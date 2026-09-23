@@ -12,7 +12,7 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | PO-04 Ricerca farmaci | Pubblicato e verificato | ef562bf5: 55 test mirati aggregati, build, browser desktop/mobile e retry paginato. Railway SUCCESS e Vercel READY, alias verificato. Smoke reale: tre confezioni ordinarie 1000 mg, AIC conservato in POST/GET/PUT/intake. |
 | PO-05 Scansioni lunghe | Pubblicato e verificato | 0418463a: 101 test backend, 17 prove integrate PostgreSQL, 125 frontend, 169 runtime; 30 pagine in tre lettere confermate e archiviate da browser mobile sintetico. Runtime e backend Railway SUCCESS; Vercel READY e alias legato al commit. |
 | PO-06 Identità e posto letto | Pubblicato e verificato | 853b4075: 29 test backend, 7 HTTP integrati, 74 frontend, build e browser; Railway SUCCESS/health200 e Vercel READY/alias verificato. |
-| PO-07 Ordine del reparto | In esecuzione | Backend/frontend isolati da853b4075; ordine SQL prima della pagina, contesto autorevole e preferenze CAS; bootstrapasOf e bozze conservate. |
+| PO-07 Ordine del reparto | Verificato, in pubblicazione | 58 test backend, 102 frontend e 6 HTTP/PG root; build, scope/CAS/paging, browser desktop/mobile, bozze e reinvio idempotente verificati. Ordine SQL globale e preferenze per reparto. |
 | PO-08 Consegne dal giro | Da eseguire | Riutilizzare flusso esistente |
 | PO-09 Dimissione | Da eseguire | Spostamento della destinazione |
 | PO-10 PAINAD e infrastruttura moduli | Da eseguire | Versione, storico e PDF |

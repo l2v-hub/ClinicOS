@@ -1,0 +1,27 @@
+frontend/src/components/admin/OperatorManagement.tsx 161ms (unchanged)
+frontend/src/components/operator/MultiPatientParametri.tsx 73ms
+frontend/src/components/operator/ParameterEntryRow.tsx 30ms (unchanged)
+frontend/src/components/operator/PatientList.tsx 52ms (unchanged)
+frontend/src/components/operator/PatientRoster.tsx 56ms (unchanged)
+frontend/src/components/operator/TherapyRoundsPage.tsx 19ms (unchanged)
+frontend/src/components/operator/TherapySlotModal.tsx 48ms (unchanged)
+frontend/src/components/operator/usePatientListPage.ts 22ms (unchanged)
+frontend/src/lib/__tests__/therapyNavigationGuard.test.ts 10ms
+frontend/src/lib/patientPage.ts 34ms (unchanged)
+frontend/src/lib/patientParametersPage.ts 25ms (unchanged)
+frontend/src/lib/therapySlotPage.ts 21ms (unchanged)
+frontend/src/types.ts 106ms (unchanged)
+frontend/src/components/admin/RosterDefaultsPanel.tsx 34ms (unchanged)
+frontend/src/components/operator/__tests__/rosterOrderUi.test.ts 19ms
+frontend/src/components/shared/RosterOrderContext.tsx 4ms (unchanged)
+frontend/src/components/shared/RosterOrderControl.css 52ms (unchanged)
+frontend/src/components/shared/RosterOrderControl.tsx 12ms
+frontend/src/lib/__tests__/parameterEntryDrafts.test.ts 12ms
+frontend/src/lib/__tests__/rosterOrder.fixtures.ts 10ms
+frontend/src/lib/__tests__/rosterOrderController.test.ts 35ms
+frontend/src/lib/__tests__/rosterOrderPages.test.ts 13ms
+frontend/src/lib/parameterEntryDrafts.ts 14ms (unchanged)
+frontend/src/lib/rosterOrder.ts 34ms (unchanged)
+frontend/src/lib/rosterOrderController.ts 22ms
+frontend/src/lib/useParameterEntryDraft.ts 4ms (unchanged)
+frontend/src/lib/useRosterOrder.ts 6ms

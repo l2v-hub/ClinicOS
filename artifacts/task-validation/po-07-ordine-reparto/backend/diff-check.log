@@ -1,0 +1,16 @@
+
+warning: in the working copy of 'backend/src/app.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/patients/__tests__/alphabetical-pages-db.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/patients/__tests__/pagination.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/patients/identity-page.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/patients/operational-identity.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/patients/pagination.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/patients/parameters-page.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/patients.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/therapy.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/therapies/__tests__/slot-page-query.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/therapies/slot-page-query.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/therapies/therapy-administration-page.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/therapies/therapy-slots.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it

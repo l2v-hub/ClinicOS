@@ -1,7 +1,10 @@
-import { Component, lazy, Suspense, useState, useEffect, useRef, useCallback } from 'react';
+import { Component, lazy, Suspense, useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import './App.css';
 import { API_URL } from './config';
+import { useRosterOrder } from './lib/useRosterOrder';
+import { assertRosterPage, isRosterChanged, throwRosterResponse } from './lib/rosterOrder';
+import { RosterOrderContext } from './components/shared/RosterOrderContext';
 import { CartellaWriteQueue, mergeCartellaPatch } from './lib/cartellaWriteQueue';
 import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
@@ -275,6 +278,9 @@ function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
 
 export default function App() {
   const [utente, setUtente] = useState<UtenteApp | null>(null);
+  const rosterOrder = useRosterOrder(utente ? `${utente.id}:${utente.ruolo}` : null);
+  const { requestKey: rosterKey, options: rosterOptions, accept: acceptRoster, recover: recoverRoster } = rosterOrder;
+  const rosterRequest = useMemo(() => ({ ...rosterOptions, requestKey: rosterKey }), [rosterOptions, rosterKey]);
   const [authStatus, setAuthStatus] = useState<{
     mode: 'entra' | 'demo' | 'disabled';
     temporaryDemo: boolean;
@@ -647,7 +653,7 @@ export default function App() {
     async (date?: string, options: { append?: boolean; cursor?: string } = {}) => {
       const sessionEpoch = sessionEpochRef.current;
       const request = ++therapyRequestSequenceRef.current;
-      const d = date || localIsoDate();
+      const d = date || therapyDateRef.current;
       const append = options.append === true;
       therapyDateRef.current = d;
       therapyAbortControllerRef.current?.abort();
@@ -670,12 +676,13 @@ export default function App() {
         });
       }
       try {
-        const response = await fetch(buildTherapySlotPageUrl(API_URL, d, options.cursor), {
+        const response = await fetch(buildTherapySlotPageUrl(API_URL, d, options.cursor, rosterRequest), {
           headers: operatorHeaders(),
           signal: controller.signal,
         });
-        if (!response.ok) throw new Error(`therapy page ${response.status}`);
+        if (!response.ok) await throwRosterResponse(response);
         const page = parseTherapySlotPage(await response.json());
+        assertRosterPage(page.roster, rosterRequest, d);
         if (append && page.pageInfo.hasMore && page.pageInfo.nextCursor === options.cursor) {
           throw new Error('therapy page cursor did not advance');
         }
@@ -684,6 +691,7 @@ export default function App() {
           request === therapyRequestSequenceRef.current &&
           d === therapyDateRef.current
         ) {
+          acceptRoster(page.roster);
           setTherapySlots((current) =>
             append
               ? mergeTherapySlotPages(current, page.slots, page.pageInfo.summaryExact)
@@ -706,6 +714,7 @@ export default function App() {
           request === therapyRequestSequenceRef.current &&
           d === therapyDateRef.current
         ) {
+          if (isRosterChanged(error) && await recoverRoster()) return;
           const message = append
             ? 'Altre terapie non disponibili: i dati già caricati restano visibili'
             : 'Terapie non disponibili: riprova prima di registrare una somministrazione';
@@ -724,7 +733,7 @@ export default function App() {
         }
       }
     },
-    [],
+    [rosterRequest, acceptRoster, recoverRoster],
   );
 
   const loadMoreTherapySlots = useCallback(() => {
@@ -2516,6 +2525,7 @@ export default function App() {
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
+    <RosterOrderContext.Provider value={rosterOrder}>
     <div className={`app-shell${mobileNavOpen ? ' app-shell--nav-open' : ''}`}>
       {/* Scrim per il drawer di navigazione mobile (≤1023px) */}
       {mobileNavOpen && (
@@ -3089,5 +3099,6 @@ export default function App() {
         </button>
       )}
     </div>
+    </RosterOrderContext.Provider>
   );
 }

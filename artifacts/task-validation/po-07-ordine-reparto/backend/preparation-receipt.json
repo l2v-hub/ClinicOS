@@ -1,0 +1,36 @@
+{
+  "task": "PO-07-backend",
+  "phase": "preparation-only",
+  "decision": "allow local preparation artifacts; application writes and Prisma generation await root GO",
+  "authorization": "Explicit root assignment to formalize contract, claims and artifacts while PO06 deploy completes",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po07-roster-order",
+  "branch": "codex/po07-roster-order",
+  "baseline": "853b40750c25f24ef40db622674612aaf64bf2cb",
+  "rootContractSha256": "00d000f13ad6dc19a31d5ba1e71bc4cfec93775c1279a7acfcf656f98b641642",
+  "claim": {
+    "issueId": "PO-07-backend-preparation",
+    "claimant": "agent:codex-po07-backend:coder",
+    "claimedAt": "2026-09-23T01:39:25.301Z",
+    "status": "active"
+  },
+  "ownedAtThisPhase": ["artifacts/task-validation/po-07-ordine-reparto/backend/**"],
+  "unrelatedDirtyPaths": ["run-claude-queue.ps1", "start-claude-team.ps1"],
+  "sourceChanged": false,
+  "testsExecuted": false,
+  "schemaOrMigrationChanged": false,
+  "prismaGenerated": false,
+  "dependenciesModified": false,
+  "verifiedDependencyLayout": {
+    "node_modules": "read-only junction to C:/Workspace/ClinicOSHouse-worktrees/quality-loop-20260829/node_modules",
+    "backend/node_modules/@prisma/client": "private directory, no link target",
+    "backend/node_modules/.prisma/client": "private directory, no link target",
+    "backend/node_modules/pdf-lib": "read-only junction to integrator private dependency"
+  },
+  "workerCommitPushPublishAuthorized": false,
+  "integrator": "/root",
+  "limitations": [
+    "This artifact is a local coordination receipt, not an independent release capability.",
+    "No acceptance tests or generation have run; all proposed source operations still require the delegated GO.",
+    "The final implementation receipt must bind all changed/untracked source, schema and migration inputs, not HEAD alone."
+  ]
+}

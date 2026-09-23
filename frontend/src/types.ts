@@ -1,4 +1,5 @@
 import type { PatientIdentityData, PatientLocationData } from './lib/patientIdentity';
+import type { RosterMetadata } from './lib/rosterOrder';
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 
@@ -1084,6 +1085,7 @@ export interface TherapySlotPageInfo {
 }
 
 export interface TherapySlotPageResponse {
+  roster?: RosterMetadata;
   slots: TherapySlot[];
   pageInfo: TherapySlotPageInfo;
 }

@@ -1,0 +1,122 @@
+{
+  "at": "2026-09-23T02:01:32.072Z",
+  "decision": "ALLOW_INTEGRATE",
+  "scope": "frontend",
+  "worker": "C:\\Workspace\\ClinicOSHouse-worktrees\\po07-roster-ui",
+  "authorization": "User approved full plan, push/deploy; root invoked after explicit worker claim release",
+  "manifestSha256": "a9b85aaf2fc702afa396bcad27c3ae6256f5ce0c7ffe2576f0c5369bb232d725",
+  "files": [
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "e257a0759bb8f0c4149cd8112a4bcc6d8693342c995178333bc4f199852c6b59"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorManagement.tsx",
+      "sha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc"
+    },
+    {
+      "path": "frontend/src/components/admin/RosterDefaultsPanel.tsx",
+      "sha256": "ac2cfab53da36b28179c5df2dcdcf9d050ca854962eab8a888dc4b050ded2d4d"
+    },
+    {
+      "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "sha256": "ae2aa161a50f3f67406aa179922cf5c76090e0640f15e38904ce08c1aad27c1e"
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "sha256": "a416599d426247c5509bfb60a9f7279c2838e34162a3977f9eef053c7ce110d1"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.tsx",
+      "sha256": "ef0c92fdb03001eafd515136f80b129f77462a3e906c763f161774398b2dd85c"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "sha256": "37fba6fab1591ce09d63f9fd7fab64e5a7fc281176087fe5c3d59bcdfb61817b"
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyRoundsPage.tsx",
+      "sha256": "7baf8c92e56ca5a366513a7aa12e4d10bd20044801613793f4bf03eb0c05aeac"
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "sha256": "32054f87c136b33fe35a7f5a464d024e38f53f0c1ceb6c4e246e79e2b7e50a33"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+      "sha256": "c8bd2f9c293b5e21fdfaf1fc57196ec9ac53edbc36fbcec65353a52e7f365746"
+    },
+    {
+      "path": "frontend/src/components/operator/usePatientListPage.ts",
+      "sha256": "a33f74b8d37f0f5e9d8d72ea7daa5d08ab53276282a10c33252d8f79a17badc0"
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderContext.tsx",
+      "sha256": "ddcd7e12a5f6152678eafce520a2ebb48dc9b32d472801be6cab41a18eb26e73"
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderControl.css",
+      "sha256": "abcd0499136bf7f6ff0ef7609925a10b48dcc0bcc00bac66b11f457305795839"
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderControl.tsx",
+      "sha256": "d17241636ad802aff1dfcf28b2b7c5a648fdb7d70d94b51ad333383519c6c99b"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterEntryDrafts.test.ts",
+      "sha256": "994c7a15c1f264fb7c09fcbb446819529975939d8e8d3b474324042cc0396fea"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrder.fixtures.ts",
+      "sha256": "fac777f550fadced7e53f1610924c34f6705a7bae53194b2a556261042385fa7"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrderController.test.ts",
+      "sha256": "8b5e076545acb2a2c2e856b451a59c1152adbac9983926c164791848f69231d0"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrderPages.test.ts",
+      "sha256": "00da146aa3c51f4b59718546c7b20f46211ed8bc4b28a4e4b6b37dee8e31f63e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+      "sha256": "5c60bf6e98facb8179d31a73adf541d82f314173b2d9fd16217b485d072dfa18"
+    },
+    {
+      "path": "frontend/src/lib/parameterEntryDrafts.ts",
+      "sha256": "0e8bd13075f3488bb650ab4828cc9e4518efd455712a85d0b881a3910ce08d06"
+    },
+    {
+      "path": "frontend/src/lib/patientPage.ts",
+      "sha256": "9a1c660c05f8c9924b992e1d8235c71c21dcfea7c94b089166599072f4e86127"
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPage.ts",
+      "sha256": "0fd758f72b9be18161ea54852fe92c478867dbe1fd0600fcfd47aeed4635bac4"
+    },
+    {
+      "path": "frontend/src/lib/rosterOrder.ts",
+      "sha256": "ce290150c395819cfb014940f81d46cdb6849da970f70dcb0dbff7f2ad3e41ad"
+    },
+    {
+      "path": "frontend/src/lib/rosterOrderController.ts",
+      "sha256": "4c386d761b2da7687724b537e31e58d332cc1f292ff195c34b621a466d109b2b"
+    },
+    {
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "sha256": "5a8693b82199cbfda42e602c007e47c6b451dd0d0f439c14505d90c2aa605065"
+    },
+    {
+      "path": "frontend/src/lib/useParameterEntryDraft.ts",
+      "sha256": "5bb3d70113e3f009ff8dd92d39056a15fb4aa22b3ea734712963a3f5cd0e439e"
+    },
+    {
+      "path": "frontend/src/lib/useRosterOrder.ts",
+      "sha256": "eb2f0733a42d3297843935e3a14e3c51b02784e9a3bad05862a6363f1fa35485"
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "6348868ec77e7e8e422c3fe09001696a6249e5e2868f77c67f85c486b5655561"
+    }
+  ]
+}

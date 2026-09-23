@@ -49,7 +49,7 @@ test('patient page cursor round-trips and is bound to normalized filters', () =>
 
 test('patient page cursor rejects malformed, oversized and incomplete payloads', () => {
   const incomplete = Buffer.from(JSON.stringify({ v: 2, id: 'patient-1' })).toString('base64url');
-  for (const cursor of ['not-base64!', 'a'.repeat(1025), incomplete]) {
+  for (const cursor of ['not-base64!', 'a'.repeat(4097), incomplete]) {
     assert.throws(() => decodePatientPageCursor(cursor, {}), PatientPageInputError);
   }
 });

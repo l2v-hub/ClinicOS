@@ -1,0 +1,86 @@
+{
+  "owner": "/root/po01_frontend_audit",
+  "integrationOwner": "/root",
+  "completedAtUtc": "2026-09-23T02:00:53.564Z",
+  "policyDecision": "ALLOW_FRONTEND_IMPLEMENTATION_AND_LOCAL_VALIDATION",
+  "authority": "Root GO after verified PO-06 publication at baseline 853b407; isolated frontend writer, root owns integration/browser/benchmark/publication",
+  "sourceIdentity": "616a7162a5ddab8dee59fca82755b4a9f47d847b08d06b85e8fea6fa759115f3",
+  "baseCommit": "853b40750c25f24ef40db622674612aaf64bf2cb",
+  "files": 28,
+  "added": 14,
+  "modified": 14,
+  "tests": {
+    "passed": 102,
+    "failed": 0,
+    "log": "tests-final.log"
+  },
+  "build": {
+    "passed": true,
+    "log": "build-final.log",
+    "warning": "Existing bundle chunk-size warning; no build error"
+  },
+  "lint": {
+    "introduced": 0,
+    "baselineDiagnostics": 13,
+    "candidateDiagnostics": 8,
+    "remainingFile": "frontend/src/App.tsx",
+    "comparison": "lint-comparison.json"
+  },
+  "diffCheck": "passed",
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+  },
+  "validations": [
+    "DTO/CAS and pending preference races",
+    "bounded recovery",
+    "parameter exact pending request, uncertainty and row remount",
+    "shared controls and separated personal/admin permissions",
+    "legacy loaded-row ordering scope",
+    "therapy server order/partial merges/exact totals",
+    "PO-06 operational identity and parameter/consegne regressions"
+  ],
+  "limitations": [
+    "Root browser/keyboard/mobile/200% and synthetic API end-to-end QA remain integration gates",
+    "Root owns source-bound baseline/candidate benchmark",
+    "Unrelated full-suite guards were not broadened beyond the agreed 102 focused regressions"
+  ],
+  "excludedActions": [
+    "backend/schema/migration/generated package writes",
+    "dependency or manifest changes",
+    "server/port use",
+    "commit/push/deploy",
+    "live patient mutation",
+    "PO-08 Consegne roster"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/tests-final.log",
+      "sha256": "283b492cd53214d3414b9cf22806db9a107ac051848c26dd885429cdd347f988"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/build-final.log",
+      "sha256": "b66bce4ddec997c9b176fc78fb12bd234fcadffd7f6bc9211c67355f082bf866"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/lint-comparison.json",
+      "sha256": "d6b1289b81208bb71b15c834fd2db0b99921cacb811b82d4b66ae8d88addb175"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/lint-final.log",
+      "sha256": "58063a00fd088279dcf8e0621425c18add54625dcdd80df51b99f4218114a0df"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/source-manifest.json",
+      "sha256": "a9b85aaf2fc702afa396bcad27c3ae6256f5ce0c7ffe2576f0c5369bb232d725"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/task-contract.md",
+      "sha256": "e7f19cc1b95f85c6b211920f81ea6610f3bc7bb3fe03e2f424b5b3bd2e75f500"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/implementation-plan.md",
+      "sha256": "7f4e46970f86b3d860f8119bdd73efd74e275de7c86ad38575bed23bac09b1bc"
+    }
+  ]
+}

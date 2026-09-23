@@ -1,0 +1,300 @@
+{
+  "baseline": "292ddc1a",
+  "applicationBaseline": "853b40750c25f24ef40db622674612aaf64bf2cb",
+  "at": "2026-09-23T02:16:49.001Z",
+  "sourceTreeSha256": "0d7620b679c666b3648a88abe648a8e8c67db89c70ece3334ffc395207f62cd1",
+  "files": [
+    {
+      "path": "backend/src/app.ts",
+      "sha256": "11b364be85aeb4c55d79344b306f34a70e783150b31c179f8bf9ac72b4ed282c",
+      "bytes": 10025
+    },
+    {
+      "path": "backend/src/patients/__tests__/alphabetical-pages-db.test.ts",
+      "sha256": "2718720d70fcf3dfaf55c7ef5a8c90f23fc01af1573d26aaed1c5fead2e40e25",
+      "bytes": 9011
+    },
+    {
+      "path": "backend/src/patients/__tests__/pagination.test.ts",
+      "sha256": "972cd097ddd3359cad1a802cd0dda10be9bd49e8e7d7e04c6ae4c8c0e64126ea",
+      "bytes": 2392
+    },
+    {
+      "path": "backend/src/patients/identity-page.ts",
+      "sha256": "6e6da67a3e7f0da3a5206772f6ecf839981f1564f8bcdf1531caaed309582073",
+      "bytes": 5048
+    },
+    {
+      "path": "backend/src/patients/operational-identity.ts",
+      "sha256": "73452f8b710d81523b3b9cbb18ff8b0451b527707b3756f84a5a4ae150beeb9a",
+      "bytes": 6017
+    },
+    {
+      "path": "backend/src/patients/pagination.ts",
+      "sha256": "813be3efd134fd69d8dd3a21a50a6cb1cbd22bd2c115c4d778b76662b42260ee",
+      "bytes": 4122
+    },
+    {
+      "path": "backend/src/patients/parameters-page.ts",
+      "sha256": "eebfa26b4108b8d18df41748f1f09fcbabed43a617b6bcfc6172f431959de205",
+      "bytes": 10271
+    },
+    {
+      "path": "backend/src/roster/__tests__/cursor.test.ts",
+      "sha256": "4b31531c3bb8c26db2cc1a6252776119325c88782d3fc214f8c656eb1b46aee3",
+      "bytes": 2014
+    },
+    {
+      "path": "backend/src/roster/__tests__/order-key-db.test.ts",
+      "sha256": "4914837f3f3580c84b482080975f7280f83b1a43393e7d8d01d2e52954cb9e11",
+      "bytes": 5731
+    },
+    {
+      "path": "backend/src/roster/__tests__/preferences-db.test.ts",
+      "sha256": "a8e2bd5a5ef2104b910436022b1913aebee415f4241b0037a5c1b7e7f0307c40",
+      "bytes": 7639
+    },
+    {
+      "path": "backend/src/roster/__tests__/roster-fixture.ts",
+      "sha256": "750b809aa8f39dea6db44d90a6d8608de377983b2fd60946834ec41373f97352",
+      "bytes": 5749
+    },
+    {
+      "path": "backend/src/roster/__tests__/roster-pagination-db.test.ts",
+      "sha256": "d61a97ae55f69e3a5fadb8018fd20377cd78c4caa5be473d88fe92e706b511ba",
+      "bytes": 8500
+    },
+    {
+      "path": "backend/src/roster/cursor.ts",
+      "sha256": "ca4f5f77d42f5a268042d08cdc8d23db0960a99f0ff809bffe27f7e29fb09455",
+      "bytes": 2692
+    },
+    {
+      "path": "backend/src/roster/order-contract.ts",
+      "sha256": "893199d4f7072d2a761e61891f2df18132a48b1dd70c612cecf103cd54e87d1b",
+      "bytes": 3355
+    },
+    {
+      "path": "backend/src/roster/order-key.ts",
+      "sha256": "2ae63f80dfd4428a79c3b2ef3279f2cf4225e3b2fc86a79f2a949a10811f495c",
+      "bytes": 3661
+    },
+    {
+      "path": "backend/src/roster/preferences.ts",
+      "sha256": "a7c466342b7281343469d811b439a955a69329af77c0311e17ec88e7035e2470",
+      "bytes": 6645
+    },
+    {
+      "path": "backend/src/roster/snapshot.ts",
+      "sha256": "c4ac8deeb12b97303bdf1ac92fb1dcdd20a7bef2f1fd72943b0f033b5586fe32",
+      "bytes": 2684
+    },
+    {
+      "path": "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+      "sha256": "8cbc8c5a9e71211a1b2f71344903d3b4449f7aaa4ac946bfdcf887881b5fd3b3",
+      "bytes": 3849
+    },
+    {
+      "path": "backend/src/routes/patients.ts",
+      "sha256": "c8b8e5ae72de9de9305e4e747c9a064d3a1cb3cd244c75f54eacabef5855e16d",
+      "bytes": 41487
+    },
+    {
+      "path": "backend/src/routes/roster-order.ts",
+      "sha256": "be726a1d73ab96d85614bfcc04bb1cbdd81ded83f38c8dbd46df70fc36950f35",
+      "bytes": 1986
+    },
+    {
+      "path": "backend/src/routes/therapy.ts",
+      "sha256": "d19345dbfaeb01f5a5060e87df21fc7885bb7bc26ec5bea862e316d9432c1a92",
+      "bytes": 10188
+    },
+    {
+      "path": "backend/src/therapies/__tests__/slot-page-query.test.ts",
+      "sha256": "17baed553c4a0d4d240c1e39c9b61d4dfdcc6652308dc9e77fbca9691475a113",
+      "bytes": 2716
+    },
+    {
+      "path": "backend/src/therapies/slot-page-query.ts",
+      "sha256": "17018833d600345d0cbaba052262f5aad60aba9940b75861ab8520c114b28bed",
+      "bytes": 2063
+    },
+    {
+      "path": "backend/src/therapies/therapy-administration-page.ts",
+      "sha256": "c86681470cdf094a60591631f0b1b33ce239265a1351cc5b18cf223d66156701",
+      "bytes": 3593
+    },
+    {
+      "path": "backend/src/therapies/therapy-candidate-page.ts",
+      "sha256": "6e6a057de7c8ad83172af16afce916c541d484aeee58491398797ec8570e7915",
+      "bytes": 2796
+    },
+    {
+      "path": "backend/src/therapies/therapy-slots.ts",
+      "sha256": "aa499768f71fe2fdf87deeda49851050a135dfaf770b0deeb1ad71890fc31220",
+      "bytes": 16167
+    },
+    {
+      "path": "prisma/migrations/20260923020000_roster_order_contexts/migration.sql",
+      "sha256": "9bc3569bb547694965bece37142c6624e5d8dc1ff94b49b4f3ba66d97d90e1c8",
+      "bytes": 5947
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "sha256": "e8665bfbc3dbb1c0bcf95951f0b8cdd64cb4f1f4c4c9943737f7137b8c36d1eb",
+      "bytes": 30962
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "e257a0759bb8f0c4149cd8112a4bcc6d8693342c995178333bc4f199852c6b59",
+      "bytes": 127255
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorManagement.tsx",
+      "sha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc",
+      "bytes": 10061
+    },
+    {
+      "path": "frontend/src/components/admin/RosterDefaultsPanel.tsx",
+      "sha256": "ac2cfab53da36b28179c5df2dcdcf9d050ca854962eab8a888dc4b050ded2d4d",
+      "bytes": 6535
+    },
+    {
+      "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "sha256": "ae2aa161a50f3f67406aa179922cf5c76090e0640f15e38904ce08c1aad27c1e",
+      "bytes": 13393
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "sha256": "a416599d426247c5509bfb60a9f7279c2838e34162a3977f9eef053c7ce110d1",
+      "bytes": 6978
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.tsx",
+      "sha256": "ef0c92fdb03001eafd515136f80b129f77462a3e906c763f161774398b2dd85c",
+      "bytes": 15232
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "sha256": "37fba6fab1591ce09d63f9fd7fab64e5a7fc281176087fe5c3d59bcdfb61817b",
+      "bytes": 14115
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyRoundsPage.tsx",
+      "sha256": "7baf8c92e56ca5a366513a7aa12e4d10bd20044801613793f4bf03eb0c05aeac",
+      "bytes": 5285
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "sha256": "32054f87c136b33fe35a7f5a464d024e38f53f0c1ceb6c4e246e79e2b7e50a33",
+      "bytes": 14125
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+      "sha256": "c8bd2f9c293b5e21fdfaf1fc57196ec9ac53edbc36fbcec65353a52e7f365746",
+      "bytes": 6635
+    },
+    {
+      "path": "frontend/src/components/operator/usePatientListPage.ts",
+      "sha256": "a33f74b8d37f0f5e9d8d72ea7daa5d08ab53276282a10c33252d8f79a17badc0",
+      "bytes": 6124
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderContext.tsx",
+      "sha256": "ddcd7e12a5f6152678eafce520a2ebb48dc9b32d472801be6cab41a18eb26e73",
+      "bytes": 742
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderControl.css",
+      "sha256": "abcd0499136bf7f6ff0ef7609925a10b48dcc0bcc00bac66b11f457305795839",
+      "bytes": 1199
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderControl.tsx",
+      "sha256": "d17241636ad802aff1dfcf28b2b7c5a648fdb7d70d94b51ad333383519c6c99b",
+      "bytes": 3925
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterEntryDrafts.test.ts",
+      "sha256": "994c7a15c1f264fb7c09fcbb446819529975939d8e8d3b474324042cc0396fea",
+      "bytes": 2826
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrder.fixtures.ts",
+      "sha256": "fac777f550fadced7e53f1610924c34f6705a7bae53194b2a556261042385fa7",
+      "bytes": 1263
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrderController.test.ts",
+      "sha256": "8b5e076545acb2a2c2e856b451a59c1152adbac9983926c164791848f69231d0",
+      "bytes": 7977
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrderPages.test.ts",
+      "sha256": "00da146aa3c51f4b59718546c7b20f46211ed8bc4b28a4e4b6b37dee8e31f63e",
+      "bytes": 5282
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+      "sha256": "5c60bf6e98facb8179d31a73adf541d82f314173b2d9fd16217b485d072dfa18",
+      "bytes": 1272
+    },
+    {
+      "path": "frontend/src/lib/parameterEntryDrafts.ts",
+      "sha256": "0e8bd13075f3488bb650ab4828cc9e4518efd455712a85d0b881a3910ce08d06",
+      "bytes": 3124
+    },
+    {
+      "path": "frontend/src/lib/patientPage.ts",
+      "sha256": "9a1c660c05f8c9924b992e1d8235c71c21dcfea7c94b089166599072f4e86127",
+      "bytes": 6064
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPage.ts",
+      "sha256": "0fd758f72b9be18161ea54852fe92c478867dbe1fd0600fcfd47aeed4635bac4",
+      "bytes": 4122
+    },
+    {
+      "path": "frontend/src/lib/rosterOrder.ts",
+      "sha256": "ce290150c395819cfb014940f81d46cdb6849da970f70dcb0dbff7f2ad3e41ad",
+      "bytes": 7778
+    },
+    {
+      "path": "frontend/src/lib/rosterOrderController.ts",
+      "sha256": "4c386d761b2da7687724b537e31e58d332cc1f292ff195c34b621a466d109b2b",
+      "bytes": 6222
+    },
+    {
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "sha256": "5a8693b82199cbfda42e602c007e47c6b451dd0d0f439c14505d90c2aa605065",
+      "bytes": 6580
+    },
+    {
+      "path": "frontend/src/lib/useParameterEntryDraft.ts",
+      "sha256": "5bb3d70113e3f009ff8dd92d39056a15fb4aa22b3ea734712963a3f5cd0e439e",
+      "bytes": 623
+    },
+    {
+      "path": "frontend/src/lib/useRosterOrder.ts",
+      "sha256": "300e20beceb04e4df5ebf678c2c798d3f5d992c4b048873ede90987e00a35b86",
+      "bytes": 1790,
+      "workerSha256": "eb2f0733a42d3297843935e3a14e3c51b02784e9a3bad05862a6363f1fa35485",
+      "rootChange": "Revision and context version fence requestKey after explicit preference save; browser verified"
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "6348868ec77e7e8e422c3fe09001696a6249e5e2868f77c67f85c486b5655561",
+      "bytes": 31820
+    },
+    {
+      "path": "tests/fixtures/po07-roster.mjs",
+      "bytes": 1987,
+      "sha256": "fbfdf3d1bb2f1927a4dc6270ec3a64efe03d1de69c03b086cbbfea804b7abfc7"
+    },
+    {
+      "path": "tests/integration/po07-roster.test.mts",
+      "bytes": 10563,
+      "sha256": "6c39f23d28ad528deab4234a7af57dc7ed530675ec5ec2bcd0678698071a7e01"
+    }
+  ]
+}

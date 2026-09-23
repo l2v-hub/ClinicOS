@@ -1,0 +1,169 @@
+{
+  "task": "PO-07-backend",
+  "phase": "implementation-complete-worker-handoff",
+  "decision": "allow handoff to root for independent integration validation",
+  "authorization": "Explicit root GO after PO06 deploy; exact owned scopes recorded by PO-07-backend-implementation claim.",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po07-roster-order",
+  "baseline": "853b40750c25f24ef40db622674612aaf64bf2cb",
+  "sourceTreeSha256": "444525230458481446a25ec128601817bc25db0b67d6f8b37be024ba5558dc86",
+  "inputTreeSha256": "148981313b29a3a2e39a2f1e9364e29d26198857dc66f5048c52b76bfefca55f",
+  "sourceManifestSha256": "dc68b03f90c4be301f2674da03de3c826d844374ff09e06ef62b6717a6e52fd2",
+  "generatedAt": "2026-09-23T01:58:09.926Z",
+  "sourceFrozen": true,
+  "tests": {
+    "database": "synthetic native PostgreSQL loopback",
+    "passed": 58,
+    "failed": 0,
+    "results": [
+      {
+        "file": "backend/src/roster/__tests__/cursor.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/roster/__tests__/preferences-db.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/roster/__tests__/roster-pagination-db.test.ts",
+        "exitCode": 0,
+        "tests": 12
+      },
+      {
+        "file": "backend/src/roster/__tests__/order-key-db.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/patients/__tests__/pagination.test.ts",
+        "exitCode": 0,
+        "tests": 6
+      },
+      {
+        "file": "backend/src/patients/__tests__/alphabetical-pages-db.test.ts",
+        "exitCode": 0,
+        "tests": 5
+      },
+      {
+        "file": "backend/src/patients/__tests__/parameters-page-db.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+        "exitCode": 0,
+        "tests": 8
+      },
+      {
+        "file": "backend/src/routes/__tests__/consegne-bounded-auth.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/therapies/__tests__/slot-page-query.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/therapies/__tests__/therapy-query.test.ts",
+        "exitCode": 0,
+        "tests": 5
+      },
+      {
+        "file": "backend/src/therapies/__tests__/due-therapy-query.test.ts",
+        "exitCode": 0,
+        "tests": 1
+      }
+    ],
+    "finishedAt": "2026-09-23T01:57:02.618Z",
+    "sourceBinding": "All source edits and formatting preceded this successful run. No source edits occurred during or after it. Source and complete backend input hashes are recorded in the linked manifests.",
+    "fixtureLifecycle": "New isolated native loopback PostgreSQL, all migrations applied, close completed and runner exited 0."
+  },
+  "validation": {
+    "typecheck": {
+      "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+      "exitCode": 0,
+      "evidence": "Tool execution 3046d5 on final source after formatting; no diagnostics."
+    },
+    "schema": {
+      "exitCode": 0,
+      "privateSchemaMatchesSourceExceptOutput": true
+    },
+    "ownedDiff": {
+      "exitCode": 0
+    },
+    "newSourceFilesBelow500Lines": true,
+    "therapySlotsLines": 467,
+    "securityReview": "Validated scalar enums/IDs/dates/versions and bounded cursors; SQL values parameterized; scopes applied before anchor/data loading; admin writes role-gated; personal actor derived from authentication; context never changes patient authorization. Verified focused scope/IDOR/CAS failure-path tests. No dependency CVE scan claimed."
+  },
+  "runtime": {
+    "privatePrismaOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po07-roster-order\\backend\\node_modules\\.prisma\\client",
+    "privatePrismaWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po07-roster-order\\backend\\node_modules\\@prisma\\client",
+    "dependencyManifestsChanged": false,
+    "sharedDependencyTargetWritten": false
+  },
+  "limitations": [
+    "Worker receipt is local evidence, not an independent production/release capability.",
+    "Root owns combined source manifest, browser QA, source-bound benchmark and any commit/push/deploy.",
+    "Global singleton epoch is deliberately conservative and can invalidate unrelated authorized pages.",
+    "Unrelated dirty PowerShell files were preserved; global diff check reports their pre-existing whitespace."
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/diff-check.log",
+      "bytes": 2005,
+      "sha256": "ecd1b8fa3d76e8357dc268b8cb474008d1643f5a62f89db45ae5941031e777ca"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/focused-tests.json",
+      "bytes": 1453,
+      "sha256": "67d748a14a3d791c88f72beabf58b15d501966ec9a120397e9fbebbbd3acab85"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/focused-tests.log",
+      "bytes": 7113,
+      "sha256": "c51b203500237a26d93957417e4e573badbf109096ff9a95eda776999a53d616"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/generate-private.mjs",
+      "bytes": 1787,
+      "sha256": "06f578f95190a41ab3c71b60ae90502535710a80f42c65c2c0b498705b9794d7"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/input-manifest.json",
+      "bytes": 58441,
+      "sha256": "8a0f3ea31ecba46a301eb480c48747c5836606e21225c40c7bba7a65982867ba"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/private-generation.log",
+      "bytes": 322,
+      "sha256": "888b0358ffee1a6d9345482a91505d890ac9d2fb52051bc175934bee47854ce9"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/private-schema.prisma",
+      "bytes": 31066,
+      "sha256": "e6e6bc27ef013f4b0974f3aad938a1c2cb8d0f85312583910e828dcdf8a801c9"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/run-focused-tests.mjs",
+      "bytes": 1807,
+      "sha256": "361d98245aafbe3f96939c782d393436224292376e8758d8c0d86d9d2a433e3a"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/schema-validation.log",
+      "bytes": 1123,
+      "sha256": "bcd7c7fb1cce63ae44e05e08464f7c8df9ec72d063884d213a6c64f8d356429b"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/backend/source-manifest.json",
+      "bytes": 5716,
+      "sha256": "dc68b03f90c4be301f2674da03de3c826d844374ff09e06ef62b6717a6e52fd2"
+    }
+  ]
+}

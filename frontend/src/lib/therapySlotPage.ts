@@ -5,6 +5,7 @@ import type {
   TherapySlotPatient,
 } from '../types';
 import { parsePatientLocation } from './patientIdentity';
+import { parseRosterMetadata, rosterQuery, type RosterPageOptions } from './rosterOrder';
 
 const FASCE = new Set(['mattina', 'pranzo', 'pomeriggio', 'sera', 'notte']);
 
@@ -12,8 +13,10 @@ export function buildTherapySlotPageUrl(
   apiUrl: string,
   date: string,
   cursor?: string | null,
+  order: RosterPageOptions = {},
 ): string {
   const query = new URLSearchParams({ date, limit: '100' });
+  Object.entries(rosterQuery(order)).forEach(([key, value]) => query.set(key, value));
   if (cursor) query.set('cursor', cursor);
   return `${apiUrl}/therapy-slots/page?${query.toString()}`;
 }
@@ -123,6 +126,7 @@ export function parseTherapySlotPage(value: unknown): TherapySlotPageResponse {
   if (info.hasMore && !info.nextCursor) throw new Error('missing therapy page cursor');
   return {
     slots: page.slots.map(parseSlot),
+    roster: parseRosterMetadata(page.roster),
     pageInfo: {
       hasMore: info.hasMore,
       nextCursor: info.nextCursor as string | null,

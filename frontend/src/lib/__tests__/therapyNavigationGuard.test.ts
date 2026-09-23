@@ -15,7 +15,7 @@ test('therapy slots are loaded only when the therapy page is visible, including 
 });
 
 test('agenda follows the bounded page contract and aborts obsolete date requests', () => {
-  assert.match(app, /buildTherapySlotPageUrl\(API_URL, d, options\.cursor\)/);
+  assert.match(app, /buildTherapySlotPageUrl\(API_URL, d, options\.cursor, rosterRequest\)/);
   assert.match(app, /therapyAbortControllerRef\.current\?\.abort\(\)/);
   assert.match(app, /mergeTherapySlotPages\(current, page\.slots, page\.pageInfo\.summaryExact\)/);
   assert.match(app, /append: true,[\s\S]*cursor: therapyPageInfo\.nextCursor/);

@@ -40,6 +40,7 @@ model Operator {
   userId             String           @unique
   licenseNumber      String?          @unique
   department         String?
+  rosterContextId    String?
   phone              String?
   ruolo              String?
   qualifica          String?
@@ -51,6 +52,51 @@ model Operator {
   clinicalRecords    ClinicalRecord[] @relation("ClinicalRecordAuthor")
   clinicalNotes      ClinicalNote[]   @relation("ClinicalNoteAuthor")
   schedule           OperatorSchedule?
+  rosterContext      RosterContext? @relation(fields: [rosterContextId], references: [id])
+  rosterPreferences  OperatorRosterPreference[]
+}
+
+enum RosterCriterion {
+  name
+  location
+}
+
+enum RosterDirection {
+  asc
+  desc
+}
+
+model RosterContext {
+  id               String @id @default(uuid())
+  departmentKey    String @unique
+  label            String
+  defaultCriterion RosterCriterion?
+  defaultDirection RosterDirection?
+  version          BigInt @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  operators        Operator[]
+  preferences      OperatorRosterPreference[]
+}
+
+model OperatorRosterPreference {
+  operatorId String
+  contextId  String
+  criterion  RosterCriterion?
+  direction  RosterDirection?
+  revision   BigInt @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  operator   Operator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+  context    RosterContext @relation(fields: [contextId], references: [id], onDelete: Cascade)
+
+  @@id([operatorId, contextId])
+}
+
+model RosterEpoch {
+  id      Int @id @default(1)
+  roster  BigInt @default(0)
+  therapy BigInt @default(0)
 }
 
 // #285: weekly shift schedule for an operator (admin "Orari operatori" screen). Stored as a JSON

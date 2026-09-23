@@ -1,0 +1,28 @@
+{
+  "task": "PO-07-backend",
+  "releasedAt": "2026-09-23T01:58:48.320Z",
+  "releases": [
+    {
+      "issueId": "PO-07-backend-preparation",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-07-backend-preparation released\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-07-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po07-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T01:39:25.301Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T01:41:35.989Z\",\n    \"progress\": 10,\n    \"context\": \"Root assigned exclusive worktree C:/Workspace/ClinicOSHouse-worktrees/po07-roster-order baseline853b40750c25f24ef40db622674612aaf64bf2cb. PREPARATION ONLY until root GO after PO06 deploy. Own artifacts/task-validation/po-07-ordine-reparto/backend/**. Planned future source ownership backend, Prisma schema/migration/tests only after GO. No app writes, Prisma generation, dependency manifests, packages, lockfiles, browser/server, commit/push/deploy.\"\n  }\n}"
+          }
+        ]
+      }
+    },
+    {
+      "issueId": "PO-07-backend-implementation",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-07-backend-implementation released\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-07-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po07-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T01:42:12.244Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T01:42:12.244Z\",\n    \"progress\": 0,\n    \"context\": \"Root GO after verified PO06 deploy. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po07-roster-order baseline853b40750c25f24ef40db622674612aaf64bf2cb. Exact owned paths: prisma/schema.prisma; prisma/migrations/20260923020000_roster_order_contexts/migration.sql; backend/src/roster/order-contract.ts; backend/src/roster/order-key.ts; backend/src/roster/cursor.ts; backend/src/roster/preferences.ts; backend/src/roster/snapshot.ts; backend/src/routes/roster-order.ts; backend/src/app.ts; backend/src/patients/pagination.ts; backend/src/patients/identity-page.ts; backend/src/patients/parameters-page.ts; backend/src/patients/operational-identity.ts; backend/src/therapies/slot-page-query.ts; backend/src/therapies/therapy-slots.ts; backend/src/therapies/therapy-administration-page.ts; backend/src/therapies/therapy-candidate-page.ts; backend/src/routes/patients.ts; backend/src/routes/therapy.ts; backend/src/roster/__tests__/**; backend/src/patients/__tests__/pagination.test.ts; backend/src/patients/__tests__/alphabetical-pages-db.test.ts; backend/src/therapies/__tests__/slot-page-query.test.ts; backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts; artifacts/task-validation/po-07-ordine-reparto/backend/**. Private generated output backend/node_modules/.prisma/client allowed after realpath check. No shared dependency target, package, lockfile, commit, push, deploy or browser server.\"\n  }\n}"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -11,6 +11,8 @@ import { AIImportStatus } from '../shared/AIImportStatus';
 import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { PatientRoster } from './PatientRoster';
+import { RosterOrderControl } from '../shared/RosterOrderControl';
+import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import {
   ADMISSION_LABELS as STATO_RICOVERO_LABEL,
   sortPatientRoster,
@@ -69,7 +71,18 @@ export function PatientList({
     loadPage,
     retrySummary,
   } = usePatientListPage(ricerca, filtroSesso);
-  const [sort, setSort] = useState<PatientRosterSort>({ field: 'patient', direction: 'asc' });
+  const rosterOrder = useRosterOrderContext();
+  const [localSort, setLocalSort] = useState<PatientRosterSort | null>(null);
+  const sort: PatientRosterSort = localSort ?? {
+    field: 'patient',
+    direction: rosterOrder.order.direction,
+  };
+  function setSort(next: PatientRosterSort) {
+    if (next.field === 'patient') {
+      setLocalSort(null);
+      void rosterOrder.choose({ criterion: 'name', direction: next.direction });
+    } else setLocalSort(next);
+  }
 
   const summaryMap = useMemo(
     () => new Map(clinicalSummary.map((c) => [c.patientId, c])),
@@ -172,12 +185,14 @@ export function PatientList({
   );
   const ordinati = useMemo(
     () =>
-      sortPatientRoster(filtrati, sort, {
-        summaryMap,
-        consegneAperteMap,
-        anomalies: anomalie.perPaziente,
-      }),
-    [filtrati, sort, summaryMap, consegneAperteMap, anomalie.perPaziente],
+      localSort
+        ? sortPatientRoster(filtrati, localSort, {
+            summaryMap,
+            consegneAperteMap,
+            anomalies: anomalie.perPaziente,
+          })
+        : filtrati,
+    [filtrati, localSort, summaryMap, consegneAperteMap, anomalie.perPaziente],
   );
 
   return (
@@ -325,6 +340,8 @@ export function PatientList({
         )}
       </div>
 
+      <RosterOrderControl onSelect={() => setLocalSort(null)} />
+
       {/* Empty state */}
       {!loading && !pageError && pazienti.length === 0 && (
         <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
@@ -360,6 +377,8 @@ export function PatientList({
       {(loading || pazienti.length > 0) && (
         <>
           <PatientRoster
+            localSortActive={Boolean(localSort)}
+            serverCriterion={rosterOrder.order.criterion}
             patients={ordinati}
             sort={sort}
             onSortChange={setSort}

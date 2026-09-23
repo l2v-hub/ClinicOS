@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IcoSearch, IcoX } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
-import { comparePazienti } from '../../lib/patientSort';
+import { createParameterDraftStore } from '../../lib/parameterEntryDrafts';
+import { isRosterChanged } from '../../lib/rosterOrder';
+import { RosterOrderControl } from '../shared/RosterOrderControl';
+import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { facilityLocalMinute } from '../../lib/facilityTime';
@@ -26,9 +29,21 @@ interface Props {
   onSelectPaziente: (patientId: string) => void;
 }
 export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props) {
+  const {
+    options: rosterOptions,
+    requestKey: rosterKey,
+    accept: acceptRoster,
+    recover: recoverRoster,
+  } = useRosterOrderContext();
+  const [draftStore] = useState(createParameterDraftStore);
+  useEffect(() => () => draftStore.clear(), [draftStore]);
   const [day, setDay] = useState(() => facilityLocalMinute().slice(0, 10));
   const [query, setQuery] = useState('');
   const [items, setItems] = useState<PatientParametersPageItem[]>([]);
+  const itemsRef = useRef(items);
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [summaryLoading, setSummaryLoading] = useState(true);
@@ -43,7 +58,9 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   const loadedQuery = useRef<string | null>(null);
   const failedMore = useRef(false);
   const savedSummaries = useRef(new Map<string, SavedParameterReading['summary']>());
-  currentDay.current = day;
+  useEffect(() => {
+    currentDay.current = day;
+  }, [day]);
   const filters = useMemo(
     () => ({
       q: query.trim() || undefined,
@@ -52,39 +69,44 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
       month: Number(day.slice(5, 7)),
       year: Number(day.slice(0, 4)),
       view: 'entry' as const,
+      ...rosterOptions,
     }),
-    [query, day],
+    [query, day, rosterOptions],
   );
 
-  function protectSavedSummary(item: PatientParametersPageItem): PatientParametersPageItem {
-    item = { ...item, summaryDate: day };
-    const saved = savedSummaries.current.get(item.patient.id);
-    return saved?.date === day ? applySavedParameterSummary(item, saved) : item;
-  }
+  const protectSavedSummary = useCallback(
+    (item: PatientParametersPageItem): PatientParametersPageItem => {
+      item = { ...item, summaryDate: day };
+      const saved = savedSummaries.current.get(item.patient.id);
+      return saved?.date === day ? applySavedParameterSummary(item, saved) : item;
+    },
+    [day],
+  );
 
   useEffect(() => {
     const version = ++generation.current;
     const controller = new AbortController();
     moreController.current?.abort();
-    setLoading(true);
-    setLoadingMore(false);
-    setSummaryLoading(true);
-    setNextCursor(null);
-    setError('');
-    failedMore.current = false;
-    if (loadedDay.current !== day) {
-      loadedDay.current = day;
-      setItems((current) => current.map((item) => resetParameterDay(item, day)));
-    }
     let detailedReady = false;
-    const hadRows = items.length > 0;
+    const hadRows = itemsRef.current.length > 0;
     const load = () => {
+      if (controller.signal.aborted) return;
+      setLoading(true);
+      setLoadingMore(false);
+      setSummaryLoading(true);
+      setNextCursor(null);
+      setError('');
+      failedMore.current = false;
+      if (loadedDay.current !== day) {
+        loadedDay.current = day;
+        setItems((current) => current.map((item) => resetParameterDay(item, day)));
+      }
       // Identities and daily metadata are independent. The detailed page remains
       // authoritative for membership/cursor, including room searches.
       if (!filters.q) {
         void fetchPatientPage(
           API_URL,
-          { limit: 25 },
+          { limit: 25, ...rosterOptions, asOf: day },
           {
             headers: operatorHeaders(),
             signal: controller.signal,
@@ -112,8 +134,9 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           });
       }
       void (async () => {
-        const sameFilter = loadedQuery.current === (filters.q ?? '');
-        const targetCount = sameFilter ? Math.max(25, items.length) : 25;
+        const filterKey = JSON.stringify([filters.q ?? '', rosterKey]);
+        const sameFilter = loadedQuery.current === filterKey;
+        const targetCount = sameFilter ? Math.max(25, itemsRef.current.length) : 25;
         let refreshed: PatientParametersPageItem[] = [];
         let cursor: string | undefined;
         do {
@@ -126,6 +149,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
             },
           );
           if (controller.signal.aborted || version !== generation.current) return;
+          acceptRoster(page.roster);
           detailedReady = true;
           refreshed = mergePatientParametersPage(
             refreshed,
@@ -144,10 +168,13 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           setNextCursor(page.nextCursor);
           cursor = needsMore ? page.nextCursor! : undefined;
         } while (cursor);
-        loadedQuery.current = filters.q ?? '';
+        loadedQuery.current = filterKey;
       })()
-        .catch((cause) => {
-          if (!controller.signal.aborted && version === generation.current) setError(cause.message);
+        .catch(async (cause) => {
+          if (!controller.signal.aborted && version === generation.current) {
+            if (isRosterChanged(cause) && (await recoverRoster())) return;
+            setError(cause.message);
+          }
         })
         .finally(() => {
           if (version === generation.current && !controller.signal.aborted) {
@@ -158,15 +185,24 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     };
     const typing = previousQuery.current !== query;
     previousQuery.current = query;
-    const timer = typing ? window.setTimeout(load, 250) : undefined;
-    if (!typing) load();
+    const timer = window.setTimeout(load, typing ? 250 : 0);
     return () => {
       window.clearTimeout(timer);
       controller.abort();
       moreController.current?.abort();
-      ++generation.current;
+      generation.current = version + 1;
     };
-  }, [filters, revision]);
+  }, [
+    filters,
+    revision,
+    rosterKey,
+    day,
+    query,
+    protectSavedSummary,
+    rosterOptions,
+    acceptRoster,
+    recoverRoster,
+  ]);
 
   async function loadMore() {
     if (!nextCursor || moreController.current || loading) return;
@@ -182,13 +218,15 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
         { headers: operatorHeaders(), signal: controller.signal },
       );
       if (version !== generation.current) return;
+      acceptRoster(page.roster);
       setItems((current) =>
         mergePatientParametersPage(current, page.items.map(protectSavedSummary), true),
       );
       setNextCursor(page.nextCursor);
       failedMore.current = false;
-    } catch {
+    } catch (cause) {
       if (!controller.signal.aborted && version === generation.current) {
+        if (isRosterChanged(cause) && (await recoverRoster())) return;
         failedMore.current = true;
         setError('Impossibile caricare altri pazienti. Riprova.');
       }
@@ -215,7 +253,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     }
     return reading;
   }
-  const sorted = [...items].sort((a, b) => comparePazienti(a.patient, b.patient));
+  const sorted = items;
   const recorded = items.filter((item) => (item.cartella.readingCount ?? 0) > 0).length;
   return (
     <div className="patient-list-view parameter-entry-page">
@@ -225,6 +263,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
         subtitle="Compilazione rapida giornaliera. Ogni salvataggio aggiunge una rilevazione allo storico del paziente."
       />
       <ParameterEntryClock onDayChange={setDay} />
+      <RosterOrderControl />
       <div className="toolbar">
         <div className="search-wrap">
           <span className="search-wrap__ico">
@@ -292,6 +331,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
               <ParameterEntryRow
                 key={item.patient.id}
                 patient={item.patient}
+                draftStore={draftStore}
                 readingCount={item.cartella.readingCount}
                 noteCount={item.cartella.noteCount}
                 summaryPending={item.summaryPending && summaryLoading}

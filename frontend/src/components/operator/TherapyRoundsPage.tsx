@@ -6,6 +6,7 @@ import type {
   MotivoNonErogazione,
 } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
+import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { TherapySlotCard } from '../shared/TherapySlotOverlay';
 import { TherapySlotModal } from './TherapySlotModal';
 import { localIsoDate } from '../../lib/appointmentRange';
@@ -98,6 +99,7 @@ export function TherapyRoundsPage({
           </div>
         }
       />
+      <RosterOrderControl />
       {loading && <p role="status">Caricamento terapie…</p>}
       {!loading && error && (
         <div role="alert" className="empty-state-card">

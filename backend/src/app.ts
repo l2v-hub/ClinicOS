@@ -4,6 +4,7 @@ import { adminRouter as adminRoomsRouter, patientAssignmentRouter } from './rout
 import patientRoomOptionsRouter from './routes/patient-room-options.js';
 import patientTherapiesRouter from './routes/patient-therapies.js';
 import patientsRouter from './routes/patients.js';
+import { meRosterOrderRouter, adminRosterOrderRouter } from './routes/roster-order.js';
 import appointmentsRouter from './routes/appointments.js';
 import therapyRouter from './routes/therapy.js';
 import patientIntakeRouter from './routes/patient-intake.js';
@@ -164,6 +165,8 @@ app.get('/auth/me', requireOperator, (req, res) => {
 });
 
 app.use('/admin', adminRoomsRouter);
+app.use('/admin', adminRosterOrderRouter);
+app.use('/me', meRosterOrderRouter);
 // patientDocumentsRouter va montato PRIMA degli altri router /patients ora protetti da
 // `router.use(requireOperator)`: quel middleware, essendo montato senza path, intercetta
 // OGNI richiesta sotto /patients (anche quelle che non hanno una route corrispondente in quel

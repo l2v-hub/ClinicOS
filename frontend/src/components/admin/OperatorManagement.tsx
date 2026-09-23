@@ -7,6 +7,7 @@ import type { ColumnDef } from '../operator/cartella/ClinicalTable';
 import { TableFilters } from '../shared/TableFilters';
 import type { TableFilterField } from '../shared/TableFilters';
 import { OperatorFormPanel } from './OperatorFormPanel';
+import { RosterDefaultsPanel } from './RosterDefaultsPanel';
 import { EMPTY_OPERATOR_FORM } from './operatorFormModel';
 import type {
   OperatorDirectoryStatus,
@@ -247,6 +248,7 @@ export function OperatorManagement({
         </button>
       </div>
 
+      <RosterDefaultsPanel />
       {/* Form */}
       {formAperto && (
         <OperatorFormPanel

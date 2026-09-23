@@ -1,0 +1,162 @@
+✔ cursor v3 is canonical, bounded, anchor-only and binds every snapshot field (13.0105ms)
+✔ scope fingerprint includes actor, role and both authorization restrictions with canonical IDs (0.4408ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 243.6807
+✔ exact department contexts, no-department and absent profile remain distinct without implicit profile creation (463.527ms)
+✔ department defaults, independent personal overrides, reset and CAS preserve revisions (98.0952ms)
+✔ department changes invalidate cursor and stale preference context without changing patient scope (45.4305ms)
+✔ HTTP personal/admin endpoints enforce roles, bounded envelopes, validation and conflict codes (128.1206ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11763.2485
+✔ name/asc: patients and parameters sort globally before limit with stable boundaries (807.9545ms)
+✔ name/asc: therapy candidates preserve patient order and partial-patient continuation (715.3261ms)
+✔ name/desc: patients and parameters sort globally before limit with stable boundaries (118.1176ms)
+✔ name/desc: therapy candidates preserve patient order and partial-patient continuation (610.1578ms)
+✔ location/asc: patients and parameters sort globally before limit with stable boundaries (258.2217ms)
+✔ location/asc: therapy candidates preserve patient order and partial-patient continuation (467.7453ms)
+✔ location/desc: patients and parameters sort globally before limit with stable boundaries (279.0565ms)
+✔ location/desc: therapy candidates preserve patient order and partial-patient continuation (431.1994ms)
+✔ cursors bind view, day, order and authenticated scope, with no external anchor disclosure (40.6121ms)
+✔ identity, ownership, assignment, room, bed and legacy changes invalidate subsequent pages (210.1337ms)
+✔ clinical notes/administration do not invalidate roster; therapy and schedule do (89.4779ms)
+✔ rollback leaves epoch unchanged and RepeatableRead keeps epoch and enrichment coherent (86.3481ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14944.7214
+✔ location/asc keeps missing keys last, canonical numeric ties stable and arbitrary-length numbers exact (620.2014ms)
+✔ location/desc keeps missing keys last, canonical numeric ties stable and arbitrary-length numbers exact (269.9252ms)
+✔ explicit identity asOf matches parameter bootstrap and excludes current-only legacy locations (23.3502ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11610.6202
+✔ patient page query defaults to a bounded page and trims search (1.6582ms)
+✔ patient page query clamps the limit and rejects ambiguous integers (0.691ms)
+✔ patient page query validates sex, search length and scalar values (0.1996ms)
+✔ patient page cursor round-trips and is bound to normalized filters (0.6075ms)
+✔ patient page cursor rejects malformed, oversized and incomplete payloads (0.2595ms)
+✔ patient page rejects cursors from the previous raw-name ordering (0.1879ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 294.2249
+✔ global alphabetical order across >50 mixed-case/accent rows, with stable duplicate-name ties (509.228ms)
+✔ parameter pages share identity ordering and bind cursors to their own view (133.9204ms)
+✔ scope, manager access and sex/search predicates apply before sorting and limits (264.6937ms)
+✔ search and cursor values are data, and malformed legacy cursors cannot traverse new ordering (84.7901ms)
+✔ HTTP pages expose globally ordered results and keep textual searches behind POST/auth (124.5307ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12214.7979
+✔ parameter page filters accents/room before limit and returns a minimal projection (374.4588ms)
+✔ parameter page enforces its endpoint-specific maximum of 25 (18.0378ms)
+✔ parameter PATCH merges days and preserves historical months and unrelated clinical data (32.5863ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11329.7439
+✔ authoritative location handles active/history/conflicts/legacy without mixed labels or private data (309.4566ms)
+✔ historical lookup ignores legacy, preserves inclusive intervals and validates calendar dates (8.814ms)
+✔ batch IDs are deduplicated and both scope restrictions apply to identity (4.0528ms)
+✔ repeated IDs use one minimal batch and database errors never become unassigned (4.3694ms)
+✔ non-string legacy scalars are unavailable and a roomless valid bed remains explicit (30.5467ms)
+✔ parameter room search is authoritative before limit+1 and identity page keeps its cursor (60.0817ms)
+✔ visible handover does not grant patient identity access, including overview previews (159.442ms)
+✔ therapy detail, location and exact totals intersect requested IDs with patient ownership (66.4839ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11409.6278
+✔ consegne feed is private, bounded, keyset paged and scoped before limit (1034.0675ms)
+✔ consegne writes derive identities and reject IDOR or spoofed fields (149.9583ms)
+✔ consegne rejects malformed bounds and cursor/filter mismatch (23.0718ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12527.2714
+✔ therapy reads and writes apply patient scope before loading clinical data (1.4115ms)
+✔ therapy slot relations and administration candidates are bounded (0.4154ms)
+✔ assistant therapy queue is exact-counted, bounded and declares sampled results (0.2908ms)
+✔ interactive agenda uses keyset pages with exact scoped summaries (0.313ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 283.912
+✔ therapy slot parser preserves opaque cursors and bounds scalar query fields (13.4636ms)
+✔ scope fingerprints are stable, order-independent and separate global access (0.7564ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 289.5469
+✔ therapy query bounds periodic and one-off therapies to the requested day (1.3891ms)
+✔ therapy access scope is pushed into the database predicate (1.0891ms)
+✔ agenda weekday is filtered before keyset pagination (0.1667ms)
+✔ weekday matching uses token boundaries instead of matching malformed day 10 (0.2417ms)
+✔ legacy weekday migration removes whitespace before tokenized paging is enabled (1.4154ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 264.9741
+✔ due-therapy CTE projects the schedule dose fields consumed by the final select (0.9033ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 274.4317

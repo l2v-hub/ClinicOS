@@ -1,0 +1,76 @@
+- main:
+  - button "Profilo sintetico operator"
+  - button "Profilo sintetico outsider"
+  - button "Profilo sintetico manager"
+  - button "Rallenta preferenza al prossimo avvio"
+  - strong: PO07 · solo pazienti sintetici · VITALS-QA-OP
+  - button "Pazienti"
+  - button "Parametri"
+  - button "Terapia"
+  - button "Simula risposta persa"
+  - button "Modifica reparto sintetico"
+  - button "Errore preferenza"
+  - button "Ripristina preferenza"
+  - button "Esporta evidenze"
+  - status
+  - navigation "Breadcrumb":
+    - generic: ClinicOS
+    - generic: /
+    - generic: Pazienti
+  - heading "Pazienti" [level=1]
+  - paragraph: 50 caricati su 72
+  - 'button "Servizio AI non disponibile: OCR non esercitato da questa fixture" [disabled]': Importa dimissione
+  - button "Nuovo paziente":
+    - text: Nuovo paziente
+  - searchbox "Cerca paziente per nome o codice fiscale"
+  - group "Filtra pazienti per sesso":
+    - button "Tutti" [pressed]
+    - button "Maschio"
+    - button "Femmina"
+  - region "Ordine del giro reparto":
+    - text: Ordina per
+    - combobox "Ordina per":
+      - option "Cognome"
+      - option "Camera e letto" [selected]
+    - text: Direzione
+    - combobox "Direzione":
+      - option "Crescente" [selected]
+      - option "Decrescente"
+    - button "Applica ordine reparto"
+    - status: Reparto sintetico A · Ordine temporaneo
+    - button "Ricarica preferenza" [disabled]
+  - generic: Ordine colonne caricate
+  - combobox "Ordine colonne caricate":
+    - option "Paziente" [selected]
+    - option "Codice fiscale"
+    - option "Ricovero"
+    - option "Segnalazioni"
+  - button "Imposta ordine decrescente": ↑ Crescente
+  - status: "Camera e letto: crescente · Ordine reparto su tutte le pagine"
+  - status: Verifica farmaci di reparto in corso…
+  - article:
+    - generic: NS
+    - strong: Sintetico 004, Nome 060
+    - generic: Nato/a il 12/06/1945 · CF da completare
+    - generic: Anagrafica da completare
+    - generic: Camera 1A · Letto 1
+    - generic: Dalla cartella
+    - button "Apri cartella di Nome 060 Sintetico 004":
+      - text: Apri
+    - generic: Ricovero non disponibile
+    - generic: Verifica in corso…
+  - article:
+    - generic: NS
+    - strong: Sintetico 024, Nome 040
+    - generic: Nato/a il 12/06/1945 · CF da completare
+    - generic: Anagrafica da completare
+    - generic: Camera 1A · Letto 1
+    - generic: Dalla cartella
+    - button "Apri cartella di Nome 040 Sintetico 024":
+      - text: Apri
+    - generic: Ricovero non disponibile
+    - generic: Verifica in corso…
+  - article:
+    - generic: NS
+    - strong: Sintetico 044, Nome 020
+    

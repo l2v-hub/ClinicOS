@@ -1,16 +1,13 @@
 import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
-import { prisma } from '../lib/prisma.js';
 import { patientScopeWhere } from './patient-scope.js';
 import { patientLocationJoin, type PatientLocationDto } from './operational-identity.js';
 import { facilityToday, parameterDate, ParameterReadingError } from './parameter-reading-input.js';
-import { patientAlphabeticalAfter, patientAlphabeticalOrder } from './alphabetical-order.js';
-import {
-  PatientPageInputError,
-  decodePatientPageCursor,
-  encodePatientPageCursor,
-  parsePatientPageQuery,
-} from './pagination.js';
+import { withRosterSnapshot } from '../roster/snapshot.js';
+import { changed, type AppliedRosterOrder } from '../roster/order-contract.js';
+import { encodeRosterCursor } from '../roster/cursor.js';
+import { rosterOrderSql, rosterAfterSql, type RosterPosition } from '../roster/order-key.js';
+import { PatientPageInputError, parsePatientPageQuery } from './pagination.js';
 
 const MAX_PARAMETERS_PAGE = 25;
 const ACCENTED_LATIN = 'àáâäãåèéêëìíîïòóôöõùúûüç';
@@ -55,6 +52,7 @@ export interface PatientParametersPage {
   }>;
   hasMore: boolean;
   nextCursor: string | null;
+  roster: AppliedRosterOrder;
 }
 
 function period(query: Record<string, unknown>): { month: number; year: number } {
@@ -103,47 +101,76 @@ export async function loadPatientParametersPage(
     );
   }
   const limit = Math.min(input.limit, MAX_PARAMETERS_PAGE);
-  const filters = { q: input.q, sex: input.sex };
-  const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
-  const predicates: Prisma.Sql[] = [];
-
+  const filters = {
+    q: input.q,
+    sex: input.sex,
+    month,
+    year,
+    view: entryView ? 'entry' : 'history',
+  };
   const scope = patientScopeWhere(actor);
-  if (scope.registeredById) {
-    predicates.push(Prisma.sql`p."registeredById" = ${scope.registeredById}`);
-  }
+  return withRosterSnapshot(
+    actor,
+    scope,
+    'parameters',
+    query,
+    filters,
+    readingDate,
+    async (tx, snapshot) => {
+      const predicates: Prisma.Sql[] = [];
+      const { order } = snapshot.roster;
+      const projectLocation = Boolean(input.q) || order.criterion === 'location';
+      const locationJoin = projectLocation
+        ? patientLocationJoin(readingDate, snapshot.today)
+        : Prisma.empty;
+      if (scope.registeredById) {
+        predicates.push(Prisma.sql`p."registeredById" = ${scope.registeredById}`);
+      }
 
-  if (input.sex) predicates.push(Prisma.sql`p."sex" = ${input.sex}`);
-  if (input.q) {
-    for (const token of input.q
-      .split(/[,\s]+/)
-      .filter(Boolean)
-      .slice(0, 5)) {
-      const pattern = likePattern(normalizeSearchText(token));
-      predicates.push(Prisma.sql`(
+      if (input.sex) predicates.push(Prisma.sql`p."sex" = ${input.sex}`);
+      if (input.q) {
+        for (const token of input.q
+          .split(/[,\s]+/)
+          .filter(Boolean)
+          .slice(0, 5)) {
+          const pattern = likePattern(normalizeSearchText(token));
+          predicates.push(Prisma.sql`(
         ${normalizedSql(Prisma.sql`p."firstName"`)} LIKE ${pattern} ESCAPE '\\' OR
         ${normalizedSql(Prisma.sql`p."lastName"`)} LIKE ${pattern} ESCAPE '\\' OR
         ${normalizedSql(Prisma.sql`p."medicalRecordNumber"`)} LIKE ${pattern} ESCAPE '\\' OR
         ${normalizedSql(Prisma.sql`COALESCE(location.location->>'room', '')`)} LIKE ${pattern} ESCAPE '\\' OR
         ${normalizedSql(Prisma.sql`COALESCE(location.location->>'bed', '')`)} LIKE ${pattern} ESCAPE '\\'
       )`);
-    }
-  }
-  if (position) {
-    predicates.push(patientAlphabeticalAfter(position));
-  }
+        }
+      }
+      if (snapshot.anchor) {
+        const [position] = await tx.$queryRaw<RosterPosition[]>(Prisma.sql`
+      SELECT p.id AS "patientId", p."firstName", p."lastName",
+        ${projectLocation ? Prisma.sql`location.location->>'room'` : Prisma.sql`NULL::text`} AS room,
+        ${projectLocation ? Prisma.sql`location.location->>'bed'` : Prisma.sql`NULL::text`} AS bed
+      FROM "Patient" p ${locationJoin}
+      WHERE p.id = ${snapshot.anchor.patientId}
+        ${predicates.length ? Prisma.sql`AND ${Prisma.join(predicates, ' AND ')}` : Prisma.empty}
+      LIMIT 1
+    `);
+        if (!position) throw changed('anchor');
+        predicates.push(rosterAfterSql(order, position));
+      }
 
-  const whereSql = predicates.length
-    ? Prisma.sql`WHERE ${Prisma.join(predicates, ' AND ')}`
-    : Prisma.empty;
-  // Location must precede the limit for search, but ordinary pages only resolve
-  // the selected patients instead of inspecting the whole authorized roster.
-  const locationValue = input.q ? Prisma.sql`selected.location` : Prisma.sql`location.location`;
-  const rows = await prisma.$queryRaw<ParameterPageRow[]>(Prisma.sql`
+      const whereSql = predicates.length
+        ? Prisma.sql`WHERE ${Prisma.join(predicates, ' AND ')}`
+        : Prisma.empty;
+      // Location must precede the limit for search, but ordinary pages only resolve
+      // the selected patients instead of inspecting the whole authorized roster.
+      const locationValue = projectLocation
+        ? Prisma.sql`selected.location`
+        : Prisma.sql`location.location`;
+      const rows = await tx.$queryRaw<ParameterPageRow[]>(Prisma.sql`
     WITH page_patients AS MATERIALIZED (
-      SELECT p."id" ${input.q ? Prisma.sql`, location.location` : Prisma.empty} FROM "Patient" p
-      ${input.q ? patientLocationJoin(readingDate) : Prisma.empty}
+      SELECT p."id" ${projectLocation ? Prisma.sql`, location.location` : Prisma.empty} FROM "Patient" p
+      ${locationJoin}
       ${whereSql}
-      ORDER BY ${patientAlphabeticalOrder}
+      ORDER BY ${rosterOrderSql(order)}
       LIMIT ${limit + 1}
     )
     SELECT
@@ -200,7 +227,7 @@ export async function loadPatientParametersPage(
       daily."readingCount", daily."lastReadingAt", daily."noteCount"
     FROM page_patients selected
     JOIN "Patient" p ON p."id" = selected."id"
-    ${input.q ? Prisma.empty : patientLocationJoin(readingDate)}
+    ${projectLocation ? Prisma.empty : patientLocationJoin(readingDate, snapshot.today)}
     LEFT JOIN "Cartella" c ON c."patientId" = p."id"
     LEFT JOIN LATERAL (
       SELECT count(*)::int AS "readingCount",
@@ -211,42 +238,40 @@ export async function loadPatientParametersPage(
         AND r."measuredAt" >= (${readingDate}::date::timestamp AT TIME ZONE 'Europe/Rome')
         AND r."measuredAt" < ((${readingDate}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')
     ) daily ON true
-    ORDER BY ${patientAlphabeticalOrder}
+    ORDER BY ${rosterOrderSql(order, locationValue)}
   `);
 
-  const hasMore = rows.length > limit;
-  const visible = hasMore ? rows.slice(0, limit) : rows;
-  const last = visible.at(-1);
-  return {
-    items: visible.map(
-      ({
-        parametriMensili,
-        cameraNumero,
-        lettoNumero,
-        readingCount,
-        noteCount,
-        lastReadingAt,
-        ...patient
-      }) => ({
-        patient,
-        cartella: {
-          pazienteId: patient.id,
-          readingCount,
-          noteCount,
-          lastReadingAt: lastReadingAt?.toISOString() ?? null,
-          parametriMensili: Array.isArray(parametriMensili) ? parametriMensili : [],
-          ...(cameraNumero && { cameraNumero }),
-          ...(lettoNumero && { lettoNumero }),
-        },
-      }),
-    ),
-    hasMore,
-    nextCursor:
-      hasMore && last
-        ? encodePatientPageCursor(
-            { lastName: last.lastName, firstName: last.firstName, id: last.id },
-            filters,
-          )
-        : null,
-  };
+      const hasMore = rows.length > limit;
+      const visible = hasMore ? rows.slice(0, limit) : rows;
+      const last = visible.at(-1);
+      return {
+        items: visible.map(
+          ({
+            parametriMensili,
+            cameraNumero,
+            lettoNumero,
+            readingCount,
+            noteCount,
+            lastReadingAt,
+            ...patient
+          }) => ({
+            patient,
+            cartella: {
+              pazienteId: patient.id,
+              readingCount,
+              noteCount,
+              lastReadingAt: lastReadingAt?.toISOString() ?? null,
+              parametriMensili: Array.isArray(parametriMensili) ? parametriMensili : [],
+              ...(cameraNumero && { cameraNumero }),
+              ...(lettoNumero && { lettoNumero }),
+            },
+          }),
+        ),
+        hasMore,
+        roster: snapshot.roster,
+        nextCursor:
+          hasMore && last ? encodeRosterCursor(snapshot.binding, { patientId: last.id }) : null,
+      };
+    },
+  );
 }

@@ -6,7 +6,6 @@ import type {
   MotivoNonErogazione,
   TherapyActionInfo,
 } from '../../types';
-import { sortPazienti } from '../../lib/patientSort';
 import { patientIdentifier, patientIdentityName } from '../../lib/patientIdentity';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import './TherapySlotModal.css';
@@ -65,9 +64,8 @@ export function TherapySlotModal({
   const [filtroStato, setFiltroStato] = useState<FiltroStato>('tutte');
 
   const { summary } = slot;
-  // Issue #129: il backend restituisce i pazienti in ordine di terapia — qui
-  // li mostriamo sempre in ordine alfabetico (cognome, nome).
-  const patients = sortPazienti(slot.patients)
+  // Patient order is established by the server before the page limit.
+  const patients = slot.patients
     .map((p) => ({
       ...p,
       administrations:

@@ -26,7 +26,7 @@ interface PatientPageCursorPayload extends PatientPagePosition, PatientPageFilte
   v: 2;
 }
 
-const MAX_CURSOR_LENGTH = 1024;
+const MAX_CURSOR_LENGTH = 4096;
 const MAX_QUERY_LENGTH = 80;
 const MAX_POSITION_FIELD_LENGTH = 200;
 const STRICT_POSITIVE_INTEGER = /^[1-9]\d*$/;

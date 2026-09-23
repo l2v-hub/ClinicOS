@@ -103,8 +103,9 @@ export async function loadOperationalIdentities(
   patientIds: readonly string[],
   access: OperationalPatientAccess,
   asOf?: string,
+  db: Prisma.TransactionClient = prisma,
+  today = facilityToday(),
 ): Promise<Map<string, PatientIdentityDto>> {
-  const today = facilityToday();
   const day = parseIsoCalendarDate(asOf ?? today, 'Data');
   const ids = [...new Set(patientIds)];
   if (!ids.length || access.patientIds?.length === 0) return new Map();
@@ -113,7 +114,7 @@ export async function loadOperationalIdentities(
     predicates.push(Prisma.sql`p.id IN (${Prisma.join([...access.patientIds])})`);
   if (access.registeredById)
     predicates.push(Prisma.sql`p."registeredById" = ${access.registeredById}`);
-  const rows = await prisma.$queryRaw<PatientIdentityDto[]>(Prisma.sql`
+  const rows = await db.$queryRaw<PatientIdentityDto[]>(Prisma.sql`
     SELECT p.id, p."firstName", p."lastName", p."codiceFiscale",
       to_char(p."dateOfBirth", 'YYYY-MM-DD') AS "dateOfBirth", location.location
     FROM "Patient" p

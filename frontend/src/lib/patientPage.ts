@@ -1,12 +1,21 @@
 import type { ClinicalSummaryEntry, Paziente } from '../types';
+import {
+  assertRosterPage,
+  parseRosterMetadata,
+  rosterQuery,
+  throwRosterResponse,
+  type RosterMetadata,
+  type RosterPageOptions,
+} from './rosterOrder';
 
 export interface PatientPageResponse {
+  roster?: RosterMetadata;
   items: Paziente[];
   hasMore: boolean;
   nextCursor: string | null;
 }
 
-export interface PatientPageFilters {
+export interface PatientPageFilters extends RosterPageOptions {
   q?: string;
   sex?: 'M' | 'F';
   cursor?: string;
@@ -17,6 +26,7 @@ export function buildPatientPageUrl(apiUrl: string, filters: PatientPageFilters)
   const requestedLimit = Number.isFinite(filters.limit) ? Math.trunc(filters.limit as number) : 50;
   const limit = Math.min(100, Math.max(1, requestedLimit));
   const params = new URLSearchParams({ limit: String(limit) });
+  Object.entries(rosterQuery(filters)).forEach(([key, value]) => params.set(key, value));
   if (filters.sex) params.set('sex', filters.sex);
   if (filters.cursor) params.set('cursor', filters.cursor);
   return `${apiUrl}/patients/page?${params.toString()}`;
@@ -31,7 +41,7 @@ export function buildPatientPageRequest(
 
   const requestedLimit = Number.isFinite(filters.limit) ? Math.trunc(filters.limit as number) : 50;
   const limit = Math.min(100, Math.max(1, requestedLimit));
-  const body: Record<string, string> = { q, limit: String(limit) };
+  const body: Record<string, string> = { q, limit: String(limit), ...rosterQuery(filters) };
   if (filters.sex) body.sex = filters.sex;
   if (filters.cursor) body.cursor = filters.cursor;
   return {
@@ -72,8 +82,10 @@ export async function fetchPatientPageWithSummary(
   const fetcher = options.fetcher ?? fetch;
   const request = buildPatientPageRequest(apiUrl, filters);
   const pageResponse = await fetcher(request.url, patientPageFetchInit(request, options));
-  if (!pageResponse.ok) throw new Error('Impossibile caricare la pagina pazienti');
+  if (!pageResponse.ok) await throwRosterResponse(pageResponse);
   const page = (await pageResponse.json()) as PatientPageResponse;
+  page.roster = parseRosterMetadata(page.roster);
+  assertRosterPage(page.roster, filters, filters.asOf);
   if (
     !Array.isArray(page.items) ||
     typeof page.hasMore !== 'boolean' ||
@@ -126,8 +138,10 @@ export async function fetchPatientPage(
   const fetcher = options.fetcher ?? fetch;
   const request = buildPatientPageRequest(apiUrl, filters);
   const response = await fetcher(request.url, patientPageFetchInit(request, options));
-  if (!response.ok) throw new Error('Impossibile cercare i pazienti');
+  if (!response.ok) await throwRosterResponse(response);
   const page = (await response.json()) as PatientPageResponse;
+  page.roster = parseRosterMetadata(page.roster);
+  assertRosterPage(page.roster, filters, filters.asOf);
   if (
     !Array.isArray(page.items) ||
     typeof page.hasMore !== 'boolean' ||

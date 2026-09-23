@@ -28,6 +28,7 @@ export function legacyAdministrationKey(patientId: string, drugName: string, fas
 export async function findTherapyPageAdministrations(
   date: string,
   candidates: TherapyAdministrationCandidate[],
+  db: Prisma.TransactionClient = prisma,
 ): Promise<TherapyAdministrationPageRow[]> {
   const dueCandidates = candidates.filter((candidate) => candidate.fasce.length > 0);
   if (dueCandidates.length === 0) return [];
@@ -49,7 +50,7 @@ export async function findTherapyPageAdministrations(
   ];
 
   const [modernRows, legacyRows] = await Promise.all([
-    prisma.$queryRaw<TherapyAdministrationPageRow[]>(Prisma.sql`
+    db.$queryRaw<TherapyAdministrationPageRow[]>(Prisma.sql`
       WITH candidate("therapyId", fascia) AS (
         VALUES ${Prisma.join(
           modernCandidates.map(
@@ -76,7 +77,7 @@ export async function findTherapyPageAdministrations(
     `),
     legacyCandidates.length === 0
       ? Promise.resolve([] as TherapyAdministrationPageRow[])
-      : prisma.$queryRaw<TherapyAdministrationPageRow[]>(Prisma.sql`
+      : db.$queryRaw<TherapyAdministrationPageRow[]>(Prisma.sql`
           WITH candidate("patientId", "farmacoNome", fascia) AS (
             VALUES ${Prisma.join(
               legacyCandidates.map(

@@ -1,0 +1,5928 @@
+{
+  "today": "2026-09-23",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/ai/extraction/status",
+      "at": "2026-09-23T02:03:32.383Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:03:32.384Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "at": "2026-09-23T02:03:32.401Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/settings",
+      "at": "2026-09-23T02:03:32.435Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:03:32.437Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%200.0&limite=25",
+      "at": "2026-09-23T02:03:32.765Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.0&limite=25",
+      "at": "2026-09-23T02:03:32.766Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.1&limite=25",
+      "at": "2026-09-23T02:03:32.766Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.2&limite=25",
+      "at": "2026-09-23T02:03:32.767Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.3&limite=25",
+      "at": "2026-09-23T02:03:32.767Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.4&limite=25",
+      "at": "2026-09-23T02:03:32.828Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.5&limite=25",
+      "at": "2026-09-23T02:03:32.904Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.6&limite=25",
+      "at": "2026-09-23T02:03:32.905Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.7&limite=25",
+      "at": "2026-09-23T02:03:32.905Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.8&limite=25",
+      "at": "2026-09-23T02:03:32.906Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.0&limite=25",
+      "at": "2026-09-23T02:03:32.906Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.1&limite=25",
+      "at": "2026-09-23T02:03:32.932Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.2&limite=25",
+      "at": "2026-09-23T02:03:33.005Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.0&limite=25",
+      "at": "2026-09-23T02:03:33.006Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.1&limite=25",
+      "at": "2026-09-23T02:03:33.011Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.2&limite=25",
+      "at": "2026-09-23T02:03:33.012Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.3&limite=25",
+      "at": "2026-09-23T02:03:33.012Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2012.0&limite=25",
+      "at": "2026-09-23T02:03:33.030Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.0&limite=25",
+      "at": "2026-09-23T02:03:33.086Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.1&limite=25",
+      "at": "2026-09-23T02:03:33.086Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.0&limite=25",
+      "at": "2026-09-23T02:03:33.087Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.1&limite=25",
+      "at": "2026-09-23T02:03:33.087Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.2&limite=25",
+      "at": "2026-09-23T02:03:33.087Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.0&limite=25",
+      "at": "2026-09-23T02:03:33.097Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.1&limite=25",
+      "at": "2026-09-23T02:03:33.143Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.2&limite=25",
+      "at": "2026-09-23T02:03:33.144Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.3&limite=25",
+      "at": "2026-09-23T02:03:33.144Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2016.0&limite=25",
+      "at": "2026-09-23T02:03:33.144Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.0&limite=25",
+      "at": "2026-09-23T02:03:33.144Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.1&limite=25",
+      "at": "2026-09-23T02:03:33.154Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.0&limite=25",
+      "at": "2026-09-23T02:03:33.189Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.1&limite=25",
+      "at": "2026-09-23T02:03:33.189Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.2&limite=25",
+      "at": "2026-09-23T02:03:33.189Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.0&limite=25",
+      "at": "2026-09-23T02:03:33.189Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.1&limite=25",
+      "at": "2026-09-23T02:03:33.189Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.2&limite=25",
+      "at": "2026-09-23T02:03:33.198Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.3&limite=25",
+      "at": "2026-09-23T02:03:33.243Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.0&limite=25",
+      "at": "2026-09-23T02:03:33.244Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.1&limite=25",
+      "at": "2026-09-23T02:03:33.244Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.2&limite=25",
+      "at": "2026-09-23T02:03:33.244Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.3&limite=25",
+      "at": "2026-09-23T02:03:33.250Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.4&limite=25",
+      "at": "2026-09-23T02:03:33.257Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.5&limite=25",
+      "at": "2026-09-23T02:03:33.330Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.6&limite=25",
+      "at": "2026-09-23T02:03:33.331Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.7&limite=25",
+      "at": "2026-09-23T02:03:33.331Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.8&limite=25",
+      "at": "2026-09-23T02:03:33.331Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2020.0&limite=25",
+      "at": "2026-09-23T02:03:33.332Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.0&limite=25",
+      "at": "2026-09-23T02:03:33.351Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.1&limite=25",
+      "at": "2026-09-23T02:03:33.393Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.0&limite=25",
+      "at": "2026-09-23T02:03:33.394Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.1&limite=25",
+      "at": "2026-09-23T02:03:33.394Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.2&limite=25",
+      "at": "2026-09-23T02:03:33.395Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.0&limite=25",
+      "at": "2026-09-23T02:03:33.395Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.1&limite=25",
+      "at": "2026-09-23T02:03:33.410Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.2&limite=25",
+      "at": "2026-09-23T02:03:33.450Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.3&limite=25",
+      "at": "2026-09-23T02:03:33.455Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2024.0&limite=25",
+      "at": "2026-09-23T02:03:33.460Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.0&limite=25",
+      "at": "2026-09-23T02:03:33.461Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.1&limite=25",
+      "at": "2026-09-23T02:03:33.461Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.0&limite=25",
+      "at": "2026-09-23T02:03:33.472Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.1&limite=25",
+      "at": "2026-09-23T02:03:33.519Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.2&limite=25",
+      "at": "2026-09-23T02:03:33.520Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.0&limite=25",
+      "at": "2026-09-23T02:03:33.520Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.1&limite=25",
+      "at": "2026-09-23T02:03:33.520Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.2&limite=25",
+      "at": "2026-09-23T02:03:33.520Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.3&limite=25",
+      "at": "2026-09-23T02:03:33.531Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2028.0&limite=25",
+      "at": "2026-09-23T02:03:33.568Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.0&limite=25",
+      "at": "2026-09-23T02:03:33.574Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.1&limite=25",
+      "at": "2026-09-23T02:03:33.574Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.0&limite=25",
+      "at": "2026-09-23T02:03:33.579Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.1&limite=25",
+      "at": "2026-09-23T02:03:33.579Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.2&limite=25",
+      "at": "2026-09-23T02:03:33.585Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.3&limite=25",
+      "at": "2026-09-23T02:03:33.632Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.0&limite=25",
+      "at": "2026-09-23T02:03:33.639Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.1&limite=25",
+      "at": "2026-09-23T02:03:33.639Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.2&limite=25",
+      "at": "2026-09-23T02:03:33.640Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.0&limite=25",
+      "at": "2026-09-23T02:03:33.644Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.1&limite=25",
+      "at": "2026-09-23T02:03:33.653Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.2&limite=25",
+      "at": "2026-09-23T02:03:33.689Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.3&limite=25",
+      "at": "2026-09-23T02:03:33.695Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2032.0&limite=25",
+      "at": "2026-09-23T02:03:33.699Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.0&limite=25",
+      "at": "2026-09-23T02:03:33.699Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.1&limite=25",
+      "at": "2026-09-23T02:03:33.699Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.0&limite=25",
+      "at": "2026-09-23T02:03:33.709Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.1&limite=25",
+      "at": "2026-09-23T02:03:33.762Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.2&limite=25",
+      "at": "2026-09-23T02:03:33.764Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.0&limite=25",
+      "at": "2026-09-23T02:03:33.764Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.1&limite=25",
+      "at": "2026-09-23T02:03:33.769Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.2&limite=25",
+      "at": "2026-09-23T02:03:33.770Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.3&limite=25",
+      "at": "2026-09-23T02:03:33.777Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2036.0&limite=25",
+      "at": "2026-09-23T02:03:33.823Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.0&limite=25",
+      "at": "2026-09-23T02:03:33.833Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.1&limite=25",
+      "at": "2026-09-23T02:03:33.834Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.0&limite=25",
+      "at": "2026-09-23T02:03:33.834Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.1&limite=25",
+      "at": "2026-09-23T02:03:33.834Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.2&limite=25",
+      "at": "2026-09-23T02:03:33.845Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.0&limite=25",
+      "at": "2026-09-23T02:03:33.892Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.1&limite=25",
+      "at": "2026-09-23T02:03:33.893Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.2&limite=25",
+      "at": "2026-09-23T02:03:33.893Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.3&limite=25",
+      "at": "2026-09-23T02:03:33.893Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%204.0&limite=25",
+      "at": "2026-09-23T02:03:33.894Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2040.0&limite=25",
+      "at": "2026-09-23T02:03:33.907Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.0&limite=25",
+      "at": "2026-09-23T02:03:33.946Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.1&limite=25",
+      "at": "2026-09-23T02:03:33.953Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.0&limite=25",
+      "at": "2026-09-23T02:03:33.958Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.1&limite=25",
+      "at": "2026-09-23T02:03:33.958Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.2&limite=25",
+      "at": "2026-09-23T02:03:33.958Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.0&limite=25",
+      "at": "2026-09-23T02:03:33.969Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.1&limite=25",
+      "at": "2026-09-23T02:03:34.016Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.2&limite=25",
+      "at": "2026-09-23T02:03:34.016Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.3&limite=25",
+      "at": "2026-09-23T02:03:34.017Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2044.0&limite=25",
+      "at": "2026-09-23T02:03:34.017Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.0&limite=25",
+      "at": "2026-09-23T02:03:34.021Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.1&limite=25",
+      "at": "2026-09-23T02:03:34.027Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.0&limite=25",
+      "at": "2026-09-23T02:03:34.093Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.1&limite=25",
+      "at": "2026-09-23T02:03:34.102Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.2&limite=25",
+      "at": "2026-09-23T02:03:34.110Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.0&limite=25",
+      "at": "2026-09-23T02:03:34.110Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.1&limite=25",
+      "at": "2026-09-23T02:03:34.110Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.2&limite=25",
+      "at": "2026-09-23T02:03:34.119Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.3&limite=25",
+      "at": "2026-09-23T02:03:34.165Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2048.0&limite=25",
+      "at": "2026-09-23T02:03:34.165Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.0&limite=25",
+      "at": "2026-09-23T02:03:34.165Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.1&limite=25",
+      "at": "2026-09-23T02:03:34.170Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.0&limite=25",
+      "at": "2026-09-23T02:03:34.170Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.1&limite=25",
+      "at": "2026-09-23T02:03:34.177Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.0&limite=25",
+      "at": "2026-09-23T02:03:34.250Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.1&limite=25",
+      "at": "2026-09-23T02:03:34.251Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.2&limite=25",
+      "at": "2026-09-23T02:03:34.252Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.0&limite=25",
+      "at": "2026-09-23T02:03:34.252Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.1&limite=25",
+      "at": "2026-09-23T02:03:34.253Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.2&limite=25",
+      "at": "2026-09-23T02:03:34.273Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.3&limite=25",
+      "at": "2026-09-23T02:03:34.337Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2052.0&limite=25",
+      "at": "2026-09-23T02:03:34.337Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.0&limite=25",
+      "at": "2026-09-23T02:03:34.338Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.1&limite=25",
+      "at": "2026-09-23T02:03:34.338Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.0&limite=25",
+      "at": "2026-09-23T02:03:34.338Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.1&limite=25",
+      "at": "2026-09-23T02:03:34.348Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.2&limite=25",
+      "at": "2026-09-23T02:03:34.389Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.0&limite=25",
+      "at": "2026-09-23T02:03:34.389Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.1&limite=25",
+      "at": "2026-09-23T02:03:34.390Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.2&limite=25",
+      "at": "2026-09-23T02:03:34.390Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.3&limite=25",
+      "at": "2026-09-23T02:03:34.395Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2056.0&limite=25",
+      "at": "2026-09-23T02:03:34.402Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.0&limite=25",
+      "at": "2026-09-23T02:03:34.441Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.1&limite=25",
+      "at": "2026-09-23T02:03:34.441Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.0&limite=25",
+      "at": "2026-09-23T02:03:34.442Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.1&limite=25",
+      "at": "2026-09-23T02:03:34.443Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.2&limite=25",
+      "at": "2026-09-23T02:03:34.447Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.0&limite=25",
+      "at": "2026-09-23T02:03:34.453Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.1&limite=25",
+      "at": "2026-09-23T02:03:34.496Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.2&limite=25",
+      "at": "2026-09-23T02:03:34.496Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.3&limite=25",
+      "at": "2026-09-23T02:03:34.497Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.0&limite=25",
+      "at": "2026-09-23T02:03:34.497Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.1&limite=25",
+      "at": "2026-09-23T02:03:34.497Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.2&limite=25",
+      "at": "2026-09-23T02:03:34.506Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2060.0&limite=25",
+      "at": "2026-09-23T02:03:34.544Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.0&limite=25",
+      "at": "2026-09-23T02:03:34.545Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.1&limite=25",
+      "at": "2026-09-23T02:03:34.545Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.0&limite=25",
+      "at": "2026-09-23T02:03:34.545Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.1&limite=25",
+      "at": "2026-09-23T02:03:34.545Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.2&limite=25",
+      "at": "2026-09-23T02:03:34.554Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.0&limite=25",
+      "at": "2026-09-23T02:03:34.596Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.1&limite=25",
+      "at": "2026-09-23T02:03:34.597Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.2&limite=25",
+      "at": "2026-09-23T02:03:34.607Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.3&limite=25",
+      "at": "2026-09-23T02:03:34.616Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.0&limite=25",
+      "at": "2026-09-23T02:03:34.616Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.1&limite=25",
+      "at": "2026-09-23T02:03:34.622Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.2&limite=25",
+      "at": "2026-09-23T02:03:34.668Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.3&limite=25",
+      "at": "2026-09-23T02:03:34.673Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%208.0&limite=25",
+      "at": "2026-09-23T02:03:34.674Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.0&limite=25",
+      "at": "2026-09-23T02:03:34.675Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.1&limite=25",
+      "at": "2026-09-23T02:03:34.675Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-063%2Cpo07-patient-056%2Cpo07-patient-049%2Cpo07-patient-042%2Cpo07-patient-035%2Cpo07-patient-028%2Cpo07-patient-021%2Cpo07-patient-014%2Cpo07-patient-007%2Cvitals-qa-anna%2Cvitals-qa-bruno%2Cpo06-alba-1%2Cpo06-alba-2%2Cpo07-patient-000%2Cpo07-patient-013%2Cpo07-patient-026%2Cpo07-patient-039%2Cpo07-patient-052%2Cpo06-conflict%2Cpo06-long%2Cpo06-ended%2Cpo06-empty%2Cpo07-patient-062%2Cpo07-patient-061%2Cpo07-patient-060%2Cpo07-patient-059%2Cpo07-patient-058%2Cpo07-patient-057%2Cpo07-patient-055%2Cpo07-patient-054%2Cpo07-patient-053%2Cpo07-patient-051%2Cpo07-patient-050%2Cpo07-patient-048%2Cpo07-patient-047%2Cpo07-patient-046%2Cpo07-patient-045%2Cpo07-patient-044%2Cpo07-patient-043%2Cpo07-patient-041%2Cpo07-patient-040%2Cpo07-patient-038%2Cpo07-patient-037%2Cpo07-patient-036%2Cpo07-patient-034%2Cpo07-patient-033%2Cpo07-patient-032%2Cpo07-patient-031%2Cpo07-patient-030%2Cpo07-patient-029",
+      "at": "2026-09-23T02:03:34.684Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:03:46.197Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962",
+      "at": "2026-09-23T02:03:46.236Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-060%2Cpo07-patient-040%2Cpo07-patient-020%2Cpo07-patient-045%2Cpo07-patient-025%2Cpo07-patient-005%2Cpo07-patient-050%2Cpo07-patient-030%2Cpo07-patient-010%2Cpo07-patient-035%2Cpo07-patient-015%2Cpo07-patient-021%2Cpo07-patient-061%2Cpo07-patient-041%2Cpo07-patient-001%2Cpo07-patient-026%2Cpo07-patient-046%2Cpo07-patient-006%2Cpo07-patient-051%2Cpo07-patient-031%2Cpo07-patient-056%2Cpo07-patient-036%2Cpo07-patient-016%2Cpo07-patient-042%2Cpo07-patient-062%2Cpo07-patient-002%2Cpo07-patient-007%2Cpo07-patient-047%2Cpo07-patient-027%2Cpo07-patient-052%2Cpo07-patient-032%2Cpo07-patient-012%2Cpo07-patient-057%2Cpo07-patient-037%2Cpo07-patient-017%2Cpo07-patient-063%2Cpo07-patient-043%2Cpo07-patient-023%2Cpo07-patient-003%2Cpo07-patient-028%2Cpo07-patient-048%2Cpo07-patient-008%2Cpo07-patient-013%2Cpo07-patient-053%2Cpo07-patient-058%2Cpo07-patient-038%2Cpo07-patient-018%2Cpo07-patient-024%2Cpo07-patient-004%2Cpo07-patient-049",
+      "at": "2026-09-23T02:03:46.506Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJwYXRpZW50cyIsInNjb3BlIjoiOWJENXlwbG5YV2h3VkZXV2w1dXdsRUFyS2pJNFJudXF6V2xIVnVRWXZFayIsImNvbnRleHRJZCI6ImM3MDg1OTNhLTFiMjMtNDNjNS1hMjEyLWMzNTg2N2EwYzk2MiIsImNvbnRleHRWZXJzaW9uIjoiMCIsInJldmlzaW9uIjoiMCIsIm9yZGVyIjp7ImNyaXRlcmlvbiI6ImxvY2F0aW9uIiwiZGlyZWN0aW9uIjoiYXNjIn0sImZpbHRlcnMiOnt9LCJhc09mIjoiMjAyNi0wOS0yMyIsImVwb2NoIjp7InJvc3RlciI6IjE1NSJ9fSwiYW5jaG9yIjp7InBhdGllbnRJZCI6InBvMDctcGF0aWVudC0wNDkifX0",
+      "at": "2026-09-23T02:04:15.782Z",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:04:15.953Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962",
+      "at": "2026-09-23T02:04:16.264Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-060%2Cpo07-patient-040%2Cpo07-patient-020%2Cpo07-patient-045%2Cpo07-patient-025%2Cpo07-patient-005%2Cpo07-patient-050%2Cpo07-patient-030%2Cpo07-patient-010%2Cpo07-patient-035%2Cpo07-patient-015%2Cpo07-patient-021%2Cpo07-patient-061%2Cpo07-patient-041%2Cpo07-patient-001%2Cpo07-patient-026%2Cpo07-patient-046%2Cpo07-patient-006%2Cpo07-patient-051%2Cpo07-patient-031%2Cpo07-patient-056%2Cpo07-patient-036%2Cpo07-patient-016%2Cpo07-patient-042%2Cpo07-patient-062%2Cpo07-patient-002%2Cpo07-patient-007%2Cpo07-patient-047%2Cpo07-patient-027%2Cpo07-patient-052%2Cpo07-patient-032%2Cpo07-patient-012%2Cpo07-patient-057%2Cpo07-patient-037%2Cpo07-patient-017%2Cpo07-patient-063%2Cpo07-patient-043%2Cpo07-patient-023%2Cpo07-patient-003%2Cpo07-patient-028%2Cpo07-patient-048%2Cpo07-patient-008%2Cpo07-patient-013%2Cpo07-patient-053%2Cpo07-patient-058%2Cpo07-patient-038%2Cpo07-patient-018%2Cpo07-patient-024%2Cpo07-patient-004%2Cpo07-patient-049",
+      "at": "2026-09-23T02:04:16.387Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:04:39.908Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:04:48.463Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:04:48.469Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:05:02.071Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:05:02.147Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:05:02.165Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:05:09.030Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:05:09.081Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:05:09.097Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/po07-patient-060/parameter-readings",
+      "at": "2026-09-23T02:06:09.905Z",
+      "requestId": "46937597-b640-4869-a641-9aa8f4545b6c",
+      "values": {
+        "fc": "72",
+        "note": "Bozza sintetica PO07: resta al paziente corretto."
+      },
+      "status": 503
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:06:16.406Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:06:16.467Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:06:16.471Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:06:16.744Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:06:16.788Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:06:16.789Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/po07-patient-060/parameter-readings",
+      "at": "2026-09-23T02:06:31.630Z",
+      "requestId": "46937597-b640-4869-a641-9aa8f4545b6c",
+      "values": {
+        "fc": "72",
+        "note": "Bozza sintetica PO07: resta al paziente corretto."
+      },
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ai/extraction/status",
+      "at": "2026-09-23T02:06:52.252Z",
+      "status": 304
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:06:52.254Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "at": "2026-09-23T02:06:52.258Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:06:52.262Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/settings",
+      "at": "2026-09-23T02:06:52.264Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%200.0&limite=25",
+      "at": "2026-09-23T02:06:52.607Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.0&limite=25",
+      "at": "2026-09-23T02:06:52.608Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.1&limite=25",
+      "at": "2026-09-23T02:06:52.614Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.2&limite=25",
+      "at": "2026-09-23T02:06:52.615Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.3&limite=25",
+      "at": "2026-09-23T02:06:52.615Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.4&limite=25",
+      "at": "2026-09-23T02:06:52.617Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.5&limite=25",
+      "at": "2026-09-23T02:06:52.710Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.6&limite=25",
+      "at": "2026-09-23T02:06:52.710Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.7&limite=25",
+      "at": "2026-09-23T02:06:52.711Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.8&limite=25",
+      "at": "2026-09-23T02:06:52.711Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.0&limite=25",
+      "at": "2026-09-23T02:06:52.712Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.1&limite=25",
+      "at": "2026-09-23T02:06:52.726Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.2&limite=25",
+      "at": "2026-09-23T02:06:52.818Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.0&limite=25",
+      "at": "2026-09-23T02:06:52.826Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.1&limite=25",
+      "at": "2026-09-23T02:06:52.826Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.2&limite=25",
+      "at": "2026-09-23T02:06:52.826Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.3&limite=25",
+      "at": "2026-09-23T02:06:52.827Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2012.0&limite=25",
+      "at": "2026-09-23T02:06:52.827Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.0&limite=25",
+      "at": "2026-09-23T02:06:52.893Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.1&limite=25",
+      "at": "2026-09-23T02:06:52.903Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.0&limite=25",
+      "at": "2026-09-23T02:06:52.904Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.1&limite=25",
+      "at": "2026-09-23T02:06:52.905Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.2&limite=25",
+      "at": "2026-09-23T02:06:52.905Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.0&limite=25",
+      "at": "2026-09-23T02:06:52.905Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.1&limite=25",
+      "at": "2026-09-23T02:06:52.977Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.2&limite=25",
+      "at": "2026-09-23T02:06:52.977Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.3&limite=25",
+      "at": "2026-09-23T02:06:52.977Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2016.0&limite=25",
+      "at": "2026-09-23T02:06:52.977Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.0&limite=25",
+      "at": "2026-09-23T02:06:52.977Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.1&limite=25",
+      "at": "2026-09-23T02:06:52.978Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.0&limite=25",
+      "at": "2026-09-23T02:06:53.081Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.1&limite=25",
+      "at": "2026-09-23T02:06:53.081Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.2&limite=25",
+      "at": "2026-09-23T02:06:53.089Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.0&limite=25",
+      "at": "2026-09-23T02:06:53.089Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.1&limite=25",
+      "at": "2026-09-23T02:06:53.089Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.2&limite=25",
+      "at": "2026-09-23T02:06:53.090Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.3&limite=25",
+      "at": "2026-09-23T02:06:53.191Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.0&limite=25",
+      "at": "2026-09-23T02:06:53.192Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.1&limite=25",
+      "at": "2026-09-23T02:06:53.193Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.2&limite=25",
+      "at": "2026-09-23T02:06:53.193Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.3&limite=25",
+      "at": "2026-09-23T02:06:53.193Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.4&limite=25",
+      "at": "2026-09-23T02:06:53.194Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.5&limite=25",
+      "at": "2026-09-23T02:06:53.275Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.6&limite=25",
+      "at": "2026-09-23T02:06:53.275Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.7&limite=25",
+      "at": "2026-09-23T02:06:53.276Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.8&limite=25",
+      "at": "2026-09-23T02:06:53.276Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2020.0&limite=25",
+      "at": "2026-09-23T02:06:53.276Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.0&limite=25",
+      "at": "2026-09-23T02:06:53.276Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.1&limite=25",
+      "at": "2026-09-23T02:06:53.351Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.0&limite=25",
+      "at": "2026-09-23T02:06:53.352Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.1&limite=25",
+      "at": "2026-09-23T02:06:53.353Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.2&limite=25",
+      "at": "2026-09-23T02:06:53.353Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.0&limite=25",
+      "at": "2026-09-23T02:06:53.353Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.1&limite=25",
+      "at": "2026-09-23T02:06:53.354Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.2&limite=25",
+      "at": "2026-09-23T02:06:53.422Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.3&limite=25",
+      "at": "2026-09-23T02:06:53.423Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2024.0&limite=25",
+      "at": "2026-09-23T02:06:53.423Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.0&limite=25",
+      "at": "2026-09-23T02:06:53.423Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.1&limite=25",
+      "at": "2026-09-23T02:06:53.423Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.0&limite=25",
+      "at": "2026-09-23T02:06:53.424Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.1&limite=25",
+      "at": "2026-09-23T02:06:53.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.2&limite=25",
+      "at": "2026-09-23T02:06:53.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.0&limite=25",
+      "at": "2026-09-23T02:06:53.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.1&limite=25",
+      "at": "2026-09-23T02:06:53.491Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.2&limite=25",
+      "at": "2026-09-23T02:06:53.495Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.3&limite=25",
+      "at": "2026-09-23T02:06:53.496Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2028.0&limite=25",
+      "at": "2026-09-23T02:06:53.565Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.0&limite=25",
+      "at": "2026-09-23T02:06:53.566Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.1&limite=25",
+      "at": "2026-09-23T02:06:53.566Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.0&limite=25",
+      "at": "2026-09-23T02:06:53.567Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.1&limite=25",
+      "at": "2026-09-23T02:06:53.567Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.2&limite=25",
+      "at": "2026-09-23T02:06:53.568Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.3&limite=25",
+      "at": "2026-09-23T02:06:53.635Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.0&limite=25",
+      "at": "2026-09-23T02:06:53.636Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.1&limite=25",
+      "at": "2026-09-23T02:06:53.636Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.2&limite=25",
+      "at": "2026-09-23T02:06:53.636Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.0&limite=25",
+      "at": "2026-09-23T02:06:53.637Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.1&limite=25",
+      "at": "2026-09-23T02:06:53.642Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.2&limite=25",
+      "at": "2026-09-23T02:06:53.696Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.3&limite=25",
+      "at": "2026-09-23T02:06:53.696Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2032.0&limite=25",
+      "at": "2026-09-23T02:06:53.701Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.0&limite=25",
+      "at": "2026-09-23T02:06:53.701Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.1&limite=25",
+      "at": "2026-09-23T02:06:53.702Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.0&limite=25",
+      "at": "2026-09-23T02:06:53.703Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.1&limite=25",
+      "at": "2026-09-23T02:06:53.766Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.2&limite=25",
+      "at": "2026-09-23T02:06:53.771Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.0&limite=25",
+      "at": "2026-09-23T02:06:53.771Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.1&limite=25",
+      "at": "2026-09-23T02:06:53.772Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.2&limite=25",
+      "at": "2026-09-23T02:06:53.772Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.3&limite=25",
+      "at": "2026-09-23T02:06:53.776Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2036.0&limite=25",
+      "at": "2026-09-23T02:06:53.835Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.0&limite=25",
+      "at": "2026-09-23T02:06:53.836Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.1&limite=25",
+      "at": "2026-09-23T02:06:53.836Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.0&limite=25",
+      "at": "2026-09-23T02:06:53.836Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.1&limite=25",
+      "at": "2026-09-23T02:06:53.836Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.2&limite=25",
+      "at": "2026-09-23T02:06:53.837Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.0&limite=25",
+      "at": "2026-09-23T02:06:53.905Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.1&limite=25",
+      "at": "2026-09-23T02:06:53.906Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.2&limite=25",
+      "at": "2026-09-23T02:06:53.906Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.3&limite=25",
+      "at": "2026-09-23T02:06:53.907Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%204.0&limite=25",
+      "at": "2026-09-23T02:06:53.907Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2040.0&limite=25",
+      "at": "2026-09-23T02:06:53.915Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.0&limite=25",
+      "at": "2026-09-23T02:06:53.980Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.1&limite=25",
+      "at": "2026-09-23T02:06:53.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.0&limite=25",
+      "at": "2026-09-23T02:06:53.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.1&limite=25",
+      "at": "2026-09-23T02:06:53.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.2&limite=25",
+      "at": "2026-09-23T02:06:53.995Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.0&limite=25",
+      "at": "2026-09-23T02:06:54.003Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.1&limite=25",
+      "at": "2026-09-23T02:06:54.050Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.2&limite=25",
+      "at": "2026-09-23T02:06:54.051Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.3&limite=25",
+      "at": "2026-09-23T02:06:54.052Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2044.0&limite=25",
+      "at": "2026-09-23T02:06:54.057Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.0&limite=25",
+      "at": "2026-09-23T02:06:54.057Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.1&limite=25",
+      "at": "2026-09-23T02:06:54.063Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.0&limite=25",
+      "at": "2026-09-23T02:06:54.120Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.1&limite=25",
+      "at": "2026-09-23T02:06:54.125Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.2&limite=25",
+      "at": "2026-09-23T02:06:54.126Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.0&limite=25",
+      "at": "2026-09-23T02:06:54.126Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.1&limite=25",
+      "at": "2026-09-23T02:06:54.126Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.2&limite=25",
+      "at": "2026-09-23T02:06:54.132Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.3&limite=25",
+      "at": "2026-09-23T02:06:54.185Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2048.0&limite=25",
+      "at": "2026-09-23T02:06:54.195Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.0&limite=25",
+      "at": "2026-09-23T02:06:54.202Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.1&limite=25",
+      "at": "2026-09-23T02:06:54.202Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.0&limite=25",
+      "at": "2026-09-23T02:06:54.203Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.1&limite=25",
+      "at": "2026-09-23T02:06:54.203Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.0&limite=25",
+      "at": "2026-09-23T02:06:54.258Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.1&limite=25",
+      "at": "2026-09-23T02:06:54.259Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.2&limite=25",
+      "at": "2026-09-23T02:06:54.260Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.0&limite=25",
+      "at": "2026-09-23T02:06:54.260Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.1&limite=25",
+      "at": "2026-09-23T02:06:54.260Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.2&limite=25",
+      "at": "2026-09-23T02:06:54.265Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.3&limite=25",
+      "at": "2026-09-23T02:06:54.326Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2052.0&limite=25",
+      "at": "2026-09-23T02:06:54.327Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.0&limite=25",
+      "at": "2026-09-23T02:06:54.328Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.1&limite=25",
+      "at": "2026-09-23T02:06:54.328Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.0&limite=25",
+      "at": "2026-09-23T02:06:54.332Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.1&limite=25",
+      "at": "2026-09-23T02:06:54.333Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.2&limite=25",
+      "at": "2026-09-23T02:06:54.391Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.0&limite=25",
+      "at": "2026-09-23T02:06:54.405Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.1&limite=25",
+      "at": "2026-09-23T02:06:54.406Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.2&limite=25",
+      "at": "2026-09-23T02:06:54.406Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.3&limite=25",
+      "at": "2026-09-23T02:06:54.406Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2056.0&limite=25",
+      "at": "2026-09-23T02:06:54.407Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.0&limite=25",
+      "at": "2026-09-23T02:06:54.450Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.1&limite=25",
+      "at": "2026-09-23T02:06:54.463Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.0&limite=25",
+      "at": "2026-09-23T02:06:54.464Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.1&limite=25",
+      "at": "2026-09-23T02:06:54.464Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.2&limite=25",
+      "at": "2026-09-23T02:06:54.465Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.0&limite=25",
+      "at": "2026-09-23T02:06:54.465Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.1&limite=25",
+      "at": "2026-09-23T02:06:54.519Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.2&limite=25",
+      "at": "2026-09-23T02:06:54.528Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.3&limite=25",
+      "at": "2026-09-23T02:06:54.528Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.0&limite=25",
+      "at": "2026-09-23T02:06:54.528Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.1&limite=25",
+      "at": "2026-09-23T02:06:54.528Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.2&limite=25",
+      "at": "2026-09-23T02:06:54.529Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2060.0&limite=25",
+      "at": "2026-09-23T02:06:54.577Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.0&limite=25",
+      "at": "2026-09-23T02:06:54.579Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.1&limite=25",
+      "at": "2026-09-23T02:06:54.579Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.0&limite=25",
+      "at": "2026-09-23T02:06:54.579Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.1&limite=25",
+      "at": "2026-09-23T02:06:54.580Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.2&limite=25",
+      "at": "2026-09-23T02:06:54.586Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.0&limite=25",
+      "at": "2026-09-23T02:06:54.641Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.1&limite=25",
+      "at": "2026-09-23T02:06:54.647Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.2&limite=25",
+      "at": "2026-09-23T02:06:54.647Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.3&limite=25",
+      "at": "2026-09-23T02:06:54.648Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.0&limite=25",
+      "at": "2026-09-23T02:06:54.653Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.1&limite=25",
+      "at": "2026-09-23T02:06:54.654Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.2&limite=25",
+      "at": "2026-09-23T02:06:54.700Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.3&limite=25",
+      "at": "2026-09-23T02:06:54.706Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%208.0&limite=25",
+      "at": "2026-09-23T02:06:54.706Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.0&limite=25",
+      "at": "2026-09-23T02:06:54.707Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.1&limite=25",
+      "at": "2026-09-23T02:06:54.707Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-060%2Cpo07-patient-040%2Cpo07-patient-020%2Cpo07-patient-045%2Cpo07-patient-025%2Cpo07-patient-005%2Cpo07-patient-050%2Cpo07-patient-030%2Cpo07-patient-010%2Cpo07-patient-035%2Cpo07-patient-015%2Cpo07-patient-021%2Cpo07-patient-061%2Cpo07-patient-041%2Cpo07-patient-001%2Cpo07-patient-026%2Cpo07-patient-046%2Cpo07-patient-006%2Cpo07-patient-051%2Cpo07-patient-031%2Cpo07-patient-056%2Cpo07-patient-036%2Cpo07-patient-016%2Cpo07-patient-042%2Cpo07-patient-062%2Cpo07-patient-002%2Cpo07-patient-007%2Cpo07-patient-047%2Cpo07-patient-027%2Cpo07-patient-052%2Cpo07-patient-032%2Cpo07-patient-012%2Cpo07-patient-057%2Cpo07-patient-037%2Cpo07-patient-017%2Cpo07-patient-063%2Cpo07-patient-043%2Cpo07-patient-023%2Cpo07-patient-003%2Cpo07-patient-028%2Cpo07-patient-048%2Cpo07-patient-008%2Cpo07-patient-013%2Cpo07-patient-053%2Cpo07-patient-058%2Cpo07-patient-038%2Cpo07-patient-018%2Cpo07-patient-024%2Cpo07-patient-004%2Cpo07-patient-049",
+      "at": "2026-09-23T02:06:54.714Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:07:27.850Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962",
+      "at": "2026-09-23T02:07:27.978Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962",
+      "at": "2026-09-23T02:07:28.155Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po06-long%2Cpo06-alba-2%2Cvitals-qa-bruno%2Cpo06-alba-1%2Cvitals-qa-anna%2Cpo07-patient-014%2Cpo07-patient-054%2Cpo07-patient-034%2Cpo07-patient-049%2Cpo07-patient-029%2Cpo07-patient-009%2Cpo07-patient-024%2Cpo07-patient-004%2Cpo07-patient-039%2Cpo07-patient-059%2Cpo07-patient-019%2Cpo07-patient-013%2Cpo07-patient-053%2Cpo07-patient-028%2Cpo07-patient-048%2Cpo07-patient-008%2Cpo07-patient-063%2Cpo07-patient-043%2Cpo07-patient-023%2Cpo07-patient-003%2Cpo07-patient-058%2Cpo07-patient-038%2Cpo07-patient-018%2Cpo07-patient-052%2Cpo07-patient-032%2Cpo07-patient-012%2Cpo07-patient-007%2Cpo07-patient-047%2Cpo07-patient-027%2Cpo07-patient-042%2Cpo07-patient-062%2Cpo07-patient-002%2Cpo07-patient-057%2Cpo07-patient-037%2Cpo07-patient-017%2Cpo07-patient-051%2Cpo07-patient-031%2Cpo07-patient-026%2Cpo07-patient-046%2Cpo07-patient-006%2Cpo07-patient-021%2Cpo07-patient-061%2Cpo07-patient-041%2Cpo07-patient-001%2Cpo07-patient-056",
+      "at": "2026-09-23T02:07:28.328Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJwYXRpZW50cyIsInNjb3BlIjoiOWJENXlwbG5YV2h3VkZXV2w1dXdsRUFyS2pJNFJudXF6V2xIVnVRWXZFayIsImNvbnRleHRJZCI6ImM3MDg1OTNhLTFiMjMtNDNjNS1hMjEyLWMzNTg2N2EwYzk2MiIsImNvbnRleHRWZXJzaW9uIjoiMCIsInJldmlzaW9uIjoiNyIsIm9yZGVyIjp7ImNyaXRlcmlvbiI6ImxvY2F0aW9uIiwiZGlyZWN0aW9uIjoiZGVzYyJ9LCJmaWx0ZXJzIjp7fSwiYXNPZiI6IjIwMjYtMDktMjMiLCJlcG9jaCI6eyJyb3N0ZXIiOiIxNTUifX0sImFuY2hvciI6eyJwYXRpZW50SWQiOiJwbzA3LXBhdGllbnQtMDU2In19",
+      "at": "2026-09-23T02:07:28.564Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-036%2Cpo07-patient-016%2Cpo07-patient-050%2Cpo07-patient-030%2Cpo07-patient-010%2Cpo07-patient-045%2Cpo07-patient-025%2Cpo07-patient-005%2Cpo07-patient-060%2Cpo07-patient-040%2Cpo07-patient-020%2Cpo07-patient-035%2Cpo07-patient-015%2Cpo07-patient-000%2Cpo06-conflict%2Cpo06-ended%2Cpo06-empty%2Cpo07-patient-055%2Cpo07-patient-044%2Cpo07-patient-033%2Cpo07-patient-022%2Cpo07-patient-011",
+      "at": "2026-09-23T02:07:28.676Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:07:49.767Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:07:49.769Z",
+      "status": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:07:49.972Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:07:49.973Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:07:49.975Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:07:50.197Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:07:50.201Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:07:50.831Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:07:50.879Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:07:50.880Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:07:51.023Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=desc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:07:51.024Z",
+      "status": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:07:51.036Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:07:51.134Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:07:51.145Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:07:51.257Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:07:51.260Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJwYXJhbWV0ZXJzIiwic2NvcGUiOiI5YkQ1eXBsblhXaHdWRldXbDV1d2xFQXJLakk0Um51cXpXbEhWdVFZdkVrIiwiY29udGV4dElkIjoiYzcwODU5M2EtMWIyMy00M2M1LWEyMTItYzM1ODY3YTBjOTYyIiwiY29udGV4dFZlcnNpb24iOiIwIiwicmV2aXNpb24iOiIxMCIsIm9yZGVyIjp7ImNyaXRlcmlvbiI6ImxvY2F0aW9uIiwiZGlyZWN0aW9uIjoiYXNjIn0sImZpbHRlcnMiOnsibW9udGgiOjksInllYXIiOjIwMjYsInZpZXciOiJlbnRyeSJ9LCJhc09mIjoiMjAyNi0wOS0yMyIsImVwb2NoIjp7InJvc3RlciI6IjE1NSJ9fSwiYW5jaG9yIjp7InBhdGllbnRJZCI6InBvMDctcGF0aWVudC0wNjIifX0",
+      "at": "2026-09-23T02:08:03.037Z",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:08:03.136Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&asOf=2026-09-23",
+      "at": "2026-09-23T02:08:03.272Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/parameters/page?limit=25&sort=location&direction=asc&contextId=c708593a-1b23-43c5-a212-c35867a0c962&month=9&year=2026&date=2026-09-23&view=entry",
+      "at": "2026-09-23T02:08:03.274Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:08:25.808Z",
+      "status": 503
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:08:43.142Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/po07-patient-060/parameter-readings",
+      "at": "2026-09-23T02:08:43.438Z",
+      "requestId": "bd777c79-95e1-43c9-891e-dda09b82b036",
+      "values": {
+        "fc": "73",
+        "note": "Bozza finale conservata dopo CAS e riordino."
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/ai/extraction/status",
+      "at": "2026-09-23T02:08:44.328Z",
+      "status": 304
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:08:44.337Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "at": "2026-09-23T02:08:44.339Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/settings",
+      "at": "2026-09-23T02:08:44.340Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:08:44.341Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-060%2Cpo07-patient-040%2Cpo07-patient-020%2Cpo07-patient-045%2Cpo07-patient-025%2Cpo07-patient-005%2Cpo07-patient-050%2Cpo07-patient-030%2Cpo07-patient-010%2Cpo07-patient-035%2Cpo07-patient-015%2Cpo07-patient-021%2Cpo07-patient-061%2Cpo07-patient-041%2Cpo07-patient-026%2Cpo07-patient-046%2Cpo07-patient-006%2Cpo07-patient-051%2Cpo07-patient-031%2Cpo07-patient-056%2Cpo07-patient-036%2Cpo07-patient-016%2Cpo07-patient-042%2Cpo07-patient-062%2Cpo07-patient-002%2Cpo07-patient-007%2Cpo07-patient-047%2Cpo07-patient-027%2Cpo07-patient-052%2Cpo07-patient-032%2Cpo07-patient-012%2Cpo07-patient-057%2Cpo07-patient-037%2Cpo07-patient-017%2Cpo07-patient-063%2Cpo07-patient-043%2Cpo07-patient-023%2Cpo07-patient-003%2Cpo07-patient-028%2Cpo07-patient-048%2Cpo07-patient-008%2Cpo07-patient-013%2Cpo07-patient-053%2Cpo07-patient-058%2Cpo07-patient-038%2Cpo07-patient-018%2Cpo07-patient-024%2Cpo07-patient-004%2Cpo07-patient-049%2Cpo07-patient-029",
+      "at": "2026-09-23T02:08:44.494Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%200.0&limite=25",
+      "at": "2026-09-23T02:08:44.697Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.0&limite=25",
+      "at": "2026-09-23T02:08:44.697Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.1&limite=25",
+      "at": "2026-09-23T02:08:44.697Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.2&limite=25",
+      "at": "2026-09-23T02:08:44.698Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.3&limite=25",
+      "at": "2026-09-23T02:08:44.698Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.4&limite=25",
+      "at": "2026-09-23T02:08:44.817Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.5&limite=25",
+      "at": "2026-09-23T02:08:44.817Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.6&limite=25",
+      "at": "2026-09-23T02:08:44.817Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.7&limite=25",
+      "at": "2026-09-23T02:08:44.817Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.8&limite=25",
+      "at": "2026-09-23T02:08:44.830Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.0&limite=25",
+      "at": "2026-09-23T02:08:44.920Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.1&limite=25",
+      "at": "2026-09-23T02:08:44.920Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.2&limite=25",
+      "at": "2026-09-23T02:08:44.921Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.0&limite=25",
+      "at": "2026-09-23T02:08:44.921Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.1&limite=25",
+      "at": "2026-09-23T02:08:44.929Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.2&limite=25",
+      "at": "2026-09-23T02:08:45.009Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.3&limite=25",
+      "at": "2026-09-23T02:08:45.009Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2012.0&limite=25",
+      "at": "2026-09-23T02:08:45.009Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.0&limite=25",
+      "at": "2026-09-23T02:08:45.009Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.1&limite=25",
+      "at": "2026-09-23T02:08:45.010Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.0&limite=25",
+      "at": "2026-09-23T02:08:45.075Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.1&limite=25",
+      "at": "2026-09-23T02:08:45.076Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.2&limite=25",
+      "at": "2026-09-23T02:08:45.076Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.0&limite=25",
+      "at": "2026-09-23T02:08:45.076Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.1&limite=25",
+      "at": "2026-09-23T02:08:45.081Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.2&limite=25",
+      "at": "2026-09-23T02:08:45.151Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.3&limite=25",
+      "at": "2026-09-23T02:08:45.151Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2016.0&limite=25",
+      "at": "2026-09-23T02:08:45.158Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.0&limite=25",
+      "at": "2026-09-23T02:08:45.158Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.1&limite=25",
+      "at": "2026-09-23T02:08:45.164Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.0&limite=25",
+      "at": "2026-09-23T02:08:45.235Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.1&limite=25",
+      "at": "2026-09-23T02:08:45.236Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.2&limite=25",
+      "at": "2026-09-23T02:08:45.236Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.0&limite=25",
+      "at": "2026-09-23T02:08:45.236Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.1&limite=25",
+      "at": "2026-09-23T02:08:45.237Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.2&limite=25",
+      "at": "2026-09-23T02:08:45.298Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.3&limite=25",
+      "at": "2026-09-23T02:08:45.298Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.0&limite=25",
+      "at": "2026-09-23T02:08:45.298Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.1&limite=25",
+      "at": "2026-09-23T02:08:45.299Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.2&limite=25",
+      "at": "2026-09-23T02:08:45.304Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.3&limite=25",
+      "at": "2026-09-23T02:08:45.368Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.4&limite=25",
+      "at": "2026-09-23T02:08:45.368Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.5&limite=25",
+      "at": "2026-09-23T02:08:45.368Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.6&limite=25",
+      "at": "2026-09-23T02:08:45.368Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.7&limite=25",
+      "at": "2026-09-23T02:08:45.369Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.8&limite=25",
+      "at": "2026-09-23T02:08:45.443Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2020.0&limite=25",
+      "at": "2026-09-23T02:08:45.444Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.0&limite=25",
+      "at": "2026-09-23T02:08:45.444Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.1&limite=25",
+      "at": "2026-09-23T02:08:45.444Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.0&limite=25",
+      "at": "2026-09-23T02:08:45.445Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.1&limite=25",
+      "at": "2026-09-23T02:08:45.510Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.2&limite=25",
+      "at": "2026-09-23T02:08:45.510Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.0&limite=25",
+      "at": "2026-09-23T02:08:45.510Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.1&limite=25",
+      "at": "2026-09-23T02:08:45.511Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.2&limite=25",
+      "at": "2026-09-23T02:08:45.516Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.3&limite=25",
+      "at": "2026-09-23T02:08:45.572Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2024.0&limite=25",
+      "at": "2026-09-23T02:08:45.573Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.0&limite=25",
+      "at": "2026-09-23T02:08:45.573Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.1&limite=25",
+      "at": "2026-09-23T02:08:45.573Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.0&limite=25",
+      "at": "2026-09-23T02:08:45.574Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.1&limite=25",
+      "at": "2026-09-23T02:08:45.621Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.2&limite=25",
+      "at": "2026-09-23T02:08:45.621Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.0&limite=25",
+      "at": "2026-09-23T02:08:45.621Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.1&limite=25",
+      "at": "2026-09-23T02:08:45.626Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.2&limite=25",
+      "at": "2026-09-23T02:08:45.627Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.3&limite=25",
+      "at": "2026-09-23T02:08:45.688Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2028.0&limite=25",
+      "at": "2026-09-23T02:08:45.688Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.0&limite=25",
+      "at": "2026-09-23T02:08:45.693Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.1&limite=25",
+      "at": "2026-09-23T02:08:45.694Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.0&limite=25",
+      "at": "2026-09-23T02:08:45.694Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.1&limite=25",
+      "at": "2026-09-23T02:08:45.767Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.2&limite=25",
+      "at": "2026-09-23T02:08:45.767Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.3&limite=25",
+      "at": "2026-09-23T02:08:45.768Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.0&limite=25",
+      "at": "2026-09-23T02:08:45.768Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.1&limite=25",
+      "at": "2026-09-23T02:08:45.768Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.2&limite=25",
+      "at": "2026-09-23T02:08:45.829Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.0&limite=25",
+      "at": "2026-09-23T02:08:45.829Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.1&limite=25",
+      "at": "2026-09-23T02:08:45.829Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.2&limite=25",
+      "at": "2026-09-23T02:08:45.830Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.3&limite=25",
+      "at": "2026-09-23T02:08:45.841Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2032.0&limite=25",
+      "at": "2026-09-23T02:08:45.897Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.0&limite=25",
+      "at": "2026-09-23T02:08:45.897Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.1&limite=25",
+      "at": "2026-09-23T02:08:45.898Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.0&limite=25",
+      "at": "2026-09-23T02:08:45.898Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.1&limite=25",
+      "at": "2026-09-23T02:08:45.898Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.2&limite=25",
+      "at": "2026-09-23T02:08:45.957Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.0&limite=25",
+      "at": "2026-09-23T02:08:45.962Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.1&limite=25",
+      "at": "2026-09-23T02:08:45.963Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.2&limite=25",
+      "at": "2026-09-23T02:08:45.963Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.3&limite=25",
+      "at": "2026-09-23T02:08:45.968Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2036.0&limite=25",
+      "at": "2026-09-23T02:08:46.018Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.0&limite=25",
+      "at": "2026-09-23T02:08:46.018Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.1&limite=25",
+      "at": "2026-09-23T02:08:46.019Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.0&limite=25",
+      "at": "2026-09-23T02:08:46.019Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.1&limite=25",
+      "at": "2026-09-23T02:08:46.019Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.2&limite=25",
+      "at": "2026-09-23T02:08:46.085Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.0&limite=25",
+      "at": "2026-09-23T02:08:46.085Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.1&limite=25",
+      "at": "2026-09-23T02:08:46.085Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.2&limite=25",
+      "at": "2026-09-23T02:08:46.085Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.3&limite=25",
+      "at": "2026-09-23T02:08:46.086Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%204.0&limite=25",
+      "at": "2026-09-23T02:08:46.152Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2040.0&limite=25",
+      "at": "2026-09-23T02:08:46.152Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.0&limite=25",
+      "at": "2026-09-23T02:08:46.153Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.1&limite=25",
+      "at": "2026-09-23T02:08:46.153Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.0&limite=25",
+      "at": "2026-09-23T02:08:46.160Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.1&limite=25",
+      "at": "2026-09-23T02:08:46.218Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.2&limite=25",
+      "at": "2026-09-23T02:08:46.218Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.0&limite=25",
+      "at": "2026-09-23T02:08:46.219Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.1&limite=25",
+      "at": "2026-09-23T02:08:46.219Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.2&limite=25",
+      "at": "2026-09-23T02:08:46.219Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.3&limite=25",
+      "at": "2026-09-23T02:08:46.274Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2044.0&limite=25",
+      "at": "2026-09-23T02:08:46.274Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.0&limite=25",
+      "at": "2026-09-23T02:08:46.275Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.1&limite=25",
+      "at": "2026-09-23T02:08:46.275Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.0&limite=25",
+      "at": "2026-09-23T02:08:46.276Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.1&limite=25",
+      "at": "2026-09-23T02:08:46.327Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.2&limite=25",
+      "at": "2026-09-23T02:08:46.327Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.0&limite=25",
+      "at": "2026-09-23T02:08:46.327Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.1&limite=25",
+      "at": "2026-09-23T02:08:46.328Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.2&limite=25",
+      "at": "2026-09-23T02:08:46.333Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.3&limite=25",
+      "at": "2026-09-23T02:08:46.394Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2048.0&limite=25",
+      "at": "2026-09-23T02:08:46.395Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.0&limite=25",
+      "at": "2026-09-23T02:08:46.395Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.1&limite=25",
+      "at": "2026-09-23T02:08:46.395Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.0&limite=25",
+      "at": "2026-09-23T02:08:46.395Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.1&limite=25",
+      "at": "2026-09-23T02:08:46.444Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.0&limite=25",
+      "at": "2026-09-23T02:08:46.444Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.1&limite=25",
+      "at": "2026-09-23T02:08:46.445Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.2&limite=25",
+      "at": "2026-09-23T02:08:46.445Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.0&limite=25",
+      "at": "2026-09-23T02:08:46.449Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.1&limite=25",
+      "at": "2026-09-23T02:08:46.509Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.2&limite=25",
+      "at": "2026-09-23T02:08:46.510Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.3&limite=25",
+      "at": "2026-09-23T02:08:46.510Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2052.0&limite=25",
+      "at": "2026-09-23T02:08:46.510Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.0&limite=25",
+      "at": "2026-09-23T02:08:46.511Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.1&limite=25",
+      "at": "2026-09-23T02:08:46.565Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.0&limite=25",
+      "at": "2026-09-23T02:08:46.566Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.1&limite=25",
+      "at": "2026-09-23T02:08:46.566Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.2&limite=25",
+      "at": "2026-09-23T02:08:46.566Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.0&limite=25",
+      "at": "2026-09-23T02:08:46.572Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.1&limite=25",
+      "at": "2026-09-23T02:08:46.638Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.2&limite=25",
+      "at": "2026-09-23T02:08:46.643Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.3&limite=25",
+      "at": "2026-09-23T02:08:46.644Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2056.0&limite=25",
+      "at": "2026-09-23T02:08:46.644Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.0&limite=25",
+      "at": "2026-09-23T02:08:46.646Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.1&limite=25",
+      "at": "2026-09-23T02:08:46.702Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.0&limite=25",
+      "at": "2026-09-23T02:08:46.703Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.1&limite=25",
+      "at": "2026-09-23T02:08:46.703Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.2&limite=25",
+      "at": "2026-09-23T02:08:46.703Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.0&limite=25",
+      "at": "2026-09-23T02:08:46.709Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.1&limite=25",
+      "at": "2026-09-23T02:08:46.780Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.2&limite=25",
+      "at": "2026-09-23T02:08:46.780Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.3&limite=25",
+      "at": "2026-09-23T02:08:46.781Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.0&limite=25",
+      "at": "2026-09-23T02:08:46.781Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.1&limite=25",
+      "at": "2026-09-23T02:08:46.782Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.2&limite=25",
+      "at": "2026-09-23T02:08:46.849Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2060.0&limite=25",
+      "at": "2026-09-23T02:08:46.850Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.0&limite=25",
+      "at": "2026-09-23T02:08:46.850Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.1&limite=25",
+      "at": "2026-09-23T02:08:46.850Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.0&limite=25",
+      "at": "2026-09-23T02:08:46.856Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.1&limite=25",
+      "at": "2026-09-23T02:08:46.920Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.2&limite=25",
+      "at": "2026-09-23T02:08:46.920Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.0&limite=25",
+      "at": "2026-09-23T02:08:46.920Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.1&limite=25",
+      "at": "2026-09-23T02:08:46.921Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.2&limite=25",
+      "at": "2026-09-23T02:08:46.921Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.3&limite=25",
+      "at": "2026-09-23T02:08:46.981Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.0&limite=25",
+      "at": "2026-09-23T02:08:46.982Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.1&limite=25",
+      "at": "2026-09-23T02:08:46.982Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.2&limite=25",
+      "at": "2026-09-23T02:08:46.982Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.3&limite=25",
+      "at": "2026-09-23T02:08:46.988Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%208.0&limite=25",
+      "at": "2026-09-23T02:08:47.055Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.0&limite=25",
+      "at": "2026-09-23T02:08:47.055Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.1&limite=25",
+      "at": "2026-09-23T02:08:47.055Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:09:06.558Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ai/extraction/status",
+      "at": "2026-09-23T02:09:06.852Z",
+      "status": 304
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:09:06.868Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:09:06.870Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/settings",
+      "at": "2026-09-23T02:09:06.871Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%200.0&limite=25",
+      "at": "2026-09-23T02:09:06.873Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.0&limite=25",
+      "at": "2026-09-23T02:09:06.887Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.1&limite=25",
+      "at": "2026-09-23T02:09:06.888Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.2&limite=25",
+      "at": "2026-09-23T02:09:06.908Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.3&limite=25",
+      "at": "2026-09-23T02:09:06.984Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.4&limite=25",
+      "at": "2026-09-23T02:09:06.984Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.5&limite=25",
+      "at": "2026-09-23T02:09:06.984Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.6&limite=25",
+      "at": "2026-09-23T02:09:06.992Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.7&limite=25",
+      "at": "2026-09-23T02:09:06.996Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.8&limite=25",
+      "at": "2026-09-23T02:09:07.005Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.0&limite=25",
+      "at": "2026-09-23T02:09:07.052Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.1&limite=25",
+      "at": "2026-09-23T02:09:07.052Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.2&limite=25",
+      "at": "2026-09-23T02:09:07.052Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.0&limite=25",
+      "at": "2026-09-23T02:09:07.065Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.1&limite=25",
+      "at": "2026-09-23T02:09:07.065Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.2&limite=25",
+      "at": "2026-09-23T02:09:07.082Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.3&limite=25",
+      "at": "2026-09-23T02:09:07.138Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2012.0&limite=25",
+      "at": "2026-09-23T02:09:07.139Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.0&limite=25",
+      "at": "2026-09-23T02:09:07.139Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.1&limite=25",
+      "at": "2026-09-23T02:09:07.154Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.0&limite=25",
+      "at": "2026-09-23T02:09:07.154Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.1&limite=25",
+      "at": "2026-09-23T02:09:07.168Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.2&limite=25",
+      "at": "2026-09-23T02:09:07.236Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.0&limite=25",
+      "at": "2026-09-23T02:09:07.236Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.1&limite=25",
+      "at": "2026-09-23T02:09:07.237Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.2&limite=25",
+      "at": "2026-09-23T02:09:07.249Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.3&limite=25",
+      "at": "2026-09-23T02:09:07.255Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2016.0&limite=25",
+      "at": "2026-09-23T02:09:07.264Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.0&limite=25",
+      "at": "2026-09-23T02:09:07.299Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.1&limite=25",
+      "at": "2026-09-23T02:09:07.300Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.0&limite=25",
+      "at": "2026-09-23T02:09:07.300Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.1&limite=25",
+      "at": "2026-09-23T02:09:07.311Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.2&limite=25",
+      "at": "2026-09-23T02:09:07.311Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.0&limite=25",
+      "at": "2026-09-23T02:09:07.320Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.1&limite=25",
+      "at": "2026-09-23T02:09:07.366Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.2&limite=25",
+      "at": "2026-09-23T02:09:07.366Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.3&limite=25",
+      "at": "2026-09-23T02:09:07.366Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.0&limite=25",
+      "at": "2026-09-23T02:09:07.378Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.1&limite=25",
+      "at": "2026-09-23T02:09:07.378Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.2&limite=25",
+      "at": "2026-09-23T02:09:07.392Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.3&limite=25",
+      "at": "2026-09-23T02:09:07.443Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.4&limite=25",
+      "at": "2026-09-23T02:09:07.443Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.5&limite=25",
+      "at": "2026-09-23T02:09:07.444Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.6&limite=25",
+      "at": "2026-09-23T02:09:07.460Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.7&limite=25",
+      "at": "2026-09-23T02:09:07.460Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.8&limite=25",
+      "at": "2026-09-23T02:09:07.474Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2020.0&limite=25",
+      "at": "2026-09-23T02:09:07.508Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.0&limite=25",
+      "at": "2026-09-23T02:09:07.508Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.1&limite=25",
+      "at": "2026-09-23T02:09:07.508Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.0&limite=25",
+      "at": "2026-09-23T02:09:07.520Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.1&limite=25",
+      "at": "2026-09-23T02:09:07.520Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.2&limite=25",
+      "at": "2026-09-23T02:09:07.534Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.0&limite=25",
+      "at": "2026-09-23T02:09:07.581Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.1&limite=25",
+      "at": "2026-09-23T02:09:07.581Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.2&limite=25",
+      "at": "2026-09-23T02:09:07.581Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.3&limite=25",
+      "at": "2026-09-23T02:09:07.595Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2024.0&limite=25",
+      "at": "2026-09-23T02:09:07.595Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.0&limite=25",
+      "at": "2026-09-23T02:09:07.609Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.1&limite=25",
+      "at": "2026-09-23T02:09:07.656Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.0&limite=25",
+      "at": "2026-09-23T02:09:07.657Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.1&limite=25",
+      "at": "2026-09-23T02:09:07.657Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.2&limite=25",
+      "at": "2026-09-23T02:09:07.673Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.0&limite=25",
+      "at": "2026-09-23T02:09:07.674Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.1&limite=25",
+      "at": "2026-09-23T02:09:07.685Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.2&limite=25",
+      "at": "2026-09-23T02:09:07.745Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.3&limite=25",
+      "at": "2026-09-23T02:09:07.745Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2028.0&limite=25",
+      "at": "2026-09-23T02:09:07.746Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.0&limite=25",
+      "at": "2026-09-23T02:09:07.760Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.1&limite=25",
+      "at": "2026-09-23T02:09:07.760Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.0&limite=25",
+      "at": "2026-09-23T02:09:07.772Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.1&limite=25",
+      "at": "2026-09-23T02:09:07.817Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.2&limite=25",
+      "at": "2026-09-23T02:09:07.818Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.3&limite=25",
+      "at": "2026-09-23T02:09:07.818Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.0&limite=25",
+      "at": "2026-09-23T02:09:07.830Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.1&limite=25",
+      "at": "2026-09-23T02:09:07.831Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.2&limite=25",
+      "at": "2026-09-23T02:09:07.842Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.0&limite=25",
+      "at": "2026-09-23T02:09:07.883Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.1&limite=25",
+      "at": "2026-09-23T02:09:07.883Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.2&limite=25",
+      "at": "2026-09-23T02:09:07.884Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.3&limite=25",
+      "at": "2026-09-23T02:09:07.898Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2032.0&limite=25",
+      "at": "2026-09-23T02:09:07.899Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.0&limite=25",
+      "at": "2026-09-23T02:09:07.914Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.1&limite=25",
+      "at": "2026-09-23T02:09:07.948Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.0&limite=25",
+      "at": "2026-09-23T02:09:07.948Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.1&limite=25",
+      "at": "2026-09-23T02:09:07.948Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.2&limite=25",
+      "at": "2026-09-23T02:09:07.962Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.0&limite=25",
+      "at": "2026-09-23T02:09:07.962Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.1&limite=25",
+      "at": "2026-09-23T02:09:07.974Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.2&limite=25",
+      "at": "2026-09-23T02:09:08.032Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.3&limite=25",
+      "at": "2026-09-23T02:09:08.032Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2036.0&limite=25",
+      "at": "2026-09-23T02:09:08.032Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.0&limite=25",
+      "at": "2026-09-23T02:09:08.046Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.1&limite=25",
+      "at": "2026-09-23T02:09:08.046Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.0&limite=25",
+      "at": "2026-09-23T02:09:08.059Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.1&limite=25",
+      "at": "2026-09-23T02:09:08.097Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.2&limite=25",
+      "at": "2026-09-23T02:09:08.097Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.0&limite=25",
+      "at": "2026-09-23T02:09:08.097Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.1&limite=25",
+      "at": "2026-09-23T02:09:08.104Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.2&limite=25",
+      "at": "2026-09-23T02:09:08.104Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.3&limite=25",
+      "at": "2026-09-23T02:09:08.114Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%204.0&limite=25",
+      "at": "2026-09-23T02:09:08.167Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2040.0&limite=25",
+      "at": "2026-09-23T02:09:08.167Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.0&limite=25",
+      "at": "2026-09-23T02:09:08.167Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.1&limite=25",
+      "at": "2026-09-23T02:09:08.179Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.0&limite=25",
+      "at": "2026-09-23T02:09:08.179Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.1&limite=25",
+      "at": "2026-09-23T02:09:08.189Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.2&limite=25",
+      "at": "2026-09-23T02:09:08.221Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.0&limite=25",
+      "at": "2026-09-23T02:09:08.221Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.1&limite=25",
+      "at": "2026-09-23T02:09:08.221Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.2&limite=25",
+      "at": "2026-09-23T02:09:08.227Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.3&limite=25",
+      "at": "2026-09-23T02:09:08.227Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2044.0&limite=25",
+      "at": "2026-09-23T02:09:08.239Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.0&limite=25",
+      "at": "2026-09-23T02:09:08.281Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.1&limite=25",
+      "at": "2026-09-23T02:09:08.281Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.0&limite=25",
+      "at": "2026-09-23T02:09:08.282Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.1&limite=25",
+      "at": "2026-09-23T02:09:08.291Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.2&limite=25",
+      "at": "2026-09-23T02:09:08.292Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.0&limite=25",
+      "at": "2026-09-23T02:09:08.303Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.1&limite=25",
+      "at": "2026-09-23T02:09:08.348Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.2&limite=25",
+      "at": "2026-09-23T02:09:08.348Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.3&limite=25",
+      "at": "2026-09-23T02:09:08.348Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2048.0&limite=25",
+      "at": "2026-09-23T02:09:08.361Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.0&limite=25",
+      "at": "2026-09-23T02:09:08.362Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.1&limite=25",
+      "at": "2026-09-23T02:09:08.379Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.0&limite=25",
+      "at": "2026-09-23T02:09:08.409Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.1&limite=25",
+      "at": "2026-09-23T02:09:08.409Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.0&limite=25",
+      "at": "2026-09-23T02:09:08.409Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.1&limite=25",
+      "at": "2026-09-23T02:09:08.425Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.2&limite=25",
+      "at": "2026-09-23T02:09:08.426Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.0&limite=25",
+      "at": "2026-09-23T02:09:08.437Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.1&limite=25",
+      "at": "2026-09-23T02:09:08.474Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.2&limite=25",
+      "at": "2026-09-23T02:09:08.474Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.3&limite=25",
+      "at": "2026-09-23T02:09:08.474Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2052.0&limite=25",
+      "at": "2026-09-23T02:09:08.485Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.0&limite=25",
+      "at": "2026-09-23T02:09:08.485Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.1&limite=25",
+      "at": "2026-09-23T02:09:08.495Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.0&limite=25",
+      "at": "2026-09-23T02:09:08.531Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.1&limite=25",
+      "at": "2026-09-23T02:09:08.531Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.2&limite=25",
+      "at": "2026-09-23T02:09:08.531Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.0&limite=25",
+      "at": "2026-09-23T02:09:08.542Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.1&limite=25",
+      "at": "2026-09-23T02:09:08.543Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.2&limite=25",
+      "at": "2026-09-23T02:09:08.554Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.3&limite=25",
+      "at": "2026-09-23T02:09:08.600Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2056.0&limite=25",
+      "at": "2026-09-23T02:09:08.600Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.0&limite=25",
+      "at": "2026-09-23T02:09:08.600Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.1&limite=25",
+      "at": "2026-09-23T02:09:08.607Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.0&limite=25",
+      "at": "2026-09-23T02:09:08.612Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.1&limite=25",
+      "at": "2026-09-23T02:09:08.627Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.2&limite=25",
+      "at": "2026-09-23T02:09:08.663Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.0&limite=25",
+      "at": "2026-09-23T02:09:08.663Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.1&limite=25",
+      "at": "2026-09-23T02:09:08.664Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.2&limite=25",
+      "at": "2026-09-23T02:09:08.677Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.3&limite=25",
+      "at": "2026-09-23T02:09:08.677Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.0&limite=25",
+      "at": "2026-09-23T02:09:08.687Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.1&limite=25",
+      "at": "2026-09-23T02:09:08.739Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.2&limite=25",
+      "at": "2026-09-23T02:09:08.739Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2060.0&limite=25",
+      "at": "2026-09-23T02:09:08.739Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.0&limite=25",
+      "at": "2026-09-23T02:09:08.754Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.1&limite=25",
+      "at": "2026-09-23T02:09:08.754Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.0&limite=25",
+      "at": "2026-09-23T02:09:08.768Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.1&limite=25",
+      "at": "2026-09-23T02:09:08.816Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.2&limite=25",
+      "at": "2026-09-23T02:09:08.816Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.0&limite=25",
+      "at": "2026-09-23T02:09:08.817Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.1&limite=25",
+      "at": "2026-09-23T02:09:08.831Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.2&limite=25",
+      "at": "2026-09-23T02:09:08.837Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.3&limite=25",
+      "at": "2026-09-23T02:09:08.844Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.0&limite=25",
+      "at": "2026-09-23T02:09:08.901Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.1&limite=25",
+      "at": "2026-09-23T02:09:08.901Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.2&limite=25",
+      "at": "2026-09-23T02:09:08.901Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.3&limite=25",
+      "at": "2026-09-23T02:09:08.915Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%208.0&limite=25",
+      "at": "2026-09-23T02:09:08.915Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.0&limite=25",
+      "at": "2026-09-23T02:09:08.928Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.1&limite=25",
+      "at": "2026-09-23T02:09:08.969Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:09:08.969Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:09:08.970Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%200.0&limite=25",
+      "at": "2026-09-23T02:09:08.985Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.0&limite=25",
+      "at": "2026-09-23T02:09:08.986Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.1&limite=25",
+      "at": "2026-09-23T02:09:09.002Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.2&limite=25",
+      "at": "2026-09-23T02:09:09.028Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.3&limite=25",
+      "at": "2026-09-23T02:09:09.065Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.4&limite=25",
+      "at": "2026-09-23T02:09:09.080Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.5&limite=25",
+      "at": "2026-09-23T02:09:09.081Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.6&limite=25",
+      "at": "2026-09-23T02:09:09.096Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.7&limite=25",
+      "at": "2026-09-23T02:09:09.096Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.8&limite=25",
+      "at": "2026-09-23T02:09:09.124Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.0&limite=25",
+      "at": "2026-09-23T02:09:09.141Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.1&limite=25",
+      "at": "2026-09-23T02:09:09.157Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.2&limite=25",
+      "at": "2026-09-23T02:09:09.158Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.0&limite=25",
+      "at": "2026-09-23T02:09:09.187Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.1&limite=25",
+      "at": "2026-09-23T02:09:09.188Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.2&limite=25",
+      "at": "2026-09-23T02:09:09.211Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-063%2Cpo07-patient-056%2Cpo07-patient-049%2Cpo07-patient-042%2Cpo07-patient-035%2Cpo07-patient-028%2Cpo07-patient-021%2Cpo07-patient-014%2Cpo07-patient-007%2Cvitals-qa-anna%2Cvitals-qa-bruno%2Cpo06-alba-1%2Cpo06-alba-2%2Cpo07-patient-000%2Cpo07-patient-013%2Cpo07-patient-026%2Cpo07-patient-039%2Cpo07-patient-052%2Cpo06-conflict%2Cpo06-long%2Cpo06-ended%2Cvitals-qa-other%2Cpo06-empty%2Cpo07-patient-062%2Cpo07-patient-061%2Cpo07-patient-060%2Cpo07-patient-059%2Cpo07-patient-058%2Cpo07-patient-057%2Cpo07-patient-055%2Cpo07-patient-054%2Cpo07-patient-053%2Cpo07-patient-051%2Cpo07-patient-050%2Cpo07-patient-048%2Cpo07-patient-047%2Cpo07-patient-046%2Cpo07-patient-045%2Cpo07-patient-044%2Cpo07-patient-043%2Cpo07-patient-041%2Cpo07-patient-040%2Cpo07-patient-038%2Cpo07-patient-037%2Cpo07-patient-036%2Cpo07-patient-034%2Cpo07-patient-033%2Cpo07-patient-032%2Cpo07-patient-031%2Cpo07-patient-030",
+      "at": "2026-09-23T02:09:09.235Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/roster-contexts?limit=50",
+      "at": "2026-09-23T02:09:09.261Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/roster-contexts/c708593a-1b23-43c5-a212-c35867a0c962",
+      "at": "2026-09-23T02:09:22.470Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:09:22.606Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:09:22.739Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/admin/roster-contexts/c708593a-1b23-43c5-a212-c35867a0c962",
+      "at": "2026-09-23T02:09:22.889Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-060%2Cpo07-patient-040%2Cpo07-patient-020%2Cpo07-patient-045%2Cpo07-patient-025%2Cpo07-patient-005%2Cpo07-patient-050%2Cpo07-patient-030%2Cpo07-patient-010%2Cpo07-patient-035%2Cpo07-patient-015%2Cpo07-patient-021%2Cpo07-patient-061%2Cpo07-patient-041%2Cpo07-patient-026%2Cpo07-patient-046%2Cpo07-patient-006%2Cpo07-patient-051%2Cpo07-patient-031%2Cpo07-patient-056%2Cpo07-patient-036%2Cpo07-patient-016%2Cpo07-patient-042%2Cpo07-patient-062%2Cpo07-patient-002%2Cpo07-patient-007%2Cpo07-patient-047%2Cpo07-patient-027%2Cpo07-patient-052%2Cpo07-patient-032%2Cpo07-patient-012%2Cpo07-patient-057%2Cpo07-patient-037%2Cpo07-patient-017%2Cpo07-patient-063%2Cpo07-patient-043%2Cpo07-patient-023%2Cpo07-patient-003%2Cpo07-patient-028%2Cpo07-patient-048%2Cpo07-patient-008%2Cpo07-patient-013%2Cpo07-patient-053%2Cpo07-patient-058%2Cpo07-patient-038%2Cpo07-patient-018%2Cpo07-patient-024%2Cpo07-patient-004%2Cpo07-patient-049%2Cpo07-patient-029",
+      "at": "2026-09-23T02:09:22.917Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:09:23.030Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:09:23.146Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-063%2Cpo07-patient-056%2Cpo07-patient-049%2Cpo07-patient-042%2Cpo07-patient-035%2Cpo07-patient-028%2Cpo07-patient-021%2Cpo07-patient-014%2Cpo07-patient-007%2Cvitals-qa-anna%2Cvitals-qa-bruno%2Cpo06-alba-1%2Cpo06-alba-2%2Cpo07-patient-000%2Cpo07-patient-013%2Cpo07-patient-026%2Cpo07-patient-039%2Cpo07-patient-052%2Cpo06-conflict%2Cpo06-long%2Cpo06-ended%2Cvitals-qa-other%2Cpo06-empty%2Cpo07-patient-062%2Cpo07-patient-061%2Cpo07-patient-060%2Cpo07-patient-059%2Cpo07-patient-058%2Cpo07-patient-057%2Cpo07-patient-055%2Cpo07-patient-054%2Cpo07-patient-053%2Cpo07-patient-051%2Cpo07-patient-050%2Cpo07-patient-048%2Cpo07-patient-047%2Cpo07-patient-046%2Cpo07-patient-045%2Cpo07-patient-044%2Cpo07-patient-043%2Cpo07-patient-041%2Cpo07-patient-040%2Cpo07-patient-038%2Cpo07-patient-037%2Cpo07-patient-036%2Cpo07-patient-034%2Cpo07-patient-033%2Cpo07-patient-032%2Cpo07-patient-031%2Cpo07-patient-030",
+      "at": "2026-09-23T02:09:23.299Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50",
+      "at": "2026-09-23T02:10:24.818Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/ai/extraction/status",
+      "at": "2026-09-23T02:10:24.820Z",
+      "status": 304
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:10:24.821Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "at": "2026-09-23T02:10:24.823Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/settings",
+      "at": "2026-09-23T02:10:24.826Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/clinical-summary?patientIds=po07-patient-060%2Cpo07-patient-040%2Cpo07-patient-020%2Cpo07-patient-045%2Cpo07-patient-025%2Cpo07-patient-005%2Cpo07-patient-050%2Cpo07-patient-030%2Cpo07-patient-010%2Cpo07-patient-035%2Cpo07-patient-015%2Cpo07-patient-021%2Cpo07-patient-061%2Cpo07-patient-041%2Cpo07-patient-026%2Cpo07-patient-046%2Cpo07-patient-006%2Cpo07-patient-051%2Cpo07-patient-031%2Cpo07-patient-056%2Cpo07-patient-036%2Cpo07-patient-016%2Cpo07-patient-042%2Cpo07-patient-062%2Cpo07-patient-002%2Cpo07-patient-007%2Cpo07-patient-047%2Cpo07-patient-027%2Cpo07-patient-052%2Cpo07-patient-032%2Cpo07-patient-012%2Cpo07-patient-057%2Cpo07-patient-037%2Cpo07-patient-017%2Cpo07-patient-063%2Cpo07-patient-043%2Cpo07-patient-023%2Cpo07-patient-003%2Cpo07-patient-028%2Cpo07-patient-048%2Cpo07-patient-008%2Cpo07-patient-013%2Cpo07-patient-053%2Cpo07-patient-058%2Cpo07-patient-038%2Cpo07-patient-018%2Cpo07-patient-024%2Cpo07-patient-004%2Cpo07-patient-049%2Cpo07-patient-029",
+      "at": "2026-09-23T02:10:25.082Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%200.0&limite=25",
+      "at": "2026-09-23T02:10:25.273Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.0&limite=25",
+      "at": "2026-09-23T02:10:25.273Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.1&limite=25",
+      "at": "2026-09-23T02:10:25.274Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.2&limite=25",
+      "at": "2026-09-23T02:10:25.274Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.3&limite=25",
+      "at": "2026-09-23T02:10:25.275Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.4&limite=25",
+      "at": "2026-09-23T02:10:25.283Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.5&limite=25",
+      "at": "2026-09-23T02:10:25.383Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.6&limite=25",
+      "at": "2026-09-23T02:10:25.384Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.7&limite=25",
+      "at": "2026-09-23T02:10:25.384Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%201.8&limite=25",
+      "at": "2026-09-23T02:10:25.385Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.0&limite=25",
+      "at": "2026-09-23T02:10:25.392Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.1&limite=25",
+      "at": "2026-09-23T02:10:25.392Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2010.2&limite=25",
+      "at": "2026-09-23T02:10:25.489Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.0&limite=25",
+      "at": "2026-09-23T02:10:25.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.1&limite=25",
+      "at": "2026-09-23T02:10:25.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.2&limite=25",
+      "at": "2026-09-23T02:10:25.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2011.3&limite=25",
+      "at": "2026-09-23T02:10:25.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2012.0&limite=25",
+      "at": "2026-09-23T02:10:25.490Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.0&limite=25",
+      "at": "2026-09-23T02:10:25.549Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2013.1&limite=25",
+      "at": "2026-09-23T02:10:25.549Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.0&limite=25",
+      "at": "2026-09-23T02:10:25.549Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.1&limite=25",
+      "at": "2026-09-23T02:10:25.550Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2014.2&limite=25",
+      "at": "2026-09-23T02:10:25.550Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.0&limite=25",
+      "at": "2026-09-23T02:10:25.550Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.1&limite=25",
+      "at": "2026-09-23T02:10:25.615Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.2&limite=25",
+      "at": "2026-09-23T02:10:25.616Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2015.3&limite=25",
+      "at": "2026-09-23T02:10:25.617Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2016.0&limite=25",
+      "at": "2026-09-23T02:10:25.618Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.0&limite=25",
+      "at": "2026-09-23T02:10:25.618Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2017.1&limite=25",
+      "at": "2026-09-23T02:10:25.619Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.0&limite=25",
+      "at": "2026-09-23T02:10:25.686Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.1&limite=25",
+      "at": "2026-09-23T02:10:25.686Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2018.2&limite=25",
+      "at": "2026-09-23T02:10:25.686Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.0&limite=25",
+      "at": "2026-09-23T02:10:25.687Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.1&limite=25",
+      "at": "2026-09-23T02:10:25.687Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.2&limite=25",
+      "at": "2026-09-23T02:10:25.687Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2019.3&limite=25",
+      "at": "2026-09-23T02:10:25.747Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.0&limite=25",
+      "at": "2026-09-23T02:10:25.747Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.1&limite=25",
+      "at": "2026-09-23T02:10:25.747Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.2&limite=25",
+      "at": "2026-09-23T02:10:25.748Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.3&limite=25",
+      "at": "2026-09-23T02:10:25.748Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.4&limite=25",
+      "at": "2026-09-23T02:10:25.748Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.5&limite=25",
+      "at": "2026-09-23T02:10:25.807Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.6&limite=25",
+      "at": "2026-09-23T02:10:25.808Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.7&limite=25",
+      "at": "2026-09-23T02:10:25.808Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%202.8&limite=25",
+      "at": "2026-09-23T02:10:25.808Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2020.0&limite=25",
+      "at": "2026-09-23T02:10:25.808Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.0&limite=25",
+      "at": "2026-09-23T02:10:25.808Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2021.1&limite=25",
+      "at": "2026-09-23T02:10:25.857Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.0&limite=25",
+      "at": "2026-09-23T02:10:25.863Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.1&limite=25",
+      "at": "2026-09-23T02:10:25.863Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2022.2&limite=25",
+      "at": "2026-09-23T02:10:25.864Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.0&limite=25",
+      "at": "2026-09-23T02:10:25.864Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.1&limite=25",
+      "at": "2026-09-23T02:10:25.864Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.2&limite=25",
+      "at": "2026-09-23T02:10:25.921Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2023.3&limite=25",
+      "at": "2026-09-23T02:10:25.922Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2024.0&limite=25",
+      "at": "2026-09-23T02:10:25.928Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.0&limite=25",
+      "at": "2026-09-23T02:10:25.928Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2025.1&limite=25",
+      "at": "2026-09-23T02:10:25.928Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.0&limite=25",
+      "at": "2026-09-23T02:10:25.928Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.1&limite=25",
+      "at": "2026-09-23T02:10:25.982Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2026.2&limite=25",
+      "at": "2026-09-23T02:10:25.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.0&limite=25",
+      "at": "2026-09-23T02:10:25.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.1&limite=25",
+      "at": "2026-09-23T02:10:25.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.2&limite=25",
+      "at": "2026-09-23T02:10:25.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2027.3&limite=25",
+      "at": "2026-09-23T02:10:25.983Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2028.0&limite=25",
+      "at": "2026-09-23T02:10:26.042Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.0&limite=25",
+      "at": "2026-09-23T02:10:26.043Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2029.1&limite=25",
+      "at": "2026-09-23T02:10:26.043Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.0&limite=25",
+      "at": "2026-09-23T02:10:26.043Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.1&limite=25",
+      "at": "2026-09-23T02:10:26.043Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.2&limite=25",
+      "at": "2026-09-23T02:10:26.043Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%203.3&limite=25",
+      "at": "2026-09-23T02:10:26.103Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.0&limite=25",
+      "at": "2026-09-23T02:10:26.104Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.1&limite=25",
+      "at": "2026-09-23T02:10:26.104Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2030.2&limite=25",
+      "at": "2026-09-23T02:10:26.104Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.0&limite=25",
+      "at": "2026-09-23T02:10:26.104Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.1&limite=25",
+      "at": "2026-09-23T02:10:26.104Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.2&limite=25",
+      "at": "2026-09-23T02:10:26.151Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2031.3&limite=25",
+      "at": "2026-09-23T02:10:26.152Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2032.0&limite=25",
+      "at": "2026-09-23T02:10:26.152Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.0&limite=25",
+      "at": "2026-09-23T02:10:26.152Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2033.1&limite=25",
+      "at": "2026-09-23T02:10:26.152Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.0&limite=25",
+      "at": "2026-09-23T02:10:26.157Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.1&limite=25",
+      "at": "2026-09-23T02:10:26.219Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2034.2&limite=25",
+      "at": "2026-09-23T02:10:26.219Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.0&limite=25",
+      "at": "2026-09-23T02:10:26.220Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.1&limite=25",
+      "at": "2026-09-23T02:10:26.220Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.2&limite=25",
+      "at": "2026-09-23T02:10:26.220Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2035.3&limite=25",
+      "at": "2026-09-23T02:10:26.220Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2036.0&limite=25",
+      "at": "2026-09-23T02:10:26.294Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.0&limite=25",
+      "at": "2026-09-23T02:10:26.301Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2037.1&limite=25",
+      "at": "2026-09-23T02:10:26.302Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.0&limite=25",
+      "at": "2026-09-23T02:10:26.302Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.1&limite=25",
+      "at": "2026-09-23T02:10:26.302Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2038.2&limite=25",
+      "at": "2026-09-23T02:10:26.302Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.0&limite=25",
+      "at": "2026-09-23T02:10:26.372Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.1&limite=25",
+      "at": "2026-09-23T02:10:26.372Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.2&limite=25",
+      "at": "2026-09-23T02:10:26.372Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2039.3&limite=25",
+      "at": "2026-09-23T02:10:26.372Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%204.0&limite=25",
+      "at": "2026-09-23T02:10:26.372Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2040.0&limite=25",
+      "at": "2026-09-23T02:10:26.372Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.0&limite=25",
+      "at": "2026-09-23T02:10:26.435Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2041.1&limite=25",
+      "at": "2026-09-23T02:10:26.436Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.0&limite=25",
+      "at": "2026-09-23T02:10:26.442Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.1&limite=25",
+      "at": "2026-09-23T02:10:26.446Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2042.2&limite=25",
+      "at": "2026-09-23T02:10:26.446Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.0&limite=25",
+      "at": "2026-09-23T02:10:26.446Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.1&limite=25",
+      "at": "2026-09-23T02:10:26.497Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.2&limite=25",
+      "at": "2026-09-23T02:10:26.497Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2043.3&limite=25",
+      "at": "2026-09-23T02:10:26.504Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2044.0&limite=25",
+      "at": "2026-09-23T02:10:26.504Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.0&limite=25",
+      "at": "2026-09-23T02:10:26.509Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2045.1&limite=25",
+      "at": "2026-09-23T02:10:26.509Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.0&limite=25",
+      "at": "2026-09-23T02:10:26.575Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.1&limite=25",
+      "at": "2026-09-23T02:10:26.576Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2046.2&limite=25",
+      "at": "2026-09-23T02:10:26.577Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.0&limite=25",
+      "at": "2026-09-23T02:10:26.577Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.1&limite=25",
+      "at": "2026-09-23T02:10:26.577Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.2&limite=25",
+      "at": "2026-09-23T02:10:26.577Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2047.3&limite=25",
+      "at": "2026-09-23T02:10:26.635Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2048.0&limite=25",
+      "at": "2026-09-23T02:10:26.635Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.0&limite=25",
+      "at": "2026-09-23T02:10:26.645Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2049.1&limite=25",
+      "at": "2026-09-23T02:10:26.645Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.0&limite=25",
+      "at": "2026-09-23T02:10:26.645Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%205.1&limite=25",
+      "at": "2026-09-23T02:10:26.645Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.0&limite=25",
+      "at": "2026-09-23T02:10:26.698Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.1&limite=25",
+      "at": "2026-09-23T02:10:26.699Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2050.2&limite=25",
+      "at": "2026-09-23T02:10:26.699Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.0&limite=25",
+      "at": "2026-09-23T02:10:26.706Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.1&limite=25",
+      "at": "2026-09-23T02:10:26.707Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.2&limite=25",
+      "at": "2026-09-23T02:10:26.707Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2051.3&limite=25",
+      "at": "2026-09-23T02:10:26.785Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2052.0&limite=25",
+      "at": "2026-09-23T02:10:26.786Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.0&limite=25",
+      "at": "2026-09-23T02:10:26.787Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2053.1&limite=25",
+      "at": "2026-09-23T02:10:26.787Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.0&limite=25",
+      "at": "2026-09-23T02:10:26.787Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.1&limite=25",
+      "at": "2026-09-23T02:10:26.787Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2054.2&limite=25",
+      "at": "2026-09-23T02:10:26.832Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.0&limite=25",
+      "at": "2026-09-23T02:10:26.832Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.1&limite=25",
+      "at": "2026-09-23T02:10:26.841Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.2&limite=25",
+      "at": "2026-09-23T02:10:26.842Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2055.3&limite=25",
+      "at": "2026-09-23T02:10:26.842Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2056.0&limite=25",
+      "at": "2026-09-23T02:10:26.842Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.0&limite=25",
+      "at": "2026-09-23T02:10:26.884Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2057.1&limite=25",
+      "at": "2026-09-23T02:10:26.884Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.0&limite=25",
+      "at": "2026-09-23T02:10:26.894Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.1&limite=25",
+      "at": "2026-09-23T02:10:26.894Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2058.2&limite=25",
+      "at": "2026-09-23T02:10:26.894Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.0&limite=25",
+      "at": "2026-09-23T02:10:26.894Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.1&limite=25",
+      "at": "2026-09-23T02:10:26.936Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.2&limite=25",
+      "at": "2026-09-23T02:10:26.936Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2059.3&limite=25",
+      "at": "2026-09-23T02:10:26.947Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.0&limite=25",
+      "at": "2026-09-23T02:10:26.947Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.1&limite=25",
+      "at": "2026-09-23T02:10:26.947Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%206.2&limite=25",
+      "at": "2026-09-23T02:10:26.947Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2060.0&limite=25",
+      "at": "2026-09-23T02:10:26.997Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.0&limite=25",
+      "at": "2026-09-23T02:10:26.998Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2061.1&limite=25",
+      "at": "2026-09-23T02:10:26.998Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.0&limite=25",
+      "at": "2026-09-23T02:10:26.998Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.1&limite=25",
+      "at": "2026-09-23T02:10:27.003Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2062.2&limite=25",
+      "at": "2026-09-23T02:10:27.003Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.0&limite=25",
+      "at": "2026-09-23T02:10:27.053Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.1&limite=25",
+      "at": "2026-09-23T02:10:27.053Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.2&limite=25",
+      "at": "2026-09-23T02:10:27.064Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%2063.3&limite=25",
+      "at": "2026-09-23T02:10:27.065Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.0&limite=25",
+      "at": "2026-09-23T02:10:27.065Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.1&limite=25",
+      "at": "2026-09-23T02:10:27.065Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.2&limite=25",
+      "at": "2026-09-23T02:10:27.117Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%207.3&limite=25",
+      "at": "2026-09-23T02:10:27.117Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%208.0&limite=25",
+      "at": "2026-09-23T02:10:27.118Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.0&limite=25",
+      "at": "2026-09-23T02:10:27.119Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/farmaci/cerca?q=FARMACO%20SINTETICO%209.1&limite=25",
+      "at": "2026-09-23T02:10:27.119Z",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots/page?date=2026-09-23&limit=100",
+      "at": "2026-09-23T02:10:27.119Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots/page?date=2026-09-23&limit=100&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJ0aGVyYXB5Iiwic2NvcGUiOiI5YkQ1eXBsblhXaHdWRldXbDV1d2xFQXJLakk0Um51cXpXbEhWdVFZdkVrIiwiY29udGV4dElkIjoiYzcwODU5M2EtMWIyMy00M2M1LWEyMTItYzM1ODY3YTBjOTYyIiwiY29udGV4dFZlcnNpb24iOiIyIiwicmV2aXNpb24iOiIxMCIsIm9yZGVyIjp7ImNyaXRlcmlvbiI6ImxvY2F0aW9uIiwiZGlyZWN0aW9uIjoiYXNjIn0sImZpbHRlcnMiOnt9LCJhc09mIjoiMjAyNi0wOS0yMyIsImVwb2NoIjp7InJvc3RlciI6IjE1NiIsInRoZXJhcHkiOiIxNzYifX0sImFuY2hvciI6eyJwYXRpZW50SWQiOiJwbzA3LXBhdGllbnQtMDQ4IiwidGhlcmFweUlkIjoicG8wNy1wYXRpZW50LTA0OC10aGVyYXB5LTAifX0",
+      "at": "2026-09-23T02:11:05.758Z",
+      "status": 200
+    }
+  ],
+  "events": [],
+  "readings": [
+    {
+      "id": "9fd89094-492e-43d0-9ff3-f3ed2239d5a7",
+      "patientId": "po07-patient-060",
+      "requestId": "46937597-b640-4869-a641-9aa8f4545b6c",
+      "measuredAt": "2026-09-23T04:06:09.893Z",
+      "values": {
+        "fc": "72",
+        "note": "Bozza sintetica PO07: resta al paziente corretto."
+      },
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "createdAt": "2026-09-23T04:06:09.972Z"
+    },
+    {
+      "id": "ddc806d3-052a-4cf5-a6f8-45d6ecd1e790",
+      "patientId": "po07-patient-060",
+      "requestId": "bd777c79-95e1-43c9-891e-dda09b82b036",
+      "measuredAt": "2026-09-23T04:08:43.428Z",
+      "values": {
+        "fc": "73",
+        "note": "Bozza finale conservata dopo CAS e riordino."
+      },
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "createdAt": "2026-09-23T04:08:43.442Z"
+    }
+  ],
+  "preferences": [
+    {
+      "operatorId": "VITALS-QA-OP",
+      "contextId": "c708593a-1b23-43c5-a212-c35867a0c962",
+      "criterion": "location",
+      "direction": "asc",
+      "revision": "10",
+      "createdAt": "2026-09-23T02:03:46.354Z",
+      "updatedAt": "2026-09-23T02:07:51.133Z"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import patientsRouter from '../../routes/patients.js';
 import { loadPatientIdentityPage } from '../identity-page.js';
 import { loadPatientParametersPage } from '../parameters-page.js';
 import { encodePatientPageCursor } from '../pagination.js';
+import { RosterError } from '../../roster/order-contract.js';
 
 const marker = `sortfixture${Date.now()}`;
 const collator = new Intl.Collator('it', { sensitivity: 'base' });
@@ -131,19 +132,30 @@ test('global alphabetical order across >50 mixed-case/accent rows, with stable d
   assert.deepEqual(await traverse(false), first);
 });
 
-test('parameter pages share identity ordering/cursors while respecting their smaller limit', async () => {
+test('parameter pages share identity ordering and bind cursors to their own view', async () => {
   assert.deepEqual(await traverse(true), sortedIds(own));
   const first = await loadPatientIdentityPage(
     { limit: '50' },
     { id: operatorId, role: 'operatore' },
   );
+  await assert.rejects(
+    loadPatientParametersPage(
+      { cursor: first.nextCursor!, limit: '25' },
+      { id: operatorId, role: 'operatore' },
+    ),
+    (error: unknown) => error instanceof RosterError && error.code === 'roster_changed',
+  );
+  const parameters = await loadPatientParametersPage(
+    { limit: '25' },
+    { id: operatorId, role: 'operatore' },
+  );
   const continuation = await loadPatientParametersPage(
-    { cursor: first.nextCursor!, limit: '25' },
+    { cursor: parameters.nextCursor!, limit: '25' },
     { id: operatorId, role: 'operatore' },
   );
   assert.deepEqual(
     continuation.items.map((item) => item.patient.id),
-    sortedIds(own).slice(50, 75),
+    sortedIds(own).slice(25, 50),
   );
 });
 
@@ -179,11 +191,16 @@ test('search and cursor values are data, and malformed legacy cursors cannot tra
     },
     {},
   );
-  await loadPatientIdentityPage({ cursor }, actor);
+  await assert.rejects(loadPatientIdentityPage({ cursor }, actor), /cursore non valido/i);
+  const first = await loadPatientIdentityPage({ limit: '5' }, actor);
+  const payload = JSON.parse(Buffer.from(first.nextCursor!, 'base64url').toString());
+  payload.anchor.patientId = "x'); DELETE FROM Patient; --";
+  const tampered = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  await assert.rejects(loadPatientIdentityPage({ cursor: tampered }, actor), /cursore non valido/i);
   assert.equal(await prisma.patient.count({ where: { registeredById: operatorId } }), own.length);
   const legacy = Buffer.from(JSON.stringify({ v: 1, ...own[0] })).toString('base64url');
-  await assert.rejects(loadPatientIdentityPage({ cursor: legacy }, actor), /cursor non valido/);
-  await assert.rejects(loadPatientParametersPage({ cursor: legacy }, actor), /cursor non valido/);
+  await assert.rejects(loadPatientIdentityPage({ cursor: legacy }, actor), /cursore non valido/i);
+  await assert.rejects(loadPatientParametersPage({ cursor: legacy }, actor), /cursore non valido/i);
 });
 
 test('HTTP pages expose globally ordered results and keep textual searches behind POST/auth', async () => {

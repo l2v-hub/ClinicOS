@@ -1,0 +1,33 @@
+{
+  "decision": "ALLOW_PREPARATION_ONLY",
+  "owner": "/root/po01_frontend_audit",
+  "baseline": "853b40750c25f24ef40db622674612aaf64bf2cb",
+  "createdAtUtc": "2026-09-23T01:42:06.8006561Z",
+  "applicationWrites": false,
+  "applicationClaimActive": false,
+  "rootContract": {
+    "path": "C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/artifacts/task-validation/po-07-ordine-reparto/task-contract.md",
+    "sha256": "00d000f13ad6dc19a31d5ba1e71bc4cfec93775c1279a7acfcf656f98b641642"
+  },
+  "files": [
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/claims.json",
+      "sha256": "dd086fc4c93614fb3c6e0e24a87851b5979310b5bfbb7bc89bb781cba5f79c63"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/task-contract.md",
+      "sha256": "0e15086156298d18c7641421b9953544ea7dad94547c06eae0377a55db25f5d7"
+    },
+    {
+      "path": "artifacts/task-validation/po-07-ordine-reparto/frontend/implementation-plan.md",
+      "sha256": "4fa0ea3dea302b5ce87b22f7a131117bec1cfdccd482091b1336a78742ff98e1"
+    }
+  ],
+  "guidance": "Read-only guidance_brain recommend: use existing root hierarchy, exact ownership and source-bound validation; tool registration is not authority",
+  "memory": "clinicos-patient-roster-sort-20260919 applies only to preserved legacy loaded-row temporary sorts; root PO07 contract governs new persisted name/location order",
+  "pending": [
+    "Root GO after verified PO06 publication",
+    "Backend CAS/context error code and admin list shape"
+  ],
+  "validation": "Preparation only; no application build/tests run"
+}

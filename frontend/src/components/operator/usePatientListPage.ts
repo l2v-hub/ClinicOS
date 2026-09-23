@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import type { ClinicalSummaryEntry, Paziente } from '../../types';
 import { operatorHeaders } from '../../lib/operatorSession';
+import { useRosterOrderContext } from '../shared/RosterOrderContext';
+import { isRosterChanged } from '../../lib/rosterOrder';
 import {
   fetchPatientPage,
   fetchPatientClinicalSummary,
@@ -10,6 +12,12 @@ import {
 
 /** Keep identities independent of optional clinical reads; no patient cache survives unmount. */
 export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
+  const {
+    options: rosterOptions,
+    requestKey: rosterKey,
+    accept: acceptRoster,
+    recover: recoverRoster,
+  } = useRosterOrderContext();
   const [patients, setPatients] = useState<Paziente[]>([]);
   const [summary, setSummary] = useState<ClinicalSummaryEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +47,7 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
       incoming.forEach((entry) => byId.set(entry.patientId, entry));
       summaries.current = [...byId.values()];
       setSummary(summaries.current);
-    } catch (error) {
+    } catch {
       if (!signal.aborted && requestId === sequence.current) {
         setSummaryError(
           'Ricoveri e segnalazioni cliniche non disponibili. L’elenco pazienti resta consultabile.',
@@ -56,7 +64,7 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
       const controller = new AbortController();
       active.current = controller;
       const requestId = ++sequence.current;
-      const key = JSON.stringify([query.trim(), sex]);
+      const key = JSON.stringify([query.trim(), sex, rosterKey]);
       setPageError('');
       setSummaryError('');
       setSummaryLoading(true);
@@ -81,10 +89,12 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
             sex: sex === 'tutti' ? undefined : sex,
             cursor,
             limit: 50,
+            ...rosterOptions,
           },
           { headers: operatorHeaders(), signal: controller.signal },
         );
         if (controller.signal.aborted || requestId !== sequence.current) return;
+        acceptRoster(page.roster);
         rows.current = mergePatientPage(rows.current, page.items, append);
         loadedKey.current = key;
         setPatients(rows.current);
@@ -100,6 +110,7 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
         );
       } catch (error) {
         if (!controller.signal.aborted && requestId === sequence.current) {
+          if (isRosterChanged(error) && (await recoverRoster())) return;
           setPageError((error as Error).message || 'Errore nel caricamento dei pazienti');
         }
       } finally {
@@ -110,7 +121,7 @@ export function usePatientListPage(query: string, sex: 'tutti' | 'M' | 'F') {
         }
       }
     },
-    [query, sex, readSummary],
+    [query, sex, readSummary, rosterKey, rosterOptions, acceptRoster, recoverRoster],
   );
 
   const retrySummary = useCallback(() => {

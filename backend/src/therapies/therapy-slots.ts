@@ -4,6 +4,11 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
+import type { Operator } from '../ai/auth.js';
+import { withRosterSnapshot } from '../roster/snapshot.js';
+import { encodeRosterCursor } from '../roster/cursor.js';
+import type { AppliedRosterOrder } from '../roster/order-contract.js';
+import { loadTherapyCandidates } from './therapy-candidate-page.js';
 import {
   MAX_THERAPY_SCHEDULES,
   scheduleDoseLabel,
@@ -73,9 +78,11 @@ export interface TherapySlot {
 
 export interface TherapySlotSourcePage {
   slots: TherapySlot[];
+  roster?: AppliedRosterOrder;
   pageInfo: {
     hasMore: boolean;
     nextId: string | null;
+    nextCursor?: string | null;
     loadedTherapies: number;
   };
 }
@@ -104,10 +111,11 @@ function therapyAccessSql(access: TherapyPatientAccess): Prisma.Sql {
 export async function buildTherapySlotExactSummary(
   date: string,
   access: TherapyPatientAccess = {},
+  db: Prisma.TransactionClient = prisma,
 ): Promise<Map<string, TherapySlot['summary']>> {
   const weekday = new Date(`${date}T00:00:00.000Z`).getUTCDay() || 7;
   const weekdayPattern = `%,${weekday},%`;
-  const rows = await prisma.$queryRaw<ExactSummaryRow[]>(Prisma.sql`
+  const rows = await db.$queryRaw<ExactSummaryRow[]>(Prisma.sql`
     WITH due_therapy AS (
       SELECT
         pt.id,
@@ -197,14 +205,19 @@ async function buildTherapySlotSourcePage(
   access: TherapyPatientAccess,
   limit: number,
   cursorId?: string,
+  db: Prisma.TransactionClient = prisma,
+  orderedIds?: string[],
+  today?: string,
 ): Promise<TherapySlotSourcePage> {
   if (Array.isArray(access.patientIds) && access.patientIds.length === 0) {
     return { slots: [], pageInfo: { hasMore: false, nextId: null, loadedTherapies: 0 } };
   }
-  const sourceRows = await prisma.patientTherapy.findMany({
-    where: cursorId
-      ? { AND: [therapyWhereForAccess(date, access), { id: { gt: cursorId } }] }
-      : therapyWhereForAccess(date, access),
+  const sourceRows = await db.patientTherapy.findMany({
+    where: orderedIds
+      ? { id: { in: orderedIds } }
+      : cursorId
+        ? { AND: [therapyWhereForAccess(date, access), { id: { gt: cursorId } }] }
+        : therapyWhereForAccess(date, access),
     select: {
       id: true,
       patientId: true,
@@ -239,6 +252,10 @@ async function buildTherapySlotSourcePage(
     orderBy: { id: 'asc' },
     take: limit + 1,
   });
+  if (orderedIds) {
+    const rank = new Map(orderedIds.map((id, index) => [id, index]));
+    sourceRows.sort((a, b) => rank.get(a.id)! - rank.get(b.id)!);
+  }
   const hasMore = sourceRows.length > limit;
   const therapies = sourceRows.slice(0, limit);
   if (therapies.some((therapy) => therapy.schedules.length > MAX_THERAPY_SCHEDULES)) {
@@ -266,6 +283,8 @@ async function buildTherapySlotSourcePage(
     validTherapies.map((therapy) => therapy.patientId),
     access,
     date,
+    db,
+    today,
   );
   const administrations = await findTherapyPageAdministrations(
     date,
@@ -277,6 +296,7 @@ async function buildTherapySlotSourcePage(
         ({ fascia }) => fascia,
       ),
     })),
+    db,
   );
   const adminMap = new Map<string, (typeof administrations)[0]>(
     administrations.flatMap((administration) => {
@@ -400,32 +420,48 @@ export async function buildTherapySlots(
 export async function buildTherapySlotPage(
   date: string,
   access: TherapyPatientAccess,
-  input: { limit: number; cursorId?: string },
+  input: { limit: number; cursor?: string; sort?: string; direction?: string; contextId?: string },
+  actor: Operator = { id: access.registeredById ?? 'internal-reader', role: 'operatore' },
 ): Promise<TherapySlotSourcePage> {
-  // The first response seeds exact totals. Continuation pages carry details only, so the
-  // expensive global aggregate is not repeated for every "load more" click.
-  if (input.cursorId || (Array.isArray(access.patientIds) && access.patientIds.length === 0)) {
-    return buildTherapySlotSourcePage(date, access, input.limit, input.cursorId);
-  }
-  const [page, exactSummary] = await Promise.all([
-    buildTherapySlotSourcePage(date, access, input.limit),
-    buildTherapySlotExactSummary(date, access),
-  ]);
-  const pageByFascia = new Map(page.slots.map((slot) => [slot.fascia, slot]));
-  page.slots = FASCE.flatMap((fascia) => {
-    const summary = exactSummary.get(fascia.fascia);
-    if (!summary?.total) return [];
-    const loaded = pageByFascia.get(fascia.fascia);
-    return [
-      {
-        id: `ts-${fascia.fascia}`,
-        fascia: fascia.fascia,
-        label: fascia.label,
-        ora: loaded?.ora ?? fascia.ora,
-        summary,
-        patients: loaded?.patients ?? [],
-      },
-    ];
+  return withRosterSnapshot(actor, access, 'therapy', input, {}, date, async (tx, snapshot) => {
+    const candidates = await loadTherapyCandidates(tx, date, access, input.limit, snapshot);
+    const page = await buildTherapySlotSourcePage(
+      date,
+      access,
+      input.limit,
+      undefined,
+      tx,
+      candidates.map((row) => row.id),
+      snapshot.today,
+    );
+    const last = candidates.slice(0, input.limit).at(-1);
+    page.roster = snapshot.roster;
+    page.pageInfo.nextCursor =
+      page.pageInfo.hasMore && last
+        ? encodeRosterCursor(snapshot.binding, { patientId: last.patientId, therapyId: last.id })
+        : null;
+    // The first response seeds exact totals. Continuation pages carry details only, so the
+    // expensive global aggregate is not repeated for every "load more" click.
+    if (input.cursor || (Array.isArray(access.patientIds) && access.patientIds.length === 0)) {
+      return page;
+    }
+    const exactSummary = await buildTherapySlotExactSummary(date, access, tx);
+    const pageByFascia = new Map(page.slots.map((slot) => [slot.fascia, slot]));
+    page.slots = FASCE.flatMap((fascia) => {
+      const summary = exactSummary.get(fascia.fascia);
+      if (!summary?.total) return [];
+      const loaded = pageByFascia.get(fascia.fascia);
+      return [
+        {
+          id: `ts-${fascia.fascia}`,
+          fascia: fascia.fascia,
+          label: fascia.label,
+          ora: loaded?.ora ?? fascia.ora,
+          summary,
+          patients: loaded?.patients ?? [],
+        },
+      ];
+    });
+    return page;
   });
-  return page;
 }

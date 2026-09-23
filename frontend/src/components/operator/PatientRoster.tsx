@@ -68,6 +68,8 @@ function PatientSignals({
 interface PatientRosterProps {
   patients: Paziente[];
   sort: PatientRosterSort;
+  localSortActive?: boolean;
+  serverCriterion?: 'name' | 'location';
   onSortChange: (sort: PatientRosterSort) => void;
   hasMore: boolean;
   loading: boolean;
@@ -158,6 +160,8 @@ const PatientCard = memo(function PatientCard({
 export function PatientRoster({
   patients,
   sort,
+  localSortActive = false,
+  serverCriterion = 'name',
   onSortChange,
   hasMore,
   loading,
@@ -171,7 +175,7 @@ export function PatientRoster({
   onDelete,
 }: PatientRosterProps) {
   const ariaSort = (field: PatientSortField) =>
-    sort.field === field
+    sort.field === field && (localSortActive || serverCriterion === 'name')
       ? sort.direction === 'asc'
         ? ('ascending' as const)
         : ('descending' as const)
@@ -189,7 +193,11 @@ export function PatientRoster({
       >
         {label}
         <span aria-hidden="true" className="patient-roster__sort-arrow">
-          {sort.field === field ? (sort.direction === 'asc' ? '↑' : '↓') : '↕'}
+          {sort.field === field && (localSortActive || serverCriterion === 'name')
+            ? sort.direction === 'asc'
+              ? '↑'
+              : '↓'
+            : '↕'}
         </span>
       </button>
     );
@@ -198,7 +206,7 @@ export function PatientRoster({
     <>
       <div className="patient-roster-order">
         <div className="patient-roster-order__mobile">
-          <label htmlFor="patient-sort-field">Ordina per</label>
+          <label htmlFor="patient-sort-field">Ordine colonne caricate</label>
           <select
             id="patient-sort-field"
             className="form-input"
@@ -223,10 +231,19 @@ export function PatientRoster({
           </button>
         </div>
         <span className="patient-roster-order__status" role="status" aria-live="polite">
-          {PATIENT_SORT_LABELS[sort.field]}:{' '}
-          {sort.direction === 'asc' ? 'crescente' : 'decrescente'}
+          {localSortActive ? 'Ordine temporaneo · ' : ''}
+          {localSortActive
+            ? PATIENT_SORT_LABELS[sort.field]
+            : serverCriterion === 'location'
+              ? 'Camera e letto'
+              : 'Cognome'}
+          : {sort.direction === 'asc' ? 'crescente' : 'decrescente'}
           {sort.field === 'signals' ? ' · Numero di segnalazioni disponibili' : ''}
-          {hasMore ? ' · Nei pazienti caricati' : ''}
+          {localSortActive
+            ? ' · Solo pazienti caricati'
+            : hasMore
+              ? ' · Ordine reparto su tutte le pagine'
+              : ''}
         </span>
       </div>
       {(anomalie.inCorso || anomalie.fallito || anomalie.verificaIncompleta) && (

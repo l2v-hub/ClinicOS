@@ -1,0 +1,347 @@
+{
+  "baseline": "853b40750c25f24ef40db622674612aaf64bf2cb",
+  "generatedAtUtc": "2026-09-23T01:59:27.325Z",
+  "files": [
+    {
+      "file": "frontend/src/App.tsx",
+      "baselineHash": "8016683439ae56a24489bdbb397b30760f1c6bf97d774a506528b0d2fba9541d",
+      "candidateHash": "e257a0759bb8f0c4149cd8112a4bcc6d8693342c995178333bc4f199852c6b59",
+      "baseline": [
+        {
+          "ruleId": "react-hooks/immutability",
+          "severity": 2,
+          "line": 549,
+          "column": 5,
+          "title": "Error: Cannot access variable before it is declared"
+        },
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 606,
+          "column": 5,
+          "title": "React Hook useCallback has a missing dependency: 'navigate'. Either include it or remove the dependency array."
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 617,
+          "column": 9,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1296,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1321,
+          "column": 7,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1386,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2971,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2971,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        }
+      ],
+      "candidate": [
+        {
+          "ruleId": "react-hooks/immutability",
+          "severity": 2,
+          "line": 555,
+          "column": 5,
+          "title": "Error: Cannot access variable before it is declared"
+        },
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 612,
+          "column": 5,
+          "title": "React Hook useCallback has a missing dependency: 'navigate'. Either include it or remove the dependency array."
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 623,
+          "column": 9,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1305,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1330,
+          "column": 7,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1395,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2981,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2981,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        }
+      ]
+    },
+    {
+      "file": "frontend/src/components/admin/OperatorManagement.tsx",
+      "baselineHash": "10eba13931d270082177c9f64ae8d7a8680a8acb90274ae9dafaa316723304dc",
+      "candidateHash": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "baselineHash": "24a65c4b5f8b4d58205aa3dae29918d8740371e6d2d96ede6a745007a66eabcd",
+      "candidateHash": "ae2aa161a50f3f67406aa179922cf5c76090e0640f15e38904ce08c1aad27c1e",
+      "baseline": [
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 46,
+          "column": 3,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 69,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 167,
+          "column": 20,
+          "title": "The ref value 'generation.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'generation.current' to a variable inside the effect, and use that variable in the cleanup function."
+        },
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 169,
+          "column": 6,
+          "title": "React Hook useEffect has missing dependencies: 'day', 'items.length', 'protectSavedSummary', and 'query'. Either include them or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setItems' needs the current value of 'day'."
+        }
+      ],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "baselineHash": "6906b6f971e99a5740b7430d4cf7a2ca5f7b64b2458af4e44f198cc25935d558",
+      "candidateHash": "a416599d426247c5509bfb60a9f7279c2838e34162a3977f9eef053c7ce110d1",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/PatientList.tsx",
+      "baselineHash": "2fbd4bab5214a2f7c94b091a6d35b0fa9ef804d7038909f27dba8497ba575062",
+      "candidateHash": "ef0c92fdb03001eafd515136f80b129f77462a3e906c763f161774398b2dd85c",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/PatientRoster.tsx",
+      "baselineHash": "30babc7fc54002c3ad22f6a68d2e8f47f7ba2b857b57554f52b6d16de689fc8f",
+      "candidateHash": "37fba6fab1591ce09d63f9fd7fab64e5a7fc281176087fe5c3d59bcdfb61817b",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/TherapyRoundsPage.tsx",
+      "baselineHash": "398eeec978e23b077c9bf3e82d7f02d12822ae399fab71168250b1284387b21e",
+      "candidateHash": "7baf8c92e56ca5a366513a7aa12e4d10bd20044801613793f4bf03eb0c05aeac",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "baselineHash": "8cdbc734f48e0ea1ec833f2bbe7a863e7fcc10d0c62a29eaf9a9c03a3939a82d",
+      "candidateHash": "32054f87c136b33fe35a7f5a464d024e38f53f0c1ceb6c4e246e79e2b7e50a33",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/usePatientListPage.ts",
+      "baselineHash": "cbce06f842cbba4390cdfc2220713dded4efb25353b6504fafff9ff6860527e2",
+      "candidateHash": "a33f74b8d37f0f5e9d8d72ea7daa5d08ab53276282a10c33252d8f79a17badc0",
+      "baseline": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "line": 42,
+          "column": 14,
+          "title": "'error' is defined but never used."
+        }
+      ],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+      "baselineHash": "6db7fc45f53ab90f338d6ab2fca3174bd44e422c9389363f033050f9b7602ee9",
+      "candidateHash": "5c60bf6e98facb8179d31a73adf541d82f314173b2d9fd16217b485d072dfa18",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/patientPage.ts",
+      "baselineHash": "f697562884f26673cf30adb09bd935befd3e3556e639e202032e1c9c70946cfe",
+      "candidateHash": "9a1c660c05f8c9924b992e1d8235c71c21dcfea7c94b089166599072f4e86127",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/patientParametersPage.ts",
+      "baselineHash": "b4c0b66be1b29fe8a74073051f694705ddcc6d1750b2736dbed724d36960e8a6",
+      "candidateHash": "0fd758f72b9be18161ea54852fe92c478867dbe1fd0600fcfd47aeed4635bac4",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/therapySlotPage.ts",
+      "baselineHash": "683fc12c34283cb09cf208b149be28a2c98b6fe25dbee376249215e74ec86667",
+      "candidateHash": "5a8693b82199cbfda42e602c007e47c6b451dd0d0f439c14505d90c2aa605065",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/types.ts",
+      "baselineHash": "7cd65975a0468398eb61e246cea96427282b40081b407985bea270b6ca2b5ea4",
+      "candidateHash": "6348868ec77e7e8e422c3fe09001696a6249e5e2868f77c67f85c486b5655561",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/admin/RosterDefaultsPanel.tsx",
+      "baselineHash": null,
+      "candidateHash": "ac2cfab53da36b28179c5df2dcdcf9d050ca854962eab8a888dc4b050ded2d4d",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+      "baselineHash": null,
+      "candidateHash": "c8bd2f9c293b5e21fdfaf1fc57196ec9ac53edbc36fbcec65353a52e7f365746",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/shared/RosterOrderContext.tsx",
+      "baselineHash": null,
+      "candidateHash": "ddcd7e12a5f6152678eafce520a2ebb48dc9b32d472801be6cab41a18eb26e73",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/shared/RosterOrderControl.tsx",
+      "baselineHash": null,
+      "candidateHash": "d17241636ad802aff1dfcf28b2b7c5a648fdb7d70d94b51ad333383519c6c99b",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/parameterEntryDrafts.test.ts",
+      "baselineHash": null,
+      "candidateHash": "994c7a15c1f264fb7c09fcbb446819529975939d8e8d3b474324042cc0396fea",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/rosterOrder.fixtures.ts",
+      "baselineHash": null,
+      "candidateHash": "fac777f550fadced7e53f1610924c34f6705a7bae53194b2a556261042385fa7",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/rosterOrderController.test.ts",
+      "baselineHash": null,
+      "candidateHash": "8b5e076545acb2a2c2e856b451a59c1152adbac9983926c164791848f69231d0",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/rosterOrderPages.test.ts",
+      "baselineHash": null,
+      "candidateHash": "00da146aa3c51f4b59718546c7b20f46211ed8bc4b28a4e4b6b37dee8e31f63e",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/parameterEntryDrafts.ts",
+      "baselineHash": null,
+      "candidateHash": "0e8bd13075f3488bb650ab4828cc9e4518efd455712a85d0b881a3910ce08d06",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/rosterOrder.ts",
+      "baselineHash": null,
+      "candidateHash": "ce290150c395819cfb014940f81d46cdb6849da970f70dcb0dbff7f2ad3e41ad",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/rosterOrderController.ts",
+      "baselineHash": null,
+      "candidateHash": "4c386d761b2da7687724b537e31e58d332cc1f292ff195c34b621a466d109b2b",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/useParameterEntryDraft.ts",
+      "baselineHash": null,
+      "candidateHash": "5bb3d70113e3f009ff8dd92d39056a15fb4aa22b3ea734712963a3f5cd0e439e",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/useRosterOrder.ts",
+      "baselineHash": null,
+      "candidateHash": "eb2f0733a42d3297843935e3a14e3c51b02784e9a3bad05862a6363f1fa35485",
+      "baseline": [],
+      "candidate": []
+    }
+  ],
+  "introduced": []
+}

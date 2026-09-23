@@ -1,0 +1,34 @@
+(node:34020) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ draft values and notes survive unsubscribe/remount and remain isolated by patient ID (1.9326ms)
+✔ in-flight and uncertain saves preserve the same body/id/time across remount and prevent duplicate send (1.1035ms)
+✔ verified failure permits correction with a fresh request, never clearing another patient draft (0.3463ms)
+✔ workspace/session cleanup rejects late responses even when the same patient ID returns (0.2421ms)
+(node:34020) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38816) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a pending preference does not block server page identity/order, and never claims persistence (29.8825ms)
+✔ personal choice sends only context, override and CAS version; reset retains server revision (3.2054ms)
+✔ missing profile allows only temporary order and never writes or creates a profile (0.7623ms)
+✔ CAS conflict refetches without automatically overwriting another operator session (2.2348ms)
+✔ network failure keeps a truthful temporary choice, and roster recovery is bounded until a page succeeds (2.2758ms)
+✔ late preference and mutation results cannot cross the disposed session boundary (1.2628ms)
+(node:38816) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39316) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ identity search keeps PHI in POST while binding global order and historical bootstrap asOf (6.3985ms)
+✔ epochs and revisions remain exact strings; malformed metadata and partial permission shapes are rejected (0.9637ms)
+✔ initial identity/parameter readers run without waiting for preference and retain real server order metadata (26.0847ms)
+✔ 409 roster_changed is typed for a fresh page sequence; therapy partial merges keep server order and exact totals (1.979ms)
+(node:39316) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 638.9146

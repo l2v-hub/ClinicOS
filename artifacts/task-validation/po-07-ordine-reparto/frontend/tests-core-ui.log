@@ -1,0 +1,45 @@
+(node:24704) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ pending and unverified server order stay visibly temporary, without claiming a saved preference (14.9504ms)
+✔ personal and department authority are independent and missing profiles expose no false save affordance (2.8301ms)
+✔ remounted parameter rows retain the correct patient values, open note, and exact uncertain request (14.2711ms)
+✔ legacy columns retain usable controls and explicitly limit temporary ordering to loaded patients (13.3489ms)
+✔ therapy modal preserves a deliberately non-alphabetical server order and the original action identifiers (8.2951ms)
+(node:24704) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33348) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ draft values and notes survive unsubscribe/remount and remain isolated by patient ID (2.7859ms)
+✔ in-flight and uncertain saves preserve the same body/id/time across remount and prevent duplicate send (1.6776ms)
+✔ verified failure permits correction with a fresh request, never clearing another patient draft (0.4814ms)
+✔ workspace/session cleanup rejects late responses even when the same patient ID returns (0.3843ms)
+(node:33348) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a pending preference does not block server page identity/order, and never claims persistence (31.541ms)
+✔ personal choice sends only context, override and CAS version; reset retains server revision (2.8885ms)
+✔ a preference changed during the initial parallel page read restarts once instead of relabelling old rows as saved (0.651ms)
+✔ an explicit temporary choice cancels a pending preference and ignores its late result (0.6512ms)
+✔ missing profile allows only temporary order and never writes or creates a profile (0.6027ms)
+✔ CAS conflict refetches without automatically overwriting another operator session (1.8438ms)
+✔ network failure keeps a truthful temporary choice, and roster recovery is bounded until a page succeeds (1.0174ms)
+✔ late preference and mutation results cannot cross the disposed session boundary (0.6094ms)
+(node:36440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20664) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ identity search keeps PHI in POST while binding global order and historical bootstrap asOf (5.4145ms)
+✔ epochs and revisions remain exact strings; malformed metadata and partial permission shapes are rejected (1.9519ms)
+✔ initial identity/parameter readers run without waiting for preference and retain real server order metadata (37.8468ms)
+✔ 409 roster_changed is typed for a fresh page sequence; therapy partial merges keep server order and exact totals (3.2744ms)
+(node:20664) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1077.8149

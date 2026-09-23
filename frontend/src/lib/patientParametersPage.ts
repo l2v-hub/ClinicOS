@@ -1,4 +1,12 @@
 import type { CartellaPaziente, ParametriMensili, Paziente } from '../types';
+import {
+  assertRosterPage,
+  parseRosterMetadata,
+  rosterQuery,
+  throwRosterResponse,
+  type RosterMetadata,
+  type RosterPageOptions,
+} from './rosterOrder';
 
 export type ParameterPagePatient = Pick<
   Paziente,
@@ -17,6 +25,7 @@ export interface PatientParametersPageItem {
 }
 
 export interface PatientParametersPageResponse {
+  roster?: RosterMetadata;
   items: PatientParametersPageItem[];
   hasMore: boolean;
   nextCursor: string | null;
@@ -24,7 +33,7 @@ export interface PatientParametersPageResponse {
 
 export function buildPatientParametersPageUrl(
   apiUrl: string,
-  filters: {
+  filters: RosterPageOptions & {
     q?: string;
     cursor?: string;
     limit?: number;
@@ -36,6 +45,7 @@ export function buildPatientParametersPageUrl(
 ): string {
   const requested = Number.isFinite(filters.limit) ? Math.trunc(filters.limit as number) : 25;
   const params = new URLSearchParams({ limit: String(Math.min(25, Math.max(1, requested))) });
+  Object.entries(rosterQuery(filters)).forEach(([key, value]) => params.set(key, value));
   const now = new Date();
   params.set('month', String(filters.month ?? now.getMonth() + 1));
   params.set('year', String(filters.year ?? now.getFullYear()));
@@ -49,7 +59,7 @@ export function buildPatientParametersPageUrl(
 
 export async function fetchPatientParametersPage(
   apiUrl: string,
-  filters: {
+  filters: RosterPageOptions & {
     q?: string;
     cursor?: string;
     limit?: number;
@@ -67,8 +77,10 @@ export async function fetchPatientParametersPage(
       signal: options.signal,
     },
   );
-  if (!response.ok) throw new Error('Impossibile caricare i parametri pazienti');
+  if (!response.ok) await throwRosterResponse(response);
   const page = (await response.json()) as PatientParametersPageResponse;
+  page.roster = parseRosterMetadata(page.roster);
+  assertRosterPage(page.roster, filters, filters.date);
   if (
     !Array.isArray(page.items) ||
     typeof page.hasMore !== 'boolean' ||

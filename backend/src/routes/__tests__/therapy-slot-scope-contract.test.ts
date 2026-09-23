@@ -4,6 +4,10 @@ import test from 'node:test';
 
 const route = readFileSync(new URL('../therapy.ts', import.meta.url), 'utf8');
 const slots = readFileSync(new URL('../../therapies/therapy-slots.ts', import.meta.url), 'utf8');
+const candidates = readFileSync(
+  new URL('../../therapies/therapy-candidate-page.ts', import.meta.url),
+  'utf8',
+);
 const writer = readFileSync(new URL('../../therapies/therapy-write.ts', import.meta.url), 'utf8');
 const assistant = readFileSync(new URL('../../ai/assistant/service.ts', import.meta.url), 'utf8');
 const dueQuery = readFileSync(
@@ -51,10 +55,13 @@ test('assistant therapy queue is exact-counted, bounded and declares sampled res
 test('interactive agenda uses keyset pages with exact scoped summaries', () => {
   assert.match(route, /router\.get\('\/page'/);
   assert.match(route, /parseTherapySlotPageQuery/);
-  assert.match(route, /encodeTherapySlotCursor/);
-  assert.match(slots, /orderBy: \{ id: 'asc' \}/);
-  assert.match(slots, /take: limit \+ 1/);
-  assert.match(slots, /\{ id: \{ gt: cursorId \} \}/);
+  assert.match(route, /nextCursor: page\.pageInfo\.nextCursor/);
+  assert.match(slots, /withRosterSnapshot/);
+  assert.match(slots, /loadTherapyCandidates\(tx/);
+  assert.match(candidates, /ORDER BY \$\{rosterOrderSql/);
+  assert.match(candidates, /LIMIT \$\{limit \+ 1\}/);
+  assert.match(candidates, /rosterAfterSql\(order, position/);
+  assert.match(candidates, /p\."registeredById" = \$\{access\.registeredById\}/);
   assert.match(slots, /buildTherapySlotExactSummary/);
   assert.match(slots, /COUNT\(\*\) FILTER \(WHERE stato = 'erogata'\)/);
   assert.match(slots, /therapyAccessSql\(access\)/);

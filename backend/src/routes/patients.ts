@@ -13,6 +13,7 @@ import {
 import { patientIntakeReviewRouter } from './patient-intake-review.js';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import { PatientPageInputError } from '../patients/pagination.js';
+import { RosterError } from '../roster/order-contract.js';
 import { loadPatientIdentityPage } from '../patients/identity-page.js';
 import { PatientSummaryInputError, parsePatientSummaryIds } from '../patients/summary-query.js';
 import { loadPatientParametersPage } from '../patients/parameters-page.js';
@@ -51,6 +52,12 @@ async function sendPatientPage(
   try {
     res.status(200).json(await loadPatientIdentityPage(rawInput, req.operator!));
   } catch (error) {
+    if (error instanceof RosterError) {
+      res
+        .status(error.status)
+        .json({ error: error.message, code: error.code, reason: error.reason });
+      return;
+    }
     if (error instanceof PatientPageInputError) {
       res.status(400).json({ error: error.message });
       return;
@@ -91,7 +98,7 @@ router.post('/page/search', async (req, res) => {
 
 // Bounded projection for the multi-patient vital-sign editor. Unlike the legacy roster + one
 // cartella request per patient, this returns at most 25 identities and only the JSON fields the
-// screen renders. It shares the versioned cursor/filter contract with /patients/page.
+// screen renders. Its versioned cursor binds the parameters view and normalized filters.
 router.get('/parameters/page', async (req, res) => {
   try {
     const actor = (req as AuthedRequest).operator!;
@@ -99,6 +106,12 @@ router.get('/parameters/page', async (req, res) => {
       .status(200)
       .json(await loadPatientParametersPage(req.query as Record<string, unknown>, actor));
   } catch (error) {
+    if (error instanceof RosterError) {
+      res
+        .status(error.status)
+        .json({ error: error.message, code: error.code, reason: error.reason });
+      return;
+    }
     if (error instanceof PatientPageInputError) {
       res.status(400).json({ error: error.message });
       return;

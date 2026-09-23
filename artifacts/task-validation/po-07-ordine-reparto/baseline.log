@@ -1,0 +1,1 @@
+[{"name":"patients50","medianMs":6.152800000000752,"p90Ms":6.842399999999543,"responseBytes":15526},{"name":"parameters25","medianMs":4.367000000000189,"p90Ms":4.666200000001481,"responseBytes":10696},{"name":"therapy100","medianMs":23.964349999999286,"p90Ms":31.51300000000083,"responseBytes":38102}]

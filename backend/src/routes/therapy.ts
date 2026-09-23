@@ -17,11 +17,10 @@ import {
 } from '../therapies/therapy-write.js';
 import { hasGlobalPatientScope } from '../patients/patient-scope.js';
 import {
-  encodeTherapySlotCursor,
   parseTherapySlotPageQuery,
-  therapySlotScopeFingerprint,
   TherapySlotPageInputError,
 } from '../therapies/slot-page-query.js';
+import { RosterError } from '../roster/order-contract.js';
 
 const router = Router();
 
@@ -57,23 +56,26 @@ router.get('/page', async (req, res) => {
     }
     const date = parseIsoCalendarDate(req.query.date, 'date');
     const access = patientAccess(req as AuthedRequest);
-    const scope = therapySlotScopeFingerprint(access);
-    const input = parseTherapySlotPageQuery(req.query as Record<string, unknown>, date, scope);
-    const page = await buildTherapySlotPage(date, access, input);
+    const input = parseTherapySlotPageQuery(req.query as Record<string, unknown>);
+    const page = await buildTherapySlotPage(date, access, input, (req as AuthedRequest).operator!);
     res.status(200).json({
       slots: page.slots,
+      roster: page.roster,
       pageInfo: {
         hasMore: page.pageInfo.hasMore,
-        nextCursor:
-          page.pageInfo.hasMore && page.pageInfo.nextId
-            ? encodeTherapySlotCursor(date, scope, page.pageInfo.nextId)
-            : null,
+        nextCursor: page.pageInfo.nextCursor ?? null,
         loadedTherapies: page.pageInfo.loadedTherapies,
         completeness: page.pageInfo.hasMore ? 'partial' : 'complete',
-        summaryExact: !input.cursorId,
+        summaryExact: !input.cursor,
       },
     });
   } catch (error) {
+    if (error instanceof RosterError) {
+      res
+        .status(error.status)
+        .json({ error: error.message, code: error.code, reason: error.reason });
+      return;
+    }
     if (error instanceof AppointmentListInputError || error instanceof TherapySlotPageInputError) {
       res.status(400).json({ error: error.message });
       return;

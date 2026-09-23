@@ -1,11 +1,10 @@
-import { useRef, useState } from 'react';
+import { useParameterEntryDraft } from '../../lib/useParameterEntryDraft';
+import type { ParameterDraftStore } from '../../lib/parameterEntryDrafts';
 import { IcoMessage } from '../../icons';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import type { ParameterPagePatient } from '../../lib/patientParametersPage';
 import {
   PARAMETER_FIELDS,
-  createParameterReadingRequest,
-  parameterValuesError,
   ParameterReadingSaveError,
   readingTime,
   type ParameterValues,
@@ -22,6 +21,7 @@ function thresholdClass(key: string, value = '') {
 }
 interface Props {
   patient: ParameterPagePatient;
+  draftStore?: ParameterDraftStore;
   lastReadingAt?: string | null;
   readingCount?: number;
   noteCount?: number;
@@ -31,6 +31,7 @@ interface Props {
 }
 export function ParameterEntryRow({
   patient,
+  draftStore,
   lastReadingAt,
   readingCount = 0,
   noteCount,
@@ -38,14 +39,8 @@ export function ParameterEntryRow({
   onOpenHistory,
   onSave,
 }: Props) {
-  const [values, setValues] = useState<ParameterValues>({});
-  const [notesOpen, setNotesOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [uncertain, setUncertain] = useState(false);
-  const [savedAt, setSavedAt] = useState<string | null>(null);
-  const pending = useRef<ParameterReadingRequest | null>(null);
-  const inFlight = useRef(false);
+  const { store, draft } = useParameterEntryDraft(patient.id, draftStore);
+  const { values, notesOpen, saving, error, uncertain, savedAt } = draft;
   const name = `${patient.firstName} ${patient.lastName}`;
   const hasValues = PARAMETER_FIELDS.some((field) => values[field.key]?.trim());
   const draftNote = Boolean(values.note?.trim());
@@ -59,37 +54,21 @@ export function ParameterEntryRow({
     ...(draftNote ? ['1 nota da salvare'] : []),
   ].join(' · ');
   function update(key: keyof ParameterValues, value: string) {
-    setValues((previous) => ({ ...previous, [key]: value }));
-    setError('');
-    setSavedAt(null);
-    pending.current = null;
+    store.update(patient.id, key, value);
   }
   async function save() {
-    if (inFlight.current) return;
-    const invalid = parameterValuesError(values);
-    if (invalid) {
-      setError(invalid);
-      return;
-    }
-    pending.current ??= createParameterReadingRequest(values);
-    inFlight.current = true;
-    setSaving(true);
-    setError('');
+    const token = store.begin(patient.id);
+    if (!token) return;
     try {
-      const saved = await onSave(pending.current);
-      pending.current = null;
-      setValues({});
-      setSavedAt(saved.measuredAt);
-      setUncertain(false);
-      setNotesOpen(false);
+      const saved = await onSave(token.request);
+      store.succeed(token, saved.measuredAt);
     } catch (cause) {
       const unknownOutcome = !(cause instanceof ParameterReadingSaveError) || cause.uncertain;
-      setUncertain(unknownOutcome);
-      if (!unknownOutcome) pending.current = null;
-      setError(cause instanceof Error ? cause.message : 'Salvataggio non verificato. Riprova.');
-    } finally {
-      inFlight.current = false;
-      setSaving(false);
+      store.fail(
+        token,
+        cause instanceof Error ? cause.message : 'Salvataggio non verificato. Riprova.',
+        unknownOutcome,
+      );
     }
   }
   return (
@@ -145,7 +124,7 @@ export function ParameterEntryRow({
         aria-label={`${notesOpen ? 'Chiudi' : 'Apri'} note per ${name} · ${noteDescription}`}
         title={noteDescription}
         aria-expanded={notesOpen}
-        onClick={() => setNotesOpen((value) => !value)}
+        onClick={() => store.toggleNotes(patient.id)}
       >
         <IcoMessage />
         <span>Note</span>

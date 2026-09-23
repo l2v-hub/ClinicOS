@@ -1,0 +1,14 @@
+✔ 72 authorized patients are globally ordered before pagination in all four orders (11351.1352ms)
+✔ identity bootstrap and detailed parameter pages have exactly the same patient order and date (484.4648ms)
+✔ therapy pages split groups safely without losing or duplicating scheduled therapies (1101.6773ms)
+✔ personal and department preferences persist independently and reject stale concurrent writes (74.0897ms)
+✔ context default and patient changes fence existing cursors; scope and dates cannot reuse them (79.2223ms)
+✔ missing profile has explicit temporary order and no implicit operator creation (4.1201ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25939.6705

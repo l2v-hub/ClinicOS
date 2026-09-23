@@ -1,0 +1,502 @@
+(node:36540) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ shared identity distinguishes homonyms, wraps untrusted text, and omits internal identifiers (19.7555ms)
+✔ location shows its date only outside today in Rome while retaining legacy provenance (2.7691ms)
+✔ loading and unavailable never display retained location labels (2.2004ms)
+✔ parameter identity is available while clinical summary counts remain pending (6.7231ms)
+✔ handover null, missing, malformed or mismatched identity has no chart-opening action (25.7089ms)
+✔ therapy action names identify both homonyms and drug while readOnly offers no signing (10.5991ms)
+✔ combobox selected patient uses shared identity without internal record number (5.2937ms)
+✔ identity presentation adds no fetch and parameter drafts retain stable patient keys (4.4687ms)
+(node:36540) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:14584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ saved note count is distinct from reading count and exposed in the accessible action (38.6577ms)
+✔ zero notes has no badge; missing metadata never fabricates zero notes or unassigned room (20.4595ms)
+(node:14584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:2264) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new handover uses the shared semantic form and exposes explicit identity fields (10.0504ms)
+✔ patient picker is an accessible listbox with shared fiscal or birth identity (0.9279ms)
+✔ handover form and result menu have explicit tablet/mobile constraints (1.5707ms)
+(node:2264) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:31996) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ consegne feed URL is bounded and encodes server filters plus cursor (7.2185ms)
+✔ consegne load-more deduplicates records (2.0711ms)
+(node:31996) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23580) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ login loads only handover overview while the bounded feed is navigation-scoped (5.466ms)
+✔ dashboards consume exact overview and never derive KPI from a feed page (0.7742ms)
+✔ patient list badges come from visible-id clinical summaries, not a handover roster prop (0.6854ms)
+✔ patient detail distinguishes an exact total from the loaded page and exposes recovery (0.6395ms)
+(node:23580) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23608) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient page keeps identity projection with one bounded request and preserves it when merged (74.756ms)
+✔ parameter page projection survives fetching and identity refresh without chart requests (4.934ms)
+✔ therapy parser and merge preserve identity and date context without changing clinical payloads or totals (2.8556ms)
+✔ missing therapy projection is unavailable even when compatibility aliases contain stale labels (0.5219ms)
+✔ handover page refresh can revoke identity without dropping the authorized handover name (0.7875ms)
+(node:23608) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37532) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ draft values and notes survive unsubscribe/remount and remain isolated by patient ID (8.8251ms)
+✔ in-flight and uncertain saves preserve the same body/id/time across remount and prevent duplicate send (4.4456ms)
+✔ verified failure permits correction with a fresh request, never clearing another patient draft (1.4898ms)
+✔ workspace/session cleanup rejects late responses even when the same patient ID returns (1.4663ms)
+(node:37532) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a late save cannot lower a newer daily snapshot; a newer save enriches an older snapshot (2.8593ms)
+✔ day rollover keeps patient identity but invalidates counts, including on a failed refresh (0.4568ms)
+(node:13392) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient combobox renders a stable identity with fiscal-code fallback (2.0619ms)
+✔ patient combobox keyboard navigation wraps and supports boundaries (0.4386ms)
+(node:13392) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8600) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ fiscal identity is preferred, birth date is the fallback, and missing phone is irrelevant (7.9223ms)
+✔ assigned location preserves complete relational and partial legacy labels (11.0686ms)
+✔ only explicit unassigned is unassigned; unavailable and loading suppress stale labels (2.1295ms)
+✔ handover identity requires the authorized complete wire shape (1.1181ms)
+(node:8600) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:7876) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (3.6221ms)
+✔ roster has five operational columns and native accessible actions (1.2978ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.8313ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (0.6352ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (0.7208ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (2.169ms)
+(node:7876) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40304) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient page URL sends only non-identifying bounded filters (3.794ms)
+✔ patient search keeps fiscal identity and names out of the URL (2.8092ms)
+✔ patient page merge replaces on a new search and deduplicates appended rows (1.0751ms)
+✔ patient page orchestration requests summaries only for visible page IDs (68.1607ms)
+✔ blank directory query uses GET and never emits a q parameter (1.8471ms)
+✔ targeted patient refresh never falls back to the legacy roster (1.8069ms)
+✔ directory search is one bounded page request without clinical summary or roster fallback (1.7843ms)
+✔ clinical enrichment is independently bounded and deduplicates requested ids (4.451ms)
+✔ summary failure remains an error rather than an empty success (3.1967ms)
+✔ aborting enrichment prevents later batches from being requested (1.9977ms)
+(node:40304) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:34148) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new readings require measured values; preserve exact time and independent request identities (13.1963ms)
+✔ network retry submits the same immutable request; no whole month PATCH (62.2508ms)
+✔ validation failures allow correction, server/parse/conflict failures retain retry identity (4.4878ms)
+✔ legacy history preserves multiple DTX, notes and explicit missing-time labels (8.0044ms)
+✔ history fetch and entry page pass date and cursor with bounded limit and abort signal (2.6281ms)
+✔ monthly fetch keeps the month when loading the next page (2.7713ms)
+(node:34148) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40840) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ today and seven-day presets are inclusive Rome civil ranges (6.2959ms)
+✔ month, six-month and year use calendar anniversaries rather than fixed-day approximations (0.8412ms)
+✔ month-end and leap anniversaries clamp, without overflowing into the wrong month (1.0916ms)
+✔ dated legacy entries follow exact period; absent dates are never counted as in-range (0.4452ms)
+✔ unified values show newest first without mutating the chart source; legacy dates stay separate (28.0898ms)
+(node:40840) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32664) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ parameters page URL clamps to 25 and binds query/cursor (6.0975ms)
+✔ parameters page validates its bounded response and merges by patient id (69.9258ms)
+✔ entry projection is opt-in and preserves bounded day and room-search filters (4.3397ms)
+✔ parameter save uses an encoded id and the bounded PATCH contract (2.3918ms)
+(node:32664) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all fields start ascending and toggle both ways (12.5812ms)
+✔ names use Italian surname and given name order; empty names remain last both ways (1.3954ms)
+✔ tax codes are case-insensitive and missing values stay last, including whitespace (0.5022ms)
+✔ admissions sort by displayed labels with unavailable summaries/status last (0.6368ms)
+✔ signals are numeric: critical counts once, all visible sources contribute, missing is not zero (0.6032ms)
+✔ equal field values use deterministic name/id ties independent of incoming page order (0.7039ms)
+✔ sorting does not mutate inputs and reorders appended rows and asynchronously resolved signals (0.4764ms)
+(node:22440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:28584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a pending preference does not block server page identity/order, and never claims persistence (54.7169ms)
+✔ personal choice sends only context, override and CAS version; reset retains server revision (5.9807ms)
+✔ missing profile allows only temporary order and never writes or creates a profile (1.4257ms)
+✔ CAS conflict refetches without automatically overwriting another operator session (3.3183ms)
+✔ network failure keeps a truthful temporary choice, and roster recovery is bounded until a page succeeds (3.3537ms)
+✔ late preference and mutation results cannot cross the disposed session boundary (1.2635ms)
+(node:28584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33224) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ identity search keeps PHI in POST while binding global order and historical bootstrap asOf (7.1741ms)
+✔ epochs and revisions remain exact strings; malformed metadata and partial permission shapes are rejected (7.5707ms)
+✔ initial identity/parameter readers run without waiting for preference and retain real server order metadata (67.7463ms)
+✔ 409 roster_changed is typed for a fresh page sequence; therapy partial merges keep server order and exact totals (3.8413ms)
+(node:33224) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33472) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy slots are loaded only when the therapy page is visible, including history navigation (2.0509ms)
+✖ agenda follows the bounded page contract and aborts obsolete date requests (5.7486ms)
+(node:33472) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:14844) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy page loader returns a complete deduplicated clinical list (32.5698ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (1.8595ms)
+✔ therapy page loader carries every server filter on the first page (1.0804ms)
+(node:14844) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy UI loads incrementally while emergency print requires every active page (14.6663ms)
+✔ therapy failures are announced and never rendered as empty clinical results (3.6428ms)
+✔ medication administration history follows the bounded opaque cursor feed (1.2023ms)
+(node:20108) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy slot URL is bounded and carries an opaque cursor (1.3888ms)
+✔ therapy pages merge patients and therapies while replacing exact summaries (1.5162ms)
+✔ therapy page parser rejects partial responses without a continuation cursor (0.6016ms)
+(node:20108) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 95
+ℹ suites 0
+ℹ pass 94
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2608.2912
+
+✖ failing tests:
+
+test at src\lib\__tests__\therapyNavigationGuard.test.ts:1:602
+✖ agenda follows the bounded page contract and aborts obsolete date requests (5.7486ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /buildTherapySlotPageUrl\(API_URL, d, options\.cursor\)/. Input:
+  
+  "import { Component, lazy, Suspense, useState, useEffect, useRef, useCallback, useMemo } from 'react';\n" +
+    "import type { ReactNode } from 'react';\r\n" +
+    "import './App.css';\r\n" +
+    "import { API_URL } from './config';\n" +
+    "import { useRosterOrder } from './lib/useRosterOrder';\n" +
+    "import { assertRosterPage, isRosterChanged, throwRosterResponse } from './lib/rosterOrder';\n" +
+    "import { RosterOrderContext } from './components/shared/RosterOrderContext';\n" +
+    "import { CartellaWriteQueue, mergeCartellaPatch } from './lib/cartellaWriteQueue';\r\n" +
+    "import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';\r\n" +
+    "import { fetchPatientById, fetchPatientPage } from './lib/patientPage';\r\n" +
+    "import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';\r\n" +
+    'import {\r\n' +
+    '  buildOperatorDirectoryPageUrl,\r\n' +
+    '  mergeOperatorDirectoryPages,\r\n' +
+    '  parseOperatorDirectoryPage,\r\n' +
+    '  type OperatorDirectoryPageInfo,\r\n' +
+    '  type OperatorDirectoryStatus,\r\n' +
+    '  type OperatorDirectorySummary,\r\n' +
+    "} from './lib/operatorDirectoryPage';\r\n" +
+    "import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';\r\n" +
+    "import { acquireApiToken } from './lib/entraAuth';\r\n" +
+    'import {\r\n' +
+    '  buildAppointmentRangeUrl,\r\n' +
+    '  localIsoDate,\r\n' +
+    '  type AppointmentRangeRequest,\r\n' +
+    "} from './lib/appointmentRange';\r\n" +
+    'import {\r\n' +
+    '  buildNotesMailboxUrl,\r\n' +
+    '  mapNoteDto,\r\n' +
+    '  mergeNotesPage,\r\n' +
+    '  type NotesMailboxQuery,\r\n' +
+    '  type NotesPageInfo,\r\n' +
+    '  type NotesPageResponse,\r\n' +
+    "} from './lib/notesMailbox';\r\n" +
+    'import {\r\n' +
+    '  buildConsegnaFeedUrl,\r\n' +
+    '  isConsegnaFeedResponse,\r\n' +
+    '  mergeConsegnaPage,\r\n' +
+    '  type ConsegnaFeedQuery,\r\n' +
+    "} from './lib/consegneFeed';\r\n" +
+    'import {\r\n' +
+    '  buildTherapySlotPageUrl,\r\n' +
+    '  mergeTherapySlotPages,\r\n' +
+    '  parseTherapySlotPage,\r\n' +
+    "} from './lib/therapySlotPage';\r\n" +
+    '\r\n' +
+    'import type {\r\n' +
+    '  UtenteApp,\r\n' +
+    '  Paziente,\r\n' +
+    '  Operatore,\r\n' +
+    '  Consegna,\r\n' +
+    '  NavKey,\r\n' +
+    '  Appuntamento,\r\n' +
+    '  Camera,\r\n' +
+    '  ScheduleOperatore,\r\n' +
+    '  SlotAgenda,\r\n' +
+    '  Nota,\r\n' +
+    '  NewNotaInput,\r\n' +
+    '  StatoNota,\r\n' +
+    '  CartellaPaziente,\r\n' +
+    '  ClinicalOverview,\r\n' +
+    '  TherapySlot,\r\n' +
+    '  MotivoNonErogazione,\r\n' +
+    '  TherapySlotPatient,\r\n' +
+    '  TherapyAdministration,\r\n' +
+    '  TipoIntervento,\r\n' +
+    '  ConsegnaOverview,\r\n' +
+    '  ConsegnaPageInfo,\r\n' +
+    '  ConsegnaSummary,\r\n' +
+    '  NewConsegnaInput,\r\n' +
+    '  TherapySlotPageInfo,\r\n' +
+    '  TherapyActionInfo,\r\n' +
+    "} from './types';\r\n" +
+    "import { OPERATOR_COLOR_PALETTE } from './types';\r\n" +
+    "import { createDefaultCartella } from './mockData';\r\n" +
+    '\r\n' +
+    "import { Login } from './components/Login';\r\n" +
+    "import type { TabId } from './components/operator/tabGroups';\r\n" +
+    "import type { AssistantNav } from './components/shared/AIAssistantButton';\r\n" +
+    "import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';\r\n" +
+    "import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';\r\n" +
+    '\r\n' +
+    "import { IcoAI, IcoSearch, IcoX } from './icons';\r\n" +
+    '\r\n' +
+    'const AdminDashboard = lazy(() =>\r\n' +
+    "  import('./components/admin/AdminDashboard').then((module) => ({\r\n" +
+    '    default: module.AdminDashboard,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const OperatorManagement = lazy(() =>\r\n' +
+    "  import('./components/admin/OperatorManagement').then((module) => ({\r\n" +
+    '    default: module.OperatorManagement,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const AdminAgenda = lazy(() =>\r\n' +
+    "  import('./components/admin/AdminAgenda').then((module) => ({ default: module.AdminAgenda })),\r\n" +
+    ');\r\n' +
+    'const RoomsManagement = lazy(() =>\r\n' +
+    "  import('./components/admin/RoomsManagement').then((module) => ({\r\n" +
+    '    default: module.RoomsManagement,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const OperatorSchedule = lazy(() =>\r\n' +
+    "  import('./components/admin/OperatorSchedule').then((module) => ({\r\n" +
+    '    default: module.OperatorSchedule,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const OperatorDashboard = lazy(() =>\r\n' +
+    "  import('./components/operator/OperatorDashboard').then((module) => ({\r\n" +
+    '    default: module.OperatorDashboard,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const PatientList = lazy(() =>\r\n' +
+    "  import('./components/operator/PatientList').then((module) => ({ default: module.PatientList })),\r\n" +
+    ');\r\n' +
+    'const PatientDetail = lazy(() =>\r\n' +
+    "  import('./components/operator/PatientDetail').then((module) => ({\r\n" +
+    '    default: module.PatientDetail,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const ConsegnePage = lazy(() =>\r\n' +
+    "  import('./components/operator/ConsegnePage').then((module) => ({ default: module.ConsegnePage })),\r\n" +
+    ');\r\n' +
+    'const TherapyRoundsPage = lazy(() =>\r\n' +
+    "  import('./components/operator/TherapyRoundsPage').then((module) => ({\r\n" +
+    '    default: module.TherapyRoundsPage,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const OperatorAgenda = lazy(() =>\r\n' +
+    "  import('./components/operator/OperatorAgenda').then((module) => ({\r\n" +
+    '    default: module.OperatorAgenda,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const NotesPage = lazy(() =>\r\n' +
+    "  import('./components/shared/NotesPage').then((module) => ({ default: module.NotesPage })),\r\n" +
+    ');\r\n' +
+    'const MultiPatientParametri = lazy(() =>\r\n' +
+    "  import('./components/operator/MultiPatientParametri').then((module) => ({\r\n" +
+    '    default: module.MultiPatientParametri,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const AnagraficaFarmaciPage = lazy(() =>\r\n' +
+    "  import('./components/operator/AnagraficaFarmaciPage').then((module) => ({\r\n" +
+    '    default: module.AnagraficaFarmaciPage,\r\n' +
+    '  })),\r\n' +
+    ');\r\n' +
+    'const AgnosPanel = lazy(() =>\r\n' +
+    "  import('./components/shared/AgnosPanel').then((module) => ({ default: module.AgnosPanel })),\r\n" +
+    ');\r\n' +
+    '\r\n' +
+    'function PageLoading() {\r\n' +
+    '  return (\r\n' +
+    '    <div className="page-loading" role="status" aria-live="polite">\r\n' +
+    '      <span className="page-loading__spinner" aria-hidden="true" />\r\n' +
+    '      Caricamento modulo…\r\n' +
+    '    </div>\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'class LazyLoadBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {\r\n' +
+    '  state = { failed: false };\r\n' +
+    '\r\n' +
+    '  static getDerivedStateFromError() {\r\n' +
+    '    return { failed: true };\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  render() {\r\n' +
+    '    if (this.state.failed) {\r\n' +
+    '      return (\r\n' +
+    '        <div className="page-load-error" role="alert">\r\n' +
+    '          <strong>Il modulo non è stato caricato.</strong>\r\n' +
+    '          <span>Potrebbe essere disponibile una versione più recente dell’applicazione.</span>\r\n' +
+    '          <button type="button" onClick={() => window.location.reload()}>\r\n' +
+    '            Ricarica ClinicOS\r\n' +
+    '          </button>\r\n' +
+    '        </div>\r\n' +
+    '      );\r\n' +
+    '    }\r\n' +
+    '    return this.props.children;\r\n' +
+    '  }\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '// ── Navigation helpers ─────────────────────────────────────────────────────────\r\n' +
+    '\r\n' +
+    '// #243: valid "Moduli" tab ids a moduleTabId coming from the intake wizard may target —\r\n' +
+    '// guards against forwarding an unexpected string as an initialTab.\r\n' +
+    'const MODULE_TAB_IDS: TabId[] = [\r\n' +
+    "  'medicazioni',\r\n" +
+    "  'contenzioni',\r\n" +
+    "  'braden',\r\n" +
+    "  'tinetti',\r\n" +
+    "  'nrs',\r\n" +
+    "  'dimissione',\r\n" +
+    '];\r\n' +
+    '\r\n' +
+    'const NAV_LABELS: Record<NavKey, string> = {\r\n' +
+    "  login: 'Login',\r\n" +
+    "  'admin-dashboard': 'Dashboard',\r\n" +
+    "  'gestione-operatori': 'Operatori',\r\n" +
+    "  'agenda-admin': 'Agenda',\r\n" +
+    "  'posti-letto': 'Posti Letto',\r\n" +
+    "  'orari-operatori': 'Orari',\r\n" +
+    "  note: 'Note',\r\n" +
+    "  'operator-dashboard': 'Dashboard',\r\n" +
+    "  pazienti: 'Pazienti',\r\n" +
+    "  'dettaglio-paziente': 'Scheda Paziente',\r\n" +
+    "  consegne: 'Consegne',\r\n" +
+    "  'agenda-operatore': 'Agenda',\r\n" +
+    "  terapie: 'Terapia',\r\n" +
+    "  'parametri-multipaziente': 'Parametri',\r\n" +
+    "  'anagrafica-farmaci': 'Anagrafica farmaci',\r\n" +
+    "  'ai-assistant': 'Assistente ClinicOS',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const OPERATOR_DIRECTORY_NAV_KEYS = new Set<NavKey>([\r\n' +
+    "  'admin-dashboard',\r\n" +
+    "  'gestione-operatori',\r\n" +
+    "  'agenda-admin',\r\n" +
+    "  'orari-operatori',\r\n" +
+    "  'consegne',\r\n" +
+    "  'note',\r\n" +
+    "  'dettaglio-paziente',\r\n" +
+    "  'agenda-operatore',\r\n" +
+    ']);\r\n' +
+    '\r\n' +
+    'const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {\r\n' +
+    "  'dettaglio-paziente': 'pazienti',\r\n" +
+    "  'parametri-multipaziente': 'operator-dashboard',\r\n" +
+    "  'anagrafica-farmaci': 'operator-dashboard',\r\n" +
+    "  'gestione-operatori': 'admin-dashboard',\r\n" +
+    "  'posti-letto': 'admin-dashboard',\r\n" +
+    "  'orari-operatori': 'admin-dashboard',\r\n" +
+    "  'agenda-admin': 'admin-dashboard',\r\n" +
+    "  'agenda-operatore': 'operator-dashboard',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    '// ── Appuntamenti: mapping DTO backend → tipo Appuntamento della UI (SPEC-015 US4) ──\r\n' +
+    '//\r\n' +
+    '// Il backend espone il modello Prisma Appointment come { data, ora, durata, tipologia, note,\r\n' +
+    '// stato, patientName, operatorName }. La UI usa lo stesso vocabolario tranne: tipologia libera\r\n' +
+    `// (es. "fisioterapia" via Agnos) → tipoIntervento 'altro' con la tipologia riportata nelle note;\r\n` +
+    '// priorita/cameraId non sono persistiti dal modello → default.\r\n' +
+    '\r\n' +
+    'const TIPI_NOTI: readonly TipoIntervento[] = [\r\n' +
+    "  'visita',\r\n" +
+    "  'controllo',\r\n" +
+    "  'procedura',\r\n" +
+    "  'urgenza',\r\n" +
+    "  'consulto',\r\n" +
+    "  'follow-up',\r\n" +
+    "  'altro',\r\n" +
+    '];\r\n' +
+    '\r\n' +
+    'function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {\r\n' +
+    "  const tipologia = String(r.tipologia ?? '');\r\n" +
+    '  const known = (TIPI_NOTI as readonly string[]).includes(tipologia);\r\n' +
+    "  const note = String(r.note ?? '');\r\n" +
+    "  const stato = String(r.stato ?? 'programmato');\r\n" +
+    '  return {\r\n' +
+    "    id: String(r.id ?? ''),\r\n" +
+    "    data: String(r.data ?? ''),\r\n" +
+    "    ora: String(r.ora ?? ''),\r\n" +
+    '    durata: Number(r.durata ?? 30),\r\n' +
+    '    pazienteId: r.patientId ? String(r.patientId) : null,\r\n' +
+    '    pazienteNome: r.patientName ? String(r.patientName) : null,\r\n' +
+    "    operatoreId: String(r.operatorId ?? ''),\r\n" +
+    "    operatoreNome: r.operatorName ? String(r.operatorName) : '',\r\n" +
+    "    tipoIntervento: (known ? tipologia : 'altro') as TipoIntervento,\r\n" +
+    "    stato: (['programmato', 'in_corso', 'completato', 'annullato'].includes(stato)\r\n" +
+    '      ? stato\r\n' +
+    "      : 'programmato') as Appuntamento['stato'],\r\n" +
+    "    priorita: 'normale',\r\n" +
+    '    note: known || !tipologia ? note : note ? `${tipologia} — ${note}` : tipologia,\r\n' +
+    '  };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '// ── App ────────────────────────────────────────────────────────────────────────\r\n' +
+    '\r\n' +
+    'export default function App() {\r\n' +
+    '  const [utente, setUtente] = useState<UtenteApp | null>(null);\n' +
+    '  const rosterOrder = useRosterOrder(utente ? `${utente.id}:${utente.ruolo}` : null);\n' +
+    '  const { requestKey: rosterKey, options: rosterOptions, accept: acceptRoster, recover: recoverRoster } = rosterOrder;\n' +
+    '  const rosterRequest = useMemo(() => ({ ...rosterOptions, requestKey: rosterKey }), [rosterOptions, rosterKey]);\n' +
+    '  const [authStatus, setAuthStatus] = useState<{\r\n' +
+    "    mode: 'entra' | 'demo' | 'disabled';\r\n" +
+    '    temporaryDemo: boolean;\r\n' +
+    '  } | null>(null);\r\n' +
+    '  const [loginPending, setLoginPending] = useState(false);\r\n' +
+    '  const [loginError, setLoginError] = useState<string | null>(null);\r\n' +
+    "  const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');\r\n" +
+    '  const [toastMsg, setToastMsg] = useState<string | null>(null);\r\n' +
+    '  const [aiOpen, setAiOpen] = useState(false);\r\n' +
+    '  const [aiOpenTrigger, set'... 114832 more characters
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po07-roster-ui\frontend\src\lib\__tests__\therapyNavigationGuard.test.ts:18:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { Component, lazy, Suspense, useState, useEffect, useRef, useCallback, useMemo } from \'react\';\nimport type { ReactNode } from \'react\';\r\nimport \'./App.css\';\r\nimport { API_URL } from \'./config\';\nimport { useRosterOrder } from \'./lib/useRosterOrder\';\nimport { assertRosterPage, isRosterChanged, throwRosterResponse } from \'./lib/rosterOrder\';\nimport { RosterOrderContext } from \'./components/shared/RosterOrderContext\';\nimport { CartellaWriteQueue, mergeCartellaPatch } from \'./lib/cartellaWriteQueue\';\r\nimport { clearCachedGet, invalidateCachedGet } from \'./lib/cachedFetch\';\r\nimport { fetchPatientById, fetchPatientPage } from \'./lib/patientPage\';\r\nimport { usePatientDirectorySearch } from \'./lib/usePatientDirectorySearch\';\r\nimport {\r\n  buildOperatorDirectoryPageUrl,\r\n  mergeOperatorDirectoryPages,\r\n  parseOperatorDirectoryPage,\r\n  type OperatorDirectoryPageInfo,\r\n  type OperatorDirectoryStatus,\r\n  type OperatorDirectorySummary,\r\n} from \'./lib/operatorDirectoryPage\';\r\nimport { setCurrentOperator, operatorHeaders } from \'./lib/operatorSession\';\r\nimport { acquireApiToken } from \'./lib/entraAuth\';\r\nimport {\r\n  buildAppointmentRangeUrl,\r\n  localIsoDate,\r\n  type AppointmentRangeRequest,\r\n} from \'./lib/appointmentRange\';\r\nimport {\r\n  buildNotesMailboxUrl,\r\n  mapNoteDto,\r\n  mergeNotesPage,\r\n  type NotesMailboxQuery,\r\n  type NotesPageInfo,\r\n  type NotesPageResponse,\r\n} from \'./lib/notesMailbox\';\r\nimport {\r\n  buildConsegnaFeedUrl,\r\n  isConsegnaFeedResponse,\r\n  mergeConsegnaPage,\r\n  type ConsegnaFeedQuery,\r\n} from \'./lib/consegneFeed\';\r\nimport {\r\n  buildTherapySlotPageUrl,\r\n  mergeTherapySlotPages,\r\n  parseTherapySlotPage,\r\n} from \'./lib/therapySlotPage\';\r\n\r\nimport type {\r\n  UtenteApp,\r\n  Paziente,\r\n  Operatore,\r\n  Consegna,\r\n  NavKey,\r\n  Appuntamento,\r\n  Camera,\r\n  ScheduleOperatore,\r\n  SlotAgenda,\r\n  Nota,\r\n  NewNotaInput,\r\n  StatoNota,\r\n  CartellaPaziente,\r\n  ClinicalOverview,\r\n  TherapySlot,\r\n  MotivoNonErogazione,\r\n  TherapySlotPatient,\r\n  TherapyAdministration,\r\n  TipoIntervento,\r\n  ConsegnaOverview,\r\n  ConsegnaPageInfo,\r\n  ConsegnaSummary,\r\n  NewConsegnaInput,\r\n  TherapySlotPageInfo,\r\n  TherapyActionInfo,\r\n} from \'./types\';\r\nimport { OPERATOR_COLOR_PALETTE } from \'./types\';\r\nimport { createDefaultCartella } from \'./mockData\';\r\n\r\nimport { Login } from \'./components/Login\';\r\nimport type { TabId } from \'./components/operator/tabGroups\';\r\nimport type { AssistantNav } from \'./components/shared/AIAssistantButton\';\r\nimport { navigateAgnosTarget } from \'./components/shared/agnos/agnosActionNavigation\';\r\nimport TeamsLikeSidebar from \'./components/shared/TeamsLikeSidebar\';\r\n\r\nimport { IcoAI, IcoSearch, IcoX } from \'./icons\';\r\n\r\nconst AdminDashboard = lazy(() =>\r\n  import(\'./components/admin/AdminDashboard\').then((module) => ({\r\n    default: module.AdminDashboard,\r\n  })),\r\n);\r\nconst OperatorManagement = lazy(() =>\r\n  import(\'./components/admin/OperatorManagement\').then((module) => ({\r\n    default: module.OperatorManagement,\r\n  })),\r\n);\r\nconst AdminAgenda = lazy(() =>\r\n  import(\'./components/admin/AdminAgenda\').then((module) => ({ default: module.AdminAgenda })),\r\n);\r\nconst RoomsManagement = lazy(() =>\r\n  import(\'./components/admin/RoomsManagement\').then((module) => ({\r\n    default: module.RoomsManagement,\r\n  })),\r\n);\r\nconst OperatorSchedule = lazy(() =>\r\n  import(\'./components/admin/OperatorSchedule\').then((module) => ({\r\n    default: module.OperatorSchedule,\r\n  })),\r\n);\r\nconst OperatorDashboard = lazy(() =>\r\n  import(\'./components/operator/OperatorDashboard\').then((module) => ({\r\n    default: module.OperatorDashboard,\r\n  })),\r\n);\r\nconst PatientList = lazy(() =>\r\n  import(\'./components/operator/PatientList\').then((module) => ({ default: module.PatientList })),\r\n);\r\nconst PatientDetail = lazy(() =>\r\n  import(\'./components/operator/PatientDetail\').then((module) => ({\r\n    default: module.PatientDetail,\r\n  })),\r\n);\r\nconst ConsegnePage = lazy(() =>\r\n  import(\'./components/operator/ConsegnePage\').then((module) => ({ default: module.ConsegnePage })),\r\n);\r\nconst TherapyRoundsPage = lazy(() =>\r\n  import(\'./components/operator/TherapyRoundsPage\').then((module) => ({\r\n    default: module.TherapyRoundsPage,\r\n  })),\r\n);\r\nconst OperatorAgenda = lazy(() =>\r\n  import(\'./components/operator/OperatorAgenda\').then((module) => ({\r\n    default: module.OperatorAgenda,\r\n  })),\r\n);\r\nconst NotesPage = lazy(() =>\r\n  import(\'./components/shared/NotesPage\').then((module) => ({ default: module.NotesPage })),\r\n);\r\nconst MultiPatientParametri = lazy(() =>\r\n  import(\'./components/operator/MultiPatientParametri\').then((module) => ({\r\n    default: module.MultiPatientParametri,\r\n  })),\r\n);\r\nconst AnagraficaFarmaciPage = lazy(() =>\r\n  import(\'./components/operator/AnagraficaFarmaciPage\').then((module) => ({\r\n    default: module.AnagraficaFarmaciPage,\r\n  })),\r\n);\r\nconst AgnosPanel = lazy(() =>\r\n  import(\'./components/shared/AgnosPanel\').then((module) => ({ default: module.AgnosPanel })),\r\n);\r\n\r\nfunction PageLoading() {\r\n  return (\r\n    <div className="page-loading" role="status" aria-live="polite">\r\n      <span className="page-loading__spinner" aria-hidden="true" />\r\n      Caricamento modulo…\r\n    </div>\r\n  );\r\n}\r\n\r\nclass LazyLoadBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {\r\n  state = { failed: false };\r\n\r\n  static getDerivedStateFromError() {\r\n    return { failed: true };\r\n  }\r\n\r\n  render() {\r\n    if (this.state.failed) {\r\n      return (\r\n        <div className="page-load-error" role="alert">\r\n          <strong>Il modulo non è stato caricato.</strong>\r\n          <span>Potrebbe essere disponibile una versione più recente dell’applicazione.</span>\r\n          <button type="button" onClick={() => window.location.reload()}>\r\n            Ricarica ClinicOS\r\n          </button>\r\n        </div>\r\n      );\r\n    }\r\n    return this.props.children;\r\n  }\r\n}\r\n\r\n// ── Navigation helpers ─────────────────────────────────────────────────────────\r\n\r\n// #243: valid "Moduli" tab ids a moduleTabId coming from the intake wizard may target —\r\n// guards against forwarding an unexpected string as an initialTab.\r\nconst MODULE_TAB_IDS: TabId[] = [\r\n  \'medicazioni\',\r\n  \'contenzioni\',\r\n  \'braden\',\r\n  \'tinetti\',\r\n  \'nrs\',\r\n  \'dimissione\',\r\n];\r\n\r\nconst NAV_LABELS: Record<NavKey, string> = {\r\n  login: \'Login\',\r\n  \'admin-dashboard\': \'Dashboard\',\r\n  \'gestione-operatori\': \'Operatori\',\r\n  \'agenda-admin\': \'Agenda\',\r\n  \'posti-letto\': \'Posti Letto\',\r\n  \'orari-operatori\': \'Orari\',\r\n  note: \'Note\',\r\n  \'operator-dashboard\': \'Dashboard\',\r\n  pazienti: \'Pazienti\',\r\n  \'dettaglio-paziente\': \'Scheda Paziente\',\r\n  consegne: \'Consegne\',\r\n  \'agenda-operatore\': \'Agenda\',\r\n  terapie: \'Terapia\',\r\n  \'parametri-multipaziente\': \'Parametri\',\r\n  \'anagrafica-farmaci\': \'Anagrafica farmaci\',\r\n  \'ai-assistant\': \'Assistente ClinicOS\',\r\n};\r\n\r\nconst OPERATOR_DIRECTORY_NAV_KEYS = new Set<NavKey>([\r\n  \'admin-dashboard\',\r\n  \'gestione-operatori\',\r\n  \'agenda-admin\',\r\n  \'orari-operatori\',\r\n  \'consegne\',\r\n  \'note\',\r\n  \'dettaglio-paziente\',\r\n  \'agenda-operatore\',\r\n]);\r\n\r\nconst NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {\r\n  \'dettaglio-paziente\': \'pazienti\',\r\n  \'parametri-multipaziente\': \'operator-dashboard\',\r\n  \'anagrafica-farmaci\': \'operator-dashboard\',\r\n  \'gestione-operatori\': \'admin-dashboard\',\r\n  \'posti-letto\': \'admin-dashboard\',\r\n  \'orari-operatori\': \'admin-dashboard\',\r\n  \'agenda-admin\': \'admin-dashboard\',\r\n  \'agenda-operatore\': \'operator-dashboard\',\r\n};\r\n\r\n// ── Appuntamenti: mapping DTO backend → tipo Appuntamento della UI (SPEC-015 US4) ──\r\n//\r\n// Il backend espone il modello Prisma Appointment come { data, ora, durata, tipologia, note,\r\n// stato, patientName, operatorName }. La UI usa lo stesso vocabolario tranne: tipologia libera\r\n// (es. "fisioterapia" via Agnos) → tipoIntervento \'altro\' con la tipologia riportata nelle note;\r\n// priorita/cameraId non sono persistiti dal modello → default.\r\n\r\nconst TIPI_NOTI: readonly TipoIntervento[] = [\r\n  \'visita\',\r\n  \'controllo\',\r\n  \'procedura\',\r\n  \'urgenza\',\r\n  \'consulto\',\r\n  \'follow-up\',\r\n  \'altro\',\r\n];\r\n\r\nfunction mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {\r\n  const tipologia = String(r.tipologia ?? \'\');\r\n  const known = (TIPI_NOTI as readonly string[]).includes(tipologia);\r\n  const note = String(r.note ?? \'\');\r\n  const stato = String(r.stato ?? \'programmato\');\r\n  return {\r\n    id: String(r.id ?? \'\'),\r\n    data: String(r.data ?? \'\'),\r\n    ora: String(r.ora ?? \'\'),\r\n    durata: Number(r.durata ?? 30),\r\n    pazienteId: r.patientId ? String(r.patientId) : null,\r\n    pazienteNome: r.patientName ? String(r.patientName) : null,\r\n    operatoreId: String(r.operatorId ?? \'\'),\r\n    operatoreNome: r.operatorName ? String(r.operatorName) : \'\',\r\n    tipoIntervento: (known ? tipologia : \'altro\') as TipoIntervento,\r\n    stato: ([\'programmato\', \'in_corso\', \'completato\', \'annullato\'].includes(stato)\r\n      ? stato\r\n      : \'programmato\') as Appuntamento[\'stato\'],\r\n    priorita: \'normale\',\r\n    note: known || !tipologia ? note : note ? `${tipologia} — ${note}` : tipologia,\r\n  };\r\n}\r\n\r\n// ── App ────────────────────────────────────────────────────────────────────────\r\n\r\nexport default function App() {\r\n  const [utente, setUtente] = useState<UtenteApp | null>(null);\n  const rosterOrder = useRosterOrder(utente ? `${utente.id}:${utente.ruolo}` : null);\n  const { requestKey: rosterKey, options: rosterOptions, accept: acceptRoster, recover: recoverRoster } = rosterOrder;\n  const rosterRequest = useMemo(() => ({ ...rosterOptions, requestKey: rosterKey }), [rosterOptions, rosterKey]);\n  const [authStatus, setAuthStatus] = useState<{\r\n    mode: \'entra\' | \'demo\' | \'disabled\';\r\n    temporaryDemo: boolean;\r\n  } | null>(null);\r\n  const [loginPending, setLoginPending] = useState(false);\r\n  const [loginError, setLoginError] = useState<string | null>(null);\r\n  const [navKey, setNavKey] = useState<NavKey>(\'admin-dashboard\');\r\n  const [toastMsg, setToastMsg] = useState<string | null>(null);\r\n  const [aiOpen, setAiOpen] = useState(false);\r\n  const [aiOpenTrigger, set'... 114832 more characters,
+    expected: /buildTherapySlotPageUrl\(API_URL, d, options\.cursor\)/,
+    operator: 'match',
+    diff: 'simple'
+  }

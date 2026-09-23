@@ -1,0 +1,57 @@
+{
+  "database": "synthetic native PostgreSQL loopback",
+  "results": [
+    {
+      "file": "backend/src/roster/__tests__/cursor.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/roster/__tests__/preferences-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/roster/__tests__/roster-pagination-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/roster/__tests__/order-key-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/patients/__tests__/pagination.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/patients/__tests__/alphabetical-pages-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/patients/__tests__/parameters-page-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/routes/__tests__/consegne-bounded-auth.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/therapies/__tests__/slot-page-query.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/therapies/__tests__/therapy-query.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/therapies/__tests__/due-therapy-query.test.ts",
+      "exitCode": 0
+    }
+  ]
+}

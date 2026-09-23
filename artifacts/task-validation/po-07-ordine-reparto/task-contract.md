@@ -1,6 +1,6 @@
 # PO-07 — ordine del giro reparto
 
-Stato: preparazione. Implementazione soltanto dopo la verifica del rilascio PO-06. L'utente ha autorizzato l'intero piano, push e deploy. Un'unica attività applicativa alla volta e un writer per worktree.
+Stato: implementazione autorizzata dopo rilascio PO-06 verificato (Railway 4b442bac-758a-4d84-a73b-417bd471825f SUCCESS, Vercel dpl_H7Z5fEvKQ95PNtkENooK45mgUnJd READY, commit853b4075). L'utente ha autorizzato l'intero piano, push e deploy. Un'unica attività applicativa alla volta e un writer per worktree.
 
 ## Risultato e ambito
 
