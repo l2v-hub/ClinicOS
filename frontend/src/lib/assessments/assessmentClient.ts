@@ -3,8 +3,10 @@ import type {
   AssessmentFailure,
   AssessmentOperation,
   AssessmentWriteResult,
+  AssessmentType,
 } from './assessmentTypes';
 import { assertAssessment, assessmentPage, validAssessmentId } from './assessmentValidation';
+import { assessmentAttestationMethods } from './assessmentAttestations';
 export class AssessmentApiError extends Error {
   failure: AssessmentFailure;
   constructor(failure: AssessmentFailure) {
@@ -23,7 +25,11 @@ const messages: Record<string, string> = {
     'La valutazione è già finale. Verifica la versione salvata; per correggerla crea una rettifica.',
   assessment_already_corrected:
     'Questa valutazione ha già una rettifica finale. Verifica lo storico.',
-  assessment_incomplete: 'Completa tutte le cinque risposte prima di finalizzare.',
+  assessment_incomplete: 'Completa i campi indicati prima di finalizzare.',
+  assessment_attestation_type: 'Conferme personali non disponibili per questo modulo.',
+  assessment_not_final: 'Finalizza la scheda prima di registrare una conferma.',
+  assessment_snapshot_conflict: 'La versione da confermare non corrisponde. Riapri la scheda.',
+  assessment_attestation_forbidden: 'La qualifica registrata non consente questa conferma.',
   scope_unavailable: 'Il perimetro di accesso non è verificabile. I dati restano conservati.',
 };
 const uncertain = (): AssessmentFailure => ({
@@ -61,6 +67,13 @@ export function createAssessmentClient(
           code,
           uncertain: response.status >= 500 || !messages[code],
           message: messages[code] ?? uncertain().message,
+          ...(Array.isArray(value?.missingPaths)
+            ? {
+                missingPaths: value.missingPaths
+                  .filter((path: unknown) => typeof path === 'string')
+                  .slice(0, 100),
+              }
+            : {}),
         });
       }
       return value;
@@ -70,7 +83,13 @@ export function createAssessmentClient(
     }
   }
   const client = {
-    async get(patientId: string, id: string, signal?: AbortSignal): Promise<AssessmentDto> {
+    ...assessmentAttestationMethods(request, base),
+    async get(
+      patientId: string,
+      id: string,
+      signal?: AbortSignal,
+      type?: AssessmentType,
+    ): Promise<AssessmentDto> {
       if (!validAssessmentId(id)) throw new Error('Valutazione non valida.');
       const value = await request(
         `${base(patientId)}/${encodeURIComponent(id)}`,
@@ -78,12 +97,29 @@ export function createAssessmentClient(
         undefined,
         signal,
       );
-      assertAssessment(value?.assessment, patientId, id);
+      assertAssessment(value?.assessment, patientId, id, type);
+      return value.assessment;
+    },
+    async current(
+      patientId: string,
+      type: AssessmentType,
+      signal?: AbortSignal,
+    ): Promise<AssessmentDto | null> {
+      const value = await request(
+        `${base(patientId)}/current?type=${encodeURIComponent(type)}`,
+        'GET',
+        undefined,
+        signal,
+      );
+      if (value?.assessment === null) return null;
+      assertAssessment(value?.assessment, patientId, undefined, type);
+      if (value.assessment.status !== 'final') throw new Error('Scheda corrente non verificata.');
       return value.assessment;
     },
     async page(
       patientId: string,
       filters: {
+        type?: AssessmentType;
         status?: 'all' | 'draft' | 'final';
         from?: string;
         to?: string;
@@ -92,7 +128,7 @@ export function createAssessmentClient(
       signal?: AbortSignal,
     ) {
       const query = new URLSearchParams({
-        type: 'painad',
+        type: filters.type ?? 'painad',
         limit: '25',
         status: filters.status ?? 'all',
       });
@@ -102,6 +138,7 @@ export function createAssessmentClient(
       return assessmentPage(
         await request(`${base(patientId)}?${query}`, 'GET', undefined, signal),
         patientId,
+        filters.type ?? 'painad',
       );
     },
     async write(patientId: string, operation: AssessmentOperation): Promise<AssessmentWriteResult> {
@@ -119,6 +156,7 @@ export function createAssessmentClient(
           value?.assessment,
           patientId,
           operation.kind === 'create' ? undefined : operation.id,
+          operation.kind === 'create' ? operation.body.type : undefined,
         );
         if (
           operation.kind !== 'patch' &&

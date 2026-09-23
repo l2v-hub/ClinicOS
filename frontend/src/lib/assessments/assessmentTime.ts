@@ -41,7 +41,7 @@ export function assessmentEditable(
     throw new Error('Indica il motivo della rettifica, massimo 1000 caratteri.');
   return {
     assessedAt,
-    answers: { ...fields.answers },
+    answers: structuredClone(fields.answers),
     ...(correction ? { correctionReason } : {}),
   };
 }
@@ -49,7 +49,7 @@ export function assessmentFields(record: AssessmentDto): AssessmentFields {
   return {
     assessedAtLocal: facilityLocalMinute(new Date(record.assessedAt)),
     instantChoice: record.assessedAt,
-    answers: { ...record.answers },
+    answers: structuredClone(record.answers),
     correctionReason: record.correctionReason ?? '',
   };
 }

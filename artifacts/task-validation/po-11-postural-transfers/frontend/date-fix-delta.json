@@ -1,0 +1,27 @@
+{
+  "task": "PO-11-frontend-admission-date-fix",
+  "generatedAtUtc": "2026-09-23T04:39:59.099Z",
+  "integratedBaseline": "3d8570",
+  "previousSourceStateId": "96062fccbd129c4256330d72f77c136ec6571cc71e323611dafd046f18eee0fa",
+  "previousRuntimeSourceId": "6aa41542eb58df6aea71d4555c3d28678525fa3f06e671e4bad933366ef0ea61",
+  "sourceStateId": "1f589b0c42efc83f5c1a7912ce4ea5c0604e346015372dab1df721ae9e994c10",
+  "runtimeSourceId": "5e14b46e6d73e0c714a08de8e3bb2350be4d1725b8a02bdee6e5212ec8eaf9fc",
+  "files": [
+    {
+      "path": "frontend/src/components/operator/__tests__/transfersUi.test.ts",
+      "oldSha256": "3b810577d0dd458c460f5d3914873a8c28fd84fa7144e4b087f10f81fcbd6352",
+      "newSha256": "579f12facb22c07ecac0de4f11fb9bf3461b4d40d4ac23728032c3c41b4a44fa"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TransfersForm.tsx",
+      "oldSha256": "987d5b081fc606c7583781a8b98fd80028d989fbe83cc8ed868cdc413530163b",
+      "newSha256": "897cd12434a2c390487323f35cf34598cdbe99101a82f584b1b1882925aadb3f"
+    },
+    {
+      "path": "frontend/src/lib/assessments/transfersDefinition.ts",
+      "oldSha256": "ae434c8fe769f84a5ca722fad29fc912706c18d7cccd26d96bdbf7dfcc885084",
+      "newSha256": "f6dbf546787e0158952d183caae07a4a99868c0d45158b1e212b3a35adcd6bd6"
+    }
+  ],
+  "integrationRule": "Apply only where the integration checkout bytes match oldSha256. No other source paths changed."
+}

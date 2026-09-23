@@ -150,7 +150,7 @@ function documentDto(row: DocumentRow): PublicPatientDocument {
     assessment: row.assessment
       ? {
           id: row.assessment.id,
-          type: 'painad',
+          type: row.assessment.type as AssessmentDocumentMeta['type'],
           formVersion: row.assessment.formVersion,
           assessedAt: row.assessment.assessedAt.toISOString(),
         }

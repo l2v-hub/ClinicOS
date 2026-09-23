@@ -31,7 +31,11 @@ export async function listAssessments(
     throw invalid();
   const type = query.type ?? 'painad',
     status = query.status ?? 'all';
-  if (type !== 'painad' || !['all', 'draft', 'final'].includes(status as string)) throw invalid();
+  if (
+    !['painad', 'postural_transfers'].includes(type as string) ||
+    !['all', 'draft', 'final'].includes(status as string)
+  )
+    throw invalid();
   if (
     query.limit !== undefined &&
     (typeof query.limit !== 'string' || !/^\d{1,3}$/.test(query.limit))
@@ -76,7 +80,7 @@ export async function listAssessments(
     async (tx) => {
       await lockPatient(tx, patientId, actor);
       const predicates = [
-        Prisma.sql`a."patientId" = ${patientId} AND a.type = 'painad'`,
+        Prisma.sql`a."patientId" = ${patientId} AND a.type = ${type}`,
         Prisma.sql`(a.status = 'final' OR a."authorOperatorId" = ${actor.id})`,
       ];
       if (status !== 'all') predicates.push(Prisma.sql`a.status = ${status}`);
@@ -116,6 +120,7 @@ export async function listAssessments(
         const {
           answers: _answers,
           finalSnapshot: _snapshot,
+          snapshotSha256: _hash,
           ...item
         } = assessmentDto({ ...row, finalSnapshot: null });
         return item;

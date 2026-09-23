@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
 import { AssessmentError, PAINAD_KEYS, PAINAD_VERSION, type PainadAnswers } from './types.js';
+import { TRANSFERS_VERSION, type AssessmentType } from './types.js';
+import { parseTransfersAnswers } from './transfers.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function assessmentId(value: unknown): string {
@@ -12,13 +14,17 @@ export function requestId(value: unknown): string {
     throw new AssessmentError('Identificativo richiesta non valido');
   return value.toLowerCase();
 }
-export function bodyObject(value: unknown, keys: readonly string[]): Record<string, unknown> {
+export function bodyObject(
+  value: unknown,
+  keys: readonly string[],
+  maxBytes = 16_384,
+): Record<string, unknown> {
   if (
     !value ||
     typeof value !== 'object' ||
     Array.isArray(value) ||
     Object.keys(value).some((key) => !keys.includes(key)) ||
-    Buffer.byteLength(JSON.stringify(value)) > 16_384
+    Buffer.byteLength(JSON.stringify(value)) > maxBytes
   )
     throw new AssessmentError('Richiesta non valida');
   return value as Record<string, unknown>;
@@ -53,37 +59,51 @@ export function correctionReason(value: unknown): string | null {
   return value.trim();
 }
 export function parseCreate(value: unknown) {
-  const input = bodyObject(value, [
-    'requestId',
-    'type',
-    'formVersion',
-    'assessedAt',
-    'answers',
-    'predecessorId',
-    'correctionReason',
-  ]);
-  if (input.type !== 'painad' || input.formVersion !== PAINAD_VERSION)
+  const input = bodyObject(
+    value,
+    [
+      'requestId',
+      'type',
+      'formVersion',
+      'assessedAt',
+      'answers',
+      'predecessorId',
+      'correctionReason',
+    ],
+    32_768,
+  );
+  if (!(
+    (input.type === 'painad' && input.formVersion === PAINAD_VERSION) ||
+    (input.type === 'postural_transfers' && input.formVersion === TRANSFERS_VERSION)
+  ))
     throw new AssessmentError('Tipo o versione del modulo non supportati');
+  if (input.type === 'painad' && Buffer.byteLength(JSON.stringify(value)) > 16_384)
+    throw new AssessmentError('Richiesta non valida');
   const predecessorId = input.predecessorId == null ? null : assessmentId(input.predecessorId);
   const reason = correctionReason(input.correctionReason);
   if (Boolean(predecessorId) !== Boolean(reason))
     throw new AssessmentError('Indica valutazione precedente e motivo della rettifica');
   return {
     requestId: requestId(input.requestId),
-    type: 'painad' as const,
-    formVersion: PAINAD_VERSION,
+    type: input.type as AssessmentType,
+    formVersion: input.formVersion as typeof PAINAD_VERSION | typeof TRANSFERS_VERSION,
     assessedAt: parseInstant(input.assessedAt),
-    answers: parseAnswers(input.answers),
+    answers:
+      input.type === 'painad' ? parseAnswers(input.answers) : parseTransfersAnswers(input.answers),
     predecessorId,
     correctionReason: reason,
   };
 }
-export function parsePatch(value: unknown) {
-  const input = bodyObject(value, ['expectedVersion', 'assessedAt', 'answers', 'correctionReason']);
+export function parsePatch(value: unknown, type: AssessmentType = 'painad') {
+  const input = bodyObject(
+    value,
+    ['expectedVersion', 'assessedAt', 'answers', 'correctionReason'],
+    type === 'painad' ? 16_384 : 32_768,
+  );
   return {
     expectedVersion: expectedVersion(input.expectedVersion),
     assessedAt: parseInstant(input.assessedAt),
-    answers: parseAnswers(input.answers),
+    answers: type === 'painad' ? parseAnswers(input.answers) : parseTransfersAnswers(input.answers),
     correctionReason: correctionReason(input.correctionReason),
   };
 }

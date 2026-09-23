@@ -1,0 +1,106 @@
+{
+  "sourceTreeSha256": "15bc32a12d8fcc1ab72f3fa6e036c364523c8692cbe41eda8f981801f3b41653",
+  "generatedAt": "2026-09-23T04:37:27.265Z",
+  "typecheck": {
+    "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+    "exitCode": 0,
+    "evidence": "Tool completion 507608 (session 57174; creation 4911a7) on final source after layout refinement; no diagnostics.",
+    "log": "artifacts/task-validation/po-11-postural-transfers/backend/typecheck.log"
+  },
+  "schema": {
+    "exitCode": 0,
+    "privateSchemaMatchesSourceExceptOutput": true,
+    "generatedSchemaMatchesPrivateExceptWhitespaceAndAdjacentIndexOrder": true,
+    "adjacentConstraintOrder": "PatientDocument @@unique([assessmentId, patientId]) and @@index([patientId])",
+    "connectedToDatabase": false
+  },
+  "ownedDiff": {
+    "exitCode": 0
+  },
+  "newFiles": [
+    {
+      "path": "backend/src/assessments/__tests__/attestations-db.test.ts",
+      "lines": 266
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-db.test.ts",
+      "lines": 229
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-fixture.ts",
+      "lines": 56
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-pdf-db.test.ts",
+      "lines": 78
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers.test.ts",
+      "lines": 117
+    },
+    {
+      "path": "backend/src/assessments/attestations.ts",
+      "lines": 223
+    },
+    {
+      "path": "backend/src/assessments/current.ts",
+      "lines": 34
+    },
+    {
+      "path": "backend/src/assessments/transfers-types.ts",
+      "lines": 82
+    },
+    {
+      "path": "backend/src/assessments/transfers.ts",
+      "lines": 251
+    },
+    {
+      "path": "prisma/migrations/20260923050000_postural_transfers/migration.sql",
+      "lines": 120
+    }
+  ],
+  "newSourceFilesBelow500Lines": true,
+  "protectedFilesPreserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "runtime": {
+    "privatePrismaOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-backend\\backend\\node_modules\\.prisma\\client",
+    "privatePrismaWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-backend\\backend\\node_modules\\@prisma\\client",
+    "dependencyManifestsChanged": false,
+    "sharedDependencyTargetWritten": false
+  },
+  "fonts": {
+    "provenance": "artifacts/task-validation/po-11-postural-transfers/backend/font-provenance.json",
+    "verified": true,
+    "license": "SIL Open Font License 1.1",
+    "fontkit": "1.1.1 MIT; root-owned dependency integration"
+  },
+  "pdfVisualQa": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/visual-qa.json",
+  "independentReview": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "resolvedFindings": [
+      "Historical civil admission dates are accepted consistently by API and SQL; invalid Gregorian dates are rejected.",
+      "SQL qualification trimming uses explicit chr(11), preserving literal v and matching the application whitespace rules."
+    ],
+    "sourceReview": "Reviewer reread both fixes and regressions and reported no other concrete P1/P2; final hash binding is independent."
+  }
+}

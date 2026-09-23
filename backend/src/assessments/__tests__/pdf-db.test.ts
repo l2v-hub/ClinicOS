@@ -191,7 +191,10 @@ test('renderer preserves Unicode and long text, emits readable PDF metadata and 
   const parsed = await PDFDocument.load(expanded);
   assert(parsed.getPageCount() > 1);
   assert(parsed.getKeywords()!.includes(snapshot.form.sourceSha256));
-  const artifact = resolve('artifacts/task-validation/po-10-painad/backend/pdf-qa');
+  const artifact = resolve(
+    process.env.ASSESSMENT_PDF_QA_DIRECTORY ??
+      'artifacts/task-validation/po-10-painad/backend/pdf-qa',
+  );
   await mkdir(artifact, { recursive: true });
   await writeFile(resolve(artifact, 'painad-normal.pdf'), normal);
   await writeFile(resolve(artifact, 'painad-long.pdf'), expanded);

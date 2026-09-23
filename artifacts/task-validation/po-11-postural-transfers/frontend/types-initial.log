@@ -1,0 +1,16 @@
+src/components/operator/assessments/AssessmentForm.tsx(110,28): error TS7053: Element implicitly has an 'any' type because expression of type '"respiration" | "negativeVocalization" | "facialExpression" | "bodyLanguage" | "consolability"' can't be used to index type 'AssessmentAnswers'.
+  Property 'respiration' does not exist on type 'AssessmentAnswers'.
+src/components/operator/assessments/AssessmentForm.tsx(116,28): error TS7053: Element implicitly has an 'any' type because expression of type '"respiration" | "negativeVocalization" | "facialExpression" | "bodyLanguage" | "consolability"' can't be used to index type 'AssessmentAnswers'.
+  Property 'respiration' does not exist on type 'AssessmentAnswers'.
+src/components/operator/assessments/AssessmentForm.tsx(132,12): error TS7053: Element implicitly has an 'any' type because expression of type '"respiration" | "negativeVocalization" | "facialExpression" | "bodyLanguage" | "consolability"' can't be used to index type 'AssessmentAnswers'.
+  Property 'respiration' does not exist on type 'AssessmentAnswers'.
+src/components/operator/assessments/AssessmentWorkspace.tsx(95,91): error TS2322: Type 'AssessmentDto | null | undefined' is not assignable to type 'AssessmentDto | undefined'.
+  Type 'null' is not assignable to type 'AssessmentDto | undefined'.
+src/components/operator/assessments/TransfersForm.tsx(57,82): error TS2345: Argument of type 'readonly (readonly ["independent" | "one_operator" | "two_operators" | "one_operator_desk" | "one_operator_axillary" | "one_operator_rollator" | null, string])[]' is not assignable to parameter of type 'readonly (readonly [string | boolean, string])[]'.
+  Type 'readonly ["independent" | "one_operator" | "two_operators" | "one_operator_desk" | "one_operator_axillary" | "one_operator_rollator" | null, string]' is not assignable to type 'readonly [string | boolean, string]'.
+    Type at position 0 in source is not compatible with type at position 0 in target.
+      Type '"independent" | "one_operator" | "two_operators" | "one_operator_desk" | "one_operator_axillary" | "one_operator_rollator" | null' is not assignable to type 'string | boolean'.
+        Type 'null' is not assignable to type 'string | boolean'.
+src/components/operator/assessments/TransfersForm.tsx(57,210): error TS2322: Type 'string | boolean | null' is not assignable to type '"independent" | "one_operator" | "two_operators" | "one_operator_desk" | "one_operator_axillary" | "one_operator_rollator" | null'.
+  Type 'string' is not assignable to type '"independent" | "one_operator" | "two_operators" | "one_operator_desk" | "one_operator_axillary" | "one_operator_rollator" | null'.
+src/components/operator/PatientDetail.tsx(2756,118): error TS2322: Type 'AssessmentTarget' is not assignable to type 'string'.

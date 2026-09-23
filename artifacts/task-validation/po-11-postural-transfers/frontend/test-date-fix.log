@@ -1,0 +1,37 @@
+(node:27904) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Transfers editor has five groups, no selected clinical answers, compact short choices and twelve aid controls (20.6048ms)
+✔ owned aid property stays near its aid; plain aids never receive property and missing field is identified (11.6953ms)
+✔ invalid admission dates remain editable and unsaved until corrected, without losing other answers (197.5448ms)
+✔ final summary preserves multiline context/notes, source labels and saved status through failed PDF without score (13.9177ms)
+✔ history shows operational completion and no answer payload or numeric score (4.7758ms)
+✔ archive separates PAINAD and Transfers by trusted metadata and retains typed deep-link IDs (16.168ms)
+(node:27904) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17580) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new transfers form contains only explicitly unresolved choices; No completes a verified field (3.5031ms)
+✔ all 8x8x6 transfer combinations are independent and complete without a score (28.6836ms)
+✔ nine owned aids require property only when present; three plain aids reject property (2.6661ms)
+✔ load, context and unknown field dependencies are validated without assuming unavailable means absent (0.8334ms)
+✔ text preserves whitespace/newlines and bounds Unicode by code point (1.1428ms)
+✔ transfer DTO validates server completion and immutable sections without accepting scores or another type (5.5707ms)
+(node:17580) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:25788) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ one patient keeps separate PAINAD and transfers drafts across route subscriptions (3.3411ms)
+✔ nested correction and pending operation cannot mutate predecessor or lose exact retry payload (7.3707ms)
+✔ server incomplete preview identifies fields and complete transfers can finalize despite result null (1.7146ms)
+✔ PATCH loss reconciles nested canonical key order, while another type is rejected (32.8722ms)
+✔ late write after logout cannot repopulate transfers state or initiate reconciliation (1.2916ms)
+(node:25788) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1093.1673

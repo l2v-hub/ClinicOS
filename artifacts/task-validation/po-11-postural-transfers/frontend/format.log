@@ -1,0 +1,50 @@
+warning: in the working copy of 'frontend/src/components/operator/PatientDetail.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentFinal.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentHistory.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentSummary.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentWorkspace.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/useAssessmentHistory.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/DocumentiTab.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/PatientArchiveTree.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/tabGroups.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/assessments/assessmentClient.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/assessments/assessmentDraftStore.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/assessments/assessmentTime.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/assessments/assessmentTypes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/assessments/assessmentValidation.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientDocumentArchive.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientDocumentArchiveIO.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientDocumentsPage.ts', LF will be replaced by CRLF the next time Git touches it
+102 frontend/src/components/operator/assessments/AssessmentFinal.tsx
+155 frontend/src/components/operator/assessments/AssessmentForm.tsx
+116 frontend/src/components/operator/assessments/AssessmentHistory.tsx
+101 frontend/src/components/operator/assessments/AssessmentSummary.tsx
+477 frontend/src/components/operator/assessments/AssessmentWorkspace.tsx
+94 frontend/src/components/operator/assessments/useAssessmentHistory.ts
+140 frontend/src/components/operator/cartella/PatientArchiveTree.tsx
+113 frontend/src/components/operator/tabGroups.ts
+190 frontend/src/lib/assessments/assessmentClient.ts
+397 frontend/src/lib/assessments/assessmentDraftStore.ts
+55 frontend/src/lib/assessments/assessmentTime.ts
+134 frontend/src/lib/assessments/assessmentTypes.ts
+295 frontend/src/lib/assessments/assessmentValidation.ts
+198 frontend/src/lib/patientDocumentArchive.ts
+288 frontend/src/lib/patientDocumentArchiveIO.ts
+77 frontend/src/lib/patientDocumentsPage.ts
+200 frontend/src/components/operator/__tests__/transfersUi.test.ts
+221 frontend/src/components/operator/assessments/AssessmentAttestations.tsx
+79 frontend/src/components/operator/assessments/AssessmentDateFields.tsx
+129 frontend/src/components/operator/assessments/Transfers.css
+48 frontend/src/components/operator/assessments/TransfersChoice.tsx
+379 frontend/src/components/operator/assessments/TransfersForm.tsx
+87 frontend/src/components/operator/assessments/TransfersSummary.tsx
+106 frontend/src/components/operator/assessments/useAssessmentPdf.ts
+135 frontend/src/lib/__tests__/transfers.fixtures.ts
+101 frontend/src/lib/__tests__/transfersClient.test.ts
+173 frontend/src/lib/__tests__/transfersDefinition.test.ts
+140 frontend/src/lib/__tests__/transfersDraftStore.test.ts
+141 frontend/src/lib/assessments/assessmentAttestations.ts
+45 frontend/src/lib/assessments/assessmentDefinition.ts
+349 frontend/src/lib/assessments/transfersDefinition.ts
+69 frontend/src/lib/assessments/transfersTypes.ts

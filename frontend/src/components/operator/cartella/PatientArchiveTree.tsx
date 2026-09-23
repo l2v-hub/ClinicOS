@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import {
   ARCHIVE_CATEGORIES,
+  ASSESSMENT_ARCHIVE_LABELS,
   DOCUMENT_TYPE_LABELS,
   documentCategory,
   type ArchiveCategory,
   type ArchiveEntry,
   type ArchiveFolder,
 } from '../../../lib/patientDocumentArchive';
+import type { AssessmentType } from '../../../lib/assessments/assessmentTypes';
 
 function FolderIcon({ open = false }: { open?: boolean }) {
   return (
@@ -45,7 +47,7 @@ export function PatientArchiveTree({
       <ul>
         {ARCHIVE_CATEGORIES.map((category) => {
           const branch = entries.filter((entry) => documentCategory(entry.type) === category.id);
-          const hasChildren = category.types.length > 1;
+          const hasChildren = category.types.length > 1 || category.id === 'valutazioni';
           const open = expanded.includes(category.id);
           const active = selected.category === category.id;
           return (
@@ -74,7 +76,9 @@ export function PatientArchiveTree({
                 <button
                   type="button"
                   className="patient-archive-tree__folder"
-                  aria-current={active && !selected.type ? 'location' : undefined}
+                  aria-current={
+                    active && !selected.type && !selected.assessmentType ? 'location' : undefined
+                  }
                   onClick={() => {
                     onSelect({ category: category.id });
                     if (hasChildren && !open) setExpanded((current) => [...current, category.id]);
@@ -87,19 +91,44 @@ export function PatientArchiveTree({
               </div>
               {hasChildren && (
                 <ul id={`archive-folder-${category.id}`} hidden={!open}>
-                  {category.types.map((type) => (
-                    <li key={type}>
-                      <button
-                        type="button"
-                        className="patient-archive-tree__folder patient-archive-tree__leaf"
-                        aria-current={active && selected.type === type ? 'location' : undefined}
-                        onClick={() => onSelect({ category: category.id, type })}
-                      >
-                        <span>{DOCUMENT_TYPE_LABELS[type]}</span>
-                        {count(branch.filter((entry) => entry.type === type).length)}
-                      </button>
-                    </li>
-                  ))}
+                  {category.id === 'valutazioni'
+                    ? (Object.keys(ASSESSMENT_ARCHIVE_LABELS) as AssessmentType[]).map((type) => (
+                        <li key={type}>
+                          <button
+                            type="button"
+                            className="patient-archive-tree__folder patient-archive-tree__leaf"
+                            aria-current={
+                              active && selected.assessmentType === type ? 'location' : undefined
+                            }
+                            onClick={() =>
+                              onSelect({
+                                category: 'valutazioni',
+                                type: 'patient_assessment',
+                                assessmentType: type,
+                              })
+                            }
+                          >
+                            <span>{ASSESSMENT_ARCHIVE_LABELS[type]}</span>
+                            {count(
+                              branch.filter((entry) => entry.document?.assessment?.type === type)
+                                .length,
+                            )}
+                          </button>
+                        </li>
+                      ))
+                    : category.types.map((type) => (
+                        <li key={type}>
+                          <button
+                            type="button"
+                            className="patient-archive-tree__folder patient-archive-tree__leaf"
+                            aria-current={active && selected.type === type ? 'location' : undefined}
+                            onClick={() => onSelect({ category: category.id, type })}
+                          >
+                            <span>{DOCUMENT_TYPE_LABELS[type]}</span>
+                            {count(branch.filter((entry) => entry.type === type).length)}
+                          </button>
+                        </li>
+                      ))}
                 </ul>
               )}
             </li>

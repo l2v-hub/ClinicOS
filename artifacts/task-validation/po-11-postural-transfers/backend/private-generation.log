@@ -1,0 +1,10 @@
+
+✔ Generated Prisma Client (v7.10.0) to .\backend\node_modules\.prisma\client in 575ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from artifacts\task-validation\po-11-postural-transfers\backend\private-schema.prisma.

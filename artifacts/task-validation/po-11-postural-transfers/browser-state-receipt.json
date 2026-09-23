@@ -1,0 +1,20 @@
+{
+  "at": "2026-09-23T04:51:58.419Z",
+  "assessments": 3,
+  "finals": 2,
+  "drafts": 1,
+  "documents": 2,
+  "attestations": 2,
+  "createFinalizeAttestationRetry": "same payload replayed, no duplicate records",
+  "patchResponseLoss": "automatic GET reconciliation verified against persisted version and answers",
+  "correction": "new immutable record, clinical instant and original answers retained",
+  "slowPatientSwitch": "Bruno response retained only for Bruno",
+  "responsive": "390/768 geometry, desktop keyboard and PDF archive verified",
+  "date1999": "native keyboard, preview, DB and PDF agree",
+  "limitations": [
+    "Out-of-range year input via browser fill was sanitized by automation; invalid raw input and correction verified in 17 focused frontend tests.",
+    "Native beforeunload/session confirmation not exercised; store unsaved and session isolation tested.",
+    "Physical devices and clinical operator acceptance remain unperformed."
+  ],
+  "syntheticOnly": true
+}

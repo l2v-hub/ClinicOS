@@ -10,8 +10,13 @@ import {
   type AssessmentDto,
   type AssessmentSnapshot,
   type PainadAnswers,
+  type PainadSnapshot,
+  type TransfersSnapshot,
+  type TransfersAnswers,
+  TRANSFERS_VERSION,
 } from './types.js';
 import { painadResult } from './painad.js';
+import { transfersCompletion } from './transfers.js';
 
 export const assessmentNotFound = () =>
   new AssessmentError('Valutazione non disponibile', 404, 'assessment_not_found');
@@ -82,12 +87,9 @@ export async function lockAssessment(
   return readAssessmentRow(tx, patientId, id, actor);
 }
 export function assessmentDto(row: AssessmentRow, now = new Date()): AssessmentDto {
-  const answers = row.answers as PainadAnswers;
-  return {
+  const common = {
     id: row.id,
     patientId: row.patientId,
-    type: 'painad',
-    formVersion: PAINAD_VERSION,
     status: row.status as 'draft' | 'final',
     version: row.version,
     assessedAt: row.assessedAt.toISOString(),
@@ -95,13 +97,10 @@ export function assessmentDto(row: AssessmentRow, now = new Date()): AssessmentD
     updatedAt: row.updatedAt.toISOString(),
     finalizedAt: row.finalizedAt?.toISOString() ?? null,
     author: { operatorId: row.authorOperatorId, name: row.authorName },
-    answers,
-    answeredCount: PAINAD_KEYS.filter((key) => answers[key] !== null).length,
-    result: painadResult(answers),
     predecessorId: row.predecessorId,
     correctionReason: row.correctionReason,
     correctedById: row.corrections[0]?.id ?? null,
-    finalSnapshot: row.finalSnapshot as unknown as AssessmentSnapshot | null,
+    snapshotSha256: row.snapshotSha256,
     pdf: row.pdfStatus
       ? {
           status: row.pdfStatus as 'pending' | 'ready' | 'failed',
@@ -111,5 +110,28 @@ export function assessmentDto(row: AssessmentRow, now = new Date()): AssessmentD
             row.pdfStatus !== 'ready' && (!row.pdfLeaseUntil || row.pdfLeaseUntil <= now),
         }
       : null,
+  };
+  if (row.type === 'postural_transfers' && row.formVersion === TRANSFERS_VERSION) {
+    const answers = row.answers as unknown as TransfersAnswers;
+    return {
+      ...common,
+      type: 'postural_transfers',
+      formVersion: TRANSFERS_VERSION,
+      answers,
+      completion: transfersCompletion(answers),
+      result: null,
+      finalSnapshot: row.finalSnapshot as unknown as TransfersSnapshot | null,
+    };
+  }
+  if (row.type !== 'painad' || row.formVersion !== PAINAD_VERSION) throw assessmentNotFound();
+  const answers = row.answers as PainadAnswers;
+  return {
+    ...common,
+    type: 'painad',
+    formVersion: PAINAD_VERSION,
+    answers,
+    answeredCount: PAINAD_KEYS.filter((key) => answers[key] !== null).length,
+    result: painadResult(answers),
+    finalSnapshot: row.finalSnapshot as unknown as PainadSnapshot | null,
   };
 }

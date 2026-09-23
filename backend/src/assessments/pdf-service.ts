@@ -4,7 +4,7 @@ import { assessmentNotFound, assessmentTransaction, lockAssessment } from './acc
 import { AssessmentError, type AssessmentSnapshot } from './types.js';
 import { getAssessment } from './service.js';
 import {
-  ASSESSMENT_RENDERER_VERSION,
+  assessmentRendererVersion,
   AssessmentPdfError,
   renderAssessmentPdf,
 } from './pdf-renderer.js';
@@ -83,7 +83,7 @@ export async function completeAssessmentPdf(
         patientId: job.patientId,
         assessmentId: job.id,
         documentType: 'patient_assessment',
-        originalName: `PAINAD_${row.assessedAt.toISOString().slice(0, 10)}_${job.id}.pdf`,
+        originalName: `${row.type === 'painad' ? 'PAINAD' : 'Trasferimenti'}_${row.assessedAt.toISOString().slice(0, 10)}_${job.id}.pdf`,
         mimeType: 'application/pdf',
         sizeBytes: bytes.length,
         sha256: createHash('sha256').update(bytes).digest('hex'),
@@ -94,7 +94,7 @@ export async function completeAssessmentPdf(
           kind: 'assessment',
           assessmentId: job.id,
           snapshotSha256: job.snapshotSha256,
-          rendererVersion: ASSESSMENT_RENDERER_VERSION,
+          rendererVersion: assessmentRendererVersion(job.snapshot),
         },
       },
     });

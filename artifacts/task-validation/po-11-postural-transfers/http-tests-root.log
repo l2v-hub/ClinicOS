@@ -1,0 +1,11 @@
+✔ HTTP Transfers keeps partial answers, reports missing paths and archives a complete score-free snapshot (14049.8276ms)
+✔ current ignores a late correction of an older clinical evaluation and never borrows PAINAD (1519.8629ms)
+✔ personal attestations bind the persisted snapshot and DB qualification without changing its PDF (419.461ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29357.6018

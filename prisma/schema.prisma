@@ -232,11 +232,30 @@ model PatientAssessment {
   predecessor          PatientAssessment? @relation("AssessmentCorrections", fields: [predecessorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   corrections          PatientAssessment[] @relation("AssessmentCorrections")
   document             PatientDocument?
+  attestations         PatientAssessmentAttestation[]
 
   @@unique([id, patientId])
+  @@unique([id, snapshotSha256])
   @@unique([authorOperatorId, requestId])
   @@unique([authorOperatorId, finalizeRequestId])
   @@index([patientId, type, createdAt, id])
+  @@index([patientId, type, status, assessedAt, createdAt, id], map: "PatientAssessment_current_idx")
+}
+
+// Personal acknowledgements bind one immutable final snapshot; never rewrite the PDF.
+model PatientAssessmentAttestation {
+  id                      String @id @default(uuid())
+  assessmentId            String
+  snapshotSha256          String
+  kind                    String
+  actorOperatorId         String
+  actorName               String
+  registeredQualification String?
+  createdAt               DateTime @default(now()) @db.Timestamptz(3)
+  assessment              PatientAssessment @relation(fields: [assessmentId, snapshotSha256], references: [id, snapshotSha256], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([assessmentId, kind, actorOperatorId], map: "PatientAssessmentAttestation_actor_kind_key")
+  @@index([assessmentId, createdAt, id])
 }
 
 model Cartella {

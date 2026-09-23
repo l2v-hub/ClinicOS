@@ -1,0 +1,410 @@
+{
+  "baseline": "d659c1b459eb72a2920cbd9f678a2c11f9bf7efd",
+  "generatedAtUtc": "2026-09-23T04:38:28.442Z",
+  "files": [
+    {
+      "file": "frontend/src/components/operator/PatientDetail.tsx",
+      "baselineHash": "ab695a8427091a7e7c99ffd63ae264088ce1986fee50b0e1a401df1a1d9d559c",
+      "candidateHash": "698d356ed5611693ee3b4e1828ed0ae7901b6e2e3955169985008b9fa0100585",
+      "baseline": [
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 288,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 343,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 747,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 747,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 747,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 747,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        }
+      ],
+      "candidate": [
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 289,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 344,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 748,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 749,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 749,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 749,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 749,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        }
+      ]
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/AssessmentFinal.tsx",
+      "baselineHash": "ae98d46169c82214d641af40c741e8d4021a3720e114866e657cb71af81ad16b",
+      "candidateHash": "bbeb2d3dcd0badb6b8aefc47b5de336f1b253707724df4a3246878c2f1d7f3c1",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/AssessmentForm.tsx",
+      "baselineHash": "280fdf2f5f90d85230c2b5ac1ccac28fd89dcf53eef35ced9e10643fefa41014",
+      "candidateHash": "bdb2fe430e8aac9595d819668ae7122a27dfd0ef50aa950cdda52cedc7056c2a",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "baselineHash": "18ee35445f3df0da20cf3d35d37ab17f39fb0434f7f4735b37145bc1995b9112",
+      "candidateHash": "be805b7c343ab540e8b1f229f12836f408b8a6d168c18a311d5a37eb2fb1c67f",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "baselineHash": "8feb9a90f2a0d5f9c0200c9a42384a2d60f5abb1d8914ee9a4164b5ecf09ecee",
+      "candidateHash": "edac1de0bcba7bee4939308996afec522446d810cff7985bdb9162ffea1b8efd",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "baselineHash": "20b629b23f1859ec5111dd5c880fa6ef734f1c656008ee1b63c466215662e94a",
+      "candidateHash": "635b34dd7fda2680692f38cc21d9d411fc02d186466497064266d931a756a0e2",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/useAssessmentHistory.ts",
+      "baselineHash": "c5bfd8d4467caffa69176868bf781075df057f5120f26fa667a3a6c7ba2fa686",
+      "candidateHash": "262045a1577084bc708caf997d4469368d27373fefffde594c245a4f4bd8c948",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+      "baselineHash": "00769a0e11751dfd67e236744b97611376e8542d2cd6625551a5caee96bbdcee",
+      "candidateHash": "14432540f42aa7368d415e0286436d156aec0b4c0325ccbf518b2654e68357b9",
+      "baseline": [
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 59,
+          "column": 9,
+          "title": "The 'records' logical expression could make the dependencies of useMemo Hook (at line 62) change on every render. To fix this, wrap the initialization of 'records' in its own useMemo() Hook."
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 116,
+          "column": 19,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        }
+      ],
+      "candidate": [
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 62,
+          "column": 9,
+          "title": "The 'records' logical expression could make the dependencies of useMemo Hook (at line 65) change on every render. To fix this, wrap the initialization of 'records' in its own useMemo() Hook."
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 119,
+          "column": 19,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        }
+      ]
+    },
+    {
+      "file": "frontend/src/components/operator/cartella/PatientArchiveTree.tsx",
+      "baselineHash": "36d2b19a37e50bbb7d9075a2b599c726029fe684bf234c1e5e6df559e318fec3",
+      "candidateHash": "bf982c8ee8a78e5091bf31c572d69a52d90df75f131359e925d59ef8c18b34bf",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/tabGroups.ts",
+      "baselineHash": "29f13655cd45a98cbd1f1dbaa94a3ed0fe2da430c83f72dd822a436db80afb1c",
+      "candidateHash": "970fe2b240598b8c64e1b233a29d6d60a4cac2a0812ebe7cf35aa98207aa21ef",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/assessmentClient.ts",
+      "baselineHash": "bd09fad96070763480b2b4a4b8e15c9680aa89397ac32a83acc5c2d924dedbd7",
+      "candidateHash": "1ae9f5b678121b76358c8299674a69ff0278fdf7351e401f47c7847c3fe05372",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "baselineHash": "c9dcc0f9037d3125f4d5f6c57e6fef20946cc3a11d3508273fb922f21b5dc7ee",
+      "candidateHash": "91d1207589baac5ecb861543e2cc1e7491b9eef012fc9472ab530f5e46369aa7",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/assessmentTime.ts",
+      "baselineHash": "28ce229944f25630ff74bc3a84e0332dc6ba1df7fc330d1665d9d25a58f7547c",
+      "candidateHash": "e1fc2d683d893adca41e0657a272450ef957222edd3012f4084ebe7e24aeaf0b",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "baselineHash": "b402a0498833ee70277aa9c1647b9d772ab54f9ec91adb02d38c26d2fdd6d372",
+      "candidateHash": "9a74e2fa38b40df53ab9178e02f2ec95a7d269058332beedb7ebdb8ef19e189c",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "baselineHash": "3f0f3e3eb09fcb43ab7c68f27637c0f6af5bea851ef53fe462665d3a2ec9d9a7",
+      "candidateHash": "7e2358ff2652c29db2ce03493a0389b4a663ac40b988f51197de0a0ca8ea5ce2",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/patientDocumentArchive.ts",
+      "baselineHash": "7c467b154487b820c1905f4b4e12aaba9a2a81551b9ba11cc4b488237e291df2",
+      "candidateHash": "a87bdf3becb55a0316c92f2f1f7f2324029979274b0f0e83f9245e7ad5daca37",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "baselineHash": "c7324c7d55a661144d7fee25aaa0a6e632fa04bf9539e93453ba2237337bfa2f",
+      "candidateHash": "d592b81aea36f5ce17673333726d8cc27a1a3e28f5d1a02c7b17373642c5b210",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/patientDocumentsPage.ts",
+      "baselineHash": "6efef969a7f9a486ca5d277ab7457c861379d28d444623ae29d2b9fc8d976047",
+      "candidateHash": "5a736c2688e5a2d2cebfa598c41beecf8a8b9b66014b8efbc8736bc3dacd0524",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/transfersUi.test.ts",
+      "baselineHash": null,
+      "candidateHash": "579f12facb22c07ecac0de4f11fb9bf3461b4d40d4ac23728032c3c41b4a44fa",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/AssessmentAttestations.tsx",
+      "baselineHash": null,
+      "candidateHash": "a6fc3a9f51b8417b38821e76e94dc6e9bb6e46440a1bf8221b56372950a39d1c",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/AssessmentDateFields.tsx",
+      "baselineHash": null,
+      "candidateHash": "0213c6aa8c8328ae53d90a5931fcc8e245f32cfead33fdb016c95adf183b5339",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/TransfersChoice.tsx",
+      "baselineHash": null,
+      "candidateHash": "9bde6f8dbcf90d61e8524ca0742329d9d917ca8bb50f473ac27b380adf18fa46",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/TransfersForm.tsx",
+      "baselineHash": null,
+      "candidateHash": "897cd12434a2c390487323f35cf34598cdbe99101a82f584b1b1882925aadb3f",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/TransfersSummary.tsx",
+      "baselineHash": null,
+      "candidateHash": "b559c26420a3d539cee5525e124ba96f8869b6c94825347163165a9d3511e937",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/assessments/useAssessmentPdf.ts",
+      "baselineHash": null,
+      "candidateHash": "e413e7dc6e0b8136b8e115e454f76fe61636ae254523d125ff69bfdd627227f0",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/transfers.fixtures.ts",
+      "baselineHash": null,
+      "candidateHash": "4ed18ee2c75c59460fbaf7b4fe67f7a41b42533dbb2b58a84cc6ba33625aaa73",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/transfersClient.test.ts",
+      "baselineHash": null,
+      "candidateHash": "c0f3f43af523373db84de59e1ad37d3422162abd5bf2181c23971dea7f8eb92e",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/transfersDefinition.test.ts",
+      "baselineHash": null,
+      "candidateHash": "382547d75cf0d5ab8b841300ccddc878738879c8ebf061c8e320a8e530686cf8",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/transfersDraftStore.test.ts",
+      "baselineHash": null,
+      "candidateHash": "3bdad66500c12d1acec8131d3ac7140eba45709c215c74f120396d1ede0b17a7",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/assessmentAttestations.ts",
+      "baselineHash": null,
+      "candidateHash": "073abae11c6f96cd9bb735a5f5fed541a7c775106cc3fb28cc708fb7940878d0",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "baselineHash": null,
+      "candidateHash": "c3ebf3b85ae62be7ad31917008a58b3c4f64a5c19c0cbd263aa5e4c2dcd9c6cb",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/transfersDefinition.ts",
+      "baselineHash": null,
+      "candidateHash": "f6dbf546787e0158952d183caae07a4a99868c0d45158b1e212b3a35adcd6bd6",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/assessments/transfersTypes.ts",
+      "baselineHash": null,
+      "candidateHash": "e35855b7667a00f43381f8916bb40f4effe0ea9ab6b26c33fa8880b1a269c5d4",
+      "baseline": [],
+      "candidate": []
+    }
+  ],
+  "introduced": []
+}

@@ -1,4 +1,4 @@
-import type { AssessmentDto } from '../../../lib/assessments/assessmentTypes';
+import type { AssessmentDto, AssessmentTarget } from '../../../lib/assessments/assessmentTypes';
 import { AssessmentSummary } from './AssessmentSummary';
 export function AssessmentFinal({
   record,
@@ -13,7 +13,7 @@ export function AssessmentFinal({
   busy: boolean;
   onPdf: () => void;
   onRefreshPdf: (retry: boolean) => void;
-  onOpenArchive?: (documentId: string, assessmentId: string) => void;
+  onOpenArchive?: (documentId: string, assessment: AssessmentTarget) => void;
   onOpenRecord: (id: string) => void;
   onCorrect: () => void;
 }) {
@@ -27,7 +27,7 @@ export function AssessmentFinal({
         <h3>PDF e archivio</h3>
         <p>
           {record.pdf?.status === 'ready'
-            ? 'PDF archiviato in Documenti → Moduli e valutazioni → PAINAD.'
+            ? `PDF archiviato in Documenti → Moduli e valutazioni → ${record.type === 'painad' ? 'PAINAD' : 'Trasferimenti posturali'}.`
             : record.pdf?.status === 'failed'
               ? 'PDF non generato. La valutazione finale è conservata.'
               : 'PDF in preparazione. La valutazione finale è conservata.'}
@@ -42,7 +42,9 @@ export function AssessmentFinal({
                 <button
                   type="button"
                   className="btn-secondary"
-                  onClick={() => onOpenArchive(record.pdf!.documentId!, record.id)}
+                  onClick={() =>
+                    onOpenArchive(record.pdf!.documentId!, { id: record.id, type: record.type })
+                  }
                 >
                   Vai al documento in archivio
                 </button>

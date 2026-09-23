@@ -1,0 +1,18 @@
+
+warning: in the working copy of 'backend/src/ai/upload/patient-documents.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/__tests__/archive-scope-db.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/__tests__/fixture.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/__tests__/painad.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/__tests__/pdf-db.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/__tests__/service-db.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/access.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/document-access.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/history.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/input.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/painad.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/pdf-renderer.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/pdf-service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/patient-assessments.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it

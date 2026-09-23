@@ -1,0 +1,131 @@
+{
+  "tablet": {
+    "active": "Segna come non verificato",
+    "groups": [
+      {
+        "scroll": 309,
+        "width": 309
+      },
+      {
+        "scroll": 309,
+        "width": 309
+      },
+      {
+        "scroll": 309,
+        "width": 309
+      }
+    ],
+    "height": 1024,
+    "scroll": 753,
+    "width": 768
+  },
+  "mobile": {
+    "activeTop": 540.171875,
+    "groups": [
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      },
+      {
+        "scroll": 272,
+        "width": 272
+      }
+    ],
+    "height": 844,
+    "identityBottom": 203.375,
+    "scroll": 375,
+    "width": 390
+  }
+}

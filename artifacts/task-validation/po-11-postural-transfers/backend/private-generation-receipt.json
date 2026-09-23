@@ -1,0 +1,16 @@
+{
+  "exitCode": 0,
+  "schemaPath": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-backend\\artifacts\\task-validation\\po-11-postural-transfers\\backend\\private-schema.prisma",
+  "privateOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-backend\\backend\\node_modules\\.prisma\\client",
+  "privateWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-backend\\backend\\node_modules\\@prisma\\client",
+  "resolvedClient": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-backend\\backend\\node_modules\\@prisma\\client\\default.js",
+  "prismaVersion": {
+    "client": "7.10.0",
+    "engine": "0edf323efd1d98336f3f0a68684b56f689b900d3"
+  },
+  "connectedToDatabase": false,
+  "schemaSha256": "e91040b510686e4493ccbb3c7f8de609e6cbe32dce2887e55b198b1c3b99f040",
+  "privateSchemaSha256": "e2a3c9206f2bd580d6051e72f6a8845ad4aeb02122160fc8bb242a02cd59f003",
+  "generatedClientSchemaSha256": "e79bedeae560156ee91ac0e89b11df99f58439cf5777a77fab664ca9871f1336",
+  "schemaVerifiedAt": "2026-09-23T04:37:27.258Z"
+}

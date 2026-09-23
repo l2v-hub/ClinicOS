@@ -1,0 +1,123 @@
+{
+  "task": "PO-11-backend",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-backend",
+  "baseline": "d659c1b459eb72a2920cbd9f678a2c11f9bf7efd",
+  "branch": "codex/po11-transfers-backend",
+  "capturedAt": "2026-09-23T04:37:27.265Z",
+  "sourceTreeSha256": "643ac8ebca2b97ecc20b8438e7b51ccdd1aa1e2aaa4f0196e8a986df6b90a0dd",
+  "inputTreeSha256": "15bc32a12d8fcc1ab72f3fa6e036c364523c8692cbe41eda8f981801f3b41653",
+  "hashAlgorithm": "SHA256 over sorted path + NUL + byte-SHA256 + LF",
+  "sourcePaths": [
+    {
+      "path": "backend/src/ai/upload/patient-documents.ts",
+      "bytes": 8835,
+      "sha256": "5ee9803b2a4224d68b5aec2d86652f82614e577fd0ba369f98aea00cefed0af4"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/attestations-db.test.ts",
+      "bytes": 10532,
+      "sha256": "4750c8394db25894388ae92345ec48949e8907a643509f435bf81ec9e3f65757"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/pdf-db.test.ts",
+      "bytes": 7631,
+      "sha256": "dbf385027aa25c76eed31f21a94682a92aecb765ae349fd3a9989841db87f05f"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-db.test.ts",
+      "bytes": 8445,
+      "sha256": "fa3a1471c5b4cea86281f75be6b28af75946045616e205ca4bfbe08124bb346f"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-fixture.ts",
+      "bytes": 1778,
+      "sha256": "818e4f580cd348399a59c027f8fe06f82909b22be65761fa4b99aaaaafa30027"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-pdf-db.test.ts",
+      "bytes": 4010,
+      "sha256": "174f173a41ef84963c6e881e3daaa93a5791c8347f1f1a35fa7c5bb6e0a48c75"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers.test.ts",
+      "bytes": 5335,
+      "sha256": "f8742b2cf210892100b56ae161f8d70b01513c5cb16bc33599a5ffaf96e73cf4"
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "bytes": 4733,
+      "sha256": "f2c88498bb63a175f862c1e467f663a88d27f010ffdb8c0d3efd3b46af66860e"
+    },
+    {
+      "path": "backend/src/assessments/attestations.ts",
+      "bytes": 7847,
+      "sha256": "0fadac61aa4d79a063bcfe9d98cba3f73b4c48ecfb812e1a7af6edc2cebbdd91"
+    },
+    {
+      "path": "backend/src/assessments/current.ts",
+      "bytes": 1041,
+      "sha256": "80114de13b787409edb92687a8df449ec150873a2d18ffaa67402eacd29b54a8"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "bytes": 4959,
+      "sha256": "169297443fb88704846700c42d4327a759b5d60a21fff4c4c7eba7d611342796"
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "bytes": 4786,
+      "sha256": "eca82514d5c329a42ab30f8d9a76ad4e80199f635f2967501aa444295842f1a8"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "bytes": 7957,
+      "sha256": "c4ac0ee00966daccd7dd9f86565b8c2af960d877bd43a70627785f3763ea6384"
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "bytes": 4948,
+      "sha256": "b3ba5fceda98c5b8f50f8c44692fc5177d73e0e610b5a189684f6175331664bf"
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "bytes": 10632,
+      "sha256": "4a4c2ab4b94d72eb34d0cd92f2af203ed96820be786786ddee087871556e18b4"
+    },
+    {
+      "path": "backend/src/assessments/transfers-types.ts",
+      "bytes": 2470,
+      "sha256": "9b1519a95a5f215aa4b69fef19d5602744238f908041d407119ce2baa7c65045"
+    },
+    {
+      "path": "backend/src/assessments/transfers.ts",
+      "bytes": 9574,
+      "sha256": "0f3b95736bde69a340d28fe3794b1c8ad46d4cbf61156548a81a192cdcf14f25"
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "bytes": 4610,
+      "sha256": "827922a50beb26cb9dd85aa198f8ce5fb4325030463d7d7bb0b988d6a7d9c17f"
+    },
+    {
+      "path": "backend/src/routes/patient-assessments.ts",
+      "bytes": 3452,
+      "sha256": "69804d0f922b9b3f112e0b92a1d111d7fb54c0582d2603a12fef4b0ac8f3987e"
+    },
+    {
+      "path": "prisma/migrations/20260923050000_postural_transfers/migration.sql",
+      "bytes": 10467,
+      "sha256": "84fab71d7126de476a0fc354389c2ab39f2e2108887636db7ef7034e206b4aa2"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "bytes": 34316,
+      "sha256": "e91040b510686e4493ccbb3c7f8de609e6cbe32dce2887e55b198b1c3b99f040"
+    }
+  ],
+  "testSourceManifest": "artifacts/task-validation/po-11-postural-transfers/backend/test-source-manifest.json",
+  "excludedUnrelatedDirtyPaths": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ],
+  "scope": "All changed/new backend and Prisma source. Input tree binds every backend source including unmodified licensed fonts, Prisma schema/migration and selected runtime configuration/dependency manifest."
+}

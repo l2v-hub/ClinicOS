@@ -9,7 +9,7 @@ export function AssessmentHistory({
   onOpen: (record: AssessmentHistoryItem) => void;
 }) {
   return (
-    <section className="assessment-history" aria-label="Storico PAINAD">
+    <section className="assessment-history" aria-label="Storico del modulo">
       <h3>Storico valutazioni</h3>
       <div className="assessment-filters">
         <label>
@@ -73,7 +73,11 @@ export function AssessmentHistory({
               <p>
                 {record.result
                   ? `${record.result.total}/10 · ${record.result.label}`
-                  : `${record.answeredCount} di 5 risposte`}
+                  : record.type === 'painad'
+                    ? `${record.answeredCount} di 5 risposte`
+                    : record.completion.complete
+                      ? 'Compilazione completa'
+                      : 'Compilazione da completare'}
                 {record.correctedById
                   ? ' · Rettificata'
                   : record.predecessorId

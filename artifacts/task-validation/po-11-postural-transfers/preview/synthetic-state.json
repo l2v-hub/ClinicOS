@@ -1,0 +1,1906 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T04:42:44.698Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:42:44.734Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:42:44.736Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T04:42:45.125Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:42:45.132Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:42:45.734Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=postural_transfers",
+      "status": 200,
+      "at": "2026-09-23T04:42:45.738Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T04:43:34.265Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:43:34.267Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:43:34.269Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T04:43:34.570Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:43:34.572Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:43:35.065Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=postural_transfers",
+      "status": 200,
+      "at": "2026-09-23T04:43:35.071Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T04:43:43.453Z",
+        "answers": {
+          "context": {
+            "admissionDate": {
+              "status": "known",
+              "value": null
+            },
+            "diagnosis": {
+              "status": null,
+              "text": "",
+              "unavailableReason": ""
+            }
+          },
+          "operatedLegLoad": {
+            "applicable": null,
+            "side": null,
+            "level": null
+          },
+          "walking": null,
+          "transfers": {
+            "bedToWheelchair": null,
+            "wheelchairToBed": null,
+            "toilet": null
+          },
+          "hygiene": null,
+          "painOnMovement": null,
+          "cognitiveDeterioration": null,
+          "aids": {
+            "wheelchair": {
+              "selected": null,
+              "ownership": null
+            },
+            "pressureReliefCushion": {
+              "selected": null,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": null
+            },
+            "oneForearmCrutch": {
+              "selected": null,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": null,
+              "ownership": null
+            },
+            "quadCane": {
+              "selected": null,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": null,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": null,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "tableWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "spinalBrace": {
+              "selected": null
+            },
+            "kneeBrace": {
+              "selected": null
+            }
+          },
+          "notes": ""
+        },
+        "requestId": "24b8b018-f27d-49ea-954a-0616d8891b07",
+        "type": "postural_transfers",
+        "formVersion": "transfers-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T04:43:53.993Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:43:54.229Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "status": 503,
+      "body": {
+        "assessedAt": "2026-09-23T04:43:43.453Z",
+        "answers": {
+          "aids": {
+            "quadCane": {
+              "selected": false,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": false,
+              "ownership": null
+            },
+            "kneeBrace": {
+              "selected": false
+            },
+            "wheelchair": {
+              "selected": true,
+              "ownership": "facility"
+            },
+            "spinalBrace": {
+              "selected": false
+            },
+            "tableWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": false,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "oneForearmCrutch": {
+              "selected": false,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": false,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": false
+            },
+            "pressureReliefCushion": {
+              "selected": false,
+              "ownership": null
+            }
+          },
+          "notes": "Prova sintetica: à è ì ò ù — α β.\nSeconda riga conservata.\nIndicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. ",
+          "context": {
+            "diagnosis": {
+              "status": "provided",
+              "text": "Scenario sintetico di riabilitazione.\nDiagnosi verificata dall’operatore QA, nessun paziente reale.",
+              "unavailableReason": ""
+            },
+            "admissionDate": {
+              "value": null,
+              "status": "known"
+            }
+          },
+          "hygiene": "bed_bath",
+          "walking": "assisted",
+          "transfers": {
+            "toilet": "two_operators",
+            "bedToWheelchair": "hoist_two_operators",
+            "wheelchairToBed": "one_operator_axillary"
+          },
+          "painOnMovement": false,
+          "operatedLegLoad": {
+            "applicable": true,
+            "side": "right",
+            "level": "touch_down"
+          },
+          "cognitiveDeterioration": "mild"
+        },
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T04:44:56.388Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "status": 200,
+      "at": "2026-09-23T04:44:56.542Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:44:56.616Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "status": 503,
+      "body": {
+        "assessedAt": "2026-09-23T04:43:43.453Z",
+        "answers": {
+          "aids": {
+            "quadCane": {
+              "selected": false,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": false,
+              "ownership": null
+            },
+            "kneeBrace": {
+              "selected": false
+            },
+            "wheelchair": {
+              "selected": true,
+              "ownership": "facility"
+            },
+            "spinalBrace": {
+              "selected": false
+            },
+            "tableWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": false,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "oneForearmCrutch": {
+              "selected": false,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": false,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": false
+            },
+            "pressureReliefCushion": {
+              "selected": false,
+              "ownership": null
+            }
+          },
+          "notes": "Prova sintetica: à è ì ò ù — α β.\nSeconda riga conservata.\nIndicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. ",
+          "context": {
+            "diagnosis": {
+              "text": "Scenario sintetico di riabilitazione.\nDiagnosi verificata dall’operatore QA, nessun paziente reale.",
+              "status": "provided",
+              "unavailableReason": ""
+            },
+            "admissionDate": {
+              "value": "1999-12-31",
+              "status": "known"
+            }
+          },
+          "hygiene": "bed_bath",
+          "walking": "assisted",
+          "transfers": {
+            "toilet": "two_operators",
+            "bedToWheelchair": "hoist_two_operators",
+            "wheelchairToBed": "one_operator_axillary"
+          },
+          "painOnMovement": false,
+          "operatedLegLoad": {
+            "side": "right",
+            "level": "touch_down",
+            "applicable": true
+          },
+          "cognitiveDeterioration": "mild"
+        },
+        "expectedVersion": 2
+      },
+      "at": "2026-09-23T04:46:35.983Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "status": 200,
+      "at": "2026-09-23T04:46:36.201Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:46:36.313Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035/finalize",
+      "status": 503,
+      "body": {
+        "requestId": "c4e7edcf-4bf4-4045-b202-628e61b1cb04",
+        "expectedVersion": 3
+      },
+      "at": "2026-09-23T04:47:58.850Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "c4e7edcf-4bf4-4045-b202-628e61b1cb04",
+        "expectedVersion": 3
+      },
+      "at": "2026-09-23T04:48:16.551Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035/attestations?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:48:16.712Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:48:16.720Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035/attestations",
+      "status": 503,
+      "body": {
+        "kind": "physiotherapist_confirmation",
+        "snapshotSha256": "d6d683c1e868b827cca5561a7731538003ae0e5c80c7c6a9715d3c66c94b6a7c"
+      },
+      "at": "2026-09-23T04:48:26.429Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035/attestations",
+      "status": 200,
+      "body": {
+        "kind": "physiotherapist_confirmation",
+        "snapshotSha256": "d6d683c1e868b827cca5561a7731538003ae0e5c80c7c6a9715d3c66c94b6a7c"
+      },
+      "at": "2026-09-23T04:48:32.353Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/0513b79a-3d85-47b0-bbbf-22fa05dda035/attestations?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:48:32.439Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T04:43:43.453Z",
+        "answers": {
+          "aids": {
+            "quadCane": {
+              "selected": false,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": false,
+              "ownership": null
+            },
+            "kneeBrace": {
+              "selected": false
+            },
+            "wheelchair": {
+              "selected": true,
+              "ownership": "facility"
+            },
+            "spinalBrace": {
+              "selected": false
+            },
+            "tableWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": false,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "oneForearmCrutch": {
+              "selected": false,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": false,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": false
+            },
+            "pressureReliefCushion": {
+              "selected": false,
+              "ownership": null
+            }
+          },
+          "notes": "Prova sintetica: à è ì ò ù — α β.\nSeconda riga conservata.\nIndicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. ",
+          "context": {
+            "diagnosis": {
+              "text": "Scenario sintetico di riabilitazione.\nDiagnosi verificata dall’operatore QA, nessun paziente reale.",
+              "status": "provided",
+              "unavailableReason": ""
+            },
+            "admissionDate": {
+              "value": "1999-12-31",
+              "status": "known"
+            }
+          },
+          "hygiene": "bed_bath",
+          "walking": "assisted",
+          "transfers": {
+            "toilet": "two_operators",
+            "bedToWheelchair": "hoist_two_operators",
+            "wheelchairToBed": "one_operator_axillary"
+          },
+          "painOnMovement": false,
+          "operatedLegLoad": {
+            "side": "left",
+            "level": "touch_down",
+            "applicable": true
+          },
+          "cognitiveDeterioration": "mild"
+        },
+        "correctionReason": "Rettifica sintetica: lato sinistro verificato.",
+        "requestId": "1d0b9202-55f3-4ebe-89f7-46bbed3cff2e",
+        "type": "postural_transfers",
+        "formVersion": "transfers-it-2026-09-22-v1",
+        "predecessorId": "0513b79a-3d85-47b0-bbbf-22fa05dda035"
+      },
+      "at": "2026-09-23T04:48:46.658Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:48:46.855Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "01b5706f-e1e0-407d-9ed0-8d40a09afcea",
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T04:48:53.374Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2/attestations?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:48:54.192Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:48:54.197Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents?limit=50",
+      "status": 200,
+      "at": "2026-09-23T04:49:02.649Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/21354698-65c0-4e07-ace8-4cacf7dc44bf/content",
+      "status": 200,
+      "at": "2026-09-23T04:49:02.761Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:49:18.974Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2",
+      "status": 200,
+      "at": "2026-09-23T04:49:18.980Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2/attestations?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:19.141Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T04:49:25.523Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:49:25.540Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T04:49:25.542Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:49:25.543Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:25.556Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T04:49:25.560Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=postural_transfers",
+      "status": null,
+      "at": "2026-09-23T04:49:25.561Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T04:49:25.749Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:49:25.751Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:49:25.752Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=postural_transfers",
+      "status": 200,
+      "at": "2026-09-23T04:49:25.753Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2/attestations?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:25.828Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2/attestations",
+      "status": 201,
+      "body": {
+        "kind": "operator_acknowledgement",
+        "snapshotSha256": "e40ef052d28d39b244a395d99a9bce324ee3f0916d79ddd40aac15762e59a7a6"
+      },
+      "at": "2026-09-23T04:49:30.918Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2/attestations?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:31.001Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T04:49:36.985Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:49:37.002Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.002Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.004Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.006Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T04:49:37.009Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.021Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.023Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.249Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.339Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:49:37.341Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.342Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments/current?type=postural_transfers",
+      "status": 200,
+      "at": "2026-09-23T04:49:37.343Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-bruno/assessments",
+      "status": 503,
+      "body": {
+        "assessedAt": "2026-09-23T04:49:42.967Z",
+        "answers": {
+          "context": {
+            "admissionDate": {
+              "status": null,
+              "value": null
+            },
+            "diagnosis": {
+              "status": null,
+              "text": "",
+              "unavailableReason": ""
+            }
+          },
+          "operatedLegLoad": {
+            "applicable": null,
+            "side": null,
+            "level": null
+          },
+          "walking": "independent",
+          "transfers": {
+            "bedToWheelchair": null,
+            "wheelchairToBed": null,
+            "toilet": null
+          },
+          "hygiene": null,
+          "painOnMovement": null,
+          "cognitiveDeterioration": null,
+          "aids": {
+            "wheelchair": {
+              "selected": null,
+              "ownership": null
+            },
+            "pressureReliefCushion": {
+              "selected": null,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": null
+            },
+            "oneForearmCrutch": {
+              "selected": null,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": null,
+              "ownership": null
+            },
+            "quadCane": {
+              "selected": null,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": null,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": null,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "tableWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "spinalBrace": {
+              "selected": null
+            },
+            "kneeBrace": {
+              "selected": null
+            }
+          },
+          "notes": ""
+        },
+        "requestId": "24c0607c-3f6f-4989-a975-10632b4c6b3b",
+        "type": "postural_transfers",
+        "formVersion": "transfers-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T04:49:43.871Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-bruno/assessments",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T04:49:42.967Z",
+        "answers": {
+          "context": {
+            "admissionDate": {
+              "status": null,
+              "value": null
+            },
+            "diagnosis": {
+              "status": null,
+              "text": "",
+              "unavailableReason": ""
+            }
+          },
+          "operatedLegLoad": {
+            "applicable": null,
+            "side": null,
+            "level": null
+          },
+          "walking": "independent",
+          "transfers": {
+            "bedToWheelchair": null,
+            "wheelchairToBed": null,
+            "toilet": null
+          },
+          "hygiene": null,
+          "painOnMovement": null,
+          "cognitiveDeterioration": null,
+          "aids": {
+            "wheelchair": {
+              "selected": null,
+              "ownership": null
+            },
+            "pressureReliefCushion": {
+              "selected": null,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": null
+            },
+            "oneForearmCrutch": {
+              "selected": null,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": null,
+              "ownership": null
+            },
+            "quadCane": {
+              "selected": null,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": null,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": null,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "tableWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "spinalBrace": {
+              "selected": null
+            },
+            "kneeBrace": {
+              "selected": null
+            }
+          },
+          "notes": ""
+        },
+        "requestId": "24c0607c-3f6f-4989-a975-10632b4c6b3b",
+        "type": "postural_transfers",
+        "formVersion": "transfers-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T04:49:48.370Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:49:48.509Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/patients/vitals-qa-bruno/assessments/a6708473-400a-4b2a-82d8-4efd5aef0a9a",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T04:49:42.967Z",
+        "answers": {
+          "aids": {
+            "quadCane": {
+              "selected": null,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": null,
+              "ownership": null
+            },
+            "kneeBrace": {
+              "selected": null
+            },
+            "wheelchair": {
+              "selected": null,
+              "ownership": null
+            },
+            "spinalBrace": {
+              "selected": null
+            },
+            "tableWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": null,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": null,
+              "ownership": null
+            },
+            "oneForearmCrutch": {
+              "selected": null,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": null,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": null
+            },
+            "pressureReliefCushion": {
+              "selected": null,
+              "ownership": null
+            }
+          },
+          "notes": "Bozza di Bruno, risposta lenta.",
+          "context": {
+            "diagnosis": {
+              "text": "",
+              "status": null,
+              "unavailableReason": ""
+            },
+            "admissionDate": {
+              "value": null,
+              "status": null
+            }
+          },
+          "hygiene": null,
+          "walking": "independent",
+          "transfers": {
+            "toilet": null,
+            "bedToWheelchair": null,
+            "wheelchairToBed": null
+          },
+          "painOnMovement": null,
+          "operatedLegLoad": {
+            "side": null,
+            "level": null,
+            "applicable": null
+          },
+          "cognitiveDeterioration": null
+        },
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T04:49:57.936Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": null,
+      "at": "2026-09-23T04:49:58.171Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:49:58.182Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T04:49:58.182Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:49:58.184Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:58.186Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=postural_transfers&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T04:49:58.188Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments/current?type=postural_transfers",
+      "status": null,
+      "at": "2026-09-23T04:49:58.190Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T04:49:58.516Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:49:58.518Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:49:58.519Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=postural_transfers",
+      "status": 200,
+      "at": "2026-09-23T04:49:58.520Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/763a3118-640c-4a21-8a4c-73328765ddf2/attestations?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:49:58.682Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T04:50:08.173Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:50:08.188Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno",
+      "status": 200,
+      "at": "2026-09-23T04:50:08.189Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:50:08.190Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:50:08.192Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T04:50:08.196Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=postural_transfers",
+      "status": null,
+      "at": "2026-09-23T04:50:08.198Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T04:50:08.362Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:50:08.369Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:50:08.370Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments/current?type=postural_transfers",
+      "status": 200,
+      "at": "2026-09-23T04:50:08.372Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments/a6708473-400a-4b2a-82d8-4efd5aef0a9a",
+      "status": 200,
+      "at": "2026-09-23T04:50:15.258Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:50:29.709Z"
+    }
+  ],
+  "assessments": [
+    {
+      "id": "0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "patientId": "vitals-qa-anna",
+      "type": "postural_transfers",
+      "formVersion": "transfers-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T06:43:43.453Z",
+      "answers": {
+        "aids": {
+          "quadCane": {
+            "selected": false,
+            "ownership": null
+          },
+          "rollator": {
+            "selected": false,
+            "ownership": null
+          },
+          "kneeBrace": {
+            "selected": false
+          },
+          "wheelchair": {
+            "selected": true,
+            "ownership": "facility"
+          },
+          "spinalBrace": {
+            "selected": false
+          },
+          "tableWalker": {
+            "selected": false,
+            "ownership": null
+          },
+          "walkingStick": {
+            "selected": false,
+            "ownership": null
+          },
+          "axillaryWalker": {
+            "selected": false,
+            "ownership": null
+          },
+          "oneForearmCrutch": {
+            "selected": false,
+            "ownership": null
+          },
+          "twoForearmCrutches": {
+            "selected": false,
+            "ownership": null
+          },
+          "wheelchairRestraint": {
+            "selected": false
+          },
+          "pressureReliefCushion": {
+            "selected": false,
+            "ownership": null
+          }
+        },
+        "notes": "Prova sintetica: à è ì ò ù — α β.\nSeconda riga conservata.\nIndicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. ",
+        "context": {
+          "diagnosis": {
+            "text": "Scenario sintetico di riabilitazione.\nDiagnosi verificata dall’operatore QA, nessun paziente reale.",
+            "status": "provided",
+            "unavailableReason": ""
+          },
+          "admissionDate": {
+            "value": "1999-12-31",
+            "status": "known"
+          }
+        },
+        "hygiene": "bed_bath",
+        "walking": "assisted",
+        "transfers": {
+          "toilet": "two_operators",
+          "bedToWheelchair": "hoist_two_operators",
+          "wheelchairToBed": "one_operator_axillary"
+        },
+        "painOnMovement": false,
+        "operatedLegLoad": {
+          "side": "right",
+          "level": "touch_down",
+          "applicable": true
+        },
+        "cognitiveDeterioration": "mild"
+      },
+      "status": "final",
+      "version": 4,
+      "createdAt": "2026-09-23T06:43:54.067Z",
+      "updatedAt": "2026-09-23T06:47:58.962Z",
+      "finalizedAt": "2026-09-23T06:47:58.962Z",
+      "requestId": "24b8b018-f27d-49ea-954a-0616d8891b07",
+      "creationPayloadHash": "b5a9b4d813cb58c5ff2eaffa34bd1194b69fa7d491aba3141153e87742032feb",
+      "finalizeRequestId": "c4e7edcf-4bf4-4045-b202-628e61b1cb04",
+      "finalizePayloadHash": "99eab039e0ccb55615d9a0b4c63547a2658da80679ff5129fcb674fec2f76046",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "postural_transfers",
+          "version": "transfers-it-2026-09-22-v1",
+          "sourceSha256": "5d5c25cfc322b4f12a6eeba4ac2cf8d4476b15e95c9152cbe09889f0cc75d49f"
+        },
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": null,
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "sections": [
+          {
+            "id": "context",
+            "rows": [
+              {
+                "path": "context.admissionDate",
+                "label": "Data di ingresso",
+                "value": "31/12/1999"
+              },
+              {
+                "path": "context.diagnosis",
+                "label": "Diagnosi",
+                "value": "Scenario sintetico di riabilitazione.\nDiagnosi verificata dall’operatore QA, nessun paziente reale."
+              }
+            ],
+            "label": "Contesto"
+          },
+          {
+            "id": "mobilization",
+            "rows": [
+              {
+                "path": "operatedLegLoad",
+                "label": "Carico su arto inferiore operato",
+                "value": "DX — Sfiorato"
+              },
+              {
+                "path": "walking",
+                "label": "Deambulazione",
+                "value": "Con assistenza"
+              },
+              {
+                "path": "transfers.bedToWheelchair",
+                "label": "Letto-carrozzina",
+                "value": "sollevatore + 2 op."
+              },
+              {
+                "path": "transfers.wheelchairToBed",
+                "label": "Carrozzina-letto",
+                "value": "1 op. + ascellare"
+              },
+              {
+                "path": "transfers.toilet",
+                "label": "In bagno sul WC",
+                "value": "2 operatori"
+              }
+            ],
+            "label": "Mobilizzazione"
+          },
+          {
+            "id": "assistance",
+            "rows": [
+              {
+                "path": "hygiene",
+                "label": "Igiene personale",
+                "value": "Bagno a letto"
+              },
+              {
+                "path": "painOnMovement",
+                "label": "Dolore alla movimentazione",
+                "value": "No"
+              },
+              {
+                "path": "cognitiveDeterioration",
+                "label": "Deterioramento cognitivo",
+                "value": "Lieve"
+              }
+            ],
+            "label": "Assistenza"
+          },
+          {
+            "id": "aids",
+            "rows": [
+              {
+                "path": "aids.wheelchair",
+                "label": "Carrozzina",
+                "value": "Sì — Struttura"
+              },
+              {
+                "path": "aids.pressureReliefCushion",
+                "label": "Cuscino antidecubito",
+                "value": "No"
+              },
+              {
+                "path": "aids.wheelchairRestraint",
+                "label": "Contenzione in carrozzina",
+                "value": "No"
+              },
+              {
+                "path": "aids.oneForearmCrutch",
+                "label": "1 antibrachiale",
+                "value": "No"
+              },
+              {
+                "path": "aids.walkingStick",
+                "label": "Bastone",
+                "value": "No"
+              },
+              {
+                "path": "aids.quadCane",
+                "label": "Tetrapode",
+                "value": "No"
+              },
+              {
+                "path": "aids.twoForearmCrutches",
+                "label": "2 antibrachiali",
+                "value": "No"
+              },
+              {
+                "path": "aids.rollator",
+                "label": "Deambulatore rollator",
+                "value": "No"
+              },
+              {
+                "path": "aids.axillaryWalker",
+                "label": "Deambulatore ascellare",
+                "value": "No"
+              },
+              {
+                "path": "aids.tableWalker",
+                "label": "Deambulatore con tavolo (desk)",
+                "value": "No"
+              },
+              {
+                "path": "aids.spinalBrace",
+                "label": "Busto",
+                "value": "No"
+              },
+              {
+                "path": "aids.kneeBrace",
+                "label": "Ginocchiera",
+                "value": "No"
+              }
+            ],
+            "label": "Ausili"
+          },
+          {
+            "id": "notes",
+            "rows": [
+              {
+                "path": "notes",
+                "label": "Note",
+                "value": "Prova sintetica: à è ì ò ù — α β.\nSeconda riga conservata.\nIndicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. "
+              }
+            ],
+            "label": "Note"
+          }
+        ],
+        "createdAt": "2026-09-23T04:43:54.067Z",
+        "assessedAt": "2026-09-23T04:43:43.453Z",
+        "finalizedAt": "2026-09-23T04:47:58.962Z",
+        "predecessor": null,
+        "predecessorId": null,
+        "signatureLabels": [
+          "Firma Fisioterapista",
+          "Firma Operatori"
+        ],
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "d6d683c1e868b827cca5561a7731538003ae0e5c80c7c6a9715d3c66c94b6a7c",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T06:47:59.578Z"
+    },
+    {
+      "id": "763a3118-640c-4a21-8a4c-73328765ddf2",
+      "patientId": "vitals-qa-anna",
+      "type": "postural_transfers",
+      "formVersion": "transfers-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T06:43:43.453Z",
+      "answers": {
+        "aids": {
+          "quadCane": {
+            "selected": false,
+            "ownership": null
+          },
+          "rollator": {
+            "selected": false,
+            "ownership": null
+          },
+          "kneeBrace": {
+            "selected": false
+          },
+          "wheelchair": {
+            "selected": true,
+            "ownership": "facility"
+          },
+          "spinalBrace": {
+            "selected": false
+          },
+          "tableWalker": {
+            "selected": false,
+            "ownership": null
+          },
+          "walkingStick": {
+            "selected": false,
+            "ownership": null
+          },
+          "axillaryWalker": {
+            "selected": false,
+            "ownership": null
+          },
+          "oneForearmCrutch": {
+            "selected": false,
+            "ownership": null
+          },
+          "twoForearmCrutches": {
+            "selected": false,
+            "ownership": null
+          },
+          "wheelchairRestraint": {
+            "selected": false
+          },
+          "pressureReliefCushion": {
+            "selected": false,
+            "ownership": null
+          }
+        },
+        "notes": "Prova sintetica: à è ì ò ù — α β.\nSeconda riga conservata.\nIndicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. ",
+        "context": {
+          "diagnosis": {
+            "text": "Scenario sintetico di riabilitazione.\nDiagnosi verificata dall’operatore QA, nessun paziente reale.",
+            "status": "provided",
+            "unavailableReason": ""
+          },
+          "admissionDate": {
+            "value": "1999-12-31",
+            "status": "known"
+          }
+        },
+        "hygiene": "bed_bath",
+        "walking": "assisted",
+        "transfers": {
+          "toilet": "two_operators",
+          "bedToWheelchair": "hoist_two_operators",
+          "wheelchairToBed": "one_operator_axillary"
+        },
+        "painOnMovement": false,
+        "operatedLegLoad": {
+          "side": "left",
+          "level": "touch_down",
+          "applicable": true
+        },
+        "cognitiveDeterioration": "mild"
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T06:48:46.708Z",
+      "updatedAt": "2026-09-23T06:48:53.463Z",
+      "finalizedAt": "2026-09-23T06:48:53.463Z",
+      "requestId": "1d0b9202-55f3-4ebe-89f7-46bbed3cff2e",
+      "creationPayloadHash": "7eb27bdf5a12ffc3b6605b99a040e7ef9c0d654ae4bab3e9c466d22e0d34531c",
+      "finalizeRequestId": "01b5706f-e1e0-407d-9ed0-8d40a09afcea",
+      "finalizePayloadHash": "28b05b6712bb50ae5914bd90c27ee5a1ac7847984457a387f98cd6deac8da7ad",
+      "predecessorId": "0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "correctionReason": "Rettifica sintetica: lato sinistro verificato.",
+      "finalSnapshot": {
+        "form": {
+          "type": "postural_transfers",
+          "version": "transfers-it-2026-09-22-v1",
+          "sourceSha256": "5d5c25cfc322b4f12a6eeba4ac2cf8d4476b15e95c9152cbe09889f0cc75d49f"
+        },
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": null,
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "sections": [
+          {
+            "id": "context",
+            "rows": [
+              {
+                "path": "context.admissionDate",
+                "label": "Data di ingresso",
+                "value": "31/12/1999"
+              },
+              {
+                "path": "context.diagnosis",
+                "label": "Diagnosi",
+                "value": "Scenario sintetico di riabilitazione.\nDiagnosi verificata dall’operatore QA, nessun paziente reale."
+              }
+            ],
+            "label": "Contesto"
+          },
+          {
+            "id": "mobilization",
+            "rows": [
+              {
+                "path": "operatedLegLoad",
+                "label": "Carico su arto inferiore operato",
+                "value": "SX — Sfiorato"
+              },
+              {
+                "path": "walking",
+                "label": "Deambulazione",
+                "value": "Con assistenza"
+              },
+              {
+                "path": "transfers.bedToWheelchair",
+                "label": "Letto-carrozzina",
+                "value": "sollevatore + 2 op."
+              },
+              {
+                "path": "transfers.wheelchairToBed",
+                "label": "Carrozzina-letto",
+                "value": "1 op. + ascellare"
+              },
+              {
+                "path": "transfers.toilet",
+                "label": "In bagno sul WC",
+                "value": "2 operatori"
+              }
+            ],
+            "label": "Mobilizzazione"
+          },
+          {
+            "id": "assistance",
+            "rows": [
+              {
+                "path": "hygiene",
+                "label": "Igiene personale",
+                "value": "Bagno a letto"
+              },
+              {
+                "path": "painOnMovement",
+                "label": "Dolore alla movimentazione",
+                "value": "No"
+              },
+              {
+                "path": "cognitiveDeterioration",
+                "label": "Deterioramento cognitivo",
+                "value": "Lieve"
+              }
+            ],
+            "label": "Assistenza"
+          },
+          {
+            "id": "aids",
+            "rows": [
+              {
+                "path": "aids.wheelchair",
+                "label": "Carrozzina",
+                "value": "Sì — Struttura"
+              },
+              {
+                "path": "aids.pressureReliefCushion",
+                "label": "Cuscino antidecubito",
+                "value": "No"
+              },
+              {
+                "path": "aids.wheelchairRestraint",
+                "label": "Contenzione in carrozzina",
+                "value": "No"
+              },
+              {
+                "path": "aids.oneForearmCrutch",
+                "label": "1 antibrachiale",
+                "value": "No"
+              },
+              {
+                "path": "aids.walkingStick",
+                "label": "Bastone",
+                "value": "No"
+              },
+              {
+                "path": "aids.quadCane",
+                "label": "Tetrapode",
+                "value": "No"
+              },
+              {
+                "path": "aids.twoForearmCrutches",
+                "label": "2 antibrachiali",
+                "value": "No"
+              },
+              {
+                "path": "aids.rollator",
+                "label": "Deambulatore rollator",
+                "value": "No"
+              },
+              {
+                "path": "aids.axillaryWalker",
+                "label": "Deambulatore ascellare",
+                "value": "No"
+              },
+              {
+                "path": "aids.tableWalker",
+                "label": "Deambulatore con tavolo (desk)",
+                "value": "No"
+              },
+              {
+                "path": "aids.spinalBrace",
+                "label": "Busto",
+                "value": "No"
+              },
+              {
+                "path": "aids.kneeBrace",
+                "label": "Ginocchiera",
+                "value": "No"
+              }
+            ],
+            "label": "Ausili"
+          },
+          {
+            "id": "notes",
+            "rows": [
+              {
+                "path": "notes",
+                "label": "Note",
+                "value": "Prova sintetica: à è ì ò ù — α β.\nSeconda riga conservata.\nIndicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. Indicazioni operative di prova con testo lungo, senza dati clinici reali. "
+              }
+            ],
+            "label": "Note"
+          }
+        ],
+        "createdAt": "2026-09-23T04:48:46.708Z",
+        "assessedAt": "2026-09-23T04:43:43.453Z",
+        "finalizedAt": "2026-09-23T04:48:53.463Z",
+        "predecessor": {
+          "id": "0513b79a-3d85-47b0-bbbf-22fa05dda035",
+          "assessedAt": "2026-09-23T04:43:43.453Z",
+          "authorName": "Operatrice QA"
+        },
+        "predecessorId": "0513b79a-3d85-47b0-bbbf-22fa05dda035",
+        "signatureLabels": [
+          "Firma Fisioterapista",
+          "Firma Operatori"
+        ],
+        "snapshotVersion": 1,
+        "correctionReason": "Rettifica sintetica: lato sinistro verificato."
+      },
+      "snapshotSha256": "e40ef052d28d39b244a395d99a9bce324ee3f0916d79ddd40aac15762e59a7a6",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T06:48:54.091Z"
+    },
+    {
+      "id": "a6708473-400a-4b2a-82d8-4efd5aef0a9a",
+      "patientId": "vitals-qa-bruno",
+      "type": "postural_transfers",
+      "formVersion": "transfers-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T06:49:42.967Z",
+      "answers": {
+        "aids": {
+          "quadCane": {
+            "selected": null,
+            "ownership": null
+          },
+          "rollator": {
+            "selected": null,
+            "ownership": null
+          },
+          "kneeBrace": {
+            "selected": null
+          },
+          "wheelchair": {
+            "selected": null,
+            "ownership": null
+          },
+          "spinalBrace": {
+            "selected": null
+          },
+          "tableWalker": {
+            "selected": null,
+            "ownership": null
+          },
+          "walkingStick": {
+            "selected": null,
+            "ownership": null
+          },
+          "axillaryWalker": {
+            "selected": null,
+            "ownership": null
+          },
+          "oneForearmCrutch": {
+            "selected": null,
+            "ownership": null
+          },
+          "twoForearmCrutches": {
+            "selected": null,
+            "ownership": null
+          },
+          "wheelchairRestraint": {
+            "selected": null
+          },
+          "pressureReliefCushion": {
+            "selected": null,
+            "ownership": null
+          }
+        },
+        "notes": "Bozza di Bruno, risposta lenta.",
+        "context": {
+          "diagnosis": {
+            "text": "",
+            "status": null,
+            "unavailableReason": ""
+          },
+          "admissionDate": {
+            "value": null,
+            "status": null
+          }
+        },
+        "hygiene": null,
+        "walking": "independent",
+        "transfers": {
+          "toilet": null,
+          "bedToWheelchair": null,
+          "wheelchairToBed": null
+        },
+        "painOnMovement": null,
+        "operatedLegLoad": {
+          "side": null,
+          "level": null,
+          "applicable": null
+        },
+        "cognitiveDeterioration": null
+      },
+      "status": "draft",
+      "version": 2,
+      "createdAt": "2026-09-23T06:49:43.872Z",
+      "updatedAt": "2026-09-23T06:50:02.981Z",
+      "finalizedAt": null,
+      "requestId": "24c0607c-3f6f-4989-a975-10632b4c6b3b",
+      "creationPayloadHash": "bf248a2bbc8f78d59d155497b897e28ac17c219ffa726a32e4f296538a85db35",
+      "finalizeRequestId": null,
+      "finalizePayloadHash": null,
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": null,
+      "snapshotSha256": null,
+      "pdfStatus": null,
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 0,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": null
+    }
+  ],
+  "attestations": [
+    {
+      "id": "dc50a012-b56d-407f-9bf4-6b010f025e7d",
+      "assessmentId": "0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "snapshotSha256": "d6d683c1e868b827cca5561a7731538003ae0e5c80c7c6a9715d3c66c94b6a7c",
+      "kind": "physiotherapist_confirmation",
+      "actorOperatorId": "VITALS-QA-OP",
+      "actorName": "Operatrice QA",
+      "registeredQualification": " Fisioterapista ",
+      "createdAt": "2026-09-23T06:48:26.493Z"
+    },
+    {
+      "id": "0a49b8b5-306b-4965-8702-1d7eca08b58c",
+      "assessmentId": "763a3118-640c-4a21-8a4c-73328765ddf2",
+      "snapshotSha256": "e40ef052d28d39b244a395d99a9bce324ee3f0916d79ddd40aac15762e59a7a6",
+      "kind": "operator_acknowledgement",
+      "actorOperatorId": "VITALS-QA-MANAGER",
+      "actorName": "Responsabile QA",
+      "registeredQualification": null,
+      "createdAt": "2026-09-23T06:49:30.978Z"
+    }
+  ],
+  "documents": [
+    {
+      "id": "b89430ad-5002-4ea0-bab1-c921ba1f4be9",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "Trasferimenti_2026-09-23_0513b79a-3d85-47b0-bbbf-22fa05dda035.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 19341,
+      "sha256": "6c21cbe2418f44b6d6fbc74778dfd8f8ea073b5faa94971e0f34d2ef6a8f6558",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "0513b79a-3d85-47b0-bbbf-22fa05dda035",
+        "snapshotSha256": "d6d683c1e868b827cca5561a7731538003ae0e5c80c7c6a9715d3c66c94b6a7c",
+        "rendererVersion": "transfers-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 0,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T04:47:59.596Z",
+      "assessmentId": "0513b79a-3d85-47b0-bbbf-22fa05dda035"
+    },
+    {
+      "id": "21354698-65c0-4e07-ace8-4cacf7dc44bf",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "Trasferimenti_2026-09-23_763a3118-640c-4a21-8a4c-73328765ddf2.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 19697,
+      "sha256": "b56e39d08544ebf5e6c78aefa8ccad0737dab200ef219473ab1c16267f5fc5a6",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "763a3118-640c-4a21-8a4c-73328765ddf2",
+        "snapshotSha256": "e40ef052d28d39b244a395d99a9bce324ee3f0916d79ddd40aac15762e59a7a6",
+        "rendererVersion": "transfers-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 1,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T04:48:54.099Z",
+      "assessmentId": "763a3118-640c-4a21-8a4c-73328765ddf2"
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+.transfers-fields {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.transfers-group {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 16px;
+  margin-block: 18px;
+  min-width: 0;
+}
+.transfers-group h3 {
+  margin-top: 0;
+}
+.transfers-group > label {
+  display: grid;
+  gap: 8px;
+  margin-block: 12px;
+}
+.transfers-group .form-input {
+  width: 100%;
+  min-height: 44px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.transfers-choice {
+  min-width: 0;
+  border: 0;
+  padding: 8px 0 14px;
+  margin: 0;
+  scroll-margin-top: calc(var(--assessment-identity-height, 90px) + 24px);
+}
+.transfers-choice legend {
+  font-weight: 600;
+  padding: 6px 0;
+}
+.transfers-choice .assessment-options {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+.transfers-choice .assessment-options label {
+  min-height: 44px;
+  padding: 8px 12px;
+}
+.transfers-choice--compact .assessment-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.transfers-choice--compact .assessment-options label {
+  flex: 0 1 auto;
+  min-width: 76px;
+  max-width: 100%;
+}
+.transfers-aids-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+  margin-top: 12px;
+}
+.transfers-choice[aria-invalid='true'] {
+  outline: 2px solid var(--danger, #b42318);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.transfers-field-error {
+  color: var(--danger, #b42318);
+}
+.transfers-aid {
+  min-width: 0;
+  padding-block: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.transfers-aid:last-of-type {
+  border-bottom: 0;
+}
+.transfers-summary-group {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.transfers-summary-group dl > div {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 2fr);
+  gap: 14px;
+  padding: 8px 0;
+}
+.transfers-summary-group dt {
+  color: var(--text-muted);
+}
+.transfers-summary-group dd {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.assessment-attestations {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-block: 18px;
+}
+.assessment-attestations .assessment-history__list li {
+  display: block;
+}
+.transfers-form [data-field-path] {
+  scroll-margin-top: calc(var(--assessment-identity-height, 90px) + 24px);
+}
+.transfers-form :is(button, input, textarea, select, fieldset):focus-visible {
+  outline: 3px solid var(--accent, #236aaf);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .transfers-aids-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .transfers-choice .assessment-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .transfers-group,
+  .assessment-attestations {
+    padding: 12px;
+  }
+  .transfers-summary-group dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}

@@ -27,6 +27,7 @@ export type TabId =
   | 'tinetti'
   | 'nrs'
   | 'painad'
+  | 'postural_transfers'
   | 'dimissione'
   | 'esami-consulenze';
 
@@ -75,6 +76,7 @@ export const TAB_GROUPS: TabGroupDef[] = [
       { id: 'tinetti', label: 'Scala Tinetti' },
       { id: 'nrs', label: 'Scala NRS' },
       { id: 'painad', label: 'Scala PAINAD' },
+      { id: 'postural_transfers', label: 'Trasferimenti posturali' },
     ],
   },
   {

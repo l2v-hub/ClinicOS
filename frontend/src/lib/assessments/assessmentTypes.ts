@@ -1,4 +1,16 @@
 import type { PatientIdentityData } from '../patientIdentity';
+import {
+  TRANSFERS_VERSION,
+  type TransfersAnswers,
+  type AssessmentCompletion,
+  type TransferSection,
+} from './transfersTypes';
+export type AssessmentType = 'painad' | 'postural_transfers';
+export interface AssessmentTarget {
+  id: string;
+  type: AssessmentType;
+}
+export type AssessmentAnswers = PainadAnswers | TransfersAnswers;
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const PAINAD_KEYS = [
   'respiration',
@@ -36,11 +48,9 @@ export interface AssessmentPdf {
   errorCode: string | null;
   retryAvailable: boolean;
 }
-export interface AssessmentHistoryItem {
+interface AssessmentHistoryBase {
   id: string;
   patientId: string;
-  type: 'painad';
-  formVersion: typeof PAINAD_VERSION;
   status: 'draft' | 'final';
   version: number;
   assessedAt: string;
@@ -48,17 +58,43 @@ export interface AssessmentHistoryItem {
   updatedAt: string;
   finalizedAt: string | null;
   author: { operatorId: string; name: string };
-  answeredCount: number;
-  result: AssessmentResult | null;
   predecessorId: string | null;
   correctionReason: string | null;
   correctedById: string | null;
   pdf: AssessmentPdf | null;
 }
-export interface AssessmentDto extends AssessmentHistoryItem {
+export type PainadHistoryItem = AssessmentHistoryBase & {
+  type: 'painad';
+  formVersion: typeof PAINAD_VERSION;
+  answeredCount: number;
+  result: AssessmentResult | null;
+};
+export type TransfersHistoryItem = AssessmentHistoryBase & {
+  type: 'postural_transfers';
+  formVersion: typeof TRANSFERS_VERSION;
+  completion: AssessmentCompletion;
+  result: null;
+};
+export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem;
+export interface TransfersSnapshot extends Omit<
+  AssessmentSnapshot,
+  'form' | 'items' | 'result' | 'interpretation'
+> {
+  form: { type: 'postural_transfers'; version: typeof TRANSFERS_VERSION; sourceSha256: string };
+  sections: TransferSection[];
+  result: null;
+  signatureLabels: string[];
+}
+export type PainadAssessmentDto = PainadHistoryItem & {
   answers: PainadAnswers;
   finalSnapshot: AssessmentSnapshot | null;
-}
+};
+export type TransfersAssessmentDto = TransfersHistoryItem & {
+  answers: TransfersAnswers;
+  finalSnapshot: TransfersSnapshot | null;
+  snapshotSha256: string | null;
+};
+export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto;
 export interface AssessmentPage {
   items: AssessmentHistoryItem[];
   pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
@@ -66,18 +102,18 @@ export interface AssessmentPage {
 export interface AssessmentFields {
   assessedAtLocal: string;
   instantChoice: string;
-  answers: PainadAnswers;
+  answers: AssessmentAnswers;
   correctionReason: string;
 }
 export interface AssessmentEditable {
   assessedAt: string;
-  answers: PainadAnswers;
+  answers: AssessmentAnswers;
   correctionReason?: string;
 }
 export interface AssessmentCreate extends AssessmentEditable {
   requestId: string;
-  type: 'painad';
-  formVersion: typeof PAINAD_VERSION;
+  type: AssessmentType;
+  formVersion: typeof PAINAD_VERSION | typeof TRANSFERS_VERSION;
   predecessorId?: string;
 }
 export type AssessmentOperation =
@@ -92,6 +128,7 @@ export interface AssessmentFailure {
   code: string;
   message: string;
   uncertain: boolean;
+  missingPaths?: string[];
 }
 export type AssessmentWriteResult =
   { kind: 'saved'; assessment: AssessmentDto } | { kind: 'failed'; failure: AssessmentFailure };

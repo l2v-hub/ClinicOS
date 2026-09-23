@@ -1,9 +1,14 @@
 import type { DocumentoConsegnato, TipoDocumento } from '../types';
 import type { PatientDocumentMeta } from './patientDocumentsPage';
 import { facilityLocalMinute } from './facilityTime';
+import type { AssessmentType } from './assessments/assessmentTypes';
+export const ASSESSMENT_ARCHIVE_LABELS: Record<AssessmentType, string> = {
+  painad: 'PAINAD',
+  postural_transfers: 'Trasferimenti posturali',
+};
 
 export const DOCUMENT_TYPE_LABELS: Record<TipoDocumento, string> = {
-  patient_assessment: 'PAINAD',
+  patient_assessment: 'Moduli e valutazioni',
   documento_identita: 'Documento di identità',
   tessera_sanitaria: 'Tessera sanitaria',
   consulenza: 'Visita specialistica',
@@ -68,8 +73,10 @@ export type ArchiveStatus = boolean | 'tutti';
 export interface ArchiveFolder {
   category: ArchiveCategory | 'tutti';
   type?: TipoDocumento;
+  assessmentType?: AssessmentType;
 }
 export function archiveFolderLabel(folder: ArchiveFolder): string {
+  if (folder.assessmentType) return ASSESSMENT_ARCHIVE_LABELS[folder.assessmentType];
   if (folder.type) return DOCUMENT_TYPE_LABELS[folder.type];
   return (
     ARCHIVE_CATEGORIES.find((item) => item.id === folder.category)?.label ?? 'Tutti i documenti'
@@ -97,6 +104,11 @@ export interface ArchiveEntry {
   record?: DocumentoConsegnato;
   document?: PatientDocumentMeta;
   unavailable: boolean;
+}
+export function archiveEntryTypeLabel(entry: ArchiveEntry) {
+  return entry.document?.assessment
+    ? ASSESSMENT_ARCHIVE_LABELS[entry.document.assessment.type]
+    : DOCUMENT_TYPE_LABELS[entry.type];
 }
 
 export function buildDocumentArchive(
@@ -159,18 +171,20 @@ export function filterDocumentArchive(
   query: string,
   archived: ArchiveStatus,
   type?: TipoDocumento,
+  assessmentType?: AssessmentType,
 ): ArchiveEntry[] {
   const term = searchable(query.trim());
   return entries.filter(
     (entry) =>
       (archived === 'tutti' || entry.archived === archived) &&
       (!type || entry.type === type) &&
+      (!assessmentType || entry.document?.assessment?.type === assessmentType) &&
       (category === 'tutti' || documentCategory(entry.type) === category) &&
       (!term ||
         searchable(
           [
             entry.title,
-            DOCUMENT_TYPE_LABELS[entry.type],
+            archiveEntryTypeLabel(entry),
             entry.document?.originalName,
             entry.date,
             entry.document?.assessment?.type,

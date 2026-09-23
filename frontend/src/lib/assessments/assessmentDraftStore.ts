@@ -1,20 +1,27 @@
 import { facilityLocalMinute } from '../facilityTime';
 import {
-  PAINAD_KEYS,
-  PAINAD_VERSION,
+  type AssessmentType,
   type AssessmentDto,
   type AssessmentFields,
   type AssessmentOperation,
   type AssessmentFailure,
   type AssessmentWriteResult,
 } from './assessmentTypes';
-import { assertPainadAnswers } from './assessmentValidation';
 import { assessmentEditable, assessmentFields } from './assessmentTime';
-import { emptyPainadAnswers, painadResult } from './painadDefinition';
+import {
+  assessmentDefinition,
+  emptyAssessmentAnswers,
+  copyAssessmentAnswers,
+  assertAssessmentAnswers,
+  savedAssessmentComplete,
+  freezeAssessmentValue,
+  assessmentAnswersEqual,
+} from './assessmentDefinition';
 import type { AssessmentClient } from './assessmentClient';
 export interface AssessmentDraft {
   key: string;
   patientId: string;
+  type: AssessmentType;
   predecessorId: string | null;
   fields: AssessmentFields;
   record: AssessmentDto | null;
@@ -29,6 +36,7 @@ export interface AssessmentDraft {
 export interface AssessmentWriteToken {
   key: string;
   patientId: string;
+  type: AssessmentType;
   generation: number;
   revision: number;
   operation: AssessmentOperation;
@@ -62,14 +70,19 @@ export function createAssessmentDraftStore() {
         listeners.delete(listener);
       };
     },
-    list: (patientId: string) =>
-      [...drafts.values()].filter((draft) => draft.patientId === patientId),
+    list: (patientId: string, type: AssessmentType = 'painad') =>
+      [...drafts.values()].filter((draft) => draft.patientId === patientId && draft.type === type),
     hasUnsaved: () =>
       [...drafts.values()].some((draft) => draft.dirty || draft.busy || draft.pending),
-    create(patientId: string, predecessor?: AssessmentDto) {
+    create(
+      patientId: string,
+      predecessor?: AssessmentDto,
+      type: AssessmentType = predecessor?.type ?? 'painad',
+    ) {
       if (
         predecessor &&
         (predecessor.patientId !== patientId ||
+          predecessor.type !== type ||
           predecessor.status !== 'final' ||
           predecessor.correctedById)
       )
@@ -77,6 +90,7 @@ export function createAssessmentDraftStore() {
       const existing = [...drafts.values()].find(
         (draft) =>
           draft.patientId === patientId &&
+          draft.type === type &&
           !draft.record &&
           draft.predecessorId === (predecessor?.id ?? null),
       );
@@ -86,13 +100,16 @@ export function createAssessmentDraftStore() {
       set(key, {
         key,
         patientId,
+        type,
         predecessorId: predecessor?.id ?? null,
         fields: {
           assessedAtLocal: predecessor
             ? assessmentFields(predecessor).assessedAtLocal
             : facilityLocalMinute(now),
           instantChoice: predecessor?.assessedAt ?? now.toISOString(),
-          answers: predecessor ? { ...predecessor.answers } : emptyPainadAnswers(),
+          answers: predecessor
+            ? copyAssessmentAnswers(predecessor.answers)
+            : emptyAssessmentAnswers(type),
           correctionReason: '',
         },
         record: null,
@@ -108,13 +125,17 @@ export function createAssessmentDraftStore() {
     },
     load(record: AssessmentDto) {
       const existing = [...drafts.values()].find(
-        (draft) => draft.patientId === record.patientId && draft.record?.id === record.id,
+        (draft) =>
+          draft.patientId === record.patientId &&
+          draft.type === record.type &&
+          draft.record?.id === record.id,
       );
       if (existing && (existing.dirty || existing.busy || existing.pending)) return existing.key;
       const key = existing?.key ?? crypto.randomUUID();
       set(key, {
         key,
         patientId: record.patientId,
+        type: record.type,
         predecessorId: record.predecessorId,
         fields: assessmentFields(record),
         record,
@@ -133,7 +154,11 @@ export function createAssessmentDraftStore() {
       if (!draft || draft.busy || draft.pending || draft.record?.status === 'final') return;
       set(key, {
         ...draft,
-        fields: { ...draft.fields, ...fields },
+        fields: {
+          ...draft.fields,
+          ...fields,
+          ...(fields.answers ? { answers: copyAssessmentAnswers(fields.answers) } : {}),
+        },
         revision: draft.revision + 1,
         dirty: true,
         failure: null,
@@ -147,10 +172,22 @@ export function createAssessmentDraftStore() {
         draft.record.status !== 'draft' ||
         draft.busy ||
         draft.pending ||
-        draft.dirty ||
-        !painadResult(draft.fields.answers)
+        draft.dirty
       )
         return false;
+      if (!savedAssessmentComplete(draft.record)) {
+        set(key, {
+          ...draft,
+          failure: {
+            ...validation('Completa i campi indicati prima di finalizzare.'),
+            code: 'assessment_incomplete',
+            ...(draft.record.type === 'postural_transfers'
+              ? { missingPaths: draft.record.completion.missingPaths }
+              : {}),
+          },
+        });
+        return false;
+      }
       set(key, { ...draft, preview: { revision: draft.revision, version: draft.record.version } });
       return true;
     },
@@ -171,7 +208,7 @@ export function createAssessmentDraftStore() {
               draft.dirty ||
               draft.preview?.revision !== draft.revision ||
               draft.preview?.version !== draft.record.version ||
-              !painadResult(draft.fields.answers)
+              !savedAssessmentComplete(draft.record)
             )
               throw new Error('Salva e verifica l’anteprima completa prima di finalizzare.');
             operation = {
@@ -184,8 +221,8 @@ export function createAssessmentDraftStore() {
             };
           } else {
             const fields = assessmentEditable(draft.fields, !!draft.predecessorId);
-            assertPainadAnswers(fields.answers);
-            Object.freeze(fields.answers);
+            assertAssessmentAnswers(draft.type, fields.answers);
+            freezeAssessmentValue(fields.answers);
             operation = draft.record
               ? {
                   kind: 'patch',
@@ -197,15 +234,23 @@ export function createAssessmentDraftStore() {
                   body: Object.freeze({
                     ...fields,
                     requestId: crypto.randomUUID(),
-                    type: 'painad',
-                    formVersion: PAINAD_VERSION,
+                    type: draft.type,
+                    formVersion: assessmentDefinition(draft.type).version as
+                      'painad-it-2026-09-22-v1' | 'transfers-it-2026-09-22-v1',
                     ...(draft.predecessorId ? { predecessorId: draft.predecessorId } : {}),
                   }),
                 };
           }
         }
         set(key, { ...draft, pending: operation, busy: true, failure: null, remote: null });
-        return { key, patientId: draft.patientId, generation, revision: draft.revision, operation };
+        return {
+          key,
+          patientId: draft.patientId,
+          type: draft.type,
+          generation,
+          revision: draft.revision,
+          operation,
+        };
       } catch (error) {
         set(key, {
           ...draft,
@@ -220,6 +265,7 @@ export function createAssessmentDraftStore() {
       if (
         outcome.kind === 'saved' &&
         (outcome.assessment.patientId !== token.patientId ||
+          outcome.assessment.type !== token.type ||
           (token.operation.kind !== 'create' && outcome.assessment.id !== token.operation.id))
       )
         outcome = {
@@ -252,6 +298,7 @@ export function createAssessmentDraftStore() {
         ...draft,
         busy: false,
         pending: editableFailure ? null : token.operation,
+        preview: editableFailure ? null : draft.preview,
         failure: outcome.failure,
       });
       return false;
@@ -262,6 +309,7 @@ export function createAssessmentDraftStore() {
         !draft ||
         draft.busy ||
         draft.patientId !== record.patientId ||
+        draft.type !== record.type ||
         draft.record?.id !== record.id
       )
         return;
@@ -307,7 +355,7 @@ export function patchMatches(record: AssessmentDto, operation: AssessmentOperati
     record.status === 'draft' &&
     record.version === operation.body.expectedVersion + 1 &&
     record.assessedAt === operation.body.assessedAt &&
-    PAINAD_KEYS.every((key) => record.answers[key] === operation.body.answers[key]) &&
+    assessmentAnswersEqual(record.type, record.answers, operation.body.answers) &&
     (record.correctionReason ?? '') === (operation.body.correctionReason ?? '')
   );
 }

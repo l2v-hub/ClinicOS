@@ -1,0 +1,90 @@
+(node:18780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Transfers editor has five groups, no selected clinical answers, compact short choices and twelve aid controls (15.3355ms)
+✔ owned aid property stays near its aid; plain aids never receive property and missing field is identified (9.5579ms)
+✖ final summary preserves multiline context/notes, source labels and saved status through failed PDF without score (6.2153ms)
+✖ history shows operational completion and no answer payload or numeric score (1.478ms)
+✔ archive separates PAINAD and Transfers by trusted metadata and retains typed deep-link IDs (7.8143ms)
+(node:18780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37252) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ current is read from a type-filtered endpoint, preserves clinical date, and rejects draft/wrong module (33.6405ms)
+✔ history filters type before pagination and structured 422 paths survive to the UI (2.4844ms)
+✔ personal confirmation response loss replays exact assessment/hash/kind and checks authenticated actor receipt (2.2929ms)
+✔ attestation page binds counts/events to exact snapshot, rejects malformed cursors and fabricated actor/hash (0.6263ms)
+(node:37252) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37036) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new transfers form contains only explicitly unresolved choices; No completes a verified field (1.9426ms)
+✔ all 8x8x6 transfer combinations are independent and complete without a score (22.0421ms)
+✔ nine owned aids require property only when present; three plain aids reject property (1.6516ms)
+✔ load, context and unknown field dependencies are validated without assuming unavailable means absent (0.5938ms)
+✔ text preserves whitespace/newlines and bounds Unicode by code point (1.0269ms)
+✔ transfer DTO validates server completion and immutable sections without accepting scores or another type (2.3934ms)
+(node:37036) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39724) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ one patient keeps separate PAINAD and transfers drafts across route subscriptions (2.0636ms)
+✔ nested correction and pending operation cannot mutate predecessor or lose exact retry payload (3.35ms)
+✔ server incomplete preview identifies fields and complete transfers can finalize despite result null (0.691ms)
+✔ PATCH loss reconciles nested canonical key order, while another type is rejected (22.0505ms)
+✔ late write after logout cannot repopulate transfers state or initiate reconciliation (0.9212ms)
+(node:39724) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 18
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 689.5406
+
+✖ failing tests:
+
+test at src\components\operator\__tests__\transfersUi.test.ts:1:3268
+✖ final summary preserves multiline context/notes, source labels and saved status through failed PDF without score (6.2153ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /\d\/10|Dolore moderato|type="radio"/. Input:
+  
+  '<section class="assessment-summary transfers-summary" aria-label="Scheda finale trasferimenti"><h3>Scheda finale</h3><span class="patient-identity"><strong class="patient-identity__name">Sintetico, Paziente</strong><span class="patient-identity__identifier">Nato/a il 01/01/1940 · CF da completare</span><span class="patient-identity__incomplete">Anagrafica da completare</span><span class="patient-identity__location">Camera QA · Letto 1</span><span class="patient-identity__context">Al <time dateTime="2026-09-22">22/09/2026</time></span></span><dl class="assessment-metadata"><div><dt>Valutata</dt><dd>25/10/2026 02:30 · Europe/Rome</dd></div><div><dt>Compilatore</dt><dd>Autore sintetico</dd></div><div><dt>Registrata</dt><dd>25/10/2026 04:00</dd></div><div><dt>Finalizzata</dt><dd>25/10/2026 05:00</dd></div></dl><section class="transfers-summary-group"><h4>Contesto</h4><dl><div><dt>Data di ingresso</dt><dd>20/09/2026</dd></div><div><dt>Diagnosi</dt><dd>Diagnosi sintetica\n' +
+    'Seconda riga</dd></div></dl></section><section class="transfers-summary-group"><h4>Mobilizzazione</h4><dl><div><dt>Carico su arto inferiore operato</dt><dd>Non applicabile</dd></div><div><dt>Deambulazione</dt><dd>Con assistenza</dd></div><div><dt>Letto-carrozzina</dt><dd>1 op. + desk (deambulatore con tavolo)</dd></div><div><dt>Carrozzina-letto</dt><dd>2 operatori</dd></div><div><dt>In bagno sul WC</dt><dd>1 operatore</dd></div></dl></section><section class="transfers-summary-group"><h4>Assistenza</h4><dl><div><dt>Igiene personale</dt><dd>Doccia</dd></div><div><dt>Dolore alla movimentazione</dt><dd>No</dd></div><div><dt>Deterioramento cognitivo</dt><dd>No</dd></div></dl></section><section class="transfers-summary-group"><h4>Ausili</h4><dl><div><dt>Carrozzina</dt><dd>No</dd></div><div><dt>Cuscino antidecubito</dt><dd>No</dd></div><div><dt>Contenzione in carrozzina</dt><dd>No</dd></div><div><dt>1 antibrachiale</dt><dd>No</dd></div><div><dt>Bastone</dt><dd>No</dd></div><div><dt>Tetrapode</dt><dd>No</dd></div><div><dt>2 antibrachiali</dt><dd>No</dd></div><div><dt>Deambulatore rollator</dt><dd>No</dd></div><div><dt>Deambulatore ascellare</dt><dd>No</dd></div><div><dt>Deambulatore con tavolo (desk)</dt><dd>No</dd></div><div><dt>Busto</dt><dd>No</dd></div><div><dt>Ginocchiera</dt><dd>No</dd></div></dl></section><section class="transfers-summary-group"><h4>Note</h4><dl><div><dt>Note</dt><dd>Prima riga sintetica\n' +
+    'Seconda riga conservata</dd></div></dl></section><p class="assessment-hint">La finalizzazione registra compilatore e data; non è una firma digitale. La scheda non modifica automaticamente prescrizioni, degenza o contenzioni.</p><details><summary>Fonte e versione</summary><p>transfers-it-2026-09-22-v1 · Nel modello “Sollievo” indica la struttura. Desk: deambulatore con tavolo.</p><p class="assessment-source">SHA-256: 5d5c25cfc322b4f12a6eeba4ac2cf8d4476b15e95c9152cbe09889f0cc75d49f</p></details></section>'
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po11-transfers-ui\frontend\src\components\operator\__tests__\transfersUi.test.ts:51:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<section class="assessment-summary transfers-summary" aria-label="Scheda finale trasferimenti"><h3>Scheda finale</h3><span class="patient-identity"><strong class="patient-identity__name">Sintetico, Paziente</strong><span class="patient-identity__identifier">Nato/a il 01/01/1940 · CF da completare</span><span class="patient-identity__incomplete">Anagrafica da completare</span><span class="patient-identity__location">Camera QA · Letto 1</span><span class="patient-identity__context">Al <time dateTime="2026-09-22">22/09/2026</time></span></span><dl class="assessment-metadata"><div><dt>Valutata</dt><dd>25/10/2026 02:30 · Europe/Rome</dd></div><div><dt>Compilatore</dt><dd>Autore sintetico</dd></div><div><dt>Registrata</dt><dd>25/10/2026 04:00</dd></div><div><dt>Finalizzata</dt><dd>25/10/2026 05:00</dd></div></dl><section class="transfers-summary-group"><h4>Contesto</h4><dl><div><dt>Data di ingresso</dt><dd>20/09/2026</dd></div><div><dt>Diagnosi</dt><dd>Diagnosi sintetica\nSeconda riga</dd></div></dl></section><section class="transfers-summary-group"><h4>Mobilizzazione</h4><dl><div><dt>Carico su arto inferiore operato</dt><dd>Non applicabile</dd></div><div><dt>Deambulazione</dt><dd>Con assistenza</dd></div><div><dt>Letto-carrozzina</dt><dd>1 op. + desk (deambulatore con tavolo)</dd></div><div><dt>Carrozzina-letto</dt><dd>2 operatori</dd></div><div><dt>In bagno sul WC</dt><dd>1 operatore</dd></div></dl></section><section class="transfers-summary-group"><h4>Assistenza</h4><dl><div><dt>Igiene personale</dt><dd>Doccia</dd></div><div><dt>Dolore alla movimentazione</dt><dd>No</dd></div><div><dt>Deterioramento cognitivo</dt><dd>No</dd></div></dl></section><section class="transfers-summary-group"><h4>Ausili</h4><dl><div><dt>Carrozzina</dt><dd>No</dd></div><div><dt>Cuscino antidecubito</dt><dd>No</dd></div><div><dt>Contenzione in carrozzina</dt><dd>No</dd></div><div><dt>1 antibrachiale</dt><dd>No</dd></div><div><dt>Bastone</dt><dd>No</dd></div><div><dt>Tetrapode</dt><dd>No</dd></div><div><dt>2 antibrachiali</dt><dd>No</dd></div><div><dt>Deambulatore rollator</dt><dd>No</dd></div><div><dt>Deambulatore ascellare</dt><dd>No</dd></div><div><dt>Deambulatore con tavolo (desk)</dt><dd>No</dd></div><div><dt>Busto</dt><dd>No</dd></div><div><dt>Ginocchiera</dt><dd>No</dd></div></dl></section><section class="transfers-summary-group"><h4>Note</h4><dl><div><dt>Note</dt><dd>Prima riga sintetica\nSeconda riga conservata</dd></div></dl></section><p class="assessment-hint">La finalizzazione registra compilatore e data; non è una firma digitale. La scheda non modifica automaticamente prescrizioni, degenza o contenzioni.</p><details><summary>Fonte e versione</summary><p>transfers-it-2026-09-22-v1 · Nel modello “Sollievo” indica la struttura. Desk: deambulatore con tavolo.</p><p class="assessment-source">SHA-256: 5d5c25cfc322b4f12a6eeba4ac2cf8d4476b15e95c9152cbe09889f0cc75d49f</p></details></section>',
+    expected: /\d\/10|Dolore moderato|type="radio"/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
+
+test at src\components\operator\__tests__\transfersUi.test.ts:1:4154
+✖ history shows operational completion and no answer payload or numeric score (1.478ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /Diagnosi sintetica|Carrozzina-letto|\d\/10/. Input:
+  
+  '<section class="assessment-history" aria-label="Storico del modulo"><h3>Storico valutazioni</h3><div class="assessment-filters"><label>Stato<select class="form-select"><option value="all" selected="">Tutte</option><option value="draft">Le mie bozze</option><option value="final">Finali</option></select></label><label>Valutazione dal<input class="form-input" type="date" value=""/></label><label>Al<input class="form-input" type="date" value=""/></label><button type="button" class="btn-secondary">Aggiorna storico</button></div><p class="assessment-hint">Le bozze sono visibili solo al loro autore. Ordine per data di registrazione.</p><ul class="assessment-history__list"><li><div><strong>Finale · 25/10/2026 02:30</strong><p>Autore sintetico · Registrata 25/10/2026 04:00</p><p>Compilazione completa</p><span>PDF in preparazione</span></div><button type="button" class="btn-secondary">Apri valutazione</button></li></ul><button type="button" class="btn-secondary">Carica altre valutazioni</button></section>'
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po11-transfers-ui\frontend\src\components\operator\__tests__\transfersUi.test.ts:59:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<section class="assessment-history" aria-label="Storico del modulo"><h3>Storico valutazioni</h3><div class="assessment-filters"><label>Stato<select class="form-select"><option value="all" selected="">Tutte</option><option value="draft">Le mie bozze</option><option value="final">Finali</option></select></label><label>Valutazione dal<input class="form-input" type="date" value=""/></label><label>Al<input class="form-input" type="date" value=""/></label><button type="button" class="btn-secondary">Aggiorna storico</button></div><p class="assessment-hint">Le bozze sono visibili solo al loro autore. Ordine per data di registrazione.</p><ul class="assessment-history__list"><li><div><strong>Finale · 25/10/2026 02:30</strong><p>Autore sintetico · Registrata 25/10/2026 04:00</p><p>Compilazione completa</p><span>PDF in preparazione</span></div><button type="button" class="btn-secondary">Apri valutazione</button></li></ul><button type="button" class="btn-secondary">Carica altre valutazioni</button></section>',
+    expected: /Diagnosi sintetica|Carrozzina-letto|\d\/10/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }

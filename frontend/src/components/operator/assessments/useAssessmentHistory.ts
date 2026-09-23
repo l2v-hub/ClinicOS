@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AssessmentClient } from '../../../lib/assessments/assessmentClient';
-import type { AssessmentHistoryItem } from '../../../lib/assessments/assessmentTypes';
-export function useAssessmentHistory(patientId: string, client: AssessmentClient) {
+import type {
+  AssessmentHistoryItem,
+  AssessmentType,
+} from '../../../lib/assessments/assessmentTypes';
+export function useAssessmentHistory(
+  patientId: string,
+  client: AssessmentClient,
+  type: AssessmentType = 'painad',
+) {
   const [status, setStatus] = useState<'all' | 'draft' | 'final'>('all');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -27,7 +34,7 @@ export function useAssessmentHistory(patientId: string, client: AssessmentClient
           throw new Error('La data iniziale deve precedere quella finale.');
         const page = await client.page(
           patientId,
-          { status, from, to, cursor: after },
+          { type, status, from, to, cursor: after },
           controller.signal,
         );
         if (controller.signal.aborted || generation.current !== version) return;
@@ -50,7 +57,7 @@ export function useAssessmentHistory(patientId: string, client: AssessmentClient
         }
       }
     },
-    [client, patientId, status, from, to],
+    [client, patientId, type, status, from, to],
   );
   useEffect(() => {
     const version = ++generation.current;

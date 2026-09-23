@@ -22,8 +22,13 @@ import {
   type AssessmentSnapshot,
   type PainadAnswers,
   type PainadScore,
+  type AssessmentType,
+  type TransfersAnswers,
+  TRANSFERS_VERSION,
+  TRANSFERS_SOURCE_SHA256,
 } from './types.js';
 import { PAINAD_INTERPRETATIONS, PAINAD_ITEMS, painadResult } from './painad.js';
+import { transfersCompletion, transfersSections } from './transfers.js';
 
 const conflict = () =>
   new AssessmentError(
@@ -46,9 +51,14 @@ function assertVersion(actual: number, expected: number) {
       { currentVersion: actual },
     );
 }
-async function assertPredecessor(tx: Prisma.TransactionClient, patientId: string, id: string) {
+async function assertPredecessor(
+  tx: Prisma.TransactionClient,
+  patientId: string,
+  id: string,
+  type: string,
+) {
   const predecessor = await tx.patientAssessment.findFirst({
-    where: { id, patientId, type: 'painad', status: 'final' },
+    where: { id, patientId, type, status: 'final' },
     select: { id: true, assessedAt: true, authorName: true },
   });
   if (!predecessor) throw assessmentNotFound();
@@ -80,7 +90,8 @@ export async function createAssessment(patientId: string, value: unknown, actor:
         replayed: true,
       };
     }
-    if (input.predecessorId) await assertPredecessor(tx, patientId, input.predecessorId);
+    if (input.predecessorId)
+      await assertPredecessor(tx, patientId, input.predecessorId, input.type);
     const author = await tx.operator.findUnique({
       where: { id: actor.id },
       select: { user: { select: { fullName: true } } },
@@ -111,9 +122,9 @@ export async function patchAssessment(
   value: unknown,
   actor: Operator,
 ) {
-  const input = parsePatch(value);
   return assessmentTransaction(async (tx) => {
     const row = await lockAssessment(tx, patientId, id, actor);
+    const input = parsePatch(value, row.type as AssessmentType);
     if (row.authorOperatorId !== actor.id) throw assessmentNotFound();
     if (row.status !== 'draft')
       throw new AssessmentError('La valutazione è già finalizzata', 409, 'assessment_finalized');
@@ -124,7 +135,7 @@ export async function patchAssessment(
       where: { id },
       data: {
         assessedAt: new Date(input.assessedAt),
-        answers: input.answers,
+        answers: input.answers as unknown as Prisma.InputJsonValue,
         correctionReason: input.correctionReason,
         version: { increment: 1 },
         updatedAt: new Date(),
@@ -154,20 +165,30 @@ export async function finalizeAssessment(
       }
       assertVersion(row.version, input.expectedVersion);
       const answers = row.answers as PainadAnswers;
-      const result = painadResult(answers);
-      if (!result)
+      const result = row.type === 'painad' ? painadResult(answers) : null;
+      if (row.type === 'painad' && !result)
         throw new AssessmentError(
           'Completa tutte le risposte prima di confermare',
           422,
           'assessment_incomplete',
           { missingItems: PAINAD_KEYS.filter((key) => answers[key] === null) },
         );
+      if (row.type === 'postural_transfers') {
+        const completion = transfersCompletion(row.answers as unknown as TransfersAnswers);
+        if (!completion.complete)
+          throw new AssessmentError(
+            'Completa tutte le risposte prima di confermare',
+            422,
+            'assessment_incomplete',
+            { missingPaths: completion.missingPaths },
+          );
+      }
       let predecessor: AssessmentSnapshot['predecessor'] = null;
       if (row.predecessorId) {
         await tx.$queryRaw(
           Prisma.sql`SELECT id FROM "PatientAssessment" WHERE id = ${row.predecessorId} FOR UPDATE`,
         );
-        const previous = await assertPredecessor(tx, patientId, row.predecessorId);
+        const previous = await assertPredecessor(tx, patientId, row.predecessorId, row.type);
         predecessor = {
           id: previous.id,
           assessedAt: previous.assessedAt.toISOString(),
@@ -191,26 +212,42 @@ export async function finalizeAssessment(
         )
       ).get(patientId);
       if (!identity) throw assessmentNotFound();
-      const snapshot: AssessmentSnapshot = {
-        snapshotVersion: 1,
+      const common = {
+        snapshotVersion: 1 as const,
         patient: identity,
         author: { operatorId: actor.id, name: row.authorName },
-        form: { type: 'painad', version: PAINAD_VERSION, sourceSha256: PAINAD_SOURCE_SHA256 },
         assessedAt: row.assessedAt.toISOString(),
         createdAt: row.createdAt.toISOString(),
         finalizedAt: now.toISOString(),
-        items: PAINAD_ITEMS.map((item) => ({
-          id: item.id,
-          label: item.label,
-          score: answers[item.id] as PainadScore,
-          description: item.options[answers[item.id] as PainadScore],
-        })),
-        result,
-        interpretation: PAINAD_INTERPRETATIONS[result.band],
         predecessor,
         predecessorId: row.predecessorId,
         correctionReason: row.correctionReason,
       };
+      const snapshot: AssessmentSnapshot =
+        row.type === 'postural_transfers'
+          ? {
+              ...common,
+              form: {
+                type: 'postural_transfers',
+                version: TRANSFERS_VERSION,
+                sourceSha256: TRANSFERS_SOURCE_SHA256,
+              },
+              sections: transfersSections(row.answers as unknown as TransfersAnswers),
+              result: null,
+              signatureLabels: ['Firma Fisioterapista', 'Firma Operatori'],
+            }
+          : {
+              ...common,
+              form: { type: 'painad', version: PAINAD_VERSION, sourceSha256: PAINAD_SOURCE_SHA256 },
+              items: PAINAD_ITEMS.map((item) => ({
+                id: item.id,
+                label: item.label,
+                score: answers[item.id] as PainadScore,
+                description: item.options[answers[item.id] as PainadScore],
+              })),
+              result: result!,
+              interpretation: PAINAD_INTERPRETATIONS[result!.band],
+            };
       await tx.patientAssessment.update({
         where: { id },
         data: {

@@ -1,0 +1,107 @@
+{
+  "task": "PO-11-frontend",
+  "generatedAt": "2026-09-23T04:32:36.340Z",
+  "sourceStateId": "96062fccbd129c4256330d72f77c136ec6571cc71e323611dafd046f18eee0fa",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/build.log",
+      "bytes": 9996,
+      "sha256": "3218944fe833ecabed0a7f0da41c2bc70459f01423bd26bc876964783d402759"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/claims.json",
+      "bytes": 2228,
+      "sha256": "ddcf498c86856ffe5aa693ec0fd993ccb48806f068b8d1f850b552c30bcda9b0"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/extract-pdf-hook.mjs",
+      "bytes": 3175,
+      "sha256": "2fa519a8cdcecfc4761cd00fc86ddb6d0d1b7b2293840d3bf7379006c4a5c750"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/finalize-evidence.mjs",
+      "bytes": 6314,
+      "sha256": "cd69300a1389ba6df0bb0b5cc2094b26a9c4e69882592bc30c5946c024d0cc64"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/format-source.mjs",
+      "bytes": 806,
+      "sha256": "0244255130a165e235b159c0f8ceec00e23e60ae2f2b30268808da4cb808c43f"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/format.log",
+      "bytes": 4658,
+      "sha256": "1795085d87825e551c9f7e73286593ae117863cb453883db42d86a381dc19e4b"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/implementation-receipt.md",
+      "bytes": 3007,
+      "sha256": "e19e4fce22ac56acfac4c8ae61e972bef8c82bc183a301836316fabb2d0c3367"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/lint-compare.mjs",
+      "bytes": 2792,
+      "sha256": "c42b22fa5d36c92af6c15a81378b73fe756a98a6c08a0ca436cd2735a0fd3cfb"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/lint-comparison.json",
+      "bytes": 14869,
+      "sha256": "19a78728d74637f058b8a9cdb63e3f9d8894be63542c7cabdd4f596fa020dc65"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/lint-summary.log",
+      "bytes": 2756,
+      "sha256": "822d1561c383727ce36b5169357525326e6db8851878d02f0d6a4d6f699d0e0c"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/painad-regression.log",
+      "bytes": 5007,
+      "sha256": "d5df36a1e8fdaeee1cc8ad7af81bcaaf6f783107c94070f122d03ca11b02402f"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/preparation-receipt.json",
+      "bytes": 2301,
+      "sha256": "5e7641eae620ff63f4c3789d19824df2d9810425f7a64ef1940a1dfcd796e815"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/secret-scan.json",
+      "bytes": 26668,
+      "sha256": "0bfa7246f730d57d49f1e4c30680aac8553593842e72a0d00bf6e8d0cec18f7a"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/secret-scan.mjs",
+      "bytes": 2057,
+      "sha256": "fbcf47dfd7059883468d114fb1650dd0a57e75755747442d100f9cd7cb7d9ed5"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/source-manifest.json",
+      "bytes": 10987,
+      "sha256": "3d857028fa7e1749790ff735eb07154971178268251a036227400e265de24b45"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/test-focused.log",
+      "bytes": 15493,
+      "sha256": "c1ca8b785281416717d99968b3bb5905ff8a6bf5b70b847beb245475c2aa3ca2"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/test-transfers.log",
+      "bytes": 13957,
+      "sha256": "40572ea6cfae98dc0b958849eec6f01ddb0f745afb7b27260e48f1a031d0bcee"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/types-current.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/types-initial.log",
+      "bytes": 2814,
+      "sha256": "a6260473f229fe2033e3906e383c1fe984c14fa3a3d312dffdd7fc7bf1c32dbf"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/frontend/validation-receipt.json",
+      "bytes": 3315,
+      "sha256": "72521e1b91ad8c5afc6fb4f834ade0f0b86047caa0a4d43083d0d26bc08310f5"
+    }
+  ]
+}

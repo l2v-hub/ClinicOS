@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-23T04:50:53.015Z",
+  "assets": [
+    {
+      "name": "NotoSans-Regular.ttf",
+      "bytes": 569208,
+      "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5"
+    },
+    {
+      "name": "NotoSans-Bold.ttf",
+      "bytes": 575740,
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a"
+    },
+    {
+      "name": "OFL.txt",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    }
+  ],
+  "rendered": [
+    {
+      "assessmentId": "0513b79a-3d85-47b0-bbbf-22fa05dda035",
+      "type": "postural_transfers",
+      "rendererVersion": "transfers-a4-v1",
+      "snapshotSha256": "d6d683c1e868b827cca5561a7731538003ae0e5c80c7c6a9715d3c66c94b6a7c",
+      "bytes": 19341,
+      "pdfSha256": "6c21cbe2418f44b6d6fbc74778dfd8f8ea073b5faa94971e0f34d2ef6a8f6558"
+    },
+    {
+      "assessmentId": "763a3118-640c-4a21-8a4c-73328765ddf2",
+      "type": "postural_transfers",
+      "rendererVersion": "transfers-a4-v1",
+      "snapshotSha256": "e40ef052d28d39b244a395d99a9bce324ee3f0916d79ddd40aac15762e59a7a6",
+      "bytes": 19697,
+      "pdfSha256": "b56e39d08544ebf5e6c78aefa8ccad0737dab200ef219473ab1c16267f5fc5a6"
+    }
+  ]
+}

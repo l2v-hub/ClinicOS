@@ -1,0 +1,14 @@
+{
+  "issueId": "PO-11-backend-implementation",
+  "claimant": "agent:codex-po11-backend:coder",
+  "released": true,
+  "recordedAt": "2026-09-23T04:37:44.021Z",
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-11-backend-implementation released\",\n  \"reason\": \"PO11 backend implementation completed; 66/66 tests, 45 migrations, final-source validation and 10 PDF pages inspected. Source frozen; handing exact source/artifact manifests to root for independent integration.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-11-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po11-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T04:15:41.635Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T04:15:41.635Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root GO after verified PO10 d659c1b deployment. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po11-transfers-backend branch codex/po11-transfers-backend baseline d659c1b459eb72a2920cbd9f678a2c11f9bf7efd. Scope backend/src/assessments/**, backend/src/routes/patient-assessments.ts, backend/src/ai/upload/patient-documents.ts and relevant focused tests; prisma/schema.prisma and one PO11 migration; artifacts/task-validation/po-11-postural-transfers/backend/**; private Prisma runtime only. No shared dependency/package/lockfile edits, commits, pushes or deploy. Root owns integration and release. Preserve unrelated dirty PowerShell files.\"\n  }\n}"
+      }
+    ]
+  }
+}

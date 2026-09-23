@@ -1,4 +1,12 @@
 import type { PatientIdentityDto } from '../patients/operational-identity.js';
+import {
+  TRANSFERS_VERSION,
+  type TransfersAnswers,
+  type AssessmentCompletion,
+  type TransferSnapshotSection,
+} from './transfers-types.js';
+export * from './transfers-types.js';
+export type AssessmentType = 'painad' | 'postural_transfers';
 
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const PAINAD_SOURCE_SHA256 =
@@ -18,7 +26,7 @@ export interface PainadResult {
   band: 'none' | 'mild' | 'moderate' | 'severe';
   label: string;
 }
-export interface AssessmentSnapshot {
+export interface PainadSnapshot {
   snapshotVersion: 1;
   patient: PatientIdentityDto;
   author: { operatorId: string; name: string };
@@ -33,13 +41,23 @@ export interface AssessmentSnapshot {
   predecessor: { id: string; assessedAt: string; authorName: string } | null;
   correctionReason: string | null;
 }
+export interface TransfersSnapshot extends Omit<
+  PainadSnapshot,
+  'form' | 'items' | 'result' | 'interpretation'
+> {
+  form: { type: 'postural_transfers'; version: typeof TRANSFERS_VERSION; sourceSha256: string };
+  sections: TransferSnapshotSection[];
+  signatureLabels: ['Firma Fisioterapista', 'Firma Operatori'];
+  result: null;
+}
+export type AssessmentSnapshot = PainadSnapshot | TransfersSnapshot;
 export interface AssessmentPdfDto {
   status: 'pending' | 'ready' | 'failed';
   documentId: string | null;
   errorCode: string | null;
   retryAvailable: boolean;
 }
-export interface AssessmentHistoryItem {
+export interface PainadHistoryItem {
   id: string;
   patientId: string;
   type: 'painad';
@@ -58,13 +76,30 @@ export interface AssessmentHistoryItem {
   correctedById: string | null;
   pdf: AssessmentPdfDto | null;
 }
-export interface AssessmentDto extends AssessmentHistoryItem {
+export interface PainadAssessmentDto extends PainadHistoryItem {
   answers: PainadAnswers;
-  finalSnapshot: AssessmentSnapshot | null;
+  finalSnapshot: PainadSnapshot | null;
+  snapshotSha256: string | null;
 }
+export interface TransfersHistoryItem extends Omit<
+  PainadHistoryItem,
+  'type' | 'formVersion' | 'answeredCount' | 'result'
+> {
+  type: 'postural_transfers';
+  formVersion: typeof TRANSFERS_VERSION;
+  completion: AssessmentCompletion;
+  result: null;
+}
+export interface TransfersAssessmentDto extends TransfersHistoryItem {
+  answers: TransfersAnswers;
+  finalSnapshot: TransfersSnapshot | null;
+  snapshotSha256: string | null;
+}
+export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem;
+export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto;
 export interface AssessmentDocumentMeta {
   id: string;
-  type: 'painad';
+  type: AssessmentType;
   formVersion: string;
   assessedAt: string;
 }
@@ -73,8 +108,38 @@ export class AssessmentError extends Error {
     message: string,
     public status = 400,
     public code = 'assessment_invalid_input',
-    public details?: { missingItems?: PainadItemId[]; currentVersion?: number },
+    public details?: {
+      missingItems?: PainadItemId[];
+      missingPaths?: string[];
+      currentVersion?: number;
+    },
   ) {
     super(message);
   }
+}
+export const ATTESTATION_KINDS = [
+  'physiotherapist_confirmation',
+  'operator_acknowledgement',
+] as const;
+export type AttestationKind = (typeof ATTESTATION_KINDS)[number];
+export interface AssessmentAttestationDto {
+  id: string;
+  assessmentId: string;
+  snapshotSha256: string;
+  kind: AttestationKind;
+  actor: { operatorId: string; name: string; registeredQualification: string | null };
+  createdAt: string;
+}
+export interface AssessmentAttestationPage {
+  assessmentId: string;
+  snapshotSha256: string;
+  correctedById: string | null;
+  items: AssessmentAttestationDto[];
+  counts: Record<AttestationKind, number>;
+  me: {
+    registeredQualification: string | null;
+    allowedKinds: AttestationKind[];
+    attestedKinds: AttestationKind[];
+  };
+  pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
 }

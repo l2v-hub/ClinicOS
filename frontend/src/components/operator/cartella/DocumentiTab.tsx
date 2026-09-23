@@ -3,9 +3,9 @@ import type { CartellaPaziente, DocumentoConsegnato, Paziente } from '../../../t
 import {
   ARCHIVE_CATEGORIES,
   buildDocumentArchive,
-  DOCUMENT_TYPE_LABELS,
   filterDocumentArchive,
   archiveFolderLabel,
+  archiveEntryTypeLabel,
   type ArchiveFolder,
   type ArchiveStatus,
   type ArchiveEntry,
@@ -22,6 +22,7 @@ import { PatientArchiveTree } from './PatientArchiveTree';
 import './PatientDocumentArchive.css';
 import './PatientArchiveTree.css';
 import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
+import type { AssessmentTarget, AssessmentType } from '../../../lib/assessments/assessmentTypes';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -32,7 +33,8 @@ interface Props {
   operatoreRole?: string;
   focusDocumentId?: string;
   expectedAssessmentId?: string;
-  onOpenAssessment?: (assessmentId: string) => void;
+  expectedAssessmentType?: AssessmentType;
+  onOpenAssessment?: (assessment: AssessmentTarget) => void;
 }
 
 export function DocumentiTab(props: Props) {
@@ -53,6 +55,7 @@ function DocumentArchiveWorkspace({
   operatoreRole,
   focusDocumentId,
   expectedAssessmentId,
+  expectedAssessmentType,
   onOpenAssessment,
 }: Props) {
   const archive = useDocumentArchive(paziente.id, operatoreId, operatoreRole);
@@ -81,7 +84,7 @@ function DocumentArchiveWorkspace({
       alive.current = false;
     };
   }, []);
-  const filtered = filterDocumentArchive(entries, folder.category, query, archived, folder.type);
+  const filtered = filterDocumentArchive(entries, folder.category, query, archived, folder.type, folder.assessmentType);
   const folderEntries = filterDocumentArchive(entries, 'tutti', query, archived);
   const selectFolder = (next: ArchiveFolder) => {
     setFolder(next);
@@ -91,16 +94,16 @@ function DocumentArchiveWorkspace({
   const complete = archive.status === 'ready';
   const focusedDocument = useRef('');
   useEffect(() => {
-    const focusKey = `${focusDocumentId}:${expectedAssessmentId}`;
+    const focusKey = `${focusDocumentId}:${expectedAssessmentId}:${expectedAssessmentType}`;
     if (!complete || !focusDocumentId || focusedDocument.current === focusKey) return;
     const timer = window.setTimeout(() => {
       focusedDocument.current = focusKey;
       const entry = entries.find(item => item.document?.id === focusDocumentId);
-      if (!entry || (expectedAssessmentId && entry.document?.assessment?.id !== expectedAssessmentId)) setError('Documento della valutazione non disponibile nell’archivio corrente.');
+      if (!entry || (expectedAssessmentId && entry.document?.assessment?.id !== expectedAssessmentId) || (expectedAssessmentType && entry.document?.assessment?.type !== expectedAssessmentType)) setError('Documento della valutazione non disponibile nell’archivio corrente.');
       else setPreview(entry);
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [complete, entries, focusDocumentId, expectedAssessmentId]);
+  }, [complete, entries, focusDocumentId, expectedAssessmentId, expectedAssessmentType]);
   const selectedDocuments = selectedArchiveDocuments(entries, selected);
   const visibleDocuments = selectedArchiveDocuments(
     filtered.slice(0, visible),
@@ -284,7 +287,7 @@ function DocumentArchiveWorkspace({
                 {folder.type && (
                   <>
                     <span aria-hidden="true">/</span>
-                    <span aria-current="location">{DOCUMENT_TYPE_LABELS[folder.type]}</span>
+                    <span aria-current="location">{archiveFolderLabel(folder)}</span>
                   </>
                 )}
               </nav>
@@ -360,7 +363,7 @@ function DocumentArchiveWorkspace({
                         </button>
                         <div className="patient-document-archive__meta">
                           <span className="badge badge--blue">
-                            {DOCUMENT_TYPE_LABELS[entry.type]}
+                            {archiveEntryTypeLabel(entry)}
                           </span>
                           {entry.archived && <span className="badge">Storico</span>}
                           <span>{fmtDate(entry.date)}</span>
@@ -404,7 +407,7 @@ function DocumentArchiveWorkspace({
                         >
                           {entry.document ? 'Visualizza' : 'Dettagli'}
                         </button>
-                        {entry.document?.assessment ? <button type="button" className="btn-secondary btn-sm" disabled={!onOpenAssessment} onClick={() => onOpenAssessment?.(entry.document!.assessment!.id)}>Apri valutazione</button> : <button
+                        {entry.document?.assessment ? <button type="button" className="btn-secondary btn-sm" disabled={!onOpenAssessment} onClick={() => onOpenAssessment?.({ id: entry.document!.assessment!.id, type: entry.document!.assessment!.type })}>Apri valutazione</button> : <button
                           type="button"
                           className="btn-secondary btn-sm"
                           disabled={!complete || !!form || saving}

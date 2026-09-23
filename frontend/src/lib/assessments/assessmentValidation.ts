@@ -7,7 +7,14 @@ import {
   type AssessmentPage,
   type PainadAnswers,
   type AssessmentResult,
+  type AssessmentType,
 } from './assessmentTypes';
+import { TRANSFERS_VERSION, TRANSFERS_SOURCE_SHA256 } from './transfersTypes';
+import {
+  assertTransfersAnswers,
+  transfersCompletion,
+  transfersSnapshotSections,
+} from './transfersDefinition';
 import { PAINAD, PAINAD_INTERPRETATIONS, answeredPainad, painadResult } from './painadDefinition';
 export const validAssessmentId = (value: unknown): value is string =>
   typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value);
@@ -16,6 +23,8 @@ const instant = (value: unknown): value is string =>
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value) &&
   Number.isFinite(Date.parse(value));
 const optionalId = (value: unknown) => value === null || validAssessmentId(value);
+export const validAssessmentType = (value: unknown): value is AssessmentType =>
+  value === 'painad' || value === 'postural_transfers';
 function invalid(): never {
   throw new Error('Risposta della valutazione non verificata.');
 }
@@ -58,8 +67,8 @@ export function assertAssessmentHistory(
     !row ||
     !validAssessmentId(row.id) ||
     row.patientId !== patientId ||
-    row.type !== 'painad' ||
-    row.formVersion !== PAINAD_VERSION ||
+    !validAssessmentType(row.type) ||
+    row.formVersion !== (row.type === 'painad' ? PAINAD_VERSION : TRANSFERS_VERSION) ||
     !['draft', 'final'].includes(row.status) ||
     !Number.isSafeInteger(row.version) ||
     row.version < 1 ||
@@ -69,19 +78,39 @@ export function assertAssessmentHistory(
     !(row.finalizedAt === null || instant(row.finalizedAt)) ||
     !validAssessmentId(row.author?.operatorId) ||
     typeof row.author?.name !== 'string' ||
-    !Number.isInteger(row.answeredCount) ||
-    row.answeredCount < 0 ||
-    row.answeredCount > 5 ||
-    !result(row.result) ||
-    (row.answeredCount < 5 && row.result !== null) ||
-    (row.answeredCount === 5 && row.result === null) ||
     !optionalId(row.predecessorId) ||
     !optionalId(row.correctedById) ||
     !(row.correctionReason === null || typeof row.correctionReason === 'string')
   )
     invalid();
+  if (row.type === 'painad') {
+    if (
+      !Number.isInteger(row.answeredCount) ||
+      row.answeredCount < 0 ||
+      row.answeredCount > 5 ||
+      !result(row.result) ||
+      (row.answeredCount < 5 ? row.result !== null : row.result === null)
+    )
+      invalid();
+  } else if (
+    row.result !== null ||
+    !row.completion ||
+    typeof row.completion.complete !== 'boolean' ||
+    !Array.isArray(row.completion.missingPaths) ||
+    row.completion.missingPaths.length > 100 ||
+    row.completion.missingPaths.some(
+      (path) => typeof path !== 'string' || !/^[a-zA-Z.]+$/.test(path),
+    ) ||
+    row.completion.complete !== (row.completion.missingPaths.length === 0)
+  )
+    invalid();
   if (row.status === 'draft' && (row.pdf !== null || row.finalizedAt !== null)) invalid();
-  if (row.status === 'final' && (!row.finalizedAt || row.answeredCount !== 5 || !row.pdf))
+  if (
+    row.status === 'final' &&
+    (!row.finalizedAt ||
+      !(row.type === 'painad' ? row.answeredCount === 5 : row.completion.complete) ||
+      !row.pdf)
+  )
     invalid();
   if (
     row.pdf &&
@@ -97,10 +126,93 @@ export function assertAssessment(
   value: unknown,
   patientId: string,
   id?: string,
+  type?: AssessmentType,
 ): asserts value is AssessmentDto {
   assertAssessmentHistory(value, patientId);
   const row = value as AssessmentDto;
   if (id && row.id !== id) invalid();
+  if (type && row.type !== type) invalid();
+  if (row.type === 'postural_transfers') {
+    assertTransfersAnswers(row.answers);
+    if (transfersCompletion(row.answers).complete !== row.completion.complete) invalid();
+    if (row.status === 'draft') {
+      if (row.finalSnapshot !== null) invalid();
+      return;
+    }
+    const snapshot = row.finalSnapshot;
+    if (
+      !snapshot ||
+      snapshot.snapshotVersion !== 1 ||
+      parsePatientIdentity(snapshot.patient)?.id !== patientId ||
+      snapshot.form?.type !== row.type ||
+      snapshot.form.version !== row.formVersion ||
+      snapshot.form.sourceSha256 !== TRANSFERS_SOURCE_SHA256 ||
+      snapshot.author?.operatorId !== row.author.operatorId ||
+      typeof snapshot.author.name !== 'string' ||
+      snapshot.assessedAt !== row.assessedAt ||
+      snapshot.createdAt !== row.createdAt ||
+      snapshot.finalizedAt !== row.finalizedAt ||
+      snapshot.predecessorId !== row.predecessorId ||
+      snapshot.correctionReason !== row.correctionReason ||
+      (row.predecessorId === null
+        ? snapshot.predecessor !== null
+        : snapshot.predecessor?.id !== row.predecessorId ||
+          !instant(snapshot.predecessor.assessedAt) ||
+          typeof snapshot.predecessor.authorName !== 'string') ||
+      snapshot.result !== null ||
+      !Array.isArray(snapshot.sections) ||
+      snapshot.sections.length !== 5 ||
+      !Array.isArray(snapshot.signatureLabels) ||
+      snapshot.signatureLabels.length !== 2 ||
+      snapshot.signatureLabels.some((label) => typeof label !== 'string') ||
+      typeof row.snapshotSha256 !== 'string' ||
+      !/^[a-f0-9]{64}$/.test(row.snapshotSha256)
+    )
+      invalid();
+    const expectedSections = transfersSnapshotSections(row.answers);
+    if (
+      snapshot.sections.some(
+        (section, index) =>
+          section.id !== expectedSections[index].id ||
+          section.label !== expectedSections[index].label ||
+          !Array.isArray(section.rows) ||
+          section.rows.length !== expectedSections[index].rows.length ||
+          section.rows.some(
+            (item, rowIndex) =>
+              !item ||
+              item.path !== expectedSections[index].rows[rowIndex].path ||
+              item.label !== expectedSections[index].rows[rowIndex].label ||
+              item.value !== expectedSections[index].rows[rowIndex].value,
+          ),
+      ) ||
+      snapshot.signatureLabels[0] !== 'Firma Fisioterapista' ||
+      snapshot.signatureLabels[1] !== 'Firma Operatori'
+    )
+      invalid();
+    const paths = new Set<string>();
+    for (const section of snapshot.sections) {
+      if (
+        !section ||
+        typeof section.id !== 'string' ||
+        typeof section.label !== 'string' ||
+        !Array.isArray(section.rows) ||
+        section.rows.length > 30
+      )
+        invalid();
+      for (const item of section.rows) {
+        if (
+          !item ||
+          typeof item.path !== 'string' ||
+          paths.has(item.path) ||
+          typeof item.label !== 'string' ||
+          typeof item.value !== 'string'
+        )
+          invalid();
+        paths.add(item.path);
+      }
+    }
+    return;
+  }
   assertPainadAnswers(row.answers);
   const score = painadResult(row.answers);
   if (
@@ -156,7 +268,11 @@ export function assertAssessment(
       invalid();
   }
 }
-export function assessmentPage(value: unknown, patientId: string): AssessmentPage {
+export function assessmentPage(
+  value: unknown,
+  patientId: string,
+  type?: AssessmentType,
+): AssessmentPage {
   const page = value as AssessmentPage;
   if (
     !page ||
@@ -173,6 +289,7 @@ export function assessmentPage(value: unknown, patientId: string): AssessmentPag
   )
     invalid();
   page.items.forEach((item) => assertAssessmentHistory(item, patientId));
+  if (type && page.items.some((item) => item.type !== type)) invalid();
   if (new Set(page.items.map((item) => item.id)).size !== page.items.length) invalid();
   return page;
 }

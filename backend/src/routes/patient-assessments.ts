@@ -10,6 +10,8 @@ import {
 import { listAssessments } from '../assessments/history.js';
 import { retryAssessmentPdf } from '../assessments/pdf-service.js';
 import { bodyObject } from '../assessments/input.js';
+import { currentAssessment } from '../assessments/current.js';
+import { attestAssessment, listAttestations } from '../assessments/attestations.js';
 
 const router = Router();
 type Action = (request: AuthedRequest, response: Response) => Promise<void>;
@@ -29,6 +31,28 @@ const handle = (action: Action) => async (req: AuthedRequest, res: Response) => 
 };
 const patient = (req: AuthedRequest) => String(req.params.patientId);
 const id = (req: AuthedRequest) => String(req.params.id);
+router.get(
+  '/:patientId/assessments/current',
+  requireOperator,
+  handle(async (req, res) => {
+    res.json({ assessment: await currentAssessment(patient(req), req.query, req.operator!) });
+  }),
+);
+router.get(
+  '/:patientId/assessments/:id/attestations',
+  requireOperator,
+  handle(async (req, res) => {
+    res.json(await listAttestations(patient(req), id(req), req.query, req.operator!));
+  }),
+);
+router.post(
+  '/:patientId/assessments/:id/attestations',
+  requireOperator,
+  handle(async (req, res) => {
+    const result = await attestAssessment(patient(req), id(req), req.body, req.operator!);
+    res.status(result.replayed ? 200 : 201).json(result);
+  }),
+);
 router.post(
   '/:patientId/assessments',
   requireOperator,

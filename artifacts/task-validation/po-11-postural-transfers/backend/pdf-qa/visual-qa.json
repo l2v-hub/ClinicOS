@@ -1,0 +1,112 @@
+{
+  "sourceTreeSha256": "15bc32a12d8fcc1ab72f3fa6e036c364523c8692cbe41eda8f981801f3b41653",
+  "recordedAt": "2026-09-23T04:36:34.968Z",
+  "allPagesInspected": true,
+  "noClippingOrOverlap": true,
+  "pages": {
+    "transfersNormal": 2,
+    "transfersLong": 5,
+    "painadNormal": 1,
+    "painadLong": 2
+  },
+  "observations": [
+    "All 10 final PNG pages were visually inspected with view_image after the last Transfers layout refinement.",
+    "Transfers normal: compact readable rows; both signature spaces remain together on page 2 with the clinical content.",
+    "Transfers long: Unicode accents and Greek names remain readable; explicit note newlines survive pagination without clipping or overlap.",
+    "PAINAD normal/long: previous content and score remain readable on 1/2 pages, including long correction reason and item text.",
+    "Fresh PDF text extraction exactly matches the stored final extracts; all Transfers groups, 12 aids and source signature labels are present, with no PAINAD score text.",
+    "Only current PDFs and final PNG/text files are bound; prior layout images outside final are excluded."
+  ],
+  "files": [
+    {
+      "path": "final/painad-long-1.png",
+      "bytes": 254157,
+      "sha256": "b77bdff4953a1a5158cfab0b5912ee9b1f27c7121bf52221179751827e9e6db0"
+    },
+    {
+      "path": "final/painad-long-2.png",
+      "bytes": 119991,
+      "sha256": "9bef827b018da97f9c9e424bfd726ca18d5d16f1b8f6b3f0c8ab3545845ced1a"
+    },
+    {
+      "path": "final/painad-long.txt",
+      "bytes": 5566,
+      "sha256": "b21b2f2886fe9c890324cec118c6066d06652aeefbc5bbd4f923af93bad00214"
+    },
+    {
+      "path": "final/painad-normal-1.png",
+      "bytes": 107818,
+      "sha256": "50c02779ff6ab6e81bc1542453b06cfc03e399c8371eee9f0b487790f76cab46"
+    },
+    {
+      "path": "final/painad-normal.txt",
+      "bytes": 1083,
+      "sha256": "cc1823798c644f17f8dbf18931ea458e3709337cba88132fde694b3bc2e3126d"
+    },
+    {
+      "path": "final/transfers-long-1.png",
+      "bytes": 161565,
+      "sha256": "818c924f394ce6b2682277f6798582af55a02f3e5c376564ae84e9c6b47693bb"
+    },
+    {
+      "path": "final/transfers-long-2.png",
+      "bytes": 128901,
+      "sha256": "909190a958f09881e244124153c933381407a87ffc3d9256e7c12a6021699248"
+    },
+    {
+      "path": "final/transfers-long-3.png",
+      "bytes": 156592,
+      "sha256": "8afbbc7e45a16b6bf4dd0ebb69ed54bbf46c08954ed45a6175399e6bc0b70a08"
+    },
+    {
+      "path": "final/transfers-long-4.png",
+      "bytes": 156071,
+      "sha256": "e21faa963302936bd493f82a539a620f3a71615c5de7010917068de9f33b5c1c"
+    },
+    {
+      "path": "final/transfers-long-5.png",
+      "bytes": 40155,
+      "sha256": "f9c966c8154a1b4254185dc30604dcdb9011b1cbc3b8e67a0db0d54616648cbf"
+    },
+    {
+      "path": "final/transfers-long.txt",
+      "bytes": 7048,
+      "sha256": "189f319d6e3c903ffa1939e1765e176ba9d7ce06c72a8f13d3b21bd7c8e395e5"
+    },
+    {
+      "path": "final/transfers-normal-1.png",
+      "bytes": 106681,
+      "sha256": "75429150de3e23e27002b6bf76681dde8c458d9c2cac7971b1a9de1159f5956e"
+    },
+    {
+      "path": "final/transfers-normal-2.png",
+      "bytes": 45394,
+      "sha256": "dfd4e1fb08824e8fcdd7934415343d64a2d52f9ece9526a972cfc006c45bbea1"
+    },
+    {
+      "path": "final/transfers-normal.txt",
+      "bytes": 1505,
+      "sha256": "f1a5970405967b17f44721f9d9448bc54056264e63dda9d4503d9d804fcefa04"
+    },
+    {
+      "path": "painad-regression/painad-long.pdf",
+      "bytes": 22092,
+      "sha256": "25fb516f07617dc7676d009b4d8f18c42bb0bb610d49b2d00271f4e0ee5dbb21"
+    },
+    {
+      "path": "painad-regression/painad-normal.pdf",
+      "bytes": 18949,
+      "sha256": "5ebfbfaafb57fa91af56ae5b5f5e17824381ac66dabe26772bb0e01af118d60f"
+    },
+    {
+      "path": "transfers-long.pdf",
+      "bytes": 24977,
+      "sha256": "f4c87cfd38e3ffafd4463e1a3263c6114e20bbfe665127b46a971a69ddc195d1"
+    },
+    {
+      "path": "transfers-normal.pdf",
+      "bytes": 19476,
+      "sha256": "fce34aab9aab869bee312c3bf217047d37c5e1a0e71cd8611a6d0d8f1312d2c2"
+    }
+  ]
+}

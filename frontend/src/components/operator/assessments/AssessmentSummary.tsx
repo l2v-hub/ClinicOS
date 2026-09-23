@@ -2,7 +2,9 @@ import type { AssessmentDto } from '../../../lib/assessments/assessmentTypes';
 import { PAINAD, PAINAD_BAND_NOTES } from '../../../lib/assessments/painadDefinition';
 import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import { PatientIdentity } from '../../shared/PatientIdentity';
+import { TransfersSummary } from './TransfersSummary';
 export function AssessmentSummary({ record }: { record: AssessmentDto }) {
+  if (record.type === 'postural_transfers') return <TransfersSummary record={record} />;
   const snapshot = record.finalSnapshot;
   const items =
     snapshot?.items ??

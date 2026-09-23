@@ -2,9 +2,6 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { Paziente } from '../../../types';
 import { API_URL } from '../../../config';
 import { operatorHeaders } from '../../../lib/operatorSession';
-import { documentAuthHeaders } from '../../../lib/entraAuth';
-import { readArchiveDocumentMetadata } from '../../../lib/patientDocumentArchiveIO';
-import type { PatientDocumentMeta } from '../../../lib/patientDocumentsPage';
 import {
   createAssessmentClient,
   type AssessmentClient,
@@ -15,32 +12,42 @@ import {
   type AssessmentDraftStore,
 } from '../../../lib/assessments/assessmentDraftStore';
 import { useAssessmentExitGuard } from '../../../lib/assessments/useAssessmentExitGuard';
-import type { AssessmentDto } from '../../../lib/assessments/assessmentTypes';
-import { PAINAD } from '../../../lib/assessments/painadDefinition';
+import type {
+  AssessmentDto,
+  AssessmentType,
+  AssessmentTarget,
+} from '../../../lib/assessments/assessmentTypes';
+import { assessmentDefinition } from '../../../lib/assessments/assessmentDefinition';
 import { PatientIdentity } from '../../shared/PatientIdentity';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { ClinicalTableSection } from '../cartella/shared';
 import { PatientArchivePreview } from '../cartella/PatientArchivePreview';
 import { AssessmentForm } from './AssessmentForm';
+import { TransfersForm } from './TransfersForm';
+import { AssessmentAttestations } from './AssessmentAttestations';
 import { AssessmentSummary } from './AssessmentSummary';
 import { AssessmentFinal } from './AssessmentFinal';
 import { AssessmentHistory } from './AssessmentHistory';
 import { useAssessmentHistory } from './useAssessmentHistory';
+import { useAssessmentPdf } from './useAssessmentPdf';
 import './AssessmentWorkspace.css';
+import './Transfers.css';
 export interface AssessmentWorkspaceProps {
   patient: Paziente;
   operatorId?: string;
   operatorRole?: string;
   operatorName: string;
   draftStore?: AssessmentDraftStore;
+  type?: AssessmentType;
+  initialAssessment?: AssessmentTarget;
   initialAssessmentId?: string;
-  onOpenArchive?: (documentId: string, assessmentId: string) => void;
+  onOpenArchive?: (documentId: string, assessment: AssessmentTarget) => void;
   client?: AssessmentClient;
 }
 export function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   return (
     <AssessmentSession
-      key={`${props.patient.id}:${props.operatorId}:${props.operatorRole}`}
+      key={`${props.patient.id}:${props.operatorId}:${props.operatorRole}:${props.type ?? 'painad'}`}
       {...props}
     />
   );
@@ -51,10 +58,15 @@ function AssessmentSession({
   operatorRole,
   operatorName,
   draftStore,
+  type = 'painad',
+  initialAssessment,
   initialAssessmentId,
   onOpenArchive,
   client: providedClient,
 }: AssessmentWorkspaceProps) {
+  const definition = assessmentDefinition(type);
+  const entryId = initialAssessment?.type === type ? initialAssessment.id : initialAssessmentId;
+  const [currentEmpty, setCurrentEmpty] = useState(false);
   const [store] = useState(() => draftStore ?? createAssessmentDraftStore());
   const workspaceRef = useRef<HTMLDivElement>(null);
   const identityRef = useRef<HTMLDivElement>(null);
@@ -81,14 +93,24 @@ function AssessmentSession({
   const requests = useRef(new Set<AbortController>());
   const [reading, setReading] = useState(false);
   const [error, setError] = useState('');
-  const [pdfBusy, setPdfBusy] = useState(false);
-  const pdfLock = useRef(false);
-  const [pdfDocument, setPdfDocument] = useState<PatientDocumentMeta | null>(null);
   const [confirm, setConfirm] = useState<'discard' | 'accept' | 'rebase' | null>(null);
-  const history = useAssessmentHistory(patient.id, client);
+  const history = useAssessmentHistory(patient.id, client, type);
   const draft = selectedKey ? store.get(selectedKey) : undefined;
   const record = draft?.record;
-  const localDrafts = store.list(patient.id).filter((item) => item.dirty || item.pending);
+  const { pdfBusy, pdfDocument, setPdfDocument, pdfAction, openPdf } = useAssessmentPdf({
+    record,
+    selectedKey,
+    life,
+    selected,
+    patient,
+    operatorId,
+    operatorRole,
+    client,
+    store,
+    refresh: history.refresh,
+    setError,
+  });
+  const localDrafts = store.list(patient.id, type).filter((item) => item.dirty || item.pending);
   useEffect(() => {
     const version = ++life.current;
     const active = requests.current;
@@ -108,7 +130,7 @@ function AssessmentSession({
     setPdfDocument(null);
     setConfirm(null);
   }
-  async function open(id: string) {
+  async function open(id?: string) {
     const request = ++reads.current;
     const version = life.current;
     const controller = new AbortController();
@@ -116,9 +138,18 @@ function AssessmentSession({
     setReading(true);
     setError('');
     try {
-      const incoming = await client.get(patient.id, id, controller.signal);
+      const incoming = id
+        ? await client.get(patient.id, id, controller.signal, type)
+        : await client.current(patient.id, type, controller.signal);
       if (controller.signal.aborted || version !== life.current || request !== reads.current)
         return;
+      if (!incoming) {
+        setCurrentEmpty(true);
+        select(null);
+        return;
+      }
+      if (incoming.type !== type) throw new Error('Tipo di scheda non corrispondente.');
+      setCurrentEmpty(false);
       if (incoming.status === 'draft' && incoming.author.operatorId !== operatorId)
         throw new Error('Bozza non disponibile per questo autore.');
       select(store.load(incoming));
@@ -131,17 +162,17 @@ function AssessmentSession({
     }
   }
   useEffect(() => {
-    if (!initialAssessmentId) return;
+    if (!entryId && type === 'painad') return;
     const timer = window.setTimeout(() => {
-      void open(initialAssessmentId);
+      void open(entryId);
     }, 0);
     return () => window.clearTimeout(timer);
     // Session key fences patient/actor changes; an explicit entry ID opens one record.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialAssessmentId]);
+  }, [entryId, type]);
   function create(predecessor?: AssessmentDto) {
     try {
-      select(store.create(patient.id, predecessor));
+      select(store.create(patient.id, predecessor, type));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Valutazione non disponibile.');
     }
@@ -174,7 +205,7 @@ function AssessmentSession({
     setReading(true);
     setError('');
     try {
-      const incoming = await client.get(patient.id, draft.record.id, controller.signal);
+      const incoming = await client.get(patient.id, draft.record.id, controller.signal, type);
       if (
         !controller.signal.aborted &&
         version === life.current &&
@@ -197,79 +228,36 @@ function AssessmentSession({
         setReading(false);
     }
   }
-  async function pdfAction(retry: boolean) {
-    if (!record || record.status !== 'final' || pdfLock.current) return;
-    const key = selectedKey;
-    const version = life.current;
-    pdfLock.current = true;
-    setPdfBusy(true);
-    setError('');
-    try {
-      const incoming = retry
-        ? await client.retryPdf(patient.id, record.id)
-        : await client.get(patient.id, record.id);
-      if (version === life.current && selected.current === key) {
-        store.load(incoming);
-        history.refresh();
-      }
-    } catch (cause) {
-      if (version === life.current && selected.current === key)
-        setError(
-          cause instanceof Error
-            ? cause.message
-            : 'PDF non disponibile. La valutazione finale è conservata.',
-        );
-    } finally {
-      pdfLock.current = false;
-      if (version === life.current) setPdfBusy(false);
-    }
-  }
-  async function openPdf() {
-    if (!record?.pdf?.documentId || pdfLock.current) return;
-    const key = selectedKey;
-    const version = life.current;
-    const controller = new AbortController();
-    requests.current.add(controller);
-    pdfLock.current = true;
-    setPdfBusy(true);
-    setError('');
-    try {
-      const document = await readArchiveDocumentMetadata(
-        {
-          patientId: patient.id,
-          signal: controller.signal,
-          getHeaders: () => documentAuthHeaders(patient.id, operatorId, operatorRole),
-        },
-        record.pdf.documentId,
-      );
-      if (document.assessment?.id !== record.id)
-        throw new Error('Documento non associato a questa valutazione.');
-      if (!controller.signal.aborted && version === life.current && selected.current === key)
-        setPdfDocument(document);
-    } catch (cause) {
-      if (!controller.signal.aborted && version === life.current && selected.current === key)
-        setError(cause instanceof Error ? cause.message : 'PDF non disponibile.');
-    } finally {
-      requests.current.delete(controller);
-      pdfLock.current = false;
-      if (version === life.current) setPdfBusy(false);
-    }
-  }
   return (
     <div className="assessment-workspace" ref={workspaceRef}>
       <div className="assessment-patient" ref={identityRef}>
         <PatientIdentity patient={patient} />
       </div>
       <ClinicalTableSection
-        title={PAINAD.title}
+        title={definition.title}
         actions={
           <button type="button" className="btn-primary" onClick={() => create()}>
-            Nuova valutazione PAINAD
+            {type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'}
           </button>
         }
       >
         <div className="cts__body--padded">
-          <p>{PAINAD.description}</p>
+          <p>{definition.description}</p>
+          {type === 'postural_transfers' && (
+            <div className="assessment-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                disabled={reading}
+                onClick={() => void open()}
+              >
+                Apri scheda corrente
+              </button>
+            </div>
+          )}
+          {currentEmpty && !draft && (
+            <p>Nessuna scheda finale corrente. Avvia una nuova compilazione.</p>
+          )}
           <p className="assessment-hint">
             Compilatore: {operatorName}. Le bozze locali restano in questa sessione; salva la bozza
             per ritrovarla dopo l’accesso successivo.
@@ -293,17 +281,29 @@ function AssessmentSession({
           {reading && <p role="status">Lettura della valutazione…</p>}
           {error && <p role="alert">{error}</p>}
           {draft && (
-            <section aria-label="Scheda PAINAD">
+            <section aria-label={`Scheda ${definition.title}`}>
               {record?.status === 'final' ? (
-                <AssessmentFinal
-                  record={record}
-                  busy={pdfBusy}
-                  onPdf={() => void openPdf()}
-                  onRefreshPdf={(retry) => void pdfAction(retry)}
-                  onOpenArchive={onOpenArchive}
-                  onOpenRecord={(id) => void open(id)}
-                  onCorrect={() => create(record)}
-                />
+                <>
+                  <AssessmentFinal
+                    record={record}
+                    busy={pdfBusy}
+                    onPdf={() => void openPdf()}
+                    onRefreshPdf={(retry) => void pdfAction(retry)}
+                    onOpenArchive={onOpenArchive}
+                    onOpenRecord={(id) => void open(id)}
+                    onCorrect={() => create(record)}
+                  />
+                  {record.type === 'postural_transfers' && record.snapshotSha256 && (
+                    <AssessmentAttestations
+                      key={`${record.id}:${record.snapshotSha256}`}
+                      patientId={patient.id}
+                      assessmentId={record.id}
+                      snapshotSha256={record.snapshotSha256}
+                      operatorId={operatorId}
+                      client={client}
+                    />
+                  )}
+                </>
               ) : draft.preview && record ? (
                 <>
                   <AssessmentSummary record={record} />
@@ -337,12 +337,21 @@ function AssessmentSession({
                       Bozza salvata · versione {record.version} · {record.author.name}
                     </p>
                   )}
-                  <AssessmentForm
-                    draft={draft}
-                    store={store}
-                    onSave={() => void save()}
-                    onPreview={() => void save(true)}
-                  />
+                  {type === 'painad' ? (
+                    <AssessmentForm
+                      draft={draft}
+                      store={store}
+                      onSave={() => void save()}
+                      onPreview={() => void save(true)}
+                    />
+                  ) : (
+                    <TransfersForm
+                      draft={draft}
+                      store={store}
+                      onSave={() => void save()}
+                      onPreview={() => void save(true)}
+                    />
+                  )}
                 </>
               )}
               {draft.failure && (
@@ -459,7 +468,7 @@ function AssessmentSession({
           operatorId={operatorId}
           operatorRole={operatorRole}
           document={pdfDocument}
-          title="PAINAD · PDF archiviato"
+          title={`${definition.title} · PDF archiviato`}
           onClose={() => setPdfDocument(null)}
         />
       )}

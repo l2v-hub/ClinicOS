@@ -1,0 +1,55 @@
+{
+  "task": "PO-11-frontend-preparation",
+  "generatedAtUtc": "2026-09-23T04:13:14.9918149Z",
+  "baseline": "d659c1b459eb72a2920cbd9f678a2c11f9bf7efd",
+  "branch": "codex/po11-transfers-ui",
+  "frontendSourceTree": "336c271aa82f15a4ab207b757b3f4e06137c22f2",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po11-transfers-ui",
+  "policyDecision": {
+    "scope": "Runtime and artifact preparation only",
+    "authority": "Root assigned worktree; GO application pending PO10 deployment verification",
+    "decision": "allow"
+  },
+  "runtime": {
+    "node": "v26.3.0",
+    "localCache": "frontend/node_modules/.tmp",
+    "typescript": "6.0.3",
+    "dependencyInstallPerformed": false,
+    "nodeModulesTarget": "C:/Workspace/ClinicOSHouse-worktrees/quality-loop-20260829/node_modules",
+    "sharedContents": "read-only"
+  },
+  "applicationSourceChanged": false,
+  "applicationClaimActive": false,
+  "inheritedLauncherChanges": "Preserved exact incoming bytes; outside worker scope",
+  "testsExecuted": [],
+  "serversStarted": [],
+  "protectedAndBaselineHashes": [
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+      "bytes": 1132
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+      "bytes": 700
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.css",
+      "sha256": "da291d16f038e1653d54cd4e2c4a010290d72855c36ea5c624b8a7e6dde907ed",
+      "bytes": 5051
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "sha256": "dfed3a00931664f22fcfc8fd9e7fb06bd28e40eddd93880b4622bd714118740f",
+      "bytes": 18462
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/task-contract.md",
+      "sha256": "8f81ee2a515e6d7ace61c6b8a998509a24304cbeb070eba1fa043a521090274d",
+      "bytes": 8236
+    }
+  ],
+  "coordination": "API current/attestations and discriminated DTO proposal sent directly to backend; root owns final contract and GO.",
+  "next": "Wait for root GO before any application source edits. Preserve integrated PAINAD sticky/tablet refinements."
+}

@@ -6,6 +6,7 @@ import type {
 import { PAINAD, answeredPainad, painadResult } from '../../../lib/assessments/painadDefinition';
 import type { PainadScore } from '../../../lib/assessments/assessmentTypes';
 import { assessmentInstants } from '../../../lib/assessments/assessmentTime';
+import { assertPainadAnswers } from '../../../lib/assessments/assessmentValidation';
 export function AssessmentForm({
   draft,
   store,
@@ -18,9 +19,11 @@ export function AssessmentForm({
   onPreview: () => void;
 }) {
   const id = useId();
+  const answers = draft.fields.answers;
+  assertPainadAnswers(answers);
   const locked = draft.busy || !!draft.pending;
-  const count = answeredPainad(draft.fields.answers);
-  const result = painadResult(draft.fields.answers);
+  const count = answeredPainad(answers);
+  const result = painadResult(answers);
   const candidates = assessmentInstants(draft.fields.assessedAtLocal);
   const update = (fields: Parameters<AssessmentDraftStore['update']>[1]) =>
     store.update(draft.key, fields);
@@ -102,18 +105,15 @@ export function AssessmentForm({
           </legend>
           <div className="assessment-options">
             {item.options.map((description, score) => (
-              <label
-                key={score}
-                className={draft.fields.answers[item.id] === score ? 'is-selected' : ''}
-              >
+              <label key={score} className={answers[item.id] === score ? 'is-selected' : ''}>
                 <input
                   type="radio"
                   name={`${id}-${item.id}`}
                   value={score}
-                  checked={draft.fields.answers[item.id] === score}
+                  checked={answers[item.id] === score}
                   onChange={() =>
                     update({
-                      answers: { ...draft.fields.answers, [item.id]: score as PainadScore },
+                      answers: { ...answers, [item.id]: score as PainadScore },
                     })
                   }
                 />
@@ -126,11 +126,11 @@ export function AssessmentForm({
               </label>
             ))}
           </div>
-          {draft.fields.answers[item.id] !== null && (
+          {answers[item.id] !== null && (
             <button
               type="button"
               className="link-btn"
-              onClick={() => update({ answers: { ...draft.fields.answers, [item.id]: null } })}
+              onClick={() => update({ answers: { ...answers, [item.id]: null } })}
             >
               Segna come non valutato
             </button>

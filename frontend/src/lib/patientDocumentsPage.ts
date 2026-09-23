@@ -1,4 +1,5 @@
 import { API_URL } from '../config';
+import type { AssessmentType } from './assessments/assessmentTypes';
 
 export interface PatientDocumentMeta {
   id: string;
@@ -10,7 +11,7 @@ export interface PatientDocumentMeta {
   sortOrder?: number;
   importJobId: string | null;
   createdAt: string;
-  assessment?: { id: string; type: 'painad'; formVersion: string; assessedAt: string } | null;
+  assessment?: { id: string; type: AssessmentType; formVersion: string; assessedAt: string } | null;
 }
 
 export interface PatientDocumentPageInfo {

@@ -1,0 +1,216 @@
+{
+  "task": "PO-11-backend",
+  "generatedAt": "2026-09-23T04:37:47.220Z",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/backend-contract.md",
+      "bytes": 4383,
+      "sha256": "749f184dfbd2164f24564d088397eb6845eb4fb1883264c908ba0a8d09e29898"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/claims-release.json",
+      "bytes": 1629,
+      "sha256": "c2c19a07204f65a3768ce1860a0b222879a3dcc8981898a8e5ea2b42b5958a60"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/diff-check.log",
+      "bytes": 2252,
+      "sha256": "c713648c5a6b624f676eb9a026e37104484bf8e973172bda0870dcb99f89afdb"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/finalize-evidence.mjs",
+      "bytes": 17253,
+      "sha256": "d62c09b8b224a1e0bf7b6e60b6eb1fb5932779a3cc4be0dbabf26b0dcf68ceda"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/focused-tests.json",
+      "bytes": 8870,
+      "sha256": "6ebdcc4aaa794a30e276029bf0239bd96b671f5386942cf654f334ad691d1d00"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/focused-tests.log",
+      "bytes": 12175,
+      "sha256": "6a9e7510210c645e8a8a2d1c2d304dc6071d7be064920ea60d26bd93db628b71"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/font-provenance.json",
+      "bytes": 1642,
+      "sha256": "1c0e2b8f2062732d5061cedc77e23073bef084ab417e5f8fdc1ed79e6251faca"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/generate-private.mjs",
+      "bytes": 2297,
+      "sha256": "5308e51c4edf234516191331654a46fc613172a318714922156774d67e970411"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/handoff.md",
+      "bytes": 1519,
+      "sha256": "1702b9cbe7f78148e2b2d72538e48aa73cc8f8fda57ad6988e7753271271a969"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/implementation-receipt.json",
+      "bytes": 19576,
+      "sha256": "513f73585a4f0af252f25358daf7b550c1cc0c1f56a17c4fef29bd2117c7e8b2"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/implementation-session.json",
+      "bytes": 1496,
+      "sha256": "b28a0a19d8885f1c481ffe00348dd364952b107967ad0a500c91a72679b9a686"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/painad-long-1.png",
+      "bytes": 254157,
+      "sha256": "b77bdff4953a1a5158cfab0b5912ee9b1f27c7121bf52221179751827e9e6db0"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/painad-long-2.png",
+      "bytes": 119991,
+      "sha256": "9bef827b018da97f9c9e424bfd726ca18d5d16f1b8f6b3f0c8ab3545845ced1a"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/painad-long.txt",
+      "bytes": 5566,
+      "sha256": "b21b2f2886fe9c890324cec118c6066d06652aeefbc5bbd4f923af93bad00214"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/painad-normal-1.png",
+      "bytes": 107818,
+      "sha256": "50c02779ff6ab6e81bc1542453b06cfc03e399c8371eee9f0b487790f76cab46"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/painad-normal.txt",
+      "bytes": 1083,
+      "sha256": "cc1823798c644f17f8dbf18931ea458e3709337cba88132fde694b3bc2e3126d"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-long-1.png",
+      "bytes": 161565,
+      "sha256": "818c924f394ce6b2682277f6798582af55a02f3e5c376564ae84e9c6b47693bb"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-long-2.png",
+      "bytes": 128901,
+      "sha256": "909190a958f09881e244124153c933381407a87ffc3d9256e7c12a6021699248"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-long-3.png",
+      "bytes": 156592,
+      "sha256": "8afbbc7e45a16b6bf4dd0ebb69ed54bbf46c08954ed45a6175399e6bc0b70a08"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-long-4.png",
+      "bytes": 156071,
+      "sha256": "e21faa963302936bd493f82a539a620f3a71615c5de7010917068de9f33b5c1c"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-long-5.png",
+      "bytes": 40155,
+      "sha256": "f9c966c8154a1b4254185dc30604dcdb9011b1cbc3b8e67a0db0d54616648cbf"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-long.txt",
+      "bytes": 7048,
+      "sha256": "189f319d6e3c903ffa1939e1765e176ba9d7ce06c72a8f13d3b21bd7c8e395e5"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-normal-1.png",
+      "bytes": 106681,
+      "sha256": "75429150de3e23e27002b6bf76681dde8c458d9c2cac7971b1a9de1159f5956e"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-normal-2.png",
+      "bytes": 45394,
+      "sha256": "dfd4e1fb08824e8fcdd7934415343d64a2d52f9ece9526a972cfc006c45bbea1"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/final/transfers-normal.txt",
+      "bytes": 1505,
+      "sha256": "f1a5970405967b17f44721f9d9448bc54056264e63dda9d4503d9d804fcefa04"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/painad-regression/painad-long.pdf",
+      "bytes": 22092,
+      "sha256": "25fb516f07617dc7676d009b4d8f18c42bb0bb610d49b2d00271f4e0ee5dbb21"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/painad-regression/painad-normal.pdf",
+      "bytes": 18949,
+      "sha256": "5ebfbfaafb57fa91af56ae5b5f5e17824381ac66dabe26772bb0e01af118d60f"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/transfers-long.pdf",
+      "bytes": 24977,
+      "sha256": "f4c87cfd38e3ffafd4463e1a3263c6114e20bbfe665127b46a971a69ddc195d1"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/transfers-normal.pdf",
+      "bytes": 19476,
+      "sha256": "fce34aab9aab869bee312c3bf217047d37c5e1a0e71cd8611a6d0d8f1312d2c2"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa/visual-qa.json",
+      "bytes": 4053,
+      "sha256": "7126fa8ee7ef2c6a9f49b97f65645233ba4805b28e82bfa9164044c84e109423"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/prepare-runtime.mjs",
+      "bytes": 8851,
+      "sha256": "d3b9867dee06206bd8dec2894b6b147cb4511ba627449bb938da73bf07d01d3b"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/private-generation-receipt.json",
+      "bytes": 1046,
+      "sha256": "e0ca6a6978aa2396daaa2a7060fe3a2226278afed87da818fd5181024ca5a05e"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/private-generation.log",
+      "bytes": 326,
+      "sha256": "c6db6765b696e48541a373b3ea564b052f860beb46e456f34d1f871ccfe75825"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/run-focused-tests.mjs",
+      "bytes": 3997,
+      "sha256": "efd93597682832ccb4a426a0970b7e480a584ed25fc769b7a55afb430f1565f0"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/schema-validation.log",
+      "bytes": 263,
+      "sha256": "4b85ca87fe521915d1e045b90ed2cd0fa440dd61939af67293b821958db545df"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/source-manifest.json",
+      "bytes": 4667,
+      "sha256": "d308ede4276bfd88641b61cffcac75745ba549f0d602f584e60764e7aa9fd39f"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/task-contract.snapshot.md",
+      "bytes": 8236,
+      "sha256": "8f81ee2a515e6d7ace61c6b8a998509a24304cbeb070eba1fa043a521090274d"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/test-plan.md",
+      "bytes": 4655,
+      "sha256": "84e482ff7b3683b4507f810c69169acd4ba1e49ac814ad30e587e68c9fa0eee7"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/test-source-manifest.json",
+      "bytes": 58358,
+      "sha256": "60a3c6f8e38c4de11b10dbd49ac9c4c49d8a4b219bc9081a9b9a9ba210529f49"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/validation-checks.json",
+      "bytes": 3801,
+      "sha256": "c95c69b7358912fd0dfaacd1b1ab0099ff14fdc7124ea0d3b63362992e5631d0"
+    },
+    {
+      "path": "artifacts/task-validation/po-11-postural-transfers/backend/verify-visual-qa.mjs",
+      "bytes": 4307,
+      "sha256": "b933d422d099ab55d44a121504e9adfd78617cb1fd78eedf00123ce1e6cc0e35"
+    }
+  ]
+}

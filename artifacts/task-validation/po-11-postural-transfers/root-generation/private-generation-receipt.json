@@ -1,0 +1,12 @@
+{
+  "exitCode": 0,
+  "schemaPath": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-11-postural-transfers\\root-generation\\private-schema.prisma",
+  "privateOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\backend\\node_modules\\.prisma\\client",
+  "privateWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\backend\\node_modules\\@prisma\\client",
+  "resolvedClient": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\backend\\node_modules\\@prisma\\client\\default.js",
+  "prismaVersion": {
+    "client": "7.10.0",
+    "engine": "0edf323efd1d98336f3f0a68684b56f689b900d3"
+  },
+  "connectedToDatabase": false
+}
