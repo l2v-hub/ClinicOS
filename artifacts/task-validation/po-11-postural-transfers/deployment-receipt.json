@@ -1,0 +1,30 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User approved PO01–PO16, commit/push and deployment without further questions",
+  "sourceCommit": "470a5fe7a7eee4a9b0a0b219947432049b9de977",
+  "backend": {
+    "deploymentId": "a6b93f38-b0c5-447d-9472-529641cdec2e",
+    "status": "SUCCESS",
+    "migration": "20260923050000_postural_transfers",
+    "migrationApplied": true,
+    "healthStatus": 200,
+    "imageDigest": "sha256:fb67bf9595b8a5358b607d4cb4af39af89c17a7d2be8780d7617e527b04a729f"
+  },
+  "frontend": {
+    "deploymentId": "dpl_DorvrDMBjys4Z78n9hoDfh78AkT5",
+    "status": "READY",
+    "url": "https://clinicos-iflemq7vu-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "sourceCommitVerified": "470a5fe7a7eee4a9b0a0b219947432049b9de977"
+  },
+  "runtimeUnchanged": "PO05",
+  "productionSmoke": {
+    "module": "Trasferimenti posturali",
+    "newAssessmentButton": true,
+    "currentLoaded": true,
+    "historyLoaded": true,
+    "writeActionsPerformed": 0,
+    "consoleErrors": 0,
+    "userOpenTherapyFormPreserved": true
+  }
+}
