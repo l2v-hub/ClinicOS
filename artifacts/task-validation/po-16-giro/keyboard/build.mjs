@@ -1,0 +1,10 @@
+import {build} from 'vite';
+import react from '@vitejs/plugin-react';
+import {resolve} from 'node:path';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+const phase=process.argv[2];if(!['baseline','candidate'].includes(phase))throw new Error('Invalid build phase');
+const folder=resolve('artifacts/task-validation/po-16-giro/keyboard');
+await build({root:resolve(folder,'preview'),base:`/${phase}/`,configFile:false,envDir:false,plugins:[react()],build:{outDir:resolve(folder,phase),emptyOutDir:false}});
+const bytes=await readFile('frontend/src/components/operator/cartella/shared.tsx');
+await writeFile(resolve(folder,`${phase}-source.json`),JSON.stringify({path:'frontend/src/components/operator/cartella/shared.tsx',bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},null,2));

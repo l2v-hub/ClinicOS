@@ -1,0 +1,44 @@
+{
+  "checks": [
+    {
+      "action": "Return on child action",
+      "count": 1,
+      "expanded": true
+    },
+    {
+      "action": "Space on child action",
+      "count": 2,
+      "expanded": true
+    },
+    {
+      "action": "Shift+Tab from child to header",
+      "focus": "header"
+    },
+    {
+      "action": "Return on header",
+      "count": 2,
+      "expanded": false
+    },
+    {
+      "action": "Space on header",
+      "count": 2,
+      "expanded": true
+    },
+    {
+      "action": "Tab from header to child",
+      "focus": "child action"
+    },
+    {
+      "action": "Click child action",
+      "count": 3,
+      "expanded": true
+    },
+    {
+      "action": "Click header title",
+      "count": 3,
+      "expanded": false
+    }
+  ],
+  "console": [],
+  "mechanism": "Browser accessibility pressKey Return/space for native activation; locator.press Enter did not trigger native button click in this isolated harness"
+}

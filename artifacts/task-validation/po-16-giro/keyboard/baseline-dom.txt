@@ -1,0 +1,7 @@
+- main:
+  - heading "PO16 · Verifica tastiera senza dati paziente" [level=1]
+  - status: "Azioni eseguite: 0"
+  - button "▶ Sezione di prova Nuova compilazione":
+    - generic: ▶
+    - generic: Sezione di prova
+    - button "Nuova compilazione" [active]
