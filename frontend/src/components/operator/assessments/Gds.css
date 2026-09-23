@@ -1,0 +1,32 @@
+.gds-form .assessment-item {
+  margin: 12px 0;
+  padding: 12px;
+}
+.gds-form .gds-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.gds-form .gds-options label {
+  flex: 0 1 160px;
+  min-height: 44px;
+  align-items: center;
+  padding: 9px 12px;
+}
+.gds-options span {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+.gds-notes {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+}
+.gds-note-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.gds-summary li {
+  break-inside: avoid;
+}

@@ -14,7 +14,7 @@ export function currentAssessment(
 ) {
   if (
     Object.keys(query).some((key) => key !== 'type') ||
-    !['painad', 'postural_transfers', 'tinetti', 'mna'].includes(query.type as string)
+    !['painad', 'postural_transfers', 'tinetti', 'mna', 'gds15'].includes(query.type as string)
   )
     throw new AssessmentError('Tipo di valutazione non valido');
   return assessmentTransaction(async (tx) => {

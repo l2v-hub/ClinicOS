@@ -1,0 +1,1213 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T06:54:29.155Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T06:54:29.159Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T06:54:29.163Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T06:54:29.330Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T06:54:29.332Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:54:29.409Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=gds15",
+      "status": 200,
+      "at": "2026-09-23T06:54:29.413Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 503,
+      "body": {
+        "assessedAt": "2026-09-23T06:54:34.077Z",
+        "answers": {
+          "q1": true,
+          "q2": true,
+          "q3": null,
+          "q4": null,
+          "q5": null,
+          "q6": null,
+          "q7": null,
+          "q8": null,
+          "q9": null,
+          "q10": null,
+          "q11": null,
+          "q12": null,
+          "q13": null,
+          "q14": null,
+          "q15": null,
+          "notes": "Prova sintetica: risposte riferite all’ultima settimana."
+        },
+        "requestId": "3d7b2588-5089-4b4d-af24-c80934f004ab",
+        "type": "gds15",
+        "formVersion": "gds15-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T06:54:44.177Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T06:54:34.077Z",
+        "answers": {
+          "q1": true,
+          "q2": true,
+          "q3": null,
+          "q4": null,
+          "q5": null,
+          "q6": null,
+          "q7": null,
+          "q8": null,
+          "q9": null,
+          "q10": null,
+          "q11": null,
+          "q12": null,
+          "q13": null,
+          "q14": null,
+          "q15": null,
+          "notes": "Prova sintetica: risposte riferite all’ultima settimana."
+        },
+        "requestId": "3d7b2588-5089-4b4d-af24-c80934f004ab",
+        "type": "gds15",
+        "formVersion": "gds15-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T06:54:49.183Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:54:49.227Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T06:54:49.557Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T06:54:49.559Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T06:54:49.561Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T06:54:49.660Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T06:54:49.661Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:54:49.682Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=gds15",
+      "status": 200,
+      "at": "2026-09-23T06:54:49.690Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+      "status": 200,
+      "at": "2026-09-23T06:55:00.805Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/patients/vitals-qa-anna/assessments/f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T06:54:34.077Z",
+        "answers": {
+          "q1": true,
+          "q2": true,
+          "q3": true,
+          "q4": true,
+          "q5": true,
+          "q6": true,
+          "q7": true,
+          "q8": true,
+          "q9": true,
+          "q10": true,
+          "q11": true,
+          "q12": true,
+          "q13": true,
+          "q14": true,
+          "q15": true,
+          "notes": "Prova sintetica: risposte riferite all’ultima settimana."
+        },
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T06:55:56.599Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:55:56.869Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/f96fbf82-4a46-486c-914a-1d5bf0e6ffa6/finalize",
+      "status": 503,
+      "body": {
+        "requestId": "ee7753f9-9f7a-4a36-8434-5a292c3ddc4d",
+        "expectedVersion": 2
+      },
+      "at": "2026-09-23T06:56:05.284Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/f96fbf82-4a46-486c-914a-1d5bf0e6ffa6/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "ee7753f9-9f7a-4a36-8434-5a292c3ddc4d",
+        "expectedVersion": 2
+      },
+      "at": "2026-09-23T06:56:11.380Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:56:11.415Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/d58dadf4-fc4b-40f4-9f41-0b778a5d1b50",
+      "status": 200,
+      "at": "2026-09-23T06:56:17.897Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/d58dadf4-fc4b-40f4-9f41-0b778a5d1b50/content",
+      "status": 200,
+      "at": "2026-09-23T06:56:17.925Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T06:54:34.077Z",
+        "answers": {
+          "q1": false,
+          "q2": false,
+          "q3": false,
+          "q4": false,
+          "q5": false,
+          "q6": false,
+          "q7": false,
+          "q8": false,
+          "q9": false,
+          "q10": false,
+          "q11": false,
+          "q12": false,
+          "q13": false,
+          "q14": false,
+          "q15": false,
+          "notes": "Prova sintetica: risposte riferite all’ultima settimana."
+        },
+        "correctionReason": "Rettifica sintetica: verifica delle risposte esplicite.",
+        "requestId": "f568b4b4-6c92-44a9-b126-4d004a15ad97",
+        "type": "gds15",
+        "formVersion": "gds15-it-2026-09-22-v1",
+        "predecessorId": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6"
+      },
+      "at": "2026-09-23T06:57:08.922Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:57:09.037Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "6b6a485f-302e-46d1-b2e7-30e1250dd9be",
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T06:57:09.098Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:57:09.540Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents?limit=50",
+      "status": 200,
+      "at": "2026-09-23T06:57:15.959Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/8ca265ce-4e96-4dc8-a29f-8e7336b6cb22/content",
+      "status": 200,
+      "at": "2026-09-23T06:57:16.005Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:57:35.701Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2",
+      "status": 200,
+      "at": "2026-09-23T06:57:35.704Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T06:57:45.856Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T06:57:45.860Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno",
+      "status": 200,
+      "at": "2026-09-23T06:57:45.864Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/cartella",
+      "status": 200,
+      "at": "2026-09-23T06:57:45.867Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T06:57:45.869Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T06:57:46.002Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T06:57:46.008Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:57:46.013Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments/current?type=gds15",
+      "status": 200,
+      "at": "2026-09-23T06:57:46.014Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-bruno/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T06:57:46.171Z",
+        "answers": {
+          "q1": false,
+          "q2": null,
+          "q3": null,
+          "q4": null,
+          "q5": null,
+          "q6": null,
+          "q7": null,
+          "q8": null,
+          "q9": null,
+          "q10": null,
+          "q11": null,
+          "q12": null,
+          "q13": null,
+          "q14": null,
+          "q15": null,
+          "notes": ""
+        },
+        "requestId": "20ce8c6f-112d-47fc-85fe-cf6e1c228dd9",
+        "type": "gds15",
+        "formVersion": "gds15-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T06:57:46.990Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": null,
+      "at": "2026-09-23T06:57:47.011Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T06:57:47.014Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T06:57:47.014Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T06:57:47.019Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T06:57:47.021Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T06:57:47.072Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T06:57:47.074Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=gds15&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T06:57:47.074Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=gds15",
+      "status": 200,
+      "at": "2026-09-23T06:57:47.075Z"
+    }
+  ],
+  "assessments": [
+    {
+      "id": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+      "patientId": "vitals-qa-anna",
+      "type": "gds15",
+      "formVersion": "gds15-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T08:54:34.077Z",
+      "answers": {
+        "q1": true,
+        "q2": true,
+        "q3": true,
+        "q4": true,
+        "q5": true,
+        "q6": true,
+        "q7": true,
+        "q8": true,
+        "q9": true,
+        "q10": true,
+        "q11": true,
+        "q12": true,
+        "q13": true,
+        "q14": true,
+        "q15": true,
+        "notes": "Prova sintetica: risposte riferite all’ultima settimana."
+      },
+      "status": "final",
+      "version": 3,
+      "createdAt": "2026-09-23T08:54:44.212Z",
+      "updatedAt": "2026-09-23T08:56:05.297Z",
+      "finalizedAt": "2026-09-23T08:56:05.297Z",
+      "requestId": "3d7b2588-5089-4b4d-af24-c80934f004ab",
+      "creationPayloadHash": "7e8a6d6a7760131514bb08db6c7ad573619effb02db1ea6a034d7f0ffc4ae7a4",
+      "finalizeRequestId": "ee7753f9-9f7a-4a36-8434-5a292c3ddc4d",
+      "finalizePayloadHash": "b2d0a4bd0d16c93563d09c6ba1fba0107078678b11c8df3daa38fdcfe731d514",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "gds15",
+          "version": "gds15-it-2026-09-22-v1",
+          "sourceSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+        },
+        "items": [
+          {
+            "id": "q1",
+            "label": "È sostanzialmente soddisfatto/a della sua vita?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q2",
+            "label": "Ha rinunciato a molte delle sue attività e interessi?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q3",
+            "label": "Sente che la sua vita sia vuota?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q4",
+            "label": "Si sente spesso annoiato/a?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q5",
+            "label": "È di buon umore per la maggior parte del tempo?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q6",
+            "label": "Ha paura che stia per succederle qualcosa di brutto?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q7",
+            "label": "Si sente felice per la maggior parte del tempo?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q8",
+            "label": "Si sente spesso impotente/senza aiuto?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q9",
+            "label": "Preferisce stare a casa piuttosto che uscire e fare cose nuove?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q10",
+            "label": "Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q11",
+            "label": "Pensa che sia bello essere vivi in questo momento?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q12",
+            "label": "Si sente piuttosto inutile/senza valore per come è ora?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q13",
+            "label": "Si sente pieno/a di energia?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q14",
+            "label": "Sente che la sua situazione sia senza speranza?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q15",
+            "label": "Pensa che la maggior parte delle persone stia meglio di lei?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          }
+        ],
+        "notes": "Prova sintetica: risposte riferite all’ultima settimana.",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "band": "severe",
+          "label": "Depressione grave",
+          "total": 10,
+          "maximum": 15
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T06:54:44.212Z",
+        "reference": "Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter version. Clinical Gerontologist.",
+        "assessedAt": "2026-09-23T06:54:34.077Z",
+        "provenance": "GDS-15, Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item, allegato del 22/09/2026. Trascrizione della fonte fornita; nessuna convalida clinica indipendente.",
+        "finalizedAt": "2026-09-23T06:56:05.297Z",
+        "instruction": "Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ oppure NO) in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per ogni risposta conforme alla colonna \"Punto (1/0)\".",
+        "predecessor": null,
+        "predecessorId": null,
+        "screeningNote": "La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo moderato-severo (es. MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in Dementia).",
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "b9440ecdc754ef6442ac043c9c04c6a9374ade72a34b01ebab855e954383bdbc",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T08:56:06.375Z"
+    },
+    {
+      "id": "d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2",
+      "patientId": "vitals-qa-anna",
+      "type": "gds15",
+      "formVersion": "gds15-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T08:54:34.077Z",
+      "answers": {
+        "q1": false,
+        "q2": false,
+        "q3": false,
+        "q4": false,
+        "q5": false,
+        "q6": false,
+        "q7": false,
+        "q8": false,
+        "q9": false,
+        "q10": false,
+        "q11": false,
+        "q12": false,
+        "q13": false,
+        "q14": false,
+        "q15": false,
+        "notes": "Prova sintetica: risposte riferite all’ultima settimana."
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T08:57:08.981Z",
+      "updatedAt": "2026-09-23T08:57:09.118Z",
+      "finalizedAt": "2026-09-23T08:57:09.118Z",
+      "requestId": "f568b4b4-6c92-44a9-b126-4d004a15ad97",
+      "creationPayloadHash": "52f422056d1c3df9fd31fde7783ac7fb69a7e6909ccd598311c295b67db7c06f",
+      "finalizeRequestId": "6b6a485f-302e-46d1-b2e7-30e1250dd9be",
+      "finalizePayloadHash": "adb38c54b4ff9261e17ad16fa0e776059ea873121f34be77c410dc5da2fd68b0",
+      "predecessorId": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+      "correctionReason": "Rettifica sintetica: verifica delle risposte esplicite.",
+      "finalSnapshot": {
+        "form": {
+          "type": "gds15",
+          "version": "gds15-it-2026-09-22-v1",
+          "sourceSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+        },
+        "items": [
+          {
+            "id": "q1",
+            "label": "È sostanzialmente soddisfatto/a della sua vita?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q2",
+            "label": "Ha rinunciato a molte delle sue attività e interessi?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q3",
+            "label": "Sente che la sua vita sia vuota?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q4",
+            "label": "Si sente spesso annoiato/a?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q5",
+            "label": "È di buon umore per la maggior parte del tempo?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q6",
+            "label": "Ha paura che stia per succederle qualcosa di brutto?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q7",
+            "label": "Si sente felice per la maggior parte del tempo?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q8",
+            "label": "Si sente spesso impotente/senza aiuto?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q9",
+            "label": "Preferisce stare a casa piuttosto che uscire e fare cose nuove?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q10",
+            "label": "Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q11",
+            "label": "Pensa che sia bello essere vivi in questo momento?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q12",
+            "label": "Si sente piuttosto inutile/senza valore per come è ora?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q13",
+            "label": "Si sente pieno/a di energia?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q14",
+            "label": "Sente che la sua situazione sia senza speranza?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "q15",
+            "label": "Pensa che la maggior parte delle persone stia meglio di lei?",
+            "score": 0,
+            "answer": false,
+            "description": "No"
+          }
+        ],
+        "notes": "Prova sintetica: risposte riferite all’ultima settimana.",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "band": "none",
+          "label": "Assente / Nella norma",
+          "total": 5,
+          "maximum": 15
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T06:57:08.981Z",
+        "reference": "Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter version. Clinical Gerontologist.",
+        "assessedAt": "2026-09-23T06:54:34.077Z",
+        "provenance": "GDS-15, Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item, allegato del 22/09/2026. Trascrizione della fonte fornita; nessuna convalida clinica indipendente.",
+        "finalizedAt": "2026-09-23T06:57:09.118Z",
+        "instruction": "Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ oppure NO) in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per ogni risposta conforme alla colonna \"Punto (1/0)\".",
+        "predecessor": {
+          "id": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+          "assessedAt": "2026-09-23T06:54:34.077Z",
+          "authorName": "Operatrice QA"
+        },
+        "predecessorId": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+        "screeningNote": "La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo moderato-severo (es. MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in Dementia).",
+        "snapshotVersion": 1,
+        "correctionReason": "Rettifica sintetica: verifica delle risposte esplicite."
+      },
+      "snapshotSha256": "88f20456d31a4dd3956231d749cf4f4611abf89ddbd9d60cfcfa58b65cc3330f",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T08:57:09.517Z"
+    },
+    {
+      "id": "9751bcd6-00d5-4b3b-b981-b59630386030",
+      "patientId": "vitals-qa-bruno",
+      "type": "gds15",
+      "formVersion": "gds15-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T08:57:46.171Z",
+      "answers": {
+        "q1": false,
+        "q2": null,
+        "q3": null,
+        "q4": null,
+        "q5": null,
+        "q6": null,
+        "q7": null,
+        "q8": null,
+        "q9": null,
+        "q10": null,
+        "q11": null,
+        "q12": null,
+        "q13": null,
+        "q14": null,
+        "q15": null,
+        "notes": ""
+      },
+      "status": "draft",
+      "version": 1,
+      "createdAt": "2026-09-23T08:57:52.004Z",
+      "updatedAt": "2026-09-23T08:57:52.004Z",
+      "finalizedAt": null,
+      "requestId": "20ce8c6f-112d-47fc-85fe-cf6e1c228dd9",
+      "creationPayloadHash": "af62d9b4e845bea0e259c4f18a5cd94e227b8d785251d8179b624ae8e7747d9e",
+      "finalizeRequestId": null,
+      "finalizePayloadHash": null,
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": null,
+      "snapshotSha256": null,
+      "pdfStatus": null,
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 0,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": null
+    }
+  ],
+  "attestations": [],
+  "initialCartelle": [
+    {
+      "id": "vitals-qa-anna-cartella",
+      "patientId": "vitals-qa-anna",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-anna",
+        "lettoNumero": "A",
+        "cameraNumero": "11",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-anna-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-anna-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T08:54:05.756Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-bruno-cartella",
+      "patientId": "vitals-qa-bruno",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-bruno",
+        "lettoNumero": "A",
+        "cameraNumero": "12",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-bruno-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-bruno-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T08:54:05.758Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-other-cartella",
+      "patientId": "vitals-qa-other",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-other",
+        "lettoNumero": "A",
+        "cameraNumero": "13",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-other-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-other-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T08:54:05.760Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    }
+  ],
+  "cartelle": [
+    {
+      "id": "vitals-qa-anna-cartella",
+      "patientId": "vitals-qa-anna",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-anna",
+        "lettoNumero": "A",
+        "cameraNumero": "11",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-anna-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-anna-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T08:54:05.756Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-bruno-cartella",
+      "patientId": "vitals-qa-bruno",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-bruno",
+        "lettoNumero": "A",
+        "cameraNumero": "12",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-bruno-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-bruno-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T08:54:05.758Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-other-cartella",
+      "patientId": "vitals-qa-other",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-other",
+        "lettoNumero": "A",
+        "cameraNumero": "13",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-other-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-other-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T08:54:05.760Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    }
+  ],
+  "documents": [
+    {
+      "id": "d58dadf4-fc4b-40f4-9f41-0b778a5d1b50",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "GDS15_2026-09-23_f96fbf82-4a46-486c-914a-1d5bf0e6ffa6.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 22670,
+      "sha256": "e133533f0df6b5778f8c9a842e2bdca7f4d364c444b86c67cd57b024ba9d8766",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+        "snapshotSha256": "b9440ecdc754ef6442ac043c9c04c6a9374ade72a34b01ebab855e954383bdbc",
+        "rendererVersion": "gds15-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 0,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T06:56:06.403Z",
+      "assessmentId": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6"
+    },
+    {
+      "id": "8ca265ce-4e96-4dc8-a29f-8e7336b6cb22",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "GDS15_2026-09-23_d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 22842,
+      "sha256": "0e703d0add4b99c90817f3ccae9fd243fd557209180e4ea39d8f549de9c912b0",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2",
+        "snapshotSha256": "88f20456d31a4dd3956231d749cf4f4611abf89ddbd9d60cfcfa58b65cc3330f",
+        "rendererVersion": "gds15-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 1,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T06:57:09.518Z",
+      "assessmentId": "d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2"
+    }
+  ]
+}

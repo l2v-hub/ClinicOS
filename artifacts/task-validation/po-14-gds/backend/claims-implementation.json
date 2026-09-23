@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-14-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po14-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T06:39:08.677Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T06:39:08.677Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root GO after verified PO13 live: Railway b8e82dd2-14c2-42f6-b4cd-110f21bd3260 SUCCESS with MNA migration and health200; Vercel dpl_LR7ZEk7P2PqPC8nbhtamURHqvGci READY alias source6f8b7ded and read-only MNA smoke zero errors. Sole writer po14-gds-backend baseline6f8b7ded54084c4a380f94b61f9aa520b698a09c. Own backend/src/assessments/**, minimal typed assessment route metadata if necessary, Prisma SQL validator migration and artifacts/task-validation/po-14-gds/backend/**. Implement agreed GDS15 bool/null15items, notes, source text, scoring, immutable new-type hash, common lifecycle and PDF. Test32768 combinations plus SQL/lifecycle/PDF/regressions. No old snapshot/digest changes, shared dependency writes, commit/push/deploy or online patient writes. Root owns HTTP/browser/publication.\"\n  },\n  \"message\": \"Issue PO-14-backend-implementation claimed by agent:codex-po14-backend:coder\"\n}"
+    }
+  ]
+}

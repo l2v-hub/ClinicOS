@@ -7,6 +7,9 @@ function resultLabel(record: AssessmentHistoryItem): string {
     const result = record.result.total ?? record.result.screening;
     return `${mnaTitle(record.extent)} · ${result ? `${result.score}/${result.maximum} · ${result.label}` : `Screening ${record.completion.screening.answeredCount}/6`}${record.extent === 'full' && !record.result.total ? ` · Globale ${record.completion.global.answeredCount}/12` : ''}`;
   }
+  if (record.type === 'gds15') return record.result
+    ? `Screening GDS-15 · ${record.result.total}/15 · ${record.result.label}`
+    : `${record.answeredCount} di 15 risposte`;
   return record.result
     ? `${record.result.total}/${record.type === 'tinetti' ? 28 : 10} · ${record.result.label}`
     : record.type !== 'postural_transfers'

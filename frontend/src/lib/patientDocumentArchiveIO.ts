@@ -4,6 +4,7 @@ import type { PatientDocumentMeta } from './patientDocumentsPage';
 import { PAINAD_VERSION } from './assessments/assessmentTypes';
 import { TRANSFERS_VERSION } from './assessments/transfersTypes';
 import { TINETTI_VERSION } from './assessments/tinettiTypes';
+import { GDS15_VERSION } from './assessments/gds15Types';
 import { MNA_VERSION } from './assessments/mnaTypes';
 import { mnaAssessmentDate } from './assessments/mnaTime';
 
@@ -51,13 +52,14 @@ export function assertArchiveDocument(value: unknown): asserts value is PatientD
         row.documentType !== 'patient_assessment' ||
         typeof row.assessment.id !== 'string' ||
         !/^[A-Za-z0-9_-]{1,128}$/.test(row.assessment.id) ||
-        !['painad', 'postural_transfers', 'tinetti', 'mna'].includes(row.assessment.type) ||
+        !['painad', 'postural_transfers', 'tinetti', 'mna', 'gds15'].includes(row.assessment.type) ||
         row.assessment.formVersion !==
           {
             painad: PAINAD_VERSION,
             postural_transfers: TRANSFERS_VERSION,
             tinetti: TINETTI_VERSION,
             mna: MNA_VERSION,
+            gds15: GDS15_VERSION,
           }[row.assessment.type] ||
         typeof row.assessment.assessedAt !== 'string' ||
         !Number.isFinite(Date.parse(row.assessment.assessedAt))))

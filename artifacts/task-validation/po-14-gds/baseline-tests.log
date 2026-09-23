@@ -1,0 +1,48 @@
+✖ GDS15 HTTP rejects incomplete final and archives all fifteen answers with the screening interpretation (8747.1567ms)
+✖ GDS15 correction keeps the prior final and clinical date, while all No yields five rather than zero (3.8671ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21148.5257
+
+✖ failing tests:
+
+test at tests\integration\po14-gds.test.mts:1:2099
+✖ GDS15 HTTP rejects incomplete final and archives all fifteen answers with the screening interpretation (8747.1567ms)
+  AssertionError [ERR_ASSERTION]: {"error":"Tipo o versione del modulo non supportati","code":"assessment_invalid_input"}
+  
+  400 !== 201
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po14-gds.test.mts:23:60)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration\po14-gds.test.mts:1:4285
+✖ GDS15 correction keeps the prior final and clinical date, while all No yields five rather than zero (3.8671ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po14-gds.test.mts:40:71)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

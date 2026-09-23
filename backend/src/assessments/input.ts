@@ -6,6 +6,8 @@ import { TINETTI_VERSION } from './tinetti-types.js';
 import { parseTinettiAnswers } from './tinetti.js';
 import { MNA_VERSION } from './mna-types.js';
 import { parseMnaAnswers, mnaAssessmentDate } from './mna-input.js';
+import { GDS15_VERSION } from './gds15-types.js';
+import { parseGds15Answers } from './gds15.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function assessmentId(value: unknown): string {
@@ -80,7 +82,8 @@ export function parseCreate(value: unknown) {
     (input.type === 'painad' && input.formVersion === PAINAD_VERSION) ||
     (input.type === 'postural_transfers' && input.formVersion === TRANSFERS_VERSION) ||
     (input.type === 'tinetti' && input.formVersion === TINETTI_VERSION) ||
-    (input.type === 'mna' && input.formVersion === MNA_VERSION)
+    (input.type === 'mna' && input.formVersion === MNA_VERSION) ||
+    (input.type === 'gds15' && input.formVersion === GDS15_VERSION)
   ))
     throw new AssessmentError('Tipo o versione del modulo non supportati');
   if (input.type === 'painad' && Buffer.byteLength(JSON.stringify(value)) > 16_384)
@@ -98,16 +101,19 @@ export function parseCreate(value: unknown) {
       | typeof PAINAD_VERSION
       | typeof TRANSFERS_VERSION
       | typeof TINETTI_VERSION
-      | typeof MNA_VERSION,
+      | typeof MNA_VERSION
+      | typeof GDS15_VERSION,
     assessedAt,
     answers:
-      input.type === 'mna'
-        ? parseMnaAnswers(input.answers)
-        : input.type === 'painad'
-          ? parseAnswers(input.answers)
-          : input.type === 'tinetti'
-            ? parseTinettiAnswers(input.answers)
-            : parseTransfersAnswers(input.answers),
+      input.type === 'gds15'
+        ? parseGds15Answers(input.answers)
+        : input.type === 'mna'
+          ? parseMnaAnswers(input.answers)
+          : input.type === 'painad'
+            ? parseAnswers(input.answers)
+            : input.type === 'tinetti'
+              ? parseTinettiAnswers(input.answers)
+              : parseTransfersAnswers(input.answers),
     predecessorId,
     correctionReason: reason,
   };
@@ -124,13 +130,15 @@ export function parsePatch(value: unknown, type: AssessmentType = 'painad') {
     expectedVersion: expectedVersion(input.expectedVersion),
     assessedAt,
     answers:
-      type === 'mna'
-        ? parseMnaAnswers(input.answers)
-        : type === 'painad'
-          ? parseAnswers(input.answers)
-          : type === 'tinetti'
-            ? parseTinettiAnswers(input.answers)
-            : parseTransfersAnswers(input.answers),
+      type === 'gds15'
+        ? parseGds15Answers(input.answers)
+        : type === 'mna'
+          ? parseMnaAnswers(input.answers)
+          : type === 'painad'
+            ? parseAnswers(input.answers)
+            : type === 'tinetti'
+              ? parseTinettiAnswers(input.answers)
+              : parseTransfersAnswers(input.answers),
     correctionReason: correctionReason(input.correctionReason),
   };
 }

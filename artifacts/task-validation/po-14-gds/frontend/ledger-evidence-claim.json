@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-14-frontend-evidence\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po14-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T06:55:59.683Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T06:55:59.683Z\",\n    \"progress\": 0,\n    \"context\": \"Root-authorized PO14 final evidence and handoff only. Exclusive writer under C:/Workspace/ClinicOSHouse-worktrees/po14-gds-ui/artifacts/task-validation/po-14-gds/frontend/**. Application claim already released; source-manifest SHA256 0d9ccbb567f069942cbc143613976624d688fd66cbd631cfcc660d74af8de0e8 freezes 22 sources. No application source, dependency, backend, server, port, commit, push, deploy, or live data changes. Root owns integration/QA4195 and publication.\"\n  },\n  \"message\": \"Issue PO-14-frontend-evidence claimed by agent:codex-po14-frontend:coder\"\n}"
+    }
+  ]
+}

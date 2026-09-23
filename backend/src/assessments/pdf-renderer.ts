@@ -1,23 +1,27 @@
 import { readFile } from 'node:fs/promises';
 import { PDFDocument, rgb, type PDFFont, type PDFPage } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
-import type { AssessmentSnapshot, TinettiSnapshot, MnaSnapshot } from './types.js';
+import type { AssessmentSnapshot, TinettiSnapshot, MnaSnapshot, Gds15Snapshot } from './types.js';
 import { mnaPdfBlocks } from './mna-pdf-content.js';
 
 const isTinettiSnapshot = (snapshot: AssessmentSnapshot): snapshot is TinettiSnapshot =>
   snapshot.form.type === 'tinetti';
 const isMnaSnapshot = (snapshot: AssessmentSnapshot): snapshot is MnaSnapshot =>
   snapshot.form.type === 'mna';
+const isGds15Snapshot = (snapshot: AssessmentSnapshot): snapshot is Gds15Snapshot =>
+  snapshot.form.type === 'gds15';
 
 export const ASSESSMENT_RENDERER_VERSION = 'painad-a4-v1';
 export const assessmentRendererVersion = (snapshot: AssessmentSnapshot) =>
   snapshot.form.type === 'painad'
     ? ASSESSMENT_RENDERER_VERSION
-    : snapshot.form.type === 'mna'
-      ? 'mna-a4-v1'
-      : snapshot.form.type === 'tinetti'
-        ? 'tinetti-a4-v1'
-        : 'transfers-a4-v1';
+    : snapshot.form.type === 'gds15'
+      ? 'gds15-a4-v1'
+      : snapshot.form.type === 'mna'
+        ? 'mna-a4-v1'
+        : snapshot.form.type === 'tinetti'
+          ? 'tinetti-a4-v1'
+          : 'transfers-a4-v1';
 export class AssessmentPdfError extends Error {
   constructor(public code: string) {
     super(code);
@@ -50,6 +54,7 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
   const transfers = snapshot.form.type === 'postural_transfers';
   const tinetti = snapshot.form.type === 'tinetti';
   const mna = isMnaSnapshot(snapshot) ? snapshot : null;
+  const gds15 = isGds15Snapshot(snapshot) ? snapshot : null;
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
   const [regularBytes, boldBytes] = await fonts();
@@ -105,13 +110,15 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     page = doc.addPage([width, height]);
     y = height - margin;
     page.drawText(
-      mna
-        ? mna.title
-        : transfers
-          ? 'Trasferimenti posturali e deambulazione'
-          : tinetti
-            ? 'Scala di Tinetti - Equilibrio e andatura'
-            : 'PAINAD - Valutazione del dolore non verbale',
+      gds15
+        ? 'GDS-15 - Scala di depressione geriatrica'
+        : mna
+          ? mna.title
+          : transfers
+            ? 'Trasferimenti posturali e deambulazione'
+            : tinetti
+              ? 'Scala di Tinetti - Equilibrio e andatura'
+              : 'PAINAD - Valutazione del dolore non verbale',
       {
         x: margin,
         y,
@@ -126,7 +133,7 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
       y -= 14;
     }
     page.drawText(
-      `Valutazione: ${dateTime(snapshot.assessedAt)} | ${mna ? 'MNA italiana' : transfers ? 'Trasferimenti' : tinetti ? 'Tinetti' : 'PAINAD italiana'}, versione 1`,
+      `Valutazione: ${dateTime(snapshot.assessedAt)} | ${gds15 ? 'GDS-15 italiana' : mna ? 'MNA italiana' : transfers ? 'Trasferimenti' : tinetti ? 'Tinetti' : 'PAINAD italiana'}, versione 1`,
       {
         x: margin,
         y,
@@ -168,7 +175,30 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     block(
       `Rettifica della valutazione${snapshot.predecessor ? ` del ${dateTime(snapshot.predecessor.assessedAt)}, di ${snapshot.predecessor.authorName}` : ' precedente'}\nMotivo: ${snapshot.correctionReason}`,
     );
-  if (isMnaSnapshot(snapshot)) {
+  if (isGds15Snapshot(snapshot)) {
+    block('Istruzioni per la somministrazione', bold, 12);
+    block(snapshot.instruction);
+    block('Questionario di valutazione', bold, 12);
+    for (const [index, item] of snapshot.items.entries()) {
+      if (y < margin + 90) newPage();
+      block(`${index + 1}. ${item.label}`, bold, 10, 3);
+      block(`Risposta: ${item.description} | Punti: ${item.score}`, regular, 10, 9);
+    }
+    if (y < margin + 100) newPage();
+    block(`Totale GDS-15: ${snapshot.result.total} / 15 — ${snapshot.result.label}`, bold, 12);
+    block('Interpretazione dello screening', bold, 10);
+    block(snapshot.screeningNote, regular, 9);
+    if (snapshot.notes) {
+      if (y < margin + 80) newPage();
+      block('Note', bold, 12);
+      block(snapshot.notes);
+    }
+    if (y < margin + 100) newPage();
+    block(`Fonte e versione: ${snapshot.form.version}`, bold, 10);
+    block(snapshot.provenance, regular, 9);
+    block('Riferimenti bibliografici', bold, 10);
+    block(snapshot.reference, regular, 9);
+  } else if (isMnaSnapshot(snapshot)) {
     for (const entry of mnaPdfBlocks(snapshot)) {
       if (y < margin + (entry.keepSpace ?? 50)) newPage();
       block(entry.text, entry.bold ? bold : regular, entry.size ?? 10, entry.gap ?? 7);
@@ -256,13 +286,15 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     }),
   );
   doc.setTitle(
-    mna
-      ? mna.title + ' - Valutazione finalizzata'
-      : transfers
-        ? 'Trasferimenti posturali - Scheda finalizzata'
-        : tinetti
-          ? 'Tinetti - Valutazione finalizzata'
-          : 'PAINAD - Valutazione finalizzata',
+    gds15
+      ? 'GDS-15 - Valutazione finalizzata'
+      : mna
+        ? mna.title + ' - Valutazione finalizzata'
+        : transfers
+          ? 'Trasferimenti posturali - Scheda finalizzata'
+          : tinetti
+            ? 'Tinetti - Valutazione finalizzata'
+            : 'PAINAD - Valutazione finalizzata',
   );
   doc.setProducer(`ClinicOS ${assessmentRendererVersion(snapshot)}`);
   doc.setKeywords([

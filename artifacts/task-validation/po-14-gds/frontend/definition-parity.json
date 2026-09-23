@@ -1,0 +1,26 @@
+{
+  "generatedAtUtc": "2026-09-23T06:48:47.352Z",
+  "scenarios": 32793,
+  "completeCombinations": 32768,
+  "outcome": "pass",
+  "texts": "Exact items/instruction/screeningNote/provenance/reference",
+  "partialSnapshotNote": "Frontend can describe missing draft items; backend snapshot items require a complete final. Complete snapshot items are compared exhaustively.",
+  "backendInputs": [
+    {
+      "path": "C:/Workspace/ClinicOSHouse-worktrees/po14-gds-backend/backend/src/assessments/gds15.ts",
+      "sha256": "17f18962f2c8315825b68c6e39210b9b025cc92dcae2cea8ca8199840e42be59"
+    },
+    {
+      "path": "C:/Workspace/ClinicOSHouse-worktrees/po14-gds-backend/backend/src/assessments/gds15-definition.ts",
+      "sha256": "cc8e51d77932b8245670278914edd30852bd9673287e4ebd7d9d4aaf9d32131c"
+    },
+    {
+      "path": "C:/Workspace/ClinicOSHouse-worktrees/po14-gds-backend/backend/src/assessments/gds15-types.ts",
+      "sha256": "751498baadc148d7d4e8f9800584e71d8e78283d946d3b1fd15cf3845620d1b2"
+    }
+  ],
+  "frontendInput": {
+    "path": "frontend/src/lib/assessments/gds15Definition.ts",
+    "sha256": "87c35af5c0493a060d8dfcc8f5ee915dfd53088eb0cb5a5dbb5d720c80efe02b"
+  }
+}

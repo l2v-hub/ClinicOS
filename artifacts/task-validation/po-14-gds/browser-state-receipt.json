@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-23T06:59:36.206Z",
+  "stateSha256": "17001112be9e064aa773e3ea3f2995f21ea455b4b1a8cba75a5b5812c166a328",
+  "assertions": "Fifteen explicit answers, inverse points, screening, immutable correction, unique PDFs, identical retries, patient isolation, unchanged Cartella",
+  "counts": {
+    "assessments": 3,
+    "finals": 2,
+    "documents": 2,
+    "attestations": 0
+  },
+  "originalId": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+  "correctionId": "d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2"
+}

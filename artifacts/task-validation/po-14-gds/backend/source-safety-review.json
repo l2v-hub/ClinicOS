@@ -1,0 +1,88 @@
+{
+  "sourceTreeSha256": "f9bfae118e478c02bfcc4a30d6d150d27cd2c288557f6a108a0250758e97605c",
+  "sourceManifestSha256": "762722736d8c5168fab01cac3db71fdf2ce0431862067cc1b9e789ebcf67a52c",
+  "recordedAt": "2026-09-23T06:48:11.605Z",
+  "newSourceFiles": [
+    {
+      "path": "backend/src/assessments/__tests__/gds15-db.test.ts",
+      "lines": 215
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15-fixture.ts",
+      "lines": 15
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15-pdf-db.test.ts",
+      "lines": 125
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15-sql-db.test.ts",
+      "lines": 111
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15.test.ts",
+      "lines": 107
+    },
+    {
+      "path": "backend/src/assessments/gds15-definition.ts",
+      "lines": 87
+    },
+    {
+      "path": "backend/src/assessments/gds15-snapshot.ts",
+      "lines": 46
+    },
+    {
+      "path": "backend/src/assessments/gds15-types.ts",
+      "lines": 35
+    },
+    {
+      "path": "backend/src/assessments/gds15.ts",
+      "lines": 67
+    },
+    {
+      "path": "prisma/migrations/20260923080000_gds15/migration.sql",
+      "lines": 88
+    }
+  ],
+  "newSourceBelow500Lines": true,
+  "scopedStaticChecks": {
+    "patterns": [
+      "dynamic execution",
+      "unsafe Prisma raw SQL call",
+      "external fetch",
+      "private key block"
+    ],
+    "findings": [],
+    "scope": [
+      "backend/src/assessments/access.ts",
+      "backend/src/assessments/current.ts",
+      "backend/src/assessments/gds15-definition.ts",
+      "backend/src/assessments/gds15-snapshot.ts",
+      "backend/src/assessments/gds15-types.ts",
+      "backend/src/assessments/gds15.ts",
+      "backend/src/assessments/history.ts",
+      "backend/src/assessments/input.ts",
+      "backend/src/assessments/pdf-renderer.ts",
+      "backend/src/assessments/pdf-service.ts",
+      "backend/src/assessments/service.ts",
+      "backend/src/assessments/types.ts"
+    ]
+  },
+  "manualReview": [
+    "Parser GDS15 stretto: quindici boolean/null obbligatori, nessuna coercizione, note fino a 4000 codepoint e controllo dei caratteri vietati.",
+    "Risultato solo con quindici risposte complete; tutte le 32768 combinazioni confrontate con scoring indipendente, incluse inversioni e soglie.",
+    "Scope, lock, CAS, replay, current, rettifica e finalizzazione usano il ciclo di vita comune; i test verificano rifiuti e concorrenza.",
+    "Snapshot GDS15 con hash canonico indipendente dall’ordine delle chiavi JSONB, senza modificare le funzioni hash dei tipi pubblicati.",
+    "Vincoli SQL verificano domini, ordine delle quindici voci, risposte, punteggi, descrizioni, totale, fascia, note e fonte dello snapshot.",
+    "Renderer usa testi congelati; dati liberi intatti e glifi non supportati falliscono esplicitamente senza archiviare PDF alterati."
+  ],
+  "independentReview": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "sourceBindingConfirmed": true,
+    "openP1P2": 0,
+    "artifactReviewPending": true
+  },
+  "limitations": [
+    "La scansione statica circoscritta e i test di autorizzazione non sono una scansione CVE delle dipendenze né una validazione clinica."
+  ]
+}

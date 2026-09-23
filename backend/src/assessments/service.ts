@@ -34,6 +34,9 @@ import { parseMnaAnswers } from './mna-input.js';
 import { mnaCompletion } from './mna.js';
 import { mnaSnapshot, mnaSnapshotHash } from './mna-snapshot.js';
 import type { MnaSnapshot } from './mna-types.js';
+import { parseGds15Answers, gds15Completion } from './gds15.js';
+import { gds15Snapshot, gds15SnapshotHash } from './gds15-snapshot.js';
+import type { Gds15Snapshot } from './types.js';
 import { TINETTI_PROVENANCE } from './tinetti-definition.js';
 import {
   TINETTI_VERSION,
@@ -185,13 +188,20 @@ export async function finalizeAssessment(
           'assessment_incomplete',
           { missingItems: PAINAD_KEYS.filter((key) => answers[key] === null) },
         );
-      if (row.type === 'postural_transfers' || row.type === 'tinetti' || row.type === 'mna') {
+      if (
+        row.type === 'postural_transfers' ||
+        row.type === 'tinetti' ||
+        row.type === 'mna' ||
+        row.type === 'gds15'
+      ) {
         const completion =
-          row.type === 'mna'
-            ? mnaCompletion(parseMnaAnswers(row.answers))
-            : row.type === 'tinetti'
-              ? tinettiCompletion(row.answers as unknown as TinettiAnswers)
-              : transfersCompletion(row.answers as unknown as TransfersAnswers);
+          row.type === 'gds15'
+            ? gds15Completion(parseGds15Answers(row.answers))
+            : row.type === 'mna'
+              ? mnaCompletion(parseMnaAnswers(row.answers))
+              : row.type === 'tinetti'
+                ? tinettiCompletion(row.answers as unknown as TinettiAnswers)
+                : transfersCompletion(row.answers as unknown as TransfersAnswers);
         if (!completion.complete)
           throw new AssessmentError(
             'Completa tutte le risposte prima di confermare',
@@ -241,50 +251,52 @@ export async function finalizeAssessment(
         correctionReason: row.correctionReason,
       };
       const snapshot: AssessmentSnapshot =
-        row.type === 'mna'
-          ? await mnaSnapshot(tx, common, row.answers)
-          : row.type === 'tinetti'
-            ? {
-                ...common,
-                form: {
-                  type: 'tinetti',
-                  version: TINETTI_VERSION,
-                  sourceSha256: TINETTI_SOURCE_SHA256,
-                  referenceSha256: TINETTI_REFERENCE_SHA256,
-                },
-                items: tinettiSnapshotItems(row.answers as unknown as TinettiAnswers),
-                result: tinettiResult(row.answers as unknown as TinettiAnswers)!,
-                notes: (row.answers as unknown as TinettiAnswers).notes,
-                provenance: TINETTI_PROVENANCE,
-              }
-            : row.type === 'postural_transfers'
+        row.type === 'gds15'
+          ? gds15Snapshot(common, row.answers)
+          : row.type === 'mna'
+            ? await mnaSnapshot(tx, common, row.answers)
+            : row.type === 'tinetti'
               ? {
                   ...common,
                   form: {
-                    type: 'postural_transfers',
-                    version: TRANSFERS_VERSION,
-                    sourceSha256: TRANSFERS_SOURCE_SHA256,
+                    type: 'tinetti',
+                    version: TINETTI_VERSION,
+                    sourceSha256: TINETTI_SOURCE_SHA256,
+                    referenceSha256: TINETTI_REFERENCE_SHA256,
                   },
-                  sections: transfersSections(row.answers as unknown as TransfersAnswers),
-                  result: null,
-                  signatureLabels: ['Firma Fisioterapista', 'Firma Operatori'],
+                  items: tinettiSnapshotItems(row.answers as unknown as TinettiAnswers),
+                  result: tinettiResult(row.answers as unknown as TinettiAnswers)!,
+                  notes: (row.answers as unknown as TinettiAnswers).notes,
+                  provenance: TINETTI_PROVENANCE,
                 }
-              : {
-                  ...common,
-                  form: {
-                    type: 'painad',
-                    version: PAINAD_VERSION,
-                    sourceSha256: PAINAD_SOURCE_SHA256,
-                  },
-                  items: PAINAD_ITEMS.map((item) => ({
-                    id: item.id,
-                    label: item.label,
-                    score: answers[item.id] as PainadScore,
-                    description: item.options[answers[item.id] as PainadScore],
-                  })),
-                  result: result!,
-                  interpretation: PAINAD_INTERPRETATIONS[result!.band],
-                };
+              : row.type === 'postural_transfers'
+                ? {
+                    ...common,
+                    form: {
+                      type: 'postural_transfers',
+                      version: TRANSFERS_VERSION,
+                      sourceSha256: TRANSFERS_SOURCE_SHA256,
+                    },
+                    sections: transfersSections(row.answers as unknown as TransfersAnswers),
+                    result: null,
+                    signatureLabels: ['Firma Fisioterapista', 'Firma Operatori'],
+                  }
+                : {
+                    ...common,
+                    form: {
+                      type: 'painad',
+                      version: PAINAD_VERSION,
+                      sourceSha256: PAINAD_SOURCE_SHA256,
+                    },
+                    items: PAINAD_ITEMS.map((item) => ({
+                      id: item.id,
+                      label: item.label,
+                      score: answers[item.id] as PainadScore,
+                      description: item.options[answers[item.id] as PainadScore],
+                    })),
+                    result: result!,
+                    interpretation: PAINAD_INTERPRETATIONS[result!.band],
+                  };
       await tx.patientAssessment.update({
         where: { id },
         data: {
@@ -296,7 +308,11 @@ export async function finalizeAssessment(
           finalizePayloadHash: hash,
           finalSnapshot: snapshot as unknown as Prisma.InputJsonValue,
           snapshotSha256:
-            row.type === 'mna' ? mnaSnapshotHash(snapshot as MnaSnapshot) : payloadHash(snapshot),
+            row.type === 'gds15'
+              ? gds15SnapshotHash(snapshot as Gds15Snapshot)
+              : row.type === 'mna'
+                ? mnaSnapshotHash(snapshot as MnaSnapshot)
+                : payloadHash(snapshot),
           pdfStatus: 'pending',
           pdfUpdatedAt: now,
         },

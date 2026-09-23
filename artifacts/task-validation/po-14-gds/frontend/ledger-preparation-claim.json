@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-14-frontend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po14-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T06:33:27.951Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T06:33:27.951Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly assigned isolated worktree C:/Workspace/ClinicOSHouse-worktrees/po14-gds-ui branch codex/po14-gds-ui baseline6f8b7ded54084c4a380f94b61f9aa520b698a09c. Preparation only: artifacts/task-validation/po-14-gds/frontend; root node_modules read-only-by-policy junction to quality-loop-20260829/node_modules; local frontend/node_modules/.tmp and .vite-temp caches. No application or test source writes until root GO. No dependencies, lockfiles, backend, servers, ports, commit/push/deploy. Protected launchers and AssessmentWorkspace.css unchanged. Root is integration owner.\"\n  },\n  \"message\": \"Issue PO-14-frontend-preparation claimed by agent:codex-po14-frontend:coder\"\n}"
+    }
+  ]
+}

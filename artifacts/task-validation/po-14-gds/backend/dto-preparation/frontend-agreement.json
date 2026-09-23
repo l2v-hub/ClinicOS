@@ -1,0 +1,7 @@
+{
+  "recordedAt": "2026-09-23T06:13:13.172Z",
+  "reviewer": "/root/po01_frontend_audit",
+  "decision": "compatible-preparation-only",
+  "message": "Schema compatibile con integrazione FE esistente: gds15, bool|null q1..q15, notes4000 codepoint, missingPaths ordinati, result nullable con maximum15/band/label, snapshot15 items e testi congelati. Accordo preparatorio subordinato al task-contract root e al suo GO. Conservare stringhe originali per instruction/screeningNote/provenance/reference e validazione snapshot distinta dai tipi pubblicati.",
+  "applicationChanges": false
+}

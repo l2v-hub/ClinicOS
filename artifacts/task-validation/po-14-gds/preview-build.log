@@ -1,0 +1,53 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 382 modules transformed.
+rendering chunks...
+computing gzip size...
+artifacts/task-validation/po-14-gds/preview/build/index.html                                       0.52 kB │ gzip:   0.32 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/pdf.worker.min-CHFwMXne.mjs           1,262.39 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/PatientArchivePreview-BY-O_bqx.css        0.68 kB │ gzip:   0.37 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/NarrativeSectionsTab-Cy2K2aEq.css         0.80 kB │ gzip:   0.37 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/CameraCapture-BZrPNFqj.css                1.85 kB │ gzip:   0.74 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/Tinetti-PvAQNSKS.css                      1.90 kB │ gzip:   0.60 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ClinicalTable-Cjulftmw.css                3.71 kB │ gzip:   0.99 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/AssessmentWorkspace-BXMWzXup.css          8.38 kB │ gzip:   2.00 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/DocumentiTab-DJY500eY.css                 8.61 kB │ gzip:   1.87 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/TherapyEditor-Bl_xva3D.css                9.05 kB │ gzip:   2.21 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/TerapiaFarmacologicaTab-Df1m973H.css      9.69 kB │ gzip:   2.28 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/index-C60dZM-V.css                      307.95 kB │ gzip:  52.62 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/LoadErrorState-B2W9g7oM.js                0.33 kB │ gzip:   0.24 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/VitalSignsEditor-BQs8WvMQ.js              1.18 kB │ gzip:   0.61 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/PainAssessmentEditor-DcxHMhrd.js          1.19 kB │ gzip:   0.63 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/clinicalHistory-Dc8Sh74T.js               1.85 kB │ gzip:   0.87 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/usePatientDocuments-CJcqrJ9x.js           2.77 kB │ gzip:   1.21 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/renderArchivePrint-Jp_ZbcEG.js            2.82 kB │ gzip:   1.30 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/patientDocumentArchive-BUgiVe9T.js        3.67 kB │ gzip:   1.51 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ScalaTinettiTab-Y7fb5RE6.js               3.69 kB │ gzip:   1.50 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/AnamnesisEditor-BBn5utR_.js               3.74 kB │ gzip:   1.53 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ClinicalAttachments-joq2dReg.js           4.15 kB │ gzip:   1.76 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/InlineEditableField-dV_YdHep.js           5.67 kB │ gzip:   2.00 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ClinicalTable-Bhm-FfDw.js                 6.00 kB │ gzip:   2.20 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/EsamiConsulenzeTab-E2L8MY5v.js            7.53 kB │ gzip:   2.51 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/jsx-runtime-QBU3mtPP.js                   8.43 kB │ gzip:   3.21 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ScalaNRSTab-CCBrYNVa.js                  11.22 kB │ gzip:   3.28 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/DiarioPazienteTab-Dt5O0i74.js            11.74 kB │ gzip:   3.94 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/PatientArchivePreview-CRjq4gxf.js        12.15 kB │ gzip:   4.48 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/InvioPSModal-Co23l8Cs.js                 12.89 kB │ gzip:   3.40 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ScalaBradenTab-CGrFth1G.js               13.13 kB │ gzip:   3.96 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/CameraCapture-DewFoVWz.js                13.33 kB │ gzip:   5.03 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/NarrativeSectionsTab-DDzu9FZX.js         14.10 kB │ gzip:   5.09 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ParametriTab-C9gYj_fZ.js                 14.14 kB │ gzip:   4.58 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/PresaInCaricoTab-BLTJA60i.js             20.98 kB │ gzip:   3.96 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/MedicazioniTab-D5gC2IEB.js               23.82 kB │ gzip:   5.75 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/ContenzioniTab-DT0eGxlv.js               23.83 kB │ gzip:   5.02 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/DocumentiTab-D2zRrCQM.js                 26.51 kB │ gzip:   8.27 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/TherapyEditor-BPhPqjoA.js                36.68 kB │ gzip:  10.72 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/DimissioneTab-Rivyzssf.js                42.92 kB │ gzip:   7.43 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/TerapiaFarmacologicaTab-CRjGAozi.js      51.03 kB │ gzip:  14.33 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/AssessmentWorkspace-B9Ny5TSE.js          66.82 kB │ gzip:  16.45 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/DocumentPreview-BW1kUAXB.js             239.89 kB │ gzip:  61.24 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/index-upiO0tSh.js                       402.93 kB │ gzip: 117.39 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/patientDemographics-Dj4Yyz7c.js         426.41 kB │ gzip: 123.12 kB
+artifacts/task-validation/po-14-gds/preview/build/assets/pdf-MO4H4bH7.js                         427.30 kB │ gzip: 127.39 kB
+
+✓ built in 1.05s

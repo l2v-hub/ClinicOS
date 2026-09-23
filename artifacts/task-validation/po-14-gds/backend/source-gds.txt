@@ -1,0 +1,82 @@
+PAGE 1
+  Geriatric Depression Scale (GDS-15)
+
+  Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item
+
+
+
+
+    Nome Paziente:                                                            Data Valutazione:
+    Esaminatore:
+
+
+
+   Istruzioni per la somministrazione: Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ
+   oppure NO) in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per ogni risposta
+   conforme alla colonna "Punto (1/0)".
+
+  QUESTIONARIO DI VALUTAZIONE (GDS-15)
+
+  N°     Domanda                                                                                         Risposta Paziente          Punto (1/0)
+
+   1      È sostanzialmente soddisfatto/a della sua vita?                                                                   SÌ         NO                NO = 1 pt
+
+   2      Ha rinunciato a molte delle sue attività e interessi?                                                             SÌ         NO                 SÌ = 1 pt
+
+   3      Sente che la sua vita sia vuota?                                                                                  SÌ         NO                 SÌ = 1 pt
+
+   4      Si sente spesso annoiato/a?                                                                                       SÌ         NO                 SÌ = 1 pt
+
+   5      È di buon umore per la maggior parte del tempo?                                                                   SÌ         NO                NO = 1 pt
+
+   6      Ha paura che stia per succederle qualcosa di brutto?                                                              SÌ         NO                 SÌ = 1 pt
+
+   7      Si sente felice per la maggior parte del tempo?                                                                   SÌ         NO                NO = 1 pt
+
+   8      Si sente spesso impotente/senza aiuto?                                                                            SÌ         NO                 SÌ = 1 pt
+
+   9      Preferisce stare a casa piuttosto che uscire e fare cose nuove?                                                   SÌ         NO                 SÌ = 1 pt
+
+  10      Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?                                 SÌ         NO                 SÌ = 1 pt
+
+  11      Pensa che sia bello essere vivi in questo momento?                                                                SÌ         NO                NO = 1 pt
+
+  12      Si sente piuttosto inutile/senza valore per come è ora?                                                           SÌ         NO                 SÌ = 1 pt
+
+  13      Si sente pieno/a di energia?                                                                                      SÌ         NO                NO = 1 pt
+
+  14      Sente che la sua situazione sia senza speranza?                                                                   SÌ         NO                 SÌ = 1 pt
+
+  15      Pensa che la maggior parte delle persone stia meglio di lei?                                                      SÌ         NO                 SÌ = 1 pt
+
+
+                                                                                             PUNTEGGIO TOTALE GDS-15:    ____________ / 15
+
+  INTERPRETAZIONE DEL PUNTEGGIO
+
+
+   Criteri di Valutazione Clinica
+
+    Punteggio Totale                     Categoria di Rischio                                 Indicazione Clinica
+
+    0 – 5 punti                               Assente / Nella Norma                                    Rischio di depressione trascurabile.
+
+    6 – 9 punti                               Depressione Lieve - Moderata                             Indicativo di possibile stato depressivo; consigliato
+                                                                                                       approfondimento.
+
+    10 – 15 punti                             Depressione Grave                                        Forte sospetto di depressione maggiore; valutazione
+                                                                                                       specialistica indicata.
+
+
+
+Riferimenti bibliografici e note: Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter
+version. Clinical Gerontologist. La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo moderato-severo (es.
+MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in Dementia).
+
+
+
+
+
+
+
+GDS-15 - Valutazione Rischio Depressione Anziano                                                                                                            Pagina 1 di 1

@@ -1,0 +1,22 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+const directory = 'artifacts/task-validation/po-14-gds/frontend';
+const baseline = '6f8b7ded54084c4a380f94b61f9aa520b698a09c';
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const git = (...args) => execFileSync('git',args,{stdio:['ignore','pipe','ignore']});
+const claimed = new Set(JSON.parse(readFileSync(`${directory}/source-at-validation.json`)).files.map(file=>file.path));
+const inputs = git('ls-tree','-r','--name-only',baseline,'--','frontend/src','frontend/package.json','frontend/package-lock.json','frontend/vite.config.ts','frontend/tsconfig.json','frontend/tsconfig.app.json','frontend/tsconfig.node.json','frontend/eslint.config.js','frontend/index.html','package.json','package-lock.json','scripts/stub-css-loader.mjs').toString().trim().split('\n').filter(Boolean).sort();
+const files = inputs.map(path => {
+  const source = git('show',`${baseline}:${path}`), current = readFileSync(path);
+  const unchanged = !claimed.has(path);
+  if (unchanged && !source.equals(current) && !source.toString().replaceAll('\r\n','\n').includes('\ufffd') && source.toString().replaceAll('\r\n','\n') !== current.toString().replaceAll('\r\n','\n')) throw new Error('Unclaimed baseline changed: '+path);
+  if (unchanged && source.toString().includes('\ufffd') && !source.equals(current)) throw new Error('Unclaimed binary changed: '+path);
+  return {path, bytes: unchanged ? current.length : source.length, sha256: hash(unchanged ? current : source), baselineCanonicalSha256:hash(source), unchangedVerified:unchanged};
+});
+const source = JSON.parse(readFileSync(`${directory}/source-at-validation.json`));
+const protectedFiles = JSON.parse(readFileSync(`${directory}/claims.json`)).protectedFiles;
+for (const [path,expected] of Object.entries(protectedFiles)) if (hash(readFileSync(path)) !== expected) throw new Error('Protected changed: '+path);
+writeFileSync(`${directory}/baseline-source-manifest.json`,JSON.stringify({task:'PO-14-frontend',baseline,capture:'Baseline reconstructed from git objects; all unchanged inputs compared byte-for-byte or Git CRLF normalization against current checkout.',files},null,2)+'\n');
+writeFileSync(`${directory}/source-manifest.json`,JSON.stringify({...source,protectedFiles},null,2)+'\n');
+console.log(JSON.stringify({sourceFiles:source.files.length,baselineInputs:files.length,unchangedVerified:files.filter(file=>file.unchangedVerified).length,sourceStateId:source.sourceStateId}));

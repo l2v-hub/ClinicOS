@@ -1,0 +1,15 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+const root=process.cwd(), artifact=resolve(root,'artifacts/task-validation/po-14-gds/backend');
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+const preparation=JSON.parse(await readFile(resolve(artifact,'preparation-receipt.json'),'utf8'));
+const wrapper=JSON.parse(await readFile(resolve(artifact,'claims-implementation.json'),'utf8'));
+const claim=JSON.parse(wrapper.content.find(row=>row.type==='text').text).claim;
+await writeFile(resolve(artifact,'implementation-session.json'),JSON.stringify({task:'PO14-backend',worktree:root,branch:preparation.branch,baseline:preparation.baseline,startedAt:claim.claimedAt,claim:{issueId:claim.issueId,claimant:'agent:codex-po14-backend:coder'},decision:'allow scoped GDS15 implementation after explicit root GO and verified PO13 live release',preserved:preparation.preserved,rootContractSha256:preparation.rootContractSha256,dtoContractSha256:preparation.dtoContractSha256,initialSourceTreeSha256:preparation.sourceTreeSha256,publicationAuthorizedToWorker:false},null,2)+'\n');
+const source=JSON.parse(await readFile(resolve(artifact,'definition-contract.json'),'utf8'));
+const lines=["import type { Gds15ItemId } from './gds15-types.js';",''];
+for(const [key,name] of [['instruction','GDS15_INSTRUCTION'],['screeningNote','GDS15_SCREENING_NOTE'],['provenance','GDS15_PROVENANCE'],['reference','GDS15_REFERENCE']]) lines.push(`export const ${name} = ${JSON.stringify(source[key])};`);
+lines.push(`export const GDS15_ITEMS = ${JSON.stringify(source.items,null,2)} as const satisfies readonly { id: Gds15ItemId; label: string; pointForYes: boolean }[];`);
+await writeFile(resolve(root,'backend/src/assessments/gds15-definition.ts'),lines.join('\n')+'\n');
+console.log(JSON.stringify({implementationSessionWritten:true,definitionSha256:sha(await readFile(resolve(root,'backend/src/assessments/gds15-definition.ts')))}));

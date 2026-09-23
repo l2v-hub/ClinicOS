@@ -1,0 +1,30 @@
+{
+  "checks": "Backend61, frontend138, rootHTTP/PG2, build and scan, browser drafts/retry/final/correction/archive/patient isolation, responsive390/768/1262, compiledPDF2/four pages inspected; limits in validation-report.md",
+  "scope": "PO14 backend SQL migration and frontend from immutable commit; AI runtime unchanged",
+  "rootSources": ["tests/fixtures/po14-gds.mjs", "tests/integration/po14-gds.test.mts"],
+  "evidenceDirectories": ["artifacts/task-validation/po-14-gds/qa-evidence"],
+  "evidencePaths": [
+    "artifacts/task-validation/po-14-gds/task-contract.md",
+    "artifacts/task-validation/po-14-gds/baseline-observation.md",
+    "artifacts/task-validation/po-14-gds/baseline-tests.log",
+    "artifacts/task-validation/po-14-gds/http-tests-root.log",
+    "artifacts/task-validation/po-14-gds/backend-build-root.log",
+    "artifacts/task-validation/po-14-gds/frontend-build-root.log",
+    "artifacts/task-validation/po-14-gds/secret-scan.log",
+    "artifacts/task-validation/po-14-gds/preview-build.log",
+    "artifacts/task-validation/po-14-gds/preview-build-manifest.json",
+    "artifacts/task-validation/po-13-mna/record-preview-build.mjs",
+    "artifacts/task-validation/po-14-gds/browser-state-receipt.json",
+    "artifacts/task-validation/po-14-gds/compiled-pdf-receipt.json",
+    "artifacts/task-validation/po-14-gds/verify-browser-state.mjs",
+    "artifacts/task-validation/po-14-gds/verify-compiled-pdf.mjs",
+    "artifacts/task-validation/po-14-gds/validation-report.md",
+    "artifacts/task-validation/po-14-gds/review-notes.md",
+    "artifacts/task-validation/po-14-gds/preview/main.tsx",
+    "artifacts/task-validation/po-14-gds/preview/server.mjs",
+    "artifacts/task-validation/po-14-gds/preview/build.mjs",
+    "artifacts/task-validation/po-14-gds/preview/index.html",
+    "artifacts/task-validation/po-14-gds/preview/synthetic-state.json",
+    "docs/product/stato-esecuzione-piano-2026-09-22.md"
+  ]
+}

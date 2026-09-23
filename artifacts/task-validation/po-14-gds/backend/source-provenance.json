@@ -1,0 +1,14 @@
+{
+  "sourcePdf": "scala GDS.pdf",
+  "sourcePdfSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709",
+  "sourceInventory": "artifacts/task-validation/po-10-painad/forms-inventory.json",
+  "verifiedSourceText": {
+    "original": "C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/artifacts/task-validation/po-10-painad/source-text/gds.txt",
+    "path": "source-gds.txt",
+    "sha256": "04c1c532ccc840ede01dcd042f0edc1d2ab9c8682900411ff8027f6911080610",
+    "byteIdentical": true
+  },
+  "formType": "gds15",
+  "formVersion": "gds15-it-2026-09-22-v1",
+  "sourceAuthority": "Root task contract and previously verified source inventory; no independent clinical validation claimed."
+}

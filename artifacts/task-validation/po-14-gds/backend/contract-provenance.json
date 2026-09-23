@@ -1,0 +1,65 @@
+{
+  "rootOriginal": {
+    "path": "C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/artifacts/task-validation/po-14-gds/task-contract.md",
+    "sha256": "a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc",
+    "lineEndings": "LF"
+  },
+  "assignedWorktreeContract": {
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\po14-gds-backend\\artifacts\\task-validation\\po-14-gds\\task-contract.md",
+    "sha256": "de9815281dbc2ec1ac6939a35ab03469246623b9b2075a0cdf4af665af900c2d",
+    "byteEquivalentAfterCrlfToLf": true,
+    "mutated": false
+  },
+  "currentSnapshot": {
+    "path": "task-contract.snapshot.md",
+    "sha256": "a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc",
+    "byteIdentical": true
+  },
+  "agreedDto": {
+    "source": "C:\\Workspace\\ClinicOSHouse-worktrees\\po13-mna-backend\\artifacts\\task-validation\\po-14-gds\\backend-preparation\\backend-contract.md",
+    "path": "backend-contract.md",
+    "sha256": "13ec80cedcc577c40e00e30a98a6e5f41ee03513c8a0a4afb6da13a252aba708",
+    "byteIdentical": true
+  },
+  "historicalPreparation": {
+    "path": "dto-preparation",
+    "copiedFiles": [
+      {
+        "path": "dto-preparation/backend-contract.md",
+        "bytes": 3011,
+        "sha256": "13ec80cedcc577c40e00e30a98a6e5f41ee03513c8a0a4afb6da13a252aba708"
+      },
+      {
+        "path": "dto-preparation/task-contract.snapshot.md",
+        "bytes": 3240,
+        "sha256": "a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc"
+      },
+      {
+        "path": "dto-preparation/claims-preparation.json",
+        "bytes": 975,
+        "sha256": "f5a053c5295497e4157efc9cf00a269380eeb268a1bee433e420ac516df391c9"
+      },
+      {
+        "path": "dto-preparation/claims-preparation-release.json",
+        "bytes": 1111,
+        "sha256": "4d7a4f4a2fb377e9eddb1c432c504508f896e2c501a5ef5fa9cb6294f22f2df3"
+      },
+      {
+        "path": "dto-preparation/frontend-agreement.json",
+        "bytes": 582,
+        "sha256": "ff94f156432ee906dcdf6c9d00aaff8715cd0adc949a5da30bcdf41f1f29ff4e"
+      },
+      {
+        "path": "dto-preparation/finalize-preparation.mjs",
+        "bytes": 1837,
+        "sha256": "0363b28becd7a48d101ac3b0c18c7d32d7cb276ab0d2efff51d367a49c67f6b3"
+      },
+      {
+        "path": "dto-preparation/preparation-receipt.json",
+        "bytes": 1598,
+        "sha256": "403c061e1b461a1e40199d597eb675f68389c707539da4c9c01f1938cf30a309"
+      }
+    ],
+    "note": "Historical DTO preparation is copied byte-for-byte with its frontend agreement and released claim; the current contract snapshot is byte-identical to the authoritative root original."
+  }
+}

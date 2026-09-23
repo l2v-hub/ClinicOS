@@ -22,7 +22,14 @@ import {
   type MnaSnapshot,
 } from './mna-types.js';
 export * from './mna-types.js';
-export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna';
+import {
+  GDS15_VERSION,
+  type Gds15Answers,
+  type Gds15Result,
+  type Gds15SnapshotItem,
+} from './gds15-types.js';
+export * from './gds15-types.js';
+export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna' | 'gds15';
 
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const PAINAD_SOURCE_SHA256 =
@@ -81,7 +88,21 @@ export interface TinettiSnapshot extends Omit<
   notes: string;
   provenance: string;
 }
-export type AssessmentSnapshot = PainadSnapshot | TransfersSnapshot | TinettiSnapshot | MnaSnapshot;
+export interface Gds15Snapshot extends Omit<
+  PainadSnapshot,
+  'form' | 'items' | 'result' | 'interpretation'
+> {
+  form: { type: 'gds15'; version: typeof GDS15_VERSION; sourceSha256: string };
+  instruction: string;
+  items: Gds15SnapshotItem[];
+  result: Gds15Result;
+  notes: string;
+  screeningNote: string;
+  provenance: string;
+  reference: string;
+}
+export type AssessmentSnapshot =
+  PainadSnapshot | TransfersSnapshot | TinettiSnapshot | MnaSnapshot | Gds15Snapshot;
 export interface AssessmentPdfDto {
   status: 'pending' | 'ready' | 'failed';
   documentId: string | null;
@@ -152,10 +173,28 @@ export interface MnaAssessmentDto extends MnaHistoryItem {
   finalSnapshot: MnaSnapshot | null;
   snapshotSha256: string | null;
 }
+export interface Gds15HistoryItem extends Omit<
+  PainadHistoryItem,
+  'type' | 'formVersion' | 'result'
+> {
+  type: 'gds15';
+  formVersion: typeof GDS15_VERSION;
+  completion: AssessmentCompletion;
+  result: Gds15Result | null;
+}
+export interface Gds15AssessmentDto extends Gds15HistoryItem {
+  answers: Gds15Answers;
+  finalSnapshot: Gds15Snapshot | null;
+  snapshotSha256: string | null;
+}
 export type AssessmentHistoryItem =
-  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem;
+  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem | Gds15HistoryItem;
 export type AssessmentDto =
-  PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto | MnaAssessmentDto;
+  | PainadAssessmentDto
+  | TransfersAssessmentDto
+  | TinettiAssessmentDto
+  | MnaAssessmentDto
+  | Gds15AssessmentDto;
 export interface AssessmentDocumentMeta {
   id: string;
   type: AssessmentType;

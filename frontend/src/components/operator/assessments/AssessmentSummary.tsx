@@ -5,10 +5,12 @@ import { PatientIdentity } from '../../shared/PatientIdentity';
 import { TransfersSummary } from './TransfersSummary';
 import { TinettiSummary } from './TinettiSummary';
 import { MnaSummary } from './MnaSummary';
+import { GdsSummary } from './GdsSummary';
 export function AssessmentSummary({ record }: { record: AssessmentDto }) {
   if (record.type === 'postural_transfers') return <TransfersSummary record={record} />;
   if (record.type === 'tinetti') return <TinettiSummary record={record} />;
   if (record.type === 'mna') return <MnaSummary record={record} />;
+  if (record.type === 'gds15') return <GdsSummary record={record} />;
   const snapshot = record.finalSnapshot;
   const items =
     snapshot?.items ??

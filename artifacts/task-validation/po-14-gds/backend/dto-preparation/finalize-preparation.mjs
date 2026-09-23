@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFile, writeFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+const folder=dirname(fileURLToPath(import.meta.url));
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+const files=['backend-contract.md','task-contract.snapshot.md','claims-preparation.json','claims-preparation-release.json','frontend-agreement.json','finalize-preparation.mjs'];
+const artifacts=await Promise.all(files.map(async path=>{const bytes=await readFile(resolve(folder,path));return {path,bytes:bytes.length,sha256:sha(bytes)};}));
+assert.equal(artifacts[0].sha256,'13ec80cedcc577c40e00e30a98a6e5f41ee03513c8a0a4afb6da13a252aba708');
+assert.equal(artifacts[1].sha256,'a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc');
+const wrapper=JSON.parse(await readFile(resolve(folder,'claims-preparation-release.json'),'utf8'));
+const result=JSON.parse(wrapper.content.find(row=>row.type==='text').text);
+assert(result.success && result.previousClaim.issueId==='PO-14-backend-dto-preparation');
+await writeFile(resolve(folder,'preparation-receipt.json'),JSON.stringify({task:'PO14-backend-dto-preparation',completedAt:new Date().toISOString(),phase:'contract-only-complete',decision:'allow agreed preparation handoff; implementation awaits explicit root GO after PO13 verified release',rootContractSha256:artifacts[1].sha256,dtoContractSha256:artifacts[0].sha256,claimReleased:true,applicationCodeChanged:false,runtimeChanged:false,po14TestsRun:false,publicationAuthorized:false,frontendAgreement:'frontend-agreement.json',artifacts},null,2)+'\n');
+console.log(JSON.stringify({completed:true,receiptSha256:sha(await readFile(resolve(folder,'preparation-receipt.json')))}));

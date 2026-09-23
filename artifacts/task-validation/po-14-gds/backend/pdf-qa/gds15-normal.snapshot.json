@@ -1,0 +1,150 @@
+{
+  "form": {
+    "type": "gds15",
+    "version": "gds15-it-2026-09-22-v1",
+    "sourceSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+  },
+  "items": [
+    {
+      "id": "q1",
+      "label": "È sostanzialmente soddisfatto/a della sua vita?",
+      "score": 0,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q2",
+      "label": "Ha rinunciato a molte delle sue attività e interessi?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q3",
+      "label": "Sente che la sua vita sia vuota?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q4",
+      "label": "Si sente spesso annoiato/a?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q5",
+      "label": "È di buon umore per la maggior parte del tempo?",
+      "score": 0,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q6",
+      "label": "Ha paura che stia per succederle qualcosa di brutto?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q7",
+      "label": "Si sente felice per la maggior parte del tempo?",
+      "score": 0,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q8",
+      "label": "Si sente spesso impotente/senza aiuto?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q9",
+      "label": "Preferisce stare a casa piuttosto che uscire e fare cose nuove?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q10",
+      "label": "Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q11",
+      "label": "Pensa che sia bello essere vivi in questo momento?",
+      "score": 0,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q12",
+      "label": "Si sente piuttosto inutile/senza valore per come è ora?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q13",
+      "label": "Si sente pieno/a di energia?",
+      "score": 0,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q14",
+      "label": "Sente che la sua situazione sia senza speranza?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    },
+    {
+      "id": "q15",
+      "label": "Pensa che la maggior parte delle persone stia meglio di lei?",
+      "score": 1,
+      "answer": true,
+      "description": "Sì"
+    }
+  ],
+  "notes": "",
+  "author": {
+    "name": "Élodie Παπαδόπουλος",
+    "operatorId": "po10-aa346328-author"
+  },
+  "result": {
+    "band": "severe",
+    "label": "Depressione grave",
+    "total": 10,
+    "maximum": 15
+  },
+  "patient": {
+    "id": "po10-aa346328-patient",
+    "lastName": "D’Àngelo",
+    "location": {
+      "bed": "A",
+      "asOf": "2026-03-29",
+      "room": "po10-aa346328",
+      "source": "assignment",
+      "status": "assigned"
+    },
+    "firstName": "Zoë",
+    "dateOfBirth": "1940-01-02",
+    "codiceFiscale": null
+  },
+  "createdAt": "2026-09-23T06:48:25.877Z",
+  "reference": "Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter version. Clinical Gerontologist.",
+  "assessedAt": "2026-03-28T23:30:00.000Z",
+  "provenance": "GDS-15, Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item, allegato del 22/09/2026. Trascrizione della fonte fornita; nessuna convalida clinica indipendente.",
+  "finalizedAt": "2026-09-23T06:48:25.941Z",
+  "instruction": "Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ oppure NO) in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per ogni risposta conforme alla colonna \"Punto (1/0)\".",
+  "predecessor": null,
+  "predecessorId": null,
+  "screeningNote": "La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo moderato-severo (es. MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in Dementia).",
+  "snapshotVersion": 1,
+  "correctionReason": null
+}

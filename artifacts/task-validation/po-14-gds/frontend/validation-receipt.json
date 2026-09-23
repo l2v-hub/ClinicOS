@@ -1,0 +1,193 @@
+{
+  "task": "PO-14-frontend",
+  "generatedAtUtc": "2026-09-23T06:58:41.249Z",
+  "baseline": "6f8b7ded54084c4a380f94b61f9aa520b698a09c",
+  "sourceStateId": "ab42f3de1afebe1d6b63d01d7aa6b5011a13058270c8530f2a2a840a46a21f31",
+  "runtimeSourceId": "de1b676d5af2bafe7dd3366e8b49b62697705e0ad6b0ddaed69718e493517850",
+  "sourceManifestSha256": "0d9ccbb567f069942cbc143613976624d688fd66cbd631cfcc660d74af8de0e8",
+  "sourceFiles": 22,
+  "addedSourceFiles": 10,
+  "changedBaselineFiles": 12,
+  "baselineInputs": 539,
+  "unchangedBaselineInputsVerified": 527,
+  "scopedCurrentInputs": 549,
+  "exactInputBinding": "Changed-file identities plus baseline manifest and protected files bind actual scoped checkout bytes; candidate is uncommitted.",
+  "policyDecision": {
+    "decision": "allow",
+    "authority": "Root GO after PO13 Railway b8e82dd2 SUCCESS, migration/health200; Vercel dpl_LR7ZEk7P2PqPC8nbhtamURHqvGci READY alias baseline6f8b7ded; MNA current/history read-only online zero errors.",
+    "scope": "Root-assigned isolated GDS frontend source/tests/evidence, now released",
+    "excluded": [
+      "backend",
+      "schema",
+      "package manifests",
+      "lockfiles",
+      "shared dependencies",
+      "servers",
+      "ports",
+      "commit",
+      "push",
+      "deploy",
+      "live patient writes"
+    ]
+  },
+  "contracts": {
+    "task-contract.snapshot.md": "a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc",
+    "backend-contract.snapshot.md": "13ec80cedcc577c40e00e30a98a6e5f41ee03513c8a0a4afb6da13a252aba708",
+    "definition-contract.snapshot.json": "f48082ea66e05298437fa771fb9274a785ca75f5169e9a7b6b8f261b63cdf2d7",
+    "gds.source.txt": "04c1c532ccc840ede01dcd042f0edc1d2ab9c8682900411ff8027f6911080610",
+    "sourcePdfSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+  },
+  "tests": {
+    "exitCode": 0,
+    "passed": 138,
+    "failed": 0,
+    "skipped": 0,
+    "gdsTests": 11,
+    "regressionTests": 127,
+    "cwd": "frontend",
+    "command": [
+      "node",
+      "--import",
+      "tsx",
+      "--import",
+      "../scripts/stub-css-loader.mjs",
+      "--test",
+      "src/lib/__tests__/gds15Definition.test.ts",
+      "src/lib/__tests__/gds15Workflow.test.ts",
+      "src/lib/__tests__/mnaDefinition.test.ts",
+      "src/lib/__tests__/mnaWorkflow.test.ts",
+      "src/lib/__tests__/painadDefinition.test.ts",
+      "src/lib/__tests__/assessmentDraftStore.test.ts",
+      "src/lib/__tests__/assessmentClient.test.ts",
+      "src/lib/__tests__/assessmentArchive.test.ts",
+      "src/lib/__tests__/transfersDefinition.test.ts",
+      "src/lib/__tests__/transfersDraftStore.test.ts",
+      "src/lib/__tests__/transfersClient.test.ts",
+      "src/lib/__tests__/tinettiDefinition.test.ts",
+      "src/lib/__tests__/tinettiWorkflow.test.ts",
+      "src/lib/__tests__/patientDocumentArchive.test.ts",
+      "src/lib/__tests__/patientIdentity.test.ts",
+      "src/lib/__tests__/patientDocumentsPage.test.ts",
+      "src/lib/__tests__/cartellaWriteQueue.test.ts",
+      "src/lib/__tests__/medicazioniConcurrency.test.ts",
+      "src/lib/__tests__/patientDetailLazyGuard.test.ts",
+      "src/lib/__tests__/patientDetailWorkspace.test.ts",
+      "src/lib/__tests__/patientRecordPrint.test.ts",
+      "src/components/operator/__tests__/gds15Ui.test.ts",
+      "src/components/operator/__tests__/mnaUi.test.ts",
+      "src/components/operator/__tests__/assessmentsUi.test.ts",
+      "src/components/operator/__tests__/transfersUi.test.ts",
+      "src/components/operator/__tests__/tinettiUi.test.ts"
+    ],
+    "sourceStateId": "ab42f3de1afebe1d6b63d01d7aa6b5011a13058270c8530f2a2a840a46a21f31",
+    "log": "artifacts/task-validation/po-14-gds/frontend/test-focused.log"
+  },
+  "build": {
+    "exitCode": 0,
+    "command": "npm run build",
+    "cwd": "frontend",
+    "runtimeSourceId": "de1b676d5af2bafe7dd3366e8b49b62697705e0ad6b0ddaed69718e493517850",
+    "log": "artifacts/task-validation/po-14-gds/frontend/build.log",
+    "binding": "Passing build preceded two test-file unused-variable cleanups; runtime inputs remained identical. Final tests and lint ran after the final source capture. Final test-file bytes were not rebuilt.",
+    "warnings": [
+      "Existing large bundle chunk warning",
+      "Bundler plugin timing diagnostic"
+    ]
+  },
+  "lint": {
+    "exitCode": 0,
+    "scope": "Differential lint of 21 changed TypeScript sources",
+    "baselineDiagnostics": 18,
+    "candidateDiagnostics": 18,
+    "introduced": [],
+    "log": "artifacts/task-validation/po-14-gds/frontend/lint-comparison.json"
+  },
+  "secretScan": {
+    "exitCode": 0,
+    "findings": 0,
+    "sourceFiles": 22,
+    "bundleFiles": 110,
+    "scannedFiles": 132,
+    "scope": "Changed source and emitted text bundle; known credential signatures only",
+    "log": "artifacts/task-validation/po-14-gds/frontend/secret-scan.json"
+  },
+  "sourceParity": {
+    "generatedAtUtc": "2026-09-23T06:48:47.352Z",
+    "scenarios": 32793,
+    "completeCombinations": 32768,
+    "outcome": "pass",
+    "texts": "Exact items/instruction/screeningNote/provenance/reference",
+    "partialSnapshotNote": "Frontend can describe missing draft items; backend snapshot items require a complete final. Complete snapshot items are compared exhaustively.",
+    "backendInputs": [
+      {
+        "path": "C:/Workspace/ClinicOSHouse-worktrees/po14-gds-backend/backend/src/assessments/gds15.ts",
+        "sha256": "17f18962f2c8315825b68c6e39210b9b025cc92dcae2cea8ca8199840e42be59"
+      },
+      {
+        "path": "C:/Workspace/ClinicOSHouse-worktrees/po14-gds-backend/backend/src/assessments/gds15-definition.ts",
+        "sha256": "cc8e51d77932b8245670278914edd30852bd9673287e4ebd7d9d4aaf9d32131c"
+      },
+      {
+        "path": "C:/Workspace/ClinicOSHouse-worktrees/po14-gds-backend/backend/src/assessments/gds15-types.ts",
+        "sha256": "751498baadc148d7d4e8f9800584e71d8e78283d946d3b1fd15cf3845620d1b2"
+      }
+    ],
+    "frontendInput": {
+      "path": "frontend/src/lib/assessments/gds15Definition.ts",
+      "sha256": "87c35af5c0493a060d8dfcc8f5ee915dfd53088eb0cb5a5dbb5d720c80efe02b"
+    }
+  },
+  "whitespace": {
+    "command": "git diff --check -- frontend/src",
+    "exitCode": 0
+  },
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "b36eca8bc9fd9f584410f7ff3a3469f812f197d6e96a435659902adc5ee91be1"
+  },
+  "artifactVerification": {
+    "sourceAtValidation": true,
+    "exactBaselineGitObjects": 539,
+    "unchangedCheckoutInputs": 527,
+    "sourceFiles": 22,
+    "lintCandidateInputs": 21,
+    "scannedInputs": 132,
+    "parityInputs": 4,
+    "scopeCoverage": true
+  },
+  "evidenceHashes": {
+    "source-manifest.json": "0d9ccbb567f069942cbc143613976624d688fd66cbd631cfcc660d74af8de0e8",
+    "source-at-validation.json": "a102f01d6f8f46d9cd1fc6c32049f1723a58dff7b2bc35d33abd54a986381f3f",
+    "baseline-source-manifest.json": "acbcab9b53d450991301d8437bed337f775786aa992b898aa2036ca381ba42d5",
+    "test-focused.log": "b8989553657995dc5d5c14c553d1e8c8ba6c7144f3d3873e2f0e72bc0db6813e",
+    "build.log": "e5f2ccb822ba5de6077ccdd8474a7f974a8e692ae678d9b9c50e4093f3bb512a",
+    "lint-comparison.json": "bba0df8c155ad460a62447862ba6604d6dc6f23fa0601d9868813f768132ef15",
+    "lint.log": "2132f4e079db80b84793db181f42acf6a6d6f5df9b7b17d5f27e72a195a322a7",
+    "secret-scan.json": "60ed8169abaf7922bb1b34f1e417102b044b2d20a2534fb8fa1864bd260e125e",
+    "secret-scan.log": "1753b4a12ac55987af59d69b819668832005056067be9cf2f830e7e5a363e495",
+    "definition-parity.json": "1d5853e6d1d052999e170fa16197b4475d8c4b77e25a4b9474c92aeffc4a535b"
+  },
+  "applicationClaimReleased": true,
+  "preparationClaimReleased": true,
+  "evidenceClaimReleased": true,
+  "claimsReleased": true,
+  "independentReview": {
+    "functionalStatus": "No remaining P1/P2 reported after surrogate fix and parser/store/UI coverage",
+    "manifestStatus": "Final generated package awaits independent hash/coverage confirmation, recorded separately by reviewer/root"
+  },
+  "resolvedDiagnostics": [
+    "Snapshot description and TypeScript null narrowing corrected before passing build.",
+    "Four unused test variables removed before final lint, with source capture and focused tests repeated.",
+    "Isolated UTF-16 surrogates rejected consistently with backend; valid emoji retained.",
+    "Editor-specific last-week instruction approved by root while original source instruction remains immutable."
+  ],
+  "limitations": [
+    "Root owns browser geometry/keyboard, QA4195, HTTP/PostgreSQL, rendered PDF checks and publication.",
+    "SSR verifies structure/text and state, not actual browser layout or PDF pagination.",
+    "No performance improvement or independent clinical validation claim.",
+    "Signature scan is limited to declared rules and inputs.",
+    "No worker dependency/package/lockfile/backend/schema/server/commit/push/deploy/live-write action.",
+    "Original application release success was observed but raw response and exact time were not persisted; subsequent empty claimant inventory is preserved."
+  ]
+}

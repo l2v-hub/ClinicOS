@@ -1,3 +1,4 @@
+import { GDS15_VERSION, type Gds15Answers, type Gds15Result, type Gds15Snapshot } from './gds15Types';
 import type { PatientIdentityData } from '../patientIdentity';
 import {
   MNA_VERSION,
@@ -20,18 +21,19 @@ import {
   type AssessmentCompletion,
   type TransferSection,
 } from './transfersTypes';
-export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna';
+export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna' | 'gds15';
 export interface AssessmentTarget {
   id: string;
   type: AssessmentType;
 }
-export type AssessmentAnswers = PainadAnswers | TransfersAnswers | TinettiAnswers | MnaAnswers;
+export type AssessmentAnswers = PainadAnswers | TransfersAnswers | TinettiAnswers | MnaAnswers | Gds15Answers;
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const ASSESSMENT_VERSIONS = {
   painad: PAINAD_VERSION,
   postural_transfers: TRANSFERS_VERSION,
   tinetti: TINETTI_VERSION,
   mna: MNA_VERSION,
+  gds15: GDS15_VERSION,
 } as const;
 export const PAINAD_KEYS = [
   'respiration',
@@ -111,8 +113,15 @@ export type MnaHistoryItem = AssessmentHistoryBase & {
   completion: MnaCompletion;
   result: MnaResult;
 };
+export type Gds15HistoryItem = AssessmentHistoryBase & {
+  type: 'gds15';
+  formVersion: typeof GDS15_VERSION;
+  answeredCount: number;
+  completion: AssessmentCompletion;
+  result: Gds15Result | null;
+};
 export type AssessmentHistoryItem =
-  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem;
+  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem | Gds15HistoryItem;
 export interface TinettiSnapshot extends Omit<
   AssessmentSnapshot,
   'form' | 'items' | 'result' | 'interpretation'
@@ -156,8 +165,13 @@ export type MnaAssessmentDto = MnaHistoryItem & {
   finalSnapshot: MnaSnapshot | null;
   snapshotSha256: string | null;
 };
+export type Gds15AssessmentDto = Gds15HistoryItem & {
+  answers: Gds15Answers;
+  finalSnapshot: Gds15Snapshot | null;
+  snapshotSha256: string | null;
+};
 export type AssessmentDto =
-  PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto | MnaAssessmentDto;
+  PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto | MnaAssessmentDto | Gds15AssessmentDto;
 export interface AssessmentPage {
   items: AssessmentHistoryItem[];
   pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
@@ -178,7 +192,7 @@ export interface AssessmentCreate extends AssessmentEditable {
   requestId: string;
   type: AssessmentType;
   formVersion:
-    typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION | typeof MNA_VERSION;
+    typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION | typeof MNA_VERSION | typeof GDS15_VERSION;
   predecessorId?: string;
 }
 export type AssessmentOperation =

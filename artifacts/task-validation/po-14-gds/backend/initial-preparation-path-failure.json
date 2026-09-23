@@ -1,0 +1,10 @@
+{
+  "phase": "preflight",
+  "runnerExitCode": 1,
+  "toolChunk": "a5cb1d",
+  "cause": "Initial preparation script retained old hyphenated PO13 artifact paths and could not locate the PO14 DTO contract.",
+  "error": "ENOENT before preparation-session write or runtime mutation",
+  "repair": "Corrected explicit artifact, DTO, root contract and previous runtime receipt paths to PO14/PO13 respectively.",
+  "applicationSourceChanged": false,
+  "runtimeChangedBeforeFailure": false
+}

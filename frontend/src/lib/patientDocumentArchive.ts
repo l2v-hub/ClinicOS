@@ -12,6 +12,7 @@ export const ASSESSMENT_ARCHIVE_LABELS: Record<AssessmentType, string> = {
   postural_transfers: 'Trasferimenti posturali',
   tinetti: 'Scala di Tinetti',
   mna: 'MNA · Nutrizione',
+  gds15: 'GDS-15 · Depressione',
 };
 
 export const DOCUMENT_TYPE_LABELS: Record<TipoDocumento, string> = {

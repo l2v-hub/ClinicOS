@@ -8,6 +8,7 @@
 // #245: 'anamnesi' rimosso — il tab editabile duplicato non esiste più (resta la sola superficie
 // narrativa 'sezioni-narrative'). #278: l'anamnesi strutturata torna modificabile lì tramite
 // AnamnesisEditor (stesso editor dell'intake).
+import type { AssessmentType } from '../../lib/assessments/assessmentTypes';
 export type TabId =
   | 'riepilogo'
   | 'profilo'
@@ -26,6 +27,7 @@ export type TabId =
   | 'braden'
   | 'tinetti'
   | 'mna'
+  | 'gds'
   | 'nrs'
   | 'painad'
   | 'postural_transfers'
@@ -76,6 +78,7 @@ export const TAB_GROUPS: TabGroupDef[] = [
       { id: 'braden', label: 'Scala Braden' },
       { id: 'tinetti', label: 'Scala Tinetti' },
       { id: 'mna', label: 'MNA · Nutrizione' },
+      { id: 'gds', label: 'GDS-15 · Depressione' },
       { id: 'nrs', label: 'Scala NRS' },
       { id: 'painad', label: 'Scala PAINAD' },
       { id: 'postural_transfers', label: 'Trasferimenti posturali' },
@@ -92,6 +95,8 @@ export const TAB_GROUPS: TabGroupDef[] = [
     tabs: [{ id: 'dimissione', label: 'Dimissione' }],
   },
 ];
+
+export const assessmentPatientTab = (type: AssessmentType): TabId => type === 'gds15' ? 'gds' : type;
 
 export function tabLabel(id: TabId): string | undefined {
   if (id === 'sezioni-narrative') return 'Sezioni cliniche';

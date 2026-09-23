@@ -1,0 +1,21 @@
+{
+  "task": "PO-14-frontend-evidence",
+  "owner": "/root/po01_frontend_audit",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po14-gds-ui",
+  "authority": "Root GO after PO13 Railway b8e82dd2 SUCCESS, migration/health200; Vercel dpl_LR7ZEk7P2PqPC8nbhtamURHqvGci READY alias baseline6f8b7ded; MNA current/history read-only online zero errors.",
+  "decision": "allow-scoped-evidence-finalization",
+  "allowedPaths": [
+    "artifacts/task-validation/po-14-gds/frontend"
+  ],
+  "ledgerClaim": "PO-14-frontend-evidence",
+  "ledgerClaimant": "agent:codex-po14-frontend:coder",
+  "ledgerClaimedAt": "2026-09-23T06:55:59.683Z",
+  "status": "released",
+  "claimActive": false,
+  "applicationClaimActive": false,
+  "releasedByTool": "mcp__ruflo__claims_release",
+  "releaseEvidence": "artifacts/task-validation/po-14-gds/frontend/claims-evidence-release.json",
+  "recordedAtUtc": "2026-09-23T06:58:41.249Z",
+  "sourceStateId": "ab42f3de1afebe1d6b63d01d7aa6b5011a13058270c8530f2a2a840a46a21f31",
+  "runtimeSourceId": "de1b676d5af2bafe7dd3366e8b49b62697705e0ad6b0ddaed69718e493517850"
+}

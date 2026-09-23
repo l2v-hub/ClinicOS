@@ -1,0 +1,10 @@
+✔ GDS15 HTTP rejects incomplete final and archives all fifteen answers with the screening interpretation (16297.341ms)
+✔ GDS15 correction keeps the prior final and clinical date, while all No yields five rather than zero (851.5618ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 34231.6054

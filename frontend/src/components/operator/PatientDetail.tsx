@@ -58,6 +58,7 @@ import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import {
   TAB_GROUPS,
   resolvePatientTab,
+  assessmentPatientTab,
   patientTabGroup,
   type TabGroup,
   type TabId,
@@ -2640,7 +2641,7 @@ export function PatientDetail({
                 focusDocumentId={archiveFocus?.patientId === paziente.id ? archiveFocus.documentId : undefined}
                 expectedAssessmentId={archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.id : undefined}
                 expectedAssessmentType={archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.type : undefined}
-                onOpenAssessment={(assessment) => { setAssessmentFocus({ patientId: paziente.id, assessment }); switchTab(assessment.type); }}
+                onOpenAssessment={(assessment) => { setAssessmentFocus({ patientId: paziente.id, assessment }); switchTab(assessmentPatientTab(assessment.type)); }}
               />
             )}
             {(tab === 'diagnosi' || tab === 'sezioni-narrative') && (
@@ -2744,9 +2745,9 @@ export function PatientDetail({
                 onChange={() => {}}
               />
             )}
-            {(tab === 'painad' || tab === 'postural_transfers' || tab === 'tinetti' || tab === 'mna') && (
+            {(tab === 'painad' || tab === 'postural_transfers' || tab === 'tinetti' || tab === 'mna' || tab === 'gds') && (
               <AssessmentWorkspace patient={paziente} operatorId={operatoreId} operatorRole={operatoreRole} operatorName={operatoreNome}
-                type={tab} draftStore={assessmentDraftStore} initialAssessment={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessment : undefined}
+                type={tab === 'gds' ? 'gds15' : tab} draftStore={assessmentDraftStore} initialAssessment={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessment : undefined}
                 onOpenArchive={(documentId, assessment) => { setArchiveFocus({ patientId: paziente.id, documentId, assessment }); switchTab('documenti'); }}>
                 {tab === 'tinetti' && <ScalaTinettiTab cartella={cartella} paziente={paziente} />}
               </AssessmentWorkspace>

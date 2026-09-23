@@ -1,0 +1,38 @@
+{
+  "task": "PO14-backend",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po14-gds-backend",
+  "branch": "codex/po14-gds-backend",
+  "baseline": "6f8b7ded54084c4a380f94b61f9aa520b698a09c",
+  "startedAt": "2026-09-23T06:39:08.677Z",
+  "claim": {
+    "issueId": "PO-14-backend-implementation",
+    "claimant": "agent:codex-po14-backend:coder"
+  },
+  "decision": "allow scoped GDS15 implementation after explicit root GO and verified PO13 live release",
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "rootContractSha256": "a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc",
+  "dtoContractSha256": "13ec80cedcc577c40e00e30a98a6e5f41ee03513c8a0a4afb6da13a252aba708",
+  "initialSourceTreeSha256": "4acb62a99f69fafe8818a363223947eedf689d8708883f212b472457cfb20e53",
+  "publicationAuthorizedToWorker": false
+}

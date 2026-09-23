@@ -1,0 +1,154 @@
+{
+  "form": {
+    "type": "gds15",
+    "version": "gds15-it-2026-09-22-v1",
+    "sourceSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+  },
+  "items": [
+    {
+      "id": "q1",
+      "label": "È sostanzialmente soddisfatto/a della sua vita?",
+      "score": 1,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q2",
+      "label": "Ha rinunciato a molte delle sue attività e interessi?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q3",
+      "label": "Sente che la sua vita sia vuota?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q4",
+      "label": "Si sente spesso annoiato/a?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q5",
+      "label": "È di buon umore per la maggior parte del tempo?",
+      "score": 1,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q6",
+      "label": "Ha paura che stia per succederle qualcosa di brutto?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q7",
+      "label": "Si sente felice per la maggior parte del tempo?",
+      "score": 1,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q8",
+      "label": "Si sente spesso impotente/senza aiuto?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q9",
+      "label": "Preferisce stare a casa piuttosto che uscire e fare cose nuove?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q10",
+      "label": "Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q11",
+      "label": "Pensa che sia bello essere vivi in questo momento?",
+      "score": 1,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q12",
+      "label": "Si sente piuttosto inutile/senza valore per come è ora?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q13",
+      "label": "Si sente pieno/a di energia?",
+      "score": 1,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q14",
+      "label": "Sente che la sua situazione sia senza speranza?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "q15",
+      "label": "Pensa che la maggior parte delle persone stia meglio di lei?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    }
+  ],
+  "notes": "Prima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima riga àèìòù e Ω.\nSeconda riga conservata.\nPrima",
+  "author": {
+    "name": "Élodie Παπαδόπουλος",
+    "operatorId": "po10-aa346328-author"
+  },
+  "result": {
+    "band": "none",
+    "label": "Assente / Nella norma",
+    "total": 5,
+    "maximum": 15
+  },
+  "patient": {
+    "id": "po10-aa346328-patient",
+    "lastName": "D’Àngelo",
+    "location": {
+      "bed": "A",
+      "asOf": "2026-03-29",
+      "room": "po10-aa346328",
+      "source": "assignment",
+      "status": "assigned"
+    },
+    "firstName": "Zoë",
+    "dateOfBirth": "1940-01-02",
+    "codiceFiscale": null
+  },
+  "createdAt": "2026-09-23T06:48:26.970Z",
+  "reference": "Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter version. Clinical Gerontologist.",
+  "assessedAt": "2026-03-28T23:30:00.000Z",
+  "provenance": "GDS-15, Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item, allegato del 22/09/2026. Trascrizione della fonte fornita; nessuna convalida clinica indipendente.",
+  "finalizedAt": "2026-09-23T06:48:26.994Z",
+  "instruction": "Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ oppure NO) in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per ogni risposta conforme alla colonna \"Punto (1/0)\".",
+  "predecessor": {
+    "id": "6eb374c2-aee0-4b5c-8315-13ed37a363b0",
+    "assessedAt": "2026-03-28T23:30:00.000Z",
+    "authorName": "Élodie Παπαδόπουλος"
+  },
+  "predecessorId": "6eb374c2-aee0-4b5c-8315-13ed37a363b0",
+  "screeningNote": "La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo moderato-severo (es. MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in Dementia).",
+  "snapshotVersion": 1,
+  "correctionReason": "Rettifica sintetica: risposte del paziente riferite all’ultima settimana."
+}

@@ -20,6 +20,8 @@ import { TINETTI_VERSION } from './tinettiTypes';
 import { assertTinettiHistory, assertTinettiAssessment } from './tinettiValidation';
 import { MNA_VERSION } from './mnaTypes';
 import { assertMnaHistory, assertMnaAssessment } from './mnaValidation';
+import { GDS15_VERSION } from './gds15Types';
+import { assertGds15History, assertGds15Assessment } from './gds15Validation';
 export const validAssessmentId = (value: unknown): value is string =>
   typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value);
 const instant = (value: unknown): value is string =>
@@ -28,7 +30,7 @@ const instant = (value: unknown): value is string =>
   Number.isFinite(Date.parse(value));
 const optionalId = (value: unknown) => value === null || validAssessmentId(value);
 export const validAssessmentType = (value: unknown): value is AssessmentType =>
-  value === 'painad' || value === 'postural_transfers' || value === 'tinetti' || value === 'mna';
+  value === 'painad' || value === 'postural_transfers' || value === 'tinetti' || value === 'mna' || value === 'gds15';
 function invalid(): never {
   throw new Error('Risposta della valutazione non verificata.');
 }
@@ -78,6 +80,7 @@ export function assertAssessmentHistory(
         postural_transfers: TRANSFERS_VERSION,
         tinetti: TINETTI_VERSION,
         mna: MNA_VERSION,
+        gds15: GDS15_VERSION,
       }[row.type] ||
     !['draft', 'final'].includes(row.status) ||
     !Number.isSafeInteger(row.version) ||
@@ -104,6 +107,8 @@ export function assertAssessmentHistory(
       invalid();
   } else if (row.type === 'tinetti') {
     assertTinettiHistory(row);
+  } else if (row.type === 'gds15') {
+    assertGds15History(row);
   } else if (row.type === 'mna') {
     assertMnaHistory(row);
   } else if (
@@ -152,6 +157,10 @@ export function assertAssessment(
   }
   if (row.type === 'mna') {
     assertMnaAssessment(row, patientId);
+    return;
+  }
+  if (row.type === 'gds15') {
+    assertGds15Assessment(row, patientId);
     return;
   }
   if (row.type === 'postural_transfers') {

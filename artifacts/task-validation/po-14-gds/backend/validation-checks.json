@@ -1,0 +1,115 @@
+{
+  "startedAt": "2026-09-23T06:47:44.290Z",
+  "completedAt": "2026-09-23T06:48:11.605Z",
+  "sourceTreeSha256": "f9bfae118e478c02bfcc4a30d6d150d27cd2c288557f6a108a0250758e97605c",
+  "sourceUnchanged": true,
+  "results": [
+    {
+      "name": "typecheck",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "backend/tsconfig.json",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-23T06:47:44.624Z",
+      "completedAt": "2026-09-23T06:48:02.012Z"
+    },
+    {
+      "name": "build",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "backend/tsconfig.json"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-23T06:48:02.013Z",
+      "completedAt": "2026-09-23T06:48:09.687Z"
+    },
+    {
+      "name": "build-fonts",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "scripts/build/copy-assessment-fonts.mjs"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-23T06:48:09.688Z",
+      "completedAt": "2026-09-23T06:48:09.811Z"
+    },
+    {
+      "name": "schema-validation",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "node_modules/prisma/build/index.js",
+        "validate",
+        "--schema",
+        "prisma/schema.prisma"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-23T06:48:09.811Z",
+      "completedAt": "2026-09-23T06:48:11.362Z"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "backend",
+        "prisma"
+      ],
+      "exitCode": 0,
+      "startedAt": "2026-09-23T06:48:11.362Z",
+      "completedAt": "2026-09-23T06:48:11.431Z"
+    }
+  ],
+  "protectedFilesPreserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "schema": {
+    "sourceSha256": "27ecb68a69455aff958fb0c66e3fffc57de0e3353b260111ad0d3a86ae64143c",
+    "generatedSha256": "e79bedeae560156ee91ac0e89b11df99f58439cf5777a77fab664ca9871f1336",
+    "privateClientMatchesSource": true,
+    "generationPerformed": false,
+    "connectedToDatabase": false
+  },
+  "build": {
+    "compiled": true,
+    "fontsCopiedAndByteVerified": true,
+    "prismaGenerationSkipped": "Prisma model schema unchanged; previously byte-verified private PO13 runtime retained."
+  },
+  "runtime": {
+    "privateWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po14-gds-backend\\backend\\node_modules\\@prisma\\client",
+    "privateClient": "C:\\Workspace\\ClinicOSHouse-worktrees\\po14-gds-backend\\backend\\node_modules\\.prisma\\client",
+    "preparedFilesByteVerified": true,
+    "sharedRuntimeWritten": false
+  },
+  "fonts": {
+    "unchanged": true,
+    "provenance": "font-provenance.json"
+  },
+  "dependencyManifestsChanged": false
+}

@@ -22,6 +22,8 @@ import { TINETTI_VERSION, type TinettiAnswers, type TinettiSnapshot } from './ty
 import { MNA_VERSION, type MnaSnapshot } from './mna-types.js';
 import { parseMnaAnswers } from './mna-input.js';
 import { mnaCompletion, mnaResult } from './mna.js';
+import { GDS15_VERSION, type Gds15Snapshot } from './types.js';
+import { parseGds15Answers, gds15Completion, gds15Result } from './gds15.js';
 
 export const assessmentNotFound = () =>
   new AssessmentError('Valutazione non disponibile', 404, 'assessment_not_found');
@@ -116,6 +118,20 @@ export function assessmentDto(row: AssessmentRow, now = new Date()): AssessmentD
         }
       : null,
   };
+  if (row.type === 'gds15' && row.formVersion === GDS15_VERSION) {
+    const answers = parseGds15Answers(row.answers);
+    const completion = gds15Completion(answers);
+    return {
+      ...common,
+      type: 'gds15',
+      formVersion: GDS15_VERSION,
+      answers,
+      answeredCount: 15 - completion.missingPaths.length,
+      completion,
+      result: gds15Result(answers),
+      finalSnapshot: row.finalSnapshot as unknown as Gds15Snapshot | null,
+    };
+  }
   if (row.type === 'mna' && row.formVersion === MNA_VERSION) {
     const answers = parseMnaAnswers(row.answers);
     const completion = mnaCompletion(answers);

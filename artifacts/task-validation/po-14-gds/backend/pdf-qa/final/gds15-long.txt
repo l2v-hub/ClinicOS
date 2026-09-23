@@ -1,0 +1,285 @@
+GDS-15 - Scala di depressione geriatrica
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | GDS-15 italiana, versione 1
+
+Data di nascita: 02/01/1940
+Codice fiscale: Non disponibile
+Camera: po10-aa346328 | Letto: A
+Posizione alla data: 2026-03-29 (Europe/Rome)
+Operatore: Élodie Παπαδόπουλος
+Registrazione: 23/09/2026, 08:48
+Finalizzazione: 23/09/2026, 08:48
+Rettifica della valutazione del 29/03/2026, 00:30, di Élodie Παπαδόπουλος
+Motivo: Rettifica sintetica: risposte del paziente riferite all’ultima settimana.
+
+Istruzioni per la somministrazione
+
+Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ oppure NO)
+in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per
+ogni risposta conforme alla colonna "Punto (1/0)".
+
+Questionario di valutazione
+
+1. È sostanzialmente soddisfatto/a della sua vita?
+Risposta: No | Punti: 1
+2. Ha rinunciato a molte delle sue attività e interessi?
+Risposta: No | Punti: 0
+3. Sente che la sua vita sia vuota?
+Risposta: No | Punti: 0
+4. Si sente spesso annoiato/a?
+Risposta: No | Punti: 0
+5. È di buon umore per la maggior parte del tempo?
+Risposta: No | Punti: 1
+6. Ha paura che stia per succederle qualcosa di brutto?
+Risposta: No | Punti: 0
+7. Si sente felice per la maggior parte del tempo?
+Risposta: No | Punti: 1
+8. Si sente spesso impotente/senza aiuto?
+Risposta: No | Punti: 0
+
+Valutazione finalizzata | Pagina 1 di 6
+GDS-15 - Scala di depressione geriatrica
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | GDS-15 italiana, versione 1
+
+9. Preferisce stare a casa piuttosto che uscire e fare cose nuove?
+Risposta: No | Punti: 0
+
+10. Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?
+Risposta: No | Punti: 0
+
+11. Pensa che sia bello essere vivi in questo momento?
+Risposta: No | Punti: 1
+
+12. Si sente piuttosto inutile/senza valore per come è ora?
+Risposta: No | Punti: 0
+
+13. Si sente pieno/a di energia?
+Risposta: No | Punti: 1
+
+14. Sente che la sua situazione sia senza speranza?
+Risposta: No | Punti: 0
+
+15. Pensa che la maggior parte delle persone stia meglio di lei?
+Risposta: No | Punti: 0
+
+Totale GDS-15: 5 / 15 — Assente / Nella norma
+
+Interpretazione dello screening
+
+La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo
+moderato-severo (es. MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in
+Dementia).
+
+Note
+
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+
+Valutazione finalizzata | Pagina 2 di 6
+GDS-15 - Scala di depressione geriatrica
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | GDS-15 italiana, versione 1
+
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+
+Valutazione finalizzata | Pagina 3 di 6
+GDS-15 - Scala di depressione geriatrica
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | GDS-15 italiana, versione 1
+
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+
+Valutazione finalizzata | Pagina 4 di 6
+GDS-15 - Scala di depressione geriatrica
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | GDS-15 italiana, versione 1
+
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+
+Valutazione finalizzata | Pagina 5 di 6
+GDS-15 - Scala di depressione geriatrica
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | GDS-15 italiana, versione 1
+
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima riga àèìòù e Ω.
+Seconda riga conservata.
+Prima
+Fonte e versione: gds15-it-2026-09-22-v1
+GDS-15, Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item, allegato del 22/09/2026. Trascrizione
+della fonte fornita; nessuna convalida clinica indipendente.
+Riferimenti bibliografici
+Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter
+version. Clinical Gerontologist.
+
+Valutazione finalizzata | Pagina 6 di 6
+

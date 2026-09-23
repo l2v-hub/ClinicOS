@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-14-backend-dto-preparation released\",\n  \"reason\": \"Preparation-only GDS15 DTO agreed with frontend; root contract controls and PO14 application work awaits verified PO13 release and separate GO.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-14-backend-dto-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po14-backend\",\n      \"agentType\": \"preparer\"\n    },\n    \"claimedAt\": \"2026-09-23T06:05:35.705Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T06:05:35.705Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly requested preparation-only GDS15 DTO while PO13 test runner is active. Sole writer scope artifacts/task-validation/po-14-gds/backend-preparation/** in po13-mna-backend worktree; no PO14 application/runtime/test changes before PO13 deployment verification and GO. Small contract aligned to PAINAD plus bool/null answers and notes, fixed source from root task contract.\"\n  }\n}"
+    }
+  ]
+}

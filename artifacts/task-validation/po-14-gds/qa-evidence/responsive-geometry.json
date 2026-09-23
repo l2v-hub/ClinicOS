@@ -1,0 +1,38 @@
+[
+  {
+    "focus": {
+      "bottom": 717.734375,
+      "top": 669.734375
+    },
+    "identity": {
+      "bottom": 187.375,
+      "top": 64
+    },
+    "scrollWidth": 375,
+    "width": 390
+  },
+  {
+    "focus": {
+      "bottom": 747.546875,
+      "top": 699.546875
+    },
+    "identity": {
+      "bottom": 149.1875,
+      "top": 64
+    },
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "focus": {
+      "bottom": 954.53125,
+      "top": 906.53125
+    },
+    "identity": {
+      "bottom": 571.1875,
+      "top": 486
+    },
+    "scrollWidth": 1247,
+    "width": 1262
+  }
+]

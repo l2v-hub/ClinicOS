@@ -26,6 +26,7 @@ import { AssessmentForm } from './AssessmentForm';
 import { TransfersForm } from './TransfersForm';
 import { TinettiForm } from './TinettiForm';
 import { MnaForm } from './MnaForm';
+import { GdsForm } from './GdsForm';
 import { AssessmentAttestations } from './AssessmentAttestations';
 import { AssessmentSummary } from './AssessmentSummary';
 import { AssessmentFinal } from './AssessmentFinal';
@@ -36,6 +37,7 @@ import './AssessmentWorkspace.css';
 import './Transfers.css';
 import './Tinetti.css';
 import './Mna.css';
+import './Gds.css';
 export interface AssessmentWorkspaceProps {
   patient: Paziente;
   operatorId?: string;
@@ -78,7 +80,9 @@ function AssessmentSession({
         ? TinettiForm
         : type === 'mna'
           ? MnaForm
-          : TransfersForm;
+          : type === 'gds15'
+            ? GdsForm
+            : TransfersForm;
   const entryId = initialAssessment?.type === type ? initialAssessment.id : initialAssessmentId;
   const [currentEmpty, setCurrentEmpty] = useState(false);
   const [store] = useState(() => draftStore ?? createAssessmentDraftStore());

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-14-backend-runtime-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po14-backend\",\n      \"agentType\": \"preparer\"\n    },\n    \"claimedAt\": \"2026-09-23T06:33:23.852Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T06:33:23.852Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root preparation assignment, sole writer C:/Workspace/ClinicOSHouse-worktrees/po14-gds-backend branch codex/po14-gds-backend baseline6f8b7ded54084c4a380f94b61f9aa520b698a09c. Scope private backend node_modules runtime, read-only root dependency/pdf/fontkit junctions and artifacts/task-validation/po-14-gds/backend/** only. Reuse agreed DTO13ec80ce and authoritative root task contract; byte-verify copy from PO13 private runtime. Preserve both dirty PowerShell and package/lock. No application source/test changes before root GO following verified PO13live. No shared dependency writes, commit/push/deploy or online patient writes.\"\n  },\n  \"message\": \"Issue PO-14-backend-runtime-preparation claimed by agent:codex-po14-backend:preparer\"\n}"
+    }
+  ]
+}

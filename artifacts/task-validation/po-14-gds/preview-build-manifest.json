@@ -1,0 +1,253 @@
+{
+  "recordedAfterBrowserValidation": true,
+  "input": [
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/main.tsx",
+      "sha256": "9e223c32b9053668eff3c441e945ef930a75fd7e4861d045519ba7c0d99401ca"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build.mjs",
+      "sha256": "5cced989723ba5abe9e414588235fddab0b39d20037e584a01fef1a08d5a8185"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/index.html",
+      "sha256": "d0e5dee75b5968a5a56240b7e4cf006f4f582cdc50ca2333709627444f62fff7"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/frontend/source-manifest.json",
+      "sha256": "0d9ccbb567f069942cbc143613976624d688fd66cbd631cfcc660d74af8de0e8"
+    }
+  ],
+  "files": [
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/AnamnesisEditor-BBn5utR_.js",
+      "bytes": 3747,
+      "sha256": "6f2fc388b200a6656d5ff00252665a31674261e8004b8c6d08ac4187973f908e"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/AssessmentWorkspace-B9Ny5TSE.js",
+      "bytes": 66820,
+      "sha256": "7761d8d15bef2bbb605616af92e645654747330876541944fb2ae3a63fc27aef"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/AssessmentWorkspace-BXMWzXup.css",
+      "bytes": 8387,
+      "sha256": "f05876979ef1f956096874c947104e12c4f4a91a538d4316655bb66a40db61d9"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/CameraCapture-BZrPNFqj.css",
+      "bytes": 1855,
+      "sha256": "087605da365a42d9251f178fe12cee846c7ff8aa2d946796e7d969df1d49d0bc"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/CameraCapture-DewFoVWz.js",
+      "bytes": 13339,
+      "sha256": "63f07971801000d6765b7583270910d7aa615d729326d40168803b1b44140c9a"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ClinicalAttachments-joq2dReg.js",
+      "bytes": 4155,
+      "sha256": "b59c658699b3872e3a8ff6d981dac4a4c1ba6fac617405536fe9aeba9b39b79b"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/clinicalHistory-Dc8Sh74T.js",
+      "bytes": 1855,
+      "sha256": "d619ba31010d85b762bd8728699a181199f1cadd0eb5c77c7ba5b3f6faae281f"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ClinicalTable-Bhm-FfDw.js",
+      "bytes": 6009,
+      "sha256": "8b3e4f677abf000ead8d1e805534324695326ef12a363c2f88a4d49876242c6a"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ClinicalTable-Cjulftmw.css",
+      "bytes": 3718,
+      "sha256": "5a9e3b254f43af95953c633cb1373b2fd5a4559475f8f8bb71ed74fe02d2a1ff"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ContenzioniTab-DT0eGxlv.js",
+      "bytes": 23838,
+      "sha256": "c323931cf9784a238bf2ffa0d9abed7228cfea6d8f6d389a42ade3fd52d762c8"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/DiarioPazienteTab-Dt5O0i74.js",
+      "bytes": 11749,
+      "sha256": "0a20b26d1f73b8ce274afb57b27518d155c775ab55db99ca84e73c6cd0bc837c"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/DimissioneTab-Rivyzssf.js",
+      "bytes": 42923,
+      "sha256": "418b1dfafc10a9f4ed300b05d1f1f9efc701d1b43bbecb101a4773a8ffd3dd84"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/DocumentiTab-D2zRrCQM.js",
+      "bytes": 26514,
+      "sha256": "e78d43eeeee11de082e93bde2e337d277e98339b70ce0ec0d5fd95b39160377a"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/DocumentiTab-DJY500eY.css",
+      "bytes": 8613,
+      "sha256": "607205b601c0c2754a64b2be724f3115f41ce456caedd90e1bb33c2f409f3c83"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/DocumentPreview-BW1kUAXB.js",
+      "bytes": 239893,
+      "sha256": "c40b3ab033b3c64f09a03ca6d8440a292c71123cce71879856d90a2ea2010248"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/EsamiConsulenzeTab-E2L8MY5v.js",
+      "bytes": 7535,
+      "sha256": "d5987e953c9b9600726fe6baafe87233bb7d241a9d73dbadc078c45bf6afc4aa"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/index-C60dZM-V.css",
+      "bytes": 307952,
+      "sha256": "3fe3276aa27e20a19a58481205c7796083f071012257c7f8a1fc753ce6b2f3fe"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/index-upiO0tSh.js",
+      "bytes": 402939,
+      "sha256": "c6d2c2dd9657af920a3123ac2d725c11228416b7ef0a01b412612cae22934110"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/InlineEditableField-dV_YdHep.js",
+      "bytes": 5678,
+      "sha256": "398e862f9b0cd64528bd1e9a87c098d8b01df38a40c4b5b19cabb8bf4fb8713f"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/InvioPSModal-Co23l8Cs.js",
+      "bytes": 12895,
+      "sha256": "092662dba195605d8d21bce8e010b3f547f90f9ad7772a19abbe83ce313a9892"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/jsx-runtime-QBU3mtPP.js",
+      "bytes": 8430,
+      "sha256": "c5d7378afde99f50c8863ff216b6272da44128535ebce258b93e5de4b078fa20"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/LoadErrorState-B2W9g7oM.js",
+      "bytes": 334,
+      "sha256": "acddd784e86046182e8c1dcc9b0be1e530ebc6c1f76be4e54e3cb339c5fc3668"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/MedicazioniTab-D5gC2IEB.js",
+      "bytes": 23824,
+      "sha256": "006462806274b94b0ff708061962a698280d5b80320f84f03ac5533f2c1c7718"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/NarrativeSectionsTab-Cy2K2aEq.css",
+      "bytes": 806,
+      "sha256": "8e1468ddc2dc49ec862668499bbb9eddfb070b2937558ba90d289df8cb597156"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/NarrativeSectionsTab-DDzu9FZX.js",
+      "bytes": 14107,
+      "sha256": "b9ef6406f213913bdb461baa8a0a41af47ae1f0675a236fa41d6d484a641d83f"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/PainAssessmentEditor-DcxHMhrd.js",
+      "bytes": 1198,
+      "sha256": "df53ec4a3c0652dba171c2b9fc2c165bfb06d6637566dafa32b6369f0c2f55c5"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ParametriTab-C9gYj_fZ.js",
+      "bytes": 14145,
+      "sha256": "a59635daf81791f780f9927a54b6601a6a4a0985db874ffa28b3edad2808c1b3"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/PatientArchivePreview-BY-O_bqx.css",
+      "bytes": 685,
+      "sha256": "798813cc9625b50f22879608a7ea64e095056a40b25be7920c1dfb740e757538"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/PatientArchivePreview-CRjq4gxf.js",
+      "bytes": 12157,
+      "sha256": "0e63923b4b186c5b792179983e5310f2f25212ac781ae956a4e3c04da537642b"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/patientDemographics-Dj4Yyz7c.js",
+      "bytes": 426410,
+      "sha256": "b7f56ef3b49584734f63727995af54608a6a4762efa77549a6d47d2af8ee8827"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/patientDocumentArchive-BUgiVe9T.js",
+      "bytes": 3675,
+      "sha256": "70131dac98220165e40f9e869b86e07998ec7fa4c8e95831eb57d92c247d676c"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/pdf-MO4H4bH7.js",
+      "bytes": 427303,
+      "sha256": "37e559954cb7c4ef914916e397de4bba1f93be80abfa788a01062131dbbddbd5"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/pdf.worker.min-CHFwMXne.mjs",
+      "bytes": 1262398,
+      "sha256": "0613f41490dd6aaceed7a93fbbd38c85e6d6aa60474b6588c6e7709cfbe18cb3"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/PresaInCaricoTab-BLTJA60i.js",
+      "bytes": 20984,
+      "sha256": "00426193e06ce38635c57583d54ad44fc8b777f250fee2c8075295013d674bd1"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/renderArchivePrint-Jp_ZbcEG.js",
+      "bytes": 2822,
+      "sha256": "69eccca2486030f5a897e0e75becde3b51dcc2b841e2c925abe1d5113a75bf44"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ScalaBradenTab-CGrFth1G.js",
+      "bytes": 13136,
+      "sha256": "5e637dd09adcf779b6f4aed96c698d5eecb9d59bfc68971f4ab1fe77996f24e0"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ScalaNRSTab-CCBrYNVa.js",
+      "bytes": 11229,
+      "sha256": "25eec49b06ea9a40264a4832b46d9603e5ef4b976d8f9e2be693a7f6bf5a8af2"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/ScalaTinettiTab-Y7fb5RE6.js",
+      "bytes": 3695,
+      "sha256": "22e12ba0301e4bd02b1e96ed17c73c5359871adbb0a1dad47b04c53789ab6408"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/TerapiaFarmacologicaTab-CRjGAozi.js",
+      "bytes": 51039,
+      "sha256": "eb91dfe3f062d58e6f97a08fb1d9763d6c5c552cdafcdefcc3bc25ac261ba3d4"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/TerapiaFarmacologicaTab-Df1m973H.css",
+      "bytes": 9694,
+      "sha256": "ba74aed79bc98899a2b78d43a2b45caf768a1f7a69ef8cdb1ff870baf55ad315"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/TherapyEditor-Bl_xva3D.css",
+      "bytes": 9050,
+      "sha256": "f748b481c89e789a74b9688b3c416e1151c123ab0a4173488563b9a26ed5c056"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/TherapyEditor-BPhPqjoA.js",
+      "bytes": 36686,
+      "sha256": "ab5c020d630fb498e7220f4edfefd449ff7c8cbd2d0eacc96ac1e6fa7958e623"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/Tinetti-PvAQNSKS.css",
+      "bytes": 1900,
+      "sha256": "3d8d6819272cfe8d3243df9a45f3b89e140ac3387e4bea381fca59ba1c5c7b59"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/usePatientDocuments-CJcqrJ9x.js",
+      "bytes": 2779,
+      "sha256": "c8d45bd973461d2fe6cc4ca379408af3f5bbb704f7dc12abc39548fd01d7acd9"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/assets/VitalSignsEditor-BQs8WvMQ.js",
+      "bytes": 1188,
+      "sha256": "adcad3df78e2a4f75be8af4d79410da970f556bc40c8173071f7983f3b747ef1"
+    },
+    {
+      "path": "artifacts/task-validation/po-14-gds/preview/build/index.html",
+      "bytes": 529,
+      "sha256": "a2aab84f1c295ed0bd494129c3b62027852ce8305cf3be540087ee0b8d59a687"
+    }
+  ]
+}

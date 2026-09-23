@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-23T06:58:32.752Z",
+  "assets": [
+    {
+      "name": "NotoSans-Regular.ttf",
+      "bytes": 569208,
+      "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5"
+    },
+    {
+      "name": "NotoSans-Bold.ttf",
+      "bytes": 575740,
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a"
+    },
+    {
+      "name": "OFL.txt",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    }
+  ],
+  "rendered": [
+    {
+      "assessmentId": "f96fbf82-4a46-486c-914a-1d5bf0e6ffa6",
+      "type": "gds15",
+      "rendererVersion": "gds15-a4-v1",
+      "snapshotSha256": "b9440ecdc754ef6442ac043c9c04c6a9374ade72a34b01ebab855e954383bdbc",
+      "bytes": 22670,
+      "pdfSha256": "e133533f0df6b5778f8c9a842e2bdca7f4d364c444b86c67cd57b024ba9d8766"
+    },
+    {
+      "assessmentId": "d6b2fb96-8af2-4fcb-91f6-9e1f46d14bc2",
+      "type": "gds15",
+      "rendererVersion": "gds15-a4-v1",
+      "snapshotSha256": "88f20456d31a4dd3956231d749cf4f4611abf89ddbd9d60cfcfa58b65cc3330f",
+      "bytes": 22842,
+      "pdfSha256": "0e703d0add4b99c90817f3ccae9fd243fd557209180e4ea39d8f549de9c912b0"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "task": "PO14-backend-dto-preparation",
+  "completedAt": "2026-09-23T06:13:18.484Z",
+  "phase": "contract-only-complete",
+  "decision": "allow agreed preparation handoff; implementation awaits explicit root GO after PO13 verified release",
+  "rootContractSha256": "a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc",
+  "dtoContractSha256": "13ec80cedcc577c40e00e30a98a6e5f41ee03513c8a0a4afb6da13a252aba708",
+  "claimReleased": true,
+  "applicationCodeChanged": false,
+  "runtimeChanged": false,
+  "po14TestsRun": false,
+  "publicationAuthorized": false,
+  "frontendAgreement": "frontend-agreement.json",
+  "artifacts": [
+    {
+      "path": "backend-contract.md",
+      "bytes": 3011,
+      "sha256": "13ec80cedcc577c40e00e30a98a6e5f41ee03513c8a0a4afb6da13a252aba708"
+    },
+    {
+      "path": "task-contract.snapshot.md",
+      "bytes": 3240,
+      "sha256": "a3b287c148561cccae5aa11cbe572f63400161d9f2aa57386d8393821c9e9abc"
+    },
+    {
+      "path": "claims-preparation.json",
+      "bytes": 975,
+      "sha256": "f5a053c5295497e4157efc9cf00a269380eeb268a1bee433e420ac516df391c9"
+    },
+    {
+      "path": "claims-preparation-release.json",
+      "bytes": 1111,
+      "sha256": "4d7a4f4a2fb377e9eddb1c432c504508f896e2c501a5ef5fa9cb6294f22f2df3"
+    },
+    {
+      "path": "frontend-agreement.json",
+      "bytes": 582,
+      "sha256": "ff94f156432ee906dcdf6c9d00aaff8715cd0adc949a5da30bcdf41f1f29ff4e"
+    },
+    {
+      "path": "finalize-preparation.mjs",
+      "bytes": 1837,
+      "sha256": "0363b28becd7a48d101ac3b0c18c7d32d7cb276ab0d2efff51d367a49c67f6b3"
+    }
+  ]
+}

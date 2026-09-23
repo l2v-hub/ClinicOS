@@ -4,8 +4,9 @@ import { TRANSFERS, assertTransfersAnswers, emptyTransfersAnswers } from './tran
 import { assertPainadAnswers } from './assessmentValidation';
 import { TINETTI, assertTinettiAnswers, emptyTinettiAnswers } from './tinettiDefinition';
 import { MNA, assertMnaAnswers, emptyMnaAnswers } from './mnaDefinition';
+import { GDS15, assertGds15Answers, emptyGds15Answers } from './gds15Definition';
 export const assessmentDefinition = (type: AssessmentType) =>
-  ({ painad: PAINAD, postural_transfers: TRANSFERS, tinetti: TINETTI, mna: MNA })[type];
+  ({ painad: PAINAD, postural_transfers: TRANSFERS, tinetti: TINETTI, mna: MNA, gds15: GDS15 })[type];
 export const emptyAssessmentAnswers = (type: AssessmentType): AssessmentAnswers =>
   type === 'painad'
     ? emptyPainadAnswers()
@@ -13,7 +14,9 @@ export const emptyAssessmentAnswers = (type: AssessmentType): AssessmentAnswers 
       ? emptyTinettiAnswers()
       : type === 'mna'
         ? emptyMnaAnswers()
-        : emptyTransfersAnswers();
+        : type === 'gds15'
+          ? emptyGds15Answers()
+          : emptyTransfersAnswers();
 export function assertAssessmentAnswers(
   type: AssessmentType,
   value: unknown,
@@ -21,6 +24,7 @@ export function assertAssessmentAnswers(
   if (type === 'painad') assertPainadAnswers(value);
   else if (type === 'tinetti') assertTinettiAnswers(value);
   else if (type === 'mna') assertMnaAnswers(value);
+  else if (type === 'gds15') assertGds15Answers(value);
   else assertTransfersAnswers(value);
 }
 export function savedAssessmentComplete(record: AssessmentDto) {

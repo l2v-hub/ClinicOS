@@ -20,6 +20,8 @@ import {
 import type { AssessmentClient } from './assessmentClient';
 import type { MnaAnswers } from './mnaTypes';
 import { mnaInputErrors } from './mnaLocalInputs';
+import { validGds15Notes } from './gds15Definition';
+import type { Gds15Answers } from './gds15Types';
 export interface AssessmentDraft {
   key: string;
   patientId: string;
@@ -205,6 +207,10 @@ export function createAssessmentDraftStore() {
       let operation = draft.pending;
       try {
         if (!operation) {
+          if (draft.type === 'gds15' && !validGds15Notes((draft.fields.answers as Gds15Answers).notes)) {
+            set(key, { ...draft, failure: { ...validation('Le note devono contenere al massimo 4000 caratteri validi.'), missingPaths: ['notes'] } });
+            return null;
+          }
           if (draft.type === 'mna') {
             const errors = mnaInputErrors(
               draft.fields.answers as MnaAnswers,

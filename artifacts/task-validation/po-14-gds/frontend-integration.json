@@ -1,0 +1,98 @@
+{
+  "at": "2026-09-23T06:53:30.374Z",
+  "decision": "ALLOW_INTEGRATE",
+  "scope": "frontend",
+  "worker": "C:\\Workspace\\ClinicOSHouse-worktrees\\po14-gds-ui",
+  "authorization": "User approved full plan and release; root invoked after worker claim release",
+  "manifestSha256": "0d9ccbb567f069942cbc143613976624d688fd66cbd631cfcc660d74af8de0e8",
+  "files": [
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "fe6491e2f735f61add8c6dbf0105197c4428df4e8f006c6eec16e4799a596d18"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "26a43f6252b91dfc9d9a6b4e8394057b39f2074757949580148bdc3ab0b84c9a"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/gds15Ui.test.ts",
+      "sha256": "b6cc4d062cd5bfa6e701f8bcbd1474161c1754d17ad7f9ea25c079064abbf8b2"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "sha256": "b76427e2b66528f4400bdcd158f98c5e66c44547b73d462b263b297f10f884d4"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "sha256": "fd1a88d130a67620b2feca596817cb3fa473f694df208c4bbfd059df0d695576"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "sha256": "2dfb16ea7eca681cdac007013a115efb372d56054966029a8599dd77e419d4c8"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Gds.css",
+      "sha256": "6362ba548577956ecb6cbc7d82d3847e1f9d6eaf018a4827c1a68b2cb2df9333"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/GdsForm.tsx",
+      "sha256": "e3f086487e8db1888ad8e3f238c5f068aae96e7d93c5dacc8428fe49ab809651"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/GdsSummary.tsx",
+      "sha256": "2bdc1a9833cc8926181429b107360b89e3e04056453b5b4f19d6a7b026635c7e"
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "sha256": "e57cd646173c5eccb019db8b58d8987b991e239ef1b1a1c2c4e26ba02c6497d4"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15.fixtures.ts",
+      "sha256": "7fe735f46cd6f7572937f94436a1a7bd703195d1c87ec3d08edab6bf03157f5d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15Definition.test.ts",
+      "sha256": "f8e893c3bc4789f0a4ba39f86c8dbda598bcd88eb9ac530e8f0b3ec027c35093"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15Workflow.test.ts",
+      "sha256": "6eb1634592e3a726d8a89a357f7faf9448fb8a06a1da59b405ee78ef8c274c87"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "sha256": "3e786a06382c54105a3195449244b16135e0099f67ec7b6f48789de35924b10c"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "sha256": "e5da37476ac4955e1b8cdd52d3e3d6e50db125a920af683ab0a921d8e0d12c94"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "sha256": "1d607f5806ee1e8bec4b593c01f5e341f75b7c26b2e1da4c755eca88b09279e3"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "sha256": "e2ede19d659b341627f215592eb892856ce3c5de40a8509c400ddcf4ac0dece9"
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Definition.ts",
+      "sha256": "87c35af5c0493a060d8dfcc8f5ee915dfd53088eb0cb5a5dbb5d720c80efe02b"
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Types.ts",
+      "sha256": "b71d50e20ee9c8d329b332bac432ce0e49b5c3b89211ce1df0b9f5654df5c694"
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Validation.ts",
+      "sha256": "a068ae2bb04031edd80ae73016b27852acb4215934b6ccbe8697864b6de997ec"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "sha256": "3da4c318789be01bf2740dfed4eb9cf7f39a9030b894090c4846e22e5f35a4ef"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "sha256": "b10359de2f4550c52011cc2ec54ec42ab61395253d65090200b572b713c7e67d"
+    }
+  ]
+}

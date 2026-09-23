@@ -1,0 +1,257 @@
+{
+  "sourceStateId": "b452ff328dec8491d9619a0246e75fc8dad44b8b75d62de5a8e09cb120f97e14",
+  "files": [
+    {
+      "path": "backend/src/assessments/__tests__/gds15-db.test.ts",
+      "sha256": "e971bfdde6de7bf5e35196bcfa52f43f3330e0d1a9ee7d3def6d0a659e67fcb7",
+      "bytes": 8424,
+      "workerSha256": "e971bfdde6de7bf5e35196bcfa52f43f3330e0d1a9ee7d3def6d0a659e67fcb7"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15-fixture.ts",
+      "sha256": "160b34c1bd0739395e6fc18092b5ef70844698a39f3419623ee8e1e2bad10154",
+      "bytes": 537,
+      "workerSha256": "160b34c1bd0739395e6fc18092b5ef70844698a39f3419623ee8e1e2bad10154"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15-pdf-db.test.ts",
+      "sha256": "62f4749ce0e50575c36c517dbf49dcea02974aafa56d086f864dbf23329ef580",
+      "bytes": 5552,
+      "workerSha256": "62f4749ce0e50575c36c517dbf49dcea02974aafa56d086f864dbf23329ef580"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15-sql-db.test.ts",
+      "sha256": "f4023d9bb521dec64cb12fbf0beaf1e5396bccd34742949187e0b6da35fb34f5",
+      "bytes": 4582,
+      "workerSha256": "f4023d9bb521dec64cb12fbf0beaf1e5396bccd34742949187e0b6da35fb34f5"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/gds15.test.ts",
+      "sha256": "85ecd33297efc009131f72fda5338786a5f74a1f776d66346ba9193aac72411a",
+      "bytes": 4634,
+      "workerSha256": "85ecd33297efc009131f72fda5338786a5f74a1f776d66346ba9193aac72411a"
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "sha256": "38d0a46c066d858b9f74d69c0af0e6db262b3b616c54236706a6910fe3100248",
+      "bytes": 6665,
+      "workerSha256": "38d0a46c066d858b9f74d69c0af0e6db262b3b616c54236706a6910fe3100248"
+    },
+    {
+      "path": "backend/src/assessments/current.ts",
+      "sha256": "5003b7c7380d1e11db0dac7deca15df032e15f136228ff455b7d08c91c2312d7",
+      "bytes": 1068,
+      "workerSha256": "5003b7c7380d1e11db0dac7deca15df032e15f136228ff455b7d08c91c2312d7"
+    },
+    {
+      "path": "backend/src/assessments/gds15-definition.ts",
+      "sha256": "cc8e51d77932b8245670278914edd30852bd9673287e4ebd7d9d4aaf9d32131c",
+      "bytes": 2822,
+      "workerSha256": "cc8e51d77932b8245670278914edd30852bd9673287e4ebd7d9d4aaf9d32131c"
+    },
+    {
+      "path": "backend/src/assessments/gds15-snapshot.ts",
+      "sha256": "4740a9b1b8969255041489cd7fb2bf24ca0eef9f9b17df3ca8ff97565e305c63",
+      "bytes": 1566,
+      "workerSha256": "4740a9b1b8969255041489cd7fb2bf24ca0eef9f9b17df3ca8ff97565e305c63"
+    },
+    {
+      "path": "backend/src/assessments/gds15-types.ts",
+      "sha256": "751498baadc148d7d4e8f9800584e71d8e78283d946d3b1fd15cf3845620d1b2",
+      "bytes": 740,
+      "workerSha256": "751498baadc148d7d4e8f9800584e71d8e78283d946d3b1fd15cf3845620d1b2"
+    },
+    {
+      "path": "backend/src/assessments/gds15.ts",
+      "sha256": "17f18962f2c8315825b68c6e39210b9b025cc92dcae2cea8ca8199840e42be59",
+      "bytes": 2457,
+      "workerSha256": "17f18962f2c8315825b68c6e39210b9b025cc92dcae2cea8ca8199840e42be59"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "sha256": "3609416204b19acdd1aca9d364e4ab9c92b056a746baf72b2524f8b0408d0a79",
+      "bytes": 4986,
+      "workerSha256": "3609416204b19acdd1aca9d364e4ab9c92b056a746baf72b2524f8b0408d0a79"
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "sha256": "1c9866da5abdb4a377d0d927511f2046b2fef2dadc07332fd8f53ebe4211c6be",
+      "bytes": 6097,
+      "workerSha256": "1c9866da5abdb4a377d0d927511f2046b2fef2dadc07332fd8f53ebe4211c6be"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "sha256": "3d9e8aa2e1137cc03472e49ef2163d3f0ff69672d56f0970847530ce6c2acf83",
+      "bytes": 11852,
+      "workerSha256": "3d9e8aa2e1137cc03472e49ef2163d3f0ff69672d56f0970847530ce6c2acf83"
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "sha256": "e612772f7827d82fba5d2ad8475df8ec92855209fbbfa02ad81875c1ad055c14",
+      "bytes": 5047,
+      "workerSha256": "e612772f7827d82fba5d2ad8475df8ec92855209fbbfa02ad81875c1ad055c14"
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "sha256": "30eb3fce7f5e04ca21f347ddd6fb85643a0607c73063686c94bb8ae222e9419c",
+      "bytes": 12995,
+      "workerSha256": "30eb3fce7f5e04ca21f347ddd6fb85643a0607c73063686c94bb8ae222e9419c"
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "sha256": "12f53aebfd8a285f9e6b8705759c7be114bfe9b23597f2c3afaee0ea9fa1a015",
+      "bytes": 7205,
+      "workerSha256": "12f53aebfd8a285f9e6b8705759c7be114bfe9b23597f2c3afaee0ea9fa1a015"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "fe6491e2f735f61add8c6dbf0105197c4428df4e8f006c6eec16e4799a596d18",
+      "bytes": 126903,
+      "workerSha256": "fe6491e2f735f61add8c6dbf0105197c4428df4e8f006c6eec16e4799a596d18"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/gds15Ui.test.ts",
+      "sha256": "b6cc4d062cd5bfa6e701f8bcbd1474161c1754d17ad7f9ea25c079064abbf8b2",
+      "bytes": 6781,
+      "workerSha256": "b6cc4d062cd5bfa6e701f8bcbd1474161c1754d17ad7f9ea25c079064abbf8b2"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "sha256": "b76427e2b66528f4400bdcd158f98c5e66c44547b73d462b263b297f10f884d4",
+      "bytes": 4724,
+      "workerSha256": "b76427e2b66528f4400bdcd158f98c5e66c44547b73d462b263b297f10f884d4"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "sha256": "fd1a88d130a67620b2feca596817cb3fa473f694df208c4bbfd059df0d695576",
+      "bytes": 3836,
+      "workerSha256": "fd1a88d130a67620b2feca596817cb3fa473f694df208c4bbfd059df0d695576"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "sha256": "2dfb16ea7eca681cdac007013a115efb372d56054966029a8599dd77e419d4c8",
+      "bytes": 18299,
+      "workerSha256": "2dfb16ea7eca681cdac007013a115efb372d56054966029a8599dd77e419d4c8"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Gds.css",
+      "sha256": "6362ba548577956ecb6cbc7d82d3847e1f9d6eaf018a4827c1a68b2cb2df9333",
+      "bytes": 512,
+      "workerSha256": "6362ba548577956ecb6cbc7d82d3847e1f9d6eaf018a4827c1a68b2cb2df9333"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/GdsForm.tsx",
+      "sha256": "e3f086487e8db1888ad8e3f238c5f068aae96e7d93c5dacc8428fe49ab809651",
+      "bytes": 4845,
+      "workerSha256": "e3f086487e8db1888ad8e3f238c5f068aae96e7d93c5dacc8428fe49ab809651"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/GdsSummary.tsx",
+      "sha256": "2bdc1a9833cc8926181429b107360b89e3e04056453b5b4f19d6a7b026635c7e",
+      "bytes": 3595,
+      "workerSha256": "2bdc1a9833cc8926181429b107360b89e3e04056453b5b4f19d6a7b026635c7e"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "26a43f6252b91dfc9d9a6b4e8394057b39f2074757949580148bdc3ab0b84c9a",
+      "bytes": 110125,
+      "workerSha256": "26a43f6252b91dfc9d9a6b4e8394057b39f2074757949580148bdc3ab0b84c9a"
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "sha256": "e57cd646173c5eccb019db8b58d8987b991e239ef1b1a1c2c4e26ba02c6497d4",
+      "bytes": 3790,
+      "workerSha256": "e57cd646173c5eccb019db8b58d8987b991e239ef1b1a1c2c4e26ba02c6497d4"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15.fixtures.ts",
+      "sha256": "7fe735f46cd6f7572937f94436a1a7bd703195d1c87ec3d08edab6bf03157f5d",
+      "bytes": 2726,
+      "workerSha256": "7fe735f46cd6f7572937f94436a1a7bd703195d1c87ec3d08edab6bf03157f5d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15Definition.test.ts",
+      "sha256": "f8e893c3bc4789f0a4ba39f86c8dbda598bcd88eb9ac530e8f0b3ec027c35093",
+      "bytes": 6247,
+      "workerSha256": "f8e893c3bc4789f0a4ba39f86c8dbda598bcd88eb9ac530e8f0b3ec027c35093"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15Workflow.test.ts",
+      "sha256": "6eb1634592e3a726d8a89a357f7faf9448fb8a06a1da59b405ee78ef8c274c87",
+      "bytes": 7140,
+      "workerSha256": "6eb1634592e3a726d8a89a357f7faf9448fb8a06a1da59b405ee78ef8c274c87"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "sha256": "3e786a06382c54105a3195449244b16135e0099f67ec7b6f48789de35924b10c",
+      "bytes": 2659,
+      "workerSha256": "3e786a06382c54105a3195449244b16135e0099f67ec7b6f48789de35924b10c"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "sha256": "e5da37476ac4955e1b8cdd52d3e3d6e50db125a920af683ab0a921d8e0d12c94",
+      "bytes": 13883,
+      "workerSha256": "e5da37476ac4955e1b8cdd52d3e3d6e50db125a920af683ab0a921d8e0d12c94"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "sha256": "1d607f5806ee1e8bec4b593c01f5e341f75b7c26b2e1da4c755eca88b09279e3",
+      "bytes": 6653,
+      "workerSha256": "1d607f5806ee1e8bec4b593c01f5e341f75b7c26b2e1da4c755eca88b09279e3"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "sha256": "e2ede19d659b341627f215592eb892856ce3c5de40a8509c400ddcf4ac0dece9",
+      "bytes": 11767,
+      "workerSha256": "e2ede19d659b341627f215592eb892856ce3c5de40a8509c400ddcf4ac0dece9"
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Definition.ts",
+      "sha256": "87c35af5c0493a060d8dfcc8f5ee915dfd53088eb0cb5a5dbb5d720c80efe02b",
+      "bytes": 6978,
+      "workerSha256": "87c35af5c0493a060d8dfcc8f5ee915dfd53088eb0cb5a5dbb5d720c80efe02b"
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Types.ts",
+      "sha256": "b71d50e20ee9c8d329b332bac432ce0e49b5c3b89211ce1df0b9f5654df5c694",
+      "bytes": 1392,
+      "workerSha256": "b71d50e20ee9c8d329b332bac432ce0e49b5c3b89211ce1df0b9f5654df5c694"
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Validation.ts",
+      "sha256": "a068ae2bb04031edd80ae73016b27852acb4215934b6ccbe8697864b6de997ec",
+      "bytes": 3713,
+      "workerSha256": "a068ae2bb04031edd80ae73016b27852acb4215934b6ccbe8697864b6de997ec"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "sha256": "3da4c318789be01bf2740dfed4eb9cf7f39a9030b894090c4846e22e5f35a4ef",
+      "bytes": 7187,
+      "workerSha256": "3da4c318789be01bf2740dfed4eb9cf7f39a9030b894090c4846e22e5f35a4ef"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "sha256": "b10359de2f4550c52011cc2ec54ec42ab61395253d65090200b572b713c7e67d",
+      "bytes": 11277,
+      "workerSha256": "b10359de2f4550c52011cc2ec54ec42ab61395253d65090200b572b713c7e67d"
+    },
+    {
+      "path": "prisma/migrations/20260923080000_gds15/migration.sql",
+      "sha256": "48d6464deb00694ba7a67af19d9dc855ccfe74dd6e79693161f9e205943fc861",
+      "bytes": 6067,
+      "workerSha256": "48d6464deb00694ba7a67af19d9dc855ccfe74dd6e79693161f9e205943fc861"
+    },
+    {
+      "path": "tests/fixtures/po14-gds.mjs",
+      "bytes": 1049,
+      "sha256": "b9b79c55231a2ab4b597a428d6cfbd5e89fe8843c6809e91d81c30c98cb3b459",
+      "owner": "root"
+    },
+    {
+      "path": "tests/integration/po14-gds.test.mts",
+      "bytes": 5255,
+      "sha256": "223ced95f4ae2bcd5ad2ff0b8fe8f1ca8ae28be3dcb710a46c33b0c44e1445a0",
+      "owner": "root"
+    }
+  ]
+}
