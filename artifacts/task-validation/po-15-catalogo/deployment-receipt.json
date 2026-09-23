@@ -1,0 +1,9 @@
+{
+  "decision":"ALLOW_RELEASE_VERIFIED",
+  "authorization":"User approved PO01–PO16, commit/push and deployment without further questions",
+  "sourceCommit":"53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "backend":{"deploymentId":"4a3368ee-254b-480e-8ff2-55b38950d7d2","status":"SUCCESS","newMigration":false,"healthStatus":200},
+  "frontend":{"deploymentId":"dpl_CpDaCDYqhba9MqMP7W232AcUQXPw","status":"READY","url":"https://clinicos-jof8nif4t-lucalavia-2482s-projects.vercel.app","alias":"https://clinicos-eosin.vercel.app","sourceCommitVerified":"53e57d694850775b85ad1d22904e7bb1e6e84618"},
+  "runtimeUnchanged":"PO05",
+  "productionSmoke":{"catalogModules":8,"catalogMetadataLoaded":true,"ownDraftShown":true,"nrsHistoryLoaded":true,"writeActionsPerformed":0,"consoleErrors":0,"userOpenTherapyFormPreserved":true}
+}
