@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "backend": {
+    "deploymentId": "de579c06-cd7d-4164-af15-ea11357adbed",
+    "status": "SUCCESS",
+    "healthStatus": 200,
+    "migration": "20260923020000_roster_order_contexts successfully applied"
+  },
+  "frontend": {
+    "deploymentId": "dpl_HriFD1fuaDkr1FNWCxFkVDuydrAw",
+    "status": "READY",
+    "alias": "clinicos-eosin.vercel.app",
+    "aliasSourceCommitVerified": true,
+    "verification": "Vercel API /v13/deployments/clinicos-eosin.vercel.app; metadata sourceCommit exact match",
+    "browserReadOnlySmoke": "Profile chooser renders; console errors/warnings empty; no live patient writes"
+  },
+  "verifiedOn": "2026-09-23",
+  "sourceManifest": "root-source-manifest.json",
+  "sourceTreeSha256": "0d7620b679c666b3648a88abe648a8e8c67db89c70ece3334ffc395207f62cd1",
+  "runtimeAI": "Unchanged from PO05",
+  "authorization": "User approved the entire PO01-16 plan, autonomous implementation, commit, push and deploy",
+  "followingActivity": "PO08 GO issued to isolated backend and frontend workers after release verification"
+}

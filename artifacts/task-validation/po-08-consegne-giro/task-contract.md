@@ -1,6 +1,6 @@
 # PO-08 — Consegne durante il giro pazienti
 
-Preparazione in sola lettura; GO applicativo soltanto dopo rilascio PO07 verificato. Autorizzazione utente: piano completo, implementazione autonoma, push e deploy. Root integra; writer backend/frontend in worktree distinti. Non aprire un nuovo sistema di workflow.
+GO applicativo emesso dopo rilascio PO07 c52af623 verificato: Railway de579c06-cd7d-4164-af15-ea11357adbed SUCCESS, migrazione e health200; Vercel dpl_HriFD1fuaDkr1FNWCxFkVDuydrAw READY con sourceCommit alias verificato. Autorizzazione utente: piano completo, implementazione autonoma, push e deploy. Root integra; writer backend/frontend in worktree distinti. Non aprire un nuovo sistema di workflow.
 
 ## Risultato
 
@@ -24,6 +24,10 @@ Salva e prossimo congela paziente/richiesta/successore per ID nell'ordine visibi
 Aggiornare callback App e due quick-add PatientDetail oggi void: attendere risultato prima di chiudere/azzerare. Mostrare “Consegna salvata per …”; badge appena salvata dalla ricevuta. Nessuna consegna visibile fuori scope abilita nuovo accesso al paziente.
 
 ## Verifica
+
+Wire concordato durante preparazione: `room` trim massimo80, vuoto assente, ricerca contiene sulla sola camera autorevole con wildcard letterali escaped; `requestId` valida /^[A-Za-z0-9_-]{1,128}$/ (UUID consentito). Summary `{items:[{patientId,total,open,urgentOpen,statoRicovero}]}`; ID fuori scope omesso, distinto da zero. Replay dopo edit restituisce record corrente, stesso ID; UI controlla paziente/richiesta senza confrontare testo attuale con payload originale. Replay eliminato:410 `consegna_creation_deleted` con soli requestId/consegnaId/pazienteId; conflitto payload409 `consegna_request_conflict`. Default scadenza risolto solo alla prima creazione, omissione stabile nell'hash. Cache vocali non possono bypassare la receipt DB.
+
+Ingresso globale `openConsegneFeed({patientId?,status?,focusId?})` per dashboard/Agnos, sidebar generale su Giro. Il tab Consegne paziente resta raggiungibile. Worktree assegnati da c52af623: po08-handover-backend e po08-handover-ui; preparazione isolata in attesa deployPO07. Memoria Ruflo richiamata: vecchio pattern ordinamento pagine locali superato daPO07, non ripristinarlo.
 
 Giro5pazienti senza digitare nomi; omonimi; >50pazienti; ordini/direzioni e camera oltreprima pagina; ritorno bozze; salvataggio albordopagina. Cambi ordine/letto/paziente durante request, logout, risposta tardiva,409, doppio clic, POSTconcorrenti, response-loss/restart, retry dopoedit/delete. Scope su roster/badge/create, zero/solostorico/errori. Regressione dashboard/Agnos/feed/quick-add/voce. Browser sintetico desktop/mobile/tastiera. Niente pazienti live modificati.
 
