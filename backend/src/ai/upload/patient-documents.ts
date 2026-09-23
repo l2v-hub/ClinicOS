@@ -8,6 +8,12 @@ import type { Prisma } from '@prisma/client';
 import { createHash } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
 import {
+  assessmentDocumentWhere,
+  type AssessmentDocumentAccess,
+} from '../../assessments/document-access.js';
+import { AssessmentError, type AssessmentDocumentMeta } from '../../assessments/types.js';
+import { assessmentTransaction } from '../../assessments/access.js';
+import {
   encodePatientDocumentCursor,
   type DecodedPatientDocumentCursor,
 } from './patient-document-cursor.js';
@@ -24,6 +30,7 @@ export interface PublicPatientDocument {
   importJobId: string | null;
   createdAt: string;
   sourceManifest?: unknown;
+  assessment: AssessmentDocumentMeta | null;
 }
 
 export interface AiPatientDocument {
@@ -89,10 +96,11 @@ export async function createPatientDocument(
       createdAt: true,
     },
   });
-  return { ...row, createdAt: row.createdAt.toISOString() };
+  return { ...row, createdAt: row.createdAt.toISOString(), assessment: null };
 }
 
 const PATIENT_DOCUMENT_PUBLIC_SELECT = {
+  assessment: { select: { id: true, type: true, formVersion: true, assessedAt: true } },
   sourceManifest: true,
   id: true,
   originalName: true,
@@ -110,15 +118,57 @@ export async function updatePatientDocumentType(
   patientId: string,
   documentId: string,
   documentType: string,
+  access?: AssessmentDocumentAccess,
 ): Promise<PublicPatientDocument | null> {
-  const where = { id: documentId, patientId };
+  const where = { id: documentId, patientId, ...assessmentDocumentWhere(access) };
+  const existing = await prisma.patientDocument.findFirst({
+    where,
+    select: { assessmentId: true },
+  });
+  if (existing?.assessmentId)
+    throw new AssessmentError(
+      'Il documento della valutazione è immutabile',
+      409,
+      'assessment_document_immutable',
+    );
   const updated = await prisma.patientDocument.updateMany({ where, data: { documentType } });
   if (updated.count !== 1) return null;
   const row = await prisma.patientDocument.findFirst({
     where,
     select: PATIENT_DOCUMENT_PUBLIC_SELECT,
   });
-  return row ? { ...row, createdAt: row.createdAt.toISOString() } : null;
+  return row ? documentDto(row) : null;
+}
+
+type DocumentRow = Prisma.PatientDocumentGetPayload<{
+  select: typeof PATIENT_DOCUMENT_PUBLIC_SELECT;
+}>;
+function documentDto(row: DocumentRow): PublicPatientDocument {
+  return {
+    ...row,
+    createdAt: row.createdAt.toISOString(),
+    assessment: row.assessment
+      ? {
+          id: row.assessment.id,
+          type: 'painad',
+          formVersion: row.assessment.formVersion,
+          assessedAt: row.assessment.assessedAt.toISOString(),
+        }
+      : null,
+  };
+}
+export async function getPatientDocumentMetadata(
+  patientId: string,
+  documentId: string,
+  access?: AssessmentDocumentAccess,
+) {
+  const row = await assessmentTransaction((tx) =>
+    tx.patientDocument.findFirst({
+      where: { id: documentId, patientId, ...assessmentDocumentWhere(access) },
+      select: PATIENT_DOCUMENT_PUBLIC_SELECT,
+    }),
+  );
+  return row ? documentDto(row) : null;
 }
 
 /** Bounded document metadata page for the patient (never includes the base64 bytes). */
@@ -129,43 +179,49 @@ export async function listPatientDocuments(
     cursor?: DecodedPatientDocumentCursor;
     sourceFileName?: string;
   },
+  access?: AssessmentDocumentAccess,
 ): Promise<PatientDocumentPage> {
   const { limit, cursor, sourceFileName } = options;
-  const [rows, sourceRow, total] = await Promise.all([
-    prisma.patientDocument.findMany({
-      where: {
-        patientId,
-        ...(cursor
-          ? {
-              OR: [
-                { sortOrder: { gt: cursor.sortOrder } },
-                { sortOrder: cursor.sortOrder, id: { gt: cursor.id } },
-              ],
-            }
-          : {}),
-      },
-      orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-      take: limit + 1,
-      select: PATIENT_DOCUMENT_PUBLIC_SELECT,
-    }),
-    sourceFileName
-      ? prisma.patientDocument.findFirst({
-          where: { patientId, originalName: sourceFileName },
-          orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-          select: PATIENT_DOCUMENT_PUBLIC_SELECT,
-        })
-      : Promise.resolve(null),
-    cursor ? Promise.resolve(null) : prisma.patientDocument.count({ where: { patientId } }),
-  ]);
+  const [rows, sourceRow, total] = await assessmentTransaction((tx) =>
+    Promise.all([
+      tx.patientDocument.findMany({
+        where: {
+          patientId,
+          AND: [assessmentDocumentWhere(access)],
+          ...(cursor
+            ? {
+                OR: [
+                  { sortOrder: { gt: cursor.sortOrder } },
+                  { sortOrder: cursor.sortOrder, id: { gt: cursor.id } },
+                ],
+              }
+            : {}),
+        },
+        orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+        take: limit + 1,
+        select: PATIENT_DOCUMENT_PUBLIC_SELECT,
+      }),
+      sourceFileName
+        ? tx.patientDocument.findFirst({
+            where: { patientId, originalName: sourceFileName, ...assessmentDocumentWhere(access) },
+            orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+            select: PATIENT_DOCUMENT_PUBLIC_SELECT,
+          })
+        : Promise.resolve(null),
+      cursor
+        ? Promise.resolve(null)
+        : tx.patientDocument.count({ where: { patientId, ...assessmentDocumentWhere(access) } }),
+    ]),
+  );
   const hasMore = rows.length > limit;
   const pageRows = rows.slice(0, limit);
-  const documents = pageRows.map((row) => ({ ...row, createdAt: row.createdAt.toISOString() }));
+  const documents = pageRows.map(documentDto);
   const last = documents.at(-1);
 
   return {
     documents,
     total,
-    sourceMatch: sourceRow ? { ...sourceRow, createdAt: sourceRow.createdAt.toISOString() } : null,
+    sourceMatch: sourceRow ? documentDto(sourceRow) : null,
     pageInfo: {
       loadedCount: documents.length,
       hasMore,
@@ -175,9 +231,12 @@ export async function listPatientDocuments(
 }
 
 /** Bounded, minimized metadata projection for the AI gateway; never used by the full UI list. */
-export async function listPatientDocumentsForAi(patientId: string): Promise<AiPatientDocument[]> {
+export async function listPatientDocumentsForAi(
+  patientId: string,
+  access?: AssessmentDocumentAccess,
+): Promise<AiPatientDocument[]> {
   const rows = await prisma.patientDocument.findMany({
-    where: { patientId },
+    where: { patientId, ...assessmentDocumentWhere(access) },
     orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
     take: AI_PATIENT_DOCUMENT_LOOKAHEAD,
     select: {
@@ -196,9 +255,10 @@ export async function listPatientDocumentsForAi(patientId: string): Promise<AiPa
 export async function getPatientDocumentContent(
   patientId: string,
   documentId: string,
+  access?: AssessmentDocumentAccess,
 ): Promise<{ mimeType: string; originalName: string; buffer: Buffer } | null> {
   const row = await prisma.patientDocument.findFirst({
-    where: { id: documentId, patientId }, // ownership check (REQ-035 v2 §12)
+    where: { id: documentId, patientId, ...assessmentDocumentWhere(access) },
     select: { mimeType: true, originalName: true, dataBase64: true },
   });
   if (!row) return null;

@@ -1,0 +1,11 @@
+✔ draft replay, CAS, finalization and archive reopen preserve the same clinical snapshot (8777.6973ms)
+✔ incomplete answers never finalize and a correction creates a new immutable final (371.7496ms)
+✔ current patient scope protects finalized assessment bytes and metadata after ownership changes (201.3918ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21395.6943

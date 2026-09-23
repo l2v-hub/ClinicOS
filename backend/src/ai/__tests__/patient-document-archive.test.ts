@@ -31,7 +31,12 @@ before(async () => {
   process.env.NODE_ENV = 'test';
   ({ prisma } = await import('../../lib/prisma.js'));
   const { default: router } = await import('../../routes/patient-documents.js');
-  originals = { patient: prisma.patient, patientDocument: prisma.patientDocument };
+  originals = {
+    patient: prisma.patient,
+    patientDocument: prisma.patientDocument,
+    $transaction: prisma.$transaction,
+    $executeRaw: prisma.$executeRaw,
+  };
   const app = express();
   app.use(express.json());
   app.use('/patients', router);
@@ -60,6 +65,8 @@ beforeEach(() => {
     },
   ];
   Object.assign(prisma, {
+    $transaction: async (action: (tx: typeof prisma) => Promise<unknown>) => action(prisma),
+    $executeRaw: async () => 0,
     patient: {
       findUnique: async ({ where }: any) => (where.id === 'patient-a' ? { id: where.id } : null),
     },
@@ -78,7 +85,15 @@ beforeEach(() => {
       },
       updateMany: async ({ where, data }: any) => {
         assert.deepEqual(Object.keys(data), ['documentType']);
-        assert.deepEqual(Object.keys(where).sort(), ['id', 'patientId']);
+        assert.deepEqual(Object.keys(where).sort(), ['OR', 'id', 'patientId']);
+        assert.deepEqual(where.OR, [
+          { assessmentId: null },
+          {
+            assessment: {
+              is: { status: 'final', patient: { is: { registeredById: 'archive-qa' } } },
+            },
+          },
+        ]);
         const row = rows.find((item) => item.id === where.id && item.patientId === where.patientId);
         if (!row) return { count: 0 };
         writes++;

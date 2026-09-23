@@ -26,6 +26,7 @@ export type TabId =
   | 'braden'
   | 'tinetti'
   | 'nrs'
+  | 'painad'
   | 'dimissione'
   | 'esami-consulenze';
 
@@ -73,6 +74,7 @@ export const TAB_GROUPS: TabGroupDef[] = [
       { id: 'braden', label: 'Scala Braden' },
       { id: 'tinetti', label: 'Scala Tinetti' },
       { id: 'nrs', label: 'Scala NRS' },
+      { id: 'painad', label: 'Scala PAINAD' },
     ],
   },
   {

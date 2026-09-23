@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-23T04:07:04.483Z",
+  "assessments": 4,
+  "finals": 2,
+  "drafts": 2,
+  "documents": 2,
+  "createResponseLoss": "same request replayed",
+  "finalizeResponseLoss": "same request replayed",
+  "correction": "new immutable record, original instant and answers retained",
+  "slowPatientSwitch": "Bruno response kept on Bruno",
+  "noDuplicateDocuments": true,
+  "syntheticOnly": true
+}

@@ -1,0 +1,35 @@
+{
+  "at": "2026-09-23T03:59:14.795Z",
+  "rendererVersion": "painad-a4-v1",
+  "assets": [
+    {
+      "name": "NotoSans-Regular.ttf",
+      "bytes": 569208,
+      "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5"
+    },
+    {
+      "name": "NotoSans-Bold.ttf",
+      "bytes": 575740,
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a"
+    },
+    {
+      "name": "OFL.txt",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    }
+  ],
+  "rendered": [
+    {
+      "assessmentId": "198951a2-d019-43b6-9d12-83f3c458ee46",
+      "snapshotSha256": "3cc40504a0509fe170f966425c629a93dbdc03f4ddef23c01580ebc1852437e8",
+      "bytes": 18339,
+      "pdfSha256": "bdcde60daed75bf3791cce99f9e96dfd552701d043ce69f2eda8e48c10b85472"
+    },
+    {
+      "assessmentId": "5cb3eef8-6d8e-409a-921b-94c09557850f",
+      "snapshotSha256": "2a08c6a0d9f90e2df5c47cf23bcf509dd99ab9fd2bf96b6592dbc6882ffb68a4",
+      "bytes": 18561,
+      "pdfSha256": "70383cb1a8cae4895638637754f0a834e246d46e688117d763b113b1e9f74ab2"
+    }
+  ]
+}

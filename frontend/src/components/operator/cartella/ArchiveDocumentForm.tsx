@@ -51,7 +51,10 @@ export function ArchiveDocumentForm({
 }) {
   const [form, setForm] = useState<DocumentoConsegnato>(() => ({
     id: initial?.record?.id ?? crypto.randomUUID(),
-    tipo: initial?.type ?? defaultType ?? 'documento_identita',
+    tipo:
+      (initial?.type ?? defaultType) === 'patient_assessment'
+        ? 'documento_identita'
+        : (initial?.type ?? defaultType ?? 'documento_identita'),
     descrizione: initial?.record?.descrizione ?? '',
     dataConsegna: initial?.date ?? localIsoDate(),
     stato: initial?.record?.stato ?? 'ricevuto',
@@ -156,15 +159,17 @@ export function ArchiveDocumentForm({
               value={form.tipo}
               onChange={(event) => set({ tipo: event.target.value as TipoDocumento })}
             >
-              {ARCHIVE_CATEGORIES.map((category) => (
-                <optgroup label={category.label} key={category.id}>
-                  {category.types.map((type) => (
-                    <option value={type} key={type}>
-                      {DOCUMENT_TYPE_LABELS[type]}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
+              {ARCHIVE_CATEGORIES.filter((category) => category.id !== 'valutazioni').map(
+                (category) => (
+                  <optgroup label={category.label} key={category.id}>
+                    {category.types.map((type) => (
+                      <option value={type} key={type}>
+                        {DOCUMENT_TYPE_LABELS[type]}
+                      </option>
+                    ))}
+                  </optgroup>
+                ),
+              )}
             </select>
           </label>
           <label>

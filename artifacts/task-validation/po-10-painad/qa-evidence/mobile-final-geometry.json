@@ -1,0 +1,27 @@
+{
+  "active": {
+    "bottom": 595.5625,
+    "height": 44,
+    "left": 31,
+    "right": 329,
+    "top": 551.5625,
+    "width": 298,
+    "x": 31,
+    "y": 551.5625
+  },
+  "identity": {
+    "bottom": 203.375,
+    "height": 123.375,
+    "left": 16,
+    "right": 344,
+    "top": 80,
+    "width": 328,
+    "x": 16,
+    "y": 80
+  },
+  "viewport": {
+    "documentWidth": 375,
+    "h": 844,
+    "w": 390
+  }
+}

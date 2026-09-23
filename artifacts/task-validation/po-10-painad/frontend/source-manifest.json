@@ -1,0 +1,254 @@
+{
+  "task": "PO-10-frontend",
+  "baseline": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a",
+  "generatedAtUtc": "2026-09-23T03:40:02.639Z",
+  "sourceStateId": "4907a87e8ed6f2ab4427be507ac1b4d5930d39ef801a05d8d309d327332f9e19",
+  "runtimeSourceId": "797c25e477cc29ba60e46f36a2378523be83c573543f2d460257e274ad791228",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-ui",
+  "files": [
+    {
+      "path": "frontend/src/App.tsx",
+      "status": "modified",
+      "bytes": 129756,
+      "lines": 3119,
+      "sha256": "c905954fb67585789a07fc00d1bdd8b90f0883055b371df9677469193d0b8e19",
+      "baselineSha256": "fc078f95a2e7a4f14ecf038f1b9f4c0ff783f781a12c8032228910b882add699"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "status": "modified",
+      "bytes": 112624,
+      "lines": 2795,
+      "sha256": "7b4cb1c2489cd4b8b9034dc66ddd7d8d0265561cb8c5cfe01dfd586979547518",
+      "baselineSha256": "9e90ca16195efa08988e7ccedac7d77b085faf90601075fbc9f6e880c908012a"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetailLazyTabs.tsx",
+      "status": "modified",
+      "bytes": 2277,
+      "lines": 57,
+      "sha256": "c1eaa39b711edf68b612ec7e70c637b29149acd55c7a91a6f4ffc64465c0f2f8",
+      "baselineSha256": "dcfb8f7c6bf56e96b554b692c85aef3153701194f27037a5d81bd7c5e1e8095e"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/assessmentsUi.test.ts",
+      "status": "added",
+      "bytes": 4721,
+      "lines": 125,
+      "sha256": "3ef9e5cff6a253f91b01c060cc884097d76ae09ee03be2e479aad46b7562b80f",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentFinal.tsx",
+      "status": "added",
+      "bytes": 3037,
+      "lines": 100,
+      "sha256": "ae98d46169c82214d641af40c741e8d4021a3720e114866e657cb71af81ad16b",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentForm.tsx",
+      "status": "added",
+      "bytes": 5283,
+      "lines": 155,
+      "sha256": "280fdf2f5f90d85230c2b5ac1ccac28fd89dcf53eef35ced9e10643fefa41014",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "status": "added",
+      "bytes": 3791,
+      "lines": 112,
+      "sha256": "18ee35445f3df0da20cf3d35d37ab17f39fb0434f7f4735b37145bc1995b9112",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "status": "added",
+      "bytes": 3341,
+      "lines": 99,
+      "sha256": "8feb9a90f2a0d5f9c0200c9a42384a2d60f5abb1d8914ee9a4164b5ecf09ecee",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.css",
+      "status": "added",
+      "bytes": 3691,
+      "lines": 190,
+      "sha256": "122f60b42fdcfbd13ee436aafb4786ddfabff49768488fde0b66430c111d399e",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "status": "added",
+      "bytes": 17447,
+      "lines": 455,
+      "sha256": "2774364a2be6568a50f326b9c627627fc2bcf592705e784c756258594c920f74",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/useAssessmentHistory.ts",
+      "status": "added",
+      "bytes": 3007,
+      "lines": 87,
+      "sha256": "c5bfd8d4467caffa69176868bf781075df057f5120f26fa667a3a6c7ba2fa686",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+      "status": "modified",
+      "bytes": 11624,
+      "lines": 345,
+      "sha256": "db5f2b247a4efa4a26d3c2cb07bd1cd4b3aed980f2d9527b0a7a8322abfc4fde",
+      "baselineSha256": "f5616e96aaa843c0b701f2d215ed3f05e6b9158cf721d2600896e2c370d2823a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+      "status": "modified",
+      "bytes": 21119,
+      "lines": 478,
+      "sha256": "1b21ed7cff0410795fc9496071291f4cb848e556f028a0a94d4b9f4e5b59ee23",
+      "baselineSha256": "68839d5cfde43a17b3c98412d3b307dddcbadb03f7050eb515e6b43ed7687176"
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "status": "modified",
+      "bytes": 3393,
+      "lines": 111,
+      "sha256": "29f13655cd45a98cbd1f1dbaa94a3ed0fe2da430c83f72dd822a436db80afb1c",
+      "baselineSha256": "5b1a0fb8f1949e3e9c0da63f6d0440f28eb317f8e23f1d1a14fe83ef7f69a2d0"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentArchive.test.ts",
+      "status": "added",
+      "bytes": 4331,
+      "lines": 131,
+      "sha256": "cb4e79ca614086f04b10411525d749a9cedf37a4800815d7cfcf5f18ff4fcca5",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentClient.test.ts",
+      "status": "added",
+      "bytes": 7111,
+      "lines": 167,
+      "sha256": "712fc90e588d797a956f7ae7f09c469777412986c44433ad0db6266e4a391c16",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentDraftStore.test.ts",
+      "status": "added",
+      "bytes": 10438,
+      "lines": 271,
+      "sha256": "2c48cc3ca24b3f62a782886e3f17495afad644c1813de611818fa352378c6696",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessments.fixtures.ts",
+      "status": "added",
+      "bytes": 3197,
+      "lines": 116,
+      "sha256": "5362072de433a0fff39e8151b41b78de2e8296597a288d4011c8122258509274",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/painadDefinition.test.ts",
+      "status": "added",
+      "bytes": 6714,
+      "lines": 181,
+      "sha256": "f2ce655b497d60fcc005ccd57303be8b1fb7e8ee7ac0d7f9e1bcb7c53c0ff23a",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentClient.ts",
+      "status": "added",
+      "bytes": 5867,
+      "lines": 152,
+      "sha256": "bd09fad96070763480b2b4a4b8e15c9680aa89397ac32a83acc5c2d924dedbd7",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "status": "added",
+      "bytes": 11470,
+      "lines": 349,
+      "sha256": "c9dcc0f9037d3125f4d5f6c57e6fef20946cc3a11d3508273fb922f21b5dc7ee",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTime.ts",
+      "status": "added",
+      "bytes": 2162,
+      "lines": 55,
+      "sha256": "28ce229944f25630ff74bc3a84e0332dc6ba1df7fc330d1665d9d25a58f7547c",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "status": "added",
+      "bytes": 3074,
+      "lines": 97,
+      "sha256": "b402a0498833ee70277aa9c1647b9d772ab54f9ec91adb02d38c26d2fdd6d372",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "status": "added",
+      "bytes": 6487,
+      "lines": 178,
+      "sha256": "3f0f3e3eb09fcb43ab7c68f27637c0f6af5bea851ef53fe462665d3a2ec9d9a7",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/painadDefinition.ts",
+      "status": "added",
+      "bytes": 3465,
+      "lines": 99,
+      "sha256": "9d8661bc8b1217489140a25c62d7df93d19cb4450bbfe0839316fb555dfa471e",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/useAssessmentExitGuard.ts",
+      "status": "added",
+      "bytes": 802,
+      "lines": 20,
+      "sha256": "c1632578de7fa71b5436fd3b61c9909a96a7aaf3e9671422c8c014873dc5bf3b",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "status": "modified",
+      "bytes": 6227,
+      "lines": 184,
+      "sha256": "7c467b154487b820c1905f4b4e12aaba9a2a81551b9ba11cc4b488237e291df2",
+      "baselineSha256": "bc2ba2acea5b465f92324501babb16344f894a293d590cba364059cb10dbc985"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "status": "modified",
+      "bytes": 10617,
+      "lines": 286,
+      "sha256": "c7324c7d55a661144d7fee25aaa0a6e632fa04bf9539e93453ba2237337bfa2f",
+      "baselineSha256": "c533e82b090a2160527347b1c01f6c28fa86ce96ca00c741d6f35324426cc71b"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentsPage.ts",
+      "status": "modified",
+      "bytes": 2378,
+      "lines": 76,
+      "sha256": "6efef969a7f9a486ca5d277ab7457c861379d28d444623ae29d2b9fc8d976047",
+      "baselineSha256": "1bb6485459e711f4fc12d19ae50eda7a99ecb3615eb41f847b0de7808431af7d"
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "status": "modified",
+      "bytes": 32983,
+      "lines": 1140,
+      "sha256": "d8a3b1d09558394ab430d8f497dbe0054ba9337b2f79dd8bb32389085f546a3d",
+      "baselineSha256": "6348868ec77e7e8e422c3fe09001696a6249e5e2868f77c67f85c486b5655561"
+    }
+  ],
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+  }
+}

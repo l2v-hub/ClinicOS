@@ -1,6 +1,7 @@
 import { API_URL } from '../config';
 import type { DocumentoConsegnato } from '../types';
 import type { PatientDocumentMeta } from './patientDocumentsPage';
+import { PAINAD_VERSION } from './assessments/assessmentTypes';
 
 export const DOCUMENT_UPLOAD_MAX_BYTES = 15 * 1024 * 1024;
 export const DOCUMENT_ACCEPT = '.pdf,.jpeg,.jpg,.png,application/pdf,image/jpeg,image/png';
@@ -38,6 +39,20 @@ export function assertArchiveDocument(value: unknown): asserts value is PatientD
     !Number.isFinite(Date.parse(row.createdAt))
   )
     throw new Error('Metadati documento non validi');
+  if (
+    (row.documentType === 'patient_assessment' && !row.assessment) ||
+    (row.assessment !== undefined &&
+      row.assessment !== null &&
+      (typeof row.assessment !== 'object' ||
+        row.documentType !== 'patient_assessment' ||
+        typeof row.assessment.id !== 'string' ||
+        !/^[A-Za-z0-9_-]{1,128}$/.test(row.assessment.id) ||
+        row.assessment.type !== 'painad' ||
+        row.assessment.formVersion !== PAINAD_VERSION ||
+        typeof row.assessment.assessedAt !== 'string' ||
+        !Number.isFinite(Date.parse(row.assessment.assessedAt))))
+  )
+    throw new Error('Associazione della valutazione non valida');
 }
 export function validateArchiveFile(file: File): string | null {
   if (!DOCUMENT_UPLOAD_TYPES.has(file.type)) return 'Seleziona un file PDF, JPEG, JPG o PNG.';
@@ -152,6 +167,8 @@ export async function uploadArchiveDocument(
   file: File,
   type: string,
 ): Promise<PatientDocumentMeta> {
+  if (type === 'patient_assessment')
+    throw new Error('I PDF delle valutazioni vengono generati dalla scheda del modulo.');
   const error = validateArchiveFile(file);
   if (error) throw new Error(error);
   const body = new FormData();
@@ -168,6 +185,8 @@ export async function classifyArchiveDocument(
   id: string,
   type: string,
 ): Promise<PatientDocumentMeta> {
+  if (type === 'patient_assessment')
+    throw new Error('Categoria riservata alle valutazioni finali.');
   const response = await request(
     scope,
     `${documentUrl(scope.patientId)}/${encodeURIComponent(id)}`,
@@ -182,6 +201,21 @@ export async function classifyArchiveDocument(
   assertArchiveDocument(result.document);
   if (result.document.id !== id || result.document.documentType !== type)
     throw new Error('Risposta documento non valida.');
+  return result.document;
+}
+export async function readArchiveDocumentMetadata(
+  scope: DocumentRequestScope,
+  id: string,
+): Promise<PatientDocumentMeta> {
+  if (!/^[A-Za-z0-9_-]{1,128}$/.test(id)) throw new Error('Documento non valido.');
+  const response = await request(
+    scope,
+    `${documentUrl(scope.patientId)}/${encodeURIComponent(id)}`,
+  );
+  const result = await response.json();
+  scope.signal.throwIfAborted();
+  assertArchiveDocument(result.document);
+  if (result.document.id !== id) throw new Error('Documento non corrispondente.');
   return result.document;
 }
 export async function readArchiveDocumentContent(
@@ -222,6 +256,12 @@ export async function saveArchiveEntry(
   },
 ): Promise<void> {
   input.signal.throwIfAborted();
+  if (
+    input.stored?.assessment ||
+    input.stored?.documentType === 'patient_assessment' ||
+    input.record.tipo === 'patient_assessment'
+  )
+    throw new Error('Le valutazioni finali si modificano solo attraverso una rettifica.');
   let stored = input.stored;
   if (!stored && input.file) {
     stored = await deps.upload(input.file, input.record.tipo);

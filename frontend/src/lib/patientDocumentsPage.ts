@@ -10,6 +10,7 @@ export interface PatientDocumentMeta {
   sortOrder?: number;
   importJobId: string | null;
   createdAt: string;
+  assessment?: { id: string; type: 'painad'; formVersion: string; assessedAt: string } | null;
 }
 
 export interface PatientDocumentPageInfo {

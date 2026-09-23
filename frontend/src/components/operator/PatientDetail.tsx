@@ -6,6 +6,7 @@ import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { ConsegnaQuickAdd } from './ConsegnaQuickAdd';
 import type { ConsegnaCreate } from '../../lib/consegnaCreation';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
+import type { AssessmentDraftStore } from '../../lib/assessments/assessmentDraftStore';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import type {
   Paziente,
@@ -62,6 +63,7 @@ import {
 } from './tabGroups';
 import {
   AnamnesisEditor,
+  AssessmentWorkspace,
   ContenzioniTab,
   DiarioPazienteTab,
   DimissioneTab,
@@ -106,6 +108,7 @@ interface PatientDetailProps {
   backLabel?: string;
   onAddConsegna: ConsegnaCreate;
   consegnaDraftStore?: ConsegnaDraftStore;
+  assessmentDraftStore?: AssessmentDraftStore;
   onUpdateConsegnaStato: (id: string, stato: Consegna['stato']) => void;
   onUpdateCartella: (
     pazienteId: string,
@@ -263,6 +266,7 @@ export function PatientDetail({
   backLabel,
   onAddConsegna,
   consegnaDraftStore,
+  assessmentDraftStore,
   onUpdateConsegnaStato,
   onUpdateCartella,
   onUpdatePaziente,
@@ -277,6 +281,8 @@ export function PatientDetail({
   const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));
   const [activeGroup, setActiveGroup] = useState<TabGroup>(() => patientTabGroup(initialTab));
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
+  const [assessmentFocus, setAssessmentFocus] = useState<{ patientId: string; assessmentId: string } | null>(null);
+  const [archiveFocus, setArchiveFocus] = useState<{ patientId: string; documentId: string; assessmentId: string } | null>(null);
   useEffect(() => {
     if (!initialTab || navigationRequestId === undefined) return;
     setTab(resolvePatientTab(initialTab));
@@ -2630,6 +2636,9 @@ export function PatientDetail({
                 operatoreNome={operatoreNome}
                 operatoreId={operatoreId}
                 operatoreRole={operatoreRole}
+                focusDocumentId={archiveFocus?.patientId === paziente.id ? archiveFocus.documentId : undefined}
+                expectedAssessmentId={archiveFocus?.patientId === paziente.id ? archiveFocus.assessmentId : undefined}
+                onOpenAssessment={(assessmentId) => { setAssessmentFocus({ patientId: paziente.id, assessmentId }); switchTab('painad'); }}
               />
             )}
             {(tab === 'diagnosi' || tab === 'sezioni-narrative') && (
@@ -2740,6 +2749,11 @@ export function PatientDetail({
                 value={undefined as never}
                 onChange={() => {}}
               />
+            )}
+            {tab === 'painad' && (
+              <AssessmentWorkspace patient={paziente} operatorId={operatoreId} operatorRole={operatoreRole} operatorName={operatoreNome}
+                draftStore={assessmentDraftStore} initialAssessmentId={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessmentId : undefined}
+                onOpenArchive={(documentId, assessmentId) => { setArchiveFocus({ patientId: paziente.id, documentId, assessmentId }); switchTab('documenti'); }} />
             )}
             {tab === 'dimissione' && (
               <DimissioneTab

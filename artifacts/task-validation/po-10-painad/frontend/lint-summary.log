@@ -1,0 +1,11 @@
+warning: in the working copy of 'frontend/src/App.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/PatientDetail.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/PatientDetailLazyTabs.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/DocumentiTab.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/tabGroups.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientDocumentArchive.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientDocumentArchiveIO.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientDocumentsPage.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/types.ts', LF will be replaced by CRLF the next time Git touches it
+{"files":29,"baselineDiagnostics":21,"candidateDiagnostics":21,"introduced":[]}

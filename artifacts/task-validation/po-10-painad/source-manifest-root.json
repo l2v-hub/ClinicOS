@@ -1,0 +1,431 @@
+{
+  "sourceStateId": "457c387507e2cb3f2910d1a678dd639ee46faf95faecc8a2a8e375015c1307a9",
+  "files": [
+    {
+      "path": "backend/package.json",
+      "sha256": "5e8eb492c3a06623bfba063ceda58a12f2cf7f0a6ff37609f3ebdf3e38fa264c",
+      "bytes": 1420,
+      "owner": "root"
+    },
+    {
+      "path": "backend/src/ai/__tests__/ai-document-bounds.test.ts",
+      "sha256": "70d5383cf3422c5f4f86868b888e2349c96c48bc25fa0fe8af1c6614d1c4034b",
+      "bytes": 1525,
+      "workerSha256": "70d5383cf3422c5f4f86868b888e2349c96c48bc25fa0fe8af1c6614d1c4034b",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/ai/__tests__/patient-document-archive.test.ts",
+      "sha256": "4c7e4513884437a8238682d193b78b8d23d680e8032a63824a8f08d6282baf34",
+      "bytes": 8059,
+      "workerSha256": "4c7e4513884437a8238682d193b78b8d23d680e8032a63824a8f08d6282baf34",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/ai/__tests__/patient-document-pagination.test.ts",
+      "sha256": "0914a6a433ba65ebf65d57742861721a703d98a07d33ce266b19aaae7a317f5a",
+      "bytes": 2680,
+      "workerSha256": "0914a6a433ba65ebf65d57742861721a703d98a07d33ce266b19aaae7a317f5a",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/ai/gateway/services.ts",
+      "sha256": "4d9fc8824157c55b118823f8ece9128ed6f16650c639840fcac198dcd6713c19",
+      "bytes": 53971,
+      "workerSha256": "4d9fc8824157c55b118823f8ece9128ed6f16650c639840fcac198dcd6713c19",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/ai/upload/patient-documents.ts",
+      "sha256": "23d3520b40e599af56d35cea820bc4ae68649d0b9a95a8a41744f276372f03dc",
+      "bytes": 8790,
+      "workerSha256": "23d3520b40e599af56d35cea820bc4ae68649d0b9a95a8a41744f276372f03dc",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/app.ts",
+      "sha256": "3ef66888598e1b3adef76fddfbda41827e3db88e482ffa515225c42d4c02269c",
+      "bytes": 10373,
+      "workerSha256": "3ef66888598e1b3adef76fddfbda41827e3db88e482ffa515225c42d4c02269c",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/__tests__/archive-scope-db.test.ts",
+      "sha256": "65364eff795fd1abb07e69f7d6cf16d1e01657e8cefbcbb26f8d54a19bc55c7c",
+      "bytes": 8182,
+      "workerSha256": "65364eff795fd1abb07e69f7d6cf16d1e01657e8cefbcbb26f8d54a19bc55c7c",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/__tests__/fixture.ts",
+      "sha256": "ab92c5f81b1e04cd37615984f0bce25eebaa19548e809e01e2d51028d8235bd8",
+      "bytes": 3252,
+      "workerSha256": "ab92c5f81b1e04cd37615984f0bce25eebaa19548e809e01e2d51028d8235bd8",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/__tests__/painad.test.ts",
+      "sha256": "d660842df89b852f99d488a72f098342e79bf2a9299fef8eae04ac3784cfa9d8",
+      "bytes": 2677,
+      "workerSha256": "d660842df89b852f99d488a72f098342e79bf2a9299fef8eae04ac3784cfa9d8",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/__tests__/pdf-db.test.ts",
+      "sha256": "f9149bae8112c5f9d306186070c9cd248d19f7ea8d8f286f351e043844464bda",
+      "bytes": 7573,
+      "workerSha256": "f9149bae8112c5f9d306186070c9cd248d19f7ea8d8f286f351e043844464bda",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/__tests__/service-db.test.ts",
+      "sha256": "5f711f39be91b17c0327a4382d9402865adf64dea07f4f588e34ff8a5f6f9cf9",
+      "bytes": 11549,
+      "workerSha256": "5f711f39be91b17c0327a4382d9402865adf64dea07f4f588e34ff8a5f6f9cf9",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "sha256": "2491ef449568d5d8995054005dd3ba78ba5df4c0aba0e8430fbde2e81254ac35",
+      "bytes": 3991,
+      "workerSha256": "2491ef449568d5d8995054005dd3ba78ba5df4c0aba0e8430fbde2e81254ac35",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/document-access.ts",
+      "sha256": "ecd53a071ca90d67ebc778e439abb6fa91c5a9b6a8dedce91dd5a49d94c73baa",
+      "bytes": 2261,
+      "workerSha256": "ecd53a071ca90d67ebc778e439abb6fa91c5a9b6a8dedce91dd5a49d94c73baa",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/fonts/NotoSans-Bold.ttf",
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+      "bytes": 575740,
+      "owner": "root"
+    },
+    {
+      "path": "backend/src/assessments/fonts/NotoSans-Regular.ttf",
+      "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5",
+      "bytes": 569208,
+      "owner": "root"
+    },
+    {
+      "path": "backend/src/assessments/fonts/OFL.txt",
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+      "bytes": 4377,
+      "owner": "root"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "sha256": "ebce21274205d6a2d38d8ab1bff402dee9695f9d47b631834c3fb87344748a2e",
+      "bytes": 4870,
+      "workerSha256": "ebce21274205d6a2d38d8ab1bff402dee9695f9d47b631834c3fb87344748a2e",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "sha256": "65105ffa7f0a740be3139f5967a52e7201257f3330b134f550d602721d6fa050",
+      "bytes": 4067,
+      "workerSha256": "65105ffa7f0a740be3139f5967a52e7201257f3330b134f550d602721d6fa050",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/painad.ts",
+      "sha256": "e3633accd5029c9dc9de4cc6f3874d24f255859ac5b7ec03cd99d88dbe01093e",
+      "bytes": 2382,
+      "workerSha256": "e3633accd5029c9dc9de4cc6f3874d24f255859ac5b7ec03cd99d88dbe01093e",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "sha256": "9eaa152e68c0d0b353431f927a8e3c24d98beabe118d31dac8a399f0dac0a3d7",
+      "bytes": 6759,
+      "workerSha256": "9eaa152e68c0d0b353431f927a8e3c24d98beabe118d31dac8a399f0dac0a3d7",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "sha256": "cbdd74b114a5cf59c2f6aa112f65d5e9ffe02721de231d45495f0be26fd10b4b",
+      "bytes": 4891,
+      "workerSha256": "cbdd74b114a5cf59c2f6aa112f65d5e9ffe02721de231d45495f0be26fd10b4b",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "sha256": "b137843288548ef7c1427b1a4f64e46607fbb46a8969ef708635bae200441be9",
+      "bytes": 9280,
+      "workerSha256": "b137843288548ef7c1427b1a4f64e46607fbb46a8969ef708635bae200441be9",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "sha256": "690b8ed26c86d844fee294cf70e78168592013eca2ea75abe52db94114cb9722",
+      "bytes": 2450,
+      "workerSha256": "690b8ed26c86d844fee294cf70e78168592013eca2ea75abe52db94114cb9722",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/routes/patient-assessments.ts",
+      "sha256": "df5222672fef2351ea50745da14926c5dbe38e44ba4fa50f5ef8b964bf228f06",
+      "bytes": 2630,
+      "workerSha256": "df5222672fef2351ea50745da14926c5dbe38e44ba4fa50f5ef8b964bf228f06",
+      "rootRefined": false
+    },
+    {
+      "path": "backend/src/routes/patient-documents.ts",
+      "sha256": "583e4e3894307aa5453da2d4e474b8bed6f09ae7f24a19db66b52e4a3fb81a87",
+      "bytes": 11950,
+      "workerSha256": "583e4e3894307aa5453da2d4e474b8bed6f09ae7f24a19db66b52e4a3fb81a87",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "c905954fb67585789a07fc00d1bdd8b90f0883055b371df9677469193d0b8e19",
+      "bytes": 129756,
+      "workerSha256": "c905954fb67585789a07fc00d1bdd8b90f0883055b371df9677469193d0b8e19",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/assessmentsUi.test.ts",
+      "sha256": "3ef9e5cff6a253f91b01c060cc884097d76ae09ee03be2e479aad46b7562b80f",
+      "bytes": 4721,
+      "workerSha256": "3ef9e5cff6a253f91b01c060cc884097d76ae09ee03be2e479aad46b7562b80f",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentFinal.tsx",
+      "sha256": "ae98d46169c82214d641af40c741e8d4021a3720e114866e657cb71af81ad16b",
+      "bytes": 3037,
+      "workerSha256": "ae98d46169c82214d641af40c741e8d4021a3720e114866e657cb71af81ad16b",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentForm.tsx",
+      "sha256": "280fdf2f5f90d85230c2b5ac1ccac28fd89dcf53eef35ced9e10643fefa41014",
+      "bytes": 5283,
+      "workerSha256": "280fdf2f5f90d85230c2b5ac1ccac28fd89dcf53eef35ced9e10643fefa41014",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "sha256": "18ee35445f3df0da20cf3d35d37ab17f39fb0434f7f4735b37145bc1995b9112",
+      "bytes": 3791,
+      "workerSha256": "18ee35445f3df0da20cf3d35d37ab17f39fb0434f7f4735b37145bc1995b9112",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "sha256": "8feb9a90f2a0d5f9c0200c9a42384a2d60f5abb1d8914ee9a4164b5ecf09ecee",
+      "bytes": 3341,
+      "workerSha256": "8feb9a90f2a0d5f9c0200c9a42384a2d60f5abb1d8914ee9a4164b5ecf09ecee",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.css",
+      "sha256": "9460d68936651f90cbc275fdee8dd5aa01f8ccf54cec1e29c3b1901823b7c2cb",
+      "bytes": 4820,
+      "workerSha256": "122f60b42fdcfbd13ee436aafb4786ddfabff49768488fde0b66430c111d399e",
+      "rootRefined": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "sha256": "20b629b23f1859ec5111dd5c880fa6ef734f1c656008ee1b63c466215662e94a",
+      "bytes": 17994,
+      "workerSha256": "2774364a2be6568a50f326b9c627627fc2bcf592705e784c756258594c920f74",
+      "rootRefined": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/useAssessmentHistory.ts",
+      "sha256": "c5bfd8d4467caffa69176868bf781075df057f5120f26fa667a3a6c7ba2fa686",
+      "bytes": 3007,
+      "workerSha256": "c5bfd8d4467caffa69176868bf781075df057f5120f26fa667a3a6c7ba2fa686",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+      "sha256": "db5f2b247a4efa4a26d3c2cb07bd1cd4b3aed980f2d9527b0a7a8322abfc4fde",
+      "bytes": 11624,
+      "workerSha256": "db5f2b247a4efa4a26d3c2cb07bd1cd4b3aed980f2d9527b0a7a8322abfc4fde",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+      "sha256": "1b21ed7cff0410795fc9496071291f4cb848e556f028a0a94d4b9f4e5b59ee23",
+      "bytes": 21119,
+      "workerSha256": "1b21ed7cff0410795fc9496071291f4cb848e556f028a0a94d4b9f4e5b59ee23",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "7b4cb1c2489cd4b8b9034dc66ddd7d8d0265561cb8c5cfe01dfd586979547518",
+      "bytes": 112624,
+      "workerSha256": "7b4cb1c2489cd4b8b9034dc66ddd7d8d0265561cb8c5cfe01dfd586979547518",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetailLazyTabs.tsx",
+      "sha256": "c1eaa39b711edf68b612ec7e70c637b29149acd55c7a91a6f4ffc64465c0f2f8",
+      "bytes": 2277,
+      "workerSha256": "c1eaa39b711edf68b612ec7e70c637b29149acd55c7a91a6f4ffc64465c0f2f8",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "sha256": "29f13655cd45a98cbd1f1dbaa94a3ed0fe2da430c83f72dd822a436db80afb1c",
+      "bytes": 3393,
+      "workerSha256": "29f13655cd45a98cbd1f1dbaa94a3ed0fe2da430c83f72dd822a436db80afb1c",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentArchive.test.ts",
+      "sha256": "cb4e79ca614086f04b10411525d749a9cedf37a4800815d7cfcf5f18ff4fcca5",
+      "bytes": 4331,
+      "workerSha256": "cb4e79ca614086f04b10411525d749a9cedf37a4800815d7cfcf5f18ff4fcca5",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentClient.test.ts",
+      "sha256": "712fc90e588d797a956f7ae7f09c469777412986c44433ad0db6266e4a391c16",
+      "bytes": 7111,
+      "workerSha256": "712fc90e588d797a956f7ae7f09c469777412986c44433ad0db6266e4a391c16",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentDraftStore.test.ts",
+      "sha256": "2c48cc3ca24b3f62a782886e3f17495afad644c1813de611818fa352378c6696",
+      "bytes": 10438,
+      "workerSha256": "2c48cc3ca24b3f62a782886e3f17495afad644c1813de611818fa352378c6696",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessments.fixtures.ts",
+      "sha256": "5362072de433a0fff39e8151b41b78de2e8296597a288d4011c8122258509274",
+      "bytes": 3197,
+      "workerSha256": "5362072de433a0fff39e8151b41b78de2e8296597a288d4011c8122258509274",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/painadDefinition.test.ts",
+      "sha256": "f2ce655b497d60fcc005ccd57303be8b1fb7e8ee7ac0d7f9e1bcb7c53c0ff23a",
+      "bytes": 6714,
+      "workerSha256": "f2ce655b497d60fcc005ccd57303be8b1fb7e8ee7ac0d7f9e1bcb7c53c0ff23a",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentClient.ts",
+      "sha256": "bd09fad96070763480b2b4a4b8e15c9680aa89397ac32a83acc5c2d924dedbd7",
+      "bytes": 5867,
+      "workerSha256": "bd09fad96070763480b2b4a4b8e15c9680aa89397ac32a83acc5c2d924dedbd7",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "sha256": "c9dcc0f9037d3125f4d5f6c57e6fef20946cc3a11d3508273fb922f21b5dc7ee",
+      "bytes": 11470,
+      "workerSha256": "c9dcc0f9037d3125f4d5f6c57e6fef20946cc3a11d3508273fb922f21b5dc7ee",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTime.ts",
+      "sha256": "28ce229944f25630ff74bc3a84e0332dc6ba1df7fc330d1665d9d25a58f7547c",
+      "bytes": 2162,
+      "workerSha256": "28ce229944f25630ff74bc3a84e0332dc6ba1df7fc330d1665d9d25a58f7547c",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "sha256": "b402a0498833ee70277aa9c1647b9d772ab54f9ec91adb02d38c26d2fdd6d372",
+      "bytes": 3074,
+      "workerSha256": "b402a0498833ee70277aa9c1647b9d772ab54f9ec91adb02d38c26d2fdd6d372",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "sha256": "3f0f3e3eb09fcb43ab7c68f27637c0f6af5bea851ef53fe462665d3a2ec9d9a7",
+      "bytes": 6487,
+      "workerSha256": "3f0f3e3eb09fcb43ab7c68f27637c0f6af5bea851ef53fe462665d3a2ec9d9a7",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/assessments/painadDefinition.ts",
+      "sha256": "9d8661bc8b1217489140a25c62d7df93d19cb4450bbfe0839316fb555dfa471e",
+      "bytes": 3465,
+      "workerSha256": "9d8661bc8b1217489140a25c62d7df93d19cb4450bbfe0839316fb555dfa471e",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/assessments/useAssessmentExitGuard.ts",
+      "sha256": "c1632578de7fa71b5436fd3b61c9909a96a7aaf3e9671422c8c014873dc5bf3b",
+      "bytes": 802,
+      "workerSha256": "c1632578de7fa71b5436fd3b61c9909a96a7aaf3e9671422c8c014873dc5bf3b",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "sha256": "7c467b154487b820c1905f4b4e12aaba9a2a81551b9ba11cc4b488237e291df2",
+      "bytes": 6227,
+      "workerSha256": "7c467b154487b820c1905f4b4e12aaba9a2a81551b9ba11cc4b488237e291df2",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "sha256": "c7324c7d55a661144d7fee25aaa0a6e632fa04bf9539e93453ba2237337bfa2f",
+      "bytes": 10617,
+      "workerSha256": "c7324c7d55a661144d7fee25aaa0a6e632fa04bf9539e93453ba2237337bfa2f",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentsPage.ts",
+      "sha256": "6efef969a7f9a486ca5d277ab7457c861379d28d444623ae29d2b9fc8d976047",
+      "bytes": 2378,
+      "workerSha256": "6efef969a7f9a486ca5d277ab7457c861379d28d444623ae29d2b9fc8d976047",
+      "rootRefined": false
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "d8a3b1d09558394ab430d8f497dbe0054ba9337b2f79dd8bb32389085f546a3d",
+      "bytes": 32983,
+      "workerSha256": "d8a3b1d09558394ab430d8f497dbe0054ba9337b2f79dd8bb32389085f546a3d",
+      "rootRefined": false
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9",
+      "bytes": 293678,
+      "owner": "root"
+    },
+    {
+      "path": "prisma/migrations/20260923040000_patient_assessments/migration.sql",
+      "sha256": "f5c4c6fd115cd488dbb2c0b544bf1e4565b9290f5ea1c79063296c2d6ed73e60",
+      "bytes": 7631,
+      "workerSha256": "f5c4c6fd115cd488dbb2c0b544bf1e4565b9290f5ea1c79063296c2d6ed73e60",
+      "rootRefined": false
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "sha256": "f8baf27aaed0eeb862f3c8db09c7059e23ab1ef97fdbe34b4f74ce95fff2fb0c",
+      "bytes": 33319,
+      "workerSha256": "f8baf27aaed0eeb862f3c8db09c7059e23ab1ef97fdbe34b4f74ce95fff2fb0c",
+      "rootRefined": false
+    },
+    {
+      "path": "scripts/build/copy-assessment-fonts.mjs",
+      "sha256": "b428cd31cdd3dd72090f812e8cb9e55503c880157776e1b771de34bf92dfb740",
+      "bytes": 728,
+      "owner": "root"
+    },
+    {
+      "path": "tests/fixtures/po10-assessments.mjs",
+      "sha256": "3927ab2c4178d118bb44bf366b804bddd854be9cd7c835b38909d39cb8f089f7",
+      "bytes": 1115,
+      "owner": "root"
+    },
+    {
+      "path": "tests/integration/po10-assessments.test.mts",
+      "sha256": "80f0c79b51fc4447424fd53d5ea71aaddab9c86fc68da64d31c91c89f8c4aca8",
+      "bytes": 8010,
+      "owner": "root"
+    }
+  ]
+}

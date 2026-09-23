@@ -1,0 +1,16 @@
+{
+  "exitCode": 0,
+  "schemaPath": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\artifacts\\task-validation\\po-10-painad\\backend\\private-schema.prisma",
+  "privateOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\backend\\node_modules\\.prisma\\client",
+  "privateWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\backend\\node_modules\\@prisma\\client",
+  "resolvedClient": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\backend\\node_modules\\@prisma\\client\\default.js",
+  "prismaVersion": {
+    "client": "7.10.0",
+    "engine": "0edf323efd1d98336f3f0a68684b56f689b900d3"
+  },
+  "connectedToDatabase": false,
+  "schemaSha256": "f8baf27aaed0eeb862f3c8db09c7059e23ab1ef97fdbe34b4f74ce95fff2fb0c",
+  "privateSchemaSha256": "d3580306f587d0edd81b596cab11fe05e26e383686e7a5abf6a7bb8f11c4942d",
+  "generatedClientSchemaSha256": "9dcb889d63230dabc3141967b73017e50c3e36d547ba11ed6cf5934d5021aab7",
+  "schemaVerifiedAt": "2026-09-23T03:44:52.270Z"
+}

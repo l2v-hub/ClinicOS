@@ -1,0 +1,50 @@
+{
+  "active": {
+    "rect": {
+      "bottom": 610.375,
+      "height": 44,
+      "left": 230.015625,
+      "right": 370.40625,
+      "top": 566.375,
+      "width": 140.390625,
+      "x": 230.015625,
+      "y": 566.375
+    },
+    "text": "Scarta modifiche locali"
+  },
+  "identity": {
+    "bottom": 165.1875,
+    "height": 85.1875,
+    "left": 16,
+    "right": 722,
+    "top": 80,
+    "width": 706,
+    "x": 16,
+    "y": 80
+  },
+  "scroll": [
+    {
+      "clientHeight": 960,
+      "cls": "page-content content-panel",
+      "overflow": "auto",
+      "scrollHeight": 2808
+    },
+    {
+      "clientHeight": 2776,
+      "cls": "patient-record-view",
+      "overflow": "visible",
+      "scrollHeight": 2776
+    },
+    {
+      "clientHeight": 2263,
+      "cls": "cr-detail-content tab-panel-transition",
+      "overflow": "visible",
+      "scrollHeight": 2263
+    }
+  ],
+  "viewport": {
+    "documentWidth": 753,
+    "h": 1024,
+    "w": 768
+  }
+}

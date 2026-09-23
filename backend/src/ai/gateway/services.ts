@@ -4,6 +4,7 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
+import { assessmentAccessForAi, assessmentDocumentSql } from '../../assessments/document-access.js';
 import {
   NARRATIVE_SECTION_KEYS,
   NARRATIVE_TITLES,
@@ -979,7 +980,7 @@ export async function getPatientDocumentsG(
 ): Promise<SourcedResult<unknown[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
-  const rows = await listPatientDocumentsForAi(patientId);
+  const rows = await listPatientDocumentsForAi(patientId, assessmentAccessForAi(ctx));
   const truncated = rows.length > AI_PATIENT_DOCUMENT_LIMIT;
   const docs = rows.slice(0, AI_PATIENT_DOCUMENT_LIMIT);
   const refs = docs.map((d) => documentSource(patientId, d.id, d.originalName));
@@ -1229,7 +1230,7 @@ export async function searchDocuments(
     gatewayAudit(ctx, 'search_documents', [], 0, 'empty', nowIso());
     return { data: [], sourceRefs: [] };
   }
-  const predicates: Prisma.Sql[] = [];
+  const predicates: Prisma.Sql[] = [assessmentDocumentSql(assessmentAccessForAi(ctx))];
   if (ctx.permittedPatientIds !== null) {
     predicates.push(Prisma.sql`document."patientId" IN (${Prisma.join(ctx.permittedPatientIds)})`);
   }

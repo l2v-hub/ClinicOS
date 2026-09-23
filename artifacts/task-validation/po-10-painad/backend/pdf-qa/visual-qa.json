@@ -1,0 +1,51 @@
+{
+  "sourceTreeSha256": "ad91e3f4df818d850df5bc71fc8e39550d313b057bc0862423eff47ebd2e7b37",
+  "inspectedAt": "2026-09-23T03:44:01.594Z",
+  "allPagesInspected": true,
+  "noClippingOrOverlap": true,
+  "normalPages": 1,
+  "longPages": 2,
+  "observations": [
+    "Repeated heading/footer are clear on all three pages.",
+    "Latin accents and Greek names render correctly.",
+    "Long correction and answer text wrap and continue without clipping or overlap.",
+    "Source version is human-readable; SHA and predecessor technical ID stay in PDF keywords."
+  ],
+  "renderCommand": "pdftoppm -scale-to 1200 -png",
+  "textCommand": "pdftotext -enc UTF-8 -layout",
+  "renderer": "C:/Users/Claudio/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/poppler/Library/bin/pdftoppm.exe",
+  "textExtractor": "C:/Program Files/Git/mingw64/bin/pdftotext.exe",
+  "visualEvidence": "All three fresh PNGs inspected through view_image in the final worker turn after suite session59255.",
+  "files": [
+    {
+      "path": "painad-normal.pdf",
+      "bytes": 19080,
+      "sha256": "bf7d54ef94d5f419f20fa7a9d5446f3278c89d865b631ae4f1fd0cd4fdfb37c5"
+    },
+    {
+      "path": "painad-long.pdf",
+      "bytes": 22234,
+      "sha256": "a6db16c0f2c3c3965325b50f320a87942316598d2c1bdb988ad342c01f432de9"
+    },
+    {
+      "path": "normal-1.png",
+      "bytes": 108140,
+      "sha256": "a76926b51bf6d9f51bd55b212d50be0d6c0e8498588fa7108fec2a300445370a"
+    },
+    {
+      "path": "long-1.png",
+      "bytes": 254484,
+      "sha256": "24ef929ebf5920d1916e946bea8575e4a8247d95523c752fc06e6eca6a5b97d8"
+    },
+    {
+      "path": "long-2.png",
+      "bytes": 119991,
+      "sha256": "9bef827b018da97f9c9e424bfd726ca18d5d16f1b8f6b3f0c8ab3545845ced1a"
+    },
+    {
+      "path": "painad-normal.txt",
+      "bytes": 1083,
+      "sha256": "41ca937002de13aeaf5509c015572e53dfc2cfa9b83f2b92c71adc452a435dd8"
+    }
+  ]
+}

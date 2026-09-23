@@ -1,0 +1,14 @@
+{
+  "issueId": "PO-10-backend-implementation",
+  "claimant": "agent:codex-po10-backend:coder",
+  "released": true,
+  "recordedAt": "2026-09-23T03:45:14.250Z",
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-10-backend-implementation released\",\n  \"reason\": \"Backend PO10 frozen: 51/51 source-bound tests, 44 native PostgreSQL migrations, private schema/typecheck/Unicode PDF QA verified. Handoff to root for independent integration.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-10-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po10-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T03:16:36.387Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T03:16:36.387Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicit GO after verified PO09 cfe0e16be0c3efc4c49245f5a9944745bf913a8a. Sole writer in C:/Workspace/ClinicOSHouse-worktrees/po10-assessments-backend branch codex/po10-assessments-backend. Exact scope: backend/src/assessments/** including fonts copied from root-provided dependency assets; backend/src/routes/patient-assessments.ts and patient-documents.ts; backend/src/app.ts mount only; backend/src/ai/upload/patient-documents.ts, patient-document-types.ts, patient-document-cursor.ts; backend/src/ai/gateway/services.ts and focused tests; prisma/schema.prisma and one additive PatientAssessment migration; artifacts/task-validation/po-10-painad/backend/** and private backend/node_modules Prisma/fontkit/pdf-lib runtime only. Root owns package/lockfiles/shared dependencies and deployment assets integration. No commit/push/deploy or new agents. Native PG synthetic tests only. Preserve dirty run-claude-queue.ps1 and start-claude-team.ps1.\"\n  }\n}"
+      }
+    ]
+  }
+}

@@ -11,6 +11,7 @@ import patientIntakeRouter from './routes/patient-intake.js';
 import patientDiaryRouter from './routes/patient-diary.js';
 import narrativeSectionsRouter from './routes/narrative-sections.js';
 import patientDocumentsRouter from './routes/patient-documents.js';
+import patientAssessmentsRouter from './routes/patient-assessments.js';
 import consegneRouter from './routes/consegne.js';
 import operatorsRouter from './routes/operators.js';
 import noteRouter from './routes/note.js';
@@ -176,6 +177,7 @@ app.use('/me', meRosterOrderRouter);
 // dopo, una richiesta in modalita' entra (Bearer JWT, senza header X-Operator-Id) prenderebbe
 // 401 dal gate generico di un router precedente prima di raggiungere il proprio gate corretto.
 app.use('/patients', patientDocumentsRouter);
+app.use('/patients', patientAssessmentsRouter);
 app.use('/patients', patientRoomOptionsRouter);
 app.use('/patients', patientAssignmentRouter);
 app.use('/patients', patientTherapiesRouter);

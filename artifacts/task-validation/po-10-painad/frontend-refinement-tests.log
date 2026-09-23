@@ -1,0 +1,39 @@
+(node:39776) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ generated PAINAD archives under its module using clinical Rome date and exact IDs for multi-print (2.5245ms)
+✔ archive metadata requires reserved category and valid assessment association together (0.7836ms)
+✔ direct metadata open verifies document identity before content access (34.3318ms)
+✔ manual upload, classification and stored document edit cannot use generated assessment category (1.2895ms)
+(node:39776) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ client captures session authority and sends scoped no-store bounded requests (40.8679ms)
+✔ create response loss replays identical bytes and accepts current edited draft (5.6913ms)
+✔ finalize response loss replays request before CAS and ready document remains linked (2.7072ms)
+✔ wrong patient, record, idempotency receipt or final snapshot is never reported saved (2.765ms)
+✔ known conflicts are actionable; 503, malformed success and unknown failures stay uncertain (2.3557ms)
+✔ PDF retry uses existing assessment ID, never create/finalize or a draft response (1.7901ms)
+(node:22556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new observations are blank, patient-specific and survive internal unsubscribe/remount (3.4337ms)
+✔ synchronous create lock and uncertain retry retain exact UUID, body and answers (2.075ms)
+✔ finalization requires a saved complete preview and exact retry survives response loss (2.3127ms)
+✔ PATCH response loss reconciles only the same next-version record and exact editable fields (0.7087ms)
+✔ CAS conflicts preserve local fields until explicit keep-local or accept-remote resolution (0.8448ms)
+✔ logout clear fences late writes; disposed UI never starts a follow-up reconciliation GET (1.2135ms)
+✔ another patient and mismatched write receipt cannot replace or clear this observation (0.5023ms)
+✔ correction starts explicitly from a final, requires reason and never changes predecessor (1.6646ms)
+✔ correction preserves original clinical instant including both repeated Rome DST occurrences (0.9104ms)
+(node:32644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 678.4103

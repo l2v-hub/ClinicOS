@@ -1,0 +1,9 @@
+
+warning: in the working copy of 'backend/src/ai/__tests__/ai-document-bounds.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/ai/__tests__/patient-document-archive.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/ai/__tests__/patient-document-pagination.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/ai/gateway/services.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/ai/upload/patient-documents.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/app.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/patient-documents.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it

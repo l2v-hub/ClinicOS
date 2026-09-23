@@ -5,6 +5,8 @@ import { API_URL } from './config';
 import { useRosterOrder } from './lib/useRosterOrder';
 import { createConsegna, type ConsegnaCreateRequest, type ConsegnaCreateResult } from './lib/consegnaCreation';
 import { createConsegnaDraftStore } from './lib/consegnaDrafts';
+import { createAssessmentDraftStore } from './lib/assessments/assessmentDraftStore';
+import { useAssessmentExitGuard } from './lib/assessments/useAssessmentExitGuard';
 import { useConsegneExitGuard } from './lib/useConsegneExitGuard';
 import { canApplyPatientConsegne, canRefreshPatientConsegne, type ConsegneEntry } from './lib/consegneNavigation';
 import { assertRosterPage, isRosterChanged, throwRosterResponse } from './lib/rosterOrder';
@@ -282,6 +284,8 @@ function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
 export default function App() {
   const [utente, setUtente] = useState<UtenteApp | null>(null);
   const [consegnaDraftStore] = useState(createConsegnaDraftStore);
+  const [assessmentDraftStore] = useState(createAssessmentDraftStore);
+  const confirmAssessmentExit = useAssessmentExitGuard(assessmentDraftStore);
   const confirmConsegneExit = useConsegneExitGuard(consegnaDraftStore);
   const rosterOrder = useRosterOrder(utente ? `${utente.id}:${utente.ruolo}` : null);
   const { requestKey: rosterKey, options: rosterOptions, accept: acceptRoster, recover: recoverRoster } = rosterOrder;
@@ -334,7 +338,7 @@ export default function App() {
   const pendingPazienteRestoreIdRef = useRef<string | null>(null);
   const patientNavigationSequenceRef = useRef(0);
   const sessionEpochRef = useRef(0);
-  useEffect(() => () => { sessionEpochRef.current++; consegnaDraftStore.clear(); }, [consegnaDraftStore]);
+  useEffect(() => () => { sessionEpochRef.current++; consegnaDraftStore.clear(); assessmentDraftStore.clear(); }, [consegnaDraftStore, assessmentDraftStore]);
   const appointmentRequestSequenceRef = useRef(0);
   const therapyRequestSequenceRef = useRef(0);
   const therapyAbortControllerRef = useRef<AbortController | null>(null);
@@ -1485,6 +1489,7 @@ export default function App() {
     setLoginError(null);
     sessionEpochRef.current += 1;
     consegnaDraftStore.clear();
+    assessmentDraftStore.clear();
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
     therapyAbortControllerRef.current?.abort();
@@ -1576,9 +1581,11 @@ export default function App() {
   }
 
   function handleLogout() {
+    if (!confirmAssessmentExit()) return;
     if (!confirmConsegneExit()) return;
     sessionEpochRef.current += 1;
     consegnaDraftStore.clear();
+    assessmentDraftStore.clear();
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
     therapyAbortControllerRef.current?.abort();
@@ -2987,6 +2994,7 @@ export default function App() {
                       backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
                       onAddConsegna={addConsegna}
                       consegnaDraftStore={consegnaDraftStore}
+                      assessmentDraftStore={assessmentDraftStore}
                       onUpdateConsegnaStato={updateConsegnaStato}
                       onUpdateCartella={updateCartella}
                       onUpdatePaziente={updatePaziente}

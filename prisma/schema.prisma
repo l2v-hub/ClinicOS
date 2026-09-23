@@ -139,6 +139,7 @@ model Patient {
   narrativeSections         PatientNarrativeSection[]
   documents                 PatientDocument[]
   parameterReadings         PatientParameterReading[]
+  assessments               PatientAssessment[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -190,9 +191,52 @@ model PatientDocument {
   sortOrder    Int      @default(0)
   createdById  String?
   createdAt    DateTime @default(now())
+  assessmentId String?  @unique
+  assessment   PatientAssessment? @relation(fields: [assessmentId, patientId], references: [id, patientId], onDelete: Restrict, onUpdate: Restrict)
   patient      Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   @@index([patientId])
+  @@unique([assessmentId, patientId])
+}
+
+// Final clinical content is DB-immutable; only separate PDF lifecycle fields may change.
+model PatientAssessment {
+  id                   String   @id @default(uuid())
+  patientId            String
+  type                 String
+  formVersion          String
+  authorOperatorId     String
+  authorName           String
+  assessedAt           DateTime @db.Timestamptz(3)
+  answers              Json
+  status               String   @default("draft")
+  version              Int      @default(1)
+  createdAt            DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime @default(now()) @db.Timestamptz(3)
+  finalizedAt          DateTime? @db.Timestamptz(3)
+  requestId            String
+  creationPayloadHash  String
+  finalizeRequestId    String?
+  finalizePayloadHash  String?
+  predecessorId        String?
+  correctionReason     String?
+  finalSnapshot        Json?
+  snapshotSha256       String?
+  pdfStatus            String?
+  pdfAttemptToken      String?
+  pdfLeaseUntil        DateTime? @db.Timestamptz(3)
+  pdfAttemptCount      Int      @default(0)
+  pdfErrorCode         String?
+  pdfUpdatedAt         DateTime? @db.Timestamptz(3)
+  patient              Patient  @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  predecessor          PatientAssessment? @relation("AssessmentCorrections", fields: [predecessorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  corrections          PatientAssessment[] @relation("AssessmentCorrections")
+  document             PatientDocument?
+
+  @@unique([id, patientId])
+  @@unique([authorOperatorId, requestId])
+  @@unique([authorOperatorId, finalizeRequestId])
+  @@index([patientId, type, createdAt, id])
 }
 
 model Cartella {

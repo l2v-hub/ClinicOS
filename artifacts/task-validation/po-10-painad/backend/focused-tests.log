@@ -1,0 +1,154 @@
+✔ all 243 complete and 781 partial PAINAD combinations preserve zero, sums and bands (5.9252ms)
+✔ boundary rejects missing/extra/coerced values, spoofed author, invalid dates and version (2.6219ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 191.839
+✔ concurrent create uses one immutable initial receipt and replays the edited current draft (458.0397ms)
+✔ draft privacy and patient scope apply to reads, writes, create replay and revocation (28.3535ms)
+✔ CAS permits one writer and incomplete finalization remains a draft (33.17ms)
+✔ finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella (182.6537ms)
+✔ only one concurrent final correction may reference a predecessor of the same patient (78.5349ms)
+✔ history is bounded, scoped, stable across draft edits and excludes snapshots and answers (237.1687ms)
+✔ concurrent ownership change fences creation before a stale patient permission can write (43.1572ms)
+✔ a new process replays the persisted creation and finalization after response loss (21451.6436ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23727.5746
+✔ PDF failure preserves the final and concurrent retries archive exactly one immutable document (591.1462ms)
+✔ expired lease is recoverable and late success/failure tokens cannot overwrite the new attempt (99.8424ms)
+✔ PDF claim and callbacks read the clock after database lock waits (118.8794ms)
+✔ renderer preserves Unicode and long text, emits readable PDF metadata and rejects unsupported glyphs (630.1311ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12429.3582
+[ai-gateway] {"requestId":"e4988130-f0f1-447a-aa0a-7f1cdb368618","userId":"po10-06e0643c-author","tenantId":"clinicos","toolName":"get_patient_documents","patientIds":["po10-06e0643c-foreign"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:06.669Z"}
+[ai-gateway] {"requestId":"e4988130-f0f1-447a-aa0a-7f1cdb368618","userId":"po10-06e0643c-author","tenantId":"clinicos","toolName":"search_documents","patientIds":["po10-06e0643c-foreign"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:06.677Z"}
+[ai-gateway] {"requestId":"e4988130-f0f1-447a-aa0a-7f1cdb368618","userId":"po10-06e0643c-other","tenantId":"clinicos","toolName":"search_documents","patientIds":["po10-06e0643c-foreign","po10-06e0643c-foreign","po10-06e0643c-foreign","po10-06e0643c-foreign"],"resultCount":4,"outcome":"ok","at":"2026-09-23T03:42:06.692Z"}
+[ai-gateway] {"requestId":"e4988130-f0f1-447a-aa0a-7f1cdb368618","userId":"po10-06e0643c-author","tenantId":"clinicos","toolName":"get_patient_documents","patientIds":["po10-06e0643c-foreign"],"resultCount":4,"outcome":"ok","at":"2026-09-23T03:42:06.697Z"}
+[ai-gateway] {"requestId":"e4988130-f0f1-447a-aa0a-7f1cdb368618","userId":"po10-06e0643c-author","tenantId":"clinicos","toolName":"search_documents","patientIds":["po10-06e0643c-foreign","po10-06e0643c-foreign","po10-06e0643c-foreign","po10-06e0643c-foreign"],"resultCount":4,"outcome":"ok","at":"2026-09-23T03:42:06.700Z"}
+✔ all archive/AI readers intersect generated documents with live patient scope before bounds; legacy stays accessible (544.7765ms)
+✔ HTTP draft/final/PDF metadata flow preserves status codes, identity, bounds and current scope (515.8293ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12492.1468
+✔ AI document metadata uses a bounded minimal database projection (0.8924ms)
+✔ AI gateway emits at most 100 document rows and propagates truncation (0.2065ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 174.2874
+✔ patient document cursor is opaque, stable and bound to its patient (1.7572ms)
+✔ patient document metadata query is bounded and keyset ordered (0.3339ms)
+✔ HTTP contract rejects invalid cursors and caps the requested page size (0.3382ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 187.1202
+✔ POST persists every personal and clinical category; list and exact-id content survive later reads (388.1293ms)
+✔ PATCH persists only classification and preserves bytes and original filename (17.115ms)
+✔ anonymous, forbidden-role and foreign-patient access fail without writes (5.933ms)
+✔ invalid category, extra fields, MIME spoof and oversized file reject at boundary (73.2507ms)
+✔ Unicode disposition handles accents, control characters and split surrogates safely (0.8285ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 839.0548
+✔ AUTH_MODE is fail-closed when absent, invalid, entra-unimplemented, or demo in production (0.9915ms)
+✔ patient-documents gate: anonymous caller (no operator headers) -> 401 (0.4308ms)
+✔ patient-documents gate: role "guest" -> 403 (0.2498ms)
+✔ patient-documents gate: valid "operatore" role passes and is attached to the request (0.2596ms)
+✔ patient-documents gate: demo request scoped to another patient -> 403 (0.2248ms)
+✔ patient-documents gate: entra, missing and invalid modes return explicit 503 without fallback (0.3857ms)
+✔ sniffAllowedMime: recognises real signatures for every allowed family (0.2745ms)
+✔ sniffAllowedMime: spoofed upload (PNG-declared filename/mimetype, non-image bytes) -> null (rejected) (0.1141ms)
+✔ sniffAllowedMime: empty/truncated buffer -> null (0.1466ms)
+✔ upload size limit: multer is configured with the documented 15MB cap (0.1758ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 579.1558
+✔ AC5: AUTH_MODE=entra with incomplete tenant config fails closed (503) (274.2385ms)
+✔ AC6: in entra mode self-declared X-Operator-*/X-Demo-Patient-Id headers are NOT identity (1.1494ms)
+✔ AC1-AC3: verified Bearer token authenticates and attaches the mapped operator (39.329ms)
+✔ AC4: forged token in entra mode → 401 without enumeration (46.0218ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10983.3209
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_patients","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.153Z"}
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_patients","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.211Z"}
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_patients","patientIds":["gateway-1790134950904-relational"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.228Z"}
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_patients","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.237Z"}
+[ai-gateway] {"requestId":"gateway-1790134950904-acl","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_patients","patientIds":[],"resultCount":0,"outcome":"empty","at":"2026-09-23T03:42:31.239Z"}
+✔ gateway SQL keeps legacy/relational filters, accents and ACL before limit (265.6779ms)
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_clinical_sections","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.250Z"}
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_documents","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.260Z"}
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"correlate_structured_data","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.263Z"}
+[ai-gateway] {"requestId":"gateway-1790134950904-request","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"get_patient_narrative_sections","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.266Z"}
+✔ gateway narrative/document/correlation SQL is accent-insensitive and bounded (26.1087ms)
+[ai-gateway] {"requestId":"gateway-1790134950904-vitals","userId":"gateway-integration-test","tenantId":"clinicos","toolName":"search_cross_patient_vitals","patientIds":["gateway-1790134950904-legacy"],"resultCount":1,"outcome":"ok","at":"2026-09-23T03:42:31.288Z"}
+✔ cross-vitals applies the patient ACL in SQL before the cap (21.8726ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10822.3479
+✔ authoritative location handles active/history/conflicts/legacy without mixed labels or private data (226.7044ms)
+✔ historical lookup ignores legacy, preserves inclusive intervals and validates calendar dates (7.9268ms)
+✔ batch IDs are deduplicated and both scope restrictions apply to identity (3.2475ms)
+✔ repeated IDs use one minimal batch and database errors never become unassigned (3.3298ms)
+✔ non-string legacy scalars are unavailable and a roomless valid bed remains explicit (22.5924ms)
+✔ parameter room search is authoritative before limit+1 and identity page keeps its cursor (48.4118ms)
+✔ visible handover does not grant patient identity access, including overview previews (106.5614ms)
+✔ therapy detail, location and exact totals intersect requested IDs with patient ownership (46.051ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10911.429

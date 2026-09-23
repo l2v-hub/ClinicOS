@@ -1,0 +1,131 @@
+
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 479 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                         1.42 kB │ gzip:   0.65 kB
+dist/assets/pdf.worker.min-CHFwMXne.mjs             1,262.39 kB
+dist/assets/OperatorDashboard-CeuW1W3M.css              0.10 kB │ gzip:   0.09 kB
+dist/assets/PdfCanvasPreview-BY-O_bqx.css               0.68 kB │ gzip:   0.37 kB
+dist/assets/SemanticTaggedText-Cy2K2aEq.css             0.80 kB │ gzip:   0.37 kB
+dist/assets/PatientIdentity-CcceCeFU.css                0.98 kB │ gzip:   0.37 kB
+dist/assets/RosterOrderControl-D6JdzpHU.css             0.98 kB │ gzip:   0.44 kB
+dist/assets/TherapySlotModal-7d9wGS23.css               1.44 kB │ gzip:   0.55 kB
+dist/assets/CameraCapture-BZrPNFqj.css                  1.85 kB │ gzip:   0.74 kB
+dist/assets/ClinicalSectionLoading-B-ZZ6bUu.css         1.88 kB │ gzip:   0.75 kB
+dist/assets/PatientCombobox-m3PNMGTn.css                2.69 kB │ gzip:   0.91 kB
+dist/assets/NotesPage-BONDdHCo.css                      2.83 kB │ gzip:   0.85 kB
+dist/assets/ConsegneWorkspace-Df-KQF84.css              2.86 kB │ gzip:   0.84 kB
+dist/assets/ConsegneRounds-DGyVERat.css                 3.00 kB │ gzip:   0.94 kB
+dist/assets/AssessmentWorkspace-DKHw1lKi.css            3.07 kB │ gzip:   0.91 kB
+dist/assets/farmacoRiferimento-BgKYx-sb.css             3.24 kB │ gzip:   0.99 kB
+dist/assets/TopNav-DK0-aQXY.css                         3.54 kB │ gzip:   1.12 kB
+dist/assets/TerapiaFarmacologicaTab-ecOsaZey.css        3.64 kB │ gzip:   1.08 kB
+dist/assets/ClinicalTable-Cjulftmw.css                  3.71 kB │ gzip:   0.99 kB
+dist/assets/AgnosPanel-Cr90M8t_.css                     3.91 kB │ gzip:   1.33 kB
+dist/assets/DischargeImportModal-BPcl_exO.css           3.97 kB │ gzip:   1.21 kB
+dist/assets/OperatorManagement-DTt4_Y4X.css             4.38 kB │ gzip:   1.20 kB
+dist/assets/PatientParameters-Bo74cfF_.css              4.97 kB │ gzip:   1.28 kB
+dist/assets/VisoreDocumentoFarmaco-DDTR8eg1.css         6.04 kB │ gzip:   1.53 kB
+dist/assets/PatientList-DVkZB8DE.css                    7.34 kB │ gzip:   1.78 kB
+dist/assets/DocumentiTab-DJY500eY.css                   8.61 kB │ gzip:   1.87 kB
+dist/assets/TherapyEditor-Bl_xva3D.css                  9.05 kB │ gzip:   2.21 kB
+dist/assets/DashboardTherapyDeadlines-zEY-7UA7.css     14.64 kB │ gzip:   2.68 kB
+dist/assets/PatientDetail-YRxnZBwS.css                 21.04 kB │ gzip:   3.91 kB
+dist/assets/index-WhmJM_cr.css                        258.46 kB │ gzip:  43.93 kB
+dist/assets/pdf.worker.min-CGa-InIf.js                  0.13 kB │ gzip:   0.14 kB
+dist/assets/appointmentRange-Bcoh8cH0.js                0.30 kB │ gzip:   0.23 kB
+dist/assets/LoadErrorState-B_ZBi07O.js                  0.57 kB │ gzip:   0.39 kB
+dist/assets/AnagraficaFarmaciPage-Dcm6KI5n.js           0.98 kB │ gzip:   0.55 kB
+dist/assets/PageHeader--vo-wil7.js                      1.61 kB │ gzip:   0.72 kB
+dist/assets/PatientIdentity-DQT460QS.js                 1.61 kB │ gzip:   0.79 kB
+dist/assets/clinicalHistory-Dc8Sh74T.js                 1.85 kB │ gzip:   0.87 kB
+dist/assets/farmacoDocumento-DzyiFi7j.js                1.94 kB │ gzip:   0.96 kB
+dist/assets/therapyDose-BJM_nIEY.js                     2.06 kB │ gzip:   1.03 kB
+dist/assets/PainAssessmentEditor-DW3bhgyC.js            2.10 kB │ gzip:   1.08 kB
+dist/assets/ConfirmDialog-_kLUIFya.js                   2.20 kB │ gzip:   1.10 kB
+dist/assets/VitalSignsEditor-CtXyItYw.js                2.20 kB │ gzip:   1.10 kB
+dist/assets/useAnomalieReparto-BpeUqDH-.js              2.23 kB │ gzip:   1.19 kB
+dist/assets/AccessibleDialogSurface-D6U3HbjQ.js         2.31 kB │ gzip:   1.24 kB
+dist/assets/useMedicationSearch-Czfw9R8g.js             2.38 kB │ gzip:   1.21 kB
+dist/assets/usePatientDocuments-Cd_qOsE2.js             2.73 kB │ gzip:   1.19 kB
+dist/assets/ClinicalCard-DKEuAhEU.js                    2.88 kB │ gzip:   1.53 kB
+dist/assets/renderArchivePrint-wcWBSTHr.js              2.96 kB │ gzip:   1.38 kB
+dist/assets/patientTherapyCalendar-Db6HB3pL.js          2.97 kB │ gzip:   1.33 kB
+dist/assets/TopNav-CowUK7xG.js                          3.27 kB │ gzip:   1.67 kB
+dist/assets/rosterOrder-6FGKCCaj.js                     3.68 kB │ gzip:   1.44 kB
+dist/assets/RosterOrderControl-CunuVIH0.js              3.93 kB │ gzip:   1.68 kB
+dist/assets/PdfCanvasPreview-FnS4Rg1i.js                3.96 kB │ gzip:   1.68 kB
+dist/assets/InlineEditableField-1h4UOPC_.js             4.02 kB │ gzip:   1.41 kB
+dist/assets/shared-B497Xpop.js                          4.10 kB │ gzip:   1.73 kB
+dist/assets/farmacoRiferimento-BUMo4HU5.js              4.23 kB │ gzip:   1.95 kB
+dist/assets/ClinicalAttachments-CJVRHanw.js             4.30 kB │ gzip:   1.85 kB
+dist/assets/TherapyRoundsPage-D-VFKYWL.js               4.69 kB │ gzip:   2.22 kB
+dist/assets/AnamnesisEditor-DBNLVpB6.js                 5.10 kB │ gzip:   2.27 kB
+dist/assets/PatientParameters-D1SoS8Bx.js               5.20 kB │ gzip:   2.51 kB
+dist/assets/PatientCombobox-vvy-1GmK.js                 5.52 kB │ gzip:   2.55 kB
+dist/assets/SemanticTaggedText-R2qMO7Up.js              5.61 kB │ gzip:   2.40 kB
+dist/assets/DocumentPreview-Bv-IjMeW.js                 6.32 kB │ gzip:   2.42 kB
+dist/assets/OperatorSchedule-DpBYKXIo.js                6.87 kB │ gzip:   2.69 kB
+dist/assets/ClinicalTable-BH6fM4G8.js                   7.19 kB │ gzip:   2.83 kB
+dist/assets/jsx-runtime-C_urxT9I.js                     8.55 kB │ gzip:   3.26 kB
+dist/assets/AgendaStatoFilter-WEEcoKG3.js               8.81 kB │ gzip:   2.80 kB
+dist/assets/NarrativeSectionsTab-Ddow6w-u.js            9.02 kB │ gzip:   3.17 kB
+dist/assets/PatientArchivePreview-cF6O3AkC.js           9.61 kB │ gzip:   3.93 kB
+dist/assets/ConsegneRounds-DKSdcBit.js                  9.84 kB │ gzip:   4.29 kB
+dist/assets/OperatorDashboard-CLjf-f-H.js              10.63 kB │ gzip:   4.04 kB
+dist/assets/NotesPage-lxYTP-BA.js                      11.55 kB │ gzip:   4.23 kB
+dist/assets/DiarioPazienteTab-UBMO9erQ.js              11.82 kB │ gzip:   3.98 kB
+dist/assets/TherapySlotModal-BN39LogR.js               12.09 kB │ gzip:   4.67 kB
+dist/assets/EsamiConsulenzeTab-i8HtNVpj.js             13.67 kB │ gzip:   5.23 kB
+dist/assets/RoomsManagement-x3DmYy8w.js                13.93 kB │ gzip:   3.85 kB
+dist/assets/CameraCapture-BAClDgNK.js                  14.04 kB │ gzip:   5.43 kB
+dist/assets/MultiPatientParametri-DtuCYNY1.js          14.79 kB │ gzip:   6.04 kB
+dist/assets/ParametriTab-CApyFJ0H.js                   15.72 kB │ gzip:   5.32 kB
+dist/assets/ScalaNRSTab-CE3pPHJD.js                    16.09 kB │ gzip:   5.32 kB
+dist/assets/InvioPSModal-AHKzLfak.js                   16.24 kB │ gzip:   5.03 kB
+dist/assets/ScalaBradenTab-CZCzaXwg.js                 17.35 kB │ gzip:   5.78 kB
+dist/assets/OperatorAgenda-BbnyyG9Q.js                 17.50 kB │ gzip:   6.43 kB
+dist/assets/AdminAgenda-C7ALCXEL.js                    18.79 kB │ gzip:   6.58 kB
+dist/assets/VisoreDocumentoFarmaco-8CYnF_Y_.js         18.91 kB │ gzip:   7.22 kB
+dist/assets/ClinicalSectionLoading-Brtzo6Fg.js         19.38 kB │ gzip:   6.06 kB
+dist/assets/AdminDashboard-DYaSzn5X.js                 20.33 kB │ gzip:   6.92 kB
+dist/assets/ScalaTinettiTab-BxefU0g4.js                20.41 kB │ gzip:   6.30 kB
+dist/assets/DashboardTherapyDeadlines-C9z4YW04.js      23.44 kB │ gzip:   7.48 kB
+dist/assets/OperatorManagement-B8ZWhPdG.js             24.44 kB │ gzip:   8.31 kB
+dist/assets/PatientList-BPIuy0gk.js                    25.96 kB │ gzip:   9.49 kB
+dist/assets/MedicazioniTab-lBTIHlE0.js                 26.50 kB │ gzip:   6.90 kB
+dist/assets/AssessmentWorkspace-BXjeleWd.js            28.03 kB │ gzip:   9.46 kB
+dist/assets/DocumentiTab-DZmoZgsr.js                   30.75 kB │ gzip:  10.08 kB
+dist/assets/ContenzioniTab-DvSzSj3_.js                 32.03 kB │ gzip:   8.51 kB
+dist/assets/PresaInCaricoTab-lt5UJzdg.js               38.23 kB │ gzip:  10.64 kB
+dist/assets/TerapiaFarmacologicaTab-y4zErguR.js        40.26 kB │ gzip:  11.47 kB
+dist/assets/TherapyEditor-CLKR-ck8.js                  45.07 kB │ gzip:  14.63 kB
+dist/assets/ConsegneWorkspace-Di5f5nkM.js              45.11 kB │ gzip:  15.35 kB
+dist/assets/AgnosPanel-Bo-MbelD.js                     47.73 kB │ gzip:  15.29 kB
+dist/assets/DischargeImportModal-DgAMvafx.js           56.97 kB │ gzip:  19.09 kB
+dist/assets/DimissioneTab-VCQeXC_F.js                  59.47 kB │ gzip:  14.47 kB
+dist/assets/IntakeWorkspace-C8hkKwyf.js                61.78 kB │ gzip:  20.51 kB
+dist/assets/PatientDetail-fWorj41k.js                 112.17 kB │ gzip:  28.42 kB
+dist/assets/pdf-Cv8vTwFP.js                           427.30 kB │ gzip: 127.39 kB
+dist/assets/patientDemographics-nRw3gPdx.js           427.81 kB │ gzip: 123.57 kB
+dist/assets/index-BJJGfOm5.js                         529.97 kB │ gzip: 149.53 kB
+
+✓ built in 13.28s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[PLUGIN_TIMINGS] Your build spent 96% of 13.3s inside plugin hooks (12.7s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @rolldown/plugin-babel transform (93%, 12.4s, 279 calls)
+Those rows are 93% of the build; the rest of the 96% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:css transform (40 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+

@@ -1,7 +1,9 @@
 import type { DocumentoConsegnato, TipoDocumento } from '../types';
 import type { PatientDocumentMeta } from './patientDocumentsPage';
+import { facilityLocalMinute } from './facilityTime';
 
 export const DOCUMENT_TYPE_LABELS: Record<TipoDocumento, string> = {
+  patient_assessment: 'PAINAD',
   documento_identita: 'Documento di identità',
   tessera_sanitaria: 'Tessera sanitaria',
   consulenza: 'Visita specialistica',
@@ -27,6 +29,7 @@ export const DOCUMENT_TYPE_LABELS: Record<TipoDocumento, string> = {
 };
 
 export const ARCHIVE_CATEGORIES = [
+  { id: 'valutazioni', label: 'Moduli e valutazioni', types: ['patient_assessment'] },
   { id: 'personali', label: 'Personali', types: ['documento_identita', 'tessera_sanitaria'] },
   { id: 'visite', label: 'Visite specialistiche', types: ['consulenza'] },
   { id: 'analisi', label: 'Analisi', types: ['esame'] },
@@ -104,12 +107,16 @@ export function buildDocumentArchive(
   const linked = new Set(records.map((record) => record.patientDocumentId).filter(Boolean));
   const entries: ArchiveEntry[] = records.map((record) => {
     const attached = record.patientDocumentId ? byId.get(record.patientDocumentId) : undefined;
-    const type = normalizeDocumentType(attached?.documentType ?? record.tipo);
+    const type = normalizeDocumentType(
+      attached?.assessment ? 'patient_assessment' : (attached?.documentType ?? record.tipo),
+    );
     return {
       id: `record:${record.id}`,
       type,
       title: record.descrizione || DOCUMENT_TYPE_LABELS[type],
-      date: record.dataConsegna,
+      date: attached?.assessment
+        ? facilityLocalMinute(new Date(attached.assessment.assessedAt)).slice(0, 10)
+        : record.dataConsegna,
       archived: !!record.archiviato,
       record,
       document: attached,
@@ -120,9 +127,13 @@ export function buildDocumentArchive(
     if (!linked.has(document.id)) {
       entries.push({
         id: `file:${document.id}`,
-        type: normalizeDocumentType(document.documentType),
+        type: normalizeDocumentType(
+          document.assessment ? 'patient_assessment' : document.documentType,
+        ),
         title: document.originalName,
-        date: document.createdAt.slice(0, 10),
+        date: document.assessment
+          ? facilityLocalMinute(new Date(document.assessment.assessedAt)).slice(0, 10)
+          : document.createdAt.slice(0, 10),
         archived: false,
         document,
         unavailable: false,
@@ -161,6 +172,8 @@ export function filterDocumentArchive(
             entry.title,
             DOCUMENT_TYPE_LABELS[entry.type],
             entry.document?.originalName,
+            entry.date,
+            entry.document?.assessment?.type,
             entry.record?.provenienza,
             entry.record?.note,
           ]

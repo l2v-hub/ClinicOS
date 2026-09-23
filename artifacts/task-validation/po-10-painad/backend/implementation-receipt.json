@@ -1,0 +1,394 @@
+{
+  "task": "PO-10-backend",
+  "phase": "implementation-complete-worker-handoff",
+  "decision": "allow exact-source handoff to root for independent integration validation",
+  "authorization": "Explicit root GO after verified PO09 release; worker owned backend/schema/tests in an isolated worktree. Final local claim released for root integration.",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend",
+  "branch": "codex/po10-assessments-backend",
+  "baseline": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a",
+  "generatedAt": "2026-09-23T03:45:17.125Z",
+  "sourceTreeSha256": "56c6d3d7f21a53de85649f88bbebc80c40e23e9e57e89e9ad784316b29db39fa",
+  "inputTreeSha256": "ad91e3f4df818d850df5bc71fc8e39550d313b057bc0862423eff47ebd2e7b37",
+  "sourceManifestSha256": "3524742d5d18ea79242e504b0b3de2d3a52ce531e7771466f1ecaa5b38de6397",
+  "sourceFrozen": true,
+  "tests": {
+    "passed": 51,
+    "failed": 0,
+    "newPo10Tests": 16,
+    "results": [
+      {
+        "file": "backend/src/assessments/__tests__/painad.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/assessments/__tests__/service-db.test.ts",
+        "exitCode": 0,
+        "tests": 8
+      },
+      {
+        "file": "backend/src/assessments/__tests__/pdf-db.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/assessments/__tests__/archive-scope-db.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/ai/__tests__/ai-document-bounds.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/ai/__tests__/patient-document-pagination.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/ai/__tests__/patient-document-archive.test.ts",
+        "exitCode": 0,
+        "tests": 5
+      },
+      {
+        "file": "backend/src/ai/__tests__/patient-documents-security.test.ts",
+        "exitCode": 0,
+        "tests": 10
+      },
+      {
+        "file": "backend/src/__tests__/patient-documents-entra.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/ai/__tests__/gateway-db.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+        "exitCode": 0,
+        "tests": 8
+      }
+    ],
+    "finishedAt": "2026-09-23T03:42:52.945Z",
+    "finalRunnerSession": 59255,
+    "finalRunnerExitCode": 0,
+    "sourceUnchangedBeforeAfterAndHandoff": true,
+    "sourceTreeSha256": "ad91e3f4df818d850df5bc71fc8e39550d313b057bc0862423eff47ebd2e7b37",
+    "database": "synthetic native PostgreSQL loopback",
+    "databaseClosed": true,
+    "migrationsApplied": 44,
+    "migrationEvidence": "artifacts/task-validation/po-10-painad/backend/focused-tests.json"
+  },
+  "validation": {
+    "sourceTreeSha256": "ad91e3f4df818d850df5bc71fc8e39550d313b057bc0862423eff47ebd2e7b37",
+    "generatedAt": "2026-09-23T03:44:52.274Z",
+    "typecheck": {
+      "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+      "exitCode": 0,
+      "evidence": "Tool execution chunk16babf on final source after lease fix and formatting; no diagnostics.",
+      "log": "artifacts/task-validation/po-10-painad/backend/typecheck.log"
+    },
+    "schema": {
+      "exitCode": 0,
+      "privateSchemaMatchesSourceExceptOutput": true,
+      "generatedSchemaMatchesPrivateExceptWhitespaceAndAdjacentIndexOrder": true,
+      "adjacentConstraintOrder": "PatientDocument @@unique([assessmentId, patientId]) and @@index([patientId])",
+      "connectedToDatabase": false
+    },
+    "ownedDiff": {
+      "exitCode": 0
+    },
+    "newFiles": [
+      {
+        "path": "backend/src/assessments/__tests__/archive-scope-db.test.ts",
+        "lines": 217
+      },
+      {
+        "path": "backend/src/assessments/__tests__/fixture.ts",
+        "lines": 90
+      },
+      {
+        "path": "backend/src/assessments/__tests__/painad.test.ts",
+        "lines": 66
+      },
+      {
+        "path": "backend/src/assessments/__tests__/pdf-db.test.ts",
+        "lines": 204
+      },
+      {
+        "path": "backend/src/assessments/__tests__/service-db.test.ts",
+        "lines": 274
+      },
+      {
+        "path": "backend/src/assessments/access.ts",
+        "lines": 115
+      },
+      {
+        "path": "backend/src/assessments/document-access.ts",
+        "lines": 63
+      },
+      {
+        "path": "backend/src/assessments/history.ts",
+        "lines": 140
+      },
+      {
+        "path": "backend/src/assessments/input.ts",
+        "lines": 98
+      },
+      {
+        "path": "backend/src/assessments/painad.ts",
+        "lines": 68
+      },
+      {
+        "path": "backend/src/assessments/pdf-renderer.ts",
+        "lines": 184
+      },
+      {
+        "path": "backend/src/assessments/pdf-service.ts",
+        "lines": 159
+      },
+      {
+        "path": "backend/src/assessments/service.ts",
+        "lines": 240
+      },
+      {
+        "path": "backend/src/assessments/types.ts",
+        "lines": 80
+      },
+      {
+        "path": "backend/src/routes/patient-assessments.ts",
+        "lines": 79
+      },
+      {
+        "path": "prisma/migrations/20260923040000_patient_assessments/migration.sql",
+        "lines": 95
+      }
+    ],
+    "newSourceFilesBelow500Lines": true,
+    "protectedFilesPreserved": [
+      {
+        "path": "package.json",
+        "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "0d8cd33d7e092b0d81329a2c83436c4d4f5636fa4f27f22c7e74a3838b86d01c"
+      },
+      {
+        "path": "backend/package.json",
+        "sha256": "0d05ac91f625b3790cb86d56289335347e084b410e83b49bfae6d21db67f1070"
+      },
+      {
+        "path": "run-claude-queue.ps1",
+        "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+      },
+      {
+        "path": "start-claude-team.ps1",
+        "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+      }
+    ],
+    "runtime": {
+      "privatePrismaOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\backend\\node_modules\\.prisma\\client",
+      "privatePrismaWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\backend\\node_modules\\@prisma\\client",
+      "dependencyManifestsChanged": false,
+      "sharedDependencyTargetWritten": false
+    },
+    "fonts": {
+      "provenance": "artifacts/task-validation/po-10-painad/backend/font-provenance.json",
+      "verified": true,
+      "license": "SIL Open Font License 1.1",
+      "fontkit": "1.1.1 MIT; root-owned dependency integration"
+    },
+    "pdfVisualQa": "artifacts/task-validation/po-10-painad/backend/pdf-qa/visual-qa.json",
+    "independentReview": {
+      "reviewer": "/root/clinical_forms_source_audit",
+      "resolvedFindings": [
+        "Verified Entra AI global scope represented by permittedPatientIds=null is preserved in generated-document gates.",
+        "PDF claim/complete/fail read an injectable clock after database locks; regression observes a real lock wait across expiry."
+      ],
+      "sourceReview": "Reviewer reread both fixes and regressions and reported no other concrete P1/P2; final hash binding is independent."
+    }
+  },
+  "claimsReleaseEvidence": "artifacts/task-validation/po-10-painad/backend/claims-release.json",
+  "invariants": [
+    "All 243 complete and 781 incomplete answer combinations preserve explicit zero, sums, source bands and null progress.",
+    "Assessment storage is separate from Cartella; initial actor/request hash remains immutable after edits and restart.",
+    "Drafts are author-private within current patientScope; CAS/finalization/correction and patient ownership are fenced by transactions.",
+    "Clinical finals and generated documents are DB-immutable, cannot be deleted, and have a patient-consistent structured relationship.",
+    "PDF rendering occurs outside transactions from a frozen snapshot; lease clocks follow locks; token/lease reject stale callbacks.",
+    "Generated-document scope is enforced before metadata pagination/count/sourceMatch, details, bytes, reclassification and AI queries.",
+    "Transaction-local UTC stabilizes pg adapter timestamps and leaves the shared Europe/Rome pool unchanged."
+  ],
+  "limitations": [
+    "This receipt is local worker evidence, not an independent release or production capability.",
+    "Root owns combined integration, dependency/lockfile and font-copy build integration, browser/HTTP validation and publication.",
+    "Normal backend build was not used because implicit Prisma generation would target shared dependencies; private generation, schema validation and typecheck were used.",
+    "Worker claims no browser, performance benchmark, dependency CVE scan, clinical validation or production result."
+  ],
+  "artifactCopyAllowlist": [
+    "source-manifest.json",
+    "test-source-manifest.json",
+    "focused-tests.json",
+    "focused-tests.log",
+    "private-generation-receipt.json",
+    "private-generation.log",
+    "schema-validation.log",
+    "diff-check.log",
+    "typecheck.log",
+    "validation-checks.json",
+    "run-focused-tests.mjs",
+    "generate-private.mjs",
+    "prepare-runtime.mjs",
+    "finalize-evidence.mjs",
+    "implementation-session.json",
+    "root-contract.snapshot.md",
+    "font-provenance.json",
+    "claims-release.json",
+    "pdf-qa/visual-qa.json",
+    "pdf-qa/painad-normal.pdf",
+    "pdf-qa/painad-long.pdf",
+    "pdf-qa/normal-1.png",
+    "pdf-qa/long-1.png",
+    "pdf-qa/long-2.png",
+    "pdf-qa/painad-normal.txt",
+    "implementation-receipt.json",
+    "handoff.md",
+    "artifact-manifest.json"
+  ],
+  "doNotCopy": [
+    "postgres-* directories",
+    "private-schema.prisma",
+    "backend/node_modules",
+    "root node_modules junction"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/claims-release.json",
+      "bytes": 1892,
+      "sha256": "2d44d6f8addd7bc5d071b41a69d8e798138ac2fcbabfcb46fec8cd777ee8109c"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/diff-check.log",
+      "bytes": 1066,
+      "sha256": "f3172ff609cf0e893f7c3179ada3c361a6785ee1e2c5f06ba24f598ee7e6bc87"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/finalize-evidence.mjs",
+      "bytes": 16977,
+      "sha256": "b02d72f87cd1505af7400fb5223b21840e828a020d83b9a3648d410675e4b563"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/focused-tests.json",
+      "bytes": 8227,
+      "sha256": "6de20597418e8671a4e846a4db61bb63033f3f1c7ab864cbbddef9d296e065ff"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/focused-tests.log",
+      "bytes": 10156,
+      "sha256": "f278431af31305785cc4f3bdcdb95846c4502e3cde2dbcf8f90dad1e837e4fe6"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/font-provenance.json",
+      "bytes": 931,
+      "sha256": "fec091f5a1cae259d6feb57f6a6fe40355ad2dd2f9b454b4cb68173b93e63d45"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/generate-private.mjs",
+      "bytes": 2285,
+      "sha256": "158f88a3ef9223a3d8bccea14518deae64b057cd098e23788d1d76531f7b6ba5"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/implementation-session.json",
+      "bytes": 2267,
+      "sha256": "6763de8a665474ceba48bc97cbc444e658a8bbfe86728d7af806f25c31edcd8e"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/pdf-qa/long-1.png",
+      "bytes": 254484,
+      "sha256": "24ef929ebf5920d1916e946bea8575e4a8247d95523c752fc06e6eca6a5b97d8"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/pdf-qa/long-2.png",
+      "bytes": 119991,
+      "sha256": "9bef827b018da97f9c9e424bfd726ca18d5d16f1b8f6b3f0c8ab3545845ced1a"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/pdf-qa/normal-1.png",
+      "bytes": 108140,
+      "sha256": "a76926b51bf6d9f51bd55b212d50be0d6c0e8498588fa7108fec2a300445370a"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/pdf-qa/painad-long.pdf",
+      "bytes": 22234,
+      "sha256": "a6db16c0f2c3c3965325b50f320a87942316598d2c1bdb988ad342c01f432de9"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/pdf-qa/painad-normal.pdf",
+      "bytes": 19080,
+      "sha256": "bf7d54ef94d5f419f20fa7a9d5446f3278c89d865b631ae4f1fd0cd4fdfb37c5"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/pdf-qa/painad-normal.txt",
+      "bytes": 1083,
+      "sha256": "41ca937002de13aeaf5509c015572e53dfc2cfa9b83f2b92c71adc452a435dd8"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/pdf-qa/visual-qa.json",
+      "bytes": 1898,
+      "sha256": "1c1795d82905d7cd9788680e49e561e8e35fdc135145a818e58039b74b8125da"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/prepare-runtime.mjs",
+      "bytes": 4634,
+      "sha256": "bdba0febe3a5151e29e4f00c8ea27d7b460556431011097710a0a08b6afba424"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/private-generation-receipt.json",
+      "bytes": 1042,
+      "sha256": "1445ca8b3aa1aada6908306270f2c15d25bcb3a18b747267d5ce9db3964f4a7b"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/private-generation.log",
+      "bytes": 1182,
+      "sha256": "7273cf5ff25583e137605c0b4744783994f1046f88236914a804c1690ae0cc1b"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/root-contract.snapshot.md",
+      "bytes": 4231,
+      "sha256": "1757b1b5e13bb1c101d6516bd7b69a6c00cc4a6014555350a641356b074ac774"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/run-focused-tests.mjs",
+      "bytes": 3662,
+      "sha256": "d3178dee68083fee1099492d3d65aaeb8e7b9153008c58b228600d9f054e09f4"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/schema-validation.log",
+      "bytes": 239,
+      "sha256": "7a0c03e4a8cae965ce7d29d43a1c2e0647058c4eac5ddcd89c3018e960e3614d"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/source-manifest.json",
+      "bytes": 5726,
+      "sha256": "3524742d5d18ea79242e504b0b3de2d3a52ce531e7771466f1ecaa5b38de6397"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/test-source-manifest.json",
+      "bytes": 56988,
+      "sha256": "2c4b50aeb02f5ae1e1128aa9676727f50a4afd95fd0ca3dc9dd797664fa99a7e"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/backend/validation-checks.json",
+      "bytes": 4232,
+      "sha256": "d49c3ea4ba1327ce858cdb2682568d06c1cd57d4902a1ee4ab4a509516e9fcaa"
+    }
+  ]
+}

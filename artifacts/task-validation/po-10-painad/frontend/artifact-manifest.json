@@ -1,0 +1,87 @@
+{
+  "task": "PO-10-frontend",
+  "generatedAt": "2026-09-23T03:40:02.639Z",
+  "sourceStateId": "4907a87e8ed6f2ab4427be507ac1b4d5930d39ef801a05d8d309d327332f9e19",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/build.log",
+      "bytes": 10227,
+      "sha256": "651d6cdccf2e20e723d54ba19233ec79ee7d203017648efe91be263af98399df"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/claims.json",
+      "bytes": 2213,
+      "sha256": "37047c69b71c6741c3b5dceccf722fffb923723b139daff98b183a31ce50d265"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/extract-final-view.mjs",
+      "bytes": 970,
+      "sha256": "9d83231d65c7f7a16a76fa645116d24df443d4cfdfedaf2a5fd580ca71103c8b"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/finalize-evidence.mjs",
+      "bytes": 5469,
+      "sha256": "6b406a9ed4ce577a41c307ff75c3f0a0a47db5fa1531e8427d3692a90f9991c1"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/format-source.mjs",
+      "bytes": 794,
+      "sha256": "a516a392c9cb106d3f07dec58af981bbadb09a2597e16f146c7ceeb500e6545e"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/implementation-plan.md",
+      "bytes": 2179,
+      "sha256": "5ef1bd2e288fcd0c68028deecb25d8a1a9466a6028ab4e38fac02d3099e60ce1"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/lint-compare.mjs",
+      "bytes": 2753,
+      "sha256": "b9ae39eef98c46ddf43897c7df45b7f63bc4fdba76ac2e4ba9f239f5bbee0bb7"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/lint-comparison.json",
+      "bytes": 17671,
+      "sha256": "c70d4c434f3606c5e55ba0b228f0b1bf74ee29c652a99248e10ba20660129d0d"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/lint-new.json",
+      "bytes": 18411,
+      "sha256": "007a5917ed234a888af24b231685ac63cd661b2f2a11e09530efd116bc6fd33a"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/lint-summary.log",
+      "bytes": 1464,
+      "sha256": "fdfed2355eda5b9a4af88b9768ef5f9ba7043996ba742f87e8a8c0ce483e357d"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/source-manifest.json",
+      "bytes": 9157,
+      "sha256": "4a462ab137fb126c16d37299c924ebd4fba1874d714d558e910fba8ed51f1105"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/test-core.log",
+      "bytes": 3207,
+      "sha256": "c92f601471edcc085d91dfdee5a90b78f686a81c5160fe8f798f3dd38d16701d"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/test-focused.log",
+      "bytes": 11749,
+      "sha256": "3ca03158a4782797816e6498409e63905c2846eb13484e7cea7f7539607aa934"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/types-current.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/types-initial.log",
+      "bytes": 121,
+      "sha256": "c79b1e58b2d50c7f004dddcaab3283ce2056669fa2a4ce7becc97d473bc7f7c0"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/frontend/validation-receipt.json",
+      "bytes": 2689,
+      "sha256": "555e7ddd0bc4ed077c0493381416e81b94c66cc46057d652a14a2845929ef40e"
+    }
+  ]
+}

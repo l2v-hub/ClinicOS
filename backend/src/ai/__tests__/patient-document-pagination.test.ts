@@ -62,6 +62,6 @@ test('HTTP contract rejects invalid cursors and caps the requested page size', (
   assert.match(routeSource, /res\.status\(200\)\.json\(page\)/);
   assert.match(
     serviceSource,
-    /cursor \? Promise\.resolve\(null\) : prisma\.patientDocument\.count/,
+    /cursor\s*\? Promise\.resolve\(null\)\s*:\s*tx\.patientDocument\.count/,
   );
 });

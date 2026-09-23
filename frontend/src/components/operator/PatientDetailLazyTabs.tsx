@@ -1,5 +1,11 @@
 import { lazy } from 'react';
 
+export const AssessmentWorkspace = lazy(() =>
+  import('./assessments/AssessmentWorkspace').then((module) => ({
+    default: module.AssessmentWorkspace,
+  })),
+);
+
 export const PresaInCaricoTab = lazy(() =>
   import('./cartella/PresaInCaricoTab').then((module) => ({ default: module.PresaInCaricoTab })),
 );

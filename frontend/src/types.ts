@@ -638,6 +638,7 @@ export interface PresaInCarico {
 // ── Documenti Consegnati ───────────────────────────────────────────────────────
 
 export type TipoDocumento =
+  | 'patient_assessment'
   | 'consulenza'
   | 'esame'
   | 'rx'

@@ -30,7 +30,7 @@ test('AI gateway emits at most 100 document rows and propagates truncation', () 
     .split('export async function getPatientDocumentsG')[1]
     ?.split('export async function getPatientAppointments')[0];
   assert.ok(block);
-  assert.match(block, /listPatientDocumentsForAi\(patientId\)/);
+  assert.match(block, /listPatientDocumentsForAi\(patientId, assessmentAccessForAi\(ctx\)\)/);
   assert.match(block, /rows\.length > AI_PATIENT_DOCUMENT_LIMIT/);
   assert.match(block, /rows\.slice\(0, AI_PATIENT_DOCUMENT_LIMIT\)/);
   assert.match(block, /return \{ data: docs, sourceRefs: refs, truncated \}/);

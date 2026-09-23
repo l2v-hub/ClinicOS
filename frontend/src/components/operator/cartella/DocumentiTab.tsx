@@ -21,6 +21,7 @@ import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { PatientArchiveTree } from './PatientArchiveTree';
 import './PatientDocumentArchive.css';
 import './PatientArchiveTree.css';
+import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -29,6 +30,9 @@ interface Props {
   operatoreNome: string;
   operatoreId?: string;
   operatoreRole?: string;
+  focusDocumentId?: string;
+  expectedAssessmentId?: string;
+  onOpenAssessment?: (assessmentId: string) => void;
 }
 
 export function DocumentiTab(props: Props) {
@@ -47,6 +51,9 @@ function DocumentArchiveWorkspace({
   operatoreNome,
   operatoreId,
   operatoreRole,
+  focusDocumentId,
+  expectedAssessmentId,
+  onOpenAssessment,
 }: Props) {
   const archive = useDocumentArchive(paziente.id, operatoreId, operatoreRole);
   const records = cartella.documentiConsegnati ?? [];
@@ -82,6 +89,18 @@ function DocumentArchiveWorkspace({
   };
   const selectedCategory = ARCHIVE_CATEGORIES.find((item) => item.id === folder.category);
   const complete = archive.status === 'ready';
+  const focusedDocument = useRef('');
+  useEffect(() => {
+    const focusKey = `${focusDocumentId}:${expectedAssessmentId}`;
+    if (!complete || !focusDocumentId || focusedDocument.current === focusKey) return;
+    const timer = window.setTimeout(() => {
+      focusedDocument.current = focusKey;
+      const entry = entries.find(item => item.document?.id === focusDocumentId);
+      if (!entry || (expectedAssessmentId && entry.document?.assessment?.id !== expectedAssessmentId)) setError('Documento della valutazione non disponibile nell’archivio corrente.');
+      else setPreview(entry);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [complete, entries, focusDocumentId, expectedAssessmentId]);
   const selectedDocuments = selectedArchiveDocuments(entries, selected);
   const visibleDocuments = selectedArchiveDocuments(
     filtered.slice(0, visible),
@@ -152,7 +171,7 @@ function DocumentArchiveWorkspace({
             <button
               type="button"
               className="btn-sm"
-              disabled={!complete || !!form || saving}
+              disabled={!complete || !!form || saving || folder.category === 'valutazioni'}
               onClick={() => openForm(null)}
             >
               + Aggiungi
@@ -362,6 +381,7 @@ function DocumentArchiveWorkspace({
                               : 'Nessun file allegato'}
                           </p>
                         )}
+                        {entry.document?.assessment && <p>Valutata {formatFacilityLocalMinute(entry.document.assessment.assessedAt)} · Registrata {formatFacilityLocalMinute(entry.document.createdAt)}</p>}
                         {entry.record?.provenienza && (
                           <p>Provenienza: {entry.record.provenienza}</p>
                         )}
@@ -384,15 +404,15 @@ function DocumentArchiveWorkspace({
                         >
                           {entry.document ? 'Visualizza' : 'Dettagli'}
                         </button>
-                        <button
+                        {entry.document?.assessment ? <button type="button" className="btn-secondary btn-sm" disabled={!onOpenAssessment} onClick={() => onOpenAssessment?.(entry.document!.assessment!.id)}>Apri valutazione</button> : <button
                           type="button"
                           className="btn-secondary btn-sm"
                           disabled={!complete || !!form || saving}
                           onClick={() => openForm(entry)}
                         >
                           Modifica dettagli
-                        </button>
-                        {entry.record && (
+                        </button>}
+                        {entry.record && !entry.document?.assessment && (
                           <button
                             type="button"
                             className="patient-document-archive__remove"

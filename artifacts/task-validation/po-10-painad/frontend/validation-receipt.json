@@ -1,0 +1,78 @@
+{
+  "task": "PO-10-frontend",
+  "generatedAtUtc": "2026-09-23T03:40:02.639Z",
+  "baseline": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a",
+  "sourceStateId": "4907a87e8ed6f2ab4427be507ac1b4d5930d39ef801a05d8d309d327332f9e19",
+  "runtimeSourceId": "797c25e477cc29ba60e46f36a2378523be83c573543f2d460257e274ad791228",
+  "policyDecision": {
+    "decision": "allow",
+    "authority": "Root PO10 GO; claims.json",
+    "scope": "Claimed frontend source and focused validation only",
+    "excluded": [
+      "backend",
+      "dependencies",
+      "manifests",
+      "lockfiles",
+      "servers",
+      "commit",
+      "push",
+      "deploy",
+      "live patient writes"
+    ]
+  },
+  "tests": {
+    "exitCode": 0,
+    "passed": 72,
+    "failed": 0,
+    "newAssessmentTests": 29,
+    "existingRegressionTests": 43,
+    "exhaustiveAnswers": {
+      "complete": 243,
+      "incomplete": 781
+    },
+    "log": "artifacts/task-validation/po-10-painad/frontend/test-focused.log",
+    "scope": [
+      "PAINAD definition",
+      "Rome DST/time precision",
+      "DTO/snapshot validation",
+      "request receipts and exact retries",
+      "CAS reconciliation and explicit conflicts",
+      "session/logout fencing",
+      "final and PDF state SSR",
+      "generated archive and multi-print",
+      "existing archive, identity, navigation, content scope and document pagination"
+    ]
+  },
+  "build": {
+    "exitCode": 0,
+    "command": "npm run build",
+    "cwd": "frontend",
+    "log": "artifacts/task-validation/po-10-painad/frontend/build.log",
+    "sourceBinding": "runtimeSourceId; source frozen before successful build",
+    "warnings": [
+      "Existing bundle chunk size warning",
+      "Bundler plugin timing diagnostic"
+    ]
+  },
+  "lint": {
+    "exitCode": 0,
+    "baselineDiagnostics": 21,
+    "candidateDiagnostics": 21,
+    "introduced": [],
+    "log": "artifacts/task-validation/po-10-painad/frontend/lint-comparison.json",
+    "normalization": "Only moved line numbers inside hook diagnostic prose are normalized for comparison; original messages retained."
+  },
+  "whitespace": {
+    "command": "git diff --check -- frontend/src",
+    "exitCode": 0
+  },
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+  },
+  "limitations": [
+    "Root owns browser geometry/keyboard QA, PostgreSQL/HTTP integration and PDF visual verification.",
+    "SSR does not validate browser geometry or clinical efficacy; no performance improvement claim.",
+    "No dependency, schema, commit, push or deployment performed by frontend worker."
+  ]
+}

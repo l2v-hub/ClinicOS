@@ -12,6 +12,7 @@ import { entraConfig, requireEntraOperator } from '../lib/entra-auth.js';
 import {
   listPatientDocuments,
   getPatientDocumentContent,
+  getPatientDocumentMetadata,
   createPatientDocument,
   updatePatientDocumentType,
 } from '../ai/upload/patient-documents.js';
@@ -24,6 +25,7 @@ import {
   PATIENT_DOCUMENT_PAGE_DEFAULT,
   PATIENT_DOCUMENT_PAGE_MAX,
 } from '../ai/upload/patient-document-cursor.js';
+import { AssessmentError } from '../assessments/types.js';
 
 const router = Router();
 // #246 FIX: NON usare router.use(requireOperator). Questo router è montato su '/patients'
@@ -225,13 +227,18 @@ router.patch(
         String(req.params.patientId),
         String(req.params.documentId),
         documentType,
+        { actor: (req as AuthedRequest).operator! },
       );
       if (!document) {
         res.status(404).json({ error: 'Documento non trovato' });
         return;
       }
       res.status(200).json({ document });
-    } catch {
+    } catch (error) {
+      if (error instanceof AssessmentError) {
+        res.status(error.status).json({ error: error.message, code: error.code });
+        return;
+      }
       res.status(500).json({ error: 'Errore nel salvataggio della tipologia' });
     }
   },
@@ -260,14 +267,35 @@ router.get('/:patientId/documents', requirePatientDocumentAccess, async (req, re
       res.status(400).json({ error: 'Nome sorgente non valido', code: 'invalid_source_name' });
       return;
     }
-    const page = await listPatientDocuments(patientId, {
-      limit,
-      cursor: decodedCursor ?? undefined,
-      sourceFileName: rawSourceFileName || undefined,
-    });
+    const page = await listPatientDocuments(
+      patientId,
+      {
+        limit,
+        cursor: decodedCursor ?? undefined,
+        sourceFileName: rawSourceFileName || undefined,
+      },
+      { actor: (req as AuthedRequest).operator! },
+    );
     res.status(200).json(page);
   } catch {
     res.status(500).json({ error: 'Errore nel recupero dei documenti' });
+  }
+});
+
+router.get('/:patientId/documents/:documentId', requirePatientDocumentAccess, async (req, res) => {
+  try {
+    const document = await getPatientDocumentMetadata(
+      String(req.params.patientId),
+      String(req.params.documentId),
+      { actor: (req as AuthedRequest).operator! },
+    );
+    if (!document) {
+      res.status(404).json({ error: 'Documento non trovato' });
+      return;
+    }
+    res.json({ document });
+  } catch {
+    res.status(500).json({ error: 'Errore nel recupero del documento' });
   }
 });
 
@@ -280,6 +308,7 @@ router.get(
       const doc = await getPatientDocumentContent(
         String(req.params.patientId),
         String(req.params.documentId),
+        { actor: (req as AuthedRequest).operator! },
       );
       if (!doc) {
         res.status(404).json({ error: 'Documento non trovato' });

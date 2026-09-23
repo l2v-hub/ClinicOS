@@ -1,0 +1,128 @@
+(node:38780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ empty form exposes all 15 complete choices with no clinical selection or final result (22.9386ms)
+✔ saved complete form displays exactly five selections and allows an explicit preview (3.6003ms)
+✔ final stays saved through pending/failed PDF, while correction and reciprocal links remain explicit (11.7132ms)
+✔ history exposes metadata, filters and bounded continuation without answer descriptions (2.3078ms)
+✔ PAINAD coexists with NRS and direct discharge in patient navigation (0.3087ms)
+(node:38780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17144) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ selection uses exact IDs, stable archive order, dedupes linked records and excludes missing/unsupported files (10.1334ms)
+✔ prepares only chosen unique files and preserves every PDF page then image in source order (3.0256ms)
+✔ rejects invalid/empty/oversized selections before any content read (2.9195ms)
+✔ actual response MIME is revalidated and empty payload is rejected (1.5161ms)
+✔ a middle read failure prevents any partial result and stops remaining reads (1.6316ms)
+✔ abort during read never starts rendering or fetches another file (1.2729ms)
+✔ abort between rendered pages closes the generator without a printable result (1.1798ms)
+✔ page and pixel limits reject entire batch and dispose renderer generator (3.2111ms)
+✔ empty, corrupt and invalid-dimension rendered documents cannot be printed (1.49ms)
+✔ actual aggregate bytes are bounded even if metadata understates file sizes (24.6148ms)
+(node:17144) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37936) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ generated PAINAD archives under its module using clinical Rome date and exact IDs for multi-print (7.9679ms)
+✔ archive metadata requires reserved category and valid assessment association together (1.4852ms)
+✔ direct metadata open verifies document identity before content access (63.0414ms)
+✔ manual upload, classification and stored document edit cannot use generated assessment category (3.5087ms)
+(node:37936) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39636) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ client captures session authority and sends scoped no-store bounded requests (41.7995ms)
+✔ create response loss replays identical bytes and accepts current edited draft (3.6919ms)
+✔ finalize response loss replays request before CAS and ready document remains linked (2.3945ms)
+✔ wrong patient, record, idempotency receipt or final snapshot is never reported saved (3.4483ms)
+✔ known conflicts are actionable; 503, malformed success and unknown failures stay uncertain (2.1588ms)
+✔ PDF retry uses existing assessment ID, never create/finalize or a draft response (2.8734ms)
+(node:39636) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38676) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new observations are blank, patient-specific and survive internal unsubscribe/remount (10.0811ms)
+✔ synchronous create lock and uncertain retry retain exact UUID, body and answers (1.5189ms)
+✔ finalization requires a saved complete preview and exact retry survives response loss (1.0069ms)
+✔ PATCH response loss reconciles only the same next-version record and exact editable fields (1.2509ms)
+✔ CAS conflicts preserve local fields until explicit keep-local or accept-remote resolution (1.6147ms)
+✔ logout clear fences late writes; disposed UI never starts a follow-up reconciliation GET (1.4534ms)
+✔ another patient and mismatched write receipt cannot replace or clear this observation (0.7009ms)
+✔ correction starts explicitly from a final, requires reason and never changes predecessor (1.1529ms)
+✔ correction preserves original clinical instant including both repeated Rome DST occurrences (0.9142ms)
+(node:38676) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:35104) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all 243 complete combinations and 781 incomplete combinations preserve null versus zero (15.09ms)
+✔ version and full clinical descriptions stay bound to the supplied Italian source (0.6741ms)
+✔ Rome clinical time rejects DST gaps, requires repeated-hour choice and preserves existing precision (3.2232ms)
+✔ DTO validation rejects cross-patient, inconsistent scoring and unverified clinical snapshots (3.28ms)
+✔ history bounds, duplicate IDs and cursor completeness are enforced (0.8503ms)
+(node:35104) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23636) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ every supported type belongs to exactly one folder and all originals remain represented (12.6098ms)
+✔ dressing photos have their own folder, separate from therapy plans (0.7431ms)
+✔ subfolder search keeps scope and treats accents and case consistently (1.5081ms)
+✔ all-documents view includes saved historical files and legacy types without duplicating links (0.7297ms)
+(node:23636) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29652) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ chart groups organize intake and clinical work while legacy links keep their destination (2.9853ms)
+✔ discharge opens directly beside Documents and legacy links keep the same module (0.7264ms)
+✔ Agnos opens the separate therapy page for both roles without confusing the agenda (0.7948ms)
+✔ demographic write preview opens the page that displays the field being changed (0.622ms)
+(node:29652) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19444) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ personal and clinical taxonomy preserves imported aliases (4.7375ms)
+✔ merge links by id, preserves two same-name files, legacy and archived entries (4.0549ms)
+✔ remote classification is authoritative and search includes accents, provenance and notes (1.2758ms)
+✔ complete metadata pagination finds a document beyond first page without content reads (64.4039ms)
+✔ rejects incomplete counts, oversized totals, malformed pages and invalid metadata (6.6825ms)
+✔ rejects repeated cursors and duplicate document ids instead of partial success (5.737ms)
+(node:19444) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ metadata timeout includes pending authentication and aborted scopes never fetch (13.209ms)
+✔ file validation rejects unsupported, empty and oversized files (14.4762ms)
+✔ legacy image originals remain readable after narrowing new upload formats (6.6237ms)
+✔ upload sends category and original file with scoped headers (2.241ms)
+✔ content retrieval uses exact id, not duplicate filename, and rejects invalid content (2.6669ms)
+✔ classification patches only category and validates server identity and category (3.8091ms)
+✔ previously imported TIFF, text and DOCX originals and files over new upload size remain downloadable (46.7135ms)
+✔ metadata failure retains upload; retry reuses same id and can change category (7.3551ms)
+✔ failed upload and aborted write do not persist or remember in stale workspace (0.504ms)
+(node:11752) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a delayed document response cannot open after patient or session scope changes (3.1864ms)
+✔ an aborted document request cannot create or open a blob URL (0.6724ms)
+(node:11752) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36752) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ document page URL carries a bounded limit, opaque cursor and encoded source target (1.8625ms)
+✔ document pages deduplicate appends and merge a source match outside the first page (2.106ms)
+✔ partial document page without a continuation cursor is rejected (0.6029ms)
+✔ document hook aborts obsolete scope/page requests and sequence-checks results (0.7785ms)
+(node:36752) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38072) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ fiscal identity is preferred, birth date is the fallback, and missing phone is irrelevant (4.367ms)
+✔ assigned location preserves complete relational and partial legacy labels (2.183ms)
+✔ only explicit unassigned is unassigned; unavailable and loading suppress stale labels (0.5465ms)
+✔ handover identity requires the authorized complete wire shape (0.5033ms)
+(node:38072) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 72
+ℹ suites 0
+ℹ pass 72
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1038.3078

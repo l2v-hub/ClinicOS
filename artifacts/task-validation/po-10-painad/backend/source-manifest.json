@@ -1,0 +1,153 @@
+{
+  "task": "PO-10-backend",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend",
+  "baseline": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a",
+  "branch": "codex/po10-assessments-backend",
+  "capturedAt": "2026-09-23T03:44:52.274Z",
+  "sourceTreeSha256": "56c6d3d7f21a53de85649f88bbebc80c40e23e9e57e89e9ad784316b29db39fa",
+  "inputTreeSha256": "ad91e3f4df818d850df5bc71fc8e39550d313b057bc0862423eff47ebd2e7b37",
+  "hashAlgorithm": "SHA256 over sorted path + NUL + byte-SHA256 + LF",
+  "sourcePaths": [
+    {
+      "path": "backend/src/ai/__tests__/ai-document-bounds.test.ts",
+      "bytes": 1525,
+      "sha256": "70d5383cf3422c5f4f86868b888e2349c96c48bc25fa0fe8af1c6614d1c4034b"
+    },
+    {
+      "path": "backend/src/ai/__tests__/patient-document-archive.test.ts",
+      "bytes": 8059,
+      "sha256": "4c7e4513884437a8238682d193b78b8d23d680e8032a63824a8f08d6282baf34"
+    },
+    {
+      "path": "backend/src/ai/__tests__/patient-document-pagination.test.ts",
+      "bytes": 2680,
+      "sha256": "0914a6a433ba65ebf65d57742861721a703d98a07d33ce266b19aaae7a317f5a"
+    },
+    {
+      "path": "backend/src/ai/gateway/services.ts",
+      "bytes": 53971,
+      "sha256": "4d9fc8824157c55b118823f8ece9128ed6f16650c639840fcac198dcd6713c19"
+    },
+    {
+      "path": "backend/src/ai/upload/patient-documents.ts",
+      "bytes": 8790,
+      "sha256": "23d3520b40e599af56d35cea820bc4ae68649d0b9a95a8a41744f276372f03dc"
+    },
+    {
+      "path": "backend/src/app.ts",
+      "bytes": 10373,
+      "sha256": "3ef66888598e1b3adef76fddfbda41827e3db88e482ffa515225c42d4c02269c"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/archive-scope-db.test.ts",
+      "bytes": 8182,
+      "sha256": "65364eff795fd1abb07e69f7d6cf16d1e01657e8cefbcbb26f8d54a19bc55c7c"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/fixture.ts",
+      "bytes": 3252,
+      "sha256": "ab92c5f81b1e04cd37615984f0bce25eebaa19548e809e01e2d51028d8235bd8"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/painad.test.ts",
+      "bytes": 2677,
+      "sha256": "d660842df89b852f99d488a72f098342e79bf2a9299fef8eae04ac3784cfa9d8"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/pdf-db.test.ts",
+      "bytes": 7573,
+      "sha256": "f9149bae8112c5f9d306186070c9cd248d19f7ea8d8f286f351e043844464bda"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/service-db.test.ts",
+      "bytes": 11549,
+      "sha256": "5f711f39be91b17c0327a4382d9402865adf64dea07f4f588e34ff8a5f6f9cf9"
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "bytes": 3991,
+      "sha256": "2491ef449568d5d8995054005dd3ba78ba5df4c0aba0e8430fbde2e81254ac35"
+    },
+    {
+      "path": "backend/src/assessments/document-access.ts",
+      "bytes": 2261,
+      "sha256": "ecd53a071ca90d67ebc778e439abb6fa91c5a9b6a8dedce91dd5a49d94c73baa"
+    },
+    {
+      "path": "backend/src/assessments/fonts/NotoSans-Bold.ttf",
+      "bytes": 575740,
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a"
+    },
+    {
+      "path": "backend/src/assessments/fonts/NotoSans-Regular.ttf",
+      "bytes": 569208,
+      "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5"
+    },
+    {
+      "path": "backend/src/assessments/fonts/OFL.txt",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "bytes": 4870,
+      "sha256": "ebce21274205d6a2d38d8ab1bff402dee9695f9d47b631834c3fb87344748a2e"
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "bytes": 4067,
+      "sha256": "65105ffa7f0a740be3139f5967a52e7201257f3330b134f550d602721d6fa050"
+    },
+    {
+      "path": "backend/src/assessments/painad.ts",
+      "bytes": 2382,
+      "sha256": "e3633accd5029c9dc9de4cc6f3874d24f255859ac5b7ec03cd99d88dbe01093e"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "bytes": 6759,
+      "sha256": "9eaa152e68c0d0b353431f927a8e3c24d98beabe118d31dac8a399f0dac0a3d7"
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "bytes": 4891,
+      "sha256": "cbdd74b114a5cf59c2f6aa112f65d5e9ffe02721de231d45495f0be26fd10b4b"
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "bytes": 9280,
+      "sha256": "b137843288548ef7c1427b1a4f64e46607fbb46a8969ef708635bae200441be9"
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "bytes": 2450,
+      "sha256": "690b8ed26c86d844fee294cf70e78168592013eca2ea75abe52db94114cb9722"
+    },
+    {
+      "path": "backend/src/routes/patient-assessments.ts",
+      "bytes": 2630,
+      "sha256": "df5222672fef2351ea50745da14926c5dbe38e44ba4fa50f5ef8b964bf228f06"
+    },
+    {
+      "path": "backend/src/routes/patient-documents.ts",
+      "bytes": 11950,
+      "sha256": "583e4e3894307aa5453da2d4e474b8bed6f09ae7f24a19db66b52e4a3fb81a87"
+    },
+    {
+      "path": "prisma/migrations/20260923040000_patient_assessments/migration.sql",
+      "bytes": 7631,
+      "sha256": "f5c4c6fd115cd488dbb2c0b544bf1e4565b9290f5ea1c79063296c2d6ed73e60"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "bytes": 33319,
+      "sha256": "f8baf27aaed0eeb862f3c8db09c7059e23ab1ef97fdbe34b4f74ce95fff2fb0c"
+    }
+  ],
+  "testSourceManifest": "artifacts/task-validation/po-10-painad/backend/test-source-manifest.json",
+  "excludedUnrelatedDirtyPaths": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ],
+  "scope": "All changed/new backend and Prisma source, including unmodified licensed font bytes. Input tree binds every backend source, Prisma schema/migration and selected runtime configuration/dependency manifest."
+}

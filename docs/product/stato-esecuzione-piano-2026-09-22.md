@@ -15,7 +15,7 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | PO-07 Ordine del reparto | Pubblicato e verificato | c52af623: 58 test backend, 102 frontend e 6 HTTP/PG root; browser desktop/mobile, bozze e reinvio idempotente. Railway SUCCESS/migrazione/health200; Vercel READY e sourceCommit alias verificato. |
 | PO-08 Consegne dal giro | Pubblicato e verificato | 3582e0bf: 126 test backend, 116 frontend più 5 rifinitura, 5 HTTP/PG root. Giro 5 pazienti, retry, bozze, paginazione e identità mobile. Railway SUCCESS/migrazione/health200; Vercel READY e sourceCommit alias verificato. Sei guardie statiche falliscono identiche in baseline. |
 | PO-09 Dimissione | Pubblicato e verificato | cfe0e16b: 11 test navigazione/Agnos, build, browser desktop/mobile/tastiera, zero scritture. Vercel READY e alias sourceCommit verificato. |
-| PO-10 PAINAD e infrastruttura moduli | In esecuzione | GO backend/frontend isolati da cfe0e16b. Contratto DTO/API, snapshot/versioni, scope archivio, bozze e PDF. |
+| PO-10 PAINAD e infrastruttura moduli | Validato, pubblicazione in corso | 51 test backend, 72 frontend, 19 rifiniture e 3 HTTP/PG root; PDF sorgente/compilato e archivio, retry, rettifiche, isolamento e UI 390/768/1262. Revisione chiusa; ricevuta deploy da registrare. |
 | PO-11 Trasferimenti posturali | Da eseguire | Fedeltà al DOCX |
 | PO-12 Tinetti | Da eseguire | Verifica fonti; nessun nuovo scoring incerto |
 | PO-13 MNA | Da eseguire | Verifica fonte dell'item Q |

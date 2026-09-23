@@ -1,0 +1,1195 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:49:18.560Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:49:18.581Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:49:18.775Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:49:18.777Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:49:19.032Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:49:43.715Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:49:43.718Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:49:43.818Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:49:43.820Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:49:44.092Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T03:50:07.202Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:50:07.204Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno",
+      "status": 200,
+      "at": "2026-09-23T03:50:07.206Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:50:07.209Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:50:07.215Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:50:07.290Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:50:07.292Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:50:07.293Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:50:16.192Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:50:16.193Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:50:16.196Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:50:16.197Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:50:16.200Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:50:16.218Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:50:16.219Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:50:16.221Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 503,
+      "body": {
+        "assessedAt": "2026-09-23T03:49:59.789Z",
+        "answers": {
+          "respiration": 0,
+          "negativeVocalization": 1,
+          "facialExpression": null,
+          "bodyLanguage": null,
+          "consolability": null
+        },
+        "requestId": "bf8184a6-8fac-4bdc-919a-708f62977aa1",
+        "type": "painad",
+        "formVersion": "painad-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T03:50:16.976Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T03:49:59.789Z",
+        "answers": {
+          "respiration": 0,
+          "negativeVocalization": 1,
+          "facialExpression": null,
+          "bodyLanguage": null,
+          "consolability": null
+        },
+        "requestId": "bf8184a6-8fac-4bdc-919a-708f62977aa1",
+        "type": "painad",
+        "formVersion": "painad-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T03:50:25.083Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:50:25.108Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:51:23.668Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:51:23.670Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:51:23.730Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:51:23.731Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:51:24.040Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/198951a2-d019-43b6-9d12-83f3c458ee46",
+      "status": 200,
+      "at": "2026-09-23T03:51:41.264Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/patients/vitals-qa-anna/assessments/198951a2-d019-43b6-9d12-83f3c458ee46",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T03:49:59.789Z",
+        "answers": {
+          "respiration": 0,
+          "bodyLanguage": 1,
+          "consolability": 2,
+          "facialExpression": 0,
+          "negativeVocalization": 1
+        },
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T03:52:34.736Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:52:34.822Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/198951a2-d019-43b6-9d12-83f3c458ee46/finalize",
+      "status": 503,
+      "body": {
+        "requestId": "9c076fba-2e53-4de5-9877-61444282bdbb",
+        "expectedVersion": 2
+      },
+      "at": "2026-09-23T03:52:48.535Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/198951a2-d019-43b6-9d12-83f3c458ee46/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "9c076fba-2e53-4de5-9877-61444282bdbb",
+        "expectedVersion": 2
+      },
+      "at": "2026-09-23T03:52:48.964Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:52:48.978Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/198951a2-d019-43b6-9d12-83f3c458ee46/pdf/retry",
+      "status": 200,
+      "body": {},
+      "at": "2026-09-23T03:54:05.009Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:54:05.244Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/b7650efc-d176-43ca-9a5b-eed65b2411e5",
+      "status": 200,
+      "at": "2026-09-23T03:54:05.306Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/b7650efc-d176-43ca-9a5b-eed65b2411e5/content",
+      "status": 200,
+      "at": "2026-09-23T03:54:05.321Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents?limit=50",
+      "status": 200,
+      "at": "2026-09-23T03:54:13.161Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/b7650efc-d176-43ca-9a5b-eed65b2411e5/content",
+      "status": 200,
+      "at": "2026-09-23T03:54:13.200Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:54:46.412Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/198951a2-d019-43b6-9d12-83f3c458ee46",
+      "status": 200,
+      "at": "2026-09-23T03:54:46.414Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T03:49:59.789Z",
+        "answers": {
+          "respiration": 0,
+          "bodyLanguage": 1,
+          "consolability": 1,
+          "facialExpression": 0,
+          "negativeVocalization": 1
+        },
+        "correctionReason": "Rettifica sintetica: rivalutata la consolabilità, risposta verificata in cartella.",
+        "requestId": "330a969b-e0ee-47fc-af2c-483c7cb75181",
+        "type": "painad",
+        "formVersion": "painad-it-2026-09-22-v1",
+        "predecessorId": "198951a2-d019-43b6-9d12-83f3c458ee46"
+      },
+      "at": "2026-09-23T03:54:47.337Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:54:47.373Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/5cb3eef8-6d8e-409a-921b-94c09557850f/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "115adaae-36da-4959-b6de-b8d7a6e88f25",
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T03:54:47.613Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:54:47.741Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:55:12.488Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:55:12.489Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:55:12.490Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:55:12.575Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:55:12.576Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:55:12.877Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:57:55.399Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:57:55.401Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:57:55.402Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:57:55.542Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:57:55.543Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:57:55.820Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T03:58:09.593Z",
+        "answers": {
+          "respiration": null,
+          "negativeVocalization": null,
+          "facialExpression": null,
+          "bodyLanguage": null,
+          "consolability": 1
+        },
+        "requestId": "0e6118c6-fc74-424a-b558-c63d112acbf6",
+        "type": "painad",
+        "formVersion": "painad-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T03:58:33.633Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:58:33.698Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T03:58:47.883Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:58:47.886Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:58:47.888Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:58:47.892Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:58:47.895Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:58:47.898Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:58:47.990Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:58:47.991Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:58:47.994Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 404,
+      "at": "2026-09-23T03:58:48.044Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:58:48.047Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-other",
+      "status": 200,
+      "at": "2026-09-23T03:58:48.048Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-other/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:58:48.049Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:58:48.051Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:58:48.055Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-other/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:58:48.090Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:58:48.091Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-other/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:58:48.092Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-other/intake-review",
+      "status": null,
+      "at": "2026-09-23T03:59:04.270Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:04.273Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.277Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.279Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-other/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:59:04.282Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.284Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.373Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:04.376Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.381Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.410Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:04.413Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.413Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.415Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.416Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:59:04.422Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.448Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:04.452Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:59:04.453Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-bruno/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T03:59:04.601Z",
+        "answers": {
+          "respiration": 2,
+          "negativeVocalization": null,
+          "facialExpression": null,
+          "bodyLanguage": null,
+          "consolability": null
+        },
+        "requestId": "eb1e5622-d458-43c6-b8f5-e997a7b81165",
+        "type": "painad",
+        "formVersion": "painad-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T03:59:05.484Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": null,
+      "at": "2026-09-23T03:59:05.732Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:05.733Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T03:59:05.736Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:59:05.737Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:59:05.738Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:59:05.741Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:59:05.758Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:05.759Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:59:05.759Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T03:59:52.029Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:52.031Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/cartella",
+      "status": 200,
+      "at": "2026-09-23T03:59:52.032Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno",
+      "status": 200,
+      "at": "2026-09-23T03:59:52.035Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T03:59:52.037Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T03:59:52.040Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T03:59:52.123Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T03:59:52.124Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T03:59:52.124Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments/f03734e2-5734-467c-9232-5904980d722f",
+      "status": 200,
+      "at": "2026-09-23T03:59:52.222Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T04:05:14.792Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T04:05:14.794Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T04:05:14.795Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T04:05:14.874Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T04:05:14.875Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T04:05:15.202Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/6dfb6472-29ea-4d52-98c1-59d562672238",
+      "status": 200,
+      "at": "2026-09-23T04:05:35.323Z"
+    }
+  ],
+  "assessments": [
+    {
+      "id": "198951a2-d019-43b6-9d12-83f3c458ee46",
+      "patientId": "vitals-qa-anna",
+      "type": "painad",
+      "formVersion": "painad-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T05:49:59.789Z",
+      "answers": {
+        "respiration": 0,
+        "bodyLanguage": 1,
+        "consolability": 2,
+        "facialExpression": 0,
+        "negativeVocalization": 1
+      },
+      "status": "final",
+      "version": 3,
+      "createdAt": "2026-09-23T05:50:16.984Z",
+      "updatedAt": "2026-09-23T05:52:48.573Z",
+      "finalizedAt": "2026-09-23T05:52:48.573Z",
+      "requestId": "bf8184a6-8fac-4bdc-919a-708f62977aa1",
+      "creationPayloadHash": "956283bec60915734d2bb3846d6941ce9d356985398898aaf7ffbd432330a3d0",
+      "finalizeRequestId": "9c076fba-2e53-4de5-9877-61444282bdbb",
+      "finalizePayloadHash": "811c1c47a24d857a68f0faefc96db69467d6663d1ccbbd9600daf012389247ac",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "painad",
+          "version": "painad-it-2026-09-22-v1",
+          "sourceSha256": "2a3c3b2724ed7cc46aa09db715680b0d494a63b587898b45d61c8db8ec73abb1"
+        },
+        "items": [
+          {
+            "id": "respiration",
+            "label": "Respirazione",
+            "score": 0,
+            "description": "Normale"
+          },
+          {
+            "id": "negativeVocalization",
+            "label": "Vocalizzazione negativa",
+            "score": 1,
+            "description": "Lamenti o gemiti occasionali. Parlare a bassa voce con tono negativo."
+          },
+          {
+            "id": "facialExpression",
+            "label": "Espressione facciale",
+            "score": 0,
+            "description": "Sorridente o inespressiva"
+          },
+          {
+            "id": "bodyLanguage",
+            "label": "Linguaggio del corpo",
+            "score": 1,
+            "description": "Teso, irrequieto, pacing (camminare avanti e indietro)."
+          },
+          {
+            "id": "consolability",
+            "label": "Consolabilità",
+            "score": 2,
+            "description": "Impossibile da rassicurare, distrarre o consolare."
+          }
+        ],
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "band": "moderate",
+          "label": "Dolore moderato",
+          "total": 4
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T03:50:16.984Z",
+        "assessedAt": "2026-09-23T03:49:59.789Z",
+        "finalizedAt": "2026-09-23T03:52:48.573Z",
+        "predecessor": null,
+        "predecessorId": null,
+        "interpretation": "Dolore moderato (richiede intervento/monitoraggio).",
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "3cc40504a0509fe170f966425c629a93dbdc03f4ddef23c01580ebc1852437e8",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 2,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T05:54:05.191Z"
+    },
+    {
+      "id": "5cb3eef8-6d8e-409a-921b-94c09557850f",
+      "patientId": "vitals-qa-anna",
+      "type": "painad",
+      "formVersion": "painad-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T05:49:59.789Z",
+      "answers": {
+        "respiration": 0,
+        "bodyLanguage": 1,
+        "consolability": 1,
+        "facialExpression": 0,
+        "negativeVocalization": 1
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T05:54:47.339Z",
+      "updatedAt": "2026-09-23T05:54:47.617Z",
+      "finalizedAt": "2026-09-23T05:54:47.617Z",
+      "requestId": "330a969b-e0ee-47fc-af2c-483c7cb75181",
+      "creationPayloadHash": "6aaf6e71fbcd9a77266270a29f9277751f91d92fb43ff58d3d656dae166d1bfe",
+      "finalizeRequestId": "115adaae-36da-4959-b6de-b8d7a6e88f25",
+      "finalizePayloadHash": "eb5008e698c74ee33c35e2d32bc3a5e91c168ae2cee0e44a626c9d9590146107",
+      "predecessorId": "198951a2-d019-43b6-9d12-83f3c458ee46",
+      "correctionReason": "Rettifica sintetica: rivalutata la consolabilità, risposta verificata in cartella.",
+      "finalSnapshot": {
+        "form": {
+          "type": "painad",
+          "version": "painad-it-2026-09-22-v1",
+          "sourceSha256": "2a3c3b2724ed7cc46aa09db715680b0d494a63b587898b45d61c8db8ec73abb1"
+        },
+        "items": [
+          {
+            "id": "respiration",
+            "label": "Respirazione",
+            "score": 0,
+            "description": "Normale"
+          },
+          {
+            "id": "negativeVocalization",
+            "label": "Vocalizzazione negativa",
+            "score": 1,
+            "description": "Lamenti o gemiti occasionali. Parlare a bassa voce con tono negativo."
+          },
+          {
+            "id": "facialExpression",
+            "label": "Espressione facciale",
+            "score": 0,
+            "description": "Sorridente o inespressiva"
+          },
+          {
+            "id": "bodyLanguage",
+            "label": "Linguaggio del corpo",
+            "score": 1,
+            "description": "Teso, irrequieto, pacing (camminare avanti e indietro)."
+          },
+          {
+            "id": "consolability",
+            "label": "Consolabilità",
+            "score": 1,
+            "description": "Rassicurato o distratto dalla voce o dal contatto fisico."
+          }
+        ],
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "band": "mild",
+          "label": "Dolore lieve",
+          "total": 3
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T03:54:47.339Z",
+        "assessedAt": "2026-09-23T03:49:59.789Z",
+        "finalizedAt": "2026-09-23T03:54:47.617Z",
+        "predecessor": {
+          "id": "198951a2-d019-43b6-9d12-83f3c458ee46",
+          "assessedAt": "2026-09-23T03:49:59.789Z",
+          "authorName": "Operatrice QA"
+        },
+        "predecessorId": "198951a2-d019-43b6-9d12-83f3c458ee46",
+        "interpretation": "Dolore lieve.",
+        "snapshotVersion": 1,
+        "correctionReason": "Rettifica sintetica: rivalutata la consolabilità, risposta verificata in cartella."
+      },
+      "snapshotSha256": "2a08c6a0d9f90e2df5c47cf23bcf509dd99ab9fd2bf96b6592dbc6882ffb68a4",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T05:54:47.720Z"
+    },
+    {
+      "id": "6dfb6472-29ea-4d52-98c1-59d562672238",
+      "patientId": "vitals-qa-anna",
+      "type": "painad",
+      "formVersion": "painad-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T05:58:09.593Z",
+      "answers": {
+        "respiration": null,
+        "bodyLanguage": null,
+        "consolability": 1,
+        "facialExpression": null,
+        "negativeVocalization": null
+      },
+      "status": "draft",
+      "version": 1,
+      "createdAt": "2026-09-23T05:58:33.663Z",
+      "updatedAt": "2026-09-23T05:58:33.663Z",
+      "finalizedAt": null,
+      "requestId": "0e6118c6-fc74-424a-b558-c63d112acbf6",
+      "creationPayloadHash": "adee360d45c7a7be22d29f8be279b09e8d2a82f33fd05940d2bdaecb8e7576a3",
+      "finalizeRequestId": null,
+      "finalizePayloadHash": null,
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": null,
+      "snapshotSha256": null,
+      "pdfStatus": null,
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 0,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": null
+    },
+    {
+      "id": "f03734e2-5734-467c-9232-5904980d722f",
+      "patientId": "vitals-qa-bruno",
+      "type": "painad",
+      "formVersion": "painad-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T05:59:04.601Z",
+      "answers": {
+        "respiration": 2,
+        "bodyLanguage": null,
+        "consolability": null,
+        "facialExpression": null,
+        "negativeVocalization": null
+      },
+      "status": "draft",
+      "version": 1,
+      "createdAt": "2026-09-23T05:59:10.493Z",
+      "updatedAt": "2026-09-23T05:59:10.493Z",
+      "finalizedAt": null,
+      "requestId": "eb1e5622-d458-43c6-b8f5-e997a7b81165",
+      "creationPayloadHash": "fc474420f68c43cd0bf356341b4ff5526af2750267cb56a67643cd26cfbbd552",
+      "finalizeRequestId": null,
+      "finalizePayloadHash": null,
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": null,
+      "snapshotSha256": null,
+      "pdfStatus": null,
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 0,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": null
+    }
+  ],
+  "documents": [
+    {
+      "id": "b7650efc-d176-43ca-9a5b-eed65b2411e5",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "PAINAD_2026-09-23_198951a2-d019-43b6-9d12-83f3c458ee46.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 18339,
+      "sha256": "bdcde60daed75bf3791cce99f9e96dfd552701d043ce69f2eda8e48c10b85472",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "198951a2-d019-43b6-9d12-83f3c458ee46",
+        "snapshotSha256": "3cc40504a0509fe170f966425c629a93dbdc03f4ddef23c01580ebc1852437e8",
+        "rendererVersion": "painad-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 0,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T03:54:05.191Z",
+      "assessmentId": "198951a2-d019-43b6-9d12-83f3c458ee46"
+    },
+    {
+      "id": "2af96221-aa98-4d60-9280-3b47ae837ce8",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "PAINAD_2026-09-23_5cb3eef8-6d8e-409a-921b-94c09557850f.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 18561,
+      "sha256": "70383cb1a8cae4895638637754f0a834e246d46e688117d763b113b1e9f74ab2",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "5cb3eef8-6d8e-409a-921b-94c09557850f",
+        "snapshotSha256": "2a08c6a0d9f90e2df5c47cf23bcf509dd99ab9fd2bf96b6592dbc6882ffb68a4",
+        "rendererVersion": "painad-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 1,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T03:54:47.720Z",
+      "assessmentId": "5cb3eef8-6d8e-409a-921b-94c09557850f"
+    }
+  ]
+}

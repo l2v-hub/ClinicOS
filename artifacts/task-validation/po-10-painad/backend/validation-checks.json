@@ -1,0 +1,130 @@
+{
+  "sourceTreeSha256": "ad91e3f4df818d850df5bc71fc8e39550d313b057bc0862423eff47ebd2e7b37",
+  "generatedAt": "2026-09-23T03:44:52.274Z",
+  "typecheck": {
+    "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+    "exitCode": 0,
+    "evidence": "Tool execution chunk16babf on final source after lease fix and formatting; no diagnostics.",
+    "log": "artifacts/task-validation/po-10-painad/backend/typecheck.log"
+  },
+  "schema": {
+    "exitCode": 0,
+    "privateSchemaMatchesSourceExceptOutput": true,
+    "generatedSchemaMatchesPrivateExceptWhitespaceAndAdjacentIndexOrder": true,
+    "adjacentConstraintOrder": "PatientDocument @@unique([assessmentId, patientId]) and @@index([patientId])",
+    "connectedToDatabase": false
+  },
+  "ownedDiff": {
+    "exitCode": 0
+  },
+  "newFiles": [
+    {
+      "path": "backend/src/assessments/__tests__/archive-scope-db.test.ts",
+      "lines": 217
+    },
+    {
+      "path": "backend/src/assessments/__tests__/fixture.ts",
+      "lines": 90
+    },
+    {
+      "path": "backend/src/assessments/__tests__/painad.test.ts",
+      "lines": 66
+    },
+    {
+      "path": "backend/src/assessments/__tests__/pdf-db.test.ts",
+      "lines": 204
+    },
+    {
+      "path": "backend/src/assessments/__tests__/service-db.test.ts",
+      "lines": 274
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "lines": 115
+    },
+    {
+      "path": "backend/src/assessments/document-access.ts",
+      "lines": 63
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "lines": 140
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "lines": 98
+    },
+    {
+      "path": "backend/src/assessments/painad.ts",
+      "lines": 68
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "lines": 184
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "lines": 159
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "lines": 240
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "lines": 80
+    },
+    {
+      "path": "backend/src/routes/patient-assessments.ts",
+      "lines": 79
+    },
+    {
+      "path": "prisma/migrations/20260923040000_patient_assessments/migration.sql",
+      "lines": 95
+    }
+  ],
+  "newSourceFilesBelow500Lines": true,
+  "protectedFilesPreserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0d8cd33d7e092b0d81329a2c83436c4d4f5636fa4f27f22c7e74a3838b86d01c"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "0d05ac91f625b3790cb86d56289335347e084b410e83b49bfae6d21db67f1070"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "runtime": {
+    "privatePrismaOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\backend\\node_modules\\.prisma\\client",
+    "privatePrismaWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po10-assessments-backend\\backend\\node_modules\\@prisma\\client",
+    "dependencyManifestsChanged": false,
+    "sharedDependencyTargetWritten": false
+  },
+  "fonts": {
+    "provenance": "artifacts/task-validation/po-10-painad/backend/font-provenance.json",
+    "verified": true,
+    "license": "SIL Open Font License 1.1",
+    "fontkit": "1.1.1 MIT; root-owned dependency integration"
+  },
+  "pdfVisualQa": "artifacts/task-validation/po-10-painad/backend/pdf-qa/visual-qa.json",
+  "independentReview": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "resolvedFindings": [
+      "Verified Entra AI global scope represented by permittedPatientIds=null is preserved in generated-document gates.",
+      "PDF claim/complete/fail read an injectable clock after database locks; regression observes a real lock wait across expiry."
+    ],
+    "sourceReview": "Reviewer reread both fixes and regressions and reported no other concrete P1/P2; final hash binding is independent."
+  }
+}
