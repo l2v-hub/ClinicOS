@@ -1,0 +1,29 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User approved PO01–PO16, commit/push and deployment without further questions",
+  "sourceCommit": "f445260a4ca4de872c1361ff19fc215179b097fe",
+  "backend": {
+    "deploymentId": "8fed9373-a9a2-47ea-ba1f-ddb223c4a9d1",
+    "status": "SUCCESS",
+    "migration": "20260923080000_gds15",
+    "migrationApplied": true,
+    "healthStatus": 200
+  },
+  "frontend": {
+    "deploymentId": "dpl_7Ybawq7tkEYmfRmaYGnVMTUxMHyX",
+    "status": "READY",
+    "url": "https://clinicos-mz2hiqj8h-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "sourceCommitVerified": "f445260a4ca4de872c1361ff19fc215179b097fe"
+  },
+  "runtimeUnchanged": "PO05",
+  "productionSmoke": {
+    "module": "GDS-15 · Screening della depressione",
+    "newAssessmentButton": true,
+    "currentLoaded": true,
+    "historyLoaded": true,
+    "writeActionsPerformed": 0,
+    "consoleErrors": 0,
+    "userOpenTherapyFormPreserved": true
+  }
+}
