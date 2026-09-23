@@ -17,8 +17,8 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | PO-09 Dimissione | Pubblicato e verificato | cfe0e16b: 11 test navigazione/Agnos, build, browser desktop/mobile/tastiera, zero scritture. Vercel READY e alias sourceCommit verificato. |
 | PO-10 PAINAD e infrastruttura moduli | Pubblicato e verificato | d659c1b4: 51 test backend, 72 frontend, 19 rifiniture e 3 HTTP/PG root; PDF/archivio, retry, rettifiche, isolamento e UI 390/768/1262. Railway SUCCESS/migrazione/health200; Vercel READY/sourceCommit verificato; modulo e storico aperti online in sola lettura. |
 | PO-11 Trasferimenti posturali | Pubblicato e verificato | 470a5fe7: 66 backend, 92 frontend più 17 rifiniture, 3 HTTP/PG root; browser 390/768/desktop, retry, rettifiche, conferme, archivio e PDF compilato. Railway SUCCESS/migrazione/health200; Vercel READY/alias sourceCommit verificato, smoke sola lettura. |
-| PO-12 Tinetti | Verificato, pronto al rilascio | 40 backend,105 frontend,2 HTTP/PG; ciclo completo,rettifica,PDF/archivio,legacy invariato; identità sticky mobile corretta e misurata390/768. |
-| PO-13 MNA | Da eseguire | Verifica fonte dell'item Q |
+| PO-12 Tinetti | Pubblicato e verificato | 4e594aa3:40 backend,105 frontend,2 HTTP/PG; ciclo completo,rettifica,PDF/archivio,legacy invariato,identità mobile390/768. Railway SUCCESS/migrazione/health200,Vercel READY/alias sourceCommit,smoke sola lettura. |
+| PO-13 MNA | In esecuzione | GO dopo PO12 verificata; DTO screening/full e misure concordato, Qcorretto con fonte ufficiale già documentata. |
 | PO-14 GDS-15 | Da eseguire | Scoring delle domande inverse |
 | PO-15 Catalogo e storico NRS | Da eseguire | Nessuna conversione delle scale |
 | PO-16 Giro completo | Da eseguire | Collaudo tecnico sintetico; distinguere prove effettuabili da osservazione clinica e dispositivi reali |

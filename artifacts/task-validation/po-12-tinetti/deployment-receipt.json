@@ -1,0 +1,30 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User approved PO01–PO16, commit/push and deployment without further questions",
+  "sourceCommit": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be",
+  "backend": {
+    "deploymentId": "d532fc0f-809b-4924-a310-ac9751706614",
+    "status": "SUCCESS",
+    "migration": "20260923060000_tinetti",
+    "migrationApplied": true,
+    "healthStatus": 200
+  },
+  "frontend": {
+    "deploymentId": "dpl_8HxzffhVs7BCpBisSv6LzXpXDBEN",
+    "status": "READY",
+    "url": "https://clinicos-ayfonlmai-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "sourceCommitVerified": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be"
+  },
+  "runtimeUnchanged": "PO05",
+  "productionSmoke": {
+    "module": "Scala di Tinetti (POMA)",
+    "newAssessmentButton": true,
+    "currentLoaded": true,
+    "historyLoaded": true,
+    "legacyHistoryLoaded": true,
+    "writeActionsPerformed": 0,
+    "consoleErrors": 0,
+    "userOpenTherapyFormPreserved": true
+  }
+}
