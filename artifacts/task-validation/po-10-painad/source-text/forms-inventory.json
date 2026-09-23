@@ -1,0 +1,32 @@
+[
+  {
+    "name": "scala PAINAD.pdf",
+    "pages": 1,
+    "form_fields": [],
+    "sha256": "2a3c3b2724ed7cc46aa09db715680b0d494a63b587898b45d61c8db8ec73abb1"
+  },
+  {
+    "name": "MNA.pdf",
+    "pages": 1,
+    "form_fields": [],
+    "sha256": "67964491d0ceb5c221e776079c3af2bc7c1ddbf834428997f1b5531e469c6ffa"
+  },
+  {
+    "name": "scala di TINETTI.pdf",
+    "pages": 2,
+    "form_fields": [],
+    "sha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6"
+  },
+  {
+    "name": "scala GDS.pdf",
+    "pages": 1,
+    "form_fields": [],
+    "sha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+  },
+  {
+    "name": "scheda trasferimenti 1.1-- NEW.docx",
+    "tables": 4,
+    "sections": 1,
+    "sha256": "5d5c25cfc322b4f12a6eeba4ac2cf8d4476b15e95c9152cbe09889f0cc75d49f"
+  }
+]

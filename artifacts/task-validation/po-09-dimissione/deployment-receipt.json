@@ -1,0 +1,16 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User approved complete plan, implementation, push and deploy",
+  "sourceCommit": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a",
+  "frontend": {
+    "deploymentId": "dpl_5xceuTtNJmQ5WneJKjefBpWYGyRn",
+    "status": "READY",
+    "url": "https://clinicos-1i77xtxfc-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "sourceCommitVerified": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a"
+  },
+  "backendUnchanged": "PO08 ae45c28c-f976-4f84-adb0-dd6f42cd0452",
+  "runtimeUnchanged": "PO05",
+  "checks": "11 focused navigation tests, frontend build, secret scan, desktop/mobile/keyboard synthetic browser; no patient write",
+  "productionSmoke": { "primaryAreas": ["Raccolta dati ingresso", "Clinica", "Diario", "Moduli", "Documenti", "Dimissione"], "moduleLoaded": true, "writeActionsPerformed": 0, "consoleErrors": 0 }
+}

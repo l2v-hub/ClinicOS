@@ -1,0 +1,64 @@
+PAGE 1
+Scala PAINAD — Scheda di Valutazione
+
+Pain Assessment in Advanced Dementia — Rilevazione del Dolore nel Paziente Non Verbale
+
+
+
+
+
+   ANAGRAFICA PAZIENTE & VALUTAZIONE
+
+
+   Paziente:                                                                               Data:
+
+   Data di                                                                                 Operatore:
+   Nascita:
+
+   Reparto/
+   Stanza:
+
+
+GRIGLIA DI VALUTAZIONE OBSERVAZIONALE
+
+
+  Item                     Punteggio 0                        Punteggio 1                        Punteggio 2                  Punti
+
+  1. Respirazione             Normale                               Occasionalmente affannosa.                RUMOROSA. Respiro
+                                                                      Brevi periodi di                        stertoroso.
+                                                                      iperventilazione.                       Iperventilazione
+                                                                                                              prolungata.
+
+  2. Vocalizzazione           Nessuna                               Lamenti o gemiti occasionali.             Chiamate ripetute a voce
+  negativa                                                            Parlare a bassa voce con tono           alta. Gemiti o lamenti
+                                                                      negativo.                               costanti. Pianto.
+
+  3. Espressione              Sorridente o inespressiva           Triste, spaventata, corrucciata,            Smorfia marcata e
+  facciale                                                            smorfia occasionale.                    costante. Serramento
+                                                                                                              della mascella / denti
+                                                                                                              stretti.
+
+  4. Linguaggio del           Rilassato                               Teso, irrequieto, pacing                Rigido. Pugni chiusi.
+  corpo                                                               (camminare avanti e indietro).          Ginocchia al petto.
+                                                                                                              Spinge via o colpisce.
+
+  5. Consolabilità            Non necessaria                       Rassicurato o distratto dalla              Impossibile da
+                                                                      voce o dal contatto fisico.             rassicurare, distrarre o
+                                                                                                              consolatore.
+
+
+                                                            PUNTEGGIO TOTALE PAINAD (0 - 10):                                          / 10
+
+
+INTERPRETAZIONE DEL PUNTEGGIO TOTALE
+
+
+     • 0 punti: Nessun dolore rilevato.
+     • 1 – 3 punti: Dolore lieve.
+     • 4 – 6 punti: Dolore moderato (richiede intervento/monitoraggio).
+     • 7 – 10 punti: Dolore severo (richiede intervento analgesico e rivalutazione).
+
+
+
+
+                            Scheda clinica per la valutazione del dolore non verbale — Conservare nella cartella del paziente

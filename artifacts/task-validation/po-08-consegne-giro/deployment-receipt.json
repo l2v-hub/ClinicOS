@@ -20,6 +20,7 @@
     "immutableExport": "frontend-release-inputs.json"
   },
   "aiRuntime": "unchanged from PO05",
+  "productionSmoke": { "roundsSelected": true, "feedVisible": true, "headingCount": 1, "writeActionsPerformed": 0, "consoleErrors": 0 },
   "localPreview": "closed through fixture endpoint; PostgreSQL processes terminated",
   "limitations": ["Six static patientRosterGuard failures match baseline", "Native mobile hardware and representative operator observation remain separate PO16 checks"]
 }
