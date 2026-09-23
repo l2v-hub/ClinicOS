@@ -1,0 +1,79 @@
+{
+  "decision": "ALLOW_RELEASE",
+  "authorization": "User requested catalog alignment; standing authorization for commit/push/deploy",
+  "baseline": "8ea3460bc7f1fe0f2cc7ae681767b0c163aa3fb9",
+  "scope": "One CSS file, screen spacing only; frontend-only release",
+  "checks": "Browser geometry1294/768/390, no overflow, build/scan/diff PASS, user launchers preserved",
+  "files": [
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+      "bytes": 2416,
+      "sha256": "8ceb928fdcf3f46d67df1d0c03bb8d114b27ea2af53ff6674e80bccdbeaeac3d"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/validation-report.md",
+      "bytes": 1255,
+      "sha256": "c4bdd4aa115854d326a1b28064d4cccfc0ad6ce31e00c05f363cc9af0bed8473"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/geometry.json",
+      "bytes": 671,
+      "sha256": "d9475a71e0bad2637103543ed9f1d44ddc98eb6e4853a9ab255bd50f7e22856d"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/desktop.png",
+      "bytes": 92721,
+      "sha256": "94333d6c137777ab1e7b103a1ccb521e02cdf2fc4eaa3f47feb32210dd0aa6ab"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/tablet.png",
+      "bytes": 25768,
+      "sha256": "3777018637937f47eec825e52a4d6405cee7bfb65f6bbad7602ab9db99959e51"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/mobile.png",
+      "bytes": 31103,
+      "sha256": "f06d1b5f4eff1b111c7dcf12bc792ab902569e2f06e505f50a25ab4bb99e6b67"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/console.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/frontend-build.log",
+      "bytes": 10567,
+      "sha256": "d0200468acd0d729907fe0fbffd6c7cb7881785acde44bc7231baea8a00a4d98"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/secret-scan.log",
+      "bytes": 72,
+      "sha256": "8611b62922656f38358d94a28292b3c46d2d8df53ac5ba1f79e023123911d155"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/preview-build.log",
+      "bytes": 544,
+      "sha256": "b8a33e4e420a760b88d1ba5ff77d532977fef2049329badd192843c5acb17b21"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/preview/main.tsx",
+      "bytes": 2005,
+      "sha256": "9245901abe8159bde4cd3e40ef3a9da5a5bef4bf7b9c0032bd3ab411549bdf0f"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/preview/index.html",
+      "bytes": 268,
+      "sha256": "78efa8a0057297d7dea7753d4e5fb5d78bec0b8c6cbd746789faebe6b6e36b2f"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/preview/build.mjs",
+      "bytes": 313,
+      "sha256": "a24debf340a723cdf8113eb82fa8540b5221ce5ade83f85d7e31bc82ba03aecf"
+    },
+    {
+      "path": "artifacts/task-validation/moduli-allineamento-topbar/preview/server.mjs",
+      "bytes": 394,
+      "sha256": "ba10e801e038bde6be6b11288aa9a576871d2d4b7513a1fb59d5584128e54656"
+    }
+  ]
+}

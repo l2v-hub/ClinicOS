@@ -1,0 +1,36 @@
+[
+  {
+    "catalogLeft": 144,
+    "documentWidth": 1294,
+    "navLeft": 144,
+    "panelScrollWidth": 1150,
+    "panelWidth": 1150,
+    "rowLeft": 144,
+    "scrollWidth": 1294,
+    "titleLeft": 144,
+    "viewport": 1294
+  },
+  {
+    "catalogLeft": 40,
+    "documentWidth": 753,
+    "navLeft": 40,
+    "panelScrollWidth": 705,
+    "panelWidth": 705,
+    "rowLeft": 40,
+    "scrollWidth": 753,
+    "titleLeft": 40,
+    "viewport": 768
+  },
+  {
+    "catalogLeft": 26,
+    "documentWidth": 375,
+    "minTarget": 44,
+    "navLeft": 26,
+    "panelScrollWidth": 347,
+    "panelWidth": 347,
+    "rowLeft": 26,
+    "scrollWidth": 375,
+    "titleLeft": 26,
+    "viewport": 390
+  }
+]

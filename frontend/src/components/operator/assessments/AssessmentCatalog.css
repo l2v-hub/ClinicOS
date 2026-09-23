@@ -1,4 +1,8 @@
 .assessment-catalog { display: grid; gap: 18px; }
+/* Keep the catalog on the same left axis as the patient TopNav. */
+@media screen { .assessment-catalog { margin-inline: 24px; } }
+@media screen and (max-width: 900px) { .assessment-catalog { margin-inline: 16px; } }
+@media screen and (max-width: 600px) { .assessment-catalog { margin-inline: 12px; } }
 .assessment-catalog h2, .assessment-catalog h3, .assessment-catalog h4, .assessment-catalog p { margin: 0; }
 .assessment-catalog h3 { margin-bottom: 10px; }
 .assessment-catalog-list { display: grid; gap: 8px; }
