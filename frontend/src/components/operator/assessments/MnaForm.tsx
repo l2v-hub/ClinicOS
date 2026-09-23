@@ -119,7 +119,7 @@ export function MnaForm({
               (option) =>
                 [
                   option.value,
-                  `${option.description} · ${option.score.toLocaleString('it-IT')} punti`,
+                  `${option.description} · ${option.score.toLocaleString('it-IT')} ${option.score === 1 ? 'punto' : 'punti'}`,
                 ] as const,
             )}
             missing={missing.includes(item.id)}

@@ -1,0 +1,69 @@
+{
+  "originalState": {
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\preview\\synthetic-state.json",
+    "sha256": "9015fb00ec2658c3d1db8f3fe192f43ef9eece8081854d5511e8bb1ac21b6b57",
+    "bytes": 153742,
+    "byteIdenticalSnapshot": true
+  },
+  "originalPdf": {
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\qa-evidence\\pdfs\\ce59b368-17d9-48c2-bec2-cbf47f621496.pdf",
+    "sha256": "6d914609025338ab192393bc0c4bb4130186bc4f550568fc7acdb9ce76fd5b8b",
+    "bytes": 27707,
+    "byteIdenticalSnapshot": true
+  },
+  "assessmentId": "9df3410f-ddc4-4da6-bc27-888d79e36bff",
+  "documentId": "ce59b368-17d9-48c2-bec2-cbf47f621496",
+  "patientId": "vitals-qa-anna",
+  "snapshotSha256": "da033114b3de6e97dc8dbf1645ee17a476f72d709edaead25a5b27e36f5d20d1",
+  "canonicalSnapshotHashVerified": true,
+  "pdfStatus": "ready",
+  "rendererVersion": "mna-a4-v1",
+  "pages": 3,
+  "fixtureOrigin": "Actual synthetic PO15 database records and exported archived PDF supplied by root; no PDF regenerated or clinical state recalculated.",
+  "baselineFinding": "Existing archived PDF contains 1 punti. This archived v1 must remain unchanged; corrected text is only for newly generated v2 documents.",
+  "visualInspectionPending": true,
+  "databaseConnected": false,
+  "applicationSourceChanged": false,
+  "files": [
+    {
+      "path": "legacy-v1/source-state.snapshot.json",
+      "bytes": 153742,
+      "sha256": "9015fb00ec2658c3d1db8f3fe192f43ef9eece8081854d5511e8bb1ac21b6b57"
+    },
+    {
+      "path": "legacy-v1/state.json",
+      "bytes": 13702,
+      "sha256": "2b047fce6659cac1e672e0f44450d416e4924b2719ad69aae6ef264343031887"
+    },
+    {
+      "path": "legacy-v1/mna-ready-v1.pdf",
+      "bytes": 27707,
+      "sha256": "6d914609025338ab192393bc0c4bb4130186bc4f550568fc7acdb9ce76fd5b8b"
+    },
+    {
+      "path": "legacy-v1/pdfinfo.txt",
+      "bytes": 759,
+      "sha256": "fecba55393c7b23a4d35cf185d434c08f3d1f5068e7dbdedd25b91e6bd09e77d"
+    },
+    {
+      "path": "legacy-v1/text.txt",
+      "bytes": 4834,
+      "sha256": "41a029bb8ec3a2b9531d0e2a55c111cd975d7e137da2670148b535bc342dd2a2"
+    },
+    {
+      "path": "legacy-v1/page-1.png",
+      "bytes": 135625,
+      "sha256": "aa7d530d739b38276776a293e52e53aedd205fa2cf17b4d49f4d0bcd969eba17"
+    },
+    {
+      "path": "legacy-v1/page-2.png",
+      "bytes": 118681,
+      "sha256": "cd59571555169e3ce433fa57bb69b26d7ff7c2518a911cfe013af8148d47a6cc"
+    },
+    {
+      "path": "legacy-v1/page-3.png",
+      "bytes": 140584,
+      "sha256": "5f62748c3f8066e951ba83c5e1c4315998e251b4b47c4e91a334a0ed8ceeec24"
+    }
+  ]
+}

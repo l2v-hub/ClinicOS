@@ -1,0 +1,8 @@
+[
+  "frontend/src/components/operator/__tests__/mnaUi.test.ts",
+  "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+  "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+  "frontend/src/components/operator/assessments/MnaAnthropometry.tsx",
+  "frontend/src/components/operator/assessments/MnaForm.tsx",
+  "frontend/src/components/operator/assessments/MnaSummary.tsx"
+]

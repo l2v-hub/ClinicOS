@@ -1,0 +1,31 @@
+[
+  {
+    "focus": {
+      "label": "Nuova compilazione Medicazioni",
+      "outline": "rgb(47, 107, 237) solid 2px",
+      "shadow": "rgba(47, 107, 237, 0.28) 0px 6px 16px 0px"
+    },
+    "minTarget": 44,
+    "scrollWidth": 375,
+    "viewport": 390,
+    "width": 375
+  },
+  {
+    "minTarget": 44,
+    "scrollWidth": 753,
+    "viewport": 768,
+    "width": 753,
+    "moduleReturn": {
+      "label": "← Tutti i moduli",
+      "height": 44,
+      "width": 115.3125,
+      "source": "Read-only browser DOM measurement during MNA draft inspection at 768px"
+    }
+  },
+  {
+    "minTarget": 21,
+    "scrollWidth": 1247,
+    "viewport": 1262,
+    "width": 1247
+  }
+]

@@ -1,0 +1,17 @@
+(node:40384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ MNA presentation uses singular points and Italian decimals without changing answers or snapshots (41.4423ms)
+✔ MNA starts in progressive screening with no clinical selection and opens full without losing G–R (39.1817ms)
+✔ invalid numeric/date input and over-limit Unicode notes stay rendered and recover without stale BMI or save (57.4296ms)
+✔ screening summary/history label extent, show retained partial K and copyright, and omit total30 (9.7826ms)
+✔ MNA document metadata validates type/version and navigable archive label (1.1063ms)
+(node:40384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 906.3901

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-16-frontend-preparation released\",\n  \"reason\": \"Preparation complete: isolated worktree and source-bound session registered, contracts copied byte-for-byte, 563 baseline inputs verified, runtime ready and scoped plan documented. No application changes or tests/build run. Await explicit root GO after PO15 published and verified; future application work requires a new exact source claim.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-16-frontend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po16-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T08:01:26.704Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T08:01:26.704Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly assigns isolated C:/Workspace/ClinicOSHouse-worktrees/po16-final-ui, branch codex/po16-final-ui from53e57d694850775b85ad1d22904e7bb1e6e84618. PREPARATION ONLY: sole writer artifacts/task-validation/po-16-giro/frontend/**, local dependency junction to already-installed read-only runtime, local TS/Vite cache directories only. Read contracts/source for MNA singular and Italian decimal display and catalog mobile/tablet touch targets>=44px <=768px. No application/test source edits until explicit root GO after PO15 published and verified. No backend/manifests/locks/shared runtime/server/ports/commit/push/deploy/live writes. Existing root hierarchy, no delegation.\"\n  }\n}"
+    }
+  ]
+}

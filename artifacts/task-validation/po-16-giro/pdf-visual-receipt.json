@@ -1,0 +1,32 @@
+{
+  "renderer": "ClinicOS mna-a4-v2",
+  "pages": 3,
+  "visualReview": "All three compiled PDF pages inspected; no clipped content or overlaps; patient identity, A-R, 1 punto, 0.5, BMI25, total27.5, references and copyright readable. Not a physical print or clinical validation.",
+  "files": [
+    {
+      "path": "artifacts/task-validation/po-16-giro/qa-evidence/compiled-pdfs/f44e07f3-b167-4bda-b1f4-b3987e431fed.pdf",
+      "sha256": "e02cf66ae96133222f30f72eb981ff32ba1bb4c7b1ca8ba746816a35d832f89a",
+      "bytes": 28096
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/qa-evidence/compiled-pdfs/mna-1.png",
+      "sha256": "904e5305a2d29ce792c4ac9c7a00f9951617de09310802619f05d2a8ec2b60da",
+      "bytes": 161094
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/qa-evidence/compiled-pdfs/mna-2.png",
+      "sha256": "95ccd5358d3b8ce889fbd2ddcbe1759e7c7aa58769dcd3d7dbfae09358ee31b2",
+      "bytes": 140839
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/qa-evidence/compiled-pdfs/mna-3.png",
+      "sha256": "648a472afa08152e09e333af6cc7631e1f6da2edf31fafcbd28698743b2c8f85",
+      "bytes": 162373
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/qa-evidence/compiled-pdfs/mna.txt",
+      "sha256": "8d1bcaeb69e055379d93e0c748759c14c0cb1237072195e8bfa3a55d2dbf221f",
+      "bytes": 4808
+    }
+  ]
+}

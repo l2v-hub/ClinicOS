@@ -1,0 +1,3 @@
+warning: in the working copy of 'backend/src/assessments/__tests__/mna-pdf-db.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/mna-pdf-content.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/pdf-renderer.ts', LF will be replaced by CRLF the next time Git touches it

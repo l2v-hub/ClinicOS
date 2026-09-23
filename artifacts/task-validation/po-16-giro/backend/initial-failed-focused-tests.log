@@ -1,0 +1,77 @@
+✔ MNA presentation matches UI BMI precision at every threshold without changing snapshot values (416.8327ms)
+✖ real archived PO15 MNA v1 ready retry invokes no renderer and preserves every persisted value (54.2681ms)
+✔ new MNA v2 archives readable 1 punto, 27,5 and 25 while retaining raw BMI and snapshot digest (933.0904ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12970.3724
+
+✖ failing tests:
+
+test at backend\src\assessments\__tests__\mna-presentation-db.test.ts:1:2867
+✖ real archived PO15 MNA v1 ready retry invokes no renderer and preserves every persisted value (54.2681ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.patientAssessment.create()` invocation in
+  C:\Workspace\ClinicOSHouse-worktrees\po16-mna-backend\backend\src\assessments\__tests__\mna-presentation-db.test.ts:109:34
+  
+    106 const restored = { ...assessment };
+    107 for (const key of ['assessedAt', 'createdAt', 'updatedAt', 'finalizedAt', 'pdfUpdatedAt'])
+    108   restored[key] = new Date(assessment[key]);
+  → 109 await prisma.patientAssessment.create(
+  Database error. Code: `P0001`. Message: `assessment_insert_draft_required`
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\po16-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:8643)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\po16-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7932)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\po16-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7639)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\po16-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:6935)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po16-mna-backend\backend\src\assessments\__tests__\mna-presentation-db.test.ts:109:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+✔ MNA strict canonical answers reject unknown/missing values and retain null/false/notes in payload hashes (6.7629ms)
+✔ MNA K evaluates all eight boolean combinations and every missing subanswer stays incomplete (3.2378ms)
+✔ MNA uses exact half points and independent 14/16/30 section boundaries (0.5223ms)
+✔ MNA anthropometry derives unrounded threshold scores and rejects concurrent categories or unusable numbers (1.5194ms)
+✔ MNA calendar/notes validation preserves Unicode and rejects date rollover or invalid clinical Rome boundaries (17.5809ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 338.6103
+✔ MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot (837.9667ms)
+✔ MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic (260.9914ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12744.2735
+✔ MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape (925.9395ms)
+✔ MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes (529.3562ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4798.5968
+✔ MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes (2296.9364ms)
+✔ MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document (1081.0111ms)
+✔ MNA editorial typography preserves free text and reports unsupported glyphs without changing the snapshot (843.3697ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16257.2199

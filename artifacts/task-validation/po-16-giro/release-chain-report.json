@@ -1,0 +1,306 @@
+{
+  "checkedHead": "36fb96750575d409dc9de41ea42e1e858c472253",
+  "at": "2026-09-23T08:07:12.186Z",
+  "checks": "All PO01–PO15 release source commits are ancestors; committed receipts record deployment success",
+  "limitation": "This is a source/release-chain check, not a repeat of prior functional or live tests",
+  "results": [
+    {
+      "activity": "PO-01",
+      "sourceCommit": "6095ce3975fa32dcc49e235f99e5b9dd9a3353ec",
+      "receiptPath": "artifacts/task-validation/po-01-ingresso-progressivo/deployment-receipt.json",
+      "receiptSha256": "02c7166c3727a32d7a37177048b2a76e3b0ecb7ad34ffac78494d573b0335d15",
+      "frontend": {
+        "deploymentId": "dpl_69jfteh9LV6MGzaGeLbvtmiTFaEX",
+        "url": "clinicos-d3r18149p-lucalavia-2482s-projects.vercel.app",
+        "alias": "clinicos-eosin.vercel.app",
+        "status": "READY"
+      },
+      "backend": {
+        "deploymentId": "aa1508a5-540e-4461-8a07-8a37acdbdb8d",
+        "url": "https://clinicos-backend-demo.up.railway.app",
+        "migration": "20260923002000_progressive_patient_identity",
+        "migrationStatus": "All migrations have been successfully applied.",
+        "environment": "demo",
+        "status": "SUCCESS",
+        "healthStatus": 200
+      }
+    },
+    {
+      "activity": "PO-02",
+      "sourceCommit": "b405c8ffe48b4bd68b4dddfadba1af89c118187b",
+      "receiptPath": "artifacts/task-validation/po-02-correzione-orari/deployment-receipt.json",
+      "receiptSha256": "34c28d4660ba1167c6ae1b5fab8bb4da76d27733b770eb6edae3c082b6b22c52",
+      "frontend": {
+        "status": "READY",
+        "url": "https://clinicos-ke2jpfzk5-lucalavia-2482s-projects.vercel.app",
+        "deploymentId": "dpl_2ep5Dcp9vTkpEYzWEGvqExQgaJjd",
+        "alias": "clinicos-eosin.vercel.app"
+      },
+      "backend": {
+        "sourceCommit": "6095ce3975fa32dcc49e235f99e5b9dd9a3353ec",
+        "deploymentId": "aa1508a5-540e-4461-8a07-8a37acdbdb8d",
+        "unchanged": true
+      }
+    },
+    {
+      "activity": "PO-03",
+      "sourceCommit": "553fa24bcbcfbf20def0dfa96de06cd52684c9bd",
+      "receiptPath": "artifacts/task-validation/po-03-note-origine/deployment-receipt.json",
+      "receiptSha256": "15864bad46c4ad5ba9c20cc03aed5c2bbe5fc3e1bcfe107250b210d2a9fd14a8",
+      "frontend": {
+        "deploymentId": "dpl_6VLuRrg2BomQVTwTYT3CA7EfUA1W",
+        "status": "READY",
+        "url": "https://clinicos-fg03c5pho-lucalavia-2482s-projects.vercel.app",
+        "alias": "clinicos-eosin.vercel.app",
+        "aliasSourceCommitVerified": true
+      },
+      "backend": {
+        "deploymentId": "7303235b-5079-4d1f-9bba-3a4fe6a2825c",
+        "status": "SUCCESS",
+        "url": "https://clinicos-backend-demo.up.railway.app",
+        "healthStatus": 200,
+        "environment": "demo"
+      }
+    },
+    {
+      "activity": "PO-04",
+      "sourceCommit": "ef562bf51f296153ff0ec51ed6ab620da8e2dc1a",
+      "receiptPath": "artifacts/task-validation/po-04-ricerca-confezione/deployment-receipt.json",
+      "receiptSha256": "99a777c9ec2b7687366501e01ed30b0de254a17c37770adb4e107bea27cd04fd",
+      "frontend": {
+        "deploymentId": "dpl_Cy9wAnjjxvAC4pqMZH3H2izxX3oZ",
+        "status": "READY",
+        "url": "https://clinicos-8mik3pyuw-lucalavia-2482s-projects.vercel.app",
+        "alias": "clinicos-eosin.vercel.app",
+        "aliasSourceCommitVerified": true
+      },
+      "backend": {
+        "deploymentId": "e5178be5-3a3b-4fc5-9df3-de0b445bb4ee",
+        "status": "SUCCESS",
+        "url": "https://clinicos-backend-demo.up.railway.app",
+        "healthStatus": 200,
+        "environment": "demo"
+      }
+    },
+    {
+      "activity": "PO-05",
+      "sourceCommit": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+      "receiptPath": "artifacts/task-validation/po-05-scansioni-lunghe/deployment-receipt.json",
+      "receiptSha256": "e357a35a5c9f56527f62d79b02bee1d06d46dcab1344e3b3fc2c7f7cdaf22e14",
+      "frontend": {
+        "deploymentId": "dpl_6z6KkYxc2NzTFZ1ESWYXC37yvz6N",
+        "status": "READY",
+        "url": "https://clinicos-n6e9xqpdm-lucalavia-2482s-projects.vercel.app",
+        "alias": "clinicos-eosin.vercel.app",
+        "aliasSourceCommitVerified": true,
+        "browserReadOnlySmoke": "Profile selection renders; no initial console errors; no live patient mutation"
+      },
+      "backend": {
+        "deploymentId": "310254af-8267-4ca7-aa57-386015783438",
+        "status": "SUCCESS",
+        "url": "https://clinicos-backend-demo.up.railway.app",
+        "environment": "demo",
+        "healthStatus": 200,
+        "migration": "Additive 20260923010000_import_page_sessions; configured prisma migrate deploy pre-deploy gate succeeded"
+      }
+    },
+    {
+      "activity": "PO-06",
+      "sourceCommit": "853b40750c25f24ef40db622674612aaf64bf2cb",
+      "receiptPath": "artifacts/task-validation/po-06-identita-posto-letto/deployment-receipt.json",
+      "receiptSha256": "1f0591ce1885b92d0e04ccb23c50f9bd32b3b88667fb30ef7cbe82d5e43b9b4e",
+      "frontend": {
+        "deploymentId": "dpl_H7Z5fEvKQ95PNtkENooK45mgUnJd",
+        "url": "https://clinicos-qjvp3sxij-lucalavia-2482s-projects.vercel.app",
+        "alias": "clinicos-eosin.vercel.app",
+        "status": "READY",
+        "aliasSourceCommitVerified": true,
+        "browserReadOnlySmoke": "Profile chooser renders; no initial console errors; no live patient writes"
+      },
+      "backend": {
+        "deploymentId": "4b442bac-758a-4d84-a73b-417bd471825f",
+        "status": "SUCCESS",
+        "url": "https://clinicos-backend-demo.up.railway.app",
+        "healthStatus": 200,
+        "imageDigest": "sha256:e7673342d5274d2166443d341aa67db60cdcb4db86f176294120f366752570e1"
+      }
+    },
+    {
+      "activity": "PO-07",
+      "sourceCommit": "c52af6237c9cbbda9a39a770c1278573567eb958",
+      "receiptPath": "artifacts/task-validation/po-07-ordine-reparto/deployment-receipt.json",
+      "receiptSha256": "01ce47df61efa9a91ec4bbb227a8223dd559cf3aef996127d12518b4636631ee",
+      "frontend": {
+        "deploymentId": "dpl_HriFD1fuaDkr1FNWCxFkVDuydrAw",
+        "status": "READY",
+        "alias": "clinicos-eosin.vercel.app",
+        "aliasSourceCommitVerified": true,
+        "verification": "Vercel API /v13/deployments/clinicos-eosin.vercel.app; metadata sourceCommit exact match",
+        "browserReadOnlySmoke": "Profile chooser renders; console errors/warnings empty; no live patient writes"
+      },
+      "backend": {
+        "deploymentId": "de579c06-cd7d-4164-af15-ea11357adbed",
+        "status": "SUCCESS",
+        "healthStatus": 200,
+        "migration": "20260923020000_roster_order_contexts successfully applied"
+      }
+    },
+    {
+      "activity": "PO-08",
+      "sourceCommit": "3582e0bf4ea28fa95afc9fc36756087fdfce60a9",
+      "receiptPath": "artifacts/task-validation/po-08-consegne-giro/deployment-receipt.json",
+      "receiptSha256": "945fe6e854be132f00d27d89e285e4b130f2cdfd22f326b147767db459ed0911",
+      "frontend": {
+        "deploymentId": "dpl_CCDpCDBhUrjQi6wkFxbX4XCqCieX",
+        "status": "READY",
+        "url": "https://clinicos-1fqt8bkwa-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "aliasSourceCommitVerified": "3582e0bf4ea28fa95afc9fc36756087fdfce60a9",
+        "immutableExport": "frontend-release-inputs.json"
+      },
+      "backend": {
+        "deploymentId": "ae45c28c-f976-4f84-adb0-dd6f42cd0452",
+        "status": "SUCCESS",
+        "healthStatus": 200,
+        "migration": "20260923030000_consegna_creation_receipts",
+        "migrationApplied": true,
+        "immutableExport": "backend-release-inputs.json"
+      }
+    },
+    {
+      "activity": "PO-09",
+      "sourceCommit": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a",
+      "receiptPath": "artifacts/task-validation/po-09-dimissione/deployment-receipt.json",
+      "receiptSha256": "82979472eca9cb41a59ef623a6fae06f40923cc6c145afef84b9c49059dbe533",
+      "frontend": {
+        "deploymentId": "dpl_5xceuTtNJmQ5WneJKjefBpWYGyRn",
+        "status": "READY",
+        "url": "https://clinicos-1i77xtxfc-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "sourceCommitVerified": "cfe0e16be0c3efc4c49245f5a9944745bf913a8a"
+      },
+      "backend": null
+    },
+    {
+      "activity": "PO-10",
+      "sourceCommit": "d659c1b459eb72a2920cbd9f678a2c11f9bf7efd",
+      "receiptPath": "artifacts/task-validation/po-10-painad/deployment-receipt.json",
+      "receiptSha256": "93a8dd349b7a533dcbc2ede23e3c3b2f62e117e96d32bcfb55cd69bede6f5357",
+      "frontend": {
+        "deploymentId": "dpl_DMC6zMSbrq2GgN6FiUhgUUVnXQnN",
+        "status": "READY",
+        "url": "https://clinicos-nwwlwexwm-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "sourceCommitVerified": "d659c1b459eb72a2920cbd9f678a2c11f9bf7efd"
+      },
+      "backend": {
+        "deploymentId": "0fde62f8-048e-457b-b9c7-f0ccae8f6368",
+        "status": "SUCCESS",
+        "migration": "20260923040000_patient_assessments",
+        "migrationApplied": true,
+        "healthStatus": 200,
+        "imageDigest": "sha256:01397657ecd3b166d6103c517963dd8ba85eb0c3703076b56731bb7489e7783f"
+      }
+    },
+    {
+      "activity": "PO-11",
+      "sourceCommit": "470a5fe7a7eee4a9b0a0b219947432049b9de977",
+      "receiptPath": "artifacts/task-validation/po-11-postural-transfers/deployment-receipt.json",
+      "receiptSha256": "2ebf8f68e98ca64b3fad26f23fac92173a64820e075fdca6944faf1a0606964f",
+      "frontend": {
+        "deploymentId": "dpl_DorvrDMBjys4Z78n9hoDfh78AkT5",
+        "status": "READY",
+        "url": "https://clinicos-iflemq7vu-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "sourceCommitVerified": "470a5fe7a7eee4a9b0a0b219947432049b9de977"
+      },
+      "backend": {
+        "deploymentId": "a6b93f38-b0c5-447d-9472-529641cdec2e",
+        "status": "SUCCESS",
+        "migration": "20260923050000_postural_transfers",
+        "migrationApplied": true,
+        "healthStatus": 200,
+        "imageDigest": "sha256:fb67bf9595b8a5358b607d4cb4af39af89c17a7d2be8780d7617e527b04a729f"
+      }
+    },
+    {
+      "activity": "PO-12",
+      "sourceCommit": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be",
+      "receiptPath": "artifacts/task-validation/po-12-tinetti/deployment-receipt.json",
+      "receiptSha256": "8db6f96906a752f62035de66ab7b1b8b40cc00156811b568ef93c25b3c74ed3a",
+      "frontend": {
+        "deploymentId": "dpl_8HxzffhVs7BCpBisSv6LzXpXDBEN",
+        "status": "READY",
+        "url": "https://clinicos-ayfonlmai-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "sourceCommitVerified": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be"
+      },
+      "backend": {
+        "deploymentId": "d532fc0f-809b-4924-a310-ac9751706614",
+        "status": "SUCCESS",
+        "migration": "20260923060000_tinetti",
+        "migrationApplied": true,
+        "healthStatus": 200
+      }
+    },
+    {
+      "activity": "PO-13",
+      "sourceCommit": "6f8b7ded54084c4a380f94b61f9aa520b698a09c",
+      "receiptPath": "artifacts/task-validation/po-13-mna/deployment-receipt.json",
+      "receiptSha256": "64004a031948daa6e8cb3731416597c35eabd8cec7349540d4927d38a7e01126",
+      "frontend": {
+        "deploymentId": "dpl_LR7ZEk7P2PqPC8nbhtamURHqvGci",
+        "status": "READY",
+        "url": "https://clinicos-cbxjkg3hx-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "sourceCommitVerified": "6f8b7ded54084c4a380f94b61f9aa520b698a09c"
+      },
+      "backend": {
+        "deploymentId": "b8e82dd2-14c2-42f6-b4cd-110f21bd3260",
+        "status": "SUCCESS",
+        "migration": "20260923070000_mna",
+        "migrationApplied": true,
+        "healthStatus": 200
+      }
+    },
+    {
+      "activity": "PO-14",
+      "sourceCommit": "f445260a4ca4de872c1361ff19fc215179b097fe",
+      "receiptPath": "artifacts/task-validation/po-14-gds/deployment-receipt.json",
+      "receiptSha256": "1d72b24456dd83c7b2645ddbb748a8d20ceb285e345935fd294f3f7d22aaa30e",
+      "frontend": {
+        "deploymentId": "dpl_7Ybawq7tkEYmfRmaYGnVMTUxMHyX",
+        "status": "READY",
+        "url": "https://clinicos-mz2hiqj8h-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "sourceCommitVerified": "f445260a4ca4de872c1361ff19fc215179b097fe"
+      },
+      "backend": {
+        "deploymentId": "8fed9373-a9a2-47ea-ba1f-ddb223c4a9d1",
+        "status": "SUCCESS",
+        "migration": "20260923080000_gds15",
+        "migrationApplied": true,
+        "healthStatus": 200
+      }
+    },
+    {
+      "activity": "PO-15",
+      "sourceCommit": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+      "receiptPath": "artifacts/task-validation/po-15-catalogo/deployment-receipt.json",
+      "receiptSha256": "aaa55336b1005fd1a7bc75822bd4df6728876bfcfe32718f15ad1d5ead0eed64",
+      "frontend": {
+        "deploymentId": "dpl_CpDaCDYqhba9MqMP7W232AcUQXPw",
+        "status": "READY",
+        "url": "https://clinicos-jof8nif4t-lucalavia-2482s-projects.vercel.app",
+        "alias": "https://clinicos-eosin.vercel.app",
+        "sourceCommitVerified": "53e57d694850775b85ad1d22904e7bb1e6e84618"
+      },
+      "backend": {
+        "deploymentId": "4a3368ee-254b-480e-8ff2-55b38950d7d2",
+        "status": "SUCCESS",
+        "newMigration": false,
+        "healthStatus": 200
+      }
+    }
+  ]
+}

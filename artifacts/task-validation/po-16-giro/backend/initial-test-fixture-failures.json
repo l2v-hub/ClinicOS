@@ -1,0 +1,9 @@
+{
+  "applicationSourceChangedForFixtureFailures": false,
+  "initialAttempt": "14 passed, 1 failed: direct INSERT of a final assessment was rejected by the existing assessment_insert_draft_required trigger. The fixture now restores draft, final pending, original document, ready with all real triggers enabled.",
+  "secondAttempt": "14 passed, 1 failed: comparing native SQL JSON timestamps to the original Prisma export introduced a fixed two-hour projection mismatch. An intermediate same-projection comparison produced the preserved 15-test green run.",
+  "finalRefinement": "The final new-test file restores and reads through the production assessmentTransaction UTC convention, checks exact equality to the original exported records and reruns from backend cwd: 3/3 passed. The other 12 green tests and every production input are byte-identical between green runs.",
+  "cwdReviewFix": "Artifact and frontend helper paths are derived from import.meta.url rather than process.cwd. Reviewer P2 closed after the successful backend-cwd run.",
+  "timestampProvenance": "The original dump itself has assessment.assessedAt 2026-09-22T08:30:00.000Z while its frozen finalSnapshot.assessedAt is 2026-09-22T06:30:00.000Z. Both original values are preserved; no production timestamp correction is claimed.",
+  "failedOutputs": "Both failed run logs, source manifests, fresh-v2 proofs and four PDFs/four snapshots from each attempt are preserved. These earlier PDFs were not visually inspected and are not the final PDF QA artifacts."
+}

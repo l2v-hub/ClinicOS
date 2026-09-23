@@ -1,0 +1,16 @@
+{
+  "task": "PO-16-frontend-implementation",
+  "owner": "/root/po01_frontend_audit",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-final-ui",
+  "branch": "codex/po16-final-ui",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "startedAt": "2026-09-23T08:07:28.133Z",
+  "status": "source-released",
+  "authority": "Root GO after PO15 published/verified, receipt36fb96750575d409dc9de41ea42e1e858c472253",
+  "sourceStateId": "d5c3c244c9a4ed8df9dfb89264277cc7f94b5525ceacc822353b5be0679a91ff",
+  "runtimeSourceId": "2352a0fd4ad2b9aef8b8c1480a87f019dccbf588a4a799eedbd34dca70d71dff",
+  "sourceManifestSha256": "939ad0f35e471c418008ee0737730b4b3c3b1766f3f02409ab7b3803a95bac52",
+  "applicationClaimReleased": true,
+  "implementationAuthorized": true,
+  "publicationAuthorized": false
+}

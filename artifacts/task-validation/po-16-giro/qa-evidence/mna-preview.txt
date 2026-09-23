@@ -1,0 +1,181 @@
+- banner:
+  - strong: PO16 · solo pazienti sintetici
+  - text: Profilo sintetico
+  - combobox "Profilo sintetico":
+    - option "operator" [selected]
+    - option "outsider"
+    - option "manager"
+  - text: Paziente sintetico
+  - combobox "Paziente sintetico":
+    - option "vitals-qa-anna" [selected]
+    - option "vitals-qa-bruno"
+  - button "Perdi risposta bozza"
+  - button "Perdi risposta finale"
+  - button "Rallenta salvataggio"
+  - button "Simula errore catalogo"
+  - button "Rallenta catalogo"
+  - button "Rallenta dati ingresso"
+  - button "Termina stampa simulata"
+  - button "Esporta evidenze"
+  - status
+- generic: ClinicOS · anteprima sintetica
+- main:
+  - button "Torna alla lista":
+  - generic: AD
+  - generic: Dall’Acqua, Anna Àgata
+  - generic: Codice fiscale non disponibile·
+  - generic: 76a · F
+  - button "Stampa scheda"
+  - button "Invio in PS":
+    - text: Invio in PS
+  - complementary "Completezza anagrafica":
+    - strong: Anagrafica da completare
+    - generic: "Dati da completare:"
+    - list:
+      - button "Codice fiscale"
+  - generic "Terapie rimaste in bozza · 1"
+  - tablist "Aree della cartella paziente":
+    - generic: Aree cartella
+    - tab "Raccolta dati ingresso"
+    - tab "Clinica"
+    - tab "Diario"
+    - tab "Moduli 1" [selected]:
+      - text: Moduli
+      - generic: "1"
+    - tab "Documenti"
+    - tab "Dimissione"
+  - tabpanel "Moduli 1":
+    - button "← Tutti i moduli"
+    - strong: Dall’Acqua, Anna Àgata
+    - generic: Nato/a il 01/01/1950 · CF da completare
+    - generic: Anagrafica da completare
+    - generic: Camera 11 · Letto A
+    - generic: Dalla cartella
+    - button "▼ Mini Nutritional Assessment · MNA® Nuova compilazione" [expanded]:
+      - generic: ▼
+      - generic: Mini Nutritional Assessment · MNA®
+      - button "Nuova compilazione"
+    - paragraph: Screening e valutazione completa dello stato nutrizionale.
+    - button "Apri scheda corrente"
+    - paragraph: "Compilatore: Operatrice QA. Le bozze locali restano in questa sessione; salva la bozza per ritrovarla dopo l’accesso successivo."
+    - region "Scheda Mini Nutritional Assessment · MNA®":
+      - region "Anteprima MNA":
+        - heading "Valutazione completa MNA® · anteprima prima della finalizzazione" [level=3]
+        - term: Valutata
+        - definition: 23/09/2026 08:30 · Europe/Rome
+        - term: Registrata
+        - definition: 23/09/2026 10:20
+        - term: Autore
+        - definition: Operatrice QA
+        - term: Versione del modulo
+        - definition: mna-it-2026-09-22-q-corrected-v1
+        - paragraph:
+          - strong: "Screening:"
+          - text: 12/14 · Stato nutrizionale normale
+        - paragraph:
+          - strong: "Valutazione globale:"
+          - text: subtotale 15,5/16
+        - paragraph:
+          - strong: "Valutazione totale: 27,5/30 · Stato nutrizionale normale"
+        - heading "Screening A–F" [level=4]
+        - list:
+          - strong: A. Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito, problemi digestivi, difficoltà di masticazione o deglutizione) · 1 punto
+          - paragraph: Moderata riduzione dell’assunzione di cibo
+          - strong: B. Perdita di peso recente (< 3 mesi) · 2 punti
+          - paragraph: Perdita di peso tra 1 e 3 kg
+          - strong: C. Motricità · 2 punti
+          - paragraph: Esce di casa
+          - strong: "D. Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici? · 2 punti"
+          - paragraph: "No"
+          - strong: E. Problemi neuropsicologici · 2 punti
+          - paragraph: Nessun problema psicologico
+          - strong: F. Indice di massa corporea (IMC = peso / (altezza)² in kg/m²) · 3 punti
+          - paragraph: IMC ≥ 23
+          - paragraph: "Metodo: da misure"
+        - heading "Valutazione globale G–R" [level=4]
+        - list:
+          - strong: G. Il paziente vive autonomamente a domicilio? · 1 punto
+          - paragraph: Sì
+          - strong: H. Prende più di 3 medicinali al giorno? · 1 punto
+          - paragraph: "No"
+          - strong: I. Presenza di decubiti, ulcere cutanee? · 1 punto
+          - paragraph: "No"
+          - strong: J. Quanti pasti completi prende al giorno? · 2 punti
+          - paragraph: 3 pasti
+          - strong: K. Consuma? · 1 punto
+          - list:
+            - listitem: "Almeno una volta al giorno dei prodotti lattiero-caseari?: Sì"
+            - listitem: "Una o due volte la settimana uova o legumi?: Sì"
+            - listitem: "Ogni giorno della carne, del pesce o del pollame?: Sì"
+          - strong: L. Consuma almeno due volte al giorno frutta o verdura? · 1 punto
+          - paragraph: Sì
+          - strong: M. Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…) · 1 punto
+          - paragraph: Più di 5 bicchieri
+          - strong: N. Come si nutre? · 2 punti
+          - paragraph: Autonomamente senza difficoltà
+          - strong: O. Il paziente si considera ben nutrito? (ha dei problemi nutrizionali) · 2 punti
+          - paragraph: Nessun problema nutrizionale
+          - strong: P. Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età? · 2 punti
+          - paragraph: Migliore
+          - strong: Q. Circonferenza brachiale (CB, cm) · 0,5 punti
+          - paragraph: 21 ≤ CB ≤ 22 cm
+          - paragraph: "Metodo: categoria dichiarata"
+          - strong: R. Circonferenza del polpaccio (CP in cm) · 1 punto
+          - paragraph: CP ≥ 31 cm
+          - paragraph: "Metodo: categoria dichiarata"
+        - heading "Misure" [level=4]
+        - term: Peso (kg)
+        - definition:
+          - text: "64"
+          - text: "Data indicata: 2026-09-23"
+          - text: "Origine: inserimento manuale nella valutazione"
+        - term: Altezza (cm)
+        - definition:
+          - text: "160"
+          - text: "Data indicata: 2026-09-23"
+          - text: "Origine: inserimento manuale nella valutazione"
+        - term: Circonferenza brachiale (cm)
+        - definition:
+          - text: Non disponibile
+          - text: "Data indicata: non disponibile"
+          - text: "Origine: inserimento manuale nella valutazione"
+        - term: Circonferenza del polpaccio (cm)
+        - definition:
+          - text: Non disponibile
+          - text: "Data indicata: non disponibile"
+          - text: "Origine: inserimento manuale nella valutazione"
+        - term: IMC (kg/m²)
+        - definition: "25"
+        - heading "Note" [level=4]
+        - paragraph: Nessuna nota.
+        - paragraph: Le fasce sono l’interpretazione dello strumento. Non generano automaticamente diagnosi o trattamenti.
+        - paragraph: ® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.
+        - generic "Fonte, riferimenti e correzioni documentate"
+      - paragraph: Dopo la finalizzazione il contenuto resta immutabile. Eventuali correzioni richiederanno una rettifica.
+      - button "Torna alla compilazione"
+      - button "Conferma e finalizza"
+      - button "Chiudi · conserva compilazione"
+      - button "Scarta modifiche locali"
+    - region "Storico del modulo":
+      - heading "Storico valutazioni" [level=3]
+      - text: Stato
+      - combobox "Stato":
+        - option "Tutte" [selected]
+        - option "Le mie bozze"
+        - option "Finali"
+      - text: Valutazione dal
+      - textbox "Valutazione dal"
+      - text: Al
+      - textbox "Al"
+      - button "Aggiorna storico"
+      - paragraph: Le bozze sono visibili solo al loro autore. Ordine per data di registrazione.
+      - list:
+        - strong: Bozza · 23/09/2026 08:30
+        - paragraph: Operatrice QA · Registrata 23/09/2026 10:20
+        - paragraph: Valutazione completa MNA® · 27,5/30 · Stato nutrizionale normale
+        - button "Riprendi bozza"
+        - strong: Finale · 22/09/2026 08:30
+        - paragraph: Operatrice QA · Registrata 23/09/2026 10:20
+        - paragraph: Valutazione completa MNA® · 30/30 · Stato nutrizionale normale
+        - generic: PDF archiviato
+        - button "Apri valutazione"

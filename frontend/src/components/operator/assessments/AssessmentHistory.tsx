@@ -5,7 +5,7 @@ import { mnaTitle } from '../../../lib/assessments/mnaDefinition';
 function resultLabel(record: AssessmentHistoryItem): string {
   if (record.type === 'mna') {
     const result = record.result.total ?? record.result.screening;
-    return `${mnaTitle(record.extent)} · ${result ? `${result.score}/${result.maximum} · ${result.label}` : `Screening ${record.completion.screening.answeredCount}/6`}${record.extent === 'full' && !record.result.total ? ` · Globale ${record.completion.global.answeredCount}/12` : ''}`;
+    return `${mnaTitle(record.extent)} · ${result ? `${result.score.toLocaleString('it-IT')}/${result.maximum} · ${result.label}` : `Screening ${record.completion.screening.answeredCount}/6`}${record.extent === 'full' && !record.result.total ? ` · Globale ${record.completion.global.answeredCount}/12` : ''}`;
   }
   if (record.type === 'gds15') return record.result
     ? `Screening GDS-15 · ${record.result.total}/15 · ${record.result.label}`

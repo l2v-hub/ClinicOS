@@ -17,6 +17,14 @@
 .nrs-print-surface { display: none; }
 @media (max-width: 900px) { .assessment-catalog-row { align-items: stretch; flex-direction: column; } }
 @media (max-width: 480px) { .assessment-catalog-actions { display: grid; grid-template-columns: 1fr; } }
+@media (max-width: 768px) {
+  .assessment-catalog button, .patient-module-return {
+    min-width: 44px;
+    min-height: 44px;
+    max-width: 100%;
+    white-space: normal;
+  }
+}
 @media print {
   .nrs-legacy .no-print { display: none !important; }
   body[data-nrs-print] > *:not(.nrs-print-surface) { display: none !important; }

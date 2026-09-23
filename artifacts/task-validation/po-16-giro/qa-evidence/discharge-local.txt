@@ -1,0 +1,192 @@
+- banner:
+  - strong: PO16 · solo pazienti sintetici
+  - text: Profilo sintetico
+  - combobox "Profilo sintetico":
+    - option "operator" [selected]
+    - option "outsider"
+    - option "manager"
+  - text: Paziente sintetico
+  - combobox "Paziente sintetico":
+    - option "vitals-qa-anna" [selected]
+    - option "vitals-qa-bruno"
+  - button "Perdi risposta bozza"
+  - button "Perdi risposta finale"
+  - button "Rallenta salvataggio"
+  - button "Simula errore catalogo"
+  - button "Rallenta catalogo"
+  - button "Rallenta dati ingresso"
+  - button "Termina stampa simulata"
+  - button "Esporta evidenze"
+  - status
+- generic: ClinicOS · anteprima sintetica
+- main:
+  - button "Torna alla lista":
+  - generic: AD
+  - generic: Dall’Acqua, Anna Àgata
+  - generic: Codice fiscale non disponibile·
+  - generic: 76a · F
+  - button "Stampa scheda"
+  - button "Invio in PS":
+    - text: Invio in PS
+  - complementary "Completezza anagrafica":
+    - strong: Anagrafica da completare
+    - generic: "Dati da completare:"
+    - list:
+      - button "Codice fiscale"
+  - generic "Terapie rimaste in bozza · 1"
+  - tablist "Aree della cartella paziente":
+    - generic: Aree cartella
+    - tab "Raccolta dati ingresso"
+    - tab "Clinica"
+    - tab "Diario"
+    - tab "Moduli 1":
+      - text: Moduli
+      - generic: "1"
+    - tab "Documenti"
+    - tab "Dimissione" [selected]
+  - tabpanel "Dimissione":
+    - text: ✓ ✓ ✓ ✓ ✓ ✓
+    - button "▼ Dimissione Infermieristica Vista modulo" [expanded]:
+      - generic: ▼
+      - generic: Dimissione Infermieristica
+      - button "Vista modulo"
+    - generic: Scheda di Dimissione
+    - button "Compila"
+    - generic: Data
+    - textbox: 2026-09-23
+    - generic: Ora
+    - textbox: 10:22
+    - generic: Respirazione
+    - checkbox "Autonomo"
+    - generic: Autonomo
+    - checkbox "O₂ terapia"
+    - generic: O₂ terapia
+    - checkbox "Cannula tracheale"
+    - generic: Cannula tracheale
+    - generic: Alimentazione
+    - checkbox "Autonomo"
+    - generic: Autonomo
+    - checkbox "Assistito"
+    - generic: Assistito
+    - checkbox "SNG"
+    - generic: SNG
+    - checkbox "PEG"
+    - generic: PEG
+    - generic: Dieta
+    - textbox "es. libera, tritatina…" [active]: Prova sintetica locale senza salvataggio
+    - generic: SNG tipo/n°
+    - textbox "es. 14Ch"
+    - generic: PEG tipo/n°
+    - textbox "es. 20Fr"
+    - generic: Eliminazione
+    - checkbox "Continente"
+    - generic: Continente
+    - checkbox "Parzialmente incontinente"
+    - generic: Parzialmente incontinente
+    - checkbox "Incontinenza feci"
+    - generic: Incontinenza feci
+    - checkbox "Incontinenza urine"
+    - generic: Incontinenza urine
+    - checkbox "Stomia"
+    - generic: Stomia
+    - generic: Data ultima evacuazione
+    - textbox
+    - generic: Catetere vescicale tipo/n°
+    - textbox "es. 16Ch Foley"
+    - generic: Mobilizzazione
+    - checkbox "Autonomo"
+    - generic: Autonomo
+    - checkbox "Allettato"
+    - generic: Allettato
+    - checkbox "Rischio caduta"
+    - generic: Rischio caduta
+    - generic: Assistito con
+    - textbox "es. deambulatore, carrozzina…"
+    - generic: Contenzione
+    - textbox "tipo di contenzione applicata"
+    - generic: Igiene e vestizione
+    - checkbox "Autonomo"
+    - generic: Autonomo
+    - checkbox "Dipendente"
+    - generic: Dipendente
+    - checkbox "Parzialmente dipendente"
+    - generic: Parzialmente dipendente
+    - generic: Lesioni da pressione
+    - checkbox "Assenti" [checked]
+    - generic: Assenti
+    - checkbox "Presenti"
+    - generic: Presenti
+    - generic: Disturbi del sonno
+    - checkbox "Assenti" [checked]
+    - generic: Assenti
+    - checkbox "Presenti"
+    - generic: Presenti
+    - generic: Uso di farmaci
+    - checkbox "No" [checked]
+    - generic: "No"
+    - checkbox "Sì"
+    - generic: Sì
+    - generic: Comunicazione / Orientamento
+    - checkbox "Orientato"
+    - generic: Orientato
+    - checkbox "Parzialmente orientato"
+    - generic: Parzialmente orientato
+    - checkbox "Disorientato"
+    - generic: Disorientato
+    - generic: Alterazioni sensoriali
+    - textbox
+    - generic: Difficoltà di comunicazione
+    - textbox
+    - checkbox "Comunica — Sì"
+    - generic: Comunica — Sì
+    - checkbox "Comunica — No"
+    - generic: Comunica — No
+    - generic: Servizi territoriali
+    - generic: Segnalazione servizio sociale
+    - checkbox "Sì"
+    - generic: Sì
+    - checkbox "No" [checked]
+    - generic: "No"
+    - generic: Servizio infermieristico domiciliare
+    - checkbox "Sì"
+    - generic: Sì
+    - checkbox "No" [checked]
+    - generic: "No"
+    - generic: Istruzioni al paziente / familiare
+    - textbox
+    - generic: Controlli programmati
+    - textbox
+    - generic: Materiale consegnato
+    - textbox
+    - checkbox "Piano di cura consegnato"
+    - generic: Piano di cura consegnato
+    - generic: Operatore infermieristico
+    - textbox: Operatrice QA
+    - generic: Note
+    - textbox
+    - button "Annulla"
+    - button "Salva":
+      - text: Salva
+    - generic: Liberatoria di Uscita
+    - button "Compila liberatoria"
+    - paragraph: Liberatoria non compilata.
+    - generic: Registro Uscite Temporanee
+    - button "+ Aggiungi uscita"
+    - table:
+      - rowgroup:
+        - row "Data Ora uscita Rientro Accompagnato da Firma":
+          - columnheader "Data":
+            - generic: Data
+          - columnheader "Ora uscita":
+            - generic: Ora uscita
+          - columnheader "Rientro":
+            - generic: Rientro
+          - columnheader "Accompagnato da":
+            - generic: Accompagnato da
+          - columnheader "Firma":
+            - generic: Firma
+          - columnheader
+      - rowgroup:
+        - row "Nessuna uscita registrata.":
+          - cell "Nessuna uscita registrata.":
+            - generic: Nessuna uscita registrata.

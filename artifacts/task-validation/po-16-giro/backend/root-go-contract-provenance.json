@@ -1,0 +1,13 @@
+{
+  "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-16-giro\\task-contract.md",
+  "preparatorySnapshot": "task-contract.snapshot.md",
+  "preparatorySha256": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3",
+  "currentSnapshot": "root-go-contract.snapshot.md",
+  "currentSha256": "9dcddf1160103fba70929c8cbd0dfa7b5b6f55a9e147f086ab28196d7e50ca3e",
+  "onlyChange": "Preparation status replaced with explicit GO after PO15 and receipt36fb9675; acceptance criteria and scope unchanged.",
+  "preflightDetection": {
+    "chunk": "fca941",
+    "exitCode": 1,
+    "cause": "The first artifact preflight correctly rejected an updated upstream contract hash; no application test or source changed."
+  }
+}

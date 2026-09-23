@@ -1,0 +1,4287 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T08:21:04.022Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T08:21:04.025Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T08:21:04.028Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T08:21:04.164Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 200,
+      "at": "2026-09-23T08:21:04.165Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/catalog",
+      "status": 200,
+      "at": "2026-09-23T08:21:12.694Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=mna&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T08:21:36.960Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/f44e07f3-b167-4bda-b1f4-b3987e431fed",
+      "status": 200,
+      "at": "2026-09-23T08:21:36.962Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/f44e07f3-b167-4bda-b1f4-b3987e431fed/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "3a6c5d59-9cb3-45de-92c4-4a5fabf87062",
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T08:21:51.985Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=mna&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T08:21:52.560Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/e2ebb081-dfab-4b1d-8acb-c3d6d17f1675",
+      "status": 200,
+      "at": "2026-09-23T08:22:11.838Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/e2ebb081-dfab-4b1d-8acb-c3d6d17f1675/content",
+      "status": 200,
+      "at": "2026-09-23T08:22:11.908Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents?limit=50",
+      "status": 200,
+      "at": "2026-09-23T08:22:24.416Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/e2ebb081-dfab-4b1d-8acb-c3d6d17f1675/content",
+      "status": 200,
+      "at": "2026-09-23T08:22:24.503Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=mna&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T08:22:47.506Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/f44e07f3-b167-4bda-b1f4-b3987e431fed",
+      "status": 200,
+      "at": "2026-09-23T08:22:47.508Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/catalog",
+      "status": 200,
+      "at": "2026-09-23T08:23:07.690Z"
+    }
+  ],
+  "printCaptures": [],
+  "seed": {
+    "finals": [
+      {
+        "id": "d68d0d3b-4652-458e-9d31-48a7bf0c39c4",
+        "patientId": "vitals-qa-anna",
+        "status": "final",
+        "version": 2,
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "createdAt": "2026-09-23T08:20:44.578Z",
+        "updatedAt": "2026-09-23T08:20:44.628Z",
+        "finalizedAt": "2026-09-23T08:20:44.628Z",
+        "author": {
+          "operatorId": "VITALS-QA-OP",
+          "name": "Operatrice QA"
+        },
+        "predecessorId": null,
+        "correctionReason": null,
+        "correctedById": null,
+        "snapshotSha256": "7d3fb448f55f577d56f40608db1f31102a034c89be840004b33ac74cfa237d2b",
+        "pdf": {
+          "status": "ready",
+          "documentId": "b0062f95-4b02-4344-8afc-c096d7bfdef4",
+          "errorCode": null,
+          "retryAvailable": false
+        },
+        "type": "painad",
+        "formVersion": "painad-it-2026-09-22-v1",
+        "answers": {
+          "respiration": 2,
+          "bodyLanguage": 2,
+          "consolability": 2,
+          "facialExpression": 2,
+          "negativeVocalization": 2
+        },
+        "answeredCount": 5,
+        "result": {
+          "total": 10,
+          "band": "severe",
+          "label": "Dolore severo"
+        },
+        "finalSnapshot": {
+          "form": {
+            "type": "painad",
+            "version": "painad-it-2026-09-22-v1",
+            "sourceSha256": "2a3c3b2724ed7cc46aa09db715680b0d494a63b587898b45d61c8db8ec73abb1"
+          },
+          "items": [
+            {
+              "id": "respiration",
+              "label": "Respirazione",
+              "score": 2,
+              "description": "RUMOROSA. Respiro stertoroso. Iperventilazione prolungata."
+            },
+            {
+              "id": "negativeVocalization",
+              "label": "Vocalizzazione negativa",
+              "score": 2,
+              "description": "Chiamate ripetute a voce alta. Gemiti o lamenti costanti. Pianto."
+            },
+            {
+              "id": "facialExpression",
+              "label": "Espressione facciale",
+              "score": 2,
+              "description": "Smorfia marcata e costante. Serramento della mascella / denti stretti."
+            },
+            {
+              "id": "bodyLanguage",
+              "label": "Linguaggio del corpo",
+              "score": 2,
+              "description": "Rigido. Pugni chiusi. Ginocchia al petto. Spinge via o colpisce."
+            },
+            {
+              "id": "consolability",
+              "label": "Consolabilità",
+              "score": 2,
+              "description": "Impossibile da rassicurare, distrarre o consolare."
+            }
+          ],
+          "author": {
+            "name": "Operatrice QA",
+            "operatorId": "VITALS-QA-OP"
+          },
+          "result": {
+            "band": "severe",
+            "label": "Dolore severo",
+            "total": 10
+          },
+          "patient": {
+            "id": "vitals-qa-anna",
+            "lastName": "Dall’Acqua",
+            "location": {
+              "bed": null,
+              "asOf": "2026-09-22",
+              "room": null,
+              "source": null,
+              "status": "unavailable"
+            },
+            "firstName": "Anna Àgata",
+            "dateOfBirth": "1950-01-01",
+            "codiceFiscale": null
+          },
+          "createdAt": "2026-09-23T08:20:44.578Z",
+          "assessedAt": "2026-09-22T06:30:00.000Z",
+          "finalizedAt": "2026-09-23T08:20:44.628Z",
+          "predecessor": null,
+          "predecessorId": null,
+          "interpretation": "Dolore severo (richiede intervento analgesico e rivalutazione).",
+          "snapshotVersion": 1,
+          "correctionReason": null
+        }
+      },
+      {
+        "id": "68dc1bd0-f65b-4061-866a-404f29b74023",
+        "patientId": "vitals-qa-anna",
+        "status": "final",
+        "version": 2,
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "createdAt": "2026-09-23T08:20:44.946Z",
+        "updatedAt": "2026-09-23T08:20:44.959Z",
+        "finalizedAt": "2026-09-23T08:20:44.959Z",
+        "author": {
+          "operatorId": "VITALS-QA-OP",
+          "name": "Operatrice QA"
+        },
+        "predecessorId": null,
+        "correctionReason": null,
+        "correctedById": null,
+        "snapshotSha256": "eb6f34752e7ce849fc635d3528fbe14dcf0e43277b0aae1dee852c7614cc2b41",
+        "pdf": {
+          "status": "ready",
+          "documentId": "ae4ce7be-a6e3-43c4-a077-8bf9406f3683",
+          "errorCode": null,
+          "retryAvailable": false
+        },
+        "type": "postural_transfers",
+        "formVersion": "transfers-it-2026-09-22-v1",
+        "answers": {
+          "aids": {
+            "quadCane": {
+              "selected": false,
+              "ownership": null
+            },
+            "rollator": {
+              "selected": false,
+              "ownership": null
+            },
+            "kneeBrace": {
+              "selected": false
+            },
+            "wheelchair": {
+              "selected": false,
+              "ownership": null
+            },
+            "spinalBrace": {
+              "selected": false
+            },
+            "tableWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "walkingStick": {
+              "selected": false,
+              "ownership": null
+            },
+            "axillaryWalker": {
+              "selected": false,
+              "ownership": null
+            },
+            "oneForearmCrutch": {
+              "selected": false,
+              "ownership": null
+            },
+            "twoForearmCrutches": {
+              "selected": false,
+              "ownership": null
+            },
+            "wheelchairRestraint": {
+              "selected": false
+            },
+            "pressureReliefCushion": {
+              "selected": false,
+              "ownership": null
+            }
+          },
+          "notes": "",
+          "context": {
+            "diagnosis": {
+              "text": "Osservazione sintetica per il collaudo dei trasferimenti.",
+              "status": "provided",
+              "unavailableReason": ""
+            },
+            "admissionDate": {
+              "value": "2026-09-20",
+              "status": "known"
+            }
+          },
+          "hygiene": "shower",
+          "walking": "independent",
+          "transfers": {
+            "toilet": "independent",
+            "bedToWheelchair": "independent",
+            "wheelchairToBed": "independent"
+          },
+          "painOnMovement": false,
+          "operatedLegLoad": {
+            "side": null,
+            "level": null,
+            "applicable": false
+          },
+          "cognitiveDeterioration": "none"
+        },
+        "completion": {
+          "complete": true,
+          "missingPaths": []
+        },
+        "result": null,
+        "finalSnapshot": {
+          "form": {
+            "type": "postural_transfers",
+            "version": "transfers-it-2026-09-22-v1",
+            "sourceSha256": "5d5c25cfc322b4f12a6eeba4ac2cf8d4476b15e95c9152cbe09889f0cc75d49f"
+          },
+          "author": {
+            "name": "Operatrice QA",
+            "operatorId": "VITALS-QA-OP"
+          },
+          "result": null,
+          "patient": {
+            "id": "vitals-qa-anna",
+            "lastName": "Dall’Acqua",
+            "location": {
+              "bed": null,
+              "asOf": "2026-09-22",
+              "room": null,
+              "source": null,
+              "status": "unavailable"
+            },
+            "firstName": "Anna Àgata",
+            "dateOfBirth": "1950-01-01",
+            "codiceFiscale": null
+          },
+          "sections": [
+            {
+              "id": "context",
+              "rows": [
+                {
+                  "path": "context.admissionDate",
+                  "label": "Data di ingresso",
+                  "value": "20/09/2026"
+                },
+                {
+                  "path": "context.diagnosis",
+                  "label": "Diagnosi",
+                  "value": "Osservazione sintetica per il collaudo dei trasferimenti."
+                }
+              ],
+              "label": "Contesto"
+            },
+            {
+              "id": "mobilization",
+              "rows": [
+                {
+                  "path": "operatedLegLoad",
+                  "label": "Carico su arto inferiore operato",
+                  "value": "Non applicabile"
+                },
+                {
+                  "path": "walking",
+                  "label": "Deambulazione",
+                  "value": "Autonoma"
+                },
+                {
+                  "path": "transfers.bedToWheelchair",
+                  "label": "Letto-carrozzina",
+                  "value": "Autonomo"
+                },
+                {
+                  "path": "transfers.wheelchairToBed",
+                  "label": "Carrozzina-letto",
+                  "value": "Autonomo"
+                },
+                {
+                  "path": "transfers.toilet",
+                  "label": "In bagno sul WC",
+                  "value": "Autonomo"
+                }
+              ],
+              "label": "Mobilizzazione"
+            },
+            {
+              "id": "assistance",
+              "rows": [
+                {
+                  "path": "hygiene",
+                  "label": "Igiene personale",
+                  "value": "Doccia"
+                },
+                {
+                  "path": "painOnMovement",
+                  "label": "Dolore alla movimentazione",
+                  "value": "No"
+                },
+                {
+                  "path": "cognitiveDeterioration",
+                  "label": "Deterioramento cognitivo",
+                  "value": "No"
+                }
+              ],
+              "label": "Assistenza"
+            },
+            {
+              "id": "aids",
+              "rows": [
+                {
+                  "path": "aids.wheelchair",
+                  "label": "Carrozzina",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.pressureReliefCushion",
+                  "label": "Cuscino antidecubito",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.wheelchairRestraint",
+                  "label": "Contenzione in carrozzina",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.oneForearmCrutch",
+                  "label": "1 antibrachiale",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.walkingStick",
+                  "label": "Bastone",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.quadCane",
+                  "label": "Tetrapode",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.twoForearmCrutches",
+                  "label": "2 antibrachiali",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.rollator",
+                  "label": "Deambulatore rollator",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.axillaryWalker",
+                  "label": "Deambulatore ascellare",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.tableWalker",
+                  "label": "Deambulatore con tavolo (desk)",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.spinalBrace",
+                  "label": "Busto",
+                  "value": "No"
+                },
+                {
+                  "path": "aids.kneeBrace",
+                  "label": "Ginocchiera",
+                  "value": "No"
+                }
+              ],
+              "label": "Ausili"
+            },
+            {
+              "id": "notes",
+              "rows": [
+                {
+                  "path": "notes",
+                  "label": "Note",
+                  "value": "Nessuna nota"
+                }
+              ],
+              "label": "Note"
+            }
+          ],
+          "createdAt": "2026-09-23T08:20:44.946Z",
+          "assessedAt": "2026-09-22T06:30:00.000Z",
+          "finalizedAt": "2026-09-23T08:20:44.959Z",
+          "predecessor": null,
+          "predecessorId": null,
+          "signatureLabels": [
+            "Firma Fisioterapista",
+            "Firma Operatori"
+          ],
+          "snapshotVersion": 1,
+          "correctionReason": null
+        }
+      },
+      {
+        "id": "7934630a-4f93-4577-91cd-8343d8a56d34",
+        "patientId": "vitals-qa-anna",
+        "status": "final",
+        "version": 2,
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "createdAt": "2026-09-23T08:20:45.100Z",
+        "updatedAt": "2026-09-23T08:20:45.110Z",
+        "finalizedAt": "2026-09-23T08:20:45.110Z",
+        "author": {
+          "operatorId": "VITALS-QA-OP",
+          "name": "Operatrice QA"
+        },
+        "predecessorId": null,
+        "correctionReason": null,
+        "correctedById": null,
+        "snapshotSha256": "fcb06bd24a48e090d370cc87bd1b1493778f25f70a254974d865430f3a20a9a2",
+        "pdf": {
+          "status": "ready",
+          "documentId": "f87cd73e-7eae-4cb8-a0c6-edfe6470b47a",
+          "errorCode": null,
+          "retryAvailable": false
+        },
+        "type": "tinetti",
+        "formVersion": "tinetti-it-2026-09-22-v1",
+        "answers": {
+          "notes": "",
+          "tronco": 2,
+          "alzarsi": 2,
+          "cammino": 1,
+          "sedersi": 2,
+          "simmetria": 1,
+          "continuita": 1,
+          "iniziazione": 1,
+          "occhiChiusi": 1,
+          "traiettoria": 2,
+          "rombergSpinta": 2,
+          "altezzaPassoDx": 1,
+          "altezzaPassoSx": 1,
+          "girarsi360Passi": 1,
+          "equilibrioSeduto": 1,
+          "lunghezzaPassoDx": 1,
+          "lunghezzaPassoSx": 1,
+          "tentativiAlzarsi": 2,
+          "equilibrioImmediato": 2,
+          "girarsi360Stabilita": 1,
+          "equilibrioProlungato": 2
+        },
+        "answeredCount": 20,
+        "completion": {
+          "complete": true,
+          "missingPaths": []
+        },
+        "result": {
+          "balance": 16,
+          "gait": 12,
+          "total": 28,
+          "riskBand": "low",
+          "label": "Basso rischio"
+        },
+        "finalSnapshot": {
+          "form": {
+            "type": "tinetti",
+            "version": "tinetti-it-2026-09-22-v1",
+            "sourceSha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09",
+            "referenceSha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6"
+          },
+          "items": [
+            {
+              "id": "equilibrioSeduto",
+              "group": "balance",
+              "label": "Equilibrio seduto",
+              "score": 1,
+              "description": "Stabile, sicuro"
+            },
+            {
+              "id": "alzarsi",
+              "group": "balance",
+              "label": "Alzarsi dalla sedia",
+              "score": 2,
+              "description": "Capace, senza usare le braccia"
+            },
+            {
+              "id": "tentativiAlzarsi",
+              "group": "balance",
+              "label": "Tentativi per alzarsi",
+              "score": 2,
+              "description": "Riesce al 1° tentativo"
+            },
+            {
+              "id": "equilibrioImmediato",
+              "group": "balance",
+              "label": "Equilibrio in piedi (primi 5 s)",
+              "score": 2,
+              "description": "Stabile senza appoggio"
+            },
+            {
+              "id": "equilibrioProlungato",
+              "group": "balance",
+              "label": "Equilibrio prolungato",
+              "score": 2,
+              "description": "Stabile senza appoggio, base stretta"
+            },
+            {
+              "id": "rombergSpinta",
+              "group": "balance",
+              "label": "Romberg con spinta sternale",
+              "score": 2,
+              "description": "Stabile"
+            },
+            {
+              "id": "occhiChiusi",
+              "group": "balance",
+              "label": "Equilibrio occhi chiusi",
+              "score": 1,
+              "description": "Stabile"
+            },
+            {
+              "id": "girarsi360Passi",
+              "group": "balance",
+              "label": "Girarsi 360° — continuità dei passi",
+              "score": 1,
+              "description": "Passi continui"
+            },
+            {
+              "id": "girarsi360Stabilita",
+              "group": "balance",
+              "label": "Girarsi 360° — stabilità",
+              "score": 1,
+              "description": "Stabile"
+            },
+            {
+              "id": "sedersi",
+              "group": "balance",
+              "label": "Sedersi",
+              "score": 2,
+              "description": "Sicuro, movimenti fluidi"
+            },
+            {
+              "id": "iniziazione",
+              "group": "gait",
+              "label": "Inizio della deambulazione",
+              "score": 1,
+              "description": "Nessuna esitazione"
+            },
+            {
+              "id": "lunghezzaPassoDx",
+              "group": "gait",
+              "label": "Lunghezza passo destro",
+              "score": 1,
+              "description": "Piede dx supera il sx"
+            },
+            {
+              "id": "altezzaPassoDx",
+              "group": "gait",
+              "label": "Altezza passo destro",
+              "score": 1,
+              "description": "Piede dx si solleva"
+            },
+            {
+              "id": "lunghezzaPassoSx",
+              "group": "gait",
+              "label": "Lunghezza passo sinistro",
+              "score": 1,
+              "description": "Piede sx supera il dx"
+            },
+            {
+              "id": "altezzaPassoSx",
+              "group": "gait",
+              "label": "Altezza passo sinistro",
+              "score": 1,
+              "description": "Piede sx si solleva"
+            },
+            {
+              "id": "simmetria",
+              "group": "gait",
+              "label": "Simmetria del passo",
+              "score": 1,
+              "description": "Simmetrico"
+            },
+            {
+              "id": "continuita",
+              "group": "gait",
+              "label": "Continuità del passo",
+              "score": 1,
+              "description": "Continuo"
+            },
+            {
+              "id": "traiettoria",
+              "group": "gait",
+              "label": "Traiettoria",
+              "score": 2,
+              "description": "Rettilinea senza ausilio"
+            },
+            {
+              "id": "tronco",
+              "group": "gait",
+              "label": "Stabilità del tronco",
+              "score": 2,
+              "description": "Stabile, nessuna oscillazione"
+            },
+            {
+              "id": "cammino",
+              "group": "gait",
+              "label": "Base d'appoggio nel cammino",
+              "score": 1,
+              "description": "Talloni vicini"
+            }
+          ],
+          "notes": "",
+          "author": {
+            "name": "Operatrice QA",
+            "operatorId": "VITALS-QA-OP"
+          },
+          "result": {
+            "gait": 12,
+            "label": "Basso rischio",
+            "total": 28,
+            "balance": 16,
+            "riskBand": "low"
+          },
+          "patient": {
+            "id": "vitals-qa-anna",
+            "lastName": "Dall’Acqua",
+            "location": {
+              "bed": null,
+              "asOf": "2026-09-22",
+              "room": null,
+              "source": null,
+              "status": "unavailable"
+            },
+            "firstName": "Anna Àgata",
+            "dateOfBirth": "1950-01-01",
+            "codiceFiscale": null
+          },
+          "createdAt": "2026-09-23T08:20:45.100Z",
+          "assessedAt": "2026-09-22T06:30:00.000Z",
+          "provenance": "Modello a 20 voci già in uso in ClinicOS: equilibrio 16 punti, andatura 12 punti, totale 28. Conservate quattro risposte distinte per lunghezza e altezza del passo destro e sinistro. Allegato del 22/09/2026 come riferimento; non costituisce trascrizione letterale o convalida clinica indipendente.",
+          "finalizedAt": "2026-09-23T08:20:45.110Z",
+          "predecessor": null,
+          "predecessorId": null,
+          "snapshotVersion": 1,
+          "correctionReason": null
+        }
+      },
+      {
+        "id": "28595269-3b98-43b6-80a0-895283d55323",
+        "patientId": "vitals-qa-anna",
+        "status": "final",
+        "version": 2,
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "createdAt": "2026-09-23T08:20:45.326Z",
+        "updatedAt": "2026-09-23T08:20:45.342Z",
+        "finalizedAt": "2026-09-23T08:20:45.342Z",
+        "author": {
+          "operatorId": "VITALS-QA-OP",
+          "name": "Operatrice QA"
+        },
+        "predecessorId": null,
+        "correctionReason": null,
+        "correctedById": null,
+        "snapshotSha256": "97bad0988768019dd1dd5ef06286bdec527ed823e0b1a493194a5df259ae1b8f",
+        "pdf": {
+          "status": "ready",
+          "documentId": "2880cb71-79bc-44a5-8be2-f5bdc8bf2a97",
+          "errorCode": null,
+          "retryAvailable": false
+        },
+        "type": "mna",
+        "formVersion": "mna-it-2026-09-22-q-corrected-v1",
+        "answers": {
+          "extent": "full",
+          "A": "no_reduction",
+          "B": "no_loss",
+          "C": "goes_out",
+          "D": false,
+          "E": "no_psychological_problems",
+          "F": {
+            "method": "category",
+            "category": "gte23"
+          },
+          "G": true,
+          "H": false,
+          "I": false,
+          "J": "three_meals",
+          "K": {
+            "dairyDaily": true,
+            "eggsOrLegumesWeekly": true,
+            "meatFishOrPoultryDaily": true
+          },
+          "L": true,
+          "M": "gt5_glasses",
+          "N": "independent_without_difficulty",
+          "O": "no_nutritional_problems",
+          "P": "better",
+          "Q": {
+            "method": "category",
+            "category": "gt22"
+          },
+          "R": {
+            "method": "category",
+            "category": "gte31"
+          },
+          "measurements": {
+            "weightKg": null,
+            "heightCm": null,
+            "armCircumferenceCm": null,
+            "calfCircumferenceCm": null
+          },
+          "measurementDates": {
+            "weightKg": null,
+            "heightCm": null,
+            "armCircumferenceCm": null,
+            "calfCircumferenceCm": null
+          },
+          "notes": ""
+        },
+        "extent": "full",
+        "answeredCount": 18,
+        "completion": {
+          "complete": true,
+          "missingPaths": [],
+          "screening": {
+            "answeredCount": 6,
+            "requiredCount": 6,
+            "complete": true,
+            "missingPaths": []
+          },
+          "global": {
+            "answeredCount": 12,
+            "requiredCount": 12,
+            "complete": true,
+            "missingPaths": []
+          }
+        },
+        "result": {
+          "screening": {
+            "score": 14,
+            "maximum": 14,
+            "band": "normal",
+            "label": "Stato nutrizionale normale"
+          },
+          "global": {
+            "score": 16,
+            "maximum": 16
+          },
+          "total": {
+            "score": 30,
+            "maximum": 30,
+            "band": "normal",
+            "label": "Stato nutrizionale normale"
+          }
+        },
+        "finalSnapshot": {
+          "bmi": null,
+          "form": {
+            "type": "mna",
+            "version": "mna-it-2026-09-22-q-corrected-v1",
+            "sourceSha256": "67964491d0ceb5c221e776079c3af2bc7c1ddbf834428997f1b5531e469c6ffa"
+          },
+          "items": [
+            {
+              "id": "A",
+              "group": "screening",
+              "label": "Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito, problemi digestivi, difficoltà di masticazione o deglutizione)",
+              "score": 2,
+              "answer": "no_reduction",
+              "description": "Nessuna riduzione dell’assunzione di cibo"
+            },
+            {
+              "id": "B",
+              "group": "screening",
+              "label": "Perdita di peso recente (< 3 mesi)",
+              "score": 3,
+              "answer": "no_loss",
+              "description": "Nessuna perdita di peso"
+            },
+            {
+              "id": "C",
+              "group": "screening",
+              "label": "Motricità",
+              "score": 2,
+              "answer": "goes_out",
+              "description": "Esce di casa"
+            },
+            {
+              "id": "D",
+              "group": "screening",
+              "label": "Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici?",
+              "score": 2,
+              "answer": false,
+              "description": "No"
+            },
+            {
+              "id": "E",
+              "group": "screening",
+              "label": "Problemi neuropsicologici",
+              "score": 2,
+              "answer": "no_psychological_problems",
+              "description": "Nessun problema psicologico"
+            },
+            {
+              "id": "F",
+              "group": "screening",
+              "label": "Indice di massa corporea (IMC = peso / (altezza)² in kg/m²)",
+              "score": 3,
+              "answer": {
+                "method": "category",
+                "category": "gte23"
+              },
+              "description": "IMC ≥ 23"
+            },
+            {
+              "id": "G",
+              "group": "global",
+              "label": "Il paziente vive autonomamente a domicilio?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "H",
+              "group": "global",
+              "label": "Prende più di 3 medicinali al giorno?",
+              "score": 1,
+              "answer": false,
+              "description": "No"
+            },
+            {
+              "id": "I",
+              "group": "global",
+              "label": "Presenza di decubiti, ulcere cutanee?",
+              "score": 1,
+              "answer": false,
+              "description": "No"
+            },
+            {
+              "id": "J",
+              "group": "global",
+              "label": "Quanti pasti completi prende al giorno?",
+              "score": 2,
+              "answer": "three_meals",
+              "description": "3 pasti"
+            },
+            {
+              "id": "K",
+              "group": "global",
+              "label": "Consuma?",
+              "score": 1,
+              "answer": {
+                "dairyDaily": true,
+                "eggsOrLegumesWeekly": true,
+                "meatFishOrPoultryDaily": true
+              },
+              "subitems": [
+                {
+                  "id": "dairyDaily",
+                  "label": "Almeno una volta al giorno dei prodotti lattiero-caseari?",
+                  "answer": true
+                },
+                {
+                  "id": "eggsOrLegumesWeekly",
+                  "label": "Una o due volte la settimana uova o legumi?",
+                  "answer": true
+                },
+                {
+                  "id": "meatFishOrPoultryDaily",
+                  "label": "Ogni giorno della carne, del pesce o del pollame?",
+                  "answer": true
+                }
+              ],
+              "description": "Almeno una volta al giorno dei prodotti lattiero-caseari?: Sì\nUna o due volte la settimana uova o legumi?: Sì\nOgni giorno della carne, del pesce o del pollame?: Sì"
+            },
+            {
+              "id": "L",
+              "group": "global",
+              "label": "Consuma almeno due volte al giorno frutta o verdura?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "M",
+              "group": "global",
+              "label": "Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…)",
+              "score": 1,
+              "answer": "gt5_glasses",
+              "description": "Più di 5 bicchieri"
+            },
+            {
+              "id": "N",
+              "group": "global",
+              "label": "Come si nutre?",
+              "score": 2,
+              "answer": "independent_without_difficulty",
+              "description": "Autonomamente senza difficoltà"
+            },
+            {
+              "id": "O",
+              "group": "global",
+              "label": "Il paziente si considera ben nutrito? (ha dei problemi nutrizionali)",
+              "score": 2,
+              "answer": "no_nutritional_problems",
+              "description": "Nessun problema nutrizionale"
+            },
+            {
+              "id": "P",
+              "group": "global",
+              "label": "Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età?",
+              "score": 2,
+              "answer": "better",
+              "description": "Migliore"
+            },
+            {
+              "id": "Q",
+              "group": "global",
+              "label": "Circonferenza brachiale (CB, cm)",
+              "score": 1,
+              "answer": {
+                "method": "category",
+                "category": "gt22"
+              },
+              "description": "CB > 22 cm"
+            },
+            {
+              "id": "R",
+              "group": "global",
+              "label": "Circonferenza del polpaccio (CP in cm)",
+              "score": 1,
+              "answer": {
+                "method": "category",
+                "category": "gte31"
+              },
+              "description": "CP ≥ 31 cm"
+            }
+          ],
+          "notes": "",
+          "title": "Valutazione completa MNA®",
+          "author": {
+            "name": "Operatrice QA",
+            "operatorId": "VITALS-QA-OP"
+          },
+          "extent": "full",
+          "result": {
+            "total": {
+              "band": "normal",
+              "label": "Stato nutrizionale normale",
+              "score": 30,
+              "maximum": 30
+            },
+            "global": {
+              "score": 16,
+              "maximum": 16
+            },
+            "screening": {
+              "band": "normal",
+              "label": "Stato nutrizionale normale",
+              "score": 14,
+              "maximum": 14
+            }
+          },
+          "answers": {
+            "A": "no_reduction",
+            "B": "no_loss",
+            "C": "goes_out",
+            "D": false,
+            "E": "no_psychological_problems",
+            "F": {
+              "method": "category",
+              "category": "gte23"
+            },
+            "G": true,
+            "H": false,
+            "I": false,
+            "J": "three_meals",
+            "K": {
+              "dairyDaily": true,
+              "eggsOrLegumesWeekly": true,
+              "meatFishOrPoultryDaily": true
+            },
+            "L": true,
+            "M": "gt5_glasses",
+            "N": "independent_without_difficulty",
+            "O": "no_nutritional_problems",
+            "P": "better",
+            "Q": {
+              "method": "category",
+              "category": "gt22"
+            },
+            "R": {
+              "method": "category",
+              "category": "gte31"
+            },
+            "notes": "",
+            "extent": "full",
+            "measurements": {
+              "heightCm": null,
+              "weightKg": null,
+              "armCircumferenceCm": null,
+              "calfCircumferenceCm": null
+            },
+            "measurementDates": {
+              "heightCm": null,
+              "weightKg": null,
+              "armCircumferenceCm": null,
+              "calfCircumferenceCm": null
+            }
+          },
+          "patient": {
+            "id": "vitals-qa-anna",
+            "lastName": "Dall’Acqua",
+            "location": {
+              "bed": null,
+              "asOf": "2026-09-22",
+              "room": null,
+              "source": null,
+              "status": "unavailable"
+            },
+            "firstName": "Anna Àgata",
+            "dateOfBirth": "1950-01-01",
+            "codiceFiscale": null
+          },
+          "copyright": "® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.",
+          "createdAt": "2026-09-23T08:20:45.326Z",
+          "assessedAt": "2026-09-22T06:30:00.000Z",
+          "completion": {
+            "global": {
+              "complete": true,
+              "missingPaths": [],
+              "answeredCount": 12,
+              "requiredCount": 12
+            },
+            "complete": true,
+            "screening": {
+              "complete": true,
+              "missingPaths": [],
+              "answeredCount": 6,
+              "requiredCount": 6
+            },
+            "missingPaths": []
+          },
+          "provenance": "MNA® in italiano dalla fonte fornita. Correzioni editoriali: «acuteo» → «acute o» e «Oni giorne» → «Ogni giorno». Q: corretto il refuso della fonte italiana; CB < 21 cm = 0, 21 ≤ CB ≤ 22 cm = 0,5, CB > 22 cm = 1, secondo il riscontro ufficiale inglese 2023. Conservati E «demenza moderata» e K «una o due volte la settimana». Questa trascrizione non costituisce convalida clinica indipendente.",
+          "references": [
+            "Vellas B, Villars H, Abellan G, et al. Overview of MNA® - Its History and Challenges. J Nut Health Aging 2006; 10: 456-465.",
+            "Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for Undernutrition in Geriatric Practice: Developing the Short-Form Mini Nutritional Assessment (MNA-SF). J. Geront 2001; 56A: M366-377.",
+            "Guigoz Y. The Mini-Nutritional Assessment (MNA®) Review of the Literature – What does it tell us? J Nutr Health Aging 2006; 10: 466-487."
+          ],
+          "finalizedAt": "2026-09-23T08:20:45.342Z",
+          "predecessor": null,
+          "demographics": {
+            "sex": "F",
+            "timeZone": "Europe/Rome",
+            "ageOnDate": "2026-09-22",
+            "ageAtAssessment": 76
+          },
+          "measurements": [
+            {
+              "id": "weightKg",
+              "unit": "kg",
+              "label": "Peso",
+              "value": null,
+              "source": "manual_assessment",
+              "measuredOn": null
+            },
+            {
+              "id": "heightCm",
+              "unit": "cm",
+              "label": "Altezza",
+              "value": null,
+              "source": "manual_assessment",
+              "measuredOn": null
+            },
+            {
+              "id": "armCircumferenceCm",
+              "unit": "cm",
+              "label": "Circonferenza brachiale",
+              "value": null,
+              "source": "manual_assessment",
+              "measuredOn": null
+            },
+            {
+              "id": "calfCircumferenceCm",
+              "unit": "cm",
+              "label": "Circonferenza del polpaccio",
+              "value": null,
+              "source": "manual_assessment",
+              "measuredOn": null
+            }
+          ],
+          "predecessorId": null,
+          "snapshotVersion": 1,
+          "correctionReason": null
+        }
+      },
+      {
+        "id": "5fed80d7-8a83-4657-9486-98e867289a66",
+        "patientId": "vitals-qa-anna",
+        "status": "final",
+        "version": 2,
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "createdAt": "2026-09-23T08:20:45.664Z",
+        "updatedAt": "2026-09-23T08:20:45.670Z",
+        "finalizedAt": "2026-09-23T08:20:45.670Z",
+        "author": {
+          "operatorId": "VITALS-QA-OP",
+          "name": "Operatrice QA"
+        },
+        "predecessorId": null,
+        "correctionReason": null,
+        "correctedById": null,
+        "snapshotSha256": "28f32ffc4d3f6e1cf39008f63cf1633e9ea26b3ef8b1345d643a4bc10eb8a50f",
+        "pdf": {
+          "status": "ready",
+          "documentId": "c04252ff-2e10-42cf-bb7c-596d1e4b565e",
+          "errorCode": null,
+          "retryAvailable": false
+        },
+        "type": "gds15",
+        "formVersion": "gds15-it-2026-09-22-v1",
+        "answers": {
+          "q1": true,
+          "q2": true,
+          "q3": true,
+          "q4": true,
+          "q5": true,
+          "q6": true,
+          "q7": true,
+          "q8": true,
+          "q9": true,
+          "q10": true,
+          "q11": true,
+          "q12": true,
+          "q13": true,
+          "q14": true,
+          "q15": true,
+          "notes": ""
+        },
+        "answeredCount": 15,
+        "completion": {
+          "complete": true,
+          "missingPaths": []
+        },
+        "result": {
+          "total": 10,
+          "maximum": 15,
+          "band": "severe",
+          "label": "Depressione grave"
+        },
+        "finalSnapshot": {
+          "form": {
+            "type": "gds15",
+            "version": "gds15-it-2026-09-22-v1",
+            "sourceSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+          },
+          "items": [
+            {
+              "id": "q1",
+              "label": "È sostanzialmente soddisfatto/a della sua vita?",
+              "score": 0,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q2",
+              "label": "Ha rinunciato a molte delle sue attività e interessi?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q3",
+              "label": "Sente che la sua vita sia vuota?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q4",
+              "label": "Si sente spesso annoiato/a?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q5",
+              "label": "È di buon umore per la maggior parte del tempo?",
+              "score": 0,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q6",
+              "label": "Ha paura che stia per succederle qualcosa di brutto?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q7",
+              "label": "Si sente felice per la maggior parte del tempo?",
+              "score": 0,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q8",
+              "label": "Si sente spesso impotente/senza aiuto?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q9",
+              "label": "Preferisce stare a casa piuttosto che uscire e fare cose nuove?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q10",
+              "label": "Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q11",
+              "label": "Pensa che sia bello essere vivi in questo momento?",
+              "score": 0,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q12",
+              "label": "Si sente piuttosto inutile/senza valore per come è ora?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q13",
+              "label": "Si sente pieno/a di energia?",
+              "score": 0,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q14",
+              "label": "Sente che la sua situazione sia senza speranza?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            },
+            {
+              "id": "q15",
+              "label": "Pensa che la maggior parte delle persone stia meglio di lei?",
+              "score": 1,
+              "answer": true,
+              "description": "Sì"
+            }
+          ],
+          "notes": "",
+          "author": {
+            "name": "Operatrice QA",
+            "operatorId": "VITALS-QA-OP"
+          },
+          "result": {
+            "band": "severe",
+            "label": "Depressione grave",
+            "total": 10,
+            "maximum": 15
+          },
+          "patient": {
+            "id": "vitals-qa-anna",
+            "lastName": "Dall’Acqua",
+            "location": {
+              "bed": null,
+              "asOf": "2026-09-22",
+              "room": null,
+              "source": null,
+              "status": "unavailable"
+            },
+            "firstName": "Anna Àgata",
+            "dateOfBirth": "1950-01-01",
+            "codiceFiscale": null
+          },
+          "createdAt": "2026-09-23T08:20:45.664Z",
+          "reference": "Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter version. Clinical Gerontologist.",
+          "assessedAt": "2026-09-22T06:30:00.000Z",
+          "provenance": "GDS-15, Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item, allegato del 22/09/2026. Trascrizione della fonte fornita; nessuna convalida clinica indipendente.",
+          "finalizedAt": "2026-09-23T08:20:45.670Z",
+          "instruction": "Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ oppure NO) in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per ogni risposta conforme alla colonna \"Punto (1/0)\".",
+          "predecessor": null,
+          "predecessorId": null,
+          "screeningNote": "La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo moderato-severo (es. MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in Dementia).",
+          "snapshotVersion": 1,
+          "correctionReason": null
+        }
+      }
+    ],
+    "ownDraft": {
+      "id": "3289ae21-4889-44c3-8de0-0963ecbeabbb",
+      "patientId": "vitals-qa-bruno",
+      "status": "draft",
+      "version": 1,
+      "assessedAt": "2026-09-22T07:30:00.000Z",
+      "createdAt": "2026-09-23T08:20:45.897Z",
+      "updatedAt": "2026-09-23T08:20:45.897Z",
+      "finalizedAt": null,
+      "author": {
+        "operatorId": "VITALS-QA-OP",
+        "name": "Operatrice QA"
+      },
+      "predecessorId": null,
+      "correctionReason": null,
+      "correctedById": null,
+      "snapshotSha256": null,
+      "pdf": null,
+      "type": "mna",
+      "formVersion": "mna-it-2026-09-22-q-corrected-v1",
+      "answers": {
+        "extent": "screening",
+        "A": null,
+        "B": null,
+        "C": null,
+        "D": null,
+        "E": null,
+        "F": {
+          "method": "category",
+          "category": null
+        },
+        "G": null,
+        "H": null,
+        "I": null,
+        "J": null,
+        "K": {
+          "dairyDaily": null,
+          "eggsOrLegumesWeekly": null,
+          "meatFishOrPoultryDaily": null
+        },
+        "L": null,
+        "M": null,
+        "N": null,
+        "O": null,
+        "P": null,
+        "Q": {
+          "method": "category",
+          "category": null
+        },
+        "R": {
+          "method": "category",
+          "category": null
+        },
+        "measurements": {
+          "weightKg": null,
+          "heightCm": null,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        },
+        "measurementDates": {
+          "weightKg": null,
+          "heightCm": null,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        },
+        "notes": ""
+      },
+      "extent": "screening",
+      "answeredCount": 0,
+      "completion": {
+        "complete": false,
+        "missingPaths": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F.category"
+        ],
+        "screening": {
+          "answeredCount": 0,
+          "requiredCount": 6,
+          "complete": false,
+          "missingPaths": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F.category"
+          ]
+        },
+        "global": {
+          "answeredCount": 0,
+          "requiredCount": 12,
+          "complete": false,
+          "missingPaths": [
+            "G",
+            "H",
+            "I",
+            "J",
+            "K.dairyDaily",
+            "K.eggsOrLegumesWeekly",
+            "K.meatFishOrPoultryDaily",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q.category",
+            "R.category"
+          ]
+        }
+      },
+      "result": {
+        "screening": null,
+        "global": null,
+        "total": null
+      },
+      "finalSnapshot": null
+    },
+    "privateDraft": {
+      "id": "24548eff-5c69-4f98-a5f5-79187e675560",
+      "patientId": "vitals-qa-anna",
+      "status": "draft",
+      "version": 1,
+      "assessedAt": "2026-09-22T07:30:00.000Z",
+      "createdAt": "2026-09-23T08:20:45.902Z",
+      "updatedAt": "2026-09-23T08:20:45.902Z",
+      "finalizedAt": null,
+      "author": {
+        "operatorId": "VITALS-QA-MANAGER",
+        "name": "Responsabile QA"
+      },
+      "predecessorId": null,
+      "correctionReason": null,
+      "correctedById": null,
+      "snapshotSha256": null,
+      "pdf": null,
+      "type": "gds15",
+      "formVersion": "gds15-it-2026-09-22-v1",
+      "answers": {
+        "q1": null,
+        "q2": null,
+        "q3": null,
+        "q4": null,
+        "q5": null,
+        "q6": null,
+        "q7": null,
+        "q8": null,
+        "q9": null,
+        "q10": null,
+        "q11": null,
+        "q12": null,
+        "q13": null,
+        "q14": null,
+        "q15": null,
+        "notes": ""
+      },
+      "answeredCount": 0,
+      "completion": {
+        "complete": false,
+        "missingPaths": [
+          "q1",
+          "q2",
+          "q3",
+          "q4",
+          "q5",
+          "q6",
+          "q7",
+          "q8",
+          "q9",
+          "q10",
+          "q11",
+          "q12",
+          "q13",
+          "q14",
+          "q15"
+        ]
+      },
+      "result": null,
+      "finalSnapshot": null
+    },
+    "presentationDraft": {
+      "id": "f44e07f3-b167-4bda-b1f4-b3987e431fed",
+      "patientId": "vitals-qa-anna",
+      "status": "draft",
+      "version": 1,
+      "assessedAt": "2026-09-23T06:30:00.000Z",
+      "createdAt": "2026-09-23T08:20:45.909Z",
+      "updatedAt": "2026-09-23T08:20:45.909Z",
+      "finalizedAt": null,
+      "author": {
+        "operatorId": "VITALS-QA-OP",
+        "name": "Operatrice QA"
+      },
+      "predecessorId": null,
+      "correctionReason": null,
+      "correctedById": null,
+      "snapshotSha256": null,
+      "pdf": null,
+      "type": "mna",
+      "formVersion": "mna-it-2026-09-22-q-corrected-v1",
+      "answers": {
+        "extent": "full",
+        "A": "moderate_reduction",
+        "B": "loss_1_to_3kg",
+        "C": "goes_out",
+        "D": false,
+        "E": "no_psychological_problems",
+        "F": {
+          "method": "measured"
+        },
+        "G": true,
+        "H": false,
+        "I": false,
+        "J": "three_meals",
+        "K": {
+          "dairyDaily": true,
+          "eggsOrLegumesWeekly": true,
+          "meatFishOrPoultryDaily": true
+        },
+        "L": true,
+        "M": "gt5_glasses",
+        "N": "independent_without_difficulty",
+        "O": "no_nutritional_problems",
+        "P": "better",
+        "Q": {
+          "method": "category",
+          "category": "21_to_22"
+        },
+        "R": {
+          "method": "category",
+          "category": "gte31"
+        },
+        "measurements": {
+          "weightKg": 64,
+          "heightCm": 160,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        },
+        "measurementDates": {
+          "weightKg": "2026-09-23",
+          "heightCm": "2026-09-23",
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        },
+        "notes": ""
+      },
+      "extent": "full",
+      "answeredCount": 18,
+      "completion": {
+        "complete": true,
+        "missingPaths": [],
+        "screening": {
+          "answeredCount": 6,
+          "requiredCount": 6,
+          "complete": true,
+          "missingPaths": []
+        },
+        "global": {
+          "answeredCount": 12,
+          "requiredCount": 12,
+          "complete": true,
+          "missingPaths": []
+        }
+      },
+      "result": {
+        "screening": {
+          "score": 12,
+          "maximum": 14,
+          "band": "normal",
+          "label": "Stato nutrizionale normale"
+        },
+        "global": {
+          "score": 15.5,
+          "maximum": 16
+        },
+        "total": {
+          "score": 27.5,
+          "maximum": 30,
+          "band": "normal",
+          "label": "Stato nutrizionale normale"
+        }
+      },
+      "finalSnapshot": null
+    }
+  },
+  "assessments": [
+    {
+      "id": "d68d0d3b-4652-458e-9d31-48a7bf0c39c4",
+      "patientId": "vitals-qa-anna",
+      "type": "painad",
+      "formVersion": "painad-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-22T08:30:00.000Z",
+      "answers": {
+        "respiration": 2,
+        "bodyLanguage": 2,
+        "consolability": 2,
+        "facialExpression": 2,
+        "negativeVocalization": 2
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T10:20:44.578Z",
+      "updatedAt": "2026-09-23T10:20:44.628Z",
+      "finalizedAt": "2026-09-23T10:20:44.628Z",
+      "requestId": "be3b9839-f06a-4586-accb-c2e961276dcf",
+      "creationPayloadHash": "f0afb6a62e737838d2622f67b470011f554f885c43499d2ec6c5014e66658c41",
+      "finalizeRequestId": "92efce51-5f12-43f4-8742-fd73b3f65a44",
+      "finalizePayloadHash": "65459d575a9517ea3fca782fa72e85f71da1ace8885eb74b540b9ec2f1727059",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "painad",
+          "version": "painad-it-2026-09-22-v1",
+          "sourceSha256": "2a3c3b2724ed7cc46aa09db715680b0d494a63b587898b45d61c8db8ec73abb1"
+        },
+        "items": [
+          {
+            "id": "respiration",
+            "label": "Respirazione",
+            "score": 2,
+            "description": "RUMOROSA. Respiro stertoroso. Iperventilazione prolungata."
+          },
+          {
+            "id": "negativeVocalization",
+            "label": "Vocalizzazione negativa",
+            "score": 2,
+            "description": "Chiamate ripetute a voce alta. Gemiti o lamenti costanti. Pianto."
+          },
+          {
+            "id": "facialExpression",
+            "label": "Espressione facciale",
+            "score": 2,
+            "description": "Smorfia marcata e costante. Serramento della mascella / denti stretti."
+          },
+          {
+            "id": "bodyLanguage",
+            "label": "Linguaggio del corpo",
+            "score": 2,
+            "description": "Rigido. Pugni chiusi. Ginocchia al petto. Spinge via o colpisce."
+          },
+          {
+            "id": "consolability",
+            "label": "Consolabilità",
+            "score": 2,
+            "description": "Impossibile da rassicurare, distrarre o consolare."
+          }
+        ],
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "band": "severe",
+          "label": "Dolore severo",
+          "total": 10
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": null,
+            "asOf": "2026-09-22",
+            "room": null,
+            "source": null,
+            "status": "unavailable"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T08:20:44.578Z",
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "finalizedAt": "2026-09-23T08:20:44.628Z",
+        "predecessor": null,
+        "predecessorId": null,
+        "interpretation": "Dolore severo (richiede intervento analgesico e rivalutazione).",
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "7d3fb448f55f577d56f40608db1f31102a034c89be840004b33ac74cfa237d2b",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T10:20:44.926Z"
+    },
+    {
+      "id": "68dc1bd0-f65b-4061-866a-404f29b74023",
+      "patientId": "vitals-qa-anna",
+      "type": "postural_transfers",
+      "formVersion": "transfers-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-22T08:30:00.000Z",
+      "answers": {
+        "aids": {
+          "quadCane": {
+            "selected": false,
+            "ownership": null
+          },
+          "rollator": {
+            "selected": false,
+            "ownership": null
+          },
+          "kneeBrace": {
+            "selected": false
+          },
+          "wheelchair": {
+            "selected": false,
+            "ownership": null
+          },
+          "spinalBrace": {
+            "selected": false
+          },
+          "tableWalker": {
+            "selected": false,
+            "ownership": null
+          },
+          "walkingStick": {
+            "selected": false,
+            "ownership": null
+          },
+          "axillaryWalker": {
+            "selected": false,
+            "ownership": null
+          },
+          "oneForearmCrutch": {
+            "selected": false,
+            "ownership": null
+          },
+          "twoForearmCrutches": {
+            "selected": false,
+            "ownership": null
+          },
+          "wheelchairRestraint": {
+            "selected": false
+          },
+          "pressureReliefCushion": {
+            "selected": false,
+            "ownership": null
+          }
+        },
+        "notes": "",
+        "context": {
+          "diagnosis": {
+            "text": "Osservazione sintetica per il collaudo dei trasferimenti.",
+            "status": "provided",
+            "unavailableReason": ""
+          },
+          "admissionDate": {
+            "value": "2026-09-20",
+            "status": "known"
+          }
+        },
+        "hygiene": "shower",
+        "walking": "independent",
+        "transfers": {
+          "toilet": "independent",
+          "bedToWheelchair": "independent",
+          "wheelchairToBed": "independent"
+        },
+        "painOnMovement": false,
+        "operatedLegLoad": {
+          "side": null,
+          "level": null,
+          "applicable": false
+        },
+        "cognitiveDeterioration": "none"
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T10:20:44.946Z",
+      "updatedAt": "2026-09-23T10:20:44.959Z",
+      "finalizedAt": "2026-09-23T10:20:44.959Z",
+      "requestId": "e208e2bb-b528-46c9-9af8-4456c18b0c51",
+      "creationPayloadHash": "4aa58093a0027c0cf03e22c1a1261da260967ff3fd960e4e5f2cdebce7c2be85",
+      "finalizeRequestId": "d60296d4-39c6-4245-99bb-0a3a72b4a56d",
+      "finalizePayloadHash": "b2e2cc3bf247faba1349fdd15ab38a14f587489fa944048834c73680b8e48969",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "postural_transfers",
+          "version": "transfers-it-2026-09-22-v1",
+          "sourceSha256": "5d5c25cfc322b4f12a6eeba4ac2cf8d4476b15e95c9152cbe09889f0cc75d49f"
+        },
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": null,
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": null,
+            "asOf": "2026-09-22",
+            "room": null,
+            "source": null,
+            "status": "unavailable"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "sections": [
+          {
+            "id": "context",
+            "rows": [
+              {
+                "path": "context.admissionDate",
+                "label": "Data di ingresso",
+                "value": "20/09/2026"
+              },
+              {
+                "path": "context.diagnosis",
+                "label": "Diagnosi",
+                "value": "Osservazione sintetica per il collaudo dei trasferimenti."
+              }
+            ],
+            "label": "Contesto"
+          },
+          {
+            "id": "mobilization",
+            "rows": [
+              {
+                "path": "operatedLegLoad",
+                "label": "Carico su arto inferiore operato",
+                "value": "Non applicabile"
+              },
+              {
+                "path": "walking",
+                "label": "Deambulazione",
+                "value": "Autonoma"
+              },
+              {
+                "path": "transfers.bedToWheelchair",
+                "label": "Letto-carrozzina",
+                "value": "Autonomo"
+              },
+              {
+                "path": "transfers.wheelchairToBed",
+                "label": "Carrozzina-letto",
+                "value": "Autonomo"
+              },
+              {
+                "path": "transfers.toilet",
+                "label": "In bagno sul WC",
+                "value": "Autonomo"
+              }
+            ],
+            "label": "Mobilizzazione"
+          },
+          {
+            "id": "assistance",
+            "rows": [
+              {
+                "path": "hygiene",
+                "label": "Igiene personale",
+                "value": "Doccia"
+              },
+              {
+                "path": "painOnMovement",
+                "label": "Dolore alla movimentazione",
+                "value": "No"
+              },
+              {
+                "path": "cognitiveDeterioration",
+                "label": "Deterioramento cognitivo",
+                "value": "No"
+              }
+            ],
+            "label": "Assistenza"
+          },
+          {
+            "id": "aids",
+            "rows": [
+              {
+                "path": "aids.wheelchair",
+                "label": "Carrozzina",
+                "value": "No"
+              },
+              {
+                "path": "aids.pressureReliefCushion",
+                "label": "Cuscino antidecubito",
+                "value": "No"
+              },
+              {
+                "path": "aids.wheelchairRestraint",
+                "label": "Contenzione in carrozzina",
+                "value": "No"
+              },
+              {
+                "path": "aids.oneForearmCrutch",
+                "label": "1 antibrachiale",
+                "value": "No"
+              },
+              {
+                "path": "aids.walkingStick",
+                "label": "Bastone",
+                "value": "No"
+              },
+              {
+                "path": "aids.quadCane",
+                "label": "Tetrapode",
+                "value": "No"
+              },
+              {
+                "path": "aids.twoForearmCrutches",
+                "label": "2 antibrachiali",
+                "value": "No"
+              },
+              {
+                "path": "aids.rollator",
+                "label": "Deambulatore rollator",
+                "value": "No"
+              },
+              {
+                "path": "aids.axillaryWalker",
+                "label": "Deambulatore ascellare",
+                "value": "No"
+              },
+              {
+                "path": "aids.tableWalker",
+                "label": "Deambulatore con tavolo (desk)",
+                "value": "No"
+              },
+              {
+                "path": "aids.spinalBrace",
+                "label": "Busto",
+                "value": "No"
+              },
+              {
+                "path": "aids.kneeBrace",
+                "label": "Ginocchiera",
+                "value": "No"
+              }
+            ],
+            "label": "Ausili"
+          },
+          {
+            "id": "notes",
+            "rows": [
+              {
+                "path": "notes",
+                "label": "Note",
+                "value": "Nessuna nota"
+              }
+            ],
+            "label": "Note"
+          }
+        ],
+        "createdAt": "2026-09-23T08:20:44.946Z",
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "finalizedAt": "2026-09-23T08:20:44.959Z",
+        "predecessor": null,
+        "predecessorId": null,
+        "signatureLabels": [
+          "Firma Fisioterapista",
+          "Firma Operatori"
+        ],
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "eb6f34752e7ce849fc635d3528fbe14dcf0e43277b0aae1dee852c7614cc2b41",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T10:20:45.090Z"
+    },
+    {
+      "id": "7934630a-4f93-4577-91cd-8343d8a56d34",
+      "patientId": "vitals-qa-anna",
+      "type": "tinetti",
+      "formVersion": "tinetti-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-22T08:30:00.000Z",
+      "answers": {
+        "notes": "",
+        "tronco": 2,
+        "alzarsi": 2,
+        "cammino": 1,
+        "sedersi": 2,
+        "simmetria": 1,
+        "continuita": 1,
+        "iniziazione": 1,
+        "occhiChiusi": 1,
+        "traiettoria": 2,
+        "rombergSpinta": 2,
+        "altezzaPassoDx": 1,
+        "altezzaPassoSx": 1,
+        "girarsi360Passi": 1,
+        "equilibrioSeduto": 1,
+        "lunghezzaPassoDx": 1,
+        "lunghezzaPassoSx": 1,
+        "tentativiAlzarsi": 2,
+        "equilibrioImmediato": 2,
+        "girarsi360Stabilita": 1,
+        "equilibrioProlungato": 2
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T10:20:45.100Z",
+      "updatedAt": "2026-09-23T10:20:45.110Z",
+      "finalizedAt": "2026-09-23T10:20:45.110Z",
+      "requestId": "02d54190-98d3-4af0-9c9b-4608b1ce69de",
+      "creationPayloadHash": "8f7ab475203020b9e51a3557e46d7c3429fb4fc468d16cc4ea99665e29eb8846",
+      "finalizeRequestId": "6fac13b2-9af2-474e-828b-49f2aa845949",
+      "finalizePayloadHash": "940424346365d25497f025cef439cdf78fbb34b40d34272d5f5a31f885cbcd16",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "tinetti",
+          "version": "tinetti-it-2026-09-22-v1",
+          "sourceSha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09",
+          "referenceSha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6"
+        },
+        "items": [
+          {
+            "id": "equilibrioSeduto",
+            "group": "balance",
+            "label": "Equilibrio seduto",
+            "score": 1,
+            "description": "Stabile, sicuro"
+          },
+          {
+            "id": "alzarsi",
+            "group": "balance",
+            "label": "Alzarsi dalla sedia",
+            "score": 2,
+            "description": "Capace, senza usare le braccia"
+          },
+          {
+            "id": "tentativiAlzarsi",
+            "group": "balance",
+            "label": "Tentativi per alzarsi",
+            "score": 2,
+            "description": "Riesce al 1° tentativo"
+          },
+          {
+            "id": "equilibrioImmediato",
+            "group": "balance",
+            "label": "Equilibrio in piedi (primi 5 s)",
+            "score": 2,
+            "description": "Stabile senza appoggio"
+          },
+          {
+            "id": "equilibrioProlungato",
+            "group": "balance",
+            "label": "Equilibrio prolungato",
+            "score": 2,
+            "description": "Stabile senza appoggio, base stretta"
+          },
+          {
+            "id": "rombergSpinta",
+            "group": "balance",
+            "label": "Romberg con spinta sternale",
+            "score": 2,
+            "description": "Stabile"
+          },
+          {
+            "id": "occhiChiusi",
+            "group": "balance",
+            "label": "Equilibrio occhi chiusi",
+            "score": 1,
+            "description": "Stabile"
+          },
+          {
+            "id": "girarsi360Passi",
+            "group": "balance",
+            "label": "Girarsi 360° — continuità dei passi",
+            "score": 1,
+            "description": "Passi continui"
+          },
+          {
+            "id": "girarsi360Stabilita",
+            "group": "balance",
+            "label": "Girarsi 360° — stabilità",
+            "score": 1,
+            "description": "Stabile"
+          },
+          {
+            "id": "sedersi",
+            "group": "balance",
+            "label": "Sedersi",
+            "score": 2,
+            "description": "Sicuro, movimenti fluidi"
+          },
+          {
+            "id": "iniziazione",
+            "group": "gait",
+            "label": "Inizio della deambulazione",
+            "score": 1,
+            "description": "Nessuna esitazione"
+          },
+          {
+            "id": "lunghezzaPassoDx",
+            "group": "gait",
+            "label": "Lunghezza passo destro",
+            "score": 1,
+            "description": "Piede dx supera il sx"
+          },
+          {
+            "id": "altezzaPassoDx",
+            "group": "gait",
+            "label": "Altezza passo destro",
+            "score": 1,
+            "description": "Piede dx si solleva"
+          },
+          {
+            "id": "lunghezzaPassoSx",
+            "group": "gait",
+            "label": "Lunghezza passo sinistro",
+            "score": 1,
+            "description": "Piede sx supera il dx"
+          },
+          {
+            "id": "altezzaPassoSx",
+            "group": "gait",
+            "label": "Altezza passo sinistro",
+            "score": 1,
+            "description": "Piede sx si solleva"
+          },
+          {
+            "id": "simmetria",
+            "group": "gait",
+            "label": "Simmetria del passo",
+            "score": 1,
+            "description": "Simmetrico"
+          },
+          {
+            "id": "continuita",
+            "group": "gait",
+            "label": "Continuità del passo",
+            "score": 1,
+            "description": "Continuo"
+          },
+          {
+            "id": "traiettoria",
+            "group": "gait",
+            "label": "Traiettoria",
+            "score": 2,
+            "description": "Rettilinea senza ausilio"
+          },
+          {
+            "id": "tronco",
+            "group": "gait",
+            "label": "Stabilità del tronco",
+            "score": 2,
+            "description": "Stabile, nessuna oscillazione"
+          },
+          {
+            "id": "cammino",
+            "group": "gait",
+            "label": "Base d'appoggio nel cammino",
+            "score": 1,
+            "description": "Talloni vicini"
+          }
+        ],
+        "notes": "",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "gait": 12,
+          "label": "Basso rischio",
+          "total": 28,
+          "balance": 16,
+          "riskBand": "low"
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": null,
+            "asOf": "2026-09-22",
+            "room": null,
+            "source": null,
+            "status": "unavailable"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T08:20:45.100Z",
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "provenance": "Modello a 20 voci già in uso in ClinicOS: equilibrio 16 punti, andatura 12 punti, totale 28. Conservate quattro risposte distinte per lunghezza e altezza del passo destro e sinistro. Allegato del 22/09/2026 come riferimento; non costituisce trascrizione letterale o convalida clinica indipendente.",
+        "finalizedAt": "2026-09-23T08:20:45.110Z",
+        "predecessor": null,
+        "predecessorId": null,
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "fcb06bd24a48e090d370cc87bd1b1493778f25f70a254974d865430f3a20a9a2",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T10:20:45.312Z"
+    },
+    {
+      "id": "28595269-3b98-43b6-80a0-895283d55323",
+      "patientId": "vitals-qa-anna",
+      "type": "mna",
+      "formVersion": "mna-it-2026-09-22-q-corrected-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-22T08:30:00.000Z",
+      "answers": {
+        "A": "no_reduction",
+        "B": "no_loss",
+        "C": "goes_out",
+        "D": false,
+        "E": "no_psychological_problems",
+        "F": {
+          "method": "category",
+          "category": "gte23"
+        },
+        "G": true,
+        "H": false,
+        "I": false,
+        "J": "three_meals",
+        "K": {
+          "dairyDaily": true,
+          "eggsOrLegumesWeekly": true,
+          "meatFishOrPoultryDaily": true
+        },
+        "L": true,
+        "M": "gt5_glasses",
+        "N": "independent_without_difficulty",
+        "O": "no_nutritional_problems",
+        "P": "better",
+        "Q": {
+          "method": "category",
+          "category": "gt22"
+        },
+        "R": {
+          "method": "category",
+          "category": "gte31"
+        },
+        "notes": "",
+        "extent": "full",
+        "measurements": {
+          "heightCm": null,
+          "weightKg": null,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        },
+        "measurementDates": {
+          "heightCm": null,
+          "weightKg": null,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        }
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T10:20:45.326Z",
+      "updatedAt": "2026-09-23T10:20:45.342Z",
+      "finalizedAt": "2026-09-23T10:20:45.342Z",
+      "requestId": "4d2ae633-d63b-4d64-a095-3c8edc99938f",
+      "creationPayloadHash": "f7f52a797aef2b5c8e7d21e60c8f02bad68cf925fcd08374dc92c39cacd22dbc",
+      "finalizeRequestId": "cff18af6-2850-4427-9c0d-fc4ff64b4918",
+      "finalizePayloadHash": "23b29a42e678ae87a594ffff5c3cd1dbbbf0741ccf900dc94505ba7ae46f7d2a",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "bmi": null,
+        "form": {
+          "type": "mna",
+          "version": "mna-it-2026-09-22-q-corrected-v1",
+          "sourceSha256": "67964491d0ceb5c221e776079c3af2bc7c1ddbf834428997f1b5531e469c6ffa"
+        },
+        "items": [
+          {
+            "id": "A",
+            "group": "screening",
+            "label": "Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito, problemi digestivi, difficoltà di masticazione o deglutizione)",
+            "score": 2,
+            "answer": "no_reduction",
+            "description": "Nessuna riduzione dell’assunzione di cibo"
+          },
+          {
+            "id": "B",
+            "group": "screening",
+            "label": "Perdita di peso recente (< 3 mesi)",
+            "score": 3,
+            "answer": "no_loss",
+            "description": "Nessuna perdita di peso"
+          },
+          {
+            "id": "C",
+            "group": "screening",
+            "label": "Motricità",
+            "score": 2,
+            "answer": "goes_out",
+            "description": "Esce di casa"
+          },
+          {
+            "id": "D",
+            "group": "screening",
+            "label": "Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici?",
+            "score": 2,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "E",
+            "group": "screening",
+            "label": "Problemi neuropsicologici",
+            "score": 2,
+            "answer": "no_psychological_problems",
+            "description": "Nessun problema psicologico"
+          },
+          {
+            "id": "F",
+            "group": "screening",
+            "label": "Indice di massa corporea (IMC = peso / (altezza)² in kg/m²)",
+            "score": 3,
+            "answer": {
+              "method": "category",
+              "category": "gte23"
+            },
+            "description": "IMC ≥ 23"
+          },
+          {
+            "id": "G",
+            "group": "global",
+            "label": "Il paziente vive autonomamente a domicilio?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "H",
+            "group": "global",
+            "label": "Prende più di 3 medicinali al giorno?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "I",
+            "group": "global",
+            "label": "Presenza di decubiti, ulcere cutanee?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "J",
+            "group": "global",
+            "label": "Quanti pasti completi prende al giorno?",
+            "score": 2,
+            "answer": "three_meals",
+            "description": "3 pasti"
+          },
+          {
+            "id": "K",
+            "group": "global",
+            "label": "Consuma?",
+            "score": 1,
+            "answer": {
+              "dairyDaily": true,
+              "eggsOrLegumesWeekly": true,
+              "meatFishOrPoultryDaily": true
+            },
+            "subitems": [
+              {
+                "id": "dairyDaily",
+                "label": "Almeno una volta al giorno dei prodotti lattiero-caseari?",
+                "answer": true
+              },
+              {
+                "id": "eggsOrLegumesWeekly",
+                "label": "Una o due volte la settimana uova o legumi?",
+                "answer": true
+              },
+              {
+                "id": "meatFishOrPoultryDaily",
+                "label": "Ogni giorno della carne, del pesce o del pollame?",
+                "answer": true
+              }
+            ],
+            "description": "Almeno una volta al giorno dei prodotti lattiero-caseari?: Sì\nUna o due volte la settimana uova o legumi?: Sì\nOgni giorno della carne, del pesce o del pollame?: Sì"
+          },
+          {
+            "id": "L",
+            "group": "global",
+            "label": "Consuma almeno due volte al giorno frutta o verdura?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "M",
+            "group": "global",
+            "label": "Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…)",
+            "score": 1,
+            "answer": "gt5_glasses",
+            "description": "Più di 5 bicchieri"
+          },
+          {
+            "id": "N",
+            "group": "global",
+            "label": "Come si nutre?",
+            "score": 2,
+            "answer": "independent_without_difficulty",
+            "description": "Autonomamente senza difficoltà"
+          },
+          {
+            "id": "O",
+            "group": "global",
+            "label": "Il paziente si considera ben nutrito? (ha dei problemi nutrizionali)",
+            "score": 2,
+            "answer": "no_nutritional_problems",
+            "description": "Nessun problema nutrizionale"
+          },
+          {
+            "id": "P",
+            "group": "global",
+            "label": "Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età?",
+            "score": 2,
+            "answer": "better",
+            "description": "Migliore"
+          },
+          {
+            "id": "Q",
+            "group": "global",
+            "label": "Circonferenza brachiale (CB, cm)",
+            "score": 1,
+            "answer": {
+              "method": "category",
+              "category": "gt22"
+            },
+            "description": "CB > 22 cm"
+          },
+          {
+            "id": "R",
+            "group": "global",
+            "label": "Circonferenza del polpaccio (CP in cm)",
+            "score": 1,
+            "answer": {
+              "method": "category",
+              "category": "gte31"
+            },
+            "description": "CP ≥ 31 cm"
+          }
+        ],
+        "notes": "",
+        "title": "Valutazione completa MNA®",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "extent": "full",
+        "result": {
+          "total": {
+            "band": "normal",
+            "label": "Stato nutrizionale normale",
+            "score": 30,
+            "maximum": 30
+          },
+          "global": {
+            "score": 16,
+            "maximum": 16
+          },
+          "screening": {
+            "band": "normal",
+            "label": "Stato nutrizionale normale",
+            "score": 14,
+            "maximum": 14
+          }
+        },
+        "answers": {
+          "A": "no_reduction",
+          "B": "no_loss",
+          "C": "goes_out",
+          "D": false,
+          "E": "no_psychological_problems",
+          "F": {
+            "method": "category",
+            "category": "gte23"
+          },
+          "G": true,
+          "H": false,
+          "I": false,
+          "J": "three_meals",
+          "K": {
+            "dairyDaily": true,
+            "eggsOrLegumesWeekly": true,
+            "meatFishOrPoultryDaily": true
+          },
+          "L": true,
+          "M": "gt5_glasses",
+          "N": "independent_without_difficulty",
+          "O": "no_nutritional_problems",
+          "P": "better",
+          "Q": {
+            "method": "category",
+            "category": "gt22"
+          },
+          "R": {
+            "method": "category",
+            "category": "gte31"
+          },
+          "notes": "",
+          "extent": "full",
+          "measurements": {
+            "heightCm": null,
+            "weightKg": null,
+            "armCircumferenceCm": null,
+            "calfCircumferenceCm": null
+          },
+          "measurementDates": {
+            "heightCm": null,
+            "weightKg": null,
+            "armCircumferenceCm": null,
+            "calfCircumferenceCm": null
+          }
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": null,
+            "asOf": "2026-09-22",
+            "room": null,
+            "source": null,
+            "status": "unavailable"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "copyright": "® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.",
+        "createdAt": "2026-09-23T08:20:45.326Z",
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "completion": {
+          "global": {
+            "complete": true,
+            "missingPaths": [],
+            "answeredCount": 12,
+            "requiredCount": 12
+          },
+          "complete": true,
+          "screening": {
+            "complete": true,
+            "missingPaths": [],
+            "answeredCount": 6,
+            "requiredCount": 6
+          },
+          "missingPaths": []
+        },
+        "provenance": "MNA® in italiano dalla fonte fornita. Correzioni editoriali: «acuteo» → «acute o» e «Oni giorne» → «Ogni giorno». Q: corretto il refuso della fonte italiana; CB < 21 cm = 0, 21 ≤ CB ≤ 22 cm = 0,5, CB > 22 cm = 1, secondo il riscontro ufficiale inglese 2023. Conservati E «demenza moderata» e K «una o due volte la settimana». Questa trascrizione non costituisce convalida clinica indipendente.",
+        "references": [
+          "Vellas B, Villars H, Abellan G, et al. Overview of MNA® - Its History and Challenges. J Nut Health Aging 2006; 10: 456-465.",
+          "Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for Undernutrition in Geriatric Practice: Developing the Short-Form Mini Nutritional Assessment (MNA-SF). J. Geront 2001; 56A: M366-377.",
+          "Guigoz Y. The Mini-Nutritional Assessment (MNA®) Review of the Literature – What does it tell us? J Nutr Health Aging 2006; 10: 466-487."
+        ],
+        "finalizedAt": "2026-09-23T08:20:45.342Z",
+        "predecessor": null,
+        "demographics": {
+          "sex": "F",
+          "timeZone": "Europe/Rome",
+          "ageOnDate": "2026-09-22",
+          "ageAtAssessment": 76
+        },
+        "measurements": [
+          {
+            "id": "weightKg",
+            "unit": "kg",
+            "label": "Peso",
+            "value": null,
+            "source": "manual_assessment",
+            "measuredOn": null
+          },
+          {
+            "id": "heightCm",
+            "unit": "cm",
+            "label": "Altezza",
+            "value": null,
+            "source": "manual_assessment",
+            "measuredOn": null
+          },
+          {
+            "id": "armCircumferenceCm",
+            "unit": "cm",
+            "label": "Circonferenza brachiale",
+            "value": null,
+            "source": "manual_assessment",
+            "measuredOn": null
+          },
+          {
+            "id": "calfCircumferenceCm",
+            "unit": "cm",
+            "label": "Circonferenza del polpaccio",
+            "value": null,
+            "source": "manual_assessment",
+            "measuredOn": null
+          }
+        ],
+        "predecessorId": null,
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "97bad0988768019dd1dd5ef06286bdec527ed823e0b1a493194a5df259ae1b8f",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T10:20:45.654Z"
+    },
+    {
+      "id": "5fed80d7-8a83-4657-9486-98e867289a66",
+      "patientId": "vitals-qa-anna",
+      "type": "gds15",
+      "formVersion": "gds15-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-22T08:30:00.000Z",
+      "answers": {
+        "q1": true,
+        "q2": true,
+        "q3": true,
+        "q4": true,
+        "q5": true,
+        "q6": true,
+        "q7": true,
+        "q8": true,
+        "q9": true,
+        "q10": true,
+        "q11": true,
+        "q12": true,
+        "q13": true,
+        "q14": true,
+        "q15": true,
+        "notes": ""
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T10:20:45.664Z",
+      "updatedAt": "2026-09-23T10:20:45.670Z",
+      "finalizedAt": "2026-09-23T10:20:45.670Z",
+      "requestId": "809b5033-76af-45ed-8fb3-96d95a86444d",
+      "creationPayloadHash": "4de7395de3c27a9f20e5c71b57a41e7884e2874755e229ce134aa0f3d6fff9a5",
+      "finalizeRequestId": "2a0c2298-dfa1-4aee-ba4f-d54992cdc7d9",
+      "finalizePayloadHash": "5b6e1ac8d1c977caa8a037a218a2f4ed545e3cc51e62519481b0d99cecd32df0",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "gds15",
+          "version": "gds15-it-2026-09-22-v1",
+          "sourceSha256": "f2d4494b49d96de08eceed69b1d793c45260f22aca7d62f98080ccee6133d709"
+        },
+        "items": [
+          {
+            "id": "q1",
+            "label": "È sostanzialmente soddisfatto/a della sua vita?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q2",
+            "label": "Ha rinunciato a molte delle sue attività e interessi?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q3",
+            "label": "Sente che la sua vita sia vuota?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q4",
+            "label": "Si sente spesso annoiato/a?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q5",
+            "label": "È di buon umore per la maggior parte del tempo?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q6",
+            "label": "Ha paura che stia per succederle qualcosa di brutto?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q7",
+            "label": "Si sente felice per la maggior parte del tempo?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q8",
+            "label": "Si sente spesso impotente/senza aiuto?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q9",
+            "label": "Preferisce stare a casa piuttosto che uscire e fare cose nuove?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q10",
+            "label": "Sente di avere più problemi di memoria rispetto alla maggior parte delle persone?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q11",
+            "label": "Pensa che sia bello essere vivi in questo momento?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q12",
+            "label": "Si sente piuttosto inutile/senza valore per come è ora?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q13",
+            "label": "Si sente pieno/a di energia?",
+            "score": 0,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q14",
+            "label": "Sente che la sua situazione sia senza speranza?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "q15",
+            "label": "Pensa che la maggior parte delle persone stia meglio di lei?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          }
+        ],
+        "notes": "",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "band": "severe",
+          "label": "Depressione grave",
+          "total": 10,
+          "maximum": 15
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": null,
+            "asOf": "2026-09-22",
+            "room": null,
+            "source": null,
+            "status": "unavailable"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T08:20:45.664Z",
+        "reference": "Sheikh, J. I., & Yesavage, J. A. (1986). Geriatric Depression Scale (GDS): recent evidence and development of a shorter version. Clinical Gerontologist.",
+        "assessedAt": "2026-09-22T06:30:00.000Z",
+        "provenance": "GDS-15, Scala di Depressione Geriatrica di Yesavage — Versione Breve a 15 Item, allegato del 22/09/2026. Trascrizione della fonte fornita; nessuna convalida clinica indipendente.",
+        "finalizedAt": "2026-09-23T08:20:45.670Z",
+        "instruction": "Chiedere al paziente di rispondere a ciascuna domanda barrando la casella corrispondente (SÌ oppure NO) in base a come si è sentito/a nell'ultima settimana. Nel calcolo del punteggio finale, assegnare 1 punto per ogni risposta conforme alla colonna \"Punto (1/0)\".",
+        "predecessor": null,
+        "predecessorId": null,
+        "screeningNote": "La GDS è uno strumento di screening e non sostituisce la diagnosi clinica. In presenza di deficit cognitivo moderato-severo (es. MMSE < 15), si consiglia l'uso di scale etero-somministrate (es. Cornell Scale for Depression in Dementia).",
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "28f32ffc4d3f6e1cf39008f63cf1633e9ea26b3ef8b1345d643a4bc10eb8a50f",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T10:20:45.888Z"
+    },
+    {
+      "id": "3289ae21-4889-44c3-8de0-0963ecbeabbb",
+      "patientId": "vitals-qa-bruno",
+      "type": "mna",
+      "formVersion": "mna-it-2026-09-22-q-corrected-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-22T09:30:00.000Z",
+      "answers": {
+        "A": null,
+        "B": null,
+        "C": null,
+        "D": null,
+        "E": null,
+        "F": {
+          "method": "category",
+          "category": null
+        },
+        "G": null,
+        "H": null,
+        "I": null,
+        "J": null,
+        "K": {
+          "dairyDaily": null,
+          "eggsOrLegumesWeekly": null,
+          "meatFishOrPoultryDaily": null
+        },
+        "L": null,
+        "M": null,
+        "N": null,
+        "O": null,
+        "P": null,
+        "Q": {
+          "method": "category",
+          "category": null
+        },
+        "R": {
+          "method": "category",
+          "category": null
+        },
+        "notes": "",
+        "extent": "screening",
+        "measurements": {
+          "heightCm": null,
+          "weightKg": null,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        },
+        "measurementDates": {
+          "heightCm": null,
+          "weightKg": null,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        }
+      },
+      "status": "draft",
+      "version": 1,
+      "createdAt": "2026-09-23T10:20:45.897Z",
+      "updatedAt": "2026-09-23T10:20:45.897Z",
+      "finalizedAt": null,
+      "requestId": "7006940a-e066-4f94-b1da-262cee7483e8",
+      "creationPayloadHash": "afa991e956dda2295b85d7a5236625da466e583a7e86b5ad1cdb05dda52863c1",
+      "finalizeRequestId": null,
+      "finalizePayloadHash": null,
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": null,
+      "snapshotSha256": null,
+      "pdfStatus": null,
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 0,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": null
+    },
+    {
+      "id": "24548eff-5c69-4f98-a5f5-79187e675560",
+      "patientId": "vitals-qa-anna",
+      "type": "gds15",
+      "formVersion": "gds15-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-MANAGER",
+      "authorName": "Responsabile QA",
+      "assessedAt": "2026-09-22T09:30:00.000Z",
+      "answers": {
+        "q1": null,
+        "q2": null,
+        "q3": null,
+        "q4": null,
+        "q5": null,
+        "q6": null,
+        "q7": null,
+        "q8": null,
+        "q9": null,
+        "q10": null,
+        "q11": null,
+        "q12": null,
+        "q13": null,
+        "q14": null,
+        "q15": null,
+        "notes": ""
+      },
+      "status": "draft",
+      "version": 1,
+      "createdAt": "2026-09-23T10:20:45.902Z",
+      "updatedAt": "2026-09-23T10:20:45.902Z",
+      "finalizedAt": null,
+      "requestId": "0e4b26a6-6d27-4af5-9fb9-868d0e90ef1a",
+      "creationPayloadHash": "797bcec0425ab88ca43e6a741c50f58824eb1875f88c151aa1f191d5c4a63519",
+      "finalizeRequestId": null,
+      "finalizePayloadHash": null,
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": null,
+      "snapshotSha256": null,
+      "pdfStatus": null,
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 0,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": null
+    },
+    {
+      "id": "f44e07f3-b167-4bda-b1f4-b3987e431fed",
+      "patientId": "vitals-qa-anna",
+      "type": "mna",
+      "formVersion": "mna-it-2026-09-22-q-corrected-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T08:30:00.000Z",
+      "answers": {
+        "A": "moderate_reduction",
+        "B": "loss_1_to_3kg",
+        "C": "goes_out",
+        "D": false,
+        "E": "no_psychological_problems",
+        "F": {
+          "method": "measured"
+        },
+        "G": true,
+        "H": false,
+        "I": false,
+        "J": "three_meals",
+        "K": {
+          "dairyDaily": true,
+          "eggsOrLegumesWeekly": true,
+          "meatFishOrPoultryDaily": true
+        },
+        "L": true,
+        "M": "gt5_glasses",
+        "N": "independent_without_difficulty",
+        "O": "no_nutritional_problems",
+        "P": "better",
+        "Q": {
+          "method": "category",
+          "category": "21_to_22"
+        },
+        "R": {
+          "method": "category",
+          "category": "gte31"
+        },
+        "notes": "",
+        "extent": "full",
+        "measurements": {
+          "heightCm": 160,
+          "weightKg": 64,
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        },
+        "measurementDates": {
+          "heightCm": "2026-09-23",
+          "weightKg": "2026-09-23",
+          "armCircumferenceCm": null,
+          "calfCircumferenceCm": null
+        }
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T10:20:45.909Z",
+      "updatedAt": "2026-09-23T10:21:52.061Z",
+      "finalizedAt": "2026-09-23T10:21:52.061Z",
+      "requestId": "92204ae5-5822-4603-9b8b-58802835b4fe",
+      "creationPayloadHash": "f953aa994826a8d813567c2f13698c2e74eda141e4ccfa45f8115dff967c2995",
+      "finalizeRequestId": "3a6c5d59-9cb3-45de-92c4-4a5fabf87062",
+      "finalizePayloadHash": "a0abcda9cd956141e4b9a1c76dc7d5614380a6789afc926134d4aefd4f6af6e9",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "bmi": 24.999999999999996,
+        "form": {
+          "type": "mna",
+          "version": "mna-it-2026-09-22-q-corrected-v1",
+          "sourceSha256": "67964491d0ceb5c221e776079c3af2bc7c1ddbf834428997f1b5531e469c6ffa"
+        },
+        "items": [
+          {
+            "id": "A",
+            "group": "screening",
+            "label": "Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito, problemi digestivi, difficoltà di masticazione o deglutizione)",
+            "score": 1,
+            "answer": "moderate_reduction",
+            "description": "Moderata riduzione dell’assunzione di cibo"
+          },
+          {
+            "id": "B",
+            "group": "screening",
+            "label": "Perdita di peso recente (< 3 mesi)",
+            "score": 2,
+            "answer": "loss_1_to_3kg",
+            "description": "Perdita di peso tra 1 e 3 kg"
+          },
+          {
+            "id": "C",
+            "group": "screening",
+            "label": "Motricità",
+            "score": 2,
+            "answer": "goes_out",
+            "description": "Esce di casa"
+          },
+          {
+            "id": "D",
+            "group": "screening",
+            "label": "Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici?",
+            "score": 2,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "E",
+            "group": "screening",
+            "label": "Problemi neuropsicologici",
+            "score": 2,
+            "answer": "no_psychological_problems",
+            "description": "Nessun problema psicologico"
+          },
+          {
+            "id": "F",
+            "group": "screening",
+            "label": "Indice di massa corporea (IMC = peso / (altezza)² in kg/m²)",
+            "score": 3,
+            "answer": {
+              "method": "measured"
+            },
+            "description": "IMC ≥ 23"
+          },
+          {
+            "id": "G",
+            "group": "global",
+            "label": "Il paziente vive autonomamente a domicilio?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "H",
+            "group": "global",
+            "label": "Prende più di 3 medicinali al giorno?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "I",
+            "group": "global",
+            "label": "Presenza di decubiti, ulcere cutanee?",
+            "score": 1,
+            "answer": false,
+            "description": "No"
+          },
+          {
+            "id": "J",
+            "group": "global",
+            "label": "Quanti pasti completi prende al giorno?",
+            "score": 2,
+            "answer": "three_meals",
+            "description": "3 pasti"
+          },
+          {
+            "id": "K",
+            "group": "global",
+            "label": "Consuma?",
+            "score": 1,
+            "answer": {
+              "dairyDaily": true,
+              "eggsOrLegumesWeekly": true,
+              "meatFishOrPoultryDaily": true
+            },
+            "subitems": [
+              {
+                "id": "dairyDaily",
+                "label": "Almeno una volta al giorno dei prodotti lattiero-caseari?",
+                "answer": true
+              },
+              {
+                "id": "eggsOrLegumesWeekly",
+                "label": "Una o due volte la settimana uova o legumi?",
+                "answer": true
+              },
+              {
+                "id": "meatFishOrPoultryDaily",
+                "label": "Ogni giorno della carne, del pesce o del pollame?",
+                "answer": true
+              }
+            ],
+            "description": "Almeno una volta al giorno dei prodotti lattiero-caseari?: Sì\nUna o due volte la settimana uova o legumi?: Sì\nOgni giorno della carne, del pesce o del pollame?: Sì"
+          },
+          {
+            "id": "L",
+            "group": "global",
+            "label": "Consuma almeno due volte al giorno frutta o verdura?",
+            "score": 1,
+            "answer": true,
+            "description": "Sì"
+          },
+          {
+            "id": "M",
+            "group": "global",
+            "label": "Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…)",
+            "score": 1,
+            "answer": "gt5_glasses",
+            "description": "Più di 5 bicchieri"
+          },
+          {
+            "id": "N",
+            "group": "global",
+            "label": "Come si nutre?",
+            "score": 2,
+            "answer": "independent_without_difficulty",
+            "description": "Autonomamente senza difficoltà"
+          },
+          {
+            "id": "O",
+            "group": "global",
+            "label": "Il paziente si considera ben nutrito? (ha dei problemi nutrizionali)",
+            "score": 2,
+            "answer": "no_nutritional_problems",
+            "description": "Nessun problema nutrizionale"
+          },
+          {
+            "id": "P",
+            "group": "global",
+            "label": "Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età?",
+            "score": 2,
+            "answer": "better",
+            "description": "Migliore"
+          },
+          {
+            "id": "Q",
+            "group": "global",
+            "label": "Circonferenza brachiale (CB, cm)",
+            "score": 0.5,
+            "answer": {
+              "method": "category",
+              "category": "21_to_22"
+            },
+            "description": "21 ≤ CB ≤ 22 cm"
+          },
+          {
+            "id": "R",
+            "group": "global",
+            "label": "Circonferenza del polpaccio (CP in cm)",
+            "score": 1,
+            "answer": {
+              "method": "category",
+              "category": "gte31"
+            },
+            "description": "CP ≥ 31 cm"
+          }
+        ],
+        "notes": "",
+        "title": "Valutazione completa MNA®",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "extent": "full",
+        "result": {
+          "total": {
+            "band": "normal",
+            "label": "Stato nutrizionale normale",
+            "score": 27.5,
+            "maximum": 30
+          },
+          "global": {
+            "score": 15.5,
+            "maximum": 16
+          },
+          "screening": {
+            "band": "normal",
+            "label": "Stato nutrizionale normale",
+            "score": 12,
+            "maximum": 14
+          }
+        },
+        "answers": {
+          "A": "moderate_reduction",
+          "B": "loss_1_to_3kg",
+          "C": "goes_out",
+          "D": false,
+          "E": "no_psychological_problems",
+          "F": {
+            "method": "measured"
+          },
+          "G": true,
+          "H": false,
+          "I": false,
+          "J": "three_meals",
+          "K": {
+            "dairyDaily": true,
+            "eggsOrLegumesWeekly": true,
+            "meatFishOrPoultryDaily": true
+          },
+          "L": true,
+          "M": "gt5_glasses",
+          "N": "independent_without_difficulty",
+          "O": "no_nutritional_problems",
+          "P": "better",
+          "Q": {
+            "method": "category",
+            "category": "21_to_22"
+          },
+          "R": {
+            "method": "category",
+            "category": "gte31"
+          },
+          "notes": "",
+          "extent": "full",
+          "measurements": {
+            "heightCm": 160,
+            "weightKg": 64,
+            "armCircumferenceCm": null,
+            "calfCircumferenceCm": null
+          },
+          "measurementDates": {
+            "heightCm": "2026-09-23",
+            "weightKg": "2026-09-23",
+            "armCircumferenceCm": null,
+            "calfCircumferenceCm": null
+          }
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "copyright": "® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.",
+        "createdAt": "2026-09-23T08:20:45.909Z",
+        "assessedAt": "2026-09-23T06:30:00.000Z",
+        "completion": {
+          "global": {
+            "complete": true,
+            "missingPaths": [],
+            "answeredCount": 12,
+            "requiredCount": 12
+          },
+          "complete": true,
+          "screening": {
+            "complete": true,
+            "missingPaths": [],
+            "answeredCount": 6,
+            "requiredCount": 6
+          },
+          "missingPaths": []
+        },
+        "provenance": "MNA® in italiano dalla fonte fornita. Correzioni editoriali: «acuteo» → «acute o» e «Oni giorne» → «Ogni giorno». Q: corretto il refuso della fonte italiana; CB < 21 cm = 0, 21 ≤ CB ≤ 22 cm = 0,5, CB > 22 cm = 1, secondo il riscontro ufficiale inglese 2023. Conservati E «demenza moderata» e K «una o due volte la settimana». Questa trascrizione non costituisce convalida clinica indipendente.",
+        "references": [
+          "Vellas B, Villars H, Abellan G, et al. Overview of MNA® - Its History and Challenges. J Nut Health Aging 2006; 10: 456-465.",
+          "Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for Undernutrition in Geriatric Practice: Developing the Short-Form Mini Nutritional Assessment (MNA-SF). J. Geront 2001; 56A: M366-377.",
+          "Guigoz Y. The Mini-Nutritional Assessment (MNA®) Review of the Literature – What does it tell us? J Nutr Health Aging 2006; 10: 466-487."
+        ],
+        "finalizedAt": "2026-09-23T08:21:52.061Z",
+        "predecessor": null,
+        "demographics": {
+          "sex": "F",
+          "timeZone": "Europe/Rome",
+          "ageOnDate": "2026-09-23",
+          "ageAtAssessment": 76
+        },
+        "measurements": [
+          {
+            "id": "weightKg",
+            "unit": "kg",
+            "label": "Peso",
+            "value": 64,
+            "source": "manual_assessment",
+            "measuredOn": "2026-09-23"
+          },
+          {
+            "id": "heightCm",
+            "unit": "cm",
+            "label": "Altezza",
+            "value": 160,
+            "source": "manual_assessment",
+            "measuredOn": "2026-09-23"
+          },
+          {
+            "id": "armCircumferenceCm",
+            "unit": "cm",
+            "label": "Circonferenza brachiale",
+            "value": null,
+            "source": "manual_assessment",
+            "measuredOn": null
+          },
+          {
+            "id": "calfCircumferenceCm",
+            "unit": "cm",
+            "label": "Circonferenza del polpaccio",
+            "value": null,
+            "source": "manual_assessment",
+            "measuredOn": null
+          }
+        ],
+        "predecessorId": null,
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "bd491542a7f3bd98cf805a67f89f422d3de57efde3b008e38482b70a6f897d53",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T10:21:52.536Z"
+    }
+  ],
+  "initialCartelle": [
+    {
+      "id": "vitals-qa-bruno-cartella",
+      "patientId": "vitals-qa-bruno",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-bruno",
+        "lettoNumero": "A",
+        "cameraNumero": "12",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-bruno-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-bruno-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T10:20:43.756Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-other-cartella",
+      "patientId": "vitals-qa-other",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-other",
+        "lettoNumero": "A",
+        "cameraNumero": "13",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-other-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-other-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T10:20:43.757Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-anna-cartella",
+      "patientId": "vitals-qa-anna",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-anna",
+        "contenzioni": [
+          {
+            "id": "po15-existing-restraint",
+            "note": "ORIGINALE CONTENZIONE DA PRESERVARE",
+            "tipo": "altro",
+            "attiva": false,
+            "oraFine": "09:00",
+            "dataFine": "2026-09-19",
+            "createdAt": "2026-09-19T06:00:00.000Z",
+            "operatore": "Operatrice storica sintetica",
+            "oraInizio": "08:00",
+            "dataInizio": "2026-09-19",
+            "motivoClinico": "Motivo sintetico per collaudo",
+            "autorizzazioneMedico": false,
+            "autorizzazioneTutore": false
+          }
+        ],
+        "lettoNumero": "A",
+        "cameraNumero": "11",
+        "valutazioniNRS": [
+          {
+            "id": "po15-nrs-zero",
+            "ora": "08:15",
+            "data": "2026-09-20",
+            "note": "Valore zero esplicito",
+            "aRiposo": 0,
+            "createdAt": "2026-09-20T06:16:00.000Z",
+            "operatore": "Operatrice storica sintetica",
+            "punteggio": 0,
+            "inMovimento": 2
+          },
+          {
+            "id": "po15-nrs-invalid",
+            "data": "2026-09-19",
+            "note": "Sentinella precedente, nessuna fascia valida",
+            "operatore": "",
+            "punteggio": -1
+          },
+          {
+            "id": "po15-nrs-missing",
+            "note": "Dato storico senza punteggio, data o autore"
+          }
+        ],
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-anna-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-anna-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ],
+        "medicazioniFerite": [
+          {
+            "id": "po15-existing-dressing",
+            "data": "2026-09-20",
+            "note": "ORIGINALE MEDICAZIONE DA PRESERVARE",
+            "sede": "Braccio sintetico",
+            "odore": false,
+            "essudato": "assente",
+            "createdAt": "2026-09-20T07:00:00.000Z",
+            "materiale": "Garza di prova",
+            "operatore": "Operatrice storica sintetica",
+            "dimensioni": "1 cm",
+            "tipoLesione": "Ferita",
+            "aspettoLesione": "Osservazione sintetica",
+            "tipoMedicazione": "Medicazione sintetica",
+            "cutePerilisionale": "Integra",
+            "prossimaMedicazione": "2026-09-24"
+          }
+        ],
+        "valutazioniBraden": [
+          {
+            "id": "po15-existing-braden",
+            "data": "2026-09-18",
+            "note": "Scala precedente di prova",
+            "umidita": 4,
+            "attivita": 4,
+            "frizione": 3,
+            "mobilita": 4,
+            "createdAt": "2026-09-18T06:00:00.000Z",
+            "operatore": "Operatrice storica sintetica",
+            "nutrizione": 4,
+            "percezioneSensoriale": 4
+          }
+        ],
+        "valutazioniTinetti": [
+          {
+            "id": "synthetic-tinetti-legacy-complete",
+            "data": "2026-09-19",
+            "note": "Valutazione precedente sintetica.",
+            "tronco": 2,
+            "alzarsi": 2,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-19T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          },
+          {
+            "id": "synthetic-tinetti-legacy-incomplete",
+            "data": "2026-09-20",
+            "note": "Scheda precedente incompleta: non attribuire un rischio.",
+            "tronco": 2,
+            "alzarsi": -1,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-20T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T10:20:43.752Z",
+      "updatedAt": "2026-09-23T08:20:44.048Z"
+    }
+  ],
+  "cartelle": [
+    {
+      "id": "vitals-qa-bruno-cartella",
+      "patientId": "vitals-qa-bruno",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-bruno",
+        "lettoNumero": "A",
+        "cameraNumero": "12",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-bruno-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-bruno-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T10:20:43.756Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-other-cartella",
+      "patientId": "vitals-qa-other",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-other",
+        "lettoNumero": "A",
+        "cameraNumero": "13",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-other-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-other-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T10:20:43.757Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-anna-cartella",
+      "patientId": "vitals-qa-anna",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-anna",
+        "contenzioni": [
+          {
+            "id": "po15-existing-restraint",
+            "note": "ORIGINALE CONTENZIONE DA PRESERVARE",
+            "tipo": "altro",
+            "attiva": false,
+            "oraFine": "09:00",
+            "dataFine": "2026-09-19",
+            "createdAt": "2026-09-19T06:00:00.000Z",
+            "operatore": "Operatrice storica sintetica",
+            "oraInizio": "08:00",
+            "dataInizio": "2026-09-19",
+            "motivoClinico": "Motivo sintetico per collaudo",
+            "autorizzazioneMedico": false,
+            "autorizzazioneTutore": false
+          }
+        ],
+        "lettoNumero": "A",
+        "cameraNumero": "11",
+        "valutazioniNRS": [
+          {
+            "id": "po15-nrs-zero",
+            "ora": "08:15",
+            "data": "2026-09-20",
+            "note": "Valore zero esplicito",
+            "aRiposo": 0,
+            "createdAt": "2026-09-20T06:16:00.000Z",
+            "operatore": "Operatrice storica sintetica",
+            "punteggio": 0,
+            "inMovimento": 2
+          },
+          {
+            "id": "po15-nrs-invalid",
+            "data": "2026-09-19",
+            "note": "Sentinella precedente, nessuna fascia valida",
+            "operatore": "",
+            "punteggio": -1
+          },
+          {
+            "id": "po15-nrs-missing",
+            "note": "Dato storico senza punteggio, data o autore"
+          }
+        ],
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-anna-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-anna-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ],
+        "medicazioniFerite": [
+          {
+            "id": "po15-existing-dressing",
+            "data": "2026-09-20",
+            "note": "ORIGINALE MEDICAZIONE DA PRESERVARE",
+            "sede": "Braccio sintetico",
+            "odore": false,
+            "essudato": "assente",
+            "createdAt": "2026-09-20T07:00:00.000Z",
+            "materiale": "Garza di prova",
+            "operatore": "Operatrice storica sintetica",
+            "dimensioni": "1 cm",
+            "tipoLesione": "Ferita",
+            "aspettoLesione": "Osservazione sintetica",
+            "tipoMedicazione": "Medicazione sintetica",
+            "cutePerilisionale": "Integra",
+            "prossimaMedicazione": "2026-09-24"
+          }
+        ],
+        "valutazioniBraden": [
+          {
+            "id": "po15-existing-braden",
+            "data": "2026-09-18",
+            "note": "Scala precedente di prova",
+            "umidita": 4,
+            "attivita": 4,
+            "frizione": 3,
+            "mobilita": 4,
+            "createdAt": "2026-09-18T06:00:00.000Z",
+            "operatore": "Operatrice storica sintetica",
+            "nutrizione": 4,
+            "percezioneSensoriale": 4
+          }
+        ],
+        "valutazioniTinetti": [
+          {
+            "id": "synthetic-tinetti-legacy-complete",
+            "data": "2026-09-19",
+            "note": "Valutazione precedente sintetica.",
+            "tronco": 2,
+            "alzarsi": 2,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-19T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          },
+          {
+            "id": "synthetic-tinetti-legacy-incomplete",
+            "data": "2026-09-20",
+            "note": "Scheda precedente incompleta: non attribuire un rischio.",
+            "tronco": 2,
+            "alzarsi": -1,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-20T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T10:20:43.752Z",
+      "updatedAt": "2026-09-23T08:20:44.048Z"
+    }
+  ],
+  "initialIntakes": [
+    {
+      "id": "po15-intake-pain",
+      "status": "confirmed",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": {
+          "note": "Dato originario dell’ingresso, non finalizzato come scala",
+          "sede": "Ginocchio sintetico",
+          "aRiposo": 0,
+          "inMovimento": -1
+        },
+        "terapiaImport": [
+          {
+            "note": "Istruzione conservata",
+            "farmacoNome": "Terapia sintetica da verificare",
+            "excludedFromConfirm": true
+          }
+        ]
+      },
+      "importJobId": null,
+      "createdById": "VITALS-QA-OP",
+      "confirmedPatientId": "vitals-qa-anna",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": "2026-09-20T09:30:00.000Z"
+    },
+    {
+      "id": "po15-intake-null",
+      "status": "confirmed",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": null
+      },
+      "importJobId": null,
+      "createdById": null,
+      "confirmedPatientId": "vitals-qa-anna",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": null
+    },
+    {
+      "id": "po15-intake-unconfirmed",
+      "status": "draft",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": {
+          "note": "Non deve comparire, bozza non confermata"
+        }
+      },
+      "importJobId": null,
+      "createdById": null,
+      "confirmedPatientId": "vitals-qa-anna",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": null
+    },
+    {
+      "id": "po15-intake-other",
+      "status": "confirmed",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": {
+          "note": "Non deve comparire, altro paziente"
+        }
+      },
+      "importJobId": null,
+      "createdById": null,
+      "confirmedPatientId": "vitals-qa-other",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": null
+    }
+  ],
+  "intakes": [
+    {
+      "id": "po15-intake-pain",
+      "status": "confirmed",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": {
+          "note": "Dato originario dell’ingresso, non finalizzato come scala",
+          "sede": "Ginocchio sintetico",
+          "aRiposo": 0,
+          "inMovimento": -1
+        },
+        "terapiaImport": [
+          {
+            "note": "Istruzione conservata",
+            "farmacoNome": "Terapia sintetica da verificare",
+            "excludedFromConfirm": true
+          }
+        ]
+      },
+      "importJobId": null,
+      "createdById": "VITALS-QA-OP",
+      "confirmedPatientId": "vitals-qa-anna",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": "2026-09-20T09:30:00.000Z"
+    },
+    {
+      "id": "po15-intake-null",
+      "status": "confirmed",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": null
+      },
+      "importJobId": null,
+      "createdById": null,
+      "confirmedPatientId": "vitals-qa-anna",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": null
+    },
+    {
+      "id": "po15-intake-unconfirmed",
+      "status": "draft",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": {
+          "note": "Non deve comparire, bozza non confermata"
+        }
+      },
+      "importJobId": null,
+      "createdById": null,
+      "confirmedPatientId": "vitals-qa-anna",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": null
+    },
+    {
+      "id": "po15-intake-other",
+      "status": "confirmed",
+      "version": 0,
+      "source": "manual",
+      "data": {
+        "dolore": {
+          "note": "Non deve comparire, altro paziente"
+        }
+      },
+      "importJobId": null,
+      "createdById": null,
+      "confirmedPatientId": "vitals-qa-other",
+      "createdAt": "2026-09-23T08:20:44.038Z",
+      "updatedAt": "2026-09-23T08:20:44.038Z",
+      "confirmedAt": null
+    }
+  ],
+  "documents": [
+    {
+      "id": "b0062f95-4b02-4344-8afc-c096d7bfdef4",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "PAINAD_2026-09-22_d68d0d3b-4652-458e-9d31-48a7bf0c39c4.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 18576,
+      "sha256": "443075aecd6d570c4e669465801ce11fc60eaf2dd0a15d9c2c0e53d4eda4a88c",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "d68d0d3b-4652-458e-9d31-48a7bf0c39c4",
+        "snapshotSha256": "7d3fb448f55f577d56f40608db1f31102a034c89be840004b33ac74cfa237d2b",
+        "rendererVersion": "painad-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 0,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T08:20:44.931Z",
+      "assessmentId": "d68d0d3b-4652-458e-9d31-48a7bf0c39c4"
+    },
+    {
+      "id": "ae4ce7be-a6e3-43c4-a077-8bf9406f3683",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "Trasferimenti_2026-09-22_68dc1bd0-f65b-4061-866a-404f29b74023.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 18018,
+      "sha256": "1e7ec82879cb04f844b6347de471487bcae852f1ca6b6ca2071c9bb98108a678",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "68dc1bd0-f65b-4061-866a-404f29b74023",
+        "snapshotSha256": "eb6f34752e7ce849fc635d3528fbe14dcf0e43277b0aae1dee852c7614cc2b41",
+        "rendererVersion": "transfers-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 1,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T08:20:45.091Z",
+      "assessmentId": "68dc1bd0-f65b-4061-866a-404f29b74023"
+    },
+    {
+      "id": "f87cd73e-7eae-4cb8-a0c6-edfe6470b47a",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "Tinetti_2026-09-22_7934630a-4f93-4577-91cd-8343d8a56d34.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 21534,
+      "sha256": "d32609b9a449194f9c5900f55522d5cd8dff35a08a3d8aa90339434bb5f2d085",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "7934630a-4f93-4577-91cd-8343d8a56d34",
+        "snapshotSha256": "fcb06bd24a48e090d370cc87bd1b1493778f25f70a254974d865430f3a20a9a2",
+        "rendererVersion": "tinetti-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 2,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T08:20:45.313Z",
+      "assessmentId": "7934630a-4f93-4577-91cd-8343d8a56d34"
+    },
+    {
+      "id": "2880cb71-79bc-44a5-8be2-f5bdc8bf2a97",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "MNA_2026-09-22_28595269-3b98-43b6-80a0-895283d55323.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 27727,
+      "sha256": "3765fa795024fb71aa9d25fb89481f2c71e7437ff8d7d6cdffa8808eb84d64c4",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "28595269-3b98-43b6-80a0-895283d55323",
+        "snapshotSha256": "97bad0988768019dd1dd5ef06286bdec527ed823e0b1a493194a5df259ae1b8f",
+        "rendererVersion": "mna-a4-v2"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 3,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T08:20:45.655Z",
+      "assessmentId": "28595269-3b98-43b6-80a0-895283d55323"
+    },
+    {
+      "id": "c04252ff-2e10-42cf-bb7c-596d1e4b565e",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "GDS15_2026-09-22_5fed80d7-8a83-4657-9486-98e867289a66.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 22315,
+      "sha256": "88e6feb0ccaef8c5c5cc2ea1481bc1b713f7069af1932d7976ca72a29c7f0534",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "5fed80d7-8a83-4657-9486-98e867289a66",
+        "snapshotSha256": "28f32ffc4d3f6e1cf39008f63cf1633e9ea26b3ef8b1345d643a4bc10eb8a50f",
+        "rendererVersion": "gds15-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 4,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T08:20:45.889Z",
+      "assessmentId": "5fed80d7-8a83-4657-9486-98e867289a66"
+    },
+    {
+      "id": "e2ebb081-dfab-4b1d-8acb-c3d6d17f1675",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "MNA_2026-09-23_f44e07f3-b167-4bda-b1f4-b3987e431fed.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 28096,
+      "sha256": "e02cf66ae96133222f30f72eb981ff32ba1bb4c7b1ca8ba746816a35d832f89a",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "f44e07f3-b167-4bda-b1f4-b3987e431fed",
+        "snapshotSha256": "bd491542a7f3bd98cf805a67f89f422d3de57efde3b008e38482b70a6f897d53",
+        "rendererVersion": "mna-a4-v2"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 5,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T08:21:52.537Z",
+      "assessmentId": "f44e07f3-b167-4bda-b1f4-b3987e431fed"
+    }
+  ]
+}

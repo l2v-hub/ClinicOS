@@ -1,6 +1,6 @@
 # ClinicOS — Piano di prodotto dai feedback del 22 settembre 2026
 
-**Stato: analisi e piano di lavoro; attività applicative da eseguire.**
+**Stato aggiornato al 23 settembre: PO-01–PO-15 pubblicate e verificate; collaudo tecnico PO-16 concluso, pubblicazione finale in corso.** Il [registro di esecuzione](<C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/docs/product/stato-esecuzione-piano-2026-09-22.md>) riporta gli esiti e le versioni. Le descrizioni dell'analisi iniziale qui sotto documentano la baseline del 22 settembre; non descrivono difetti ancora aperti dopo i rilasci. Le prove con personale e dispositivi fisici restano distinte dal collaudo tecnico sintetico.
 
 La direzione proposta è fare di ClinicOS uno strumento affidabile per il giro reparto: riconoscere subito il paziente, trovare la prossima azione, registrarla con pochi passaggi e sapere se è stata salvata. La complessità clinica deve rimanere disponibile senza occupare tutta la schermata contemporaneamente.
 
@@ -279,22 +279,22 @@ Prima di implementare si registrano tempi, passaggi e punti di esitazione dello 
 5. Pubblicare la versione verificata nel delivery concordato e controllare la stessa versione sul sito; mostrare all’operatore come ripetere la verifica. Il frontend Vercel richiede un deploy esplicito: il solo push non lo aggiorna.
 6. Registrare l’esito e passare all’attività successiva. Se fallisce un criterio, la voce resta aperta con il problema preciso.
 
-Ogni consegna applicativa include: comportamento cambiato, prove eseguite, versione pubblicata e limiti rimasti. Il presente lavoro consegna il piano: non modifica l’app, non chiude requisiti e non pubblica una nuova versione.
+Ogni consegna applicativa include comportamento, prove, versione pubblicata e limiti. L'esecuzione approvata ha prodotto rilasci applicativi separati con ricevute di commit/deploy; i risultati sono nel registro. Il collaudo tecnico sintetico non sostituisce l'osservazione con operatori e dispositivi fisici prevista nella prova di usabilità.
 
-## 9. Decisioni da chiudere al momento opportuno
+## 9. Decisioni applicate durante l'esecuzione
 
-| Decisione | Proposta nel piano | Quando serve |
+| Decisione | Soluzione applicata | Evidenza |
 |---|---|---|
-| Dati minimi dell’ingresso | Nome/cognome e presa in carico; altri dati mancanti espliciti; telefono necessario per completezza | Prima di implementare PO-01 |
-| Modifica orari e ruoli | Correzione consentita ai ruoli già abilitati, con autore tracciato e conferma | PO-02 |
-| Tinetti | Convalidare item 11 e versione da 28 punti con referente clinico | Prima di rilasciare PO-12 |
-| MNA item Q | Chiarire l’intervallo della circonferenza brachiale, evitando sovrapposizioni | Prima di fissare lo scoring in PO-13 |
-| NRS | Ritirare nuove compilazioni dal catalogo; conservare storico e altri campi dolore finché non diversamente richiesto | PO-15 |
-| Firme trasferimenti | Identità autenticata e validazione tracciata; firme previste nel PDF, senza spacciare il nome digitato per firma digitale | PO-11 |
+| Dati minimi dell’ingresso | Nome/cognome e operatore di presa in carico; CF/nascita/telefono mancanti ammessi e segnalati; telefono necessario per completezza | PO-01 pubblicata |
+| Modifica orari e ruoli | Orari corretti persistiti in bozza, conferma, terapia e agenda; indicazioni accessorie separate nelle note | PO-02/03 pubblicate |
+| Tinetti | Conservate le quattro voci distinte lunghezza/altezza DX/SX già presenti, corroborate dai riferimenti universitari; massimo16+12=28. Nessun rischio sui parziali e storico invariato | PO-12; non è convalida clinica indipendente |
+| MNA item Q | Intervallo21≤CB≤22 per0,5punti, riscontro sulla fonte ufficiale inglese amended2023. Testo italiano e correzione Q dichiarati nella versione | PO-13 e specifiche aggiornate |
+| NRS | Storico in sola lettura/stampabile; dati dolore dell'ingresso conservati distintamente; nessuna conversione o modifica degli altri campi dolore | PO-15 pubblicata |
+| Firme trasferimenti | Conferma contenuto fisioterapista e presa visione operatore separate, riferite alla versione; nessuna firma digitale dichiarata | PO-11 pubblicata |
 
-Queste decisioni non impediscono di usare il piano. Le convalide cliniche sono circoscritte ai relativi moduli, senza introdurre approvazioni ripetute su correzioni ordinarie già autorizzate.
+Riferimenti e limiti dei modelli sono espliciti nelle specifiche e negli snapshot. Nessuna convalida clinica indipendente o partecipazione di operatori è stata attribuita all'utente. La verifica operativa con personale e dispositivi reali resta distinta dal collaudo tecnico effettuato.
 
-## 10. Base dell’analisi e limiti
+## 10. Base dell’analisi iniziale e limiti
 
 - Codice analizzato: commit `393e8b4ae909d66d945d474c01bb7669b0d8be3d`, branch `codex/subtle-dashboard-notifications`.
 - Alias verificato: [ClinicOS](https://clinicos-eosin.vercel.app), deployment `dpl_45LJxzRzDBvKdUaC3rA7AnxpLvFc`; metadata del frontend corrispondenti al commit. Questo non certifica separatamente la versione del backend Railway.

@@ -1,0 +1,11 @@
+{
+  "reviewer": "/root/clinical_forms_source_audit",
+  "sourceManifestSha256": "633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5",
+  "inputTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+  "sourceBindingPassed": true,
+  "openP1P2": 0,
+  "sourceBindingMessage": "Source binding indipendente PASS (chunk 534c1e): 4 sorgenti = 3 modificati + 1 nuovo, 1.104 input correnti, 1.103 blob baseline Git verificati, 1.100 input invariati; ID/hashes/bytes e protetti corretti. Due run verdi differiscono soltanto per il nuovo test; consolidamento 12 + 3 = 15 su 5 file confermato. Release sorgente confermata; source manifest 633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5. Attendo artifact freeze.",
+  "legacyRetryReview": "P2 cwd closed; childWorkingDirectory backend and 3/3 PASS. Restore/read use assessmentTransaction UTC. Independent proof check chunk 91ee0c: full before/after equal to original export, metadata unchanged, 3 retries, renderCalls 0, 27707 bytes and original SHA256 identical. No application P1/P2.",
+  "independentVisualMessage": "Ho ispezionato indipendentemente le tre PNG mna-v2-half-point del rendering finale: 1 punto, 0,5 punti, IMC 25, subtotal 14,5 e totale 27,5 leggibili; K completo, identità, fonte/copyright e numerazione presenti; nessun taglio o sovrapposizione visibile. La dicitura versione 1 nel corpo è coerente con il modello invariato; renderer v2 resta nei metadati. Attendo manifest/receipt definitivo.",
+  "artifactBindingPending": true
+}

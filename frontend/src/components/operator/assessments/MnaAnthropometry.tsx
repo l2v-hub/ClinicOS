@@ -121,7 +121,7 @@ export function MnaAnthropometry({
             (option) =>
               [
                 String(option.value),
-                `${option.description} · ${option.score.toLocaleString('it-IT')} punti`,
+                `${option.description} · ${option.score.toLocaleString('it-IT')} ${option.score === 1 ? 'punto' : 'punti'}`,
               ] as const,
           )}
           missing={missing.includes(`${id}.category`)}
@@ -147,7 +147,7 @@ export function MnaAnthropometry({
               )}
               <p>
                 {derived?.description
-                  ? `${derived.description} · ${derived.score?.toLocaleString('it-IT')} punti`
+                  ? `${derived.description} · ${derived.score?.toLocaleString('it-IT')} ${derived.score === 1 ? 'punto' : 'punti'}`
                   : 'Misure da completare.'}
               </p>
             </>

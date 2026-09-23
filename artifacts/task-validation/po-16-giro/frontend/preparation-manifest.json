@@ -1,0 +1,98 @@
+{
+  "task": "PO-16-frontend-preparation",
+  "generatedAtUtc": "2026-09-23T08:05:11.140Z",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "sourceTreeSha256": "6d573bd1b3c36e49d95879ccbba961bccf642c6d8a599ffa82f10167ec0b5dd0",
+  "baselineInputs": 563,
+  "applicationSourceChanges": 0,
+  "applicationValidationRun": false,
+  "applicationGo": false,
+  "claimsReleased": true,
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/baseline-source-manifest.json",
+      "bytes": 182373,
+      "sha256": "c6b92711dda69be1e2fe935d92070dec8c6a05229625fb7b5807fb48e526ef35"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-preparation-release.json",
+      "bytes": 1598,
+      "sha256": "1a6a33f59366f8607cbfa316aed84e6c24a785a41b1e1d405945fcdcc186e541"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-preparation.json",
+      "bytes": 2942,
+      "sha256": "fb1bd56b3ec488818357089992dc9dc2a49116e4d27847ebf164b8d9f436d368"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims.json",
+      "bytes": 2942,
+      "sha256": "fb1bd56b3ec488818357089992dc9dc2a49116e4d27847ebf164b8d9f436d368"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/finish-preparation.mjs",
+      "bytes": 2805,
+      "sha256": "4d5d90f316f01a55cc5939c2719df92b6b856d82aea1eb6d36ebde077057f593"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/frontend-preparation.md",
+      "bytes": 4351,
+      "sha256": "8a90a83dc93fbaf579438c666c0ae660c99503c2e97ec99387b621978848d4f6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/guidance-recommendation.json",
+      "bytes": 10963,
+      "sha256": "0d9b1cc41fdc8905f41a9337c20ccba85d46ea10c8a2430fc153d75874e8ac86"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/ledger-claims-before.json",
+      "bytes": 161,
+      "sha256": "0beb6e7b0ab3478d0377377cc42705819e6adfc4c0e61555f288e48849625dc4"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/ledger-preparation-claim.json",
+      "bytes": 1263,
+      "sha256": "6e9d75c691c08e5b15270c9a6b62d7b4af95eb37174413b6502cb530960073a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/memory-recall.json",
+      "bytes": 283,
+      "sha256": "d4496168ef4ec6be0cb537bfea492f0f9bd810b2afa4c26091c2fd206fedb108"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/preparation-session.json",
+      "bytes": 2827,
+      "sha256": "57c2855aeeb108ea4bb72a9515c2e3d813b9e9135cefc617cffc2061b2bb7103"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/prepare-evidence.mjs",
+      "bytes": 6436,
+      "sha256": "0027cbf2bfa162bdae95001b126c1ddc7db6394d4e46570830b1522282264c41"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/rifiniture-osservate.snapshot.md",
+      "bytes": 802,
+      "sha256": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/root-assignment.snapshot.md",
+      "bytes": 1162,
+      "sha256": "b70148c576875037cc9f20f59e25e6be8b4b8449475e7a9c7a3e103aed0c4cfe"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/runtime-preparation.json",
+      "bytes": 1402,
+      "sha256": "92ee26e93dd7f1c0b7029790d765ca43b8d5254eb75084b86d2271a976912c64"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/task-contract.snapshot.md",
+      "bytes": 3269,
+      "sha256": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/worktree-creation.json",
+      "bytes": 4702,
+      "sha256": "cef7ca49f2b4daaf27abbd669b2dfa3c2b1ef55fc2cd3466e2e28f0f801e7b9b"
+    }
+  ]
+}

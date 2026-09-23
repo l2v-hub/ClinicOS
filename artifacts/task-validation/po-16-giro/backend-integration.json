@@ -1,0 +1,26 @@
+{
+  "at": "2026-09-23T08:20:16.269Z",
+  "decision": "ALLOW_INTEGRATE",
+  "scope": "backend",
+  "worker": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-mna-backend",
+  "authorization": "User approved full plan and release; root invoked after worker claim release",
+  "manifestSha256": "633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5",
+  "files": [
+    {
+      "path": "backend/src/assessments/__tests__/mna-pdf-db.test.ts",
+      "sha256": "071cdfe2199b24f0e4e0762f344f2259db74454534da57bda71a74a3b154664f"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-presentation-db.test.ts",
+      "sha256": "927c5c4d5b189bd92caa8ab774238ba16ef0a1fe5ed1a1ea419a7b5def069964"
+    },
+    {
+      "path": "backend/src/assessments/mna-pdf-content.ts",
+      "sha256": "b2bf58ab7a67b80668fb2b297971dd39ea06ff759e35b849060554559a9738b2"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "sha256": "4b838b0364d784e9fe47f093d1c31c6d154f46fa4f4b006f544274318a55a8ad"
+    }
+  ]
+}

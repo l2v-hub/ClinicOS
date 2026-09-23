@@ -1,0 +1,69 @@
+{
+  "task": "PO-16-frontend-preparation",
+  "owner": "/root/po01_frontend_audit",
+  "integrationOwner": "/root",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-final-ui",
+  "branch": "codex/po16-final-ui",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "phase": "preparation",
+  "applicationGo": false,
+  "authority": "Root explicitly assigned isolated PO16 checkout for preparation only during PO15 deploy; application GO follows PO15 published and verified.",
+  "decision": "allow-scoped-preparation",
+  "ledgerClaim": "PO-16-frontend-preparation",
+  "ledgerClaimant": "agent:codex-po16-frontend:coder",
+  "ledgerClaimedAt": "2026-09-23T08:01:26.704Z",
+  "status": "released",
+  "claimActive": false,
+  "applicationClaimActive": false,
+  "allowedPaths": [
+    "artifacts/task-validation/po-16-giro/frontend",
+    "node_modules",
+    "frontend/node_modules/.tmp",
+    "frontend/node_modules/.vite-temp"
+  ],
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "b36eca8bc9fd9f584410f7ff3a3469f812f197d6e96a435659902adc5ee91be1"
+  },
+  "inputs": {
+    "task-contract.snapshot.md": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3",
+    "rifiniture-osservate.snapshot.md": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6",
+    "root-assignment.snapshot.md": "b70148c576875037cc9f20f59e25e6be8b4b8449475e7a9c7a3e103aed0c4cfe"
+  },
+  "runtime": {
+    "node": "v26.3.0",
+    "packages": {
+      "typescript": "6.0.3",
+      "tsx": "4.23.1",
+      "react": "19.2.5",
+      "vite": "8.2.2"
+    },
+    "dependencyJunction": "C:\\Workspace\\ClinicOSHouse-worktrees\\quality-loop-20260829\\node_modules",
+    "dependencyWritePolicy": "Shared target read only by policy; no install/shared runtime writes.",
+    "localCaches": [
+      "frontend/node_modules/.tmp",
+      "frontend/node_modules/.vite-temp"
+    ]
+  },
+  "ports": [],
+  "excluded": [
+    "application source/tests until root GO",
+    "backend",
+    "package manifests",
+    "lockfiles",
+    "shared dependencies",
+    "servers",
+    "ports",
+    "commit",
+    "push",
+    "deploy",
+    "live patient writes"
+  ],
+  "recall": "No relevant MNA presentation/touch-target memory match. Root contract/assignment and existing source are authoritative; existing hierarchy retained.",
+  "timestamp": "2026-09-23T08:04:27.635Z",
+  "sourceTreeSha256": "6d573bd1b3c36e49d95879ccbba961bccf642c6d8a599ffa82f10167ec0b5dd0",
+  "releaseOccurredBeforeUtc": "2026-09-23T08:05:11.140Z",
+  "releaseEvidence": "artifacts/task-validation/po-16-giro/frontend/claims-preparation-release.json",
+  "nextGate": "Explicit root GO after PO15 published and verified, then exact application claim before source edits."
+}

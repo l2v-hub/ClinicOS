@@ -8,6 +8,14 @@ export interface MnaPdfBlock {
   keepSpace?: number;
 }
 const score = (value: number) => String(value).replace('.', ',');
+function displayBmi(value: number): string {
+  const rounded = Number(value.toFixed(2));
+  const band = (n: number) => (n < 19 ? 0 : n < 21 ? 1 : n < 23 ? 2 : 3);
+  // Match the UI without displaying a value across a scoring boundary.
+  return rounded === 0 || band(rounded) !== band(value)
+    ? score(value)
+    : value.toLocaleString('it-IT', { maximumFractionDigits: 2 });
+}
 export function mnaPdfBlocks(snapshot: MnaSnapshot): MnaPdfBlock[] {
   const blocks: MnaPdfBlock[] = [];
   const rawBlock = (text: string, bold = false, size = 10, keepSpace = 50) =>
@@ -51,7 +59,9 @@ export function mnaPdfBlocks(snapshot: MnaSnapshot): MnaPdfBlock[] {
           '. ' +
           item.label +
           ' — ' +
-          (item.score === null ? 'Non compilato' : score(item.score) + ' punti'),
+          (item.score === null
+            ? 'Non compilato'
+            : score(item.score) + (item.score === 1 ? ' punto' : ' punti')),
         true,
         10,
         85,
@@ -99,7 +109,7 @@ export function mnaPdfBlocks(snapshot: MnaSnapshot): MnaPdfBlock[] {
         if (item.id === 'F')
           block(
             'IMC: ' +
-              (snapshot.bmi === null ? 'Non disponibile' : score(snapshot.bmi) + ' kg/m²') +
+              (snapshot.bmi === null ? 'Non disponibile' : displayBmi(snapshot.bmi) + ' kg/m²') +
               (snapshot.bmi === null ? '' : ' (soglie applicate al valore non arrotondato)'),
             false,
             9,

@@ -1,0 +1,15 @@
+{
+  "at": "2026-09-23T08:23:37.787Z",
+  "stateSha256": "97e66dd85ffbd76cf73e6952d8c183c6c12b72e29a3d983ea5cf96001627ada1",
+  "checks": "MNA27.5 and precise BMI retained, new PDF renderer v2, hash verified, no discharge write, all Cartella/intake data unchanged",
+  "assessmentId": "f44e07f3-b167-4bda-b1f4-b3987e431fed",
+  "pdfId": "e2ebb081-dfab-4b1d-8acb-c3d6d17f1675",
+  "pdfSha256": "e02cf66ae96133222f30f72eb981ff32ba1bb4c7b1ca8ba746816a35d832f89a",
+  "snapshotSha256": "bd491542a7f3bd98cf805a67f89f422d3de57efde3b008e38482b70a6f897d53",
+  "counts": {
+    "assessments": 8,
+    "finals": 6,
+    "documents": 6
+  },
+  "limitations": "Synthetic browser run; PDFv1 immutability covered independently by backend DB test, not this fresh fixture"
+}

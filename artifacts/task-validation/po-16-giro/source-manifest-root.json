@@ -1,0 +1,71 @@
+{
+  "sourceStateId": "f71eda0836d291e68af78cb9780106723b00c81dcc3c1573276cf0e58c5e2c29",
+  "files": [
+    {
+      "path": "backend/src/assessments/__tests__/mna-pdf-db.test.ts",
+      "sha256": "071cdfe2199b24f0e4e0762f344f2259db74454534da57bda71a74a3b154664f",
+      "bytes": 7870,
+      "workerSha256": "071cdfe2199b24f0e4e0762f344f2259db74454534da57bda71a74a3b154664f"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-presentation-db.test.ts",
+      "sha256": "927c5c4d5b189bd92caa8ab774238ba16ef0a1fe5ed1a1ea419a7b5def069964",
+      "bytes": 10980,
+      "workerSha256": "927c5c4d5b189bd92caa8ab774238ba16ef0a1fe5ed1a1ea419a7b5def069964"
+    },
+    {
+      "path": "backend/src/assessments/mna-pdf-content.ts",
+      "sha256": "b2bf58ab7a67b80668fb2b297971dd39ea06ff759e35b849060554559a9738b2",
+      "bytes": 6006,
+      "workerSha256": "b2bf58ab7a67b80668fb2b297971dd39ea06ff759e35b849060554559a9738b2"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "sha256": "4b838b0364d784e9fe47f093d1c31c6d154f46fa4f4b006f544274318a55a8ad",
+      "bytes": 11852,
+      "workerSha256": "4b838b0364d784e9fe47f093d1c31c6d154f46fa4f4b006f544274318a55a8ad"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/mnaUi.test.ts",
+      "sha256": "c1d5ac92dcbc728a45ec1115a83d9ea1cfb453859119129b88fa0294abf9e393",
+      "bytes": 8688,
+      "workerSha256": "c1d5ac92dcbc728a45ec1115a83d9ea1cfb453859119129b88fa0294abf9e393"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+      "sha256": "805f4f55dd964c342028835e42ba4af90ffb02e143be077d50b5a72e0969c383",
+      "bytes": 2114,
+      "workerSha256": "805f4f55dd964c342028835e42ba4af90ffb02e143be077d50b5a72e0969c383"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "sha256": "215ce161a8cb224d254b6113675201567ca27c100eecfee1ac020a096cd5cf4f",
+      "bytes": 4874,
+      "workerSha256": "215ce161a8cb224d254b6113675201567ca27c100eecfee1ac020a096cd5cf4f"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaAnthropometry.tsx",
+      "sha256": "077f379cb0d3971d93a3e19802271af5195ee02ff687a2980179a9963f9125aa",
+      "bytes": 6364,
+      "workerSha256": "077f379cb0d3971d93a3e19802271af5195ee02ff687a2980179a9963f9125aa"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaForm.tsx",
+      "sha256": "9390192012981babbe26cb4f489aaa71e77b4f663d400b5f92fd478d232c0f50",
+      "bytes": 9174,
+      "workerSha256": "9390192012981babbe26cb4f489aaa71e77b4f663d400b5f92fd478d232c0f50"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaSummary.tsx",
+      "sha256": "43bf91a897a5b382ec09844a015eb04a9b75f08ae22880eb827aa984012474f2",
+      "bytes": 6169,
+      "workerSha256": "43bf91a897a5b382ec09844a015eb04a9b75f08ae22880eb827aa984012474f2"
+    },
+    {
+      "path": "tests/integration/po16-round.test.mts",
+      "bytes": 15787,
+      "sha256": "12111ec20e759e15975ce57bd87834b0942bac6b2f385f26b643d9bfd3770d6e",
+      "owner": "root"
+    }
+  ]
+}

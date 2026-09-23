@@ -1,0 +1,74 @@
+{
+  "task": "PO-16-frontend-implementation",
+  "owner": "/root/po01_frontend_audit",
+  "integrationOwner": "/root",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-final-ui",
+  "branch": "codex/po16-final-ui",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "phase": "implementation",
+  "applicationGo": true,
+  "authority": "Root GO after PO15 published/verified, receipt36fb96750575d409dc9de41ea42e1e858c472253",
+  "decision": "allow-scoped-presentation-only-implementation",
+  "ledgerClaim": "PO-16-frontend-implementation",
+  "ledgerClaimant": "agent:codex-po16-frontend:coder",
+  "ledgerClaimedAt": "2026-09-23T08:07:28.133Z",
+  "status": "released",
+  "claimActive": false,
+  "applicationClaimActive": false,
+  "allowedPaths": [
+    "frontend/src/components/operator/assessments/MnaForm.tsx",
+    "frontend/src/components/operator/assessments/MnaAnthropometry.tsx",
+    "frontend/src/components/operator/assessments/MnaSummary.tsx",
+    "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+    "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+    "frontend/src/components/operator/__tests__/mnaUi.test.ts",
+    "artifacts/task-validation/po-16-giro/frontend"
+  ],
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "b36eca8bc9fd9f584410f7ff3a3469f812f197d6e96a435659902adc5ee91be1"
+  },
+  "inputs": {
+    "task-contract.snapshot.md": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3",
+    "rifiniture-osservate.snapshot.md": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6",
+    "root-assignment.snapshot.md": "b70148c576875037cc9f20f59e25e6be8b4b8449475e7a9c7a3e103aed0c4cfe"
+  },
+  "runtime": {
+    "node": "v26.3.0",
+    "packages": {
+      "typescript": "6.0.3",
+      "tsx": "4.23.1",
+      "react": "19.2.5",
+      "vite": "8.2.2"
+    },
+    "dependencyJunction": "C:\\Workspace\\ClinicOSHouse-worktrees\\quality-loop-20260829\\node_modules",
+    "dependencyWritePolicy": "Shared target read only by policy; no install/shared runtime writes.",
+    "localCaches": [
+      "frontend/node_modules/.tmp",
+      "frontend/node_modules/.vite-temp"
+    ]
+  },
+  "ports": [],
+  "excluded": [
+    "scoring",
+    "BMI displayMnaBmi",
+    "answers/snapshots/versions",
+    "backend",
+    "package manifests",
+    "lockfiles",
+    "shared dependencies",
+    "servers",
+    "ports",
+    "commit",
+    "push",
+    "deploy",
+    "live patient writes"
+  ],
+  "sourceStateId": "d5c3c244c9a4ed8df9dfb89264277cc7f94b5525ceacc822353b5be0679a91ff",
+  "runtimeSourceId": "2352a0fd4ad2b9aef8b8c1480a87f019dccbf588a4a799eedbd34dca70d71dff",
+  "sourceManifestSha256": "939ad0f35e471c418008ee0737730b4b3c3b1766f3f02409ab7b3803a95bac52",
+  "handoff": "Root owns integrated/browser final QA and publication; evidence-only after source claim release.",
+  "releaseOccurredBeforeUtc": "2026-09-23T08:11:40.6837897Z",
+  "releaseEvidence": "artifacts/task-validation/po-16-giro/frontend/claims-implementation-release.json"
+}

@@ -1,0 +1,7 @@
+{
+  "frontend": "/root/po01_frontend_audit",
+  "message": "Confermo: displayMnaBmi resta invariato nella mia scope; form e summary già lo usano. La tua descrizione della semantica è esatta (fallback raw se rounded===0 o cambia fascia19/21/23). FE dopo GO cambierà solo plurale nei tre renderer, locale nello storico MNA e target catalogo44px<=768px. Nessuna modifica scoring/snapshot/risposte/versioni.",
+  "bmiSemanticsAgreed": true,
+  "backendRendererVersionForNewMnaPdfs": "mna-a4-v2",
+  "applicationGoPending": true
+}

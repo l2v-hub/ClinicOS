@@ -1,0 +1,60 @@
+{
+  "task": "PO16-backend-preparation",
+  "startedAt": "2026-09-23T08:04:17.273Z",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-mna-backend",
+  "branch": "codex/po16-mna-presentation",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "decision": "allow private runtime and contract preparation only; application work awaits root GO after PO15 verified live",
+  "claim": {
+    "issueId": "PO-16-backend-preparation",
+    "claimant": {
+      "type": "agent",
+      "agentId": "codex-po16-backend",
+      "agentType": "coder"
+    },
+    "claimedAt": "2026-09-23T08:01:32.691Z",
+    "status": "active",
+    "statusChangedAt": "2026-09-23T08:01:32.691Z",
+    "progress": 0,
+    "context": "Explicit root assignment: preparation only while PO15 deploys. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po16-mna-backend, branch codex/po16-mna-presentation baseline53e57d694850775b85ad1d22904e7bb1e6e84618. Own only artifacts/task-validation/po-16-giro/backend/** plus private runtime preparation; application backend/src/prisma/frontend read-only until root GO. Read root task-contract/rifiniture-osservate and source-bound synthetic PO15 v1 PDFs/state. Plan MNA display1punto/27,5/BMI preserving19/21/23 semantics, renderer mna-a4-v2 only new PDFs, real DB ready-v1 retry no rendering/mutation. No shared dependency writes, manifests, commits, push, deploy, online writes or additional agents; no application tests/edits until GO."
+  },
+  "sourceTreeSha256": "3e21b69f7402e354636416b18f51bd75209f6caf3e39c26c5e500a510140a1eb",
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "contracts": [
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-16-giro\\task-contract.md",
+      "snapshot": "task-contract.snapshot.md",
+      "sha256": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-16-giro\\rifiniture-osservate.md",
+      "snapshot": "rifiniture-osservate.snapshot.md",
+      "sha256": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6",
+      "byteIdentical": true
+    }
+  ],
+  "implementationAuthorized": false,
+  "publicationAuthorized": false
+}

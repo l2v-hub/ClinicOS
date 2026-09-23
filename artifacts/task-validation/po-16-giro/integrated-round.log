@@ -1,0 +1,12 @@
+PATCH /patients/cmudtlkwu000ml0lpwtvux59s → aggiornato
+POST /patients/cmudtlkwu000ml0lpwtvux59s/room-assignments → created id=cmudtllne001cl0lph79xuhov
+PUT /patients/cmudtlkwu000ml0lpwtvux59s/cartella → salvata
+✔ one synthetic patient round preserves identity, import, schedule, readings and immutable assessment archive (23749.4556ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37869.7193

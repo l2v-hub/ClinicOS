@@ -1,0 +1,22 @@
+{
+  "passed": 15,
+  "failed": 0,
+  "files": 5,
+  "databaseClosed": true,
+  "currentInputTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+  "priorInputTreeSha256": "34ac83ce2c560505a290cf93785dc0bbf89ede2c7077892aba743907e2ad0613",
+  "currentRun": "cwd-focused-tests.json",
+  "currentTestFiles": [
+    "backend/src/assessments/__tests__/mna-presentation-db.test.ts"
+  ],
+  "priorRun": "pre-utc-focused-tests.json",
+  "priorTestFiles": [
+    "backend/src/assessments/__tests__/mna.test.ts",
+    "backend/src/assessments/__tests__/mna-db.test.ts",
+    "backend/src/assessments/__tests__/mna-sql-db.test.ts",
+    "backend/src/assessments/__tests__/mna-pdf-db.test.ts"
+  ],
+  "priorProductionAndOtherTestInputsByteIdentical": true,
+  "onlyInputChangedBetweenGreenRuns": "backend/src/assessments/__tests__/mna-presentation-db.test.ts",
+  "reason": "Only the historical fixture setup/read gained the production UTC transaction convention after the 15-test green run; the corrected 3-test file passed again from backend cwd. No repeated broad regression suite."
+}

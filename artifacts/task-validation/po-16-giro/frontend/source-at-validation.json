@@ -1,0 +1,52 @@
+{
+  "task": "PO-16-frontend",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "generatedAtUtc": "2026-09-23T08:09:27.794Z",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-final-ui",
+  "sourceStateId": "d5c3c244c9a4ed8df9dfb89264277cc7f94b5525ceacc822353b5be0679a91ff",
+  "runtimeSourceId": "2352a0fd4ad2b9aef8b8c1480a87f019dccbf588a4a799eedbd34dca70d71dff",
+  "files": [
+    {
+      "path": "frontend/src/components/operator/__tests__/mnaUi.test.ts",
+      "bytes": 8688,
+      "lines": 212,
+      "sha256": "c1d5ac92dcbc728a45ec1115a83d9ea1cfb453859119129b88fa0294abf9e393",
+      "baselineSha256": "f8a9d48ce9b1dc82b2480c77509e10698446503908beccaecfec2d43b13d2122"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+      "bytes": 2114,
+      "lines": 33,
+      "sha256": "805f4f55dd964c342028835e42ba4af90ffb02e143be077d50b5a72e0969c383",
+      "baselineSha256": "a49bfde5575725e5a46dfd572eac498d16f9a2a260c84d76676e8265dc0ac5bc"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "bytes": 4874,
+      "lines": 127,
+      "sha256": "215ce161a8cb224d254b6113675201567ca27c100eecfee1ac020a096cd5cf4f",
+      "baselineSha256": "b76427e2b66528f4400bdcd158f98c5e66c44547b73d462b263b297f10f884d4"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaAnthropometry.tsx",
+      "bytes": 6364,
+      "lines": 170,
+      "sha256": "077f379cb0d3971d93a3e19802271af5195ee02ff687a2980179a9963f9125aa",
+      "baselineSha256": "78c52faa54877c54118a97c431abec10e59d6ba642e4049eb1cae3dd3d4e4b81"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaForm.tsx",
+      "bytes": 9174,
+      "lines": 235,
+      "sha256": "9390192012981babbe26cb4f489aaa71e77b4f663d400b5f92fd478d232c0f50",
+      "baselineSha256": "548a2be70e826005a138864e910cee33eadff965e15df6e8aa539ef527a02afe"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaSummary.tsx",
+      "bytes": 6169,
+      "lines": 159,
+      "sha256": "43bf91a897a5b382ec09844a015eb04a9b75f08ae22880eb827aa984012474f2",
+      "baselineSha256": "ef2e40c622e941deab2aaf88e1cc09ad2a1a18df70d530832ef5e3545144be4c"
+    }
+  ]
+}

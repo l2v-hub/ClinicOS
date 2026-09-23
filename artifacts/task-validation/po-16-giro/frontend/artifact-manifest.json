@@ -1,0 +1,243 @@
+{
+  "task": "PO-16-frontend",
+  "generatedAtUtc": "2026-09-23T08:14:17.367Z",
+  "sourceStateId": "d5c3c244c9a4ed8df9dfb89264277cc7f94b5525ceacc822353b5be0679a91ff",
+  "runtimeSourceId": "2352a0fd4ad2b9aef8b8c1480a87f019dccbf588a4a799eedbd34dca70d71dff",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/baseline-source-manifest.json",
+      "bytes": 182373,
+      "sha256": "c6b92711dda69be1e2fe935d92070dec8c6a05229625fb7b5807fb48e526ef35"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/build-command.json",
+      "bytes": 558,
+      "sha256": "34ef644af7990e5923d614b3a3172703a24a5615c6a93ced0784fd53f4405762"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/build.log",
+      "bytes": 10567,
+      "sha256": "5583c1594a3b7da6947dea3790e698284d80b4f41c8fd70d801bde98948f5f75"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/capture-source.mjs",
+      "bytes": 1700,
+      "sha256": "b17c029b4f3d72ff5a0e5ab35ed333d6d577d2f540ee8ad40b4fff297dc8ec5a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-evidence-release.json",
+      "bytes": 1401,
+      "sha256": "580b373f00cae434a9744a8e4be187ee719ae11185528a2a38cdd0865fff9ab4"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-evidence.json",
+      "bytes": 949,
+      "sha256": "eda6515ea649cc89e737e8f4578cb4b1b9259ff6af3c0541371717455413a63e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-implementation-release.json",
+      "bytes": 1876,
+      "sha256": "129c851f9aeb29fde12dd67b984318dd26b8a74faa90d3df18d4d3d4da63b535"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-implementation.json",
+      "bytes": 3315,
+      "sha256": "f8c1365a946efe726268db342e80ba4d22b63aba17b50022adce91edbd45123b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-preparation-release.json",
+      "bytes": 1598,
+      "sha256": "1a6a33f59366f8607cbfa316aed84e6c24a785a41b1e1d405945fcdcc186e541"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims-preparation.json",
+      "bytes": 2942,
+      "sha256": "fb1bd56b3ec488818357089992dc9dc2a49116e4d27847ebf164b8d9f436d368"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/claims.json",
+      "bytes": 3315,
+      "sha256": "f8c1365a946efe726268db342e80ba4d22b63aba17b50022adce91edbd45123b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/finalize-evidence.mjs",
+      "bytes": 16230,
+      "sha256": "61c282323d41c3b90c2107e674eaef3542588e4b4617265676db63f72ce70bb3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/finish-preparation.mjs",
+      "bytes": 2805,
+      "sha256": "4d5d90f316f01a55cc5939c2719df92b6b856d82aea1eb6d36ebde077057f593"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/freeze-source.mjs",
+      "bytes": 2039,
+      "sha256": "8a92ff17b0a8d8d2082107e4a8138b7a5bc883f7d61a9a68eeebc66cb7f5c3d4"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/frontend-preparation.md",
+      "bytes": 4351,
+      "sha256": "8a90a83dc93fbaf579438c666c0ae660c99503c2e97ec99387b621978848d4f6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/guidance-recommendation.json",
+      "bytes": 10963,
+      "sha256": "0d9b1cc41fdc8905f41a9337c20ccba85d46ea10c8a2430fc153d75874e8ac86"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/implementation-paths.json",
+      "bytes": 407,
+      "sha256": "3a314055d131eaf6be9fbb6ee1f129af4da6bf6b05a92b77dbfe5a9395a0f2c0"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/implementation-receipt.md",
+      "bytes": 3949,
+      "sha256": "269962e613836de3652ab399b893ac3256dbddef3406e3c0f0f81b2665cbbd23"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/implementation-session.json",
+      "bytes": 805,
+      "sha256": "68683075b3aeca6e024246f9567bbd514c3911b050a6d39eed9b3708318efaf5"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/ledger-claims-before.json",
+      "bytes": 161,
+      "sha256": "0beb6e7b0ab3478d0377377cc42705819e6adfc4c0e61555f288e48849625dc4"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/ledger-evidence-claim.json",
+      "bytes": 1125,
+      "sha256": "f3bd1269961b34530d5ff947fd150f7d9d7a20e179e3baabde9332a22573d8d0"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/ledger-implementation-claim-diagnostic.json",
+      "bytes": 450,
+      "sha256": "815afdce84714b9ad656ad0b2c088661db6f71ba0e9978da820b70291fbce6b6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/ledger-implementation-claim.json",
+      "bytes": 1565,
+      "sha256": "95807f70b6853e9a59b9db314a013ec1adebd682ebfa3cd1b881ec8fd85a6a58"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/ledger-preparation-claim.json",
+      "bytes": 1263,
+      "sha256": "6e9d75c691c08e5b15270c9a6b62d7b4af95eb37174413b6502cb530960073a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/lint-compare.mjs",
+      "bytes": 2794,
+      "sha256": "de53ec2fe0d988238e934ebb9ac6fe595c531f12d16adf887e306a61ccb834d6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/lint-comparison.json",
+      "bytes": 1728,
+      "sha256": "b9948b890e19c783a4f6a5e666bc9610af87de778d109b3a4bf2efcde0a26311"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/lint.log",
+      "bytes": 1010,
+      "sha256": "dc85998b8b3033900a788fc535beea2d6ed3c41d3d89f8132fcb7aff4c61f024"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/memory-recall.json",
+      "bytes": 283,
+      "sha256": "d4496168ef4ec6be0cb537bfea492f0f9bd810b2afa4c26091c2fd206fedb108"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/preparation-manifest.json",
+      "bytes": 3897,
+      "sha256": "6d59ed28f46453337e5b96dbf799dab9a2cbd74cdc48199115f79e8f1ab48148"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/preparation-session.json",
+      "bytes": 2827,
+      "sha256": "57c2855aeeb108ea4bb72a9515c2e3d813b9e9135cefc617cffc2061b2bb7103"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/prepare-evidence.mjs",
+      "bytes": 6436,
+      "sha256": "0027cbf2bfa162bdae95001b126c1ddc7db6394d4e46570830b1522282264c41"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/rifiniture-osservate.snapshot.md",
+      "bytes": 802,
+      "sha256": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/root-assignment.snapshot.md",
+      "bytes": 1162,
+      "sha256": "b70148c576875037cc9f20f59e25e6be8b4b8449475e7a9c7a3e103aed0c4cfe"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/run-validation.mjs",
+      "bytes": 1911,
+      "sha256": "e6ebedb2e5a4bef78ecfae952c8cb039e961d469fcf9ad6a7f15e1baeb4a41bc"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/runtime-preparation.json",
+      "bytes": 1402,
+      "sha256": "92ee26e93dd7f1c0b7029790d765ca43b8d5254eb75084b86d2271a976912c64"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/secret-scan.json",
+      "bytes": 22056,
+      "sha256": "289ea796022785c855a915eefef9f3a0c89a6dfd402203ac6d7d083b6c66f209"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/secret-scan.log",
+      "bytes": 50,
+      "sha256": "4a825aa358883be81350b735b3833468447ac44bf205f0e387ff3574fdcd6fab"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/secret-scan.mjs",
+      "bytes": 2069,
+      "sha256": "697fe2d7e36aa7b897d660414ed72b36615e853fb5b276818fd5f929968d19ba"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/source-at-validation.json",
+      "bytes": 2250,
+      "sha256": "a3a864f3fb1673b7280ac391c18cab1c7970f1a335c28b0dfbd1d3dec9333c7d"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/source-manifest.json",
+      "bytes": 2613,
+      "sha256": "939ad0f35e471c418008ee0737730b4b3c3b1766f3f02409ab7b3803a95bac52"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/stub-test-assets.mjs",
+      "bytes": 1037,
+      "sha256": "0f53cd431e18c8f31dd290802b317f2494a24de7d85c534dd10ae93d62231e07"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/task-contract.snapshot.md",
+      "bytes": 3269,
+      "sha256": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/test-command.json",
+      "bytes": 2372,
+      "sha256": "0ee9bbb0e40a1ac40e8ebd466dbde21a82015cdbb62da9af205c6a2d7d70de53"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/test-focused.log",
+      "bytes": 32088,
+      "sha256": "659078d7a377e305d13a3bdd2a0fb5322f456b5443b5d6516eaeaebf6dd45325"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/test-mna-focused.log",
+      "bytes": 1063,
+      "sha256": "deb0149a2db88b1e8b20e54332a5253d525e62a7eeb3617a5eb46c64c153decb"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/validation-receipt.json",
+      "bytes": 11199,
+      "sha256": "83ab8554db1821281143c538ff9127418926f9e0b3cf22e293ac542d6d361f61"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend/worktree-creation.json",
+      "bytes": 4702,
+      "sha256": "cef7ca49f2b4daaf27abbd669b2dfa3c2b1ef55fc2cd3466e2e28f0f801e7b9b"
+    }
+  ]
+}

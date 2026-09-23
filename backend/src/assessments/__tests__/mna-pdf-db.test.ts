@@ -68,7 +68,7 @@ test('MNA full PDFs retain measured units, source/copyright, all K questions and
   const normalBytes = await save('mna-full-normal', snapshot);
   const normalDoc = await PDFDocument.load(normalBytes, { updateMetadata: false });
   assert.match(normalDoc.getTitle()!, /Valutazione completa MNA/);
-  assert.match(normalDoc.getProducer()!, /mna-a4-v1/);
+  assert.match(normalDoc.getProducer()!, /mna-a4-v2/);
   assert(normalDoc.getKeywords()!.includes(snapshot.form.sourceSha256));
   const text = mnaPdfBlocks(snapshot)
     .map((row) => row.text)

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-16-backend-preparation released\",\n  \"reason\": \"Preparation complete: isolated baseline53e57d694850775b85ad1d22904e7bb1e6e84618,1103source inputs unchanged,private runtime verified,root contracts and actual synthetic v1 PDF/state frozen,three baseline pages inspected,frontend BMI semantics agreed. Preflight passed. Root has now issued explicit PO16 application GO after PO15 live checks; close preparatory claim before precise implementation claim.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-16-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po16-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T08:01:32.691Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T08:01:32.691Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root assignment: preparation only while PO15 deploys. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po16-mna-backend, branch codex/po16-mna-presentation baseline53e57d694850775b85ad1d22904e7bb1e6e84618. Own only artifacts/task-validation/po-16-giro/backend/** plus private runtime preparation; application backend/src/prisma/frontend read-only until root GO. Read root task-contract/rifiniture-osservate and source-bound synthetic PO15 v1 PDFs/state. Plan MNA display1punto/27,5/BMI preserving19/21/23 semantics, renderer mna-a4-v2 only new PDFs, real DB ready-v1 retry no rendering/mutation. No shared dependency writes, manifests, commits, push, deploy, online writes or additional agents; no application tests/edits until GO.\"\n  }\n}"
+    }
+  ]
+}

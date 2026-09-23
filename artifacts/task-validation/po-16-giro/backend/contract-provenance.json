@@ -1,0 +1,23 @@
+{
+  "contracts": [
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-16-giro\\task-contract.md",
+      "snapshot": "task-contract.snapshot.md",
+      "sha256": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-16-giro\\rifiniture-osservate.md",
+      "snapshot": "rifiniture-osservate.snapshot.md",
+      "sha256": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6",
+      "byteIdentical": true
+    }
+  ],
+  "assignedWorktreeContractUnchanged": true,
+  "assignedWorktreeContractMatchesAfterCrlfNormalization": true,
+  "backendContract": {
+    "path": "backend-contract.md",
+    "sha256": "133b8fb87f9b3443cb0726b1a0585a350b556d34ef2374a2ced68829b06c9bbb",
+    "status": "preparatory agreement; freeze at preparation handoff"
+  }
+}

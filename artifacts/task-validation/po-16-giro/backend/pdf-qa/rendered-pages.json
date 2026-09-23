@@ -1,0 +1,179 @@
+{
+  "sourceManifestSha256": "633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5",
+  "sourceTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+  "renderedAt": "2026-09-23T08:20:34.929Z",
+  "files": [
+    {
+      "path": "mna-v2-half-point.pdf",
+      "bytes": 29350,
+      "sha256": "562b36b6171d3206dbc618d2291a517d7fb131d00271f88da781446dff2329e6"
+    },
+    {
+      "path": "mna-v2-half-point.snapshot.json",
+      "bytes": 6971,
+      "sha256": "adeb48c6828a70d7c76f14e00cb160e06ebfd3e341c97f2e9f727dc1ac651051"
+    },
+    {
+      "path": "final/mna-v2-half-point.txt",
+      "bytes": 4849,
+      "sha256": "c525842d76b558f029fef10e78d71b6721cb322143c644dc8622f9cb981fe286"
+    },
+    {
+      "path": "final/mna-v2-half-point-1.png",
+      "bytes": 139880,
+      "sha256": "5c595863c9f14840e917e90782a510007b461679aa130206ef55da09941a93ad"
+    },
+    {
+      "path": "final/mna-v2-half-point-2.png",
+      "bytes": 118481,
+      "sha256": "969820ce90546394d317a98d7bba6ad076eab1387cfdd340b59f8bd5ac4dfec9"
+    },
+    {
+      "path": "final/mna-v2-half-point-3.png",
+      "bytes": 140464,
+      "sha256": "0d49274e6e97edeb30f0bbd7cddb9f53bee4d7543e75cbd7c3eec0ae2178e1f0"
+    },
+    {
+      "path": "mna-full-normal.pdf",
+      "bytes": 29138,
+      "sha256": "17671d54918d9330d8dfa9c755b7496d9613a1d277dca858273b757f254b3cd3"
+    },
+    {
+      "path": "mna-full-normal.snapshot.json",
+      "bytes": 9216,
+      "sha256": "5938ddd070011314ef5bbffbec7b591890dc0168af3cbc69c3412d9ea2803fac"
+    },
+    {
+      "path": "final/mna-full-normal.txt",
+      "bytes": 4789,
+      "sha256": "b9555316b462369390a595c22d4a1eb69d0bb810e8fbf51b8a35dca67b85b0ac"
+    },
+    {
+      "path": "final/mna-full-normal-1.png",
+      "bytes": 138235,
+      "sha256": "84627db7c24a582d42fa952bf6f35f62781cda22c60a61f2de1f994836657dd7"
+    },
+    {
+      "path": "final/mna-full-normal-2.png",
+      "bytes": 118487,
+      "sha256": "6cc858146562ef792485b06583ebb7c016becdf1130d98d8157aef156a0d61d0"
+    },
+    {
+      "path": "final/mna-full-normal-3.png",
+      "bytes": 140404,
+      "sha256": "94509e77ca92a6ba60caa5562909c79abf4b44004b745b733097c90d592b9b0a"
+    },
+    {
+      "path": "mna-full-long.pdf",
+      "bytes": 35001,
+      "sha256": "3c4a2d1a4e499fa8ce8ace2e5d24b13764ca4155582982c28e4b5437974d7f63"
+    },
+    {
+      "path": "mna-full-long.snapshot.json",
+      "bytes": 18576,
+      "sha256": "15764c031b11e449f3c0a9c22bf0c9a1216da18b9b22aa15ca9651be4a34dc93"
+    },
+    {
+      "path": "final/mna-full-long.txt",
+      "bytes": 10107,
+      "sha256": "1c12cac0e23e85429f52e40052c4c3697f688f15d578a520f0e1dc8caa892cfa"
+    },
+    {
+      "path": "final/mna-full-long-1.png",
+      "bytes": 138175,
+      "sha256": "b5e83f30ab859c9e759d235c13f3a67e83516941a7310b703ea74e465d85f52b"
+    },
+    {
+      "path": "final/mna-full-long-2.png",
+      "bytes": 118469,
+      "sha256": "c70dac8fb606a1f3f393166f6369279c4d742ceecd0ae55737b08131c1dd1593"
+    },
+    {
+      "path": "final/mna-full-long-3.png",
+      "bytes": 141063,
+      "sha256": "41d1012c6634f0d5a8297e1504eaf30b70a7e7f1324d432f384c47d170c71258"
+    },
+    {
+      "path": "final/mna-full-long-4.png",
+      "bytes": 131221,
+      "sha256": "6cc57c3164a2054172cfc81a8464dd4c6d09f18738c34c46bdbd66065e25d62a"
+    },
+    {
+      "path": "final/mna-full-long-5.png",
+      "bytes": 131642,
+      "sha256": "7bf95799c787afcc50a0db7dfd648fec908b1620bebd21f0784c7a09d627c4c9"
+    },
+    {
+      "path": "final/mna-full-long-6.png",
+      "bytes": 131301,
+      "sha256": "dda2c8ab9f4f57b53fb7c1bf7efe9b7067691aadce788e0896c4d4ca423452b5"
+    },
+    {
+      "path": "final/mna-full-long-7.png",
+      "bytes": 108615,
+      "sha256": "b7fe50ff568026adaff5dcc8a9d20e99a937325c0a5074add1d282e08d095b1e"
+    },
+    {
+      "path": "mna-screening-partial.pdf",
+      "bytes": 29049,
+      "sha256": "72cc7264c1cc3bb1e99a78e38388e6852376cf70d02f8f9b7d8572a789fdf197"
+    },
+    {
+      "path": "mna-screening-partial.snapshot.json",
+      "bytes": 9056,
+      "sha256": "0038cb1fd375f6bd7edc17d56a0ebb58117cda83128d2b87ce7d896ce01fde4a"
+    },
+    {
+      "path": "final/mna-screening-partial.txt",
+      "bytes": 4996,
+      "sha256": "37e6f6a7297f329d3f3fbf6f9ee17405dc93b9e191acd75f3e782ca14564c89f"
+    },
+    {
+      "path": "final/mna-screening-partial-1.png",
+      "bytes": 133973,
+      "sha256": "67f2989fb63e1675e3b138b5445b8a7ce34aa57b01ebd822818cfbc5edae5655"
+    },
+    {
+      "path": "final/mna-screening-partial-2.png",
+      "bytes": 133359,
+      "sha256": "51a243d89b51148b58951aab9626d2646e896b591b56cdf08c74ee416bc66f28"
+    },
+    {
+      "path": "final/mna-screening-partial-3.png",
+      "bytes": 145058,
+      "sha256": "6d4f60d1f4b1254ae4f86500933bba162f938f26ff196dc3ad8b439e5445c5c4"
+    }
+  ],
+  "rendered": [
+    {
+      "name": "mna-v2-half-point",
+      "pages": 3,
+      "producer": "ClinicOS mna-a4-v2",
+      "generatedUnderInputTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+      "productionAndRelevantTestSourcesMatchFrozenTree": true
+    },
+    {
+      "name": "mna-full-normal",
+      "pages": 3,
+      "producer": "ClinicOS mna-a4-v2",
+      "generatedUnderInputTreeSha256": "34ac83ce2c560505a290cf93785dc0bbf89ede2c7077892aba743907e2ad0613",
+      "productionAndRelevantTestSourcesMatchFrozenTree": true
+    },
+    {
+      "name": "mna-full-long",
+      "pages": 7,
+      "producer": "ClinicOS mna-a4-v2",
+      "generatedUnderInputTreeSha256": "34ac83ce2c560505a290cf93785dc0bbf89ede2c7077892aba743907e2ad0613",
+      "productionAndRelevantTestSourcesMatchFrozenTree": true
+    },
+    {
+      "name": "mna-screening-partial",
+      "pages": 3,
+      "producer": "ClinicOS mna-a4-v2",
+      "generatedUnderInputTreeSha256": "34ac83ce2c560505a290cf93785dc0bbf89ede2c7077892aba743907e2ad0613",
+      "productionAndRelevantTestSourcesMatchFrozenTree": true
+    }
+  ],
+  "totalPages": 16,
+  "visualInspectionPending": true
+}

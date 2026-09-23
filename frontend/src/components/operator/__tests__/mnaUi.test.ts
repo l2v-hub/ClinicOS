@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MnaForm } from '../assessments/MnaForm';
+import { MnaAnthropometry } from '../assessments/MnaAnthropometry';
 import { AssessmentSummary } from '../assessments/AssessmentSummary';
 import { AssessmentHistory } from '../assessments/AssessmentHistory';
 import { createAssessmentDraftStore } from '../../../lib/assessments/assessmentDraftStore';
@@ -15,6 +16,57 @@ import { archiveEntryTypeLabel, buildDocumentArchive } from '../../../lib/patien
 Object.assign(globalThis, { React });
 const noop = () => {};
 const render = (element: React.ReactElement) => renderToStaticMarkup(element);
+
+test('MNA presentation uses singular points and Italian decimals without changing answers or snapshots', () => {
+  const answers: MnaAnswers = {
+    ...completeMna(),
+    A: 'moderate_reduction',
+    F: { method: 'category', category: 'gte21_lt23' },
+    M: '3_to_5_glasses',
+  };
+  const record = mnaAssessment({ answers, status: 'final' });
+  const original = structuredClone(record);
+  assert.equal(record.result.total?.score, 27.5);
+  const store = createAssessmentDraftStore();
+  const key = store.create('patient-a', undefined, 'mna');
+  store.update(key, { answers: structuredClone(answers) });
+  const form = render(React.createElement(MnaForm, {
+    draft: store.get(key)!, store, onSave: noop, onPreview: noop,
+  }));
+  assert.match(form, /Moderata riduzione dell’assunzione di cibo · 1 punto/);
+  assert.match(form, /19 ≤ IMC &lt; 21 · 1 punto/);
+  assert.match(form, /0 punti/);
+  assert.match(form, /0,5 punti/);
+  assert.doesNotMatch(form, /\b1 punti\b/);
+  const measured = structuredClone(answers);
+  measured.F = { method: 'measured' };
+  measured.measurements.weightKg = 20;
+  measured.measurements.heightCm = 100;
+  const measuredBefore = structuredClone(measured);
+  const derived = render(React.createElement(MnaAnthropometry, {
+    id: 'F', answers: measured, missing: [], onChange: noop,
+  }));
+  assert.match(derived, /19 ≤ IMC &lt; 21 · 1 punto/);
+  assert.doesNotMatch(derived, /\b1 punti\b/);
+  assert.deepEqual(measured, measuredBefore);
+  const summary = render(React.createElement(AssessmentSummary, { record }));
+  assert.match(summary, /1 punto/);
+  assert.match(summary, /0,5 punti/);
+  assert.match(summary, /27,5\/30/);
+  assert.doesNotMatch(summary, /\b1 punti\b/);
+  const history = {
+    items: [record], status: 'all', from: '', to: '', loading: false, error: null,
+    hasMore: false, setStatus: noop, setFrom: noop, setTo: noop, refresh: noop, loadMore: noop,
+  };
+  const list = render(React.createElement(AssessmentHistory, {
+    history: history as Parameters<typeof AssessmentHistory>[0]['history'], onOpen: noop,
+  }));
+  assert.match(list, /27,5\/30/);
+  assert.doesNotMatch(list, /27\.5/);
+  assert.deepEqual(record, original);
+  assert.deepEqual(store.get(key)!.fields.answers, answers);
+});
+
 test('MNA starts in progressive screening with no clinical selection and opens full without losing G–R', () => {
   const store = createAssessmentDraftStore();
   const key = store.create('patient-a', undefined, 'mna');

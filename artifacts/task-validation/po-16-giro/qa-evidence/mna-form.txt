@@ -1,0 +1,327 @@
+- banner:
+  - strong: PO16 · solo pazienti sintetici
+  - text: Profilo sintetico
+  - combobox "Profilo sintetico":
+    - option "operator" [selected]
+    - option "outsider"
+    - option "manager"
+  - text: Paziente sintetico
+  - combobox "Paziente sintetico":
+    - option "vitals-qa-anna" [selected]
+    - option "vitals-qa-bruno"
+  - button "Perdi risposta bozza"
+  - button "Perdi risposta finale"
+  - button "Rallenta salvataggio"
+  - button "Simula errore catalogo"
+  - button "Rallenta catalogo"
+  - button "Rallenta dati ingresso"
+  - button "Termina stampa simulata"
+  - button "Esporta evidenze"
+  - status
+- generic: ClinicOS · anteprima sintetica
+- main:
+  - button "Torna alla lista":
+  - generic: AD
+  - generic: Dall’Acqua, Anna Àgata
+  - generic: Codice fiscale non disponibile·
+  - generic: 76a · F
+  - button "Stampa scheda"
+  - button "Invio in PS":
+    - text: Invio in PS
+  - complementary "Completezza anagrafica":
+    - strong: Anagrafica da completare
+    - generic: "Dati da completare:"
+    - list:
+      - button "Codice fiscale"
+  - generic "Terapie rimaste in bozza · 1"
+  - tablist "Aree della cartella paziente":
+    - generic: Aree cartella
+    - tab "Raccolta dati ingresso"
+    - tab "Clinica"
+    - tab "Diario"
+    - tab "Moduli 1" [selected]:
+      - text: Moduli
+      - generic: "1"
+    - tab "Documenti"
+    - tab "Dimissione"
+  - tabpanel "Moduli 1":
+    - button "← Tutti i moduli"
+    - strong: Dall’Acqua, Anna Àgata
+    - generic: Nato/a il 01/01/1950 · CF da completare
+    - generic: Anagrafica da completare
+    - generic: Camera 11 · Letto A
+    - generic: Dalla cartella
+    - button "▼ Mini Nutritional Assessment · MNA® Nuova compilazione" [expanded]:
+      - generic: ▼
+      - generic: Mini Nutritional Assessment · MNA®
+      - button "Nuova compilazione"
+    - paragraph: Screening e valutazione completa dello stato nutrizionale.
+    - button "Apri scheda corrente"
+    - paragraph: "Compilatore: Operatrice QA. Le bozze locali restano in questa sessione; salva la bozza per ritrovarla dopo l’accesso successivo."
+    - region "Scheda Mini Nutritional Assessment · MNA®":
+      - status: Bozza salvata · versione 1 · Operatrice QA
+      - text: Data e ora della valutazione · Europe/Rome
+      - textbox "Data e ora della valutazione · Europe/Rome": 2026-09-23T08:30
+      - group "Estensione della valutazione":
+        - generic: Estensione della valutazione
+        - radio "Screening A–F"
+        - text: Screening A–F
+        - radio "Valutazione completa A–R" [checked]
+        - text: Valutazione completa A–R
+      - region "Screening · A–F":
+        - heading "Screening · A–F" [level=3]
+        - paragraph: 6 di 6 risposte
+        - group "A. Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito, problemi digestivi, difficoltà di masticazione o deglutizione)":
+          - generic: A. Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito, problemi digestivi, difficoltà di masticazione o deglutizione)
+          - radio "Grave riduzione dell’assunzione di cibo · 0 punti"
+          - generic: Grave riduzione dell’assunzione di cibo · 0 punti
+          - radio "Moderata riduzione dell’assunzione di cibo · 1 punto" [checked]
+          - generic: Moderata riduzione dell’assunzione di cibo · 1 punto
+          - radio "Nessuna riduzione dell’assunzione di cibo · 2 punti"
+          - generic: Nessuna riduzione dell’assunzione di cibo · 2 punti
+          - button "Segna come non verificato"
+        - group "B. Perdita di peso recente (< 3 mesi)":
+          - generic: B. Perdita di peso recente (< 3 mesi)
+          - radio "Perdita di peso > 3 kg · 0 punti"
+          - generic: Perdita di peso > 3 kg · 0 punti
+          - radio "Non sa · 1 punto"
+          - generic: Non sa · 1 punto
+          - radio "Perdita di peso tra 1 e 3 kg · 2 punti" [checked]
+          - generic: Perdita di peso tra 1 e 3 kg · 2 punti
+          - radio "Nessuna perdita di peso · 3 punti"
+          - generic: Nessuna perdita di peso · 3 punti
+          - button "Segna come non verificato"
+        - group "C. Motricità":
+          - generic: C. Motricità
+          - radio "Dal letto alla poltrona · 0 punti"
+          - generic: Dal letto alla poltrona · 0 punti
+          - radio "Autonomo a domicilio · 1 punto"
+          - generic: Autonomo a domicilio · 1 punto
+          - radio "Esce di casa · 2 punti" [checked]
+          - generic: Esce di casa · 2 punti
+          - button "Segna come non verificato"
+        - 'group "D. Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici?"':
+          - generic: "D. Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici?"
+          - radio "Sì · 0 punti"
+          - generic: Sì · 0 punti
+          - radio "No · 2 punti" [checked]
+          - generic: No · 2 punti
+          - button "Segna come non verificato"
+        - group "E. Problemi neuropsicologici":
+          - generic: E. Problemi neuropsicologici
+          - radio "Demenza o depressione grave · 0 punti"
+          - generic: Demenza o depressione grave · 0 punti
+          - radio "Demenza moderata · 1 punto"
+          - generic: Demenza moderata · 1 punto
+          - radio "Nessun problema psicologico · 2 punti" [checked]
+          - generic: Nessun problema psicologico · 2 punti
+          - button "Segna come non verificato"
+        - heading "F. Indice di massa corporea (IMC = peso / (altezza)² in kg/m²)" [level=4]
+        - text: Peso (kg)
+        - textbox "Peso (kg)": "64"
+        - text: Data rilevazione peso · facoltativa
+        - textbox "Data rilevazione peso · facoltativa":
+          - /placeholder: AAAA-MM-GG
+          - text: 2026-09-23
+        - text: Altezza (cm)
+        - textbox "Altezza (cm)": "160"
+        - text: Data rilevazione altezza · facoltativa
+        - textbox "Data rilevazione altezza · facoltativa":
+          - /placeholder: AAAA-MM-GG
+          - text: 2026-09-23
+        - paragraph: Dati inseriti manualmente per questa valutazione. Lascia vuota la data se sconosciuta.
+        - group "Metodo F":
+          - radio "Da misure" [checked]
+          - text: Da misure
+          - radio "Categoria dichiarata" [disabled]
+          - text: Categoria dichiarata
+        - status:
+          - paragraph: "IMC: 25 kg/m²"
+          - paragraph: IMC ≥ 23 · 3 punti
+          - paragraph: La fascia deriva dalle misure presenti. Per usare una categoria dichiarata, modifica o rimuovi esplicitamente le misure necessarie.
+      - status:
+        - strong: "Screening: 12/14 · Stato nutrizionale normale"
+      - region "Valutazione globale · G–R":
+        - heading "Valutazione globale · G–R" [level=3]
+        - paragraph: 12 di 12 risposte
+        - group "G. Il paziente vive autonomamente a domicilio?":
+          - generic: G. Il paziente vive autonomamente a domicilio?
+          - radio "Sì · 1 punto" [checked]
+          - generic: Sì · 1 punto
+          - radio "No · 0 punti"
+          - generic: No · 0 punti
+          - button "Segna come non verificato"
+        - group "H. Prende più di 3 medicinali al giorno?":
+          - generic: H. Prende più di 3 medicinali al giorno?
+          - radio "Sì · 0 punti"
+          - generic: Sì · 0 punti
+          - radio "No · 1 punto" [checked]
+          - generic: No · 1 punto
+          - button "Segna come non verificato"
+        - group "I. Presenza di decubiti, ulcere cutanee?":
+          - generic: I. Presenza di decubiti, ulcere cutanee?
+          - radio "Sì · 0 punti"
+          - generic: Sì · 0 punti
+          - radio "No · 1 punto" [checked]
+          - generic: No · 1 punto
+          - button "Segna come non verificato"
+        - group "J. Quanti pasti completi prende al giorno?":
+          - generic: J. Quanti pasti completi prende al giorno?
+          - radio "1 pasto · 0 punti"
+          - generic: 1 pasto · 0 punti
+          - radio "2 pasti · 1 punto"
+          - generic: 2 pasti · 1 punto
+          - radio "3 pasti · 2 punti" [checked]
+          - generic: 3 pasti · 2 punti
+          - button "Segna come non verificato"
+        - region "K. Consuma?":
+          - heading "K. Consuma?" [level=4]
+          - paragraph: 3 di 3 risposte · tutte necessarie
+          - group "Almeno una volta al giorno dei prodotti lattiero-caseari?":
+            - generic: Almeno una volta al giorno dei prodotti lattiero-caseari?
+            - radio "Sì" [checked]
+            - generic: Sì
+            - radio "No"
+            - generic: "No"
+            - button "Segna come non verificato"
+          - group "Una o due volte la settimana uova o legumi?":
+            - generic: Una o due volte la settimana uova o legumi?
+            - radio "Sì" [checked]
+            - generic: Sì
+            - radio "No"
+            - generic: "No"
+            - button "Segna come non verificato"
+          - group "Ogni giorno della carne, del pesce o del pollame?":
+            - generic: Ogni giorno della carne, del pesce o del pollame?
+            - radio "Sì" [checked]
+            - generic: Sì
+            - radio "No"
+            - generic: "No"
+            - button "Segna come non verificato"
+        - group "L. Consuma almeno due volte al giorno frutta o verdura?":
+          - generic: L. Consuma almeno due volte al giorno frutta o verdura?
+          - radio "No · 0 punti"
+          - generic: No · 0 punti
+          - radio "Sì · 1 punto" [checked]
+          - generic: Sì · 1 punto
+          - button "Segna come non verificato"
+        - group "M. Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…)":
+          - generic: M. Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…)
+          - radio "Meno di 3 bicchieri · 0 punti"
+          - generic: Meno di 3 bicchieri · 0 punti
+          - radio "Da 3 a 5 bicchieri · 0,5 punti"
+          - generic: Da 3 a 5 bicchieri · 0,5 punti
+          - radio "Più di 5 bicchieri · 1 punto" [checked]
+          - generic: Più di 5 bicchieri · 1 punto
+          - button "Segna come non verificato"
+        - group "N. Come si nutre?":
+          - generic: N. Come si nutre?
+          - radio "Necessita di assistenza · 0 punti"
+          - generic: Necessita di assistenza · 0 punti
+          - radio "Autonomamente con difficoltà · 1 punto"
+          - generic: Autonomamente con difficoltà · 1 punto
+          - radio "Autonomamente senza difficoltà · 2 punti" [checked]
+          - generic: Autonomamente senza difficoltà · 2 punti
+          - button "Segna come non verificato"
+        - group "O. Il paziente si considera ben nutrito? (ha dei problemi nutrizionali)":
+          - generic: O. Il paziente si considera ben nutrito? (ha dei problemi nutrizionali)
+          - radio "Malnutrizione grave · 0 punti"
+          - generic: Malnutrizione grave · 0 punti
+          - radio "Malnutrizione moderata o non sa · 1 punto"
+          - generic: Malnutrizione moderata o non sa · 1 punto
+          - radio "Nessun problema nutrizionale · 2 punti" [checked]
+          - generic: Nessun problema nutrizionale · 2 punti
+          - button "Segna come non verificato"
+        - group "P. Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età?":
+          - generic: P. Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età?
+          - radio "Meno buono · 0 punti"
+          - generic: Meno buono · 0 punti
+          - radio "Non sa · 0,5 punti"
+          - generic: Non sa · 0,5 punti
+          - radio "Uguale · 1 punto"
+          - generic: Uguale · 1 punto
+          - radio "Migliore · 2 punti" [checked]
+          - generic: Migliore · 2 punti
+          - button "Segna come non verificato"
+        - heading "Q. Circonferenza brachiale (CB, cm)" [level=4]
+        - text: Circonferenza brachiale (cm)
+        - textbox "Circonferenza brachiale (cm)"
+        - text: Data rilevazione circonferenza brachiale · facoltativa
+        - textbox "Data rilevazione circonferenza brachiale · facoltativa":
+          - /placeholder: AAAA-MM-GG
+        - paragraph: Dati inseriti manualmente per questa valutazione. Lascia vuota la data se sconosciuta.
+        - group "Metodo Q":
+          - radio "Da misure"
+          - text: Da misure
+          - radio "Categoria dichiarata" [checked]
+          - text: Categoria dichiarata
+        - group "Categoria dichiarata":
+          - generic: Categoria dichiarata
+          - radio "CB < 21 cm · 0 punti"
+          - generic: CB < 21 cm · 0 punti
+          - radio "21 ≤ CB ≤ 22 cm · 0,5 punti" [checked]
+          - generic: 21 ≤ CB ≤ 22 cm · 0,5 punti
+          - radio "CB > 22 cm · 1 punto"
+          - generic: CB > 22 cm · 1 punto
+          - button "Segna come non verificato"
+        - paragraph: "Q corretto: CB < 21 cm = 0; 21–22 cm inclusi = 0,5; CB > 22 cm = 1."
+        - heading "R. Circonferenza del polpaccio (CP in cm)" [level=4]
+        - text: Circonferenza del polpaccio (cm)
+        - textbox "Circonferenza del polpaccio (cm)"
+        - text: Data rilevazione circonferenza del polpaccio · facoltativa
+        - textbox "Data rilevazione circonferenza del polpaccio · facoltativa":
+          - /placeholder: AAAA-MM-GG
+        - paragraph: Dati inseriti manualmente per questa valutazione. Lascia vuota la data se sconosciuta.
+        - group "Metodo R":
+          - radio "Da misure"
+          - text: Da misure
+          - radio "Categoria dichiarata" [checked]
+          - text: Categoria dichiarata
+        - group "Categoria dichiarata":
+          - generic: Categoria dichiarata
+          - radio "CP < 31 cm · 0 punti"
+          - generic: CP < 31 cm · 0 punti
+          - radio "CP ≥ 31 cm · 1 punto" [checked]
+          - generic: CP ≥ 31 cm · 1 punto
+          - button "Segna come non verificato"
+      - text: Note facoltative
+      - textbox "Note facoltative 0 di 4000 caratteri"
+      - generic: 0 di 4000 caratteri
+      - paragraph:
+        - strong: "Screening:"
+        - text: 12/14 · Stato nutrizionale normale
+      - paragraph:
+        - strong: "Valutazione globale:"
+        - text: subtotale 15,5/16
+      - paragraph:
+        - strong: "Valutazione totale: 27,5/30 · Stato nutrizionale normale"
+      - paragraph: Le fasce sono l’interpretazione dello strumento. Non generano automaticamente diagnosi o trattamenti.
+      - button "Salva bozza" [disabled]
+      - button "Salva e verifica anteprima"
+      - paragraph: ® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.
+      - generic "Fonte, riferimenti e correzioni documentate"
+      - button "Chiudi · conserva compilazione"
+      - button "Scarta modifiche locali"
+    - region "Storico del modulo":
+      - heading "Storico valutazioni" [level=3]
+      - text: Stato
+      - combobox "Stato":
+        - option "Tutte" [selected]
+        - option "Le mie bozze"
+        - option "Finali"
+      - text: Valutazione dal
+      - textbox "Valutazione dal"
+      - text: Al
+      - textbox "Al"
+      - button "Aggiorna storico"
+      - paragraph: Le bozze sono visibili solo al loro autore. Ordine per data di registrazione.
+      - list:
+        - strong: Bozza · 23/09/2026 08:30
+        - paragraph: Operatrice QA · Registrata 23/09/2026 10:20
+        - paragraph: Valutazione completa MNA® · 27,5/30 · Stato nutrizionale normale
+        - button "Riprendi bozza"
+        - strong: Finale · 22/09/2026 08:30
+        - paragraph: Operatrice QA · Registrata 23/09/2026 10:20
+        - paragraph: Valutazione completa MNA® · 30/30 · Stato nutrizionale normale
+        - generic: PDF archiviato
+        - button "Apri valutazione"

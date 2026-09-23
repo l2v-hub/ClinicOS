@@ -1,0 +1,9 @@
+{
+  "cwd": "frontend",
+  "command": "npm run build",
+  "exitCode": 0,
+  "sourceStateId": "d5c3c244c9a4ed8df9dfb89264277cc7f94b5525ceacc822353b5be0679a91ff",
+  "runtimeSourceId": "2352a0fd4ad2b9aef8b8c1480a87f019dccbf588a4a799eedbd34dca70d71dff",
+  "binding": "Source capture preceded final174-pass test suite and production build. No source changed afterward.",
+  "observation": "exec session91130 completed with exit_code0. Build log was initially captured at a temporary sibling evidence path and moved unchanged to frontend/build.log after completion."
+}

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-16-frontend-evidence released\",\n  \"reason\": \"Implementation receipt and finalizer complete. Source handoff and independent source/baseline verification passed. Release evidence ownership before final release bookkeeping and validation/artifact manifest generation. No application writes, worker processes or deployment remain.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-16-frontend-evidence\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po16-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T08:12:42.542Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T08:12:42.542Z\",\n    \"progress\": 0,\n    \"context\": \"Evidence finalization only in C:/Workspace/ClinicOSHouse-worktrees/po16-final-ui/artifacts/task-validation/po-16-giro/frontend/**. Application source frozen d5c3c244c9a4ed8df9dfb89264277cc7f94b5525ceacc822353b5be0679a91ff, source manifest939ad0f35e471c418008ee0737730b4b3c3b1766f3f02409ab7b3803a95bac52, implementation claim released. Root GO receipt36fb9675 remains authority. Verify baseline/current hashes and final logs, produce receipt/manifests and independent review. No application/backend/runtime/server/port/commit/push/deploy/live writes.\"\n  }\n}"
+    }
+  ]
+}

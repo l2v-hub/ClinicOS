@@ -1,0 +1,11 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"query\": \"MNA PDF immutable ready retry renderer version sourceManifest Producer BMI formatting threshold 19 21 23\",\n  \"results\": [\n    {\n      \"key\": \"clinicos/document-scan-pdf-20260915\",\n      \"namespace\": \"patterns\",\n      \"value\": \"ClinicOS scanner release718b3860fa88e5140c475f1ed6b99b278256...\",\n      \"similarity\": 0.3309678355484141,\n      \"provenanceType\": \"unknown\"\n    }\n  ],\n  \"total\": 1,\n  \"searchTime\": \"802.08ms\",\n  \"backend\": \"HNSW + sql.js\"\n}"
+      }
+    ]
+  }
+}

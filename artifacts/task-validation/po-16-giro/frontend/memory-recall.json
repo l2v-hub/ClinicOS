@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"query\": \"MNA displayMnaBmi Italian decimals singular punto presentation scoring boundaries\",\n  \"results\": [],\n  \"total\": 0,\n  \"searchTime\": \"245.78ms\",\n  \"backend\": \"HNSW + sql.js\"\n}"
+    }
+  ]
+}

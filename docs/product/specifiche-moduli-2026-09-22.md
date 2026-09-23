@@ -1,6 +1,6 @@
 # ClinicOS — Specifiche dei moduli allegati
 
-Documento collegato al [piano PO del 22 settembre](<C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/docs/product/piano-po-feedback-2026-09-22.md>). È una specifica preparatoria: punteggi e diciture sono ricavati dagli allegati, non costituiscono una convalida clinica indipendente.
+Documento collegato al [piano PO del 22 settembre](<C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/docs/product/piano-po-feedback-2026-09-22.md>), aggiornato all'implementazione del 23 settembre. I cinque moduli nuovi o versionati (PAINAD, Trasferimenti posturali, Tinetti, MNA e GDS-15) sono disponibili con bozza, anteprima, finale, rettifica, storico e PDF in archivio. Punteggi e diciture derivano dagli allegati e dai riferimenti espliciti sotto; le verifiche tecniche non costituiscono una convalida clinica indipendente.
 
 ## 1. Inventario e destinazione
 
@@ -9,13 +9,13 @@ Documento collegato al [piano PO del 22 settembre](<C:/Workspace/ClinicOSHouse-w
 | Medicazioni | Già nell’app | Presente | Conservare |
 | Contenzioni | Già nell’app | Presente | Conservare |
 | Braden | Già nell’app | Presente | Conservare |
-| PAINAD | [PDF, 1 pagina](<C:/Users/Claudio/Downloads/Nuova cartella/scala PAINAD.pdf>) | Non individuato nel catalogo/codice corrente | Nuovo modulo |
-| Trasferimenti posturali | [DOCX, 4 tabelle](<C:/Users/Claudio/Downloads/Nuova cartella/scheda trasferimenti 1.1-- NEW.docx>) | Non individuato | Nuovo modulo di mobilizzazione |
-| Tinetti | [PDF, 2 pagine](<C:/Users/Claudio/Downloads/Nuova cartella/scala di TINETTI.pdf>) | Scala, storico e stampa presenti | Aggiornare dopo chiarimento item 11 |
-| MNA | [PDF, 1 pagina](<C:/Users/Claudio/Downloads/Nuova cartella/MNA.pdf>) | Non individuato | Nuovo modulo completo A–R |
-| GDS-15 | [PDF, 1 pagina](<C:/Users/Claudio/Downloads/Nuova cartella/scala GDS.pdf>) | Non individuato | Nuova scala a 15 item |
-| NRS | Già nell’app | Presente | Ritirare dal catalogo delle nuove compilazioni, conservare storico |
-| Dimissione | Già nell’app | Presente dentro Moduli | Spostare al livello di Documenti |
+| PAINAD | [PDF, 1 pagina](<C:/Users/Claudio/Downloads/Nuova cartella/scala PAINAD.pdf>) | Pubblicata PO-10 | Catalogo Moduli |
+| Trasferimenti posturali | [DOCX, 4 tabelle](<C:/Users/Claudio/Downloads/Nuova cartella/scheda trasferimenti 1.1-- NEW.docx>) | Pubblicata PO-11 | Assistenza e mobilizzazione |
+| Tinetti | [PDF, 2 pagine](<C:/Users/Claudio/Downloads/Nuova cartella/scala di TINETTI.pdf>) | Versionata PO-12, massimo28 | Nuove compilazioni e storico precedente separati |
+| MNA | [PDF, 1 pagina](<C:/Users/Claudio/Downloads/Nuova cartella/MNA.pdf>) | Pubblicata PO-13, A–R | Screening e valutazione completa |
+| GDS-15 | [PDF, 1 pagina](<C:/Users/Claudio/Downloads/Nuova cartella/scala GDS.pdf>) | Pubblicata PO-14 | Screening a15item |
+| NRS | Già nell’app | Storico protetto PO-15 | Sola lettura/stampa; altri campi dolore invariati |
+| Dimissione | Già nell’app | Spostata PO-09 | Accanto a Documenti |
 
 L’audio chiede di togliere Tinetti/NRS e inserire gli allegati. Poiché è allegata una nuova Tinetti, l’interpretazione proposta è sostituire la versione Tinetti e ritirare NRS dal catalogo operativo. Non significa cancellare valutazioni pregresse né convertire NRS in PAINAD.
 
@@ -106,9 +106,9 @@ Il PDF indica **equilibrio massimo 16, andatura massima 12, totale 28**. Tuttavi
 
 La versione applicativa attuale distingue quattro risposte: lunghezza DX, altezza DX, lunghezza SX, altezza SX. È compatibile con un massimo dell’andatura di 12. Non eliminare queste distinzioni per riprodurre una scheda incoerente.
 
-**Decisione necessaria:** referente clinico conferma il modello corretto, le descrizioni dell’item 11 e la versione di riferimento. L’adattamento grafico può essere preparato; il nuovo calcolo non va pubblicato prima della risoluzione.
+**Decisione implementata PO-12:** preservare le quattro voci distinte già presenti, corroborate dai riferimenti universitari documentati negli artefatti PO-12, e il massimo16+12=28. Il PDF allegato non è stato copiato nei punti incoerenti; provenienza e differenze sono dichiarate. Nessuna migrazione o ricalcolo dei record precedenti e nessuna convalida clinica indipendente dichiarata.
 
-### Struttura proposta, soggetta alla convalida dell’item 11
+### Struttura implementata PO-12
 
 | Sezione | Item | Massimo |
 |---|---|---|
@@ -129,9 +129,9 @@ La versione applicativa attuale distingue quattro risposte: lunghezza DX, altezz
 | Andatura | Tronco | 2 |
 | Andatura | Base d’appoggio | 1 |
 
-Fasce dell’allegato: meno di 19 elevato; 19–23 moderato; 24–28 basso. Mostrarle solo per un risultato completo secondo la versione convalidata.
+Fasce dell’allegato: meno di19 elevato;19–23 moderato;24–28 basso. Sono mostrate solo per un risultato completo secondo la versione documentata.
 
-### Problema aggiuntivo individuato nel codice
+### Problema individuato nella baseline, corretto in PO-12
 
 Il form inizializza le risposte mancanti a `-1`, mentre le funzioni di somma sostituiscono solo valori nulli/assenti con zero. Il riepilogo del rischio appare quando almeno una risposta è compilata. Ciò può produrre un totale spurio e una classificazione prematura durante la compilazione. Il salvataggio richiede già tutti gli item: non è stata dimostrata la persistenza di questi totali parziali.
 
@@ -161,7 +161,7 @@ Il modello allegato è la **MNA completa**, con screening A–F (14 punti) e val
 | N | Modalità di alimentazione | 0 / 1 / 2 |
 | O | Autovalutazione dello stato nutrizionale | 0 / 1 / 2 |
 | P | Salute rispetto ai coetanei | 0 / 0,5 / 1 / 2 |
-| Q | Circonferenza brachiale | <21: 0; fascia intermedia da chiarire: 0,5; >22: 1 |
+| Q | Circonferenza brachiale | <21: 0;21≤CB≤22:0,5;>22:1 |
 | R | Circonferenza polpaccio | <31: 0; ≥31: 1 |
 
 Le descrizioni complete restano quelle del PDF. “Non sa” è una risposta prevista in alcune domande, con un punteggio proprio; non è equivalente a domanda non compilata.
@@ -172,9 +172,9 @@ Le descrizioni complete restano quelle del PDF. “Non sa” è una risposta pre
 
 Fasce screening del modello: 12–14 normale; 8–11 a rischio; 0–7 malnutrito. Fasce globali: 24–30 normale; 17–23,5 rischio; <17 cattivo stato nutrizionale. Riportare fonte e revisione del modello, conservando i riferimenti presenti nell’allegato.
 
-### Refuso da chiarire
+### Refuso risolto con riferimento esplicito
 
-L’item Q del PDF riporta visivamente **“0.5 = CB ≤ 21 CB ≤ 22”**, in conflitto con la prima alternativa `CB < 21`. L’intervallo presumibilmente inteso è `21 ≤ CB ≤ 22`, ma va confermato sul modello concordato, non assunto silenziosamente dal codice.
+L’item Q del PDF riporta **“0.5 = CB ≤ 21 CB ≤ 22”**, in conflitto con `CB < 21`. La versione ufficiale inglese amended2023 conferma `21 ≤ CB ≤ 22`: PO-13 usa tale intervallo e dichiara la correzione Q nella versione e nella fonte. Le altre diciture restano quelle italiane allegate, inclusi K ed E. Riferimenti/copyright conservati; nessun accordo esterno accettato o convalida clinica indipendente dichiarata.
 
 **Prove:** somma massima 14/16/30; mezzi punti conservati; confini IMC 19/21/23, CB 21/22, CP 31; tutte le combinazioni dei tre Sì/No dell’item K; un sottoitem di K mancante; altezza zero/assente; dati fuori formato; screening incompleto e solo screening completato. Testare funzioni realmente utilizzate dall’app con risultati attesi indipendenti, senza copiare l’implementazione nei test.
 
@@ -195,7 +195,7 @@ Conservare la nota del modello: GDS non sostituisce la diagnosi clinica; il file
 
 ## 8. Riferimenti tecnici per evitare duplicazioni
 
-Percorsi riferiti al commit `393e8b4ae909d66d945d474c01bb7669b0d8be3d`. Indicano dove iniziare l’implementazione, non file da riscrivere interamente.
+Percorsi storici riferiti al commit di analisi `393e8b4ae909d66d945d474c01bb7669b0d8be3d`; descrivono la baseline, non difetti ancora aperti. I percorsi correnti sono tracciati nei manifest di ogni attività e nel registro di esecuzione.
 
 | Ambito | Evidenza nel codice |
 |---|---|

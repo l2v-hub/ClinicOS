@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+const base='artifacts/task-validation/po-16-giro',sha=b=>createHash('sha256').update(b).digest('hex');
+const bytes=await readFile(`${base}/preview/synthetic-state.json`),s=JSON.parse(bytes);
+assert.deepEqual(s.cartelle,s.initialCartelle,'Opening and local completion of discharge must not write Cartella');
+assert.deepEqual(s.intakes,s.initialIntakes);
+assert.ok(!s.requests.some(r=>r.method==='PUT'&&r.path.endsWith('/cartella')));
+const id=s.seed.presentationDraft.id,row=s.assessments.find(a=>a.id===id);
+assert.equal(row.status,'final');assert.equal(row.finalSnapshot.result.total.score,27.5);
+assert.equal(row.finalSnapshot.bmi,64/(1.6**2));
+assert.notEqual(row.finalSnapshot.bmi,25,'Presentation must not round persisted BMI');
+assert.deepEqual(row.finalSnapshot.answers.measurements,s.seed.presentationDraft.answers.measurements);
+assert.equal(s.assessments.filter(a=>a.status==='final').length,6);
+assert.equal(s.documents.length,6);
+for(const doc of s.documents){assert.equal(sha(await readFile(`${base}/qa-evidence/pdfs/${doc.id}.pdf`)),doc.sha256);if(s.assessments.find(a=>a.id===doc.assessmentId)?.type==='mna')assert.equal(doc.sourceManifest.rendererVersion,'mna-a4-v2')}
+const doc=s.documents.find(d=>d.assessmentId===id);assert.ok(doc);
+const errors=s.requests.filter(r=>r.status>=400);assert.equal(errors.length,0,JSON.stringify(errors));
+await writeFile(`${base}/browser-state-receipt.json`,JSON.stringify({at:new Date().toISOString(),stateSha256:sha(bytes),checks:'MNA27.5 and precise BMI retained, new PDF renderer v2, hash verified, no discharge write, all Cartella/intake data unchanged',assessmentId:id,pdfId:doc.id,pdfSha256:doc.sha256,snapshotSha256:row.snapshotSha256,counts:{assessments:s.assessments.length,finals:6,documents:6},limitations:'Synthetic browser run; PDFv1 immutability covered independently by backend DB test, not this fresh fixture'},null,2));
+console.log(JSON.stringify({checks:'passed',pdfId:doc.id}));

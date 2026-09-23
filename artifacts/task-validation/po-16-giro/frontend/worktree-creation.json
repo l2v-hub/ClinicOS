@@ -1,0 +1,25 @@
+{
+  "command": [
+    "git",
+    "worktree",
+    "add",
+    "-b",
+    "codex/po16-final-ui",
+    "C:/Workspace/ClinicOSHouse-worktrees/po16-final-ui",
+    "53e57d694850775b85ad1d22904e7bb1e6e84618"
+  ],
+  "initial": {
+    "chunk_id": "f37ed6",
+    "wall_time_seconds": 10.0143775,
+    "session_id": 88715,
+    "original_token_count": 235,
+    "output": "Preparing worktree (new branch 'codex/po16-final-ui')\nUpdating files:   8% (669/8244)\rUpdating files:   9% (742/8244)\rUpdating files:  10% (825/8244)\rUpdating files:  11% (907/8244)\rUpdating files:  11% (923/8244)\rUpdating files:  12% (990/8244)\rUpdating files:  13% (1072/8244)\rUpdating files:  13% (1130/8244)\rUpdating files:  14% (1155/8244)\rUpdating files:  15% (1237/8244)\rUpdating files:  15% (1302/8244)\rUpdating files:  16% (1320/8244)\rUpdating files:  17% (1402/8244)\rUpdating files:  17% (1443/8244)\rUpdating files:  18% (1484/8244)\rUpdating files:  19% (1567/8244)\rUpdating files:  19% (1636/8244)\rUpdating files:  20% (1649/8244)\rUpdating files:  21% (1732/8244)\rUpdating files:  21% (1765/8244)\rUpdating files:  22% (1814/8244)\rUpdating files:  23% (1897/8244)\rUpdating files:  23% (1921/8244)\rUpdating files:  24% (1979/8244)\rUpdating files:  25% (2061/8244)\rUpdating files:  25% (2111/8244)\rUpdating files:  26% (2144/8244)\r"
+  },
+  "completion": {
+    "chunk_id": "4310cf",
+    "wall_time_seconds": 0.0000338,
+    "exit_code": 0,
+    "original_token_count": 782,
+    "output": "Updating files:  27% (2226/8244)\rUpdating files:  28% (2309/8244)\rUpdating files:  29% (2391/8244)\rUpdating files:  29% (2419/8244)\rUpdating files:  30% (2474/8244)\rUpdating files:  31% (2556/8244)\rUpdating files:  32% (2639/8244)\rUpdating files:  33% (2721/8244)\rUpdating files:  34% (2803/8244)\rUpdating files:  35% (2886/8244)\rUpdating files:  35% (2944/8244)\rUpdating files:  36% (2968/8244)\rUpdating files:  37% (3051/8244)\rUpdating files:  38% (3133/8244)\rUpdating files:  38% (3154/8244)\rUpdating files:  39% (3216/8244)\rUpdating files:  40% (3298/8244)\rUpdating files:  41% (3381/8244)\rUpdating files:  41% (3416/8244)\rUpdating files:  42% (3463/8244)\rUpdating files:  43% (3545/8244)\rUpdating files:  44% (3628/8244)\rUpdating files:  44% (3654/8244)\rUpdating files:  45% (3710/8244)\rUpdating files:  46% (3793/8244)\rUpdating files:  47% (3875/8244)\rUpdating files:  47% (3923/8244)\rUpdating files:  48% (3958/8244)\rUpdating files:  49% (4040/8244)\rUpdating files:  50% (4122/8244)\rUpdating files:  51% (4205/8244)\rUpdating files:  51% (4261/8244)\rUpdating files:  52% (4287/8244)\rUpdating files:  53% (4370/8244)\rUpdating files:  54% (4452/8244)\rUpdating files:  55% (4535/8244)\rUpdating files:  56% (4617/8244)\rUpdating files:  56% (4674/8244)\rUpdating files:  57% (4700/8244)\rUpdating files:  58% (4782/8244)\rUpdating files:  59% (4864/8244)\rUpdating files:  60% (4947/8244)\rUpdating files:  61% (5029/8244)\rUpdating files:  62% (5112/8244)\rUpdating files:  62% (5147/8244)\rUpdating files:  63% (5194/8244)\rUpdating files:  64% (5277/8244)\rUpdating files:  65% (5359/8244)\rUpdating files:  66% (5442/8244)\rUpdating files:  67% (5524/8244)\rUpdating files:  67% (5577/8244)\rUpdating files:  68% (5606/8244)\rUpdating files:  69% (5689/8244)\rUpdating files:  70% (5771/8244)\rUpdating files:  71% (5854/8244)\rUpdating files:  72% (5936/8244)\rUpdating files:  72% (5940/8244)\rUpdating files:  73% (6019/8244)\rUpdating files:  74% (6101/8244)\rUpdating files:  75% (6183/8244)\rUpdating files:  76% (6266/8244)\rUpdating files:  76% (6310/8244)\rUpdating files:  77% (6348/8244)\rUpdating files:  78% (6431/8244)\rUpdating files:  79% (6513/8244)\rUpdating files:  80% (6596/8244)\rUpdating files:  81% (6678/8244)\rUpdating files:  81% (6709/8244)\rUpdating files:  82% (6761/8244)\rUpdating files:  83% (6843/8244)\rUpdating files:  84% (6925/8244)\rUpdating files:  85% (7008/8244)\rUpdating files:  85% (7057/8244)\rUpdating files:  86% (7090/8244)\rUpdating files:  87% (7173/8244)\rUpdating files:  88% (7255/8244)\rUpdating files:  89% (7338/8244)\rUpdating files:  90% (7420/8244)\rUpdating files:  90% (7462/8244)\rUpdating files:  91% (7503/8244)\rUpdating files:  92% (7585/8244)\rUpdating files:  93% (7667/8244)\rUpdating files:  94% (7750/8244)\rUpdating files:  95% (7832/8244)\rUpdating files:  95% (7851/8244)\rUpdating files:  96% (7915/8244)\rUpdating files:  97% (7997/8244)\rUpdating files:  97% (8040/8244)\rUpdating files:  98% (8080/8244)\rUpdating files:  99% (8162/8244)\rUpdating files: 100% (8244/8244)\rUpdating files: 100% (8244/8244), done.\nHEAD is now at 53e57d69 feat(moduli): add catalog and preserve legacy pain records\n"
+  }
+}

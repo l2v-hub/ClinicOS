@@ -1,0 +1,12 @@
+{
+  "implementationAuthorized": true,
+  "publicationAuthorizedToWorker": false,
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "authority": "Explicit /root GO message after PO15 live verification",
+  "backend": "4a3368ee SUCCESS / health 200",
+  "frontend": "dpl_CpDaCDYqhba9MqMP7W232AcUQXPw READY / alias sourceCommit 53e57d69",
+  "smoke": "Catalogo 8 moduli / NRS read-only without errors, as verified by root",
+  "releaseReceiptCommit": "36fb96750575d409dc9de41ea42e1e858c472253",
+  "scope": "MNA presentation only, v1 unchanged/v2 fresh DB tests, BMI threshold formatter; generated PDFs rendered and inspected",
+  "validationDirection": "Focused meaningful tests; root owns integrated flow and final builds; no redundant large-suite reruns."
+}

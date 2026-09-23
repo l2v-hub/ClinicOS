@@ -95,7 +95,7 @@ export function MnaSummary({ record }: { record: MnaAssessmentDto }) {
                     {item.id}. {item.label} ·{' '}
                     {item.score === null
                       ? 'Non compilato'
-                      : `${item.score.toLocaleString('it-IT')} punti`}
+                      : `${item.score.toLocaleString('it-IT')} ${item.score === 1 ? 'punto' : 'punti'}`}
                   </strong>
                   {item.id === 'K' ? (
                     <ul>

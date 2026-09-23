@@ -18,7 +18,7 @@ export const assessmentRendererVersion = (snapshot: AssessmentSnapshot) =>
     : snapshot.form.type === 'gds15'
       ? 'gds15-a4-v1'
       : snapshot.form.type === 'mna'
-        ? 'mna-a4-v1'
+        ? 'mna-a4-v2'
         : snapshot.form.type === 'tinetti'
           ? 'tinetti-a4-v1'
           : 'transfers-a4-v1';

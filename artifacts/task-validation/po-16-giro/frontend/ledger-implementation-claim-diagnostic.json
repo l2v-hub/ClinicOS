@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "tool call error: tool call failed for `ruflo/claims_claim`\n\nCaused by:\n    Mcp error: -32603: Failed to execute MCP tool 'claims_claim': EPERM: operation not permitted, rename 'C:\\Workspace\\ClinicOSHouse\\.claude-flow\\policy\\state.json.9108.7adc5bdf-6d7b-4196-8558-f552c567c4b0.tmp' -> 'C:\\Workspace\\ClinicOSHouse\\.claude-flow\\policy\\state.json'"
+    }
+  ],
+  "isError": true
+}

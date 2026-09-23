@@ -1,0 +1,15 @@
+{
+  "pdf": "legacy-v1/mna-ready-v1.pdf",
+  "pdfSha256": "6d914609025338ab192393bc0c4bb4130186bc4f550568fc7acdb9ce76fd5b8b",
+  "pagesInspected": [1, 2, 3],
+  "allPagesInspected": true,
+  "observations": [
+    "Page 1: identity, scope, demographic context, screening questions and null BMI are legible; no clipped text observed.",
+    "Page 2: global items display the existing 1 punti wording for G/H/I/K/L/M/Q; content and repeated identity are legible.",
+    "Page 3: R also displays 1 punti; total, interpretation, source, bibliography and copyright are readable without overlap."
+  ],
+  "purpose": "Read-only baseline inspection of an existing synthetic v1 PDF; it must remain byte-identical after the new renderer is introduced.",
+  "pdfRegenerated": false,
+  "applicationSourceChanged": false,
+  "candidateVisualQaPerformed": false
+}

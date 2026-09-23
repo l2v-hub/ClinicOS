@@ -1,0 +1,997 @@
+{
+  "task": "PO-16-backend",
+  "phase": "implementation-complete-worker-handoff",
+  "generatedAt": "2026-09-23T08:27:20.383Z",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-mna-backend",
+  "branch": "codex/po16-mna-presentation",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "decision": "Consegna delle sole sorgenti e prove elencate a root per integrazione; pubblicazione riservata al gate root autorizzato separatamente.",
+  "authorization": {
+    "implementationAuthorized": true,
+    "publicationAuthorizedToWorker": false,
+    "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+    "authority": "Explicit /root GO message after PO15 live verification",
+    "backend": "4a3368ee SUCCESS / health 200",
+    "frontend": "dpl_CpDaCDYqhba9MqMP7W232AcUQXPw READY / alias sourceCommit 53e57d69",
+    "smoke": "Catalogo 8 moduli / NRS read-only without errors, as verified by root",
+    "releaseReceiptCommit": "36fb96750575d409dc9de41ea42e1e858c472253",
+    "scope": "MNA presentation only, v1 unchanged/v2 fresh DB tests, BMI threshold formatter; generated PDFs rendered and inspected",
+    "validationDirection": "Focused meaningful tests; root owns integrated flow and final builds; no redundant large-suite reruns."
+  },
+  "sourceManifestSha256": "633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5",
+  "sourceTreeSha256": "b88e834e03dd050bfdfbd3a281584a1164c41edeca24b3f3e80750d99d829fbf",
+  "inputTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+  "sourceFrozen": true,
+  "sourceFiles": 4,
+  "sourceInputs": 1104,
+  "contracts": {
+    "task-contract.snapshot.md": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3",
+    "rifiniture-osservate.snapshot.md": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6"
+  },
+  "contractGoUpdate": {
+    "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-16-giro\\task-contract.md",
+    "preparatorySnapshot": "task-contract.snapshot.md",
+    "preparatorySha256": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3",
+    "currentSnapshot": "root-go-contract.snapshot.md",
+    "currentSha256": "9dcddf1160103fba70929c8cbd0dfa7b5b6f55a9e147f086ab28196d7e50ca3e",
+    "onlyChange": "Preparation status replaced with explicit GO after PO15 and receipt36fb9675; acceptance criteria and scope unchanged.",
+    "preflightDetection": {
+      "chunk": "fca941",
+      "exitCode": 1,
+      "cause": "The first artifact preflight correctly rejected an updated upstream contract hash; no application test or source changed."
+    }
+  },
+  "tests": {
+    "passed": 15,
+    "failed": 0,
+    "files": 5,
+    "databaseClosed": true,
+    "currentInputTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+    "priorInputTreeSha256": "34ac83ce2c560505a290cf93785dc0bbf89ede2c7077892aba743907e2ad0613",
+    "currentRun": "cwd-focused-tests.json",
+    "currentTestFiles": [
+      "backend/src/assessments/__tests__/mna-presentation-db.test.ts"
+    ],
+    "priorRun": "pre-utc-focused-tests.json",
+    "priorTestFiles": [
+      "backend/src/assessments/__tests__/mna.test.ts",
+      "backend/src/assessments/__tests__/mna-db.test.ts",
+      "backend/src/assessments/__tests__/mna-sql-db.test.ts",
+      "backend/src/assessments/__tests__/mna-pdf-db.test.ts"
+    ],
+    "priorProductionAndOtherTestInputsByteIdentical": true,
+    "onlyInputChangedBetweenGreenRuns": "backend/src/assessments/__tests__/mna-presentation-db.test.ts",
+    "reason": "Only the historical fixture setup/read gained the production UTC transaction convention after the 15-test green run; the corrected 3-test file passed again from backend cwd. No repeated broad regression suite.",
+    "migrationsApplied": 48,
+    "newMigrations": 0,
+    "currentResults": [
+      {
+        "file": "backend/src/assessments/__tests__/mna-presentation-db.test.ts",
+        "childWorkingDirectory": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-mna-backend\\backend",
+        "exitCode": 0,
+        "tests": 3
+      }
+    ],
+    "retainedPriorResults": [
+      {
+        "file": "backend/src/assessments/__tests__/mna.test.ts",
+        "exitCode": 0,
+        "tests": 5
+      },
+      {
+        "file": "backend/src/assessments/__tests__/mna-db.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/assessments/__tests__/mna-sql-db.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/assessments/__tests__/mna-pdf-db.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      }
+    ],
+    "exactTwoRunBinding": true,
+    "historicalEvidenceUnmodified": true,
+    "priorAttempts": {
+      "applicationSourceChangedForFixtureFailures": false,
+      "initialAttempt": "14 passed, 1 failed: direct INSERT of a final assessment was rejected by the existing assessment_insert_draft_required trigger. The fixture now restores draft, final pending, original document, ready with all real triggers enabled.",
+      "secondAttempt": "14 passed, 1 failed: comparing native SQL JSON timestamps to the original Prisma export introduced a fixed two-hour projection mismatch. An intermediate same-projection comparison produced the preserved 15-test green run.",
+      "finalRefinement": "The final new-test file restores and reads through the production assessmentTransaction UTC convention, checks exact equality to the original exported records and reruns from backend cwd: 3/3 passed. The other 12 green tests and every production input are byte-identical between green runs.",
+      "cwdReviewFix": "Artifact and frontend helper paths are derived from import.meta.url rather than process.cwd. Reviewer P2 closed after the successful backend-cwd run.",
+      "timestampProvenance": "The original dump itself has assessment.assessedAt 2026-09-22T08:30:00.000Z while its frozen finalSnapshot.assessedAt is 2026-09-22T06:30:00.000Z. Both original values are preserved; no production timestamp correction is claimed.",
+      "failedOutputs": "Both failed run logs, source manifests, fresh-v2 proofs and four PDFs/four snapshots from each attempt are preserved. These earlier PDFs were not visually inspected and are not the final PDF QA artifacts."
+    }
+  },
+  "validation": {
+    "completedAt": "2026-09-23T08:19:20.550Z",
+    "sourceTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+    "sourceUnchanged": true,
+    "results": [
+      {
+        "name": "typecheck",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "node_modules/typescript/bin/tsc",
+          "-p",
+          "backend/tsconfig.json",
+          "--noEmit"
+        ],
+        "exitCode": 0
+      },
+      {
+        "name": "diff-check",
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "backend/src",
+          "prisma"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "compiledBuildRunByWorker": false,
+    "buildOwner": "/root final integration",
+    "schemaChanged": false,
+    "migrationChanged": false,
+    "dependencyManifestsChanged": false,
+    "preservedFiles": [
+      {
+        "path": "package.json",
+        "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+      },
+      {
+        "path": "backend/package.json",
+        "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+      },
+      {
+        "path": "run-claude-queue.ps1",
+        "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+      },
+      {
+        "path": "start-claude-team.ps1",
+        "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+      }
+    ],
+    "clinicalScoringSnapshotAndFontSourcesUnchanged": true
+  },
+  "execution": {
+    "initialFixtureFailure": {
+      "sessionId": 37247,
+      "completionChunk": "8aef09",
+      "exitCode": 1,
+      "passed": 14,
+      "failed": 1
+    },
+    "secondFixtureFailure": {
+      "sessionId": 37281,
+      "completionChunk": "1d16f4",
+      "exitCode": 1,
+      "passed": 14,
+      "failed": 1
+    },
+    "priorGreenRun": {
+      "sessionId": 23808,
+      "initialChunk": "7d05ba",
+      "completionChunk": "ee0c5d",
+      "exitCode": 0,
+      "passed": 15,
+      "failed": 0
+    },
+    "finalBackendCwdRun": {
+      "sessionId": 13256,
+      "initialChunk": "e2fb3f",
+      "completionChunk": "e0adad",
+      "exitCode": 0,
+      "passed": 3,
+      "failed": 0
+    },
+    "sourceFreezeValidation": {
+      "sessionId": 90898,
+      "completionChunk": "4ced12",
+      "exitCode": 0
+    },
+    "pdfRender": {
+      "completionChunk": "aa83e1",
+      "exitCode": 0,
+      "pdfs": 4,
+      "pages": 16
+    },
+    "pdfOperationMarker": {
+      "completionChunk": "622545",
+      "exitCode": 0,
+      "operationKind": "create",
+      "expectedOutputCount": 4,
+      "outputFormat": "pdf",
+      "calls": 1
+    }
+  },
+  "legacyV1": {
+    "proof": "legacy-ready-retry-proof.json",
+    "originalPdfSha256": "6d914609025338ab192393bc0c4bb4130186bc4f550568fc7acdb9ce76fd5b8b",
+    "bytes": 27707,
+    "originalStateSha256": "9015fb00ec2658c3d1db8f3fe192f43ef9eece8081854d5511e8bb1ac21b6b57",
+    "retries": 3,
+    "renderCalls": 0,
+    "fullRowsMetadataBytesSnapshotUnchanged": true,
+    "timestampDiscrepancyPreserved": true,
+    "fixtureRequiredByTests": [
+      "legacy-v1/state.json",
+      "legacy-v1/mna-ready-v1.pdf"
+    ]
+  },
+  "newV2": {
+    "assessmentId": "2f29e8b7-b3cd-4c63-a01a-dc2826a585da",
+    "documentId": "f6b89dd9-a393-47a9-a8d2-549cf9820526",
+    "snapshotSha256": "279789ed27ce98878bd4cb537f9b8e54acb0d194f86715cc568897c96e9aee27",
+    "rawBmi": 24.999999999999996,
+    "total": 27.5,
+    "displayedBmi": "25",
+    "displayedTotal": "27,5",
+    "rendererVersion": "mna-a4-v2",
+    "producer": "ClinicOS mna-a4-v2",
+    "pdfSha256": "562b36b6171d3206dbc618d2291a517d7fb131d00271f88da781446dff2329e6",
+    "bytes": 29350,
+    "sourceManifest": {
+      "kind": "assessment",
+      "assessmentId": "2f29e8b7-b3cd-4c63-a01a-dc2826a585da",
+      "snapshotSha256": "279789ed27ce98878bd4cb537f9b8e54acb0d194f86715cc568897c96e9aee27",
+      "rendererVersion": "mna-a4-v2"
+    },
+    "pdfPath": "pdf-qa/mna-v2-half-point.pdf",
+    "snapshotPath": "pdf-qa/mna-v2-half-point.snapshot.json"
+  },
+  "pdfQa": {
+    "receipt": "pdf-qa/visual-qa.json",
+    "pdfs": 4,
+    "pages": 16,
+    "allPagesInspected": true,
+    "files": 28,
+    "findings": 0,
+    "sourceBinding": "Half-point generated on current tree; other three on prior tree with byte-identical production and relevant test inputs."
+  },
+  "failedAttemptOutputs": {
+    "included": true,
+    "files": 16,
+    "visuallyInspected": false,
+    "paths": [
+      "initial-pdf-qa/mna-full-long.pdf",
+      "initial-pdf-qa/mna-full-long.snapshot.json",
+      "initial-pdf-qa/mna-full-normal.pdf",
+      "initial-pdf-qa/mna-full-normal.snapshot.json",
+      "initial-pdf-qa/mna-screening-partial.pdf",
+      "initial-pdf-qa/mna-screening-partial.snapshot.json",
+      "initial-pdf-qa/mna-v2-half-point.pdf",
+      "initial-pdf-qa/mna-v2-half-point.snapshot.json",
+      "second-pdf-qa/mna-full-long.pdf",
+      "second-pdf-qa/mna-full-long.snapshot.json",
+      "second-pdf-qa/mna-full-normal.pdf",
+      "second-pdf-qa/mna-full-normal.snapshot.json",
+      "second-pdf-qa/mna-screening-partial.pdf",
+      "second-pdf-qa/mna-screening-partial.snapshot.json",
+      "second-pdf-qa/mna-v2-half-point.pdf",
+      "second-pdf-qa/mna-v2-half-point.snapshot.json"
+    ]
+  },
+  "benchmark": {
+    "performed": false,
+    "reason": "Presentation-only change; no performance claim or measured bottleneck."
+  },
+  "invariants": [
+    "1 punto only for exactly 1; other scores retain punti and decimal comma.",
+    "BMI display matches unchanged UI without altering raw measurements or score bands.",
+    "Only new MNA PDFs use mna-a4-v2; ready historical v1 bytes, metadata, sourceManifest and snapshot remain unchanged.",
+    "Other renderer versions, clinical form source, fonts, schemas, migrations and dependencies are unchanged."
+  ],
+  "limitations": [
+    "Root owns final compiled build, integrated HTTP/browser QA and independently authorized publication.",
+    "Independent source review has no open P1/P2; final artifact binding is still for the independent reviewer.",
+    "No worker commit, push, deploy, online patient write, dependency CVE scan, clinical validation or performance claim."
+  ],
+  "claimsReleased": [
+    "PO-16-backend-preparation",
+    "PO-16-backend-implementation",
+    "PO-16-backend-evidence"
+  ],
+  "artifactCopyAllowlist": [
+    "backend-contract.md",
+    "claims-evidence-release.json",
+    "claims-evidence.json",
+    "claims-implementation.json",
+    "claims-preparation-release.json",
+    "claims-preparation.json",
+    "claims-source-release.json",
+    "consolidated-tests.json",
+    "contract-provenance.json",
+    "cwd-focused-tests.json",
+    "cwd-focused-tests.log",
+    "cwd-test-source-manifest.json",
+    "diff-check.log",
+    "execution-sessions.json",
+    "finalize-evidence.mjs",
+    "finalize-preparation.mjs",
+    "focused-tests.json",
+    "focused-tests.log",
+    "fresh-v2-proof.json",
+    "frontend-agreement.json",
+    "guidance-preparation.json",
+    "implementation-plan.md",
+    "implementation-session.json",
+    "independent-source-review.json",
+    "initial-failed-focused-tests.json",
+    "initial-failed-focused-tests.log",
+    "initial-failed-test-source-manifest.json",
+    "initial-fresh-v2-proof.json",
+    "initial-pdf-qa/mna-full-long.pdf",
+    "initial-pdf-qa/mna-full-long.snapshot.json",
+    "initial-pdf-qa/mna-full-normal.pdf",
+    "initial-pdf-qa/mna-full-normal.snapshot.json",
+    "initial-pdf-qa/mna-screening-partial.pdf",
+    "initial-pdf-qa/mna-screening-partial.snapshot.json",
+    "initial-pdf-qa/mna-v2-half-point.pdf",
+    "initial-pdf-qa/mna-v2-half-point.snapshot.json",
+    "initial-test-fixture-failures.json",
+    "legacy-ready-retry-proof.json",
+    "legacy-v1-provenance.json",
+    "legacy-v1-visual-review.json",
+    "legacy-v1/mna-ready-v1.pdf",
+    "legacy-v1/page-1.png",
+    "legacy-v1/page-2.png",
+    "legacy-v1/page-3.png",
+    "legacy-v1/pdfinfo.txt",
+    "legacy-v1/source-state.snapshot.json",
+    "legacy-v1/state.json",
+    "legacy-v1/text.txt",
+    "memory-preparation.json",
+    "pdf-qa/final/mna-full-long-1.png",
+    "pdf-qa/final/mna-full-long-2.png",
+    "pdf-qa/final/mna-full-long-3.png",
+    "pdf-qa/final/mna-full-long-4.png",
+    "pdf-qa/final/mna-full-long-5.png",
+    "pdf-qa/final/mna-full-long-6.png",
+    "pdf-qa/final/mna-full-long-7.png",
+    "pdf-qa/final/mna-full-long.txt",
+    "pdf-qa/final/mna-full-normal-1.png",
+    "pdf-qa/final/mna-full-normal-2.png",
+    "pdf-qa/final/mna-full-normal-3.png",
+    "pdf-qa/final/mna-full-normal.txt",
+    "pdf-qa/final/mna-screening-partial-1.png",
+    "pdf-qa/final/mna-screening-partial-2.png",
+    "pdf-qa/final/mna-screening-partial-3.png",
+    "pdf-qa/final/mna-screening-partial.txt",
+    "pdf-qa/final/mna-v2-half-point-1.png",
+    "pdf-qa/final/mna-v2-half-point-2.png",
+    "pdf-qa/final/mna-v2-half-point-3.png",
+    "pdf-qa/final/mna-v2-half-point.txt",
+    "pdf-qa/mna-full-long.pdf",
+    "pdf-qa/mna-full-long.snapshot.json",
+    "pdf-qa/mna-full-normal.pdf",
+    "pdf-qa/mna-full-normal.snapshot.json",
+    "pdf-qa/mna-screening-partial.pdf",
+    "pdf-qa/mna-screening-partial.snapshot.json",
+    "pdf-qa/mna-v2-half-point.pdf",
+    "pdf-qa/mna-v2-half-point.snapshot.json",
+    "pdf-qa/rendered-pages.json",
+    "pdf-qa/visual-qa.json",
+    "pre-utc-focused-tests.json",
+    "pre-utc-focused-tests.log",
+    "pre-utc-test-source-manifest.json",
+    "preparation-receipt.json",
+    "preparation-session.json",
+    "preparation-source-manifest.json",
+    "prepare-legacy-v1.mjs",
+    "prepare-runtime.mjs",
+    "render-pdf-qa.mjs",
+    "rifiniture-osservate.snapshot.md",
+    "root-go-contract-provenance.json",
+    "root-go-contract.snapshot.md",
+    "root-go.json",
+    "run-cwd-focused-test.mjs",
+    "run-focused-tests.mjs",
+    "second-failed-focused-tests.json",
+    "second-failed-focused-tests.log",
+    "second-failed-test-source-manifest.json",
+    "second-fresh-v2-proof.json",
+    "second-pdf-qa/mna-full-long.pdf",
+    "second-pdf-qa/mna-full-long.snapshot.json",
+    "second-pdf-qa/mna-full-normal.pdf",
+    "second-pdf-qa/mna-full-normal.snapshot.json",
+    "second-pdf-qa/mna-screening-partial.pdf",
+    "second-pdf-qa/mna-screening-partial.snapshot.json",
+    "second-pdf-qa/mna-v2-half-point.pdf",
+    "second-pdf-qa/mna-v2-half-point.snapshot.json",
+    "source-manifest.json",
+    "source-safety-review.json",
+    "task-contract.snapshot.md",
+    "test-source-manifest.json",
+    "typecheck.log",
+    "validate-and-freeze.mjs",
+    "validation-checks.json",
+    "implementation-receipt.json",
+    "handoff.md",
+    "artifact-manifest.json"
+  ],
+  "doNotCopy": [
+    "postgres-* directories",
+    "private runtime and node_modules junctions",
+    "backend/dist",
+    "PowerShell launchers",
+    "other PO artifacts"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/backend-contract.md",
+      "bytes": 2522,
+      "sha256": "133b8fb87f9b3443cb0726b1a0585a350b556d34ef2374a2ced68829b06c9bbb"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/claims-evidence-release.json",
+      "bytes": 1677,
+      "sha256": "033d94c35a6ac3cdd6911f6035e56dfc5a16f35ffbd12a0dafd4f216c212f477"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/claims-evidence.json",
+      "bytes": 1140,
+      "sha256": "0fd66043f10970a5fb01b8a73f88f282ecf85bfbcadd35ed747ca9bc9f6c36cb"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/claims-implementation.json",
+      "bytes": 1549,
+      "sha256": "7549c5318f35e4d8141aa6b9134fe4a2e971a8a06ea40e389cbb6f37d5252d0f"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/claims-preparation-release.json",
+      "bytes": 1716,
+      "sha256": "34f67fad42e0cfa6853ffa15ba326d2da7e11aee0c48d7762518a0e2b51f826a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/claims-preparation.json",
+      "bytes": 1318,
+      "sha256": "26315635f9a449440629d8907a12254658634a60d7fdeaf663ae1e8bbfaba92a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/claims-source-release.json",
+      "bytes": 2090,
+      "sha256": "c8013600ee64c8bc328eff3b269dc8292dd4f4661c09ab161e3d8764d252e0ef"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/consolidated-tests.json",
+      "bytes": 1088,
+      "sha256": "c0c7b5e8f502a744f20913d5c45afe9348c9c07a8f79efdb9b8eeeab8f13f89a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/contract-provenance.json",
+      "bytes": 1006,
+      "sha256": "f46cd7bdc189abe4117877ee66f422a56b583ed7dac69f69fb9c741e994c8e1e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/cwd-focused-tests.json",
+      "bytes": 7655,
+      "sha256": "46207ee9edfea5f773659675b6430c9814172d10e899d107970a8078f6ddf584"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/cwd-focused-tests.log",
+      "bytes": 446,
+      "sha256": "0afe15c7be063366f18fa8baa70496e7bc43b20bf8fffe879301101bbf610601"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/cwd-test-source-manifest.json",
+      "bytes": 151585,
+      "sha256": "44c62775be0f70a95671e5845effa5680d20b03d5c1383572c99500bf170b461"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/diff-check.log",
+      "bytes": 412,
+      "sha256": "6ca77db1a671305cff7328d8187923b1a630470deff9c719edc01d02d701a18c"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/execution-sessions.json",
+      "bytes": 873,
+      "sha256": "b26b12811c552db9b7e1f842cc45921c1bd3b38f61f000549dbfe4985ae070e3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/finalize-evidence.mjs",
+      "bytes": 24975,
+      "sha256": "0dc3a1cde57720b745b3b4cbe67bbdd907ea10bfa654f56b09cac6cdcf75cce9"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/finalize-preparation.mjs",
+      "bytes": 6360,
+      "sha256": "f25d666106de0b1b700f8377d24961b192a1f3b57df486a612377b6f7584001b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/focused-tests.json",
+      "bytes": 8028,
+      "sha256": "da3d9394c4fb67e7670a07c384ff1b4e95cf7836744a82abc0f46fe23c0431ad"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/focused-tests.log",
+      "bytes": 2348,
+      "sha256": "e5814f343712cb095f88348718cc7fd9494359be8f6937dbf8f2c84e450470c1"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/fresh-v2-proof.json",
+      "bytes": 820,
+      "sha256": "b402b5120770607ca5bd0002954fbecb7aaa34a69ec53f11de28362c4b2c23b3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/frontend-agreement.json",
+      "bytes": 525,
+      "sha256": "4d88231ebc2312577e7113e16d6bbab60125f94cdac5065a89d0e43da50e59ea"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/guidance-preparation.json",
+      "bytes": 14140,
+      "sha256": "3ac681ab6a957df1d065fa9e854b6ba2540c1058f877a1ba7718da4634ca9d8a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/implementation-plan.md",
+      "bytes": 3814,
+      "sha256": "725576fced76f6fca5e3610434fc4ccd50c15f65fcb2c8845db73f1a3a10a634"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/implementation-session.json",
+      "bytes": 1462,
+      "sha256": "d48cfbfca3312a348c32e139cf7703896922f3dfd43cc5d4dbeef8556a34f1d9"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/independent-source-review.json",
+      "bytes": 1543,
+      "sha256": "122ae0301278db593601b9e4546bf7d0d1fdbd2fc05d33bc460c9ffb9ff668a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-failed-focused-tests.json",
+      "bytes": 8028,
+      "sha256": "70156c96f3a3d9e73b0b3034d78aad3bc8ce6b4d6b684d076221f8472f8777ad"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-failed-focused-tests.log",
+      "bytes": 4072,
+      "sha256": "5006aa71f54f459c30c0ecc9caa68a52a9b73be9a35b1f75cefe88faf1620dca"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-failed-test-source-manifest.json",
+      "bytes": 151585,
+      "sha256": "8936cebebea6b2fed26f9abcfc89d499d70c1acfd7c70ad6eedd83716c6e4652"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-fresh-v2-proof.json",
+      "bytes": 820,
+      "sha256": "9b081a78479a681f4fce4f6b3ba655fd9a3c5f60368e76826ae9e37f5999b5a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-full-long.pdf",
+      "bytes": 35009,
+      "sha256": "6e0c448beba5fd41166a7e95d9e674628852ab555fc1f90b6e6c62d956ad129b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-full-long.snapshot.json",
+      "bytes": 18576,
+      "sha256": "d548a39d3314d831e00d129863ce586aaa72f8e9e0cb62b49a76dc303f4d425a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-full-normal.pdf",
+      "bytes": 29143,
+      "sha256": "d82e229e2b4c31e262793449a426f875136fad29031127579121bd2a4b649bf9"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-full-normal.snapshot.json",
+      "bytes": 9216,
+      "sha256": "26e5073291ed6c4f0ac62911ae4add08561d48c5359ea2201105eb5f31376d76"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-screening-partial.pdf",
+      "bytes": 29072,
+      "sha256": "febfc0c296f8c5863c4417580f8194c465e580f3e2ae4b7273a3ea2b2fba9a4e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-screening-partial.snapshot.json",
+      "bytes": 9056,
+      "sha256": "461d4aef0df7de93d267ec2a5129422cf21324e002929ea7df510af91fc9ce7e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-v2-half-point.pdf",
+      "bytes": 29350,
+      "sha256": "61f80209741ada9f41c045a3a56b4b46f1c66c7116acd16279a6ee04de63df76"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-pdf-qa/mna-v2-half-point.snapshot.json",
+      "bytes": 6971,
+      "sha256": "f8bf6d1bc1c0ad85a56edfcce13297237bb515a6df1774433410e40b9ae6a238"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/initial-test-fixture-failures.json",
+      "bytes": 1528,
+      "sha256": "dbaba6bfb358c2cefde13de847542c77531a2953ebf1b194d892edc41504c8e4"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-ready-retry-proof.json",
+      "bytes": 29825,
+      "sha256": "3532cee5a336c2a951cbc6de17529606c7af7522a9076e45357e0a10b53bd605"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1-provenance.json",
+      "bytes": 2732,
+      "sha256": "29b1a7656410bb72b101b06fb37c7bf28fcf0ca882b2ec337f289cce300bbbad"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1-visual-review.json",
+      "bytes": 839,
+      "sha256": "9e5d47181c1e1dccba92d9d889c515bf82cfcb493a7954d2f257d55de1bb519b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/mna-ready-v1.pdf",
+      "bytes": 27707,
+      "sha256": "6d914609025338ab192393bc0c4bb4130186bc4f550568fc7acdb9ce76fd5b8b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/page-1.png",
+      "bytes": 135625,
+      "sha256": "aa7d530d739b38276776a293e52e53aedd205fa2cf17b4d49f4d0bcd969eba17"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/page-2.png",
+      "bytes": 118681,
+      "sha256": "cd59571555169e3ce433fa57bb69b26d7ff7c2518a911cfe013af8148d47a6cc"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/page-3.png",
+      "bytes": 140584,
+      "sha256": "5f62748c3f8066e951ba83c5e1c4315998e251b4b47c4e91a334a0ed8ceeec24"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/pdfinfo.txt",
+      "bytes": 759,
+      "sha256": "fecba55393c7b23a4d35cf185d434c08f3d1f5068e7dbdedd25b91e6bd09e77d"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/source-state.snapshot.json",
+      "bytes": 153742,
+      "sha256": "9015fb00ec2658c3d1db8f3fe192f43ef9eece8081854d5511e8bb1ac21b6b57"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/state.json",
+      "bytes": 13702,
+      "sha256": "2b047fce6659cac1e672e0f44450d416e4924b2719ad69aae6ef264343031887"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/legacy-v1/text.txt",
+      "bytes": 4834,
+      "sha256": "41a029bb8ec3a2b9531d0e2a55c111cd975d7e137da2670148b535bc342dd2a2"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/memory-preparation.json",
+      "bytes": 640,
+      "sha256": "35128ecb6cb77b880f7bc6d5f04bdeb6ee4aacd590b4f46943375dbe46d459b1"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long-1.png",
+      "bytes": 138175,
+      "sha256": "b5e83f30ab859c9e759d235c13f3a67e83516941a7310b703ea74e465d85f52b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long-2.png",
+      "bytes": 118469,
+      "sha256": "c70dac8fb606a1f3f393166f6369279c4d742ceecd0ae55737b08131c1dd1593"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long-3.png",
+      "bytes": 141063,
+      "sha256": "41d1012c6634f0d5a8297e1504eaf30b70a7e7f1324d432f384c47d170c71258"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long-4.png",
+      "bytes": 131221,
+      "sha256": "6cc57c3164a2054172cfc81a8464dd4c6d09f18738c34c46bdbd66065e25d62a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long-5.png",
+      "bytes": 131642,
+      "sha256": "7bf95799c787afcc50a0db7dfd648fec908b1620bebd21f0784c7a09d627c4c9"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long-6.png",
+      "bytes": 131301,
+      "sha256": "dda2c8ab9f4f57b53fb7c1bf7efe9b7067691aadce788e0896c4d4ca423452b5"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long-7.png",
+      "bytes": 108615,
+      "sha256": "b7fe50ff568026adaff5dcc8a9d20e99a937325c0a5074add1d282e08d095b1e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-long.txt",
+      "bytes": 10107,
+      "sha256": "1c12cac0e23e85429f52e40052c4c3697f688f15d578a520f0e1dc8caa892cfa"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-normal-1.png",
+      "bytes": 138235,
+      "sha256": "84627db7c24a582d42fa952bf6f35f62781cda22c60a61f2de1f994836657dd7"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-normal-2.png",
+      "bytes": 118487,
+      "sha256": "6cc858146562ef792485b06583ebb7c016becdf1130d98d8157aef156a0d61d0"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-normal-3.png",
+      "bytes": 140404,
+      "sha256": "94509e77ca92a6ba60caa5562909c79abf4b44004b745b733097c90d592b9b0a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-full-normal.txt",
+      "bytes": 4789,
+      "sha256": "b9555316b462369390a595c22d4a1eb69d0bb810e8fbf51b8a35dca67b85b0ac"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-screening-partial-1.png",
+      "bytes": 133973,
+      "sha256": "67f2989fb63e1675e3b138b5445b8a7ce34aa57b01ebd822818cfbc5edae5655"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-screening-partial-2.png",
+      "bytes": 133359,
+      "sha256": "51a243d89b51148b58951aab9626d2646e896b591b56cdf08c74ee416bc66f28"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-screening-partial-3.png",
+      "bytes": 145058,
+      "sha256": "6d4f60d1f4b1254ae4f86500933bba162f938f26ff196dc3ad8b439e5445c5c4"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-screening-partial.txt",
+      "bytes": 4996,
+      "sha256": "37e6f6a7297f329d3f3fbf6f9ee17405dc93b9e191acd75f3e782ca14564c89f"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-v2-half-point-1.png",
+      "bytes": 139880,
+      "sha256": "5c595863c9f14840e917e90782a510007b461679aa130206ef55da09941a93ad"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-v2-half-point-2.png",
+      "bytes": 118481,
+      "sha256": "969820ce90546394d317a98d7bba6ad076eab1387cfdd340b59f8bd5ac4dfec9"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-v2-half-point-3.png",
+      "bytes": 140464,
+      "sha256": "0d49274e6e97edeb30f0bbd7cddb9f53bee4d7543e75cbd7c3eec0ae2178e1f0"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/final/mna-v2-half-point.txt",
+      "bytes": 4849,
+      "sha256": "c525842d76b558f029fef10e78d71b6721cb322143c644dc8622f9cb981fe286"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-full-long.pdf",
+      "bytes": 35001,
+      "sha256": "3c4a2d1a4e499fa8ce8ace2e5d24b13764ca4155582982c28e4b5437974d7f63"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-full-long.snapshot.json",
+      "bytes": 18576,
+      "sha256": "15764c031b11e449f3c0a9c22bf0c9a1216da18b9b22aa15ca9651be4a34dc93"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-full-normal.pdf",
+      "bytes": 29138,
+      "sha256": "17671d54918d9330d8dfa9c755b7496d9613a1d277dca858273b757f254b3cd3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-full-normal.snapshot.json",
+      "bytes": 9216,
+      "sha256": "5938ddd070011314ef5bbffbec7b591890dc0168af3cbc69c3412d9ea2803fac"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-screening-partial.pdf",
+      "bytes": 29049,
+      "sha256": "72cc7264c1cc3bb1e99a78e38388e6852376cf70d02f8f9b7d8572a789fdf197"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-screening-partial.snapshot.json",
+      "bytes": 9056,
+      "sha256": "0038cb1fd375f6bd7edc17d56a0ebb58117cda83128d2b87ce7d896ce01fde4a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.pdf",
+      "bytes": 29350,
+      "sha256": "562b36b6171d3206dbc618d2291a517d7fb131d00271f88da781446dff2329e6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/mna-v2-half-point.snapshot.json",
+      "bytes": 6971,
+      "sha256": "adeb48c6828a70d7c76f14e00cb160e06ebfd3e341c97f2e9f727dc1ac651051"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/rendered-pages.json",
+      "bytes": 5991,
+      "sha256": "fdbb8f74a7e9065333691c3b573b7827beb5a7340c749e9acd80b219bdbe3b85"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pdf-qa/visual-qa.json",
+      "bytes": 8293,
+      "sha256": "02027c8b52689721dbfa32085eba5a0581c4c2457a09a77641dd43a30bac8de8"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pre-utc-focused-tests.json",
+      "bytes": 8028,
+      "sha256": "da3d9394c4fb67e7670a07c384ff1b4e95cf7836744a82abc0f46fe23c0431ad"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pre-utc-focused-tests.log",
+      "bytes": 2348,
+      "sha256": "e5814f343712cb095f88348718cc7fd9494359be8f6937dbf8f2c84e450470c1"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/pre-utc-test-source-manifest.json",
+      "bytes": 151585,
+      "sha256": "8a938e0df9b5b7364a31a048df9b11e492a7af807829b2f9785500a1f39bf9d1"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/preparation-receipt.json",
+      "bytes": 24034,
+      "sha256": "61b66631c2b08e888692ddf72a6a0bf390b14b21b3dbff2e7e8be603d549343a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/preparation-session.json",
+      "bytes": 2976,
+      "sha256": "c9df35f913f11de1d64a2d82013f8cb13c053e3189cf9e7695abc9626a4034ff"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/preparation-source-manifest.json",
+      "bytes": 203372,
+      "sha256": "3e2c5ea2ca7800c7bc4df69440a860907507c2e3f64ba1bf7d2d5bf20e03bd64"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/prepare-legacy-v1.mjs",
+      "bytes": 4507,
+      "sha256": "3f1a4f9534c8e247f4d377f5203f8fc9fc3e332050fe931127ce278dd13dfb80"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/prepare-runtime.mjs",
+      "bytes": 10108,
+      "sha256": "491de1882e5349f60b607301462fdfb052afc8f855aaf77d6225cce9c619a73f"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/render-pdf-qa.mjs",
+      "bytes": 3076,
+      "sha256": "ab2254ea29d367f60fc6ce0a61dc448553106d678ad858bc75e447b0bdc47cd8"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/rifiniture-osservate.snapshot.md",
+      "bytes": 802,
+      "sha256": "676bb022dcbdf2e031827cdd6c634fb67af9c7c18d473b453da66e041e52b6a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/root-go-contract-provenance.json",
+      "bytes": 781,
+      "sha256": "3074cc0d3fbbd1ef36aaf49ed7c95554fbb84ac8fba015d4c97d275126f5c727"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/root-go-contract.snapshot.md",
+      "bytes": 3266,
+      "sha256": "9dcddf1160103fba70929c8cbd0dfa7b5b6f55a9e147f086ab28196d7e50ca3e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/root-go.json",
+      "bytes": 761,
+      "sha256": "daf2621e089103227c149fa32375395bc2a83c00704dc0c9384a7dc84a03add7"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/run-cwd-focused-test.mjs",
+      "bytes": 3562,
+      "sha256": "4e63611bcd6efa6721de24817e7890c3f8759209e959a9a7e0ee27eef61e695f"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/run-focused-tests.mjs",
+      "bytes": 3725,
+      "sha256": "0cecdfb6432b5e0bad4d9d7a820cbef1070f8c90016229cb6212d5a6de50889a"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-failed-focused-tests.json",
+      "bytes": 8028,
+      "sha256": "a3f2d8fe0179c8c0a3cb3cb1621f5e85ca911f3b90f898c4321fef540960ad2b"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-failed-focused-tests.log",
+      "bytes": 9473,
+      "sha256": "9e8d281294bbd92936c5c52cba3728d1b29fd3888e4a9ec43f849456455be17e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-failed-test-source-manifest.json",
+      "bytes": 151585,
+      "sha256": "12d0729ef15cf594bd64800a9b6126da030ac7ad595dba3689efd62510debfe5"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-fresh-v2-proof.json",
+      "bytes": 820,
+      "sha256": "4237b161ed0f6524c2652094151f70456bd9c97cec484c81a387b2dd67d3b500"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-full-long.pdf",
+      "bytes": 35003,
+      "sha256": "68754d5e31a593735bb97db59eefe592416a8424451f0e796c290c3aebacb47f"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-full-long.snapshot.json",
+      "bytes": 18576,
+      "sha256": "ac9c6e98c66db2e77e57bc1c99b0e744f2bcd3d05d4b32a84b097f5e313c4440"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-full-normal.pdf",
+      "bytes": 29133,
+      "sha256": "66f0a0c944c08af1a12bb7c0d16b145003025b3765dd0dcec88f6b3dd0fdba91"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-full-normal.snapshot.json",
+      "bytes": 9216,
+      "sha256": "cebdff4588329978b27630339bb63c54afd959699ebc50ad62fa6536ced08a42"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-screening-partial.pdf",
+      "bytes": 29063,
+      "sha256": "8a5fed3ec4a470a004cff94ee66dcb33cac6429952963cce1c2fbdc3806b2052"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-screening-partial.snapshot.json",
+      "bytes": 9056,
+      "sha256": "1a3770561719061188c479df429ef9f1dd98c12a6bad2b77ef6d207c01d8a5b3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-v2-half-point.pdf",
+      "bytes": 29367,
+      "sha256": "7f6ff1a52c7cae009d674a39024535341b7ae570ce0692f97db570eca39193a7"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/second-pdf-qa/mna-v2-half-point.snapshot.json",
+      "bytes": 6971,
+      "sha256": "ebd0ef6c11911b4dee4eb33324902effa2e60d9b93f09b15998d9ef05408317f"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/source-manifest.json",
+      "bytes": 1402,
+      "sha256": "633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/source-safety-review.json",
+      "bytes": 1191,
+      "sha256": "a939c8bb404464c7051e82f490ac398147ae82c69942b22a36506216e9cc55f6"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/task-contract.snapshot.md",
+      "bytes": 3269,
+      "sha256": "d182b01333d1c31e5f571fe0598888f2268007c46cbd222c9c776c86f9e600d3"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/test-source-manifest.json",
+      "bytes": 151585,
+      "sha256": "8a938e0df9b5b7364a31a048df9b11e492a7af807829b2f9785500a1f39bf9d1"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/validate-and-freeze.mjs",
+      "bytes": 5608,
+      "sha256": "7f52a43c4786cb882c5b60d7b33813ec1384d496553665d27d313a4f35c6c52f"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend/validation-checks.json",
+      "bytes": 1539,
+      "sha256": "bc26d0782f6ab7d8d11528bd4e450db52e395ab0d8e751ea9c7b8d9354a8b130"
+    }
+  ]
+}

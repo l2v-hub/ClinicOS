@@ -1,0 +1,13 @@
+# PO16 — Revisione e integrazione
+
+Frontend: sei sorgenti congelati, manifestSHA256 `939ad0f35e471c418008ee0737730b4b3c3b1766f3f02409ab7b3803a95bac52`, sourceState `d5c3c244c9a4ed8df9dfb89264277cc7f94b5525ceacc822353b5be0679a91ff`. Verifica indipendente di563input/557immutati,174test,47artefatti e claim rilasciate. Artifact manifest `cf67f59ac61ce5e807cdc1280323ebc18da6c2503c54530fa9027f41b44ae518`; receipt `83ab8554db1821281143c538ff9127418926f9e0b3cf22e293ac542d6d361f61`. NessunP1/P2 aperto.
+
+Backend: quattro sorgenti congelati, manifestSHA256 `633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5`, source tree `b88e834e03dd050bfdfbd3a281584a1164c41edeca24b3f3e80750d99d829fbf`, input tree `66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7`. Verifica indipendente di1104input/1103blobbaseline/1100immutati e15test consolidati. Claim sorgente rilasciata prima della copia. Root ha verificato gli hash e compilato senza ulteriori modifiche.
+
+I rilievi del reviewer riguardavano il banco del nuovo test: root del repository ricavata daimport.meta.url per esecuzione dal cwd backend; restore con transizioni DB consentite, mantenendo trigger e snapshot; transazioneUTC per riprodurre i timestamp originali del dumpPO15. Il file finale passa3/3dal cwd backend. Tre retry del PDFv1 producono zero rendering e mantengono righe, ID, bytes, manifest e snapshot identici; SHA PDFv1 `6d914609025338ab192393bc0c4bb4130186bc4f550568fc7acdb9ce76fd5b8b`.
+
+La revisione documentale distingue analisi iniziale e stato attuale, limita bozza/finale/rettifica ai cinque moduli versionati e rinomina la struttura Tinetti implementata. I riscontri sulle fonti non sono presentati come convalida clinica. La matrice di copertura collega le prove effettive e dichiara cosa resta da osservare sul campo.
+
+Root: giro integrato, browser finale, verifiche DB/hash, build e PDF compilato superati; vedi validation-report.md e ricevute. Il reviewer ha verificato anche il campione PDF backendv2 e i manifest degli output render. Il pacchetto backend completo è stato copiato dopo rilascio delle claim e verifica degli hash:115artefatti, manifest `59af226059636fe14d681d0f7194316571bde017c92fed6cfa87a79da9af5fc9`, receipt `655482a651126dd3f197dd44c442e7c9abd61c0671590590badfa75369f44144`. Le fixture del PDFv1 necessarie al nuovo test sono incluse nel pacchetto.
+
+Gate indipendente finale PASS, chunk d38661:115artefatti/113evidence/116copy paths con copertura esatta, tutte le claim rilasciate e nessunP1/P2 in backend, frontend o report. Configurazione root e prove del browser controllate separatamente; le ricevute di integrazione sono incluse automaticamente dal finalizer. Rilascio autorizzato al root.

@@ -1,0 +1,5 @@
+export const legacyForms={
+ medicazioniFerite:[{id:'po15-existing-dressing',data:'2026-09-20',sede:'Braccio sintetico',tipoLesione:'Ferita',tipoMedicazione:'Medicazione sintetica',materiale:'Garza di prova',aspettoLesione:'Osservazione sintetica',dimensioni:'1 cm',odore:false,essudato:'assente',cutePerilisionale:'Integra',prossimaMedicazione:'2026-09-24',operatore:'Operatrice storica sintetica',note:'ORIGINALE MEDICAZIONE DA PRESERVARE',createdAt:'2026-09-20T07:00:00.000Z'}],
+ contenzioni:[{id:'po15-existing-restraint',dataInizio:'2026-09-19',oraInizio:'08:00',tipo:'altro',motivoClinico:'Motivo sintetico per collaudo',autorizzazioneMedico:false,autorizzazioneTutore:false,dataFine:'2026-09-19',oraFine:'09:00',attiva:false,operatore:'Operatrice storica sintetica',note:'ORIGINALE CONTENZIONE DA PRESERVARE',createdAt:'2026-09-19T06:00:00.000Z'}],
+ valutazioniBraden:[{id:'po15-existing-braden',data:'2026-09-18',percezioneSensoriale:4,umidita:4,attivita:4,mobilita:4,nutrizione:4,frizione:3,operatore:'Operatrice storica sintetica',note:'Scala precedente di prova',createdAt:'2026-09-18T06:00:00.000Z'}],
+};

@@ -1,0 +1,24 @@
+{
+  "sourceCommit": "36fb96750575d409dc9de41ea42e1e858c472253",
+  "applicationFilesMatchCommit": true,
+  "command": "node --import tsx --test tests/integration/po16-round.test.mts",
+  "node": "v26.3.0",
+  "files": [
+    {
+      "path": "tests/integration/po16-round.test.mts",
+      "sha256": "12111ec20e759e15975ce57bd87834b0942bac6b2f385f26b643d9bfd3770d6e",
+      "bytes": 15787
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/integrated-round.log",
+      "sha256": "87b587d60a86dc4518de5de548c7aa2095094412af687d6db3f2cc3ee1aecd84",
+      "bytes": 471
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/integrated-round-receipt.json",
+      "sha256": "0056e66a8f70a27f1fe2a69c1e581b10553725778cde41076134bfd79791faf4",
+      "bytes": 3296
+    }
+  ],
+  "limitations": "Mixed loopback HTTP/service integration, injected extraction. MNA presentation and touch-only changes have separate worker/root evidence."
+}

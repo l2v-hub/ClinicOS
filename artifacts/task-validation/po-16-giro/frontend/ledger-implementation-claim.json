@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-16-frontend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po16-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T08:07:28.133Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T08:07:28.133Z\",\n    \"progress\": 0,\n    \"context\": \"Root GO after PO15 published and verified, receipt36fb96750575d409dc9de41ea42e1e858c472253. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po16-final-ui baseline53e57d694850775b85ad1d22904e7bb1e6e84618 branch codex/po16-final-ui. Exact paths: frontend/src/components/operator/assessments/MnaForm.tsx; frontend/src/components/operator/assessments/MnaAnthropometry.tsx; frontend/src/components/operator/assessments/MnaSummary.tsx; frontend/src/components/operator/assessments/AssessmentHistory.tsx; frontend/src/components/operator/assessments/AssessmentCatalog.css; frontend/src/components/operator/__tests__/mnaUi.test.ts. Evidence artifacts/task-validation/po-16-giro/frontend/** and local TS/Vite caches. Presentation only: 1 punto, Italian MNA history decimals, catalog and return44px targets <=768px. Scoring/BMI/snapshot/helper invariant. No extra source/backend/manifests/locks/shared dependency/servers/ports/commit/push/deploy/live writes. Root integrated/browser QA.\"\n  },\n  \"message\": \"Issue PO-16-frontend-implementation claimed by agent:codex-po16-frontend:coder\"\n}"
+    }
+  ]
+}

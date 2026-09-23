@@ -1,0 +1,117 @@
+✔ MNA presentation matches UI BMI precision at every threshold without changing snapshot values (407.1356ms)
+✖ real archived PO15 MNA v1 ready retry invokes no renderer and preserves every persisted value (103.2893ms)
+✔ new MNA v2 archives readable 1 punto, 27,5 and 25 while retaining raw BMI and snapshot digest (1230.6777ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14030.4284
+
+✖ failing tests:
+
+test at backend\src\assessments\__tests__\mna-presentation-db.test.ts:1:3038
+✖ real archived PO15 MNA v1 ready retry invokes no renderer and preserves every persisted value (103.2893ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    {
+      answers: {
+        A: 'no_reduction',
+        B: 'no_loss',
+        C: 'goes_out',
+  ...
+      },
+  +   assessedAt: '2026-09-22T06:30:00.000Z',
+  -   assessedAt: '2026-09-22T08:30:00.000Z',
+      authorName: 'Operatrice QA',
+      authorOperatorId: 'VITALS-QA-OP',
+      correctionReason: null,
+  +   createdAt: '2026-09-23T07:43:02.997Z',
+  -   createdAt: '2026-09-23T09:43:02.997Z',
+      creationPayloadHash: '8821093346f1f13eae77c36b8a4ee47186ebe8174f1d1b642347ea46b75ea36e',
+      finalSnapshot: {
+        answers: {
+          A: 'no_reduction',
+          B: 'no_loss',
+  ...
+      finalizeRequestId: '43c62cdf-9cda-4011-90ef-4e0459cae6a5',
+  +   finalizedAt: '2026-09-23T07:43:03.008Z',
+  -   finalizedAt: '2026-09-23T09:43:03.008Z',
+      formVersion: 'mna-it-2026-09-22-q-corrected-v1',
+      id: '9df3410f-ddc4-4da6-bc27-888d79e36bff',
+      patientId: 'vitals-qa-anna',
+      pdfAttemptCount: 1,
+      pdfAttemptToken: null,
+  ...
+      pdfStatus: 'ready',
+  +   pdfUpdatedAt: '2026-09-23T07:43:03.372Z',
+  -   pdfUpdatedAt: '2026-09-23T09:43:03.372Z',
+      predecessorId: null,
+      requestId: '38ea8001-6a00-48c3-b208-d9380382bba6',
+      snapshotSha256: 'da033114b3de6e97dc8dbf1645ee17a476f72d709edaead25a5b27e36f5d20d1',
+      status: 'final',
+      type: 'mna',
+  +   updatedAt: '2026-09-23T07:43:03.008Z',
+  -   updatedAt: '2026-09-23T09:43:03.008Z',
+      version: 2
+    }
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po16-mna-backend\backend\src\assessments\__tests__\mna-presentation-db.test.ts:159:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { id: '9df3410f-ddc4-4da6-bc27-888d79e36bff', type: 'mna', status: 'final', answers: { A: 'no_reduction', B: 'no_loss', C: 'goes_out', D: false, E: 'no_psychological_problems', F: [Object], G: true, H: false, I: false, J: 'three_meals', K: [Object], L: true, M: 'gt5_glasses', N: 'independent_without_difficulty', O: 'no_nutritional_problems', P: 'better', Q: [Object], R: [Object], notes: '', extent: 'full', measurements: [Object], measurementDates: [Object] }, version: 2, createdAt: '2026-09-23T07:43:02.997Z', patientId: 'vitals-qa-anna', pdfStatus: 'ready', requestId: '38ea8001-6a00-48c3-b208-d9380382bba6', updatedAt: '2026-09-23T07:43:03.008Z', assessedAt: '2026-09-22T06:30:00.000Z', authorName: 'Operatrice QA', finalizedAt: '2026-09-23T07:43:03.008Z', formVersion: 'mna-it-2026-09-22-q-corrected-v1', pdfErrorCode: null, pdfUpdatedAt: '2026-09-23T07:43:03.372Z', finalSnapshot: { bmi: null, form: [Object], items: [Array], notes: '', title: 'Valutazione completa MNA®', author: [Object], extent: 'full', result: [Object], answers: [Object], patient: [Object], copyright: '® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.', createdAt: '2026-09-23T07:43:02.997Z', assessedAt: '2026-09-22T06:30:00.000Z', completion: [Object], provenance: 'MNA® in italiano dalla fonte fornita. Correzioni editoriali: «acuteo» → «acute o» e «Oni giorne» → «Ogni giorno». Q: corretto il refuso della fonte italiana; CB < 21 cm = 0, 21 ≤ CB ≤ 22 cm = 0,5, CB > 22 cm = 1, secondo il riscontro ufficiale inglese 2023. Conservati E «demenza moderata» e K «una o due volte la settimana». Questa trascrizione non costituisce convalida clinica indipendente.', references: [Array], finalizedAt: '2026-09-23T07:43:03.008Z', predecessor: null, demographics: [Object], measurements: [Array], predecessorId: null, snapshotVersion: 1, correctionReason: null }, pdfLeaseUntil: null, predecessorId: null, snapshotSha256: 'da033114b3de6e97dc8dbf1645ee17a476f72d709edaead25a5b27e36f5d20d1', pdfAttemptCount: 1, pdfAttemptToken: null, authorOperatorId: 'VITALS-QA-OP', correctionReason: null, finalizeRequestId: '43c62cdf-9cda-4011-90ef-4e0459cae6a5', creationPayloadHash: '8821093346f1f13eae77c36b8a4ee47186ebe8174f1d1b642347ea46b75ea36e', finalizePayloadHash: 'd654fc6eb51cd65f4f2aa49793ebbde3ffcc56e593a65f618d8f36a72392740b' },
+    expected: { id: '9df3410f-ddc4-4da6-bc27-888d79e36bff', patientId: 'vitals-qa-anna', type: 'mna', formVersion: 'mna-it-2026-09-22-q-corrected-v1', authorOperatorId: 'VITALS-QA-OP', authorName: 'Operatrice QA', assessedAt: '2026-09-22T08:30:00.000Z', answers: { A: 'no_reduction', B: 'no_loss', C: 'goes_out', D: false, E: 'no_psychological_problems', F: [Object], G: true, H: false, I: false, J: 'three_meals', K: [Object], L: true, M: 'gt5_glasses', N: 'independent_without_difficulty', O: 'no_nutritional_problems', P: 'better', Q: [Object], R: [Object], notes: '', extent: 'full', measurements: [Object], measurementDates: [Object] }, status: 'final', version: 2, createdAt: '2026-09-23T09:43:02.997Z', updatedAt: '2026-09-23T09:43:03.008Z', finalizedAt: '2026-09-23T09:43:03.008Z', requestId: '38ea8001-6a00-48c3-b208-d9380382bba6', creationPayloadHash: '8821093346f1f13eae77c36b8a4ee47186ebe8174f1d1b642347ea46b75ea36e', finalizeRequestId: '43c62cdf-9cda-4011-90ef-4e0459cae6a5', finalizePayloadHash: 'd654fc6eb51cd65f4f2aa49793ebbde3ffcc56e593a65f618d8f36a72392740b', predecessorId: null, correctionReason: null, finalSnapshot: { bmi: null, form: [Object], items: [Array], notes: '', title: 'Valutazione completa MNA®', author: [Object], extent: 'full', result: [Object], answers: [Object], patient: [Object], copyright: '® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.', createdAt: '2026-09-23T07:43:02.997Z', assessedAt: '2026-09-22T06:30:00.000Z', completion: [Object], provenance: 'MNA® in italiano dalla fonte fornita. Correzioni editoriali: «acuteo» → «acute o» e «Oni giorne» → «Ogni giorno». Q: corretto il refuso della fonte italiana; CB < 21 cm = 0, 21 ≤ CB ≤ 22 cm = 0,5, CB > 22 cm = 1, secondo il riscontro ufficiale inglese 2023. Conservati E «demenza moderata» e K «una o due volte la settimana». Questa trascrizione non costituisce convalida clinica indipendente.', references: [Array], finalizedAt: '2026-09-23T07:43:03.008Z', predecessor: null, demographics: [Object], measurements: [Array], predecessorId: null, snapshotVersion: 1, correctionReason: null }, snapshotSha256: 'da033114b3de6e97dc8dbf1645ee17a476f72d709edaead25a5b27e36f5d20d1', pdfStatus: 'ready', pdfAttemptToken: null, pdfLeaseUntil: null, pdfAttemptCount: 1, pdfErrorCode: null, pdfUpdatedAt: '2026-09-23T09:43:03.372Z' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+✔ MNA strict canonical answers reject unknown/missing values and retain null/false/notes in payload hashes (10.86ms)
+✔ MNA K evaluates all eight boolean combinations and every missing subanswer stays incomplete (7.1376ms)
+✔ MNA uses exact half points and independent 14/16/30 section boundaries (0.9447ms)
+✔ MNA anthropometry derives unrounded threshold scores and rejects concurrent categories or unusable numbers (3.1963ms)
+✔ MNA calendar/notes validation preserves Unicode and rejects date rollover or invalid clinical Rome boundaries (27.345ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 380.6404
+✔ MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot (1136.4329ms)
+✔ MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic (310.1402ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13650.7584
+✔ MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape (629.3775ms)
+✔ MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes (399.8208ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2743.932
+✔ MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes (1521.5599ms)
+✔ MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document (521.7599ms)
+✔ MNA editorial typography preserves free text and reports unsupported glyphs without changing the snapshot (421.1369ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14023.4092

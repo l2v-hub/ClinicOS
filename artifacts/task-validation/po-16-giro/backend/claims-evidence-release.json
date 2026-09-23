@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-16-backend-evidence released\",\n  \"reason\": \"Artifact preflight PASS chunk f33b84: 4 frozen sources / 1104 inputs, 15 focused tests explicitly bound to 12 prior unchanged inputs plus 3 current backend-cwd tests; typecheck and diff PASS. Four v2 PDFs / all 16 pages visually inspected. Real v1 fixture and three no-render retries preserve every row, metadata, snapshot and byte. Independent source review PASS chunk 534c1e with no open P1/P2. Release artifact writing for final receipt and immutable manifest handoff to root; no source, commit, push, deployment or online patient writes.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-16-backend-evidence\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po16-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T08:19:52.134Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T08:19:52.134Z\",\n    \"progress\": 0,\n    \"context\": \"Artifact-only final evidence for PO16 after frozen4source/1104inputs. Source manifest633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5; input66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7. Sole writer only artifacts/task-validation/po-16-giro/backend/** for4MNA PDF visual QA and receipts.15focused tests passed via12unchanged regression+3finalcwdbackend tests; typecheck/diffPASS; reviewer closesP2cwd and verifies readyv1immutable3retries/spy0. Application read-only; no commit/push/deploy/shared dependencies/network patient writes.\"\n  }\n}"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+warning: in the working copy of 'frontend/src/components/operator/__tests__/mnaUi.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentCatalog.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentHistory.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/MnaAnthropometry.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/MnaForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/MnaSummary.tsx', LF will be replaced by CRLF the next time Git touches it
+{"files":5,"baselineDiagnostics":0,"candidateDiagnostics":0,"introduced":[]}

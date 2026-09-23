@@ -1,0 +1,27 @@
+{
+  "sourceManifestSha256": "633af929a87194280f2e79e9cb10f2cc6b44f9baad2593ad38da7e25ea8d14e5",
+  "inputTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+  "newSourceFiles": [
+    {
+      "path": "backend/src/assessments/__tests__/mna-presentation-db.test.ts",
+      "lines": 278
+    }
+  ],
+  "newSourceBelow500Lines": true,
+  "scopedStaticChecks": {
+    "scope": [
+      "backend/src/assessments/mna-pdf-content.ts",
+      "backend/src/assessments/pdf-renderer.ts"
+    ],
+    "findings": []
+  },
+  "manualReview": [
+    "Only MNA PDF item plurality, BMI display and renderer selector changed.",
+    "BMI uses the unchanged frontend semantics: at most two decimals unless rounding to zero or crossing the 19/21/23 band; score thresholds still use raw values.",
+    "Answers, clinical source/model version, score, snapshot/hash, PDF storage/retry lifecycle and font inputs remain unchanged.",
+    "Historical ready v1 rows/documents remain byte-identical under three real retry calls with a renderer spy that must never execute."
+  ],
+  "limitations": [
+    "Scoped source review, not a dependency CVE scan, clinical validation or performance benchmark."
+  ]
+}

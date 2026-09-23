@@ -1,0 +1,11 @@
+✔ MNA presentation matches UI BMI precision at every threshold without changing snapshot values (233.898ms)
+✔ real archived PO15 MNA v1 ready retry invokes no renderer and preserves every persisted value (144.5201ms)
+✔ new MNA v2 archives readable 1 punto, 27,5 and 25 while retaining raw BMI and snapshot digest (420.778ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11949.6839

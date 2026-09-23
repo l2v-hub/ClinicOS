@@ -1,0 +1,37 @@
+{
+  "task": "PO-16-backend",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po16-mna-backend",
+  "branch": "codex/po16-mna-presentation",
+  "baseline": "53e57d694850775b85ad1d22904e7bb1e6e84618",
+  "capturedAt": "2026-09-23T08:19:20.555Z",
+  "sourceTreeSha256": "b88e834e03dd050bfdfbd3a281584a1164c41edeca24b3f3e80750d99d829fbf",
+  "inputTreeSha256": "66e3ef8b667d50d8668c8e27b597a46ba4430b7505fca64de8de3d1f196417c7",
+  "hashAlgorithm": "SHA256 over sorted path + NUL + byte-SHA256 + LF",
+  "sourcePaths": [
+    {
+      "path": "backend/src/assessments/__tests__/mna-pdf-db.test.ts",
+      "bytes": 7870,
+      "sha256": "071cdfe2199b24f0e4e0762f344f2259db74454534da57bda71a74a3b154664f"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-presentation-db.test.ts",
+      "bytes": 10980,
+      "sha256": "927c5c4d5b189bd92caa8ab774238ba16ef0a1fe5ed1a1ea419a7b5def069964"
+    },
+    {
+      "path": "backend/src/assessments/mna-pdf-content.ts",
+      "bytes": 6006,
+      "sha256": "b2bf58ab7a67b80668fb2b297971dd39ea06ff759e35b849060554559a9738b2"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "bytes": 11852,
+      "sha256": "4b838b0364d784e9fe47f093d1c31c6d154f46fa4f4b006f544274318a55a8ad"
+    }
+  ],
+  "testedInputBindings": "consolidated-tests.json",
+  "excludedUnrelatedDirtyPaths": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ]
+}

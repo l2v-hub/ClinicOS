@@ -1,0 +1,9 @@
+{
+  "initialFixtureFailure": { "sessionId": 37247, "completionChunk": "8aef09", "exitCode": 1, "passed": 14, "failed": 1 },
+  "secondFixtureFailure": { "sessionId": 37281, "completionChunk": "1d16f4", "exitCode": 1, "passed": 14, "failed": 1 },
+  "priorGreenRun": { "sessionId": 23808, "initialChunk": "7d05ba", "completionChunk": "ee0c5d", "exitCode": 0, "passed": 15, "failed": 0 },
+  "finalBackendCwdRun": { "sessionId": 13256, "initialChunk": "e2fb3f", "completionChunk": "e0adad", "exitCode": 0, "passed": 3, "failed": 0 },
+  "sourceFreezeValidation": { "sessionId": 90898, "completionChunk": "4ced12", "exitCode": 0 },
+  "pdfRender": { "completionChunk": "aa83e1", "exitCode": 0, "pdfs": 4, "pages": 16 },
+  "pdfOperationMarker": { "completionChunk": "622545", "exitCode": 0, "operationKind": "create", "expectedOutputCount": 4, "outputFormat": "pdf", "calls": 1 }
+}
