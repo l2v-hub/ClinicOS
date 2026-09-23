@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+  "verifiedOn": "2026-09-23",
+  "runtime": {
+    "deploymentId": "703bdc52-5600-44bd-be32-3a3a69972f98",
+    "status": "SUCCESS",
+    "url": "https://clinicos-ai-runtime-production.up.railway.app",
+    "documentJobContractVersion": 2,
+    "imageDigest": "sha256:e784957989d0c0cc4a5ecff568b75b11a45df5a9fbd9dfe089a5c8131768a6b5",
+    "python311ImageBuildAndHealth": "PASS"
+  },
+  "backend": {
+    "deploymentId": "310254af-8267-4ca7-aa57-386015783438",
+    "status": "SUCCESS",
+    "url": "https://clinicos-backend-demo.up.railway.app",
+    "environment": "demo",
+    "healthStatus": 200,
+    "migration": "Additive 20260923010000_import_page_sessions; configured prisma migrate deploy pre-deploy gate succeeded"
+  },
+  "frontend": {
+    "deploymentId": "dpl_6z6KkYxc2NzTFZ1ESWYXC37yvz6N",
+    "status": "READY",
+    "url": "https://clinicos-n6e9xqpdm-lucalavia-2482s-projects.vercel.app",
+    "alias": "clinicos-eosin.vercel.app",
+    "aliasSourceCommitVerified": true,
+    "browserReadOnlySmoke": "Profile selection renders; no initial console errors; no live patient mutation"
+  },
+  "sequence": ["runtime contract2 verified", "backend health verified", "frontend alias source verified"],
+  "evidence": ["root-source-manifest.json", "validation-report.md", "runtime-release-inputs.json", "backend-release-inputs.json", "frontend-release-inputs.json", "benchmark.json", "preview/synthetic-state.json"],
+  "authorization": "User approved all PO activities, push and deployment. Source exported from immutable commit; unrelated PowerShell and claim changes excluded."
+}

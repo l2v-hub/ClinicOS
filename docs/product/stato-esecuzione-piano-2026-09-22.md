@@ -10,8 +10,8 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | PO-02 Correzione orari | Pubblicato e verificato | b405c8ff: 53 test, build, focus desktop/mobile; 16→20 e doppia fascia concordi in bozza/payload/DB/feed. |
 | PO-03 Note e origine | Pubblicato e verificato | 553fa24b: 80 test mirati e build; istruzione PA alle 22:00 conservata nelle note senza seconda somministrazione; provenienza e archivio integri. Railway SUCCESS, Vercel READY e alias verificato. |
 | PO-04 Ricerca farmaci | Pubblicato e verificato | ef562bf5: 55 test mirati aggregati, build, browser desktop/mobile e retry paginato. Railway SUCCESS e Vercel READY, alias verificato. Smoke reale: tre confezioni ordinarie 1000 mg, AIC conservato in POST/GET/PUT/intake. |
-| PO-05 Scansioni lunghe | In esecuzione | Contratto pagine/gruppi persistenti concordato; tre worker isolati backend, frontend e runtime. Obiettivo di prova 30 pagine, recupero e archivio atomico. |
-| PO-06 Identità e posto letto | Da eseguire | Componente condiviso |
+| PO-05 Scansioni lunghe | Pubblicato e verificato | 0418463a: 101 test backend, 17 prove integrate PostgreSQL, 125 frontend, 169 runtime; 30 pagine in tre lettere confermate e archiviate da browser mobile sintetico. Runtime e backend Railway SUCCESS; Vercel READY e alias legato al commit. |
+| PO-06 Identità e posto letto | In esecuzione | DTO posizione autorevole e presentazione condivisa; worker backend/frontend isolati, baseline prestazioni con 202 pazienti sintetici. |
 | PO-07 Ordine del reparto | Da eseguire | Ordinamento prima della paginazione |
 | PO-08 Consegne dal giro | Da eseguire | Riutilizzare flusso esistente |
 | PO-09 Dimissione | Da eseguire | Spostamento della destinazione |
