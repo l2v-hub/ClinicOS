@@ -29,7 +29,7 @@ export type TabId =
   | 'dimissione'
   | 'esami-consulenze';
 
-export type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti';
+export type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti' | 'dimissione';
 
 export interface TabGroupDef {
   id: TabGroup;
@@ -73,13 +73,17 @@ export const TAB_GROUPS: TabGroupDef[] = [
       { id: 'braden', label: 'Scala Braden' },
       { id: 'tinetti', label: 'Scala Tinetti' },
       { id: 'nrs', label: 'Scala NRS' },
-      { id: 'dimissione', label: 'Dimissione' },
     ],
   },
   {
     id: 'documenti',
     label: 'Documenti',
     tabs: [{ id: 'documenti', label: 'Documenti' }],
+  },
+  {
+    id: 'dimissione',
+    label: 'Dimissione',
+    tabs: [{ id: 'dimissione', label: 'Dimissione' }],
   },
 ];
 

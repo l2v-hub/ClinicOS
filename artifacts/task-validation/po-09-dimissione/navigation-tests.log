@@ -1,0 +1,27 @@
+(node:31492) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all seven writes map to exact patient page or agenda, unknown/deletes/missing IDs fail closed (1.5573ms)
+✔ routing preserves failure and cancellation instead of claiming a page opened (0.9528ms)
+✔ read navigation only follows explicit single-page intent and structured authorized destinations (0.4506ms)
+✔ request gate synchronously rejects double starts and fences late work after cancellation (0.3225ms)
+✔ preview retains full narrative diff and refuses ambiguities; hostile content stays escaped (7.0479ms)
+✔ microphone errors tell the operator how to recover (0.1474ms)
+✔ only recognized pre-write denials prove a failed save; server and malformed responses remain uncertain (0.1607ms)
+(node:31492) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26508) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ chart groups organize intake and clinical work while legacy links keep their destination (1.2324ms)
+✔ discharge opens directly beside Documents and legacy links keep the same module (0.213ms)
+✔ Agnos opens the separate therapy page for both roles without confusing the agenda (0.268ms)
+✔ demographic write preview opens the page that displays the field being changed (0.2293ms)
+(node:26508) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 274.1856

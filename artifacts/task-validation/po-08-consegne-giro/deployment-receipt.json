@@ -1,0 +1,25 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User approved the complete plan, autonomous implementation, commit, push and deploy",
+  "sourceCommit": "3582e0bf4ea28fa95afc9fc36756087fdfce60a9",
+  "sourceTreeSha256": "cfcb77ebc7a367add8592cf7555984165894e8809a87c50a8754a792ffacff98",
+  "backend": {
+    "deploymentId": "ae45c28c-f976-4f84-adb0-dd6f42cd0452",
+    "status": "SUCCESS",
+    "healthStatus": 200,
+    "migration": "20260923030000_consegna_creation_receipts",
+    "migrationApplied": true,
+    "immutableExport": "backend-release-inputs.json"
+  },
+  "frontend": {
+    "deploymentId": "dpl_CCDpCDBhUrjQi6wkFxbX4XCqCieX",
+    "status": "READY",
+    "url": "https://clinicos-1fqt8bkwa-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "aliasSourceCommitVerified": "3582e0bf4ea28fa95afc9fc36756087fdfce60a9",
+    "immutableExport": "frontend-release-inputs.json"
+  },
+  "aiRuntime": "unchanged from PO05",
+  "localPreview": "closed through fixture endpoint; PostgreSQL processes terminated",
+  "limitations": ["Six static patientRosterGuard failures match baseline", "Native mobile hardware and representative operator observation remain separate PO16 checks"]
+}

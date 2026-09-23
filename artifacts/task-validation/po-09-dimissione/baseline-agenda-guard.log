@@ -1,0 +1,321 @@
+(node:35088) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells (2.2625ms)
+✔ opening a calendar day loads that exact therapy date and carries it into mutations (0.2228ms)
+✔ changing the agenda date or view closes any therapy modal before its date can change (0.3595ms)
+(node:35088) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 216.6449
+
+✖ failing tests:
+
+test at src\lib\__tests__\therapyAgendaDateGuard.test.ts:1:428
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells (2.2625ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Le terapie sono disponibili nella vista Giorno/. Input:
+  
+  "import { useState, useMemo, Fragment, useEffect } from 'react';\n" +
+    'import type {\n' +
+    '  Appuntamento,\n' +
+    '  Operatore,\n' +
+    '  TherapySlot,\n' +
+    '  MotivoNonErogazione,\n' +
+    '  TherapySlotPageInfo,\n' +
+    '  TherapyActionInfo,\n' +
+    "} from '../../types';\n" +
+    "import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';\n" +
+    "import { AppointmentForm } from '../shared/AppointmentForm';\n" +
+    "import { localIsoDate } from '../../lib/appointmentRange';\n" +
+    "import { AgendaLegend } from '../shared/AgendaLegend';\n" +
+    "import { AppuntamentoActions } from '../shared/AppuntamentoActions';\n" +
+    "import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';\n" +
+    "import { TherapySlotCard } from '../shared/TherapySlotOverlay';\n" +
+    "import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';\n" +
+    "import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';\n" +
+    "import { PageHeader } from '../shared/PageHeader';\n" +
+    "import { TherapySlotModal } from './TherapySlotModal';\n" +
+    '\n' +
+    "type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';\n" +
+    '\n' +
+    'interface OperatorAgendaProps {\n' +
+    '  operatoreId: string;\n' +
+    '  nomeOperatore: string;\n' +
+    '  operatori: Operatore[];\n' +
+    '  appuntamenti: Appuntamento[];\n' +
+    "  onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;\n" +
+    "  onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;\n" +
+    '  onDeleteAppuntamento?: (id: string) => void;\n' +
+    '  loadingAppuntamenti?: boolean;\n' +
+    '  appointmentLoadError?: string | null;\n' +
+    '  onRetryAppointments?: () => void;\n' +
+    '  onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;\n' +
+    '  onSelectPaziente?: (nome: string, patientId?: string) => void;\n' +
+    '  therapySlots?: TherapySlot[];\n' +
+    '  loadingTherapySlots?: boolean;\n' +
+    '  therapyLoadError?: string | null;\n' +
+    '  therapyLoadMoreError?: string | null;\n' +
+    '  therapyPageInfo?: TherapySlotPageInfo;\n' +
+    '  loadingMoreTherapySlots?: boolean;\n' +
+    '  onRetryTherapySlots?: () => void;\n' +
+    '  onLoadMoreTherapySlots?: () => void;\n' +
+    '  onConfirmTherapy?: (info: TherapyActionInfo) => void;\n' +
+    '  onNotAdministeredTherapy?: (\n' +
+    '    info: TherapyActionInfo,\n' +
+    '    motivo: MotivoNonErogazione,\n' +
+    '    note: string,\n' +
+    '  ) => void;\n' +
+    '  onLoadTherapySlots?: (date: string) => void;\n' +
+    '}\n' +
+    '\n' +
+    'const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {\n' +
+    '  const h = Math.floor(i / 2) + 8;\n' +
+    "  const m = i % 2 === 0 ? '00' : '30';\n" +
+    "  return `${String(h).padStart(2, '0')}:${m}`;\n" +
+    '});\n' +
+    'const HOUR_SLOTS = TIME_SLOTS.filter((_, i) => i % 2 === 0);\n' +
+    '\n' +
+    'function addDays(d: Date, n: number): Date {\n' +
+    '  const r = new Date(d);\n' +
+    '  r.setDate(d.getDate() + n);\n' +
+    '  return r;\n' +
+    '}\n' +
+    'function getMondayOf(d: Date): Date {\n' +
+    '  const day = d.getDay();\n' +
+    '  return addDays(d, day === 0 ? -6 : 1 - day);\n' +
+    '}\n' +
+    'function getWeekDays(ref: Date): Date[] {\n' +
+    '  const mon = getMondayOf(ref);\n' +
+    '  return Array.from({ length: 7 }, (_, i) => addDays(mon, i));\n' +
+    '}\n' +
+    'function getMonthMatrix(ref: Date): Date[] {\n' +
+    '  const y = ref.getFullYear(),\n' +
+    '    m = ref.getMonth();\n' +
+    '  const mon = getMondayOf(new Date(y, m, 1));\n' +
+    '  return Array.from({ length: 42 }, (_, i) => addDays(mon, i));\n' +
+    '}\n' +
+    'function isoDate(d: Date): string {\n' +
+    '  return localIsoDate(d);\n' +
+    '}\n' +
+    'function fmtDateLong(d: Date): string {\n' +
+    "  return d.toLocaleDateString('it-IT', {\n" +
+    "    weekday: 'long',\n" +
+    "    day: 'numeric',\n" +
+    "    month: 'long',\n" +
+    "    year: 'numeric',\n" +
+    '  });\n' +
+    '}\n' +
+    'function fmtMonth(d: Date): string {\n' +
+    "  return d.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });\n" +
+    '}\n' +
+    '\n' +
+    'const TIPO_LABEL: Record<string, string> = {\n' +
+    "  visita: 'Visita',\n" +
+    "  controllo: 'Controllo',\n" +
+    "  procedura: 'Procedura',\n" +
+    "  urgenza: 'Urgenza',\n" +
+    "  consulto: 'Consulto',\n" +
+    "  'follow-up': 'Follow-up',\n" +
+    "  altro: 'Altro',\n" +
+    '};\n' +
+    '\n' +
+    'export function OperatorAgenda({\n' +
+    '  operatoreId,\n' +
+    '  nomeOperatore,\n' +
+    '  operatori,\n' +
+    '  appuntamenti,\n' +
+    '  onAddAppuntamento,\n' +
+    '  onUpdateAppuntamento,\n' +
+    '  onDeleteAppuntamento,\n' +
+    '  loadingAppuntamenti = false,\n' +
+    '  appointmentLoadError = null,\n' +
+    '  onRetryAppointments,\n' +
+    '  onLoadAppointments,\n' +
+    '  onSelectPaziente,\n' +
+    '  therapySlots,\n' +
+    '  loadingTherapySlots = false,\n' +
+    '  therapyLoadError = null,\n' +
+    '  therapyLoadMoreError = null,\n' +
+    '  therapyPageInfo,\n' +
+    '  loadingMoreTherapySlots = false,\n' +
+    '  onRetryTherapySlots,\n' +
+    '  onLoadMoreTherapySlots,\n' +
+    '  onConfirmTherapy,\n' +
+    '  onNotAdministeredTherapy,\n' +
+    '  onLoadTherapySlots,\n' +
+    '}: OperatorAgendaProps) {\n' +
+    "  const [view, setView] = useState<ViewMode>('giornaliero');\n" +
+    '  const [refDate, setRefDate] = useState(new Date());\n' +
+    "  const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');\n" +
+    '  const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);\n' +
+    '  const [showNewPaziente, setShowNewPaziente] = useState(false);\n' +
+    '  const [selectedAptId, setSelectedAptId] = useState<string | null>(null);\n' +
+    '  const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);\n' +
+    '  const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);\n' +
+    '  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);\n' +
+    '\n' +
+    '  useEffect(() => {\n' +
+    '    const days =\n' +
+    "      view === 'giornaliero'\n" +
+    '        ? [refDate]\n' +
+    "        : view === 'settimanale'\n" +
+    '          ? getWeekDays(refDate)\n' +
+    '          : getMonthMatrix(refDate);\n' +
+    '    onLoadAppointments?.(isoDate(days[0]), isoDate(days[days.length - 1]), operatoreId);\n' +
+    '  }, [onLoadAppointments, operatoreId, refDate, view]);\n' +
+    '\n' +
+    '  const therapySlotsMap = new Map<string, TherapySlot>();\n' +
+    '  if (therapySlots) {\n' +
+    '    for (const ts of therapySlots) {\n' +
+    '      therapySlotsMap.set(ts.ora, ts);\n' +
+    '    }\n' +
+    '  }\n' +
+    '\n' +
+    '  const myOp = operatori.find((o) => o.id === operatoreId);\n' +
+    "  const opColor = myOp?.colore ?? 'var(--blue)';\n" +
+    '\n' +
+    '  function myApts(data: string): Appuntamento[] {\n' +
+    '    return appuntamenti\n' +
+    '      .filter((a) => a.data === data && a.operatoreId === operatoreId)\n' +
+    '      .sort((a, b) => a.ora.localeCompare(b.ora));\n' +
+    '  }\n' +
+    '\n' +
+    "  /** Appuntamenti del giorno effettivamente mostrati, cioe' filtrati per stato. */\n" +
+    '  function visibleApts(data: string): Appuntamento[] {\n' +
+    '    return myApts(data).filter((a) => matchStato(a, filtroStato));\n' +
+    '  }\n' +
+    '\n' +
+    '  function navigate(delta: number) {\n' +
+    '    setSelectedTherapySlotId(null);\n' +
+    '    setRefDate((d) => {\n' +
+    '      let next: Date;\n' +
+    "      if (view === 'giornaliero') next = addDays(d, delta);\n" +
+    "      else if (view === 'settimanale') next = addDays(d, delta * 7);\n" +
+    '      else {\n' +
+    '        next = new Date(d);\n' +
+    '        next.setMonth(d.getMonth() + delta);\n' +
+    '      }\n' +
+    "      if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(next));\n" +
+    '      return next;\n' +
+    '    });\n' +
+    '  }\n' +
+    '\n' +
+    '  function changeView(next: ViewMode) {\n' +
+    '    setSelectedTherapySlotId(null);\n' +
+    '    setView(next);\n' +
+    "    if (next === 'giornaliero') onLoadTherapySlots?.(isoDate(refDate));\n" +
+    '  }\n' +
+    '\n' +
+    '  function openDay(date: Date) {\n' +
+    '    setSelectedTherapySlotId(null);\n' +
+    '    setRefDate(date);\n' +
+    "    setView('giornaliero');\n" +
+    '    onLoadTherapySlots?.(isoDate(date));\n' +
+    '  }\n' +
+    '\n' +
+    '  function goToday() {\n' +
+    '    const today = new Date();\n' +
+    '    setSelectedTherapySlotId(null);\n' +
+    '    setRefDate(today);\n' +
+    "    if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(today));\n" +
+    '  }\n' +
+    '\n' +
+    '  function titleLabel(): string {\n' +
+    "    if (view === 'giornaliero') return fmtDateLong(refDate);\n" +
+    "    if (view === 'settimanale') {\n" +
+    '      const days = getWeekDays(refDate);\n' +
+    "      return `${days[0].toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })} – ${days[6].toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })}`;\n" +
+    '    }\n' +
+    '    return fmtMonth(refDate);\n' +
+    '  }\n' +
+    '\n' +
+    '  const todayStr = isoDate(refDate);\n' +
+    '  const todayApts = useMemo(\n' +
+    '    () =>\n' +
+    '      appuntamenti\n' +
+    '        .filter(\n' +
+    '          (appointment) => appointment.data === todayStr && appointment.operatoreId === operatoreId,\n' +
+    '        )\n' +
+    '        .sort((left, right) => left.ora.localeCompare(right.ora)),\n' +
+    '    [appuntamenti, operatoreId, todayStr],\n' +
+    '  );\n' +
+    '\n' +
+    '  function aptsInRange(days: Date[]): number {\n' +
+    '    const from = isoDate(days[0]);\n' +
+    '    const to = isoDate(days[days.length - 1]);\n' +
+    '    return appuntamenti.filter(\n' +
+    '      (a) =>\n' +
+    '        a.operatoreId === operatoreId &&\n' +
+    '        a.data >= from &&\n' +
+    '        a.data <= to &&\n' +
+    '        matchStato(a, filtroStato),\n' +
+    '    ).length;\n' +
+    '  }\n' +
+    '\n' +
+    '  // Appuntamenti del range visualizzato (giorno/settimana/mese), non filtrati: alimentano\n' +
+    '  // i conteggi dei chip di stato, che devono restare stabili al variare del filtro.\n' +
+    '  const rangeApts = useMemo(() => {\n' +
+    '    const days =\n' +
+    "      view === 'giornaliero'\n" +
+    '        ? [refDate]\n' +
+    "        : view === 'settimanale'\n" +
+    '          ? getWeekDays(refDate)\n' +
+    '          : getMonthMatrix(refDate);\n' +
+    '    const from = isoDate(days[0]);\n' +
+    '    const to = isoDate(days[days.length - 1]);\n' +
+    '    return appuntamenti.filter(\n' +
+    '      (a) => a.operatoreId === operatoreId && a.data >= from && a.data <= to,\n' +
+    '    );\n' +
+    '  }, [appuntamenti, operatoreId, view, refDate]);\n' +
+    '  // Indice per lookup O(1) nella griglia giornaliera: senza, ogni cella orario richiamava\n' +
+    "  // myApts() e rifiltrava/riordinava l'intero array `appuntamenti` (TIME_SLOTS.length volte\n" +
+    '  // per render, su un array con gli appuntamenti di tutti gli operatori, non solo i propri).\n' +
+    '  const todayAptByOra = useMemo(() => {\n' +
+    '    const map = new Map<string, Appuntamento>();\n' +
+    '    for (const a of todayApts) map.set(a.ora, a);\n' +
+    '    return map;\n' +
+    '  }, [todayApts]);\n' +
+    '  // Extract activeSlot OUTSIDE JSX — avoids React Compiler IIFE caching bug\n' +
+    '  const activeSlot = selectedTherapySlotId\n' +
+    '    ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)\n' +
+    '    : null;\n' +
+    '\n' +
+    '  return (\n' +
+    '    <div className="agt-view">\n' +
+    '      <PageHeader\n' +
+    "        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Agenda' }]}\n" +
+    '        title="Agenda operatore"\n' +
+    '        subtitle={\n' +
+    '          <span className="agt-page-subtitle">\n' +
+    '            <span className="agt-op-chip">\n' +
+    '              <span className="agt-op-dot" style={{ background: opColor }} aria-hidden="true" />\n' +
+    '              <span className="agt-op-name">{nomeOperatore}</span>\n' +
+    '            </span>\n' +
+    '            <span className="agt-page-subtitle__separator" aria-hidden="true">\n' +
+    '              ·\n' +
+    '            </span>\n' +
+    '            <span className="agt-header__date">{titleLabel()}</span>\n' +
+    '          </span>\n' +
+    '        }\n' +
+    '        actions={\n' +
+    '          <div className="agt-page-actions">\n' +
+    '            <div className="agt-view-switcher" role="group" aria-label="Visualizzazione agenda">\n' +
+    "              {(['giornaliero', 'settima"... 16406 more characters
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\frontend\src\lib\__tests__\therapyAgendaDateGuard.test.ts:21:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useState, useMemo, Fragment, useEffect } from \'react\';\nimport type {\n  Appuntamento,\n  Operatore,\n  TherapySlot,\n  MotivoNonErogazione,\n  TherapySlotPageInfo,\n  TherapyActionInfo,\n} from \'../../types\';\nimport { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from \'../../icons\';\nimport { AppointmentForm } from \'../shared/AppointmentForm\';\nimport { localIsoDate } from \'../../lib/appointmentRange\';\nimport { AgendaLegend } from \'../shared/AgendaLegend\';\nimport { AppuntamentoActions } from \'../shared/AppuntamentoActions\';\nimport { IntakeWorkspace } from \'../shared/intake/IntakeWorkspace\';\nimport { TherapySlotCard } from \'../shared/TherapySlotOverlay\';\nimport { AgendaStatoFilterRow } from \'../shared/AgendaStatoFilter\';\nimport { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from \'../shared/agendaStato\';\nimport { PageHeader } from \'../shared/PageHeader\';\nimport { TherapySlotModal } from \'./TherapySlotModal\';\n\ntype ViewMode = \'giornaliero\' | \'settimanale\' | \'mensile\';\n\ninterface OperatorAgendaProps {\n  operatoreId: string;\n  nomeOperatore: string;\n  operatori: Operatore[];\n  appuntamenti: Appuntamento[];\n  onAddAppuntamento: (apt: Omit<Appuntamento, \'id\'>) => Promise<string | null>;\n  onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, \'id\'>) => Promise<string | null>;\n  onDeleteAppuntamento?: (id: string) => void;\n  loadingAppuntamenti?: boolean;\n  appointmentLoadError?: string | null;\n  onRetryAppointments?: () => void;\n  onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;\n  onSelectPaziente?: (nome: string, patientId?: string) => void;\n  therapySlots?: TherapySlot[];\n  loadingTherapySlots?: boolean;\n  therapyLoadError?: string | null;\n  therapyLoadMoreError?: string | null;\n  therapyPageInfo?: TherapySlotPageInfo;\n  loadingMoreTherapySlots?: boolean;\n  onRetryTherapySlots?: () => void;\n  onLoadMoreTherapySlots?: () => void;\n  onConfirmTherapy?: (info: TherapyActionInfo) => void;\n  onNotAdministeredTherapy?: (\n    info: TherapyActionInfo,\n    motivo: MotivoNonErogazione,\n    note: string,\n  ) => void;\n  onLoadTherapySlots?: (date: string) => void;\n}\n\nconst TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {\n  const h = Math.floor(i / 2) + 8;\n  const m = i % 2 === 0 ? \'00\' : \'30\';\n  return `${String(h).padStart(2, \'0\')}:${m}`;\n});\nconst HOUR_SLOTS = TIME_SLOTS.filter((_, i) => i % 2 === 0);\n\nfunction addDays(d: Date, n: number): Date {\n  const r = new Date(d);\n  r.setDate(d.getDate() + n);\n  return r;\n}\nfunction getMondayOf(d: Date): Date {\n  const day = d.getDay();\n  return addDays(d, day === 0 ? -6 : 1 - day);\n}\nfunction getWeekDays(ref: Date): Date[] {\n  const mon = getMondayOf(ref);\n  return Array.from({ length: 7 }, (_, i) => addDays(mon, i));\n}\nfunction getMonthMatrix(ref: Date): Date[] {\n  const y = ref.getFullYear(),\n    m = ref.getMonth();\n  const mon = getMondayOf(new Date(y, m, 1));\n  return Array.from({ length: 42 }, (_, i) => addDays(mon, i));\n}\nfunction isoDate(d: Date): string {\n  return localIsoDate(d);\n}\nfunction fmtDateLong(d: Date): string {\n  return d.toLocaleDateString(\'it-IT\', {\n    weekday: \'long\',\n    day: \'numeric\',\n    month: \'long\',\n    year: \'numeric\',\n  });\n}\nfunction fmtMonth(d: Date): string {\n  return d.toLocaleDateString(\'it-IT\', { month: \'long\', year: \'numeric\' });\n}\n\nconst TIPO_LABEL: Record<string, string> = {\n  visita: \'Visita\',\n  controllo: \'Controllo\',\n  procedura: \'Procedura\',\n  urgenza: \'Urgenza\',\n  consulto: \'Consulto\',\n  \'follow-up\': \'Follow-up\',\n  altro: \'Altro\',\n};\n\nexport function OperatorAgenda({\n  operatoreId,\n  nomeOperatore,\n  operatori,\n  appuntamenti,\n  onAddAppuntamento,\n  onUpdateAppuntamento,\n  onDeleteAppuntamento,\n  loadingAppuntamenti = false,\n  appointmentLoadError = null,\n  onRetryAppointments,\n  onLoadAppointments,\n  onSelectPaziente,\n  therapySlots,\n  loadingTherapySlots = false,\n  therapyLoadError = null,\n  therapyLoadMoreError = null,\n  therapyPageInfo,\n  loadingMoreTherapySlots = false,\n  onRetryTherapySlots,\n  onLoadMoreTherapySlots,\n  onConfirmTherapy,\n  onNotAdministeredTherapy,\n  onLoadTherapySlots,\n}: OperatorAgendaProps) {\n  const [view, setView] = useState<ViewMode>(\'giornaliero\');\n  const [refDate, setRefDate] = useState(new Date());\n  const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>(\'tutti\');\n  const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);\n  const [showNewPaziente, setShowNewPaziente] = useState(false);\n  const [selectedAptId, setSelectedAptId] = useState<string | null>(null);\n  const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);\n  const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);\n  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);\n\n  useEffect(() => {\n    const days =\n      view === \'giornaliero\'\n        ? [refDate]\n        : view === \'settimanale\'\n          ? getWeekDays(refDate)\n          : getMonthMatrix(refDate);\n    onLoadAppointments?.(isoDate(days[0]), isoDate(days[days.length - 1]), operatoreId);\n  }, [onLoadAppointments, operatoreId, refDate, view]);\n\n  const therapySlotsMap = new Map<string, TherapySlot>();\n  if (therapySlots) {\n    for (const ts of therapySlots) {\n      therapySlotsMap.set(ts.ora, ts);\n    }\n  }\n\n  const myOp = operatori.find((o) => o.id === operatoreId);\n  const opColor = myOp?.colore ?? \'var(--blue)\';\n\n  function myApts(data: string): Appuntamento[] {\n    return appuntamenti\n      .filter((a) => a.data === data && a.operatoreId === operatoreId)\n      .sort((a, b) => a.ora.localeCompare(b.ora));\n  }\n\n  /** Appuntamenti del giorno effettivamente mostrati, cioe\' filtrati per stato. */\n  function visibleApts(data: string): Appuntamento[] {\n    return myApts(data).filter((a) => matchStato(a, filtroStato));\n  }\n\n  function navigate(delta: number) {\n    setSelectedTherapySlotId(null);\n    setRefDate((d) => {\n      let next: Date;\n      if (view === \'giornaliero\') next = addDays(d, delta);\n      else if (view === \'settimanale\') next = addDays(d, delta * 7);\n      else {\n        next = new Date(d);\n        next.setMonth(d.getMonth() + delta);\n      }\n      if (view === \'giornaliero\') onLoadTherapySlots?.(isoDate(next));\n      return next;\n    });\n  }\n\n  function changeView(next: ViewMode) {\n    setSelectedTherapySlotId(null);\n    setView(next);\n    if (next === \'giornaliero\') onLoadTherapySlots?.(isoDate(refDate));\n  }\n\n  function openDay(date: Date) {\n    setSelectedTherapySlotId(null);\n    setRefDate(date);\n    setView(\'giornaliero\');\n    onLoadTherapySlots?.(isoDate(date));\n  }\n\n  function goToday() {\n    const today = new Date();\n    setSelectedTherapySlotId(null);\n    setRefDate(today);\n    if (view === \'giornaliero\') onLoadTherapySlots?.(isoDate(today));\n  }\n\n  function titleLabel(): string {\n    if (view === \'giornaliero\') return fmtDateLong(refDate);\n    if (view === \'settimanale\') {\n      const days = getWeekDays(refDate);\n      return `${days[0].toLocaleDateString(\'it-IT\', { day: \'numeric\', month: \'short\' })} – ${days[6].toLocaleDateString(\'it-IT\', { day: \'numeric\', month: \'short\', year: \'numeric\' })}`;\n    }\n    return fmtMonth(refDate);\n  }\n\n  const todayStr = isoDate(refDate);\n  const todayApts = useMemo(\n    () =>\n      appuntamenti\n        .filter(\n          (appointment) => appointment.data === todayStr && appointment.operatoreId === operatoreId,\n        )\n        .sort((left, right) => left.ora.localeCompare(right.ora)),\n    [appuntamenti, operatoreId, todayStr],\n  );\n\n  function aptsInRange(days: Date[]): number {\n    const from = isoDate(days[0]);\n    const to = isoDate(days[days.length - 1]);\n    return appuntamenti.filter(\n      (a) =>\n        a.operatoreId === operatoreId &&\n        a.data >= from &&\n        a.data <= to &&\n        matchStato(a, filtroStato),\n    ).length;\n  }\n\n  // Appuntamenti del range visualizzato (giorno/settimana/mese), non filtrati: alimentano\n  // i conteggi dei chip di stato, che devono restare stabili al variare del filtro.\n  const rangeApts = useMemo(() => {\n    const days =\n      view === \'giornaliero\'\n        ? [refDate]\n        : view === \'settimanale\'\n          ? getWeekDays(refDate)\n          : getMonthMatrix(refDate);\n    const from = isoDate(days[0]);\n    const to = isoDate(days[days.length - 1]);\n    return appuntamenti.filter(\n      (a) => a.operatoreId === operatoreId && a.data >= from && a.data <= to,\n    );\n  }, [appuntamenti, operatoreId, view, refDate]);\n  // Indice per lookup O(1) nella griglia giornaliera: senza, ogni cella orario richiamava\n  // myApts() e rifiltrava/riordinava l\'intero array `appuntamenti` (TIME_SLOTS.length volte\n  // per render, su un array con gli appuntamenti di tutti gli operatori, non solo i propri).\n  const todayAptByOra = useMemo(() => {\n    const map = new Map<string, Appuntamento>();\n    for (const a of todayApts) map.set(a.ora, a);\n    return map;\n  }, [todayApts]);\n  // Extract activeSlot OUTSIDE JSX — avoids React Compiler IIFE caching bug\n  const activeSlot = selectedTherapySlotId\n    ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)\n    : null;\n\n  return (\n    <div className="agt-view">\n      <PageHeader\n        breadcrumb={[{ label: \'ClinicOS\' }, { label: \'Agenda\' }]}\n        title="Agenda operatore"\n        subtitle={\n          <span className="agt-page-subtitle">\n            <span className="agt-op-chip">\n              <span className="agt-op-dot" style={{ background: opColor }} aria-hidden="true" />\n              <span className="agt-op-name">{nomeOperatore}</span>\n            </span>\n            <span className="agt-page-subtitle__separator" aria-hidden="true">\n              ·\n            </span>\n            <span className="agt-header__date">{titleLabel()}</span>\n          </span>\n        }\n        actions={\n          <div className="agt-page-actions">\n            <div className="agt-view-switcher" role="group" aria-label="Visualizzazione agenda">\n              {([\'giornaliero\', \'settima'... 16406 more characters,
+    expected: /Le terapie sono disponibili nella vista Giorno/,
+    operator: 'match',
+    diff: 'simple'
+  }

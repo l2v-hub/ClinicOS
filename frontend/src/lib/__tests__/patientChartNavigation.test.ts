@@ -29,6 +29,15 @@ test('chart groups organize intake and clinical work while legacy links keep the
   assert.equal(patientTabGroup('consegne'), 'clinica');
 });
 
+test('discharge opens directly beside Documents and legacy links keep the same module', () => {
+  const documentIndex = TAB_GROUPS.findIndex((group) => group.id === 'documenti');
+  assert.equal(TAB_GROUPS[documentIndex + 1].id, 'dimissione');
+  assert.equal(patientTabGroup('dimissione'), 'dimissione');
+  assert.equal(resolvePatientTab('dimissione'), 'dimissione');
+  assert.equal(TAB_GROUPS.flatMap((group) => group.tabs).filter((tab) => tab.id === 'dimissione').length, 1);
+  assert.ok(!TAB_GROUPS.find((group) => group.id === 'moduli')!.tabs.some((tab) => tab.id === 'dimissione'));
+});
+
 test('Agnos opens the separate therapy page for both roles without confusing the agenda', async () => {
   for (const isAdmin of [false, true]) {
     const calls: string[] = [];
