@@ -1,0 +1,29 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User approved PO01–PO16, commit/push and deployment without further questions",
+  "sourceCommit": "6f8b7ded54084c4a380f94b61f9aa520b698a09c",
+  "backend": {
+    "deploymentId": "b8e82dd2-14c2-42f6-b4cd-110f21bd3260",
+    "status": "SUCCESS",
+    "migration": "20260923070000_mna",
+    "migrationApplied": true,
+    "healthStatus": 200
+  },
+  "frontend": {
+    "deploymentId": "dpl_LR7ZEk7P2PqPC8nbhtamURHqvGci",
+    "status": "READY",
+    "url": "https://clinicos-cbxjkg3hx-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "sourceCommitVerified": "6f8b7ded54084c4a380f94b61f9aa520b698a09c"
+  },
+  "runtimeUnchanged": "PO05",
+  "productionSmoke": {
+    "module": "Mini Nutritional Assessment · MNA®",
+    "newAssessmentButton": true,
+    "currentLoaded": true,
+    "historyLoaded": true,
+    "writeActionsPerformed": 0,
+    "consoleErrors": 0,
+    "userOpenTherapyFormPreserved": true
+  }
+}
