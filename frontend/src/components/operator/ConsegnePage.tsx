@@ -4,7 +4,6 @@ import type {
   Consegna,
   ConsegnaSummary,
   Operatore,
-  NewConsegnaInput,
   PrioritaConsegna,
   StatoConsegna,
 } from '../../types';
@@ -16,14 +15,20 @@ import { PageHeader } from '../shared/PageHeader';
 import { ConsegnaCreateForm } from './ConsegnaCreateForm';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import { parsePatientIdentity, patientIdentityName } from '../../lib/patientIdentity';
+import type { ConsegnaCreate } from '../../lib/consegnaCreation';
+import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 
-interface ConsegnePageProps {
+export interface ConsegnePageProps {
+  embedded?: boolean;
   consegne: Consegna[];
   summary: ConsegnaSummary;
   operatori: Operatore[];
   operatoreId: string;
   isAdmin: boolean;
-  onAdd: (c: NewConsegnaInput) => Promise<boolean>;
+  onAdd: ConsegnaCreate;
+  draftStore?: ConsegnaDraftStore;
+  initialPatientId?: string;
+  initialQuery?: ConsegnaFeedQuery;
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
@@ -63,6 +68,7 @@ const STATO_LABEL: Record<StatoConsegna, string> = {
 };
 
 export function ConsegnePage({
+  embedded = false,
   consegne,
   summary,
   operatori,
@@ -81,12 +87,15 @@ export function ConsegnePage({
   onSelectPaziente,
   initialFiltroStato,
   focusId,
+  draftStore,
+  initialPatientId,
+  initialQuery,
 }: ConsegnePageProps) {
   const [filtroStato, setFiltroStato] = useState<'tutte' | 'attive' | Consegna['stato']>(
     initialFiltroStato ?? 'tutte',
   );
-  const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>('tutte');
-  const [ricerca, setRicerca] = useState('');
+  const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>(initialQuery?.priority ?? 'tutte');
+  const [ricerca, setRicerca] = useState(initialQuery?.q ?? '');
   const [formAperto, setFormAperto] = useState(false);
 
   useEffect(() => {
@@ -96,11 +105,12 @@ export function ConsegnePage({
           ...(filtroStato !== 'tutte' ? { status: filtroStato } : {}),
           ...(filtroPriorita !== 'tutte' ? { priority: filtroPriorita } : {}),
           ...(ricerca.trim() ? { q: ricerca.trim() } : {}),
+          ...(initialPatientId ? { patientId: initialPatientId } : {}),
         }),
       250,
     );
     return () => window.clearTimeout(timer);
-  }, [filtroStato, filtroPriorita, ricerca, onQueryChange]);
+  }, [filtroStato, filtroPriorita, ricerca, onQueryChange, initialPatientId]);
 
   // #283: quando la dashboard apre UNA consegna specifica, scrolla alla sua card evidenziata.
   useEffect(() => {
@@ -108,41 +118,51 @@ export function ConsegnePage({
     document
       .getElementById(`consegna-${focusId}`)
       ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-  }, [focusId]);
+  }, [focusId, consegne]);
 
   const filtrate = consegne;
 
   const urgenti = filtrate.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
   const altre = filtrate.filter((c) => !(c.priorita === 'urgente' && c.stato !== 'completata'));
+  const summaryLabel = `Nel tuo perimetro: ${summary.open} aperte · ${summary.urgentOpen} urgenti${
+    filtroStato !== 'tutte' || filtroPriorita !== 'tutte' || ricerca.trim()
+      ? ' · riepilogo indipendente dai filtri'
+      : ''
+  }`;
+  const createAction = (
+    <button
+      type="button"
+      className="btn-success"
+      aria-expanded={formAperto}
+      aria-controls="nuova-consegna-panel"
+      onClick={() => setFormAperto((open) => !open)}
+    >
+      <IcoPlus /> Nuova consegna
+    </button>
+  );
 
   return (
     <div className="consegne-page">
-      <PageHeader
-        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Consegne' }]}
-        title="Consegne"
-        subtitle={`Nel tuo perimetro: ${summary.open} aperte · ${summary.urgentOpen} urgenti${
-          filtroStato !== 'tutte' || filtroPriorita !== 'tutte' || ricerca.trim()
-            ? ' · riepilogo indipendente dai filtri'
-            : ''
-        }`}
-        actions={
-          <button
-            type="button"
-            className="btn-success"
-            aria-expanded={formAperto}
-            aria-controls="nuova-consegna-panel"
-            onClick={() => setFormAperto((open) => !open)}
-          >
-            <IcoPlus /> Nuova consegna
-          </button>
-        }
-      />
+      {embedded ? (
+        <div className="toolbar" aria-label="Riepilogo consegne">
+          <p className="page-header__subtitle">{summaryLabel}</p>
+          {createAction}
+        </div>
+      ) : (
+        <PageHeader
+          breadcrumb={[{ label: 'ClinicOS' }, { label: 'Consegne' }]}
+          title="Consegne"
+          subtitle={summaryLabel}
+          actions={createAction}
+        />
+      )}
 
       {formAperto && (
         <ConsegnaCreateForm
           operatori={operatori}
           isAdmin={isAdmin}
           onAdd={onAdd}
+          draftStore={draftStore}
           onClose={() => setFormAperto(false)}
         />
       )}

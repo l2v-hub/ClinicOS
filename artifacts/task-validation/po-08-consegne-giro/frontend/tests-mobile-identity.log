@@ -1,0 +1,17 @@
+(node:31452) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ general handover workspace opens the patient round, explicit feed entry retains existing handovers (32.9372ms)
+✔ composer retains patient-specific draft and identity after remount; permitted assignment is visible (7.141ms)
+✔ roster distinguishes zero, history, missing scope and failed summaries without inventing counts (6.4056ms)
+✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (4.5956ms)
+✔ both PatientDetail entry points share receipt-backed quick-add and keep the same draft (8.8441ms)
+(node:31452) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1048.0594

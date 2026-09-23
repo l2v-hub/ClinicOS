@@ -1,0 +1,80 @@
+{
+  "owner": "/root/po01_frontend_audit",
+  "integrationOwner": "/root",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po08-handover-ui",
+  "branch": "codex/po08-handover-ui",
+  "baseline": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "status": "released",
+  "authorization": "Root PO08 mobile390x844 browser remediation: keep selected patient identity visible while editing using scoped sticky opaque header and shell-aware offset; only roster CSS/composer plus artifacts, targeted validation and manifest handoff.",
+  "applicationClaimActive": false,
+  "paths": [
+    "frontend/src/components/operator/ConsegneRounds.css",
+    "frontend/src/components/operator/ConsegnaComposer.tsx",
+    "artifacts/task-validation/po-08-consegne-giro/frontend/"
+  ],
+  "proposedApplicationPaths": [
+    "frontend/src/App.tsx",
+    "frontend/src/types.ts",
+    "frontend/src/lib/patientPage.ts",
+    "frontend/src/lib/consegnaCreation.ts",
+    "frontend/src/lib/consegnaDrafts.ts",
+    "frontend/src/lib/consegnaAdvance.ts",
+    "frontend/src/lib/consegnePatientSummary.ts",
+    "frontend/src/lib/consegneNavigation.ts",
+    "frontend/src/lib/useConsegnaDraft.ts",
+    "frontend/src/lib/useConsegneExitGuard.ts",
+    "frontend/src/components/operator/ConsegneWorkspace.tsx",
+    "frontend/src/components/operator/ConsegneRounds.tsx",
+    "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+    "frontend/src/components/operator/ConsegnaComposer.tsx",
+    "frontend/src/components/operator/ConsegneRounds.css",
+    "frontend/src/components/operator/useConsegneRoster.ts",
+    "frontend/src/components/operator/ConsegnePage.tsx",
+    "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+    "frontend/src/components/operator/ConsegnaCreateForm.css",
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/OperatorDashboard.tsx",
+    "frontend/src/components/admin/AdminDashboard.tsx",
+    "frontend/src/components/shared/agnos/agnosActionNavigation.ts",
+    "frontend/src/components/shared/agnos/agnosWorkflow.test.ts",
+    "frontend/src/lib/__tests__/",
+    "frontend/src/components/operator/__tests__/",
+    "frontend/src/components/shared/__tests__/"
+  ],
+  "resources": [
+    {
+      "path": "node_modules",
+      "mode": "read-only dependency junction reuse",
+      "target": "C:/Workspace/ClinicOSHouse-worktrees/quality-loop-20260829/node_modules"
+    }
+  ],
+  "ports": [],
+  "excluded": [
+    "application writes before GO",
+    "backend",
+    "schema",
+    "migrations",
+    "generated packages",
+    "manifests",
+    "lockfiles",
+    "dependency installation",
+    "shared dependency writes",
+    "servers",
+    "ports",
+    "commit",
+    "push",
+    "deploy",
+    "live patient mutation",
+    "worktree deletion",
+    "PHI browser persistence"
+  ],
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+  },
+  "acquiredAtUtc": "2026-09-23T02:22:40.1909625Z",
+  "activatedAtUtc": "2026-09-23T02:55:07.2897606Z",
+  "releasedAtUtc": "2026-09-23T02:57:00.975Z",
+  "releaseTo": "/root",
+  "sourceStateId": "3796c4fe2f6772ff32db0c33e321e25c1a7fc3e4b2c3bcf1d0c8c393ab45c24c"
+}

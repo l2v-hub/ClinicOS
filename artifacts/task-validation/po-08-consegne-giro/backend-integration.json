@@ -1,0 +1,90 @@
+{
+  "at": "2026-09-23T02:42:30.247Z",
+  "decision": "ALLOW_INTEGRATE",
+  "scope": "backend",
+  "worker": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend",
+  "authorization": "User approved full plan, push/deploy; root invoked after explicit worker claim release",
+  "manifestSha256": "32ee94cfac21a74c722cd5335a82ef2c57f4ede1c24b8cebc6dec4502378d3cf",
+  "files": [
+    {
+      "path": "backend/src/ai/__tests__/actions.test.ts",
+      "sha256": "c23e7ab8b7a1b9de0cad9f295735b52c64112857eb387f6a397e28cc968ca9b6"
+    },
+    {
+      "path": "backend/src/ai/actions/orchestrate.ts",
+      "sha256": "aede38a235e7dca73b08b16eb263fe8fcc162bc0a9d48b659c83d195dd4a1027"
+    },
+    {
+      "path": "backend/src/ai/voice/execute.ts",
+      "sha256": "1e9082b8285f6fb2aa562f7205929769d763ab299107bf9b2c8a79671b9219c6"
+    },
+    {
+      "path": "backend/src/ai/voice/write-services.ts",
+      "sha256": "43a87574a46165ab61c684481492738fbc6b4cd92743bd2c04db3ebc8aba43ad"
+    },
+    {
+      "path": "backend/src/consegne/__tests__/creation-db.test.ts",
+      "sha256": "ed31df5920e12e8fd74ac83c2602a40b40dfd0529b1647b6d089527c60253382"
+    },
+    {
+      "path": "backend/src/consegne/__tests__/patient-summary-db.test.ts",
+      "sha256": "1d324e8e45030e1a691f3c40b8c7ff1c6bdaa0d4b12cde25626dbedc500a2834"
+    },
+    {
+      "path": "backend/src/consegne/__tests__/po08-fixture.ts",
+      "sha256": "3124c401f2770ccbcdb82ed291f432c29a007ee5e11779075d4dcf4a806454d8"
+    },
+    {
+      "path": "backend/src/consegne/__tests__/voice-creation-db.test.ts",
+      "sha256": "2a902c8719917f17feeb90910741b4c16fa63df5218c4ac1911a6b10f1f30b54"
+    },
+    {
+      "path": "backend/src/consegne/create-receipt.ts",
+      "sha256": "323db5e282297b0ea8ddaba790fe05c91180c303ddf1a8675faf9ed07f00b012"
+    },
+    {
+      "path": "backend/src/consegne/patient-summary.ts",
+      "sha256": "23f0f7cc732372df34a9ebf1c27b94e2f9f6ce24b658de43994603b06544f61d"
+    },
+    {
+      "path": "backend/src/consegne/write-validation.ts",
+      "sha256": "22e023a9e2a29715858b97d014037bfab428c05d1d34413af88218f703631d45"
+    },
+    {
+      "path": "backend/src/patients/__tests__/room-filter-db.test.ts",
+      "sha256": "eacfade0a30dbd0041fe236d4955802ee7d953895362a28b188929124c2373b1"
+    },
+    {
+      "path": "backend/src/patients/identity-page.ts",
+      "sha256": "8f4a1bfde520f41ba878c2e116eb160476c7997f68480c69e428835c6c72e726"
+    },
+    {
+      "path": "backend/src/patients/room-filter.ts",
+      "sha256": "2e63c11f9f9240aba345a528f3dd1ff78af27fc2b2b14fee83c73f9c0d2683bc"
+    },
+    {
+      "path": "backend/src/routes/ai-actions.ts",
+      "sha256": "130806e2f19a3f299c05c892a64e7462c6d5390b929714aac3470f90b76fbf8b"
+    },
+    {
+      "path": "backend/src/routes/ai-voice.ts",
+      "sha256": "2bb8ef302fdf33e9a001715c2fd547841704013c923e18c4512d3c1f8fea3539"
+    },
+    {
+      "path": "backend/src/routes/consegne.ts",
+      "sha256": "014890b640e512540e2f3b21dd42bdd1ad071e96b63f4d5e7aead5541c2335f0"
+    },
+    {
+      "path": "backend/src/services/consegna-service.ts",
+      "sha256": "c73731adcbb55b21d1e3cb1794cf5b8e8027b2c2e894bf82f6b71ebc87715a79"
+    },
+    {
+      "path": "prisma/migrations/20260923030000_consegna_creation_receipts/migration.sql",
+      "sha256": "f1181b75b1b95e14ae3a7662f687d2e383574ae1805bdf796ce7cacbbbe18ef1"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "sha256": "0843de9ca0b56749be53500be2d77c8486b3dc95e1b7b4110af1a966d515a54f"
+    }
+  ]
+}

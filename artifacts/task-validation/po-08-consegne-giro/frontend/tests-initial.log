@@ -1,0 +1,66 @@
+(node:28140) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ general handover workspace opens the patient round, explicit feed entry retains existing handovers (19.2781ms)
+✔ composer retains patient-specific draft and identity after remount; permitted assignment is visible (5.2418ms)
+✔ roster distinguishes zero, history, missing scope and failed summaries without inventing counts (3.6839ms)
+✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (4.3862ms)
+✔ both PatientDetail entry points share receipt-backed quick-add and keep the same draft (3.6173ms)
+(node:28140) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all seven writes map to exact patient page or agenda, unknown/deletes/missing IDs fail closed (2.7059ms)
+✔ routing preserves failure and cancellation instead of claiming a page opened (0.3498ms)
+✔ read navigation only follows explicit single-page intent and structured authorized destinations (0.7031ms)
+✔ request gate synchronously rejects double starts and fences late work after cancellation (0.4777ms)
+✖ preview retains full narrative diff and refuses ambiguities; hostile content stays escaped (4.1988ms)
+✔ microphone errors tell the operator how to recover (0.3096ms)
+✔ only recognized pre-write denials prove a failed save; server and malformed responses remain uncertain (0.2563ms)
+(node:37644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:21556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new request freezes normalized clinical body and contains no supplied authority or status fields (7.3594ms)
+✔ validated creation/replay preserves current edited record and never restores original payload (41.8647ms)
+✔ wrong patient/request, malformed success and a new completed record remain uncertain (2.8144ms)
+✔ response loss retries exactly the same body/key and HTTP transport does not cache creation (2.2785ms)
+✔ conflict, unavailable patient and valid deleted receipt are explicit non-advance outcomes (2.3245ms)
+✔ bounded summaries preserve omitted IDs as unavailable and distinguish zero from historical-only (3.0396ms)
+✔ room filter travels in both bounded identity routes and name search stays POST (1.3354ms)
+(node:21556) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39172) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ workspace fields and local revisions remain patient-specific across unsubscribe/remount (4.7123ms)
+✔ synchronous lock prevents a second save and exact pending request survives uncertain outcome (2.818ms)
+✔ concurrent patients cannot clear one another and a refreshed receipt is independent of summary failures (0.8583ms)
+✔ 410, conflict and denied outcomes keep their draft/request and never start a silent replacement (0.9993ms)
+✔ a definitive validation failure allows correction and creates a new immutable request (0.6058ms)
+✔ logout generation rejects a late receipt, and wrong patient receipt cannot clear a draft (0.7704ms)
+✔ advance is fenced by successful receipt, selection including away/back, roster and request identity (0.2987ms)
+(node:39172) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 25
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1116.6988
+
+✖ failing tests:
+
+test at src\components\shared\agnos\agnosWorkflow.test.ts:1:4151
+✖ preview retains full narrative diff and refuses ambiguities; hostile content stays escaped (4.1988ms)
+  ReferenceError: React is not defined
+      at TurnView (C:\Workspace\ClinicOSHouse-worktrees\po08-handover-ui\frontend\src\components\shared\agnos\AgnosTurnView.tsx:39:3)
+      at Object.react_stack_bottom_frame (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:9808:18)
+      at renderWithHooks (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5062:19)
+      at renderElement (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5497:23)
+      at retryNode (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:6417:31)
+      at performWork (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:7435:17)
+      at startWork (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:8270:7)
+      at renderToStringImpl (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:8380:7)
+      at process.env.NODE_ENV.exports.renderToStaticMarkup (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:9861:14)
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po08-handover-ui\frontend\src\components\shared\agnos\agnosWorkflow.test.ts:69:18)

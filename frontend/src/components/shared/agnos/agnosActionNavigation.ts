@@ -82,6 +82,7 @@ export function navigationScope(nav: AssistantNav, role?: string) {
     };
   if (nav.type === 'open_therapies_today')
     return { currentPatientId: undefined, navKey: 'terapie' };
+  if (nav.type === 'open_consegne') return { currentPatientId: nav.patientId, navKey: 'consegne' };
   if (nav.patientId) return { currentPatientId: nav.patientId, navKey: 'dettaglio-paziente' };
   return { currentPatientId: undefined, navKey: 'consegne' };
 }
@@ -92,7 +93,7 @@ export async function navigateAgnosTarget(
     isAdmin: boolean;
     navigate: (key: NavKey) => void;
     openPatient: (id: string, tab?: TabId, signal?: AbortSignal) => Promise<boolean>;
-    openConsegne: (recordId?: string) => void;
+    openConsegne: (recordId?: string, patientId?: string) => void;
   },
   signal?: AbortSignal,
 ): Promise<boolean> {
@@ -110,14 +111,11 @@ export async function navigateAgnosTarget(
     handlers.navigate('posti-letto');
     return true;
   }
-  if (nav.type === 'open_consegne' && !nav.patientId) {
-    handlers.openConsegne(nav.recordId);
+  if (nav.type === 'open_consegne' && (nav.patientId === undefined || validId(nav.patientId))) {
+    handlers.openConsegne(nav.recordId, nav.patientId);
     return true;
   }
-  if (
-    (PATIENT_DESTINATIONS.has(nav.type) || nav.type === 'open_consegne') &&
-    validId(nav.patientId)
-  )
+  if (PATIENT_DESTINATIONS.has(nav.type) && validId(nav.patientId))
     return await handlers.openPatient(nav.patientId, navTabId(nav), signal);
   return false;
 }

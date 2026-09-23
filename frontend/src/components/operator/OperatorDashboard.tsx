@@ -19,6 +19,7 @@ interface OperatorDashboardProps {
   onNavigate: (nav: NavKey) => void;
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
+  onOpenConsegneFeed?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   clinicalOverview?: ClinicalOverview | null;
   clinicalOverviewState: 'loading' | 'ready' | 'error';
@@ -40,6 +41,7 @@ export function OperatorDashboard({
   agenda,
   onNavigate,
   onOpenConsegneAperte,
+  onOpenConsegneFeed,
   onSelectPaziente,
   clinicalOverview = null,
   clinicalOverviewState,
@@ -214,7 +216,7 @@ export function OperatorDashboard({
               </span>
               Le Mie Consegne Urgenti
             </h3>
-            <button className="link-btn" onClick={() => onNavigate('consegne')}>
+            <button className="link-btn" onClick={() => onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne')}>
               Vedi tutte <IcoArrow />
             </button>
           </div>

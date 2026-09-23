@@ -1,0 +1,24 @@
+{
+  "at": "2026-09-23T02:57:24.262Z",
+  "decision": "ALLOW_INTEGRATE",
+  "reason": "PO08 embedded feed header, explicit worker claim release; previous and new byte hashes verified",
+  "sourceStateId": "3796c4fe2f6772ff32db0c33e321e25c1a7fc3e4b2c3bcf1d0c8c393ab45c24c",
+  "files": [
+    {
+      "path": "frontend/src/components/operator/ConsegnaComposer.tsx",
+      "status": "added",
+      "bytes": 7540,
+      "lines": 224,
+      "sha256": "003cab49389ca7ea7e7df18ff0eca00118b44f69464d30c3aad05e7a5e4db2d0",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneRounds.css",
+      "status": "added",
+      "bytes": 3613,
+      "lines": 162,
+      "sha256": "857ba2755cf42ae72724bee698136ed0c6a324eafa9153c9292e77362fbf7420",
+      "baselineSha256": null
+    }
+  ]
+}

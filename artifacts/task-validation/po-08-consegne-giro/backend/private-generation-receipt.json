@@ -1,0 +1,17 @@
+{
+  "exitCode": 0,
+  "schemaPath": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\artifacts\\task-validation\\po-08-consegne-giro\\backend\\private-schema.prisma",
+  "privateOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\backend\\node_modules\\.prisma\\client",
+  "privateWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\backend\\node_modules\\@prisma\\client",
+  "resolvedClient": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\backend\\node_modules\\@prisma\\client\\default.js",
+  "prismaVersion": {
+    "client": "7.10.0",
+    "engine": "0edf323efd1d98336f3f0a68684b56f689b900d3"
+  },
+  "connectedToDatabase": false,
+  "schemaSha256": "0843de9ca0b56749be53500be2d77c8486b3dc95e1b7b4110af1a966d515a54f",
+  "privateSchemaSha256": "30c8ab29bda3a69e5d51f83f78ed77890ded7f4057ef67e900741ac14e0a025d",
+  "generatedClientSchemaSha256": "652f5ca445cefd55b9d23366df3791ac15d624d5a191721e514a3a18c55f3f62",
+  "schemaVerifiedAt": "2026-09-23T02:40:59.185Z",
+  "metadataCorrection": "Removed stale preparation-only label after exact source/private/generated schema verification. No generation or database connection performed by this correction."
+}

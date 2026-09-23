@@ -1,0 +1,33 @@
+{
+  "reason": "Root tab23 observed duplicate page header in embedded Feed.",
+  "generatedAtUtc": "2026-09-23T02:52:18.859Z",
+  "previousSourceStateId": "a4a43d6b9ed43634f5166fb3ccb688da3e0532c09ca36166ea7530ebee5d9a3f",
+  "sourceStateId": "b0ca658ad07a6033ff99ec482e7b13fc4558981c2b51a4fac3e9859ae5c4313b",
+  "runtimeSourceId": "a326abdc7d3fe52a65ec42627130f6b35e53ae694d357649df9a202dab53e9b0",
+  "changedFiles": [
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "sha256": "04147236b8166233576e3804615dbf94e8420dafa4cb746041687ee34fcef74b"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneWorkspace.tsx",
+      "sha256": "96a2eb81c9d113782a24971a875437159292094b19c282050955a60ea8e6f094"
+    }
+  ],
+  "validation": {
+    "types": {
+      "command": "node ../node_modules/typescript/bin/tsc -b",
+      "exitCode": 0
+    },
+    "headerRendering": "Standalone and embedded workspace each have one breadcrumb, one h1, one page header, with summary and creation action retained.",
+    "lint": {
+      "files": [
+        "frontend/src/components/operator/ConsegnePage.tsx",
+        "frontend/src/components/operator/ConsegneWorkspace.tsx"
+      ],
+      "exitCode": 0
+    },
+    "diffCheck": "passed"
+  },
+  "fullBuildAndSuite": "Earlier evidence retained at previous source identity. No full build or full test suite repeated for this presentation-only patch; root integration owns final build/browser QA."
+}

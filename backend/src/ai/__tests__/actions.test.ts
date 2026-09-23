@@ -63,8 +63,9 @@ function fakeWriter() {
       return 'rec-appt';
     },
     async createConsegna() {
+      const replayed = calls.includes('consegna');
       calls.push('consegna');
-      return 'rec-consegna';
+      return { id: 'rec-consegna', replayed };
     },
   };
   return { w, calls };
@@ -1069,7 +1070,7 @@ test('I130 execute: consegna confermata → writer consegne, idempotente al retr
   assert.equal(r1.recordId, 'rec-consegna');
   const r2 = await executeCommand(input, deps);
   assert.equal(r2.deduped, true);
-  assert.deepEqual(calls, ['consegna']); // una sola scrittura
+  assert.deepEqual(calls, ['consegna', 'consegna']); // both confirmations reach the durable writer
 });
 
 test('I130 execute: senza conferma → confirmation_required, writer MAI chiamato', async () => {

@@ -34,6 +34,7 @@ export interface WriteMeta {
   operatorId: string;
   operatorRole?: string;
   nowISO: string; // injectable "now" for deterministic tests
+  requestId?: string; // stable action key, distinct from the audit request id
 }
 
 // The writer maps a validated plan to a real ClinicOS domain write and returns the new/updated recordId.
@@ -73,7 +74,7 @@ export interface VoiceWriter {
     patientId: string,
     fields: Record<string, unknown>,
     meta: WriteMeta,
-  ): Promise<string>;
+  ): Promise<string | { id: string; replayed: boolean }>;
 }
 
 const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
@@ -152,7 +153,9 @@ export async function executeAction(
   }
 
   // idempotency: a replayed confirmation returns the original result, never a duplicate write.
-  const prior = store.get(plan.idempotencyKey, nowMs);
+  // Consegne always reach their durable receipt, including payload conflicts and deleted rows.
+  const prior =
+    plan.actionType === 'create_consegna' ? null : store.get(plan.idempotencyKey, nowMs);
   if (prior) {
     audit(prior.recordId ?? null, 'deduped');
     return prior;
@@ -163,8 +166,10 @@ export async function executeAction(
     operatorId: ctx.userId,
     operatorRole: ctx.operatorRole,
     nowISO,
+    requestId: plan.idempotencyKey,
   };
   let recordId: string;
+  let replayed = false;
   switch (plan.actionType) {
     case 'create_vital_sign':
       recordId = await writer.createVitalSign(plan.patientId, plan.fields, meta);
@@ -198,9 +203,12 @@ export async function executeAction(
       }
       recordId = await writer.updateAppointment(plan.targetRecordId, plan.fields, meta);
       break;
-    case 'create_consegna':
-      recordId = await writer.createConsegna(plan.patientId, plan.fields, meta);
+    case 'create_consegna': {
+      const created = await writer.createConsegna(plan.patientId, plan.fields, meta);
+      recordId = typeof created === 'string' ? created : created.id;
+      replayed = typeof created !== 'string' && created.replayed;
       break;
+    }
     default:
       throw new VoiceError('not_executable', 'Azione non supportata.');
   }
@@ -210,9 +218,9 @@ export async function executeAction(
     actionType: plan.actionType,
     recordId,
     message: SUCCESS_MESSAGE[plan.actionType],
-    deduped: false,
+    deduped: replayed,
   };
-  store.put(plan.idempotencyKey, result, nowMs);
-  audit(recordId, 'ok');
+  if (plan.actionType !== 'create_consegna') store.put(plan.idempotencyKey, result, nowMs);
+  audit(recordId, replayed ? 'deduped' : 'ok');
   return result;
 }

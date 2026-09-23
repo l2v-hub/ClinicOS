@@ -1,0 +1,94 @@
+✖ summary distinguishes zero, history, visible urgent and unavailable patient without leaking a hidden handover (5604.2569ms)
+✖ camera filter selects the whole authorized roster before keyset paging and fences a different filter (53.0782ms)
+✖ concurrent submissions, changed body, retry after edit and delete retain one authoritative creation (9.5092ms)
+✖ five patient round saves to stable IDs, remains open and updates the visible summaries (10.8997ms)
+✖ replay checks patient scope even when the operator can still see the assigned handover in the feed (2.0646ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17999.769
+
+✖ failing tests:
+
+test at tests\integration\po08-consegne.test.mts:1:2872
+✖ summary distinguishes zero, history, visible urgent and unavailable patient without leaking a hidden handover (5604.2569ms)
+  SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+      at JSON.parse (<anonymous>)
+      at request (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po08-consegne.test.mts:18:55)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po08-consegne.test.mts:46:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at tests\integration\po08-consegne.test.mts:1:3993
+✖ camera filter selects the whole authorized roster before keyset paging and fences a different filter (53.0782ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 409
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po08-consegne.test.mts:66:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 409,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration\po08-consegne.test.mts:1:5374
+✖ concurrent submissions, changed body, retry after edit and delete retain one authoritative creation (9.5092ms)
+  AssertionError [ERR_ASSERTION]: {"status":400,"body":{"error":"Campo non consentito: requestId"}}
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po08-consegne.test.mts:82:44)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\integration\po08-consegne.test.mts:1:6666
+✖ five patient round saves to stable IDs, remains open and updates the visible summaries (10.8997ms)
+  AssertionError [ERR_ASSERTION]: {"status":400,"body":{"error":"Campo non consentito: requestId"}}
+  
+  400 !== 201
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po08-consegne.test.mts:103:60)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration\po08-consegne.test.mts:1:7566
+✖ replay checks patient scope even when the operator can still see the assigned handover in the feed (2.0646ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 201
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po08-consegne.test.mts:114:58)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

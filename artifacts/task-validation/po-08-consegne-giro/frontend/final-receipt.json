@@ -1,0 +1,268 @@
+{
+  "owner": "/root/po01_frontend_audit",
+  "integrationOwner": "/root",
+  "baseline": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "branch": "codex/po08-handover-ui",
+  "generatedAtUtc": "2026-09-23T02:57:00.975Z",
+  "sourceStateId": "3796c4fe2f6772ff32db0c33e321e25c1a7fc3e4b2c3bcf1d0c8c393ab45c24c",
+  "runtimeSourceId": "ff9b816a1ab293d577fd29218befea873c8d4f402cd12f5b9b4bb7cb60f3518e",
+  "policyDecision": {
+    "decision": "allow",
+    "basis": "Root PO08 mobile390x844 browser remediation: keep selected patient identity visible while editing using scoped sticky opaque header and shell-aware offset; only roster CSS/composer plus artifacts, targeted validation and manifest handoff.",
+    "actions": [
+      "two-file mobile identity patch",
+      "targeted types/component/lint validation",
+      "manifest and claim handoff"
+    ],
+    "publicationAuthorizedByThisReceipt": false
+  },
+  "status": "implemented-and-released-for-integration",
+  "toolchain": {
+    "node": "v26.3.0",
+    "typescript": "6.0.3",
+    "tsx": "4.23.1",
+    "react": "19.2.5",
+    "vite": "8.2.2",
+    "eslint": "10.7.0",
+    "prettier": "3.9.5"
+  },
+  "validation": {
+    "candidateTests": {
+      "tests": 114,
+      "pass": 108,
+      "fail": 6,
+      "log": "tests-final.log",
+      "sourceStateId": "a4a43d6b9ed43634f5166fb3ccb688da3e0532c09ca36166ea7530ebee5d9a3f"
+    },
+    "identityTests": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "log": "tests-identity.log",
+      "sourceStateId": "a4a43d6b9ed43634f5166fb3ccb688da3e0532c09ca36166ea7530ebee5d9a3f"
+    },
+    "baselineStaticGuards": {
+      "tests": 9,
+      "pass": 3,
+      "fail": 6,
+      "log": "tests-baseline-roster-guard.log",
+      "method": "Unchanged test executed with readFileSync mapping to exact git-show baseline source inputs; checkout untouched.",
+      "failures": [
+        "a single parameters table is always visible and uses the operational table contract",
+        "multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+        "multi-patient parameters uses one bounded page instead of cartella fan-out",
+        "multi-patient quick entry exposes every action and field to assistive technology",
+        "multi-patient quick entry reuses the ClinicOS form and action design system",
+        "multi-patient refresh keeps the previous roster visible and announces progress"
+      ]
+    },
+    "build": {
+      "exitCode": 0,
+      "log": "build-final.log",
+      "warnings": [
+        "Vite chunks above 500 kB",
+        "Rolldown plugin timings"
+      ],
+      "runtimeSourceId": "abc0b66d52ded2d099bfab7faa45a1047063636bc7347e5b3c1e226423a8aa4c",
+      "status": "historical-before-embedded-header-patch"
+    },
+    "lint": {
+      "files": 28,
+      "baselineDiagnostics": 18,
+      "candidateDiagnostics": 18,
+      "introduced": [],
+      "sourceStateId": "a4a43d6b9ed43634f5166fb3ccb688da3e0532c09ca36166ea7530ebee5d9a3f"
+    },
+    "diffCheck": "passed",
+    "newFileLineBudget": "all below 500",
+    "protectedFiles": "exact SHA-256 match",
+    "embeddedHeaderFollowup": {
+      "reason": "Root tab23 observed duplicate page header in embedded Feed.",
+      "generatedAtUtc": "2026-09-23T02:52:18.859Z",
+      "previousSourceStateId": "a4a43d6b9ed43634f5166fb3ccb688da3e0532c09ca36166ea7530ebee5d9a3f",
+      "sourceStateId": "b0ca658ad07a6033ff99ec482e7b13fc4558981c2b51a4fac3e9859ae5c4313b",
+      "runtimeSourceId": "a326abdc7d3fe52a65ec42627130f6b35e53ae694d357649df9a202dab53e9b0",
+      "changedFiles": [
+        {
+          "path": "frontend/src/components/operator/ConsegnePage.tsx",
+          "sha256": "04147236b8166233576e3804615dbf94e8420dafa4cb746041687ee34fcef74b"
+        },
+        {
+          "path": "frontend/src/components/operator/ConsegneWorkspace.tsx",
+          "sha256": "96a2eb81c9d113782a24971a875437159292094b19c282050955a60ea8e6f094"
+        }
+      ],
+      "validation": {
+        "types": {
+          "command": "node ../node_modules/typescript/bin/tsc -b",
+          "exitCode": 0
+        },
+        "headerRendering": "Standalone and embedded workspace each have one breadcrumb, one h1, one page header, with summary and creation action retained.",
+        "lint": {
+          "files": [
+            "frontend/src/components/operator/ConsegnePage.tsx",
+            "frontend/src/components/operator/ConsegneWorkspace.tsx"
+          ],
+          "exitCode": 0
+        },
+        "diffCheck": "passed"
+      },
+      "fullBuildAndSuite": "Earlier evidence retained at previous source identity. No full build or full test suite repeated for this presentation-only patch; root integration owns final build/browser QA."
+    },
+    "mobileIdentityFollowup": {
+      "reason": "Root mobile390x844 observed identity scrolling outside the viewport while editing.",
+      "generatedAtUtc": "2026-09-23T02:57:00.975Z",
+      "previousSourceStateId": "b0ca658ad07a6033ff99ec482e7b13fc4558981c2b51a4fac3e9859ae5c4313b",
+      "sourceStateId": "3796c4fe2f6772ff32db0c33e321e25c1a7fc3e4b2c3bcf1d0c8c393ab45c24c",
+      "runtimeSourceId": "ff9b816a1ab293d577fd29218befea873c8d4f402cd12f5b9b4bb7cb60f3518e",
+      "changedFiles": [
+        {
+          "path": "frontend/src/components/operator/ConsegnaComposer.tsx",
+          "sha256": "003cab49389ca7ea7e7df18ff0eca00118b44f69464d30c3aad05e7a5e4db2d0"
+        },
+        {
+          "path": "frontend/src/components/operator/ConsegneRounds.css",
+          "sha256": "857ba2755cf42ae72724bee698136ed0c6a324eafa9153c9292e77362fbf7420"
+        }
+      ],
+      "behavior": "Inside the round form, patient identity is sticky on an opaque surface. The title scrolls normally. Shell pages use --topbar-h, standalone previews use zero. ResizeObserver measures identity height for field/action scroll margins. Quick-add modal headers are not made sticky.",
+      "validation": {
+        "types": {
+          "command": "node ../node_modules/typescript/bin/tsc -b",
+          "exitCode": 0
+        },
+        "focusedTests": {
+          "tests": 5,
+          "pass": 5,
+          "fail": 0
+        },
+        "lint": {
+          "files": [
+            "frontend/src/components/operator/ConsegnaComposer.tsx"
+          ],
+          "exitCode": 0
+        },
+        "diffCheck": "passed"
+      },
+      "limitation": "Root owns actual 390x844 focus/scroll geometry verification and final integration build. Earlier full build and suite remain bound to their original source inputs."
+    }
+  },
+  "independentReview": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "scope": [
+      "late PatientDetail A response after A→B and A→B→A",
+      "delayed continuation after draft edit/discard/new save"
+    ],
+    "result": "Both fixes re-read with no residual finding; reviewer did not run suites."
+  },
+  "limitations": [
+    "Root integration and browser QA pending",
+    "Six baseline static guards for unchanged MultiPatientParametri fail identically",
+    "Existing 18 lint diagnostics retained",
+    "No backend implementation or live patient mutation validated by this worker",
+    "No commit, push, deploy, server, port or dependency changes"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/task-contract.md",
+      "sha256": "f16eb94e2b08d39f6eff77d3f23b21f96116ca0d8f9a36f019815acbfe80a4c3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/implementation-plan.md",
+      "sha256": "2ed2a2fe7a23382e9f62d848a7d05733131f6b783bc1ec52243c9accb24ecc58"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/claims.json",
+      "sha256": "f5da7fe148c3a993d846561daad4c9f391800cb96aac98e75ac57cc873d19fce"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/source-manifest.json",
+      "sha256": "18443fd2355889e9ed8213cff5fc978ceba75b4ac0b69e9be6d1f83842106466"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/build-manifest.json",
+      "sha256": "4c8d07aae76ff519decd3863a1468462a73722e1da041bbea9c6656364cdb5e3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-final.log",
+      "sha256": "5e3e98f56b87ebf5f24d345ba3a06ae8fbce6ff0a6bdc7887e27fd9c712ded28"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-identity.log",
+      "sha256": "5635da1546f8cb06dcca0b63be824c4f0aa788daff70934318912bd381203b64"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-baseline-roster-guard.log",
+      "sha256": "c109355be4e99a8c40a837b98d49e23a89d91bcce0bdce74545ead4149f82d1a"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/baseline-roster-guard.mjs",
+      "sha256": "c968fbeddb8172f1f1a45d6b660f43849f5ff607d4d0f948ab4cf953916b0082"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/build-final.log",
+      "sha256": "fed2d049a009556cc874f4cbd42029f3037f7d06f0de0b54a51e5f1f6d16000d"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-comparison.json",
+      "sha256": "c55121f76b9b7e5d087f9e89d788400c209d7441da71a7244ca4c0876af9a9d6"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-final.log",
+      "sha256": "5d6addb55740bf7638f7853bff516bcc4ae1ce16bb5bdaeed5564029ffd16637"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/source-manifest.pre-embedded-header.json",
+      "sha256": "c6b35c1228aa8248178cd7679b358084a6c91cf3d037deb80b48be9539c13148"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/final-receipt.pre-embedded-header.json",
+      "sha256": "22e89e7271aa51ad256fc5c5073002b9344a63fcb4e96b98e0aac2a7ae93348b"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/embedded-header-receipt.json",
+      "sha256": "1d739172295f0c87802b065c90bf35f4ea6340fc3f9a3e66b33b8c34d1df1f6b"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/embedded-header-check.ts",
+      "sha256": "b7cb788747cf9ad04d6a881524d4efe9a12fa6841550b2c5ef868f5b1653901b"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/embedded-header-check.log",
+      "sha256": "691639e7449082048528ab7df13272696206f97f34d7a2a52ef5931be2080352"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/types-embedded-header.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-embedded-header.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/source-manifest.pre-mobile-identity.json",
+      "sha256": "99e38763a409728d6dc3e6273a145ddeb83041fff28909b9b7fdb11d5921164a"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/final-receipt.pre-mobile-identity.json",
+      "sha256": "6b97da64c205a1b5949ef246b1fd45a384e87f7c0dd7127d69a4f3a2dd3bf759"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/mobile-identity-receipt.json",
+      "sha256": "5f8d44df10437f3824b5811aaf7fc16791385a547d2d7ab0f96f7514c48a0a1f"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-mobile-identity.log",
+      "sha256": "844b510d1bb7384b596dd747320ce528760a31bc5b943dfe43da1ac8a071b75e"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/types-mobile-identity.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-mobile-identity.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "previousSourceStateId": "b0ca658ad07a6033ff99ec482e7b13fc4558981c2b51a4fac3e9859ae5c4313b"
+}

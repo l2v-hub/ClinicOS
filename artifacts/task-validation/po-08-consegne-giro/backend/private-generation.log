@@ -1,0 +1,10 @@
+
+✔ Generated Prisma Client (v7.10.0) to .\backend\node_modules\.prisma\client in 1.08s
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from artifacts\task-validation\po-08-consegne-giro\backend\private-schema.prisma.

@@ -1,0 +1,13 @@
+✔ summary distinguishes zero, history, visible urgent and unavailable patient without leaking a hidden handover (10586.9999ms)
+✔ camera filter selects the whole authorized roster before keyset paging and fences a different filter (222.3921ms)
+✔ concurrent submissions, changed body, retry after edit and delete retain one authoritative creation (152.1473ms)
+✔ five patient round saves to stable IDs, remains open and updates the visible summaries (164.1561ms)
+✔ replay checks patient scope even when the operator can still see the assigned handover in the feed (64.2235ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23812.3965

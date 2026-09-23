@@ -1,0 +1,89 @@
+{
+  "sourceTreeSha256": "91faf30e87d7012eeccb286aa79e8817ee0f9c69e40b85511abeb7a16cb988bf",
+  "generatedAt": "2026-09-23T02:40:59.187Z",
+  "typecheck": {
+    "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+    "exitCode": 0,
+    "evidence": "Tool execution 2f3380 on final source after formatting; no diagnostics."
+  },
+  "schema": {
+    "exitCode": 0,
+    "privateSchemaMatchesSourceExceptOutput": true,
+    "generatedSchemaMatchesPrivateExceptFormattingWhitespace": true,
+    "connectedToDatabase": false
+  },
+  "ownedDiff": {
+    "exitCode": 0
+  },
+  "newFiles": [
+    {
+      "path": "backend/src/consegne/__tests__/creation-db.test.ts",
+      "lines": 231
+    },
+    {
+      "path": "backend/src/consegne/__tests__/patient-summary-db.test.ts",
+      "lines": 176
+    },
+    {
+      "path": "backend/src/consegne/__tests__/po08-fixture.ts",
+      "lines": 89
+    },
+    {
+      "path": "backend/src/consegne/__tests__/voice-creation-db.test.ts",
+      "lines": 164
+    },
+    {
+      "path": "backend/src/consegne/create-receipt.ts",
+      "lines": 61
+    },
+    {
+      "path": "backend/src/consegne/patient-summary.ts",
+      "lines": 52
+    },
+    {
+      "path": "backend/src/patients/__tests__/room-filter-db.test.ts",
+      "lines": 157
+    },
+    {
+      "path": "backend/src/patients/room-filter.ts",
+      "lines": 21
+    },
+    {
+      "path": "prisma/migrations/20260923030000_consegna_creation_receipts/migration.sql",
+      "lines": 23
+    }
+  ],
+  "newSourceFilesBelow500Lines": true,
+  "protectedFilesPreserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0d8cd33d7e092b0d81329a2c83436c4d4f5636fa4f27f22c7e74a3838b86d01c"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "0d05ac91f625b3790cb86d56289335347e084b410e83b49bfae6d21db67f1070"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "rootContract": {
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-08-consegne-giro\\task-contract.md",
+    "sha256": "21a9048dceee33bce47d1c7ba27200f37854ca99bff0dc918876f7109df1a5da"
+  },
+  "runtime": {
+    "privatePrismaOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\backend\\node_modules\\.prisma\\client",
+    "privatePrismaWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\backend\\node_modules\\@prisma\\client",
+    "dependencyManifestsChanged": false,
+    "sharedDependencyTargetWritten": false
+  }
+}

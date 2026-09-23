@@ -19,6 +19,10 @@ import {
 } from '../ai/actions/orchestrate.js';
 import { ctxFromOperator } from './ai-assistant-public.js';
 import { isAgentId } from '../ai/assistant/agents.js';
+import { ConsegnaCreationError } from '../consegne/create-receipt.js';
+import { ConsegnaInputError } from '../consegne/query.js';
+import { parseConsegnaRequestId } from '../consegne/write-validation.js';
+import { ConsegnaPatientNotFoundError } from '../services/consegna-service.js';
 
 const actionsRouter = Router();
 actionsRouter.use(requireOperator);
@@ -49,6 +53,16 @@ const VOICE_ERROR_STATUS: Record<string, number> = {
 };
 
 function fail(res: Response, err: unknown) {
+  if (err instanceof ConsegnaCreationError)
+    return res
+      .status(err.status)
+      .json({ error: { kind: err.code, message: err.message }, code: err.code, ...err.ids });
+  if (err instanceof ConsegnaPatientNotFoundError)
+    return res
+      .status(404)
+      .json({ error: { kind: 'not_found', message: err.message }, code: 'patient_not_found' });
+  if (err instanceof ConsegnaInputError)
+    return res.status(400).json({ error: { kind: 'bad_request', message: err.message } });
   // SPEC-015 US4: slot re-checked inside the shared service at write time (race between preview
   // and confirm) — surfaced with the same contract shape as the REST route.
   if (err instanceof SlotConflictError) {
@@ -118,11 +132,7 @@ actionsRouter.post('/execute', async (req: AuthedRequest, res) => {
       return res
         .status(400)
         .json({ error: { kind: 'bad_request', message: 'Testo del comando mancante.' } });
-    const idempotencyKey = String(req.body?.idempotencyKey ?? '').slice(0, 80);
-    if (!idempotencyKey)
-      return res
-        .status(400)
-        .json({ error: { kind: 'bad_request', message: 'idempotencyKey mancante.' } });
+    const idempotencyKey = parseConsegnaRequestId(req.body?.idempotencyKey);
     const result = await executeCommand({
       text,
       channel: parseChannel(req.body?.channel),

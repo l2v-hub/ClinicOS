@@ -1,0 +1,22 @@
+src/App.tsx(1650,23): error TS2353: Object literal may only specify known properties, and 'filtro' does not exist in type 'SetStateAction<ConsegneEntry>'.
+src/components/operator/ConsegnePatientRoster.tsx(18,26): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/ConsegnePatientRoster.tsx(18,75): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/ConsegnePatientRoster.tsx(18,105): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/ConsegnePatientRoster.tsx(18,146): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/ConsegnePatientRoster.tsx(19,20): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/ConsegnePatientRoster.tsx(19,59): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/ConsegnePatientRoster.tsx(20,20): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/ConsegnePatientRoster.tsx(20,68): error TS2339: Property 'value' does not exist on type 'SummaryState'.
+  Property 'value' does not exist on type '{ status: "error" | "unavailable" | "loading"; }'.
+src/components/operator/PatientDetail.tsx(376,10): error TS6133: 'modalConsegnaShow' is declared but its value is never read.
+src/components/operator/PatientDetail.tsx(660,18): error TS6133: 'addVitaleFromModal' is declared but its value is never read.
+src/components/operator/PatientDetail.tsx(878,61): error TS2552: Cannot find name 'operatori'. Did you mean 'operatoreId'?
+src/components/operator/PatientDetail.tsx(2174,63): error TS2552: Cannot find name 'operatori'. Did you mean 'operatoreId'?
+src/components/operator/PatientDetail.tsx(2607,36): error TS2552: Cannot find name 'renderConsegneModal'. Did you mean 'renderConsegne'?

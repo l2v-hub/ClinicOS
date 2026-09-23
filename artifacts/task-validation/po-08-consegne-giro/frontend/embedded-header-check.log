@@ -1,0 +1,5 @@
+PASS: standalone and embedded Feed each have one breadcrumb, one h1 and one page header; summary and create action retained.
+(node:36088) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36088) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)

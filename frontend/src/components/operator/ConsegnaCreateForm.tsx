@@ -1,15 +1,24 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import type { NewConsegnaInput, Operatore, Paziente, PrioritaConsegna } from '../../types';
+import type { Operatore, Paziente, PrioritaConsegna } from '../../types';
 import { IcoCheck, IcoX } from '../../icons';
-import { localIsoDate } from '../../lib/appointmentRange';
+import type { ConsegnaCreate } from '../../lib/consegnaCreation';
+import {
+  createConsegnaDraftStore,
+  submitConsegna,
+  type ConsegnaDraftStore,
+  type ConsegnaFields,
+} from '../../lib/consegnaDrafts';
+import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
 import { PatientCombobox } from '../shared/PatientCombobox';
+import { ConfirmDialog } from '../shared/ConfirmDialog';
 import './ConsegnaCreateForm.css';
 
 interface ConsegnaCreateFormProps {
   operatori: Operatore[];
   isAdmin: boolean;
-  onAdd: (input: NewConsegnaInput) => Promise<boolean>;
+  onAdd: ConsegnaCreate;
+  draftStore?: ConsegnaDraftStore;
   onClose: () => void;
 }
 
@@ -24,30 +33,40 @@ const TIPO_OPTIONS = [
   'Altro',
 ];
 
-function createEmptyForm() {
-  return {
-    tipo: 'Monitoraggio',
-    priorita: 'normale' as PrioritaConsegna,
-    scadenza: localIsoDate(),
-    oraScadenza: '',
-    operatoreAssegnatoId: '',
-    note: '',
-  };
-}
-
 export function ConsegnaCreateForm({
   operatori,
-  isAdmin,
   onAdd,
   onClose,
+  draftStore,
 }: ConsegnaCreateFormProps) {
   const [patient, setPatient] = useState<Paziente | null>(null);
-  const [form, setForm] = useState(createEmptyForm);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [discard, setDiscard] = useState(false);
+  const [store] = useState(() => draftStore ?? createConsegnaDraftStore());
+  const draft = useConsegnaDraft(store, patient?.id ?? 'unselected');
+  const form = draft.fields;
+  const saving = draft.saving;
+  const error = draft.outcome?.kind === 'failed' ? draft.outcome.message : null;
+  const blocked = Boolean(
+    draft.pending && draft.outcome?.kind === 'failed' && !draft.outcome.uncertain,
+  );
+  const generation = useRef(0);
+  useEffect(() => {
+    const version = ++generation.current;
+    return () => {
+      generation.current = version + 1;
+    };
+  }, [patient?.id]);
+  useEffect(
+    () => () => {
+      if (!draftStore) store.clear();
+    },
+    [store, draftStore],
+  );
+  const setForm = (update: (current: ConsegnaFields) => ConsegnaFields) =>
+    store.update(patient?.id ?? 'unselected', update(form));
   const noteRef = useRef<HTMLTextAreaElement>(null);
 
-  const canSubmit = Boolean(patient && form.note.trim() && form.scadenza && !saving);
+  const canSubmit = Boolean(patient && form.note.trim() && form.scadenza && !saving && !blocked);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -57,28 +76,10 @@ export function ConsegnaCreateForm({
       return;
     }
 
-    setSaving(true);
-    setError(null);
-    try {
-      const ok = await onAdd({
-        pazienteId: patient.id,
-        priorita: form.priorita,
-        tipo: form.tipo,
-        note: form.note.trim(),
-        scadenza: form.scadenza,
-        oraScadenza: form.oraScadenza || undefined,
-        operatoreAssegnatoId: form.operatoreAssegnatoId || null,
-      });
-      if (!ok) {
-        setError('Creazione non riuscita. Verifica i dati e riprova.');
-        return;
-      }
-      onClose();
-    } catch {
-      setError('Creazione non riuscita. Verifica i dati e riprova.');
-    } finally {
-      setSaving(false);
-    }
+    const token = store.begin(patient.id);
+    if (!token) return;
+    const version = generation.current;
+    if ((await submitConsegna(store, token, onAdd)) && version === generation.current) onClose();
   }
 
   return (
@@ -111,7 +112,7 @@ export function ConsegnaCreateForm({
       </header>
 
       <div className="handover-editor__body">
-        <fieldset className="handover-editor__section">
+        <fieldset className="handover-editor__section" disabled={saving}>
           <legend>Destinatario</legend>
           <div className="handover-editor__grid">
             <div className="handover-editor__field--patient">
@@ -125,7 +126,7 @@ export function ConsegnaCreateForm({
                 helperText="Sono disponibili i pazienti registrati nel tuo perimetro, con codice fiscale o data di nascita."
               />
             </div>
-            {isAdmin && (
+            {
               <div className="form-field handover-editor__field--assignee">
                 <label className="form-label" htmlFor="handover-assignee">
                   Assegna a
@@ -134,14 +135,14 @@ export function ConsegnaCreateForm({
                   id="handover-assignee"
                   name="operatoreAssegnatoId"
                   className="form-select"
-                  value={form.operatoreAssegnatoId}
+                  value={form.operatoreAssegnatoId ?? ''}
                   onChange={(event) =>
                     setForm((current) => ({
                       ...current,
                       operatoreAssegnatoId: event.target.value,
                     }))
                   }
-                  disabled={saving}
+                  disabled={!patient || saving || Boolean(draft.pending)}
                 >
                   <option value="">Non assegnata</option>
                   {operatori
@@ -153,11 +154,14 @@ export function ConsegnaCreateForm({
                     ))}
                 </select>
               </div>
-            )}
+            }
           </div>
         </fieldset>
 
-        <fieldset className="handover-editor__section">
+        <fieldset
+          className="handover-editor__section"
+          disabled={!patient || saving || Boolean(draft.pending)}
+        >
           <legend>Dettagli operativi</legend>
           <div className="handover-editor__grid">
             <div className="form-field handover-editor__field--third">
@@ -229,7 +233,7 @@ export function ConsegnaCreateForm({
                 name="oraScadenza"
                 className="form-input"
                 type="time"
-                value={form.oraScadenza}
+                value={form.oraScadenza ?? ''}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, oraScadenza: event.target.value }))
                 }
@@ -239,7 +243,10 @@ export function ConsegnaCreateForm({
           </div>
         </fieldset>
 
-        <fieldset className="handover-editor__section handover-editor__section--last">
+        <fieldset
+          className="handover-editor__section handover-editor__section--last"
+          disabled={!patient || saving || Boolean(draft.pending)}
+        >
           <legend>Istruzioni</legend>
           <div className="form-field">
             <label className="form-label" htmlFor="handover-notes">
@@ -274,12 +281,38 @@ export function ConsegnaCreateForm({
           </p>
         )}
         <button type="button" className="btn-secondary" onClick={onClose} disabled={saving}>
-          Annulla
+          Chiudi · conserva bozza
         </button>
+        {patient && draft.dirty && (
+          <button
+            type="button"
+            className="link-btn"
+            onClick={() => setDiscard(true)}
+            disabled={saving}
+          >
+            Scarta bozza
+          </button>
+        )}
         <button type="submit" className="btn-success" disabled={!canSubmit}>
-          <IcoCheck /> {saving ? 'Creazione…' : 'Crea consegna'}
+          <IcoCheck />{' '}
+          {saving ? 'Creazione…' : draft.pending ? 'Riprova salvataggio' : 'Crea consegna'}
         </button>
       </footer>
+      <ConfirmDialog
+        open={discard}
+        title="Scartare la bozza?"
+        message={
+          draft.pending
+            ? 'Il salvataggio potrebbe essere già avvenuto. Scartare la bozza non annulla una consegna salvata: verifica prima il Feed.'
+            : 'I campi non salvati di questo paziente saranno eliminati.'
+        }
+        confirmLabel="Scarta bozza"
+        onCancel={() => setDiscard(false)}
+        onConfirm={() => {
+          if (patient) store.discard(patient.id);
+          setDiscard(false);
+        }}
+      />
     </form>
   );
 }

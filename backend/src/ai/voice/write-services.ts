@@ -147,16 +147,17 @@ export const prismaVoiceWriter: VoiceWriter = {
         priorita: 'normale',
         tipo: 'Monitoraggio',
         note: String(fields.note ?? ''),
-        scadenza: meta.nowISO.slice(0, 10),
         oraScadenza: null,
         operatoreAssegnatoId: null,
+        requestId: meta.requestId,
       },
       {
         id: meta.operatorId,
         role: meta.operatorRole ?? 'operatore',
         name: meta.operatorName,
       },
+      new Date(meta.nowISO),
     );
-    return created.id;
+    return { id: created.id, replayed: created.replayed };
   },
 };

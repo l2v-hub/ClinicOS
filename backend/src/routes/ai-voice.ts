@@ -15,12 +15,26 @@ import { loadVoiceConfig, sttStatus, REQUIRED_STT_CAPABILITIES } from '../ai/voi
 import { planCommand, executeCommand } from '../ai/actions/orchestrate.js';
 import { agnosOperatorFrom } from './ai-actions.js';
 import { GatewayError } from '../ai/gateway/types.js';
+import { ConsegnaCreationError } from '../consegne/create-receipt.js';
+import { ConsegnaInputError } from '../consegne/query.js';
+import { parseConsegnaRequestId } from '../consegne/write-validation.js';
+import { ConsegnaPatientNotFoundError } from '../services/consegna-service.js';
 
 const voiceRouter = Router();
 voiceRouter.use(requireOperator);
 voiceRouter.use(importRateLimit);
 
 function mapError(res: Response, err: unknown) {
+  if (err instanceof ConsegnaCreationError)
+    return res
+      .status(err.status)
+      .json({ error: err.message, kind: err.code, code: err.code, ...err.ids });
+  if (err instanceof ConsegnaPatientNotFoundError)
+    return res
+      .status(404)
+      .json({ error: err.message, kind: 'not_found', code: 'patient_not_found' });
+  if (err instanceof ConsegnaInputError)
+    return res.status(400).json({ error: err.message, kind: 'bad_request' });
   if (err instanceof VoiceError) {
     const status: Record<string, number> = {
       feature_disabled: 403,
@@ -86,9 +100,7 @@ voiceRouter.post('/plan', async (req: AuthedRequest, res) => {
 voiceRouter.post('/execute', async (req: AuthedRequest, res) => {
   try {
     const transcript = String(req.body?.transcript ?? '').slice(0, 500);
-    const idempotencyKey = String(req.body?.idempotencyKey ?? '').slice(0, 80);
-    if (!idempotencyKey)
-      return res.status(400).json({ error: 'idempotencyKey mancante', kind: 'not_executable' });
+    const idempotencyKey = parseConsegnaRequestId(req.body?.idempotencyKey);
 
     const result = await executeCommand({
       text: transcript,

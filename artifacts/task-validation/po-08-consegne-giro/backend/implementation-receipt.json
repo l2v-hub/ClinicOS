@@ -1,0 +1,290 @@
+{
+  "task": "PO-08-backend",
+  "phase": "implementation-complete-worker-handoff",
+  "decision": "allow exact-source handoff to root for independent integration validation",
+  "authorization": "Explicit root GO after verified PO07 release; worker owned backend/schema/tests in isolated worktree. Independent reviewer reported no actionable regressions; root directed final handoff.",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend",
+  "branch": "codex/po08-handover-backend",
+  "baseline": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "generatedAt": "2026-09-23T02:41:43.168Z",
+  "sourceTreeSha256": "ed708bdd7cfbc1535e18e9fd59352910ed8efff1d33931132c9e70852f264cc1",
+  "inputTreeSha256": "91faf30e87d7012eeccb286aa79e8817ee0f9c69e40b85511abeb7a16cb988bf",
+  "sourceManifestSha256": "32ee94cfac21a74c722cd5335a82ef2c57f4ede1c24b8cebc6dec4502378d3cf",
+  "sourceFrozen": true,
+  "tests": {
+    "passed": 126,
+    "failed": 0,
+    "newPo08Tests": 22,
+    "results": [
+      {
+        "file": "backend/src/consegne/__tests__/creation-db.test.ts",
+        "exitCode": 0,
+        "tests": 7
+      },
+      {
+        "file": "backend/src/consegne/__tests__/patient-summary-db.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/consegne/__tests__/voice-creation-db.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/patients/__tests__/room-filter-db.test.ts",
+        "exitCode": 0,
+        "tests": 7
+      },
+      {
+        "file": "backend/src/consegne/__tests__/query.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/routes/__tests__/consegne-bounded-auth.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/patients/__tests__/alphabetical-pages-db.test.ts",
+        "exitCode": 0,
+        "tests": 5
+      },
+      {
+        "file": "backend/src/roster/__tests__/roster-pagination-db.test.ts",
+        "exitCode": 0,
+        "tests": 12
+      },
+      {
+        "file": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+        "exitCode": 0,
+        "tests": 8
+      },
+      {
+        "file": "backend/src/ai/__tests__/actions.test.ts",
+        "exitCode": 0,
+        "tests": 49
+      },
+      {
+        "file": "backend/src/ai/__tests__/voice.test.ts",
+        "exitCode": 0,
+        "tests": 20
+      },
+      {
+        "file": "backend/src/ai/__tests__/voice-privacy-logging.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      }
+    ],
+    "finishedAt": "2026-09-23T02:38:31.076Z",
+    "finalRunnerSession": 39663,
+    "finalRunnerExitCode": 0,
+    "sourceUnchangedBeforeAfterAndHandoff": true,
+    "sourceTreeSha256": "91faf30e87d7012eeccb286aa79e8817ee0f9c69e40b85511abeb7a16cb988bf",
+    "database": "synthetic native PostgreSQL loopback",
+    "databaseClosed": true,
+    "migrationsApplied": 43,
+    "migrationEvidence": "artifacts/task-validation/po-08-consegne-giro/backend/focused-tests.json"
+  },
+  "validation": {
+    "sourceTreeSha256": "91faf30e87d7012eeccb286aa79e8817ee0f9c69e40b85511abeb7a16cb988bf",
+    "generatedAt": "2026-09-23T02:40:59.187Z",
+    "typecheck": {
+      "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+      "exitCode": 0,
+      "evidence": "Tool execution 2f3380 on final source after formatting; no diagnostics."
+    },
+    "schema": {
+      "exitCode": 0,
+      "privateSchemaMatchesSourceExceptOutput": true,
+      "generatedSchemaMatchesPrivateExceptFormattingWhitespace": true,
+      "connectedToDatabase": false
+    },
+    "ownedDiff": {
+      "exitCode": 0
+    },
+    "newFiles": [
+      {
+        "path": "backend/src/consegne/__tests__/creation-db.test.ts",
+        "lines": 231
+      },
+      {
+        "path": "backend/src/consegne/__tests__/patient-summary-db.test.ts",
+        "lines": 176
+      },
+      {
+        "path": "backend/src/consegne/__tests__/po08-fixture.ts",
+        "lines": 89
+      },
+      {
+        "path": "backend/src/consegne/__tests__/voice-creation-db.test.ts",
+        "lines": 164
+      },
+      {
+        "path": "backend/src/consegne/create-receipt.ts",
+        "lines": 61
+      },
+      {
+        "path": "backend/src/consegne/patient-summary.ts",
+        "lines": 52
+      },
+      {
+        "path": "backend/src/patients/__tests__/room-filter-db.test.ts",
+        "lines": 157
+      },
+      {
+        "path": "backend/src/patients/room-filter.ts",
+        "lines": 21
+      },
+      {
+        "path": "prisma/migrations/20260923030000_consegna_creation_receipts/migration.sql",
+        "lines": 23
+      }
+    ],
+    "newSourceFilesBelow500Lines": true,
+    "protectedFilesPreserved": [
+      {
+        "path": "package.json",
+        "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "0d8cd33d7e092b0d81329a2c83436c4d4f5636fa4f27f22c7e74a3838b86d01c"
+      },
+      {
+        "path": "backend/package.json",
+        "sha256": "0d05ac91f625b3790cb86d56289335347e084b410e83b49bfae6d21db67f1070"
+      },
+      {
+        "path": "run-claude-queue.ps1",
+        "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+      },
+      {
+        "path": "start-claude-team.ps1",
+        "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+      }
+    ],
+    "rootContract": {
+      "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-08-consegne-giro\\task-contract.md",
+      "sha256": "21a9048dceee33bce47d1c7ba27200f37854ca99bff0dc918876f7109df1a5da"
+    },
+    "runtime": {
+      "privatePrismaOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\backend\\node_modules\\.prisma\\client",
+      "privatePrismaWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-backend\\backend\\node_modules\\@prisma\\client",
+      "dependencyManifestsChanged": false,
+      "sharedDependencyTargetWritten": false
+    }
+  },
+  "claimsReleaseEvidence": "artifacts/task-validation/po-08-consegne-giro/backend/claims-release.json",
+  "invariants": [
+    "Room-only literal normalized filter precedes limit/anchor and binds PO07 v3 cursor.",
+    "Bounded patient summary intersects patient scope and handover visibility; unavailable IDs omitted, authorized zero preserved.",
+    "Creation and immutable actor/request receipt share one transaction; patient FOR SHARE protects concurrent ownership changes.",
+    "Same initial intent replays current row; differing intent gives 409; deleted original gives 410 without recreation.",
+    "REST/text/voice share durable receipt; create_consegna cannot shortcut via memory cache; scope and confirmation remain required."
+  ],
+  "limitations": [
+    "This worker receipt records local evidence and is not an independent release or production capability.",
+    "Root owns combined integration manifest, browser/performance QA, commit/push/deploy and production migration application.",
+    "Normal backend build was not used because implicit Prisma generation would target shared dependencies. Typecheck and explicit private generation/schema checks were used.",
+    "No browser result, performance benchmark, dependency CVE scan or production behavior is claimed by this worker."
+  ],
+  "artifactCopyAllowlist": [
+    "source-manifest.json",
+    "test-source-manifest.json",
+    "focused-tests.json",
+    "focused-tests.log",
+    "private-generation-receipt.json",
+    "private-generation.log",
+    "schema-validation.log",
+    "diff-check.log",
+    "validation-checks.json",
+    "run-focused-tests.mjs",
+    "generate-private.mjs",
+    "finalize-evidence.mjs",
+    "implementation-contract.snapshot.md",
+    "claims-release.json",
+    "implementation-receipt.json",
+    "handoff.md",
+    "artifact-manifest.json"
+  ],
+  "doNotCopy": [
+    "postgres-* directories",
+    "private-schema.prisma",
+    "backend/node_modules",
+    "root node_modules junction"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/claims-release.json",
+      "bytes": 3061,
+      "sha256": "d2c05afd652b5ad89d4987d51e498ccebfb07d614bb1b31d322f1aa90a22d0b7"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/diff-check.log",
+      "bytes": 1399,
+      "sha256": "8a3a7ff2df193f8024c62989cca5040f856e82a1d6c63a05bd3038e8806ad141"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/finalize-evidence.mjs",
+      "bytes": 14358,
+      "sha256": "1554029919787e5dab827063e57c81ebd729158caf50d0378a20ca4462e0c0b5"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/focused-tests.json",
+      "bytes": 8188,
+      "sha256": "a4ab6506a639cf32a201edbc04bbe86e570a45fc33c5943a1384c80aa4d8b0a3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/focused-tests.log",
+      "bytes": 32535,
+      "sha256": "722319c7cd34de652e1276271be24c0144cd31320cfe48366b90034a503cd759"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/generate-private.mjs",
+      "bytes": 2292,
+      "sha256": "ae44a303e916b1dc06204cd2a1fb5f3aa0297d0f715952ff8d0433b1b4d80b3c"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/implementation-contract.snapshot.md",
+      "bytes": 5248,
+      "sha256": "21a9048dceee33bce47d1c7ba27200f37854ca99bff0dc918876f7109df1a5da"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/private-generation-receipt.json",
+      "bytes": 1226,
+      "sha256": "8242f690f206e4d983b764d0af4e08331060de2fb3900c6ac511f62627932ac0"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/private-generation.log",
+      "bytes": 1189,
+      "sha256": "69c0d595908f6a9d8b7af9d55737225c3284df96ccce74c5a7b7e9d30809b93f"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/run-focused-tests.mjs",
+      "bytes": 3713,
+      "sha256": "7dc76a69b80e06e394e7856db214d7e9374c319da58b38b7790e36cb81720d2c"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/schema-validation.log",
+      "bytes": 253,
+      "sha256": "1e2bc0fd4ab5255a6fda13b31f253151043832ce6f84c52e262bfad475f2d2a5"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/source-manifest.json",
+      "bytes": 4451,
+      "sha256": "32ee94cfac21a74c722cd5335a82ef2c57f4ede1c24b8cebc6dec4502378d3cf"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/test-source-manifest.json",
+      "bytes": 54508,
+      "sha256": "50c0a16befe2110dafea7c21c07b694e6b7a72c849c3d4c4d95136f46c8c4495"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/validation-checks.json",
+      "bytes": 2864,
+      "sha256": "ce805377fe6f7defda46d3543678c8da9391f979ba1bfd55bb73e5e92ae70228"
+    }
+  ]
+}

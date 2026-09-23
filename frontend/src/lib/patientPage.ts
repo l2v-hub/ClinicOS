@@ -16,6 +16,7 @@ export interface PatientPageResponse {
 }
 
 export interface PatientPageFilters extends RosterPageOptions {
+  room?: string;
   q?: string;
   sex?: 'M' | 'F';
   cursor?: string;
@@ -28,6 +29,7 @@ export function buildPatientPageUrl(apiUrl: string, filters: PatientPageFilters)
   const params = new URLSearchParams({ limit: String(limit) });
   Object.entries(rosterQuery(filters)).forEach(([key, value]) => params.set(key, value));
   if (filters.sex) params.set('sex', filters.sex);
+  if (filters.room?.trim()) params.set('room', filters.room.trim());
   if (filters.cursor) params.set('cursor', filters.cursor);
   return `${apiUrl}/patients/page?${params.toString()}`;
 }
@@ -43,6 +45,7 @@ export function buildPatientPageRequest(
   const limit = Math.min(100, Math.max(1, requestedLimit));
   const body: Record<string, string> = { q, limit: String(limit), ...rosterQuery(filters) };
   if (filters.sex) body.sex = filters.sex;
+  if (filters.room?.trim()) body.room = filters.room.trim();
   if (filters.cursor) body.cursor = filters.cursor;
   return {
     url: `${apiUrl}/patients/page/search`,

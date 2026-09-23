@@ -1,0 +1,20 @@
+(node:19028) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ shared identity distinguishes homonyms, wraps untrusted text, and omits internal identifiers (7.5841ms)
+✔ location shows its date only outside today in Rome while retaining legacy provenance (0.9562ms)
+✔ loading and unavailable never display retained location labels (0.8048ms)
+✔ parameter identity is available while clinical summary counts remain pending (2.5736ms)
+✔ handover null, missing, malformed or mismatched identity has no chart-opening action (13.9597ms)
+✔ therapy action names identify both homonyms and drug while readOnly offers no signing (5.3558ms)
+✔ combobox selected patient uses shared identity without internal record number (1.9075ms)
+✔ identity presentation adds no fetch and parameter drafts retain stable patient keys (0.7724ms)
+(node:19028) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 559.429

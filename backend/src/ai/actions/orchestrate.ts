@@ -335,7 +335,9 @@ export async function executeCommand(
       ); // issue #130: same tamper-proof re-grounding with patient scope
     if (plan.patientId) {
       assertPatientAllowed(input.operatorCtx.gatewayCtx, plan.patientId);
-      const prior = store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
+      const prior = isConsegnaAction(plan.actionType)
+        ? null
+        : store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
       if (prior) {
         voiceAudit(
           ctx,

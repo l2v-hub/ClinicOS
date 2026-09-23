@@ -1,0 +1,459 @@
+{
+  "baseline": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "generatedAtUtc": "2026-09-23T02:44:34.485Z",
+  "files": [
+    {
+      "file": "frontend/src/App.tsx",
+      "baselineHash": "83a8fb157176c805b37d5de0d4d8e482d18811132411defae2305fe9e3448b25",
+      "candidateHash": "68693b9ba3cd6b8e489d26b79b6a4cfb33018a22cd56050473e0a1052effffb3",
+      "baseline": [
+        {
+          "ruleId": "react-hooks/immutability",
+          "severity": 2,
+          "line": 555,
+          "column": 5,
+          "title": "Error: Cannot access variable before it is declared"
+        },
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 612,
+          "column": 5,
+          "title": "React Hook useCallback has a missing dependency: 'navigate'. Either include it or remove the dependency array."
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 623,
+          "column": 9,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1305,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1330,
+          "column": 7,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1395,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2981,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2981,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        }
+      ],
+      "candidate": [
+        {
+          "ruleId": "react-hooks/immutability",
+          "severity": 2,
+          "line": 569,
+          "column": 5,
+          "title": "Error: Cannot access variable before it is declared"
+        },
+        {
+          "ruleId": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "line": 622,
+          "column": 5,
+          "title": "React Hook useCallback has a missing dependency: 'navigate'. Either include it or remove the dependency array."
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 633,
+          "column": 9,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1320,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1345,
+          "column": 7,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 1410,
+          "column": 10,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2987,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 2987,
+          "column": 45,
+          "title": "Error: Cannot access refs during render"
+        }
+      ]
+    },
+    {
+      "file": "frontend/src/components/admin/AdminDashboard.tsx",
+      "baselineHash": "53c404763b787d48cfac1819b31f08ca69c16e619a95c2366f1ed162536af9d0",
+      "candidateHash": "196f63cb9fcfd2514bc547f37cd4c1aea430143d476ef908b3cd823ce154d7e5",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "baselineHash": "6fe8cc6e9d0b38f0b311e95c762745f7915f1a7ddf7b2f47963a716beada9e0d",
+      "candidateHash": "28467fa128980273eec7955d117d0ead5c1ff21ae3abf184265ee951461fab44",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegnePage.tsx",
+      "baselineHash": "c9f251e8a6667afe6b12b7715af14109685c0a25594efac7cc8a843d29a016b3",
+      "candidateHash": "be8e0edd956ed723f0d99441bbd4cdd967ae480fa32da83879c9c01a04619b05",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/OperatorDashboard.tsx",
+      "baselineHash": "e0c577b547653d7561aa35978dec9217d7c9e0d1545eeb0ff47b818c3f7ab509",
+      "candidateHash": "bcacc1e10dc5249cbc76d0ff6707c47d96e98af16249914b05e7661a7339204b",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/PatientDetail.tsx",
+      "baselineHash": "1698b55d1bdebc86a5c089b50dca8bb891f74e4aefda1e703166c71f9389332d",
+      "candidateHash": "00e8a03f1871dcd4060674e7e8ee499c89f11fd9b6baf642155c7c6a9c9cd2f6",
+      "baseline": [
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 290,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 345,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 793,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 793,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 793,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 793,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 794,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 794,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 794,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 794,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        }
+      ],
+      "candidate": [
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 282,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/set-state-in-effect",
+          "severity": 2,
+          "line": 337,
+          "column": 5,
+          "title": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 741,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 741,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 741,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 741,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 742,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 742,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 742,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        },
+        {
+          "ruleId": "react-hooks/refs",
+          "severity": 2,
+          "line": 742,
+          "column": 17,
+          "title": "Error: Cannot access refs during render"
+        }
+      ]
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/operationalIdentity.test.ts",
+      "baselineHash": "1813ac85d1143b9a58c19b373417123702421976af19efbd58f340b4291b61ce",
+      "candidateHash": "4a6bd260229bedccc73f252f34345622f16b03c18c33120e422f1921caf7df53",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/shared/agnos/agnosActionNavigation.ts",
+      "baselineHash": "2a9d573529ab6bccc4fc4d04d12afe215698284fabffab2bb1691c685315c0b9",
+      "candidateHash": "177e71e16010e17334e1d3caba9193bda840d22adeda351fc9db661ce3c68339",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/shared/agnos/agnosWorkflow.test.ts",
+      "baselineHash": "dfbc061ca0cddcc83689470e2283903166375d8d18dcd0e38540223bda1dde6c",
+      "candidateHash": "eb9d65e5b586e95684f328a953041f23bce9612452647d2a32159ffbda201918",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/patientPage.ts",
+      "baselineHash": "9a1c660c05f8c9924b992e1d8235c71c21dcfea7c94b089166599072f4e86127",
+      "candidateHash": "7e1c5dc8b9c845c877e240dbd93d826edad9dd6112d7dcdcd7d67c85bdf76885",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegnaComposer.tsx",
+      "baselineHash": null,
+      "candidateHash": "7c284acd7f8d8ca468249cc0d34fefb1eef11f117403a78e11c6799ac4699e13",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegnaQuickAdd.tsx",
+      "baselineHash": null,
+      "candidateHash": "17049f2b7c40c909d034598dfd57bcb086ae884672061c0b4a54eb38263439ae",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+      "baselineHash": null,
+      "candidateHash": "0575d9e83e0b272354bbefe146b3b485498861798d7570d0db462f2e1c0fd9e6",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegneRounds.tsx",
+      "baselineHash": null,
+      "candidateHash": "3bc3f08edb949f7801d78f06fa517788a5d5fdd568eedfd65cf90584d0cacca4",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/ConsegneWorkspace.tsx",
+      "baselineHash": null,
+      "candidateHash": "86c3d7d9ff4a4d1ed90f48ac3c307df0162e4459e10e68f924049d7dcc727b25",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/__tests__/consegneGiroUi.test.ts",
+      "baselineHash": null,
+      "candidateHash": "1edcf15ede3fad502ac9c6ed55176629cda299b2cf7a73a743958d799f8677ca",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/components/operator/useConsegneRoster.ts",
+      "baselineHash": null,
+      "candidateHash": "2a65490388c9e85d6d1898d01713b07d751bc25fb7e31fe0b0c4f73e47a185be",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/consegnaCreation.test.ts",
+      "baselineHash": null,
+      "candidateHash": "3acf33ec95ff2d2a1180e02bed6a4435610ac2a3ff1402eeee5b42944f0bb557",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/consegnaDrafts.test.ts",
+      "baselineHash": null,
+      "candidateHash": "f8e6a95a13cf69bfc7e35c96bd7bb91e75fd50301d2227248f2cf2b8907debb3",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/consegnaGiro.fixtures.ts",
+      "baselineHash": null,
+      "candidateHash": "3c5ee4a848f6b00846357d3a609860dd496fd54d47599594d3eb200968ab290d",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/__tests__/consegneNavigation.test.ts",
+      "baselineHash": null,
+      "candidateHash": "d594fc1b33f360fb3b7b10428e49d057590d2048018555fcb187683138b627ca",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/consegnaAdvance.ts",
+      "baselineHash": null,
+      "candidateHash": "dc83b1f980a92258021b73ae0d1ce465952734413099f8314a1f2b1c8dc5dda5",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/consegnaCreation.ts",
+      "baselineHash": null,
+      "candidateHash": "729f3b6ae359c065bb236c96baa9845b36d6ef09b4cf3a28b7464c7248c022aa",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/consegnaDrafts.ts",
+      "baselineHash": null,
+      "candidateHash": "0705cb0a70f8915f89da8cdda379ed87ad111b834201eab32dff8000b5a162c0",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/consegneNavigation.ts",
+      "baselineHash": null,
+      "candidateHash": "870b3ac097bec713b51f8a57497062001b7ba6df6061a750b3e9836068b32b38",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/consegnePatientSummary.ts",
+      "baselineHash": null,
+      "candidateHash": "abda86067e64f747ecc41dbac3cfe9e4fcd0676dcfe182933ed808d7b5908be3",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/useConsegnaDraft.ts",
+      "baselineHash": null,
+      "candidateHash": "fbeb0b91fbc853c1f6975b111e33212fe91648395fa3899b51bd072e327cac65",
+      "baseline": [],
+      "candidate": []
+    },
+    {
+      "file": "frontend/src/lib/useConsegneExitGuard.ts",
+      "baselineHash": null,
+      "candidateHash": "16bbc69960dfb36d06d7b2dd084843a6dca22d75df614b8a061a6cf8d8637ce5",
+      "baseline": [],
+      "candidate": []
+    }
+  ],
+  "introduced": []
+}

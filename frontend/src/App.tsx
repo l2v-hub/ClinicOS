@@ -3,6 +3,10 @@ import type { ReactNode } from 'react';
 import './App.css';
 import { API_URL } from './config';
 import { useRosterOrder } from './lib/useRosterOrder';
+import { createConsegna, type ConsegnaCreateRequest, type ConsegnaCreateResult } from './lib/consegnaCreation';
+import { createConsegnaDraftStore } from './lib/consegnaDrafts';
+import { useConsegneExitGuard } from './lib/useConsegneExitGuard';
+import { canApplyPatientConsegne, canRefreshPatientConsegne, type ConsegneEntry } from './lib/consegneNavigation';
 import { assertRosterPage, isRosterChanged, throwRosterResponse } from './lib/rosterOrder';
 import { RosterOrderContext } from './components/shared/RosterOrderContext';
 import { CartellaWriteQueue, mergeCartellaPatch } from './lib/cartellaWriteQueue';
@@ -67,7 +71,6 @@ import type {
   ConsegnaOverview,
   ConsegnaPageInfo,
   ConsegnaSummary,
-  NewConsegnaInput,
   TherapySlotPageInfo,
   TherapyActionInfo,
 } from './types';
@@ -118,8 +121,8 @@ const PatientDetail = lazy(() =>
     default: module.PatientDetail,
   })),
 );
-const ConsegnePage = lazy(() =>
-  import('./components/operator/ConsegnePage').then((module) => ({ default: module.ConsegnePage })),
+const ConsegneWorkspace = lazy(() =>
+  import('./components/operator/ConsegneWorkspace').then((module) => ({ default: module.ConsegneWorkspace })),
 );
 const TherapyRoundsPage = lazy(() =>
   import('./components/operator/TherapyRoundsPage').then((module) => ({
@@ -278,6 +281,8 @@ function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
 
 export default function App() {
   const [utente, setUtente] = useState<UtenteApp | null>(null);
+  const [consegnaDraftStore] = useState(createConsegnaDraftStore);
+  const confirmConsegneExit = useConsegneExitGuard(consegnaDraftStore);
   const rosterOrder = useRosterOrder(utente ? `${utente.id}:${utente.ruolo}` : null);
   const { requestKey: rosterKey, options: rosterOptions, accept: acceptRoster, recover: recoverRoster } = rosterOrder;
   const rosterRequest = useMemo(() => ({ ...rosterOptions, requestKey: rosterKey }), [rosterOptions, rosterKey]);
@@ -329,6 +334,7 @@ export default function App() {
   const pendingPazienteRestoreIdRef = useRef<string | null>(null);
   const patientNavigationSequenceRef = useRef(0);
   const sessionEpochRef = useRef(0);
+  useEffect(() => () => { sessionEpochRef.current++; consegnaDraftStore.clear(); }, [consegnaDraftStore]);
   const appointmentRequestSequenceRef = useRef(0);
   const therapyRequestSequenceRef = useRef(0);
   const therapyAbortControllerRef = useRef<AbortController | null>(null);
@@ -433,10 +439,12 @@ export default function App() {
   const [loadingConsegne, setLoadingConsegne] = useState(false);
   const [consegneLoadError, setConsegneLoadError] = useState<string | null>(null);
   // #283: come aprire la pagina Consegne (filtro iniziale + eventuale consegna da evidenziare)
-  const [consegneView, setConsegneView] = useState<{
-    filtro: 'tutte' | 'attive' | Consegna['stato'];
-    focusId: string | null;
-  }>({ filtro: 'tutte', focusId: null });
+  const [consegneView, setConsegneView] = useState<ConsegneEntry>({ mode: 'rounds', key: 0 });
+  const [consegneMode, setConsegneMode] = useState<'rounds' | 'feed'>('rounds');
+  const consegnaViewScopeRef = useRef({ navKey, mode: consegneMode, patientId: pazienteSelezionato?.id });
+  useEffect(() => {
+    consegnaViewScopeRef.current = { navKey, mode: consegneMode, patientId: pazienteSelezionato?.id };
+  }, [navKey, consegneMode, pazienteSelezionato?.id]);
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
   const cartellaWrites = useRef(new CartellaWriteQueue<CartellaPaziente>());
   // Le dashboard consumano un aggregato di dimensione costante, indipendente dal roster.
@@ -531,7 +539,11 @@ export default function App() {
     }
     // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
     // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
-    if (key === 'consegne') setConsegneView({ filtro: 'tutte', focusId: null });
+    if (key === 'consegne') {
+      setConsegneView((value) => ({ mode: 'rounds', key: value.key + 1 }));
+      setConsegneMode('rounds');
+      consegneQueryRef.current = {};
+    }
     pushNav(key);
   }
 
@@ -540,10 +552,12 @@ export default function App() {
   function openConsegneAperte() {
     const summary = consegneOverview?.summary;
     const single = summary?.open === 1 ? consegneOverview?.openPreview[0] : undefined;
-    setConsegneView({
-      filtro: 'attive',
-      focusId: single?.id ?? null,
-    });
+    openConsegneFeed({ status: 'attive' }, single?.id);
+  }
+  function openConsegneFeed(query: ConsegnaFeedQuery = {}, focusId?: string) {
+    consegneQueryRef.current = query;
+    setConsegneView((value) => ({ mode: 'feed', query, focusId: focusId ?? null, key: value.key + 1 }));
+    setConsegneMode('feed');
     setMobileNavOpen(false);
     pushNav('consegne');
   }
@@ -588,11 +602,7 @@ export default function App() {
         isAdmin,
         navigate,
         openPatient: selectPazienteById,
-        openConsegne: (recordId) => {
-          setConsegneView({ filtro: 'tutte', focusId: recordId ?? null });
-          setMobileNavOpen(false);
-          pushNav('consegne');
-        },
+        openConsegne: (recordId, patientId) => openConsegneFeed(patientId ? { patientId } : {}, recordId),
       },
       signal,
     );
@@ -890,6 +900,8 @@ export default function App() {
   }, []);
 
   const loadPatientConsegne = useCallback(async (patientId: string, append = false) => {
+    const scope = consegnaViewScopeRef.current;
+    if (!canRefreshPatientConsegne(scope, patientId)) return;
     const cursor = append ? patientConsegnePageInfoRef.current.nextCursor : null;
     if (append && !cursor) return;
     const sessionEpoch = sessionEpochRef.current;
@@ -915,7 +927,8 @@ export default function App() {
       if (!isConsegnaFeedResponse(page)) throw new Error('patient_consegne_shape');
       if (
         sessionEpoch === sessionEpochRef.current &&
-        request === patientConsegneRequestRef.current
+        request === patientConsegneRequestRef.current &&
+        canApplyPatientConsegne(scope, consegnaViewScopeRef.current, patientId)
       ) {
         setPatientConsegne((current) => mergeConsegnaPage(current, page.items, append));
         setPatientConsegneSummary(page.summary);
@@ -926,14 +939,16 @@ export default function App() {
       if ((error as { name?: string }).name === 'AbortError') return;
       if (
         sessionEpoch === sessionEpochRef.current &&
-        request === patientConsegneRequestRef.current
+        request === patientConsegneRequestRef.current &&
+        canApplyPatientConsegne(scope, consegnaViewScopeRef.current, patientId)
       ) {
         setPatientConsegneError('Consegne del paziente non disponibili. Riprova.');
       }
     } finally {
       if (
         sessionEpoch === sessionEpochRef.current &&
-        request === patientConsegneRequestRef.current
+        request === patientConsegneRequestRef.current &&
+        canApplyPatientConsegne(scope, consegnaViewScopeRef.current, patientId)
       ) {
         setLoadingPatientConsegne(false);
       }
@@ -1396,9 +1411,9 @@ export default function App() {
   }, [utente, navKey, loadTherapySlots]);
 
   useEffect(() => {
-    if (!utente || navKey !== 'consegne') return;
+    if (!utente || navKey !== 'consegne' || consegneMode !== 'feed') return;
     void loadConsegne(consegneQueryRef.current);
-  }, [utente, navKey, loadConsegne]);
+  }, [utente, navKey, consegneMode, loadConsegne]);
 
   useEffect(() => {
     if (!utente || navKey !== 'dettaglio-paziente' || !pazienteSelezionato) return;
@@ -1469,6 +1484,7 @@ export default function App() {
     setLoginPending(true);
     setLoginError(null);
     sessionEpochRef.current += 1;
+    consegnaDraftStore.clear();
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
     therapyAbortControllerRef.current?.abort();
@@ -1560,7 +1576,9 @@ export default function App() {
   }
 
   function handleLogout() {
+    if (!confirmConsegneExit()) return;
     sessionEpochRef.current += 1;
+    consegnaDraftStore.clear();
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
     therapyAbortControllerRef.current?.abort();
@@ -1638,7 +1656,8 @@ export default function App() {
     setPazientiRicerca('');
     setPazientiFiltroSesso('tutti');
     setPendingModuleTab(undefined);
-    setConsegneView({ filtro: 'tutte', focusId: null });
+    setConsegneView({ mode: 'rounds', key: 0 });
+    setConsegneMode('rounds');
     setCartelle([]);
     setAppuntamenti([]);
     setNote([]);
@@ -1783,41 +1802,22 @@ export default function App() {
 
   // ── Consegne CRUD (API-persisted) ─────────────────────────────────────────
 
-  function refreshConsegnaViews() {
+  function refreshConsegnaViews(savedPatientId?: string) {
+    const scope = consegnaViewScopeRef.current;
     void loadConsegneOverview();
-    if (navKey === 'consegne') void loadConsegne(consegneQueryRef.current);
-    if (pazienteSelezionato) void loadPatientConsegne(pazienteSelezionato.id);
+    if (scope.navKey === 'consegne' && scope.mode === 'feed') void loadConsegne(consegneQueryRef.current);
+    if (scope.patientId && canRefreshPatientConsegne(scope, savedPatientId ?? scope.patientId)) void loadPatientConsegne(scope.patientId);
   }
 
-  async function addConsegna(c: NewConsegnaInput): Promise<boolean> {
+  async function addConsegna(c: ConsegnaCreateRequest): Promise<ConsegnaCreateResult> {
     const sessionEpoch = sessionEpochRef.current;
-    try {
-      const res = await fetch(`${API_URL}/consegne`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({
-          pazienteId: c.pazienteId,
-          priorita: c.priorita,
-          tipo: c.tipo,
-          note: c.note,
-          scadenza: c.scadenza,
-          oraScadenza: c.oraScadenza ?? null,
-          operatoreAssegnatoId: c.operatoreAssegnatoId ?? null,
-        }),
-      });
-      if (!res.ok) {
-        showToast('Impossibile creare la consegna');
-        return false;
-      }
-      await res.json();
-      if (sessionEpoch !== sessionEpochRef.current) return false;
-      refreshConsegnaViews();
-      showToast('Consegna creata');
-      return true;
-    } catch {
-      showToast('Impossibile creare la consegna');
-      return false;
+    const result = await createConsegna(API_URL, c, { headers: operatorHeaders() });
+    if (sessionEpoch !== sessionEpochRef.current) return { kind: 'failed', code: 'session_changed', uncertain: true, message: 'Sessione cambiata. Esito non disponibile in questa sessione.' };
+    if (result.kind === 'saved') {
+      refreshConsegnaViews(c.pazienteId);
+      showToast(`Consegna salvata per ${result.record.pazienteNome}`);
     }
+    return result;
   }
 
   async function updateConsegna(id: string, patch: Partial<Consegna>): Promise<boolean> {
@@ -2783,6 +2783,7 @@ export default function App() {
                       loadingPazienti={loadingClinicalOverview}
                       onNavigate={navigate}
                       onOpenConsegneAperte={openConsegneAperte}
+                      onOpenConsegneFeed={() => openConsegneFeed()}
                       onSelectPaziente={goToPazienteByNome}
                       clinicalOverview={clinicalOverview}
                       clinicalOverviewState={clinicalOverviewState}
@@ -2844,7 +2845,11 @@ export default function App() {
                     />
                   )}
                   {navKey === 'consegne' && (
-                    <ConsegnePage
+                    <ConsegneWorkspace
+                      sessionKey={utenteId}
+                      entry={consegneView}
+                      draftStore={consegnaDraftStore}
+                      onModeChange={setConsegneMode}
                       consegne={consegne}
                       summary={consegneSummary}
                       operatori={operatori}
@@ -2861,7 +2866,7 @@ export default function App() {
                       onLoadMore={() => void loadConsegne(consegneQueryRef.current, true)}
                       onRetry={() => void loadConsegne(consegneQueryRef.current)}
                       onSelectPaziente={goToPazienteByNome}
-                      initialFiltroStato={consegneView.filtro}
+                      initialFiltroStato={consegneView.query?.status}
                       focusId={consegneView.focusId}
                     />
                   )}
@@ -2893,6 +2898,7 @@ export default function App() {
                       agenda={agendaOggi}
                       onNavigate={navigate}
                       onOpenConsegneAperte={openConsegneAperte}
+                      onOpenConsegneFeed={() => openConsegneFeed()}
                       onSelectPaziente={goToPazienteByNome}
                       clinicalOverview={clinicalOverview}
                       clinicalOverviewState={clinicalOverviewState}
@@ -2980,6 +2986,7 @@ export default function App() {
                       onBack={() => goBack('pazienti')}
                       backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
                       onAddConsegna={addConsegna}
+                      consegnaDraftStore={consegnaDraftStore}
                       onUpdateConsegnaStato={updateConsegnaStato}
                       onUpdateCartella={updateCartella}
                       onUpdatePaziente={updatePaziente}
@@ -3042,7 +3049,7 @@ export default function App() {
               operatorRole={utente?.ruolo}
               operatorName={utente?.nome}
               currentPatientId={
-                navKey === 'dettaglio-paziente' ? pazienteSelezionato?.id : undefined
+                navKey === 'dettaglio-paziente' ? pazienteSelezionato?.id : navKey === 'consegne' && consegneMode === 'feed' ? consegneView.query?.patientId : undefined
               }
               currentPatientName={
                 navKey === 'dettaglio-paziente' && pazienteSelezionato

@@ -3,6 +3,9 @@ import { birthDateValue, birthSummary, type DemographicField } from '../../lib/p
 import { DemographicsStatus } from '../shared/DemographicsStatus';
 import { PatientIntakeReview } from './PatientIntakeReview';
 import { ConsegnaTimestamp } from './ConsegnaTimestamp';
+import { ConsegnaQuickAdd } from './ConsegnaQuickAdd';
+import type { ConsegnaCreate } from '../../lib/consegnaCreation';
+import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import type {
   Paziente,
@@ -13,10 +16,8 @@ import type {
   NotaClinica,
   VisitaRecord,
   IndicatoreRischio,
-  PrioritaConsegna,
   VitaleItem,
   Anamnesi,
-  NewConsegnaInput,
   ConsegnaSummary,
 } from '../../types';
 import {
@@ -103,7 +104,8 @@ interface PatientDetailProps {
   canAssignRooms: boolean;
   onBack: () => void;
   backLabel?: string;
-  onAddConsegna: (c: NewConsegnaInput) => void;
+  onAddConsegna: ConsegnaCreate;
+  consegnaDraftStore?: ConsegnaDraftStore;
   onUpdateConsegnaStato: (id: string, stato: Consegna['stato']) => void;
   onUpdateCartella: (
     pazienteId: string,
@@ -179,18 +181,6 @@ const STATO_VITALE_CLASS: Record<string, string> = {
   critico: 'vital-card--critico',
 };
 
-const TIPO_CONSEGNA_OPTIONS = [
-  'Monitoraggio',
-  'Terapia',
-  'Esami',
-  'Dimissione',
-  'Medicazione',
-  'Consultazione',
-  'Rivalutazione',
-  'Altro',
-];
-const PRIORITA_OPTIONS: PrioritaConsegna[] = ['normale', 'alta', 'urgente'];
-
 // SectionHeader removed — all sections now use ClinicalTableSection
 
 // ── Inline form wrapper ────────────────────────────────────────────────────────
@@ -254,6 +244,7 @@ function ItemRow({
 // ── Main component ─────────────────────────────────────────────────────────────
 
 export function PatientDetail({
+  operatori,
   paziente,
   cartella,
   consegne,
@@ -271,6 +262,7 @@ export function PatientDetail({
   onBack,
   backLabel,
   onAddConsegna,
+  consegnaDraftStore,
   onUpdateConsegnaStato,
   onUpdateCartella,
   onUpdatePaziente,
@@ -366,12 +358,6 @@ export function PatientDetail({
 
   // Consegne
   const [showAddConsegna, setShowAddConsegna] = useState(false);
-  const [consegnaForm, setConsegnaForm] = useState({
-    tipo: 'Monitoraggio',
-    priorita: 'normale' as PrioritaConsegna,
-    note: '',
-    oraScadenza: '',
-  });
 
   // ── Card modals ─────────────────────────────────────────────────────────────
   type CardModalType =
@@ -387,12 +373,6 @@ export function PatientDetail({
 
   // Consegne modal quick-add
   const [modalConsegnaShow, setModalConsegnaShow] = useState(false);
-  const [modalConsegnaForm, setModalConsegnaForm] = useState({
-    tipo: 'Monitoraggio',
-    priorita: 'normale' as PrioritaConsegna,
-    note: '',
-    oraScadenza: '',
-  });
 
   // Camera modal
   const [cameraEditing, setCameraEditing] = useState(false);
@@ -435,12 +415,10 @@ export function PatientDetail({
     setEditVisitaId(null);
     setVisitaForm({});
     setShowAddConsegna(false);
-    setConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
     setCardModal(null);
     setModalVitaleShow(false);
     setVitaleForm({});
     setModalConsegnaShow(false);
-    setModalConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
     setCameraEditing(false);
     setCameraModalForm({});
     setCameraModalBedId('');
@@ -672,21 +650,6 @@ export function PatientDetail({
     }
   }
 
-  // Consegna
-  function salvaConsegna() {
-    if (!consegnaForm.note.trim()) return;
-    onAddConsegna({
-      pazienteId: paziente.id,
-      priorita: consegnaForm.priorita,
-      tipo: consegnaForm.tipo,
-      note: consegnaForm.note,
-      scadenza: todayStr(),
-      oraScadenza: consegnaForm.oraScadenza || undefined,
-    });
-    setShowAddConsegna(false);
-    setConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
-  }
-
   // ── Card modal CRUD helpers ────────────────────────────────────────────────
 
   // Allergie CRUD — delegated to AllergiesEditor
@@ -710,21 +673,6 @@ export function PatientDetail({
       setModalVitaleShow(false);
       setVitaleForm({});
     }
-  }
-
-  // Consegna quick-add from modal
-  function salvaConsegnaDaModal() {
-    if (!modalConsegnaForm.note.trim()) return;
-    onAddConsegna({
-      pazienteId: paziente.id,
-      priorita: modalConsegnaForm.priorita,
-      tipo: modalConsegnaForm.tipo,
-      note: modalConsegnaForm.note,
-      scadenza: todayStr(),
-      oraScadenza: modalConsegnaForm.oraScadenza || undefined,
-    });
-    setModalConsegnaShow(false);
-    setModalConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
   }
 
   // Camera save from modal
@@ -1079,71 +1027,7 @@ export function PatientDetail({
             ))}
           </div>
           {modalConsegnaShow ? (
-            <div className="ec-modal-add-form">
-              <div className="op-form-grid">
-                <div className="form-field">
-                  <label className="form-label">Tipo</label>
-                  <select
-                    className="form-select"
-                    value={modalConsegnaForm.tipo}
-                    onChange={(e) => setModalConsegnaForm((p) => ({ ...p, tipo: e.target.value }))}
-                  >
-                    {TIPO_CONSEGNA_OPTIONS.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Priorità</label>
-                  <select
-                    className="form-select"
-                    value={modalConsegnaForm.priorita}
-                    onChange={(e) =>
-                      setModalConsegnaForm((p) => ({
-                        ...p,
-                        priorita: e.target.value as PrioritaConsegna,
-                      }))
-                    }
-                  >
-                    {PRIORITA_OPTIONS.map((p) => (
-                      <option key={p} value={p}>
-                        {p.charAt(0).toUpperCase() + p.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="form-field" style={{ marginTop: 4 }}>
-                <label className="form-label">Note *</label>
-                <textarea
-                  className="form-input"
-                  rows={2}
-                  value={modalConsegnaForm.note}
-                  onChange={(e) => setModalConsegnaForm((p) => ({ ...p, note: e.target.value }))}
-                />
-              </div>
-              <div className="ec-modal-add-form__actions">
-                <button
-                  className="btn-secondary btn-sm"
-                  onClick={() => {
-                    setModalConsegnaShow(false);
-                    setModalConsegnaForm({
-                      tipo: 'Monitoraggio',
-                      priorita: 'normale',
-                      note: '',
-                      oraScadenza: '',
-                    });
-                  }}
-                >
-                  Annulla
-                </button>
-                <button className="btn-success btn-sm" onClick={salvaConsegnaDaModal}>
-                  <IcoCheck /> Salva
-                </button>
-              </div>
-            </div>
+            <ConsegnaQuickAdd patient={paziente} operatori={operatori} onAdd={onAddConsegna} draftStore={consegnaDraftStore} onClose={() => setModalConsegnaShow(false)} />
           ) : (
             <button className="btn-secondary btn-sm" onClick={() => setModalConsegnaShow(true)}>
               <IcoPlus /> Aggiungi consegna
@@ -2439,63 +2323,7 @@ export function PatientDetail({
         >
           <div className="cts__body--padded">
             {showAddConsegna && (
-              <InlineForm onSave={salvaConsegna} onCancel={() => setShowAddConsegna(false)}>
-                <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Tipo</label>
-                    <select
-                      className="form-select"
-                      value={consegnaForm.tipo}
-                      onChange={(e) => setConsegnaForm((p) => ({ ...p, tipo: e.target.value }))}
-                    >
-                      {TIPO_CONSEGNA_OPTIONS.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Priorità</label>
-                    <select
-                      className="form-select"
-                      value={consegnaForm.priorita}
-                      onChange={(e) =>
-                        setConsegnaForm((p) => ({
-                          ...p,
-                          priorita: e.target.value as PrioritaConsegna,
-                        }))
-                      }
-                    >
-                      {PRIORITA_OPTIONS.map((p) => (
-                        <option key={p} value={p}>
-                          {p.charAt(0).toUpperCase() + p.slice(1)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Ora scadenza</label>
-                    <input
-                      className="form-input"
-                      type="time"
-                      value={consegnaForm.oraScadenza}
-                      onChange={(e) =>
-                        setConsegnaForm((p) => ({ ...p, oraScadenza: e.target.value }))
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="form-field" style={{ marginTop: 8 }}>
-                  <label className="form-label">Note *</label>
-                  <textarea
-                    className="form-input"
-                    rows={3}
-                    value={consegnaForm.note}
-                    onChange={(e) => setConsegnaForm((p) => ({ ...p, note: e.target.value }))}
-                  />
-                </div>
-              </InlineForm>
+              <ConsegnaQuickAdd patient={paziente} operatori={operatori} onAdd={onAddConsegna} draftStore={consegnaDraftStore} onClose={() => setShowAddConsegna(false)} />
             )}
             <div className="consegne-list">
               {consegneError && (

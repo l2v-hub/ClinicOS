@@ -1,0 +1,86 @@
+{
+  "task": "PO-08-backend",
+  "generatedAt": "2026-09-23T02:41:43.168Z",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/claims-release.json",
+      "bytes": 3061,
+      "sha256": "d2c05afd652b5ad89d4987d51e498ccebfb07d614bb1b31d322f1aa90a22d0b7"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/diff-check.log",
+      "bytes": 1399,
+      "sha256": "8a3a7ff2df193f8024c62989cca5040f856e82a1d6c63a05bd3038e8806ad141"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/finalize-evidence.mjs",
+      "bytes": 14358,
+      "sha256": "1554029919787e5dab827063e57c81ebd729158caf50d0378a20ca4462e0c0b5"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/focused-tests.json",
+      "bytes": 8188,
+      "sha256": "a4ab6506a639cf32a201edbc04bbe86e570a45fc33c5943a1384c80aa4d8b0a3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/focused-tests.log",
+      "bytes": 32535,
+      "sha256": "722319c7cd34de652e1276271be24c0144cd31320cfe48366b90034a503cd759"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/generate-private.mjs",
+      "bytes": 2292,
+      "sha256": "ae44a303e916b1dc06204cd2a1fb5f3aa0297d0f715952ff8d0433b1b4d80b3c"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/handoff.md",
+      "bytes": 1752,
+      "sha256": "8b9edf422f2b20f31943d30a1487de7071726107998c2351e10223b64a63fa5a"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/implementation-contract.snapshot.md",
+      "bytes": 5248,
+      "sha256": "21a9048dceee33bce47d1c7ba27200f37854ca99bff0dc918876f7109df1a5da"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/implementation-receipt.json",
+      "bytes": 11057,
+      "sha256": "b5de7bb34f57d156ffdf9c6a6b4c3510983fcbd1b6028979267d5e3a720d8a89"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/private-generation-receipt.json",
+      "bytes": 1226,
+      "sha256": "8242f690f206e4d983b764d0af4e08331060de2fb3900c6ac511f62627932ac0"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/private-generation.log",
+      "bytes": 1189,
+      "sha256": "69c0d595908f6a9d8b7af9d55737225c3284df96ccce74c5a7b7e9d30809b93f"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/run-focused-tests.mjs",
+      "bytes": 3713,
+      "sha256": "7dc76a69b80e06e394e7856db214d7e9374c319da58b38b7790e36cb81720d2c"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/schema-validation.log",
+      "bytes": 253,
+      "sha256": "1e2bc0fd4ab5255a6fda13b31f253151043832ce6f84c52e262bfad475f2d2a5"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/source-manifest.json",
+      "bytes": 4451,
+      "sha256": "32ee94cfac21a74c722cd5335a82ef2c57f4ede1c24b8cebc6dec4502378d3cf"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/test-source-manifest.json",
+      "bytes": 54508,
+      "sha256": "50c0a16befe2110dafea7c21c07b694e6b7a72c849c3d4c4d95136f46c8c4495"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/backend/validation-checks.json",
+      "bytes": 2864,
+      "sha256": "ce805377fe6f7defda46d3543678c8da9391f979ba1bfd55bb73e5e92ae70228"
+    }
+  ]
+}

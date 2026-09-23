@@ -1,0 +1,242 @@
+{
+  "database": "synthetic native PostgreSQL loopback",
+  "databaseClosed": true,
+  "sourceTreeSha256": "91faf30e87d7012eeccb286aa79e8817ee0f9c69e40b85511abeb7a16cb988bf",
+  "sourceUnchanged": true,
+  "migrations": [
+    {
+      "name": "20260430121929_init",
+      "sha256": "f47abca97641f8281c36b622e54f921755f027699594cf332087bbca9c8273b7"
+    },
+    {
+      "name": "20260508180649_add_cartella_json",
+      "sha256": "3837dd39a8d625672affff0f38070b88a5e501e707e4cd432a99849cd643acf9"
+    },
+    {
+      "name": "20260510120000_add_medication_administration",
+      "sha256": "fe988bbe13c94f2852634167e1f26bd4cdba2c1d4fbe2cc8831015b668649a2d"
+    },
+    {
+      "name": "20260510140000_add_patient_intake_document",
+      "sha256": "c0a1c2259a3641f908ad3e63f64e7458c9d112737cfba674a845f9d851f2bfeb"
+    },
+    {
+      "name": "20260510160000_add_patient_therapy",
+      "sha256": "7859048e0bd3ea122fea7c49eff148250fd3b51ec47af8cadd6ac4ad4ce535d8"
+    },
+    {
+      "name": "20260510160953_add_rooms_beds_assignments",
+      "sha256": "44ea1516caff3bcfab779b57df50696c544852549c44b76db0a8979732e097e3"
+    },
+    {
+      "name": "20260612090000_add_consegna",
+      "sha256": "34480ed064bbd1170ccd93c86d09621ff173917fbfa2d4e1279711e3b416ae4e"
+    },
+    {
+      "name": "20260612091500_add_nota",
+      "sha256": "20fbda5265f2ff0c035b386f8ce0dbf1a7d742bbaa4228b69cc0e40323eb937b"
+    },
+    {
+      "name": "20260613103741_add_import_jobs",
+      "sha256": "52b8e904008d01a03a7d002d3ddf02e485cc368269db5e27be675ad0b6bef1df"
+    },
+    {
+      "name": "20260613130207_add_import_confirm_audit",
+      "sha256": "af7cf22199427ccf36c41f74d5c5259193825e39dfe3c634836bd3ce0bc40e61"
+    },
+    {
+      "name": "20260614091124_add_async_job_fields",
+      "sha256": "7c0782cf396eefda1192cafd5b069fa615531c21d99ff8fe933058f27dcad3ef"
+    },
+    {
+      "name": "20260616080000_add_patient_narrative_sections",
+      "sha256": "2398f3ea8a74af34f68e3e371a006fc655cc1302b33d8d867b8a1b58ce3ece6b"
+    },
+    {
+      "name": "20260616220000_add_patient_documents",
+      "sha256": "3361f5566152debc0a336877c12338caacad5868e6133d4ae41445afab29fa3a"
+    },
+    {
+      "name": "20260621130000_add_importdocument_databytes",
+      "sha256": "0c59143bdeac0d879eea4f5b37b062c014dba1b879a90ec68e8e695b35bd5243"
+    },
+    {
+      "name": "20260624090000_req093_therapy_schedules",
+      "sha256": "00431c4db8fcaecf875770d3c38bc38d76246995aff98b00426a367ee952d72a"
+    },
+    {
+      "name": "20260628162637_add_patient_intake_draft",
+      "sha256": "5a1ff3db4d46707eb98008f4a197c143a9f863c6cf124e80c4b11d2e27549385"
+    },
+    {
+      "name": "20260629040947_unique_intake_draft_import_job",
+      "sha256": "025b96958c2a2e6bd140c4068be1663b331c4ef1814072053a57b7a8ce93a467"
+    },
+    {
+      "name": "20260703225843_ai_audit_event",
+      "sha256": "924ab7dfc2d4c5c4f45e5c1e3a7ca6b6f1aed17e4bccda035e6db397abf9673e"
+    },
+    {
+      "name": "20260708120000_therapy_giorni_settimana",
+      "sha256": "e5ad425351ff953eb58309eee90c45f7a0b4ef4ae9f5b64d5e258d5173332f38"
+    },
+    {
+      "name": "20260719120000_operator_ruolo_qualifica",
+      "sha256": "1af18e9a8478bd2286874a4c78bdaac3cf537d8586c22c20588a715fa1535431"
+    },
+    {
+      "name": "20260720100000_operator_schedule",
+      "sha256": "336ec86e151e35c0884d265d1d093e93892160915a65ca5c131ffd29fa64ba54"
+    },
+    {
+      "name": "20260720160000_patient_codice_fiscale",
+      "sha256": "f737652d22427a1a6e732b06b0e85f1115a624c2d2f219f941c9a7b577eceefc"
+    },
+    {
+      "name": "20260721090000_user_entra_object_id",
+      "sha256": "41720b67308f4df8165241eeda7243b0db6b31d1dd058899a291f435b6b9229e"
+    },
+    {
+      "name": "20260725140000_anagrafica_farmaci_aifa",
+      "sha256": "fcbc3407aaeacc1a1cc7443d7f48de7191dc48ddc372cf2edfb9aac35c4d6938"
+    },
+    {
+      "name": "20260731160000_clinical_lists_indexes",
+      "sha256": "2eeded4189408c7701f35c35ed00f4268534681b8e0d2c408224016ea877c23e"
+    },
+    {
+      "name": "20260731170000_therapy_appointment_indexes",
+      "sha256": "014d3a7f486063abf5b711d0f9d2e16f7a7e2d87fc348262fde1e711fe8c138d"
+    },
+    {
+      "name": "20260829130000_therapy_slot_query_indexes",
+      "sha256": "20140dd0a5a27e708c781e888cf4a925cb044b3b0a7cdb9f4209494a45ea04af"
+    },
+    {
+      "name": "20260829140000_bind_administration_to_therapy",
+      "sha256": "08c4619819b4925210dd6a98d2b847b82d27f60caeb8c00e5c46688255df6be9"
+    },
+    {
+      "name": "20260829193000_bound_notes_mailbox",
+      "sha256": "6943062a563ea83af03099398127b6aa6d03a5c0386b7b38ee22a9877aaf92ce"
+    },
+    {
+      "name": "20260829210000_bound_consegne_feed",
+      "sha256": "a4e94b492dff58ea98d4e6dcf5a5aa8753a9a7bf4888f36bc4f8ed188a9ee12f"
+    },
+    {
+      "name": "20260829223000_bound_diary_feed",
+      "sha256": "16ddc0ce17c53f0069476ceaf8a1694d60514610cba90e89c6df3929f4c2eebc"
+    },
+    {
+      "name": "20260829233000_bound_therapy_feed",
+      "sha256": "7fc97b0df2a40956165a516d141c74bf02aef15e2f46fbe7b6bf0a4a91033765"
+    },
+    {
+      "name": "20260829234500_therapy_name_trgm",
+      "sha256": "a2f36b48c523797490b9247df2461a91459accbb114497e73ed089c0024b4149"
+    },
+    {
+      "name": "20260830000500_medication_administration_feed",
+      "sha256": "6495f8163d18e81cd04c99fc96e7aa3ebb0e07341539743a96ff5b84a6d3a43a"
+    },
+    {
+      "name": "20260830002500_therapy_slot_scope",
+      "sha256": "4f2a83a2414b42857e71773caa80a2d3bbe7e3f3191470cc9d343abd3ce9252f"
+    },
+    {
+      "name": "20260830010000_normalize_therapy_weekdays",
+      "sha256": "e5d0bfd399f12958f28be4304f57150c179d28ddd38f33adc097b2cc3089b38d"
+    },
+    {
+      "name": "20260902133000_backfill_demo_fiscal_codes",
+      "sha256": "b89316e9ad4e14300d5cab170475274c8f2768cc1af85cc4ca300660b357b6b5"
+    },
+    {
+      "name": "20260902193000_seed_demo_room_occupancy",
+      "sha256": "b2f202f4f63058d7f84dc1b46a72774280b1ede6eacbe48017253bb684663230"
+    },
+    {
+      "name": "20260919110000_patient_parameter_readings",
+      "sha256": "eebfddc50b7fdb67d16ead7847d9cca9514be48c83946aa702038d62e90e23cb"
+    },
+    {
+      "name": "20260923002000_progressive_patient_identity",
+      "sha256": "676cacc6d3bb009bbfe90197f44c943821bfe9b734dcc2ff96cda5ad450af537"
+    },
+    {
+      "name": "20260923010000_import_page_sessions",
+      "sha256": "e7d919db86789c45cdd507a1907f913c7a6f1ba154200e97bc8ef519f2e4a393"
+    },
+    {
+      "name": "20260923020000_roster_order_contexts",
+      "sha256": "0300fd42dee508d920387f9f511238cd99ddb1bed284b2308509d601b50321c8"
+    },
+    {
+      "name": "20260923030000_consegna_creation_receipts",
+      "sha256": "f1181b75b1b95e14ae3a7662f687d2e383574ae1805bdf796ce7cacbbbe18ef1"
+    }
+  ],
+  "results": [
+    {
+      "file": "backend/src/consegne/__tests__/creation-db.test.ts",
+      "exitCode": 0,
+      "tests": 7
+    },
+    {
+      "file": "backend/src/consegne/__tests__/patient-summary-db.test.ts",
+      "exitCode": 0,
+      "tests": 4
+    },
+    {
+      "file": "backend/src/consegne/__tests__/voice-creation-db.test.ts",
+      "exitCode": 0,
+      "tests": 4
+    },
+    {
+      "file": "backend/src/patients/__tests__/room-filter-db.test.ts",
+      "exitCode": 0,
+      "tests": 7
+    },
+    {
+      "file": "backend/src/consegne/__tests__/query.test.ts",
+      "exitCode": 0,
+      "tests": 3
+    },
+    {
+      "file": "backend/src/routes/__tests__/consegne-bounded-auth.test.ts",
+      "exitCode": 0,
+      "tests": 3
+    },
+    {
+      "file": "backend/src/patients/__tests__/alphabetical-pages-db.test.ts",
+      "exitCode": 0,
+      "tests": 5
+    },
+    {
+      "file": "backend/src/roster/__tests__/roster-pagination-db.test.ts",
+      "exitCode": 0,
+      "tests": 12
+    },
+    {
+      "file": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+      "exitCode": 0,
+      "tests": 8
+    },
+    {
+      "file": "backend/src/ai/__tests__/actions.test.ts",
+      "exitCode": 0,
+      "tests": 49
+    },
+    {
+      "file": "backend/src/ai/__tests__/voice.test.ts",
+      "exitCode": 0,
+      "tests": 20
+    },
+    {
+      "file": "backend/src/ai/__tests__/voice-privacy-logging.test.ts",
+      "exitCode": 0,
+      "tests": 4
+    }
+  ]
+}

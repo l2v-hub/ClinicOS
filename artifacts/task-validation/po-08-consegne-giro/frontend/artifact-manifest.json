@@ -1,0 +1,192 @@
+{
+  "task": "PO-08-frontend",
+  "generatedAt": "2026-09-23T02:57:00.975Z",
+  "sourceStateId": "3796c4fe2f6772ff32db0c33e321e25c1a7fc3e4b2c3bcf1d0c8c393ab45c24c",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/baseline-roster-guard.mjs",
+      "bytes": 1203,
+      "sha256": "c968fbeddb8172f1f1a45d6b660f43849f5ff607d4d0f948ab4cf953916b0082"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/build-final.log",
+      "bytes": 9911,
+      "sha256": "fed2d049a009556cc874f4cbd42029f3037f7d06f0de0b54a51e5f1f6d16000d"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/build-manifest.json",
+      "bytes": 17922,
+      "sha256": "4c8d07aae76ff519decd3863a1468462a73722e1da041bbea9c6656364cdb5e3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/claims.json",
+      "bytes": 3288,
+      "sha256": "f5da7fe148c3a993d846561daad4c9f391800cb96aac98e75ac57cc873d19fce"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/embedded-header-check.log",
+      "bytes": 512,
+      "sha256": "691639e7449082048528ab7df13272696206f97f34d7a2a52ef5931be2080352"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/embedded-header-check.ts",
+      "bytes": 1552,
+      "sha256": "b7cb788747cf9ad04d6a881524d4efe9a12fa6841550b2c5ef868f5b1653901b"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/embedded-header-receipt.json",
+      "bytes": 1456,
+      "sha256": "1d739172295f0c87802b065c90bf35f4ea6340fc3f9a3e66b33b8c34d1df1f6b"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/final-receipt.json",
+      "bytes": 12109,
+      "sha256": "57adb23cdab51e1aeeee57e8501daffd73afc7d88d388946e5d252fe1d6a2154"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/final-receipt.pre-embedded-header.json",
+      "bytes": 5550,
+      "sha256": "22e89e7271aa51ad256fc5c5073002b9344a63fcb4e96b98e0aac2a7ae93348b"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/final-receipt.pre-mobile-identity.json",
+      "bytes": 9061,
+      "sha256": "6b97da64c205a1b5949ef246b1fd45a384e87f7c0dd7127d69a4f3a2dd3bf759"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/finalize-embedded-header.mjs",
+      "bytes": 4738,
+      "sha256": "904e8140f9bc8d4e9bade940d8ae83fbe19c4cb46ae3e34d17f99111aebc2969"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/finalize-handoff.mjs",
+      "bytes": 6741,
+      "sha256": "74d959e40d45af5093986919dc3a9e907f173af4d76eadc1dc7af7366e038edc"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/finalize-mobile-identity.mjs",
+      "bytes": 5155,
+      "sha256": "fcfeecb9e09b5f789c9637c0aa43fa8386c9988e6629e073a8a54a591fb51b21"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/format-source.mjs",
+      "bytes": 745,
+      "sha256": "e0dd10ad07b45f685ee481f624d2f1e002b9e93d88d1bba866b6fbd58cdd4588"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/implementation-plan.md",
+      "bytes": 7135,
+      "sha256": "2ed2a2fe7a23382e9f62d848a7d05733131f6b783bc1ec52243c9accb24ecc58"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-compare.mjs",
+      "bytes": 2524,
+      "sha256": "32887eacd726087e08bec87009ae1c24cff1d908fd45ed10a3bb2303cd4189b2"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-comparison.json",
+      "bytes": 15476,
+      "sha256": "c55121f76b9b7e5d087f9e89d788400c209d7441da71a7244ca4c0876af9a9d6"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-embedded-header.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-final.log",
+      "bytes": 1517,
+      "sha256": "5d6addb55740bf7638f7853bff516bcc4ae1ce16bb5bdaeed5564029ffd16637"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-initial.json",
+      "bytes": 299176,
+      "sha256": "e35ac82d5f87cdfa13e7f07816c62633e58b73995d7d5473436b4dbe895d23e5"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-mobile-identity.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/mobile-identity-receipt.json",
+      "bytes": 1617,
+      "sha256": "5f8d44df10437f3824b5811aaf7fc16791385a547d2d7ab0f96f7514c48a0a1f"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/preparation-receipt.json",
+      "bytes": 4346,
+      "sha256": "83122f1053bc7ecde2630aeef104a5a9dfd08eeaa6c5b152320ac9b8125faaf9"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/source-manifest.json",
+      "bytes": 8876,
+      "sha256": "18443fd2355889e9ed8213cff5fc978ceba75b4ac0b69e9be6d1f83842106466"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/source-manifest.pre-embedded-header.json",
+      "bytes": 8876,
+      "sha256": "c6b35c1228aa8248178cd7679b358084a6c91cf3d037deb80b48be9539c13148"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/source-manifest.pre-mobile-identity.json",
+      "bytes": 8876,
+      "sha256": "99e38763a409728d6dc3e6273a145ddeb83041fff28909b9b7fdb11d5921164a"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/task-contract.md",
+      "bytes": 7551,
+      "sha256": "f16eb94e2b08d39f6eff77d3f23b21f96116ca0d8f9a36f019815acbfe80a4c3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-baseline-roster-guard.log",
+      "bytes": 146965,
+      "sha256": "c109355be4e99a8c40a837b98d49e23a89d91bcce0bdce74545ead4149f82d1a"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-core.log",
+      "bytes": 4452,
+      "sha256": "04b2e7a1f113df80c18fc8f68ad82ae44581b542607dea06fe843e09ca7cbe4b"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-final.log",
+      "bytes": 167862,
+      "sha256": "5e3e98f56b87ebf5f24d345ba3a06ae8fbce6ff0a6bdc7887e27fd9c712ded28"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-identity.log",
+      "bytes": 1286,
+      "sha256": "5635da1546f8cb06dcca0b63be824c4f0aa788daff70934318912bd381203b64"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-initial.log",
+      "bytes": 6341,
+      "sha256": "be20adab17d7203d7dcf0fe78695bfc197b1397c6bf60c66d92cf4915f4a42fa"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-mobile-identity.log",
+      "bytes": 1067,
+      "sha256": "844b510d1bb7384b596dd747320ce528760a31bc5b943dfe43da1ac8a071b75e"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/types-current.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/types-embedded-header.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/types-initial.log",
+      "bytes": 2592,
+      "sha256": "f183f690d564d33d1a0f6e022f4eab3ce6154f00c39c0d66ff67ce791ba913c1"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/types-mobile-identity.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

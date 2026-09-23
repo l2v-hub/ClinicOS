@@ -10,9 +10,10 @@ export interface ConsegnaCreateInput {
   priorita: ConsegnaPriority;
   tipo: string;
   note: string;
-  scadenza: string;
+  scadenza?: string;
   oraScadenza: string | null;
   operatoreAssegnatoId: string | null;
+  requestId?: string;
 }
 export interface ConsegnaPatchInput {
   priorita?: ConsegnaPriority;
@@ -32,6 +33,7 @@ const CREATE_KEYS = new Set([
   'scadenza',
   'oraScadenza',
   'operatoreAssegnatoId',
+  'requestId',
 ]);
 const PATCH_KEYS = new Set([
   'priorita',
@@ -69,6 +71,12 @@ function requiredId(value: unknown, field: string): string {
 function optionalId(value: unknown, field: string): string | null {
   if (value === undefined || value === null || value === '') return null;
   return requiredId(value, field);
+}
+
+export function parseConsegnaRequestId(value: unknown): string {
+  if (typeof value !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(value))
+    throw new ConsegnaInputError('requestId non valido');
+  return value;
 }
 
 function text(value: unknown, field: string, max: number): string {
@@ -122,9 +130,11 @@ export function parseConsegnaCreateBody(value: unknown): ConsegnaCreateInput {
     priorita: priority(body.priorita),
     tipo: text(body.tipo ?? 'Monitoraggio', 'tipo', 100),
     note: text(body.note, 'note', 4_000),
-    scadenza: date(body.scadenza ?? new Date().toISOString().slice(0, 10)),
+    // Preserve omission in the immutable intent; resolve the default only on first create.
+    scadenza: body.scadenza == null ? undefined : date(body.scadenza),
     oraScadenza: time(body.oraScadenza),
     operatoreAssegnatoId: optionalId(body.operatoreAssegnatoId, 'operatoreAssegnatoId'),
+    ...(body.requestId !== undefined ? { requestId: parseConsegnaRequestId(body.requestId) } : {}),
   };
 }
 

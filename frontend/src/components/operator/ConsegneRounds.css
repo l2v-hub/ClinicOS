@@ -1,0 +1,162 @@
+.handover-workspace__tabs,
+.handover-rounds__filters,
+.handover-rounds__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+}
+.handover-workspace__tabs {
+  margin-block: 12px;
+}
+.handover-workspace button,
+.handover-workspace input,
+.handover-workspace select {
+  min-height: 44px;
+}
+.handover-workspace button:focus-visible,
+.handover-workspace input:focus-visible,
+.handover-workspace select:focus-visible,
+.handover-workspace textarea:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+.handover-rounds__filters > label {
+  flex: 1 1 220px;
+  display: grid;
+  gap: 5px;
+}
+.handover-rounds__layout {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.85fr) minmax(0, 1.5fr);
+  gap: 20px;
+  margin-top: 16px;
+  align-items: start;
+}
+.handover-rounds__list {
+  max-height: max(300px, calc(100dvh - 340px));
+  overflow-y: auto;
+  padding: 3px;
+}
+.handover-rounds__roster {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: grid;
+  gap: 8px;
+}
+.handover-rounds__patient {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+.handover-rounds__patient.is-selected {
+  border-color: var(--blue);
+  box-shadow: inset 3px 0 var(--blue);
+}
+.handover-rounds__select {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 12px;
+  cursor: pointer;
+  color: inherit;
+}
+.handover-rounds__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.handover-rounds__badges > span {
+  background: var(--bg);
+  border-radius: 4px;
+  padding: 3px 6px;
+}
+.handover-rounds__composer {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 16px;
+  position: sticky;
+  top: 12px;
+}
+.handover-rounds__composer-identity {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+.handover-rounds__composer h3 {
+  margin: 0 0 8px;
+}
+.handover-rounds__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.handover-rounds__fields label,
+.handover-rounds__note {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+}
+.handover-rounds__note {
+  margin-top: 14px;
+}
+.handover-rounds__note textarea {
+  width: 100%;
+  resize: vertical;
+}
+.handover-rounds__hint {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin: 6px 0 14px;
+}
+.handover-workspace__memory {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+@media (max-width: 800px) {
+  .handover-rounds__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .handover-rounds__list {
+    max-height: 40vh;
+    overflow-y: auto;
+    padding: 3px;
+  }
+  .handover-rounds__composer {
+    position: static;
+  }
+  .main-area-clean .handover-rounds__layout {
+    --handover-sticky-top: var(--topbar-h, 64px);
+  }
+  .handover-rounds__layout .handover-rounds__composer-identity {
+    position: sticky;
+    top: var(--handover-sticky-top, 0px);
+    z-index: 10;
+    padding-block: 10px;
+    background: var(--surface, #fff);
+    box-shadow: 0 4px 6px -5px var(--text-muted);
+  }
+  .handover-rounds__layout .handover-rounds__composer :is(input, select, textarea, button) {
+    scroll-margin-block-start: calc(
+      var(--handover-sticky-top, 0px) + var(--handover-identity-height, 130px) + 16px
+    );
+    scroll-margin-block-end: 16px;
+  }
+}
+@media (max-width: 440px) {
+  .handover-rounds__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .handover-rounds__composer {
+    padding: 12px;
+  }
+}

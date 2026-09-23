@@ -7,6 +7,8 @@ import { loadConsegnaFeed, loadConsegnaOverview } from '../consegne/read-service
 import { parseConsegnaCreateBody, parseConsegnaPatchBody } from '../consegne/write-validation.js';
 import { prisma } from '../lib/prisma.js';
 import { ConsegnaPatientNotFoundError, createConsegna } from '../services/consegna-service.js';
+import { ConsegnaCreationError } from '../consegne/create-receipt.js';
+import { loadConsegnaPatientSummary } from '../consegne/patient-summary.js';
 
 const consegneRouter = Router();
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -74,11 +76,25 @@ consegneRouter.get('/overview', async (req: AuthedRequest, res) => {
   }
 });
 
+consegneRouter.post('/patient-summary', async (req: AuthedRequest, res) => {
+  try {
+    res.status(200).json(await loadConsegnaPatientSummary(req.body, req.operator!));
+  } catch (error) {
+    if (badRequest(res, error)) return;
+    console.error('POST /consegne/patient-summary error:', error);
+    res.status(500).json({ error: 'Riepilogo consegne non disponibile' });
+  }
+});
+
 consegneRouter.post('/', async (req: AuthedRequest, res) => {
   try {
     const input = parseConsegnaCreateBody(req.body);
     res.status(201).json(await createConsegna(input, req.operator!));
   } catch (error) {
+    if (error instanceof ConsegnaCreationError) {
+      res.status(error.status).json({ error: error.message, code: error.code, ...error.ids });
+      return;
+    }
     if (error instanceof ConsegnaPatientNotFoundError) {
       patientNotFound(res);
       return;

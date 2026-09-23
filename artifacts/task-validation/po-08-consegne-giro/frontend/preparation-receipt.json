@@ -1,0 +1,123 @@
+{
+  "owner": "/root/po01_frontend_audit",
+  "integrationOwner": "/root",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-ui",
+  "branch": "codex/po08-handover-ui",
+  "baseline": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "createdAtUtc": "2026-09-23T02:22:40.1909625Z",
+  "policyDecision": "ALLOW_PREPARATION_ONLY",
+  "authority": "Root assigned isolated worktree and authorized dependency reuse plus frontend preparation artifacts; no application GO yet",
+  "applicationClaimActive": false,
+  "sourceWrites": 0,
+  "testsRun": false,
+  "buildRun": false,
+  "sourceDiff": [],
+  "inheritedDirtyFiles": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ],
+  "protectedHashes": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+  },
+  "dependencyReuse": {
+    "kind": "junction",
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\po08-handover-ui\\node_modules",
+    "target": "C:/Workspace/ClinicOSHouse-worktrees/quality-loop-20260829/node_modules",
+    "sharedWrites": false,
+    "installed": false,
+    "versions": {
+      "typescript": "6.0.3",
+      "vite": "8.2.2",
+      "react-dom": "19.2.5",
+      "react": "19.2.5",
+      "eslint": "10.7.0",
+      "tsx": "4.23.1"
+    }
+  },
+  "manifests": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0d8cd33d7e092b0d81329a2c83436c4d4f5636fa4f27f22c7e74a3838b86d01c"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "319c3acade0ca06ff325e4749a65ab331bdd8c106086ccffd1d8be8f48468ac3"
+    }
+  ],
+  "inspectedSources": [
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "bdf4fd6827c7ab0cbb96d5af0660fffa02e43feade87596e68e2659cdcc2b1b3",
+      "bytes": 127290
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "15b3d70d9990f6ca23228f4de72c09206725ab34118b652b362f34de13283010",
+      "bytes": 32959
+    },
+    {
+      "path": "frontend/src/lib/patientPage.ts",
+      "sha256": "8164b982b18c9d5181c3f6657710cd846fcad3a1cdaf189994fb24a55d414ef3",
+      "bytes": 6231
+    },
+    {
+      "path": "frontend/src/lib/useRosterOrder.ts",
+      "sha256": "cd2698e1a4aac3d4cba72706dcc49d6f8102192ca5352f696a9b3c6e6169e4e9",
+      "bytes": 1844
+    },
+    {
+      "path": "frontend/src/lib/rosterOrderController.ts",
+      "sha256": "c960c7e6c9ec84d4e6d0dc496d73c9620e8af710e2349cc01fb0daf6e47ba92b",
+      "bytes": 6430
+    },
+    {
+      "path": "frontend/src/lib/parameterEntryDrafts.ts",
+      "sha256": "e0f65b7812b6ef96329ccd51a7c9bc165c8ba7df87d8f54d4787b3625a9a7ff8",
+      "bytes": 3219
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "sha256": "2fc8583922cf9ec8b9d30ff0f4eb8339e56f9d3f56073fcc9f634a5d8dee4003",
+      "bytes": 20317
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "sha256": "46927c231f54e9d23c1043ac178496227e003601a1f9ffed1c1afcda262918b9",
+      "bytes": 10050
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "fca1aa5b2afed60188f7bd178e8d362de73fe4fb832c4419bf61326491c107c1",
+      "bytes": 117786
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorDashboard.tsx",
+      "sha256": "46434df4d1721ccb3cff5685bc249db0ddeb7c610a49f1473d4310884c783240",
+      "bytes": 10012
+    },
+    {
+      "path": "frontend/src/components/admin/AdminDashboard.tsx",
+      "sha256": "838bdaea2eec2c30bbfd100ceec4dd3314d356f418215ab477c58095619d1411",
+      "bytes": 18506
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosActionNavigation.ts",
+      "sha256": "bb7da4ab6a3efcf402557646cb4c3d8f3ba4cbda4ee41e34335c5ece62cb946f",
+      "bytes": 4698
+    }
+  ],
+  "wireConfirmedBy": [
+    "/root",
+    "/root/po01_backend_audit"
+  ],
+  "limitations": [
+    "Implementation requires root GO after verified PO07 deployment",
+    "Proposed source paths remain inactive",
+    "No application tests/build/browser work performed during preparation"
+  ]
+}

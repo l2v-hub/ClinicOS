@@ -8,6 +8,7 @@ import {
   type PatientLocationDto,
 } from './operational-identity.js';
 import { parsePatientPageQuery } from './pagination.js';
+import { parsePatientRoomFilter, patientRoomFilterSql } from './room-filter.js';
 import { facilityToday } from './parameter-reading-input.js';
 import { changed, rosterDate, type AppliedRosterOrder } from '../roster/order-contract.js';
 import { withRosterSnapshot } from '../roster/snapshot.js';
@@ -37,7 +38,8 @@ export async function loadPatientIdentityPage(
   roster: AppliedRosterOrder;
 }> {
   const input = parsePatientPageQuery(query);
-  const filters = { q: input.q, sex: input.sex };
+  const room = parsePatientRoomFilter(query.room);
+  const filters = { q: input.q, sex: input.sex, room };
   const scope = patientScopeWhere(actor);
   const asOf = query.asOf === undefined ? facilityToday() : rosterDate(query.asOf);
   return withRosterSnapshot(
@@ -53,6 +55,7 @@ export async function loadPatientIdentityPage(
         predicates.push(Prisma.sql`p."registeredById" = ${scope.registeredById}`);
       }
       if (input.sex) predicates.push(Prisma.sql`p."sex" = ${input.sex}`);
+      if (room) predicates.push(patientRoomFilterSql(room));
 
       const normalizedFiscalQuery = input.q?.replace(/\s+/g, '').toUpperCase() ?? '';
       if (/^[A-Z0-9]{16}$/.test(normalizedFiscalQuery)) {
@@ -78,7 +81,9 @@ export async function loadPatientIdentityPage(
       }
       const { order } = snapshot.roster;
       const locationJoin =
-        order.criterion === 'location' ? patientLocationJoin(asOf, snapshot.today) : Prisma.empty;
+        order.criterion === 'location' || room
+          ? patientLocationJoin(asOf, snapshot.today)
+          : Prisma.empty;
       if (snapshot.anchor) {
         const [position] = await tx.$queryRaw<RosterPosition[]>(Prisma.sql`
       SELECT p.id AS "patientId", p."firstName", p."lastName",

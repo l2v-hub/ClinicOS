@@ -1,0 +1,50 @@
+(node:40692) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ general handover workspace opens the patient round, explicit feed entry retains existing handovers (14.9653ms)
+✔ composer retains patient-specific draft and identity after remount; permitted assignment is visible (5.4805ms)
+✔ roster distinguishes zero, history, missing scope and failed summaries without inventing counts (3.8226ms)
+✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (4.0372ms)
+✔ both PatientDetail entry points share receipt-backed quick-add and keep the same draft (3.7342ms)
+(node:40692) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39224) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all seven writes map to exact patient page or agenda, unknown/deletes/missing IDs fail closed (2.3903ms)
+✔ routing preserves failure and cancellation instead of claiming a page opened (0.3552ms)
+✔ read navigation only follows explicit single-page intent and structured authorized destinations (0.6088ms)
+✔ request gate synchronously rejects double starts and fences late work after cancellation (0.4198ms)
+✔ preview retains full narrative diff and refuses ambiguities; hostile content stays escaped (9.8393ms)
+✔ microphone errors tell the operator how to recover (0.2198ms)
+✔ only recognized pre-write denials prove a failed save; server and malformed responses remain uncertain (0.2111ms)
+(node:39224) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:11356) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new request freezes normalized clinical body and contains no supplied authority or status fields (3.7668ms)
+✔ validated creation/replay preserves current edited record and never restores original payload (28.6009ms)
+✔ wrong patient/request, malformed success and a new completed record remain uncertain (1.6235ms)
+✔ response loss retries exactly the same body/key and HTTP transport does not cache creation (1.0102ms)
+✔ conflict, unavailable patient and valid deleted receipt are explicit non-advance outcomes (1.0844ms)
+✔ bounded summaries preserve omitted IDs as unavailable and distinguish zero from historical-only (1.6704ms)
+✔ room filter travels in both bounded identity routes and name search stays POST (0.5146ms)
+(node:11356) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:21388) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ workspace fields and local revisions remain patient-specific across unsubscribe/remount (2.2023ms)
+✔ synchronous lock prevents a second save and exact pending request survives uncertain outcome (1.4692ms)
+✔ concurrent patients cannot clear one another and a refreshed receipt is independent of summary failures (0.364ms)
+✔ 410, conflict and denied outcomes keep their draft/request and never start a silent replacement (0.3968ms)
+✔ a definitive validation failure allows correction and creates a new immutable request (0.2596ms)
+✔ logout generation rejects a late receipt, and wrong patient receipt cannot clear a draft (0.4377ms)
+✔ advance is fenced by successful receipt, selection including away/back, roster and request identity (0.2276ms)
+(node:21388) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 764.0963

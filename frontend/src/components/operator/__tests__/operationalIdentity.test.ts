@@ -104,7 +104,7 @@ function handover(identity: Consegna['identity']) {
       operatori: [],
       operatoreId: 'unrelated',
       isAdmin: false,
-      onAdd: async () => false,
+      onAdd: async () => ({ kind: 'failed', code: 'synthetic', uncertain: false, message: 'Non salvata' }),
       onUpdate() {},
       onUpdateStato() {},
       onDelete() {},

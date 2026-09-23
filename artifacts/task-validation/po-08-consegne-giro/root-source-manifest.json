@@ -1,0 +1,263 @@
+{
+  "baseline": "370a3071",
+  "applicationBaseline": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "at": "2026-09-23T02:59:12.239Z",
+  "sourceTreeSha256": "cfcb77ebc7a367add8592cf7555984165894e8809a87c50a8754a792ffacff98",
+  "files": [
+    {
+      "path": "backend/src/ai/__tests__/actions.test.ts",
+      "sha256": "c23e7ab8b7a1b9de0cad9f295735b52c64112857eb387f6a397e28cc968ca9b6",
+      "bytes": 40764
+    },
+    {
+      "path": "backend/src/ai/actions/orchestrate.ts",
+      "sha256": "aede38a235e7dca73b08b16eb263fe8fcc162bc0a9d48b659c83d195dd4a1027",
+      "bytes": 15118
+    },
+    {
+      "path": "backend/src/ai/voice/execute.ts",
+      "sha256": "1e9082b8285f6fb2aa562f7205929769d763ab299107bf9b2c8a79671b9219c6",
+      "bytes": 7548
+    },
+    {
+      "path": "backend/src/ai/voice/write-services.ts",
+      "sha256": "43a87574a46165ab61c684481492738fbc6b4cd92743bd2c04db3ebc8aba43ad",
+      "bytes": 5960
+    },
+    {
+      "path": "backend/src/consegne/__tests__/creation-db.test.ts",
+      "sha256": "ed31df5920e12e8fd74ac83c2602a40b40dfd0529b1647b6d089527c60253382",
+      "bytes": 8803
+    },
+    {
+      "path": "backend/src/consegne/__tests__/patient-summary-db.test.ts",
+      "sha256": "1d324e8e45030e1a691f3c40b8c7ff1c6bdaa0d4b12cde25626dbedc500a2834",
+      "bytes": 5540
+    },
+    {
+      "path": "backend/src/consegne/__tests__/po08-fixture.ts",
+      "sha256": "3124c401f2770ccbcdb82ed291f432c29a007ee5e11779075d4dcf4a806454d8",
+      "bytes": 3101
+    },
+    {
+      "path": "backend/src/consegne/__tests__/voice-creation-db.test.ts",
+      "sha256": "2a902c8719917f17feeb90910741b4c16fa63df5218c4ac1911a6b10f1f30b54",
+      "bytes": 6129
+    },
+    {
+      "path": "backend/src/consegne/create-receipt.ts",
+      "sha256": "323db5e282297b0ea8ddaba790fe05c91180c303ddf1a8675faf9ed07f00b012",
+      "bytes": 2403
+    },
+    {
+      "path": "backend/src/consegne/patient-summary.ts",
+      "sha256": "23f0f7cc732372df34a9ebf1c27b94e2f9f6ce24b658de43994603b06544f61d",
+      "bytes": 2419
+    },
+    {
+      "path": "backend/src/consegne/write-validation.ts",
+      "sha256": "22e023a9e2a29715858b97d014037bfab428c05d1d34413af88218f703631d45",
+      "bytes": 5330
+    },
+    {
+      "path": "backend/src/patients/__tests__/room-filter-db.test.ts",
+      "sha256": "eacfade0a30dbd0041fe236d4955802ee7d953895362a28b188929124c2373b1",
+      "bytes": 5881
+    },
+    {
+      "path": "backend/src/patients/identity-page.ts",
+      "sha256": "8f4a1bfde520f41ba878c2e116eb160476c7997f68480c69e428835c6c72e726",
+      "bytes": 5275
+    },
+    {
+      "path": "backend/src/patients/room-filter.ts",
+      "sha256": "2e63c11f9f9240aba345a528f3dd1ff78af27fc2b2b14fee83c73f9c0d2683bc",
+      "bytes": 754
+    },
+    {
+      "path": "backend/src/routes/ai-actions.ts",
+      "sha256": "130806e2f19a3f299c05c892a64e7462c6d5390b929714aac3470f90b76fbf8b",
+      "bytes": 5778
+    },
+    {
+      "path": "backend/src/routes/ai-voice.ts",
+      "sha256": "2bb8ef302fdf33e9a001715c2fd547841704013c923e18c4512d3c1f8fea3539",
+      "bytes": 5018
+    },
+    {
+      "path": "backend/src/routes/consegne.ts",
+      "sha256": "014890b640e512540e2f3b21dd42bdd1ad071e96b63f4d5e7aead5541c2335f0",
+      "bytes": 8033
+    },
+    {
+      "path": "backend/src/services/consegna-service.ts",
+      "sha256": "c73731adcbb55b21d1e3cb1794cf5b8e8027b2c2e894bf82f6b71ebc87715a79",
+      "bytes": 3780
+    },
+    {
+      "path": "prisma/migrations/20260923030000_consegna_creation_receipts/migration.sql",
+      "sha256": "f1181b75b1b95e14ae3a7662f687d2e383574ae1805bdf796ce7cacbbbe18ef1",
+      "bytes": 1082
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "sha256": "0843de9ca0b56749be53500be2d77c8486b3dc95e1b7b4110af1a966d515a54f",
+      "bytes": 31336
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "68693b9ba3cd6b8e489d26b79b6a4cfb33018a22cd56050473e0a1052effffb3",
+      "bytes": 129139
+    },
+    {
+      "path": "frontend/src/components/admin/AdminDashboard.tsx",
+      "sha256": "196f63cb9fcfd2514bc547f37cd4c1aea430143d476ef908b3cd823ce154d7e5",
+      "bytes": 18604
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaComposer.tsx",
+      "sha256": "003cab49389ca7ea7e7df18ff0eca00118b44f69464d30c3aad05e7a5e4db2d0",
+      "bytes": 7540
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "sha256": "28467fa128980273eec7955d117d0ead5c1ff21ae3abf184265ee951461fab44",
+      "bytes": 11228
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaQuickAdd.tsx",
+      "sha256": "17049f2b7c40c909d034598dfd57bcb086ae884672061c0b4a54eb38263439ae",
+      "bytes": 1541
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "sha256": "04147236b8166233576e3804615dbf94e8420dafa4cb746041687ee34fcef74b",
+      "bytes": 20966
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+      "sha256": "0575d9e83e0b272354bbefe146b3b485498861798d7570d0db462f2e1c0fd9e6",
+      "bytes": 3114
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneRounds.css",
+      "sha256": "857ba2755cf42ae72724bee698136ed0c6a324eafa9153c9292e77362fbf7420",
+      "bytes": 3613
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneRounds.tsx",
+      "sha256": "3bc3f08edb949f7801d78f06fa517788a5d5fdd568eedfd65cf90584d0cacca4",
+      "bytes": 7145
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneWorkspace.tsx",
+      "sha256": "96a2eb81c9d113782a24971a875437159292094b19c282050955a60ea8e6f094",
+      "bytes": 3435
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorDashboard.tsx",
+      "sha256": "bcacc1e10dc5249cbc76d0ff6707c47d96e98af16249914b05e7661a7339204b",
+      "bytes": 10110
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "00e8a03f1871dcd4060674e7e8ee499c89f11fd9b6baf642155c7c6a9c9cd2f6",
+      "bytes": 111309
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/consegneGiroUi.test.ts",
+      "sha256": "1edcf15ede3fad502ac9c6ed55176629cda299b2cf7a73a743958d799f8677ca",
+      "bytes": 6201
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operationalIdentity.test.ts",
+      "sha256": "4a6bd260229bedccc73f252f34345622f16b03c18c33120e422f1921caf7df53",
+      "bytes": 7166
+    },
+    {
+      "path": "frontend/src/components/operator/useConsegneRoster.ts",
+      "sha256": "2a65490388c9e85d6d1898d01713b07d751bc25fb7e31fe0b0c4f73e47a185be",
+      "bytes": 6216
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosActionNavigation.ts",
+      "sha256": "177e71e16010e17334e1d3caba9193bda840d22adeda351fc9db661ce3c68339",
+      "bytes": 4705
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosWorkflow.test.ts",
+      "sha256": "eb9d65e5b586e95684f328a953041f23bce9612452647d2a32159ffbda201918",
+      "bytes": 6886
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaCreation.test.ts",
+      "sha256": "3acf33ec95ff2d2a1180e02bed6a4435610ac2a3ff1402eeee5b42944f0bb557",
+      "bytes": 6117
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaDrafts.test.ts",
+      "sha256": "f8e6a95a13cf69bfc7e35c96bd7bb91e75fd50301d2227248f2cf2b8907debb3",
+      "bytes": 6575
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaGiro.fixtures.ts",
+      "sha256": "3c5ee4a848f6b00846357d3a609860dd496fd54d47599594d3eb200968ab290d",
+      "bytes": 893
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegneNavigation.test.ts",
+      "sha256": "d594fc1b33f360fb3b7b10428e49d057590d2048018555fcb187683138b627ca",
+      "bytes": 1922
+    },
+    {
+      "path": "frontend/src/lib/consegnaAdvance.ts",
+      "sha256": "dc83b1f980a92258021b73ae0d1ce465952734413099f8314a1f2b1c8dc5dda5",
+      "bytes": 501
+    },
+    {
+      "path": "frontend/src/lib/consegnaCreation.ts",
+      "sha256": "729f3b6ae359c065bb236c96baa9845b36d6ef09b4cf3a28b7464c7248c022aa",
+      "bytes": 4629
+    },
+    {
+      "path": "frontend/src/lib/consegnaDrafts.ts",
+      "sha256": "0705cb0a70f8915f89da8cdda379ed87ad111b834201eab32dff8000b5a162c0",
+      "bytes": 5399
+    },
+    {
+      "path": "frontend/src/lib/consegneNavigation.ts",
+      "sha256": "870b3ac097bec713b51f8a57497062001b7ba6df6061a750b3e9836068b32b38",
+      "bytes": 680
+    },
+    {
+      "path": "frontend/src/lib/consegnePatientSummary.ts",
+      "sha256": "abda86067e64f747ecc41dbac3cfe9e4fcd0676dcfe182933ed808d7b5908be3",
+      "bytes": 1606
+    },
+    {
+      "path": "frontend/src/lib/patientPage.ts",
+      "sha256": "7e1c5dc8b9c845c877e240dbd93d826edad9dd6112d7dcdcd7d67c85bdf76885",
+      "bytes": 6211
+    },
+    {
+      "path": "frontend/src/lib/useConsegnaDraft.ts",
+      "sha256": "fbeb0b91fbc853c1f6975b111e33212fe91648395fa3899b51bd072e327cac65",
+      "bytes": 350
+    },
+    {
+      "path": "frontend/src/lib/useConsegneExitGuard.ts",
+      "sha256": "16bbc69960dfb36d06d7b2dd084843a6dca22d75df614b8a061a6cf8d8637ce5",
+      "bytes": 785
+    },
+    {
+      "path": "tests/fixtures/po08-consegne.mjs",
+      "bytes": 1379,
+      "sha256": "7307b526a37826e9a95e8f80a2e99139d9d8a6cc0582bf585a1a7c07b22bd37d"
+    },
+    {
+      "path": "tests/integration/po08-consegne.test.mts",
+      "bytes": 8633,
+      "sha256": "7ee19101dd334c2f273eba3ec194afcba05ab9f27b7a59122839603cb6496026"
+    }
+  ]
+}

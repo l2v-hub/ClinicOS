@@ -1,0 +1,37 @@
+{
+  "reason": "Root mobile390x844 observed identity scrolling outside the viewport while editing.",
+  "generatedAtUtc": "2026-09-23T02:57:00.975Z",
+  "previousSourceStateId": "b0ca658ad07a6033ff99ec482e7b13fc4558981c2b51a4fac3e9859ae5c4313b",
+  "sourceStateId": "3796c4fe2f6772ff32db0c33e321e25c1a7fc3e4b2c3bcf1d0c8c393ab45c24c",
+  "runtimeSourceId": "ff9b816a1ab293d577fd29218befea873c8d4f402cd12f5b9b4bb7cb60f3518e",
+  "changedFiles": [
+    {
+      "path": "frontend/src/components/operator/ConsegnaComposer.tsx",
+      "sha256": "003cab49389ca7ea7e7df18ff0eca00118b44f69464d30c3aad05e7a5e4db2d0"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneRounds.css",
+      "sha256": "857ba2755cf42ae72724bee698136ed0c6a324eafa9153c9292e77362fbf7420"
+    }
+  ],
+  "behavior": "Inside the round form, patient identity is sticky on an opaque surface. The title scrolls normally. Shell pages use --topbar-h, standalone previews use zero. ResizeObserver measures identity height for field/action scroll margins. Quick-add modal headers are not made sticky.",
+  "validation": {
+    "types": {
+      "command": "node ../node_modules/typescript/bin/tsc -b",
+      "exitCode": 0
+    },
+    "focusedTests": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    "lint": {
+      "files": [
+        "frontend/src/components/operator/ConsegnaComposer.tsx"
+      ],
+      "exitCode": 0
+    },
+    "diffCheck": "passed"
+  },
+  "limitation": "Root owns actual 390x844 focus/scroll geometry verification and final integration build. Earlier full build and suite remain bound to their original source inputs."
+}

@@ -1,0 +1,24 @@
+{
+  "task": "PO-08-backend",
+  "claimant": "agent:codex-po08-backend:coder",
+  "releasedAt": "2026-09-23T02:41:19.370Z",
+  "bothReleased": true,
+  "results": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-08-backend-preparation released\",\n  \"reason\": \"Preparazione e implementazione PO-08 completate; 126 test passati e sorgenti verificati. Handoff a root.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-08-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po08-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T02:21:01.187Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T02:23:52.330Z\",\n    \"progress\": 100,\n    \"context\": \"Root assigned C:/Workspace/ClinicOSHouse-worktrees/po08-handover-backend branch codex/po08-handover-backend baseline c52af6237c9cbbda9a39a770c1278573567eb958. PREPARATION ONLY until root GO after PO07 deployment verification. Own artifacts/task-validation/po-08-consegne-giro/backend/** and private runtime preparation under backend/node_modules. Root node_modules junction read-only; never write shared .prisma. No application source/schema/migration edits yet, no package/lockfile, commit/push/deploy, no new agents or browser server.\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-08-backend-implementation released\",\n  \"reason\": \"Backend PO-08 completato; 126 test passati, revisione indipendente senza rilievi, manifest e verifiche pronti. Ownership di integrazione a root.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-08-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po08-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T02:25:19.022Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T02:25:19.022Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicit GO after verified PO07 deployment c52af6237c9cbbda9a39a770c1278573567eb958. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po08-handover-backend. Exact source scopes: backend/src/patients/identity-page.ts, backend/src/patients/room-filter.ts; backend/src/consegne/patient-summary.ts, write-validation.ts, create-receipt.ts; backend/src/services/consegna-service.ts; backend/src/routes/consegne.ts, ai-voice.ts, ai-actions.ts; backend/src/ai/actions/orchestrate.ts, backend/src/ai/voice/execute.ts, write-services.ts; tests under corresponding backend/src/**/__tests__ directories; prisma/schema.prisma; prisma/migrations/20260923030000_consegna_creation_receipts/migration.sql; artifacts/task-validation/po-08-consegne-giro/backend/** and private generated client only. No package/lockfile/shared dependency changes, no new agents, browser/dev servers, commit, push, deploy.\"\n  }\n}"
+        }
+      ]
+    }
+  ]
+}

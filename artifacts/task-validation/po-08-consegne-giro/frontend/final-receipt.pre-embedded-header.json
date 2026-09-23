@@ -1,0 +1,141 @@
+{
+  "owner": "/root/po01_frontend_audit",
+  "integrationOwner": "/root",
+  "baseline": "c52af6237c9cbbda9a39a770c1278573567eb958",
+  "branch": "codex/po08-handover-ui",
+  "generatedAtUtc": "2026-09-23T02:45:44.533Z",
+  "sourceStateId": "a4a43d6b9ed43634f5166fb3ccb688da3e0532c09ca36166ea7530ebee5d9a3f",
+  "runtimeSourceId": "abc0b66d52ded2d099bfab7faa45a1047063636bc7347e5b3c1e226423a8aa4c",
+  "policyDecision": {
+    "decision": "allow",
+    "basis": "Root GO PO08 after verified PO07 c52af623 Railway de579c06-cd7d-4164-af15-ea11357adbed SUCCESS health200 and Vercel dpl_HriFD1fuaDkr1FNWCxFkVDuydrAw READY alias sourceCommit",
+    "actions": [
+      "claimed frontend implementation",
+      "read-only dependency reuse",
+      "focused validation",
+      "handoff and claim release"
+    ],
+    "publicationAuthorizedByThisReceipt": false
+  },
+  "status": "implemented-and-released-for-integration",
+  "toolchain": {
+    "node": "v26.3.0",
+    "typescript": "6.0.3",
+    "tsx": "4.23.1",
+    "react": "19.2.5",
+    "vite": "8.2.2",
+    "eslint": "10.7.0",
+    "prettier": "3.9.5"
+  },
+  "validation": {
+    "candidateTests": {
+      "tests": 114,
+      "pass": 108,
+      "fail": 6,
+      "log": "tests-final.log"
+    },
+    "identityTests": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "log": "tests-identity.log"
+    },
+    "baselineStaticGuards": {
+      "tests": 9,
+      "pass": 3,
+      "fail": 6,
+      "log": "tests-baseline-roster-guard.log",
+      "method": "Unchanged test executed with readFileSync mapping to exact git-show baseline source inputs; checkout untouched.",
+      "failures": [
+        "a single parameters table is always visible and uses the operational table contract",
+        "multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+        "multi-patient parameters uses one bounded page instead of cartella fan-out",
+        "multi-patient quick entry exposes every action and field to assistive technology",
+        "multi-patient quick entry reuses the ClinicOS form and action design system",
+        "multi-patient refresh keeps the previous roster visible and announces progress"
+      ]
+    },
+    "build": {
+      "exitCode": 0,
+      "log": "build-final.log",
+      "warnings": [
+        "Vite chunks above 500 kB",
+        "Rolldown plugin timings"
+      ]
+    },
+    "lint": {
+      "files": 28,
+      "baselineDiagnostics": 18,
+      "candidateDiagnostics": 18,
+      "introduced": []
+    },
+    "diffCheck": "passed",
+    "newFileLineBudget": "all below 500",
+    "protectedFiles": "exact SHA-256 match"
+  },
+  "independentReview": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "scope": [
+      "late PatientDetail A response after A→B and A→B→A",
+      "delayed continuation after draft edit/discard/new save"
+    ],
+    "result": "Both fixes re-read with no residual finding; reviewer did not run suites."
+  },
+  "limitations": [
+    "Root integration and browser QA pending",
+    "Six baseline static guards for unchanged MultiPatientParametri fail identically",
+    "Existing 18 lint diagnostics retained",
+    "No backend implementation or live patient mutation validated by this worker",
+    "No commit, push, deploy, server, port or dependency changes"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/task-contract.md",
+      "sha256": "f16eb94e2b08d39f6eff77d3f23b21f96116ca0d8f9a36f019815acbfe80a4c3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/implementation-plan.md",
+      "sha256": "2ed2a2fe7a23382e9f62d848a7d05733131f6b783bc1ec52243c9accb24ecc58"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/claims.json",
+      "sha256": "533abff8feac8a3d1f60296831a825609682f7e9298d9446b5df0e8f2881ddd1"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/source-manifest.json",
+      "sha256": "c6b35c1228aa8248178cd7679b358084a6c91cf3d037deb80b48be9539c13148"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/build-manifest.json",
+      "sha256": "4c8d07aae76ff519decd3863a1468462a73722e1da041bbea9c6656364cdb5e3"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-final.log",
+      "sha256": "5e3e98f56b87ebf5f24d345ba3a06ae8fbce6ff0a6bdc7887e27fd9c712ded28"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-identity.log",
+      "sha256": "5635da1546f8cb06dcca0b63be824c4f0aa788daff70934318912bd381203b64"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/tests-baseline-roster-guard.log",
+      "sha256": "c109355be4e99a8c40a837b98d49e23a89d91bcce0bdce74545ead4149f82d1a"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/baseline-roster-guard.mjs",
+      "sha256": "c968fbeddb8172f1f1a45d6b660f43849f5ff607d4d0f948ab4cf953916b0082"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/build-final.log",
+      "sha256": "fed2d049a009556cc874f4cbd42029f3037f7d06f0de0b54a51e5f1f6d16000d"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-comparison.json",
+      "sha256": "c55121f76b9b7e5d087f9e89d788400c209d7441da71a7244ca4c0876af9a9d6"
+    },
+    {
+      "path": "artifacts/task-validation/po-08-consegne-giro/frontend/lint-final.log",
+      "sha256": "5d6addb55740bf7638f7853bff516bcc4ae1ce16bb5bdaeed5564029ffd16637"
+    }
+  ]
+}

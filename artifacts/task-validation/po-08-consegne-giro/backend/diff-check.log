@@ -1,0 +1,12 @@
+
+warning: in the working copy of 'backend/src/ai/__tests__/actions.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/ai/actions/orchestrate.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/ai/voice/execute.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/ai/voice/write-services.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/consegne/write-validation.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/patients/identity-page.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/ai-actions.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/ai-voice.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/consegne.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/services/consegna-service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it

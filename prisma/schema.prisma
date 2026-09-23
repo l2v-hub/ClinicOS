@@ -480,6 +480,19 @@ model Consegna {
   @@index([pazienteId, stato, createdAt, id])
 }
 
+// Durable create outcome; no cascading relation to an editable/deletable handover.
+model ConsegnaCreationReceipt {
+  actorId     String
+  requestId   String
+  payloadHash String
+  patientId   String
+  consegnaId  String   @unique
+  createdAt   DateTime @default(now())
+
+  @@id([actorId, requestId])
+  @@index([patientId])
+}
+
 model Nota {
   id               String   @id @default(cuid())
   autoreId         String

@@ -13,7 +13,7 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | PO-05 Scansioni lunghe | Pubblicato e verificato | 0418463a: 101 test backend, 17 prove integrate PostgreSQL, 125 frontend, 169 runtime; 30 pagine in tre lettere confermate e archiviate da browser mobile sintetico. Runtime e backend Railway SUCCESS; Vercel READY e alias legato al commit. |
 | PO-06 Identità e posto letto | Pubblicato e verificato | 853b4075: 29 test backend, 7 HTTP integrati, 74 frontend, build e browser; Railway SUCCESS/health200 e Vercel READY/alias verificato. |
 | PO-07 Ordine del reparto | Pubblicato e verificato | c52af623: 58 test backend, 102 frontend e 6 HTTP/PG root; browser desktop/mobile, bozze e reinvio idempotente. Railway SUCCESS/migrazione/health200; Vercel READY e sourceCommit alias verificato. |
-| PO-08 Consegne dal giro | In esecuzione | GO backend/frontend isolati da c52af623 dopo deployPO07 verificato. Roster/compositore, summary a doppio scope, ricevuta idempotente e Salva e prossimo protetto. |
+| PO-08 Consegne dal giro | Verificato, in pubblicazione | 126 test backend, 116 frontend più 5 rifinitura, 5 HTTP/PG root. Browser: giro 5 pazienti, retry senza duplicati, bozze, conflitto camera, paginazione e identità mobile persistente. Sei guardie statiche falliscono identiche in baseline. |
 | PO-09 Dimissione | Da eseguire | Spostamento della destinazione |
 | PO-10 PAINAD e infrastruttura moduli | Da eseguire | Versione, storico e PDF |
 | PO-11 Trasferimenti posturali | Da eseguire | Fedeltà al DOCX |

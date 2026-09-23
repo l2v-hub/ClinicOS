@@ -1,0 +1,765 @@
+{
+  "today": "2026-09-23",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:46:37.308Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:46:37.313Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&asOf=2026-09-23",
+      "at": "2026-09-23T02:46:37.321Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:46:37.505Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:47:23.778Z",
+      "body": {
+        "requestId": "653d5303-8191-4d80-a116-c67c8d0a5239",
+        "pazienteId": "po07-patient-063",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "Giro QA 1: osservazione sintetica del primo paziente.",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:47:23.911Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:47:23.927Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:47:47.784Z",
+      "body": {
+        "requestId": "9b2ffa6f-d4ad-4283-a49f-f13e108d726d",
+        "pazienteId": "po07-patient-056",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "Giro QA 2: osservazione sintetica del paziente selezionato.",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:47:47.837Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:47:47.851Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:47:48.111Z",
+      "body": {
+        "requestId": "6a1dd784-81d3-4a1a-a364-1b0d5e3943d4",
+        "pazienteId": "po07-patient-049",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "Giro QA 3: osservazione sintetica del paziente selezionato.",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:47:48.125Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:47:48.137Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:47:48.445Z",
+      "body": {
+        "requestId": "616035f0-6088-4b0a-b9e3-ef958654f257",
+        "pazienteId": "po07-patient-042",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "Giro QA 4: osservazione sintetica del paziente selezionato.",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:47:48.460Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:47:48.465Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:47:48.764Z",
+      "body": {
+        "requestId": "84041a45-a1e9-4215-a425-9c7d99593de5",
+        "pazienteId": "po07-patient-035",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "Giro QA 5: osservazione sintetica del paziente selezionato.",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:47:48.778Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:47:48.788Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&asOf=2026-09-23",
+      "at": "2026-09-23T02:50:30.980Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:50:31.047Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:50:44.382Z",
+      "body": {
+        "requestId": "ef272c95-c50f-4a40-91a8-ee764db6302a",
+        "pazienteId": "po07-patient-028",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "Bozza A sintetica da conservare",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 503
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:51:02.423Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:51:02.445Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:51:02.493Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:51:02.530Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:51:02.940Z",
+      "body": {
+        "requestId": "ef272c95-c50f-4a40-91a8-ee764db6302a",
+        "pazienteId": "po07-patient-028",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "Bozza A sintetica da conservare",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:51:02.952Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:51:02.965Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:51:11.455Z",
+      "body": {
+        "requestId": "3fe44949-5dce-4817-aaa1-55f861cb4759",
+        "pazienteId": "po07-patient-028",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "QA lento: resta sul paziente selezionato manualmente.",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:51:17.502Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:51:17.513Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23&room=99",
+      "at": "2026-09-23T02:51:31.858Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:51:31.974Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:51:37.745Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=name&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23&room=99",
+      "at": "2026-09-23T02:51:38.036Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:51:38.056Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=name&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:52:35.771Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:52:35.865Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne",
+      "at": "2026-09-23T02:53:06.850Z",
+      "body": {
+        "requestId": "e90461bd-ef35-48ff-a2d4-baa9c80b9478",
+        "pazienteId": "po07-patient-029",
+        "priorita": "normale",
+        "tipo": "Monitoraggio",
+        "note": "QA bordo pagina 50: prossimo corretto.",
+        "scadenza": "2026-09-23",
+        "operatoreAssegnatoId": null
+      },
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=name&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJwYXRpZW50cyIsInNjb3BlIjoiOWJENXlwbG5YV2h3VkZXV2w1dXdsRUFyS2pJNFJudXF6V2xIVnVRWXZFayIsImNvbnRleHRJZCI6Ijk5ZjM5YjgwLTJiZjQtNGNkNC04NDE0LWFiMWNhNjQwYjhlMyIsImNvbnRleHRWZXJzaW9uIjoiMCIsInJldmlzaW9uIjoiMiIsIm9yZGVyIjp7ImNyaXRlcmlvbiI6Im5hbWUiLCJkaXJlY3Rpb24iOiJhc2MifSwiZmlsdGVycyI6e30sImFzT2YiOiIyMDI2LTA5LTIzIiwiZXBvY2giOnsicm9zdGVyIjoiMTU2In19LCJhbmNob3IiOnsicGF0aWVudElkIjoicG8wNy1wYXRpZW50LTAyOSJ9fQ",
+      "at": "2026-09-23T02:53:06.851Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:53:06.902Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:53:06.921Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:53:06.945Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:53:13.094Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:53:13.117Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:53:13.136Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:53:13.163Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23&cursor=eyJ2IjozLCJiaW5kaW5nIjp7InZpZXciOiJwYXRpZW50cyIsInNjb3BlIjoiOWJENXlwbG5YV2h3VkZXV2w1dXdsRUFyS2pJNFJudXF6V2xIVnVRWXZFayIsImNvbnRleHRJZCI6Ijk5ZjM5YjgwLTJiZjQtNGNkNC04NDE0LWFiMWNhNjQwYjhlMyIsImNvbnRleHRWZXJzaW9uIjoiMCIsInJldmlzaW9uIjoiMyIsIm9yZGVyIjp7ImNyaXRlcmlvbiI6ImxvY2F0aW9uIiwiZGlyZWN0aW9uIjoiYXNjIn0sImZpbHRlcnMiOnt9LCJhc09mIjoiMjAyNi0wOS0yMyIsImVwb2NoIjp7InJvc3RlciI6IjE1NiJ9fSwiYW5jaG9yIjp7InBhdGllbnRJZCI6InBvMDctcGF0aWVudC0wNDkifX0",
+      "at": "2026-09-23T02:53:42.172Z",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:53:42.197Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=asc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:53:42.253Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:53:42.292Z",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:53:49.478Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=desc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:53:49.493Z",
+      "status": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&sort=location&direction=desc&contextId=99f39b80-2bf4-4cd4-8414-ab1ca640b8e3&asOf=2026-09-23",
+      "at": "2026-09-23T02:53:49.508Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:53:49.591Z",
+      "status": 503
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:54:05.775Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:54:43.391Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:54:43.393Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&asOf=2026-09-23",
+      "at": "2026-09-23T02:54:43.398Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:54:43.486Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:55:02.616Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:55:02.618Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&asOf=2026-09-23",
+      "at": "2026-09-23T02:55:02.624Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20&status=attive",
+      "at": "2026-09-23T02:55:02.991Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/me/roster-order",
+      "at": "2026-09-23T02:57:41.993Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20",
+      "at": "2026-09-23T02:57:41.996Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=50&asOf=2026-09-23",
+      "at": "2026-09-23T02:57:42.000Z",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/consegne/patient-summary",
+      "at": "2026-09-23T02:57:42.195Z",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/consegne?limit=20&status=attive",
+      "at": "2026-09-23T02:58:25.080Z",
+      "status": 200
+    }
+  ],
+  "events": [],
+  "consegne": [
+    {
+      "id": "po06-visible",
+      "pazienteId": "po06-alba-1",
+      "pazienteNome": "Alba Bianchi",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Consegna sintetica autorizzata",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "Operatrice QA",
+      "operatoreAssegnatoId": "VITALS-QA-OP",
+      "creatoDA": "Operatore QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:44:31.183Z",
+      "updatedAt": "2026-09-23T02:44:31.183Z"
+    },
+    {
+      "id": "po06-restricted",
+      "pazienteId": "vitals-qa-other",
+      "pazienteNome": "Nome già visibile",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Consegna assegnata: cartella fuori perimetro",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "Operatrice QA",
+      "operatoreAssegnatoId": "VITALS-QA-OP",
+      "creatoDA": "Operatore QA",
+      "creatoDaId": "VITALS-QA-OTHER",
+      "createdAt": "2026-09-23T02:44:31.183Z",
+      "updatedAt": "2026-09-23T02:44:31.183Z"
+    },
+    {
+      "id": "po08-open",
+      "pazienteId": "po07-patient-000",
+      "pazienteNome": "Paziente sintetico",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Consegna sintetica open",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatore QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:44:31.321Z",
+      "updatedAt": "2026-09-23T02:44:31.321Z"
+    },
+    {
+      "id": "po08-urgent",
+      "pazienteId": "po07-patient-000",
+      "pazienteNome": "Paziente sintetico",
+      "priorita": "urgente",
+      "stato": "in_corso",
+      "tipo": "Monitoraggio",
+      "note": "Consegna sintetica urgent",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "Collega QA",
+      "operatoreAssegnatoId": "VITALS-QA-OP",
+      "creatoDA": "Operatore QA",
+      "creatoDaId": "VITALS-QA-OTHER",
+      "createdAt": "2026-09-23T02:44:31.324Z",
+      "updatedAt": "2026-09-23T02:44:31.324Z"
+    },
+    {
+      "id": "po08-invisible",
+      "pazienteId": "po07-patient-000",
+      "pazienteNome": "Paziente sintetico",
+      "priorita": "urgente",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Consegna sintetica invisible",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "Collega QA",
+      "operatoreAssegnatoId": "VITALS-QA-OTHER",
+      "creatoDA": "Operatore QA",
+      "creatoDaId": "VITALS-QA-OTHER",
+      "createdAt": "2026-09-23T02:44:31.326Z",
+      "updatedAt": "2026-09-23T02:44:31.326Z"
+    },
+    {
+      "id": "po08-history",
+      "pazienteId": "po07-patient-001",
+      "pazienteNome": "Paziente sintetico",
+      "priorita": "normale",
+      "stato": "completata",
+      "tipo": "Monitoraggio",
+      "note": "Consegna sintetica history",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatore QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:44:31.327Z",
+      "updatedAt": "2026-09-23T02:44:31.327Z"
+    },
+    {
+      "id": "po08-outside",
+      "pazienteId": "vitals-qa-other",
+      "pazienteNome": "Paziente sintetico",
+      "priorita": "alta",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Consegna sintetica outside",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "Collega QA",
+      "operatoreAssegnatoId": "VITALS-QA-OP",
+      "creatoDA": "Operatore QA",
+      "creatoDaId": "VITALS-QA-OTHER",
+      "createdAt": "2026-09-23T02:44:31.329Z",
+      "updatedAt": "2026-09-23T02:44:31.329Z"
+    },
+    {
+      "id": "b92536aa-0206-4f9c-a80c-7cdd4855555f",
+      "pazienteId": "po07-patient-063",
+      "pazienteNome": "Àccenti 001, Nome 063",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Giro QA 1: osservazione sintetica del primo paziente.",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:47:23.904Z",
+      "updatedAt": "2026-09-23T02:47:23.904Z"
+    },
+    {
+      "id": "ae1bdcdc-b9e7-4f99-baa3-d8b7851c4c10",
+      "pazienteId": "po07-patient-056",
+      "pazienteNome": "Àccenti 008, Nome 056",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Giro QA 2: osservazione sintetica del paziente selezionato.",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:47:47.828Z",
+      "updatedAt": "2026-09-23T02:47:47.828Z"
+    },
+    {
+      "id": "ec64f6ab-f7f4-46f8-ba07-3dc250e2c72d",
+      "pazienteId": "po07-patient-049",
+      "pazienteNome": "Àccenti 015, Nome 049",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Giro QA 3: osservazione sintetica del paziente selezionato.",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:47:48.120Z",
+      "updatedAt": "2026-09-23T02:47:48.120Z"
+    },
+    {
+      "id": "371bbf6a-1821-43df-99df-458d813a7c61",
+      "pazienteId": "po07-patient-042",
+      "pazienteNome": "Àccenti 022, Nome 042",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Giro QA 4: osservazione sintetica del paziente selezionato.",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:47:48.448Z",
+      "updatedAt": "2026-09-23T02:47:48.448Z"
+    },
+    {
+      "id": "582f65cf-acef-41a5-8908-544c18be7c55",
+      "pazienteId": "po07-patient-035",
+      "pazienteNome": "Àccenti 029, Nome 035",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Giro QA 5: osservazione sintetica del paziente selezionato.",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:47:48.766Z",
+      "updatedAt": "2026-09-23T02:47:48.766Z"
+    },
+    {
+      "id": "91fa2130-66e8-46da-ae3b-71563bf79b96",
+      "pazienteId": "po07-patient-028",
+      "pazienteNome": "Àccenti 036, Nome 028",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "Bozza A sintetica da conservare",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:50:44.423Z",
+      "updatedAt": "2026-09-23T02:50:44.423Z"
+    },
+    {
+      "id": "a1df0a2c-ec75-4ab7-bc24-f9a101de6015",
+      "pazienteId": "po07-patient-028",
+      "pazienteNome": "Àccenti 036, Nome 028",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "QA lento: resta sul paziente selezionato manualmente.",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:51:17.497Z",
+      "updatedAt": "2026-09-23T02:51:17.497Z"
+    },
+    {
+      "id": "d9275f6c-b041-4771-ac5b-f5673eb05fb4",
+      "pazienteId": "po07-patient-029",
+      "pazienteNome": "Sintetico 035, Nome 029",
+      "priorita": "normale",
+      "stato": "aperta",
+      "tipo": "Monitoraggio",
+      "note": "QA bordo pagina 50: prossimo corretto.",
+      "scadenza": "2026-09-23",
+      "oraScadenza": null,
+      "operatoreAssegnato": "",
+      "operatoreAssegnatoId": null,
+      "creatoDA": "Operatrice QA",
+      "creatoDaId": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T02:53:06.895Z",
+      "updatedAt": "2026-09-23T02:53:06.895Z"
+    }
+  ],
+  "receiptCount": 8
+}

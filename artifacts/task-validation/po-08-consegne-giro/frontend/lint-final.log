@@ -1,0 +1,11 @@
+warning: in the working copy of 'frontend/src/App.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/AdminDashboard.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/ConsegnaCreateForm.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/ConsegnePage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/OperatorDashboard.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/PatientDetail.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/__tests__/operationalIdentity.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/shared/agnos/agnosActionNavigation.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/shared/agnos/agnosWorkflow.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientPage.ts', LF will be replaced by CRLF the next time Git touches it
+{"files":28,"baselineDiagnostics":18,"candidateDiagnostics":18,"introduced":[]}
