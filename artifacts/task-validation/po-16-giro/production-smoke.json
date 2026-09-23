@@ -1,0 +1,19 @@
+{
+  "at": "2026-09-23T08:49:39.776Z",
+  "mode": "read-only production smoke; empty MNA form opened locally, no save/finalize/upload action",
+  "initialSourceCommit": "a3549a20c72080ede67dd16174d52989e744bfab",
+  "finalSourceCommit": "99b43c98102af4e0c2673ba90622248a064beca9",
+  "catalogModules": 8,
+  "catalogMetadataLoaded": true,
+  "catalog390pxMinimumTarget": 44,
+  "horizontalOverflowAt390": false,
+  "mnaHistoryLoaded": true,
+  "mnaKeyboardReturnOpensForm": true,
+  "mnaSectionRemainsExpanded": true,
+  "singularOnePointLabel": true,
+  "consoleErrors": 0,
+  "consoleWarnings": 0,
+  "writeActionsPerformed": 0,
+  "userOpenTherapyFormPreserved": true,
+  "agentTabsClosed": true
+}

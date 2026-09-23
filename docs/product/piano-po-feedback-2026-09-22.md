@@ -1,6 +1,6 @@
 # ClinicOS — Piano di prodotto dai feedback del 22 settembre 2026
 
-**Stato aggiornato al 23 settembre: PO-01–PO-15 pubblicate e verificate; collaudo tecnico PO-16 concluso, pubblicazione finale in corso.** Il [registro di esecuzione](<C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/docs/product/stato-esecuzione-piano-2026-09-22.md>) riporta gli esiti e le versioni. Le descrizioni dell'analisi iniziale qui sotto documentano la baseline del 22 settembre; non descrivono difetti ancora aperti dopo i rilasci. Le prove con personale e dispositivi fisici restano distinte dal collaudo tecnico sintetico.
+**Stato aggiornato al 23 settembre: PO-01–PO-16 implementate e pubblicate, con collaudo tecnico concluso e smoke online verificato.** Il [registro di esecuzione](<C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/docs/product/stato-esecuzione-piano-2026-09-22.md>) riporta gli esiti e le versioni. Le descrizioni dell'analisi iniziale qui sotto documentano la baseline del 22 settembre; non descrivono difetti ancora aperti dopo i rilasci. Le prove con personale e dispositivi fisici restano da completare e sono distinte dal collaudo tecnico sintetico.
 
 La direzione proposta è fare di ClinicOS uno strumento affidabile per il giro reparto: riconoscere subito il paziente, trovare la prossima azione, registrarla con pochi passaggi e sapere se è stata salvata. La complessità clinica deve rimanere disponibile senza occupare tutta la schermata contemporaneamente.
 

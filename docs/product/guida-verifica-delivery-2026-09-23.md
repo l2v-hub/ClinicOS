@@ -2,6 +2,8 @@
 
 Apri [ClinicOS](https://clinicos-eosin.vercel.app/#/operator-dashboard). I rilasci e le prove sono tracciati nel [registro del piano](<C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/docs/product/stato-esecuzione-piano-2026-09-22.md>). Per le prove con salvataggio usa una persona sintetica riconoscibile: il sito demo conserva le modifiche. Gli agenti hanno eseguito le scritture di collaudo soltanto in database locali separati.
 
+PO01–PO16 sono pubblicate. Verifica finale online: catalogo degli otto moduli, MNA e storico caricati, comandi44px su viewport mobile, Invio su “Nuova compilazione” apre il modulo mantenendo la sezione aperta. Nessun errore console o salvataggio durante lo smoke.
+
 ## Giro breve
 
 1. **Ingresso:** registra nome/cognome e presa in carico lasciando i dati non disponibili vuoti. La scheda segnala cosa manca e consente il completamento successivo sullo stesso paziente.

@@ -1,0 +1,75 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User approved PO01–PO16, commit/push and deployment without further questions",
+  "sourceCommit": "99b43c98102af4e0c2673ba90622248a064beca9",
+  "backend": {
+    "deploymentId": "5549ced7-f116-4817-ab19-79acb6b35dc4",
+    "status": "SUCCESS",
+    "sourceCommit": "a3549a20c72080ede67dd16174d52989e744bfab",
+    "sourceMessage": "PO16 a3549a20c72080ede67dd16174d52989e744bfab",
+    "healthStatus": 200,
+    "newMigration": false,
+    "verifiedAt": "2026-09-23T08:34:21.4746183Z"
+  },
+  "frontend": {
+    "deploymentId": "dpl_8EWb6LkHaBmLFmkovcZSWDRV19Gw",
+    "status": "READY",
+    "url": "https://clinicos-1951lkl43-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "sourceCommitVerified": "99b43c98102af4e0c2673ba90622248a064beca9",
+    "verifiedAt": "2026-09-23T08:48:32.6279409Z"
+  },
+  "initialFrontend": {
+    "deploymentId": "dpl_EWWwfkK4JuYiR3EjWhVxWjXCff9e",
+    "status": "READY",
+    "url": "https://clinicos-oggenaoir-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "sourceCommitVerified": "a3549a20c72080ede67dd16174d52989e744bfab",
+    "verifiedAt": "2026-09-23T08:35:54.1128486Z"
+  },
+  "backendSourceEquivalentAtFinalCommit": true,
+  "runtimeUnchanged": "PO05",
+  "references": [
+    {
+      "path": "artifacts/task-validation/po-16-giro/root-release-gate.json",
+      "sha256": "9b3e0822c90dd1f45f81441de66342354d7e9b469fa33eea03b97118c7dfcd7d"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/keyboard/release-gate.json",
+      "sha256": "22a48c4706c9605a385edd7dc752a106c6cf85719bdeb3ccdc31b9a36ed7232e"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/backend-release-inputs.json",
+      "sha256": "42d9e7f45700413b18ec14ebe5fe7e0e028711d7de8da4b65e670970fdf79de2"
+    },
+    {
+      "path": "artifacts/task-validation/po-16-giro/frontend-release-inputs.json",
+      "sha256": "03bb5957db32087f713e4bab1f86793d799b66abd5ce7527a8fffd0d2288f8d3"
+    }
+  ],
+  "productionSmoke": {
+    "at": "2026-09-23T08:49:39.776Z",
+    "mode": "read-only production smoke; empty MNA form opened locally, no save/finalize/upload action",
+    "initialSourceCommit": "a3549a20c72080ede67dd16174d52989e744bfab",
+    "finalSourceCommit": "99b43c98102af4e0c2673ba90622248a064beca9",
+    "catalogModules": 8,
+    "catalogMetadataLoaded": true,
+    "catalog390pxMinimumTarget": 44,
+    "horizontalOverflowAt390": false,
+    "mnaHistoryLoaded": true,
+    "mnaKeyboardReturnOpensForm": true,
+    "mnaSectionRemainsExpanded": true,
+    "singularOnePointLabel": true,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "writeActionsPerformed": 0,
+    "userOpenTherapyFormPreserved": true,
+    "agentTabsClosed": true
+  },
+  "keyboardReview": {
+    "result": "PASS, no P1/P2",
+    "chunk": "0c6112",
+    "gateSha256": "22a48c4706c9605a385edd7dc752a106c6cf85719bdeb3ccdc31b9a36ed7232e"
+  },
+  "limitations": "Technical completion only; representative operators, physical mobile devices/cameras/printer/native zoom and independent clinical validation were not performed."
+}
