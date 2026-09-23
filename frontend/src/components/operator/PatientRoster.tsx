@@ -1,8 +1,5 @@
 import { memo } from 'react';
-import {
-  birthSummary as patientBirthSummary,
-  incompleteDemographicFields,
-} from '../../lib/patientDemographics';
+import { PatientIdentity, PatientIdentifier } from '../shared/PatientIdentity';
 import type { ClinicalSummaryEntry, Paziente } from '../../types';
 import { IcoChevronRight, IcoTrash } from '../../icons';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
@@ -14,21 +11,6 @@ import {
   type PatientRosterSort,
   type PatientSortField,
 } from '../../lib/patientRosterSort';
-
-function birthSummary(patient: Paziente): string {
-  const sex = patient.sex === 'M' ? 'M' : patient.sex === 'F' ? 'F' : 'Sesso non indicato';
-  return `${patientBirthSummary(patient.dateOfBirth)} · ${sex}`;
-}
-
-function FiscalCode({ patient }: { patient: Paziente }) {
-  return patient.codiceFiscale ? (
-    <span className="patient-fiscal-code">{patient.codiceFiscale}</span>
-  ) : (
-    <span className="patient-fiscal-code patient-fiscal-code--missing">
-      Codice fiscale non disponibile
-    </span>
-  );
-}
 
 function PatientSignals({
   patient,
@@ -121,7 +103,6 @@ const PatientCard = memo(function PatientCard({
   onDelete: (patient: Paziente, event: React.MouseEvent) => void;
 }) {
   const state = summary?.statoRicovero;
-  const fullName = `${patient.lastName}, ${patient.firstName}`;
   return (
     <article className="patient-card">
       <div className="patient-card__head">
@@ -130,11 +111,7 @@ const PatientCard = memo(function PatientCard({
           {patient.lastName[0]}
         </span>
         <div className="patient-card__identity">
-          <strong>{fullName}</strong>
-          <span>{birthSummary(patient)}</span>
-          {incompleteDemographicFields(patient).length > 0 && (
-            <small>Anagrafica da completare</small>
-          )}
+          <PatientIdentity patient={patient} />
         </div>
         <button
           type="button"
@@ -144,10 +121,6 @@ const PatientCard = memo(function PatientCard({
         >
           Apri <IcoChevronRight />
         </button>
-      </div>
-      <div className="patient-card__fiscal">
-        <span>Codice fiscale</span>
-        <FiscalCode patient={patient} />
       </div>
       <div className="patient-card__context">
         {state ? (
@@ -328,19 +301,11 @@ export function PatientRoster({
                           {patient.firstName[0]}
                           {patient.lastName[0]}
                         </span>
-                        <span>
-                          <strong>
-                            {patient.lastName}, {patient.firstName}
-                          </strong>
-                          <small>{birthSummary(patient)}</small>
-                          {incompleteDemographicFields(patient).length > 0 && (
-                            <small>Anagrafica da completare</small>
-                          )}
-                        </span>
+                        <PatientIdentity patient={patient} showIdentifier={false} />
                       </div>
                     </td>
                     <td>
-                      <FiscalCode patient={patient} />
+                      <PatientIdentifier patient={patient} />
                     </td>
                     <td>
                       {state ? (

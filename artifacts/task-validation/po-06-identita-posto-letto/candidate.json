@@ -1,0 +1,43 @@
+{
+  "candidateRoot": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications",
+  "at": "2026-09-23T01:25:41.816Z",
+  "scenario": "202 authorized synthetic patients; 200 legacy locations, oversized unrelated cartella text; loopback PostgreSQL; 10 warm reads after one cold read",
+  "sources": [
+    {
+      "path": "backend/src/patients/identity-page.ts",
+      "sha256": "0307e8c3bdd02538830882609ce56e4587b7953abae613da05a6b2d55f23988b"
+    },
+    {
+      "path": "backend/src/patients/parameters-page.ts",
+      "sha256": "066215dbab0aa07c44dfa9495128b010786801c970922442660a58d10fd82acc"
+    },
+    {
+      "path": "backend/src/patients/patient-scope.ts",
+      "sha256": "51ad8d020987f912993c90811d513ec38ed3719d4643ac7f9808cda3a44684a5"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "sha256": "de38c9dc866241b274487019c437fd8b12fb7ecd7e19a551053bc457c74483d5"
+    },
+    {
+      "path": "backend/src/patients/operational-identity.ts",
+      "sha256": "860cbc6a250c06833f6986328a07283039c068af2fb8e1eae227ecfa6808fd85"
+    }
+  ],
+  "output": [
+    {
+      "name": "patients",
+      "pageSize": 50,
+      "medianMs": 10.591499999999542,
+      "p90Ms": 12.336599999998725,
+      "responseBytes": 14501
+    },
+    {
+      "name": "parameters",
+      "pageSize": 25,
+      "medianMs": 7.6161999999994805,
+      "p90Ms": 8.308499999999185,
+      "responseBytes": 10504
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "decision": "ALLOW_PREPARATION_ONLY",
+  "owner": "/root/po01_frontend_audit",
+  "createdAtUtc": "2026-09-23T01:09:40.7507349Z",
+  "baseline": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+  "branch": "codex/po06-identity-ui",
+  "status": "prepared-awaiting-go",
+  "applicationWrites": 0,
+  "applicationClaimActive": false,
+  "testsRun": false,
+  "buildRun": false,
+  "dependenciesInstalled": false,
+  "rootGoRequired": true,
+  "rootContract": {
+    "path": "C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/artifacts/task-validation/po-06-identita-posto-letto/task-contract.md",
+    "sha256": "b6146be46cb5ce97cd01f15ad4266738af39b0d24e06ea3941ba6552dffec7aa"
+  },
+  "protectedLaunchers": [
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "inspectedSource": [
+    {
+      "path": "docs/product/piano-po-feedback-2026-09-22.md",
+      "sha256": "5d5c6b3968bf950f0b8fa7dd408e39744c1a1e2b5e097c3157310374091b733e"
+    },
+    {
+      "path": "docs/product/note-implementazione-piano-2026-09-23.md",
+      "sha256": "126a5926b3c591442749198821b9a2ee864ce68b7928ed7f3bb588ae335141df"
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "595a5c045ffdbb3461ee50a9fe72be305f39f8b29e98883202038798f0e6aad6"
+    },
+    {
+      "path": "frontend/src/lib/patientDemographics.ts",
+      "sha256": "b72556dcd109c6ddbaa0446f5ede057b091f965420790dde824ba459377ecf10"
+    },
+    {
+      "path": "frontend/src/lib/patientPage.ts",
+      "sha256": "6378534b7d73a931b952b2601fbabf593ae11a32ea7d06b3f1a7d9501f1ab788"
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPage.ts",
+      "sha256": "ee7dcd825239b993f47fd3dd7b021bb3da56bb74e8386c6d3c5af542dbc86df9"
+    },
+    {
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "sha256": "f26695d21805468cf666d64ef6500b8f103c0b7e4654eca79612769e13270e26"
+    },
+    {
+      "path": "frontend/src/lib/consegneFeed.ts",
+      "sha256": "622cd18879766354a11597eee28c459f39af2e77daad0c915e8618534ccd02e9"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "sha256": "5938a72fcba3e970bfedead223428dfb28ff4595423bd433b1f45067a31b3ce8"
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "sha256": "c022dd6ae1dce115c822bdc81daf0b2985d7b30ef68ca00441c252d845b96144"
+    },
+    {
+      "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "sha256": "77a3af1712d343b2ee55a8781f79d93210a9a5d432dc3c431733e1014ffc6981"
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "sha256": "26b4cb41b3fd27435112a60e740193cd743b120dd85f6fc9a923c670d292a45d"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "sha256": "d4510266cc0feaef93b03904ebd175bc93a1553f01251625a9252d8b4e161dc5"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "sha256": "3610d725aa788eb5471ce0ad699245d5c83b8e8acdda72f82c06d249c5655fb8"
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.tsx",
+      "sha256": "b843f095505fba2676bc33e30e56e1b717833e72724bdae3ee1b1568777be612"
+    }
+  ],
+  "preparationArtifacts": [
+    {
+      "path": "task-contract.md",
+      "sha256": "c6c65bab985c48d702bd2fc50f7ab22e89a695f9f41f94f5d2456afe8ba8d1a3"
+    },
+    {
+      "path": "ui-test-plan.md",
+      "sha256": "bcf6c2b750481757eb06d2eefe6b489e3cae5577137a9d34d7f2c3c05b149f60"
+    },
+    {
+      "path": "claims.json",
+      "sha256": "733b3a034fc81dc12a7ae0c90b6a275a235d521b3ab1fd87fb13c5eaf73b6f1c"
+    }
+  ],
+  "coordination": {
+    "guidance": "Ruflo read-only advisory guidance queried",
+    "memory": "No directly applicable identity/location pattern; older phone-required pattern excluded",
+    "backend": "Additive DTO placement and asOf YYYY-MM-DD Europe/Rome confirmed by backend owner"
+  }
+}

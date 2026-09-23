@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { IcoMessage } from '../../icons';
+import { PatientIdentity } from '../shared/PatientIdentity';
 import type { ParameterPagePatient } from '../../lib/patientParametersPage';
 import {
   PARAMETER_FIELDS,
@@ -21,25 +22,19 @@ function thresholdClass(key: string, value = '') {
 }
 interface Props {
   patient: ParameterPagePatient;
-  room?: string;
-  bed?: string;
   lastReadingAt?: string | null;
   readingCount?: number;
   noteCount?: number;
   summaryPending?: boolean;
-  summaryUnavailable?: boolean;
   onOpenHistory: () => void;
   onSave: (request: ParameterReadingRequest) => Promise<PatientParameterReading>;
 }
 export function ParameterEntryRow({
   patient,
-  room,
-  bed,
   lastReadingAt,
   readingCount = 0,
   noteCount,
   summaryPending = false,
-  summaryUnavailable = false,
   onOpenHistory,
   onSave,
 }: Props) {
@@ -109,16 +104,7 @@ export function ParameterEntryRow({
           {`${patient.firstName?.[0] ?? ''}${patient.lastName?.[0] ?? ''}`.toUpperCase()}
         </span>
         <span className="parameter-entry-patient__text">
-          <span className="qe-row__name">{name}</span>
-          <span className="qe-row__room">
-            {summaryPending
-              ? 'Caricamento camera…'
-              : summaryUnavailable
-                ? 'Camera non disponibile'
-                : room
-                  ? `Camera ${room}${bed ? ` · Letto ${bed}` : ''}`
-                  : 'Camera non assegnata'}
-          </span>
+          <PatientIdentity patient={patient} />
           {lastReadingAt && (
             <span className="parameter-entry-last">
               {readingCount} oggi · ultima {readingTime(lastReadingAt).slice(-5)}

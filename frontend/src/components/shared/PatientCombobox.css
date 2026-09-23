@@ -37,8 +37,8 @@
   top: 50%;
   right: 4px;
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 0;
   border-radius: 7px;
@@ -91,24 +91,6 @@
   height: 15px;
 }
 
-.patient-combobox__selection > span:last-child,
-.patient-combobox__selection strong,
-.patient-combobox__selection > span:last-child > span {
-  display: block;
-  min-width: 0;
-}
-
-.patient-combobox__selection strong {
-  font-size: 13px;
-}
-
-.patient-combobox__selection > span:last-child > span {
-  margin-top: 2px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
-}
-
 .patient-combobox__popup {
   position: absolute;
   top: calc(100% + 6px);
@@ -132,7 +114,7 @@
 
 .patient-combobox__option {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   align-items: center;
   min-height: 52px;

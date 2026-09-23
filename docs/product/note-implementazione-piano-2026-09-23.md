@@ -44,6 +44,8 @@ Riutilizzare il contratto idempotente dei parametri vitali. Finalizzazione persi
 
 UI PAINAD: cinque item con descrizioni complete, risposte mai preselezionate, zero distinto da assente, avanzamento, bozza, riepilogo, storico e PDF finalizzato dallo snapshot. 243 combinazioni, soglie, incompletezza, conflitto, retry, impossibilità di cancellazione tramite PUT Cartella legacy, errore PDF e recupero. Nuovi moduli nella navigazione esistente, nessuna rimozione anticipata di NRS.
 
+Preparazione PO10 del 23 settembre: creare requestId+hash iniziale immutabile, CAS sulle bozze e rettifica come nuovo record sullo stesso paziente/tipo. Finali protetti anche dal DB; nessun delete e relazione paziente Restrict. PDF con lease/token, bytes/SHA e stato ready nella stessa transazione, PatientDocument.assessmentId univoco. La guardia archivio attuale Entra è più ampia del patientScope: il nuovo collegamento strutturato deve imporre lo scope assessment su lista/count/sourceMatch/dettaglio/bytes e accesso AI, senza basarsi sul tipo riclassificabile. Non cambiare la policy dei documenti legacy. Renderer dedicato pdf-lib già disponibile, testo Unicode e impaginazione A4 verificati. PAINAD: oltre alle 243 combinazioni complete, 781 parziali di null/0/2/1 senza score finale; istogramma dei totali 1,5,15,30,45,51,45,30,15,5,1. Nessun nuovo framework di code o firme digitali.
+
 ## PO-12/13 — Limiti delle fonti
 
 Tinetti: quattro voci DX/SX per lunghezza/altezza sono corroborate dalle fonti universitarie e già presenti; preservare struttura e soglie esistenti. Correggere sentinelle -1 e rischio su parziali. Non qualificare questo come convalida clinica di un nuovo modello.

@@ -3,11 +3,8 @@ import type { KeyboardEvent } from 'react';
 import type { Paziente } from '../../types';
 import { IcoCheck, IcoSearch, IcoX } from '../../icons';
 import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
-import {
-  nextPatientOptionIndex,
-  patientDisplayName,
-  patientFiscalCode,
-} from '../../lib/patientComboboxModel';
+import { nextPatientOptionIndex, patientDisplayName } from '../../lib/patientComboboxModel';
+import { PatientIdentity } from './PatientIdentity';
 import './PatientCombobox.css';
 
 export interface PatientComboboxProps {
@@ -158,12 +155,7 @@ export function PatientCombobox({
           <span className="patient-combobox__selection-icon" aria-hidden="true">
             <IcoCheck />
           </span>
-          <span>
-            <strong>{patientDisplayName(selected)}</strong>
-            <span>
-              CF {patientFiscalCode(selected)} · Scheda {selected.medicalRecordNumber}
-            </span>
-          </span>
+          <PatientIdentity patient={selected} />
         </div>
       )}
 
@@ -200,13 +192,7 @@ export function PatientCombobox({
                   }}
                   onMouseEnter={() => setActiveIndex(index)}
                 >
-                  <span className="patient-combobox__option-name">
-                    {patientDisplayName(patient)}
-                  </span>
-                  <span className="patient-combobox__option-identity">
-                    <strong>CF {patientFiscalCode(patient)}</strong>
-                    <span>Scheda {patient.medicalRecordNumber}</span>
-                  </span>
+                  <PatientIdentity patient={patient} />
                 </li>
               ))}
             </ul>

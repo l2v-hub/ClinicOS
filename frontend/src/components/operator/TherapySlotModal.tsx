@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type {
   TherapySlot,
   TherapySlotPatient,
@@ -7,6 +7,9 @@ import type {
   TherapyActionInfo,
 } from '../../types';
 import { sortPazienti } from '../../lib/patientSort';
+import { patientIdentifier, patientIdentityName } from '../../lib/patientIdentity';
+import { PatientIdentity } from '../shared/PatientIdentity';
+import './TherapySlotModal.css';
 
 interface Props {
   slot: TherapySlot;
@@ -46,6 +49,15 @@ export function TherapySlotModal({
   loadMoreError = null,
   onLoadMore,
 }: Props) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    dialogRef.current?.querySelector<HTMLButtonElement>('.therapy-modal__close')?.focus();
+    return () => {
+      if (previous?.isConnected) previous.focus();
+    };
+  }, []);
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
   const [noteText, setNoteText] = useState('');
@@ -94,11 +106,39 @@ export function TherapySlotModal({
 
   return (
     <div className="therapy-modal-overlay" onClick={onClose}>
-      <div className="therapy-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="therapy-modal"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            event.stopPropagation();
+            onClose();
+          }
+          if (event.key !== 'Tab') return;
+          const controls = Array.from(
+            event.currentTarget.querySelectorAll<HTMLElement>(
+              'button:not(:disabled), input:not(:disabled), [tabindex="0"]',
+            ),
+          );
+          const first = controls[0];
+          const last = controls.at(-1);
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last?.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+          }
+        }}
+      >
         {/* Header */}
         <div className="therapy-modal__header">
           <div>
-            <h3>
+            <h3 id={titleId}>
               {slot.label} &mdash; {slot.ora}
             </h3>
             <span className="therapy-modal__header-info">
@@ -152,19 +192,22 @@ export function TherapySlotModal({
             </div>
           ) : (
             patients.map((p) => (
-              <div key={p.patientId}>
+              <section
+                className="therapy-patient-group"
+                key={p.patientId}
+                aria-label={patientIdentityName({ ...p, id: p.patientId })}
+              >
                 {/* Patient header */}
                 <div className="therapy-patient-header">
-                  {p.lastName.toUpperCase()}, {p.firstName}
-                  <span className="therapy-patient-header__sub">
-                    Camera {p.room} / Letto {p.bed}
-                  </span>
+                  <PatientIdentity patient={{ ...p, id: p.patientId }} />
                 </div>
 
                 {/* Drug rows */}
                 {p.administrations.map((a) => {
                   const key = `${p.patientId}|${a.therapyId}`;
                   const isPending = pendingKeys.has(key);
+                  const identity = { ...p, id: p.patientId };
+                  const actionTarget = `${patientIdentityName(identity)} · ${patientIdentifier(identity)} · ${a.drugName} · ${a.dosage}`;
                   return (
                     <div key={key}>
                       <div className="therapy-drug-row">
@@ -200,6 +243,7 @@ export function TherapySlotModal({
                             <>
                               <button
                                 className="therapy-action-btn therapy-action-btn--confirm"
+                                aria-label={`Erogata: ${actionTarget}`}
                                 disabled={isPending}
                                 style={{ opacity: isPending ? 0.6 : 1 }}
                                 onClick={() => {
@@ -211,6 +255,8 @@ export function TherapySlotModal({
                               </button>
                               <button
                                 className="therapy-action-btn therapy-action-btn--reject"
+                                aria-label={`Non erogata: ${actionTarget}`}
+                                aria-expanded={expandedKey === key}
                                 onClick={() => {
                                   if (expandedKey === key) {
                                     setExpandedKey(null);
@@ -229,13 +275,15 @@ export function TherapySlotModal({
                           )}
                         </div>
                       </div>
-                      {expandedKey === key && (
+                      {expandedKey === key && !readOnly && (
                         <div className="therapy-nonadmin-expand">
                           <div className="therapy-motivi-grid">
                             {MOTIVI.map((m) => (
                               <button
                                 key={m.value}
                                 className={`therapy-motivo-btn${selectedMotivo === m.value ? ' selected' : ''}`}
+                                aria-label={`${m.label}: ${actionTarget}`}
+                                aria-pressed={selectedMotivo === m.value}
                                 onClick={() => setSelectedMotivo(m.value)}
                               >
                                 {m.label}
@@ -245,6 +293,7 @@ export function TherapySlotModal({
                           {selectedMotivo === 'altro' && (
                             <input
                               className="therapy-note-input"
+                              aria-label={`Motivo della mancata erogazione: ${actionTarget}`}
                               placeholder="Specifica il motivo..."
                               value={noteText}
                               onChange={(e) => setNoteText(e.target.value)}
@@ -252,6 +301,7 @@ export function TherapySlotModal({
                           )}
                           <button
                             className="therapy-action-btn therapy-action-btn--confirm"
+                            aria-label={`Conferma non erogata: ${actionTarget}`}
                             disabled={!selectedMotivo}
                             style={{ opacity: selectedMotivo ? 1 : 0.5 }}
                             onClick={() => {
@@ -269,7 +319,7 @@ export function TherapySlotModal({
                     </div>
                   );
                 })}
-              </div>
+              </section>
             ))
           )}
         </div>

@@ -14,6 +14,8 @@ import { ConfirmDialog } from '../shared/ConfirmDialog';
 import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
 import { PageHeader } from '../shared/PageHeader';
 import { ConsegnaCreateForm } from './ConsegnaCreateForm';
+import { PatientIdentity } from '../shared/PatientIdentity';
+import { parsePatientIdentity, patientIdentityName } from '../../lib/patientIdentity';
 
 interface ConsegnePageProps {
   consegne: Consegna[];
@@ -292,6 +294,8 @@ function ConsegnaCard({
   const canTransition =
     isAdmin || c.creatoDaId === operatoreId || c.operatoreAssegnatoId === operatoreId;
   const canDelete = isAdmin || c.creatoDaId === operatoreId;
+  const candidateIdentity = parsePatientIdentity(c.identity);
+  const identity = candidateIdentity?.id === c.pazienteId ? candidateIdentity : null;
 
   return (
     <div
@@ -333,15 +337,16 @@ function ConsegnaCard({
               .toUpperCase()}
           </span>
         )}
-        {onSelectPaziente && c.pazienteNome ? (
+        <PatientIdentity patient={identity} fallbackName={c.pazienteNome} />
+        {onSelectPaziente && identity && (
           <button
             className="link-btn consegna-paziente"
-            onClick={() => onSelectPaziente(c.pazienteNome!, c.pazienteId)}
+            type="button"
+            aria-label={`Apri cartella di ${patientIdentityName(identity)}`}
+            onClick={() => onSelectPaziente(patientIdentityName(identity), identity.id)}
           >
-            {c.pazienteNome}
+            Apri cartella
           </button>
-        ) : (
-          <span className="consegna-paziente">{c.pazienteNome}</span>
         )}
       </div>
       <ConsegnaTimestamp createdAt={c.createdAt} />

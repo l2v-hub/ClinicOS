@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
 import { patientScopeWhere } from './patient-scope.js';
+import { patientLocationJoin, type PatientLocationDto } from './operational-identity.js';
 import { facilityToday, parameterDate, ParameterReadingError } from './parameter-reading-input.js';
 import { patientAlphabeticalAfter, patientAlphabeticalOrder } from './alphabetical-order.js';
 import {
@@ -20,6 +21,9 @@ interface ParameterPageRow {
   medicalRecordNumber: string;
   firstName: string;
   lastName: string;
+  codiceFiscale: string | null;
+  dateOfBirth: string | null;
+  location: PatientLocationDto;
   parametriMensili: unknown;
   cameraNumero: string | null;
   lettoNumero: string | null;
@@ -119,8 +123,8 @@ export async function loadPatientParametersPage(
         ${normalizedSql(Prisma.sql`p."firstName"`)} LIKE ${pattern} ESCAPE '\\' OR
         ${normalizedSql(Prisma.sql`p."lastName"`)} LIKE ${pattern} ESCAPE '\\' OR
         ${normalizedSql(Prisma.sql`p."medicalRecordNumber"`)} LIKE ${pattern} ESCAPE '\\' OR
-        ${normalizedSql(Prisma.sql`COALESCE(c."data"->>'cameraNumero', '')`)} LIKE ${pattern} ESCAPE '\\' OR
-        ${normalizedSql(Prisma.sql`COALESCE(c."data"->>'lettoNumero', '')`)} LIKE ${pattern} ESCAPE '\\'
+        ${normalizedSql(Prisma.sql`COALESCE(location.location->>'room', '')`)} LIKE ${pattern} ESCAPE '\\' OR
+        ${normalizedSql(Prisma.sql`COALESCE(location.location->>'bed', '')`)} LIKE ${pattern} ESCAPE '\\'
       )`);
     }
   }
@@ -131,10 +135,13 @@ export async function loadPatientParametersPage(
   const whereSql = predicates.length
     ? Prisma.sql`WHERE ${Prisma.join(predicates, ' AND ')}`
     : Prisma.empty;
+  // Location must precede the limit for search, but ordinary pages only resolve
+  // the selected patients instead of inspecting the whole authorized roster.
+  const locationValue = input.q ? Prisma.sql`selected.location` : Prisma.sql`location.location`;
   const rows = await prisma.$queryRaw<ParameterPageRow[]>(Prisma.sql`
     WITH page_patients AS MATERIALIZED (
-      SELECT p."id" FROM "Patient" p
-      LEFT JOIN "Cartella" c ON c."patientId" = p."id"
+      SELECT p."id" ${input.q ? Prisma.sql`, location.location` : Prisma.empty} FROM "Patient" p
+      ${input.q ? patientLocationJoin(readingDate) : Prisma.empty}
       ${whereSql}
       ORDER BY ${patientAlphabeticalOrder}
       LIMIT ${limit + 1}
@@ -144,6 +151,9 @@ export async function loadPatientParametersPage(
       p."medicalRecordNumber",
       p."firstName",
       p."lastName",
+      p."codiceFiscale",
+      to_char(p."dateOfBirth", 'YYYY-MM-DD') AS "dateOfBirth",
+      ${locationValue} AS location,
       ${
         entryView
           ? Prisma.sql`'[]'::jsonb`
@@ -185,11 +195,12 @@ export async function loadPatientParametersPage(
           AND month_entry->>'anno' = ${String(year)}
       ), '[]'::jsonb)`
       } AS "parametriMensili",
-      c."data"->>'cameraNumero' AS "cameraNumero",
-      c."data"->>'lettoNumero' AS "lettoNumero",
+      ${locationValue}->>'room' AS "cameraNumero",
+      ${locationValue}->>'bed' AS "lettoNumero",
       daily."readingCount", daily."lastReadingAt", daily."noteCount"
     FROM page_patients selected
     JOIN "Patient" p ON p."id" = selected."id"
+    ${input.q ? Prisma.empty : patientLocationJoin(readingDate)}
     LEFT JOIN "Cartella" c ON c."patientId" = p."id"
     LEFT JOIN LATERAL (
       SELECT count(*)::int AS "readingCount",

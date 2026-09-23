@@ -16,6 +16,10 @@ import {
 } from './therapy-administration-page.js';
 import { TherapySlotCapacityError } from './therapy-capacity.js';
 import { therapyWhereForAccess, type TherapyPatientAccess } from './therapy-query.js';
+import {
+  loadOperationalIdentities,
+  type PatientLocationDto,
+} from '../patients/operational-identity.js';
 
 export { therapyWhereForDate, therapyWhereForDueDate } from './therapy-query.js';
 export { TherapySlotCapacityError } from './therapy-capacity.js';
@@ -31,12 +35,6 @@ export const FASCE = [
 type FlagField = (typeof FASCE)[number]['flagField'];
 
 export const MAX_THERAPY_SLOT_SOURCE_ROWS = 5000;
-
-interface RoomFallbackRow {
-  patientId: string;
-  cameraNumero: string | null;
-  lettoNumero: string | null;
-}
 
 export interface SlotAdministration {
   administrationId: string | null;
@@ -56,6 +54,9 @@ export interface SlotPatient {
   patientId: string;
   firstName: string;
   lastName: string;
+  codiceFiscale: string | null;
+  dateOfBirth: string | null;
+  location: PatientLocationDto;
   room: string;
   bed: string;
   administrations: SlotAdministration[];
@@ -88,14 +89,15 @@ interface ExactSummaryRow {
 }
 
 function therapyAccessSql(access: TherapyPatientAccess): Prisma.Sql {
+  const predicates: Prisma.Sql[] = [];
   if (Array.isArray(access.patientIds)) {
     if (access.patientIds.length === 0) return Prisma.sql`AND FALSE`;
-    return Prisma.sql`AND pt."patientId" IN (${Prisma.join([...access.patientIds])})`;
+    predicates.push(Prisma.sql`pt."patientId" IN (${Prisma.join([...access.patientIds])})`);
   }
   if (access.registeredById) {
-    return Prisma.sql`AND p."registeredById" = ${access.registeredById}`;
+    predicates.push(Prisma.sql`p."registeredById" = ${access.registeredById}`);
   }
-  return Prisma.empty;
+  return predicates.length ? Prisma.sql`AND ${Prisma.join(predicates, ' AND ')}` : Prisma.empty;
 }
 
 /** Exact, constant-size fascia totals. Details remain cursor-paged independently. */
@@ -231,17 +233,6 @@ async function buildTherapySlotSourcePage(
         select: {
           firstName: true,
           lastName: true,
-          roomAssignments: {
-            where: {
-              startDate: { lte: date },
-              OR: [{ endDate: null }, { endDate: { gte: date } }],
-            },
-            orderBy: [{ startDate: 'desc' }, { id: 'desc' }],
-            take: 1,
-            select: {
-              bed: { select: { label: true, room: { select: { numero: true } } } },
-            },
-          },
         },
       },
     },
@@ -271,26 +262,11 @@ async function buildTherapySlotSourcePage(
       ),
     ),
   );
-  const missingAssignmentIds = [
-    ...new Set(
-      validTherapies
-        .filter((therapy) => therapy.patient.roomAssignments.length === 0)
-        .map((therapy) => therapy.patientId),
-    ),
-  ];
-  const fallbackRows =
-    missingAssignmentIds.length === 0
-      ? []
-      : await prisma.$queryRaw<RoomFallbackRow[]>(Prisma.sql`
-          SELECT
-            "patientId",
-            data->>'cameraNumero' AS "cameraNumero",
-            data->>'lettoNumero' AS "lettoNumero"
-          FROM "Cartella"
-          WHERE "patientId" IN (${Prisma.join(missingAssignmentIds)})
-          LIMIT ${MAX_THERAPY_SLOT_SOURCE_ROWS}
-        `);
-  const roomFallbackByPatient = new Map(fallbackRows.map((row) => [row.patientId, row]));
+  const identities = await loadOperationalIdentities(
+    validTherapies.map((therapy) => therapy.patientId),
+    access,
+    date,
+  );
   const administrations = await findTherapyPageAdministrations(
     date,
     validTherapies.map((therapy) => ({
@@ -322,13 +298,12 @@ async function buildTherapySlotSourcePage(
     const patientMap = new Map<string, SlotPatient>();
 
     for (const pt of fasciaTherapies) {
-      const patient = pt.patient;
-
-      // Resolve room/bed from active assignment, fallback to cartella JSON
-      const activeAssignment = patient.roomAssignments[0];
-      const fallback = roomFallbackByPatient.get(pt.patientId);
-      const room = activeAssignment?.bed?.room?.numero || fallback?.cameraNumero || 'Non assegnato';
-      const bed = activeAssignment?.bed?.label || fallback?.lettoNumero || 'Non assegnato';
+      const patient = identities.get(pt.patientId);
+      if (!patient) continue;
+      const location = patient.location;
+      const missingLabel = location.status === 'unassigned' ? 'Non assegnato' : 'Non disponibile';
+      const room = location.room ?? missingLabel;
+      const bed = location.bed ?? missingLabel;
 
       const existing =
         adminMap.get(`${pt.id}|${f.fascia}`) ??
@@ -365,6 +340,9 @@ async function buildTherapySlotSourcePage(
           patientId: pt.patientId,
           firstName: patient.firstName,
           lastName: patient.lastName,
+          codiceFiscale: patient.codiceFiscale,
+          dateOfBirth: patient.dateOfBirth,
+          location,
           room,
           bed,
           administrations: [],

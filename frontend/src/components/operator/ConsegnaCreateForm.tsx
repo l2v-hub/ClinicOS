@@ -122,7 +122,7 @@ export function ConsegnaCreateForm({
                 onChange={setPatient}
                 required
                 disabled={saving}
-                helperText="Sono disponibili i pazienti registrati nel tuo perimetro. Il codice fiscale resta sempre visibile."
+                helperText="Sono disponibili i pazienti registrati nel tuo perimetro, con codice fiscale o data di nascita."
               />
             </div>
             {isAdmin && (

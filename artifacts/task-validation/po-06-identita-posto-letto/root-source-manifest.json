@@ -1,0 +1,167 @@
+{
+  "baseline": "f75f19b37b73dc7d686f9539b7a8603a0efb8392",
+  "at": "2026-09-23T01:33:12.462Z",
+  "files": [
+    {
+      "path": "backend/src/consegne/read-service.ts",
+      "sha256": "1be6544524c0cc63f0241db5f1cbfdb873267e8251c1e29b3d9c819e56dda6ad",
+      "bytes": 7581
+    },
+    {
+      "path": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+      "sha256": "d45d26b7d1ab80e2b7bb1c7fc7b938274d320a17a0d7fde56b2c80b247fec68b",
+      "bytes": 13288
+    },
+    {
+      "path": "backend/src/patients/identity-page.ts",
+      "sha256": "0307e8c3bdd02538830882609ce56e4587b7953abae613da05a6b2d55f23988b",
+      "bytes": 3627
+    },
+    {
+      "path": "backend/src/patients/operational-identity.ts",
+      "sha256": "860cbc6a250c06833f6986328a07283039c068af2fb8e1eae227ecfa6808fd85",
+      "bytes": 5986
+    },
+    {
+      "path": "backend/src/patients/parameters-page.ts",
+      "sha256": "066215dbab0aa07c44dfa9495128b010786801c970922442660a58d10fd82acc",
+      "bytes": 8994
+    },
+    {
+      "path": "backend/src/therapies/therapy-slots.ts",
+      "sha256": "c0fc01450407e53ff3d80ffb437ccc2c956e987f81d91725913fc78930380c13",
+      "bytes": 14740
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "sha256": "6fe8cc6e9d0b38f0b311e95c762745f7915f1a7ddf7b2f47963a716beada9e0d",
+      "bytes": 9765
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "sha256": "c9f251e8a6667afe6b12b7715af14109685c0a25594efac7cc8a843d29a016b3",
+      "bytes": 19713
+    },
+    {
+      "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "sha256": "24a65c4b5f8b4d58205aa3dae29918d8740371e6d2d96ede6a745007a66eabcd",
+      "bytes": 12132
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "sha256": "6906b6f971e99a5740b7430d4cf7a2ca5f7b64b2458af4e44f198cc25935d558",
+      "bytes": 7645
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.css",
+      "sha256": "9e13478443a3d5ce2d489c35ec07c63d1031c73c6ccbbc54bac9db019db89419",
+      "bytes": 9001
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameters.css",
+      "sha256": "1cacea51f3cd42a1539c2a420bf1cddb0117d16baea00393ae1ab5c15e781019",
+      "bytes": 6082
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "sha256": "30babc7fc54002c3ad22f6a68d2e8f47f7ba2b857b57554f52b6d16de689fc8f",
+      "bytes": 13523
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.css",
+      "sha256": "7ccfa6fb85769d03b78c6d1bff31e8a9c9d58550dbd3c9d547b70b946a91d7ec",
+      "bytes": 1716
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "sha256": "8cdbc734f48e0ea1ec833f2bbe7a863e7fcc10d0c62a29eaf9a9c03a3939a82d",
+      "bytes": 14265
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operationalIdentity.fixtures.ts",
+      "sha256": "5fb2155c6c1d85d90300e09456ab7f76968d357e860cc485de8f03535ab28030",
+      "bytes": 2034
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operationalIdentity.test.ts",
+      "sha256": "1813ac85d1143b9a58c19b373417123702421976af19efbd58f340b4291b61ce",
+      "bytes": 6900
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/parameterNotes.test.ts",
+      "sha256": "99b6de70461364448e6afb366c329ed45531c059c6dee41fc7baedd8d4efea58",
+      "bytes": 1571
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.css",
+      "sha256": "af48528a9c3fdbdec12ef193193565ceab32f1c1482db986b701f6e9b4c6dd68",
+      "bytes": 3273
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.tsx",
+      "sha256": "71a6b9b9d37e9ba0b51276eb436d6a1a4ea4f66bba9ff36e333492d551af0145",
+      "bytes": 6782
+    },
+    {
+      "path": "frontend/src/components/shared/PatientIdentity.css",
+      "sha256": "bee390f46fa3c41eb250868465e3ffffb50e8f9e5a707f8ddc8b1e255ba689b6",
+      "bytes": 1147
+    },
+    {
+      "path": "frontend/src/components/shared/PatientIdentity.tsx",
+      "sha256": "56c1253d62f13557d4458f986755766ea00d6764df7d2efe7b5eba681b6f08b7",
+      "bytes": 2027
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaFormUxContract.test.ts",
+      "sha256": "de3b391649304d025e33499fc82a6ccb7d9fc395d94790e3fd38bec778ab740e",
+      "bytes": 2911
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operationalIdentityPages.test.ts",
+      "sha256": "cebeebf2d44add9bd4ea22a6bc5cf6561df45aa44670c12e32ec48eab5068dcf",
+      "bytes": 4256
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientIdentity.test.ts",
+      "sha256": "268c124a38187a49b5d211d344f3ab9256873a3fcfda2f82bee95487f4235cdd",
+      "bytes": 3220
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "sha256": "bb29f3c0f38017dda079c84656834d4f38df67db18f865ef0c21728586e2e13e",
+      "bytes": 4185
+    },
+    {
+      "path": "frontend/src/lib/patientIdentity.ts",
+      "sha256": "d54ae5af8a7edd1d228721a554690c0c7a91d0c57eaf7b9ff5101dbbe5c16899",
+      "bytes": 4291
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPage.ts",
+      "sha256": "b4c0b66be1b29fe8a74073051f694705ddcc6d1750b2736dbed724d36960e8a6",
+      "bytes": 3721
+    },
+    {
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "sha256": "683fc12c34283cb09cf208b149be28a2c98b6fe25dbee376249215e74ec86667",
+      "bytes": 6324
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "7cd65975a0468398eb61e246cea96427282b40081b407985bea270b6ca2b5ea4",
+      "bytes": 31736
+    },
+    {
+      "path": "tests/fixtures/po06-identity.mjs",
+      "sha256": "09305a65dbc3424884b04dc15975d9216b08e40ee9ac9be5266dc4bb5ab6eccd",
+      "bytes": 3804
+    },
+    {
+      "path": "tests/integration/po06-identity.test.mts",
+      "sha256": "89394bf09a0a9c83f92b6b1ce0b553aeece858aad22021f168e00e8de8814bf5",
+      "bytes": 7305
+    }
+  ],
+  "treeHash": "25a758abc777de2a774c7d0651a2f142b4e66fdcac2e56243cd6ba2431fe0dcb"
+}

@@ -26,8 +26,8 @@ test('patient list exposes the canonical fiscal identity and never shows MRN', (
   assert.match(list, /aria-label="Cerca paziente per nome o codice fiscale"/);
   assert.doesNotMatch(list, /MRN|medicalRecordNumber/);
   assert.match(roster, /sortButton\('fiscalCode', 'Codice fiscale'\)/);
-  assert.match(roster, /patient\.codiceFiscale/);
-  assert.match(roster, /Codice fiscale non disponibile/);
+  assert.match(roster, /<PatientIdentity patient=\{patient\}/);
+  assert.match(roster, /<PatientIdentifier patient=\{patient\}/);
   assert.doesNotMatch(roster, /MRN|medicalRecordNumber/);
 });
 

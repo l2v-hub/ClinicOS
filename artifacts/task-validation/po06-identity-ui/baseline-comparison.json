@@ -1,0 +1,89 @@
+{
+  "baseline": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+  "lint": {
+    "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+    "baselineSha256": "2af74746e5327e64bc65132a8476cf933a8d846920a0f720823b46838dd997eb",
+    "currentSha256": "24a65c4b5f8b4d58205aa3dae29918d8740371e6d2d96ede6a745007a66eabcd",
+    "baselineDiagnostics": [
+      {
+        "ruleId": "react-hooks/refs",
+        "severity": 2,
+        "line": 46,
+        "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).\n\nC:\\Workspace\\ClinicOSHouse-worktrees\\po06-identity-ui\\frontend\\src\\components\\operator\\MultiPatientParametri.tsx:46:3\n  44 |   const failedMore = useRef(false);\n  45 |   const savedSummaries = useRef(new Map<string, SavedParameterReading['summary']>());\n> 46 |   currentDay.current = day;\n     |   ^^^^^^^^^^^^^^^^^^ Cannot update ref during render\n  47 |   const filters = useMemo(\n  48 |     () => ({\n  49 |       q: query.trim() || undefined,"
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 69,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\nC:\\Workspace\\ClinicOSHouse-worktrees\\po06-identity-ui\\frontend\\src\\components\\operator\\MultiPatientParametri.tsx:69:5\n  67 |     const controller = new AbortController();\n  68 |     moreController.current?.abort();\n> 69 |     setLoading(true);\n     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect\n  70 |     setLoadingMore(false);\n  71 |     setSummaryLoading(true);\n  72 |     setNextCursor(null);"
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "line": 167,
+        "message": "The ref value 'generation.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'generation.current' to a variable inside the effect, and use that variable in the cleanup function."
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "line": 169,
+        "message": "React Hook useEffect has missing dependencies: 'day', 'items.length', 'protectSavedSummary', and 'query'. Either include them or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setItems' needs the current value of 'day'."
+      }
+    ],
+    "currentDiagnostics": [
+      {
+        "ruleId": "react-hooks/refs",
+        "severity": 2,
+        "line": 46,
+        "message": "Error: Cannot access refs during render\n\nReact refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).\n\nC:\\Workspace\\ClinicOSHouse-worktrees\\po06-identity-ui\\frontend\\src\\components\\operator\\MultiPatientParametri.tsx:46:3\n  44 |   const failedMore = useRef(false);\n  45 |   const savedSummaries = useRef(new Map<string, SavedParameterReading['summary']>());\n> 46 |   currentDay.current = day;\n     |   ^^^^^^^^^^^^^^^^^^ Cannot update ref during render\n  47 |   const filters = useMemo(\n  48 |     () => ({\n  49 |       q: query.trim() || undefined,"
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "line": 69,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\nC:\\Workspace\\ClinicOSHouse-worktrees\\po06-identity-ui\\frontend\\src\\components\\operator\\MultiPatientParametri.tsx:69:5\n  67 |     const controller = new AbortController();\n  68 |     moreController.current?.abort();\n> 69 |     setLoading(true);\n     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect\n  70 |     setLoadingMore(false);\n  71 |     setSummaryLoading(true);\n  72 |     setNextCursor(null);"
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "line": 167,
+        "message": "The ref value 'generation.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'generation.current' to a variable inside the effect, and use that variable in the cleanup function."
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "line": 169,
+        "message": "React Hook useEffect has missing dependencies: 'day', 'items.length', 'protectSavedSummary', and 'query'. Either include them or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setItems' needs the current value of 'day'."
+      }
+    ],
+    "equal": true
+  },
+  "guard": {
+    "assertion": "/Le terapie sono disponibili nella vista Giorno/",
+    "baselineOperatorContainsText": false,
+    "files": [
+      {
+        "path": "frontend/src/components/operator/OperatorAgenda.tsx",
+        "baselineBlobSha256": "83b9533408a22919e699998408a4722fb4278f4d394a9c093eeff051efde4084",
+        "currentSha256": "67530b389107043f807d7cc093c6d4cebdc9a3e8c65243bbf7b3770087decd5a",
+        "contentEqualIgnoringCRLF": true
+      },
+      {
+        "path": "frontend/src/components/admin/AdminAgenda.tsx",
+        "baselineBlobSha256": "87c7516dbf531cfa37e99fcce6e294e9b6a53cc5099e91549313f130bea2613f",
+        "currentSha256": "3ee020d35a202aefb7c3d009cb88d27bb94e848f8ec823ea698c4d6cb5b36524",
+        "contentEqualIgnoringCRLF": true
+      },
+      {
+        "path": "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+        "baselineBlobSha256": "0bd3f98c7de269c635376ffa8b2158872fedd6651d8818623a5044e2095e4b36",
+        "currentSha256": "805c39ca834e690b390387f17413bfdb529c87a10970eef4283a2bc8699bcb7b",
+        "contentEqualIgnoringCRLF": true
+      }
+    ]
+  },
+  "therapyPayload": {
+    "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+    "equal": true
+  }
+}

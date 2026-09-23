@@ -1,0 +1,49 @@
+.patient-identity {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+  text-align: left;
+  line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.patient-identity .patient-identity__name,
+.patient-identity__name {
+  color: var(--text, #1a3357);
+  font-size: 15px;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.patient-identity__identifier {
+  color: var(--text, #1a3357);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.patient-identity .patient-identity__location {
+  color: var(--text, #1a3357);
+  font-size: 12px;
+  font-weight: 550;
+}
+.patient-identity .patient-identity__context,
+.patient-identity .patient-identity__incomplete {
+  color: var(--text-muted, #526174);
+  font-size: 11px;
+  font-weight: 400;
+}
+.consegna-card__patient > .patient-identity {
+  flex: 1;
+}
+.consegna-card__patient {
+  flex-wrap: wrap;
+}
+.consegna-card__patient > .consegna-paziente {
+  min-height: 44px;
+  white-space: normal;
+}
+.consegna-card__patient > .consegna-paziente:focus-visible {
+  outline: 2px solid var(--blue, #2463eb);
+  outline-offset: 3px;
+}

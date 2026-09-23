@@ -33,6 +33,12 @@
   padding: 0;
   text-align: left;
   font: inherit;
+  min-height: 44px;
+  white-space: normal;
+}
+.parameter-entry-patient:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
 }
 .parameter-entry-patient__text {
   display: grid;

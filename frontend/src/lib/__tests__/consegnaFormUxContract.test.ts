@@ -38,14 +38,16 @@ test('new handover uses the shared semantic form and exposes explicit identity f
   assert.match(form, /disabled=\{!canSubmit\}/);
 });
 
-test('patient picker is an accessible listbox with fiscal code always visible', () => {
+test('patient picker is an accessible listbox with shared fiscal or birth identity', () => {
   assert.match(combobox, /role="combobox"/);
   assert.match(combobox, /aria-autocomplete="list"/);
   assert.match(combobox, /aria-activedescendant=\{activeOptionId\}/);
   assert.match(combobox, /aria-required=\{required\}/);
   assert.match(combobox, /role="listbox"/);
   assert.match(combobox, /role="option"/);
-  assert.match(combobox, /CF \{patientFiscalCode\(patient\)\}/);
+  assert.match(combobox, /<PatientIdentity patient=\{patient\}/);
+  assert.match(combobox, /<PatientIdentity patient=\{selected\}/);
+  assert.doesNotMatch(combobox, /medicalRecordNumber|Scheda|MRN/);
   assert.match(combobox, /Nessun paziente trovato/);
   assert.match(combobox, /Digita almeno 2 caratteri/);
   assert.doesNotMatch(combobox, /search-dropdown/);

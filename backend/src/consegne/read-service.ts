@@ -1,6 +1,11 @@
 import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
+import { patientScopeWhere } from '../patients/patient-scope.js';
+import {
+  loadOperationalIdentities,
+  type PatientIdentityDto,
+} from '../patients/operational-identity.js';
 import { buildConsegnaTsQuery, encodeConsegnaCursor, type ConsegnaFeedQuery } from './query.js';
 
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -26,6 +31,7 @@ export interface ConsegnaListRow {
   creatoDaId: string | null;
   createdAt: Date;
   updatedAt: Date;
+  identity: PatientIdentityDto | null;
 }
 
 export interface ConsegnaSummary {
@@ -138,8 +144,12 @@ export async function loadConsegnaFeed(actor: Operator, input: ConsegnaFeedQuery
     ...(input.patientId ? { patientId: input.patientId } : {}),
     ...(input.q ? { q: input.q } : {}),
   };
+  const identities = await loadOperationalIdentities(
+    items.map((row) => row.pazienteId),
+    patientScopeWhere(actor),
+  );
   return {
-    items,
+    items: items.map((row) => ({ ...row, identity: identities.get(row.pazienteId) ?? null })),
     pageInfo: {
       hasMore,
       nextCursor:
@@ -180,11 +190,19 @@ export async function loadConsegnaOverview(actor: Operator) {
         `)
       : Promise.resolve([]),
   ]);
+  const identities = await loadOperationalIdentities(
+    [...urgentPreview, ...openPreview].map((row) => row.pazienteId),
+    patientScopeWhere(actor),
+  );
+  const enrich = (row: ConsegnaListRow) => ({
+    ...row,
+    identity: identities.get(row.pazienteId) ?? null,
+  });
   return {
     scope: privileged(actor) ? 'facility' : 'operator',
     summary,
-    urgentPreview,
-    openPreview,
+    urgentPreview: urgentPreview.map(enrich),
+    openPreview: openPreview.map(enrich),
     byOperator: Object.fromEntries(byOperatorRows.map((row) => [row.operatorId, row.open])),
   };
 }

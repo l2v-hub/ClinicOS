@@ -7,6 +7,7 @@ import {
   patientAlphabeticalOrder,
 } from './alphabetical-order.js';
 import { patientScopeWhere } from './patient-scope.js';
+import { loadOperationalIdentities, type PatientLocationDto } from './operational-identity.js';
 import {
   decodePatientPageCursor,
   encodePatientPageCursor,
@@ -23,6 +24,7 @@ interface PatientIdentityRow {
   sex: string | null;
   email: string | null;
   phone: string | null;
+  location: PatientLocationDto;
 }
 
 export async function loadPatientIdentityPage(
@@ -68,7 +70,7 @@ export async function loadPatientIdentityPage(
 
   // Prisma cannot express a folded ORDER BY through findMany. Parameterized SQL
   // keeps filtering and limit+1 in PostgreSQL instead of sorting an unbounded roster.
-  const rows = await prisma.$queryRaw<PatientIdentityRow[]>(Prisma.sql`
+  const rows = await prisma.$queryRaw<Omit<PatientIdentityRow, 'location'>[]>(Prisma.sql`
     SELECT p."id", p."medicalRecordNumber", p."codiceFiscale", p."firstName", p."lastName",
       p."dateOfBirth", p."sex", p."email", p."phone"
     FROM "Patient" p
@@ -79,8 +81,15 @@ export async function loadPatientIdentityPage(
   const hasMore = rows.length > input.limit;
   const items = hasMore ? rows.slice(0, input.limit) : rows;
   const last = items.at(-1);
+  const identities = await loadOperationalIdentities(
+    items.map((item) => item.id),
+    scope,
+  );
   return {
-    items,
+    items: items.flatMap((item) => {
+      const identity = identities.get(item.id);
+      return identity ? [{ ...item, location: identity.location }] : [];
+    }),
     hasMore,
     nextCursor:
       hasMore && last

@@ -1,0 +1,129 @@
+{
+  "task": "PO-06-backend",
+  "phase": "handoff",
+  "recordedAt": "2026-09-23T01:23:21.632Z",
+  "decision": "implementation and synthetic local tests allowed by root GO; integration and publication remain root-owned",
+  "authorization": "Root GO after verified PO-05 publication; approved preparation contract and strict therapyAccessSql AND fix",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po06-operational-identity",
+  "baseline": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+  "sourceIdentity": {
+    "algorithm": "sha256 over sorted path + NUL + file-sha256 + LF",
+    "treeHash": "b9504d8ef9bb4c2deb8c512916b84e94e39e80d1f12e38dc98f85c3d3138bd98",
+    "files": [
+      {
+        "path": "backend/src/consegne/read-service.ts",
+        "sha256": "1be6544524c0cc63f0241db5f1cbfdb873267e8251c1e29b3d9c819e56dda6ad",
+        "bytes": 7581,
+        "lines": 217
+      },
+      {
+        "path": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+        "sha256": "d45d26b7d1ab80e2b7bb1c7fc7b938274d320a17a0d7fde56b2c80b247fec68b",
+        "bytes": 13288,
+        "lines": 365
+      },
+      {
+        "path": "backend/src/patients/identity-page.ts",
+        "sha256": "0307e8c3bdd02538830882609ce56e4587b7953abae613da05a6b2d55f23988b",
+        "bytes": 3627,
+        "lines": 102
+      },
+      {
+        "path": "backend/src/patients/operational-identity.ts",
+        "sha256": "860cbc6a250c06833f6986328a07283039c068af2fb8e1eae227ecfa6808fd85",
+        "bytes": 5986,
+        "lines": 125
+      },
+      {
+        "path": "backend/src/patients/parameters-page.ts",
+        "sha256": "066215dbab0aa07c44dfa9495128b010786801c970922442660a58d10fd82acc",
+        "bytes": 8994,
+        "lines": 252
+      },
+      {
+        "path": "backend/src/therapies/therapy-slots.ts",
+        "sha256": "c0fc01450407e53ff3d80ffb437ccc2c956e987f81d91725913fc78930380c13",
+        "bytes": 14740,
+        "lines": 431
+      }
+    ]
+  },
+  "safetyEnvelope": {
+    "soleWriter": "/root/po01_backend_audit",
+    "sourcePaths": [
+      "backend/src/consegne/read-service.ts",
+      "backend/src/patients/__tests__/operational-identity-db.test.ts",
+      "backend/src/patients/identity-page.ts",
+      "backend/src/patients/operational-identity.ts",
+      "backend/src/patients/parameters-page.ts",
+      "backend/src/therapies/therapy-slots.ts"
+    ],
+    "unchangedUnrelatedPaths": [
+      "run-claude-queue.ps1",
+      "start-claude-team.ps1"
+    ],
+    "database": "new native PostgreSQL cluster bound to 127.0.0.1, migrated from existing repository SQL and stopped after tests",
+    "dependencies": "read-only node_modules/pdf-lib junctions and private copies of root Prisma client; no generation or target modification",
+    "noSchemaMigrationDependencyCommitPushPublish": true
+  },
+  "validation": {
+    "focusedDatabaseTests": {
+      "passed": 19,
+      "failed": 0,
+      "evidence": "focused-tests.json",
+      "output": "focused-tests.log",
+      "results": [
+        {
+          "file": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+          "exitCode": 0
+        },
+        {
+          "file": "backend/src/patients/__tests__/parameters-page-db.test.ts",
+          "exitCode": 0
+        },
+        {
+          "file": "backend/src/patients/__tests__/alphabetical-pages-db.test.ts",
+          "exitCode": 0
+        },
+        {
+          "file": "backend/src/routes/__tests__/consegne-bounded-auth.test.ts",
+          "exitCode": 0
+        }
+      ]
+    },
+    "therapyContractTests": {
+      "passed": 10,
+      "failed": 0,
+      "command": "node --import tsx --test backend/src/therapies/__tests__/therapy-query.test.ts backend/src/therapies/__tests__/due-therapy-query.test.ts backend/src/routes/__tests__/therapy-slot-scope-contract.test.ts"
+    },
+    "typecheck": {
+      "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+      "exitCode": 0
+    },
+    "diffCheck": {
+      "command": "git diff --check -- backend/src",
+      "exitCode": 0
+    },
+    "formatting": "Prettier applied to six source/test files before final run",
+    "security": "real DB tests cover patientScope intersection, Consegna visibility separation, malformed data, parameterized search and minimal identity projection"
+  },
+  "handoff": {
+    "integrator": "/root",
+    "claimDisposition": "release follows manifest creation; see claim-release.json",
+    "applicationSourceComplete": true,
+    "blockers": [],
+    "remainingRootWork": [
+      "frontend/backend integration",
+      "browser and performance checks",
+      "complete source manifest",
+      "authorized publication"
+    ],
+    "notes": [
+      "Consegna.identity is null for visible handovers whose patient is outside patientScope.",
+      "Patient page preserves its existing DOB serialization; shared identity, parameter and therapy DOB use YYYY-MM-DD.",
+      "Historical location reads never use Cartella legacy values; malformed relational history conservatively returns unavailable.",
+      "The initial query-count test used Node mock.method on the Prisma proxy and failed before executing the reader; it was replaced with a restored direct method wrapper, and the final full focused run passes.",
+      "No sorting/cursor/preferences PO-07 changes were made."
+    ]
+  }
+}

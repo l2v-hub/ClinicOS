@@ -1,0 +1,75 @@
+.therapy-modal .therapy-modal__body {
+  min-height: 0;
+  padding-top: 0;
+  scroll-padding-block: 160px 16px;
+}
+.therapy-modal .therapy-patient-group {
+  min-width: 0;
+  margin-bottom: 18px;
+  border: 1px solid var(--border, #dce3ec);
+  border-radius: 8px;
+  background: var(--surface, #fff);
+}
+.therapy-modal .therapy-patient-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 0;
+  border-bottom: 2px solid var(--border, #dce3ec);
+  border-radius: 7px 7px 0 0;
+  background: var(--surface, #fff);
+  box-shadow: 0 3px 5px rgb(26 51 87 / 8%);
+}
+.therapy-modal .patient-identity__name {
+  font-size: 18px;
+  font-weight: 750;
+}
+.therapy-modal .therapy-drug-row {
+  padding-block: 12px;
+  flex-wrap: wrap;
+}
+.therapy-modal .therapy-drug-row__info {
+  min-width: 0;
+  flex-basis: 180px;
+  overflow-wrap: anywhere;
+}
+.therapy-modal .therapy-drug-row__actions {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+}
+.therapy-modal button,
+.therapy-modal input {
+  min-height: 44px;
+}
+.therapy-modal button {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.therapy-modal button:focus-visible,
+.therapy-modal input:focus-visible {
+  outline: 2px solid var(--blue, #2463eb);
+  outline-offset: 3px;
+}
+.therapy-modal .therapy-modal__footer,
+.therapy-modal .therapy-modal__footer > div {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media (max-width: 520px) {
+  .therapy-modal .therapy-modal__body {
+    padding: 0 8px 8px;
+  }
+  .therapy-modal .therapy-patient-header,
+  .therapy-modal .therapy-drug-row {
+    padding-inline: 12px;
+  }
+  .therapy-modal .therapy-drug-row__actions {
+    width: 100%;
+  }
+  .therapy-modal .therapy-motivi-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "decision": "ALLOW_FRONTEND_HANDOFF",
+  "createdAtUtc": "2026-09-23T01:27:18.214Z",
+  "owner": "/root/po01_frontend_audit",
+  "baseline": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+  "authorization": "Root GO after verified PO-05 publication; final root refinement on current date visibility and CF fallback applied",
+  "sourceManifest": {
+    "path": "artifacts/task-validation/po06-identity-ui/source-manifest.json",
+    "sha256": "b122826faff77079d17aea76870651c42f187d1ba67586a87301ab177035d795",
+    "files": 24
+  },
+  "claims": {
+    "status": "released",
+    "path": "artifacts/task-validation/po06-identity-ui/claims.json",
+    "sha256": "3d97b674d3cbe9e7838dbe629a799f5b6d72cbb1b78395c891424ed8baad0a6f"
+  },
+  "validation": {
+    "focusedTests": "74/74 PASS",
+    "initialBroadRun": "75/76: one proved pre-existing agenda text guard failure",
+    "build": "PASS; bundle-size warning",
+    "scopedLint": "PASS except MultiPatientParametri baseline-identical 2 errors/2 warnings",
+    "clinicalActionPayload": "buildInfo identical to baseline",
+    "diffCheck": "frontend PASS"
+  },
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/tests-final.log",
+      "sha256": "3f4bc735cb2e532765c04c86aac25c2afabab04d3bc4b76a3da7827fe6901512"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/tests.log",
+      "sha256": "9e7c56dd66e3f7e21e47270942f03a7fd3ad518723b0c5b469dac2a1405bb933"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/build-final.log",
+      "sha256": "4855e8fa1282ab8b72a6156cf3ecf0cb746aa400da829e1ac6cfd271d6045946"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/lint.log",
+      "sha256": "8e055c299946e021caae3a0e35a23d338019a9f4e39dbed5dcb60ba2e2a69aa4"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/lint-changed-without-baseline.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/baseline-comparison.json",
+      "sha256": "2f54ee6942ac3f05cb871ff3d712aac2ba98aa4edf88b9ff2f2a1d3da12d7418"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/baseline-check.log",
+      "sha256": "42c8f78d149975696aadc005d34717a9842ec0ed3f0b40ab61db1cfc973098c9"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/handoff.md",
+      "sha256": "c42630c73aef2209e3cca5f8c48ac6b6aff56999d6d0a8f7ca6d566a22399667"
+    },
+    {
+      "path": "artifacts/task-validation/po06-identity-ui/task-contract.md",
+      "sha256": "9b2acae93916e206ee97467d8ecb690a063272867429c27a8b7173c82e8a5c43"
+    }
+  ],
+  "dependencyInputs": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0d8cd33d7e092b0d81329a2c83436c4d4f5636fa4f27f22c7e74a3838b86d01c"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "319c3acade0ca06ff325e4749a65ab331bdd8c106086ccffd1d8be8f48468ac3"
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "sha256": "ec75b4405e60b7e4ab6de65ff536063b952a6d66fbc86a0d977cfa3d2f427ae8"
+    },
+    {
+      "path": "frontend/tsconfig.app.json",
+      "sha256": "beb4745fe309bec67d29e9a8945b498f08d7164b0dd12ebd63a49818cd4548dd"
+    }
+  ],
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+  },
+  "exclusions": [
+    "backend",
+    "schema",
+    "generated packages",
+    "manifests/lockfiles",
+    "dependency installation",
+    "servers/ports",
+    "commit/push/deploy",
+    "PO-07 sorting",
+    "PO-08 workflow"
+  ],
+  "remainingRootValidation": [
+    "browser geometry/sticky/200%/keyboard",
+    "live parameter draft refresh",
+    "therapy click payload",
+    "combined API/browser scope and request checks",
+    "publication decision"
+  ]
+}

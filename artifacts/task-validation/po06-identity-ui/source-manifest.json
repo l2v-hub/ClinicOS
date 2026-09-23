@@ -1,0 +1,152 @@
+{
+  "baseline": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+  "createdAtUtc": "2026-09-23T01:27:18.214Z",
+  "owner": "/root/po01_frontend_audit",
+  "scope": "frontend candidate: baseline plus exact bytes of changed tracked and untracked source/test files",
+  "files": [
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "bytes": 9765,
+      "sha256": "6fe8cc6e9d0b38f0b311e95c762745f7915f1a7ddf7b2f47963a716beada9e0d",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "bytes": 19713,
+      "sha256": "c9f251e8a6667afe6b12b7715af14109685c0a25594efac7cc8a843d29a016b3",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "bytes": 12132,
+      "sha256": "24a65c4b5f8b4d58205aa3dae29918d8740371e6d2d96ede6a745007a66eabcd",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "bytes": 7645,
+      "sha256": "6906b6f971e99a5740b7430d4cf7a2ca5f7b64b2458af4e44f198cc25935d558",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.css",
+      "bytes": 9001,
+      "sha256": "9e13478443a3d5ce2d489c35ec07c63d1031c73c6ccbbc54bac9db019db89419",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameters.css",
+      "bytes": 6082,
+      "sha256": "1cacea51f3cd42a1539c2a420bf1cddb0117d16baea00393ae1ab5c15e781019",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "bytes": 13523,
+      "sha256": "30babc7fc54002c3ad22f6a68d2e8f47f7ba2b857b57554f52b6d16de689fc8f",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.css",
+      "bytes": 1692,
+      "sha256": "ba21d9114400b9887c0dbc6e592b06a494fe3af7c13a97311a35d5c67b65b541",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "bytes": 14265,
+      "sha256": "8cdbc734f48e0ea1ec833f2bbe7a863e7fcc10d0c62a29eaf9a9c03a3939a82d",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operationalIdentity.fixtures.ts",
+      "bytes": 2034,
+      "sha256": "5fb2155c6c1d85d90300e09456ab7f76968d357e860cc485de8f03535ab28030",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operationalIdentity.test.ts",
+      "bytes": 6900,
+      "sha256": "1813ac85d1143b9a58c19b373417123702421976af19efbd58f340b4291b61ce",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/parameterNotes.test.ts",
+      "bytes": 1571,
+      "sha256": "99b6de70461364448e6afb366c329ed45531c059c6dee41fc7baedd8d4efea58",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.css",
+      "bytes": 3273,
+      "sha256": "af48528a9c3fdbdec12ef193193565ceab32f1c1482db986b701f6e9b4c6dd68",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.tsx",
+      "bytes": 6782,
+      "sha256": "71a6b9b9d37e9ba0b51276eb436d6a1a4ea4f66bba9ff36e333492d551af0145",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/components/shared/PatientIdentity.css",
+      "bytes": 1147,
+      "sha256": "bee390f46fa3c41eb250868465e3ffffb50e8f9e5a707f8ddc8b1e255ba689b6",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/components/shared/PatientIdentity.tsx",
+      "bytes": 2027,
+      "sha256": "56c1253d62f13557d4458f986755766ea00d6764df7d2efe7b5eba681b6f08b7",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaFormUxContract.test.ts",
+      "bytes": 2911,
+      "sha256": "de3b391649304d025e33499fc82a6ccb7d9fc395d94790e3fd38bec778ab740e",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operationalIdentityPages.test.ts",
+      "bytes": 4256,
+      "sha256": "cebeebf2d44add9bd4ea22a6bc5cf6561df45aa44670c12e32ec48eab5068dcf",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientIdentity.test.ts",
+      "bytes": 3220,
+      "sha256": "268c124a38187a49b5d211d344f3ab9256873a3fcfda2f82bee95487f4235cdd",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "bytes": 4185,
+      "sha256": "bb29f3c0f38017dda079c84656834d4f38df67db18f865ef0c21728586e2e13e",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/lib/patientIdentity.ts",
+      "bytes": 4291,
+      "sha256": "d54ae5af8a7edd1d228721a554690c0c7a91d0c57eaf7b9ff5101dbbe5c16899",
+      "newFile": true
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPage.ts",
+      "bytes": 3721,
+      "sha256": "b4c0b66be1b29fe8a74073051f694705ddcc6d1750b2736dbed724d36960e8a6",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "bytes": 6324,
+      "sha256": "683fc12c34283cb09cf208b149be28a2c98b6fe25dbee376249215e74ec86667",
+      "newFile": false
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "bytes": 31736,
+      "sha256": "7cd65975a0468398eb61e246cea96427282b40081b407985bea270b6ca2b5ea4",
+      "newFile": false
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import type {
   TherapySlotPageResponse,
   TherapySlotPatient,
 } from '../types';
+import { parsePatientLocation } from './patientIdentity';
 
 const FASCE = new Set(['mattina', 'pranzo', 'pomeriggio', 'sera', 'notte']);
 
@@ -54,6 +55,9 @@ function parsePatient(value: unknown): TherapySlotPatient {
     patientId: row.patientId,
     firstName: row.firstName,
     lastName: row.lastName,
+    codiceFiscale: typeof row.codiceFiscale === 'string' ? row.codiceFiscale : null,
+    dateOfBirth: typeof row.dateOfBirth === 'string' ? row.dateOfBirth : null,
+    location: parsePatientLocation(row.location),
     room: typeof row.room === 'string' ? row.room : 'Non assegnato',
     bed: typeof row.bed === 'string' ? row.bed : 'Non assegnato',
     administrations: row.administrations.map(parseAdministration),

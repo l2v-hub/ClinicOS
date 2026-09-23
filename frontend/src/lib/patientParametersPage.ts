@@ -3,7 +3,8 @@ import type { CartellaPaziente, ParametriMensili, Paziente } from '../types';
 export type ParameterPagePatient = Pick<
   Paziente,
   'id' | 'medicalRecordNumber' | 'firstName' | 'lastName'
->;
+> &
+  Partial<Pick<Paziente, 'codiceFiscale' | 'dateOfBirth' | 'location'>>;
 
 export interface PatientParametersPageItem {
   patient: ParameterPagePatient;

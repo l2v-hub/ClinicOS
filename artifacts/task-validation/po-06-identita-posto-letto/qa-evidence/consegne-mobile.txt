@@ -1,0 +1,56 @@
+- main:
+  - strong: Verifica PO06 · esclusivamente dati sintetici
+  - button "Pazienti"
+  - button "Parametri"
+  - button "Terapia"
+  - button "Consegne" [active]
+  - button "Simula errore riepilogo"
+  - button "Esporta evidenze"
+  - status: "Azione sintetica: Farmaco sintetico 2.5"
+  - navigation "Breadcrumb":
+    - generic: ClinicOS
+    - generic: /
+    - generic: Consegne
+  - heading "Consegne" [level=1]
+  - paragraph: "Nel tuo perimetro: 2 aperte · 0 urgenti"
+  - button "Nuova consegna":
+    - text: Nuova consegna
+  - searchbox "Cerca paziente, tipo, note…"
+  - button "Tutte"
+  - button "Attive"
+  - button "Da iniziare"
+  - button "In corso"
+  - button "Completate"
+  - button "Tutte"
+  - button "Urgente"
+  - button "Alta"
+  - button "Normale"
+  - generic: Normale
+  - generic: Monitoraggio
+  - generic: Aperta
+  - button "Modifica consegna":
+  - generic: AB
+  - strong: Bianchi, Alba
+  - generic: CF BNCLBA40A41H501X
+  - generic: Camera 12 · Letto A
+  - button "Apri cartella di Bianchi, Alba": Apri cartella
+  - time: Scritta il 23/09/2026, 03:25
+  - button "Note consegna":
+    - generic: Consegna sintetica autorizzata
+  - status
+  - generic: → Operatrice QA
+  - generic: · da Operatore QA
+  - button "Prendi in carico"
+  - button "Completa":
+  - button "Elimina":
+  - generic: Normale
+  - generic: Monitoraggio
+  - generic: Aperta
+  - generic: NG
+  - generic: Nome già visibile
+  - time: Scritta il 23/09/2026, 03:25
+  - paragraph: "Consegna assegnata: cartella fuori perimetro"
+  - generic: → Operatrice QA
+  - generic: · da Operatore QA
+  - button "Prendi in carico"
+  - button "Completa":

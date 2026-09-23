@@ -1,3 +1,5 @@
+import type { PatientIdentityData, PatientLocationData } from './lib/patientIdentity';
+
 // ── Auth ──────────────────────────────────────────────────────────────────────
 
 export type RuoloUtente = 'admin' | 'operatore';
@@ -44,6 +46,7 @@ export interface Paziente {
   email: string | null;
   phone: string | null;
   address?: string | null;
+  location?: PatientLocationData | null;
 }
 
 // ── Patient (local/new) ────────────────────────────────────────────────────────
@@ -141,6 +144,7 @@ export interface Consegna {
   id: string;
   pazienteId: string;
   pazienteNome: string;
+  identity?: PatientIdentityData | null;
   priorita: PrioritaConsegna;
   stato: StatoConsegna;
   tipo: string;
@@ -1047,6 +1051,9 @@ export interface TherapySlotPatient {
   patientId: string;
   firstName: string;
   lastName: string;
+  codiceFiscale?: string | null;
+  dateOfBirth?: string | null;
+  location?: PatientLocationData | null;
   room: string;
   bed: string;
   administrations: TherapyAdministration[];

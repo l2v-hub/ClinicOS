@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-09-23T01:23:43.265Z",
+  "releases": [
+    {
+      "issueId": "PO-06-backend-implementation",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-06-backend-implementation released\",\n  \"reason\": \"Completed PO06 backend and focused tests; six-file source manifest b9504d8ef9bb4c2deb8c512916b84e94e39e80d1f12e38dc98f85c3d3138bd98 handed to root. 29 tests passed, typecheck/diff check passed; root owns integration, browser/performance and release. No further source edits.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-06-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po06-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T01:14:37.512Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T01:22:32.773Z\",\n    \"progress\": 90,\n    \"context\": \"Root GO after PO05 verified. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po06-operational-identity baseline0418463a94801bf2d22bdb3155eb6d4a05e9a2dd. Exact owned paths: backend/src/patients/operational-identity.ts; backend/src/patients/identity-page.ts; backend/src/patients/parameters-page.ts; backend/src/therapies/therapy-slots.ts; backend/src/consegne/read-service.ts; backend/src/patients/__tests__/operational-identity.test.ts; backend/src/patients/__tests__/operational-identity-db.test.ts; backend/src/patients/__tests__/parameters-page-db.test.ts; backend/src/patients/__tests__/alphabetical-pages-db.test.ts; backend/src/routes/__tests__/consegne-bounded-auth.test.ts; artifacts/task-validation/po-06-identita-posto-letto/backend/**. No shared manifests, packages, schema, generation, commits, push or deployment; local synthetic DB only.\"\n  }\n}"
+          }
+        ]
+      }
+    },
+    {
+      "issueId": "PO-06-backend",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-06-backend released\",\n  \"reason\": \"Completed PO06 backend and focused tests; six-file source manifest b9504d8ef9bb4c2deb8c512916b84e94e39e80d1f12e38dc98f85c3d3138bd98 handed to root. 29 tests passed, typecheck/diff check passed; root owns integration, browser/performance and release. No further source edits.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-06-backend\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po06-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T01:04:27.535Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T01:11:00.018Z\",\n    \"progress\": 10,\n    \"context\": \"Preparation-only assignment from root. Sole worktree po06-operational-identity baseline0418463; own artifacts contract/test/file plan. No application source edits until GO, no migrations/package/client generation/commit/push/deploy. Planned backend operational identity plus identity/parameters/therapy-slots/consegne readers.\"\n  }\n}"
+          }
+        ]
+      }
+    }
+  ]
+}

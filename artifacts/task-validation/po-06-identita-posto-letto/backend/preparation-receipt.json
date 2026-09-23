@@ -1,0 +1,31 @@
+{
+  "task": "PO-06-backend",
+  "phase": "preparation-only",
+  "decision": "allow-artifact-preparation; application-writes-await-root-go",
+  "decisionBasis": "Explicit root assignment and subsequent wire/date/scope approvals in the current coordinated task",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po06-operational-identity",
+  "baseline": "0418463a94801bf2d22bdb3155eb6d4a05e9a2dd",
+  "actor": "/root/po01_backend_audit",
+  "claim": {
+    "issueId": "PO-06-backend",
+    "claimant": "agent:codex-po06-backend:coder",
+    "claimedAt": "2026-09-23T01:04:27.535Z",
+    "status": "active"
+  },
+  "ownedPathsAtThisPhase": [
+    "artifacts/task-validation/po-06-identita-posto-letto/backend/preparation-contract.md",
+    "artifacts/task-validation/po-06-identita-posto-letto/backend/preparation-receipt.json"
+  ],
+  "unrelatedDirtyPaths": ["run-claude-queue.ps1", "start-claude-team.ps1"],
+  "sourceChanged": false,
+  "testsExecuted": false,
+  "dependenciesModified": false,
+  "prismaGenerated": false,
+  "commitPushReleaseAuthorized": false,
+  "integrator": "/root",
+  "limitations": [
+    "Preparation is a local coordination record, not a distributed capability or release authority.",
+    "HEAD is the preparation baseline only; a final source receipt must additionally bind all changed and untracked implementation files.",
+    "Parent task contract was referenced in coordination but its checkout path was not yet resolved when this backend preparation record was written."
+  ]
+}

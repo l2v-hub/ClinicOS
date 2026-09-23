@@ -1,0 +1,21 @@
+{
+  "database": "synthetic native PostgreSQL loopback",
+  "results": [
+    {
+      "file": "backend/src/patients/__tests__/operational-identity-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/patients/__tests__/parameters-page-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/patients/__tests__/alphabetical-pages-db.test.ts",
+      "exitCode": 0
+    },
+    {
+      "file": "backend/src/routes/__tests__/consegne-bounded-auth.test.ts",
+      "exitCode": 0
+    }
+  ]
+}

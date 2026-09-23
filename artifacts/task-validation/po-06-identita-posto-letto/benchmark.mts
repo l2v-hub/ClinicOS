@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, access } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -38,6 +38,10 @@ try {
   const sources = [];
   for (const path of ['backend/src/patients/identity-page.ts', 'backend/src/patients/parameters-page.ts', 'backend/src/patients/patient-scope.ts', 'prisma/schema.prisma']) {
     sources.push({ path, sha256: createHash('sha256').update(await readFile(resolve(root, path))).digest('hex') });
+  }
+  const identityPath = 'backend/src/patients/operational-identity.ts';
+  if (await access(resolve(root, identityPath)).then(() => true, () => false)) {
+    sources.push({ path: identityPath, sha256: createHash('sha256').update(await readFile(resolve(root, identityPath))).digest('hex') });
   }
   const result = { candidateRoot: root, at: new Date().toISOString(), scenario: '202 authorized synthetic patients; 200 legacy locations, oversized unrelated cartella text; loopback PostgreSQL; 10 warm reads after one cold read', sources, output };
   await writeFile(resolve(folder, process.env.PO06_BENCHMARK_OUTPUT || 'baseline.json'), JSON.stringify(result, null, 2));

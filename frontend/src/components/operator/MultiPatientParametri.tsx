@@ -292,12 +292,9 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
               <ParameterEntryRow
                 key={item.patient.id}
                 patient={item.patient}
-                room={item.cartella.cameraNumero}
-                bed={item.cartella.lettoNumero}
                 readingCount={item.cartella.readingCount}
                 noteCount={item.cartella.noteCount}
                 summaryPending={item.summaryPending && summaryLoading}
-                summaryUnavailable={item.summaryPending && !summaryLoading}
                 lastReadingAt={item.cartella.lastReadingAt}
                 onOpenHistory={() => onSelectPaziente(item.patient.id)}
                 onSave={(request) => save(item.patient.id, request)}

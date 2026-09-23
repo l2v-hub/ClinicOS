@@ -33,9 +33,9 @@ test('zero notes has no badge; missing metadata never fabricates zero notes or u
   assert.doesNotMatch(render({ noteCount: 0 }), /class="parameter-note-count/);
   const pending = render({ summaryPending: true });
   assert.match(pending, /Verifica note in corso/);
-  assert.match(pending, /Caricamento camera/);
+  assert.match(pending, /Posto letto non disponibile/);
   assert.doesNotMatch(pending, /0 note salvate|Camera non assegnata/);
-  const unavailable = render({ summaryUnavailable: true });
+  const unavailable = render();
   assert.match(unavailable, /Conteggio note non disponibile/);
-  assert.match(unavailable, /Camera non disponibile/);
+  assert.match(unavailable, /Posto letto non disponibile/);
 });
