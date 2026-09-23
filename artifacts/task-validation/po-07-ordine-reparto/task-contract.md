@@ -18,7 +18,13 @@ Cursore v3 lega vista, scope autenticato, contextId, sort, filtri normalizzati, 
 
 ## UX e prove
 
+Decisioni tecniche confermate: RosterEpoch singleton con contatori roster/therapy bigint serializzati come stringhe; scope indipendente dal reparto. Fingerprint include attore/ruolo e restrizioni patientIds AND registeredById. Anchor patientId(+therapyId), ricostruito nel medesimo epoch sotto scope; 409 se assente/inammissibile. Epoch include sex/MRN usati dai filtri, oltre a identità/ownership e scalari posizione; terapia comprende PatientTherapy/TherapySchedule, esclude MedicationAdministration. Identity page/search accetta asOf opzionale validato per bootstrap Parametri; default oggi Europe/Rome.
+
+API concordata: query sort=name|location, direction e contextId opzionali; pagine aggiungono roster={context:{id,label,version}|null,order,source,revision,temporary,asOf,epoch:{roster,therapy?}}. GET me con canEdit/canEditDefault distinti, revisione personale '0' quando assente, null soltanto profilo assente. Profilo assente: context:null, canEdit:false, temporary:true, reason:profile_missing. Admin GET /admin/roster-contexts bounded50/max100 e PATCH /admin/roster-contexts/:id {default,expectedVersion}. RosterContext.departmentKey usa prefissi distinti none: e department: per evitare collisioni fra reparto assente e nome reale “Senza reparto”.
+
 Controllo condiviso compatto, scelta corrente evidente, esito di salvataggio e retry. Preferenza non disponibile: spiegare ordine temporaneo, non simulare persistenza. Cambio ordine/context abortisce le richieste vecchie, resetta pagine e preserva valori/nota per paziente, senza trasferire bozze. Mantenere selezione per ID e gerarchia visiva PO-06. Default reparto editabile solo da admin/manager; controlli personali non cambiano gli altri operatori.
+
+Gli ordinamenti preesistenti di intestazione CF/ricovero/segnalazioni non vanno eliminati: mantenerli come criterio temporaneo del solo elenco caricato con indicazione visibile del limite, separato dalla preferenza condivisa nome/camera; la scelta del controllo condiviso ripristina l'ordine server. Nessuna promessa di ordinamento globale per le colonne legacy finché non implementato.
 
 Prove con oltre 50 pazienti e più pagine: entrambi i criteri/direzioni; accenti/omonimi; posizioni 1A…10A e mancanti/incoerenti; scope operatori/admin; cambio letto/identità/reparto a metà paging; reset e CAS concorrenti; ricarica e preferenze indipendenti. Backend HTTP/PostgreSQL loopback, browser desktop/mobile/tastiera, build/tipi, confronto con baseline PO-06 e verifica zero N+1/cartelle intere. Nessun paziente live modificato.
 

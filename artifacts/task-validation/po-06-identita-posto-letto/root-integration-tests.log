@@ -1,0 +1,15 @@
+✔ four operational HTTP readers preserve the same authoritative identity and location (9253.5818ms)
+✔ assigned handover does not grant chart identity or direct patient access (42.9763ms)
+✔ ended and inconsistent assignments cannot resurface stale legacy location (10.5716ms)
+✔ historical parameter request does not imply legacy position existed then (16.7378ms)
+✔ room search returns authoritative room and excludes superseded legacy value (22.3878ms)
+✔ homonyms retain distinct patient identifiers and missing demographic values (41.2831ms)
+✔ operator plus explicit IDs intersects therapy details and exact totals (47.0823ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22191.2241

@@ -1,0 +1,1 @@
+[{"name":"patients","pageSize":50,"medianMs":10.591499999999542,"p90Ms":12.336599999998725,"responseBytes":14501},{"name":"parameters","pageSize":25,"medianMs":7.6161999999994805,"p90Ms":8.308499999999185,"responseBytes":10504}]

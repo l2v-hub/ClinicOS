@@ -1,0 +1,51 @@
+✔ authoritative location handles active/history/conflicts/legacy without mixed labels or private data (267.3842ms)
+✔ historical lookup ignores legacy, preserves inclusive intervals and validates calendar dates (9.2817ms)
+✔ batch IDs are deduplicated and both scope restrictions apply to identity (4.564ms)
+✔ repeated IDs use one minimal batch and database errors never become unassigned (4.1947ms)
+✔ non-string legacy scalars are unavailable and a roomless valid bed remains explicit (24.5569ms)
+✔ parameter room search is authoritative before limit+1 and identity page keeps its cursor (28.3921ms)
+✔ visible handover does not grant patient identity access, including overview previews (134.3832ms)
+✔ therapy detail, location and exact totals intersect requested IDs with patient ownership (39.3643ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11141.6072
+✔ parameter page filters accents/room before limit and returns a minimal projection (228.3456ms)
+✔ parameter page enforces its endpoint-specific maximum of 25 (7.9419ms)
+✔ parameter PATCH merges days and preserves historical months and unrelated clinical data (34.5511ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10826.268
+✔ global alphabetical order across >50 mixed-case/accent rows, with stable duplicate-name ties (437.2398ms)
+✔ parameter pages share identity ordering/cursors while respecting their smaller limit (66.7935ms)
+✔ scope, manager access and sex/search predicates apply before sorting and limits (151.5634ms)
+✔ search and cursor values are data, and malformed legacy cursors cannot traverse new ordering (50.6961ms)
+✔ HTTP pages expose globally ordered results and keep textual searches behind POST/auth (105.9221ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11697.6001
+✔ consegne feed is private, bounded, keyset paged and scoped before limit (512.3904ms)
+✔ consegne writes derive identities and reject IDOR or spoofed fields (96.4152ms)
+✔ consegne rejects malformed bounds and cursor/filter mismatch (12.4849ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11326.1587

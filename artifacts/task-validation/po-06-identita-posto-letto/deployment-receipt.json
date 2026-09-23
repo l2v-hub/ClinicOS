@@ -1,0 +1,25 @@
+{
+  "sourceCommit": "853b40750c25f24ef40db622674612aaf64bf2cb",
+  "backend": {
+    "deploymentId": "4b442bac-758a-4d84-a73b-417bd471825f",
+    "status": "SUCCESS",
+    "url": "https://clinicos-backend-demo.up.railway.app",
+    "healthStatus": 200,
+    "imageDigest": "sha256:e7673342d5274d2166443d341aa67db60cdcb4db86f176294120f366752570e1"
+  },
+  "frontend": {
+    "deploymentId": "dpl_H7Z5fEvKQ95PNtkENooK45mgUnJd",
+    "url": "https://clinicos-qjvp3sxij-lucalavia-2482s-projects.vercel.app",
+    "alias": "clinicos-eosin.vercel.app",
+    "status": "READY",
+    "aliasSourceCommitVerified": true,
+    "browserReadOnlySmoke": "Profile chooser renders; no initial console errors; no live patient writes"
+  },
+  "verifiedOn": "2026-09-23",
+  "runtime": "Unchanged from PO05",
+  "migrations": "No schema migration in PO06",
+  "authorization": "User approved entire PO plan, push and deployment; worker claims released before integration. Source exported from immutable commit; unrelated PowerShell changes excluded.",
+  "sourceManifest": "root-source-manifest.json",
+  "validation": "validation-report.md",
+  "followingActivity": "PO07 implementation authorized after this deployment verification"
+}

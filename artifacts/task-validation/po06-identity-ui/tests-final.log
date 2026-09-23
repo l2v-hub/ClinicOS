@@ -1,0 +1,150 @@
+(node:40152) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ shared identity distinguishes homonyms, wraps untrusted text, and omits internal identifiers (14.8308ms)
+✔ location shows its date only outside today in Rome while retaining legacy provenance (2.3925ms)
+✔ loading and unavailable never display retained location labels (1.2099ms)
+✔ parameter identity is available while clinical summary counts remain pending (4.101ms)
+✔ handover null, missing, malformed or mismatched identity has no chart-opening action (18.2511ms)
+✔ therapy action names identify both homonyms and drug while readOnly offers no signing (6.2977ms)
+✔ combobox selected patient uses shared identity without internal record number (3.6132ms)
+✔ identity presentation adds no fetch and parameter drafts retain stable patient keys (5.3396ms)
+(node:40152) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:4292) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ saved note count is distinct from reading count and exposed in the accessible action (30.0709ms)
+✔ zero notes has no badge; missing metadata never fabricates zero notes or unassigned room (9.8113ms)
+(node:4292) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36500) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new handover uses the shared semantic form and exposes explicit identity fields (2.7297ms)
+✔ patient picker is an accessible listbox with shared fiscal or birth identity (0.9804ms)
+✔ handover form and result menu have explicit tablet/mobile constraints (0.8991ms)
+(node:36500) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32700) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ consegne feed URL is bounded and encodes server filters plus cursor (3.9171ms)
+✔ consegne load-more deduplicates records (2.6317ms)
+(node:32700) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40548) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40548) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ login loads only handover overview while the bounded feed is navigation-scoped (2.8151ms)
+✔ dashboards consume exact overview and never derive KPI from a feed page (0.6628ms)
+✔ patient list badges come from visible-id clinical summaries, not a handover roster prop (0.5085ms)
+✔ patient detail distinguishes an exact total from the loaded page and exposes recovery (0.5273ms)
+(node:40648) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient page keeps identity projection with one bounded request and preserves it when merged (67.8793ms)
+✔ parameter page projection survives fetching and identity refresh without chart requests (3.5397ms)
+✔ therapy parser and merge preserve identity and date context without changing clinical payloads or totals (2.2816ms)
+✔ missing therapy projection is unavailable even when compatibility aliases contain stale labels (0.4628ms)
+✔ handover page refresh can revoke identity without dropping the authorized handover name (0.6518ms)
+(node:40648) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:6360) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a late save cannot lower a newer daily snapshot; a newer save enriches an older snapshot (2.9451ms)
+✔ day rollover keeps patient identity but invalidates counts, including on a failed refresh (0.6376ms)
+(node:6360) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17680) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient combobox renders a stable identity with fiscal-code fallback (1.7736ms)
+✔ patient combobox keyboard navigation wraps and supports boundaries (0.5804ms)
+(node:17680) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29476) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ fiscal identity is preferred, birth date is the fallback, and missing phone is irrelevant (5.4184ms)
+✔ assigned location preserves complete relational and partial legacy labels (4.0571ms)
+✔ only explicit unassigned is unassigned; unavailable and loading suppress stale labels (0.9031ms)
+✔ handover identity requires the authorized complete wire shape (1.88ms)
+(node:29476) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40944) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (2.2361ms)
+✔ roster has five operational columns and native accessible actions (1.0508ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.7726ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (0.6753ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (0.8367ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (1.4723ms)
+(node:40944) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient page URL sends only non-identifying bounded filters (2.4918ms)
+✔ patient search keeps fiscal identity and names out of the URL (2.2501ms)
+✔ patient page merge replaces on a new search and deduplicates appended rows (0.8031ms)
+✔ patient page orchestration requests summaries only for visible page IDs (51.585ms)
+✔ blank directory query uses GET and never emits a q parameter (1.2192ms)
+✔ targeted patient refresh never falls back to the legacy roster (1.125ms)
+✔ directory search is one bounded page request without clinical summary or roster fallback (1.3313ms)
+✔ clinical enrichment is independently bounded and deduplicates requested ids (2.4868ms)
+✔ summary failure remains an error rather than an empty success (2.7317ms)
+✔ aborting enrichment prevents later batches from being requested (2.9926ms)
+(node:19584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:24276) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new readings require measured values; preserve exact time and independent request identities (6.3502ms)
+✔ network retry submits the same immutable request; no whole month PATCH (55.7317ms)
+✔ validation failures allow correction, server/parse/conflict failures retain retry identity (4.2382ms)
+✔ legacy history preserves multiple DTX, notes and explicit missing-time labels (3.8929ms)
+✔ history fetch and entry page pass date and cursor with bounded limit and abort signal (2.0969ms)
+✔ monthly fetch keeps the month when loading the next page (1.0915ms)
+(node:24276) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38668) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ today and seven-day presets are inclusive Rome civil ranges (6.7532ms)
+✔ month, six-month and year use calendar anniversaries rather than fixed-day approximations (0.7254ms)
+✔ month-end and leap anniversaries clamp, without overflowing into the wrong month (1.0062ms)
+✔ dated legacy entries follow exact period; absent dates are never counted as in-range (0.6434ms)
+✔ unified values show newest first without mutating the chart source; legacy dates stay separate (24.281ms)
+(node:38668) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37020) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ parameters page URL clamps to 25 and binds query/cursor (4.2779ms)
+✔ parameters page validates its bounded response and merges by patient id (52.1459ms)
+✔ entry projection is opt-in and preserves bounded day and room-search filters (4.2609ms)
+✔ parameter save uses an encoded id and the bounded PATCH contract (2.1607ms)
+(node:37020) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:14168) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy slots are loaded only when the therapy page is visible, including history navigation (2.8169ms)
+✔ agenda follows the bounded page contract and aborts obsolete date requests (1.5951ms)
+(node:14168) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36944) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy page loader returns a complete deduplicated clinical list (39.8018ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (2.5932ms)
+✔ therapy page loader carries every server filter on the first page (1.1374ms)
+(node:36944) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy UI loads incrementally while emergency print requires every active page (14.1423ms)
+✔ therapy failures are announced and never rendered as empty clinical results (3.4439ms)
+✔ medication administration history follows the bounded opaque cursor feed (2.0203ms)
+(node:31700) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy slot URL is bounded and carries an opaque cursor (1.9054ms)
+✔ therapy pages merge patients and therapies while replacing exact summaries (1.5538ms)
+✔ therapy page parser rejects partial responses without a continuation cursor (0.6033ms)
+(node:31700) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 74
+ℹ suites 0
+ℹ pass 74
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1424.8392
