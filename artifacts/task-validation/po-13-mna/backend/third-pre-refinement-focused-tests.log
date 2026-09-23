@@ -1,0 +1,43 @@
+✔ MNA strict canonical answers reject unknown/missing values and retain null/false/notes in payload hashes (7.6616ms)
+✔ MNA K evaluates all eight boolean combinations and every missing subanswer stays incomplete (2.8645ms)
+✔ MNA uses exact half points and independent 14/16/30 section boundaries (0.6136ms)
+✔ MNA anthropometry derives unrounded threshold scores and rejects concurrent categories or unusable numbers (1.7797ms)
+✔ MNA calendar/notes validation preserves Unicode and rejects date rollover or invalid clinical Rome boundaries (23.0052ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 339.4318
+✔ MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot (458.1337ms)
+✔ MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic (111.4452ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11671.9497
+✔ MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape (332.4705ms)
+✔ MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes (303.5486ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1692.4474
+✔ MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes (1400.7249ms)
+✔ MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document (583.2649ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13350.3927

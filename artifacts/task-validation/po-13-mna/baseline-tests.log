@@ -1,0 +1,48 @@
+✖ MNA HTTP final screening keeps partial global answers and archives a distinct screening PDF (8333.4601ms)
+✖ MNA HTTP rejects concurrent category/measure and persists exact BMI and Q boundaries in a full correction (14.8377ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20735.4491
+
+✖ failing tests:
+
+test at tests\integration\po13-mna.test.mts:1:2114
+✖ MNA HTTP final screening keeps partial global answers and archives a distinct screening PDF (8333.4601ms)
+  AssertionError [ERR_ASSERTION]: {"error":"Tipo o versione del modulo non supportati","code":"assessment_invalid_input"}
+  
+  400 !== 201
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po13-mna.test.mts:22:60)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration\po13-mna.test.mts:1:4589
+✖ MNA HTTP rejects concurrent category/measure and persists exact BMI and Q boundaries in a full correction (14.8377ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(original)
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po13-mna.test.mts:40:88)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

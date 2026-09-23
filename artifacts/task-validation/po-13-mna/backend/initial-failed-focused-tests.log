@@ -1,0 +1,293 @@
+✔ MNA strict canonical answers reject unknown/missing values and retain null/false/notes in payload hashes (7.6075ms)
+✔ MNA K evaluates all eight boolean combinations and every missing subanswer stays incomplete (3.9703ms)
+✔ MNA uses exact half points and independent 14/16/30 section boundaries (0.6481ms)
+✔ MNA anthropometry derives unrounded threshold scores and rejects concurrent categories or unusable numbers (1.8309ms)
+✔ MNA calendar/notes validation preserves Unicode and rejects date rollover or invalid clinical Rome boundaries (21.0859ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 402.1676
+✖ MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot (372.0244ms)
+✖ MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic (11.9501ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12448.1795
+
+✖ failing tests:
+
+test at backend\src\assessments\__tests__\mna-db.test.ts:1:633
+✖ MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot (372.0244ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.$queryRaw()` invocation:
+  
+  
+  Raw query failed. Code: `23514`. Message: `new row for relation "PatientAssessment" violates check constraint "PatientAssessment_answers_check"`
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:8643)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7932)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7639)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:6935)
+      at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\service.ts:111:22)
+      at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-db.test.ts:35:19)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at backend\src\assessments\__tests__\mna-db.test.ts:1:5285
+✖ MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic (11.9501ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.$queryRaw()` invocation:
+  
+  
+  Raw query failed. Code: `23514`. Message: `new row for relation "PatientAssessment" violates check constraint "PatientAssessment_answers_check"`
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:8643)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7932)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7639)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:6935)
+      at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\service.ts:111:22)
+      at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-db.test.ts:142:19)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+✖ MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape (639.757ms)
+✖ MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes (31.4141ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13724.5123
+
+✖ failing tests:
+
+test at backend\src\assessments\__tests__\mna-sql-db.test.ts:1:755
+✖ MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape (639.757ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(await valid(mnaAnswers(), true))
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-sql-db.test.ts:22:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at backend\src\assessments\__tests__\mna-sql-db.test.ts:1:2675
+✖ MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes (31.4141ms)
+  AssertionError [ERR_ASSERTION]: weightKg:1e+308
+  
+  false !== true
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-sql-db.test.ts:90:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+✖ MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes (525.1166ms)
+✖ MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document (28.409ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12536.5638
+
+✖ failing tests:
+
+test at backend\src\assessments\__tests__\mna-pdf-db.test.ts:1:1598
+✖ MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes (525.1166ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.$queryRaw()` invocation:
+  
+  
+  Raw query failed. Code: `23514`. Message: `new row for relation "PatientAssessment" violates check constraint "PatientAssessment_answers_check"`
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:8643)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7932)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7639)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:6935)
+      at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\service.ts:111:22)
+      at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+      at async finalized (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-pdf-db.test.ts:22:18)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-pdf-db.test.ts:62:18)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+
+test at backend\src\assessments\__tests__\mna-pdf-db.test.ts:1:3464
+✖ MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document (28.409ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.$queryRaw()` invocation:
+  
+  
+  Raw query failed. Code: `23514`. Message: `new row for relation "PatientAssessment" violates check constraint "PatientAssessment_answers_check"`
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:8643)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7932)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7639)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:6935)
+      at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\service.ts:111:22)
+      at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+      at async finalized (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-pdf-db.test.ts:22:18)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po13-mna-backend\backend\src\assessments\__tests__\mna-pdf-db.test.ts:113:17)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+✔ all 48 approved options produce exact balance/gait totals and preserve the 16/12/28 model (4.1994ms)
+✔ twenty missing answers never gain a risk class; malformed values cannot become scores (2.3013ms)
+✔ optional notes preserve Unicode, whitespace and newlines with a 4000-codepoint boundary (0.9967ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 396.2863
+✔ one Tinetti lifecycle retains CAS/replay, immutable snapshot, typed current/history and legacy JSON (667.3476ms)
+✔ SQL validates all 48 domains, null completeness and note bounds and blocks direct malformed writes (183.0449ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2406.1576
+✔ Cartella PUT preserves absent/equal legacy branches and refuses changes atomically (340.732ms)
+✔ missing/null/empty stay distinct and denied scope cannot write a cartella (20.9364ms)
+✔ locked latest legacy and patient ownership defeat stale PUT and scope races (127.8546ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12066.6241
+✔ Tinetti PDF renders all frozen items and Unicode notes, and archives under its own type (1324.6243ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13049.9267
+✔ existing import rejects altered history without confirming, then omission retries safely and idempotently (354.6503ms)
+✔ new-patient import cannot inject historical assessments and empty defaults leave the branch absent (28.2646ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12093.8492
+✔ confirmDraft creates patient transactionally + is idempotent (321.5931ms)
+✔ confirmDraft permits a manager to recover a stale legacy owner (13.4506ms)
+✔ confirmJob permits a manager to recover an ownerless legacy job (32.8425ms)
+✔ confirmDraft: accepts a missing CF but blocks a duplicate CF (not forcible) (32.6153ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11531.8909
+✔ all 243 complete and 781 partial PAINAD combinations preserve zero, sums and bands (7.888ms)
+✔ boundary rejects missing/extra/coerced values, spoofed author, invalid dates and version (3.0644ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 392.9386
+✔ Transfers has no defaults or score and covers all 384 independent transfer choices (15.5687ms)
+✔ Transfers preserves explicit no, dependencies and every aid ownership boundary (2.3209ms)
+✔ Transfers rejects unknown/coerced options and enforces dates, text and Unicode bounds (2.824ms)
+✔ admission civil date accepts historical years and validates Gregorian leap days (0.4897ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 610.3826
+✔ concurrent create uses one immutable initial receipt and replays the edited current draft (539.6877ms)
+✔ draft privacy and patient scope apply to reads, writes, create replay and revocation (30.4913ms)
+✔ CAS permits one writer and incomplete finalization remains a draft (28.2685ms)
+✔ finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella (179.5263ms)
+✔ only one concurrent final correction may reference a predecessor of the same patient (114.3599ms)
+✔ history is bounded, scoped, stable across draft edits and excludes snapshots and answers (270.7767ms)
+✔ concurrent ownership change fences creation before a stale patient permission can write (51.2119ms)
+✔ a new process replays the persisted creation and finalization after response loss (22174.7444ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25319.7738
+✔ PDF failure preserves the final and concurrent retries archive exactly one immutable document (714.0761ms)
+✔ expired lease is recoverable and late success/failure tokens cannot overwrite the new attempt (119.6347ms)
+✔ PDF claim and callbacks read the clock after database lock waits (116.3172ms)
+✔ renderer preserves Unicode and long text, emits readable PDF metadata and rejects unsupported glyphs (1011.3847ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12892.7395
+✔ Transfers PDF freezes all groups, source signature spaces and long Unicode paragraphs without scores (1477.0847ms)
+✔ Transfers document metadata keeps its type and existing archive scope and retries remain intact (528.6389ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13938.8447
+✔ personal confirmations use exact DB qualification and frozen server identity, with durable replay (1785.3935ms)
+✔ revoked qualification is re-read after the real operator lock before a new confirmation (212.5487ms)
+✔ attestations are append-only and never rewrite the PDF or transfer to a correction (883.106ms)
+✔ attestation counts, personal state and pages are bounded and current-scope protected (828.7616ms)
+✔ HTTP current and attestations expose the agreed status and identity-bound response (246.6668ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16431.906

@@ -3,20 +3,24 @@ import { PAINAD, emptyPainadAnswers, painadResult } from './painadDefinition';
 import { TRANSFERS, assertTransfersAnswers, emptyTransfersAnswers } from './transfersDefinition';
 import { assertPainadAnswers } from './assessmentValidation';
 import { TINETTI, assertTinettiAnswers, emptyTinettiAnswers } from './tinettiDefinition';
+import { MNA, assertMnaAnswers, emptyMnaAnswers } from './mnaDefinition';
 export const assessmentDefinition = (type: AssessmentType) =>
-  ({ painad: PAINAD, postural_transfers: TRANSFERS, tinetti: TINETTI })[type];
+  ({ painad: PAINAD, postural_transfers: TRANSFERS, tinetti: TINETTI, mna: MNA })[type];
 export const emptyAssessmentAnswers = (type: AssessmentType): AssessmentAnswers =>
   type === 'painad'
     ? emptyPainadAnswers()
     : type === 'tinetti'
       ? emptyTinettiAnswers()
-      : emptyTransfersAnswers();
+      : type === 'mna'
+        ? emptyMnaAnswers()
+        : emptyTransfersAnswers();
 export function assertAssessmentAnswers(
   type: AssessmentType,
   value: unknown,
 ): asserts value is AssessmentAnswers {
   if (type === 'painad') assertPainadAnswers(value);
   else if (type === 'tinetti') assertTinettiAnswers(value);
+  else if (type === 'mna') assertMnaAnswers(value);
   else assertTransfersAnswers(value);
 }
 export function savedAssessmentComplete(record: AssessmentDto) {

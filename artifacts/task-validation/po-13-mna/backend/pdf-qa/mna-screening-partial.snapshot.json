@@ -1,0 +1,341 @@
+{
+  "bmi": null,
+  "form": {
+    "type": "mna",
+    "version": "mna-it-2026-09-22-q-corrected-v1",
+    "sourceSha256": "67964491d0ceb5c221e776079c3af2bc7c1ddbf834428997f1b5531e469c6ffa"
+  },
+  "items": [
+    {
+      "id": "A",
+      "group": "screening",
+      "label": "Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito, problemi digestivi, difficoltà di masticazione o deglutizione)",
+      "score": 2,
+      "answer": "no_reduction",
+      "description": "Nessuna riduzione dell’assunzione di cibo"
+    },
+    {
+      "id": "B",
+      "group": "screening",
+      "label": "Perdita di peso recente (< 3 mesi)",
+      "score": 3,
+      "answer": "no_loss",
+      "description": "Nessuna perdita di peso"
+    },
+    {
+      "id": "C",
+      "group": "screening",
+      "label": "Motricità",
+      "score": 2,
+      "answer": "goes_out",
+      "description": "Esce di casa"
+    },
+    {
+      "id": "D",
+      "group": "screening",
+      "label": "Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici?",
+      "score": 2,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "E",
+      "group": "screening",
+      "label": "Problemi neuropsicologici",
+      "score": 2,
+      "answer": "no_psychological_problems",
+      "description": "Nessun problema psicologico"
+    },
+    {
+      "id": "F",
+      "group": "screening",
+      "label": "Indice di massa corporea (IMC = peso / (altezza)² in kg/m²)",
+      "score": 3,
+      "answer": {
+        "method": "category",
+        "category": "gte23"
+      },
+      "description": "IMC ≥ 23"
+    },
+    {
+      "id": "G",
+      "group": "global",
+      "label": "Il paziente vive autonomamente a domicilio?",
+      "score": 0,
+      "answer": false,
+      "description": "No"
+    },
+    {
+      "id": "H",
+      "group": "global",
+      "label": "Prende più di 3 medicinali al giorno?",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "I",
+      "group": "global",
+      "label": "Presenza di decubiti, ulcere cutanee?",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "J",
+      "group": "global",
+      "label": "Quanti pasti completi prende al giorno?",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "K",
+      "group": "global",
+      "label": "Consuma?",
+      "score": null,
+      "answer": {
+        "dairyDaily": true,
+        "eggsOrLegumesWeekly": null,
+        "meatFishOrPoultryDaily": false
+      },
+      "subitems": [
+        {
+          "id": "dairyDaily",
+          "label": "Almeno una volta al giorno dei prodotti lattiero-caseari?",
+          "answer": true
+        },
+        {
+          "id": "eggsOrLegumesWeekly",
+          "label": "Una o due volte la settimana uova o legumi?",
+          "answer": null
+        },
+        {
+          "id": "meatFishOrPoultryDaily",
+          "label": "Ogni giorno della carne, del pesce o del pollame?",
+          "answer": false
+        }
+      ],
+      "description": null
+    },
+    {
+      "id": "L",
+      "group": "global",
+      "label": "Consuma almeno due volte al giorno frutta o verdura?",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "M",
+      "group": "global",
+      "label": "Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…)",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "N",
+      "group": "global",
+      "label": "Come si nutre?",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "O",
+      "group": "global",
+      "label": "Il paziente si considera ben nutrito? (ha dei problemi nutrizionali)",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "P",
+      "group": "global",
+      "label": "Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età?",
+      "score": null,
+      "answer": null,
+      "description": null
+    },
+    {
+      "id": "Q",
+      "group": "global",
+      "label": "Circonferenza brachiale (CB, cm)",
+      "score": 0.5,
+      "answer": {
+        "method": "measured"
+      },
+      "description": "21 ≤ CB ≤ 22 cm"
+    },
+    {
+      "id": "R",
+      "group": "global",
+      "label": "Circonferenza del polpaccio (CP in cm)",
+      "score": null,
+      "answer": {
+        "method": "category",
+        "category": null
+      },
+      "description": null
+    }
+  ],
+  "notes": "Dati globali parziali conservati.\nNessuna misura inventata.",
+  "title": "Screening MNA®",
+  "author": {
+    "name": "Élodie Παπαδόπουλος",
+    "operatorId": "po10-303db447-author"
+  },
+  "extent": "screening",
+  "result": {
+    "total": null,
+    "global": null,
+    "screening": {
+      "band": "normal",
+      "label": "Stato nutrizionale normale",
+      "score": 14,
+      "maximum": 14
+    }
+  },
+  "answers": {
+    "A": "no_reduction",
+    "B": "no_loss",
+    "C": "goes_out",
+    "D": false,
+    "E": "no_psychological_problems",
+    "F": {
+      "method": "category",
+      "category": "gte23"
+    },
+    "G": false,
+    "H": null,
+    "I": null,
+    "J": null,
+    "K": {
+      "dairyDaily": true,
+      "eggsOrLegumesWeekly": null,
+      "meatFishOrPoultryDaily": false
+    },
+    "L": null,
+    "M": null,
+    "N": null,
+    "O": null,
+    "P": null,
+    "Q": {
+      "method": "measured"
+    },
+    "R": {
+      "method": "category",
+      "category": null
+    },
+    "notes": "Dati globali parziali conservati.\nNessuna misura inventata.",
+    "extent": "screening",
+    "measurements": {
+      "heightCm": null,
+      "weightKg": null,
+      "armCircumferenceCm": 21,
+      "calfCircumferenceCm": null
+    },
+    "measurementDates": {
+      "heightCm": null,
+      "weightKg": null,
+      "armCircumferenceCm": "2026-03-27",
+      "calfCircumferenceCm": null
+    }
+  },
+  "patient": {
+    "id": "po10-303db447-patient",
+    "lastName": "D’Àngelo",
+    "location": {
+      "bed": "A",
+      "asOf": "2026-03-29",
+      "room": "po10-303db447",
+      "source": "assignment",
+      "status": "assigned"
+    },
+    "firstName": "Zoë",
+    "dateOfBirth": "1940-01-02",
+    "codiceFiscale": null
+  },
+  "copyright": "® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M; www.mna-elderly.com.",
+  "createdAt": "2026-09-23T06:12:23.961Z",
+  "assessedAt": "2026-03-28T23:30:00.000Z",
+  "completion": {
+    "global": {
+      "complete": false,
+      "missingPaths": [
+        "H",
+        "I",
+        "J",
+        "K.eggsOrLegumesWeekly",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "R.category"
+      ],
+      "answeredCount": 2,
+      "requiredCount": 12
+    },
+    "complete": true,
+    "screening": {
+      "complete": true,
+      "missingPaths": [],
+      "answeredCount": 6,
+      "requiredCount": 6
+    },
+    "missingPaths": []
+  },
+  "provenance": "MNA® in italiano dalla fonte fornita. Correzioni editoriali: «acuteo» → «acute o» e «Oni giorne» → «Ogni giorno». Q: corretto il refuso della fonte italiana; CB < 21 cm = 0, 21 ≤ CB ≤ 22 cm = 0,5, CB > 22 cm = 1, secondo il riscontro ufficiale inglese 2023. Conservati E «demenza moderata» e K «una o due volte la settimana». Questa trascrizione non costituisce convalida clinica indipendente.",
+  "references": [
+    "Vellas B, Villars H, Abellan G, et al. Overview of MNA® - Its History and Challenges. J Nut Health Aging 2006; 10: 456-465.",
+    "Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for Undernutrition in Geriatric Practice: Developing the Short-Form Mini Nutritional Assessment (MNA-SF). J. Geront 2001; 56A: M366-377.",
+    "Guigoz Y. The Mini-Nutritional Assessment (MNA®) Review of the Literature – What does it tell us? J Nutr Health Aging 2006; 10: 466-487."
+  ],
+  "finalizedAt": "2026-09-23T06:12:23.968Z",
+  "predecessor": null,
+  "demographics": {
+    "sex": "F",
+    "timeZone": "Europe/Rome",
+    "ageOnDate": "2026-03-29",
+    "ageAtAssessment": 86
+  },
+  "measurements": [
+    {
+      "id": "weightKg",
+      "unit": "kg",
+      "label": "Peso",
+      "value": null,
+      "source": "manual_assessment",
+      "measuredOn": null
+    },
+    {
+      "id": "heightCm",
+      "unit": "cm",
+      "label": "Altezza",
+      "value": null,
+      "source": "manual_assessment",
+      "measuredOn": null
+    },
+    {
+      "id": "armCircumferenceCm",
+      "unit": "cm",
+      "label": "Circonferenza brachiale",
+      "value": 21,
+      "source": "manual_assessment",
+      "measuredOn": "2026-03-27"
+    },
+    {
+      "id": "calfCircumferenceCm",
+      "unit": "cm",
+      "label": "Circonferenza del polpaccio",
+      "value": null,
+      "source": "manual_assessment",
+      "measuredOn": null
+    }
+  ],
+  "predecessorId": null,
+  "snapshotVersion": 1,
+  "correctionReason": null
+}

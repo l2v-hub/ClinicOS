@@ -4,6 +4,8 @@ import type { PatientDocumentMeta } from './patientDocumentsPage';
 import { PAINAD_VERSION } from './assessments/assessmentTypes';
 import { TRANSFERS_VERSION } from './assessments/transfersTypes';
 import { TINETTI_VERSION } from './assessments/tinettiTypes';
+import { MNA_VERSION } from './assessments/mnaTypes';
+import { mnaAssessmentDate } from './assessments/mnaTime';
 
 export const DOCUMENT_UPLOAD_MAX_BYTES = 15 * 1024 * 1024;
 export const DOCUMENT_ACCEPT = '.pdf,.jpeg,.jpg,.png,application/pdf,image/jpeg,image/png';
@@ -49,17 +51,19 @@ export function assertArchiveDocument(value: unknown): asserts value is PatientD
         row.documentType !== 'patient_assessment' ||
         typeof row.assessment.id !== 'string' ||
         !/^[A-Za-z0-9_-]{1,128}$/.test(row.assessment.id) ||
-        !['painad', 'postural_transfers', 'tinetti'].includes(row.assessment.type) ||
+        !['painad', 'postural_transfers', 'tinetti', 'mna'].includes(row.assessment.type) ||
         row.assessment.formVersion !==
           {
             painad: PAINAD_VERSION,
             postural_transfers: TRANSFERS_VERSION,
             tinetti: TINETTI_VERSION,
+            mna: MNA_VERSION,
           }[row.assessment.type] ||
         typeof row.assessment.assessedAt !== 'string' ||
         !Number.isFinite(Date.parse(row.assessment.assessedAt))))
   )
     throw new Error('Associazione della valutazione non valida');
+  if (row.assessment?.type === 'mna') mnaAssessmentDate(row.assessment.assessedAt);
 }
 export function validateArchiveFile(file: File): string | null {
   if (!DOCUMENT_UPLOAD_TYPES.has(file.type)) return 'Seleziona un file PDF, JPEG, JPG o PNG.';

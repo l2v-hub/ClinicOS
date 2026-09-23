@@ -1,0 +1,13 @@
+{
+  "task": "PO13-backend",
+  "runnerSession": 60526,
+  "runnerExitCode": 1,
+  "passedTests": 48,
+  "failedTests": 3,
+  "regressionsPassed": 40,
+  "sqlMnaPassed": 2,
+  "databaseClosed": true,
+  "failures": ["JSONB object key order made the original insertion-order snapshot digest non-reproducible after readback", "Existing fonts do not include MNA symbols U+2264, U+2265 and U+2192"],
+  "repair": ["Canonical object-key ordering for the new MNA snapshot hash only; array order and all clinical values remain bound", "Root-authorized equivalent typographic forms only before MNA PDF layout, retaining original Unicode in snapshot/UI and unsupported-glyph guard"],
+  "evidence": ["second-failed-focused-tests.json", "second-failed-focused-tests.log", "second-failed-test-source-manifest.json", "pdf-typography.md"]
+}

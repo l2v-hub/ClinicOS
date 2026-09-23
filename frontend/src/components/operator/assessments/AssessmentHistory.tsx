@@ -1,6 +1,20 @@
 import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import type { AssessmentHistoryItem } from '../../../lib/assessments/assessmentTypes';
 import type { useAssessmentHistory } from './useAssessmentHistory';
+import { mnaTitle } from '../../../lib/assessments/mnaDefinition';
+function resultLabel(record: AssessmentHistoryItem): string {
+  if (record.type === 'mna') {
+    const result = record.result.total ?? record.result.screening;
+    return `${mnaTitle(record.extent)} · ${result ? `${result.score}/${result.maximum} · ${result.label}` : `Screening ${record.completion.screening.answeredCount}/6`}${record.extent === 'full' && !record.result.total ? ` · Globale ${record.completion.global.answeredCount}/12` : ''}`;
+  }
+  return record.result
+    ? `${record.result.total}/${record.type === 'tinetti' ? 28 : 10} · ${record.result.label}`
+    : record.type !== 'postural_transfers'
+      ? `${record.answeredCount} di ${record.type === 'tinetti' ? 20 : 5} risposte`
+      : record.completion.complete
+        ? 'Compilazione completa'
+        : 'Compilazione da completare';
+}
 export function AssessmentHistory({
   history,
   onOpen,
@@ -71,13 +85,7 @@ export function AssessmentHistory({
                 {record.author.name} · Registrata {formatFacilityLocalMinute(record.createdAt)}
               </p>
               <p>
-                {record.result
-                  ? `${record.result.total}/${record.type === 'tinetti' ? 28 : 10} · ${record.result.label}`
-                  : record.type !== 'postural_transfers'
-                    ? `${record.answeredCount} di ${record.type === 'tinetti' ? 20 : 5} risposte`
-                    : record.completion.complete
-                      ? 'Compilazione completa'
-                      : 'Compilazione da completare'}
+                {resultLabel(record)}
                 {record.correctedById
                   ? ' · Rettificata'
                   : record.predecessorId

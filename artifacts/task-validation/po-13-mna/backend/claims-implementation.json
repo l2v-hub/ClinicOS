@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-13-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po13-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T05:45:00.921Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T05:45:00.921Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root GO after PO12 Railway d532fc0f-809b-4924-a310-ac9751706614 SUCCESS, migration20260923060000_tinetti applied, health200; Vercel dpl_8HxzffhVs7BCpBisSv6LzXpXDBEN READY alias baseline4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be and read-only Tinetti smoke zero errors. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po13-mna-backend branch codex/po13-mna-backend. Own backend/src/assessments/**, minimal assessment route metadata if needed, prisma SQL validator migration and artifacts/task-validation/po-13-mna/backend/** with private runtime. Implement agreed DTO9d24743f and root contract8f08: MNA A-R, canonical nullable measurements/dates, screening/full, immutable partial G-R snapshots/PDF. Preserve PAINAD/Transfers/Tinetti, baseline dirty PowerShell, package/lock and shared runtime. Root owns HTTP/integration/publish. No worker commit/push/deploy or online patient writes. Freeze exact-source manifest and release claim before review/integration.\"\n  },\n  \"message\": \"Issue PO-13-backend-implementation claimed by agent:codex-po13-backend:coder\"\n}"
+    }
+  ]
+}

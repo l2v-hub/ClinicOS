@@ -2744,7 +2744,7 @@ export function PatientDetail({
                 onChange={() => {}}
               />
             )}
-            {(tab === 'painad' || tab === 'postural_transfers' || tab === 'tinetti') && (
+            {(tab === 'painad' || tab === 'postural_transfers' || tab === 'tinetti' || tab === 'mna') && (
               <AssessmentWorkspace patient={paziente} operatorId={operatoreId} operatorRole={operatoreRole} operatorName={operatoreNome}
                 type={tab} draftStore={assessmentDraftStore} initialAssessment={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessment : undefined}
                 onOpenArchive={(documentId, assessment) => { setArchiveFocus({ patientId: paziente.id, documentId, assessment }); switchTab('documenti'); }}>

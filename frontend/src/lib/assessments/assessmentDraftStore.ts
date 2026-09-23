@@ -18,6 +18,8 @@ import {
   assessmentAnswersEqual,
 } from './assessmentDefinition';
 import type { AssessmentClient } from './assessmentClient';
+import type { MnaAnswers } from './mnaTypes';
+import { mnaInputErrors } from './mnaLocalInputs';
 export interface AssessmentDraft {
   key: string;
   patientId: string;
@@ -158,6 +160,7 @@ export function createAssessmentDraftStore() {
           ...draft.fields,
           ...fields,
           ...(fields.answers ? { answers: copyAssessmentAnswers(fields.answers) } : {}),
+          ...(fields.mnaInputs ? { mnaInputs: structuredClone(fields.mnaInputs) } : {}),
         },
         revision: draft.revision + 1,
         dirty: true,
@@ -202,6 +205,23 @@ export function createAssessmentDraftStore() {
       let operation = draft.pending;
       try {
         if (!operation) {
+          if (draft.type === 'mna') {
+            const errors = mnaInputErrors(
+              draft.fields.answers as MnaAnswers,
+              draft.fields.mnaInputs,
+            );
+            const paths = Object.keys(errors);
+            if (paths.length) {
+              set(key, {
+                ...draft,
+                failure: {
+                  ...validation('Correggi le misure o le date indicate prima di salvare.'),
+                  missingPaths: paths,
+                },
+              });
+              return null;
+            }
+          }
           if (kind === 'finalize') {
             if (
               !draft.record ||
@@ -220,7 +240,7 @@ export function createAssessmentDraftStore() {
               }),
             };
           } else {
-            const fields = assessmentEditable(draft.fields, !!draft.predecessorId);
+            const fields = assessmentEditable(draft.fields, !!draft.predecessorId, draft.type);
             assertAssessmentAnswers(draft.type, fields.answers);
             freezeAssessmentValue(fields.answers);
             operation = draft.record

@@ -1,0 +1,12 @@
+{
+  "task": "PO13-backend-runtime-preparation",
+  "recordedAt": "2026-09-23T05:41:51.276Z",
+  "phase": "preflight-before-runtime-copy",
+  "toolChunk": "152d47",
+  "exitCode": 1,
+  "error": "Approved contract bytes differ",
+  "reason": "Assigned worktree contract copy uses CRLF; authoritative root contract uses LF. Read authoritative original for the new snapshot and verify local copy differs only by CRLF-to-LF normalization.",
+  "runtimeMutatedBeforeFailure": false,
+  "applicationMutated": false,
+  "testsRun": false
+}

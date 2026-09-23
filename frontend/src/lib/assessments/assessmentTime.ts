@@ -1,5 +1,11 @@
 import { facilityLocalMinute } from '../facilityTime';
-import type { AssessmentFields, AssessmentEditable, AssessmentDto } from './assessmentTypes';
+import type {
+  AssessmentFields,
+  AssessmentEditable,
+  AssessmentDto,
+  AssessmentType,
+} from './assessmentTypes';
+import { mnaAssessmentInstants, mnaAssessmentDate, mnaLocalMinute } from './mnaTime';
 export function assessmentInstants(local: string): string[] {
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(local)) return [];
   const base = Date.parse(`${local}:00Z`);
@@ -18,11 +24,22 @@ export function assessmentInstants(local: string): string[] {
 export function assessmentEditable(
   fields: AssessmentFields,
   correction: boolean,
+  type: AssessmentType = 'painad',
 ): AssessmentEditable {
-  const candidates = assessmentInstants(fields.assessedAtLocal);
+  const candidates =
+    type === 'mna'
+      ? mnaAssessmentInstants(fields.assessedAtLocal)
+      : assessmentInstants(fields.assessedAtLocal);
+  const localMinute = (value: string) => {
+    try {
+      return type === 'mna' ? mnaLocalMinute(value) : facilityLocalMinute(new Date(value));
+    } catch {
+      return '';
+    }
+  };
   const retained =
     Number.isFinite(Date.parse(fields.instantChoice)) &&
-    facilityLocalMinute(new Date(fields.instantChoice)) === fields.assessedAtLocal
+    localMinute(fields.instantChoice) === fields.assessedAtLocal
       ? fields.instantChoice
       : undefined;
   const assessedAt =
@@ -37,6 +54,7 @@ export function assessmentEditable(
         : 'Verifica data e ora della valutazione (Europe/Rome).',
     );
   const correctionReason = fields.correctionReason.trim();
+  if (type === 'mna') mnaAssessmentDate(assessedAt);
   if (correction && (!correctionReason || correctionReason.length > 1000))
     throw new Error('Indica il motivo della rettifica, massimo 1000 caratteri.');
   return {
@@ -47,7 +65,10 @@ export function assessmentEditable(
 }
 export function assessmentFields(record: AssessmentDto): AssessmentFields {
   return {
-    assessedAtLocal: facilityLocalMinute(new Date(record.assessedAt)),
+    assessedAtLocal:
+      record.type === 'mna'
+        ? mnaLocalMinute(record.assessedAt)
+        : facilityLocalMinute(new Date(record.assessedAt)),
     instantChoice: record.assessedAt,
     answers: structuredClone(record.answers),
     correctionReason: record.correctionReason ?? '',

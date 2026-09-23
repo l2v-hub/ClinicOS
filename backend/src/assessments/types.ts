@@ -13,7 +13,16 @@ import {
   type TinettiSnapshotItem,
 } from './tinetti-types.js';
 export * from './tinetti-types.js';
-export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti';
+import {
+  MNA_VERSION,
+  type MnaAnswers,
+  type MnaCompletion,
+  type MnaExtent,
+  type MnaResult,
+  type MnaSnapshot,
+} from './mna-types.js';
+export * from './mna-types.js';
+export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna';
 
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const PAINAD_SOURCE_SHA256 =
@@ -72,7 +81,7 @@ export interface TinettiSnapshot extends Omit<
   notes: string;
   provenance: string;
 }
-export type AssessmentSnapshot = PainadSnapshot | TransfersSnapshot | TinettiSnapshot;
+export type AssessmentSnapshot = PainadSnapshot | TransfersSnapshot | TinettiSnapshot | MnaSnapshot;
 export interface AssessmentPdfDto {
   status: 'pending' | 'ready' | 'failed';
   documentId: string | null;
@@ -131,8 +140,22 @@ export interface TinettiAssessmentDto extends TinettiHistoryItem {
   finalSnapshot: TinettiSnapshot | null;
   snapshotSha256: string | null;
 }
-export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem;
-export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto;
+export interface MnaHistoryItem extends Omit<PainadHistoryItem, 'type' | 'formVersion' | 'result'> {
+  type: 'mna';
+  formVersion: typeof MNA_VERSION;
+  extent: MnaExtent;
+  completion: MnaCompletion;
+  result: MnaResult;
+}
+export interface MnaAssessmentDto extends MnaHistoryItem {
+  answers: MnaAnswers;
+  finalSnapshot: MnaSnapshot | null;
+  snapshotSha256: string | null;
+}
+export type AssessmentHistoryItem =
+  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem;
+export type AssessmentDto =
+  PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto | MnaAssessmentDto;
 export interface AssessmentDocumentMeta {
   id: string;
   type: AssessmentType;

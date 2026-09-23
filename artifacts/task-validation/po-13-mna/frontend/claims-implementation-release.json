@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "message": "Issue PO-13-frontend-implementation released",
+  "reason": "PO13 frontend source frozen for root integration/review: 30 source files, 127 tests PASS, build PASS, focused lint18 baseline/18 candidate with zero introduced, source/bundle scan140 files zero findings, BE/FE parity89 scenarios, protected mobile CSS/scripts unchanged. sourceStateId4d39d1dfc47614e40271ea2d944a63ac1a37746799ae4e6d275b3aee37c5d2c9. No further worker writes to application scope; root owns browser/static4194/PDF/HTTP/PostgreSQL/publication.",
+  "previousClaim": {
+    "issueId": "PO-13-frontend-implementation",
+    "claimant": {
+      "type": "agent",
+      "agentId": "codex-po13-frontend",
+      "agentType": "coder"
+    },
+    "claimedAt": "2026-09-23T05:45:03.255Z",
+    "status": "active",
+    "statusChangedAt": "2026-09-23T05:45:03.255Z",
+    "progress": 0,
+    "context": "Root GO after PO12 Railway d532fc0f SUCCESS migration/health200 and Vercel dpl_8HxzffhVs7BCpBisSv6LzXpXDBEN READY source4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be with online Tinetti/history smoke. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po13-mna-ui baseline4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be. Paths: frontend/src/lib/assessments/**; frontend/src/lib/__tests__/mna*; frontend/src/components/operator/assessments/** EXCEPT protected AssessmentWorkspace.css; frontend/src/components/operator/__tests__/mna*; frontend/src/components/operator/PatientDetail.tsx; frontend/src/components/operator/PatientRecordPrintDocument.tsx; existing MNA cartella tab if present; frontend/src/lib/patientDocumentArchive.ts; frontend/src/lib/patientDocumentArchiveIO.ts; frontend/src/App.tsx; artifacts/task-validation/po-13-mna/frontend/**. Local compiler/build caches only. Implement DTO9d24743f/UX, focused production/UI/store tests, build/lint baseline/secret scan and manifests, then handoff/release. Preserve protected CSS/mobile fix and preexisting PowerShell changes. No backend/package/lock/shared dependency mutation, no servers/ports (root static4194), commit/push/deploy or live writes. Root handles integration/publication; existing reviewer independently audits."
+  }
+}

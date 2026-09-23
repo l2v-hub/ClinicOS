@@ -4,6 +4,8 @@ import { TRANSFERS_VERSION, type AssessmentType } from './types.js';
 import { parseTransfersAnswers } from './transfers.js';
 import { TINETTI_VERSION } from './tinetti-types.js';
 import { parseTinettiAnswers } from './tinetti.js';
+import { MNA_VERSION } from './mna-types.js';
+import { parseMnaAnswers, mnaAssessmentDate } from './mna-input.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function assessmentId(value: unknown): string {
@@ -77,7 +79,8 @@ export function parseCreate(value: unknown) {
   if (!(
     (input.type === 'painad' && input.formVersion === PAINAD_VERSION) ||
     (input.type === 'postural_transfers' && input.formVersion === TRANSFERS_VERSION) ||
-    (input.type === 'tinetti' && input.formVersion === TINETTI_VERSION)
+    (input.type === 'tinetti' && input.formVersion === TINETTI_VERSION) ||
+    (input.type === 'mna' && input.formVersion === MNA_VERSION)
   ))
     throw new AssessmentError('Tipo o versione del modulo non supportati');
   if (input.type === 'painad' && Buffer.byteLength(JSON.stringify(value)) > 16_384)
@@ -86,18 +89,25 @@ export function parseCreate(value: unknown) {
   const reason = correctionReason(input.correctionReason);
   if (Boolean(predecessorId) !== Boolean(reason))
     throw new AssessmentError('Indica valutazione precedente e motivo della rettifica');
+  const assessedAt = parseInstant(input.assessedAt);
+  if (input.type === 'mna') mnaAssessmentDate(assessedAt);
   return {
     requestId: requestId(input.requestId),
     type: input.type as AssessmentType,
     formVersion: input.formVersion as
-      typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION,
-    assessedAt: parseInstant(input.assessedAt),
+      | typeof PAINAD_VERSION
+      | typeof TRANSFERS_VERSION
+      | typeof TINETTI_VERSION
+      | typeof MNA_VERSION,
+    assessedAt,
     answers:
-      input.type === 'painad'
-        ? parseAnswers(input.answers)
-        : input.type === 'tinetti'
-          ? parseTinettiAnswers(input.answers)
-          : parseTransfersAnswers(input.answers),
+      input.type === 'mna'
+        ? parseMnaAnswers(input.answers)
+        : input.type === 'painad'
+          ? parseAnswers(input.answers)
+          : input.type === 'tinetti'
+            ? parseTinettiAnswers(input.answers)
+            : parseTransfersAnswers(input.answers),
     predecessorId,
     correctionReason: reason,
   };
@@ -108,15 +118,19 @@ export function parsePatch(value: unknown, type: AssessmentType = 'painad') {
     ['expectedVersion', 'assessedAt', 'answers', 'correctionReason'],
     type === 'painad' ? 16_384 : 32_768,
   );
+  const assessedAt = parseInstant(input.assessedAt);
+  if (type === 'mna') mnaAssessmentDate(assessedAt);
   return {
     expectedVersion: expectedVersion(input.expectedVersion),
-    assessedAt: parseInstant(input.assessedAt),
+    assessedAt,
     answers:
-      type === 'painad'
-        ? parseAnswers(input.answers)
-        : type === 'tinetti'
-          ? parseTinettiAnswers(input.answers)
-          : parseTransfersAnswers(input.answers),
+      type === 'mna'
+        ? parseMnaAnswers(input.answers)
+        : type === 'painad'
+          ? parseAnswers(input.answers)
+          : type === 'tinetti'
+            ? parseTinettiAnswers(input.answers)
+            : parseTransfersAnswers(input.answers),
     correctionReason: correctionReason(input.correctionReason),
   };
 }

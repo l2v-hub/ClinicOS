@@ -1,0 +1,143 @@
+- banner:
+  - strong: PO13 · solo pazienti sintetici
+  - text: Profilo sintetico
+  - combobox "Profilo sintetico":
+    - option "operator" [selected]
+    - option "outsider"
+    - option "manager"
+  - text: Paziente sintetico
+  - combobox "Paziente sintetico":
+    - option "vitals-qa-anna" [selected]
+    - option "vitals-qa-bruno"
+  - button "Perdi risposta bozza"
+  - button "Perdi risposta finale"
+  - button "Perdi risposta conferma"
+  - button "Rallenta salvataggio"
+  - button "Simula errore PDF"
+  - button "Ripristina PDF"
+  - button "Cambia nome sintetico"
+  - button "Esporta evidenze"
+  - status: Prossima risposta finale persa
+- generic: ClinicOS · anteprima sintetica
+- main:
+  - button "Torna alla lista":
+  - generic: AD
+  - generic: Dall’Acqua, Anna Àgata
+  - generic: Codice fiscale non disponibile·
+  - generic: 76a · F
+  - button "Stampa scheda"
+  - button "Invio in PS":
+    - text: Invio in PS
+  - complementary "Completezza anagrafica":
+    - strong: Anagrafica da completare
+    - generic: "Dati da completare:"
+    - list:
+      - button "Codice fiscale"
+  - tablist "Aree della cartella paziente":
+    - generic: Aree cartella
+    - tab "Raccolta dati ingresso"
+    - tab "Clinica"
+    - tab "Diario"
+    - tab "Moduli"
+    - tab "Documenti" [selected]
+    - tab "Dimissione"
+  - tabpanel "Documenti":
+    - button "▼ Documenti paziente 2 documenti Stampa selezionati (0) + Aggiungi" [expanded]:
+      - generic: ▼
+      - generic: Documenti paziente
+      - generic: 2 documenti
+      - button "Stampa selezionati (0)" [disabled]
+      - button "+ Aggiungi"
+    - text: Cerca nell’archivio
+    - searchbox "Cerca nell’archivio"
+    - text: Mostra
+    - combobox "Mostra":
+      - option "Tutti i documenti" [selected]
+      - option "Documenti correnti"
+      - option "Documenti nello storico"
+    - button "Aggiorna archivio"
+    - paragraph: Qui trovi tutti i file e le foto salvati per il paziente, anche da esami, medicazioni e importazioni.
+    - checkbox "Seleziona documenti visibili"
+    - text: Seleziona documenti visibili
+    - status: 0 selezionati
+    - navigation "Cartelle documenti":
+      - heading "Cartelle" [level=3]
+      - button "Tutti i documenti 2":
+        - generic: Tutti i documenti
+        - generic: "2"
+      - list:
+        - button "Chiudi Moduli e valutazioni" [expanded] [active]: ⌄
+        - button "Moduli e valutazioni 2":
+          - generic: Moduli e valutazioni
+          - generic: "2"
+        - list:
+          - button "PAINAD 0":
+            - generic: PAINAD
+            - generic: "0"
+          - button "Trasferimenti posturali 0":
+            - generic: Trasferimenti posturali
+            - generic: "0"
+          - button "Scala di Tinetti 0":
+            - generic: Scala di Tinetti
+            - generic: "0"
+          - button "MNA · Nutrizione 2":
+            - generic: MNA · Nutrizione
+            - generic: "2"
+        - button "Espandi Personali": ›
+        - button "Personali 0":
+          - generic: Personali
+          - generic: "0"
+        - button "Visite specialistiche 0":
+          - generic: Visite specialistiche
+          - generic: "0"
+        - button "Analisi 0":
+          - generic: Analisi
+          - generic: "0"
+        - button "Espandi Esami e referti": ›
+        - button "Esami e referti 0":
+          - generic: Esami e referti
+          - generic: "0"
+        - button "Espandi Terapie": ›
+        - button "Terapie 0":
+          - generic: Terapie
+          - generic: "0"
+        - button "Medicazioni 0":
+          - generic: Medicazioni
+          - generic: "0"
+        - button "Espandi Dimissioni e invii": ›
+        - button "Dimissioni e invii 0":
+          - generic: Dimissioni e invii
+          - generic: "0"
+        - button "Espandi Consensi e moduli": ›
+        - button "Consensi e moduli 0":
+          - generic: Consensi e moduli
+          - generic: "0"
+        - button "Altri documenti 0":
+          - generic: Altri documenti
+          - generic: "0"
+    - region "Contenuto della cartella":
+      - navigation "Percorso documenti":
+        - button "Documenti"
+      - heading "Tutti i documenti" [level=3]
+      - status: 2 documenti trovati
+      - list:
+        - 'checkbox "Seleziona per la stampa: MNA_2026-09-23_6fd92026-3088-4ac7-ab1a-afbdd983abe6.pdf"'
+        - text: Seleziona per la stampa
+        - button "MNA_2026-09-23_6fd92026-3088-4ac7-ab1a-afbdd983abe6.pdf"
+        - generic: MNA · Nutrizione
+        - generic: 23/09/2026
+        - generic: Ricevuto
+        - paragraph: MNA_2026-09-23_6fd92026-3088-4ac7-ab1a-afbdd983abe6.pdf · 0.0 MB
+        - paragraph: Valutata 23/09/2026 08:16 · Registrata 23/09/2026 08:21
+        - button "Visualizza"
+        - button "Apri valutazione"
+        - 'checkbox "Seleziona per la stampa: MNA_2026-09-23_a46844a7-333b-453e-9c75-4d24ab2c155b.pdf"'
+        - text: Seleziona per la stampa
+        - button "MNA_2026-09-23_a46844a7-333b-453e-9c75-4d24ab2c155b.pdf"
+        - generic: MNA · Nutrizione
+        - generic: 23/09/2026
+        - generic: Ricevuto
+        - paragraph: MNA_2026-09-23_a46844a7-333b-453e-9c75-4d24ab2c155b.pdf · 0.0 MB
+        - paragraph: Valutata 23/09/2026 08:16 · Registrata 23/09/2026 08:19
+        - button "Visualizza"
+        - button "Apri valutazione"

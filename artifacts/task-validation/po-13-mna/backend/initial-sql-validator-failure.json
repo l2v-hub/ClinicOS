@@ -1,0 +1,14 @@
+{
+  "task": "PO13-backend",
+  "runnerSession": 57381,
+  "runnerExitCode": 1,
+  "failure": "New MNA SQL validator rejected valid inputs because subtraction bound before JSON projection in two expressions.",
+  "affectedExpressions": ["a->'measurements' - measure_keys", "a->'measurementDates' - measure_keys"],
+  "repair": "Parenthesize each JSON projection before subtracting allowed keys; no application TypeScript changed.",
+  "independentDiagnosis": "Reviewer confirmed original SELECT fails with SQLSTATE22P02 and parenthesized SELECT returns empty JSON object, using default_transaction_read_only on the existing synthetic cluster.",
+  "passedTests": 45,
+  "failedTests": 6,
+  "regressionsPassed": 40,
+  "databaseClosed": true,
+  "evidence": ["initial-failed-focused-tests.json", "initial-failed-focused-tests.log", "initial-failed-test-source-manifest.json"]
+}

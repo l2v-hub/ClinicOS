@@ -1,0 +1,24 @@
+{
+  "task": "PO-13-frontend-preparation",
+  "generatedAt": "2026-09-23T05:42:17.700Z",
+  "node": "v26.3.0",
+  "packages": {
+    "typescript": "6.0.3",
+    "tsx": "4.23.1",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "vite": "8.2.2",
+    "prettier": "3.9.5"
+  },
+  "dependencyDirectory": "node_modules",
+  "target": "C:\\Workspace\\ClinicOSHouse-worktrees\\quality-loop-20260829\\node_modules",
+  "sharedDependenciesReadOnlyByPolicy": true,
+  "localCaches": [
+    "frontend/node_modules/.tmp",
+    "frontend/node_modules/.vite-temp"
+  ],
+  "installPerformed": false,
+  "applicationTestsRun": false,
+  "applicationBuildRun": false,
+  "serversStarted": false
+}

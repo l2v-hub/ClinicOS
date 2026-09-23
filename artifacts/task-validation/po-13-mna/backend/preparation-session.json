@@ -1,0 +1,50 @@
+{
+  "task": "PO13-backend-runtime-preparation",
+  "startedAt": "2026-09-23T05:41:56.388Z",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po13-mna-backend",
+  "branch": "codex/po13-mna-backend",
+  "baseline": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be",
+  "decision": "allow private runtime and PO13 artifact preparation only; application work awaits explicit root GO after PO12 deploy verification",
+  "claim": {
+    "issueId": "PO-13-backend-runtime-preparation",
+    "claimant": {
+      "type": "agent",
+      "agentId": "codex-po13-backend",
+      "agentType": "preparer"
+    },
+    "claimedAt": "2026-09-23T05:40:20.688Z",
+    "status": "active",
+    "statusChangedAt": "2026-09-23T05:40:20.688Z",
+    "progress": 0,
+    "context": "Root assigned C:/Workspace/ClinicOSHouse-worktrees/po13-mna-backend branch codex/po13-mna-backend baseline 4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be. Sole writer authorized for private backend/node_modules runtime, a policy-read-only root node_modules junction, and artifacts/task-validation/po-13-mna/backend/**. Copy root LF contract SHA256 8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961 and agreed DTO SHA256 9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a preserving bytes/provenance. No source application changes, tests, package/lock changes or shared Prisma generation. Preserve existing dirty start-claude-team.ps1 and other baseline files. Application implementation awaits explicit GO after PO12 Railway/Vercel verification."
+  },
+  "sourceTreeSha256": "90031ea7895b3a2866655ab5c533b05abab395a144ecd32756f11bb2b35d2670",
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "contracts": {
+    "rootSha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+    "dtoSha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a"
+  },
+  "implementationAuthorized": false,
+  "publicationAuthorized": false
+}

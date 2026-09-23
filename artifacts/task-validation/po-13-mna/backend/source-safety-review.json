@@ -1,0 +1,96 @@
+{
+  "sourceTreeSha256": "bbc7c87da51da8a1ceb64e532fbba3c97e1e07030846a7d34fceb533475ba8ac",
+  "recordedAt": "2026-09-23T06:13:10.922Z",
+  "newSourceFiles": [
+    {
+      "path": "backend/src/assessments/__tests__/mna-db.test.ts",
+      "lines": 214
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-fixture.ts",
+      "lines": 93
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-pdf-db.test.ts",
+      "lines": 188
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-sql-db.test.ts",
+      "lines": 191
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna.test.ts",
+      "lines": 280
+    },
+    {
+      "path": "backend/src/assessments/mna-definition.ts",
+      "lines": 174
+    },
+    {
+      "path": "backend/src/assessments/mna-input.ts",
+      "lines": 139
+    },
+    {
+      "path": "backend/src/assessments/mna-pdf-content.ts",
+      "lines": 166
+    },
+    {
+      "path": "backend/src/assessments/mna-snapshot.ts",
+      "lines": 95
+    },
+    {
+      "path": "backend/src/assessments/mna-types.ts",
+      "lines": 122
+    },
+    {
+      "path": "backend/src/assessments/mna.ts",
+      "lines": 151
+    },
+    {
+      "path": "prisma/migrations/20260923070000_mna/migration.sql",
+      "lines": 137
+    }
+  ],
+  "newSourceBelow500Lines": true,
+  "scopedStaticChecks": {
+    "patterns": [
+      "dynamic execution",
+      "unsafe Prisma raw SQL call",
+      "external fetch",
+      "private key block"
+    ],
+    "findings": [],
+    "scope": [
+      "backend/src/assessments/access.ts",
+      "backend/src/assessments/current.ts",
+      "backend/src/assessments/history.ts",
+      "backend/src/assessments/input.ts",
+      "backend/src/assessments/mna-definition.ts",
+      "backend/src/assessments/mna-input.ts",
+      "backend/src/assessments/mna-pdf-content.ts",
+      "backend/src/assessments/mna-snapshot.ts",
+      "backend/src/assessments/mna-types.ts",
+      "backend/src/assessments/mna.ts",
+      "backend/src/assessments/pdf-renderer.ts",
+      "backend/src/assessments/pdf-service.ts",
+      "backend/src/assessments/service.ts",
+      "backend/src/assessments/types.ts"
+    ]
+  },
+  "manualReview": [
+    "MNA boundary parsers reject missing/extra keys, coercion, nonfinite measures, invalid calendars and conflicting measure/category modes.",
+    "Existing locked assessment authorization and lifecycle remain shared; MNA only adds type-specific parser/completeness/snapshot/result branches.",
+    "Patient sex is read in the locked finalization transaction; clinical age derives from frozen birth date and assessment date in Europe/Rome.",
+    "Canonical sorted-key digest is scoped to new MNA snapshots, retaining array order and values; previously published snapshot hash paths remain unchanged.",
+    "PDF source typography is confined to editorial blocks; notes and identity are passed unchanged and unsupported glyphs fail explicitly."
+  ],
+  "independentReview": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "sourceBindingConfirmed": true,
+    "openP1P2": 0,
+    "artifactReviewPending": true
+  },
+  "limitations": [
+    "Static pattern scan and focused authorization regressions are not a dependency CVE scan or clinical validation."
+  ]
+}

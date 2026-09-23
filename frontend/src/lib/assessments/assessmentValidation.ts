@@ -18,6 +18,8 @@ import {
 import { PAINAD, PAINAD_INTERPRETATIONS, answeredPainad, painadResult } from './painadDefinition';
 import { TINETTI_VERSION } from './tinettiTypes';
 import { assertTinettiHistory, assertTinettiAssessment } from './tinettiValidation';
+import { MNA_VERSION } from './mnaTypes';
+import { assertMnaHistory, assertMnaAssessment } from './mnaValidation';
 export const validAssessmentId = (value: unknown): value is string =>
   typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value);
 const instant = (value: unknown): value is string =>
@@ -26,7 +28,7 @@ const instant = (value: unknown): value is string =>
   Number.isFinite(Date.parse(value));
 const optionalId = (value: unknown) => value === null || validAssessmentId(value);
 export const validAssessmentType = (value: unknown): value is AssessmentType =>
-  value === 'painad' || value === 'postural_transfers' || value === 'tinetti';
+  value === 'painad' || value === 'postural_transfers' || value === 'tinetti' || value === 'mna';
 function invalid(): never {
   throw new Error('Risposta della valutazione non verificata.');
 }
@@ -71,9 +73,12 @@ export function assertAssessmentHistory(
     row.patientId !== patientId ||
     !validAssessmentType(row.type) ||
     row.formVersion !==
-      { painad: PAINAD_VERSION, postural_transfers: TRANSFERS_VERSION, tinetti: TINETTI_VERSION }[
-        row.type
-      ] ||
+      {
+        painad: PAINAD_VERSION,
+        postural_transfers: TRANSFERS_VERSION,
+        tinetti: TINETTI_VERSION,
+        mna: MNA_VERSION,
+      }[row.type] ||
     !['draft', 'final'].includes(row.status) ||
     !Number.isSafeInteger(row.version) ||
     row.version < 1 ||
@@ -99,6 +104,8 @@ export function assertAssessmentHistory(
       invalid();
   } else if (row.type === 'tinetti') {
     assertTinettiHistory(row);
+  } else if (row.type === 'mna') {
+    assertMnaHistory(row);
   } else if (
     row.result !== null ||
     !row.completion ||
@@ -141,6 +148,10 @@ export function assertAssessment(
   if (type && row.type !== type) invalid();
   if (row.type === 'tinetti') {
     assertTinettiAssessment(row, patientId);
+    return;
+  }
+  if (row.type === 'mna') {
+    assertMnaAssessment(row, patientId);
     return;
   }
   if (row.type === 'postural_transfers') {

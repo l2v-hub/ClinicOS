@@ -4,6 +4,7 @@ import type {
   AssessmentDraftStore,
 } from '../../../lib/assessments/assessmentDraftStore';
 import { assessmentInstants } from '../../../lib/assessments/assessmentTime';
+import { mnaAssessmentInstants } from '../../../lib/assessments/mnaTime';
 export function AssessmentDateFields({
   draft,
   store,
@@ -13,7 +14,10 @@ export function AssessmentDateFields({
 }) {
   const id = useId();
   const locked = draft.busy || !!draft.pending;
-  const candidates = assessmentInstants(draft.fields.assessedAtLocal);
+  const candidates =
+    draft.type === 'mna'
+      ? mnaAssessmentInstants(draft.fields.assessedAtLocal)
+      : assessmentInstants(draft.fields.assessedAtLocal);
   const update = (fields: Parameters<AssessmentDraftStore['update']>[1]) =>
     store.update(draft.key, fields);
   return (

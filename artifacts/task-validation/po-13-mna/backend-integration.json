@@ -1,0 +1,94 @@
+{
+  "at": "2026-09-23T06:15:34.018Z",
+  "decision": "ALLOW_INTEGRATE",
+  "scope": "backend",
+  "worker": "C:\\Workspace\\ClinicOSHouse-worktrees\\po13-mna-backend",
+  "authorization": "User approved full plan and release; root invoked after worker claim release",
+  "manifestSha256": "50d738bbb5e49c4d4179027a5d7ff83a66858bc28d3790f99b5156ae81a45a4b",
+  "files": [
+    {
+      "path": "backend/src/assessments/__tests__/mna-db.test.ts",
+      "sha256": "73b2faa6b0582b1499850eb193ab0be3a935ba7f0addbb72c35515af9632ea0c"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-fixture.ts",
+      "sha256": "0a76f0606985599a4fe9067323f17e47e76df4c2387cd0aef7689434c36cbdb5"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-pdf-db.test.ts",
+      "sha256": "f89415e21bffd3b8609914628a5d7eeb5210a266dc08cc7bea1dab45b1718adc"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-sql-db.test.ts",
+      "sha256": "76038fd208550e10305273328cde92b7bc11f333f8731bb2993af591287f28f9"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna.test.ts",
+      "sha256": "130f05d14f907002de38e3e5e3c64035868f6eabbb9b09b4c655da35a14d8a46"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-pdf-db.test.ts",
+      "sha256": "a0eb21934c5fc81c9e66298e4b35ce6c7c6d60122d8f6bf98a22cdf674008ed3"
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "sha256": "6249957d10a6c9f899c72ce6b0d40cf404ac242ac9d4f3e09a8e03f0636ee78e"
+    },
+    {
+      "path": "backend/src/assessments/current.ts",
+      "sha256": "618f190e2c27e3ec750a91673c3fff5ca64096ff6acf774176134a1b12ac7024"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "sha256": "ecf826e62f1c383afcb186e537d28b70005f7f4db113ca1bb00be2c9203a58a0"
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "sha256": "2b5dc00438276136894d414daa861d9da3ee84af9efb9337376d0c42737b6ad6"
+    },
+    {
+      "path": "backend/src/assessments/mna-definition.ts",
+      "sha256": "3847c180c4179cc24bd1deb4aa15b180ccfee64d30920bf188b8dc0008591035"
+    },
+    {
+      "path": "backend/src/assessments/mna-input.ts",
+      "sha256": "59da64eed321d7188a1e1117c9f22becca370a9f51158fe726550e9934f5dbc9"
+    },
+    {
+      "path": "backend/src/assessments/mna-pdf-content.ts",
+      "sha256": "775c11b33752683d52ce6b6f497f83c4bb36f8ea01fc8c3b83d45c79ef9a00eb"
+    },
+    {
+      "path": "backend/src/assessments/mna-snapshot.ts",
+      "sha256": "b73dfa837cbb5770f5f91a07dc8db91480228ea815e4b3c5a20948d088530daf"
+    },
+    {
+      "path": "backend/src/assessments/mna-types.ts",
+      "sha256": "9e674b9fd0955d10caa0400cc1d4f0d069143795d0dc5a681254fc7b869a695d"
+    },
+    {
+      "path": "backend/src/assessments/mna.ts",
+      "sha256": "9fb7c1dac7bb83e99b089d7673aa15ad63d0a00502bd1ce71b370c560342e72d"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "sha256": "39e579b072b4731650e7dde27416f91c3c3bab0a3fd250e1830bacf15b71f6c2"
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "sha256": "e1f9e01ab03f67c99b1927719201e0d875eeea03b9f7d87445a69a006eee0c00"
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "sha256": "b6a18fc9c9cff0926ca0ed74be8c71662a6aa42a6405347dfb24759f285a2b6b"
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "sha256": "e49b3d731ff8aec023668db6812455dff513b0af0a42b33bc098d58fdb2abf0b"
+    },
+    {
+      "path": "prisma/migrations/20260923070000_mna/migration.sql",
+      "sha256": "9a6e2dbf3bf4873d81b3f3f6dc24586e48d8f76ef186fe439c6fc95c7002c3fa"
+    }
+  ]
+}

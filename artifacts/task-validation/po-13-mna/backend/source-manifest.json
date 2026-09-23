@@ -1,0 +1,121 @@
+{
+  "task": "PO-13-backend",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po13-mna-backend",
+  "branch": "codex/po13-mna-backend",
+  "baseline": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be",
+  "capturedAt": "2026-09-23T06:13:10.922Z",
+  "sourceTreeSha256": "50e721903be652c0640e10023d63e3347147fffdec879733ebc36553958eb8df",
+  "inputTreeSha256": "bbc7c87da51da8a1ceb64e532fbba3c97e1e07030846a7d34fceb533475ba8ac",
+  "hashAlgorithm": "SHA256 over sorted path + NUL + byte-SHA256 + LF",
+  "sourcePaths": [
+    {
+      "path": "backend/src/assessments/__tests__/mna-db.test.ts",
+      "bytes": 9034,
+      "sha256": "73b2faa6b0582b1499850eb193ab0be3a935ba7f0addbb72c35515af9632ea0c"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-fixture.ts",
+      "bytes": 2437,
+      "sha256": "0a76f0606985599a4fe9067323f17e47e76df4c2387cd0aef7689434c36cbdb5"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-pdf-db.test.ts",
+      "bytes": 7870,
+      "sha256": "f89415e21bffd3b8609914628a5d7eeb5210a266dc08cc7bea1dab45b1718adc"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna-sql-db.test.ts",
+      "bytes": 6640,
+      "sha256": "76038fd208550e10305273328cde92b7bc11f333f8731bb2993af591287f28f9"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/mna.test.ts",
+      "bytes": 11490,
+      "sha256": "130f05d14f907002de38e3e5e3c64035868f6eabbb9b09b4c655da35a14d8a46"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-pdf-db.test.ts",
+      "bytes": 2256,
+      "sha256": "a0eb21934c5fc81c9e66298e4b35ce6c7c6d60122d8f6bf98a22cdf674008ed3"
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "bytes": 6057,
+      "sha256": "6249957d10a6c9f899c72ce6b0d40cf404ac242ac9d4f3e09a8e03f0636ee78e"
+    },
+    {
+      "path": "backend/src/assessments/current.ts",
+      "bytes": 1059,
+      "sha256": "618f190e2c27e3ec750a91673c3fff5ca64096ff6acf774176134a1b12ac7024"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "bytes": 4977,
+      "sha256": "ecf826e62f1c383afcb186e537d28b70005f7f4db113ca1bb00be2c9203a58a0"
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "bytes": 5729,
+      "sha256": "2b5dc00438276136894d414daa861d9da3ee84af9efb9337376d0c42737b6ad6"
+    },
+    {
+      "path": "backend/src/assessments/mna-definition.ts",
+      "bytes": 6316,
+      "sha256": "3847c180c4179cc24bd1deb4aa15b180ccfee64d30920bf188b8dc0008591035"
+    },
+    {
+      "path": "backend/src/assessments/mna-input.ts",
+      "bytes": 5797,
+      "sha256": "59da64eed321d7188a1e1117c9f22becca370a9f51158fe726550e9934f5dbc9"
+    },
+    {
+      "path": "backend/src/assessments/mna-pdf-content.ts",
+      "bytes": 5566,
+      "sha256": "775c11b33752683d52ce6b6f497f83c4bb36f8ea01fc8c3b83d45c79ef9a00eb"
+    },
+    {
+      "path": "backend/src/assessments/mna-snapshot.ts",
+      "bytes": 3074,
+      "sha256": "b73dfa837cbb5770f5f91a07dc8db91480228ea815e4b3c5a20948d088530daf"
+    },
+    {
+      "path": "backend/src/assessments/mna-types.ts",
+      "bytes": 3805,
+      "sha256": "9e674b9fd0955d10caa0400cc1d4f0d069143795d0dc5a681254fc7b869a695d"
+    },
+    {
+      "path": "backend/src/assessments/mna.ts",
+      "bytes": 5334,
+      "sha256": "9fb7c1dac7bb83e99b089d7673aa15ad63d0a00502bd1ce71b370c560342e72d"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "bytes": 10369,
+      "sha256": "39e579b072b4731650e7dde27416f91c3c3bab0a3fd250e1830bacf15b71f6c2"
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "bytes": 5014,
+      "sha256": "e1f9e01ab03f67c99b1927719201e0d875eeea03b9f7d87445a69a006eee0c00"
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "bytes": 12344,
+      "sha256": "b6a18fc9c9cff0926ca0ed74be8c71662a6aa42a6405347dfb24759f285a2b6b"
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "bytes": 6221,
+      "sha256": "e49b3d731ff8aec023668db6812455dff513b0af0a42b33bc098d58fdb2abf0b"
+    },
+    {
+      "path": "prisma/migrations/20260923070000_mna/migration.sql",
+      "bytes": 8597,
+      "sha256": "9a6e2dbf3bf4873d81b3f3f6dc24586e48d8f76ef186fe439c6fc95c7002c3fa"
+    }
+  ],
+  "excludedUnrelatedDirtyPaths": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ]
+}

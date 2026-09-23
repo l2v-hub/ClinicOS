@@ -1,0 +1,36 @@
+[
+  {
+    "focus": {
+      "bottom": 541.359375,
+      "id": "_r_1u_-measurements.calfCircumferenceCm",
+      "top": 493.359375
+    },
+    "identity": {
+      "bottom": 174.375,
+      "top": 77
+    },
+    "scrollWidth": 375,
+    "width": 390
+  },
+  {
+    "focus": {
+      "bottom": 612.953125,
+      "id": "_r_1s_-measurements.armCircumferenceCm",
+      "top": 564.953125
+    },
+    "identity": {
+      "bottom": 136.1875,
+      "top": 77
+    },
+    "scrollWidth": 753,
+    "width": 768
+  },
+  {
+    "identity": {
+      "bottom": 510.1875,
+      "top": 451
+    },
+    "scrollWidth": 1247,
+    "width": 1262
+  }
+]

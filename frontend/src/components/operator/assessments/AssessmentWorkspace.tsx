@@ -25,6 +25,7 @@ import { PatientArchivePreview } from '../cartella/PatientArchivePreview';
 import { AssessmentForm } from './AssessmentForm';
 import { TransfersForm } from './TransfersForm';
 import { TinettiForm } from './TinettiForm';
+import { MnaForm } from './MnaForm';
 import { AssessmentAttestations } from './AssessmentAttestations';
 import { AssessmentSummary } from './AssessmentSummary';
 import { AssessmentFinal } from './AssessmentFinal';
@@ -34,6 +35,7 @@ import { useAssessmentPdf } from './useAssessmentPdf';
 import './AssessmentWorkspace.css';
 import './Transfers.css';
 import './Tinetti.css';
+import './Mna.css';
 export interface AssessmentWorkspaceProps {
   patient: Paziente;
   operatorId?: string;
@@ -70,7 +72,13 @@ function AssessmentSession({
 }: AssessmentWorkspaceProps) {
   const definition = assessmentDefinition(type);
   const Form =
-    type === 'painad' ? AssessmentForm : type === 'tinetti' ? TinettiForm : TransfersForm;
+    type === 'painad'
+      ? AssessmentForm
+      : type === 'tinetti'
+        ? TinettiForm
+        : type === 'mna'
+          ? MnaForm
+          : TransfersForm;
   const entryId = initialAssessment?.type === type ? initialAssessment.id : initialAssessmentId;
   const [currentEmpty, setCurrentEmpty] = useState(false);
   const [store] = useState(() => draftStore ?? createAssessmentDraftStore());

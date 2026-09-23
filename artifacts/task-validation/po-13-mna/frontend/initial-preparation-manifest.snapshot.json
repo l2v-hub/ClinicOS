@@ -1,0 +1,48 @@
+{
+  "task": "PO-13-MNA-frontend-preparation",
+  "generatedAt": "2026-09-23T05:26:39.083Z",
+  "owner": "/root/po01_frontend_audit",
+  "scope": "Preparation artifacts only; no PO12 manifest changes.",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/backend-contract.snapshot.md",
+      "bytes": 15998,
+      "sha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a"
+    },
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/claims.json",
+      "bytes": 1064,
+      "sha256": "8fa05e251a6ee49578f954aebe368872decef5aa26aac96ab5482f53a82acf01"
+    },
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/freeze-verification.json",
+      "bytes": 16405,
+      "sha256": "764bba6bb5493cb22af192d6279cc135ca984bad26f15156ad24ecb840539766"
+    },
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/implementation-notes.md",
+      "bytes": 6839,
+      "sha256": "267bd920421ef0cfbd46117cfd4347e8252b76633245044c5c88e78f65451a15"
+    },
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/preparation-receipt.json",
+      "bytes": 2156,
+      "sha256": "7c86003170fc53200c1ad506d4278565b886309ea0ecefc78b50c78ac3826df5"
+    },
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/source-provenance.snapshot.md",
+      "bytes": 1353,
+      "sha256": "7c3dd489ed334a105948f87570fa274f1aef20536891f12dc9b349e27c036407"
+    },
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/task-contract.snapshot.md",
+      "bytes": 7089,
+      "sha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961"
+    },
+    {
+      "path": "artifacts/task-validation/po-13-mna/frontend-preparation/ux-contract-notes.md",
+      "bytes": 7748,
+      "sha256": "db10aecb27ed6cc375666bff196037a37c83e3ff9775d0cba05201c633d4a897"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "checks": "Backend52, frontend127, rootHTTP/PG2, source/build scan, browser screening/full/correction/retry/raw-invalid/patient isolation, responsive390/768/1262, compiledPDF2/six pages inspected; limits in validation-report.md",
+  "scope": "PO13 backend SQL migration and frontend from immutable commit; AI runtime unchanged",
+  "rootSources": ["tests/fixtures/po13-mna.mjs", "tests/integration/po13-mna.test.mts"],
+  "evidenceDirectories": ["artifacts/task-validation/po-13-mna/qa-evidence"],
+  "evidencePaths": [
+    "artifacts/task-validation/po-13-mna/task-contract.md",
+    "artifacts/task-validation/po-13-mna/baseline-observation.md",
+    "artifacts/task-validation/po-13-mna/baseline-tests.log",
+    "artifacts/task-validation/po-13-mna/http-tests-root.log",
+    "artifacts/task-validation/po-13-mna/backend-build-root.log",
+    "artifacts/task-validation/po-13-mna/frontend-build-root.log",
+    "artifacts/task-validation/po-13-mna/secret-scan.log",
+    "artifacts/task-validation/po-13-mna/preview-build.log",
+    "artifacts/task-validation/po-13-mna/preview-build-manifest.json",
+    "artifacts/task-validation/po-13-mna/record-preview-build.mjs",
+    "artifacts/task-validation/po-13-mna/browser-state-receipt.json",
+    "artifacts/task-validation/po-13-mna/compiled-pdf-receipt.json",
+    "artifacts/task-validation/po-13-mna/verify-browser-state.mjs",
+    "artifacts/task-validation/po-13-mna/verify-compiled-pdf.mjs",
+    "artifacts/task-validation/po-13-mna/validation-report.md",
+    "artifacts/task-validation/po-13-mna/review-notes.md",
+    "artifacts/task-validation/po-13-mna/preview/main.tsx",
+    "artifacts/task-validation/po-13-mna/preview/server.mjs",
+    "artifacts/task-validation/po-13-mna/preview/build.mjs",
+    "artifacts/task-validation/po-13-mna/preview/index.html",
+    "artifacts/task-validation/po-13-mna/preview/synthetic-state.json",
+    "docs/product/stato-esecuzione-piano-2026-09-22.md"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "message": "Issue PO-13-frontend-runtime-preparation released",
+  "reason": "Assigned PO13 frontend preparation complete: read-only dependency junction/local caches ready; frozen DTO and root contract copied with verified hashes; 521 baseline source/config inputs and protected mobile CSS/scripts unchanged. No application edits/tests/builds or servers. Await explicit root GO after PO12 live verification.",
+  "previousClaim": {
+    "issueId": "PO-13-frontend-runtime-preparation",
+    "claimant": {
+      "type": "agent",
+      "agentId": "codex-po13-frontend",
+      "agentType": "preparer"
+    },
+    "claimedAt": "2026-09-23T05:41:11.723Z",
+    "status": "active",
+    "statusChangedAt": "2026-09-23T05:41:11.723Z",
+    "progress": 0,
+    "context": "Root assigned C:/Workspace/ClinicOSHouse-worktrees/po13-mna-ui branch codex/po13-mna-ui baseline 4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be. Sole writer for artifacts/task-validation/po-13-mna/frontend/**, read-only root node_modules junction targeting quality-loop-20260829/node_modules, and private frontend/node_modules/.tmp and .vite-temp caches. Copy agreed DTO SHA256 9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a; preserve PO12 mobile sticky AssessmentWorkspace.css hash b36eca8bc9fd9f584410f7ff3a3469f812f197d6e96a435659902adc5ee91be1 and pre-existing dirty PowerShell files. No application edits/tests/builds, install/shared dependency mutation, package/lock changes, server/port, commit/push/deploy or live patient writes until explicit root GO after PO12 Railway/Vercel verification. Existing root/backend/reviewer hierarchy; no new agents."
+  }
+}

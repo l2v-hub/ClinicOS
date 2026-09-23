@@ -1,0 +1,325 @@
+{
+  "sourceTreeSha256": "bbc7c87da51da8a1ceb64e532fbba3c97e1e07030846a7d34fceb533475ba8ac",
+  "recordedAt": "2026-09-23T06:16:48.093Z",
+  "allPagesInspected": true,
+  "noClippingOrOverlap": true,
+  "totalPages": 31,
+  "pages": [
+    {
+      "file": "mna-full-normal.pdf",
+      "name": "mna-full-normal",
+      "pages": 3
+    },
+    {
+      "file": "mna-full-long.pdf",
+      "name": "mna-full-long",
+      "pages": 7
+    },
+    {
+      "file": "mna-screening-partial.pdf",
+      "name": "mna-screening-partial",
+      "pages": 3
+    },
+    {
+      "file": "painad-regression/painad-normal.pdf",
+      "name": "painad-normal",
+      "pages": 1
+    },
+    {
+      "file": "painad-regression/painad-long.pdf",
+      "name": "painad-long",
+      "pages": 2
+    },
+    {
+      "file": "transfers-regression/transfers-normal.pdf",
+      "name": "transfers-normal",
+      "pages": 2
+    },
+    {
+      "file": "transfers-regression/transfers-long.pdf",
+      "name": "transfers-long",
+      "pages": 5
+    },
+    {
+      "file": "tinetti-regression/tinetti-normal.pdf",
+      "name": "tinetti-normal",
+      "pages": 2
+    },
+    {
+      "file": "tinetti-regression/tinetti-long.pdf",
+      "name": "tinetti-long",
+      "pages": 6
+    }
+  ],
+  "observations": [
+    "All 31 final PNG pages were individually inspected with view_image: headers, identity, body, source text and page numbering remain readable without clipping or overlap.",
+    "MNA full normal: three pages, all A–R responses, three frozen K questions, measured values/units/dates, 14/16/30 totals, unrounded BMI and age/sex metadata visible.",
+    "MNA full long: seven pages, all 4000 note codepoints retained including supported accented Unicode and explicit newlines, followed by complete source, references and copyright.",
+    "MNA screening: three pages, partial G–R retained, K false/null/true distinctions and Q inclusive threshold visible; no 30-point total.",
+    "Editorial source glyphs use approved <=, >= and diventa typography only. Unsupported glyphs in free text are covered by the explicit failure-path test; notes are not silently rewritten.",
+    "PAINAD one/two pages, Transfers two/five pages and Tinetti two/six pages retain readable previous layouts, scores or signature spaces and source notices.",
+    "Fresh UTF-8 extracts match stored text. MNA content checks are against saved immutable snapshots, including every item, K subitem, bibliographic reference, source notice and complete notes."
+  ],
+  "files": [
+    {
+      "path": "final/mna-full-long-1.png",
+      "bytes": 159599,
+      "sha256": "2bcc4bf541e3fe503a87429176ba37c0678fa8824915bd11b61b728eaec00b1e"
+    },
+    {
+      "path": "final/mna-full-long-2.png",
+      "bytes": 136469,
+      "sha256": "854da7758a4bee29ea9d132c34e74e163c81b35f0627c7c8f20e3e154f5f1069"
+    },
+    {
+      "path": "final/mna-full-long-3.png",
+      "bytes": 158250,
+      "sha256": "4181ee640cc9cdc234fdd2f72cc860cbfbf3113a413c71055396363cf9edba0e"
+    },
+    {
+      "path": "final/mna-full-long-4.png",
+      "bytes": 148787,
+      "sha256": "c96ae08787bda70679e557b109cd1170fedb5fffeb9efdb3c1912a483d272816"
+    },
+    {
+      "path": "final/mna-full-long-5.png",
+      "bytes": 149227,
+      "sha256": "c77baa18d33c0da08a1bb89734d7d1557ee2d937b38a1167a3842468e5cc9be8"
+    },
+    {
+      "path": "final/mna-full-long-6.png",
+      "bytes": 148816,
+      "sha256": "9f20d7fc2d7fd2dfdbd998619d6280aea672ea5120bc12386a6e3166e2acbed6"
+    },
+    {
+      "path": "final/mna-full-long-7.png",
+      "bytes": 121871,
+      "sha256": "a70ce886dcdc9183b46f280830ae337b1cf69eaf54e43c988feebe9ca5ea9b87"
+    },
+    {
+      "path": "final/mna-full-long.txt",
+      "bytes": 10123,
+      "sha256": "8c3d89fd5c9156cfbef7454632e56622f034431e6d3ff056bde8b15041a358fb"
+    },
+    {
+      "path": "final/mna-full-normal-1.png",
+      "bytes": 159626,
+      "sha256": "9f7e7df934c203075db837e7785298c21f07668cbaca609aca5ad1d7d3155de9"
+    },
+    {
+      "path": "final/mna-full-normal-2.png",
+      "bytes": 136519,
+      "sha256": "eab50019cbcfa61f9f48cdd7c8fcb8cf7838d6112cdb8e9d9140949a249f441f"
+    },
+    {
+      "path": "final/mna-full-normal-3.png",
+      "bytes": 157480,
+      "sha256": "c8268b443cd0b842a9440261802778ae2179d5cc3dfcc8a4d96b41799be8a893"
+    },
+    {
+      "path": "final/mna-full-normal.txt",
+      "bytes": 4805,
+      "sha256": "f6ed0ae914fa1c4f650fb36cac3b2b07c8df370d06ccd24584b875d98760bba0"
+    },
+    {
+      "path": "final/mna-screening-partial-1.png",
+      "bytes": 155110,
+      "sha256": "b008565ddf6719b7fb7cbe0eb9681e308d8f6c882f590b79100352fea798eaf3"
+    },
+    {
+      "path": "final/mna-screening-partial-2.png",
+      "bytes": 148706,
+      "sha256": "54a712ffdfb32d1bc646e9ab2b003532939e44a7884355953c957fb080502962"
+    },
+    {
+      "path": "final/mna-screening-partial-3.png",
+      "bytes": 164975,
+      "sha256": "98b2781a555e22ddae71785988d8de1e79781e9e69c9b46ddeb2aa9a512ac279"
+    },
+    {
+      "path": "final/mna-screening-partial.txt",
+      "bytes": 4996,
+      "sha256": "3b6fdeffe8957e2f446cd497c0cae826b95692a7b85d8826dbab639a0f06d944"
+    },
+    {
+      "path": "final/painad-long-1.png",
+      "bytes": 298087,
+      "sha256": "a1034452462a271e5b8bede6bd5bb0caa20065c03fccf30aee0c159f02ef56c3"
+    },
+    {
+      "path": "final/painad-long-2.png",
+      "bytes": 139962,
+      "sha256": "190ea2cb83b1af307276ae8d7278f6690188ebdb6cfedcc0ff1716721d6dc367"
+    },
+    {
+      "path": "final/painad-long.txt",
+      "bytes": 5566,
+      "sha256": "66da5e7d88bc154aefa8baed46568cf1273fa522f2d9564669debced7aca1b4c"
+    },
+    {
+      "path": "final/painad-normal-1.png",
+      "bytes": 116961,
+      "sha256": "8305a1c3ca0b9040a86bd71da67b8dd87170f3739705d30808b678993a8c9a9a"
+    },
+    {
+      "path": "final/painad-normal.txt",
+      "bytes": 1083,
+      "sha256": "2af12e8a95e29c6c7b6e4c6eb9b6b30c7ff5ebb9945f4804985e2c42ee1a1c15"
+    },
+    {
+      "path": "final/tinetti-long-1.png",
+      "bytes": 134986,
+      "sha256": "67b46a523467b1f9dec132846de6edf0e1a500df02156ba491312e8c54b8cd04"
+    },
+    {
+      "path": "final/tinetti-long-2.png",
+      "bytes": 134338,
+      "sha256": "314ef55a72015a0fed03f74405793251d1178d63ec92fd2268645da69ff748a2"
+    },
+    {
+      "path": "final/tinetti-long-3.png",
+      "bytes": 147239,
+      "sha256": "a80c88c940ae6993d8ca5360eb973ec648780ba4a8cf18d6b32aefe422142ca6"
+    },
+    {
+      "path": "final/tinetti-long-4.png",
+      "bytes": 147569,
+      "sha256": "e4fe7cbbef77f28039271b9749e05cd4fffb73d894310e45c672c832c2c7ea3a"
+    },
+    {
+      "path": "final/tinetti-long-5.png",
+      "bytes": 147232,
+      "sha256": "035c0d5790fc5f5466d0e162ca1b5636edb362e82511eb997696764fcec81e56"
+    },
+    {
+      "path": "final/tinetti-long-6.png",
+      "bytes": 75347,
+      "sha256": "17c898bc6e2def216995ec670d8ff5366061741e73e0b17a225a9464facaa743"
+    },
+    {
+      "path": "final/tinetti-long.txt",
+      "bytes": 7364,
+      "sha256": "d67bfb733d9ec468f9f93d99ad9f1a0b96beee5f76d56da05020474854a33d62"
+    },
+    {
+      "path": "final/tinetti-normal-1.png",
+      "bytes": 134948,
+      "sha256": "7f6306183d59c0dad318056d602c26e6f03114cd0568d77f9917e0cfcf5978e2"
+    },
+    {
+      "path": "final/tinetti-normal-2.png",
+      "bytes": 116101,
+      "sha256": "5bf0b5c24753d0fa1649c439a362c7cea53f23d68927ab69ec4daa089144bed6"
+    },
+    {
+      "path": "final/tinetti-normal.txt",
+      "bytes": 2308,
+      "sha256": "1eb6413f9d9a9281e83ea1f6770433fdb30b02bfc5dedcbc84be61f6626ed2fe"
+    },
+    {
+      "path": "final/transfers-long-1.png",
+      "bytes": 166793,
+      "sha256": "83339815f5266a9b0de65945ac2dfc52f302c401d7b3d823fd46081bd1f00d7f"
+    },
+    {
+      "path": "final/transfers-long-2.png",
+      "bytes": 144086,
+      "sha256": "76091c256630b0dd819915b2e724c6912aca7a468806e3a90d62255898d842e0"
+    },
+    {
+      "path": "final/transfers-long-3.png",
+      "bytes": 174356,
+      "sha256": "62f62268b904390b5c17f57806d27d9ee3df68765f406cacffc30834a3053266"
+    },
+    {
+      "path": "final/transfers-long-4.png",
+      "bytes": 173571,
+      "sha256": "e6a98152183f9f4352e19211bef239ac3f9584153c11f317cb7c5a96910da2a6"
+    },
+    {
+      "path": "final/transfers-long-5.png",
+      "bytes": 43461,
+      "sha256": "c310f374cdf8497b2e414cc043cfff7d0e652ad37d7c38206bd242d9d5550703"
+    },
+    {
+      "path": "final/transfers-long.txt",
+      "bytes": 7048,
+      "sha256": "24d8096be37acba5362ad8c192102059876f9df54796da4de3e76b307bce32a6"
+    },
+    {
+      "path": "final/transfers-normal-1.png",
+      "bytes": 117204,
+      "sha256": "e8ec2d0f0c16b1c9a9d2c99cb6276b5297a3111a86c1fda622c6ecc4dc8721b9"
+    },
+    {
+      "path": "final/transfers-normal-2.png",
+      "bytes": 49818,
+      "sha256": "134c77070ba380002fac83b2623501ff165258728d2711a3c4397cfb02d27045"
+    },
+    {
+      "path": "final/transfers-normal.txt",
+      "bytes": 1505,
+      "sha256": "ccb7e0d3a4de9a6568a6c737c90ef6ae6f44d2ec285387a858a2a2ae53834741"
+    },
+    {
+      "path": "mna-full-long.pdf",
+      "bytes": 35029,
+      "sha256": "746c9a0becf849d01c8a3664da6cf2729e1c24b6f7ca29f235b3bdb7224ea1ad"
+    },
+    {
+      "path": "mna-full-long.snapshot.json",
+      "bytes": 18576,
+      "sha256": "3b099957e2688e67a124ebddf28d9bf544c543c04f187756cb570bd537839883"
+    },
+    {
+      "path": "mna-full-normal.pdf",
+      "bytes": 29155,
+      "sha256": "f61ba70fb5ccdd32976c1bb97d48ec4b68c0989d0386519a9f2a31443659de68"
+    },
+    {
+      "path": "mna-full-normal.snapshot.json",
+      "bytes": 9216,
+      "sha256": "4f64b594f0164287d34dfa92ab8df91c3139f91f6299827ac26cfface25562b2"
+    },
+    {
+      "path": "mna-screening-partial.pdf",
+      "bytes": 29065,
+      "sha256": "046e3c6b3fa1061a77b76cffcf4c338b5a6f9ae8cdd2e990c4e19b5949683cc9"
+    },
+    {
+      "path": "mna-screening-partial.snapshot.json",
+      "bytes": 9056,
+      "sha256": "89248893c06a3b50c411d8668933b5c99d1a54cffe10f66ec6f25a37cf212bef"
+    },
+    {
+      "path": "painad-regression/painad-long.pdf",
+      "bytes": 22259,
+      "sha256": "93c57e1cc6c6145db61f616c967e2b705d1837844f01a1eef7c57fcc7f530e27"
+    },
+    {
+      "path": "painad-regression/painad-normal.pdf",
+      "bytes": 19121,
+      "sha256": "b2978bd1d2c4adbef04f341de93b6bf67db8b42f9acf33577b3e4c0cf341e0fa"
+    },
+    {
+      "path": "tinetti-regression/tinetti-long.pdf",
+      "bytes": 28654,
+      "sha256": "bbf56924d612a9f51fb7ec07417df616f2a7cbb5ff4b705b2cd4ce5a41bf7d92"
+    },
+    {
+      "path": "tinetti-regression/tinetti-normal.pdf",
+      "bytes": 22790,
+      "sha256": "6700bd70e630bd2a60b0b32103b2fb98c3171baf350628866dd9f5b30d4527df"
+    },
+    {
+      "path": "transfers-regression/transfers-long.pdf",
+      "bytes": 24977,
+      "sha256": "eea12d7a5530f4f45036e25a6cf3806ed69e1dc4c3a6f91a6eeb0dcb8595a63f"
+    },
+    {
+      "path": "transfers-regression/transfers-normal.pdf",
+      "bytes": 19476,
+      "sha256": "a3c24dd86035c2c33696bebd69d81f3151718b9504572b8b6dace13b261d7090"
+    }
+  ]
+}

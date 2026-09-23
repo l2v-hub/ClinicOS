@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-23T06:26:51.378Z",
+  "stateSha256": "4deeaf824a4d1988384590ae5204cd96393c9932bba480cca83463ffbbd7254e",
+  "assertions": "Screening/full snapshots, Kpartial, anthropometry, immutable correction, unique PDFs, identical retries, patient-bound slow save, unchanged Cartella",
+  "counts": {
+    "assessments": 3,
+    "finals": 2,
+    "documents": 2,
+    "attestations": 0
+  },
+  "screeningId": "a46844a7-333b-453e-9c75-4d24ab2c155b",
+  "fullId": "6fd92026-3088-4ac7-ab1a-afbdd983abe6"
+}

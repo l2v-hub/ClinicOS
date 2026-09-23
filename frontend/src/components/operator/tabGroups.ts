@@ -25,6 +25,7 @@ export type TabId =
   | 'contenzioni'
   | 'braden'
   | 'tinetti'
+  | 'mna'
   | 'nrs'
   | 'painad'
   | 'postural_transfers'
@@ -74,6 +75,7 @@ export const TAB_GROUPS: TabGroupDef[] = [
       { id: 'contenzioni', label: 'Contenzioni' },
       { id: 'braden', label: 'Scala Braden' },
       { id: 'tinetti', label: 'Scala Tinetti' },
+      { id: 'mna', label: 'MNA · Nutrizione' },
       { id: 'nrs', label: 'Scala NRS' },
       { id: 'painad', label: 'Scala PAINAD' },
       { id: 'postural_transfers', label: 'Trasferimenti posturali' },

@@ -19,6 +19,9 @@ import { painadResult } from './painad.js';
 import { transfersCompletion } from './transfers.js';
 import { tinettiCompletion, tinettiResult } from './tinetti.js';
 import { TINETTI_VERSION, type TinettiAnswers, type TinettiSnapshot } from './types.js';
+import { MNA_VERSION, type MnaSnapshot } from './mna-types.js';
+import { parseMnaAnswers } from './mna-input.js';
+import { mnaCompletion, mnaResult } from './mna.js';
 
 export const assessmentNotFound = () =>
   new AssessmentError('Valutazione non disponibile', 404, 'assessment_not_found');
@@ -113,6 +116,21 @@ export function assessmentDto(row: AssessmentRow, now = new Date()): AssessmentD
         }
       : null,
   };
+  if (row.type === 'mna' && row.formVersion === MNA_VERSION) {
+    const answers = parseMnaAnswers(row.answers);
+    const completion = mnaCompletion(answers);
+    return {
+      ...common,
+      type: 'mna',
+      formVersion: MNA_VERSION,
+      answers,
+      extent: answers.extent,
+      answeredCount: completion.screening.answeredCount + completion.global.answeredCount,
+      completion,
+      result: mnaResult(answers),
+      finalSnapshot: row.finalSnapshot as unknown as MnaSnapshot | null,
+    };
+  }
   if (row.type === 'tinetti' && row.formVersion === TINETTI_VERSION) {
     const answers = row.answers as unknown as TinettiAnswers;
     const completion = tinettiCompletion(answers);

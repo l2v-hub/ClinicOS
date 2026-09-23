@@ -1,0 +1,14 @@
+{
+  "issueId": "PO-13-backend-preparation",
+  "claimant": "agent:codex-po13-backend:preparer",
+  "released": true,
+  "recordedAt": "2026-09-23T05:26:03.835Z",
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-13-backend-preparation released\",\n  \"reason\": \"Preparation-only MNA DTO contract complete and agreed with frontend. Requested snapshot/reference clarifications applied; final contract SHA256 9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a. No application/runtime/tests or PO12 frozen file edits. Hand off artifacts to root; implementation awaits explicit GO and new PO13 worktree.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-13-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po13-backend\",\n      \"agentType\": \"preparer\"\n    },\n    \"claimedAt\": \"2026-09-23T05:20:52.901Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T05:20:52.901Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly authorized preparation only after PO12 handoff. Sole writer in existing C:/Workspace/ClinicOSHouse-worktrees/po12-tinetti-backend; exact mutable scope artifacts/task-validation/po-13-mna/backend-preparation/** outside frozen PO12 manifests. Read task contract and source, coordinate definitive DTO with frontend. No application/runtime/package/lockfile edits, tests, commit/push/deploy; implementation awaits explicit root GO and new worktree from published PO12. Preserve all frozen PO12 source/artifact hashes.\"\n  }\n}"
+      }
+    ]
+  }
+}

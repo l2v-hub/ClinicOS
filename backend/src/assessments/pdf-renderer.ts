@@ -1,18 +1,23 @@
 import { readFile } from 'node:fs/promises';
 import { PDFDocument, rgb, type PDFFont, type PDFPage } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
-import type { AssessmentSnapshot, TinettiSnapshot } from './types.js';
+import type { AssessmentSnapshot, TinettiSnapshot, MnaSnapshot } from './types.js';
+import { mnaPdfBlocks } from './mna-pdf-content.js';
 
 const isTinettiSnapshot = (snapshot: AssessmentSnapshot): snapshot is TinettiSnapshot =>
   snapshot.form.type === 'tinetti';
+const isMnaSnapshot = (snapshot: AssessmentSnapshot): snapshot is MnaSnapshot =>
+  snapshot.form.type === 'mna';
 
 export const ASSESSMENT_RENDERER_VERSION = 'painad-a4-v1';
 export const assessmentRendererVersion = (snapshot: AssessmentSnapshot) =>
   snapshot.form.type === 'painad'
     ? ASSESSMENT_RENDERER_VERSION
-    : snapshot.form.type === 'tinetti'
-      ? 'tinetti-a4-v1'
-      : 'transfers-a4-v1';
+    : snapshot.form.type === 'mna'
+      ? 'mna-a4-v1'
+      : snapshot.form.type === 'tinetti'
+        ? 'tinetti-a4-v1'
+        : 'transfers-a4-v1';
 export class AssessmentPdfError extends Error {
   constructor(public code: string) {
     super(code);
@@ -44,6 +49,7 @@ function fonts() {
 export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise<Buffer> {
   const transfers = snapshot.form.type === 'postural_transfers';
   const tinetti = snapshot.form.type === 'tinetti';
+  const mna = isMnaSnapshot(snapshot) ? snapshot : null;
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
   const [regularBytes, boldBytes] = await fonts();
@@ -99,11 +105,13 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     page = doc.addPage([width, height]);
     y = height - margin;
     page.drawText(
-      transfers
-        ? 'Trasferimenti posturali e deambulazione'
-        : tinetti
-          ? 'Scala di Tinetti - Equilibrio e andatura'
-          : 'PAINAD - Valutazione del dolore non verbale',
+      mna
+        ? mna.title
+        : transfers
+          ? 'Trasferimenti posturali e deambulazione'
+          : tinetti
+            ? 'Scala di Tinetti - Equilibrio e andatura'
+            : 'PAINAD - Valutazione del dolore non verbale',
       {
         x: margin,
         y,
@@ -118,7 +126,7 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
       y -= 14;
     }
     page.drawText(
-      `Valutazione: ${dateTime(snapshot.assessedAt)} | ${transfers ? 'Trasferimenti' : tinetti ? 'Tinetti' : 'PAINAD italiana'}, versione 1`,
+      `Valutazione: ${dateTime(snapshot.assessedAt)} | ${mna ? 'MNA italiana' : transfers ? 'Trasferimenti' : tinetti ? 'Tinetti' : 'PAINAD italiana'}, versione 1`,
       {
         x: margin,
         y,
@@ -160,7 +168,12 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     block(
       `Rettifica della valutazione${snapshot.predecessor ? ` del ${dateTime(snapshot.predecessor.assessedAt)}, di ${snapshot.predecessor.authorName}` : ' precedente'}\nMotivo: ${snapshot.correctionReason}`,
     );
-  if ('sections' in snapshot) {
+  if (isMnaSnapshot(snapshot)) {
+    for (const entry of mnaPdfBlocks(snapshot)) {
+      if (y < margin + (entry.keepSpace ?? 50)) newPage();
+      block(entry.text, entry.bold ? bold : regular, entry.size ?? 10, entry.gap ?? 7);
+    }
+  } else if ('sections' in snapshot) {
     for (const section of snapshot.sections) {
       if (y < margin + 100) newPage();
       block(section.label, bold, 12);
@@ -243,11 +256,13 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     }),
   );
   doc.setTitle(
-    transfers
-      ? 'Trasferimenti posturali - Scheda finalizzata'
-      : tinetti
-        ? 'Tinetti - Valutazione finalizzata'
-        : 'PAINAD - Valutazione finalizzata',
+    mna
+      ? mna.title + ' - Valutazione finalizzata'
+      : transfers
+        ? 'Trasferimenti posturali - Scheda finalizzata'
+        : tinetti
+          ? 'Tinetti - Valutazione finalizzata'
+          : 'PAINAD - Valutazione finalizzata',
   );
   doc.setProducer(`ClinicOS ${assessmentRendererVersion(snapshot)}`);
   doc.setKeywords([

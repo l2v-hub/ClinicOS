@@ -1,0 +1,50 @@
+{
+  "renderedAt": "2026-09-23T06:14:58.188Z",
+  "specs": [
+    {
+      "file": "mna-full-normal.pdf",
+      "name": "mna-full-normal",
+      "pages": 3
+    },
+    {
+      "file": "mna-full-long.pdf",
+      "name": "mna-full-long",
+      "pages": 7
+    },
+    {
+      "file": "mna-screening-partial.pdf",
+      "name": "mna-screening-partial",
+      "pages": 3
+    },
+    {
+      "file": "painad-regression/painad-normal.pdf",
+      "name": "painad-normal",
+      "pages": 1
+    },
+    {
+      "file": "painad-regression/painad-long.pdf",
+      "name": "painad-long",
+      "pages": 2
+    },
+    {
+      "file": "transfers-regression/transfers-normal.pdf",
+      "name": "transfers-normal",
+      "pages": 2
+    },
+    {
+      "file": "transfers-regression/transfers-long.pdf",
+      "name": "transfers-long",
+      "pages": 5
+    },
+    {
+      "file": "tinetti-regression/tinetti-normal.pdf",
+      "name": "tinetti-normal",
+      "pages": 2
+    },
+    {
+      "file": "tinetti-regression/tinetti-long.pdf",
+      "name": "tinetti-long",
+      "pages": 6
+    }
+  ]
+}

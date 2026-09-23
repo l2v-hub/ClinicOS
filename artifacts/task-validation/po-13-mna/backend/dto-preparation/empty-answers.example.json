@@ -1,0 +1,47 @@
+{
+  "extent": "screening",
+  "A": null,
+  "B": null,
+  "C": null,
+  "D": null,
+  "E": null,
+  "F": {
+    "method": "category",
+    "category": null
+  },
+  "G": null,
+  "H": null,
+  "I": null,
+  "J": null,
+  "K": {
+    "dairyDaily": null,
+    "eggsOrLegumesWeekly": null,
+    "meatFishOrPoultryDaily": null
+  },
+  "L": null,
+  "M": null,
+  "N": null,
+  "O": null,
+  "P": null,
+  "Q": {
+    "method": "category",
+    "category": null
+  },
+  "R": {
+    "method": "category",
+    "category": null
+  },
+  "measurements": {
+    "weightKg": null,
+    "heightCm": null,
+    "armCircumferenceCm": null,
+    "calfCircumferenceCm": null
+  },
+  "measurementDates": {
+    "weightKg": null,
+    "heightCm": null,
+    "armCircumferenceCm": null,
+    "calfCircumferenceCm": null
+  },
+  "notes": ""
+}

@@ -1,0 +1,145 @@
+{
+  "task": "PO13-backend-preparation",
+  "phase": "dto-contract-only",
+  "generatedAt": "2026-09-23T05:26:07.560Z",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po12-tinetti-backend",
+  "mutableScope": "artifacts/task-validation/po-13-mna/backend-preparation/**",
+  "decision": "allow preparation artifact handoff; application implementation awaits root GO and new isolated worktree",
+  "authorization": "Explicit root preparation-only task after PO12 handoff; no application work before PO12 deploy verification",
+  "contractSha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a",
+  "rootContractSha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+  "sourcePdfSha256": "67964491d0ceb5c221e776079c3af2bc7c1ddbf834428997f1b5531e469c6ffa",
+  "frontendAgreement": {
+    "agreed": true,
+    "contractSha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a",
+    "reviewer": "/root/po01_frontend_audit",
+    "recordedAt": "2026-09-23T05:25:55.273Z",
+    "reviewedContractSha256": "277599431d8d089c79011f3f633cd0e6304909ccd02dc45d4c420f85405c97a3",
+    "basis": "Frontend accepted the complete DTO contract and requested exactly two documentary clarifications. Both were applied; the final digest and confirmation were sent to frontend.",
+    "frontendMessage": "Letto integralmente backend-contract.md SHA 277599…: accordo FE su shape answers/enums, mode transitions, date indipendenti, completion/progress, result sempre oggetto e snapshot dedicato/demographics. Bene anche BMI non finito/zero e anni 0001–9999. Due precisazioni documentali prima del freeze: (1) esplicitare detail draft finalSnapshot=null/snapshotSha256=null e final snapshot/hash64hex; history omette entrambi come già indicato. (2) fissare references esattamente ai 3 riferimenti bibliografici e copyright come unica stringa del quarto bullet con trademark, copyright e sito. Conferma questi due dettagli e congelo copia+accordo nelle note FE. Nessuna modifica app.",
+    "requestedClarificationsApplied": [
+      "Detail draft finalSnapshot/snapshotSha256 null; final detail immutable MNA snapshot and SHA256 64 lowercase hex; history omits both.",
+      "references has exactly the first three bibliographic strings; copyright is exactly the fourth bullet including trademark, copyright and site."
+    ],
+    "onlyOtherChange": "Contract heading records frontend agreement instead of proposal status.",
+    "implementationAuthorized": false
+  },
+  "frozenPo12": {
+    "sourceManifestSha256": "2696009c17ee34519a30624382f346c315841fb66a30e06664b716452d1d4f5a",
+    "sourceTreeSha256": "309e55ff7901d5535693dc975e07cd98020fce07d1bc9ebb02164300f77bd566",
+    "inputTreeSha256": "745439cba8628a28d3bee99281a5f7953e8046d0b904c7b5a6000a5de07e3b2e",
+    "sourceFiles": 22,
+    "artifactFiles": 65,
+    "uniqueFilesByteVerified": 512,
+    "protectedFilesUnchanged": 5,
+    "unchanged": true
+  },
+  "recall": {
+    "source": "Ruflo memory_search",
+    "query": "MNA clinical assessment PO13 nullable measurements snapshot screening full",
+    "relevantMatchFound": false
+  },
+  "implementationAuthorized": false,
+  "applicationFilesChanged": false,
+  "applicationTestsRun": false,
+  "runtimePrepared": false,
+  "committed": false,
+  "published": false,
+  "nextGate": "Root verifies published PO12 and assigns PO13 worktree, then explicitly authorizes implementation",
+  "claimReleased": true,
+  "evidence": [
+    {
+      "path": "backend-contract.md",
+      "bytes": 15998,
+      "sha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a"
+    },
+    {
+      "path": "task-contract.snapshot.md",
+      "bytes": 7147,
+      "sha256": "f99265f7aef1287e8fd83dbe9c2db2c6497b16ff7cd37cfaf867031c06782ca5"
+    },
+    {
+      "path": "source-mna.txt",
+      "bytes": 16687,
+      "sha256": "2fb317825ad0885a7fc1d19c3cbca4eaeb92e6ac4ed99890812d00cf3bdfdf60"
+    },
+    {
+      "path": "source-provenance.md",
+      "bytes": 1353,
+      "sha256": "7c3dd489ed334a105948f87570fa274f1aef20536891f12dc9b349e27c036407"
+    },
+    {
+      "path": "empty-answers.example.json",
+      "bytes": 784,
+      "sha256": "e359bbec5dbaa67a887035073d1dd7f6652b95a4dcd1e4122667b7136171e781"
+    },
+    {
+      "path": "claims-preparation.json",
+      "bytes": 1112,
+      "sha256": "36d43226fea24c9a80469ccd5d37c45a7977e07afbf48bc38732c161fc42ff38"
+    },
+    {
+      "path": "frontend-agreement.json",
+      "bytes": 1648,
+      "sha256": "4f7557e005feadb0266278cc9c50b9280ed161f0c344cf5f99faa44d87344d9e"
+    },
+    {
+      "path": "claims-preparation-release.json",
+      "bytes": 1644,
+      "sha256": "36ab6d492390ee4aa87ac601755aa10d47b7c4b37a058bc41ead2b3238b0c1e4"
+    },
+    {
+      "path": "finalize-preparation.mjs",
+      "bytes": 4722,
+      "sha256": "459fbc66dd6698078e3445575d944a84b852f9842b801cd42d00126b70077958"
+    },
+    {
+      "path": "root-contract-byte-comparison.json",
+      "bytes": 1272,
+      "sha256": "d21b31e387caf6c048e2ac4452c003aad07be732f8ccbc7fc45c3a991b7bc84d"
+    }
+  ],
+  "copyAllowlist": [
+    "backend-contract.md",
+    "task-contract.snapshot.md",
+    "source-mna.txt",
+    "source-provenance.md",
+    "empty-answers.example.json",
+    "claims-preparation.json",
+    "frontend-agreement.json",
+    "claims-preparation-release.json",
+    "finalize-preparation.mjs",
+    "preparation-receipt.json",
+    "root-contract-byte-comparison.json"
+  ],
+  "updatedAt": "2026-09-23T05:33:16.227Z",
+  "rootContractSnapshotSha256": "f99265f7aef1287e8fd83dbe9c2db2c6497b16ff7cd37cfaf867031c06782ca5",
+  "rootContractProvenance": {
+    "task": "PO13-backend-preparation",
+    "recordedAt": "2026-09-23T05:33:16.227Z",
+    "original": {
+      "path": "C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/artifacts/task-validation/po-13-mna/task-contract.md",
+      "bytes": 7089,
+      "sha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+      "crlf": 0,
+      "lf": 58,
+      "bom": false
+    },
+    "snapshot": {
+      "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\artifacts\\task-validation\\po-13-mna\\backend-preparation\\task-contract.snapshot.md",
+      "bytes": 7147,
+      "sha256": "f99265f7aef1287e8fd83dbe9c2db2c6497b16ff7cd37cfaf867031c06782ca5",
+      "crlf": 58,
+      "lf": 0,
+      "bom": false
+    },
+    "transformation": "UTF-8 snapshot: replace each CRLF with LF only; no trimming, BOM removal, or content rewriting",
+    "equalAfterCrlfToLf": true,
+    "normalizedSnapshotSha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+    "differenceInBytes": 58,
+    "explanation": "The previous rootContractSha256 field recorded the CRLF snapshot bytes. The original root uses LF. Both hashes are now distinguished; the prepared snapshot and agreed DTO remain byte-identical.",
+    "po12ArtifactsReopened": false,
+    "applicationChanges": false
+  },
+  "correctionReason": "Clarify root-original versus CRLF snapshot byte hashes; no change to agreed DTO, snapshot, or PO12 evidence."
+}

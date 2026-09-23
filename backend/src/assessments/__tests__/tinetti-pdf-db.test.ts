@@ -33,7 +33,10 @@ test('Tinetti PDF renders all frozen items and Unicode notes, and archives under
   assert.match(pdf.getTitle()!, /Tinetti/);
   assert.match(pdf.getProducer()!, /tinetti-a4-v1/);
   assert(pdf.getKeywords()!.includes(long.form.referenceSha256));
-  const folder = resolve('artifacts/task-validation/po-12-tinetti/backend/pdf-qa');
+  const folder = resolve(
+    process.env.TINETTI_PDF_QA_DIRECTORY ??
+      'artifacts/task-validation/po-12-tinetti/backend/pdf-qa',
+  );
   await mkdir(folder, { recursive: true });
   await writeFile(resolve(folder, 'tinetti-normal.pdf'), normal);
   await writeFile(resolve(folder, 'tinetti-long.pdf'), expanded);

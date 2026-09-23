@@ -2,10 +2,16 @@ import type { DocumentoConsegnato, TipoDocumento } from '../types';
 import type { PatientDocumentMeta } from './patientDocumentsPage';
 import { facilityLocalMinute } from './facilityTime';
 import type { AssessmentType } from './assessments/assessmentTypes';
+import { mnaAssessmentDate } from './assessments/mnaTime';
+const assessmentDate = (assessment: NonNullable<PatientDocumentMeta['assessment']>) =>
+  assessment.type === 'mna'
+    ? mnaAssessmentDate(assessment.assessedAt)
+    : facilityLocalMinute(new Date(assessment.assessedAt)).slice(0, 10);
 export const ASSESSMENT_ARCHIVE_LABELS: Record<AssessmentType, string> = {
   painad: 'PAINAD',
   postural_transfers: 'Trasferimenti posturali',
   tinetti: 'Scala di Tinetti',
+  mna: 'MNA · Nutrizione',
 };
 
 export const DOCUMENT_TYPE_LABELS: Record<TipoDocumento, string> = {
@@ -127,9 +133,7 @@ export function buildDocumentArchive(
       id: `record:${record.id}`,
       type,
       title: record.descrizione || DOCUMENT_TYPE_LABELS[type],
-      date: attached?.assessment
-        ? facilityLocalMinute(new Date(attached.assessment.assessedAt)).slice(0, 10)
-        : record.dataConsegna,
+      date: attached?.assessment ? assessmentDate(attached.assessment) : record.dataConsegna,
       archived: !!record.archiviato,
       record,
       document: attached,
@@ -145,7 +149,7 @@ export function buildDocumentArchive(
         ),
         title: document.originalName,
         date: document.assessment
-          ? facilityLocalMinute(new Date(document.assessment.assessedAt)).slice(0, 10)
+          ? assessmentDate(document.assessment)
           : document.createdAt.slice(0, 10),
         archived: false,
         document,

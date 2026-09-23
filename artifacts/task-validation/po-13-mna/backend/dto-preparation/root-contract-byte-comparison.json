@@ -1,0 +1,27 @@
+{
+  "task": "PO13-backend-preparation",
+  "recordedAt": "2026-09-23T05:33:16.227Z",
+  "original": {
+    "path": "C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/artifacts/task-validation/po-13-mna/task-contract.md",
+    "bytes": 7089,
+    "sha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+    "crlf": 0,
+    "lf": 58,
+    "bom": false
+  },
+  "snapshot": {
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\artifacts\\task-validation\\po-13-mna\\backend-preparation\\task-contract.snapshot.md",
+    "bytes": 7147,
+    "sha256": "f99265f7aef1287e8fd83dbe9c2db2c6497b16ff7cd37cfaf867031c06782ca5",
+    "crlf": 58,
+    "lf": 0,
+    "bom": false
+  },
+  "transformation": "UTF-8 snapshot: replace each CRLF with LF only; no trimming, BOM removal, or content rewriting",
+  "equalAfterCrlfToLf": true,
+  "normalizedSnapshotSha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+  "differenceInBytes": 58,
+  "explanation": "The previous rootContractSha256 field recorded the CRLF snapshot bytes. The original root uses LF. Both hashes are now distinguished; the prepared snapshot and agreed DTO remain byte-identical.",
+  "po12ArtifactsReopened": false,
+  "applicationChanges": false
+}

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-13-backend-runtime-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po13-backend\",\n      \"agentType\": \"preparer\"\n    },\n    \"claimedAt\": \"2026-09-23T05:40:20.688Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T05:40:20.688Z\",\n    \"progress\": 0,\n    \"context\": \"Root assigned C:/Workspace/ClinicOSHouse-worktrees/po13-mna-backend branch codex/po13-mna-backend baseline 4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be. Sole writer authorized for private backend/node_modules runtime, a policy-read-only root node_modules junction, and artifacts/task-validation/po-13-mna/backend/**. Copy root LF contract SHA256 8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961 and agreed DTO SHA256 9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a preserving bytes/provenance. No source application changes, tests, package/lock changes or shared Prisma generation. Preserve existing dirty start-claude-team.ps1 and other baseline files. Application implementation awaits explicit GO after PO12 Railway/Vercel verification.\"\n  },\n  \"message\": \"Issue PO-13-backend-runtime-preparation claimed by agent:codex-po13-backend:preparer\"\n}"
+    }
+  ]
+}

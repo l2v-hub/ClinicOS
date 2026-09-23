@@ -1,0 +1,95 @@
+.mna-fields {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.mna-extent,
+.mna-group {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-block: 18px;
+  min-width: 0;
+}
+.mna-extent legend {
+  font-weight: 600;
+}
+.mna-extent label,
+.mna-methods label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-right: 18px;
+}
+.mna-group > h3 {
+  margin-top: 0;
+}
+.mna-anthropometry,
+.mna-protein {
+  border-top: 1px solid var(--border);
+  margin-block: 12px;
+  padding-block: 10px;
+}
+.mna-measurements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 16px;
+}
+.mna-measurements > div,
+.mna-measurements label,
+.mna-notes {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.mna-measurements .form-input,
+.mna-notes .form-input {
+  width: 100%;
+  min-width: 0;
+}
+.mna-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mna-field-error {
+  color: var(--danger, #b42318);
+}
+.mna-screening-result,
+.mna-derived {
+  padding: 12px;
+  border-radius: 6px;
+  background: var(--bg);
+  overflow-wrap: anywhere;
+}
+.mna-notes {
+  margin-block: 18px;
+}
+.mna-note-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.mna-source {
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  margin-top: 18px;
+}
+.mna-source li {
+  margin-block: 8px;
+}
+.mna-form [aria-invalid='true'] {
+  outline: 2px solid var(--danger, #b42318);
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .mna-group,
+  .mna-extent {
+    padding: 10px;
+  }
+  .mna-extent label {
+    display: flex;
+  }
+}

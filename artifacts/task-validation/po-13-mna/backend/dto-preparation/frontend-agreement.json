@@ -1,0 +1,15 @@
+{
+  "agreed": true,
+  "contractSha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a",
+  "reviewer": "/root/po01_frontend_audit",
+  "recordedAt": "2026-09-23T05:25:55.273Z",
+  "reviewedContractSha256": "277599431d8d089c79011f3f633cd0e6304909ccd02dc45d4c420f85405c97a3",
+  "basis": "Frontend accepted the complete DTO contract and requested exactly two documentary clarifications. Both were applied; the final digest and confirmation were sent to frontend.",
+  "frontendMessage": "Letto integralmente backend-contract.md SHA 277599…: accordo FE su shape answers/enums, mode transitions, date indipendenti, completion/progress, result sempre oggetto e snapshot dedicato/demographics. Bene anche BMI non finito/zero e anni 0001–9999. Due precisazioni documentali prima del freeze: (1) esplicitare detail draft finalSnapshot=null/snapshotSha256=null e final snapshot/hash64hex; history omette entrambi come già indicato. (2) fissare references esattamente ai 3 riferimenti bibliografici e copyright come unica stringa del quarto bullet con trademark, copyright e sito. Conferma questi due dettagli e congelo copia+accordo nelle note FE. Nessuna modifica app.",
+  "requestedClarificationsApplied": [
+    "Detail draft finalSnapshot/snapshotSha256 null; final detail immutable MNA snapshot and SHA256 64 lowercase hex; history omits both.",
+    "references has exactly the first three bibliographic strings; copyright is exactly the fourth bullet including trademark, copyright and site."
+  ],
+  "onlyOtherChange": "Contract heading records frontend agreement instead of proposal status.",
+  "implementationAuthorized": false
+}

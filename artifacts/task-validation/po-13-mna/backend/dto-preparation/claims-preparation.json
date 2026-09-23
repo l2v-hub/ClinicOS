@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-13-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po13-backend\",\n      \"agentType\": \"preparer\"\n    },\n    \"claimedAt\": \"2026-09-23T05:20:52.901Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T05:20:52.901Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly authorized preparation only after PO12 handoff. Sole writer in existing C:/Workspace/ClinicOSHouse-worktrees/po12-tinetti-backend; exact mutable scope artifacts/task-validation/po-13-mna/backend-preparation/** outside frozen PO12 manifests. Read task contract and source, coordinate definitive DTO with frontend. No application/runtime/package/lockfile edits, tests, commit/push/deploy; implementation awaits explicit root GO and new worktree from published PO12. Preserve all frozen PO12 source/artifact hashes.\"\n  },\n  \"message\": \"Issue PO-13-backend-preparation claimed by agent:codex-po13-backend:preparer\"\n}"
+    }
+  ]
+}

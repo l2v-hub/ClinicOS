@@ -1,0 +1,14 @@
+{
+  "task": "PO-13-frontend",
+  "generatedAt": "2026-09-23T06:02:44.207Z",
+  "scenarios": 89,
+  "itemCount": 18,
+  "scoredOptions": 48,
+  "kQuestions": 3,
+  "exactLabelsDescriptionsOptionsProvenanceAndCopyright": true,
+  "canonicalAnswersCompletionResultsAndSnapshotsMatch": true,
+  "frontendDefinitionSha256": "a98dddff4af8b4c5353f514df55f6050fb61f5f94a326fe848ddaca3688442c6",
+  "backendDefinitionSha256": "3847c180c4179cc24bd1deb4aa15b180ccfee64d30920bf188b8dc0008591035",
+  "backendDomainSha256": "9fb7c1dac7bb83e99b089d7673aa15ad63d0a00502bd1ce71b370c560342e72d",
+  "backendInputSha256": "59da64eed321d7188a1e1117c9f22becca370a9f51158fe726550e9934f5dbc9"
+}

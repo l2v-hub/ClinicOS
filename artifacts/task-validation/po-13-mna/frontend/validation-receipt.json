@@ -1,0 +1,134 @@
+{
+  "task": "PO-13-frontend",
+  "generatedAtUtc": "2026-09-23T06:06:41.045Z",
+  "baseline": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be",
+  "sourceStateId": "4d39d1dfc47614e40271ea2d944a63ac1a37746799ae4e6d275b3aee37c5d2c9",
+  "runtimeSourceId": "b17e6c66b5cc0de8da97235000952d092d81e56ef69d09766cca6f3836943457",
+  "sourceManifestSha256": "543f68396f26c82ae9d025ed30efaeeed11fba31686a473db5d17126352991ec",
+  "unchangedBaselineInputsVerified": 507,
+  "policyDecision": {
+    "decision": "allow",
+    "authority": "Root explicit GO after PO12 Railway d532fc0f and Vercel dpl_8HxzffhVs7BCpBisSv6LzXpXDBEN verified against 4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be.",
+    "scope": "Root-assigned isolated MNA frontend source/tests/evidence, now released",
+    "excluded": [
+      "backend",
+      "schema",
+      "package manifests",
+      "lockfiles",
+      "shared dependencies",
+      "servers",
+      "ports",
+      "commit",
+      "push",
+      "deploy",
+      "live patient writes"
+    ]
+  },
+  "contracts": {
+    "backendDtoSha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a",
+    "rootTaskContractSha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+    "snapshotKAddendumSha256": "bd00383bfe1994b685a54548580c766ed6d8e78acd4f3664055c47b3473d684d"
+  },
+  "tests": {
+    "exitCode": 0,
+    "passed": 127,
+    "failed": 0,
+    "mnaTests": 18,
+    "regressionTests": 109,
+    "cwd": "frontend",
+    "command": [
+      "node",
+      "--import",
+      "tsx",
+      "--import",
+      "../scripts/stub-css-loader.mjs",
+      "--test",
+      "src/lib/__tests__/mnaDefinition.test.ts",
+      "src/lib/__tests__/mnaWorkflow.test.ts",
+      "src/lib/__tests__/painadDefinition.test.ts",
+      "src/lib/__tests__/assessmentDraftStore.test.ts",
+      "src/lib/__tests__/assessmentClient.test.ts",
+      "src/lib/__tests__/assessmentArchive.test.ts",
+      "src/lib/__tests__/transfersDefinition.test.ts",
+      "src/lib/__tests__/transfersDraftStore.test.ts",
+      "src/lib/__tests__/transfersClient.test.ts",
+      "src/lib/__tests__/tinettiDefinition.test.ts",
+      "src/lib/__tests__/tinettiWorkflow.test.ts",
+      "src/lib/__tests__/patientDocumentArchive.test.ts",
+      "src/lib/__tests__/patientIdentity.test.ts",
+      "src/lib/__tests__/patientDocumentsPage.test.ts",
+      "src/lib/__tests__/cartellaWriteQueue.test.ts",
+      "src/lib/__tests__/medicazioniConcurrency.test.ts",
+      "src/lib/__tests__/patientDetailLazyGuard.test.ts",
+      "src/lib/__tests__/patientDetailWorkspace.test.ts",
+      "src/lib/__tests__/patientRecordPrint.test.ts",
+      "src/components/operator/__tests__/mnaUi.test.ts",
+      "src/components/operator/__tests__/assessmentsUi.test.ts",
+      "src/components/operator/__tests__/transfersUi.test.ts",
+      "src/components/operator/__tests__/tinettiUi.test.ts"
+    ],
+    "log": "artifacts/task-validation/po-13-mna/frontend/test-focused.log",
+    "sourceStateId": "4d39d1dfc47614e40271ea2d944a63ac1a37746799ae4e6d275b3aee37c5d2c9"
+  },
+  "build": {
+    "exitCode": 0,
+    "command": "npm run build",
+    "cwd": "frontend",
+    "log": "artifacts/task-validation/po-13-mna/frontend/build.log",
+    "runtimeSourceId": "b17e6c66b5cc0de8da97235000952d092d81e56ef69d09766cca6f3836943457",
+    "warnings": [
+      "Existing large bundle chunk warning",
+      "Bundler plugin timing diagnostic"
+    ]
+  },
+  "lint": {
+    "exitCode": 0,
+    "baselineDiagnostics": 18,
+    "candidateDiagnostics": 18,
+    "introduced": [],
+    "log": "artifacts/task-validation/po-13-mna/frontend/lint-comparison.json"
+  },
+  "secretScan": {
+    "exitCode": 0,
+    "findings": 0,
+    "sourceFiles": 30,
+    "bundleFiles": 110,
+    "log": "artifacts/task-validation/po-13-mna/frontend/secret-scan.json",
+    "scope": "Changed source and emitted text bundle; known credential signatures only"
+  },
+  "sourceParity": {
+    "task": "PO-13-frontend",
+    "generatedAt": "2026-09-23T06:02:44.207Z",
+    "scenarios": 89,
+    "itemCount": 18,
+    "scoredOptions": 48,
+    "kQuestions": 3,
+    "exactLabelsDescriptionsOptionsProvenanceAndCopyright": true,
+    "canonicalAnswersCompletionResultsAndSnapshotsMatch": true,
+    "frontendDefinitionSha256": "a98dddff4af8b4c5353f514df55f6050fb61f5f94a326fe848ddaca3688442c6",
+    "backendDefinitionSha256": "3847c180c4179cc24bd1deb4aa15b180ccfee64d30920bf188b8dc0008591035",
+    "backendDomainSha256": "9fb7c1dac7bb83e99b089d7673aa15ad63d0a00502bd1ce71b370c560342e72d",
+    "backendInputSha256": "59da64eed321d7188a1e1117c9f22becca370a9f51158fe726550e9934f5dbc9"
+  },
+  "whitespace": {
+    "command": "git diff --check -- frontend/src",
+    "exitCode": 0
+  },
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "b36eca8bc9fd9f584410f7ff3a3469f812f197d6e96a435659902adc5ee91be1"
+  },
+  "claimsReleased": true,
+  "resolvedDiagnostics": [
+    "Initial archive UI fixture reversed its builder arrays; corrected.",
+    "Two control-regex expressions replaced by a shared codepoint predicate; final tests/build/lint repeated.",
+    "MNA-only padded-year/Rome date helper and archive projection added following independent review."
+  ],
+  "limitations": [
+    "Root owns real browser geometry/keyboard, static preview4194, HTTP/PostgreSQL and rendered PDF checks and publication.",
+    "SSR validates structure/text and state, not actual browser layout or PDF pagination.",
+    "No performance improvement or independent clinical validation claim.",
+    "No worker package/lockfile/dependency/server/commit/push/deploy/live-write action."
+  ]
+}

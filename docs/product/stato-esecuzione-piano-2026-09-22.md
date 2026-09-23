@@ -18,7 +18,7 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | PO-10 PAINAD e infrastruttura moduli | Pubblicato e verificato | d659c1b4: 51 test backend, 72 frontend, 19 rifiniture e 3 HTTP/PG root; PDF/archivio, retry, rettifiche, isolamento e UI 390/768/1262. Railway SUCCESS/migrazione/health200; Vercel READY/sourceCommit verificato; modulo e storico aperti online in sola lettura. |
 | PO-11 Trasferimenti posturali | Pubblicato e verificato | 470a5fe7: 66 backend, 92 frontend più 17 rifiniture, 3 HTTP/PG root; browser 390/768/desktop, retry, rettifiche, conferme, archivio e PDF compilato. Railway SUCCESS/migrazione/health200; Vercel READY/alias sourceCommit verificato, smoke sola lettura. |
 | PO-12 Tinetti | Pubblicato e verificato | 4e594aa3:40 backend,105 frontend,2 HTTP/PG; ciclo completo,rettifica,PDF/archivio,legacy invariato,identità mobile390/768. Railway SUCCESS/migrazione/health200,Vercel READY/alias sourceCommit,smoke sola lettura. |
-| PO-13 MNA | In esecuzione | GO dopo PO12 verificata; DTO screening/full e misure concordato, Qcorretto con fonte ufficiale già documentata. |
+| PO-13 MNA | Verificato, pubblicazione in corso |52 backend,127 frontend,2HTTP/PG; screening/full/rettifica, misure, Kparziale, rawinvalid/retry, PDF/archivio,390/768/1262. Migrazione e frontend pronti, fonteQcorretto documentata. |
 | PO-14 GDS-15 | Da eseguire | Scoring delle domande inverse |
 | PO-15 Catalogo e storico NRS | Da eseguire | Nessuna conversione delle scale |
 | PO-16 Giro completo | Da eseguire | Collaudo tecnico sintetico; distinguere prove effettuabili da osservazione clinica e dispositivi reali |

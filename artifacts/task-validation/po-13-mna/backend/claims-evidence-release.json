@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-13-backend-evidence released\",\n  \"reason\": \"Final 52/52 focused/regression tests, 47 migrations and closed loopback DB bind frozen inputbbc7c87d. Typecheck/build/schema/diff pass. All 31 pages from9PDFs visually inspected and snapshot-bound extracted content verified; finalizer preflight passed21source/459inputs. Release artifact ownership for final receipt and root/reviewer handoff.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-13-backend-evidence\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po13-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T06:14:44.049Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T06:14:44.049Z\",\n    \"progress\": 0,\n    \"context\": \"Root authorized splitting source and artifact ownership so integration HTTP/browser QA may proceed. Sources frozen by manifest SHA25650d738bbb5e49c4d4179027a5d7ff83a66858bc28d3790f99b5156ae81a45a4b; this claim owns only artifacts/task-validation/po-13-mna/backend/** in isolated po13-mna-backend worktree for final regressions/PDF rendering/QA/receipts. No application source changes. Any defect requiring source edit must explicitly invalidate freeze and obtain coordination before editing. No commit/push/deploy.\"\n  }\n}"
+    }
+  ]
+}

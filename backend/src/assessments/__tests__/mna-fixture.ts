@@ -1,0 +1,93 @@
+import { randomUUID } from 'node:crypto';
+import { MNA_VERSION, type MnaAnswers, type MnaExtent } from '../mna-types.js';
+export function mnaAnswers(
+  mode: 'empty' | 'zero' | 'max' = 'max',
+  extent: MnaExtent = 'full',
+): MnaAnswers {
+  const empty: MnaAnswers = {
+    extent,
+    A: null,
+    B: null,
+    C: null,
+    D: null,
+    E: null,
+    F: { method: 'category', category: null },
+    G: null,
+    H: null,
+    I: null,
+    J: null,
+    K: { dairyDaily: null, eggsOrLegumesWeekly: null, meatFishOrPoultryDaily: null },
+    L: null,
+    M: null,
+    N: null,
+    O: null,
+    P: null,
+    Q: { method: 'category', category: null },
+    R: { method: 'category', category: null },
+    measurements: {
+      weightKg: null,
+      heightCm: null,
+      armCircumferenceCm: null,
+      calfCircumferenceCm: null,
+    },
+    measurementDates: {
+      weightKg: null,
+      heightCm: null,
+      armCircumferenceCm: null,
+      calfCircumferenceCm: null,
+    },
+    notes: '',
+  };
+  if (mode === 'empty') return empty;
+  if (mode === 'zero')
+    return {
+      ...empty,
+      A: 'severe_reduction',
+      B: 'loss_over_3kg',
+      C: 'bed_or_chair',
+      D: true,
+      E: 'severe_dementia_or_depression',
+      F: { method: 'category', category: 'lt19' },
+      G: false,
+      H: true,
+      I: true,
+      J: 'one_meal',
+      K: { dairyDaily: false, eggsOrLegumesWeekly: false, meatFishOrPoultryDaily: false },
+      L: false,
+      M: 'lt3_glasses',
+      N: 'needs_assistance',
+      O: 'severe_malnutrition',
+      P: 'worse',
+      Q: { method: 'category', category: 'lt21' },
+      R: { method: 'category', category: 'lt31' },
+    };
+  return {
+    ...empty,
+    A: 'no_reduction',
+    B: 'no_loss',
+    C: 'goes_out',
+    D: false,
+    E: 'no_psychological_problems',
+    F: { method: 'category', category: 'gte23' },
+    G: true,
+    H: false,
+    I: false,
+    J: 'three_meals',
+    K: { dairyDaily: true, eggsOrLegumesWeekly: true, meatFishOrPoultryDaily: true },
+    L: true,
+    M: 'gt5_glasses',
+    N: 'independent_without_difficulty',
+    O: 'no_nutritional_problems',
+    P: 'better',
+    Q: { method: 'category', category: 'gt22' },
+    R: { method: 'category', category: 'gte31' },
+  };
+}
+export const mnaInput = (extra: Record<string, unknown> = {}) => ({
+  requestId: randomUUID(),
+  type: 'mna',
+  formVersion: MNA_VERSION,
+  assessedAt: '2026-03-28T23:30:00.000Z',
+  answers: mnaAnswers(),
+  ...extra,
+});

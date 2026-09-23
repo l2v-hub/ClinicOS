@@ -1,0 +1,85 @@
+{
+  "rootOriginal": {
+    "path": "C:/Workspace/ClinicOSHouse-worktrees/subtle-dashboard-notifications/artifacts/task-validation/po-13-mna/task-contract.md",
+    "sha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+    "lineEndings": "LF"
+  },
+  "assignedWorktreeContract": {
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\po13-mna-backend\\artifacts\\task-validation\\po-13-mna\\task-contract.md",
+    "sha256": "f99265f7aef1287e8fd83dbe9c2db2c6497b16ff7cd37cfaf867031c06782ca5",
+    "byteEquivalentAfterCrlfToLf": true,
+    "mutated": false
+  },
+  "currentSnapshot": {
+    "path": "task-contract.snapshot.md",
+    "sha256": "8f08f0f2b141c29ec0a3717ccab8ac67790e619ca0628e8d08a198654f53d961",
+    "byteIdentical": true
+  },
+  "agreedDto": {
+    "source": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\artifacts\\task-validation\\po-13-mna\\backend-preparation\\backend-contract.md",
+    "path": "backend-contract.md",
+    "sha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a",
+    "byteIdentical": true
+  },
+  "historicalPreparation": {
+    "path": "dto-preparation",
+    "copiedFiles": [
+      {
+        "path": "dto-preparation/backend-contract.md",
+        "bytes": 15998,
+        "sha256": "9d24743fafe6b78ce71dc4c119603ccae1bdde6babbe44907b30bf79b8e9eb2a"
+      },
+      {
+        "path": "dto-preparation/task-contract.snapshot.md",
+        "bytes": 7147,
+        "sha256": "f99265f7aef1287e8fd83dbe9c2db2c6497b16ff7cd37cfaf867031c06782ca5"
+      },
+      {
+        "path": "dto-preparation/source-mna.txt",
+        "bytes": 16687,
+        "sha256": "2fb317825ad0885a7fc1d19c3cbca4eaeb92e6ac4ed99890812d00cf3bdfdf60"
+      },
+      {
+        "path": "dto-preparation/source-provenance.md",
+        "bytes": 1353,
+        "sha256": "7c3dd489ed334a105948f87570fa274f1aef20536891f12dc9b349e27c036407"
+      },
+      {
+        "path": "dto-preparation/empty-answers.example.json",
+        "bytes": 784,
+        "sha256": "e359bbec5dbaa67a887035073d1dd7f6652b95a4dcd1e4122667b7136171e781"
+      },
+      {
+        "path": "dto-preparation/claims-preparation.json",
+        "bytes": 1112,
+        "sha256": "36d43226fea24c9a80469ccd5d37c45a7977e07afbf48bc38732c161fc42ff38"
+      },
+      {
+        "path": "dto-preparation/frontend-agreement.json",
+        "bytes": 1648,
+        "sha256": "4f7557e005feadb0266278cc9c50b9280ed161f0c344cf5f99faa44d87344d9e"
+      },
+      {
+        "path": "dto-preparation/claims-preparation-release.json",
+        "bytes": 1644,
+        "sha256": "36ab6d492390ee4aa87ac601755aa10d47b7c4b37a058bc41ead2b3238b0c1e4"
+      },
+      {
+        "path": "dto-preparation/finalize-preparation.mjs",
+        "bytes": 4722,
+        "sha256": "459fbc66dd6698078e3445575d944a84b852f9842b801cd42d00126b70077958"
+      },
+      {
+        "path": "dto-preparation/preparation-receipt.json",
+        "bytes": 7047,
+        "sha256": "341b8efd61ad10371eb50db2386a08f0a13d73d9a513b7394e0462d814c5545b"
+      },
+      {
+        "path": "dto-preparation/root-contract-byte-comparison.json",
+        "bytes": 1272,
+        "sha256": "d21b31e387caf6c048e2ac4452c003aad07be732f8ccbc7fc45c3a991b7bc84d"
+      }
+    ],
+    "note": "Historical DTO preparation retains its original CRLF snapshot and explicit CRLF-to-LF provenance. The current runtime preparation snapshot is copied byte-for-byte from the authoritative LF contract."
+  }
+}

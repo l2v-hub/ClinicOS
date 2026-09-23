@@ -1,5 +1,14 @@
 import type { PatientIdentityData } from '../patientIdentity';
 import {
+  MNA_VERSION,
+  type MnaAnswers,
+  type MnaCompletion,
+  type MnaExtent,
+  type MnaResult,
+  type MnaSnapshot,
+  type MnaLocalInputs,
+} from './mnaTypes';
+import {
   TINETTI_VERSION,
   type TinettiAnswers,
   type TinettiResult,
@@ -11,17 +20,18 @@ import {
   type AssessmentCompletion,
   type TransferSection,
 } from './transfersTypes';
-export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti';
+export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna';
 export interface AssessmentTarget {
   id: string;
   type: AssessmentType;
 }
-export type AssessmentAnswers = PainadAnswers | TransfersAnswers | TinettiAnswers;
+export type AssessmentAnswers = PainadAnswers | TransfersAnswers | TinettiAnswers | MnaAnswers;
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const ASSESSMENT_VERSIONS = {
   painad: PAINAD_VERSION,
   postural_transfers: TRANSFERS_VERSION,
   tinetti: TINETTI_VERSION,
+  mna: MNA_VERSION,
 } as const;
 export const PAINAD_KEYS = [
   'respiration',
@@ -93,7 +103,16 @@ export type TinettiHistoryItem = AssessmentHistoryBase & {
   completion: AssessmentCompletion;
   result: TinettiResult | null;
 };
-export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem;
+export type MnaHistoryItem = AssessmentHistoryBase & {
+  type: 'mna';
+  formVersion: typeof MNA_VERSION;
+  extent: MnaExtent;
+  answeredCount: number;
+  completion: MnaCompletion;
+  result: MnaResult;
+};
+export type AssessmentHistoryItem =
+  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem;
 export interface TinettiSnapshot extends Omit<
   AssessmentSnapshot,
   'form' | 'items' | 'result' | 'interpretation'
@@ -132,7 +151,13 @@ export type TinettiAssessmentDto = TinettiHistoryItem & {
   finalSnapshot: TinettiSnapshot | null;
   snapshotSha256: string | null;
 };
-export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto;
+export type MnaAssessmentDto = MnaHistoryItem & {
+  answers: MnaAnswers;
+  finalSnapshot: MnaSnapshot | null;
+  snapshotSha256: string | null;
+};
+export type AssessmentDto =
+  PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto | MnaAssessmentDto;
 export interface AssessmentPage {
   items: AssessmentHistoryItem[];
   pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
@@ -142,6 +167,7 @@ export interface AssessmentFields {
   instantChoice: string;
   answers: AssessmentAnswers;
   correctionReason: string;
+  mnaInputs?: MnaLocalInputs;
 }
 export interface AssessmentEditable {
   assessedAt: string;
@@ -151,7 +177,8 @@ export interface AssessmentEditable {
 export interface AssessmentCreate extends AssessmentEditable {
   requestId: string;
   type: AssessmentType;
-  formVersion: typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION;
+  formVersion:
+    typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION | typeof MNA_VERSION;
   predecessorId?: string;
 }
 export type AssessmentOperation =

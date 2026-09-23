@@ -1,0 +1,117 @@
+Screening MNA®
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | MNA italiana, versione 1
+
+Data di nascita: 02/01/1940
+Codice fiscale: Non disponibile
+Camera: po10-303db447 | Letto: A
+Posizione alla data: 2026-03-29 (Europe/Rome)
+Operatore: Élodie Παπαδόπουλος
+Registrazione: 23/09/2026, 08:12
+Finalizzazione: 23/09/2026, 08:12
+Sesso: F | Età alla valutazione: 86 anni
+Data di riferimento età: 2026-03-29 (Europe/Rome)
+
+Screening A–F (massimo 14 punti)
+
+Voci complete: 6 / 6
+A. Presenta una perdita dell’appetito? Ha mangiato meno negli ultimi 3 mesi? (perdita d’appetito,
+problemi digestivi, difficoltà di masticazione o deglutizione) — 2 punti
+Nessuna riduzione dell’assunzione di cibo
+B. Perdita di peso recente (< 3 mesi) — 3 punti
+Nessuna perdita di peso
+C. Motricità — 2 punti
+Esce di casa
+D. Nell’arco degli ultimi 3 mesi: malattie acute o stress psicologici? — 2 punti
+No
+E. Problemi neuropsicologici — 2 punti
+Nessun problema psicologico
+F. Indice di massa corporea (IMC = peso / (altezza)² in kg/m²) — 3 punti
+IMC >= 23
+Metodo: Categoria dichiarata
+Peso: Non disponibile | Data misura: Non disponibile
+Dato inserito manualmente nella valutazione
+Altezza: Non disponibile | Data misura: Non disponibile
+Dato inserito manualmente nella valutazione
+IMC: Non disponibile
+
+Screening: 14 / 14 — Stato nutrizionale normale
+
+Valutazione finalizzata | Pagina 1 di 3
+Screening MNA®
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | MNA italiana, versione 1
+
+Dati globali aggiuntivi conservati — non inclusi nel totale
+
+Voci complete: 2 / 12
+G. Il paziente vive autonomamente a domicilio? — 0 punti
+No
+H. Prende più di 3 medicinali al giorno? — Non compilato
+Risposta non compilata
+I. Presenza di decubiti, ulcere cutanee? — Non compilato
+Risposta non compilata
+J. Quanti pasti completi prende al giorno? — Non compilato
+Risposta non compilata
+K. Consuma? — Non compilato
+Almeno una volta al giorno dei prodotti lattiero-caseari?: Sì
+Una o due volte la settimana uova o legumi?: Non compilato
+Ogni giorno della carne, del pesce o del pollame?: No
+L. Consuma almeno due volte al giorno frutta o verdura? — Non compilato
+Risposta non compilata
+M. Quanti bicchieri beve al giorno? (acqua, succhi, caffé, té, latte…) — Non compilato
+Risposta non compilata
+N. Come si nutre? — Non compilato
+Risposta non compilata
+O. Il paziente si considera ben nutrito? (ha dei problemi nutrizionali) — Non compilato
+Risposta non compilata
+P. Il paziente considera il suo stato di salute migliore o peggiore di altre persone della sua età? —
+Non compilato
+Risposta non compilata
+Q. Circonferenza brachiale (CB, cm) — 0,5 punti
+21 <= CB <= 22 cm
+Metodo: Calcolo da misure
+Circonferenza brachiale: 21 cm | Data misura: 2026-03-27
+Dato inserito manualmente nella valutazione
+
+Valutazione finalizzata | Pagina 2 di 3
+Screening MNA®
+
+D’Àngelo Zoë
+Valutazione: 29/03/2026, 00:30 | MNA italiana, versione 1
+
+R. Circonferenza del polpaccio (CP in cm) — Non compilato
+Risposta non compilata
+Metodo: Categoria dichiarata
+Circonferenza del polpaccio: Non disponibile | Data misura: Non disponibile
+Dato inserito manualmente nella valutazione
+Subtotale globale: Non disponibile — sezione incompleta
+Finalizzata come Screening MNA®. I dati G–R conservati non costituiscono una valutazione completa;
+nessun totale a 30.
+Screening: 0–7 malnutrito; 8–11 a rischio di malnutrizione; 12–14 stato nutrizionale normale. Con screening <= 11 è
+indicato completare la valutazione globale, sempre disponibile.
+Le fasce sono interpretazioni dello strumento: nessuna diagnosi o trattamento automatico.
+
+Note
+
+Dati globali parziali conservati.
+Nessuna misura inventata.
+Fonte e versione: mna-it-2026-09-22-q-corrected-v1
+MNA® in italiano dalla fonte fornita. Correzioni editoriali: «acuteo» diventa «acute o» e «Oni giorne» diventa «Ogni
+giorno». Q: corretto il refuso della fonte italiana; CB < 21 cm = 0, 21 <= CB <= 22 cm = 0,5, CB > 22 cm = 1, secondo il
+riscontro ufficiale inglese 2023. Conservati E «demenza moderata» e K «una o due volte la settimana». Questa
+trascrizione non costituisce convalida clinica indipendente.
+Riferimenti bibliografici
+
+Vellas B, Villars H, Abellan G, et al. Overview of MNA® - Its History and Challenges. J Nut Health Aging 2006; 10: 456-465.
+Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for Undernutrition in Geriatric Practice: Developing the Short-Form
+Mini Nutritional Assessment (MNA-SF). J. Geront 2001; 56A: M366-377.
+Guigoz Y. The Mini-Nutritional Assessment (MNA®) Review of the Literature – What does it tell us? J Nutr Health Aging 2006; 10:
+466-487.
+® Société des Produits Nestlé, S.A., Vevey, Switzerland, Trademark Owners; © Nestlé, 1994, Revision 2006. N67200 12/99 10M;
+www.mna-elderly.com.
+
+Valutazione finalizzata | Pagina 3 di 3
+

@@ -1,0 +1,225 @@
+{
+  "task": "PO-13-frontend",
+  "baseline": "4e594aa39cb2cf9ef3bfc403e4680ae66a41c3be",
+  "generatedAtUtc": "2026-09-23T06:02:43.065Z",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po13-mna-ui",
+  "sourceStateId": "4d39d1dfc47614e40271ea2d944a63ac1a37746799ae4e6d275b3aee37c5d2c9",
+  "runtimeSourceId": "b17e6c66b5cc0de8da97235000952d092d81e56ef69d09766cca6f3836943457",
+  "files": [
+    {
+      "path": "frontend/src/App.tsx",
+      "bytes": 130013,
+      "lines": 3121,
+      "sha256": "0b73c9ca3cce3c2524d12806f7a2a0531dddce8558b5cbc9219853095b65fd2a",
+      "baselineSha256": "b2213164d8900a57c9e6f8b05195abdcfc3ad4092763604357154174bf5b41d7"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "bytes": 112826,
+      "lines": 2791,
+      "sha256": "4e39b46936778d0b5b3d0e81526013d3106b70b6909c26f4f97640e58143f71d",
+      "baselineSha256": "10975b813497e642bf0e4ee5066a7192df7a2009e9151cdb72d42f06cceaed5a"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/mnaUi.test.ts",
+      "bytes": 6211,
+      "lines": 160,
+      "sha256": "f8a9d48ce9b1dc82b2480c77509e10698446503908beccaecfec2d43b13d2122",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentDateFields.tsx",
+      "bytes": 2782,
+      "lines": 83,
+      "sha256": "89e3268ec0ff47742e88ef29b946f2986212d861ceb080ad23ee4cb56fb9b505",
+      "baselineSha256": "0213c6aa8c8328ae53d90a5931fcc8e245f32cfead33fdb016c95adf183b5339"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "bytes": 4544,
+      "lines": 124,
+      "sha256": "b784369038599c751a883250f0280d620ead5c0797efc41ecdd67816149d7350",
+      "baselineSha256": "0f5f5d3e6a390b2305ff24243c14a7f7f0a8d4adc886169b41bc1115209d2663"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "bytes": 3723,
+      "lines": 105,
+      "sha256": "a85320e0a522906305b7a55ed7b33afbf57de4825d4ec7440bb2d4d008fd89ab",
+      "baselineSha256": "a503131cba6a6f59db2106b43b399f64f35897160c4188c54e77109ebde63690"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "bytes": 18189,
+      "lines": 483,
+      "sha256": "e40df0d277626ce6f95aba11d05d0716cfe7b6fe4f409b0670495157a1c708ed",
+      "baselineSha256": "61750a4117544d7e9c8049c1476765c94e1d8ce22cdbf88e8dd4829cca9c6bb3"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Mna.css",
+      "bytes": 1613,
+      "lines": 95,
+      "sha256": "54aa8b48622446fb473eccde18a0c72424ee07dc3787c763395c14d803766304",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaAnthropometry.tsx",
+      "bytes": 6123,
+      "lines": 170,
+      "sha256": "78c52faa54877c54118a97c431abec10e59d6ba642e4049eb1cae3dd3d4e4b81",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaContent.tsx",
+      "bytes": 1509,
+      "lines": 44,
+      "sha256": "3a0c7ca17bde1bb366c3524172a1f0d8cfd3d104c188b649d0a4ed6f1293b41b",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaForm.tsx",
+      "bytes": 8904,
+      "lines": 235,
+      "sha256": "548a2be70e826005a138864e910cee33eadff965e15df6e8aa539ef527a02afe",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaSummary.tsx",
+      "bytes": 5977,
+      "lines": 159,
+      "sha256": "ef2e40c622e941deab2aaf88e1cc09ad2a1a18df70d530832ef5e3545144be4c",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "bytes": 3547,
+      "lines": 115,
+      "sha256": "e0697dfc6b9edd3dcc945386c1237743192c646006f6f85e201a61cd542fa799",
+      "baselineSha256": "970fe2b240598b8c64e1b233a29d6d60a4cac2a0812ebe7cf35aa98207aa21ef"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/mna.fixtures.ts",
+      "bytes": 4332,
+      "lines": 121,
+      "sha256": "3744cd6f0de25c5ef97f4730a3fa9f5ab806896ff3bd38d28af23934859dc438",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/mnaDefinition.test.ts",
+      "bytes": 8035,
+      "lines": 191,
+      "sha256": "f942b90098c05454d5afdb408aed3fcb6853b630106c1060523d4ccdf8e5a76e",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/mnaWorkflow.test.ts",
+      "bytes": 11543,
+      "lines": 260,
+      "sha256": "2f3558a5aa9e41d646cdda08fad15bf8007daebab063f49824e48efb540c3f7f",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "bytes": 2446,
+      "lines": 55,
+      "sha256": "68c4c6762d3fab33e1811097cd666b37cd533b04f1bf56d35161e8ff2678fc09",
+      "baselineSha256": "515d816776dde886d828ea116612e61b85fbf3ce4b83eee2d19b7e470e56f3bf"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "bytes": 13486,
+      "lines": 416,
+      "sha256": "7e7d4c6a7c37c7d10241bbbfc18baf0d395738482a8fc54f99371531ef46f694",
+      "baselineSha256": "bf5e41ab7be54120ef15c1713f5c98c5af0e8b014edcc463cc6da7294154ae05"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTime.ts",
+      "bytes": 2713,
+      "lines": 76,
+      "sha256": "8cab88da8907a5fa3c100bb303db16271e812e8649fe7ad9eb6fe5db9469c7c2",
+      "baselineSha256": "e1fc2d683d893adca41e0657a272450ef957222edd3012f4084ebe7e24aeaf0b"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "bytes": 6079,
+      "lines": 199,
+      "sha256": "d4c6bdbc8d0aa351540cc44fea92c4ab04b6845e022c86095da90babbd04ac15",
+      "baselineSha256": "cf45097c4449f61060d66c3f4e124700be6b5b8fad2b9921d686ef71699b362f"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "bytes": 11436,
+      "lines": 317,
+      "sha256": "3b1acb04e65703dd819766615158019d1ccf3c55196b5ea985b263eda8e3a480",
+      "baselineSha256": "1e413c8b37ef97a7314232d1aa611cc8d2f5c6b01de5a82f1efb0e0dd164f7e4"
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaDefinition.ts",
+      "bytes": 6646,
+      "lines": 181,
+      "sha256": "b633a3aa1cd32c6f71d6af4c4be1039539a708e4bb57cb5bb7cbacb01f1a691c",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaInputValidation.ts",
+      "bytes": 5548,
+      "lines": 136,
+      "sha256": "f9b283cb088f5106804778dd0729bf936ba9b1495fbecf897c05154e0d57cb52",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaItems.ts",
+      "bytes": 6312,
+      "lines": 174,
+      "sha256": "a98dddff4af8b4c5353f514df55f6050fb61f5f94a326fe848ddaca3688442c6",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaLocalInputs.ts",
+      "bytes": 4054,
+      "lines": 105,
+      "sha256": "14f2d16b472e5c700c6465486333febce254fcbfd0d82b283328978ee60bdd0f",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaTime.ts",
+      "bytes": 2149,
+      "lines": 56,
+      "sha256": "196a3e53aff277bd1f1bbc7ab26b69b09bfd242ecfa4896e4a7cc368c383a4a8",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaTypes.ts",
+      "bytes": 4138,
+      "lines": 129,
+      "sha256": "f5e10e294bfa4d56c380f30367de0c91ffe99f2645a623e710af963e7fbef389",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaValidation.ts",
+      "bytes": 8949,
+      "lines": 251,
+      "sha256": "e7f85e543f8de63bea129d006f11820fb77d1ae22220522bcaa43005b900547f",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "bytes": 7153,
+      "lines": 203,
+      "sha256": "359d50dd2bbef2d6c57b2941f0cc4e3772fa2467446367e58c84ea93d5c27a48",
+      "baselineSha256": "9816dc0f6a10cf325f7973d3125360c6c6fe05b343e8346f771df144a7096443"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "bytes": 11176,
+      "lines": 297,
+      "sha256": "f05f97791b1f94e3429cfb9fc90c8838769a2d9fa5051d9096769b992ebaafba",
+      "baselineSha256": "4ebe7563cee94c26a3304af6059dbd485581d2f7d0eac6fa2b9b1b5ba9b502b1"
+    }
+  ],
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "b36eca8bc9fd9f584410f7ff3a3469f812f197d6e96a435659902adc5ee91be1"
+  }
+}

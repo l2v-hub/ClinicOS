@@ -194,6 +194,7 @@ const MODULE_TAB_IDS: TabId[] = [
   'contenzioni',
   'braden',
   'tinetti',
+  'mna',
   'nrs',
   'dimissione',
 ];
