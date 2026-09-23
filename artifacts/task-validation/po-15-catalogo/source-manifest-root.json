@@ -1,0 +1,263 @@
+{
+  "sourceStateId": "4baa6d98559f139f3aa487881d65ae04974471fdbd247bbe807c7a6045e9adf0",
+  "files": [
+    {
+      "path": "backend/src/ai/__tests__/intake-nrs-db.test.ts",
+      "sha256": "15f04afaa661d38f6fc93a8fc2d8fc61ac1c736b62931d4ad7d21484fc77296f",
+      "bytes": 5892,
+      "workerSha256": "15f04afaa661d38f6fc93a8fc2d8fc61ac1c736b62931d4ad7d21484fc77296f"
+    },
+    {
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "sha256": "44950e8fbcdf2f0fcfa3d0efb9616a307accdc7de6eeddd004d3075feba1634c",
+      "bytes": 16126,
+      "workerSha256": "44950e8fbcdf2f0fcfa3d0efb9616a307accdc7de6eeddd004d3075feba1634c"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/catalog-db.test.ts",
+      "sha256": "81cca5bd3881f84ce7d6dcd26223d3d8314a35bc8bf22599541a9f2ea659ccb1",
+      "bytes": 6264,
+      "workerSha256": "81cca5bd3881f84ce7d6dcd26223d3d8314a35bc8bf22599541a9f2ea659ccb1"
+    },
+    {
+      "path": "backend/src/assessments/catalog.ts",
+      "sha256": "46e5d50e17bef2ccb943dcd6f1853dc5bd282d169846ca6a35f4e782c360d554",
+      "bytes": 4753,
+      "workerSha256": "46e5d50e17bef2ccb943dcd6f1853dc5bd282d169846ca6a35f4e782c360d554"
+    },
+    {
+      "path": "backend/src/intake/__tests__/patient-review-db.test.ts",
+      "sha256": "35a39e0dd46fd71d864a79451baa09611fc9e466be1b626c15e68177a2aac5c6",
+      "bytes": 9602,
+      "workerSha256": "35a39e0dd46fd71d864a79451baa09611fc9e466be1b626c15e68177a2aac5c6"
+    },
+    {
+      "path": "backend/src/intake/patient-review.ts",
+      "sha256": "ce4e4ee47af76aa1053002bed27e12e6b0c6347fb38cee3fd5fbb790c319fe30",
+      "bytes": 3324,
+      "workerSha256": "ce4e4ee47af76aa1053002bed27e12e6b0c6347fb38cee3fd5fbb790c319fe30"
+    },
+    {
+      "path": "backend/src/patients/__tests__/cartella-nrs-db.test.ts",
+      "sha256": "9980b8d9cd0bd08e4c6a554f098301ca415e676aab7dc3c6ce0bd940147d6d7c",
+      "bytes": 4569,
+      "workerSha256": "9980b8d9cd0bd08e4c6a554f098301ca415e676aab7dc3c6ce0bd940147d6d7c"
+    },
+    {
+      "path": "backend/src/patients/cartella-update.ts",
+      "sha256": "15a3a948719fe5fc4ca28eae5c474fed0c2035450a5c42d2206d5ec81e0e6683",
+      "bytes": 3944,
+      "workerSha256": "15a3a948719fe5fc4ca28eae5c474fed0c2035450a5c42d2206d5ec81e0e6683"
+    },
+    {
+      "path": "backend/src/routes/patient-assessments.ts",
+      "sha256": "14b900d158c4c3b923ebe4c1c71a67bca7c53326b30f4cb565a6e18a403864fb",
+      "bytes": 3702,
+      "workerSha256": "14b900d158c4c3b923ebe4c1c71a67bca7c53326b30f4cb565a6e18a403864fb"
+    },
+    {
+      "path": "backend/src/routes/patient-intake-review.ts",
+      "sha256": "a6204aeff83178d3615cdb531f388013bb7f4a6daeb22c7b0049af471e954ac3",
+      "bytes": 945,
+      "workerSha256": "a6204aeff83178d3615cdb531f388013bb7f4a6daeb22c7b0049af471e954ac3"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts",
+      "sha256": "2988055e64013e7e0419146b8843b433d2dc4ffa62e5a1ec646d18943e386585",
+      "bytes": 4222,
+      "workerSha256": "2988055e64013e7e0419146b8843b433d2dc4ffa62e5a1ec646d18943e386585"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/nrsLegacyUi.test.ts",
+      "sha256": "9382486caef9ec3994f5ba1bc6e05938be23cda6f712261ac80369ffe6eecbce",
+      "bytes": 3695,
+      "workerSha256": "9382486caef9ec3994f5ba1bc6e05938be23cda6f712261ac80369ffe6eecbce"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+      "sha256": "a49bfde5575725e5a46dfd572eac498d16f9a2a260c84d76676e8265dc0ac5bc",
+      "bytes": 1913,
+      "workerSha256": "a49bfde5575725e5a46dfd572eac498d16f9a2a260c84d76676e8265dc0ac5bc"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.tsx",
+      "sha256": "f6e188ee9534ce3480dcbb806efe0979e77fd92d479e27704fb6acad3da0aac6",
+      "bytes": 6061,
+      "workerSha256": "f6e188ee9534ce3480dcbb806efe0979e77fd92d479e27704fb6acad3da0aac6"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "sha256": "4c25c912e75c0cb368938d7987ef459042e96c2a3fdeadc6308763e21eddbf9c",
+      "bytes": 19138,
+      "workerSha256": "4c25c912e75c0cb368938d7987ef459042e96c2a3fdeadc6308763e21eddbf9c"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/NrsLegacyContent.tsx",
+      "sha256": "cdf7c89b5c50dcc7526afa601c2afde635752efb14bac5ae4957cb60318d4c2a",
+      "bytes": 3406,
+      "workerSha256": "cdf7c89b5c50dcc7526afa601c2afde635752efb14bac5ae4957cb60318d4c2a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ContenzioniTab.tsx",
+      "sha256": "476a1ab1dd69c9d64f76ac7a180e90c3ea7cd9f86dac34810d36db954fe2520c",
+      "bytes": 42085,
+      "workerSha256": "476a1ab1dd69c9d64f76ac7a180e90c3ea7cd9f86dac34810d36db954fe2520c"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/MedicazioniTab.tsx",
+      "sha256": "146db561bb8f967d4179974ab1cb5b52868cc51b04544840808b1d7a4661cd32",
+      "bytes": 46027,
+      "workerSha256": "146db561bb8f967d4179974ab1cb5b52868cc51b04544840808b1d7a4661cd32"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaBradenTab.tsx",
+      "sha256": "e16cc5397863879dfc0e6461a2496bd86c981788f3b09e5e053c8b549ec515e5",
+      "bytes": 22296,
+      "workerSha256": "e16cc5397863879dfc0e6461a2496bd86c981788f3b09e5e053c8b549ec515e5"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaNRSTab.tsx",
+      "sha256": "54a201b348f72e8c08847b96ac58587600f6b903802761375be78de17187fe16",
+      "bytes": 4754,
+      "workerSha256": "54a201b348f72e8c08847b96ac58587600f6b903802761375be78de17187fe16"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "aa83feafbb0ee738c744933a01e4364877ba3ecf0c7657ad3310c3a9616b819d",
+      "bytes": 115840,
+      "workerSha256": "aa83feafbb0ee738c744933a01e4364877ba3ecf0c7657ad3310c3a9616b819d"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientIntakeReview.tsx",
+      "sha256": "d3029d53d167a74811b3039e47c397b6ea2eea41d6a1d561bb34c81a3f4dc637",
+      "bytes": 1305,
+      "workerSha256": "d3029d53d167a74811b3039e47c397b6ea2eea41d6a1d561bb34c81a3f4dc637"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/patientSections.test.ts",
+      "sha256": "b429b156778e9832d530f0b54c16bb9194a32bc2aabd8bf0d89f61b5e40bd0e4",
+      "bytes": 913,
+      "workerSha256": "b429b156778e9832d530f0b54c16bb9194a32bc2aabd8bf0d89f61b5e40bd0e4"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/PainAssessmentEditor.tsx",
+      "sha256": "0b57bf9feedf14ac9eec9b0419d356e1b84bb3f1e4ff34910aaeb61abd83b7a5",
+      "bytes": 1856,
+      "workerSha256": "0b57bf9feedf14ac9eec9b0419d356e1b84bb3f1e4ff34910aaeb61abd83b7a5"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/patientSections.ts",
+      "sha256": "63c7ed8a8c0fa24176d0a18d90300f10e8332ee9420b30065b8c97c24b4e2093",
+      "bytes": 2599,
+      "workerSha256": "63c7ed8a8c0fa24176d0a18d90300f10e8332ee9420b30065b8c97c24b4e2093"
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "sha256": "ea803d1773f7f3ca1fb0e6cf539334756d3d8b22ebe0a869aa53cd3217d89f99",
+      "bytes": 4012,
+      "workerSha256": "ea803d1773f7f3ca1fb0e6cf539334756d3d8b22ebe0a869aa53cd3217d89f99"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/confirmCartella.test.ts",
+      "sha256": "2e2a84a1ee9ccb1ccabf5ce9a7a6139a2d211886f69e09f4c2b63a2d3ca39559",
+      "bytes": 3382,
+      "workerSha256": "2e2a84a1ee9ccb1ccabf5ce9a7a6139a2d211886f69e09f4c2b63a2d3ca39559"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/legacyPainDraft.test.ts",
+      "sha256": "4d0f86da7e43cce7289bde36782f417b86b96db3f1ac180216d0c70a240d4a5a",
+      "bytes": 2041,
+      "workerSha256": "4d0f86da7e43cce7289bde36782f417b86b96db3f1ac180216d0c70a240d4a5a"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/confirmCartella.ts",
+      "sha256": "a19bbbd4bbb14841db35b259629210005b258cfe3a60d7ee3a474a02307ad56b",
+      "bytes": 1955,
+      "workerSha256": "a19bbbd4bbb14841db35b259629210005b258cfe3a60d7ee3a474a02307ad56b"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "sha256": "5a847637bbef3dde06f305680069974b6ec87b52613fc717537d850cdbddf6e1",
+      "bytes": 30085,
+      "workerSha256": "5a847637bbef3dde06f305680069974b6ec87b52613fc717537d850cdbddf6e1"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "sha256": "0c435a216d52ed96515ac906df99546c8b073af9c3cc07993340fa913c26fe69",
+      "bytes": 8755,
+      "workerSha256": "0c435a216d52ed96515ac906df99546c8b073af9c3cc07993340fa913c26fe69"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepVerifica.tsx",
+      "sha256": "37052a40be6bb3404744222f9166f199121f81e22f30dd8b0e557aa01e584777",
+      "bytes": 12361,
+      "workerSha256": "37052a40be6bb3404744222f9166f199121f81e22f30dd8b0e557aa01e584777"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentCatalog.test.ts",
+      "sha256": "3c1165db20bc40e717b3a1e82486e53c37ded95fbe7679bf680cc58c80053a0e",
+      "bytes": 7527,
+      "workerSha256": "3c1165db20bc40e717b3a1e82486e53c37ded95fbe7679bf680cc58c80053a0e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentCatalogWorkflow.test.ts",
+      "sha256": "8f8b44e4a3fcd368acfb4325ef3b4cdd0142c564e9782dd36fd00cda2eb524e6",
+      "bytes": 2349,
+      "workerSha256": "8f8b44e4a3fcd368acfb4325ef3b4cdd0142c564e9782dd36fd00cda2eb524e6"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/nrsLegacy.test.ts",
+      "sha256": "a8bc5ccfd0891e1b0ad4f433e65dd18dd56b8d3da44e4e8b3abcb535f7f06233",
+      "bytes": 1248,
+      "workerSha256": "a8bc5ccfd0891e1b0ad4f433e65dd18dd56b8d3da44e4e8b3abcb535f7f06233"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientIntakeReview.test.ts",
+      "sha256": "66a08d8230742cf5b395a64d1d5083a4c3310161166526336b7f3ee1f760d99d",
+      "bytes": 2452,
+      "workerSha256": "66a08d8230742cf5b395a64d1d5083a4c3310161166526336b7f3ee1f760d99d"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentCatalog.ts",
+      "sha256": "2f2c52fe9aeb97ea170dc3bf2ced1e2702e8278f6b8d7be069f030d2717cd2e9",
+      "bytes": 5273,
+      "workerSha256": "2f2c52fe9aeb97ea170dc3bf2ced1e2702e8278f6b8d7be069f030d2717cd2e9"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentCatalogState.ts",
+      "sha256": "ef78e79b4c0d8d8c5b1e2e21207489c05aa5b111311db5d4c0406d33c5234a7c",
+      "bytes": 1574,
+      "workerSha256": "ef78e79b4c0d8d8c5b1e2e21207489c05aa5b111311db5d4c0406d33c5234a7c"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentEntry.ts",
+      "sha256": "cd620d47560964980481670e4f0c0cd308b166f8554f6c36da45f370ab288225",
+      "bytes": 1627,
+      "workerSha256": "cd620d47560964980481670e4f0c0cd308b166f8554f6c36da45f370ab288225"
+    },
+    {
+      "path": "frontend/src/lib/assessments/nrsLegacy.ts",
+      "sha256": "c6274d5307a37645ea060617cd213dd76fd04b142bc3248d84041a3384f1227e",
+      "bytes": 1126,
+      "workerSha256": "c6274d5307a37645ea060617cd213dd76fd04b142bc3248d84041a3384f1227e"
+    },
+    {
+      "path": "frontend/src/lib/patientIntakeReview.ts",
+      "sha256": "138a515243e17f97f793eb3a610ae0c4beea52363a3399706a87b277f404dcf6",
+      "bytes": 5350,
+      "workerSha256": "138a515243e17f97f793eb3a610ae0c4beea52363a3399706a87b277f404dcf6"
+    },
+    {
+      "path": "tests/fixtures/po15-catalog.mjs",
+      "bytes": 4888,
+      "sha256": "75372ab952aeca571baa2eabaa7e3dcbd02c17f6db7dcd3c9083b732783c1cae",
+      "owner": "root"
+    },
+    {
+      "path": "tests/integration/po15-catalog.test.mts",
+      "bytes": 7890,
+      "sha256": "67df0e989ed290d6e35f8626acb3342026c03f54eac50788d45d8c70b28dc9cb",
+      "owner": "root"
+    }
+  ]
+}

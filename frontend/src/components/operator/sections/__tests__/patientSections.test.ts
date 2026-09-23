@@ -11,6 +11,8 @@ test('registry lists the core clinical sections', () => {
 
 test('intakeSections returns only intake-available sections', () => {
   assert.ok(intakeSections().every((s) => s.availableDuringIntake));
+  assert.equal(intakeSections().some(section => section.sectionKey === 'dolore'), false);
+  assert.equal(getSection('dolore')?.availableDuringIntake, false);
 });
 
 test('getSection resolves by key', () => {

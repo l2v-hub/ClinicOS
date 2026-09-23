@@ -1,0 +1,17 @@
+{
+  "reviewer": "/root/clinical_forms_source_audit",
+  "sourceManifestSha256": "a8c2d88aa2cdabe1c7ee46bce8895668ed26e8ca23039cdc3877a5b2701d48ca",
+  "sourceTreeSha256": "1c37cd6d5ee8445cf0b92967e3b1610f5ff2a59d8091a9e2643e3dc730324bd9",
+  "inputTreeSha256": "258be0f040d287114b82c8d11852a68838423de21509daa02c307b46dc92f1b2",
+  "sourceFiles": 10,
+  "inputFiles": 475,
+  "openP1P2": 0,
+  "resolvedFinding": {
+    "code": "P2-repeatable-budget-snapshot",
+    "problem": "Historical confirmJob reconciliation can confirm a draft without taking the parent lock when registeredById already exists.",
+    "resolution": "RepeatableRead freezes the count/byte precheck and subsequent pain SELECT in the same read snapshot.",
+    "evidence": "Real confirmJob concurrently confirms the 101st draft after the reader precheck: the current read returns the original 100, the next read returns the overflow discriminator, and both preserve therapies."
+  },
+  "freezeVerificationMessage": "Freeze a8c2d88a… verificato: hash e byte di 10 sorgenti, copertura diff/untracked, 475 input e copertura, entrambi i tree ricalcolati, baseline/branch e release claim tutti coerenti. Inviato esito positivo a root. Attendo binding artefatti finale; non eseguo suite parallele.",
+  "artifactBindingPending": true
+}

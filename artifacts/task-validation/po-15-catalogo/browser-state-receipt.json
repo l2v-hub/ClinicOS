@@ -1,0 +1,20 @@
+{
+  "at": "2026-09-23T07:57:51.823Z",
+  "stateSha256": "9015fb00ec2658c3d1db8f3fe192f43ef9eece8081854d5511e8bb1ac21b6b57",
+  "checks": "Legacy originals/NRS/Tinetti/Braden/intakes unchanged; two separate new legacy records; one idempotent draft; 5 PDF hashes; two isolated NRS print captures",
+  "counts": {
+    "assessments": 8,
+    "finals": 5,
+    "drafts": 3,
+    "documents": 5,
+    "printCaptures": 2
+  },
+  "catalogSecondaryButtonContrast": 15.571806950598452,
+  "limitations": [
+    "NRS print interception checks DOM and cleanup, not physical printing",
+    "Archive multiprint prepared 5 documents/10 pages; physical print not exercised",
+    "Unrelated therapy-slots route absent in preview: GET404 retained",
+    "Harness callback first returned400; corrected signature before successful writes",
+    "Browser late intake change checks visible isolation; requests log records aborted response as null"
+  ]
+}

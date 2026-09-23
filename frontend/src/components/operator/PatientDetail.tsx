@@ -2,11 +2,14 @@ import { intakeDemographicErrors } from '../../lib/intakeDemographics';
 import { birthDateValue, birthSummary, type DemographicField } from '../../lib/patientDemographics';
 import { DemographicsStatus } from '../shared/DemographicsStatus';
 import { PatientIntakeReview } from './PatientIntakeReview';
+import { usePatientIntakeReview } from '../../lib/patientIntakeReview';
 import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { ConsegnaQuickAdd } from './ConsegnaQuickAdd';
 import type { ConsegnaCreate } from '../../lib/consegnaCreation';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
-import type { AssessmentDraftStore } from '../../lib/assessments/assessmentDraftStore';
+import { createAssessmentDraftStore, type AssessmentDraftStore } from '../../lib/assessments/assessmentDraftStore';
+import { assessmentCatalogEntry, type AssessmentEntry } from '../../lib/assessments/assessmentEntry';
+import { AssessmentCatalog } from './assessments/AssessmentCatalog';
 import type { AssessmentTarget } from '../../lib/assessments/assessmentTypes';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import type {
@@ -283,10 +286,17 @@ export function PatientDetail({
   const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));
   const [activeGroup, setActiveGroup] = useState<TabGroup>(() => patientTabGroup(initialTab));
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
-  const [assessmentFocus, setAssessmentFocus] = useState<{ patientId: string; assessment: AssessmentTarget } | null>(null);
+  const [assessmentFocus, setAssessmentFocus] = useState<{ patientId: string; assessment: AssessmentEntry } | null>(null);
+  const [assessmentStore] = useState(() => assessmentDraftStore ?? createAssessmentDraftStore());
+  const [legacyVisits, setLegacyVisits] = useState<Set<TabId>>(() => new Set(initialTab ? [initialTab] : []));
+  const [legacyCreates, setLegacyCreates] = useState<Partial<Record<TabId, { patientId: string; request: string }>>>({});
+  const intakeReview = usePatientIntakeReview(paziente.id, operatoreId, operatoreRole);
+  useEffect(() => () => { if (!assessmentDraftStore) assessmentStore.clear(); }, [assessmentDraftStore, assessmentStore]);
   const [archiveFocus, setArchiveFocus] = useState<{ patientId: string; documentId: string; assessment: AssessmentTarget } | null>(null);
   useEffect(() => {
     if (!initialTab || navigationRequestId === undefined) return;
+    setAssessmentFocus(null);
+    setLegacyVisits(previous => new Set([...previous, initialTab]));
     setTab(resolvePatientTab(initialTab));
     setActiveGroup(patientTabGroup(initialTab));
   }, [initialTab, navigationRequestId]);
@@ -307,6 +317,8 @@ export function PatientDetail({
   const lastTabByGroup = useRef<Partial<Record<TabGroup, TabId>>>({});
 
   function switchTab(tabId: TabId) {
+    if (tabId === 'medicazioni' || tabId === 'contenzioni' || tabId === 'braden')
+      setLegacyVisits(previous => new Set([...previous, tabId]));
     const target = resolvePatientTab(tabId);
     const group = patientTabGroup(target);
     setTab(target);
@@ -315,6 +327,7 @@ export function PatientDetail({
   }
 
   function switchGroup(groupId: TabGroup) {
+    if (groupId === 'moduli') { switchTab('moduli'); return; }
     const group = TAB_GROUPS.find((g) => g.id === groupId);
     if (!group) return;
     setActiveGroup(groupId);
@@ -2455,7 +2468,7 @@ export function PatientDetail({
   }, [activeGroup, tab]);
 
   const activeGroupDefinition = TAB_GROUPS.find((group) => group.id === activeGroup);
-  const hasSectionTabs = (activeGroupDefinition?.tabs.length ?? 0) > 1;
+  const hasSectionTabs = activeGroup !== 'moduli' && (activeGroupDefinition?.tabs.length ?? 0) > 1;
   const patientPanelLabelledBy =
     activeGroup !== 'diario' && hasSectionTabs
       ? `patient-secondary-${tab}`
@@ -2474,11 +2487,7 @@ export function PatientDetail({
       />
 
       <DemographicsStatus value={paziente} onEdit={openProfileEditor} busy={profiloSaving} />
-      <PatientIntakeReview
-        patientId={paziente.id}
-        operatorId={operatoreId}
-        operatorRole={operatoreRole}
-      />
+      <PatientIntakeReview state={intakeReview.state} onRetry={intakeReview.retry} />
 
       {/* Banda allergie/rischi — sempre visibile sotto l'header, su tutti i tab */}
       {(hasAllergie || rischioAlto.length > 0) && (
@@ -2541,6 +2550,7 @@ export function PatientDetail({
       />
       {/* L3 — Sotto-navigazione contestuale del gruppo attivo */}
       {(() => {
+        if (activeGroup === 'moduli') return null;
         if (activeGroup === 'diario') {
           return (
             <div
@@ -2595,7 +2605,15 @@ export function PatientDetail({
           tabIndex={0}
           className="cr-detail-content tab-panel-transition"
         >
+          {activeGroup === 'moduli' && tab !== 'moduli' && <button type="button" className="btn-secondary btn-sm patient-module-return" onClick={() => switchTab('moduli')}>← Tutti i moduli</button>}
           <Suspense fallback={<ClinicalSectionLoading />}>
+            {tab === 'moduli' && <AssessmentCatalog patientId={paziente.id} operatorId={operatoreId} operatorRole={operatoreRole} cartella={cartella} draftStore={assessmentStore}
+              onNrs={() => switchTab('nrs')}
+              onOpen={(module, action, item) => {
+                setAssessmentFocus(module.type ? { patientId: paziente.id, assessment: assessmentCatalogEntry(paziente.id, module.type, action, assessmentStore, item) } : null);
+                if (!module.type && action === 'new') setLegacyCreates(previous => ({ ...previous, [module.tab]: { patientId: paziente.id, request: crypto.randomUUID() } }));
+                switchTab(module.tab);
+              }} />}
             {tab === 'riepilogo' && renderRiepilogo()}
             {(tab === 'profilo' || tab === 'contatti') && renderProfilo()}
             {tab === 'diagnosi' && renderDiagnosi()}
@@ -2695,9 +2713,10 @@ export function PatientDetail({
                 filterBy={diarioFilter}
               />
             )}
-            {tab === 'medicazioni' && (
+            {(tab === 'medicazioni' || legacyVisits.has('medicazioni')) && <div hidden={tab !== 'medicazioni'}>
               <MedicazioniTab
                 key={paziente.id}
+                createRequest={legacyCreates.medicazioni?.patientId === paziente.id ? legacyCreates.medicazioni.request : undefined}
                 cartella={cartella}
                 paziente={paziente}
                 onUpdate={(updates) =>
@@ -2707,15 +2726,17 @@ export function PatientDetail({
                 operatoreId={operatoreId}
                 operatoreRole={operatoreRole}
               />
-            )}
-            {tab === 'contenzioni' && (
+            </div>}
+            {(tab === 'contenzioni' || legacyVisits.has('contenzioni')) && <div hidden={tab !== 'contenzioni'}>
               <ContenzioniTab
+                key={paziente.id}
+                createRequest={legacyCreates.contenzioni?.patientId === paziente.id ? legacyCreates.contenzioni.request : undefined}
                 cartella={cartella}
                 paziente={paziente}
                 onUpdate={upd}
                 operatoreNome={operatoreNome}
               />
-            )}
+            </div>}
             {tab === 'esami-consulenze' && (
               <EsamiConsulenzeTab
                 cartella={cartella}
@@ -2726,28 +2747,32 @@ export function PatientDetail({
                 operatoreRole={operatoreRole}
               />
             )}
-            {tab === 'braden' && (
+            {(tab === 'braden' || legacyVisits.has('braden')) && <div hidden={tab !== 'braden'}>
               <ScalaBradenTab
+                key={paziente.id}
+                createRequest={legacyCreates.braden?.patientId === paziente.id ? legacyCreates.braden.request : undefined}
                 cartella={cartella}
                 paziente={paziente}
                 onUpdate={upd}
                 operatoreNome={operatoreNome}
               />
-            )}
+            </div>}
             {tab === 'nrs' && (
               <PainAssessmentEditor
                 mode="patient-chart"
                 cartella={cartella}
                 paziente={paziente}
-                onUpdate={upd}
-                operatoreNome={operatoreNome}
+                intakeReview={intakeReview.state}
+                onRetryIntake={intakeReview.retry}
                 value={undefined as never}
                 onChange={() => {}}
               />
             )}
             {(tab === 'painad' || tab === 'postural_transfers' || tab === 'tinetti' || tab === 'mna' || tab === 'gds') && (
               <AssessmentWorkspace patient={paziente} operatorId={operatoreId} operatorRole={operatoreRole} operatorName={operatoreNome}
-                type={tab === 'gds' ? 'gds15' : tab} draftStore={assessmentDraftStore} initialAssessment={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessment : undefined}
+                type={tab === 'gds' ? 'gds15' : tab} draftStore={assessmentStore}
+                initialAssessment={assessmentFocus?.patientId === paziente.id && assessmentFocus.assessment.id ? { type: assessmentFocus.assessment.type, id: assessmentFocus.assessment.id } : undefined}
+                initialDraftKey={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessment.localKey : undefined}
                 onOpenArchive={(documentId, assessment) => { setArchiveFocus({ patientId: paziente.id, documentId, assessment }); switchTab('documenti'); }}>
                 {tab === 'tinetti' && <ScalaTinettiTab cartella={cartella} paziente={paziente} />}
               </AssessmentWorkspace>

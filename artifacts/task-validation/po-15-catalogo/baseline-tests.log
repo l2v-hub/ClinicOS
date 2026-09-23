@@ -1,0 +1,94 @@
+✖ catalog returns only five bounded metadata rows, private drafts and explicit access errors (7027.1646ms)
+✖ catalog latest final agrees with current after a late correction of an older assessment (3.5558ms)
+PUT /patients/vitals-qa-anna/cartella → salvata
+✖ NRS legacy remains immutable through Cartella while unrelated updates and omitted fields are accepted (34.1854ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19260.6833
+
+✖ failing tests:
+
+test at tests\integration\po15-catalog.test.mts:1:2006
+✖ catalog returns only five bounded metadata rows, private drafts and explicit access errors (7027.1646ms)
+  AssertionError [ERR_ASSERTION]: {"error":"Valutazione non disponibile","code":"assessment_not_found"}
+  
+  404 !== 200
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po15-catalog.test.mts:22:58)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration\po15-catalog.test.mts:1:3697
+✖ catalog latest final agrees with current after a late correction of an older assessment (3.5558ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(seed)
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po15-catalog.test.mts:37:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\integration\po15-catalog.test.mts:1:5056
+✖ NRS legacy remains immutable through Cartella while unrelated updates and omitted fields are accepted (34.1854ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - [
+  -   {
+  -     aRiposo: 0,
+  -     createdAt: '2026-09-20T06:16:00.000Z',
+  -     data: '2026-09-20',
+  -     id: 'po15-nrs-zero',
+  -     inMovimento: 2,
+  -     note: 'Valore zero esplicito',
+  -     operatore: 'Operatrice storica sintetica',
+  -     ora: '08:15',
+  -     punteggio: 0
+  -   },
+  -   {
+  -     data: '2026-09-19',
+  -     id: 'po15-nrs-invalid',
+  -     note: 'Sentinella precedente, nessuna fascia valida',
+  -     operatore: '',
+  -     punteggio: -1
+  -   },
+  -   {
+  -     id: 'po15-nrs-missing',
+  -     note: 'Dato storico senza punteggio, data o autore'
+  -   }
+  - ]
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po15-catalog.test.mts:50:180)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ { id: 'po15-nrs-zero', ora: '08:15', data: '2026-09-20', note: 'Valore zero esplicito', aRiposo: 0, createdAt: '2026-09-20T06:16:00.000Z', operatore: 'Operatrice storica sintetica', punteggio: 0, inMovimento: 2 }, { id: 'po15-nrs-invalid', data: '2026-09-19', note: 'Sentinella precedente, nessuna fascia valida', operatore: '', punteggio: -1 }, { id: 'po15-nrs-missing', note: 'Dato storico senza punteggio, data o autore' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

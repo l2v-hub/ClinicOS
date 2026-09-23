@@ -1,0 +1,21 @@
+{
+  "task": "PO-15-frontend-evidence",
+  "owner": "/root/po01_frontend_audit",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-ui",
+  "authority": "Root GO after PO14 f445260a live/health200/alias/read-only smoke verified and receipt258f6104 pushed. Root approved aggregate DTO, legacyPainDrafts/legacyPainError pair, eight New entry actions and read-only NRS preservation.",
+  "decision": "allow-scoped-evidence-finalization",
+  "allowedPaths": [
+    "artifacts/task-validation/po-15-catalogo/frontend"
+  ],
+  "ledgerClaim": "PO-15-frontend-evidence",
+  "ledgerClaimant": "agent:codex-po15-frontend:coder",
+  "ledgerClaimedAt": "2026-09-23T07:41:25.896Z",
+  "status": "released",
+  "claimActive": false,
+  "applicationClaimActive": false,
+  "releasedByTool": "mcp__ruflo__claims_release",
+  "releaseOccurredBeforeUtc": "2026-09-23T07:45:05.145Z",
+  "releaseEvidence": "artifacts/task-validation/po-15-catalogo/frontend/claims-evidence-release.json",
+  "sourceStateId": "e6e5cdfe1e5b3c970933e0749e28ee20d6eede47efdaf60af1e25d93e8c6920c",
+  "runtimeSourceId": "fa36a69fd25f736455ecfcdd807cfab0e57d0d13065d59527f3efa08df4b6786"
+}

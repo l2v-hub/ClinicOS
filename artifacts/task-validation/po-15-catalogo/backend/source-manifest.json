@@ -1,0 +1,66 @@
+{
+  "task": "PO-15-backend",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-backend",
+  "branch": "codex/po15-catalog-backend",
+  "baseline": "f445260a4ca4de872c1361ff19fc215179b097fe",
+  "capturedAt": "2026-09-23T07:26:15.114Z",
+  "sourceTreeSha256": "1c37cd6d5ee8445cf0b92967e3b1610f5ff2a59d8091a9e2643e3dc730324bd9",
+  "inputTreeSha256": "258be0f040d287114b82c8d11852a68838423de21509daa02c307b46dc92f1b2",
+  "hashAlgorithm": "SHA256 over sorted path + NUL + byte-SHA256 + LF",
+  "sourcePaths": [
+    {
+      "path": "backend/src/ai/__tests__/intake-nrs-db.test.ts",
+      "bytes": 5892,
+      "sha256": "15f04afaa661d38f6fc93a8fc2d8fc61ac1c736b62931d4ad7d21484fc77296f"
+    },
+    {
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "bytes": 16126,
+      "sha256": "44950e8fbcdf2f0fcfa3d0efb9616a307accdc7de6eeddd004d3075feba1634c"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/catalog-db.test.ts",
+      "bytes": 6264,
+      "sha256": "81cca5bd3881f84ce7d6dcd26223d3d8314a35bc8bf22599541a9f2ea659ccb1"
+    },
+    {
+      "path": "backend/src/assessments/catalog.ts",
+      "bytes": 4753,
+      "sha256": "46e5d50e17bef2ccb943dcd6f1853dc5bd282d169846ca6a35f4e782c360d554"
+    },
+    {
+      "path": "backend/src/intake/__tests__/patient-review-db.test.ts",
+      "bytes": 9602,
+      "sha256": "35a39e0dd46fd71d864a79451baa09611fc9e466be1b626c15e68177a2aac5c6"
+    },
+    {
+      "path": "backend/src/intake/patient-review.ts",
+      "bytes": 3324,
+      "sha256": "ce4e4ee47af76aa1053002bed27e12e6b0c6347fb38cee3fd5fbb790c319fe30"
+    },
+    {
+      "path": "backend/src/patients/__tests__/cartella-nrs-db.test.ts",
+      "bytes": 4569,
+      "sha256": "9980b8d9cd0bd08e4c6a554f098301ca415e676aab7dc3c6ce0bd940147d6d7c"
+    },
+    {
+      "path": "backend/src/patients/cartella-update.ts",
+      "bytes": 3944,
+      "sha256": "15a3a948719fe5fc4ca28eae5c474fed0c2035450a5c42d2206d5ec81e0e6683"
+    },
+    {
+      "path": "backend/src/routes/patient-assessments.ts",
+      "bytes": 3702,
+      "sha256": "14b900d158c4c3b923ebe4c1c71a67bca7c53326b30f4cb565a6e18a403864fb"
+    },
+    {
+      "path": "backend/src/routes/patient-intake-review.ts",
+      "bytes": 945,
+      "sha256": "a6204aeff83178d3615cdb531f388013bb7f4a6daeb22c7b0049af471e954ac3"
+    }
+  ],
+  "excludedUnrelatedDirtyPaths": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-15-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po15-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T07:05:03.174Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T07:05:03.174Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root preparation-only assignment. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po15-catalog-backend baseline f445260a4ca4de872c1361ff19fc215179b097fe branch codex/po15-catalog-backend. Own artifacts/task-validation/po-15-catalogo/backend/** and private backend/node_modules plus read-only root dependency junction for runtime setup. Agree catalog metadata DTO and read-only legacy NRS PUT/import guard contract with frontend. No application source or tests until explicit root GO after verified PO14 live. Preserve protected PowerShell and dependency manifests. No shared runtime writes, commit/push/deploy, ports, online patient writes or delegation.\"\n  },\n  \"message\": \"Issue PO-15-backend-preparation claimed by agent:codex-po15-backend:coder\"\n}"
+    }
+  ]
+}

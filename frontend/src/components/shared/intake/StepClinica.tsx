@@ -9,6 +9,8 @@ import { intakeSections } from '../../operator/sections/patientSections';
 import { DischargeTherapyReview } from './DischargeTherapyReview';
 import type { DischargeTherapyRow } from './dischargeTherapy';
 import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
+import { legacyPainPresent } from '../../../lib/assessments/nrsLegacy';
+import { NrsLegacyContent } from '../../operator/assessments/NrsLegacyContent';
 
 // Maps lowercase intake section keys to the Italian uppercase keys used in sourceReferences.
 const SECTION_KEY_TO_ITALIAN: Record<string, string> = {
@@ -139,6 +141,7 @@ export function StepClinica({
           </span>
         </label>
       </div>
+      {legacyPainPresent(data) && <NrsLegacyContent value={data.dolore} title="Dati dolore precedenti della bozza" intake />}
       {sections.map((def) => {
         const { sectionKey, title, component: Editor } = def;
 

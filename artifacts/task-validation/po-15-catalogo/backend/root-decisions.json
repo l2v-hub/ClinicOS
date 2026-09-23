@@ -1,0 +1,17 @@
+{
+  "authority": "Explicit messages from /root",
+  "baseline": "f445260a4ca4de872c1361ff19fc215179b097fe",
+  "implementationGoReceived": true,
+  "goBasis": "PO14 f445260a published, health200, Vercel READY alias and read-only smoke verified by root; release receipt committed258f6104.",
+  "publicationAuthorizedToWorker": false,
+  "catalogDto": "Original five-item metadata-only proposal, exact types/order, canonical ISO dates, own-draft count/null coherence.",
+  "nrsGuard": "Strict presence and JSON equality for NRS in PUT/import. Preserve published Tinetti import-empty exception only for Tinetti. Vital-sign NRS unchanged.",
+  "legacyPainReview": {
+    "endpoint": "GET /patients/:id/intake-review",
+    "success": "HTTP200: legacyPainDrafts=array, legacyPainError=null",
+    "overflow": "HTTP200: legacyPainDrafts=null, legacyPainError=intake_review_legacy_pain_too_large",
+    "bounds": { "draftsWithPain": 100, "aggregatePainJsonUtf8Bytes": 2097152 },
+    "preservation": "Original JSON, no truncation; deferredTherapies and Cartella NRS remain accessible. Exclude dolore from therapy data projection before reading pain.",
+    "supersedes": "Earlier global413 and legacyPainDraftsError-object proposals were preparatory only and are not the final contract."
+  }
+}

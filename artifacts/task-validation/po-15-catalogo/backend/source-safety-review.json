@@ -1,0 +1,78 @@
+{
+  "sourceTreeSha256": "258be0f040d287114b82c8d11852a68838423de21509daa02c307b46dc92f1b2",
+  "sourceManifestSha256": "a8c2d88aa2cdabe1c7ee46bce8895668ed26e8ca23039cdc3877a5b2701d48ca",
+  "recordedAt": "2026-09-23T07:26:15.114Z",
+  "newSourceFiles": [
+    {
+      "path": "backend/src/ai/__tests__/intake-nrs-db.test.ts",
+      "lines": 159
+    },
+    {
+      "path": "backend/src/assessments/__tests__/catalog-db.test.ts",
+      "lines": 164
+    },
+    {
+      "path": "backend/src/assessments/catalog.ts",
+      "lines": 126
+    },
+    {
+      "path": "backend/src/intake/__tests__/patient-review-db.test.ts",
+      "lines": 267
+    },
+    {
+      "path": "backend/src/intake/patient-review.ts",
+      "lines": 81
+    },
+    {
+      "path": "backend/src/patients/__tests__/cartella-nrs-db.test.ts",
+      "lines": 117
+    }
+  ],
+  "newSourceBelow500Lines": true,
+  "scopedStaticChecks": {
+    "patterns": [
+      "dynamic execution",
+      "unsafe Prisma raw SQL call",
+      "external fetch",
+      "private key block"
+    ],
+    "findings": [],
+    "scope": [
+      "backend/src/ai/upload/confirm-service.ts",
+      "backend/src/assessments/catalog.ts",
+      "backend/src/intake/patient-review.ts",
+      "backend/src/patients/cartella-update.ts",
+      "backend/src/routes/patient-assessments.ts",
+      "backend/src/routes/patient-intake-review.ts"
+    ]
+  },
+  "manualReview": [
+    "Catalogo autorizzato dal patient scope e lock; query parametrizzata, cinque righe di soli metadati, nessun JSON clinico o dato PDF.",
+    "Finali terminali ordinati per data clinica/creazione/id; bozze solo autore corrente, conteggio esatto prima del limite e coerenza count/null.",
+    "NRS Cartella protetto sotto lock in PUT e import: omissione preservata, uguaglianza JSON profonda, presenza/null/array vuoto distinti.",
+    "Import valida prima entrambi gli storici e li rimuove dal merge: niente duplicazione; eccezione Tinetti assente+[] mantenuta solo per Tinetti.",
+    "Dolore ingresso conservato come JSON originale da sole bozze confermate del paziente autorizzato; proiezione terapie esclude dolore prima della materializzazione.",
+    "Precheck massimo 100 bozze e 2097152 byte aggregati prima della SELECT dolore; overflow locale HTTP200 conserva terapie e documenti.",
+    "RepeatableRead preserva lo snapshot del budget anche con riconciliazione storica confirmJob concorrente; caso reale coperto dal test di regressione."
+  ],
+  "independentReview": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "sourceManifestSha256": "a8c2d88aa2cdabe1c7ee46bce8895668ed26e8ca23039cdc3877a5b2701d48ca",
+    "sourceTreeSha256": "1c37cd6d5ee8445cf0b92967e3b1610f5ff2a59d8091a9e2643e3dc730324bd9",
+    "inputTreeSha256": "258be0f040d287114b82c8d11852a68838423de21509daa02c307b46dc92f1b2",
+    "sourceFiles": 10,
+    "inputFiles": 475,
+    "openP1P2": 0,
+    "resolvedFinding": {
+      "code": "P2-repeatable-budget-snapshot",
+      "problem": "Historical confirmJob reconciliation can confirm a draft without taking the parent lock when registeredById already exists.",
+      "resolution": "RepeatableRead freezes the count/byte precheck and subsequent pain SELECT in the same read snapshot.",
+      "evidence": "Real confirmJob concurrently confirms the 101st draft after the reader precheck: the current read returns the original 100, the next read returns the overflow discriminator, and both preserve therapies."
+    },
+    "freezeVerificationMessage": "Freeze a8c2d88a… verificato: hash e byte di 10 sorgenti, copertura diff/untracked, 475 input e copertura, entrambi i tree ricalcolati, baseline/branch e release claim tutti coerenti. Inviato esito positivo a root. Attendo binding artefatti finale; non eseguo suite parallele.",
+    "artifactBindingPending": true
+  },
+  "limitations": [
+    "La scansione statica circoscritta e i test di autorizzazione non sono una scansione CVE delle dipendenze né una validazione clinica."
+  ]
+}

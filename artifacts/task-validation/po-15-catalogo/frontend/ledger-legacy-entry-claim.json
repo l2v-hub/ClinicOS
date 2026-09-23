@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-15-frontend-legacy-entry\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po15-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T07:24:57.733Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T07:24:57.733Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly requires catalog Nuova compilazione for Medicazioni, Contenzioni and Braden. Same sole writer in C:/Workspace/ClinicOSHouse-worktrees/po15-catalog-ui. Exact additional source paths: frontend/src/components/operator/cartella/MedicazioniTab.tsx, frontend/src/components/operator/cartella/ContenzioniTab.tsx, frontend/src/components/operator/cartella/ScalaBradenTab.tsx. Add optional entry intent to open/focus existing form without saving or clinical defaults; default behavior unchanged, preserve applicable local drafts. Tests/evidence under existing PO15 frontend implementation claim. No additional authority, dependencies, servers or publication.\"\n  },\n  \"message\": \"Issue PO-15-frontend-legacy-entry claimed by agent:codex-po15-frontend:coder\"\n}"
+    }
+  ]
+}

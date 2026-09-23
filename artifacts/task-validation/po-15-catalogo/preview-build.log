@@ -1,0 +1,53 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 389 modules transformed.
+rendering chunks...
+computing gzip size...
+artifacts/task-validation/po-15-catalogo/preview/build/index.html                                       0.53 kB │ gzip:   0.33 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/pdf.worker.min-CHFwMXne.mjs           1,262.39 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/PatientArchivePreview-BY-O_bqx.css        0.68 kB │ gzip:   0.37 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/NarrativeSectionsTab-Cy2K2aEq.css         0.80 kB │ gzip:   0.37 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/CameraCapture-BZrPNFqj.css                1.85 kB │ gzip:   0.74 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/Tinetti-PvAQNSKS.css                      1.90 kB │ gzip:   0.60 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ClinicalTable-Cjulftmw.css                3.71 kB │ gzip:   0.99 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/AssessmentWorkspace-BXMWzXup.css          8.38 kB │ gzip:   2.00 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/DocumentiTab-DJY500eY.css                 8.61 kB │ gzip:   1.87 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/TherapyEditor-Bl_xva3D.css                9.05 kB │ gzip:   2.21 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/TerapiaFarmacologicaTab-Df1m973H.css      9.69 kB │ gzip:   2.28 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/index-DM9JmlZH.css                      309.60 kB │ gzip:  52.92 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/LoadErrorState-B2W9g7oM.js                0.33 kB │ gzip:   0.24 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/VitalSignsEditor-DzbSapzJ.js              1.18 kB │ gzip:   0.61 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/clinicalHistory-Dc8Sh74T.js               1.85 kB │ gzip:   0.87 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/usePatientDocuments-Bb4j57Wc.js           2.77 kB │ gzip:   1.21 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/renderArchivePrint-C-tHxJOX.js            2.82 kB │ gzip:   1.30 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ScalaNRSTab-DtWh2sYL.js                   3.53 kB │ gzip:   1.53 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/patientDocumentArchive-Clvncykr.js        3.67 kB │ gzip:   1.51 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ScalaTinettiTab-BjbE2uoq.js               3.70 kB │ gzip:   1.50 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/AnamnesisEditor-RdcIzg2u.js               3.74 kB │ gzip:   1.53 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/PainAssessmentEditor-DUrDRrY6.js          4.10 kB │ gzip:   1.78 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ClinicalAttachments-fX0puvBx.js           4.15 kB │ gzip:   1.77 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/InlineEditableField-h6bJO9fd.js           5.67 kB │ gzip:   2.00 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ClinicalTable-BB7GNiow.js                 6.00 kB │ gzip:   2.19 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/EsamiConsulenzeTab-DxcHiy9w.js            7.52 kB │ gzip:   2.51 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/jsx-runtime-QBU3mtPP.js                   8.43 kB │ gzip:   3.21 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/DiarioPazienteTab-BYN-teEj.js            11.74 kB │ gzip:   3.94 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/PatientArchivePreview-RzAcGNS5.js        12.15 kB │ gzip:   4.47 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/InvioPSModal-B7doaARV.js                 12.89 kB │ gzip:   3.40 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/CameraCapture-CBEgvXqJ.js                13.33 kB │ gzip:   5.03 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ScalaBradenTab-DFyeCyEQ.js               13.36 kB │ gzip:   4.08 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/NarrativeSectionsTab-DtQVBg02.js         14.10 kB │ gzip:   5.09 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ParametriTab-BUFMwMjs.js                 14.14 kB │ gzip:   4.58 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/PresaInCaricoTab-DEAHsfqT.js             20.98 kB │ gzip:   3.96 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/MedicazioniTab-C4A-EGO5.js               24.83 kB │ gzip:   6.13 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/ContenzioniTab-ClIlr2HX.js               24.84 kB │ gzip:   5.39 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/DocumentiTab-B4k4eFTG.js                 26.51 kB │ gzip:   8.25 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/TherapyEditor-DG7_JXT9.js                36.68 kB │ gzip:  10.72 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/DimissioneTab-DgslDa4a.js                42.91 kB │ gzip:   7.43 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/TerapiaFarmacologicaTab-BXemGhUa.js      51.01 kB │ gzip:  14.32 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/AssessmentWorkspace-DHckt6ag.js          67.01 kB │ gzip:  16.52 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/DocumentPreview-BW1kUAXB.js             239.89 kB │ gzip:  61.24 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/index-BkA-ttrM.js                       414.12 kB │ gzip: 121.08 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/patientDemographics-Dj4Yyz7c.js         426.41 kB │ gzip: 123.12 kB
+artifacts/task-validation/po-15-catalogo/preview/build/assets/pdf-BG4FCu9Z.js                         427.30 kB │ gzip: 127.39 kB
+
+✓ built in 1.11s

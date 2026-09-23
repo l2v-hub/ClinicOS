@@ -1,0 +1,29 @@
+{
+  "checks":"Backend74/frontend173/rootHTTP4 PASS; builds/scan PASS; review manifests verified; eight modules, legacy new/edit guards, draft retry/isolation, NRS single print cleanup, archive5 types/multiprint10 pages, responsive390/768/1262; limits in validation-report.md",
+  "scope":"PO15 backend and frontend from immutable commit, no new migration; AI runtime unchanged",
+  "rootSources":["tests/fixtures/po15-catalog.mjs","tests/integration/po15-catalog.test.mts"],
+  "evidenceDirectories":["artifacts/task-validation/po-15-catalogo/qa-evidence"],
+  "evidencePaths":[
+    "artifacts/task-validation/po-15-catalogo/task-contract.md",
+    "artifacts/task-validation/po-15-catalogo/baseline-observation.md",
+    "artifacts/task-validation/po-15-catalogo/baseline-tests.log",
+    "artifacts/task-validation/po-15-catalogo/http-tests-root.log",
+    "artifacts/task-validation/po-15-catalogo/http-tests-harness-diagnostic.log",
+    "artifacts/task-validation/po-15-catalogo/backend-build-root.log",
+    "artifacts/task-validation/po-15-catalogo/frontend-build-root.log",
+    "artifacts/task-validation/po-15-catalogo/secret-scan.log",
+    "artifacts/task-validation/po-15-catalogo/preview-build.log",
+    "artifacts/task-validation/po-15-catalogo/preview-build-manifest.json",
+    "artifacts/task-validation/po-15-catalogo/browser-state-receipt.json",
+    "artifacts/task-validation/po-15-catalogo/verify-browser-state.mjs",
+    "artifacts/task-validation/po-15-catalogo/validation-report.md",
+    "artifacts/task-validation/po-15-catalogo/review-notes.md",
+    "artifacts/task-validation/po-15-catalogo/preview/main.tsx",
+    "artifacts/task-validation/po-15-catalogo/preview/server.mjs",
+    "artifacts/task-validation/po-15-catalogo/preview/build.mjs",
+    "artifacts/task-validation/po-15-catalogo/preview/index.html",
+    "artifacts/task-validation/po-15-catalogo/preview/legacy-records.mjs",
+    "artifacts/task-validation/po-15-catalogo/preview/synthetic-state.json",
+    "docs/product/stato-esecuzione-piano-2026-09-22.md"
+  ]
+}

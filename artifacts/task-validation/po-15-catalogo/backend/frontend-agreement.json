@@ -1,0 +1,8 @@
+{
+  "agreed": true,
+  "frontend": "/root/po01_frontend_audit",
+  "backendContractSha256": "02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23",
+  "byteReviewConfirmed": true,
+  "message": "Letto e copiato byte-esatto backend-contract.md: confermo accordo SHA256 02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23. FE procede con DTO catalogo e coppia legacyPainDrafts/legacyPainError root, terapie/storico separati.",
+  "scope": "Five-row metadata-only catalog, strict NRS guards and preserved Tinetti behavior, read-only retained pain JSON with exact success/overflow discriminator and100draft/2MiB bounds."
+}

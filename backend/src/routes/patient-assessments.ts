@@ -11,6 +11,7 @@ import { listAssessments } from '../assessments/history.js';
 import { retryAssessmentPdf } from '../assessments/pdf-service.js';
 import { bodyObject } from '../assessments/input.js';
 import { currentAssessment } from '../assessments/current.js';
+import { assessmentCatalog } from '../assessments/catalog.js';
 import { attestAssessment, listAttestations } from '../assessments/attestations.js';
 
 const router = Router();
@@ -31,6 +32,13 @@ const handle = (action: Action) => async (req: AuthedRequest, res: Response) => 
 };
 const patient = (req: AuthedRequest) => String(req.params.patientId);
 const id = (req: AuthedRequest) => String(req.params.id);
+router.get(
+  '/:patientId/assessments/catalog',
+  requireOperator,
+  handle(async (req, res) => {
+    res.json(await assessmentCatalog(patient(req), req.query, req.operator!));
+  }),
+);
 router.get(
   '/:patientId/assessments/current',
   requireOperator,

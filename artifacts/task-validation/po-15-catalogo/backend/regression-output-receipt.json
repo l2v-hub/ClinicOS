@@ -1,0 +1,152 @@
+{
+  "sourceTreeSha256": "258be0f040d287114b82c8d11852a68838423de21509daa02c307b46dc92f1b2",
+  "databaseClosed": true,
+  "sourceApplicationUnchanged": true,
+  "reason": "Existing regression tests always export PDF fixtures; empty QA directory resolves to worktree root instead of disabling exports.",
+  "action": "Moved only the 16 known generated files to the private regression-output directory, with exact bytes preserved and no overwritten destination.",
+  "executedRunner": {
+    "path": "run-focused-tests.executed.mjs",
+    "sha256": "34386de66efdf09eacfd46697bf8969680c1a8469e8b303b26b10c6c7e16ef8d"
+  },
+  "reusableRunner": {
+    "path": "run-focused-tests.mjs",
+    "sha256": "ca45671f0289e423a77da2efaeaf552abc63078328933761a4cccf3132c30c5b",
+    "change": "Only five export environment values now name the private artifact directory.",
+    "rerunRequired": false
+  },
+  "pdfFiles": 11,
+  "snapshotFiles": 5,
+  "files": [
+    {
+      "formerPath": "gds15-long.pdf",
+      "path": "regression-output/gds15-long.pdf",
+      "bytes": 29925,
+      "sha256": "b58551cf3a249c335edafd4d07643ad2f6580aece276762b5e06ddaca6f5235c",
+      "createdAt": "2026-09-23T07:32:17.718Z",
+      "modifiedAt": "2026-09-23T07:32:17.718Z"
+    },
+    {
+      "formerPath": "gds15-normal.pdf",
+      "path": "regression-output/gds15-normal.pdf",
+      "bytes": 23642,
+      "sha256": "8ac425bbe1a5f4176a1b143098937741f19d72ee11493df14e9e643632067066",
+      "createdAt": "2026-09-23T07:32:17.025Z",
+      "modifiedAt": "2026-09-23T07:32:17.029Z"
+    },
+    {
+      "formerPath": "gds15-long.snapshot.json",
+      "path": "regression-output/gds15-long.snapshot.json",
+      "bytes": 9330,
+      "sha256": "1c0fe9289021a3d865b16b62df199ab9c76f7cdf821efa5665bb3dd44d3d3bfc",
+      "createdAt": "2026-09-23T07:32:17.719Z",
+      "modifiedAt": "2026-09-23T07:32:17.719Z"
+    },
+    {
+      "formerPath": "gds15-normal.snapshot.json",
+      "path": "regression-output/gds15-normal.snapshot.json",
+      "bytes": 4392,
+      "sha256": "c1c35f0c77cb423b444138c47e9256b83f0bfed7bcc1db611054cf2a39beb16c",
+      "createdAt": "2026-09-23T07:32:17.029Z",
+      "modifiedAt": "2026-09-23T07:32:17.029Z"
+    },
+    {
+      "formerPath": "mna-full-long.pdf",
+      "path": "regression-output/mna-full-long.pdf",
+      "bytes": 35022,
+      "sha256": "5ab2fbf06aab6f3af3a40fbc9eb8acd32ee76cf32a8b4f95367426d4cd1a9a76",
+      "createdAt": "2026-09-23T07:32:48.739Z",
+      "modifiedAt": "2026-09-23T07:32:48.740Z"
+    },
+    {
+      "formerPath": "mna-full-normal.pdf",
+      "path": "regression-output/mna-full-normal.pdf",
+      "bytes": 29154,
+      "sha256": "f7b58ae1d0bb2fb444f1e0a8b3b70fe5ca4a051f7abebb785be9bd0b718e99d4",
+      "createdAt": "2026-09-23T07:32:48.095Z",
+      "modifiedAt": "2026-09-23T07:32:48.095Z"
+    },
+    {
+      "formerPath": "mna-screening-partial.pdf",
+      "path": "regression-output/mna-screening-partial.pdf",
+      "bytes": 29062,
+      "sha256": "a103cb0b2f4fa41ed8ef4c879830b7afa38a6f79cd1815158e116fd47875ac45",
+      "createdAt": "2026-09-23T07:32:49.375Z",
+      "modifiedAt": "2026-09-23T07:32:49.375Z"
+    },
+    {
+      "formerPath": "mna-full-long.snapshot.json",
+      "path": "regression-output/mna-full-long.snapshot.json",
+      "bytes": 18576,
+      "sha256": "9fabb851dc5b7040ca97df6a92061b7e2cbe6982ef174ab42366f570cca765bb",
+      "createdAt": "2026-09-23T07:32:48.742Z",
+      "modifiedAt": "2026-09-23T07:32:48.743Z"
+    },
+    {
+      "formerPath": "mna-full-normal.snapshot.json",
+      "path": "regression-output/mna-full-normal.snapshot.json",
+      "bytes": 9216,
+      "sha256": "21104966a0273c37a1f424e0872299058d18d692345b855a93200227aa2a4730",
+      "createdAt": "2026-09-23T07:32:48.095Z",
+      "modifiedAt": "2026-09-23T07:32:48.095Z"
+    },
+    {
+      "formerPath": "mna-screening-partial.snapshot.json",
+      "path": "regression-output/mna-screening-partial.snapshot.json",
+      "bytes": 9056,
+      "sha256": "81cc455a96b1dede254ae74cd7ce0698eb1467abbece5b8c8c81b589969d2387",
+      "createdAt": "2026-09-23T07:32:49.383Z",
+      "modifiedAt": "2026-09-23T07:32:49.383Z"
+    },
+    {
+      "formerPath": "painad-long.pdf",
+      "path": "regression-output/painad-long.pdf",
+      "bytes": 22084,
+      "sha256": "20808b0d92c2a70fd57dc9ac7cfad91efc86a1ebb4429c23de0d253b65c4e89f",
+      "createdAt": "2026-09-23T07:34:28.577Z",
+      "modifiedAt": "2026-09-23T07:34:28.577Z"
+    },
+    {
+      "formerPath": "painad-normal.pdf",
+      "path": "regression-output/painad-normal.pdf",
+      "bytes": 18942,
+      "sha256": "14a0aabe80017e01041b24d5c9f2f9c20b1e497f477b682e4f375c2139c3fca9",
+      "createdAt": "2026-09-23T07:34:28.577Z",
+      "modifiedAt": "2026-09-23T07:34:28.577Z"
+    },
+    {
+      "formerPath": "tinetti-long.pdf",
+      "path": "regression-output/tinetti-long.pdf",
+      "bytes": 28703,
+      "sha256": "6c4cecf34872c698783047a126b3f3d7f7ca6c810cf44c8b22033fe857328da1",
+      "createdAt": "2026-09-23T07:33:21.395Z",
+      "modifiedAt": "2026-09-23T07:33:21.395Z"
+    },
+    {
+      "formerPath": "tinetti-normal.pdf",
+      "path": "regression-output/tinetti-normal.pdf",
+      "bytes": 22713,
+      "sha256": "07eaa7edcde9ea36dac06f3eda2f9c2424751d1016ed68923fe6c42a9c8d7d49",
+      "createdAt": "2026-09-23T07:33:21.395Z",
+      "modifiedAt": "2026-09-23T07:33:21.395Z"
+    },
+    {
+      "formerPath": "transfers-long.pdf",
+      "path": "regression-output/transfers-long.pdf",
+      "bytes": 24915,
+      "sha256": "36ec65c36851dd4e237087ca7f77fee6a0888bc99d88db6f03527781acc4541c",
+      "createdAt": "2026-09-23T07:34:39.657Z",
+      "modifiedAt": "2026-09-23T07:34:39.657Z"
+    },
+    {
+      "formerPath": "transfers-normal.pdf",
+      "path": "regression-output/transfers-normal.pdf",
+      "bytes": 19421,
+      "sha256": "2c13dfda7d30ce81e072bee6f2786405d4e67593c63422277f840d509a514ef3",
+      "createdAt": "2026-09-23T07:34:39.657Z",
+      "modifiedAt": "2026-09-23T07:34:39.657Z"
+    }
+  ],
+  "visuallyInspected": false,
+  "includedInHandoff": false,
+  "limitation": "Renderer and font source are unchanged; these are existing regression outputs, not a new PO15 visual QA claim."
+}

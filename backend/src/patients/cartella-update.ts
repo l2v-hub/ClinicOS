@@ -30,9 +30,12 @@ function jsonEqual(left: unknown, right: unknown): boolean {
   );
 }
 /** Call only after locking the patient and existing Cartella row in the write transaction. */
-export function preserveTinettiHistory(
+function preserveLegacyHistory(
   current: unknown,
   incoming: Record<string, unknown>,
+  key: 'valutazioniTinetti' | 'valutazioniNRS',
+  label: 'Tinetti' | 'NRS',
+  code: string,
   allowEmptyWhenAbsent = false,
 ) {
   const output = { ...incoming };
@@ -40,26 +43,35 @@ export function preserveTinettiHistory(
     !!current &&
     typeof current === 'object' &&
     !Array.isArray(current) &&
-    Object.hasOwn(current, 'valutazioniTinetti');
-  const legacy = hasLegacy ? (current as Record<string, unknown>).valutazioniTinetti : undefined;
-  if (
-    allowEmptyWhenAbsent &&
-    !hasLegacy &&
-    Array.isArray(output.valutazioniTinetti) &&
-    output.valutazioniTinetti.length === 0
-  )
-    delete output.valutazioniTinetti;
-  if (
-    Object.hasOwn(output, 'valutazioniTinetti') &&
-    (!hasLegacy || !jsonEqual(output.valutazioniTinetti, legacy))
-  )
+    Object.hasOwn(current, key);
+  const legacy = hasLegacy ? (current as Record<string, unknown>)[key] : undefined;
+  if (allowEmptyWhenAbsent && !hasLegacy && Array.isArray(output[key]) && output[key].length === 0)
+    delete output[key];
+  if (Object.hasOwn(output, key) && (!hasLegacy || !jsonEqual(output[key], legacy)))
     throw new CartellaUpdateError(
-      'Lo storico Tinetti precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.',
+      `Lo storico ${label} precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.`,
       409,
-      'tinetti_legacy_read_only',
+      code,
     );
-  if (hasLegacy) output.valutazioniTinetti = legacy;
+  if (hasLegacy) output[key] = legacy;
   return output;
+}
+export function preserveTinettiHistory(
+  current: unknown,
+  incoming: Record<string, unknown>,
+  allowEmptyWhenAbsent = false,
+) {
+  return preserveLegacyHistory(
+    current,
+    incoming,
+    'valutazioniTinetti',
+    'Tinetti',
+    'tinetti_legacy_read_only',
+    allowEmptyWhenAbsent,
+  );
+}
+export function preserveNrsHistory(current: unknown, incoming: Record<string, unknown>) {
+  return preserveLegacyHistory(current, incoming, 'valutazioniNRS', 'NRS', 'nrs_legacy_read_only');
 }
 export async function saveCartella(patientId: string, value: unknown, actor: Operator) {
   if (!value || typeof value !== 'object' || Array.isArray(value))
@@ -79,7 +91,10 @@ export async function saveCartella(patientId: string, value: unknown, actor: Ope
       throw new CartellaUpdateError('Paziente non trovato', 404, 'patient_not_found');
     const rows = await tx.$queryRaw<Array<{ data: Prisma.JsonValue }>>`
       SELECT data FROM "Cartella" WHERE "patientId" = ${patientId} FOR UPDATE`;
-    const protectedData = preserveTinettiHistory(rows[0]?.data, clinicalData);
+    const protectedData = preserveNrsHistory(
+      rows[0]?.data,
+      preserveTinettiHistory(rows[0]?.data, clinicalData),
+    );
     return tx.cartella.upsert({
       where: { patientId },
       create: { patientId, data: protectedData as Prisma.InputJsonObject },

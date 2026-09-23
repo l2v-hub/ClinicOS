@@ -1,0 +1,45 @@
+✔ catalog is exactly five empty metadata rows and rejects query/scope without writes (199.529ms)
+✔ all five forms use terminal clinical order and hide colleague drafts (382.241ms)
+✔ exact counts exceed history page size; one metadata query returns no clinical JSON (95.7971ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11672.7983
+✔ NRS omission/equality preserves both histories while vital-sign NRS remains writable (216.8653ms)
+✔ absent/null/empty remain distinct and out-of-scope writes are rejected (21.5714ms)
+✔ NRS comparison reads the locked latest history before permitting an update (50.8945ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11306.772
+✔ existing import rejects NRS mutation atomically and preserves both legacy arrays on equal/omitted input (246.128ms)
+✔ NRS import has no absent/empty exception and rejected new-patient writes fully roll back (55.2285ms)
+✔ confirming an old intake draft retains pain JSON without promoting it to Cartella (9.9221ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11338.4573
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (307.4691ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (67.3456ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (270.9179ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (150.5052ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12072.7591

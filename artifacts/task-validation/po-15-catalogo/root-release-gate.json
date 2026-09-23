@@ -1,0 +1,970 @@
+{
+  "decision": "ALLOW_RELEASE",
+  "authorization": "User approved PO01–PO16, commit/push and deploy",
+  "sourceStateId": "4baa6d98559f139f3aa487881d65ae04974471fdbd247bbe807c7a6045e9adf0",
+  "at": "2026-09-23T07:58:42.112Z",
+  "checks": "Backend74/frontend173/rootHTTP4 PASS; builds/scan PASS; review manifests verified; eight modules, legacy new/edit guards, draft retry/isolation, NRS single print cleanup, archive5 types/multiprint10 pages, responsive390/768/1262; limits in validation-report.md",
+  "scope": "PO15 backend and frontend from immutable commit, no new migration; AI runtime unchanged",
+  "files": [
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/finalize-root.mjs",
+      "bytes": 3719,
+      "sha256": "b4911183bf0925f70ba9da27a805aea30cf5d8fe1f34d7e2ae5daf26f98ace7a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend-build-root.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend-integration.json",
+      "bytes": 1952,
+      "sha256": "ffa3f4d2c4ce2a473df3619404efc7e089b325d36ef1e58670df2aab3a841c2b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/artifact-manifest.json",
+      "bytes": 12716,
+      "sha256": "29251b73501cbb364af531a054dcd623cc451bac3854ebb58419f92c3f39dada"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/backend-contract.md",
+      "bytes": 8297,
+      "sha256": "02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/benchmark-catalog.mts",
+      "bytes": 5981,
+      "sha256": "7785ab54a948fab387b9c08bd11393196e717ef92586e0d9eb2e6107b4aea4ca"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/benchmark-catalog.ts",
+      "bytes": 5981,
+      "sha256": "7785ab54a948fab387b9c08bd11393196e717ef92586e0d9eb2e6107b4aea4ca"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/build-fonts.log",
+      "bytes": 60,
+      "sha256": "2502ef00b7addbf9c894176a433b4a165f7736f2f0ff3387ed18f9bc7e868060"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/catalog-benchmark-run.json",
+      "bytes": 7463,
+      "sha256": "3755ec9c13cec11cf18288a0e8d55fc7c18b5329326d5ee8e2b94a55468ed17b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/catalog-benchmark.json",
+      "bytes": 3042,
+      "sha256": "990398b5f283adaa0337954afe7e44dbfa541c150d548b3f6a07473519fcd17b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/catalog-benchmark.log",
+      "bytes": 231,
+      "sha256": "0143db47b20b629dc7dd5d057ce51a94cddb49e8db31455c16906b88a47a6ac1"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/catalog-contract-proposal.snapshot.md",
+      "bytes": 1826,
+      "sha256": "cacbf3edb27e8b17402c759cea6c08a25bffd3069d47d8cec3a6598f0c401000"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/catalog-focused-tests.json",
+      "bytes": 7907,
+      "sha256": "0e04bae1b23e4088e2c5368c1ff563253eff2e11ddaa015bc2a36d066df5af11"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/catalog-focused-tests.log",
+      "bytes": 1781,
+      "sha256": "1349d968d3e6cf32ef5376e6868a0ab117debad7bac3627f5c42f384fefab5ba"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/catalog-test-source-manifest.json",
+      "bytes": 63575,
+      "sha256": "e1168043f96c7513c4e77c29a098bee04d31f72c0154806edd66d26141aa218c"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/claims-evidence-release.json",
+      "bytes": 1755,
+      "sha256": "a1b82d2796a504f95f08477d122669271360b63a12a139b817dd91a6dc6b790e"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/claims-evidence.json",
+      "bytes": 1206,
+      "sha256": "fc747df927093a23945ad00f7edd144476c177babdddc01577129a5153cfd2b3"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/claims-implementation.json",
+      "bytes": 1620,
+      "sha256": "8882a70f0df8bf2cc3e5bd7079c27ce6545f521f406505e5c4e124d79500397a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/claims-preparation-release.json",
+      "bytes": 1626,
+      "sha256": "a6c85060ea0be8c92d5fd8d76a6b05764814ff2307f211010df74342251daa55"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/claims-preparation.json",
+      "bytes": 1242,
+      "sha256": "3fd67363e44262e1a08b79311835a0ca835a83cd316f5a3124012bbc419b1155"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/claims-source-release.json",
+      "bytes": 2024,
+      "sha256": "fa03d0adc9581b882dc4639296828984f0bf01f8dded1a4947a47912e591e182"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/contract-provenance.json",
+      "bytes": 1583,
+      "sha256": "293a1dbe0c99bdc82268908fb30c4bfcc13fa5fd3f67f586fda9ec68c65c89fa"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/diff-check.log",
+      "bytes": 535,
+      "sha256": "fea6d328f29daf022ea9aebd9772c0cadc91ea671cb821a06c1fa6b24a14570a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/execution-sessions.json",
+      "bytes": 1211,
+      "sha256": "383505c74c4b04e6ff6f67d743a511655c9e2512eb6a4dd347e15d8b307e6198"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/finalize-evidence.mjs",
+      "bytes": 23735,
+      "sha256": "5a5db4596384da132a82ec8ba776a70238f5de4b555cf5a2c4640d7f092a62b6"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/finalize-preparation.mjs",
+      "bytes": 6172,
+      "sha256": "b346073c65314f645c3b45b60728ae869d3340b40bfb7a555b5975f56e464310"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/focused-tests.json",
+      "bytes": 10315,
+      "sha256": "04ccbe8568c0cdd0ce8442f97618d25e6aa2c7866f7f6b7e9ef3742635cdf2b7"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/focused-tests.log",
+      "bytes": 10777,
+      "sha256": "a102a7482ac8ef9cf3fe656c3918771b916efbca69ef91047f788b95e21b93e0"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/font-provenance.json",
+      "bytes": 1681,
+      "sha256": "4366b853cec838537c44337f55a77eb96f6778ea2596295ee952122fc002a010"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/freeze-source.mjs",
+      "bytes": 2730,
+      "sha256": "73a1cb3721c106fd765ad423a4a313aebeeea7b6015ca7e81451a6fb4d02bfdd"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/frontend-agreement.json",
+      "bytes": 639,
+      "sha256": "c6681c43ab567fba93b0572ffd7e37d8e5a22498a21f27bb7bfd6b0343b8663e"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/handoff.md",
+      "bytes": 1990,
+      "sha256": "9e6c13297f2b163199d063da43cfa5eebba207c1a61d63bd416c746d66db358b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/implementation-plan.md",
+      "bytes": 2318,
+      "sha256": "cd620ee3129d8cb190edba1211781d2df44062faecf1002c3ad3200debd80247"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/implementation-receipt.json",
+      "bytes": 31048,
+      "sha256": "4ec9fffaeb8cbd9195912c7facdc760d29a28a04ebb925fed7728b2605e41b8b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/implementation-session.json",
+      "bytes": 1564,
+      "sha256": "225bf8c2dcd602cc895c47e339bd9925ba3bd52826bb40df2f5eeb47bcce2de8"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/independent-source-review.json",
+      "bytes": 1290,
+      "sha256": "84fa0be5f6cf2064058a22e80ff6774b2072a24441fcd7759ce02c8d77c951a2"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/initial-failed-catalog-benchmark-run.json",
+      "bytes": 7463,
+      "sha256": "b4a294dae8470c6d7233afd0d3ce6daeafe5767b97d8c76d2ee2acd85fcb9245"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/initial-failed-catalog-benchmark.log",
+      "bytes": 2184,
+      "sha256": "7751ab286d77ce5328360edac7081501f20cf7a393abad198e2e5893cee4221f"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/initial-failed-focused-tests.json",
+      "bytes": 7907,
+      "sha256": "01637d9d4fe1e794057ea9aede85b3e94e1a5f975a1c1370f1729ef6e42bc5a0"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/initial-failed-focused-tests.log",
+      "bytes": 4442,
+      "sha256": "4ed01a2557298553b85a49dc4c183a5acef50878879d5f4455f8db97e5eef0a8"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/initial-failed-test-source-manifest.json",
+      "bytes": 63575,
+      "sha256": "d961b791c5c2008f107698ef34a21602f80348168e582d6fc4034aefe763f87c"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/initial-test-fixture-failures.json",
+      "bytes": 1002,
+      "sha256": "7fb56ac6d011dd9c50aba0ce0ce1e9333b41b7d1ec61e39e2c717d60e8a57c1e"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/preparation-recall.json",
+      "bytes": 1116,
+      "sha256": "e4ab372ddad86a5dd2b7a71e6fbcf2e7ead0afcbc548dec4f2c66052e1e672ff"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/preparation-receipt.json",
+      "bytes": 23772,
+      "sha256": "d764b5ba6edffeeb8d863a95a2965c56ee9defa142a496b31cbaaff387b31a2e"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/preparation-session.json",
+      "bytes": 3257,
+      "sha256": "f03e4294ecbd3285f7b7fb1141883ff2728a98531a2a80c47fb98b63dff35304"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/preparation-source-manifest.json",
+      "bytes": 199431,
+      "sha256": "558ef66d2254436e8d8885b426acb73e104d805c39b7d918535342e739b6c93c"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/preparatory-review.snapshot.md",
+      "bytes": 1800,
+      "sha256": "4fd9d6adf93345285340fb0a044a20b0acfc1fa8aad54285f91ee3ea451a06e1"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/prepare-runtime.mjs",
+      "bytes": 10146,
+      "sha256": "84e0ee430c2931af7be174e984af521bd0f141e01ac6148fe1ef386c44da61be"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/regression-output-receipt.json",
+      "bytes": 6163,
+      "sha256": "2ae8fa0ed6a287544251530593b29520f636993b6880ecb69de50a8e1fb89998"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/relocate-regression-output.mjs",
+      "bytes": 3695,
+      "sha256": "b992695f84f3cad641d963a0fa0941f86b7b0202d87472c64e6f9c0331bc5847"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/root-decisions.json",
+      "bytes": 1274,
+      "sha256": "6c135c8897b59247be61d94bce9cf95a2b51d669a2e00805e9c7e271a42a8581"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/run-catalog-benchmark.initial.mjs",
+      "bytes": 2224,
+      "sha256": "30f47b15680d07830220828e6d75c2c27be1f1f398208eb3c66b5a765969c3f5"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/run-catalog-benchmark.mjs",
+      "bytes": 2225,
+      "sha256": "957d52a228c0b5a25864f7759cc41bff288232dde49860d4747af52c3b83055a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/run-focused-tests.executed.mjs",
+      "bytes": 4600,
+      "sha256": "34386de66efdf09eacfd46697bf8969680c1a8469e8b303b26b10c6c7e16ef8d"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/run-focused-tests.mjs",
+      "bytes": 4800,
+      "sha256": "ca45671f0289e423a77da2efaeaf552abc63078328933761a4cccf3132c30c5b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/run-validation.mjs",
+      "bytes": 4921,
+      "sha256": "5cc3d661fcd36bef58875756cf4416ef5641956dcc2a007614b0c06b29f97216"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/schema-validation.log",
+      "bytes": 142,
+      "sha256": "95c9135b719a4e4f8467fe0e6bac467da2765c0deb2afda10dce637866445b97"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/source-manifest.json",
+      "bytes": 2406,
+      "sha256": "a8c2d88aa2cdabe1c7ee46bce8895668ed26e8ca23039cdc3877a5b2701d48ca"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/source-safety-review.json",
+      "bytes": 3948,
+      "sha256": "798eb3e2101e82a787e84589fd0a9151f11fe5a56b8f774a8e4be896ce2c5666"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/task-contract.snapshot.md",
+      "bytes": 3833,
+      "sha256": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/test-source-manifest.json",
+      "bytes": 63575,
+      "sha256": "e1168043f96c7513c4e77c29a098bee04d31f72c0154806edd66d26141aa218c"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/backend/validation-checks.json",
+      "bytes": 3472,
+      "sha256": "beb379dcb3ea2c50fe2c5eb833c4cc7d51d37945abe3e1f3ad82ba2bde535532"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/baseline-observation.md",
+      "bytes": 1906,
+      "sha256": "8c17bdf10dc24ec61f43bd781614771ab35043f88acfbd7981e44a672322b911"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/baseline-tests.log",
+      "bytes": 4118,
+      "sha256": "40a2f4192c3f4a19a432ea6dd257e222fb1aa2e748246f11fcd12a7dd881cd16"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/browser-state-receipt.json",
+      "bytes": 919,
+      "sha256": "b9382e84e9c77ec111d5db1996fd738f2424eb57794470893080241fc5a7df01"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend-build-root.log",
+      "bytes": 10336,
+      "sha256": "0630668b8759aebf236a3f41776cb7240f8978f3decab8251fca4abd39d12e0f"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend-integration.json",
+      "bytes": 5691,
+      "sha256": "81510cd5fdabc7e5d81db4458bbb484ad9b4281b954389676bdd8ffb6d81c76c"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/artifact-manifest.json",
+      "bytes": 9205,
+      "sha256": "1ca68389fb513561a5142b867a2fc45653e24714d17e814bdf965f7876abee2b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/backend-contract.snapshot.md",
+      "bytes": 8297,
+      "sha256": "02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/baseline-source-manifest.json",
+      "bytes": 177717,
+      "sha256": "4290ac905e64233cff1046b2cd3fb5ee895cf3395ea5e30420bb50950918020f"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/build-command.json",
+      "bytes": 474,
+      "sha256": "21b7a7942a290c7cdc8d001d8b8b3881f02bf21a56d35f0d7256b42e676b518c"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/build.log",
+      "bytes": 10567,
+      "sha256": "ac38f246db53032980d0fb2bfbacd3ebdeae68a2a8883529a0caa93037a6d76f"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/capture-source.mjs",
+      "bytes": 1704,
+      "sha256": "560f175dd8db2ad2569478c17829f2627b71badbd4e2defb00edb4c12c06f7ed"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/catalog-contract-proposal.snapshot.md",
+      "bytes": 1826,
+      "sha256": "cacbf3edb27e8b17402c759cea6c08a25bffd3069d47d8cec3a6598f0c401000"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims-evidence-release.json",
+      "bytes": 1300,
+      "sha256": "222c03727cbfd69023d7c847dad3f752166ebbc87ea238a6c1f89190f20d11d4"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims-evidence.json",
+      "bytes": 1148,
+      "sha256": "f541a9344296beb291407c85d6f5c301410c82444ef326daa8875be1cc6a3793"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims-implementation-release.json",
+      "bytes": 3058,
+      "sha256": "b23af16b24059c0823a520f4dbd5d14c35e86c6422c15c101211e927c11a439e"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims-implementation.json",
+      "bytes": 5570,
+      "sha256": "fed6afd80aadae491cdd3ddfbeacc72c44751948cf4690c76a714cf997e2d39d"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims-legacy-entry-release.json",
+      "bytes": 1399,
+      "sha256": "b88be36e77a3ff0fd5b1071920e6d602b70364300677daea020807a32ab5a6ca"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims-preparation-release.json",
+      "bytes": 1440,
+      "sha256": "c433e06f0f254dff9071382f52e648e4dd061c8b20d9443359d7a567c8eadf0a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims-preparation.json",
+      "bytes": 2709,
+      "sha256": "afb2aef67db37308625e6aeb7b0de68dab8a6b704728e0ecb9b12b029d39ea80"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/claims.json",
+      "bytes": 5570,
+      "sha256": "fed6afd80aadae491cdd3ddfbeacc72c44751948cf4690c76a714cf997e2d39d"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/finalize-evidence.mjs",
+      "bytes": 17849,
+      "sha256": "6819a5c3947b13cd30c091f93b30bbf20f5a1793a4c6f43c4b797ece2daf43e4"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/freeze-source.mjs",
+      "bytes": 3047,
+      "sha256": "cbc1a599a873102e37cf34d5e460a70b6ffce73d3a4040f8eb2cba65f308c43a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/frontend-contract.md",
+      "bytes": 7333,
+      "sha256": "5a8423b8bd5270557be34dc962bdf56b1608dc664e825ac3207bac7da2e5802a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/implementation-paths.json",
+      "bytes": 1977,
+      "sha256": "553ba0741d57dad0eaaef7cbf4ef47197fc634f6b23309cd4f679efb174bfff0"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/implementation-receipt.md",
+      "bytes": 3328,
+      "sha256": "b36106fa14f34a7e396199b8c0321950ddff92977890c3d6e3bbe8dd3fdb15be"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/intake-nrs-addendum.snapshot.md",
+      "bytes": 2631,
+      "sha256": "2108b3dc9e7d3943e6995cb823fb6694d9eb8019f927c3e42f48f758361fd5a0"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/ledger-evidence-claim.json",
+      "bytes": 1056,
+      "sha256": "97d43783d3e5743a288d58eae70dfff4d0fdaad9e1e60985a7e3623375bf19a8"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/ledger-implementation-claim.json",
+      "bytes": 2827,
+      "sha256": "11d92a0b77b20641656224455f590ebd5ef4c392f4a955cc353333bc3f38d54f"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/ledger-legacy-entry-claim.json",
+      "bytes": 1249,
+      "sha256": "31911454d55d0f3724f3a45a28659b950a075cc3de7648b0140602b800c7a3e2"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/ledger-preparation-claim.json",
+      "bytes": 1271,
+      "sha256": "38648494131b230e429f8cb322474fceafbe7a339f6de21a6191c59d4984e3cc"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/lint-compare.mjs",
+      "bytes": 2794,
+      "sha256": "bc05f0ed747dba4c557b6c99e2a243db32dd13edfef6b4a676bb21904220391a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/lint-comparison.json",
+      "bytes": 16159,
+      "sha256": "5de3afa18b879b02258f7f4611450821b3db921b0443564ace7dad7f5f090c50"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/lint.log",
+      "bytes": 2666,
+      "sha256": "7e1b5dbc5b7da0b3a39456da70863198e94b09fddd7fd6e3707c6128a828f887"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/preparatory-review.snapshot.md",
+      "bytes": 1800,
+      "sha256": "4fd9d6adf93345285340fb0a044a20b0acfc1fa8aad54285f91ee3ea451a06e1"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/prepare-evidence.mjs",
+      "bytes": 5425,
+      "sha256": "d5147810590f3825ac3555634804ece03de87855c20686ff4d3308bafaa448ab"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/run-validation.mjs",
+      "bytes": 1903,
+      "sha256": "eeaa5affe9aa26ae05d04e91e75949a03e9d8cb97fd997b537435e98862f3c71"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/runtime-preparation.json",
+      "bytes": 1410,
+      "sha256": "9650a6ec565cca0288e308a46a6a6dd16ea26d75f8318417592d6603acea8221"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/secret-scan.json",
+      "bytes": 26858,
+      "sha256": "7224bb6143f46588b39e9c5aae1ae847045acb4fb4a18606a4da2b31c321c7c0"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/secret-scan.log",
+      "bytes": 51,
+      "sha256": "e544130de2df0d4db9bfe69ece22a5a70f7f58c36992ee98706f70862cd6ab1d"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/secret-scan.mjs",
+      "bytes": 2073,
+      "sha256": "7a77503ca66b6382fcd2df08c045f724e2620e9046ec479252aeb730d816dfcb"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/source-at-validation.json",
+      "bytes": 8970,
+      "sha256": "98dd396e3bf40cddf94fb942299afa111568b2b986eb4fa0bf7cdfc067fb340b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/source-manifest.json",
+      "bytes": 9333,
+      "sha256": "1aa2bf2ceed4e9e71cce5cef9bfd76a651ba498be6b946c41009776bc86ca730"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/stub-test-assets.mjs",
+      "bytes": 1020,
+      "sha256": "fdf11310c15b2bc86b3ea8e3e77fa0e8e073028aad84dcd2fe5a1eb45b3ea3ea"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/task-contract.snapshot.md",
+      "bytes": 3833,
+      "sha256": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/test-command.json",
+      "bytes": 2376,
+      "sha256": "4f6dd6799b981b802814b50225ca3396fbc0f0daa80afdf357219f4a66b2db19"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/test-focused.log",
+      "bytes": 31965,
+      "sha256": "14a82d85228dc679b685effdf124751232810fdc0987b0892b321a560b7c28b1"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/test-legacy-entry.log",
+      "bytes": 932,
+      "sha256": "4571a7f2999e4ee10291a196c7ec16a2a753c6bf6b8a5a510a60165193023564"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/test-po15-focused.log",
+      "bytes": 6613,
+      "sha256": "765c0859be7dc36d52794e28d24143188d1ea4a87acdcc07f19036f969d50509"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/frontend/validation-receipt.json",
+      "bytes": 11279,
+      "sha256": "49ba76f100fcdc0504d47641825f299684b1a15e787fdb705d72f998bad47745"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/http-tests-harness-diagnostic.log",
+      "bytes": 5674,
+      "sha256": "00e3cb51c639306031a1929e1a9e62186bc234b05a98c30a1831c651e665623d"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/http-tests-root.log",
+      "bytes": 4823,
+      "sha256": "46531fbae64651d8b00a84c376b8f63e267a978f636bba15d4600ce9f53d14a2"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview-build-manifest.json",
+      "bytes": 17624,
+      "sha256": "ffb695cbf9498e4c717aeaeab85455001f1bf146504753f1355915847038e871"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview-build.log",
+      "bytes": 6271,
+      "sha256": "c116d79cb8e15a28b6cfab7a55536366dcbd7a62b0b39a4a1e80a2f2e668551b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview/build.mjs",
+      "bytes": 389,
+      "sha256": "bbafa381f0e59d7930f66f42d148cb68b0584194fd670d493004b1baa1002069"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview/index.html",
+      "bytes": 264,
+      "sha256": "033e7618bfee5446c12c55120a66ed21f7c0aa6696503ec81850e0b22ce1a76a"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview/legacy-records.mjs",
+      "bytes": 1116,
+      "sha256": "f7048f12ccb71fb02e5d7ed03fc7f0e1952ddc0cb3fb0ec46136a4a2faecbdea"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview/main.tsx",
+      "bytes": 6327,
+      "sha256": "acd73c39d647f27c6096ddd1a2e8980d59c12c385c40f478d9f83f2880e842b0"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview/server.mjs",
+      "bytes": 4097,
+      "sha256": "74d3f17edd85bd78a17ba8c224b1c166e53919a69926ea3d78a69fc78c158fe1"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/preview/synthetic-state.json",
+      "bytes": 153742,
+      "sha256": "9015fb00ec2658c3d1db8f3fe192f43ef9eece8081854d5511e8bb1ac21b6b57"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/browser-geometry-and-console.json",
+      "bytes": 823,
+      "sha256": "ce84d21f52dbcc29b7806f9f5e141a455de713e21245523e9d8d14a6babeb740"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/catalog-desktop.png",
+      "bytes": 102261,
+      "sha256": "53716023ab11841ca7a88f6dcd72872163aaf0cb9d914f94150821c0a8736ad4"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/catalog-mobile-actions.png",
+      "bytes": 38417,
+      "sha256": "96f974c5905e8734e2bd0f4ef341a5a6cf03fe2065a139274eb545aa6a58dc28"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/catalog-mobile.png",
+      "bytes": 43254,
+      "sha256": "d0533ece8140f10f653014a530d19a556a54d003d962faf638220140650f06a5"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/catalog-tablet.png",
+      "bytes": 63140,
+      "sha256": "6dbda0b5ead3cb8e92f90a3807cc6e89bf2071f725d870382062f6ffc70f4bfd"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/mna-inline-pdf.png",
+      "bytes": 90487,
+      "sha256": "b2c0250850011c4f7814fa8dbecbe5da0c7cb352a5464b738d54ce8b5004fbca"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/multiprint-ready.png",
+      "bytes": 64851,
+      "sha256": "cc7595f6a91048aca6994cc6662f502bc9163bf614a866a9f30b64badbd127a5"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/3543e342-ab4c-47f3-967a-229643bec5c9.pdf",
+      "bytes": 27705,
+      "sha256": "2aa217f6d4001348dd45395a35be417bba2350992ffd75f9b8a9059fb5141c2e"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/43498bb6-ce38-4a3b-8940-8e447aedbe7a.pdf",
+      "bytes": 21533,
+      "sha256": "cfdf94176cb7684da2b7a285fa6c193e721d1646ca8f62ec1813863a35311c7b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/4927673a-941a-41a4-9b70-3d45557792b5.pdf",
+      "bytes": 18120,
+      "sha256": "c333e67092d2e5943d56680cf26a99a8a89e649680a24e798981a3d25e06956c"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/7e271848-4bc3-44b8-8b77-2cd9c0b79b6d.pdf",
+      "bytes": 22422,
+      "sha256": "772a290b086eba3c714a88a09226b8666337d9efe533fe1362b13863699440db"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/8a83d9cf-3018-4209-b32d-b28c3a0e98d8.pdf",
+      "bytes": 18578,
+      "sha256": "57447c2f9205f60117e29cb26ef07d71199232d5f7391a3aa44a1c7dd2f50925"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/b097cc19-4be9-4ee2-a06a-381c611c4361.pdf",
+      "bytes": 21533,
+      "sha256": "04c261e94b8e032298c77e739ec1708c93e13190b207e6a000bd6fe9be74ccf7"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/be4cbe26-8a6d-4ea5-b87d-c821b780c78b.pdf",
+      "bytes": 22422,
+      "sha256": "174ab1a4faeeae34ef31059602fc5cd17be2c54e98e7da04b2518e8277643db8"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/ce59b368-17d9-48c2-bec2-cbf47f621496.pdf",
+      "bytes": 27707,
+      "sha256": "6d914609025338ab192393bc0c4bb4130186bc4f550568fc7acdb9ce76fd5b8b"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/eb22d337-234b-43d3-ba7a-2474684bdec0.pdf",
+      "bytes": 18581,
+      "sha256": "b18dd5e3ef5f323f339e50a7ddb516df6475a95b8a64a310b438ac4403c2f673"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/pdfs/ef7ada9f-b69d-4ab7-ae3c-c1a6a7c63ad8.pdf",
+      "bytes": 18120,
+      "sha256": "8985b6d96bf87a9fc01ffecbc1ea77d7bbe5d12cea91e57e4e3802a8198a4c65"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/qa-evidence/preview-build.log",
+      "bytes": 6271,
+      "sha256": "d449ffbe6b5ee5a727468d420fc80c1a93a200e880849b21f1761b128fa75922"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/review-notes.md",
+      "bytes": 2542,
+      "sha256": "f2a26c45688c752d00ee88032d1eb025ac56d3c089f0858b120eef77d19777b0"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/root-validation-config.json",
+      "bytes": 2038,
+      "sha256": "6cab9eb87086979e415f2950e9eb2222f21550b0f5bfb9d4b893b219a46536bd"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/secret-scan.log",
+      "bytes": 72,
+      "sha256": "8611b62922656f38358d94a28292b3c46d2d8df53ac5ba1f79e023123911d155"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/source-manifest-root.json",
+      "bytes": 11951,
+      "sha256": "007f3d1adc90b555b2e9875594f7e4ddeeaf33c7842fd970a4df5c5814a54ea8"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/task-contract.md",
+      "bytes": 3833,
+      "sha256": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/validation-report.md",
+      "bytes": 3312,
+      "sha256": "79d1487a5b2112fc09a135dd6ad5a3ac5cbf6f5093097597466a63e2225932a2"
+    },
+    {
+      "path": "artifacts/task-validation/po-15-catalogo/verify-browser-state.mjs",
+      "bytes": 3397,
+      "sha256": "eed12ff40aa47915ed74c2eaf840848fc5431a83e527bdb7e2bad88f1ab2fb75"
+    },
+    {
+      "path": "backend/src/ai/__tests__/intake-nrs-db.test.ts",
+      "bytes": 5892,
+      "sha256": "15f04afaa661d38f6fc93a8fc2d8fc61ac1c736b62931d4ad7d21484fc77296f"
+    },
+    {
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "bytes": 16126,
+      "sha256": "44950e8fbcdf2f0fcfa3d0efb9616a307accdc7de6eeddd004d3075feba1634c"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/catalog-db.test.ts",
+      "bytes": 6264,
+      "sha256": "81cca5bd3881f84ce7d6dcd26223d3d8314a35bc8bf22599541a9f2ea659ccb1"
+    },
+    {
+      "path": "backend/src/assessments/catalog.ts",
+      "bytes": 4753,
+      "sha256": "46e5d50e17bef2ccb943dcd6f1853dc5bd282d169846ca6a35f4e782c360d554"
+    },
+    {
+      "path": "backend/src/intake/__tests__/patient-review-db.test.ts",
+      "bytes": 9602,
+      "sha256": "35a39e0dd46fd71d864a79451baa09611fc9e466be1b626c15e68177a2aac5c6"
+    },
+    {
+      "path": "backend/src/intake/patient-review.ts",
+      "bytes": 3324,
+      "sha256": "ce4e4ee47af76aa1053002bed27e12e6b0c6347fb38cee3fd5fbb790c319fe30"
+    },
+    {
+      "path": "backend/src/patients/__tests__/cartella-nrs-db.test.ts",
+      "bytes": 4569,
+      "sha256": "9980b8d9cd0bd08e4c6a554f098301ca415e676aab7dc3c6ce0bd940147d6d7c"
+    },
+    {
+      "path": "backend/src/patients/cartella-update.ts",
+      "bytes": 3944,
+      "sha256": "15a3a948719fe5fc4ca28eae5c474fed0c2035450a5c42d2206d5ec81e0e6683"
+    },
+    {
+      "path": "backend/src/routes/patient-assessments.ts",
+      "bytes": 3702,
+      "sha256": "14b900d158c4c3b923ebe4c1c71a67bca7c53326b30f4cb565a6e18a403864fb"
+    },
+    {
+      "path": "backend/src/routes/patient-intake-review.ts",
+      "bytes": 945,
+      "sha256": "a6204aeff83178d3615cdb531f388013bb7f4a6daeb22c7b0049af471e954ac3"
+    },
+    {
+      "path": "docs/product/stato-esecuzione-piano-2026-09-22.md",
+      "bytes": 4872,
+      "sha256": "4be7276c8c0e96ab30501ea8a566aa3b86f0b6d67c768530e6db9b3d76ec63f3"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "bytes": 115840,
+      "sha256": "aa83feafbb0ee738c744933a01e4364877ba3ecf0c7657ad3310c3a9616b819d"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientIntakeReview.tsx",
+      "bytes": 1305,
+      "sha256": "d3029d53d167a74811b3039e47c397b6ea2eea41d6a1d561bb34c81a3f4dc637"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts",
+      "bytes": 4222,
+      "sha256": "2988055e64013e7e0419146b8843b433d2dc4ffa62e5a1ec646d18943e386585"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/nrsLegacyUi.test.ts",
+      "bytes": 3695,
+      "sha256": "9382486caef9ec3994f5ba1bc6e05938be23cda6f712261ac80369ffe6eecbce"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+      "bytes": 1913,
+      "sha256": "a49bfde5575725e5a46dfd572eac498d16f9a2a260c84d76676e8265dc0ac5bc"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.tsx",
+      "bytes": 6061,
+      "sha256": "f6e188ee9534ce3480dcbb806efe0979e77fd92d479e27704fb6acad3da0aac6"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "bytes": 19138,
+      "sha256": "4c25c912e75c0cb368938d7987ef459042e96c2a3fdeadc6308763e21eddbf9c"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/NrsLegacyContent.tsx",
+      "bytes": 3406,
+      "sha256": "cdf7c89b5c50dcc7526afa601c2afde635752efb14bac5ae4957cb60318d4c2a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ContenzioniTab.tsx",
+      "bytes": 42085,
+      "sha256": "476a1ab1dd69c9d64f76ac7a180e90c3ea7cd9f86dac34810d36db954fe2520c"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/MedicazioniTab.tsx",
+      "bytes": 46027,
+      "sha256": "146db561bb8f967d4179974ab1cb5b52868cc51b04544840808b1d7a4661cd32"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaBradenTab.tsx",
+      "bytes": 22296,
+      "sha256": "e16cc5397863879dfc0e6461a2496bd86c981788f3b09e5e053c8b549ec515e5"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaNRSTab.tsx",
+      "bytes": 4754,
+      "sha256": "54a201b348f72e8c08847b96ac58587600f6b903802761375be78de17187fe16"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/PainAssessmentEditor.tsx",
+      "bytes": 1856,
+      "sha256": "0b57bf9feedf14ac9eec9b0419d356e1b84bb3f1e4ff34910aaeb61abd83b7a5"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/patientSections.test.ts",
+      "bytes": 913,
+      "sha256": "b429b156778e9832d530f0b54c16bb9194a32bc2aabd8bf0d89f61b5e40bd0e4"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/patientSections.ts",
+      "bytes": 2599,
+      "sha256": "63c7ed8a8c0fa24176d0a18d90300f10e8332ee9420b30065b8c97c24b4e2093"
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "bytes": 4012,
+      "sha256": "ea803d1773f7f3ca1fb0e6cf539334756d3d8b22ebe0a869aa53cd3217d89f99"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "bytes": 30085,
+      "sha256": "5a847637bbef3dde06f305680069974b6ec87b52613fc717537d850cdbddf6e1"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "bytes": 8755,
+      "sha256": "0c435a216d52ed96515ac906df99546c8b073af9c3cc07993340fa913c26fe69"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepVerifica.tsx",
+      "bytes": 12361,
+      "sha256": "37052a40be6bb3404744222f9166f199121f81e22f30dd8b0e557aa01e584777"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/confirmCartella.test.ts",
+      "bytes": 3382,
+      "sha256": "2e2a84a1ee9ccb1ccabf5ce9a7a6139a2d211886f69e09f4c2b63a2d3ca39559"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/legacyPainDraft.test.ts",
+      "bytes": 2041,
+      "sha256": "4d0f86da7e43cce7289bde36782f417b86b96db3f1ac180216d0c70a240d4a5a"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/confirmCartella.ts",
+      "bytes": 1955,
+      "sha256": "a19bbbd4bbb14841db35b259629210005b258cfe3a60d7ee3a474a02307ad56b"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentCatalog.test.ts",
+      "bytes": 7527,
+      "sha256": "3c1165db20bc40e717b3a1e82486e53c37ded95fbe7679bf680cc58c80053a0e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentCatalogWorkflow.test.ts",
+      "bytes": 2349,
+      "sha256": "8f8b44e4a3fcd368acfb4325ef3b4cdd0142c564e9782dd36fd00cda2eb524e6"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/nrsLegacy.test.ts",
+      "bytes": 1248,
+      "sha256": "a8bc5ccfd0891e1b0ad4f433e65dd18dd56b8d3da44e4e8b3abcb535f7f06233"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientIntakeReview.test.ts",
+      "bytes": 2452,
+      "sha256": "66a08d8230742cf5b395a64d1d5083a4c3310161166526336b7f3ee1f760d99d"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentCatalog.ts",
+      "bytes": 5273,
+      "sha256": "2f2c52fe9aeb97ea170dc3bf2ced1e2702e8278f6b8d7be069f030d2717cd2e9"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentCatalogState.ts",
+      "bytes": 1574,
+      "sha256": "ef78e79b4c0d8d8c5b1e2e21207489c05aa5b111311db5d4c0406d33c5234a7c"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentEntry.ts",
+      "bytes": 1627,
+      "sha256": "cd620d47560964980481670e4f0c0cd308b166f8554f6c36da45f370ab288225"
+    },
+    {
+      "path": "frontend/src/lib/assessments/nrsLegacy.ts",
+      "bytes": 1126,
+      "sha256": "c6274d5307a37645ea060617cd213dd76fd04b142bc3248d84041a3384f1227e"
+    },
+    {
+      "path": "frontend/src/lib/patientIntakeReview.ts",
+      "bytes": 5350,
+      "sha256": "138a515243e17f97f793eb3a610ae0c4beea52363a3399706a87b277f404dcf6"
+    },
+    {
+      "path": "tests/fixtures/po15-catalog.mjs",
+      "bytes": 4888,
+      "sha256": "75372ab952aeca571baa2eabaa7e3dcbd02c17f6db7dcd3c9083b732783c1cae"
+    },
+    {
+      "path": "tests/integration/po15-catalog.test.mts",
+      "bytes": 7890,
+      "sha256": "67df0e989ed290d6e35f8626acb3342026c03f54eac50788d45d8c70b28dc9cb"
+    }
+  ]
+}

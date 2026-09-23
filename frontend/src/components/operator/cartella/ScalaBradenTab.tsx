@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CartellaPaziente, ScalaBradenValutazione, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
@@ -9,6 +9,7 @@ interface Props {
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void;
   operatoreNome: string;
+  createRequest?: string;
 }
 
 interface BradenFormState {
@@ -498,12 +499,22 @@ function BradenHistoryTable({
   );
 }
 
-export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
   const list = cartella.valutazioniBraden ?? [];
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState(!!createRequest);
   const [form, setForm] = useState<BradenFormState>({ ...EMPTY_FORM });
   const [modulo, setModulo] = useState(false);
   const [moduloTarget, setModuloTarget] = useState<string | null>(null); // id valutazione
+  const entryForm = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!createRequest) return;
+    let focusTimer: ReturnType<typeof setTimeout> | undefined;
+    const timer = setTimeout(() => {
+      setShowAdd(true); setModulo(false);
+      focusTimer = setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
+    }, 0);
+    return () => { clearTimeout(timer); clearTimeout(focusTimer); };
+  }, [createRequest]);
 
   function set(f: Partial<BradenFormState>) {
     setForm((p) => ({ ...p, ...f }));
@@ -601,7 +612,7 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: 
           )}
 
           {showAdd && (
-            <div className="cr-inline-form braden-form">
+            <div className="cr-inline-form braden-form" ref={entryForm}>
               <div className="cr-form-section__title">Nuova valutazione Braden</div>
               <div className="form-row-2col">
                 <div className="form-row">

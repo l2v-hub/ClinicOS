@@ -47,6 +47,7 @@ export interface AssessmentWorkspaceProps {
   type?: AssessmentType;
   initialAssessment?: AssessmentTarget;
   initialAssessmentId?: string;
+  initialDraftKey?: string;
   onOpenArchive?: (documentId: string, assessment: AssessmentTarget) => void;
   client?: AssessmentClient;
   children?: ReactNode;
@@ -68,6 +69,7 @@ function AssessmentSession({
   type = 'painad',
   initialAssessment,
   initialAssessmentId,
+  initialDraftKey,
   onOpenArchive,
   client: providedClient,
   children,
@@ -180,14 +182,20 @@ function AssessmentSession({
     }
   }
   useEffect(() => {
-    if (!entryId && type === 'painad') return;
+    if (!initialDraftKey && !entryId && type === 'painad') return;
     const timer = window.setTimeout(() => {
+      if (initialDraftKey) {
+        const local = store.get(initialDraftKey);
+        if (local?.patientId === patient.id && local.type === type) select(local.key);
+        else setError('Bozza locale non disponibile per questo paziente e modulo.');
+        return;
+      }
       void open(entryId);
     }, 0);
     return () => window.clearTimeout(timer);
     // Session key fences patient/actor changes; an explicit entry ID opens one record.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entryId, type]);
+  }, [entryId, initialDraftKey, type]);
   function create(predecessor?: AssessmentDto) {
     try {
       select(store.create(patient.id, predecessor, type));

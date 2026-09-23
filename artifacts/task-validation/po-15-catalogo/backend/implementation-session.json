@@ -1,0 +1,39 @@
+{
+  "task": "PO15-backend",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-backend",
+  "branch": "codex/po15-catalog-backend",
+  "baseline": "f445260a4ca4de872c1361ff19fc215179b097fe",
+  "startedAt": "2026-09-23T07:16:43.545Z",
+  "claim": {
+    "issueId": "PO-15-backend-implementation",
+    "claimant": "agent:codex-po15-backend:coder"
+  },
+  "decision": "allow implementation after explicit root GO and final frontend contract agreement",
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "rootContractSha256": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf",
+  "dtoContractSha256": "02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23",
+  "initialSourceTreeSha256": "bc5e57a04e0b4102434493093c65977c174ecd91ee6de63871edbfdeb2c00612",
+  "preparationReceiptSha256": "d764b5ba6edffeeb8d863a95a2965c56ee9defa142a496b31cbaaff387b31a2e",
+  "publicationAuthorizedToWorker": false
+}

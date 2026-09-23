@@ -1,0 +1,25 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Transform failed with 15 errors:
+C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\artifacts\task-validation\po-15-catalogo\backend\benchmark-catalog.ts:17:20: ERROR: Top-level await is currently not supported with the "cjs" output format
+C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\artifacts\task-validation\po-15-catalogo\backend\benchmark-catalog.ts:21:18: ERROR: Top-level await is currently not supported with the "cjs" output format
+C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\artifacts\task-validation\po-15-catalogo\backend\benchmark-catalog.ts:26:2: ERROR: Top-level await is currently not supported with the "cjs" output format
+C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\artifacts\task-validation\po-15-catalogo\backend\benchmark-catalog.ts:31:19: ERROR: Top-level await is currently not supported with the "cjs" output format
+C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\artifacts\task-validation\po-15-catalogo\backend\benchmark-catalog.ts:32:4: ERROR: Top-level await is currently not supported with the "cjs" output format
+...
+    at failureErrorWithLog (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\esbuild\lib\main.js:1748:15)
+    at C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\esbuild\lib\main.js:1017:50
+    at responseCallbacks.<computed> (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\esbuild\lib\main.js:884:9)
+    at handleIncomingPacket (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\esbuild\lib\main.js:939:12)
+    at Socket.readFromStdout (C:\Workspace\ClinicOSHouse-worktrees\quality-loop-20260829\node_modules\esbuild\lib\main.js:862:7)
+    at Socket.emit (node:events:509:20)
+    at addChunk (node:internal/streams/readable:568:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:519:3)
+    at Readable.push (node:internal/streams/readable:399:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
+  name: 'TransformError'
+}
+
+Node.js v26.3.0

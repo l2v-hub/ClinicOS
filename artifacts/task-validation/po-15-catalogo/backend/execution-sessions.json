@@ -1,0 +1,47 @@
+{
+  "targeted": {
+    "sessionId": 53614,
+    "completionChunk": "a14b6a",
+    "exitCode": 0,
+    "tests": 13
+  },
+  "fullRegression": {
+    "sessionId": 70914,
+    "initialChunk": "c28542",
+    "completionChunk": "ed8277",
+    "exitCode": 0,
+    "tests": 74,
+    "files": 24,
+    "executedRunner": "run-focused-tests.executed.mjs"
+  },
+  "validation": {
+    "sessionId": 10387,
+    "completionChunk": "d0fe8a",
+    "exitCode": 0
+  },
+  "benchmark": {
+    "sessionId": 75650,
+    "initialChunk": "9d098b",
+    "completionChunk": "fb04bf",
+    "exitCode": 0,
+    "initialFailedAttempt": {
+      "completionChunk": "511dcc",
+      "exitCode": 1,
+      "cause": "Artifact .ts treated as CommonJS cannot use top-level await; same-byte .mts is the successful ESM entry point.",
+      "beforeWorkload": true,
+      "databaseClosed": true
+    }
+  },
+  "regressionOutputRelocation": {
+    "completionChunk": "3c20d4",
+    "exitCode": 0,
+    "files": 16,
+    "applicationSourceUnchanged": true
+  },
+  "diagnosticProbe": {
+    "completionChunk": "fe75a2",
+    "exitCode": 1,
+    "cause": "PowerShell rejected a shell brace-list in a read-only rg probe; retried with a quoted glob.",
+    "applicationEffects": false
+  }
+}

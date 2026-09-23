@@ -26,7 +26,11 @@ import {
 import { patientScopeWhere, hasGlobalPatientScope } from '../../patients/patient-scope.js';
 import { canAccessOwnedResource } from '../ownership-policy.js';
 import { ImportSessionError } from './pages/model.js';
-import { CartellaUpdateError, preserveTinettiHistory } from '../../patients/cartella-update.js';
+import {
+  CartellaUpdateError,
+  preserveTinettiHistory,
+  preserveNrsHistory,
+} from '../../patients/cartella-update.js';
 import {
   preparePageArchive,
   assertPreparedPageArchive,
@@ -321,11 +325,14 @@ async function confirm(
               SELECT data FROM "Cartella" WHERE "patientId" = ${patient.id} FOR UPDATE`
               )[0]
             : null;
-        // Empty import defaults do not invent legacy history; any actual change is rejected.
-        const { valutazioniTinetti: _protectedLegacy, ...incoming } = preserveTinettiHistory(
+        // Preserve the existing Tinetti default exception; NRS always distinguishes absent/null/[].
+        const {
+          valutazioniTinetti: _protectedTinetti,
+          valutazioniNRS: _protectedNrs,
+          ...incoming
+        } = preserveNrsHistory(
           current?.data,
-          cartella,
-          true,
+          preserveTinettiHistory(current?.data, cartella, true),
         );
         const merged = mergeCartella(asData(current?.data), incoming);
         delete merged.codiceFiscale;

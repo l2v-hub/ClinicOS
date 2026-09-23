@@ -27,10 +27,7 @@ export function buildConfirmCartella(data: ConfirmDraftData): Record<string, unk
     cartella.parametriMensili = parametriObj.parametriMensili ?? [];
     cartella.parametriVitali = parametriObj.parametriVitali ?? [];
   }
-  // Pain assessments
-  if (Array.isArray(data.dolore) && data.dolore.length) {
-    cartella.valutazioniNRS = data.dolore;
-  }
+  // Legacy pain remains in the retained intake draft; confirmation never creates NRS records.
   // Carry imported therapy text (TherapyEditor intake mode is still a placeholder)
   // so it is persisted instead of dropped on confirm.
   if (typeof data._terapiaText === 'string' && data._terapiaText.trim()) {

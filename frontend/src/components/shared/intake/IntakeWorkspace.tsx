@@ -19,6 +19,7 @@ import { StepVerifica } from './StepVerifica';
 import { buildIntakeTherapyReview, prepareIntakeConfirmData } from './intakeTherapies';
 import { focusTherapyCorrection, type TherapyCorrectionTarget } from './intakeTherapyNavigation';
 import { buildConfirmCartella } from './confirmCartella';
+import { CLINICAL_MODULES as CATALOG_MODULES } from '../../../lib/assessments/assessmentCatalog';
 import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 
 // "Documenti" (import/scatta foto in questo step) non e' ancora implementato (F5): finche' resta
@@ -29,42 +30,8 @@ const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Verifica'] as con
 
 // #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
 // dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
-const CLINICAL_MODULES: ReadonlyArray<{
-  id: string;
-  label: string;
-  desc: string;
-  available: boolean;
-}> = [
-  {
-    id: 'medicazioni',
-    label: 'Medicazioni / Wound Care',
-    desc: 'Registro medicazioni e lesioni',
-    available: true,
-  },
-  {
-    id: 'contenzioni',
-    label: 'Contenzioni / Protezioni',
-    desc: 'Registrazione contenzioni e consenso',
-    available: true,
-  },
-  { id: 'braden', label: 'Scala Braden', desc: 'Rischio lesioni da pressione', available: true },
-  { id: 'tinetti', label: 'Scala Tinetti', desc: 'Equilibrio e andatura', available: true },
-  { id: 'nrs', label: 'Scala NRS', desc: 'Valutazione del dolore', available: true },
-  { id: 'dimissione', label: 'Dimissione', desc: 'Modulo di dimissione', available: true },
-];
-
-// #243 AC4: modulo selezionato in step 4 → tab della scheda paziente (gruppo "Moduli") su cui
-// atterrare subito dopo la creazione. Oggi è una mappa identità (gli id coincidono con i TabId
-// di PatientDetail) ma resta esplicita e colocata con CLINICAL_MODULES per non dipendere da
-// un'assunzione implicita se le label/id divergeranno in futuro.
-const MODULE_TO_TAB_ID: Record<string, string> = {
-  medicazioni: 'medicazioni',
-  contenzioni: 'contenzioni',
-  braden: 'braden',
-  tinetti: 'tinetti',
-  nrs: 'nrs',
-  dimissione: 'dimissione',
-};
+const CLINICAL_MODULES = CATALOG_MODULES.map(module => ({ id: module.tab, label: module.label, desc: module.group, available: true }));
+const MODULE_TO_TAB_ID: Record<string, string> = Object.fromEntries(CLINICAL_MODULES.map(module => [module.id, module.id]));
 
 interface AnagraficaData {
   firstName?: string;

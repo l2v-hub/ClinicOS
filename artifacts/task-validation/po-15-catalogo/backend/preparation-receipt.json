@@ -1,0 +1,605 @@
+{
+  "task": "PO15-backend-preparation",
+  "phase": "preparation-complete-go-received",
+  "preparedAt": "2026-09-23T07:08:17.887Z",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-backend",
+  "branch": "codex/po15-catalog-backend",
+  "baseline": "f445260a4ca4de872c1361ff19fc215179b097fe",
+  "decision": "Preparation complete with exact-source runtime and agreed final contract; root GO received, application work starts under a separate implementation claim.",
+  "sourceTreeSha256": "bc5e57a04e0b4102434493093c65977c174ecd91ee6de63871edbfdeb2c00612",
+  "sourceUnchanged": true,
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "contracts": [
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\task-contract.md",
+      "snapshot": "task-contract.snapshot.md",
+      "sha256": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\preparatory-review.md",
+      "snapshot": "preparatory-review.snapshot.md",
+      "sha256": "4fd9d6adf93345285340fb0a044a20b0acfc1fa8aad54285f91ee3ea451a06e1",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\catalog-contract-proposal.md",
+      "snapshot": "catalog-contract-proposal.snapshot.md",
+      "sha256": "cacbf3edb27e8b17402c759cea6c08a25bffd3069d47d8cec3a6598f0c401000",
+      "byteIdentical": true
+    }
+  ],
+  "runtime": {
+    "readOnlyShared": "C:\\Workspace\\ClinicOSHouse-worktrees\\quality-loop-20260829\\node_modules",
+    "readOnlyByPolicy": true,
+    "privateWrapper": {
+      "source": "C:\\Workspace\\ClinicOSHouse-worktrees\\po14-gds-backend\\backend\\node_modules\\@prisma\\client",
+      "target": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-backend\\backend\\node_modules\\@prisma\\client",
+      "treeSha256": "03fa7ad6c318b73043d5fef3d9edd9eb250fddc9d76ae12b540acc99d085526d",
+      "files": [
+        {
+          "path": "LICENSE",
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        },
+        {
+          "path": "README.md",
+          "bytes": 2409,
+          "sha256": "feef40cc3ef087e0bdea16e5ec56c999107abe18eec5bdf019ca0dbe9ed92a34"
+        },
+        {
+          "path": "default.d.ts",
+          "bytes": 39,
+          "sha256": "51ebca098538b252953b1ef83c165f25b52271bfb6049cd09d197dddd4cd43c5"
+        },
+        {
+          "path": "default.js",
+          "bytes": 61,
+          "sha256": "0cfff057c91fcb7559bd1a3bb4891404e455829ced5b18a87c9393ee1721ace4"
+        },
+        {
+          "path": "edge.d.ts",
+          "bytes": 36,
+          "sha256": "317483ac49e6e3592ae08c55aeca9e9cc252749ef3a10841229f01422720ed2a"
+        },
+        {
+          "path": "edge.js",
+          "bytes": 107,
+          "sha256": "7bf087246c937e84453cb6ec8235c106c9f1808b3400d74601dd503f14e49643"
+        },
+        {
+          "path": "extension.d.ts",
+          "bytes": 40,
+          "sha256": "2479ba0bddab019eaacf32578d5c3af99999cee581bc10d49946469b06ee2426"
+        },
+        {
+          "path": "extension.js",
+          "bytes": 111,
+          "sha256": "116e87c8b1e477b2b0f80b08f32c1752976d6909f9e6e38a1c4a92f97b9251f3"
+        },
+        {
+          "path": "index-browser.js",
+          "bytes": 80,
+          "sha256": "3d3124ae428b3514dbeb60a4270b904a063451cb82de1d96f0b16d69fd1860c6"
+        },
+        {
+          "path": "index.d.ts",
+          "bytes": 39,
+          "sha256": "51ebca098538b252953b1ef83c165f25b52271bfb6049cd09d197dddd4cd43c5"
+        },
+        {
+          "path": "index.js",
+          "bytes": 110,
+          "sha256": "98ebb7453444d223cacae7a3d8ad655f29997523d9a1646d383f852b10ba70fa"
+        },
+        {
+          "path": "package.json",
+          "bytes": 8353,
+          "sha256": "974ee2fedaddb6f7707ba2dc0c4d95219be80d6e952034ba9d5d10c68eddc9a7"
+        },
+        {
+          "path": "runtime/client.d.mts",
+          "bytes": 117082,
+          "sha256": "2e3533bc1651aa968a274740771d2189270bd9d28253708e887bfb9b70532ac5"
+        },
+        {
+          "path": "runtime/client.d.ts",
+          "bytes": 117082,
+          "sha256": "2e3533bc1651aa968a274740771d2189270bd9d28253708e887bfb9b70532ac5"
+        },
+        {
+          "path": "runtime/client.js",
+          "bytes": 208461,
+          "sha256": "c444040cf5d0a8bb0edde2d482e2865360671d1609349ce626506ae198bcee29"
+        },
+        {
+          "path": "runtime/client.js.map",
+          "bytes": 1071331,
+          "sha256": "db16bc9826128ae519f5e93e54fe17f3bf44fd0ce53753faac006c66ee820b3f"
+        },
+        {
+          "path": "runtime/client.mjs",
+          "bytes": 207421,
+          "sha256": "728edf67c2ecdd72a7086ccfb0127f83511c95f921a754cbfb59efcce32062a5"
+        },
+        {
+          "path": "runtime/client.mjs.map",
+          "bytes": 1071923,
+          "sha256": "e70ada8ef134e56dd10af5b3e7991629c2d0b5f526da06ee310cbe33ff09f10a"
+        },
+        {
+          "path": "runtime/index-browser.d.mts",
+          "bytes": 3454,
+          "sha256": "64604f63c6f4540eb43bc6c10c1e33d36f44391e24a51cdab314dfed2bab37b2"
+        },
+        {
+          "path": "runtime/index-browser.d.ts",
+          "bytes": 3454,
+          "sha256": "64604f63c6f4540eb43bc6c10c1e33d36f44391e24a51cdab314dfed2bab37b2"
+        },
+        {
+          "path": "runtime/index-browser.js",
+          "bytes": 2346,
+          "sha256": "2221521962296e7ac6c68393ed6ec7bc28c297bb323e47c393700f099342ef2c"
+        },
+        {
+          "path": "runtime/index-browser.js.map",
+          "bytes": 7925,
+          "sha256": "3561982f1de4a3d97fc2e08b46c993eb2ab76212454446c2b5bea01da0dadad3"
+        },
+        {
+          "path": "runtime/index-browser.mjs",
+          "bytes": 1868,
+          "sha256": "6d01377aa8da1dafb1b863e464329cfa8cfd7d09602669b430820a728dae8b9a"
+        },
+        {
+          "path": "runtime/index-browser.mjs.map",
+          "bytes": 7920,
+          "sha256": "0dcc328835c4d649219e96731ad88d6ffb4f89e3171d143c935bb7da4ad63aa1"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.cockroachdb.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.cockroachdb.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.cockroachdb.wasm-base64.js",
+          "bytes": 4646043,
+          "sha256": "9da9088357db6f46fe2b770201078cd8e5a92efa5e586232d3be9fef60e813df"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.cockroachdb.wasm-base64.mjs",
+          "bytes": 4646033,
+          "sha256": "b45311c0db4948154723443c7f0ac3c6c877422d26581e70a0063d14d20a2673"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.mysql.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.mysql.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.mysql.wasm-base64.js",
+          "bytes": 4522655,
+          "sha256": "475cb2046d18f6256df75d2d4d58660e12d1830cb2bb568a1302bb6beec2ea47"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.mysql.wasm-base64.mjs",
+          "bytes": 4522645,
+          "sha256": "510ec5b8a8d7d55b39715214f5e21542361ba6dea799f3234a5856a63f89eb6a"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.postgresql.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.postgresql.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.postgresql.wasm-base64.js",
+          "bytes": 4583047,
+          "sha256": "e7bcd37e164457509eacef7d577a66f15df134fce01eaeea699789775535c9fd"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.postgresql.wasm-base64.mjs",
+          "bytes": 4583037,
+          "sha256": "a2dd2f2a58eafe6cdfb579cf8bd5cbcbf2ea811d4505efe4e48eea4dcfae59c6"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlite.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlite.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlite.wasm-base64.js",
+          "bytes": 4406183,
+          "sha256": "1c8832df92408b0af3f1a60871d44bcbb850af1b23eb208e5aa9cec723eba36c"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlite.wasm-base64.mjs",
+          "bytes": 4406173,
+          "sha256": "6e941a4e282460af472f603613d8554a2424f2b026d3427aae6c416f7d2f721f"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlserver.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlserver.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlserver.wasm-base64.js",
+          "bytes": 4700283,
+          "sha256": "5100982d68ddbbf9e5d2552eda36c0541fc3fc375be5a81da805226c67c4dbfb"
+        },
+        {
+          "path": "runtime/query_compiler_fast_bg.sqlserver.wasm-base64.mjs",
+          "bytes": 4700273,
+          "sha256": "700b356af65725546f72a22026149c61c43d74cd0128502993c668fb3ad2f656"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.cockroachdb.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.cockroachdb.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.cockroachdb.wasm-base64.js",
+          "bytes": 2343103,
+          "sha256": "da27374165eeca0c9bdc53677be564894f1d04563f22b6c54eeb0c79e9913acb"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.cockroachdb.wasm-base64.mjs",
+          "bytes": 2343093,
+          "sha256": "48d23147da12bacd2aa473b19b505e0f753641b344aff0ff9c66e67420244945"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.mysql.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.mysql.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.mysql.wasm-base64.js",
+          "bytes": 2271031,
+          "sha256": "80f84b8943271a41c0975c34a2e67934b09a50f9e97ffa21d26516ceb80186d7"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.mysql.wasm-base64.mjs",
+          "bytes": 2271021,
+          "sha256": "1d0510be83212b40d33dda0b4213ae7cab51ac18e4f4b5edeae7df11e768965a"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.postgresql.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.postgresql.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.postgresql.wasm-base64.js",
+          "bytes": 2312839,
+          "sha256": "8f27fd1146d7e22041663b1a7a86a28028bef9f8e566d1494a1e7ef75043d66d"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.postgresql.wasm-base64.mjs",
+          "bytes": 2312829,
+          "sha256": "3476342f6b8cea0f4ad526690f06ad6c227e261c7052560a246d43ea75adff24"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlite.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlite.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlite.wasm-base64.js",
+          "bytes": 2214935,
+          "sha256": "96136815c6195b26d84d82d7cd271e55f4393328500ea52a5f3299c2ffa4224e"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlite.wasm-base64.mjs",
+          "bytes": 2214925,
+          "sha256": "53a6bde5256f918bbe1b19380898f2dababf5b54b8c336ba6cf432f9d08a3a0b"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlserver.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlserver.mjs",
+          "bytes": 6288,
+          "sha256": "f9b1cc127e0fc67aea591352f1200374c370a9c36fc51f9bb6c54f41de142b43"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlserver.wasm-base64.js",
+          "bytes": 2309095,
+          "sha256": "c73f99945d48e78d01cd39d21854857b779d85a1130a5558901773dd0d38c412"
+        },
+        {
+          "path": "runtime/query_compiler_small_bg.sqlserver.wasm-base64.mjs",
+          "bytes": 2309085,
+          "sha256": "1290b19bf4a3b94a890267f049b567fa52b93259b9f1ea25afcabdb7265432d2"
+        },
+        {
+          "path": "runtime/wasm-compiler-edge.d.ts",
+          "bytes": 25,
+          "sha256": "80385d658f3e09e747f2d6540b6f8d4425598533fa2b23d45258b04be491e164"
+        },
+        {
+          "path": "runtime/wasm-compiler-edge.js",
+          "bytes": 223427,
+          "sha256": "da64eaec43fe8d38b0703c48875343dfd02f4b84c5505c91f52d0e70814798f8"
+        },
+        {
+          "path": "runtime/wasm-compiler-edge.js.map",
+          "bytes": 1197514,
+          "sha256": "5c8bdcc10c87920717c97fa0b93fb062d12d394563159f083b0d6ecb1fa8e233"
+        },
+        {
+          "path": "runtime/wasm-compiler-edge.mjs",
+          "bytes": 222093,
+          "sha256": "22fd0f9bb21c18dfdcc28443f0752c1998471ed41424964c18b759f8d7ae4ef2"
+        },
+        {
+          "path": "runtime/wasm-compiler-edge.mjs.map",
+          "bytes": 1198171,
+          "sha256": "796e6bfee7278d497b5dcfd6da2ab04bd45678370968ee1a63ff963a9cb9cc30"
+        },
+        {
+          "path": "scripts/colors.js",
+          "bytes": 5732,
+          "sha256": "08eb6a703f1f8acb8c3cdd69f5c15ba958c3df657a35c7d4e30436a799847a9f"
+        },
+        {
+          "path": "scripts/default-index.d.ts",
+          "bytes": 4004,
+          "sha256": "13a989ac19ca7342067b9346be1ac5dc9f335ed4630c59f29cdcc11ef40c8032"
+        },
+        {
+          "path": "scripts/default-index.js",
+          "bytes": 2077,
+          "sha256": "ce8512d682ffe419cb10e7ad2fa76683b806871346be4690853f854a9691e3dc"
+        },
+        {
+          "path": "sql.d.ts",
+          "bytes": 35,
+          "sha256": "79609bf6f382209078a578e71ed2ecb81829f1b8bebae3c7948a02090ead8e3e"
+        },
+        {
+          "path": "sql.js",
+          "bytes": 70,
+          "sha256": "1eaca014b3d83401e69545a43e2b2bb8ee95c9238703428a084a6479a49b66d1"
+        },
+        {
+          "path": "sql.mjs",
+          "bytes": 51,
+          "sha256": "a9a785844488c0ae9da9890d625df4c61d8033e93914d213b4456aefc87b4487"
+        }
+      ]
+    },
+    "privateGeneratedClient": {
+      "source": "C:\\Workspace\\ClinicOSHouse-worktrees\\po14-gds-backend\\backend\\node_modules\\.prisma\\client",
+      "target": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-backend\\backend\\node_modules\\.prisma\\client",
+      "treeSha256": "0271921c1d5d5f35c653625bebc42014bcf95690a146f2b4768037bf6794de7b",
+      "files": [
+        {
+          "path": "client.d.ts",
+          "bytes": 23,
+          "sha256": "d5eb5865d4cbaa9985cc3cfb920b230cdcf3363f1e70903a08dc4baab80b0ce1"
+        },
+        {
+          "path": "client.js",
+          "bytes": 169,
+          "sha256": "b0537de53acb6a4fe87eba90c26538e5328748f110c6cdfa4c658e6618e1b37d"
+        },
+        {
+          "path": "default.d.ts",
+          "bytes": 23,
+          "sha256": "d5eb5865d4cbaa9985cc3cfb920b230cdcf3363f1e70903a08dc4baab80b0ce1"
+        },
+        {
+          "path": "default.js",
+          "bytes": 185,
+          "sha256": "27f67f5742440cc51256289d9122f2acb0715fbc346e2fd8fa9f1d9dc8c6e38d"
+        },
+        {
+          "path": "edge.d.ts",
+          "bytes": 25,
+          "sha256": "7378dd41401ba1acff435b9c317a5b919a3d38479ed3dbd4a25c8b4fd623a224"
+        },
+        {
+          "path": "edge.js",
+          "bytes": 278875,
+          "sha256": "21e33b6a1a41f4874277a42cbcf2966e71db0ef4ab3fb84fbf10c18b3dbe0c43"
+        },
+        {
+          "path": "index-browser.js",
+          "bytes": 21625,
+          "sha256": "92556c6d312b4eb8d3be651b2423354cf35afb51a41e64380622e9b69de7be4b"
+        },
+        {
+          "path": "index.d.ts",
+          "bytes": 2867523,
+          "sha256": "844766d2dbf3028dedf1f6192ac8017c082033494ee00ff1ff12656ad4e49451"
+        },
+        {
+          "path": "index.js",
+          "bytes": 278738,
+          "sha256": "9a934af2b35058ab3e55fd5347d76f848c2bd5a1216ec5c0a1816c43c2803bc5"
+        },
+        {
+          "path": "package.json",
+          "bytes": 3840,
+          "sha256": "52f75ec9f1d5b6277a9d8e9c7f222284a7de225880c71f58b63c23686ad01147"
+        },
+        {
+          "path": "query_compiler_fast_bg.js",
+          "bytes": 8153,
+          "sha256": "b2371d753aad726da699b0a3748071c67325fb673e7c7eeb3cd6cbe87fef8cfe"
+        },
+        {
+          "path": "query_compiler_fast_bg.wasm",
+          "bytes": 3437252,
+          "sha256": "f2592df4586bc42ceffbfcdbaa764cc44612b533b61293119a7e6222cf5637f9"
+        },
+        {
+          "path": "query_compiler_fast_bg.wasm-base64.js",
+          "bytes": 4583047,
+          "sha256": "e7bcd37e164457509eacef7d577a66f15df134fce01eaeea699789775535c9fd"
+        },
+        {
+          "path": "runtime/client.d.ts",
+          "bytes": 117082,
+          "sha256": "2e3533bc1651aa968a274740771d2189270bd9d28253708e887bfb9b70532ac5"
+        },
+        {
+          "path": "runtime/client.js",
+          "bytes": 208594,
+          "sha256": "cbce5cca44be796f822c2d84748aa52430541a1a1d1574da8a86456a2a8b21d7"
+        },
+        {
+          "path": "runtime/index-browser.d.ts",
+          "bytes": 3454,
+          "sha256": "64604f63c6f4540eb43bc6c10c1e33d36f44391e24a51cdab314dfed2bab37b2"
+        },
+        {
+          "path": "runtime/index-browser.js",
+          "bytes": 2479,
+          "sha256": "96e3cb68f7aaf44959f05718489c0976d5a2c7b6a54aa1f0db1deec7223b9bb4"
+        },
+        {
+          "path": "runtime/wasm-compiler-edge.js",
+          "bytes": 223560,
+          "sha256": "bc0765c97569a96a6abd835b538f33a83923119e4afd5c79064f839e497abdb5"
+        },
+        {
+          "path": "schema.prisma",
+          "bytes": 34688,
+          "sha256": "e79bedeae560156ee91ac0e89b11df99f58439cf5777a77fab664ca9871f1336"
+        },
+        {
+          "path": "wasm-edge-light-loader.mjs",
+          "bytes": 194,
+          "sha256": "8fcdcc1a0c951fe38e1035913b7f6a9979cac504e62ed6704df2da9c3b45308a"
+        },
+        {
+          "path": "wasm-worker-loader.mjs",
+          "bytes": 187,
+          "sha256": "8fffe492af08eeb7eb6eb619121fda0f3752741acd372efb4431040e49f34ec2"
+        }
+      ]
+    },
+    "pdfReadOnly": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-05-scansioni-lunghe\\dependencies\\node_modules\\pdf-lib",
+    "fontkitReadOnly": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-10-painad\\dependencies\\fontkit-runtime\\node_modules\\@pdf-lib\\fontkit",
+    "clientPath": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-backend\\backend\\node_modules\\@prisma\\client\\default.js",
+    "nodeVersion": "v26.3.0",
+    "prismaVersion": {
+      "client": "7.10.0",
+      "engine": "0edf323efd1d98336f3f0a68684b56f689b900d3"
+    },
+    "schemaSha256": "27ecb68a69455aff958fb0c66e3fffc57de0e3353b260111ad0d3a86ae64143c",
+    "generatedSchemaSha256": "e79bedeae560156ee91ac0e89b11df99f58439cf5777a77fab664ca9871f1336",
+    "baselineSchemaMatches": true,
+    "comparison": "Ignore generator output path, formatting whitespace and adjacent PatientDocument unique/index order only.",
+    "generationPerformed": false,
+    "databaseConnected": false,
+    "sharedRuntimeWritten": false
+  },
+  "implementationAuthorized": true,
+  "publicationAuthorized": false,
+  "applicationTestsRun": false,
+  "limitations": [
+    "No application source changes, application tests, database connection, runtime generation, dependency installation or deployment occurred during preparation.",
+    "Publication remains reserved to root; implementation authorization and claims do not grant worker publishing authority."
+  ],
+  "finalizedAt": "2026-09-23T07:16:23.550Z",
+  "claimReleased": true,
+  "claimRelease": "claims-preparation-release.json",
+  "dtoContractSha256": "02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23",
+  "frontendAgreement": "frontend-agreement.json",
+  "implementationGo": "root-decisions.json",
+  "applicationSourceUnchanged": true,
+  "artifactCopyAllowlist": [
+    "artifact-manifest.json",
+    "backend-contract.md",
+    "catalog-contract-proposal.snapshot.md",
+    "claims-preparation-release.json",
+    "claims-preparation.json",
+    "contract-provenance.json",
+    "finalize-preparation.mjs",
+    "frontend-agreement.json",
+    "implementation-plan.md",
+    "preparation-recall.json",
+    "preparation-receipt.json",
+    "preparation-session.json",
+    "preparation-source-manifest.json",
+    "preparatory-review.snapshot.md",
+    "prepare-runtime.mjs",
+    "root-decisions.json",
+    "task-contract.snapshot.md"
+  ],
+  "doNotCopy": [
+    "backend/node_modules",
+    "root node_modules junction",
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ]
+}

@@ -59,7 +59,7 @@ test('preserves the pre-existing mapping keys unchanged', () => {
   assert.deepEqual(cartella.anamnesi, { remota: 'testo' });
   assert.deepEqual(cartella.parametriMensili, []);
   assert.equal((cartella.parametriVitali as unknown[]).length, 1);
-  assert.equal((cartella.valutazioniNRS as unknown[]).length, 1);
+  assert.equal(Object.hasOwn(cartella, 'valutazioniNRS'), false);
   assert.equal(cartella.terapiaImportText, 'Paracetamolo 1000mg');
 });
 

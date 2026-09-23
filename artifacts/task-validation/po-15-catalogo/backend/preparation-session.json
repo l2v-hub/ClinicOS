@@ -1,0 +1,66 @@
+{
+  "task": "PO15-backend-preparation",
+  "startedAt": "2026-09-23T07:08:16.580Z",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po15-catalog-backend",
+  "branch": "codex/po15-catalog-backend",
+  "baseline": "f445260a4ca4de872c1361ff19fc215179b097fe",
+  "decision": "allow private runtime and contract preparation only; application work awaits root GO after PO14 verified live",
+  "claim": {
+    "issueId": "PO-15-backend-preparation",
+    "claimant": {
+      "type": "agent",
+      "agentId": "codex-po15-backend",
+      "agentType": "coder"
+    },
+    "claimedAt": "2026-09-23T07:05:03.174Z",
+    "status": "active",
+    "statusChangedAt": "2026-09-23T07:05:03.174Z",
+    "progress": 0,
+    "context": "Explicit root preparation-only assignment. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po15-catalog-backend baseline f445260a4ca4de872c1361ff19fc215179b097fe branch codex/po15-catalog-backend. Own artifacts/task-validation/po-15-catalogo/backend/** and private backend/node_modules plus read-only root dependency junction for runtime setup. Agree catalog metadata DTO and read-only legacy NRS PUT/import guard contract with frontend. No application source or tests until explicit root GO after verified PO14 live. Preserve protected PowerShell and dependency manifests. No shared runtime writes, commit/push/deploy, ports, online patient writes or delegation."
+  },
+  "sourceTreeSha256": "bc5e57a04e0b4102434493093c65977c174ecd91ee6de63871edbfdeb2c00612",
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "contracts": [
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\task-contract.md",
+      "snapshot": "task-contract.snapshot.md",
+      "sha256": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\preparatory-review.md",
+      "snapshot": "preparatory-review.snapshot.md",
+      "sha256": "4fd9d6adf93345285340fb0a044a20b0acfc1fa8aad54285f91ee3ea451a06e1",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\catalog-contract-proposal.md",
+      "snapshot": "catalog-contract-proposal.snapshot.md",
+      "sha256": "cacbf3edb27e8b17402c759cea6c08a25bffd3069d47d8cec3a6598f0c401000",
+      "byteIdentical": true
+    }
+  ],
+  "implementationAuthorized": false,
+  "publicationAuthorized": false
+}

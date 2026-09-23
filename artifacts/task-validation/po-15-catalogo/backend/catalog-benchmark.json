@@ -1,0 +1,93 @@
+{
+  "sourceManifestSha256": "a8c2d88aa2cdabe1c7ee46bce8895668ed26e8ca23039cdc3877a5b2701d48ca",
+  "sourceTreeSha256": "1c37cd6d5ee8445cf0b92967e3b1610f5ff2a59d8091a9e2643e3dc730324bd9",
+  "inputTreeSha256": "258be0f040d287114b82c8d11852a68838423de21509daa02c307b46dc92f1b2",
+  "recordedAt": "2026-09-23T07:36:34.975Z",
+  "baselineSource": {
+    "commit": "f445260a4ca4de872c1361ff19fc215179b097fe",
+    "unchangedExecutedFiles": [
+      {
+        "path": "backend/src/assessments/current.ts",
+        "baselineGitBytesSha256": "5003b7c7380d1e11db0dac7deca15df032e15f136228ff455b7d08c91c2312d7",
+        "executedBytesSha256": "962e45ad21d07bfca3e22113420d869a3e6e2a7fb98e000b071d76e59998cf06"
+      },
+      {
+        "path": "backend/src/assessments/access.ts",
+        "baselineGitBytesSha256": "38d0a46c066d858b9f74d69c0af0e6db262b3b616c54236706a6910fe3100248",
+        "executedBytesSha256": "f5427266c6d518012205c185dde365ea68b557a3c31e4feb80c637dc397b597e"
+      }
+    ]
+  },
+  "candidateSource": [
+    {
+      "path": "backend/src/assessments/catalog.ts",
+      "bytes": 4753,
+      "sha256": "46e5d50e17bef2ccb943dcd6f1853dc5bd282d169846ca6a35f4e782c360d554"
+    }
+  ],
+  "workload": {
+    "patientAssessments": 255,
+    "finalForms": 5,
+    "ownPainadDrafts": 250,
+    "notesPerNonPainadFinal": 4000,
+    "samples": 12,
+    "warmups": 2,
+    "alternatingOrder": true
+  },
+  "environment": {
+    "node": "v26.3.0",
+    "database": "synthetic native PostgreSQL loopback",
+    "networkRequests": 0,
+    "compiledBuildUsed": false
+  },
+  "baseline": {
+    "operation": "Five existing currentAssessment calls",
+    "serviceCalls": 5,
+    "payloadBytes": 60578,
+    "medianMs": 17.769800000000032,
+    "samplesMs": [
+      15.458099999999831,
+      21.43769999999995,
+      21.35819999999967,
+      17.35199999999986,
+      15.728799999999865,
+      19.709100000000035,
+      16.369000000000142,
+      20.370699999999943,
+      17.73090000000002,
+      17.476799999999912,
+      17.808700000000044,
+      18.37480000000005
+    ]
+  },
+  "candidate": {
+    "operation": "One assessmentCatalog call",
+    "serviceCalls": 1,
+    "metadataQueries": 1,
+    "patientLockQueries": 1,
+    "payloadBytes": 1835,
+    "medianMs": 3.1733999999999014,
+    "samplesMs": [
+      3.2213999999999032,
+      2.770100000000184,
+      3.233900000000176,
+      3.0423000000000684,
+      2.746900000000096,
+      3.1253999999998996,
+      3.1059000000000196,
+      2.8971999999998843,
+      3.2696999999998297,
+      3.301400000000285,
+      3.3123999999997977,
+      3.854200000000219
+    ]
+  },
+  "sameLatestFinalIds": true,
+  "ownDraftCountExact": true,
+  "payloadReductionPercent": 96.97084750239361,
+  "limitations": [
+    "Synthetic service-level comparison, not a production latency claim or HTTP benchmark.",
+    "Baseline intentionally obtains full current assessments for five types; candidate returns catalog metadata plus own-draft metadata.",
+    "No real patient data or PDF generation is part of this benchmark; all fixtures are synthetic."
+  ]
+}

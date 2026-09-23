@@ -55,9 +55,9 @@ export const PATIENT_SECTIONS: PatientSectionDefinition[] = [
   },
   {
     sectionKey: 'dolore',
-    title: 'Dolore (NRS)',
+    title: 'Dati dolore precedenti · sola lettura',
     component: PainAssessmentEditor as unknown as ComponentType<SectionProps<never>>,
-    availableDuringIntake: true,
+    availableDuringIntake: false,
     requiredDuringIntake: false,
     supportedByDocumentImport: false,
     permissions: ['operatore'],

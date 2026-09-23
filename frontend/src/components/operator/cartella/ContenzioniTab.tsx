@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import { legacyEntryTransition } from '../../../lib/assessments/assessmentEntry';
 import { IcoCheck } from '../../../icons';
 import type {
   CartellaPaziente,
@@ -22,6 +23,7 @@ interface Props {
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void;
   operatoreNome: string;
+  createRequest?: string;
 }
 
 const TIPO_LABEL: Record<TipoContenzione, string> = {
@@ -359,13 +361,31 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
 
 // ── Main component ────────────────────────────────────────────────────────
 
-export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
   const list = cartella.contenzioni ?? [];
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState(!!createRequest);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [modulo, setModulo] = useState(false);
   const [moduloTarget, setModuloTarget] = useState<string | null>(null);
+  const entryForm = useRef<HTMLDivElement>(null);
+  const entryGate = useRef<HTMLDivElement>(null);
+  const [entryBlocked, setEntryBlocked] = useState(false);
+  function applyEntry(action: 'request' | 'resume' | 'discard') {
+    const next = legacyEntryTransition(action, { editId, form }, () => ({ ...EMPTY_FORM }));
+    setEditId(next.editId); setForm(next.form); setEntryBlocked(next.blocked); setShowAdd(next.showForm); setModulo(false);
+    if (action !== 'request') setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
+  }
+  const requestEntry = useEffectEvent(() => applyEntry('request'));
+  useEffect(() => {
+    if (!createRequest) return;
+    let focusTimer: ReturnType<typeof setTimeout> | undefined;
+    const timer = setTimeout(() => {
+      requestEntry();
+      focusTimer = setTimeout(() => (entryGate.current?.querySelector<HTMLButtonElement>('button') ?? entryForm.current?.querySelector<HTMLInputElement>('input'))?.focus(), 0);
+    }, 0);
+    return () => { clearTimeout(timer); clearTimeout(focusTimer); };
+  }, [createRequest]);
 
   function set(f: Partial<typeof form>) {
     setForm((p) => ({ ...p, ...f }));
@@ -420,6 +440,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
   }
 
   function startEdit(c: Contenzione) {
+    setEntryBlocked(false);
     setForm({
       dataInizio: c.dataInizio,
       oraInizio: c.oraInizio,
@@ -506,11 +527,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
               </button>
               <button
                 className="btn-sm"
-                onClick={() => {
-                  setEditId(null);
-                  setForm({ ...EMPTY_FORM });
-                  setShowAdd(true);
-                }}
+                onClick={() => applyEntry('discard')}
               >
                 + Aggiungi
               </button>
@@ -518,8 +535,13 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
           }
         >
           <div className="cts__body--padded">
+            {entryBlocked && <div ref={entryGate} role="alert" data-legacy-entry-gate>
+              <p>È presente una modifica non salvata. Riprendila oppure annullala prima di iniziare una nuova contenzione.</p>
+              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('resume')}>Riprendi modifica</button>
+              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('discard')}>Annulla modifica e inizia nuova</button>
+            </div>}
             {showAdd && (
-              <div className="cr-inline-form">
+              <div className="cr-inline-form" ref={entryForm}>
                 <div className="cr-form-section__title">
                   {editId ? 'Modifica' : 'Nuova contenzione / protezione'}
                 </div>

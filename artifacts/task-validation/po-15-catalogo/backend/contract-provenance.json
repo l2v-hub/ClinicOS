@@ -1,0 +1,35 @@
+{
+  "contracts": [
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\task-contract.md",
+      "snapshot": "task-contract.snapshot.md",
+      "sha256": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\preparatory-review.md",
+      "snapshot": "preparatory-review.snapshot.md",
+      "sha256": "4fd9d6adf93345285340fb0a044a20b0acfc1fa8aad54285f91ee3ea451a06e1",
+      "byteIdentical": true
+    },
+    {
+      "original": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-15-catalogo\\catalog-contract-proposal.md",
+      "snapshot": "catalog-contract-proposal.snapshot.md",
+      "sha256": "cacbf3edb27e8b17402c759cea6c08a25bffd3069d47d8cec3a6598f0c401000",
+      "byteIdentical": true
+    }
+  ],
+  "assignedWorktreeContractUnchanged": true,
+  "assignedWorktreeContractMatchesAfterCrlfNormalization": true,
+  "backendContract": {
+    "path": "backend-contract.md",
+    "sha256": "7a08a06937d369c49ac213b377c29e7c8cc788ca0e1cc494d08a27ddf07f4573",
+    "status": "preparatory agreement; freeze at preparation handoff"
+  },
+  "finalBackendContract": {
+    "path": "backend-contract.md",
+    "sha256": "02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23",
+    "agreedByFrontend": true,
+    "rootDecisions": "root-decisions.json"
+  }
+}

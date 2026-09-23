@@ -1,0 +1,74 @@
+✔ catalog returns only five bounded metadata rows, private drafts and explicit access errors (9688.6188ms)
+✔ catalog latest final agrees with current after a late correction of an older assessment (411.2424ms)
+PUT /patients/vitals-qa-anna/cartella → salvata
+PUT /patients/vitals-qa-anna/cartella → salvata
+PUT /patients/:id/cartella error: CartellaUpdateError: Lo storico NRS precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+    at preserveLegacyHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:51:11)
+    at preserveNrsHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:74:10)
+    at <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:94:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+    at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\routes\patients.ts:1248:22) {
+  status: 409,
+  code: 'nrs_legacy_read_only'
+}
+PUT /patients/:id/cartella error: CartellaUpdateError: Lo storico NRS precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+    at preserveLegacyHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:51:11)
+    at preserveNrsHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:74:10)
+    at <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:94:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+    at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\routes\patients.ts:1248:22) {
+  status: 409,
+  code: 'nrs_legacy_read_only'
+}
+PUT /patients/:id/cartella error: CartellaUpdateError: Lo storico NRS precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+    at preserveLegacyHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:51:11)
+    at preserveNrsHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:74:10)
+    at <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:94:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+    at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\routes\patients.ts:1248:22) {
+  status: 409,
+  code: 'nrs_legacy_read_only'
+}
+PUT /patients/:id/cartella error: CartellaUpdateError: Lo storico NRS precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+    at preserveLegacyHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:51:11)
+    at preserveNrsHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:74:10)
+    at <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:94:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+    at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\routes\patients.ts:1248:22) {
+  status: 409,
+  code: 'nrs_legacy_read_only'
+}
+✔ NRS legacy remains immutable through Cartella while unrelated updates and omitted fields are accepted (59.3889ms)
+✖ confirmed intake pain remains readable without conversion and overflow preserves deferred therapies (4.1464ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22961.6651
+
+✖ failing tests:
+
+test at tests\integration\po15-catalog.test.mts:1:6414
+✖ confirmed intake pain remains readable without conversion and overflow preserves deferred therapies (4.1464ms)
+  AssertionError [ERR_ASSERTION]: {"error":"Autenticazione richiesta","code":"operator_missing"}
+  
+  401 !== 200
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po15-catalog.test.mts:59:54)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 401,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

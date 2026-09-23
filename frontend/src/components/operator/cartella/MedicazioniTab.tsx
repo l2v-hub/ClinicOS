@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import { legacyEntryTransition } from '../../../lib/assessments/assessmentEntry';
 import { IcoCheck } from '../../../icons';
 import type {
   CartellaPaziente,
@@ -19,6 +20,7 @@ interface Props {
   operatoreNome: string;
   operatoreId?: string;
   operatoreRole?: string;
+  createRequest?: string;
 }
 
 const ESSUDATO_LABEL: Record<EssudatoLivello, string> = {
@@ -696,17 +698,36 @@ export function MedicazioniTab({
   operatoreNome,
   operatoreId,
   operatoreRole,
+  createRequest,
 }: Props) {
   const meds = cartella.medicazioniFerite ?? [];
   const medsRef = useRef(meds);
   medsRef.current = meds;
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState(!!createRequest);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [modulo, setModulo] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const savingRef = useRef(false);
+  const entryForm = useRef<HTMLDivElement>(null);
+  const entryGate = useRef<HTMLDivElement>(null);
+  const [entryBlocked, setEntryBlocked] = useState(false);
+  function applyEntry(action: 'request' | 'resume' | 'discard') {
+    const next = legacyEntryTransition(action, { editId, form }, () => ({ ...EMPTY_FORM, data: todayStr() }));
+    setEditId(next.editId); setForm(next.form); setEntryBlocked(next.blocked); setShowAdd(next.showForm); setModulo(false);
+    if (action !== 'request') setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
+  }
+  const requestEntry = useEffectEvent(() => applyEntry('request'));
+  useEffect(() => {
+    if (!createRequest) return;
+    let focusTimer: ReturnType<typeof setTimeout> | undefined;
+    const timer = setTimeout(() => {
+      requestEntry();
+      focusTimer = setTimeout(() => (entryGate.current?.querySelector<HTMLButtonElement>('button') ?? entryForm.current?.querySelector<HTMLInputElement>('input'))?.focus(), 0);
+    }, 0);
+    return () => { clearTimeout(timer); clearTimeout(focusTimer); };
+  }, [createRequest]);
 
   function set(f: Partial<typeof form>) {
     setForm((p) => ({ ...p, ...f }));
@@ -759,6 +780,7 @@ export function MedicazioniTab({
 
   function startEdit(m: MedicazioneRecord) {
     if (savingRef.current) return;
+    setEntryBlocked(false);
     setSaveError('');
     setForm({
       data: m.data,
@@ -810,10 +832,8 @@ export function MedicazioniTab({
                 className="btn-sm"
                 disabled={saving}
                 onClick={() => {
-                  setEditId(null);
-                  setForm({ ...EMPTY_FORM, data: todayStr() });
+                  applyEntry('discard');
                   setSaveError('');
-                  setShowAdd(true);
                 }}
               >
                 + Nuova medicazione
@@ -822,8 +842,13 @@ export function MedicazioniTab({
           }
         >
           <div className="cts__body--padded">
+            {entryBlocked && <div ref={entryGate} role="alert" data-legacy-entry-gate>
+              <p>È presente una modifica non salvata. Riprendila oppure annullala prima di iniziare una nuova medicazione.</p>
+              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('resume')}>Riprendi modifica</button>
+              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('discard')}>Annulla modifica e inizia nuova</button>
+            </div>}
             {showAdd && (
-              <div className="cr-inline-form">
+              <div className="cr-inline-form" ref={entryForm}>
                 <div className="cr-form-section__title">
                   {editId ? 'Modifica medicazione' : 'Nuova medicazione'}
                 </div>

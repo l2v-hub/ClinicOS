@@ -1,0 +1,33 @@
+{
+  "task": "PO-15-frontend",
+  "generatedAtUtc": "2026-09-23T07:08:51.347Z",
+  "baseline": "f445260a4ca4de872c1361ff19fc215179b097fe",
+  "runtime": {
+    "node": "v26.3.0",
+    "packages": {
+      "typescript": "6.0.3",
+      "tsx": "4.23.1",
+      "react": "19.2.5",
+      "vite": "8.2.2"
+    },
+    "dependencyJunction": "C:\\Workspace\\ClinicOSHouse-worktrees\\quality-loop-20260829\\node_modules",
+    "dependencyWritePolicy": "Shared target read only by policy; no install/shared runtime writes.",
+    "localCaches": [
+      "frontend/node_modules/.tmp",
+      "frontend/node_modules/.vite-temp"
+    ]
+  },
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "b36eca8bc9fd9f584410f7ff3a3469f812f197d6e96a435659902adc5ee91be1"
+  },
+  "inputs": {
+    "task-contract.snapshot.md": "bf0e8dd2f18a20e04fdcda2d754c3d34390e12b7e7ad0807852a3d5c5ed35fdf",
+    "preparatory-review.snapshot.md": "4fd9d6adf93345285340fb0a044a20b0acfc1fa8aad54285f91ee3ea451a06e1",
+    "catalog-contract-proposal.snapshot.md": "cacbf3edb27e8b17402c759cea6c08a25bffd3069d47d8cec3a6598f0c401000"
+  },
+  "baselineInputs": 549,
+  "applicationSourceChanges": 0,
+  "applicationValidationRun": false
+}

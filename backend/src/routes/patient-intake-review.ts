@@ -1,33 +1,27 @@
 import { Router } from 'express';
-import { prisma } from '../lib/prisma.js';
+import type { AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
-import { deferredTherapies } from '../intake/therapy-selection.js';
+import { AssessmentError } from '../assessments/types.js';
+import { patientIntakeReview } from '../intake/patient-review.js';
 
 export const patientIntakeReviewRouter = Router();
-patientIntakeReviewRouter.get('/:id/intake-review', requirePatientScope, async (req, res) => {
-  try {
-    const patientId = String(req.params.id);
-    const drafts = await prisma.patientIntakeDraft.findMany({
-      where: { confirmedPatientId: patientId, status: 'confirmed' },
-      orderBy: { confirmedAt: 'desc' },
-      select: { id: true, data: true, importJobId: true },
-    });
-    const deferred = drafts.flatMap((draft) =>
-      deferredTherapies(draft.data as Record<string, unknown>),
-    );
-    const documents = await prisma.patientDocument.findMany({
-      where: {
-        patientId,
-        importJobId: { in: drafts.flatMap((d) => (d.importJobId ? [d.importJobId] : [])) },
-      },
-      select: { id: true },
-    });
-    res.json({
-      draftId: drafts[0]?.id ?? null,
-      deferredTherapies: deferred,
-      sourceDocumentIds: documents.map((d) => d.id),
-    });
-  } catch {
-    res.status(500).json({ error: 'Impossibile recuperare le terapie da verificare' });
-  }
-});
+patientIntakeReviewRouter.get(
+  '/:id/intake-review',
+  (req, res, next) => {
+    res.setHeader('Cache-Control', 'private, no-store');
+    next();
+  },
+  requirePatientScope,
+  async (req: AuthedRequest, res) => {
+    try {
+      const patientId = String(req.params.id);
+      res.json(await patientIntakeReview(patientId, req.operator!));
+    } catch (error) {
+      if (error instanceof AssessmentError) {
+        res.status(error.status).json({ error: error.message, code: error.code });
+        return;
+      }
+      res.status(500).json({ error: 'Impossibile recuperare le terapie da verificare' });
+    }
+  },
+);

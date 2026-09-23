@@ -1,0 +1,40 @@
+{
+  "desktop": {
+    "controls": [
+      {
+        "background": "rgb(248, 249, 251)",
+        "color": "rgb(22, 32, 46)",
+        "height": 34,
+        "name": "Apri Medicazioni"
+      },
+      {
+        "background": "rgb(248, 249, 251)",
+        "color": "rgb(22, 32, 46)",
+        "height": 34,
+        "name": "Apri Contenzioni"
+      },
+      {
+        "background": "rgb(248, 249, 251)",
+        "color": "rgb(22, 32, 46)",
+        "height": 34,
+        "name": "Apri Trasferimenti posturali"
+      }
+    ],
+    "height": 1032,
+    "overflow": false,
+    "width": 1262
+  },
+  "logs": [],
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "overflow": false,
+    "buttonHeight": 34,
+    "refinement": "PO16 touch targets >=44px"
+  },
+  "tablet": {
+    "width": 768,
+    "height": 1024,
+    "overflow": false
+  }
+}

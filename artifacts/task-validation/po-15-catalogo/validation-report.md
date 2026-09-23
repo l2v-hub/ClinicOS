@@ -1,0 +1,16 @@
+# PO15 — Catalogo moduli e storico NRS
+
+Il catalogo offre otto moduli in due gruppi, con comandi immediati e metadati aggregati; non aggiunge una seconda barra di tab. Le bozze sono personali e recuperabili. Lo storico NRS e i dati dolore originali dell'ingresso restano consultabili senza conversione in PAINAD.
+
+- Backend74/74test, frontend173/173test e root4/4HTTP/PostgreSQL superati. Build backend/frontend, font e secret scan riusciti. Lint frontend16→16, nessun nuovo errore; sei guardie statiche baseline già note non sono dichiarate verdi.
+- Browser: tutti8moduli aperti; nuova compilazione legacy, ritorno catalogo, ripresa e abbandono esplicito di modifiche; nuove Medicazioni/Contenzioni salvate con originali identici. Braden apre il form esistente senza salvataggio implicito. PAINAD conserva la bozza locale e recupera una risposta persa con richiesta identica e un solo record.
+- Catalogo lento con nomi/azioni subito presenti, errore distinto dall'assenza e Riprova funzionante. Bruno mostra soltanto la propria bozza MNA; GDS personale visibile solo al responsabile autore; la bozza PAINAD dell'operatore non appare nella sessione manager. Cambio rapido Anna→Bruno con dati ingresso rallentati: nessun dato Anna visibile su Bruno, anche dopo il tempo di risposta.
+- NRS0 valido e assente;−1 senza fascia, data/autore mancanti espliciti. Due stampe consecutive di record diversi producono un solo portale alla volta; cleanup verificato dopo afterprint e cambio paziente. Intercettazione locale della stampa: è prova DOM/lifecycle, non stampa fisica.
+- Archivio5tipi nuovi: anteprima MNA inline, ritorno alla specifica valutazione, selezione5documenti e preparazione stampa unica10pagine. Nessun documento eliminato. I cinque PDF esportati corrispondono ai rispettivi hash. Non si attribuisce una nuova QA visiva integrale a tutte10pagine, già coperte nei singoli moduli precedenti.
+- Responsive390/768/1262 verificato senza overflow; focus visibile sui comandi; contrasto testo dei pulsanti secondari15,57:1. Screenshot e console senza errori/warning conservati. I pulsanti catalogo34px hanno spazio tra loro; area touch minima44px è rifinitura PO16.
+
+Banco corretto prima delle prove definitive: un router intake duplicato prima dell'autenticazione causava401nel quarto test; il primo callback browser Cartella usava una firma errata e causava400. Corretti solo gli harness; log diagnostici conservati. Il banco non monta therapy-slots, dunque i GET404estranei al catalogo non sono difetti applicativi né prove della terapia. Le due scritture legacy esplicite aggiungono anche i default Cartella previsti dalla preview: nessuna affermazione che tutta la Cartella di Anna sia identica, solo rami e record verificati. Bruno, outsider e draft d'ingresso sono identici.
+
+Benchmark locale del reader:60.578→1.835byte e mediana17,77→3,17ms su12campioni,250bozze e stessi finali. Non misura latenza HTTP o produzione. Test interamente sintetici/PostgreSQL loopback; nessuna scrittura su pazienti del sito, nessuna prova attribuita a operatori clinici o dispositivi fisici.
+
+Review indipendente e binding manifest superati. Pubblicazione autorizzata dall'utente: backend prima frontend, nessuna migrazione nuova, runtime IA invariato. Stage selettivo, launcher e board utente esclusi.

@@ -1,0 +1,9 @@
+{
+  "cwd": "frontend",
+  "command": "npm run build",
+  "exitCode": 0,
+  "sourceStateId": "e6e5cdfe1e5b3c970933e0749e28ee20d6eede47efdaf60af1e25d93e8c6920c",
+  "runtimeSourceId": "fa36a69fd25f736455ecfcdd807cfab0e57d0d13065d59527f3efa08df4b6786",
+  "binding": "Final source capture preceded final test and production build; no source changed afterward.",
+  "observation": "exec session60851 completed with exit_code0; log contains tsc -b && vite build and built in20.98s."
+}

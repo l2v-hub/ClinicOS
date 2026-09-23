@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-15-frontend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po15-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T07:05:30.871Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T07:05:30.871Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly assigned C:/Workspace/ClinicOSHouse-worktrees/po15-catalog-ui branch codex/po15-catalog-ui baseline f445260a4ca4de872c1361ff19fc215179b097fe. PREPARATION ONLY: sole writer artifacts/task-validation/po-15-catalogo/frontend/**, local node_modules junction to existing quality-loop-20260829/node_modules (target read only), local frontend/node_modules/.tmp and .vite-temp. Read source/contracts and agree catalog DTO/intake legacy NRS policy. No application source/tests until explicit root GO after PO14 live. No backend/package/locks/shared dependencies/server/port/commit/push/deploy/live data changes. Existing hierarchy; root owns browser QA4196, integration and release.\"\n  },\n  \"message\": \"Issue PO-15-frontend-preparation claimed by agent:codex-po15-frontend:coder\"\n}"
+    }
+  ]
+}

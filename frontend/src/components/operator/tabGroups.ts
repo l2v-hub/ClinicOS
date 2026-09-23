@@ -10,6 +10,7 @@
 // AnamnesisEditor (stesso editor dell'intake).
 import type { AssessmentType } from '../../lib/assessments/assessmentTypes';
 export type TabId =
+  | 'moduli'
   | 'riepilogo'
   | 'profilo'
   | 'contatti'
@@ -79,7 +80,7 @@ export const TAB_GROUPS: TabGroupDef[] = [
       { id: 'tinetti', label: 'Scala Tinetti' },
       { id: 'mna', label: 'MNA · Nutrizione' },
       { id: 'gds', label: 'GDS-15 · Depressione' },
-      { id: 'nrs', label: 'Scala NRS' },
+      { id: 'nrs', label: 'Storico NRS precedente' },
       { id: 'painad', label: 'Scala PAINAD' },
       { id: 'postural_transfers', label: 'Trasferimenti posturali' },
     ],
@@ -99,6 +100,7 @@ export const TAB_GROUPS: TabGroupDef[] = [
 export const assessmentPatientTab = (type: AssessmentType): TabId => type === 'gds15' ? 'gds' : type;
 
 export function tabLabel(id: TabId): string | undefined {
+  if (id === 'moduli') return 'Moduli';
   if (id === 'sezioni-narrative') return 'Sezioni cliniche';
   id = resolvePatientTab(id);
   for (const g of TAB_GROUPS) {
@@ -115,6 +117,7 @@ export function resolvePatientTab(id?: TabId): TabId {
 }
 
 export function patientTabGroup(id?: TabId): TabGroup {
+  if (id === 'moduli') return 'moduli';
   const tab = resolvePatientTab(id);
   return TAB_GROUPS.find((group) => group.tabs.some((item) => item.id === tab))?.id ?? 'panoramica';
 }

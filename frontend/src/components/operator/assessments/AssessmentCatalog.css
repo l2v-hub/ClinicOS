@@ -1,0 +1,25 @@
+.assessment-catalog { display: grid; gap: 18px; }
+.assessment-catalog h2, .assessment-catalog h3, .assessment-catalog h4, .assessment-catalog p { margin: 0; }
+.assessment-catalog h3 { margin-bottom: 10px; }
+.assessment-catalog-list { display: grid; gap: 8px; }
+.assessment-catalog-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px; border: 1px solid var(--border-color, #d8e0e8); border-radius: 10px; background: var(--surface, #fff); }
+.assessment-catalog-row > div:first-child { min-width: 0; display: grid; gap: 5px; overflow-wrap: anywhere; }
+.assessment-catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex-shrink: 0; }
+.assessment-catalog-secondary { font-size: .85rem; color: var(--text-muted, #526170); }
+.patient-module-return { margin-bottom: 12px; }
+.nrs-legacy { display: grid; gap: 12px; }
+.nrs-legacy details { padding: 12px; border: 1px solid var(--border-color, #d8e0e8); border-radius: 8px; }
+.nrs-legacy summary { cursor: pointer; overflow-wrap: anywhere; }
+.nrs-legacy pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; }
+.nrs-legacy dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.nrs-legacy dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+.nrs-legacy-note { white-space: pre-wrap; overflow-wrap: anywhere; }
+.nrs-print-surface { display: none; }
+@media (max-width: 900px) { .assessment-catalog-row { align-items: stretch; flex-direction: column; } }
+@media (max-width: 480px) { .assessment-catalog-actions { display: grid; grid-template-columns: 1fr; } }
+@media print {
+  .nrs-legacy .no-print { display: none !important; }
+  body[data-nrs-print] > *:not(.nrs-print-surface) { display: none !important; }
+  body[data-nrs-print] > .nrs-print-surface { display: block !important; padding: 12mm; }
+  .nrs-legacy details { break-inside: avoid; }
+}

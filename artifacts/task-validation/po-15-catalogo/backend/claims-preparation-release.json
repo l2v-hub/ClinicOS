@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-15-backend-preparation released\",\n  \"reason\": \"Preparation complete: private runtime byte-verified,1082 application inputs unchanged,5 protected files preserved, final backend/frontend contract02f5a046ca85531902744136ae2534f782abb14136fb3b0cb78cf219ead09e23 agreed. Root GO received after verified PO14 live; release preparation claim, finalize original wrapper and receipt, then register precise application claim before source edits.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-15-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po15-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T07:05:03.174Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T07:05:03.174Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root preparation-only assignment. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po15-catalog-backend baseline f445260a4ca4de872c1361ff19fc215179b097fe branch codex/po15-catalog-backend. Own artifacts/task-validation/po-15-catalogo/backend/** and private backend/node_modules plus read-only root dependency junction for runtime setup. Agree catalog metadata DTO and read-only legacy NRS PUT/import guard contract with frontend. No application source or tests until explicit root GO after verified PO14 live. Preserve protected PowerShell and dependency manifests. No shared runtime writes, commit/push/deploy, ports, online patient writes or delegation.\"\n  }\n}"
+    }
+  ]
+}

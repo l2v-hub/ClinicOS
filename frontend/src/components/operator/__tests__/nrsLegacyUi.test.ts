@@ -1,0 +1,46 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { ScalaNRSTab, NrsPrintDocument } from '../cartella/ScalaNRSTab';
+import { PatientIntakeReview, type PatientIntakeReviewState } from '../PatientIntakeReview';
+import { NrsLegacyRecord } from '../assessments/NrsLegacyContent';
+import { parsePatientIntakeReview } from '../../../lib/patientIntakeReview';
+import type { CartellaPaziente, Paziente } from '../../../types';
+Object.assign(globalThis, { React });
+const patient = { id: 'patient-a', firstName: 'Sara', lastName: 'Rossi', dateOfBirth: '1950-01-02' } as Paziente;
+const cartella = { valutazioniNRS: [{ id: 'chart-a', punteggio: 0, data: '2025-01-01', note: 'Nota della cartella' }] } as unknown as CartellaPaziente;
+const base = { draftId: 'draft-a', deferredTherapies: [{ name: 'Terapia conservata', dose: '', route: '', frequency: '', times: [], notes: '', reason: 'Da verificare' }], sourceDocumentIds: [] };
+const render = (element: React.ReactElement) => renderToStaticMarkup(element);
+test('NRS chart history and therapies remain visible when the retained pain branch exceeds its budget', () => {
+  const state: PatientIntakeReviewState = { status: 'ready', data: parsePatientIntakeReview({ ...base, legacyPainDrafts: null, legacyPainError: 'intake_review_legacy_pain_too_large' }) };
+  const html = render(React.createElement('div', {}, React.createElement(PatientIntakeReview, { state, onRetry() {} }), React.createElement(ScalaNRSTab, { cartella, paziente: patient, intakeReview: state, onRetryIntake() {} })));
+  assert.match(html, /Terapia conservata/);
+  assert.match(html, /Nota della cartella/);
+  assert.match(html, /0\/10 · Assente/);
+  assert.match(html, /superano il limite di consultazione/);
+  assert.match(html, /Riprova dati d’ingresso/);
+  assert.doesNotMatch(html, /Nessun dato dolore conservato/);
+  assert.doesNotMatch(html, /Elimina|Nuova rilevazione|Salva valutazione/);
+});
+test('retained pain primitives, invalid scores and missing provenance are readable without invented severity', () => {
+  const data = parsePatientIntakeReview({ ...base, legacyPainDrafts: [{ draftId: 'long-technical-reference', confirmedAt: '2026-09-23T07:00:00.000Z', pain: null }, { draftId: 'draft-b', confirmedAt: null, pain: { punteggio: -1, note: 'Storico non completato' } }], legacyPainError: null });
+  const html = render(React.createElement(ScalaNRSTab, { cartella, paziente: patient, intakeReview: { status: 'ready', data } }));
+  assert.match(html, /Ingresso confermato il 23\/09\/26, 09:00/);
+  assert.match(html, /Data conferma ingresso non riportata/);
+  assert.doesNotMatch(html, /long-technical-reference/);
+  assert.match(html, /<pre>null<\/pre>/);
+  const invalid = render(React.createElement(NrsLegacyRecord, { value: { punteggio: -1 } }));
+  assert.match(invalid, /Nessuna fascia/);
+  assert.doesNotMatch(invalid, /Lieve|Moderato|Severo/);
+  assert.match(invalid, /<summary>Dati originali<\/summary>/);
+});
+test('the dedicated print document contains only its chosen original record, patient and provenance', () => {
+  const html = render(React.createElement(NrsPrintDocument, { selection: { patient, value: { id: 'selected-original', punteggio: 7, note: 'Solo questa nota' }, origin: 'Ingresso precedente · non confermato come valutazione' } }));
+  assert.match(html, /Sara/);
+  assert.match(html, /Rossi/);
+  assert.match(html, /Solo questa nota/);
+  assert.match(html, /non confermato come valutazione/);
+  assert.match(html, /selected-original/);
+  assert.doesNotMatch(html, /Nota della cartella|Terapia conservata|<button|<details/);
+});

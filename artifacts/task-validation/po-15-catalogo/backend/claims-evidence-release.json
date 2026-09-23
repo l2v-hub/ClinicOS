@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-15-backend-evidence released\",\n  \"reason\": \"PO15 evidence preflight PASS: frozen10source/475input unchanged, targeted13/13, full74/74 in24files,48existing migrations, build/typecheck/fonts/schema/diff PASS. Synthetic catalog benchmark PASS and DBs closed. First benchmark ESM-format startup failure preserved; PDF regression export paths corrected only in reusable artifact runner, executed runner retained,16known outputs relocated with hashes and excluded from handoff. Release artifacts to root/reviewer for final byte-binding and independent publication decision; no worker commit/push/deploy.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-15-backend-evidence\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po15-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T07:28:44.710Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T07:28:44.710Z\",\n    \"progress\": 0,\n    \"context\": \"Artifact-only PO15 backend final evidence after13/13 targeted tests, build/typecheck/schema/diff PASS and independent source review no openP1/P2. Application10files frozen by source-manifest.json on input258be0f040d287114b82c8d11852a68838423de21509daa02c307b46dc92f1b2. Sole writer only artifacts/task-validation/po-15-catalogo/backend/** in po15-catalog-backend for74-test regression run, synthetic catalog benchmark and source-bound receipts. Application sources read-only; defects require explicit freeze invalidation coordination. No shared dependency writes, publishing, online patient writes, ports except ephemeral syntheticDB.\"\n  }\n}"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-15-frontend-evidence released\",\n  \"reason\": \"Contracts and finalizer complete; source already handed off and independently verified. Evidence frozen except final release bookkeeping and generation of validation/artifact manifests; root owns integration and QA4196. No application writes remain.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-15-frontend-evidence\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po15-frontend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T07:41:25.896Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T07:41:25.896Z\",\n    \"progress\": 0,\n    \"context\": \"Root-approved PO15 frontend evidence finalization only, sole writer in C:/Workspace/ClinicOSHouse-worktrees/po15-catalog-ui/artifacts/task-validation/po-15-catalogo/frontend/**. Source e6e5cdfe1e5b3c970933e0749e28ee20d6eede47efdaf60af1e25d93e8c6920c frozen, implementation and legacy-entry claims released. No application/backend/dependency/server/port/commit/push/deploy/live writes. Verify source inputs/contracts/logs, create receipts/manifests, independent review and handoff.\"\n  }\n}"
+    }
+  ]
+}

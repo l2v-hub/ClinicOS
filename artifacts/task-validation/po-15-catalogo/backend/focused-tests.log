@@ -1,0 +1,266 @@
+✔ catalog is exactly five empty metadata rows and rejects query/scope without writes (261.2985ms)
+✔ all five forms use terminal clinical order and hide colleague drafts (560.6355ms)
+✔ exact counts exceed history page size; one metadata query returns no clinical JSON (110.0557ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12394.8058
+✔ NRS omission/equality preserves both histories while vital-sign NRS remains writable (295.5016ms)
+✔ absent/null/empty remain distinct and out-of-scope writes are rejected (36.3651ms)
+✔ NRS comparison reads the locked latest history before permitting an update (66.3234ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12103.006
+✔ existing import rejects NRS mutation atomically and preserves both legacy arrays on equal/omitted input (371.7811ms)
+✔ NRS import has no absent/empty exception and rejected new-patient writes fully roll back (128.4237ms)
+✔ confirming an old intake draft retains pain JSON without promoting it to Cartella (22.7465ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12069.0801
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (256.0446ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (75.9866ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (175.8518ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (151.3722ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11975.5604
+✔ GDS15 exhaustively scores 32768 answer combinations against the source reverse-key mask and every band boundary (289.7048ms)
+✔ GDS15 partial answers never receive a result, and strict boundaries reject every non-boolean domain or missing key (4.1398ms)
+✔ GDS15 notes preserve 4000 Unicode codepoints, whitespace and canonical payload hashes without coercion (1.0151ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 653.9165
+✔ GDS15 final freezes fifteen answers, clinical identity and source; correction/current/history preserve the original (618.786ms)
+✔ GDS15 replay binds each answer and notes; incomplete final is atomic and concurrent patches/finalization retain CAS (172.2404ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12334.2615
+✔ GDS15 PostgreSQL independently enforces all fifteen boolean/null domains, complete finals and note boundaries (584.8471ms)
+✔ GDS15 final snapshot SQL rejects missing, reordered, coerced or inconsistent answers/scores/source without altering old types (205.6308ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12344.7995
+✔ GDS15 PDF renders frozen questions/source and a long corrected assessment with supported Unicode notes (1250.2246ms)
+✔ GDS15 PDF failure/concurrent retry creates one typed document and unsupported free-text glyphs preserve the final snapshot (743.5134ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13022.0152
+✔ MNA strict canonical answers reject unknown/missing values and retain null/false/notes in payload hashes (19.1184ms)
+✔ MNA K evaluates all eight boolean combinations and every missing subanswer stays incomplete (11.3746ms)
+✔ MNA uses exact half points and independent 14/16/30 section boundaries (3.0257ms)
+✔ MNA anthropometry derives unrounded threshold scores and rejects concurrent categories or unusable numbers (4.1666ms)
+✔ MNA calendar/notes validation preserves Unicode and rejects date rollover or invalid clinical Rome boundaries (47.3811ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 664.937
+✔ MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot (787.8103ms)
+✔ MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic (294.9484ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13457.3112
+✔ MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape (541.134ms)
+✔ MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes (367.0009ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2391.0302
+✔ MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes (1666.2067ms)
+✔ MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document (757.9905ms)
+✔ MNA editorial typography preserves free text and reports unsupported glyphs without changing the snapshot (499.7751ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14375.3788
+✔ all 48 approved options produce exact balance/gait totals and preserve the 16/12/28 model (3.8138ms)
+✔ twenty missing answers never gain a risk class; malformed values cannot become scores (2.4183ms)
+✔ optional notes preserve Unicode, whitespace and newlines with a 4000-codepoint boundary (1.0999ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 349.976
+✔ one Tinetti lifecycle retains CAS/replay, immutable snapshot, typed current/history and legacy JSON (789.7215ms)
+✔ SQL validates all 48 domains, null completeness and note bounds and blocks direct malformed writes (180.6807ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2883.2527
+✔ Cartella PUT preserves absent/equal legacy branches and refuses changes atomically (328.635ms)
+✔ missing/null/empty stay distinct and denied scope cannot write a cartella (16.2957ms)
+✔ locked latest legacy and patient ownership defeat stale PUT and scope races (114.2659ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12118.7114
+✔ Tinetti PDF renders all frozen items and Unicode notes, and archives under its own type (2075.1624ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16159.9154
+✔ existing import rejects altered history without confirming, then omission retries safely and idempotently (636.9321ms)
+✔ new-patient import cannot inject historical assessments and empty defaults leave the branch absent (81.2018ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13066.2711
+✔ confirmDraft creates patient transactionally + is idempotent (351.2171ms)
+✔ confirmDraft permits a manager to recover a stale legacy owner (19.2465ms)
+✔ confirmJob permits a manager to recover an ownerless legacy job (47.3214ms)
+✔ confirmDraft: accepts a missing CF but blocks a duplicate CF (not forcible) (37.3622ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11676.1232
+✔ all 243 complete and 781 partial PAINAD combinations preserve zero, sums and bands (7.1715ms)
+✔ boundary rejects missing/extra/coerced values, spoofed author, invalid dates and version (4.6072ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 455.1985
+✔ Transfers has no defaults or score and covers all 384 independent transfer choices (19.1217ms)
+✔ Transfers preserves explicit no, dependencies and every aid ownership boundary (3.3269ms)
+✔ Transfers rejects unknown/coerced options and enforces dates, text and Unicode bounds (3.1892ms)
+✔ admission civil date accepts historical years and validates Gregorian leap days (0.4849ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 384.5969
+✔ concurrent create uses one immutable initial receipt and replays the edited current draft (562.0894ms)
+✔ draft privacy and patient scope apply to reads, writes, create replay and revocation (34.1049ms)
+✔ CAS permits one writer and incomplete finalization remains a draft (31.7019ms)
+✔ finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella (195.2176ms)
+✔ only one concurrent final correction may reference a predecessor of the same patient (109.6796ms)
+✔ history is bounded, scoped, stable across draft edits and excludes snapshots and answers (377.8193ms)
+✔ concurrent ownership change fences creation before a stale patient permission can write (53.1067ms)
+✔ a new process replays the persisted creation and finalization after response loss (22108.6259ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25516.066
+✔ PDF failure preserves the final and concurrent retries archive exactly one immutable document (743.4197ms)
+✔ expired lease is recoverable and late success/failure tokens cannot overwrite the new attempt (267.1019ms)
+✔ PDF claim and callbacks read the clock after database lock waits (166.4543ms)
+✔ renderer preserves Unicode and long text, emits readable PDF metadata and rejects unsupported glyphs (1396.9371ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13578.4174
+✔ Transfers PDF freezes all groups, source signature spaces and long Unicode paragraphs without scores (884.2464ms)
+✔ Transfers document metadata keeps its type and existing archive scope and retries remain intact (229.348ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12487.8353
+✔ personal confirmations use exact DB qualification and frozen server identity, with durable replay (527.766ms)
+✔ revoked qualification is re-read after the real operator lock before a new confirmation (77.9849ms)
+✔ attestations are append-only and never rewrite the PDF or transfer to a correction (313.5258ms)
+✔ attestation counts, personal state and pages are bounded and current-scope protected (246.9455ms)
+✔ HTTP current and attestations expose the agreed status and identity-bound response (103.4486ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12392.4988

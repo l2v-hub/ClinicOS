@@ -1,0 +1,18 @@
+warning: in the working copy of 'frontend/src/components/operator/PatientDetail.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/PatientIntakeReview.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/assessments/AssessmentWorkspace.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/ContenzioniTab.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/MedicazioniTab.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/ScalaBradenTab.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/cartella/ScalaNRSTab.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/sections/PainAssessmentEditor.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/sections/__tests__/patientSections.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/sections/patientSections.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/operator/tabGroups.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/shared/intake/IntakeWorkspace.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/shared/intake/StepClinica.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/shared/intake/StepVerifica.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/shared/intake/__tests__/confirmCartella.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/shared/intake/confirmCartella.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/lib/patientIntakeReview.ts', LF will be replaced by CRLF the next time Git touches it
+{"files":30,"baselineDiagnostics":16,"candidateDiagnostics":16,"introduced":[]}

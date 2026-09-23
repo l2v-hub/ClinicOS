@@ -1,0 +1,91 @@
+✔ catalog is exactly five empty metadata rows and rejects query/scope without writes (211.0161ms)
+✔ all five forms use terminal clinical order and hide colleague drafts (427.4775ms)
+✖ exact counts exceed history page size; one metadata query returns no clinical JSON (88.5786ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1964.54
+
+✖ failing tests:
+
+test at backend\src\assessments\__tests__\catalog-db.test.ts:1:3336
+✖ exact counts exceed history page size; one metadata query returns no clinical JSON (88.5786ms)
+  PrismaClientKnownRequestError: 
+  Invalid `prisma.patientAssessment.createMany()` invocation in
+  C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\backend\src\assessments\__tests__\catalog-db.test.ts:114:34
+  
+    111   id: randomUUID(),
+    112   requestId: randomUUID(),
+    113 }));
+  → 114 await prisma.patientAssessment.createMany(
+  Database error. Code: `23514`. Message: `new row for relation "PatientAssessment" violates check constraint "PatientAssessment_state_check"`
+      at vn.handleRequestError (C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\backend\node_modules\.prisma\client\runtime\client.js:69:8643)
+      at vn.handleAndLogRequestError (C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7932)
+      at vn.request (C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\backend\node_modules\.prisma\client\runtime\client.js:69:7639)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async a (C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\backend\node_modules\.prisma\client\runtime\client.js:103:6935)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\backend\src\assessments\__tests__\catalog-db.test.ts:114:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+✔ NRS omission/equality preserves both histories while vital-sign NRS remains writable (214.461ms)
+✔ absent/null/empty remain distinct and out-of-scope writes are rejected (20.673ms)
+✔ NRS comparison reads the locked latest history before permitting an update (51.5495ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11283.7609
+✔ existing import rejects NRS mutation atomically and preserves both legacy arrays on equal/omitted input (257.4ms)
+✖ NRS import has no absent/empty exception and rejected new-patient writes fully roll back (42.9529ms)
+✔ confirming an old intake draft retains pain JSON without promoting it to Cartella (13.4151ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11483.2726
+
+✖ failing tests:
+
+test at backend\src\ai\__tests__\intake-nrs-db.test.ts:1:2638
+✖ NRS import has no absent/empty exception and rejected new-patient writes fully roll back (42.9529ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   _importedFromJob: 'cmuds14sq000pp4lpzcq4bo17',
+      valutazioniNRS: null
+    }
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po15-catalog-backend\backend\src\ai\__tests__\intake-nrs-db.test.ts:117:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { valutazioniNRS: null, _importedFromJob: 'cmuds14sq000pp4lpzcq4bo17' },
+    expected: { valutazioniNRS: null },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+✔ confirmed pain retains original JSON/presence and never exposes other patients or pending drafts (229.0967ms)
+✔ count limit admits exactly100 and returns a distinct error at101 while preserving therapies (50.5629ms)
+✔ UTF-8 JSON byte limit includes quotes and overflow never materializes pain in therapy projection (130.4359ms)
+✔ repeatable snapshot survives historical reconciliation between budget and pain read (97.8716ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11657.6688

@@ -8,6 +8,7 @@ import type { DemographicField } from '../../../lib/patientDemographics';
 import { DemographicsStatus } from '../DemographicsStatus';
 import { buildIntakeTherapyReview } from './intakeTherapies';
 import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
+import { legacyPainPresent } from '../../../lib/assessments/nrsLegacy';
 
 interface AnagraficaData {
   firstName?: string;
@@ -62,7 +63,6 @@ export function StepVerifica({
     : [];
   const altreSezioni: Array<{ key: string; label: string }> = [
     { key: 'parametri', label: 'Parametri vitali' },
-    { key: 'dolore', label: 'Dolore (NRS)' },
   ].filter((s) => countFilled(data[s.key]));
   const excerpt = (t: string, max = 220) => (t.length > max ? `${t.slice(0, max)}…` : t);
 
@@ -95,6 +95,7 @@ export function StepVerifica({
   return (
     <div className="step-verifica" data-testid="intake-step-5">
       <h3 className="step-verifica__title">Riepilogo</h3>
+      {legacyPainPresent(data) && <p role="status">I dati dolore precedenti restano conservati nella bozza d’ingresso e consultabili nello storico NRS. Non saranno confermati come nuove valutazioni.</p>}
       <DemographicsStatus value={a} onEdit={onReviewDemographics} busy={busy} />
 
       <section className="step-verifica__section">

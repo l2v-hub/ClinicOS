@@ -1,0 +1,24 @@
+{
+  "runSession": 74163,
+  "completionChunk": "666685",
+  "passed": 11,
+  "failed": 2,
+  "failures": [
+    {
+      "file": "catalog-db.test.ts",
+      "cause": "Bulk fixture spread SQL-null finalSnapshot back through Prisma JSON input, creating JSON null and violating the existing draft-state CHECK.",
+      "resolution": "Omit finalSnapshot when copying draft fixtures so the database default stays SQL NULL."
+    },
+    {
+      "file": "intake-nrs-db.test.ts",
+      "cause": "Expected complete cartella omitted the legitimate existing _importedFromJob provenance set by a successful import.",
+      "resolution": "Capture full state after successful equal import, then verify the rejected mutation preserves it exactly, while checking NRS value separately."
+    }
+  ],
+  "reviewFinding": {
+    "code": "P2-repeatable-budget-snapshot",
+    "resolution": "RepeatableRead reader",
+    "realConcurrentReconciliationTest": "PASS in this run"
+  },
+  "applicationSourceChangedForFixtureFailures": false
+}
