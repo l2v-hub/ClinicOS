@@ -8,6 +8,10 @@ export function mergeCartellaPatch(
   patch: Partial<CartellaPaziente>,
 ): CartellaPaziente {
   const merged = { ...latest, ...patch };
+  // Historical Tinetti records are read-only; preserve absent/null/array without normalization.
+  if (Object.hasOwn(latest, 'valutazioniTinetti'))
+    merged.valutazioniTinetti = latest.valutazioniTinetti;
+  else delete merged.valutazioniTinetti;
   if (patch.medicazioniFerite)
     merged.medicazioniFerite = mergeMedicazioni(
       latest.medicazioniFerite ?? [],
@@ -24,6 +28,15 @@ export function mergeCartellaPatch(
       records.set(id, item);
   }
   return { ...merged, documentiConsegnati: [...records.values()] };
+}
+
+/** The backend preserves the current legacy branch under lock, even when this snapshot is stale. */
+export function cartellaWriteData(snapshot: CartellaPaziente) {
+  return Object.fromEntries(
+    Object.entries(snapshot).filter(
+      ([key]) => key !== 'pazienteId' && key !== 'codiceFiscale' && key !== 'valutazioniTinetti',
+    ),
+  );
 }
 
 /** Full-record PUTs must include earlier successful edits from other open sections. */

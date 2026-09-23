@@ -5,6 +5,7 @@ import type { AssessmentType } from './assessments/assessmentTypes';
 export const ASSESSMENT_ARCHIVE_LABELS: Record<AssessmentType, string> = {
   painad: 'PAINAD',
   postural_transfers: 'Trasferimenti posturali',
+  tinetti: 'Scala di Tinetti',
 };
 
 export const DOCUMENT_TYPE_LABELS: Record<TipoDocumento, string> = {

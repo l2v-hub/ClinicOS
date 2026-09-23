@@ -56,7 +56,10 @@ test('Transfers PDF freezes all groups, source signature spaces and long Unicode
   assert.match(parsed.getTitle()!, /Trasferimenti/);
   assert.match(parsed.getProducer()!, /transfers-a4-v1/);
   assert(parsed.getKeywords()!.includes(snapshot.form.sourceSha256));
-  const artifact = resolve('artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa');
+  const artifact = resolve(
+    process.env.TRANSFERS_PDF_QA_DIRECTORY ??
+      'artifacts/task-validation/po-11-postural-transfers/backend/pdf-qa',
+  );
   await mkdir(artifact, { recursive: true });
   await writeFile(resolve(artifact, 'transfers-normal.pdf'), normal);
   await writeFile(resolve(artifact, 'transfers-long.pdf'), expanded);

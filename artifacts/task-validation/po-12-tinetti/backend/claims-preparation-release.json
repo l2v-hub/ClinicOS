@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-12-backend-preparation released\",\n  \"reason\": \"Private runtime and DTO/test plan preparation complete; application source unchanged. Root has now explicitly authorized PO12 implementation after verified PO11 release; close preparatory scope before implementation claim.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-12-backend-preparation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po12-backend\",\n      \"agentType\": \"preparer\"\n    },\n    \"claimedAt\": \"2026-09-23T04:55:55.254Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T04:55:55.254Z\",\n    \"progress\": 0,\n    \"context\": \"Root authorized preparation only in isolated C:/Workspace/ClinicOSHouse-worktrees/po12-tinetti-backend, branch codex/po12-tinetti-backend baseline 470a5fe7a7eee4a9b0a0b219947432049b9de977. Sole writer scope artifacts/task-validation/po-12-tinetti/backend/** and private backend/node_modules runtime, read-only root dependency junction. No application edits, application tests, manifests/lockfile edits, commits, pushes or deploy before explicit root GO after PO11 release verified. Inspect Tinetti DTO/scoring and legacy Cartella protection; preserve existing dirty PowerShell files.\"\n  }\n}"
+    }
+  ]
+}

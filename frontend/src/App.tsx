@@ -11,7 +11,7 @@ import { useConsegneExitGuard } from './lib/useConsegneExitGuard';
 import { canApplyPatientConsegne, canRefreshPatientConsegne, type ConsegneEntry } from './lib/consegneNavigation';
 import { assertRosterPage, isRosterChanged, throwRosterResponse } from './lib/rosterOrder';
 import { RosterOrderContext } from './components/shared/RosterOrderContext';
-import { CartellaWriteQueue, mergeCartellaPatch } from './lib/cartellaWriteQueue';
+import { CartellaWriteQueue, mergeCartellaPatch, cartellaWriteData } from './lib/cartellaWriteQueue';
 import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
@@ -2061,7 +2061,8 @@ export default function App() {
     const documentSaveEpoch = sessionEpochRef.current;
     const existing =
       cartelle.find((c) => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
-    const updated = { ...existing, ...updates };
+    const updated = mergeCartellaPatch(existing, existing, updates);
+    let saveError = 'Impossibile salvare i dati';
 
     // Optimistic update
     const applyUpdate = () =>
@@ -2082,16 +2083,16 @@ export default function App() {
         updates,
         async (snapshot) => {
           if (documentSaveEpoch !== sessionEpochRef.current) return false;
-          const data = Object.fromEntries(
-            Object.entries(snapshot).filter(
-              ([key]) => key !== 'pazienteId' && key !== 'codiceFiscale',
-            ),
-          );
+          const data = cartellaWriteData(snapshot);
           const response = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
             method: 'PUT',
             headers,
             body: JSON.stringify({ data }),
           });
+          if (!response.ok) {
+            const failure = await response.json().catch(() => null);
+            if (failure?.code === 'tinetti_legacy_read_only') saveError = 'Lo storico Tinetti è di sola lettura. I campi inseriti sono conservati; ricarica lo storico prima di riprovare.';
+          }
           return response.ok && documentSaveEpoch === sessionEpochRef.current;
         },
         mergeCartellaPatch,
@@ -2102,7 +2103,7 @@ export default function App() {
         showToast('Dati salvati correttamente');
         return true;
       }
-      showToast('Impossibile salvare i dati');
+      showToast(saveError);
       return false;
     } catch {
       if (documentSaveEpoch !== sessionEpochRef.current) return false;

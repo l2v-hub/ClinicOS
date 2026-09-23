@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto';
 import { AssessmentError, PAINAD_KEYS, PAINAD_VERSION, type PainadAnswers } from './types.js';
 import { TRANSFERS_VERSION, type AssessmentType } from './types.js';
 import { parseTransfersAnswers } from './transfers.js';
+import { TINETTI_VERSION } from './tinetti-types.js';
+import { parseTinettiAnswers } from './tinetti.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function assessmentId(value: unknown): string {
@@ -74,7 +76,8 @@ export function parseCreate(value: unknown) {
   );
   if (!(
     (input.type === 'painad' && input.formVersion === PAINAD_VERSION) ||
-    (input.type === 'postural_transfers' && input.formVersion === TRANSFERS_VERSION)
+    (input.type === 'postural_transfers' && input.formVersion === TRANSFERS_VERSION) ||
+    (input.type === 'tinetti' && input.formVersion === TINETTI_VERSION)
   ))
     throw new AssessmentError('Tipo o versione del modulo non supportati');
   if (input.type === 'painad' && Buffer.byteLength(JSON.stringify(value)) > 16_384)
@@ -86,10 +89,15 @@ export function parseCreate(value: unknown) {
   return {
     requestId: requestId(input.requestId),
     type: input.type as AssessmentType,
-    formVersion: input.formVersion as typeof PAINAD_VERSION | typeof TRANSFERS_VERSION,
+    formVersion: input.formVersion as
+      typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION,
     assessedAt: parseInstant(input.assessedAt),
     answers:
-      input.type === 'painad' ? parseAnswers(input.answers) : parseTransfersAnswers(input.answers),
+      input.type === 'painad'
+        ? parseAnswers(input.answers)
+        : input.type === 'tinetti'
+          ? parseTinettiAnswers(input.answers)
+          : parseTransfersAnswers(input.answers),
     predecessorId,
     correctionReason: reason,
   };
@@ -103,7 +111,12 @@ export function parsePatch(value: unknown, type: AssessmentType = 'painad') {
   return {
     expectedVersion: expectedVersion(input.expectedVersion),
     assessedAt: parseInstant(input.assessedAt),
-    answers: type === 'painad' ? parseAnswers(input.answers) : parseTransfersAnswers(input.answers),
+    answers:
+      type === 'painad'
+        ? parseAnswers(input.answers)
+        : type === 'tinetti'
+          ? parseTinettiAnswers(input.answers)
+          : parseTransfersAnswers(input.answers),
     correctionReason: correctionReason(input.correctionReason),
   };
 }

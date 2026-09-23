@@ -1,17 +1,28 @@
 import type { PatientIdentityData } from '../patientIdentity';
 import {
+  TINETTI_VERSION,
+  type TinettiAnswers,
+  type TinettiResult,
+  type TinettiSnapshotItem,
+} from './tinettiTypes';
+import {
   TRANSFERS_VERSION,
   type TransfersAnswers,
   type AssessmentCompletion,
   type TransferSection,
 } from './transfersTypes';
-export type AssessmentType = 'painad' | 'postural_transfers';
+export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti';
 export interface AssessmentTarget {
   id: string;
   type: AssessmentType;
 }
-export type AssessmentAnswers = PainadAnswers | TransfersAnswers;
+export type AssessmentAnswers = PainadAnswers | TransfersAnswers | TinettiAnswers;
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
+export const ASSESSMENT_VERSIONS = {
+  painad: PAINAD_VERSION,
+  postural_transfers: TRANSFERS_VERSION,
+  tinetti: TINETTI_VERSION,
+} as const;
 export const PAINAD_KEYS = [
   'respiration',
   'negativeVocalization',
@@ -75,7 +86,29 @@ export type TransfersHistoryItem = AssessmentHistoryBase & {
   completion: AssessmentCompletion;
   result: null;
 };
-export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem;
+export type TinettiHistoryItem = AssessmentHistoryBase & {
+  type: 'tinetti';
+  formVersion: typeof TINETTI_VERSION;
+  answeredCount: number;
+  completion: AssessmentCompletion;
+  result: TinettiResult | null;
+};
+export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem;
+export interface TinettiSnapshot extends Omit<
+  AssessmentSnapshot,
+  'form' | 'items' | 'result' | 'interpretation'
+> {
+  form: {
+    type: 'tinetti';
+    version: typeof TINETTI_VERSION;
+    sourceSha256: string;
+    referenceSha256: string;
+  };
+  items: TinettiSnapshotItem[];
+  result: TinettiResult;
+  notes: string;
+  provenance: string;
+}
 export interface TransfersSnapshot extends Omit<
   AssessmentSnapshot,
   'form' | 'items' | 'result' | 'interpretation'
@@ -94,7 +127,12 @@ export type TransfersAssessmentDto = TransfersHistoryItem & {
   finalSnapshot: TransfersSnapshot | null;
   snapshotSha256: string | null;
 };
-export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto;
+export type TinettiAssessmentDto = TinettiHistoryItem & {
+  answers: TinettiAnswers;
+  finalSnapshot: TinettiSnapshot | null;
+  snapshotSha256: string | null;
+};
+export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto;
 export interface AssessmentPage {
   items: AssessmentHistoryItem[];
   pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
@@ -113,7 +151,7 @@ export interface AssessmentEditable {
 export interface AssessmentCreate extends AssessmentEditable {
   requestId: string;
   type: AssessmentType;
-  formVersion: typeof PAINAD_VERSION | typeof TRANSFERS_VERSION;
+  formVersion: typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION;
   predecessorId?: string;
 }
 export type AssessmentOperation =

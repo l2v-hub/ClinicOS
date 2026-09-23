@@ -6,7 +6,14 @@ import {
   type TransferSnapshotSection,
 } from './transfers-types.js';
 export * from './transfers-types.js';
-export type AssessmentType = 'painad' | 'postural_transfers';
+import {
+  TINETTI_VERSION,
+  type TinettiAnswers,
+  type TinettiResult,
+  type TinettiSnapshotItem,
+} from './tinetti-types.js';
+export * from './tinetti-types.js';
+export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti';
 
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const PAINAD_SOURCE_SHA256 =
@@ -50,7 +57,22 @@ export interface TransfersSnapshot extends Omit<
   signatureLabels: ['Firma Fisioterapista', 'Firma Operatori'];
   result: null;
 }
-export type AssessmentSnapshot = PainadSnapshot | TransfersSnapshot;
+export interface TinettiSnapshot extends Omit<
+  PainadSnapshot,
+  'form' | 'items' | 'result' | 'interpretation'
+> {
+  form: {
+    type: 'tinetti';
+    version: typeof TINETTI_VERSION;
+    sourceSha256: string;
+    referenceSha256: string;
+  };
+  items: TinettiSnapshotItem[];
+  result: TinettiResult;
+  notes: string;
+  provenance: string;
+}
+export type AssessmentSnapshot = PainadSnapshot | TransfersSnapshot | TinettiSnapshot;
 export interface AssessmentPdfDto {
   status: 'pending' | 'ready' | 'failed';
   documentId: string | null;
@@ -95,8 +117,22 @@ export interface TransfersAssessmentDto extends TransfersHistoryItem {
   finalSnapshot: TransfersSnapshot | null;
   snapshotSha256: string | null;
 }
-export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem;
-export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto;
+export interface TinettiHistoryItem extends Omit<
+  PainadHistoryItem,
+  'type' | 'formVersion' | 'result'
+> {
+  type: 'tinetti';
+  formVersion: typeof TINETTI_VERSION;
+  completion: AssessmentCompletion;
+  result: TinettiResult | null;
+}
+export interface TinettiAssessmentDto extends TinettiHistoryItem {
+  answers: TinettiAnswers;
+  finalSnapshot: TinettiSnapshot | null;
+  snapshotSha256: string | null;
+}
+export type AssessmentHistoryItem = PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem;
+export type AssessmentDto = PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto;
 export interface AssessmentDocumentMeta {
   id: string;
   type: AssessmentType;

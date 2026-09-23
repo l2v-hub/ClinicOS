@@ -1,0 +1,41 @@
+{
+  "ancestors": [
+    {
+      "class": "main-area-clean",
+      "height": 1169,
+      "overflow": "visible",
+      "scrollHeight": 1169
+    },
+    {
+      "class": "page-content content-panel",
+      "height": 1169,
+      "overflow": "visible",
+      "scrollHeight": 1169
+    },
+    {
+      "class": "patient-record-view",
+      "height": 1103,
+      "overflow": "visible",
+      "scrollHeight": 1103
+    },
+    {
+      "class": "cr-detail-content tab-panel-transition",
+      "height": 1103,
+      "overflow": "visible",
+      "scrollHeight": 1103
+    }
+  ],
+  "end": {
+    "bottom": 0,
+    "height": 0,
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "width": 0,
+    "x": 0,
+    "y": 0
+  },
+  "mode": "CSS1Compat",
+  "rows": 20,
+  "visibleDetails": 1
+}

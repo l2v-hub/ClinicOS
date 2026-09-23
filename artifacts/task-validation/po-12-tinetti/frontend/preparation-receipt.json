@@ -1,0 +1,126 @@
+{
+  "task": "PO-12-frontend",
+  "generatedAtUtc": "2026-09-23T04:57:49.248Z",
+  "baseline": "470a5fe7a7eee4a9b0a0b219947432049b9de977",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-ui",
+  "branch": "codex/po12-tinetti-ui",
+  "status": "preparation-only",
+  "applicationModified": false,
+  "sourceInputs": [
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaTinettiTab.tsx",
+      "bytes": 27550,
+      "sha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/task-contract.md",
+      "bytes": 5051,
+      "sha256": "4e4b5eac186f8f65661a410b1ce81748e6f96c59f3c2b20c2e58ffa29b3ebe8f"
+    },
+    {
+      "path": "docs/product/note-implementazione-piano-2026-09-23.md",
+      "bytes": 11833,
+      "sha256": "afad468edd97ea365c705f5c6325013f52be3d44be2408e781f56b8956d7dae9"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "bytes": 4471,
+      "sha256": "4ad5780fd8db790f9cc8600c3bd5fd79b696485c487527f76f931a2218432b0a"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "bytes": 2050,
+      "sha256": "d49781230a88f272b079c0c6a869434a5deb5c85bf1ce401dfb0f114982ce56d"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "bytes": 13227,
+      "sha256": "164227e9af15111a3138cb0357cdf4d2d9fbf18d2406f1d27929f27f0eda6b73"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "bytes": 18645,
+      "sha256": "80aeaedb92c8ecf18f98ee0a64cd5db2fd83170d0cc0197f7670ee871f667472"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/integrate-worker.mjs",
+      "bytes": 3057,
+      "sha256": "79b7c1364822e775edc2883cd4100bea4cc4e1faf0a88fede18cbe6ce15890ce"
+    },
+    {
+      "path": "artifacts/task-validation/po-10-painad/copy-worker-evidence.mjs",
+      "bytes": 1676,
+      "sha256": "b90e6ee461bb11c8ecc986ce46a3f2af5ff2be968f8db90dbe0d014721af5d71"
+    }
+  ],
+  "policyDecision": {
+    "decision": "allow",
+    "authority": "Root preparation task after PO11 commit/push, before PO11 live verification",
+    "scope": [
+      "Read source and contract",
+      "Record frontend preparation evidence",
+      "Prepare isolated runtime link and local compiler cache",
+      "Agree DTO with backend worker"
+    ],
+    "applicationGo": false,
+    "excluded": [
+      "backend",
+      "schema",
+      "dependencies",
+      "manifests",
+      "lockfiles",
+      "servers",
+      "ports",
+      "commit",
+      "push",
+      "deploy",
+      "live patient writes"
+    ]
+  },
+  "runtime": {
+    "node": "v26.3.0",
+    "packages": {
+      "typescript": "6.0.3",
+      "tsx": "4.23.1",
+      "react": "19.2.5",
+      "react-dom": "19.2.5",
+      "vite": "8.2.2",
+      "prettier": "3.9.5"
+    },
+    "dependencyDirectory": "node_modules",
+    "target": "C:/Workspace/ClinicOSHouse-worktrees/quality-loop-20260829/node_modules",
+    "sharedDependenciesReadOnly": true,
+    "localCompilerCache": "frontend/node_modules/.tmp",
+    "installPerformed": false
+  },
+  "model": {
+    "itemCount": 20,
+    "optionCount": 48,
+    "balanceMaximum": 16,
+    "gaitMaximum": 12,
+    "maximum": 28,
+    "originalSha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09",
+    "preservedOriginal": "artifacts/task-validation/po-12-tinetti/frontend/baseline-ScalaTinettiTab.tsx",
+    "referenceSha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6"
+  },
+  "coordination": {
+    "topology": "Existing root hierarchy; no additional agent",
+    "frontendOwner": "/root/po01_frontend_audit",
+    "integrationOwner": "/root",
+    "memoryRecall": "Ruflo memory search returned five approximate entries; none directly concerned PO10/PO11 assessment workflow. Tracked contract and baseline source used.",
+    "guidance": "Ruflo guidance_brain recommend reachable and advisory; no capability or publication authority expanded.",
+    "dto": "Backend and frontend agreed on type/version, flat answers+notes, answeredCount/completion, balance/gait/total/riskBand/label, typed snapshot items and source/reference hashes. Exact provenance text awaits backend contract."
+  },
+  "validation": {
+    "applicationDiffEmpty": true,
+    "sourceHashMatchesContract": true,
+    "protectedFiles": {
+      "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+      "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+      "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "da291d16f038e1653d54cd4e2c4a010290d72855c36ea5c624b8a7e6dde907ed"
+    },
+    "testsRun": false,
+    "buildRun": false,
+    "reason": "Preparation only; previous PO11 validation belongs to its own source state."
+  }
+}

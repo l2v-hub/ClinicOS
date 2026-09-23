@@ -72,9 +72,9 @@ export function AssessmentHistory({
               </p>
               <p>
                 {record.result
-                  ? `${record.result.total}/10 · ${record.result.label}`
-                  : record.type === 'painad'
-                    ? `${record.answeredCount} di 5 risposte`
+                  ? `${record.result.total}/${record.type === 'tinetti' ? 28 : 10} · ${record.result.label}`
+                  : record.type !== 'postural_transfers'
+                    ? `${record.answeredCount} di ${record.type === 'tinetti' ? 20 : 5} risposte`
                     : record.completion.complete
                       ? 'Compilazione completa'
                       : 'Compilazione da completare'}

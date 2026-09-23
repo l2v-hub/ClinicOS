@@ -1,0 +1,54 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 364 modules transformed.
+rendering chunks...
+computing gzip size...
+artifacts/task-validation/po-12-tinetti/preview/build/index.html                                       0.61 kB │ gzip:   0.34 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/pdf.worker.min-CHFwMXne.mjs           1,262.39 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/PatientArchivePreview-BY-O_bqx.css        0.68 kB │ gzip:   0.37 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/NarrativeSectionsTab-Cy2K2aEq.css         0.80 kB │ gzip:   0.37 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/CameraCapture-BZrPNFqj.css                1.85 kB │ gzip:   0.74 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/Tinetti-PvAQNSKS.css                      1.90 kB │ gzip:   0.60 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ClinicalTable-Cjulftmw.css                3.71 kB │ gzip:   0.99 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/AssessmentWorkspace-1aEYakJ4.css          6.66 kB │ gzip:   1.68 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/DocumentiTab-DJY500eY.css                 8.61 kB │ gzip:   1.87 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/TherapyEditor-Bl_xva3D.css                9.05 kB │ gzip:   2.21 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/TerapiaFarmacologicaTab-Df1m973H.css      9.69 kB │ gzip:   2.28 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/index-C60dZM-V.css                      307.95 kB │ gzip:  52.62 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/LoadErrorState-B2W9g7oM.js                0.33 kB │ gzip:   0.24 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/tinettiTypes-DMl49mUB.js                  0.52 kB │ gzip:   0.34 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/VitalSignsEditor-CgMM2TMx.js              1.22 kB │ gzip:   0.63 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/PainAssessmentEditor-Bv1mw3uG.js          1.23 kB │ gzip:   0.65 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/clinicalHistory-Dc8Sh74T.js               1.85 kB │ gzip:   0.87 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/usePatientDocuments-yr2NPSC3.js           2.77 kB │ gzip:   1.21 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/renderArchivePrint-BAbfGtXH.js            2.85 kB │ gzip:   1.33 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/patientDocumentArchive-Dh_pivXH.js        3.60 kB │ gzip:   1.45 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ScalaTinettiTab-qbdGVLQk.js               3.69 kB │ gzip:   1.50 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/AnamnesisEditor-CfoZC9jF.js               3.74 kB │ gzip:   1.53 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ClinicalAttachments-B-E1OP1q.js           4.15 kB │ gzip:   1.76 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/InlineEditableField-DU6V82jZ.js           5.67 kB │ gzip:   2.00 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ClinicalTable-Kk3XqGa_.js                 6.00 kB │ gzip:   2.20 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/EsamiConsulenzeTab-a6Grmmps.js            7.52 kB │ gzip:   2.51 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/jsx-runtime-QBU3mtPP.js                   8.43 kB │ gzip:   3.21 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ScalaNRSTab-D2KFkvm6.js                  11.22 kB │ gzip:   3.28 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/DiarioPazienteTab-BBYWsPON.js            11.74 kB │ gzip:   3.94 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/PatientArchivePreview-Cww4zW6-.js        12.08 kB │ gzip:   4.45 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/InvioPSModal-BB76jzjw.js                 12.89 kB │ gzip:   3.40 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ScalaBradenTab-ImVpcM0R.js               13.13 kB │ gzip:   3.97 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/CameraCapture-CuyMVBG5.js                13.33 kB │ gzip:   5.03 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/NarrativeSectionsTab-CKAgTchz.js         14.10 kB │ gzip:   5.09 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ParametriTab-CaDopbP9.js                 14.14 kB │ gzip:   4.58 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/PresaInCaricoTab-Bdi4V5M1.js             20.98 kB │ gzip:   3.97 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/MedicazioniTab-DIA8Ryl0.js               23.81 kB │ gzip:   5.76 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/ContenzioniTab-TXF2ixCq.js               23.83 kB │ gzip:   5.02 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/DocumentiTab-Bfu3xT_S.js                 26.54 kB │ gzip:   8.28 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/TherapyEditor-C1Z2ePo0.js                36.72 kB │ gzip:  10.75 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/DimissioneTab-Cxmo0Yst.js                42.91 kB │ gzip:   7.43 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/AssessmentWorkspace-CzqIyOUR.js          47.06 kB │ gzip:  12.31 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/TerapiaFarmacologicaTab-DdNO7yvj.js      51.05 kB │ gzip:  14.34 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/DocumentPreview-BW1kUAXB.js             239.89 kB │ gzip:  61.24 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/index-BPNlrdVD.js                       375.80 kB │ gzip: 109.05 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/patientDemographics-Dj4Yyz7c.js         426.41 kB │ gzip: 123.12 kB
+artifacts/task-validation/po-12-tinetti/preview/build/assets/pdf-5oX_fESz.js                         427.30 kB │ gzip: 127.39 kB
+
+✓ built in 729ms

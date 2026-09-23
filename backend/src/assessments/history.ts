@@ -32,7 +32,7 @@ export async function listAssessments(
   const type = query.type ?? 'painad',
     status = query.status ?? 'all';
   if (
-    !['painad', 'postural_transfers'].includes(type as string) ||
+    !['painad', 'postural_transfers', 'tinetti'].includes(type as string) ||
     !['all', 'draft', 'final'].includes(status as string)
   )
     throw invalid();

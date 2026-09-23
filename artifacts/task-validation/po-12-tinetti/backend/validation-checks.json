@@ -1,0 +1,107 @@
+{
+  "generatedAt": "2026-09-23T05:14:24.799Z",
+  "sourceTreeSha256": "745439cba8628a28d3bee99281a5f7953e8046d0b904c7b5a6000a5de07e3b2e",
+  "typecheck": {
+    "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+    "exitCode": 0,
+    "evidence": "Tool 004869 after final TypeScript changes; later repair affected SQL CASE parentheses only.",
+    "log": "artifacts/task-validation/po-12-tinetti/backend/typecheck.log"
+  },
+  "schema": {
+    "exitCode": 0,
+    "connectedToDatabase": false,
+    "sourceSchemaSha256": "27ecb68a69455aff958fb0c66e3fffc57de0e3353b260111ad0d3a86ae64143c",
+    "generatedSchemaSha256": "e79bedeae560156ee91ac0e89b11df99f58439cf5777a77fab664ca9871f1336",
+    "privateClientMatchesSource": true,
+    "generationPerformed": false,
+    "reason": "Prisma models unchanged; PO11 private client reused, migration changes SQL validators/constraints only."
+  },
+  "ownedDiff": {
+    "exitCode": 0
+  },
+  "newSourceFiles": [
+    {
+      "path": "backend/src/ai/__tests__/intake-tinetti-db.test.ts",
+      "lines": 108
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-db.test.ts",
+      "lines": 159
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-fixture.ts",
+      "lines": 25
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-pdf-db.test.ts",
+      "lines": 44
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti.test.ts",
+      "lines": 96
+    },
+    {
+      "path": "backend/src/assessments/tinetti-definition.ts",
+      "lines": 148
+    },
+    {
+      "path": "backend/src/assessments/tinetti-types.ts",
+      "lines": 46
+    },
+    {
+      "path": "backend/src/assessments/tinetti.ts",
+      "lines": 75
+    },
+    {
+      "path": "backend/src/patients/__tests__/cartella-tinetti-db.test.ts",
+      "lines": 143
+    },
+    {
+      "path": "backend/src/patients/cartella-update.ts",
+      "lines": 89
+    },
+    {
+      "path": "prisma/migrations/20260923060000_tinetti/migration.sql",
+      "lines": 52
+    }
+  ],
+  "newSourceFilesBelow500Lines": true,
+  "runtime": {
+    "privateOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\backend\\node_modules\\.prisma\\client",
+    "privateWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\backend\\node_modules\\@prisma\\client",
+    "sharedDependencyTargetWritten": false
+  },
+  "protectedFilesPreserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "dependencyManifestsChanged": false,
+  "fonts": {
+    "provenance": "artifacts/task-validation/po-12-tinetti/backend/font-provenance.json",
+    "verified": true,
+    "license": "SIL Open Font License 1.1"
+  },
+  "pdfVisualQa": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/visual-qa.json",
+  "review": {
+    "reviewer": "/root/clinical_forms_source_audit",
+    "resolved": "Import confirmation bypass closed by shared locked guard; final binding is independent."
+  }
+}

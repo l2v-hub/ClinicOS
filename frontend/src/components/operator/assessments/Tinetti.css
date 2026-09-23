@@ -1,0 +1,97 @@
+.tinetti-form .assessment-item {
+  margin: 10px 0;
+  padding: 10px;
+}
+.tinetti-form .tinetti-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tinetti-form .tinetti-options label {
+  flex: 0 1 auto;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 9px 12px;
+  align-items: center;
+}
+.tinetti-form .tinetti-options span {
+  display: block;
+}
+.tinetti-form .tinetti-options strong {
+  margin-right: 8px;
+}
+.tinetti-notes {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+}
+.tinetti-note-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.tinetti-legacy {
+  margin-top: 24px;
+}
+.tinetti-legacy details {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 12px;
+}
+.tinetti-legacy summary {
+  cursor: pointer;
+  min-height: 44px;
+}
+.tinetti-legacy table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tinetti-legacy th,
+.tinetti-legacy td {
+  text-align: left;
+  padding: 6px;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .tinetti-form .tinetti-options label {
+    flex-basis: 100%;
+  }
+}
+@media print {
+  html:has(.tinetti-legacy[data-print-id]),
+  body:has(.tinetti-legacy[data-print-id]),
+  body:has(.tinetti-legacy[data-print-id]) *:has(.tinetti-legacy[data-print-id]) {
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    contain: none !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+  body:has(.tinetti-legacy[data-print-id])
+    *:not(.tinetti-legacy):not(.tinetti-legacy *):not(:has(.tinetti-legacy[data-print-id])) {
+    display: none !important;
+  }
+  body:has(.tinetti-legacy[data-print-id]) .assessment-workspace > :not(.tinetti-legacy) {
+    display: none !important;
+  }
+  .tinetti-legacy[data-print-id] > :not(details),
+  .tinetti-legacy[data-print-id] details:not([data-print-selected]) {
+    display: none !important;
+  }
+  .tinetti-legacy details[data-print-selected] {
+    display: block !important;
+    border: 0;
+  }
+  .tinetti-legacy details[data-print-selected] > summary {
+    display: none;
+  }
+  .tinetti-legacy tr {
+    break-inside: avoid;
+  }
+}

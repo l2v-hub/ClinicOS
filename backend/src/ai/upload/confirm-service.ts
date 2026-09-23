@@ -26,6 +26,7 @@ import {
 import { patientScopeWhere, hasGlobalPatientScope } from '../../patients/patient-scope.js';
 import { canAccessOwnedResource } from '../ownership-policy.js';
 import { ImportSessionError } from './pages/model.js';
+import { CartellaUpdateError, preserveTinettiHistory } from '../../patients/cartella-update.js';
 import {
   preparePageArchive,
   assertPreparedPageArchive,
@@ -315,9 +316,18 @@ async function confirm(
         };
         const current =
           status === 'updated'
-            ? await tx.cartella.findUnique({ where: { patientId: patient.id } })
+            ? (
+                await tx.$queryRaw<Array<{ data: unknown }>>`
+              SELECT data FROM "Cartella" WHERE "patientId" = ${patient.id} FOR UPDATE`
+              )[0]
             : null;
-        const merged = mergeCartella(asData(current?.data), cartella);
+        // Empty import defaults do not invent legacy history; any actual change is rejected.
+        const { valutazioniTinetti: _protectedLegacy, ...incoming } = preserveTinettiHistory(
+          current?.data,
+          cartella,
+          true,
+        );
+        const merged = mergeCartella(asData(current?.data), incoming);
         delete merged.codiceFiscale;
         await tx.cartella.upsert({
           where: { patientId: patient.id },
@@ -369,6 +379,8 @@ async function confirm(
     return result;
   } catch (error) {
     await audit(jobId, 'confirm_failed', undefined, 'transaction_failed');
+    if (error instanceof CartellaUpdateError)
+      throw new ImportSessionError(error.status, error.code, error.message);
     if (error instanceof AiExtractionError || error instanceof ImportSessionError) throw error;
     if (error instanceof PatientIdentityInputError || isTherapyValidationError(error))
       throw new AiExtractionError('config', error.message);

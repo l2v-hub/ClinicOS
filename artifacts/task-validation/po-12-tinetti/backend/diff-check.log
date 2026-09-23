@@ -1,0 +1,12 @@
+
+warning: in the working copy of 'backend/src/ai/upload/confirm-service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/__tests__/transfers-pdf-db.test.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/access.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/current.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/history.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/input.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/pdf-renderer.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/pdf-service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/service.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/assessments/types.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/routes/patients.ts', LF will be replaced by CRLF the next time Git touches it

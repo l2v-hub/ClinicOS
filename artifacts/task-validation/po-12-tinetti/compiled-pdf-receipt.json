@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-23T05:34:30.054Z",
+  "assets": [
+    {
+      "name": "NotoSans-Regular.ttf",
+      "bytes": 569208,
+      "sha256": "b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5"
+    },
+    {
+      "name": "NotoSans-Bold.ttf",
+      "bytes": 575740,
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a"
+    },
+    {
+      "name": "OFL.txt",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    }
+  ],
+  "rendered": [
+    {
+      "assessmentId": "9c2f6598-833b-4b66-9932-cb28873a4905",
+      "type": "tinetti",
+      "rendererVersion": "tinetti-a4-v1",
+      "snapshotSha256": "d770b7013adefbf32d4c4ab98cc16b295b7e478bc947283351c84bbcca440f0c",
+      "bytes": 21905,
+      "pdfSha256": "42b4bca0f9ba85bfe58ca51a82926c4684e4dfd1557ac37d471a7867ad00f3d9"
+    },
+    {
+      "assessmentId": "fd105b42-f26d-4644-ac09-67b2c553f5a5",
+      "type": "tinetti",
+      "rendererVersion": "tinetti-a4-v1",
+      "snapshotSha256": "614472f72860e590b84735cb595f6c0d35deaa6646e0ec16ddcd4faad14efc7b",
+      "bytes": 21812,
+      "pdfSha256": "8e8e7be7f446cb136005dce3803580a8184d605bb9999abe6d43324b2c102c59"
+    }
+  ]
+}

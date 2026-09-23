@@ -1,0 +1,49 @@
+✖ Tinetti HTTP partial-to-final archives20items/28points and preserves clinical instant on correction (12623.6393ms)
+PUT /patients/vitals-qa-anna/cartella → salvata
+PUT /patients/vitals-qa-anna/cartella → salvata
+PUT /patients/:id/cartella error: CartellaUpdateError: Lo storico Tinetti precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+    at preserveTinettiHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:56:11)
+    at <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:82:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+    at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\routes\patients.ts:1248:22) {
+  status: 409,
+  code: 'tinetti_legacy_read_only'
+}
+PUT /patients/:id/cartella error: CartellaUpdateError: Lo storico Tinetti precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+    at preserveTinettiHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:56:11)
+    at <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:82:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+    at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\routes\patients.ts:1248:22) {
+  status: 409,
+  code: 'tinetti_legacy_read_only'
+}
+PUT /patients/:id/cartella error: CartellaUpdateError: Lo storico Tinetti precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+    at preserveTinettiHistory (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:56:11)
+    at <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\patients\cartella-update.ts:82:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Proxy._transactionWithCallback (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\node_modules\.prisma\client\runtime\client.js:103:4868)
+    at async <anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\backend\src\routes\patients.ts:1248:22) {
+  status: 409,
+  code: 'tinetti_legacy_read_only'
+}
+✔ Cartella HTTP preserves omitted or equal legacy Tinetti and rejects changes explicitly (116.4236ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25241.5376
+
+✖ failing tests:
+
+test at tests\integration\po12-tinetti.test.mts:1:2111
+✖ Tinetti HTTP partial-to-final archives20items/28points and preserves clinical instant on correction (12623.6393ms)
+  TypeError: Cannot read properties of undefined (reading 'find')
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po12-tinetti.test.mts:32:78)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-12-backend-import-guard\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po12-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T05:05:55.863Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T05:05:55.863Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly extends PO12 backend ownership to close legacy Tinetti write bypass in import confirmation. Same sole-writer worktree po12-tinetti-backend baseline470a5fe7. Exact additional scope backend/src/ai/upload/confirm-service.ts, shared legacy guard backend/src/patients/cartella-update.ts or extracted helper, focused import legacy test only. Preserve existing history under Patient/Cartella locks; reject altered explicit history without completing job; new-patient import cannot inject legacy records; empty defaults may be discarded. No other import redesign, dependencies or publication.\"\n  },\n  \"message\": \"Issue PO-12-backend-import-guard claimed by agent:codex-po12-backend:coder\"\n}"
+    }
+  ]
+}

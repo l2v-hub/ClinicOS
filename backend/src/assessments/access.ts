@@ -17,6 +17,8 @@ import {
 } from './types.js';
 import { painadResult } from './painad.js';
 import { transfersCompletion } from './transfers.js';
+import { tinettiCompletion, tinettiResult } from './tinetti.js';
+import { TINETTI_VERSION, type TinettiAnswers, type TinettiSnapshot } from './types.js';
 
 export const assessmentNotFound = () =>
   new AssessmentError('Valutazione non disponibile', 404, 'assessment_not_found');
@@ -111,6 +113,20 @@ export function assessmentDto(row: AssessmentRow, now = new Date()): AssessmentD
         }
       : null,
   };
+  if (row.type === 'tinetti' && row.formVersion === TINETTI_VERSION) {
+    const answers = row.answers as unknown as TinettiAnswers;
+    const completion = tinettiCompletion(answers);
+    return {
+      ...common,
+      type: 'tinetti',
+      formVersion: TINETTI_VERSION,
+      answers,
+      answeredCount: 20 - completion.missingPaths.length,
+      completion,
+      result: tinettiResult(answers),
+      finalSnapshot: row.finalSnapshot as unknown as TinettiSnapshot | null,
+    };
+  }
   if (row.type === 'postural_transfers' && row.formVersion === TRANSFERS_VERSION) {
     const answers = row.answers as unknown as TransfersAnswers;
     return {

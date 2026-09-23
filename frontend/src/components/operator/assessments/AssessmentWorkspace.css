@@ -25,6 +25,22 @@
   scroll-margin-block-start: calc(var(--assessment-identity-height, 110px) + 20px);
   scroll-margin-block-end: 16px;
 }
+/* Mobile scrolls the document. Hidden/auto overflow on a non-scrolling ancestor
+   would capture sticky positioning and let the patient identity leave view. */
+@media (max-width: 1023px) {
+  body:has(.assessment-workspace) {
+    overflow: clip visible;
+  }
+  .page-content.content-panel:has(.assessment-workspace) {
+    overflow: visible;
+  }
+  .assessment-patient {
+    top: var(--topbar-h, 64px);
+  }
+  .assessment-workspace :is(button, input, select, textarea, [tabindex]) {
+    scroll-margin-block-start: calc(var(--assessment-identity-height, 110px) + var(--topbar-h, 64px) + 20px);
+  }
+}
 @media (min-width: 601px) {
   .assessment-patient .patient-identity {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

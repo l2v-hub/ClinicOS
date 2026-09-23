@@ -1,0 +1,425 @@
+{
+  "source": {
+    "path": "frontend/src/components/operator/cartella/ScalaTinettiTab.tsx",
+    "sha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09"
+  },
+  "referenceSha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6",
+  "provenance": "Modello a 20 voci già in uso in ClinicOS: equilibrio 16 punti, andatura 12 punti, totale 28. Conservate quattro risposte distinte per lunghezza e altezza del passo destro e sinistro. Allegato del 22/09/2026 come riferimento; non costituisce trascrizione letterale o convalida clinica indipendente.",
+  "groups": [
+    {
+      "id": "balance",
+      "label": "Equilibrio",
+      "maximum": 16,
+      "items": [
+        {
+          "id": "equilibrioSeduto",
+          "label": "Equilibrio seduto",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Instabile",
+              "description": "Instabile"
+            },
+            {
+              "score": 1,
+              "label": "1 — Stabile, sicuro",
+              "description": "Stabile, sicuro"
+            }
+          ]
+        },
+        {
+          "id": "alzarsi",
+          "label": "Alzarsi dalla sedia",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Incapace senza aiuto",
+              "description": "Incapace senza aiuto"
+            },
+            {
+              "score": 1,
+              "label": "1 — Capace, usa braccia / non sicuro",
+              "description": "Capace, usa braccia / non sicuro"
+            },
+            {
+              "score": 2,
+              "label": "2 — Capace, senza usare le braccia",
+              "description": "Capace, senza usare le braccia"
+            }
+          ]
+        },
+        {
+          "id": "tentativiAlzarsi",
+          "label": "Tentativi per alzarsi",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Incapace",
+              "description": "Incapace"
+            },
+            {
+              "score": 1,
+              "label": "1 — Richiede > 1 tentativo",
+              "description": "Richiede > 1 tentativo"
+            },
+            {
+              "score": 2,
+              "label": "2 — Riesce al 1° tentativo",
+              "description": "Riesce al 1° tentativo"
+            }
+          ]
+        },
+        {
+          "id": "equilibrioImmediato",
+          "label": "Equilibrio in piedi (primi 5 s)",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Instabile (vacilla, sposta i piedi)",
+              "description": "Instabile (vacilla, sposta i piedi)"
+            },
+            {
+              "score": 1,
+              "label": "1 — Stabile con appoggio",
+              "description": "Stabile con appoggio"
+            },
+            {
+              "score": 2,
+              "label": "2 — Stabile senza appoggio",
+              "description": "Stabile senza appoggio"
+            }
+          ]
+        },
+        {
+          "id": "equilibrioProlungato",
+          "label": "Equilibrio prolungato",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Instabile",
+              "description": "Instabile"
+            },
+            {
+              "score": 1,
+              "label": "1 — Base allargata o appoggio",
+              "description": "Base allargata o appoggio"
+            },
+            {
+              "score": 2,
+              "label": "2 — Stabile senza appoggio, base stretta",
+              "description": "Stabile senza appoggio, base stretta"
+            }
+          ]
+        },
+        {
+          "id": "rombergSpinta",
+          "label": "Romberg con spinta sternale",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Cade",
+              "description": "Cade"
+            },
+            {
+              "score": 1,
+              "label": "1 — Vacilla, si aggrappa",
+              "description": "Vacilla, si aggrappa"
+            },
+            {
+              "score": 2,
+              "label": "2 — Stabile",
+              "description": "Stabile"
+            }
+          ]
+        },
+        {
+          "id": "occhiChiusi",
+          "label": "Equilibrio occhi chiusi",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Instabile",
+              "description": "Instabile"
+            },
+            {
+              "score": 1,
+              "label": "1 — Stabile",
+              "description": "Stabile"
+            }
+          ]
+        },
+        {
+          "id": "girarsi360Passi",
+          "label": "Girarsi 360° — continuità dei passi",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Passi discontinui",
+              "description": "Passi discontinui"
+            },
+            {
+              "score": 1,
+              "label": "1 — Passi continui",
+              "description": "Passi continui"
+            }
+          ]
+        },
+        {
+          "id": "girarsi360Stabilita",
+          "label": "Girarsi 360° — stabilità",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Instabile (si aggrappa)",
+              "description": "Instabile (si aggrappa)"
+            },
+            {
+              "score": 1,
+              "label": "1 — Stabile",
+              "description": "Stabile"
+            }
+          ]
+        },
+        {
+          "id": "sedersi",
+          "label": "Sedersi",
+          "group": "balance",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Insicuro (caduta nella sedia)",
+              "description": "Insicuro (caduta nella sedia)"
+            },
+            {
+              "score": 1,
+              "label": "1 — Usa le braccia o movimenti bruschi",
+              "description": "Usa le braccia o movimenti bruschi"
+            },
+            {
+              "score": 2,
+              "label": "2 — Sicuro, movimenti fluidi",
+              "description": "Sicuro, movimenti fluidi"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gait",
+      "label": "Andatura",
+      "maximum": 12,
+      "items": [
+        {
+          "id": "iniziazione",
+          "label": "Inizio della deambulazione",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Esitazione / passi multipli",
+              "description": "Esitazione / passi multipli"
+            },
+            {
+              "score": 1,
+              "label": "1 — Nessuna esitazione",
+              "description": "Nessuna esitazione"
+            }
+          ]
+        },
+        {
+          "id": "lunghezzaPassoDx",
+          "label": "Lunghezza passo destro",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Piede dx non supera il sx",
+              "description": "Piede dx non supera il sx"
+            },
+            {
+              "score": 1,
+              "label": "1 — Piede dx supera il sx",
+              "description": "Piede dx supera il sx"
+            }
+          ]
+        },
+        {
+          "id": "altezzaPassoDx",
+          "label": "Altezza passo destro",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Piede dx striscia",
+              "description": "Piede dx striscia"
+            },
+            {
+              "score": 1,
+              "label": "1 — Piede dx si solleva",
+              "description": "Piede dx si solleva"
+            }
+          ]
+        },
+        {
+          "id": "lunghezzaPassoSx",
+          "label": "Lunghezza passo sinistro",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Piede sx non supera il dx",
+              "description": "Piede sx non supera il dx"
+            },
+            {
+              "score": 1,
+              "label": "1 — Piede sx supera il dx",
+              "description": "Piede sx supera il dx"
+            }
+          ]
+        },
+        {
+          "id": "altezzaPassoSx",
+          "label": "Altezza passo sinistro",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Piede sx striscia",
+              "description": "Piede sx striscia"
+            },
+            {
+              "score": 1,
+              "label": "1 — Piede sx si solleva",
+              "description": "Piede sx si solleva"
+            }
+          ]
+        },
+        {
+          "id": "simmetria",
+          "label": "Simmetria del passo",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Asimmetrico",
+              "description": "Asimmetrico"
+            },
+            {
+              "score": 1,
+              "label": "1 — Simmetrico",
+              "description": "Simmetrico"
+            }
+          ]
+        },
+        {
+          "id": "continuita",
+          "label": "Continuità del passo",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Interruzioni / fermate",
+              "description": "Interruzioni / fermate"
+            },
+            {
+              "score": 1,
+              "label": "1 — Continuo",
+              "description": "Continuo"
+            }
+          ]
+        },
+        {
+          "id": "traiettoria",
+          "label": "Traiettoria",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Deviazione marcata",
+              "description": "Deviazione marcata"
+            },
+            {
+              "score": 1,
+              "label": "1 — Deviazione lieve / usa ausilio",
+              "description": "Deviazione lieve / usa ausilio"
+            },
+            {
+              "score": 2,
+              "label": "2 — Rettilinea senza ausilio",
+              "description": "Rettilinea senza ausilio"
+            }
+          ]
+        },
+        {
+          "id": "tronco",
+          "label": "Stabilità del tronco",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Oscillazione marcata / usa ausilio",
+              "description": "Oscillazione marcata / usa ausilio"
+            },
+            {
+              "score": 1,
+              "label": "1 — Flette ginocchia o allarga le braccia",
+              "description": "Flette ginocchia o allarga le braccia"
+            },
+            {
+              "score": 2,
+              "label": "2 — Stabile, nessuna oscillazione",
+              "description": "Stabile, nessuna oscillazione"
+            }
+          ]
+        },
+        {
+          "id": "cammino",
+          "label": "Base d'appoggio nel cammino",
+          "group": "gait",
+          "options": [
+            {
+              "score": 0,
+              "label": "0 — Talloni distanti",
+              "description": "Talloni distanti"
+            },
+            {
+              "score": 1,
+              "label": "1 — Talloni vicini",
+              "description": "Talloni vicini"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thresholds": [
+    {
+      "minimum": 0,
+      "maximum": 18,
+      "riskBand": "high",
+      "label": "Alto rischio cadute"
+    },
+    {
+      "minimum": 19,
+      "maximum": 23,
+      "riskBand": "moderate",
+      "label": "Rischio moderato"
+    },
+    {
+      "minimum": 24,
+      "maximum": 28,
+      "riskBand": "low",
+      "label": "Basso rischio"
+    }
+  ],
+  "evidence": "Read-only extraction of the approved current source definitions; no application function, test or database executed."
+}

@@ -1,5 +1,6 @@
 import { facilityLocalMinute } from '../facilityTime';
 import {
+  ASSESSMENT_VERSIONS,
   type AssessmentType,
   type AssessmentDto,
   type AssessmentFields,
@@ -9,7 +10,6 @@ import {
 } from './assessmentTypes';
 import { assessmentEditable, assessmentFields } from './assessmentTime';
 import {
-  assessmentDefinition,
   emptyAssessmentAnswers,
   copyAssessmentAnswers,
   assertAssessmentAnswers,
@@ -181,7 +181,7 @@ export function createAssessmentDraftStore() {
           failure: {
             ...validation('Completa i campi indicati prima di finalizzare.'),
             code: 'assessment_incomplete',
-            ...(draft.record.type === 'postural_transfers'
+            ...(draft.record.type !== 'painad'
               ? { missingPaths: draft.record.completion.missingPaths }
               : {}),
           },
@@ -235,8 +235,7 @@ export function createAssessmentDraftStore() {
                     ...fields,
                     requestId: crypto.randomUUID(),
                     type: draft.type,
-                    formVersion: assessmentDefinition(draft.type).version as
-                      'painad-it-2026-09-22-v1' | 'transfers-it-2026-09-22-v1',
+                    formVersion: ASSESSMENT_VERSIONS[draft.type],
                     ...(draft.predecessorId ? { predecessorId: draft.predecessorId } : {}),
                   }),
                 };

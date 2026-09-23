@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"claim\": {\n    \"issueId\": \"PO-12-backend-implementation\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po12-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T04:59:51.332Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T04:59:51.332Z\",\n    \"progress\": 0,\n    \"context\": \"Explicit root GO after verified PO11 commit470a5fe7 backend a6b93f38 SUCCESS/migration/health200 and Vercel dpl_DorvrDMBjys4Z78n9hoDfh78AkT5 READY/alias sourceCommit/read-only smoke. Sole writer C:/Workspace/ClinicOSHouse-worktrees/po12-tinetti-backend branch codex/po12-tinetti-backend baseline470a5fe7a7eee4a9b0a0b219947432049b9de977. Own backend/src assessments and legacy cartella guard/routes/tests, prisma type/check migration, artifacts/task-validation/po-12-tinetti/backend/** and private runtime. No package/lock/shared dependency changes, no new tables without necessity, no commit/push/deploy or online patient writes. Root owns HTTP fixture/integration/release. Preserve dirty PowerShell files.\"\n  },\n  \"message\": \"Issue PO-12-backend-implementation claimed by agent:codex-po12-backend:coder\"\n}"
+    }
+  ]
+}

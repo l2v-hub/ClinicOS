@@ -1,0 +1,17 @@
+
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+src/lib/assessments/assessmentDraftStore.ts(226,13): error TS2322: Type '{ kind: "create"; body: Readonly<{ predecessorId?: string | undefined; requestId: `${string}-${string}-${string}-${string}-${string}`; type: AssessmentType; formVersion: string; assessedAt: string; answers: AssessmentAnswers; correctionReason?: string; }>; }' is not assignable to type 'AssessmentOperation | null'.
+  The types of 'body.formVersion' are incompatible between these types.
+    Type 'string' is not assignable to type '"tinetti-it-2026-09-22-v1" | "transfers-it-2026-09-22-v1" | "painad-it-2026-09-22-v1"'.
+src/lib/assessments/assessmentDraftStore.ts(251,11): error TS2322: Type 'AssessmentOperation | null' is not assignable to type 'AssessmentOperation'.
+  Type 'null' is not assignable to type 'AssessmentOperation'.
+src/lib/assessments/tinettiValidation.ts(93,5): error TS18047: 's' is possibly 'null'.
+npm error Lifecycle script `build` failed with error:
+npm error code 2
+npm error path C:\Workspace\ClinicOSHouse-worktrees\po12-tinetti-ui\frontend
+npm error workspace frontend@0.0.0
+npm error location C:\Workspace\ClinicOSHouse-worktrees\po12-tinetti-ui\frontend
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c tsc -b && vite build

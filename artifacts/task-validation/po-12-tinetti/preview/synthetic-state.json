@@ -1,0 +1,1493 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T05:25:25.546Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T05:25:25.556Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T05:25:25.561Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T05:25:25.759Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T05:25:25.762Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:25:26.055Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=tinetti",
+      "status": 200,
+      "at": "2026-09-23T05:25:26.057Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 503,
+      "body": {
+        "assessedAt": "2026-09-23T05:25:42.135Z",
+        "answers": {
+          "equilibrioSeduto": 1,
+          "alzarsi": null,
+          "tentativiAlzarsi": null,
+          "equilibrioImmediato": null,
+          "equilibrioProlungato": null,
+          "rombergSpinta": null,
+          "occhiChiusi": null,
+          "girarsi360Passi": null,
+          "girarsi360Stabilita": null,
+          "sedersi": null,
+          "iniziazione": null,
+          "lunghezzaPassoDx": null,
+          "altezzaPassoDx": null,
+          "lunghezzaPassoSx": null,
+          "altezzaPassoSx": null,
+          "simmetria": null,
+          "continuita": null,
+          "traiettoria": null,
+          "tronco": null,
+          "cammino": null,
+          "notes": ""
+        },
+        "requestId": "3975021d-5a1f-4fc7-a5f0-e1ffe7f44d8f",
+        "type": "tinetti",
+        "formVersion": "tinetti-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T05:25:50.254Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T05:25:42.135Z",
+        "answers": {
+          "equilibrioSeduto": 1,
+          "alzarsi": null,
+          "tentativiAlzarsi": null,
+          "equilibrioImmediato": null,
+          "equilibrioProlungato": null,
+          "rombergSpinta": null,
+          "occhiChiusi": null,
+          "girarsi360Passi": null,
+          "girarsi360Stabilita": null,
+          "sedersi": null,
+          "iniziazione": null,
+          "lunghezzaPassoDx": null,
+          "altezzaPassoDx": null,
+          "lunghezzaPassoSx": null,
+          "altezzaPassoSx": null,
+          "simmetria": null,
+          "continuita": null,
+          "traiettoria": null,
+          "tronco": null,
+          "cammino": null,
+          "notes": ""
+        },
+        "requestId": "3975021d-5a1f-4fc7-a5f0-e1ffe7f44d8f",
+        "type": "tinetti",
+        "formVersion": "tinetti-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T05:26:00.579Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:26:00.651Z"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/patients/vitals-qa-anna/assessments/fd105b42-f26d-4644-ac09-67b2c553f5a5",
+      "status": 200,
+      "body": {
+        "assessedAt": "2026-09-23T05:25:42.135Z",
+        "answers": {
+          "notes": "Valutazione sintetica per il controllo del modulo.\nVerificati equilibrio, andatura e risposte separate destra/sinistra.",
+          "tronco": 2,
+          "alzarsi": 2,
+          "cammino": 1,
+          "sedersi": 2,
+          "simmetria": 1,
+          "continuita": 1,
+          "iniziazione": 1,
+          "occhiChiusi": 1,
+          "traiettoria": 2,
+          "rombergSpinta": 2,
+          "altezzaPassoDx": 1,
+          "altezzaPassoSx": 1,
+          "girarsi360Passi": 1,
+          "equilibrioSeduto": 1,
+          "lunghezzaPassoDx": 1,
+          "lunghezzaPassoSx": 1,
+          "tentativiAlzarsi": 2,
+          "equilibrioImmediato": 2,
+          "girarsi360Stabilita": 1,
+          "equilibrioProlungato": 2
+        },
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T05:28:11.657Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:28:11.830Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T05:28:16.789Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T05:28:16.791Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T05:28:16.793Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T05:28:16.888Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T05:28:16.893Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:28:17.205Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=tinetti",
+      "status": 200,
+      "at": "2026-09-23T05:28:17.206Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/fd105b42-f26d-4644-ac09-67b2c553f5a5",
+      "status": 200,
+      "at": "2026-09-23T05:28:31.909Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/fd105b42-f26d-4644-ac09-67b2c553f5a5/finalize",
+      "status": 503,
+      "body": {
+        "requestId": "a230a77f-a731-48ba-a9f1-e832ab3a7c74",
+        "expectedVersion": 2
+      },
+      "at": "2026-09-23T05:29:21.951Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/fd105b42-f26d-4644-ac09-67b2c553f5a5/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "a230a77f-a731-48ba-a9f1-e832ab3a7c74",
+        "expectedVersion": 2
+      },
+      "at": "2026-09-23T05:29:38.472Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:29:38.528Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T05:25:42.135Z",
+        "answers": {
+          "notes": "Valutazione sintetica per il controllo del modulo.\nVerificati equilibrio, andatura e risposte separate destra/sinistra.",
+          "tronco": 2,
+          "alzarsi": 0,
+          "cammino": 1,
+          "sedersi": 2,
+          "simmetria": 1,
+          "continuita": 1,
+          "iniziazione": 1,
+          "occhiChiusi": 1,
+          "traiettoria": 2,
+          "rombergSpinta": 2,
+          "altezzaPassoDx": 1,
+          "altezzaPassoSx": 1,
+          "girarsi360Passi": 1,
+          "equilibrioSeduto": 0,
+          "lunghezzaPassoDx": 1,
+          "lunghezzaPassoSx": 1,
+          "tentativiAlzarsi": 0,
+          "equilibrioImmediato": 2,
+          "girarsi360Stabilita": 1,
+          "equilibrioProlungato": 2
+        },
+        "correctionReason": "Rettifica sintetica delle prime tre risposte.",
+        "requestId": "e3630e6e-9103-4747-8583-e711b709c7c5",
+        "type": "tinetti",
+        "formVersion": "tinetti-it-2026-09-22-v1",
+        "predecessorId": "fd105b42-f26d-4644-ac09-67b2c553f5a5"
+      },
+      "at": "2026-09-23T05:29:54.706Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:29:54.773Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-anna/assessments/9c2f6598-833b-4b66-9932-cb28873a4905/finalize",
+      "status": 200,
+      "body": {
+        "requestId": "79b3ada0-1d1b-4f0b-ab70-279c2e8a098f",
+        "expectedVersion": 1
+      },
+      "at": "2026-09-23T05:30:00.095Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:30:00.393Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents?limit=50",
+      "status": 200,
+      "at": "2026-09-23T05:31:16.227Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/documents/1d20341c-8d3a-430b-84dc-9e499cc4e8d4/content",
+      "status": 200,
+      "at": "2026-09-23T05:31:16.304Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:31:36.846Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/9c2f6598-833b-4b66-9932-cb28873a4905",
+      "status": 200,
+      "at": "2026-09-23T05:31:36.847Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T05:31:45.694Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T05:31:45.695Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T05:31:45.696Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T05:31:45.762Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T05:31:45.763Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:31:46.061Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=tinetti",
+      "status": 200,
+      "at": "2026-09-23T05:31:46.062Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": null,
+      "at": "2026-09-23T05:33:36.883Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T05:33:36.885Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno",
+      "status": 200,
+      "at": "2026-09-23T05:33:36.887Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/cartella",
+      "status": 200,
+      "at": "2026-09-23T05:33:36.889Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T05:33:36.892Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": null,
+      "at": "2026-09-23T05:33:36.895Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=tinetti",
+      "status": null,
+      "at": "2026-09-23T05:33:36.897Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": 200,
+      "at": "2026-09-23T05:33:37.017Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T05:33:37.021Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:33:37.025Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/assessments/current?type=tinetti",
+      "status": 200,
+      "at": "2026-09-23T05:33:37.025Z"
+    },
+    {
+      "method": "POST",
+      "path": "/api/patients/vitals-qa-bruno/assessments",
+      "status": 201,
+      "body": {
+        "assessedAt": "2026-09-23T05:33:42.138Z",
+        "answers": {
+          "equilibrioSeduto": 1,
+          "alzarsi": null,
+          "tentativiAlzarsi": null,
+          "equilibrioImmediato": null,
+          "equilibrioProlungato": null,
+          "rombergSpinta": null,
+          "occhiChiusi": null,
+          "girarsi360Passi": null,
+          "girarsi360Stabilita": null,
+          "sedersi": null,
+          "iniziazione": null,
+          "lunghezzaPassoDx": null,
+          "altezzaPassoDx": null,
+          "lunghezzaPassoSx": null,
+          "altezzaPassoSx": null,
+          "simmetria": null,
+          "continuita": null,
+          "traiettoria": null,
+          "tronco": null,
+          "cammino": null,
+          "notes": "Bozza di Bruno, risposta lenta."
+        },
+        "requestId": "4448e5af-8763-41de-ba52-7a8cd44c4ef9",
+        "type": "tinetti",
+        "formVersion": "tinetti-it-2026-09-22-v1"
+      },
+      "at": "2026-09-23T05:33:51.094Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-bruno/intake-review",
+      "status": null,
+      "at": "2026-09-23T05:33:51.334Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T05:33:51.336Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna",
+      "status": 200,
+      "at": "2026-09-23T05:33:51.338Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/cartella",
+      "status": 200,
+      "at": "2026-09-23T05:33:51.341Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/page?limit=25",
+      "status": 200,
+      "at": "2026-09-23T05:33:51.343Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/intake-review",
+      "status": 200,
+      "at": "2026-09-23T05:33:51.443Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/therapy-slots?date=2026-09-23",
+      "status": 404,
+      "at": "2026-09-23T05:33:51.444Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=tinetti&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:33:51.446Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=tinetti",
+      "status": 200,
+      "at": "2026-09-23T05:33:51.447Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=painad&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:35:08.134Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments?type=postural_transfers&limit=25&status=all",
+      "status": 200,
+      "at": "2026-09-23T05:35:25.324Z"
+    },
+    {
+      "method": "GET",
+      "path": "/api/patients/vitals-qa-anna/assessments/current?type=postural_transfers",
+      "status": 200,
+      "at": "2026-09-23T05:35:25.325Z"
+    }
+  ],
+  "assessments": [
+    {
+      "id": "9c2f6598-833b-4b66-9932-cb28873a4905",
+      "patientId": "vitals-qa-anna",
+      "type": "tinetti",
+      "formVersion": "tinetti-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T07:25:42.135Z",
+      "answers": {
+        "notes": "Valutazione sintetica per il controllo del modulo.\nVerificati equilibrio, andatura e risposte separate destra/sinistra.",
+        "tronco": 2,
+        "alzarsi": 0,
+        "cammino": 1,
+        "sedersi": 2,
+        "simmetria": 1,
+        "continuita": 1,
+        "iniziazione": 1,
+        "occhiChiusi": 1,
+        "traiettoria": 2,
+        "rombergSpinta": 2,
+        "altezzaPassoDx": 1,
+        "altezzaPassoSx": 1,
+        "girarsi360Passi": 1,
+        "equilibrioSeduto": 0,
+        "lunghezzaPassoDx": 1,
+        "lunghezzaPassoSx": 1,
+        "tentativiAlzarsi": 0,
+        "equilibrioImmediato": 2,
+        "girarsi360Stabilita": 1,
+        "equilibrioProlungato": 2
+      },
+      "status": "final",
+      "version": 2,
+      "createdAt": "2026-09-23T07:29:54.737Z",
+      "updatedAt": "2026-09-23T07:30:00.104Z",
+      "finalizedAt": "2026-09-23T07:30:00.104Z",
+      "requestId": "e3630e6e-9103-4747-8583-e711b709c7c5",
+      "creationPayloadHash": "6fe9a15019aaaee3c6d68b4cda7cd36949fb2a3b057f559893b26516464d5658",
+      "finalizeRequestId": "79b3ada0-1d1b-4f0b-ab70-279c2e8a098f",
+      "finalizePayloadHash": "f32e61477cee7c5a7e6c1723f086cfee10cd66f877a581303aa1be4a09e71bea",
+      "predecessorId": "fd105b42-f26d-4644-ac09-67b2c553f5a5",
+      "correctionReason": "Rettifica sintetica delle prime tre risposte.",
+      "finalSnapshot": {
+        "form": {
+          "type": "tinetti",
+          "version": "tinetti-it-2026-09-22-v1",
+          "sourceSha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09",
+          "referenceSha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6"
+        },
+        "items": [
+          {
+            "id": "equilibrioSeduto",
+            "group": "balance",
+            "label": "Equilibrio seduto",
+            "score": 0,
+            "description": "Instabile"
+          },
+          {
+            "id": "alzarsi",
+            "group": "balance",
+            "label": "Alzarsi dalla sedia",
+            "score": 0,
+            "description": "Incapace senza aiuto"
+          },
+          {
+            "id": "tentativiAlzarsi",
+            "group": "balance",
+            "label": "Tentativi per alzarsi",
+            "score": 0,
+            "description": "Incapace"
+          },
+          {
+            "id": "equilibrioImmediato",
+            "group": "balance",
+            "label": "Equilibrio in piedi (primi 5 s)",
+            "score": 2,
+            "description": "Stabile senza appoggio"
+          },
+          {
+            "id": "equilibrioProlungato",
+            "group": "balance",
+            "label": "Equilibrio prolungato",
+            "score": 2,
+            "description": "Stabile senza appoggio, base stretta"
+          },
+          {
+            "id": "rombergSpinta",
+            "group": "balance",
+            "label": "Romberg con spinta sternale",
+            "score": 2,
+            "description": "Stabile"
+          },
+          {
+            "id": "occhiChiusi",
+            "group": "balance",
+            "label": "Equilibrio occhi chiusi",
+            "score": 1,
+            "description": "Stabile"
+          },
+          {
+            "id": "girarsi360Passi",
+            "group": "balance",
+            "label": "Girarsi 360° — continuità dei passi",
+            "score": 1,
+            "description": "Passi continui"
+          },
+          {
+            "id": "girarsi360Stabilita",
+            "group": "balance",
+            "label": "Girarsi 360° — stabilità",
+            "score": 1,
+            "description": "Stabile"
+          },
+          {
+            "id": "sedersi",
+            "group": "balance",
+            "label": "Sedersi",
+            "score": 2,
+            "description": "Sicuro, movimenti fluidi"
+          },
+          {
+            "id": "iniziazione",
+            "group": "gait",
+            "label": "Inizio della deambulazione",
+            "score": 1,
+            "description": "Nessuna esitazione"
+          },
+          {
+            "id": "lunghezzaPassoDx",
+            "group": "gait",
+            "label": "Lunghezza passo destro",
+            "score": 1,
+            "description": "Piede dx supera il sx"
+          },
+          {
+            "id": "altezzaPassoDx",
+            "group": "gait",
+            "label": "Altezza passo destro",
+            "score": 1,
+            "description": "Piede dx si solleva"
+          },
+          {
+            "id": "lunghezzaPassoSx",
+            "group": "gait",
+            "label": "Lunghezza passo sinistro",
+            "score": 1,
+            "description": "Piede sx supera il dx"
+          },
+          {
+            "id": "altezzaPassoSx",
+            "group": "gait",
+            "label": "Altezza passo sinistro",
+            "score": 1,
+            "description": "Piede sx si solleva"
+          },
+          {
+            "id": "simmetria",
+            "group": "gait",
+            "label": "Simmetria del passo",
+            "score": 1,
+            "description": "Simmetrico"
+          },
+          {
+            "id": "continuita",
+            "group": "gait",
+            "label": "Continuità del passo",
+            "score": 1,
+            "description": "Continuo"
+          },
+          {
+            "id": "traiettoria",
+            "group": "gait",
+            "label": "Traiettoria",
+            "score": 2,
+            "description": "Rettilinea senza ausilio"
+          },
+          {
+            "id": "tronco",
+            "group": "gait",
+            "label": "Stabilità del tronco",
+            "score": 2,
+            "description": "Stabile, nessuna oscillazione"
+          },
+          {
+            "id": "cammino",
+            "group": "gait",
+            "label": "Base d'appoggio nel cammino",
+            "score": 1,
+            "description": "Talloni vicini"
+          }
+        ],
+        "notes": "Valutazione sintetica per il controllo del modulo.\nVerificati equilibrio, andatura e risposte separate destra/sinistra.",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "gait": 12,
+          "label": "Rischio moderato",
+          "total": 23,
+          "balance": 11,
+          "riskBand": "moderate"
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T05:29:54.737Z",
+        "assessedAt": "2026-09-23T05:25:42.135Z",
+        "provenance": "Modello a 20 voci già in uso in ClinicOS: equilibrio 16 punti, andatura 12 punti, totale 28. Conservate quattro risposte distinte per lunghezza e altezza del passo destro e sinistro. Allegato del 22/09/2026 come riferimento; non costituisce trascrizione letterale o convalida clinica indipendente.",
+        "finalizedAt": "2026-09-23T05:30:00.104Z",
+        "predecessor": {
+          "id": "fd105b42-f26d-4644-ac09-67b2c553f5a5",
+          "assessedAt": "2026-09-23T05:25:42.135Z",
+          "authorName": "Operatrice QA"
+        },
+        "predecessorId": "fd105b42-f26d-4644-ac09-67b2c553f5a5",
+        "snapshotVersion": 1,
+        "correctionReason": "Rettifica sintetica delle prime tre risposte."
+      },
+      "snapshotSha256": "d770b7013adefbf32d4c4ab98cc16b295b7e478bc947283351c84bbcca440f0c",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T07:30:00.344Z"
+    },
+    {
+      "id": "fd105b42-f26d-4644-ac09-67b2c553f5a5",
+      "patientId": "vitals-qa-anna",
+      "type": "tinetti",
+      "formVersion": "tinetti-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T07:25:42.135Z",
+      "answers": {
+        "notes": "Valutazione sintetica per il controllo del modulo.\nVerificati equilibrio, andatura e risposte separate destra/sinistra.",
+        "tronco": 2,
+        "alzarsi": 2,
+        "cammino": 1,
+        "sedersi": 2,
+        "simmetria": 1,
+        "continuita": 1,
+        "iniziazione": 1,
+        "occhiChiusi": 1,
+        "traiettoria": 2,
+        "rombergSpinta": 2,
+        "altezzaPassoDx": 1,
+        "altezzaPassoSx": 1,
+        "girarsi360Passi": 1,
+        "equilibrioSeduto": 1,
+        "lunghezzaPassoDx": 1,
+        "lunghezzaPassoSx": 1,
+        "tentativiAlzarsi": 2,
+        "equilibrioImmediato": 2,
+        "girarsi360Stabilita": 1,
+        "equilibrioProlungato": 2
+      },
+      "status": "final",
+      "version": 3,
+      "createdAt": "2026-09-23T07:25:50.314Z",
+      "updatedAt": "2026-09-23T07:29:21.999Z",
+      "finalizedAt": "2026-09-23T07:29:21.999Z",
+      "requestId": "3975021d-5a1f-4fc7-a5f0-e1ffe7f44d8f",
+      "creationPayloadHash": "bfc37b983f1c673f9c88bcb3a896c55b7def4c67dd83d73f9d05ba5dfaaefa1e",
+      "finalizeRequestId": "a230a77f-a731-48ba-a9f1-e832ab3a7c74",
+      "finalizePayloadHash": "45fc2f2677dd1e1b0b45acb178134a5fd5a0b1aa5dc0ba2b725f75c6c16fb2b9",
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": {
+        "form": {
+          "type": "tinetti",
+          "version": "tinetti-it-2026-09-22-v1",
+          "sourceSha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09",
+          "referenceSha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6"
+        },
+        "items": [
+          {
+            "id": "equilibrioSeduto",
+            "group": "balance",
+            "label": "Equilibrio seduto",
+            "score": 1,
+            "description": "Stabile, sicuro"
+          },
+          {
+            "id": "alzarsi",
+            "group": "balance",
+            "label": "Alzarsi dalla sedia",
+            "score": 2,
+            "description": "Capace, senza usare le braccia"
+          },
+          {
+            "id": "tentativiAlzarsi",
+            "group": "balance",
+            "label": "Tentativi per alzarsi",
+            "score": 2,
+            "description": "Riesce al 1° tentativo"
+          },
+          {
+            "id": "equilibrioImmediato",
+            "group": "balance",
+            "label": "Equilibrio in piedi (primi 5 s)",
+            "score": 2,
+            "description": "Stabile senza appoggio"
+          },
+          {
+            "id": "equilibrioProlungato",
+            "group": "balance",
+            "label": "Equilibrio prolungato",
+            "score": 2,
+            "description": "Stabile senza appoggio, base stretta"
+          },
+          {
+            "id": "rombergSpinta",
+            "group": "balance",
+            "label": "Romberg con spinta sternale",
+            "score": 2,
+            "description": "Stabile"
+          },
+          {
+            "id": "occhiChiusi",
+            "group": "balance",
+            "label": "Equilibrio occhi chiusi",
+            "score": 1,
+            "description": "Stabile"
+          },
+          {
+            "id": "girarsi360Passi",
+            "group": "balance",
+            "label": "Girarsi 360° — continuità dei passi",
+            "score": 1,
+            "description": "Passi continui"
+          },
+          {
+            "id": "girarsi360Stabilita",
+            "group": "balance",
+            "label": "Girarsi 360° — stabilità",
+            "score": 1,
+            "description": "Stabile"
+          },
+          {
+            "id": "sedersi",
+            "group": "balance",
+            "label": "Sedersi",
+            "score": 2,
+            "description": "Sicuro, movimenti fluidi"
+          },
+          {
+            "id": "iniziazione",
+            "group": "gait",
+            "label": "Inizio della deambulazione",
+            "score": 1,
+            "description": "Nessuna esitazione"
+          },
+          {
+            "id": "lunghezzaPassoDx",
+            "group": "gait",
+            "label": "Lunghezza passo destro",
+            "score": 1,
+            "description": "Piede dx supera il sx"
+          },
+          {
+            "id": "altezzaPassoDx",
+            "group": "gait",
+            "label": "Altezza passo destro",
+            "score": 1,
+            "description": "Piede dx si solleva"
+          },
+          {
+            "id": "lunghezzaPassoSx",
+            "group": "gait",
+            "label": "Lunghezza passo sinistro",
+            "score": 1,
+            "description": "Piede sx supera il dx"
+          },
+          {
+            "id": "altezzaPassoSx",
+            "group": "gait",
+            "label": "Altezza passo sinistro",
+            "score": 1,
+            "description": "Piede sx si solleva"
+          },
+          {
+            "id": "simmetria",
+            "group": "gait",
+            "label": "Simmetria del passo",
+            "score": 1,
+            "description": "Simmetrico"
+          },
+          {
+            "id": "continuita",
+            "group": "gait",
+            "label": "Continuità del passo",
+            "score": 1,
+            "description": "Continuo"
+          },
+          {
+            "id": "traiettoria",
+            "group": "gait",
+            "label": "Traiettoria",
+            "score": 2,
+            "description": "Rettilinea senza ausilio"
+          },
+          {
+            "id": "tronco",
+            "group": "gait",
+            "label": "Stabilità del tronco",
+            "score": 2,
+            "description": "Stabile, nessuna oscillazione"
+          },
+          {
+            "id": "cammino",
+            "group": "gait",
+            "label": "Base d'appoggio nel cammino",
+            "score": 1,
+            "description": "Talloni vicini"
+          }
+        ],
+        "notes": "Valutazione sintetica per il controllo del modulo.\nVerificati equilibrio, andatura e risposte separate destra/sinistra.",
+        "author": {
+          "name": "Operatrice QA",
+          "operatorId": "VITALS-QA-OP"
+        },
+        "result": {
+          "gait": 12,
+          "label": "Basso rischio",
+          "total": 28,
+          "balance": 16,
+          "riskBand": "low"
+        },
+        "patient": {
+          "id": "vitals-qa-anna",
+          "lastName": "Dall’Acqua",
+          "location": {
+            "bed": "A",
+            "asOf": "2026-09-23",
+            "room": "11",
+            "source": "cartella",
+            "status": "assigned"
+          },
+          "firstName": "Anna Àgata",
+          "dateOfBirth": "1950-01-01",
+          "codiceFiscale": null
+        },
+        "createdAt": "2026-09-23T05:25:50.314Z",
+        "assessedAt": "2026-09-23T05:25:42.135Z",
+        "provenance": "Modello a 20 voci già in uso in ClinicOS: equilibrio 16 punti, andatura 12 punti, totale 28. Conservate quattro risposte distinte per lunghezza e altezza del passo destro e sinistro. Allegato del 22/09/2026 come riferimento; non costituisce trascrizione letterale o convalida clinica indipendente.",
+        "finalizedAt": "2026-09-23T05:29:21.999Z",
+        "predecessor": null,
+        "predecessorId": null,
+        "snapshotVersion": 1,
+        "correctionReason": null
+      },
+      "snapshotSha256": "614472f72860e590b84735cb595f6c0d35deaa6646e0ec16ddcd4faad14efc7b",
+      "pdfStatus": "ready",
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 1,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": "2026-09-23T07:29:22.276Z"
+    },
+    {
+      "id": "fbd668b6-a053-4008-af30-ace7caed9670",
+      "patientId": "vitals-qa-bruno",
+      "type": "tinetti",
+      "formVersion": "tinetti-it-2026-09-22-v1",
+      "authorOperatorId": "VITALS-QA-OP",
+      "authorName": "Operatrice QA",
+      "assessedAt": "2026-09-23T07:33:42.138Z",
+      "answers": {
+        "notes": "Bozza di Bruno, risposta lenta.",
+        "tronco": null,
+        "alzarsi": null,
+        "cammino": null,
+        "sedersi": null,
+        "simmetria": null,
+        "continuita": null,
+        "iniziazione": null,
+        "occhiChiusi": null,
+        "traiettoria": null,
+        "rombergSpinta": null,
+        "altezzaPassoDx": null,
+        "altezzaPassoSx": null,
+        "girarsi360Passi": null,
+        "equilibrioSeduto": 1,
+        "lunghezzaPassoDx": null,
+        "lunghezzaPassoSx": null,
+        "tentativiAlzarsi": null,
+        "equilibrioImmediato": null,
+        "girarsi360Stabilita": null,
+        "equilibrioProlungato": null
+      },
+      "status": "draft",
+      "version": 1,
+      "createdAt": "2026-09-23T07:33:56.105Z",
+      "updatedAt": "2026-09-23T07:33:56.105Z",
+      "finalizedAt": null,
+      "requestId": "4448e5af-8763-41de-ba52-7a8cd44c4ef9",
+      "creationPayloadHash": "56b748699266902fd4cf11e26458e92d862396ff3836f2009d346975cb0f3cf6",
+      "finalizeRequestId": null,
+      "finalizePayloadHash": null,
+      "predecessorId": null,
+      "correctionReason": null,
+      "finalSnapshot": null,
+      "snapshotSha256": null,
+      "pdfStatus": null,
+      "pdfAttemptToken": null,
+      "pdfLeaseUntil": null,
+      "pdfAttemptCount": 0,
+      "pdfErrorCode": null,
+      "pdfUpdatedAt": null
+    }
+  ],
+  "attestations": [],
+  "initialCartelle": [
+    {
+      "id": "vitals-qa-bruno-cartella",
+      "patientId": "vitals-qa-bruno",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-bruno",
+        "lettoNumero": "A",
+        "cameraNumero": "12",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-bruno-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-bruno-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T07:25:15.195Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-other-cartella",
+      "patientId": "vitals-qa-other",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-other",
+        "lettoNumero": "A",
+        "cameraNumero": "13",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-other-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-other-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T07:25:15.196Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-anna-cartella",
+      "patientId": "vitals-qa-anna",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-anna",
+        "lettoNumero": "A",
+        "cameraNumero": "11",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-anna-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-anna-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ],
+        "valutazioniTinetti": [
+          {
+            "id": "synthetic-tinetti-legacy-complete",
+            "data": "2026-09-19",
+            "note": "Valutazione precedente sintetica.",
+            "tronco": 2,
+            "alzarsi": 2,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-19T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          },
+          {
+            "id": "synthetic-tinetti-legacy-incomplete",
+            "data": "2026-09-20",
+            "note": "Scheda precedente incompleta: non attribuire un rischio.",
+            "tronco": 2,
+            "alzarsi": -1,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-20T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T07:25:15.192Z",
+      "updatedAt": "2026-09-23T05:25:15.417Z"
+    }
+  ],
+  "cartelle": [
+    {
+      "id": "vitals-qa-bruno-cartella",
+      "patientId": "vitals-qa-bruno",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-bruno",
+        "lettoNumero": "A",
+        "cameraNumero": "12",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-bruno-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-bruno-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T07:25:15.195Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-other-cartella",
+      "patientId": "vitals-qa-other",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-other",
+        "lettoNumero": "A",
+        "cameraNumero": "13",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-other-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-other-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T07:25:15.196Z",
+      "updatedAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "vitals-qa-anna-cartella",
+      "patientId": "vitals-qa-anna",
+      "data": {
+        "terapie": [],
+        "allergie": [],
+        "diagnosi": [],
+        "pazienteId": "vitals-qa-anna",
+        "lettoNumero": "A",
+        "cameraNumero": "11",
+        "parametriVitali": [
+          {
+            "id": "vitals-qa-anna-old",
+            "stato": "normale",
+            "unita": "°C",
+            "valore": "36.7",
+            "rilevato": "2026-09-17",
+            "etichetta": "Temperatura",
+            "rilevatoDa": "Operatore storico"
+          }
+        ],
+        "parametriMensili": [
+          {
+            "id": "vitals-qa-anna-legacy",
+            "anno": 2026,
+            "mese": 9,
+            "giorni": [
+              {
+                "fc": "72",
+                "pa": "120/80",
+                "note": "Valore storico sintetico",
+                "spo2": "98",
+                "dtx08": "99",
+                "dtx12": "104",
+                "dtx18": "101",
+                "giorno": 18,
+                "firmaIpM": "Operatore storico"
+              }
+            ],
+            "createdAt": "2026-09-01T08:00:00.000Z"
+          }
+        ],
+        "valutazioniTinetti": [
+          {
+            "id": "synthetic-tinetti-legacy-complete",
+            "data": "2026-09-19",
+            "note": "Valutazione precedente sintetica.",
+            "tronco": 2,
+            "alzarsi": 2,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-19T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          },
+          {
+            "id": "synthetic-tinetti-legacy-incomplete",
+            "data": "2026-09-20",
+            "note": "Scheda precedente incompleta: non attribuire un rischio.",
+            "tronco": 2,
+            "alzarsi": -1,
+            "cammino": 1,
+            "sedersi": 2,
+            "createdAt": "2026-09-20T08:10:00.000Z",
+            "operatore": "Nome storico non autenticato",
+            "simmetria": 1,
+            "continuita": 1,
+            "iniziazione": 1,
+            "occhiChiusi": 1,
+            "traiettoria": 2,
+            "rombergSpinta": 2,
+            "altezzaPassoDx": 1,
+            "altezzaPassoSx": 1,
+            "girarsi360Passi": 1,
+            "equilibrioSeduto": 1,
+            "lunghezzaPassoDx": 1,
+            "lunghezzaPassoSx": 1,
+            "tentativiAlzarsi": 2,
+            "equilibrioImmediato": 2,
+            "girarsi360Stabilita": 1,
+            "equilibrioProlungato": 2
+          }
+        ]
+      },
+      "createdAt": "2026-09-23T07:25:15.192Z",
+      "updatedAt": "2026-09-23T05:25:15.417Z"
+    }
+  ],
+  "documents": [
+    {
+      "id": "67628806-445e-4d87-932a-4bc8789a3e5e",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "Tinetti_2026-09-23_fd105b42-f26d-4644-ac09-67b2c553f5a5.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 21812,
+      "sha256": "8e8e7be7f446cb136005dce3803580a8184d605bb9999abe6d43324b2c102c59",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "fd105b42-f26d-4644-ac09-67b2c553f5a5",
+        "snapshotSha256": "614472f72860e590b84735cb595f6c0d35deaa6646e0ec16ddcd4faad14efc7b",
+        "rendererVersion": "tinetti-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 0,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T05:29:22.284Z",
+      "assessmentId": "fd105b42-f26d-4644-ac09-67b2c553f5a5"
+    },
+    {
+      "id": "1d20341c-8d3a-430b-84dc-9e499cc4e8d4",
+      "patientId": "vitals-qa-anna",
+      "importJobId": null,
+      "originalName": "Tinetti_2026-09-23_9c2f6598-833b-4b66-9932-cb28873a4905.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 21905,
+      "sha256": "42b4bca0f9ba85bfe58ca51a82926c4684e4dfd1557ac37d471a7867ad00f3d9",
+      "sourceManifest": {
+        "kind": "assessment",
+        "assessmentId": "9c2f6598-833b-4b66-9932-cb28873a4905",
+        "snapshotSha256": "d770b7013adefbf32d4c4ab98cc16b295b7e478bc947283351c84bbcca440f0c",
+        "rendererVersion": "tinetti-a4-v1"
+      },
+      "documentType": "patient_assessment",
+      "sortOrder": 1,
+      "createdById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T05:30:00.345Z",
+      "assessmentId": "9c2f6598-833b-4b66-9932-cb28873a4905"
+    }
+  ]
+}

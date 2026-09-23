@@ -1,0 +1,173 @@
+{
+  "sourceTreeSha256": "745439cba8628a28d3bee99281a5f7953e8046d0b904c7b5a6000a5de07e3b2e",
+  "recordedAt": "2026-09-23T05:14:18.698Z",
+  "allPagesInspected": true,
+  "noClippingOrOverlap": true,
+  "pages": {
+    "tinettiNormal": 2,
+    "tinettiLong": 6,
+    "painadNormal": 1,
+    "painadLong": 2,
+    "transfersNormal": 2,
+    "transfersLong": 5
+  },
+  "observations": [
+    "All 18 final PNG pages were inspected with view_image; headers/identity/body/footer remain readable without clipping or overlap.",
+    "Tinetti normal contains all 20 item labels/descriptions, 16/12/28 totals and low-risk label on two pages.",
+    "Tinetti long preserves accented Unicode and explicit note newlines across six pages, with final source provenance fully visible.",
+    "PAINAD and Transfers retain their prior readable layouts, sources/scores or signature spaces on 1/2 and 2/5 pages respectively.",
+    "Fresh UTF-8 text extraction matches all stored extracts and verifies frozen Tinetti labels, selected descriptions and provenance."
+  ],
+  "files": [
+    {
+      "path": "final/painad-long-1.png",
+      "bytes": 253883,
+      "sha256": "4768d46f60095716fa408e02969bc4a8489c8c512595d75e813c33c98ff440cf"
+    },
+    {
+      "path": "final/painad-long-2.png",
+      "bytes": 119991,
+      "sha256": "9bef827b018da97f9c9e424bfd726ca18d5d16f1b8f6b3f0c8ab3545845ced1a"
+    },
+    {
+      "path": "final/painad-long.txt",
+      "bytes": 5566,
+      "sha256": "a78b426770995c21ed66715126931198bfe8158e40dea5acb03d18d3b9b83175"
+    },
+    {
+      "path": "final/painad-normal-1.png",
+      "bytes": 107497,
+      "sha256": "228d9ff10036408715d1ddbf6d694aa342e5aca3b5cbf08b31b45b231dee7ab7"
+    },
+    {
+      "path": "final/painad-normal.txt",
+      "bytes": 1083,
+      "sha256": "3865e1aec76865a46b03cf868ae43b3a5ae8bf0f92f684df58abcce745482ef8"
+    },
+    {
+      "path": "final/tinetti-long-1.png",
+      "bytes": 122551,
+      "sha256": "d216dd0be3e9891a06ea1c78a1d100f24f9531e07f681289ebd9e0ba0b04824a"
+    },
+    {
+      "path": "final/tinetti-long-2.png",
+      "bytes": 120933,
+      "sha256": "4f377ee449b472563fbc3acd2f0b6ef9741b1a497c5eda9908c9117dd1b4d5d1"
+    },
+    {
+      "path": "final/tinetti-long-3.png",
+      "bytes": 134232,
+      "sha256": "598b1f6a6321a2b39b15b2e9eada13a634198eda7a468f5a314a86ee339f6473"
+    },
+    {
+      "path": "final/tinetti-long-4.png",
+      "bytes": 134623,
+      "sha256": "082c626a4739ad39fa28e6bb7afe1e866b02ce473051cb8693937a53a0bc5381"
+    },
+    {
+      "path": "final/tinetti-long-5.png",
+      "bytes": 134209,
+      "sha256": "738c33b7dc62bd94024e27bf22010f966c0db637cf59b71b8226e964a84d908f"
+    },
+    {
+      "path": "final/tinetti-long-6.png",
+      "bytes": 68157,
+      "sha256": "b4f3fcd1eafde0b5a5cdcc0faf62e99001dcea998f41a6cca431a84bdbb1fc69"
+    },
+    {
+      "path": "final/tinetti-long.txt",
+      "bytes": 7364,
+      "sha256": "6608245363fcd78e4a8a82ec888e0291d2c3eaaf4a24272e0cd560709104ff0d"
+    },
+    {
+      "path": "final/tinetti-normal-1.png",
+      "bytes": 122467,
+      "sha256": "549047a3572fd336b04c215448889eb7921a13d911bcf222b3f8e776de0058ee"
+    },
+    {
+      "path": "final/tinetti-normal-2.png",
+      "bytes": 104011,
+      "sha256": "81d689954d6f999f2f6e2cc14b3a305421af8c6b776e099ed5c33787da1df587"
+    },
+    {
+      "path": "final/tinetti-normal.txt",
+      "bytes": 2308,
+      "sha256": "a2315af6f2376fd7b827f9e22decbfa094251be06a6cdd436b60f128e72c0f2b"
+    },
+    {
+      "path": "final/transfers-long-1.png",
+      "bytes": 161161,
+      "sha256": "f88b92c4f7bd2008a81f183075fdc41d472262b65396455fb5d45b10227c712e"
+    },
+    {
+      "path": "final/transfers-long-2.png",
+      "bytes": 128901,
+      "sha256": "909190a958f09881e244124153c933381407a87ffc3d9256e7c12a6021699248"
+    },
+    {
+      "path": "final/transfers-long-3.png",
+      "bytes": 156592,
+      "sha256": "8afbbc7e45a16b6bf4dd0ebb69ed54bbf46c08954ed45a6175399e6bc0b70a08"
+    },
+    {
+      "path": "final/transfers-long-4.png",
+      "bytes": 156071,
+      "sha256": "e21faa963302936bd493f82a539a620f3a71615c5de7010917068de9f33b5c1c"
+    },
+    {
+      "path": "final/transfers-long-5.png",
+      "bytes": 40155,
+      "sha256": "f9c966c8154a1b4254185dc30604dcdb9011b1cbc3b8e67a0db0d54616648cbf"
+    },
+    {
+      "path": "final/transfers-long.txt",
+      "bytes": 7048,
+      "sha256": "fff0d7ec2fcf552576d81d211a5d4eeb3c2f883d25ef44abaf7f083840e4ec92"
+    },
+    {
+      "path": "final/transfers-normal-1.png",
+      "bytes": 106281,
+      "sha256": "635f18dfcc229b97f4e57381149fefa70c49fdaf066e26a05f33cf7b2076315a"
+    },
+    {
+      "path": "final/transfers-normal-2.png",
+      "bytes": 45394,
+      "sha256": "dfd4e1fb08824e8fcdd7934415343d64a2d52f9ece9526a972cfc006c45bbea1"
+    },
+    {
+      "path": "final/transfers-normal.txt",
+      "bytes": 1505,
+      "sha256": "d7c9c88b15d92423ac5dd17042730fd5377dd672c729a0b3178cfbc2c578bdee"
+    },
+    {
+      "path": "painad-regression/painad-long.pdf",
+      "bytes": 22255,
+      "sha256": "ecbb4f6cbf82ef88572da82242615c93171333cf80e35ef07342aee22b0ca99b"
+    },
+    {
+      "path": "painad-regression/painad-normal.pdf",
+      "bytes": 19118,
+      "sha256": "13f1b087841065bd50f06a9e82184da05010e18586df0e05329d60f480139027"
+    },
+    {
+      "path": "tinetti-long.pdf",
+      "bytes": 28699,
+      "sha256": "4ea296c4f7ca0d555b0f4ef5a65c453ce20b095e57cfa0c579a0307d69184ae3"
+    },
+    {
+      "path": "tinetti-normal.pdf",
+      "bytes": 22716,
+      "sha256": "a31b4b6bdfb098f3469ca17803cc9e3462b5d660a75511d00969b4b44e1dfdb8"
+    },
+    {
+      "path": "transfers-regression/transfers-long.pdf",
+      "bytes": 24974,
+      "sha256": "eaade309c2ed066bb9a9bdf38299f7e7d0481a7e1fa262c9f12b025a37ff6862"
+    },
+    {
+      "path": "transfers-regression/transfers-normal.pdf",
+      "bytes": 19475,
+      "sha256": "9570904cc22190698011d07c87544a24f5c0e176191efac553e7adf85e7940bb"
+    }
+  ]
+}

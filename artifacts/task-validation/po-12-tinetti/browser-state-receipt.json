@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-23T05:36:52.211Z",
+  "syntheticOnly": true,
+  "finals": 2,
+  "drafts": 1,
+  "documents": 2,
+  "legacyJsonUnchanged": true,
+  "retryWithoutDuplicates": true,
+  "slowPatientSwitch": true,
+  "responsive": "390/768: identity below64px topbar and focus clear; desktop geometry preserved",
+  "legacyPrint": "Real selected DOM with extracted print rules rendered on screen;20 rows, one record, unclipped ancestors",
+  "limitations": [
+    "Native print dialog and physical pagination not exercised.",
+    "No clinical operator or physical-device acceptance claimed."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "phase": "migration setup before any application tests",
+  "command": "node artifacts/task-validation/po-12-tinetti/backend/run-focused-tests.mjs",
+  "exitCode": 1,
+  "toolChunk": "ed59c5",
+  "sqlState": "42601",
+  "position": 1380,
+  "migrationSha256": "7472ff97e45af2aee2d76027b98b8c06a5374997d85352169f8436029a0fd170",
+  "cause": "Unparenthesized CASE expression inside PLpgSQL IF is parsed through its inner THEN",
+  "repair": "Parenthesize scalar CASE expression",
+  "cleanup": "Fixture catch called stop; no live server retained",
+  "testsExecuted": 0
+}

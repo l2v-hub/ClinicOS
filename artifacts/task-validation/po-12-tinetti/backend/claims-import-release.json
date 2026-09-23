@@ -1,0 +1,14 @@
+{
+  "issueId": "PO-12-backend-import-guard",
+  "claimant": "agent:codex-po12-backend:coder",
+  "released": true,
+  "recordedAt": "2026-09-23T05:16:12.036Z",
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-12-backend-import-guard released\",\n  \"reason\": \"Root-authorized minimal import guard complete: shared locked legacy protection, rejected changes rollback without confirming job, normal import/retry proven. Included in frozen PO12 manifest and40/40 focused tests; handoff to root.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-12-backend-import-guard\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po12-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-23T05:05:55.863Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-23T05:05:55.863Z\",\n    \"progress\": 0,\n    \"context\": \"Root explicitly extends PO12 backend ownership to close legacy Tinetti write bypass in import confirmation. Same sole-writer worktree po12-tinetti-backend baseline470a5fe7. Exact additional scope backend/src/ai/upload/confirm-service.ts, shared legacy guard backend/src/patients/cartella-update.ts or extracted helper, focused import legacy test only. Preserve existing history under Patient/Cartella locks; reject altered explicit history without completing job; new-patient import cannot inject legacy records; empty defaults may be discarded. No other import redesign, dependencies or publication.\"\n  }\n}"
+      }
+    ]
+  }
+}

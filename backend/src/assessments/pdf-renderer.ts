@@ -1,11 +1,18 @@
 import { readFile } from 'node:fs/promises';
 import { PDFDocument, rgb, type PDFFont, type PDFPage } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
-import type { AssessmentSnapshot } from './types.js';
+import type { AssessmentSnapshot, TinettiSnapshot } from './types.js';
+
+const isTinettiSnapshot = (snapshot: AssessmentSnapshot): snapshot is TinettiSnapshot =>
+  snapshot.form.type === 'tinetti';
 
 export const ASSESSMENT_RENDERER_VERSION = 'painad-a4-v1';
 export const assessmentRendererVersion = (snapshot: AssessmentSnapshot) =>
-  snapshot.form.type === 'painad' ? ASSESSMENT_RENDERER_VERSION : 'transfers-a4-v1';
+  snapshot.form.type === 'painad'
+    ? ASSESSMENT_RENDERER_VERSION
+    : snapshot.form.type === 'tinetti'
+      ? 'tinetti-a4-v1'
+      : 'transfers-a4-v1';
 export class AssessmentPdfError extends Error {
   constructor(public code: string) {
     super(code);
@@ -36,6 +43,7 @@ function fonts() {
 }
 export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise<Buffer> {
   const transfers = snapshot.form.type === 'postural_transfers';
+  const tinetti = snapshot.form.type === 'tinetti';
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
   const [regularBytes, boldBytes] = await fonts();
@@ -93,7 +101,9 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     page.drawText(
       transfers
         ? 'Trasferimenti posturali e deambulazione'
-        : 'PAINAD - Valutazione del dolore non verbale',
+        : tinetti
+          ? 'Scala di Tinetti - Equilibrio e andatura'
+          : 'PAINAD - Valutazione del dolore non verbale',
       {
         x: margin,
         y,
@@ -108,7 +118,7 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
       y -= 14;
     }
     page.drawText(
-      `Valutazione: ${dateTime(snapshot.assessedAt)} | ${transfers ? 'Trasferimenti' : 'PAINAD italiana'}, versione 1`,
+      `Valutazione: ${dateTime(snapshot.assessedAt)} | ${transfers ? 'Trasferimenti' : tinetti ? 'Tinetti' : 'PAINAD italiana'}, versione 1`,
       {
         x: margin,
         y,
@@ -167,6 +177,39 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     if (y < margin + 110) newPage();
     for (const label of snapshot.signatureLabels)
       block(`${label}: ____________________________________`, regular, 10, 20);
+  } else if (isTinettiSnapshot(snapshot)) {
+    for (const group of ['balance', 'gait'] as const) {
+      if (y < margin + 100) newPage();
+      block(
+        group === 'balance' ? 'Equilibrio (massimo 16 punti)' : 'Andatura (massimo 12 punti)',
+        bold,
+        12,
+      );
+      for (const [index, item] of snapshot.items.entries()) {
+        if (item.group !== group) continue;
+        if (y < margin + 80) newPage();
+        block(`${index + 1}. ${item.label} - ${item.score} punti`, bold, 10, 2);
+        block(item.description, regular, 10, 7);
+      }
+      block(
+        `${group === 'balance' ? 'Equilibrio' : 'Andatura'}: ${snapshot.result[group]} / ${group === 'balance' ? 16 : 12}`,
+        bold,
+        10,
+      );
+    }
+    if (y < margin + 90) newPage();
+    block(`Totale Tinetti: ${snapshot.result.total} / 28 - ${snapshot.result.label}`, bold, 12);
+    block(
+      'Fasce: 0-18 Alto rischio cadute; 19-23 Rischio moderato; 24-28 Basso rischio.',
+      regular,
+      9,
+    );
+    if (snapshot.notes) {
+      if (y < margin + 80) newPage();
+      block('Note', bold, 12);
+      block(snapshot.notes);
+    }
+    block(`Fonte: ${snapshot.provenance} Versione italiana 1.`, regular, 9);
   } else {
     block('Griglia di valutazione osservazionale', bold, 12);
     for (const [index, item] of snapshot.items.entries()) {
@@ -200,12 +243,17 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     }),
   );
   doc.setTitle(
-    transfers ? 'Trasferimenti posturali - Scheda finalizzata' : 'PAINAD - Valutazione finalizzata',
+    transfers
+      ? 'Trasferimenti posturali - Scheda finalizzata'
+      : tinetti
+        ? 'Tinetti - Valutazione finalizzata'
+        : 'PAINAD - Valutazione finalizzata',
   );
   doc.setProducer(`ClinicOS ${assessmentRendererVersion(snapshot)}`);
   doc.setKeywords([
     snapshot.form.version,
     snapshot.form.sourceSha256,
+    ...('referenceSha256' in snapshot.form ? [snapshot.form.referenceSha256] : []),
     ...(snapshot.predecessorId ? [snapshot.predecessorId] : []),
   ]);
   doc.setCreationDate(new Date(snapshot.finalizedAt));

@@ -1,0 +1,34 @@
+{
+  "checks": "Backend40, frontend105, rootHTTP/PG2, source/build secret scan, browser cycle/legacy/retry/slow switch, mobile sticky refinement reviewed and measured, compiledPDF; see validation-report.md for exact limits",
+  "scope": "PO12 backend SQL migration and frontend from immutable commit; AI runtime unchanged",
+  "rootSources": [
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css",
+    "tests/fixtures/po12-tinetti.mjs",
+    "tests/integration/po12-tinetti.test.mts"
+  ],
+  "evidenceDirectories": ["artifacts/task-validation/po-12-tinetti/qa-evidence"],
+  "evidencePaths": [
+    "artifacts/task-validation/po-12-tinetti/task-contract.md",
+    "artifacts/task-validation/po-12-tinetti/baseline-observation.md",
+    "artifacts/task-validation/po-12-tinetti/baseline-tests.log",
+    "artifacts/task-validation/po-12-tinetti/http-tests-missing-scope-header.log",
+    "artifacts/task-validation/po-12-tinetti/http-tests-root.log",
+    "artifacts/task-validation/po-12-tinetti/backend-build-root.log",
+    "artifacts/task-validation/po-12-tinetti/frontend-build-root.log",
+    "artifacts/task-validation/po-12-tinetti/secret-scan.log",
+    "artifacts/task-validation/po-12-tinetti/preview-build.log",
+    "artifacts/task-validation/po-12-tinetti/preview-build-manifest.json",
+    "artifacts/task-validation/po-12-tinetti/browser-state-receipt.json",
+    "artifacts/task-validation/po-12-tinetti/compiled-pdf-receipt.json",
+    "artifacts/task-validation/po-12-tinetti/verify-browser-state.mjs",
+    "artifacts/task-validation/po-12-tinetti/verify-compiled-pdf.mjs",
+    "artifacts/task-validation/po-12-tinetti/validation-report.md",
+    "artifacts/task-validation/po-12-tinetti/review-notes.md",
+    "artifacts/task-validation/po-12-tinetti/preview/main.tsx",
+    "artifacts/task-validation/po-12-tinetti/preview/server.mjs",
+    "artifacts/task-validation/po-12-tinetti/preview/build.mjs",
+    "artifacts/task-validation/po-12-tinetti/preview/index.html",
+    "artifacts/task-validation/po-12-tinetti/preview/synthetic-state.json",
+    "docs/product/stato-esecuzione-piano-2026-09-22.md"
+  ]
+}

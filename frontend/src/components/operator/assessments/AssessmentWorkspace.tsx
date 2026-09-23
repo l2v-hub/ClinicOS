@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import type { Paziente } from '../../../types';
 import { API_URL } from '../../../config';
 import { operatorHeaders } from '../../../lib/operatorSession';
@@ -24,6 +24,7 @@ import { ClinicalTableSection } from '../cartella/shared';
 import { PatientArchivePreview } from '../cartella/PatientArchivePreview';
 import { AssessmentForm } from './AssessmentForm';
 import { TransfersForm } from './TransfersForm';
+import { TinettiForm } from './TinettiForm';
 import { AssessmentAttestations } from './AssessmentAttestations';
 import { AssessmentSummary } from './AssessmentSummary';
 import { AssessmentFinal } from './AssessmentFinal';
@@ -32,6 +33,7 @@ import { useAssessmentHistory } from './useAssessmentHistory';
 import { useAssessmentPdf } from './useAssessmentPdf';
 import './AssessmentWorkspace.css';
 import './Transfers.css';
+import './Tinetti.css';
 export interface AssessmentWorkspaceProps {
   patient: Paziente;
   operatorId?: string;
@@ -43,6 +45,7 @@ export interface AssessmentWorkspaceProps {
   initialAssessmentId?: string;
   onOpenArchive?: (documentId: string, assessment: AssessmentTarget) => void;
   client?: AssessmentClient;
+  children?: ReactNode;
 }
 export function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   return (
@@ -63,8 +66,11 @@ function AssessmentSession({
   initialAssessmentId,
   onOpenArchive,
   client: providedClient,
+  children,
 }: AssessmentWorkspaceProps) {
   const definition = assessmentDefinition(type);
+  const Form =
+    type === 'painad' ? AssessmentForm : type === 'tinetti' ? TinettiForm : TransfersForm;
   const entryId = initialAssessment?.type === type ? initialAssessment.id : initialAssessmentId;
   const [currentEmpty, setCurrentEmpty] = useState(false);
   const [store] = useState(() => draftStore ?? createAssessmentDraftStore());
@@ -243,7 +249,7 @@ function AssessmentSession({
       >
         <div className="cts__body--padded">
           <p>{definition.description}</p>
-          {type === 'postural_transfers' && (
+          {type !== 'painad' && (
             <div className="assessment-actions">
               <button
                 type="button"
@@ -337,21 +343,12 @@ function AssessmentSession({
                       Bozza salvata · versione {record.version} · {record.author.name}
                     </p>
                   )}
-                  {type === 'painad' ? (
-                    <AssessmentForm
-                      draft={draft}
-                      store={store}
-                      onSave={() => void save()}
-                      onPreview={() => void save(true)}
-                    />
-                  ) : (
-                    <TransfersForm
-                      draft={draft}
-                      store={store}
-                      onSave={() => void save()}
-                      onPreview={() => void save(true)}
-                    />
-                  )}
+                  <Form
+                    draft={draft}
+                    store={store}
+                    onSave={() => void save()}
+                    onPreview={() => void save(true)}
+                  />
                 </>
               )}
               {draft.failure && (
@@ -434,6 +431,7 @@ function AssessmentSession({
           <AssessmentHistory history={history} onOpen={(item) => void open(item.id)} />
         </div>
       </ClinicalTableSection>
+      {children}
       <ConfirmDialog
         open={!!confirm}
         title={

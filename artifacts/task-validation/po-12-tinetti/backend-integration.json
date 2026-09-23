@@ -1,0 +1,98 @@
+{
+  "at": "2026-09-23T05:16:50.184Z",
+  "decision": "ALLOW_INTEGRATE",
+  "scope": "backend",
+  "worker": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend",
+  "authorization": "User approved full plan and release; root invoked after worker claim release",
+  "manifestSha256": "2696009c17ee34519a30624382f346c315841fb66a30e06664b716452d1d4f5a",
+  "files": [
+    {
+      "path": "backend/src/ai/__tests__/intake-tinetti-db.test.ts",
+      "sha256": "0a579aa69d04428a6fecbc2f86127b3bf3b6752567e216ce589b659ae07927c2"
+    },
+    {
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "sha256": "44a63670577f34e899e7d331a35018e365cbd295fde75b4ece9f06c3963298a1"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-db.test.ts",
+      "sha256": "f6a2f6e3c3f435b95f6f1c4459573ab129d7b99269b08da8d572e2f2518ddccb"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-fixture.ts",
+      "sha256": "30da85818ec0e6f43254d08bfe0fe599e1961357aacd4b450096c2f8ef258057"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-pdf-db.test.ts",
+      "sha256": "ef10fe9456f0ed8529efc9dde973d93bc5f96e77fef16a19eecb0a988f682a95"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti.test.ts",
+      "sha256": "89745d68d50858fd222cd63d7e072774b811409331d176379c63678efe8d99d5"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-pdf-db.test.ts",
+      "sha256": "ca42322414512d41650e5b8bc372293052bace30c326b21c4a53d9c479e6c173"
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "sha256": "b60c0372233198f3bb03dc9b0b863b25773cd2e43d87955814226b37a0767384"
+    },
+    {
+      "path": "backend/src/assessments/current.ts",
+      "sha256": "7213a5a9aff55b945207d0dd4cc80e99ef626dc58edd85f155c54b3c1fd25967"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "sha256": "9ca1b6e10c4228cc1568f90cac9897220c0197ef589ec0755a9a422bcd8fd1ad"
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "sha256": "63e5108a81c75bf3ba374adda8ada60168a9f7d9576b19112cf79343d00473c2"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "sha256": "0826cb0b8f8c8985d3ff8b2c7bf4482df223fee4c5a0540b7bdc9200794e41cc"
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "sha256": "1610366a814e4b854989f21c3feebffb6b9be22653b5d49102c22d6c71e144c2"
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "sha256": "c66498e98d90f5d74e165b3d3f59d53077bc8559c4d710a444d4ae150c378490"
+    },
+    {
+      "path": "backend/src/assessments/tinetti-definition.ts",
+      "sha256": "6151cde83a3181ab805deb6b6dd2bbf5ba3aa6c5354b4bf309ce3801c084222d"
+    },
+    {
+      "path": "backend/src/assessments/tinetti-types.ts",
+      "sha256": "adacc17306190c979b2c49a5a45c0411b3120d574750772ce36a1bd996a6f864"
+    },
+    {
+      "path": "backend/src/assessments/tinetti.ts",
+      "sha256": "a7c6af029659a68a57777de0b42991fcc943b96abbbcee3d92456c9409f5c51c"
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "sha256": "6e061970386082a5bdb38b667244d63c6910edf5efae368584e9ca064beaf730"
+    },
+    {
+      "path": "backend/src/patients/__tests__/cartella-tinetti-db.test.ts",
+      "sha256": "04a69aabf466a46f55424c527e3e262cd45539338ded9f224a30b672a89a547b"
+    },
+    {
+      "path": "backend/src/patients/cartella-update.ts",
+      "sha256": "1c4e663bb89a15a9678bc6430efc5f48fa1002acf23030deceb6a0c9a88f198d"
+    },
+    {
+      "path": "backend/src/routes/patients.ts",
+      "sha256": "2486c389f939afe2f67f1a56e305aef05d228b229a169978fe374a31eed0c3e7"
+    },
+    {
+      "path": "prisma/migrations/20260923060000_tinetti/migration.sql",
+      "sha256": "0b40795104f0f30d6886b5544aad553507cbf57354dcd7399608c3c5b4857022"
+    }
+  ]
+}

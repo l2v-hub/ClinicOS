@@ -1,0 +1,95 @@
+{
+  "mobile": {
+    "focus": {
+      "bottom": 708.234375,
+      "height": 48,
+      "left": 31,
+      "right": 344,
+      "top": 660.234375,
+      "width": 313,
+      "x": 31,
+      "y": 660.234375
+    },
+    "focusName": "Salva e verifica anteprima",
+    "identity": {
+      "bottom": 187.375,
+      "height": 123.375,
+      "left": 16,
+      "right": 359,
+      "top": 64,
+      "width": 343,
+      "x": 16,
+      "y": 64
+    },
+    "scrollWidth": 375,
+    "topbar": {
+      "bottom": 64,
+      "height": 64,
+      "left": 0,
+      "right": 375,
+      "top": 0,
+      "width": 375,
+      "x": 0,
+      "y": 0
+    },
+    "width": 390
+  },
+  "tablet": {
+    "focus": {
+      "bottom": 719.046875,
+      "height": 48,
+      "left": 151.34375,
+      "right": 351,
+      "top": 671.046875,
+      "width": 199.65625,
+      "x": 151.34375,
+      "y": 671.046875
+    },
+    "identity": {
+      "bottom": 149.1875,
+      "height": 85.1875,
+      "left": 16,
+      "right": 737,
+      "top": 64,
+      "width": 721,
+      "x": 16,
+      "y": 64
+    },
+    "scrollWidth": 753,
+    "topbar": {
+      "bottom": 64,
+      "height": 64,
+      "left": 0,
+      "right": 753,
+      "top": 0,
+      "width": 753,
+      "x": 0,
+      "y": 0
+    },
+    "width": 768
+  },
+  "desktop": {
+    "focus": {
+      "bottom": 901.859375,
+      "height": 48,
+      "left": 247.34375,
+      "right": 447,
+      "top": 853.859375,
+      "width": 199.65625,
+      "x": 247.34375,
+      "y": 853.859375
+    },
+    "identity": {
+      "bottom": 523.1875,
+      "height": 85.1875,
+      "left": 112,
+      "right": 1216,
+      "top": 438,
+      "width": 1104,
+      "x": 112,
+      "y": 438
+    },
+    "scrollWidth": 1247,
+    "width": 1262
+  }
+}

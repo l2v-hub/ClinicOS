@@ -1,0 +1,106 @@
+✖ Tinetti HTTP partial-to-final archives20items/28points and preserves clinical instant on correction (10307.1521ms)
+PUT /patients/vitals-qa-anna/cartella → salvata
+✖ Cartella HTTP preserves omitted or equal legacy Tinetti and rejects changes explicitly (58.6964ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23358.1747
+
+✖ failing tests:
+
+test at tests\integration\po12-tinetti.test.mts:1:2111
+✖ Tinetti HTTP partial-to-final archives20items/28points and preserves clinical instant on correction (10307.1521ms)
+  AssertionError [ERR_ASSERTION]: {"error":"Tipo o versione del modulo non supportati","code":"assessment_invalid_input"}
+  
+  400 !== 201
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po12-tinetti.test.mts:22:76)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\integration\po12-tinetti.test.mts:1:5162
+✖ Cartella HTTP preserves omitted or equal legacy Tinetti and rejects changes explicitly (58.6964ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - [
+  -   {
+  -     altezzaPassoDx: 1,
+  -     altezzaPassoSx: 1,
+  -     alzarsi: 2,
+  -     cammino: 1,
+  -     continuita: 1,
+  -     createdAt: '2026-09-19T08:10:00.000Z',
+  -     data: '2026-09-19',
+  -     equilibrioImmediato: 2,
+  -     equilibrioProlungato: 2,
+  -     equilibrioSeduto: 1,
+  -     girarsi360Passi: 1,
+  -     girarsi360Stabilita: 1,
+  -     id: 'synthetic-tinetti-legacy-complete',
+  -     iniziazione: 1,
+  -     lunghezzaPassoDx: 1,
+  -     lunghezzaPassoSx: 1,
+  -     note: 'Valutazione precedente sintetica.',
+  -     occhiChiusi: 1,
+  -     operatore: 'Nome storico non autenticato',
+  -     rombergSpinta: 2,
+  -     sedersi: 2,
+  -     simmetria: 1,
+  -     tentativiAlzarsi: 2,
+  -     traiettoria: 2,
+  -     tronco: 2
+  -   },
+  -   {
+  -     altezzaPassoDx: 1,
+  -     altezzaPassoSx: 1,
+  -     alzarsi: -1,
+  -     cammino: 1,
+  -     continuita: 1,
+  -     createdAt: '2026-09-20T08:10:00.000Z',
+  -     data: '2026-09-20',
+  -     equilibrioImmediato: 2,
+  -     equilibrioProlungato: 2,
+  -     equilibrioSeduto: 1,
+  -     girarsi360Passi: 1,
+  -     girarsi360Stabilita: 1,
+  -     id: 'synthetic-tinetti-legacy-incomplete',
+  -     iniziazione: 1,
+  -     lunghezzaPassoDx: 1,
+  -     lunghezzaPassoSx: 1,
+  -     note: 'Scheda precedente incompleta: non attribuire un rischio.',
+  -     occhiChiusi: 1,
+  -     operatore: 'Nome storico non autenticato',
+  -     rombergSpinta: 2,
+  -     sedersi: 2,
+  -     simmetria: 1,
+  -     tentativiAlzarsi: 2,
+  -     traiettoria: 2,
+  -     tronco: 2
+  -   }
+  - ]
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\po12-tinetti.test.mts:46:187)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ { id: 'synthetic-tinetti-legacy-complete', data: '2026-09-19', note: 'Valutazione precedente sintetica.', tronco: 2, alzarsi: 2, cammino: 1, sedersi: 2, createdAt: '2026-09-19T08:10:00.000Z', operatore: 'Nome storico non autenticato', simmetria: 1, continuita: 1, iniziazione: 1, occhiChiusi: 1, traiettoria: 2, rombergSpinta: 2, altezzaPassoDx: 1, altezzaPassoSx: 1, girarsi360Passi: 1, equilibrioSeduto: 1, lunghezzaPassoDx: 1, lunghezzaPassoSx: 1, tentativiAlzarsi: 2, equilibrioImmediato: 2, girarsi360Stabilita: 1, equilibrioProlungato: 2 }, { id: 'synthetic-tinetti-legacy-incomplete', data: '2026-09-20', note: 'Scheda precedente incompleta: non attribuire un rischio.', tronco: 2, alzarsi: -1, cammino: 1, sedersi: 2, createdAt: '2026-09-20T08:10:00.000Z', operatore: 'Nome storico non autenticato', simmetria: 1, continuita: 1, iniziazione: 1, occhiChiusi: 1, traiettoria: 2, rombergSpinta: 2, altezzaPassoDx: 1, altezzaPassoSx: 1, girarsi360Passi: 1, equilibrioSeduto: 1, lunghezzaPassoDx: 1, lunghezzaPassoSx: 1, tentativiAlzarsi: 2, equilibrioImmediato: 2, girarsi360Stabilita: 1, equilibrioProlungato: 2 } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

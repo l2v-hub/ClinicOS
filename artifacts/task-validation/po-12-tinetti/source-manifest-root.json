@@ -1,0 +1,317 @@
+{
+  "sourceStateId": "0107bee7b147430bd5c8eee72b6a38a307902a7fcf4839d8b7691fe9fe586b53",
+  "files": [
+    {
+      "path": "backend/src/ai/__tests__/intake-tinetti-db.test.ts",
+      "sha256": "0a579aa69d04428a6fecbc2f86127b3bf3b6752567e216ce589b659ae07927c2",
+      "bytes": 3927,
+      "workerSha256": "0a579aa69d04428a6fecbc2f86127b3bf3b6752567e216ce589b659ae07927c2"
+    },
+    {
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "sha256": "44a63670577f34e899e7d331a35018e365cbd295fde75b4ece9f06c3963298a1",
+      "bytes": 15997,
+      "workerSha256": "44a63670577f34e899e7d331a35018e365cbd295fde75b4ece9f06c3963298a1"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-db.test.ts",
+      "sha256": "f6a2f6e3c3f435b95f6f1c4459573ab129d7b99269b08da8d572e2f2518ddccb",
+      "bytes": 6451,
+      "workerSha256": "f6a2f6e3c3f435b95f6f1c4459573ab129d7b99269b08da8d572e2f2518ddccb"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-fixture.ts",
+      "sha256": "30da85818ec0e6f43254d08bfe0fe599e1961357aacd4b450096c2f8ef258057",
+      "bytes": 694,
+      "workerSha256": "30da85818ec0e6f43254d08bfe0fe599e1961357aacd4b450096c2f8ef258057"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti-pdf-db.test.ts",
+      "sha256": "ef10fe9456f0ed8529efc9dde973d93bc5f96e77fef16a19eecb0a988f682a95",
+      "bytes": 2201,
+      "workerSha256": "ef10fe9456f0ed8529efc9dde973d93bc5f96e77fef16a19eecb0a988f682a95"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/tinetti.test.ts",
+      "sha256": "89745d68d50858fd222cd63d7e072774b811409331d176379c63678efe8d99d5",
+      "bytes": 3952,
+      "workerSha256": "89745d68d50858fd222cd63d7e072774b811409331d176379c63678efe8d99d5"
+    },
+    {
+      "path": "backend/src/assessments/__tests__/transfers-pdf-db.test.ts",
+      "sha256": "ca42322414512d41650e5b8bc372293052bace30c326b21c4a53d9c479e6c173",
+      "bytes": 4067,
+      "workerSha256": "ca42322414512d41650e5b8bc372293052bace30c326b21c4a53d9c479e6c173"
+    },
+    {
+      "path": "backend/src/assessments/access.ts",
+      "sha256": "b60c0372233198f3bb03dc9b0b863b25773cd2e43d87955814226b37a0767384",
+      "bytes": 5377,
+      "workerSha256": "b60c0372233198f3bb03dc9b0b863b25773cd2e43d87955814226b37a0767384"
+    },
+    {
+      "path": "backend/src/assessments/current.ts",
+      "sha256": "7213a5a9aff55b945207d0dd4cc80e99ef626dc58edd85f155c54b3c1fd25967",
+      "bytes": 1052,
+      "workerSha256": "7213a5a9aff55b945207d0dd4cc80e99ef626dc58edd85f155c54b3c1fd25967"
+    },
+    {
+      "path": "backend/src/assessments/history.ts",
+      "sha256": "9ca1b6e10c4228cc1568f90cac9897220c0197ef589ec0755a9a422bcd8fd1ad",
+      "bytes": 4970,
+      "workerSha256": "9ca1b6e10c4228cc1568f90cac9897220c0197ef589ec0755a9a422bcd8fd1ad"
+    },
+    {
+      "path": "backend/src/assessments/input.ts",
+      "sha256": "63e5108a81c75bf3ba374adda8ada60168a9f7d9576b19112cf79343d00473c2",
+      "bytes": 5198,
+      "workerSha256": "63e5108a81c75bf3ba374adda8ada60168a9f7d9576b19112cf79343d00473c2"
+    },
+    {
+      "path": "backend/src/assessments/pdf-renderer.ts",
+      "sha256": "0826cb0b8f8c8985d3ff8b2c7bf4482df223fee4c5a0540b7bdc9200794e41cc",
+      "bytes": 9695,
+      "workerSha256": "0826cb0b8f8c8985d3ff8b2c7bf4482df223fee4c5a0540b7bdc9200794e41cc"
+    },
+    {
+      "path": "backend/src/assessments/pdf-service.ts",
+      "sha256": "1610366a814e4b854989f21c3feebffb6b9be22653b5d49102c22d6c71e144c2",
+      "bytes": 4985,
+      "workerSha256": "1610366a814e4b854989f21c3feebffb6b9be22653b5d49102c22d6c71e144c2"
+    },
+    {
+      "path": "backend/src/assessments/service.ts",
+      "sha256": "c66498e98d90f5d74e165b3d3f59d53077bc8559c4d710a444d4ae150c378490",
+      "bytes": 11774,
+      "workerSha256": "c66498e98d90f5d74e165b3d3f59d53077bc8559c4d710a444d4ae150c378490"
+    },
+    {
+      "path": "backend/src/assessments/tinetti-definition.ts",
+      "sha256": "6151cde83a3181ab805deb6b6dd2bbf5ba3aa6c5354b4bf309ce3801c084222d",
+      "bytes": 4028,
+      "workerSha256": "6151cde83a3181ab805deb6b6dd2bbf5ba3aa6c5354b4bf309ce3801c084222d"
+    },
+    {
+      "path": "backend/src/assessments/tinetti-types.ts",
+      "sha256": "adacc17306190c979b2c49a5a45c0411b3120d574750772ce36a1bd996a6f864",
+      "bytes": 1317,
+      "workerSha256": "adacc17306190c979b2c49a5a45c0411b3120d574750772ce36a1bd996a6f864"
+    },
+    {
+      "path": "backend/src/assessments/tinetti.ts",
+      "sha256": "a7c6af029659a68a57777de0b42991fcc943b96abbbcee3d92456c9409f5c51c",
+      "bytes": 2815,
+      "workerSha256": "a7c6af029659a68a57777de0b42991fcc943b96abbbcee3d92456c9409f5c51c"
+    },
+    {
+      "path": "backend/src/assessments/types.ts",
+      "sha256": "6e061970386082a5bdb38b667244d63c6910edf5efae368584e9ca064beaf730",
+      "bytes": 5603,
+      "workerSha256": "6e061970386082a5bdb38b667244d63c6910edf5efae368584e9ca064beaf730"
+    },
+    {
+      "path": "backend/src/patients/__tests__/cartella-tinetti-db.test.ts",
+      "sha256": "04a69aabf466a46f55424c527e3e262cd45539338ded9f224a30b672a89a547b",
+      "bytes": 5439,
+      "workerSha256": "04a69aabf466a46f55424c527e3e262cd45539338ded9f224a30b672a89a547b"
+    },
+    {
+      "path": "backend/src/patients/cartella-update.ts",
+      "sha256": "1c4e663bb89a15a9678bc6430efc5f48fa1002acf23030deceb6a0c9a88f198d",
+      "bytes": 3487,
+      "workerSha256": "1c4e663bb89a15a9678bc6430efc5f48fa1002acf23030deceb6a0c9a88f198d"
+    },
+    {
+      "path": "backend/src/routes/patients.ts",
+      "sha256": "2486c389f939afe2f67f1a56e305aef05d228b229a169978fe374a31eed0c3e7",
+      "bytes": 41307,
+      "workerSha256": "2486c389f939afe2f67f1a56e305aef05d228b229a169978fe374a31eed0c3e7"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "ac0d397f7a0e20a4dad2c158703c2f204ccc77cc002d13433b8afc99e0eda5f1",
+      "bytes": 129994,
+      "workerSha256": "ac0d397f7a0e20a4dad2c158703c2f204ccc77cc002d13433b8afc99e0eda5f1"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/tinettiUi.test.ts",
+      "sha256": "4b0a7bf50a91ded6748b4da37fd39fe49abd51bb8ba0b35b34bea5adf98e43c0",
+      "bytes": 7262,
+      "workerSha256": "4b0a7bf50a91ded6748b4da37fd39fe49abd51bb8ba0b35b34bea5adf98e43c0"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentFinal.tsx",
+      "sha256": "5c6a9a9f56e4e3856aca250c4838e459598a7f0d9cce6e31ddd655db6fd5ca0f",
+      "bytes": 3245,
+      "workerSha256": "5c6a9a9f56e4e3856aca250c4838e459598a7f0d9cce6e31ddd655db6fd5ca0f"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "sha256": "0f5f5d3e6a390b2305ff24243c14a7f7f0a8d4adc886169b41bc1115209d2663",
+      "bytes": 4076,
+      "workerSha256": "0f5f5d3e6a390b2305ff24243c14a7f7f0a8d4adc886169b41bc1115209d2663"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "sha256": "a503131cba6a6f59db2106b43b399f64f35897160c4188c54e77109ebde63690",
+      "bytes": 3612,
+      "workerSha256": "a503131cba6a6f59db2106b43b399f64f35897160c4188c54e77109ebde63690"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.css",
+      "bytes": 5415,
+      "sha256": "76e487d4e2bed268d693fffdf5e3d60e25878b9358e9a66ecdd4ba6d08333dc4",
+      "owner": "root"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "sha256": "61750a4117544d7e9c8049c1476765c94e1d8ce22cdbf88e8dd4829cca9c6bb3",
+      "bytes": 18057,
+      "workerSha256": "61750a4117544d7e9c8049c1476765c94e1d8ce22cdbf88e8dd4829cca9c6bb3"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Tinetti.css",
+      "sha256": "9897c628db8881b4168c30bb896300990532c468ea67eb37e2a303e7ec02de4c",
+      "bytes": 2282,
+      "workerSha256": "9897c628db8881b4168c30bb896300990532c468ea67eb37e2a303e7ec02de4c"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TinettiForm.tsx",
+      "sha256": "830d501758e94d9e26ea8db1957e7561be04242cf5bfbed2ee264c4a8bbc1b87",
+      "bytes": 5054,
+      "workerSha256": "830d501758e94d9e26ea8db1957e7561be04242cf5bfbed2ee264c4a8bbc1b87"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TinettiSummary.tsx",
+      "sha256": "fc405612b852e3748e81c883936efc20f4d38845af9b9f7241aa8cc35f05922f",
+      "bytes": 3862,
+      "workerSha256": "fc405612b852e3748e81c883936efc20f4d38845af9b9f7241aa8cc35f05922f"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaTinettiTab.tsx",
+      "sha256": "1c6558a6c1ce3de8660eac60542f731e42ecbc73b0927c11c127fb2717977737",
+      "bytes": 4737,
+      "workerSha256": "1c6558a6c1ce3de8660eac60542f731e42ecbc73b0927c11c127fb2717977737"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "sha256": "2c6a7ccdda2d32fe65e283c06e89e00604e0c35a2929ede812d675f8e4b554e2",
+      "bytes": 112806,
+      "workerSha256": "2c6a7ccdda2d32fe65e283c06e89e00604e0c35a2929ede812d675f8e4b554e2"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordPrintDocument.tsx",
+      "sha256": "6844fb758f452eafa2da5ebb86d83f6d43e84737088d5008fe59bebce6f280ec",
+      "bytes": 11989,
+      "workerSha256": "6844fb758f452eafa2da5ebb86d83f6d43e84737088d5008fe59bebce6f280ec"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinetti.fixtures.ts",
+      "sha256": "07f60cca4d5d27959b64ae0f72f31578a1146be5576f1360814c973a14058c48",
+      "bytes": 2787,
+      "workerSha256": "07f60cca4d5d27959b64ae0f72f31578a1146be5576f1360814c973a14058c48"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinettiDefinition.test.ts",
+      "sha256": "435fb28a5ec6924bfe3199fe39b5d32c29948d813b77d5d7287ea0e69cefe628",
+      "bytes": 6618,
+      "workerSha256": "435fb28a5ec6924bfe3199fe39b5d32c29948d813b77d5d7287ea0e69cefe628"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinettiWorkflow.test.ts",
+      "sha256": "a0cf37b5f4bf9d163c6597ffba33c48b1a74d7cba94f5cc6ad8b800a2677011c",
+      "bytes": 7243,
+      "workerSha256": "a0cf37b5f4bf9d163c6597ffba33c48b1a74d7cba94f5cc6ad8b800a2677011c"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "sha256": "515d816776dde886d828ea116612e61b85fbf3ce4b83eee2d19b7e470e56f3bf",
+      "bytes": 2257,
+      "workerSha256": "515d816776dde886d828ea116612e61b85fbf3ce4b83eee2d19b7e470e56f3bf"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "sha256": "bf5e41ab7be54120ef15c1713f5c98c5af0e8b014edcc463cc6da7294154ae05",
+      "bytes": 12726,
+      "workerSha256": "bf5e41ab7be54120ef15c1713f5c98c5af0e8b014edcc463cc6da7294154ae05"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "sha256": "cf45097c4449f61060d66c3f4e124700be6b5b8fad2b9921d686ef71699b362f",
+      "bytes": 5428,
+      "workerSha256": "cf45097c4449f61060d66c3f4e124700be6b5b8fad2b9921d686ef71699b362f"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "sha256": "1e413c8b37ef97a7314232d1aa611cc8d2f5c6b01de5a82f1efb0e0dd164f7e4",
+      "bytes": 11114,
+      "workerSha256": "1e413c8b37ef97a7314232d1aa611cc8d2f5c6b01de5a82f1efb0e0dd164f7e4"
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiDefinition.ts",
+      "sha256": "f0662cc8f7a0563d1b3956d436d1ab9d68de9885659ec96b9990ed9b86511b1a",
+      "bytes": 3894,
+      "workerSha256": "f0662cc8f7a0563d1b3956d436d1ab9d68de9885659ec96b9990ed9b86511b1a"
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiItems.ts",
+      "sha256": "2966ce2dfbbb9ab7ec69e93a951f707ece88a6601381f77dd804421212afdd85",
+      "bytes": 3967,
+      "workerSha256": "2966ce2dfbbb9ab7ec69e93a951f707ece88a6601381f77dd804421212afdd85"
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiLegacy.ts",
+      "sha256": "c4f4266e34f6fb987e072260661af460b9d4cafbebe019f0da40b7b2853c5364",
+      "bytes": 1135,
+      "workerSha256": "c4f4266e34f6fb987e072260661af460b9d4cafbebe019f0da40b7b2853c5364"
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiTypes.ts",
+      "sha256": "53ab142aac36814a7d67eccde9ad4ee67457cc9acfa4dd591905987b85d8c3f4",
+      "bytes": 1276,
+      "workerSha256": "53ab142aac36814a7d67eccde9ad4ee67457cc9acfa4dd591905987b85d8c3f4"
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiValidation.ts",
+      "sha256": "aa20e3fb406f4bfa9022668ec8253a06d1df82a7004ad460bd661969c50bc6de",
+      "bytes": 3765,
+      "workerSha256": "aa20e3fb406f4bfa9022668ec8253a06d1df82a7004ad460bd661969c50bc6de"
+    },
+    {
+      "path": "frontend/src/lib/cartellaWriteQueue.ts",
+      "sha256": "98b105382d0548f24c0404ba7f5a907fa975d2e3d0d83cb3e0fb3e9b4ed201fc",
+      "bytes": 2898,
+      "workerSha256": "98b105382d0548f24c0404ba7f5a907fa975d2e3d0d83cb3e0fb3e9b4ed201fc"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "sha256": "9816dc0f6a10cf325f7973d3125360c6c6fe05b343e8346f771df144a7096443",
+      "bytes": 6925,
+      "workerSha256": "9816dc0f6a10cf325f7973d3125360c6c6fe05b343e8346f771df144a7096443"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "sha256": "4ebe7563cee94c26a3304af6059dbd485581d2f7d0eac6fa2b9b1b5ba9b502b1",
+      "bytes": 10942,
+      "workerSha256": "4ebe7563cee94c26a3304af6059dbd485581d2f7d0eac6fa2b9b1b5ba9b502b1"
+    },
+    {
+      "path": "prisma/migrations/20260923060000_tinetti/migration.sql",
+      "sha256": "0b40795104f0f30d6886b5544aad553507cbf57354dcd7399608c3c5b4857022",
+      "bytes": 3658,
+      "workerSha256": "0b40795104f0f30d6886b5544aad553507cbf57354dcd7399608c3c5b4857022"
+    },
+    {
+      "path": "tests/fixtures/po12-tinetti.mjs",
+      "bytes": 2086,
+      "sha256": "197e14b3d13aca6aed5553845a86fdaa192a94bfc13bdffe043bd097f53406ba",
+      "owner": "root"
+    },
+    {
+      "path": "tests/integration/po12-tinetti.test.mts",
+      "bytes": 6253,
+      "sha256": "60c9591540a02ad830d00ed61fefaec86f5c7c9769074077448f041d7c78f710",
+      "owner": "root"
+    }
+  ]
+}

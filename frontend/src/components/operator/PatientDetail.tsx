@@ -2733,14 +2733,6 @@ export function PatientDetail({
                 operatoreNome={operatoreNome}
               />
             )}
-            {tab === 'tinetti' && (
-              <ScalaTinettiTab
-                cartella={cartella}
-                paziente={paziente}
-                onUpdate={upd}
-                operatoreNome={operatoreNome}
-              />
-            )}
             {tab === 'nrs' && (
               <PainAssessmentEditor
                 mode="patient-chart"
@@ -2752,10 +2744,12 @@ export function PatientDetail({
                 onChange={() => {}}
               />
             )}
-            {(tab === 'painad' || tab === 'postural_transfers') && (
+            {(tab === 'painad' || tab === 'postural_transfers' || tab === 'tinetti') && (
               <AssessmentWorkspace patient={paziente} operatorId={operatoreId} operatorRole={operatoreRole} operatorName={operatoreNome}
                 type={tab} draftStore={assessmentDraftStore} initialAssessment={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessment : undefined}
-                onOpenArchive={(documentId, assessment) => { setArchiveFocus({ patientId: paziente.id, documentId, assessment }); switchTab('documenti'); }} />
+                onOpenArchive={(documentId, assessment) => { setArchiveFocus({ patientId: paziente.id, documentId, assessment }); switchTab('documenti'); }}>
+                {tab === 'tinetti' && <ScalaTinettiTab cartella={cartella} paziente={paziente} />}
+              </AssessmentWorkspace>
             )}
             {tab === 'dimissione' && (
               <DimissioneTab

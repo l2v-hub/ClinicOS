@@ -1,0 +1,50 @@
+{
+  "task": "PO12-backend-preparation",
+  "startedAt": "2026-09-23T04:56:46.739Z",
+  "root": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend",
+  "branch": "codex/po12-tinetti-backend",
+  "baseline": "470a5fe7a7eee4a9b0a0b219947432049b9de977",
+  "decision": "allow private runtime copy and preparation artifacts only; application implementation awaits explicit root GO after PO11 deploy",
+  "claim": {
+    "issueId": "PO-12-backend-preparation",
+    "claimant": {
+      "type": "agent",
+      "agentId": "codex-po12-backend",
+      "agentType": "preparer"
+    },
+    "claimedAt": "2026-09-23T04:55:55.254Z",
+    "status": "active",
+    "statusChangedAt": "2026-09-23T04:55:55.254Z",
+    "progress": 0,
+    "context": "Root authorized preparation only in isolated C:/Workspace/ClinicOSHouse-worktrees/po12-tinetti-backend, branch codex/po12-tinetti-backend baseline 470a5fe7a7eee4a9b0a0b219947432049b9de977. Sole writer scope artifacts/task-validation/po-12-tinetti/backend/** and private backend/node_modules runtime, read-only root dependency junction. No application edits, application tests, manifests/lockfile edits, commits, pushes or deploy before explicit root GO after PO11 release verified. Inspect Tinetti DTO/scoring and legacy Cartella protection; preserve existing dirty PowerShell files."
+  },
+  "contract": {
+    "path": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\artifacts\\task-validation\\po-12-tinetti\\task-contract.md",
+    "sha256": "4e4b5eac186f8f65661a410b1ce81748e6f96c59f3c2b20c2e58ffa29b3ebe8f"
+  },
+  "sourceTreeSha256": "0b89d45e1627c151a62505648f7c68e43142eb398239af8567981bb2dcd1de93",
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "implementationAuthorized": false,
+  "publicationAuthorized": false
+}

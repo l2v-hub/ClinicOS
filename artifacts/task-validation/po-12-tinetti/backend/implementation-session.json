@@ -1,0 +1,38 @@
+{
+  "task": "PO12-backend",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend",
+  "branch": "codex/po12-tinetti-backend",
+  "baseline": "470a5fe7a7eee4a9b0a0b219947432049b9de977",
+  "startedAt": "2026-09-23T04:59:51.332Z",
+  "decision": "allow scoped implementation after explicit root GO and verified PO11 Railway/Vercel deployment",
+  "claim": {
+    "issueId": "PO-12-backend-implementation",
+    "claimant": "agent:codex-po12-backend:coder",
+    "claimedAt": "2026-09-23T04:59:51.332Z"
+  },
+  "preserved": [
+    {
+      "path": "package.json",
+      "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+    },
+    {
+      "path": "backend/package.json",
+      "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+    },
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "rootContract": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\artifacts\\task-validation\\po-12-tinetti\\task-contract.md",
+  "rootContractSha256": "4e4b5eac186f8f65661a410b1ce81748e6f96c59f3c2b20c2e58ffa29b3ebe8f",
+  "publicationAuthorizedToWorker": false
+}

@@ -1,0 +1,11 @@
+{
+  "task": "PO-12-frontend",
+  "generatedAtUtc": "2026-09-23T05:12:59.354Z",
+  "itemCount": 20,
+  "optionCount": 48,
+  "exactLabelsDescriptionsGroupsAndProvenance": true,
+  "originalSourceSha256": "7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09",
+  "referenceSha256": "feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6",
+  "backendDefinitionSha256": "149e7e8bfcdb324bb413fc36e20db843cd72d03aeb77628b3903980c9ad9424e",
+  "frontendItemsSha256": "2966ce2dfbbb9ab7ec69e93a951f707ece88a6601381f77dd804421212afdd85"
+}

@@ -1,5 +1,6 @@
 import type { AssessmentDto, AssessmentTarget } from '../../../lib/assessments/assessmentTypes';
 import { AssessmentSummary } from './AssessmentSummary';
+import { ASSESSMENT_ARCHIVE_LABELS } from '../../../lib/patientDocumentArchive';
 export function AssessmentFinal({
   record,
   busy,
@@ -27,7 +28,7 @@ export function AssessmentFinal({
         <h3>PDF e archivio</h3>
         <p>
           {record.pdf?.status === 'ready'
-            ? `PDF archiviato in Documenti → Moduli e valutazioni → ${record.type === 'painad' ? 'PAINAD' : 'Trasferimenti posturali'}.`
+            ? `PDF archiviato in Documenti → Moduli e valutazioni → ${ASSESSMENT_ARCHIVE_LABELS[record.type]}.`
             : record.pdf?.status === 'failed'
               ? 'PDF non generato. La valutazione finale è conservata.'
               : 'PDF in preparazione. La valutazione finale è conservata.'}

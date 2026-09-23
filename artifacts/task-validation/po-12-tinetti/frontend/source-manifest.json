@@ -1,0 +1,204 @@
+{
+  "task": "PO-12-frontend",
+  "baseline": "470a5fe7a7eee4a9b0a0b219947432049b9de977",
+  "generatedAtUtc": "2026-09-23T05:14:23.456Z",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-ui",
+  "sourceStateId": "ede22f419330266315a9912b6239198607eaea8ee0613931ecdc84854f516b63",
+  "runtimeSourceId": "2f1be30866c8ea07251d4cf4d8c8650a46b93d9c5d26b43330ee1f5ddf125c25",
+  "files": [
+    {
+      "path": "frontend/src/App.tsx",
+      "bytes": 129994,
+      "lines": 3120,
+      "sha256": "ac0d397f7a0e20a4dad2c158703c2f204ccc77cc002d13433b8afc99e0eda5f1",
+      "baselineSha256": "b017bfba4d960eeacaa2b582a854d35e8569a12bc66dfcd70920e749639be8a6"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "bytes": 112806,
+      "lines": 2791,
+      "sha256": "2c6a7ccdda2d32fe65e283c06e89e00604e0c35a2929ede812d675f8e4b554e2",
+      "baselineSha256": "9c1f27d2228946b7a21fdff2513b0e02f6053b61b5ce095c2db6020719f78128"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordPrintDocument.tsx",
+      "bytes": 11989,
+      "lines": 363,
+      "sha256": "6844fb758f452eafa2da5ebb86d83f6d43e84737088d5008fe59bebce6f280ec",
+      "baselineSha256": "0a488fe47ea4fbe9431d852deeda105177a1b6c70a5d25902fe4234ee255518e"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/tinettiUi.test.ts",
+      "bytes": 7262,
+      "lines": 190,
+      "sha256": "4b0a7bf50a91ded6748b4da37fd39fe49abd51bb8ba0b35b34bea5adf98e43c0",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentFinal.tsx",
+      "bytes": 3245,
+      "lines": 103,
+      "sha256": "5c6a9a9f56e4e3856aca250c4838e459598a7f0d9cce6e31ddd655db6fd5ca0f",
+      "baselineSha256": "bbeb2d3dcd0badb6b8aefc47b5de336f1b253707724df4a3246878c2f1d7f3c1"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "bytes": 4076,
+      "lines": 116,
+      "sha256": "0f5f5d3e6a390b2305ff24243c14a7f7f0a8d4adc886169b41bc1115209d2663",
+      "baselineSha256": "be805b7c343ab540e8b1f229f12836f408b8a6d168c18a311d5a37eb2fb1c67f"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "bytes": 3612,
+      "lines": 103,
+      "sha256": "a503131cba6a6f59db2106b43b399f64f35897160c4188c54e77109ebde63690",
+      "baselineSha256": "edac1de0bcba7bee4939308996afec522446d810cff7985bdb9162ffea1b8efd"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "bytes": 18057,
+      "lines": 475,
+      "sha256": "61750a4117544d7e9c8049c1476765c94e1d8ce22cdbf88e8dd4829cca9c6bb3",
+      "baselineSha256": "635b34dd7fda2680692f38cc21d9d411fc02d186466497064266d931a756a0e2"
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Tinetti.css",
+      "bytes": 2282,
+      "lines": 97,
+      "sha256": "9897c628db8881b4168c30bb896300990532c468ea67eb37e2a303e7ec02de4c",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TinettiForm.tsx",
+      "bytes": 5054,
+      "lines": 139,
+      "sha256": "830d501758e94d9e26ea8db1957e7561be04242cf5bfbed2ee264c4a8bbc1b87",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TinettiSummary.tsx",
+      "bytes": 3862,
+      "lines": 114,
+      "sha256": "fc405612b852e3748e81c883936efc20f4d38845af9b9f7241aa8cc35f05922f",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaTinettiTab.tsx",
+      "bytes": 4737,
+      "lines": 138,
+      "sha256": "1c6558a6c1ce3de8660eac60542f731e42ecbc73b0927c11c127fb2717977737",
+      "baselineSha256": "5b298f2969dc561402fc2fecc25cc3493d24216bebc3b5ab6cd15ac5d4176b8f"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinetti.fixtures.ts",
+      "bytes": 2787,
+      "lines": 89,
+      "sha256": "07f60cca4d5d27959b64ae0f72f31578a1146be5576f1360814c973a14058c48",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinettiDefinition.test.ts",
+      "bytes": 6618,
+      "lines": 180,
+      "sha256": "435fb28a5ec6924bfe3199fe39b5d32c29948d813b77d5d7287ea0e69cefe628",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinettiWorkflow.test.ts",
+      "bytes": 7243,
+      "lines": 160,
+      "sha256": "a0cf37b5f4bf9d163c6597ffba33c48b1a74d7cba94f5cc6ad8b800a2677011c",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "bytes": 2257,
+      "lines": 51,
+      "sha256": "515d816776dde886d828ea116612e61b85fbf3ce4b83eee2d19b7e470e56f3bf",
+      "baselineSha256": "c3ebf3b85ae62be7ad31917008a58b3c4f64a5c19c0cbd263aa5e4c2dcd9c6cb"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "bytes": 12726,
+      "lines": 396,
+      "sha256": "bf5e41ab7be54120ef15c1713f5c98c5af0e8b014edcc463cc6da7294154ae05",
+      "baselineSha256": "91d1207589baac5ecb861543e2cc1e7491b9eef012fc9472ab530f5e46369aa7"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "bytes": 5428,
+      "lines": 172,
+      "sha256": "cf45097c4449f61060d66c3f4e124700be6b5b8fad2b9921d686ef71699b362f",
+      "baselineSha256": "9a74e2fa38b40df53ab9178e02f2ec95a7d269058332beedb7ebdb8ef19e189c"
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "bytes": 11114,
+      "lines": 306,
+      "sha256": "1e413c8b37ef97a7314232d1aa611cc8d2f5c6b01de5a82f1efb0e0dd164f7e4",
+      "baselineSha256": "7e2358ff2652c29db2ce03493a0389b4a663ac40b988f51197de0a0ca8ea5ce2"
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiDefinition.ts",
+      "bytes": 3894,
+      "lines": 116,
+      "sha256": "f0662cc8f7a0563d1b3956d436d1ab9d68de9885659ec96b9990ed9b86511b1a",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiItems.ts",
+      "bytes": 3967,
+      "lines": 147,
+      "sha256": "2966ce2dfbbb9ab7ec69e93a951f707ece88a6601381f77dd804421212afdd85",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiLegacy.ts",
+      "bytes": 1135,
+      "lines": 39,
+      "sha256": "c4f4266e34f6fb987e072260661af460b9d4cafbebe019f0da40b7b2853c5364",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiTypes.ts",
+      "bytes": 1276,
+      "lines": 46,
+      "sha256": "53ab142aac36814a7d67eccde9ad4ee67457cc9acfa4dd591905987b85d8c3f4",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiValidation.ts",
+      "bytes": 3765,
+      "lines": 104,
+      "sha256": "aa20e3fb406f4bfa9022668ec8253a06d1df82a7004ad460bd661969c50bc6de",
+      "baselineSha256": null
+    },
+    {
+      "path": "frontend/src/lib/cartellaWriteQueue.ts",
+      "bytes": 2898,
+      "lines": 72,
+      "sha256": "98b105382d0548f24c0404ba7f5a907fa975d2e3d0d83cb3e0fb3e9b4ed201fc",
+      "baselineSha256": "51fded7d8dbd208801f1287c51a6a3fdc4f758413812c5ddd004feec2f009b36"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "bytes": 6925,
+      "lines": 199,
+      "sha256": "9816dc0f6a10cf325f7973d3125360c6c6fe05b343e8346f771df144a7096443",
+      "baselineSha256": "a87bdf3becb55a0316c92f2f1f7f2324029979274b0f0e83f9245e7ad5daca37"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "bytes": 10942,
+      "lines": 293,
+      "sha256": "4ebe7563cee94c26a3304af6059dbd485581d2f7d0eac6fa2b9b1b5ba9b502b1",
+      "baselineSha256": "d592b81aea36f5ce17673333726d8cc27a1a3e28f5d1a02c7b17373642c5b210"
+    }
+  ],
+  "protectedFiles": {
+    "run-claude-queue.ps1": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008",
+    "start-claude-team.ps1": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.css": "da291d16f038e1653d54cd4e2c4a010290d72855c36ea5c624b8a7e6dde907ed"
+  }
+}

@@ -25,6 +25,7 @@ import {
 } from '../patients/parameters-update.js';
 import { loadPatientConsegnaCounts } from '../consegne/read-service.js';
 import { requirePatientScope } from '../patients/access.js';
+import { CartellaUpdateError, saveCartella } from '../patients/cartella-update.js';
 import { hasGlobalPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
 import {
   assemblePatientClinicalSummaries,
@@ -1244,23 +1245,16 @@ router.put('/:id/cartella', requirePatientScope, async (req, res) => {
   }
 
   try {
-    const patient = await prisma.patient.findUnique({ where: { id }, select: { id: true } });
-    if (!patient) {
-      res.status(404).json({ error: 'Paziente non trovato' });
-      return;
-    }
-
-    const { codiceFiscale: _legacyIdentity, ...clinicalData } = data as Record<string, unknown>;
-    const cartella = await prisma.cartella.upsert({
-      where: { patientId: id },
-      create: { patientId: id, data: clinicalData as object },
-      update: { data: clinicalData as object },
-    });
+    const cartella = await saveCartella(id, data, (req as AuthedRequest).operator!);
 
     console.log(`PUT /patients/${id}/cartella → salvata`);
     res.status(200).json({ patientId: id, data: cartella.data });
   } catch (error) {
     console.error('PUT /patients/:id/cartella error:', error);
+    if (error instanceof CartellaUpdateError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
     res.status(500).json({ error: 'Errore durante salvataggio cartella clinica' });
   }
 });

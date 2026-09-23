@@ -1,0 +1,17 @@
+(node:39968) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Tinetti editor shows two groups and 48 compact accessible options with no preselection (23.2741ms)
+✔ Tinetti notes retain 4000 Unicode codepoints and remain editable above the limit without render crashes (36.1121ms)
+✔ Tinetti summary/history use 28 denominator and frozen notes while PAINAD remains explicitly 10 (11.4446ms)
+✔ legacy detail and print source preserve data with no creation/deletion controls or risk on invalid rows (14.695ms)
+✔ Tinetti archive metadata and filters carry the explicit module/version pair (2.0925ms)
+(node:39968) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 826.1529

@@ -29,6 +29,14 @@ import {
 } from './types.js';
 import { PAINAD_INTERPRETATIONS, PAINAD_ITEMS, painadResult } from './painad.js';
 import { transfersCompletion, transfersSections } from './transfers.js';
+import { tinettiCompletion, tinettiResult, tinettiSnapshotItems } from './tinetti.js';
+import { TINETTI_PROVENANCE } from './tinetti-definition.js';
+import {
+  TINETTI_VERSION,
+  TINETTI_SOURCE_SHA256,
+  TINETTI_REFERENCE_SHA256,
+  type TinettiAnswers,
+} from './tinetti-types.js';
 
 const conflict = () =>
   new AssessmentError(
@@ -173,8 +181,11 @@ export async function finalizeAssessment(
           'assessment_incomplete',
           { missingItems: PAINAD_KEYS.filter((key) => answers[key] === null) },
         );
-      if (row.type === 'postural_transfers') {
-        const completion = transfersCompletion(row.answers as unknown as TransfersAnswers);
+      if (row.type === 'postural_transfers' || row.type === 'tinetti') {
+        const completion =
+          row.type === 'tinetti'
+            ? tinettiCompletion(row.answers as unknown as TinettiAnswers)
+            : transfersCompletion(row.answers as unknown as TransfersAnswers);
         if (!completion.complete)
           throw new AssessmentError(
             'Completa tutte le risposte prima di confermare',
@@ -224,30 +235,48 @@ export async function finalizeAssessment(
         correctionReason: row.correctionReason,
       };
       const snapshot: AssessmentSnapshot =
-        row.type === 'postural_transfers'
+        row.type === 'tinetti'
           ? {
               ...common,
               form: {
-                type: 'postural_transfers',
-                version: TRANSFERS_VERSION,
-                sourceSha256: TRANSFERS_SOURCE_SHA256,
+                type: 'tinetti',
+                version: TINETTI_VERSION,
+                sourceSha256: TINETTI_SOURCE_SHA256,
+                referenceSha256: TINETTI_REFERENCE_SHA256,
               },
-              sections: transfersSections(row.answers as unknown as TransfersAnswers),
-              result: null,
-              signatureLabels: ['Firma Fisioterapista', 'Firma Operatori'],
+              items: tinettiSnapshotItems(row.answers as unknown as TinettiAnswers),
+              result: tinettiResult(row.answers as unknown as TinettiAnswers)!,
+              notes: (row.answers as unknown as TinettiAnswers).notes,
+              provenance: TINETTI_PROVENANCE,
             }
-          : {
-              ...common,
-              form: { type: 'painad', version: PAINAD_VERSION, sourceSha256: PAINAD_SOURCE_SHA256 },
-              items: PAINAD_ITEMS.map((item) => ({
-                id: item.id,
-                label: item.label,
-                score: answers[item.id] as PainadScore,
-                description: item.options[answers[item.id] as PainadScore],
-              })),
-              result: result!,
-              interpretation: PAINAD_INTERPRETATIONS[result!.band],
-            };
+          : row.type === 'postural_transfers'
+            ? {
+                ...common,
+                form: {
+                  type: 'postural_transfers',
+                  version: TRANSFERS_VERSION,
+                  sourceSha256: TRANSFERS_SOURCE_SHA256,
+                },
+                sections: transfersSections(row.answers as unknown as TransfersAnswers),
+                result: null,
+                signatureLabels: ['Firma Fisioterapista', 'Firma Operatori'],
+              }
+            : {
+                ...common,
+                form: {
+                  type: 'painad',
+                  version: PAINAD_VERSION,
+                  sourceSha256: PAINAD_SOURCE_SHA256,
+                },
+                items: PAINAD_ITEMS.map((item) => ({
+                  id: item.id,
+                  label: item.label,
+                  score: answers[item.id] as PainadScore,
+                  description: item.options[answers[item.id] as PainadScore],
+                })),
+                result: result!,
+                interpretation: PAINAD_INTERPRETATIONS[result!.band],
+              };
       await tx.patientAssessment.update({
         where: { id },
         data: {

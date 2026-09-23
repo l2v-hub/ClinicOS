@@ -1,0 +1,601 @@
+{
+  "task": "PO-12-backend",
+  "phase": "implementation-complete-worker-handoff",
+  "generatedAt": "2026-09-23T05:16:18.442Z",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend",
+  "branch": "codex/po12-tinetti-backend",
+  "baseline": "470a5fe7a7eee4a9b0a0b219947432049b9de977",
+  "decision": "allow exact-source worker handoff to root for independent integration",
+  "authorization": "Explicit root GO after verified PO11 release; root additionally authorized the minimal import legacy guard. Both worker claims released.",
+  "sourceManifestSha256": "2696009c17ee34519a30624382f346c315841fb66a30e06664b716452d1d4f5a",
+  "sourceTreeSha256": "309e55ff7901d5535693dc975e07cd98020fce07d1bc9ebb02164300f77bd566",
+  "inputTreeSha256": "745439cba8628a28d3bee99281a5f7953e8046d0b904c7b5a6000a5de07e3b2e",
+  "sourceFrozen": true,
+  "tests": {
+    "passed": 40,
+    "failed": 0,
+    "newPo12Tests": 11,
+    "files": 12,
+    "results": [
+      {
+        "file": "backend/src/assessments/__tests__/tinetti.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/assessments/__tests__/tinetti-db.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/patients/__tests__/cartella-tinetti-db.test.ts",
+        "exitCode": 0,
+        "tests": 3
+      },
+      {
+        "file": "backend/src/assessments/__tests__/tinetti-pdf-db.test.ts",
+        "exitCode": 0,
+        "tests": 1
+      },
+      {
+        "file": "backend/src/ai/__tests__/intake-tinetti-db.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/ai/__tests__/intake-confirm.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/assessments/__tests__/painad.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/assessments/__tests__/transfers.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/assessments/__tests__/service-db.test.ts",
+        "exitCode": 0,
+        "tests": 8
+      },
+      {
+        "file": "backend/src/assessments/__tests__/pdf-db.test.ts",
+        "exitCode": 0,
+        "tests": 4
+      },
+      {
+        "file": "backend/src/assessments/__tests__/transfers-pdf-db.test.ts",
+        "exitCode": 0,
+        "tests": 2
+      },
+      {
+        "file": "backend/src/assessments/__tests__/attestations-db.test.ts",
+        "exitCode": 0,
+        "tests": 5
+      }
+    ],
+    "finalRunnerSession": 1878,
+    "finalRunnerExitCode": 0,
+    "database": "synthetic native PostgreSQL loopback",
+    "databaseClosed": true,
+    "migrationsApplied": 46,
+    "sourceUnchangedBeforeAfterAndHandoff": true,
+    "setupRepair": "Initial migration syntax failure occurred before tests; one corrected full focused run. See initial-migration-failure.json."
+  },
+  "validation": {
+    "generatedAt": "2026-09-23T05:14:24.799Z",
+    "sourceTreeSha256": "745439cba8628a28d3bee99281a5f7953e8046d0b904c7b5a6000a5de07e3b2e",
+    "typecheck": {
+      "command": "node node_modules/typescript/bin/tsc -p backend/tsconfig.json --noEmit",
+      "exitCode": 0,
+      "evidence": "Tool 004869 after final TypeScript changes; later repair affected SQL CASE parentheses only.",
+      "log": "artifacts/task-validation/po-12-tinetti/backend/typecheck.log"
+    },
+    "schema": {
+      "exitCode": 0,
+      "connectedToDatabase": false,
+      "sourceSchemaSha256": "27ecb68a69455aff958fb0c66e3fffc57de0e3353b260111ad0d3a86ae64143c",
+      "generatedSchemaSha256": "e79bedeae560156ee91ac0e89b11df99f58439cf5777a77fab664ca9871f1336",
+      "privateClientMatchesSource": true,
+      "generationPerformed": false,
+      "reason": "Prisma models unchanged; PO11 private client reused, migration changes SQL validators/constraints only."
+    },
+    "ownedDiff": {
+      "exitCode": 0
+    },
+    "newSourceFiles": [
+      {
+        "path": "backend/src/ai/__tests__/intake-tinetti-db.test.ts",
+        "lines": 108
+      },
+      {
+        "path": "backend/src/assessments/__tests__/tinetti-db.test.ts",
+        "lines": 159
+      },
+      {
+        "path": "backend/src/assessments/__tests__/tinetti-fixture.ts",
+        "lines": 25
+      },
+      {
+        "path": "backend/src/assessments/__tests__/tinetti-pdf-db.test.ts",
+        "lines": 44
+      },
+      {
+        "path": "backend/src/assessments/__tests__/tinetti.test.ts",
+        "lines": 96
+      },
+      {
+        "path": "backend/src/assessments/tinetti-definition.ts",
+        "lines": 148
+      },
+      {
+        "path": "backend/src/assessments/tinetti-types.ts",
+        "lines": 46
+      },
+      {
+        "path": "backend/src/assessments/tinetti.ts",
+        "lines": 75
+      },
+      {
+        "path": "backend/src/patients/__tests__/cartella-tinetti-db.test.ts",
+        "lines": 143
+      },
+      {
+        "path": "backend/src/patients/cartella-update.ts",
+        "lines": 89
+      },
+      {
+        "path": "prisma/migrations/20260923060000_tinetti/migration.sql",
+        "lines": 52
+      }
+    ],
+    "newSourceFilesBelow500Lines": true,
+    "runtime": {
+      "privateOutput": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\backend\\node_modules\\.prisma\\client",
+      "privateWrapper": "C:\\Workspace\\ClinicOSHouse-worktrees\\po12-tinetti-backend\\backend\\node_modules\\@prisma\\client",
+      "sharedDependencyTargetWritten": false
+    },
+    "protectedFilesPreserved": [
+      {
+        "path": "package.json",
+        "sha256": "46be708ae2e591a7dad9d9cae8a744d967bd86e11497402eaa7a371d4549a3b0"
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "b49adbd151df39153aabed55df29926ca5a9df5581b86b73379134484c2fd2b9"
+      },
+      {
+        "path": "backend/package.json",
+        "sha256": "5edecfdb5af3c597c9fcf29f74be56bee505b111d7e028f33d4564741a8158c2"
+      },
+      {
+        "path": "run-claude-queue.ps1",
+        "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+      },
+      {
+        "path": "start-claude-team.ps1",
+        "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+      }
+    ],
+    "dependencyManifestsChanged": false,
+    "fonts": {
+      "provenance": "artifacts/task-validation/po-12-tinetti/backend/font-provenance.json",
+      "verified": true,
+      "license": "SIL Open Font License 1.1"
+    },
+    "pdfVisualQa": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/visual-qa.json",
+    "review": {
+      "reviewer": "/root/clinical_forms_source_audit",
+      "resolved": "Import confirmation bypass closed by shared locked guard; final binding is independent."
+    }
+  },
+  "invariants": [
+    "Tinetti retains the approved 20 items/48 options and 16/12/28 maxima; partial answers never receive a result/risk band.",
+    "Typed immutable snapshots retain all item descriptions, notes and source/reference provenance; PAINAD/Transfers snapshots stay unchanged.",
+    "CAS, replay, scope, terminal current, corrections, PDF retry and archive use the existing common lifecycle.",
+    "Legacy JSON remains unchanged: scoped locked PUT and locked import confirmation reject differences; import new-patient cannot inject history.",
+    "Import rejection rolls back clinical writes and leaves job/draft eligible for retry; absent empty defaults create no history."
+  ],
+  "limitations": [
+    "Local worker evidence is not independent release authorization; root owns HTTP/browser/build and publication.",
+    "No new Prisma model/dependency, no shared runtime generation, no dependency manifest changes.",
+    "No worker claim of clinical validation, performance benchmark, CVE scan or production writes."
+  ],
+  "artifactCopyAllowlist": [
+    "source-manifest.json",
+    "test-source-manifest.json",
+    "focused-tests.json",
+    "focused-tests.log",
+    "typecheck.log",
+    "validation-checks.json",
+    "schema-validation.log",
+    "diff-check.log",
+    "font-provenance.json",
+    "implementation-session.json",
+    "claims-implementation.json",
+    "claims-import-guard.json",
+    "claims-release.json",
+    "claims-import-release.json",
+    "preparation-session.json",
+    "preparation-receipt.json",
+    "preparation-recall.json",
+    "preparation-source-manifest.json",
+    "claims-preparation.json",
+    "claims-preparation-release.json",
+    "prepare-runtime.mjs",
+    "prepare-contract.mjs",
+    "generate-definition.mjs",
+    "definition-snapshot.json",
+    "backend-contract.md",
+    "test-plan.md",
+    "task-contract.snapshot.md",
+    "initial-migration-failure.json",
+    "initial-migration-failure-source-manifest.json",
+    "run-focused-tests.mjs",
+    "finalize-evidence.mjs",
+    "verify-visual-qa.mjs",
+    "pdf-qa/visual-qa.json",
+    "pdf-qa/final/painad-long-1.png",
+    "pdf-qa/final/painad-long-2.png",
+    "pdf-qa/final/painad-long.txt",
+    "pdf-qa/final/painad-normal-1.png",
+    "pdf-qa/final/painad-normal.txt",
+    "pdf-qa/final/tinetti-long-1.png",
+    "pdf-qa/final/tinetti-long-2.png",
+    "pdf-qa/final/tinetti-long-3.png",
+    "pdf-qa/final/tinetti-long-4.png",
+    "pdf-qa/final/tinetti-long-5.png",
+    "pdf-qa/final/tinetti-long-6.png",
+    "pdf-qa/final/tinetti-long.txt",
+    "pdf-qa/final/tinetti-normal-1.png",
+    "pdf-qa/final/tinetti-normal-2.png",
+    "pdf-qa/final/tinetti-normal.txt",
+    "pdf-qa/final/transfers-long-1.png",
+    "pdf-qa/final/transfers-long-2.png",
+    "pdf-qa/final/transfers-long-3.png",
+    "pdf-qa/final/transfers-long-4.png",
+    "pdf-qa/final/transfers-long-5.png",
+    "pdf-qa/final/transfers-long.txt",
+    "pdf-qa/final/transfers-normal-1.png",
+    "pdf-qa/final/transfers-normal-2.png",
+    "pdf-qa/final/transfers-normal.txt",
+    "pdf-qa/painad-regression/painad-long.pdf",
+    "pdf-qa/painad-regression/painad-normal.pdf",
+    "pdf-qa/tinetti-long.pdf",
+    "pdf-qa/tinetti-normal.pdf",
+    "pdf-qa/transfers-regression/transfers-long.pdf",
+    "pdf-qa/transfers-regression/transfers-normal.pdf",
+    "implementation-receipt.json",
+    "handoff.md",
+    "artifact-manifest.json"
+  ],
+  "doNotCopy": [
+    "postgres-* directories",
+    "private-schema.prisma",
+    "backend/node_modules",
+    "root node_modules junction",
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/backend-contract.md",
+      "bytes": 7914,
+      "sha256": "f0a1143a4f8971a8ef0c5b95e11cff1b47623906295b43a7becc5136c1c7f5a6"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/claims-implementation.json",
+      "bytes": 1290,
+      "sha256": "1518ae81fcddcbc307e062433636cb223777fb365ed59c6bd7529535881b60f9"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/claims-import-guard.json",
+      "bytes": 1180,
+      "sha256": "e1d2db9ad74f2e764b5807cb3fe1300cc8cd08e73076b4b563523a0935c3a92e"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/claims-import-release.json",
+      "bytes": 1594,
+      "sha256": "75b1e98768c2d39f442d3bd3f3e1a6ca35e0dbaf0694ebd40ce126401ce8f116"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/claims-preparation-release.json",
+      "bytes": 1382,
+      "sha256": "f71692a05b0f947979f62f145cd455e8f8eaff9f3e1e1459538d4c6e7729c3ff"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/claims-preparation.json",
+      "bytes": 1167,
+      "sha256": "249c57957e6495861aec14042df528936002c9c18beedc2871198c91e7027cae"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/claims-release.json",
+      "bytes": 1754,
+      "sha256": "01094400097d9c440a5659e3d5273ecd9b5e8ff5a58fccc99312bef710014284"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/definition-snapshot.json",
+      "bytes": 12242,
+      "sha256": "149e7e8bfcdb324bb413fc36e20db843cd72d03aeb77628b3903980c9ad9424e"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/diff-check.log",
+      "bytes": 1428,
+      "sha256": "d9aaa6115df6926295866bf86654e2c5821780639738718453872d2bdbc76f12"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/finalize-evidence.mjs",
+      "bytes": 13939,
+      "sha256": "f4182fc1c5cf2a5b9fc2c9416990a6b6ab431aad019d2811b784001a1dd89db7"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/focused-tests.json",
+      "bytes": 8613,
+      "sha256": "2e91fa144f3e4c0fb565d16cf7f4dcad49b197fcc20d62ecf4f7da01b9edb61b"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/focused-tests.log",
+      "bytes": 5462,
+      "sha256": "845ee3493e1f6acf792ecf70330e7b1cc3d9a0c0ea302d982786b6eed41de395"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/font-provenance.json",
+      "bytes": 1642,
+      "sha256": "1c0e2b8f2062732d5061cedc77e23073bef084ab417e5f8fdc1ed79e6251faca"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/generate-definition.mjs",
+      "bytes": 899,
+      "sha256": "5ed844f25bef0cd92dde71457366801ec43ed5472786dd05dcc46745726f7216"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/implementation-session.json",
+      "bytes": 1515,
+      "sha256": "f74214e9294024ada24aca4e670d331b192659620ada1f28955c2b7f1e56f956"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/initial-migration-failure-source-manifest.json",
+      "bytes": 59855,
+      "sha256": "5dd38cefdc4545f41fe3c8157a006839be3efba669cd296f706277bd033b58c6"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/initial-migration-failure.json",
+      "bytes": 575,
+      "sha256": "7b3598676a916f989efe3910c4ef36ca934c39e6d13ab2f4574ba1b54592f5fb"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/painad-long-1.png",
+      "bytes": 253883,
+      "sha256": "4768d46f60095716fa408e02969bc4a8489c8c512595d75e813c33c98ff440cf"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/painad-long-2.png",
+      "bytes": 119991,
+      "sha256": "9bef827b018da97f9c9e424bfd726ca18d5d16f1b8f6b3f0c8ab3545845ced1a"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/painad-long.txt",
+      "bytes": 5566,
+      "sha256": "a78b426770995c21ed66715126931198bfe8158e40dea5acb03d18d3b9b83175"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/painad-normal-1.png",
+      "bytes": 107497,
+      "sha256": "228d9ff10036408715d1ddbf6d694aa342e5aca3b5cbf08b31b45b231dee7ab7"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/painad-normal.txt",
+      "bytes": 1083,
+      "sha256": "3865e1aec76865a46b03cf868ae43b3a5ae8bf0f92f684df58abcce745482ef8"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-long-1.png",
+      "bytes": 122551,
+      "sha256": "d216dd0be3e9891a06ea1c78a1d100f24f9531e07f681289ebd9e0ba0b04824a"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-long-2.png",
+      "bytes": 120933,
+      "sha256": "4f377ee449b472563fbc3acd2f0b6ef9741b1a497c5eda9908c9117dd1b4d5d1"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-long-3.png",
+      "bytes": 134232,
+      "sha256": "598b1f6a6321a2b39b15b2e9eada13a634198eda7a468f5a314a86ee339f6473"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-long-4.png",
+      "bytes": 134623,
+      "sha256": "082c626a4739ad39fa28e6bb7afe1e866b02ce473051cb8693937a53a0bc5381"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-long-5.png",
+      "bytes": 134209,
+      "sha256": "738c33b7dc62bd94024e27bf22010f966c0db637cf59b71b8226e964a84d908f"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-long-6.png",
+      "bytes": 68157,
+      "sha256": "b4f3fcd1eafde0b5a5cdcc0faf62e99001dcea998f41a6cca431a84bdbb1fc69"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-long.txt",
+      "bytes": 7364,
+      "sha256": "6608245363fcd78e4a8a82ec888e0291d2c3eaaf4a24272e0cd560709104ff0d"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-normal-1.png",
+      "bytes": 122467,
+      "sha256": "549047a3572fd336b04c215448889eb7921a13d911bcf222b3f8e776de0058ee"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-normal-2.png",
+      "bytes": 104011,
+      "sha256": "81d689954d6f999f2f6e2cc14b3a305421af8c6b776e099ed5c33787da1df587"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/tinetti-normal.txt",
+      "bytes": 2308,
+      "sha256": "a2315af6f2376fd7b827f9e22decbfa094251be06a6cdd436b60f128e72c0f2b"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-long-1.png",
+      "bytes": 161161,
+      "sha256": "f88b92c4f7bd2008a81f183075fdc41d472262b65396455fb5d45b10227c712e"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-long-2.png",
+      "bytes": 128901,
+      "sha256": "909190a958f09881e244124153c933381407a87ffc3d9256e7c12a6021699248"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-long-3.png",
+      "bytes": 156592,
+      "sha256": "8afbbc7e45a16b6bf4dd0ebb69ed54bbf46c08954ed45a6175399e6bc0b70a08"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-long-4.png",
+      "bytes": 156071,
+      "sha256": "e21faa963302936bd493f82a539a620f3a71615c5de7010917068de9f33b5c1c"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-long-5.png",
+      "bytes": 40155,
+      "sha256": "f9c966c8154a1b4254185dc30604dcdb9011b1cbc3b8e67a0db0d54616648cbf"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-long.txt",
+      "bytes": 7048,
+      "sha256": "fff0d7ec2fcf552576d81d211a5d4eeb3c2f883d25ef44abaf7f083840e4ec92"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-normal-1.png",
+      "bytes": 106281,
+      "sha256": "635f18dfcc229b97f4e57381149fefa70c49fdaf066e26a05f33cf7b2076315a"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-normal-2.png",
+      "bytes": 45394,
+      "sha256": "dfd4e1fb08824e8fcdd7934415343d64a2d52f9ece9526a972cfc006c45bbea1"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/final/transfers-normal.txt",
+      "bytes": 1505,
+      "sha256": "d7c9c88b15d92423ac5dd17042730fd5377dd672c729a0b3178cfbc2c578bdee"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/painad-regression/painad-long.pdf",
+      "bytes": 22255,
+      "sha256": "ecbb4f6cbf82ef88572da82242615c93171333cf80e35ef07342aee22b0ca99b"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/painad-regression/painad-normal.pdf",
+      "bytes": 19118,
+      "sha256": "13f1b087841065bd50f06a9e82184da05010e18586df0e05329d60f480139027"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/tinetti-long.pdf",
+      "bytes": 28699,
+      "sha256": "4ea296c4f7ca0d555b0f4ef5a65c453ce20b095e57cfa0c579a0307d69184ae3"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/tinetti-normal.pdf",
+      "bytes": 22716,
+      "sha256": "a31b4b6bdfb098f3469ca17803cc9e3462b5d660a75511d00969b4b44e1dfdb8"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/transfers-regression/transfers-long.pdf",
+      "bytes": 24974,
+      "sha256": "eaade309c2ed066bb9a9bdf38299f7e7d0481a7e1fa262c9f12b025a37ff6862"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/transfers-regression/transfers-normal.pdf",
+      "bytes": 19475,
+      "sha256": "9570904cc22190698011d07c87544a24f5c0e176191efac553e7adf85e7940bb"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/pdf-qa/visual-qa.json",
+      "bytes": 5916,
+      "sha256": "0c4ca969f57b491f5eb46aca5fabaf041d9fdd4e9756de81a23666bfe9d8338a"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/preparation-recall.json",
+      "bytes": 11969,
+      "sha256": "50cf1752a489dccd79ed8ef4daf3bd2c6bb2aa46462d3fcf202493e60566b73b"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/preparation-receipt.json",
+      "bytes": 21737,
+      "sha256": "8cada253f27576d4fa9f3bb3aaec90df8d03af4c2c84f84ef34d3a6f5b4c8014"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/preparation-session.json",
+      "bytes": 2403,
+      "sha256": "20e135df162cc57ca65be15c290086aa5f1bf7362c370eccabffb0d2cbc2f376"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/preparation-source-manifest.json",
+      "bytes": 184085,
+      "sha256": "37453a2c66e881fc9c7d2dce654fb5058d8cac7bd122418fb13d6146ae49bc67"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/prepare-contract.mjs",
+      "bytes": 2940,
+      "sha256": "3aba3c93d2cd66d38374501c701d73bb3c9edfa9c6627a88ecaed521f98d22f4"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/prepare-runtime.mjs",
+      "bytes": 8914,
+      "sha256": "2a98d97bec7b84fe126c719e5b5557e894e4a81d8abc80466678db3efd4eaccb"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/run-focused-tests.mjs",
+      "bytes": 3864,
+      "sha256": "5f3b623a1aa0268274c448a6bb832cc757c4dcacd92b1e7bac2c2beefd352c95"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/schema-validation.log",
+      "bytes": 241,
+      "sha256": "47550f74e680b52a1d0a99c3cf9b77f58b349617939bfc44323bbd70fa59a0fc"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/source-manifest.json",
+      "bytes": 4522,
+      "sha256": "2696009c17ee34519a30624382f346c315841fb66a30e06664b716452d1d4f5a"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/task-contract.snapshot.md",
+      "bytes": 5051,
+      "sha256": "4e4b5eac186f8f65661a410b1ce81748e6f96c59f3c2b20c2e58ffa29b3ebe8f"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/test-plan.md",
+      "bytes": 2674,
+      "sha256": "88ba44b46964e0130250c4edcba62e4c71644a89e69ffefbf48f59b810b6213e"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/test-source-manifest.json",
+      "bytes": 59855,
+      "sha256": "3abdbe148663cedd8f939d1bed3cdf9eee11bfe32b0fb38570e2121f6dc34d39"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/typecheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/validation-checks.json",
+      "bytes": 3578,
+      "sha256": "ea2bdd84f006ce0c685a5c2d8323a5355e6011a9d3b1edf578d133d0276416ce"
+    },
+    {
+      "path": "artifacts/task-validation/po-12-tinetti/backend/verify-visual-qa.mjs",
+      "bytes": 4146,
+      "sha256": "cd9d1bd3f9cc94ed45bb5625a7e9709c2a80d49ced27ebbcbd5831ff6ff66b0d"
+    }
+  ]
+}

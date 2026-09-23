@@ -335,8 +335,13 @@ export default function PatientRecordPrintDocument({
               <dd>{cartella.valutazioniBraden.length}</dd>
             </div>
             <div>
-              <dt>Valutazioni Tinetti</dt>
-              <dd>{cartella.valutazioniTinetti?.length ?? 0}</dd>
+              <dt>Tinetti · storico precedente</dt>
+              <dd>
+                {Array.isArray(cartella.valutazioniTinetti)
+                  ? cartella.valutazioniTinetti.length
+                  : 0}{' '}
+                · nuovi moduli nell’archivio valutazioni
+              </dd>
             </div>
             <div>
               <dt>Valutazioni NRS</dt>

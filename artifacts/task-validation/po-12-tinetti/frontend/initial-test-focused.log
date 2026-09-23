@@ -1,0 +1,213 @@
+(node:36860) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ empty form exposes all 15 complete choices with no clinical selection or final result (36.1767ms)
+✔ saved complete form displays exactly five selections and allows an explicit preview (7.5335ms)
+✔ final stays saved through pending/failed PDF, while correction and reciprocal links remain explicit (23.1604ms)
+✔ history exposes metadata, filters and bounded continuation without answer descriptions (5.2796ms)
+✔ PAINAD coexists with NRS and direct discharge in patient navigation (1.0418ms)
+(node:36860) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32732) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Tinetti editor shows two groups and 48 compact accessible options with no preselection (60.436ms)
+✔ Tinetti notes retain 4000 Unicode codepoints and remain editable above the limit without render crashes (81.2686ms)
+✖ Tinetti summary/history use 28 denominator and frozen notes while PAINAD remains explicitly 10 (27.5508ms)
+✔ legacy detail and print source preserve data with no creation/deletion controls or risk on invalid rows (27.0671ms)
+✔ Tinetti archive metadata and filters carry the explicit module/version pair (8.2588ms)
+(node:32732) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:13024) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Transfers editor has five groups, no selected clinical answers, compact short choices and twelve aid controls (63.9674ms)
+✔ owned aid property stays near its aid; plain aids never receive property and missing field is identified (40.5081ms)
+✔ invalid admission dates remain editable and unsaved until corrected, without losing other answers (577.7122ms)
+✔ final summary preserves multiline context/notes, source labels and saved status through failed PDF without score (25.1753ms)
+✔ history shows operational completion and no answer payload or numeric score (4.9856ms)
+✔ archive separates PAINAD and Transfers by trusted metadata and retains typed deep-link IDs (22.1212ms)
+(node:13024) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37936) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37936) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ generated PAINAD archives under its module using clinical Rome date and exact IDs for multi-print (9.1294ms)
+✔ archive metadata requires reserved category and valid assessment association together (2.6464ms)
+✔ direct metadata open verifies document identity before content access (78.4048ms)
+✔ manual upload, classification and stored document edit cannot use generated assessment category (3.9106ms)
+(node:32528) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ client captures session authority and sends scoped no-store bounded requests (99.8117ms)
+✔ create response loss replays identical bytes and accepts current edited draft (13.0698ms)
+✔ finalize response loss replays request before CAS and ready document remains linked (9.4507ms)
+✔ wrong patient, record, idempotency receipt or final snapshot is never reported saved (7.5928ms)
+✔ known conflicts are actionable; 503, malformed success and unknown failures stay uncertain (4.6738ms)
+✔ PDF retry uses existing assessment ID, never create/finalize or a draft response (16.3262ms)
+(node:32528) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8552) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new observations are blank, patient-specific and survive internal unsubscribe/remount (7.5312ms)
+✔ synchronous create lock and uncertain retry retain exact UUID, body and answers (9.2896ms)
+✔ finalization requires a saved complete preview and exact retry survives response loss (3.8235ms)
+✔ PATCH response loss reconciles only the same next-version record and exact editable fields (2.1486ms)
+✔ CAS conflicts preserve local fields until explicit keep-local or accept-remote resolution (2.1405ms)
+✔ logout clear fences late writes; disposed UI never starts a follow-up reconciliation GET (1.6483ms)
+✔ another patient and mismatched write receipt cannot replace or clear this observation (1.3112ms)
+✔ correction starts explicitly from a final, requires reason and never changes predecessor (4.0752ms)
+✔ correction preserves original clinical instant including both repeated Rome DST occurrences (3.9894ms)
+(node:8552) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ serializes full snapshots, retaining earlier successful edits regardless of section order (5.2548ms)
+✔ failed edits are not carried into later saves; independent patients do not block (1.0927ms)
+✔ record deltas retain additions made while a document form was reopened (2.0648ms)
+✔ rejected requests release queue and a new session uses its own baseline (2.2006ms)
+(node:39780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38560) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ concurrent photo writes preserve refs on the same and different dressings (13.0229ms)
+✔ photo, form and followup changes reconcile while preserving unrelated clinical fields (2.7712ms)
+✔ deletions win over stale edits without deleting concurrent new records or photos (1.1393ms)
+(node:38560) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37604) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all 243 complete combinations and 781 incomplete combinations preserve null versus zero (17.111ms)
+✔ version and full clinical descriptions stay bound to the supplied Italian source (0.7695ms)
+✔ Rome clinical time rejects DST gaps, requires repeated-hour choice and preserves existing precision (4.4744ms)
+✔ DTO validation rejects cross-patient, inconsistent scoring and unverified clinical snapshots (6.315ms)
+✔ history bounds, duplicate IDs and cursor completeness are enforced (1.0618ms)
+(node:37604) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40744) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient detail specialist modules stay behind explicit lazy imports (8.366ms)
+✔ patient detail keeps a local accessible loading state without an empty clinical claim (1.305ms)
+✔ diary filter metadata is dependency-light and does not eager-load the diary tab (0.756ms)
+✔ patient changes remount the chart and stale diary reads cannot retarget (1.3204ms)
+(node:40744) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33948) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient record exposes a labelled two-level navigation and controlled tab panel (5.5749ms)
+✔ top navigation follows the keyboard tab pattern with one focusable active tab (1.7216ms)
+✔ therapy sections reuse the canonical contextual navigation (1.5012ms)
+✔ overview removes duplicated KPI tiles and uses semantic operational sections (1.1111ms)
+✔ overview is three columns on wide screens, two on tablet and one on phone (2.4705ms)
+✔ patient record applies one screen-only contract to cards, key-value rows and tables (0.934ms)
+✔ patient record data contract keeps tablet overflow local and stacks key-value rows on phones (1.3157ms)
+(node:33948) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:25192) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ personal and clinical taxonomy preserves imported aliases (4.7949ms)
+✔ merge links by id, preserves two same-name files, legacy and archived entries (6.6348ms)
+✔ remote classification is authoritative and search includes accents, provenance and notes (2.8374ms)
+✔ complete metadata pagination finds a document beyond first page without content reads (91.9875ms)
+✔ rejects incomplete counts, oversized totals, malformed pages and invalid metadata (10.6605ms)
+✔ rejects repeated cursors and duplicate document ids instead of partial success (8.6909ms)
+✔ metadata timeout includes pending authentication and aborted scopes never fetch (21.2694ms)
+✔ file validation rejects unsupported, empty and oversized files (29.3581ms)
+(node:25192) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ legacy image originals remain readable after narrowing new upload formats (36.7848ms)
+✔ upload sends category and original file with scoped headers (2.8391ms)
+✔ content retrieval uses exact id, not duplicate filename, and rejects invalid content (2.9625ms)
+✔ classification patches only category and validates server identity and category (4.9607ms)
+✔ previously imported TIFF, text and DOCX originals and files over new upload size remain downloadable (99.5199ms)
+✔ metadata failure retains upload; retry reuses same id and can change category (2.1244ms)
+✔ failed upload and aborted write do not persist or remember in stale workspace (1.4609ms)
+(node:34736) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ fiscal identity is preferred, birth date is the fallback, and missing phone is irrelevant (7.9951ms)
+✔ assigned location preserves complete relational and partial legacy labels (4.0636ms)
+✔ only explicit unassigned is unassigned; unavailable and loading suppress stale labels (0.9333ms)
+✔ handover identity requires the authorized complete wire shape (0.9474ms)
+(node:34736) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:35164) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:35164) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ global patient print always opens the selective dialog instead of printing the active tab (33.3891ms)
+✔ print dialog supports all or subset selection and blocks incomplete output (5.8393ms)
+✔ selective print has a dedicated responsive dialog and isolated A4 document (26.7208ms)
+✔ diary print loader follows every bounded page and deduplicates entries (78.5976ms)
+(node:39644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ production Tinetti preserves 20 items, 48 choices and 16/12/28 maxima with zero distinct from null (10.5598ms)
+✔ production scoring exhausts both independent combination spaces and all risk thresholds (155.3149ms)
+✔ every missing item prevents risk, invalid domains reject, and notes do not count as answers (13.6951ms)
+✔ Tinetti DTO and frozen snapshot validate explicitly, preserving PAINAD and Transfers discrimination (26.1156ms)
+(node:39644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37532) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Tinetti draft isolation, correction instant, exact retry and predecessor immutability reuse shared store (11.1676ms)
+✔ incomplete Tinetti has no preview/finalization; saved complete draft permits CAS-bound finalization (1.9154ms)
+✔ Tinetti client uses typed current/history and retains server incomplete paths without cross-type receipts (49.4194ms)
+✔ legacy adapter preserves raw data and suppresses any risk for missing, -1 or invalid values (0.9933ms)
+✔ Cartella request omission and queue preserve legacy absent/null/array without changing retained form fields (1.2135ms)
+(node:37532) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36028) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ current is read from a type-filtered endpoint, preserves clinical date, and rejects draft/wrong module (96.0619ms)
+✔ history filters type before pagination and structured 422 paths survive to the UI (8.3604ms)
+✔ personal confirmation response loss replays exact assessment/hash/kind and checks authenticated actor receipt (7.0326ms)
+✔ attestation page binds counts/events to exact snapshot, rejects malformed cursors and fabricated actor/hash (1.8333ms)
+(node:36028) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3864) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new transfers form contains only explicitly unresolved choices; No completes a verified field (9.1138ms)
+✔ all 8x8x6 transfer combinations are independent and complete without a score (55.9189ms)
+✔ nine owned aids require property only when present; three plain aids reject property (3.3018ms)
+✔ load, context and unknown field dependencies are validated without assuming unavailable means absent (1.3899ms)
+✔ text preserves whitespace/newlines and bounds Unicode by code point (7.3104ms)
+✔ transfer DTO validates server completion and immutable sections without accepting scores or another type (18.3169ms)
+(node:3864) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ one patient keeps separate PAINAD and transfers drafts across route subscriptions (7.7617ms)
+✔ nested correction and pending operation cannot mutate predecessor or lose exact retry payload (10.8536ms)
+✔ server incomplete preview identifies fields and complete transfers can finalize despite result null (2.1704ms)
+✔ PATCH loss reconciles nested canonical key order, while another type is rejected (73.7835ms)
+✔ late write after logout cannot repopulate transfers state or initiate reconciliation (2.6807ms)
+(node:37596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 105
+ℹ suites 0
+ℹ pass 104
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3630.9771
+
+✖ failing tests:
+
+test at src\components\operator\__tests__\tinettiUi.test.ts:1:3151
+✖ Tinetti summary/history use 28 denominator and frozen notes while PAINAD remains explicitly 10 (27.5508ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /\/10|Dolore lieve/. Input:
+  
+  '<section class="assessment-summary tinetti-summary" aria-label="Valutazione finale Tinetti"><h3>Valutazione finale Tinetti</h3><span class="patient-identity"><strong class="patient-identity__name">Sintetico, Paziente</strong><span class="patient-identity__identifier">Nato/a il 01/01/1940 · CF da completare</span><span class="patient-identity__incomplete">Anagrafica da completare</span><span class="patient-identity__location">Camera QA · Letto 1</span><span class="patient-identity__context">Al <time dateTime="2026-09-22">22/09/2026</time></span></span><dl class="assessment-metadata"><div><dt>Valutata</dt><dd>25/10/2026 02:30 · Europe/Rome</dd></div><div><dt>Registrata</dt><dd>25/10/2026 04:00</dd></div><div><dt>Autore</dt><dd>Autore sintetico</dd></div><div><dt>Versione del modulo</dt><dd>tinetti-it-2026-09-22-v1</dd></div><div><dt>Finalizzata</dt><dd>25/10/2026 05:00</dd></div></dl><section><h4>Equilibrio</h4><ol start="1"><li><strong>Equilibrio seduto · 1</strong><p>Stabile, sicuro</p></li><li><strong>Alzarsi dalla sedia · 2</strong><p>Capace, senza usare le braccia</p></li><li><strong>Tentativi per alzarsi · 2</strong><p>Riesce al 1° tentativo</p></li><li><strong>Equilibrio in piedi (primi 5 s) · 2</strong><p>Stabile senza appoggio</p></li><li><strong>Equilibrio prolungato · 2</strong><p>Stabile senza appoggio, base stretta</p></li><li><strong>Romberg con spinta sternale · 2</strong><p>Stabile</p></li><li><strong>Equilibrio occhi chiusi · 1</strong><p>Stabile</p></li><li><strong>Girarsi 360° — continuità dei passi · 1</strong><p>Passi continui</p></li><li><strong>Girarsi 360° — stabilità · 1</strong><p>Stabile</p></li><li><strong>Sedersi · 2</strong><p>Sicuro, movimenti fluidi</p></li></ol></section><section><h4>Andatura</h4><ol start="11"><li><strong>Inizio della deambulazione · 1</strong><p>Nessuna esitazione</p></li><li><strong>Lunghezza passo destro · 1</strong><p>Piede dx supera il sx</p></li><li><strong>Altezza passo destro · 1</strong><p>Piede dx si solleva</p></li><li><strong>Lunghezza passo sinistro · 1</strong><p>Piede sx supera il dx</p></li><li><strong>Altezza passo sinistro · 1</strong><p>Piede sx si solleva</p></li><li><strong>Simmetria del passo · 1</strong><p>Simmetrico</p></li><li><strong>Continuità del passo · 1</strong><p>Continuo</p></li><li><strong>Traiettoria · 2</strong><p>Rettilinea senza ausilio</p></li><li><strong>Stabilità del tronco · 2</strong><p>Stabile, nessuna oscillazione</p></li><li><strong>Base d&#x27;appoggio nel cammino · 1</strong><p>Talloni vicini</p></li></ol></section><div class="assessment-result"><p>Equilibrio 16/16 · Andatura 12/12</p><strong>28/28 · Basso rischio</strong></div><h4>Note</h4><p class="tinetti-note-text"> Note sintetiche\n' +
+    'Seconda riga conservata </p><p class="assessment-hint">Il risultato richiede valutazione clinica. Non genera automaticamente diagnosi o trattamenti.</p><details><summary>Fonte e versione</summary><p>Modello a 20 voci già in uso in ClinicOS: equilibrio 16 punti, andatura 12 punti, totale 28. Conservate quattro risposte distinte per lunghezza e altezza del passo destro e sinistro. Allegato del 22/09/2026 come riferimento; non costituisce trascrizione letterale o convalida clinica indipendente.</p><p class="assessment-source">Modello conservato SHA-256: 7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09</p><p class="assessment-source">Allegato di riferimento SHA-256: feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6</p></details></section>'
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po12-tinetti-ui\frontend\src\components\operator\__tests__\tinettiUi.test.ts:90:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<section class="assessment-summary tinetti-summary" aria-label="Valutazione finale Tinetti"><h3>Valutazione finale Tinetti</h3><span class="patient-identity"><strong class="patient-identity__name">Sintetico, Paziente</strong><span class="patient-identity__identifier">Nato/a il 01/01/1940 · CF da completare</span><span class="patient-identity__incomplete">Anagrafica da completare</span><span class="patient-identity__location">Camera QA · Letto 1</span><span class="patient-identity__context">Al <time dateTime="2026-09-22">22/09/2026</time></span></span><dl class="assessment-metadata"><div><dt>Valutata</dt><dd>25/10/2026 02:30 · Europe/Rome</dd></div><div><dt>Registrata</dt><dd>25/10/2026 04:00</dd></div><div><dt>Autore</dt><dd>Autore sintetico</dd></div><div><dt>Versione del modulo</dt><dd>tinetti-it-2026-09-22-v1</dd></div><div><dt>Finalizzata</dt><dd>25/10/2026 05:00</dd></div></dl><section><h4>Equilibrio</h4><ol start="1"><li><strong>Equilibrio seduto · 1</strong><p>Stabile, sicuro</p></li><li><strong>Alzarsi dalla sedia · 2</strong><p>Capace, senza usare le braccia</p></li><li><strong>Tentativi per alzarsi · 2</strong><p>Riesce al 1° tentativo</p></li><li><strong>Equilibrio in piedi (primi 5 s) · 2</strong><p>Stabile senza appoggio</p></li><li><strong>Equilibrio prolungato · 2</strong><p>Stabile senza appoggio, base stretta</p></li><li><strong>Romberg con spinta sternale · 2</strong><p>Stabile</p></li><li><strong>Equilibrio occhi chiusi · 1</strong><p>Stabile</p></li><li><strong>Girarsi 360° — continuità dei passi · 1</strong><p>Passi continui</p></li><li><strong>Girarsi 360° — stabilità · 1</strong><p>Stabile</p></li><li><strong>Sedersi · 2</strong><p>Sicuro, movimenti fluidi</p></li></ol></section><section><h4>Andatura</h4><ol start="11"><li><strong>Inizio della deambulazione · 1</strong><p>Nessuna esitazione</p></li><li><strong>Lunghezza passo destro · 1</strong><p>Piede dx supera il sx</p></li><li><strong>Altezza passo destro · 1</strong><p>Piede dx si solleva</p></li><li><strong>Lunghezza passo sinistro · 1</strong><p>Piede sx supera il dx</p></li><li><strong>Altezza passo sinistro · 1</strong><p>Piede sx si solleva</p></li><li><strong>Simmetria del passo · 1</strong><p>Simmetrico</p></li><li><strong>Continuità del passo · 1</strong><p>Continuo</p></li><li><strong>Traiettoria · 2</strong><p>Rettilinea senza ausilio</p></li><li><strong>Stabilità del tronco · 2</strong><p>Stabile, nessuna oscillazione</p></li><li><strong>Base d&#x27;appoggio nel cammino · 1</strong><p>Talloni vicini</p></li></ol></section><div class="assessment-result"><p>Equilibrio 16/16 · Andatura 12/12</p><strong>28/28 · Basso rischio</strong></div><h4>Note</h4><p class="tinetti-note-text"> Note sintetiche\nSeconda riga conservata </p><p class="assessment-hint">Il risultato richiede valutazione clinica. Non genera automaticamente diagnosi o trattamenti.</p><details><summary>Fonte e versione</summary><p>Modello a 20 voci già in uso in ClinicOS: equilibrio 16 punti, andatura 12 punti, totale 28. Conservate quattro risposte distinte per lunghezza e altezza del passo destro e sinistro. Allegato del 22/09/2026 come riferimento; non costituisce trascrizione letterale o convalida clinica indipendente.</p><p class="assessment-source">Modello conservato SHA-256: 7785059cceedc3ff85f051a60ff1cbdaa48145f03fb7f93ab7d53696ca6c8b09</p><p class="assessment-source">Allegato di riferimento SHA-256: feca88c71bc7b6c9b53a812979f222e0769d688380673995277e8490db8c3ff6</p></details></section>',
+    expected: /\/10|Dolore lieve/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
