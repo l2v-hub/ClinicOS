@@ -1,0 +1,29 @@
+npm warn config production Use `--omit=dev` instead.
+Starting Container
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+Datasource "db": PostgreSQL database "railway", schema "public" at "postgres.railway.internal:5432"
+
+44 migrations found in prisma/migrations
+
+Applying migration `20260923040000_patient_assessments`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260923040000_patient_assessments/
+    └─ migration.sql
+
+All migrations have been successfully applied.
+Stopping Container
+Starting Container
+npm warn config production Use `--omit=dev` instead.
+
+> @clinicos/backend@1.0.0 start
+> node dist/server.js
+
+[ai-worker] started (poll 2000ms)
+CORS allowed origins: [ 'https://clinicos-eosin.vercel.app' ]
+ClinicOS backend listening on port 8080
+[ai] extraction ready: provider=google model=gemma-4-31b-it
