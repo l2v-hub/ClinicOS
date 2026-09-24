@@ -5,6 +5,8 @@ import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { API_URL } from '../../../config';
 import { facilityLocalMinute, formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import { operatorHeaders } from '../../../lib/operatorSession';
+import { readSessionCache, writeSessionCache } from '../../../lib/sessionCache';
+import { diaryCacheKey, type DiarySnapshot } from '../../../lib/patientTabSnapshots';
 
 type DiaryFeedEntry = DiarioPazienteEntry & {
   sourceType?: 'diary' | 'consegna';
@@ -138,11 +140,18 @@ export function DiarioPazienteTab({
   legacyMedico,
   filterBy,
 }: Props) {
-  const [entries, setEntries] = useState<DiarioPazienteEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Ultima pagina gia' mostrata in sessione per questo paziente/filtro: il diario compare subito
+  // e si rivalida in background invece di ripartire da "Caricamento…".
+  const initialSnapshot = readSessionCache<DiarySnapshot>(
+    diaryCacheKey(pazienteId, filterBy ?? 'tutti'),
+  );
+  const [entries, setEntries] = useState<DiarioPazienteEntry[]>(
+    () => initialSnapshot?.entries ?? [],
+  );
+  const [loading, setLoading] = useState(!initialSnapshot);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
-  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(initialSnapshot?.hasMore ?? false);
+  const [nextCursor, setNextCursor] = useState<string | null>(initialSnapshot?.nextCursor ?? null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [refreshVersion, setRefreshVersion] = useState(0);
@@ -172,10 +181,12 @@ export function DiarioPazienteTab({
       options: { cursor?: string; append?: boolean; silent?: boolean } = {},
     ) => {
       const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
+      const cacheKey = diaryCacheKey(pazienteId, resolvedFilter);
       if (options.append) setLoadingMore(true);
       else {
         setLoadingMore(false);
-        if (!options.silent) setLoading(true);
+        // Con una pagina gia' in cache la rivalidazione non svuota l'elenco.
+        if (!options.silent && readSessionCache(cacheKey) === undefined) setLoading(true);
       }
       setError('');
       if (!options.append) setNotice('');
@@ -216,6 +227,13 @@ export function DiarioPazienteTab({
           });
           setHasMore(pageHasMore);
           setNextCursor(pageNextCursor);
+          if (!options.append) {
+            writeSessionCache<DiarySnapshot>(cacheKey, {
+              entries: allEntries,
+              hasMore: pageHasMore,
+              nextCursor: pageNextCursor,
+            });
+          }
           if (!options.append && legacyPageTruncated) {
             setNotice(
               'Sono visibili le 50 voci legacy più recenti. Contatta l’amministratore per completare la migrazione dello storico.',

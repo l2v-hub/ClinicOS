@@ -7,6 +7,7 @@ import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
+import { readSessionCache, writeSessionCache } from '../../lib/sessionCache';
 import { facilityLocalMinute } from '../../lib/facilityTime';
 import { fetchPatientPage } from '../../lib/patientPage';
 import { applySavedParameterSummary, resetParameterDay } from '../../lib/parameterEntrySummary';
@@ -39,12 +40,17 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   useEffect(() => () => draftStore.clear(), [draftStore]);
   const [day, setDay] = useState(() => facilityLocalMinute().slice(0, 10));
   const [query, setQuery] = useState('');
-  const [items, setItems] = useState<PatientParametersPageItem[]>([]);
+  // Ultimo elenco gia' mostrato in sessione per giorno/ordine: la pagina compare subito con
+  // quello e lo rivalida in background invece di ripartire da "Caricamento pazienti…".
+  const initialItems = readSessionCache<PatientParametersPageItem[]>(
+    `parameters:${JSON.stringify(['', rosterKey, day])}`,
+  );
+  const [items, setItems] = useState<PatientParametersPageItem[]>(() => initialItems ?? []);
   const itemsRef = useRef(items);
   useEffect(() => {
     itemsRef.current = items;
   }, [items]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialItems);
   const [loadingMore, setLoadingMore] = useState(false);
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [error, setError] = useState('');
@@ -91,7 +97,8 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     const hadRows = itemsRef.current.length > 0;
     const load = () => {
       if (controller.signal.aborted) return;
-      setLoading(true);
+      // Righe gia' a schermo: la rivalidazione non le nasconde dietro il placeholder.
+      setLoading(itemsRef.current.length === 0);
       setLoadingMore(false);
       setSummaryLoading(true);
       setNextCursor(null);
@@ -169,6 +176,10 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           cursor = needsMore ? page.nextCursor! : undefined;
         } while (cursor);
         loadedQuery.current = filterKey;
+        writeSessionCache(
+          `parameters:${JSON.stringify([filters.q ?? '', rosterKey, day])}`,
+          refreshed,
+        );
       })()
         .catch(async (cause) => {
           if (!controller.signal.aborted && version === generation.current) {

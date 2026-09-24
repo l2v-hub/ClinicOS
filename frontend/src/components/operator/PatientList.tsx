@@ -36,6 +36,8 @@ interface PatientListProps {
   filtroSesso: 'tutti' | 'M' | 'F';
   onFiltroSessoChange: (v: 'tutti' | 'M' | 'F') => void;
   onSelect: (p: Paziente) => void;
+  /** Richiesta anticipata della cartella al passaggio del mouse/focus su una riga. */
+  onPrefetch?: (p: Paziente) => void;
   /** REQ-018: refresh the list after an imported patient is created.
    * #243: also carries the id of the just-created patient and (optionally) the "Moduli" tab
    * the operator selected in the intake wizard, so the caller can navigate straight there. */
@@ -53,6 +55,7 @@ export function PatientList({
   filtroSesso,
   onFiltroSessoChange: setFiltroSesso,
   onSelect,
+  onPrefetch,
   onImported,
   onDeleted,
   operatorId,
@@ -391,6 +394,7 @@ export function PatientList({
             deleteEnabled={deleteEnabled}
             deletingId={deletingId}
             onSelect={onSelect}
+            onPrefetch={onPrefetch}
             onDelete={handleDelete}
           />
           {hasMore && nextCursor && (

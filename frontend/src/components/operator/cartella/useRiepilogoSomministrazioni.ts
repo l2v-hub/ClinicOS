@@ -4,6 +4,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { API_URL } from '../../../config';
 import { readDashboardTherapyDay } from '../../../lib/dashboardTherapyRead';
+import { peekCachedGet } from '../../../lib/cachedFetch';
+import { parseTherapySlots } from '../../../lib/therapySlotPage';
 import {
   summarizeDashboardTherapies,
   therapyCalendar,
@@ -36,12 +38,24 @@ const emptyDay = (date: string): DayState => ({
   refreshing: true,
 });
 
+// Ultima lettura del giorno gia' vista in sessione: i KPI compaiono subito con quei valori,
+// marcati "in aggiornamento", mentre la rilettura fresca parte comunque nell'effetto sotto.
+function seededDay(date: string): DayState {
+  const known = peekCachedGet<unknown>(`${API_URL}/therapy-slots?date=${date}`);
+  if (known === undefined) return emptyDay(date);
+  try {
+    return { date, slots: parseTherapySlots(known), failed: false, refreshing: true };
+  } catch {
+    return emptyDay(date);
+  }
+}
+
 export function useRiepilogoSomministrazioni(attivo = true): RiepilogoSomministrazioni {
   const [now, setNow] = useState(() => new Date());
   const [revision, setRevision] = useState(0);
   const { oggi, domani } = therapyCalendar(now);
-  const [today, setToday] = useState<DayState>(() => emptyDay(oggi));
-  const [tomorrow, setTomorrow] = useState<DayState>(() => emptyDay(domani));
+  const [today, setToday] = useState<DayState>(() => seededDay(oggi));
+  const [tomorrow, setTomorrow] = useState<DayState>(() => seededDay(domani));
   const aggiorna = useCallback(() => {
     setNow(new Date());
     setRevision((value) => value + 1);

@@ -1,0 +1,613 @@
+{
+  "label": "dev-baseline",
+  "base": "http://localhost:5173",
+  "cpu": 1,
+  "at": "2026-09-24T22:28:04.440Z",
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "results": [
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 59,
+      "contentMs": 1,
+      "settledMs": 1254,
+      "muts": 501,
+      "api": 5,
+      "apiList": [
+        "GET /ai/extraction/status",
+        "GET /patients/page",
+        "GET /patients/settings",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Dashboard",
+      "shellMs": 52,
+      "contentMs": 410,
+      "settledMs": 409,
+      "muts": 470,
+      "api": 2,
+      "apiList": [
+        "GET /therapy-slots"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [
+        62,
+        77
+      ],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Dashboard | Benvenuto, Dr. Marco Ferretti |  | Cardiologia — venerdì 25 settembre 202"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 54,
+      "contentMs": 11,
+      "settledMs": 500,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "row->detail(1st)",
+      "shellMs": 44,
+      "contentMs": 13,
+      "settledMs": 1218,
+      "muts": 13,
+      "api": 6,
+      "apiList": [
+        "GET /patients/p020/cartella",
+        "GET /operators/directory/page",
+        "GET /patients/p020/room-options",
+        "GET /consegne",
+        "GET /patients/p020/intake-review"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "back->Pazienti",
+      "shellMs": 11,
+      "contentMs": 876,
+      "settledMs": 873,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "row->detail(2nd)",
+      "shellMs": 42,
+      "contentMs": 14,
+      "settledMs": 693,
+      "muts": 11,
+      "api": 6,
+      "apiList": [
+        "GET /patients/p020/cartella",
+        "GET /operators/directory/page",
+        "GET /patients/p020/room-options",
+        "GET /consegne",
+        "GET /patients/p020/intake-review"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Clinica",
+      "shellMs": 48,
+      "contentMs": 796,
+      "settledMs": 788,
+      "muts": 33,
+      "api": 2,
+      "apiList": [
+        "GET /patients/p020/narrative-sections"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Terapia Farmacologica",
+      "shellMs": 38,
+      "contentMs": 13,
+      "settledMs": 778,
+      "muts": 32,
+      "api": 1,
+      "apiList": [
+        "GET /patients/p020/therapies/page"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Diagnosi",
+      "shellMs": 41,
+      "contentMs": 276,
+      "settledMs": 261,
+      "muts": 20,
+      "api": 2,
+      "apiList": [
+        "GET /patients/p020/narrative-sections"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Diario",
+      "shellMs": 49,
+      "contentMs": 6,
+      "settledMs": 795,
+      "muts": 24,
+      "api": 1,
+      "apiList": [
+        "GET /patients/p020/diary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Moduli",
+      "shellMs": 47,
+      "contentMs": 482,
+      "settledMs": 468,
+      "muts": 23,
+      "api": 2,
+      "apiList": [
+        "GET /patients/p020/assessments/catalog"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Raccolta dati ingresso",
+      "shellMs": 50,
+      "contentMs": 4,
+      "settledMs": 50,
+      "muts": 12,
+      "api": 0,
+      "apiList": [],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 49,
+      "contentMs": 928,
+      "settledMs": 925,
+      "muts": 498,
+      "api": 5,
+      "apiList": [
+        "GET /ai/extraction/status",
+        "GET /patients/page",
+        "GET /patients/settings",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Consegne",
+      "shellMs": 39,
+      "contentMs": 8,
+      "settledMs": 1670,
+      "muts": 163,
+      "api": 3,
+      "apiList": [
+        "GET /operators/directory/page",
+        "GET /patients/page",
+        "POST /consegne/patient-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Consegne | Consegne |  | Scrivi durante il giro oppure consulta il Feed delle consegn"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 52,
+      "contentMs": 515,
+      "settledMs": 512,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Agenda",
+      "shellMs": 45,
+      "contentMs": 15,
+      "settledMs": 1188,
+      "muts": 17,
+      "api": 3,
+      "apiList": [
+        "GET /operators/directory/page",
+        "GET /appointments"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Agenda | Agenda operatore |  | Dr. Marco Ferretti | · | Venerdì 25 Settembre 2026 |  | Giorno"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 31,
+      "contentMs": 911,
+      "settledMs": 909,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Note",
+      "shellMs": 52,
+      "contentMs": 3,
+      "settledMs": 1483,
+      "muts": 71,
+      "api": 2,
+      "apiList": [
+        "GET /operators/directory/page",
+        "GET /notes"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Note | Note e messaggi |  | 15 non lette |  | Nuova nota | Tutte | Ricevute | Inviate | Non lette"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 34,
+      "contentMs": 503,
+      "settledMs": 500,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Terapia",
+      "shellMs": 54,
+      "contentMs": 6,
+      "settledMs": 482,
+      "muts": 8,
+      "api": 1,
+      "apiList": [
+        "GET /therapy-slots/page"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Terapia | Terapia giornaliera |  | venerdì 25 settembre 2026 |  | Oggi | Data terapia  | Ordi"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 48,
+      "contentMs": 945,
+      "settledMs": 943,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Parametri",
+      "shellMs": 42,
+      "contentMs": 13,
+      "settledMs": 1359,
+      "muts": 13,
+      "api": 2,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/parameters/page"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Parametri | Registrazione parametri |  | Compilazione rapida giornaliera. Ogni salvat"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 44,
+      "contentMs": 502,
+      "settledMs": 499,
+      "muts": 498,
+      "api": 5,
+      "apiList": [
+        "GET /ai/extraction/status",
+        "GET /patients/page",
+        "GET /patients/settings",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Dashboard",
+      "shellMs": 56,
+      "contentMs": 648,
+      "settledMs": 647,
+      "muts": 470,
+      "api": 2,
+      "apiList": [
+        "GET /therapy-slots"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [
+        64,
+        91
+      ],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Dashboard | Benvenuto, Dr. Marco Ferretti |  | Cardiologia — venerdì 25 settembre 202"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 60,
+      "contentMs": 10,
+      "settledMs": 934,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "nav:Consegne",
+      "shellMs": 52,
+      "contentMs": 4,
+      "settledMs": 1351,
+      "muts": 160,
+      "api": 3,
+      "apiList": [
+        "GET /operators/directory/page",
+        "GET /patients/page",
+        "POST /consegne/patient-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Consegne | Consegne |  | Scrivi durante il giro oppure consulta il Feed delle consegn"
+    },
+    {
+      "label": "nav:Agenda",
+      "shellMs": 50,
+      "contentMs": 9,
+      "settledMs": 710,
+      "muts": 12,
+      "api": 2,
+      "apiList": [
+        "GET /appointments"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Agenda | Agenda operatore |  | Dr. Marco Ferretti | · | Venerdì 25 Settembre 2026 |  | Giorno"
+    },
+    {
+      "label": "nav:Note",
+      "shellMs": 45,
+      "contentMs": 49,
+      "settledMs": 743,
+      "muts": 66,
+      "api": 1,
+      "apiList": [
+        "GET /notes"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Note | Note e messaggi |  | 15 non lette |  | Nuova nota | Tutte | Ricevute | Inviate | Non lette"
+    },
+    {
+      "label": "nav:Terapia",
+      "shellMs": 53,
+      "contentMs": 1,
+      "settledMs": 493,
+      "muts": 8,
+      "api": 1,
+      "apiList": [
+        "GET /therapy-slots/page"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Terapia | Terapia giornaliera |  | venerdì 25 settembre 2026 |  | Oggi | Data terapia  | Ordi"
+    },
+    {
+      "label": "nav:Pazienti",
+      "shellMs": 45,
+      "contentMs": 931,
+      "settledMs": 929,
+      "muts": 498,
+      "api": 3,
+      "apiList": [
+        "GET /patients/page",
+        "GET /patients/clinical-summary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Pazienti | Pazienti |  | 50 caricati su 60 |  | Importa dimissione | Nuovo paziente | Tutti | M"
+    },
+    {
+      "label": "row->detail(3rd)",
+      "shellMs": 38,
+      "contentMs": 8,
+      "settledMs": 900,
+      "muts": 10,
+      "api": 6,
+      "apiList": [
+        "GET /patients/p020/cartella",
+        "GET /operators/directory/page",
+        "GET /patients/p020/room-options",
+        "GET /consegne",
+        "GET /patients/p020/intake-review"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Clinica",
+      "shellMs": 52,
+      "contentMs": 469,
+      "settledMs": 462,
+      "muts": 30,
+      "api": 2,
+      "apiList": [
+        "GET /patients/p020/narrative-sections"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "tab:Diario",
+      "shellMs": 52,
+      "contentMs": 1,
+      "settledMs": 490,
+      "muts": 18,
+      "api": 1,
+      "apiList": [
+        "GET /patients/p020/diary"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [],
+      "stillLoading": false,
+      "text": "AM | Moretti, Andrea | ⚠ Allergie | Codice fiscale: RSSMRA59A01H501T | 67a · F | Stampa scheda | Invio"
+    },
+    {
+      "label": "nav:Dashboard",
+      "shellMs": 49,
+      "contentMs": 617,
+      "settledMs": 616,
+      "muts": 470,
+      "api": 2,
+      "apiList": [
+        "GET /therapy-slots"
+      ],
+      "chunks": 0,
+      "chunkList": [],
+      "longTasks": [
+        58,
+        65
+      ],
+      "stillLoading": false,
+      "text": "ClinicOS | / | Dashboard | Benvenuto, Dr. Marco Ferretti |  | Cardiologia — venerdì 25 settembre 202"
+    }
+  ],
+  "totals": {
+    "steps": 34,
+    "contentAvgMs": 294,
+    "contentP50Ms": 15,
+    "contentMaxMs": 945,
+    "settledAvgMs": 789,
+    "apiTotal": 92,
+    "chunksTotal": 0,
+    "stepsOver300msContent": 14,
+    "stepsOver1000msContent": 0
+  }
+}

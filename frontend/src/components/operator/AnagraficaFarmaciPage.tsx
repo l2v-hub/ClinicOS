@@ -7,10 +7,16 @@
 // Da qui i documenti si aprono senza prescrizione di riferimento: il visore non ha un dosaggio
 // su cui riconoscere la formulazione, quindi la chiedera' all'operatore invece di sceglierne una.
 
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { PageHeader } from '../shared/PageHeader';
 import { RicercaFarmaco } from './cartella/RicercaFarmaco';
-import { VisoreDocumentoFarmaco } from './cartella/VisoreDocumentoFarmaco';
+// Il visore del foglio illustrativo trascina lo stack PDF (~1,7 MB): resta fuori dal chunk
+// della pagina e si scarica solo alla prima apertura di un documento.
+const VisoreDocumentoFarmaco = lazy(() =>
+  import('./cartella/VisoreDocumentoFarmaco').then((m) => ({
+    default: m.VisoreDocumentoFarmaco,
+  })),
+);
 import type { DocumentoFarmaco, FarmacoTrovato } from './cartella/farmacoDocumento';
 import type { PrescrizioneDaAbbinare } from './cartella/farmacoCorrispondenza';
 
@@ -41,11 +47,13 @@ export function AnagraficaFarmaciPage() {
       </div>
 
       {aperto && (
-        <VisoreDocumentoFarmaco
-          documento={aperto.documento}
-          prescrizione={aperto.prescrizione}
-          onChiudi={() => setAperto(null)}
-        />
+        <Suspense fallback={<p className="cr-empty-inline">Apertura del documento…</p>}>
+          <VisoreDocumentoFarmaco
+            documento={aperto.documento}
+            prescrizione={aperto.prescrizione}
+            onChiudi={() => setAperto(null)}
+          />
+        </Suspense>
       )}
     </div>
   );

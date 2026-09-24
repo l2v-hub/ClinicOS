@@ -80,6 +80,7 @@ interface PatientRosterProps {
   deleteEnabled: boolean;
   deletingId: string | null;
   onSelect: (patient: Paziente) => void;
+  onPrefetch?: (patient: Paziente) => void;
   onDelete: (patient: Paziente, event: React.MouseEvent) => void;
 }
 
@@ -172,6 +173,7 @@ export function PatientRoster({
   deleteEnabled,
   deletingId,
   onSelect,
+  onPrefetch,
   onDelete,
 }: PatientRosterProps) {
   const ariaSort = (field: PatientSortField) =>
@@ -301,6 +303,8 @@ export function PatientRoster({
                     className="patient-roster__row"
                     tabIndex={0}
                     aria-label={openLabel}
+                    onMouseEnter={() => onPrefetch?.(patient)}
+                    onFocus={() => onPrefetch?.(patient)}
                     onClick={(event) => {
                       if ((event.target as HTMLElement).closest('button')) return;
                       onSelect(patient);

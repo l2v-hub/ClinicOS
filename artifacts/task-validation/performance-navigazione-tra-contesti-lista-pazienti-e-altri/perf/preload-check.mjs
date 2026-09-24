@@ -1,0 +1,10 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage();
+const chunks = [];
+page.on('request', (r) => { if (/assets\/.*\.js/.test(r.url())) chunks.push([Date.now(), r.url().split('/').pop()]); });
+const t0 = Date.now();
+await page.goto('http://localhost:4173', { waitUntil: 'domcontentloaded' });
+await page.waitForTimeout(1500);
+console.log(chunks.map(([t, n]) => `${t - t0}ms ${n}`).join('\n'));
+await browser.close();

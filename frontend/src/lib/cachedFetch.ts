@@ -42,6 +42,13 @@ export function cachedGetJson<T>(url: string, ttlMs: number = DEFAULT_TTL_MS): P
   return request as Promise<T>;
 }
 
+/** Ultimo valore in cache per l'URL, anche se scaduto: serve a disegnare subito una pagina con i
+ * dati gia' visti mentre `cachedGetJson` li rivalida (stale-while-revalidate). Undefined se mai letto
+ * o invalidato. */
+export function peekCachedGet<T>(url: string): T | undefined {
+  return cache.get(url)?.data as T | undefined;
+}
+
 /** Expire only the timed-out request, never a newer read started after invalidation. */
 export function expireCachedGet(url: string, expected: Promise<unknown>): void {
   if (inflight.get(url) !== expected) return;

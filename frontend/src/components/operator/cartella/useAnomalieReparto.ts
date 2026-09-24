@@ -12,7 +12,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { API_URL } from '../../../config';
-import { cachedGetJson } from '../../../lib/cachedFetch';
+import { cachedGetJson, peekCachedGet } from '../../../lib/cachedFetch';
 import { anomalieDi, NESSUNA_ANOMALIA, type AnomaliePaziente } from './anomalieFarmaco';
 import {
   trovaRisoluzione,
@@ -77,7 +77,14 @@ function oggi(): string {
  * chiamare condizionalmente, ma si puo' spegnere.
  */
 export function useAnomalieReparto(attivo = true): AnomalieReparto {
-  const [slots, setSlots] = useState<Slot[] | null>(null);
+  // Ultima risposta gia' vista in sessione (anche scaduta): la pagina si disegna con quella e
+  // la rivalida sotto, invece di ripartire da "verifica in corso" a ogni cambio contesto.
+  const [slots, setSlots] = useState<Slot[] | null>(() => {
+    const noti = attivo
+      ? peekCachedGet<Slot[]>(`${API_URL}/therapy-slots?date=${oggi()}`)
+      : undefined;
+    return Array.isArray(noti) ? noti : null;
+  });
   const [fallito, setFallito] = useState(false);
 
   useEffect(() => {

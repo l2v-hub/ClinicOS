@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../../config';
 import { operatorHeaders } from '../../../lib/operatorSession';
+import { readSessionCache, writeSessionCache } from '../../../lib/sessionCache';
+import { narrativeCacheKey } from '../../../lib/patientTabSnapshots';
 import {
   NarrativeClinicalSection,
   type BoldTag,
@@ -33,8 +35,10 @@ export function NarrativeSectionsTab({
   operatoreId,
   operatoreRole,
 }: NarrativeSectionsTabProps) {
-  const [sections, setSections] = useState<SectionDTO[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Sezioni gia' mostrate in sessione per questo paziente: compaiono subito e si rivalidano.
+  const cachedSections = readSessionCache<SectionDTO[]>(narrativeCacheKey(patientId));
+  const [sections, setSections] = useState<SectionDTO[]>(() => cachedSections ?? []);
+  const [loading, setLoading] = useState(!cachedSections);
   const [error, setError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [reloadVersion, setReloadVersion] = useState(0);
@@ -57,7 +61,7 @@ export function NarrativeSectionsTab({
     const controller = new AbortController();
     const sequence = ++loadSequence.current;
     void (async () => {
-      setLoading(true);
+      setLoading(readSessionCache(narrativeCacheKey(patientId)) === undefined);
       setError(null);
       setSaveError(null);
       try {
@@ -68,7 +72,9 @@ export function NarrativeSectionsTab({
         const data = await r.json();
         if (!r.ok) throw new Error();
         if (sequence === loadSequence.current) {
-          setSections(Array.isArray(data.sections) ? data.sections : []);
+          const next: SectionDTO[] = Array.isArray(data.sections) ? data.sections : [];
+          setSections(next);
+          writeSessionCache(narrativeCacheKey(patientId), next);
         }
       } catch (loadError) {
         if (

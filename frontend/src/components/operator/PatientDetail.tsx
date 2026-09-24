@@ -7,8 +7,14 @@ import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { ConsegnaQuickAdd } from './ConsegnaQuickAdd';
 import type { ConsegnaCreate } from '../../lib/consegnaCreation';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
-import { createAssessmentDraftStore, type AssessmentDraftStore } from '../../lib/assessments/assessmentDraftStore';
-import { assessmentCatalogEntry, type AssessmentEntry } from '../../lib/assessments/assessmentEntry';
+import {
+  createAssessmentDraftStore,
+  type AssessmentDraftStore,
+} from '../../lib/assessments/assessmentDraftStore';
+import {
+  assessmentCatalogEntry,
+  type AssessmentEntry,
+} from '../../lib/assessments/assessmentEntry';
 import { AssessmentCatalog } from './assessments/AssessmentCatalog';
 import type { AssessmentTarget } from '../../lib/assessments/assessmentTypes';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
@@ -83,6 +89,7 @@ import {
   ScalaTinettiTab,
   TherapyEditor,
 } from './PatientDetailLazyTabs';
+import { prefetchPatientDetailTabs } from '../../lib/patientDetailPrefetch';
 import { ClinicalSectionLoading } from './ClinicalSectionLoading';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { PatientVitalSignsView } from './PatientVitalSignsView';
@@ -286,23 +293,45 @@ export function PatientDetail({
   const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));
   const [activeGroup, setActiveGroup] = useState<TabGroup>(() => patientTabGroup(initialTab));
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
-  const [assessmentFocus, setAssessmentFocus] = useState<{ patientId: string; assessment: AssessmentEntry } | null>(null);
+  const [assessmentFocus, setAssessmentFocus] = useState<{
+    patientId: string;
+    assessment: AssessmentEntry;
+  } | null>(null);
   const [assessmentStore] = useState(() => assessmentDraftStore ?? createAssessmentDraftStore());
-  const [legacyVisits, setLegacyVisits] = useState<Set<TabId>>(() => new Set(initialTab ? [initialTab] : []));
-  const [legacyCreates, setLegacyCreates] = useState<Partial<Record<TabId, { patientId: string; request: string }>>>({});
+  const [legacyVisits, setLegacyVisits] = useState<Set<TabId>>(
+    () => new Set(initialTab ? [initialTab] : []),
+  );
+  const [legacyCreates, setLegacyCreates] = useState<
+    Partial<Record<TabId, { patientId: string; request: string }>>
+  >({});
   const intakeReview = usePatientIntakeReview(paziente.id, operatoreId, operatoreRole);
-  useEffect(() => () => { if (!assessmentDraftStore) assessmentStore.clear(); }, [assessmentDraftStore, assessmentStore]);
-  const [archiveFocus, setArchiveFocus] = useState<{ patientId: string; documentId: string; assessment: AssessmentTarget } | null>(null);
+  useEffect(
+    () => () => {
+      if (!assessmentDraftStore) assessmentStore.clear();
+    },
+    [assessmentDraftStore, assessmentStore],
+  );
+  const [archiveFocus, setArchiveFocus] = useState<{
+    patientId: string;
+    documentId: string;
+    assessment: AssessmentTarget;
+  } | null>(null);
   useEffect(() => {
     if (!initialTab || navigationRequestId === undefined) return;
     setAssessmentFocus(null);
-    setLegacyVisits(previous => new Set([...previous, initialTab]));
+    setLegacyVisits((previous) => new Set([...previous, initialTab]));
     setTab(resolvePatientTab(initialTab));
     setActiveGroup(patientTabGroup(initialTab));
   }, [initialTab, navigationRequestId]);
   // AC5: anomalie di terapia del paziente. Passa dalla stessa richiesta di reparto che alimenta
   // la lista pazienti, quindi aprire una cartella non aggiunge chiamate.
   const anomalieReparto = useAnomalieReparto();
+  // Dati dei tab piu' usati letti in anticipo a browser inattivo: il primo click su Clinica,
+  // Terapia, Diario o Moduli non attende piu' la rete (vedi lib/patientDetailPrefetch.ts).
+  useEffect(() => {
+    const timer = window.setTimeout(() => prefetchPatientDetailTabs(paziente.id), 300);
+    return () => window.clearTimeout(timer);
+  }, [paziente.id]);
 
   // #243: this component mounts fresh each time the operator opens the patient chart (the
   // caller conditionally renders it), so a ref seeded from `initialTab` on first render lets us
@@ -318,7 +347,7 @@ export function PatientDetail({
 
   function switchTab(tabId: TabId) {
     if (tabId === 'medicazioni' || tabId === 'contenzioni' || tabId === 'braden')
-      setLegacyVisits(previous => new Set([...previous, tabId]));
+      setLegacyVisits((previous) => new Set([...previous, tabId]));
     const target = resolvePatientTab(tabId);
     const group = patientTabGroup(target);
     setTab(target);
@@ -327,7 +356,10 @@ export function PatientDetail({
   }
 
   function switchGroup(groupId: TabGroup) {
-    if (groupId === 'moduli') { switchTab('moduli'); return; }
+    if (groupId === 'moduli') {
+      switchTab('moduli');
+      return;
+    }
     const group = TAB_GROUPS.find((g) => g.id === groupId);
     if (!group) return;
     setActiveGroup(groupId);
@@ -1048,7 +1080,13 @@ export function PatientDetail({
             ))}
           </div>
           {modalConsegnaShow ? (
-            <ConsegnaQuickAdd patient={paziente} operatori={operatori} onAdd={onAddConsegna} draftStore={consegnaDraftStore} onClose={() => setModalConsegnaShow(false)} />
+            <ConsegnaQuickAdd
+              patient={paziente}
+              operatori={operatori}
+              onAdd={onAddConsegna}
+              draftStore={consegnaDraftStore}
+              onClose={() => setModalConsegnaShow(false)}
+            />
           ) : (
             <button className="btn-secondary btn-sm" onClick={() => setModalConsegnaShow(true)}>
               <IcoPlus /> Aggiungi consegna
@@ -2344,7 +2382,13 @@ export function PatientDetail({
         >
           <div className="cts__body--padded">
             {showAddConsegna && (
-              <ConsegnaQuickAdd patient={paziente} operatori={operatori} onAdd={onAddConsegna} draftStore={consegnaDraftStore} onClose={() => setShowAddConsegna(false)} />
+              <ConsegnaQuickAdd
+                patient={paziente}
+                operatori={operatori}
+                onAdd={onAddConsegna}
+                draftStore={consegnaDraftStore}
+                onClose={() => setShowAddConsegna(false)}
+              />
             )}
             <div className="consegne-list">
               {consegneError && (
@@ -2605,15 +2649,48 @@ export function PatientDetail({
           tabIndex={0}
           className="cr-detail-content tab-panel-transition"
         >
-          {activeGroup === 'moduli' && tab !== 'moduli' && <button type="button" className="btn-secondary btn-sm patient-module-return" onClick={() => switchTab('moduli')}>← Tutti i moduli</button>}
+          {activeGroup === 'moduli' && tab !== 'moduli' && (
+            <button
+              type="button"
+              className="btn-secondary btn-sm patient-module-return"
+              onClick={() => switchTab('moduli')}
+            >
+              ← Tutti i moduli
+            </button>
+          )}
           <Suspense fallback={<ClinicalSectionLoading />}>
-            {tab === 'moduli' && <AssessmentCatalog patientId={paziente.id} operatorId={operatoreId} operatorRole={operatoreRole} cartella={cartella} draftStore={assessmentStore}
-              onNrs={() => switchTab('nrs')}
-              onOpen={(module, action, item) => {
-                setAssessmentFocus(module.type ? { patientId: paziente.id, assessment: assessmentCatalogEntry(paziente.id, module.type, action, assessmentStore, item) } : null);
-                if (!module.type && action === 'new') setLegacyCreates(previous => ({ ...previous, [module.tab]: { patientId: paziente.id, request: crypto.randomUUID() } }));
-                switchTab(module.tab);
-              }} />}
+            {tab === 'moduli' && (
+              <AssessmentCatalog
+                patientId={paziente.id}
+                operatorId={operatoreId}
+                operatorRole={operatoreRole}
+                cartella={cartella}
+                draftStore={assessmentStore}
+                onNrs={() => switchTab('nrs')}
+                onOpen={(module, action, item) => {
+                  setAssessmentFocus(
+                    module.type
+                      ? {
+                          patientId: paziente.id,
+                          assessment: assessmentCatalogEntry(
+                            paziente.id,
+                            module.type,
+                            action,
+                            assessmentStore,
+                            item,
+                          ),
+                        }
+                      : null,
+                  );
+                  if (!module.type && action === 'new')
+                    setLegacyCreates((previous) => ({
+                      ...previous,
+                      [module.tab]: { patientId: paziente.id, request: crypto.randomUUID() },
+                    }));
+                  switchTab(module.tab);
+                }}
+              />
+            )}
             {tab === 'riepilogo' && renderRiepilogo()}
             {(tab === 'profilo' || tab === 'contatti') && renderProfilo()}
             {tab === 'diagnosi' && renderDiagnosi()}
@@ -2656,10 +2733,19 @@ export function PatientDetail({
                 operatoreNome={operatoreNome}
                 operatoreId={operatoreId}
                 operatoreRole={operatoreRole}
-                focusDocumentId={archiveFocus?.patientId === paziente.id ? archiveFocus.documentId : undefined}
-                expectedAssessmentId={archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.id : undefined}
-                expectedAssessmentType={archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.type : undefined}
-                onOpenAssessment={(assessment) => { setAssessmentFocus({ patientId: paziente.id, assessment }); switchTab(assessmentPatientTab(assessment.type)); }}
+                focusDocumentId={
+                  archiveFocus?.patientId === paziente.id ? archiveFocus.documentId : undefined
+                }
+                expectedAssessmentId={
+                  archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.id : undefined
+                }
+                expectedAssessmentType={
+                  archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.type : undefined
+                }
+                onOpenAssessment={(assessment) => {
+                  setAssessmentFocus({ patientId: paziente.id, assessment });
+                  switchTab(assessmentPatientTab(assessment.type));
+                }}
               />
             )}
             {(tab === 'diagnosi' || tab === 'sezioni-narrative') && (
@@ -2713,30 +2799,42 @@ export function PatientDetail({
                 filterBy={diarioFilter}
               />
             )}
-            {(tab === 'medicazioni' || legacyVisits.has('medicazioni')) && <div hidden={tab !== 'medicazioni'}>
-              <MedicazioniTab
-                key={paziente.id}
-                createRequest={legacyCreates.medicazioni?.patientId === paziente.id ? legacyCreates.medicazioni.request : undefined}
-                cartella={cartella}
-                paziente={paziente}
-                onUpdate={(updates) =>
-                  onUpdateCartella(cartella.pazienteId, updates, { optimistic: false })
-                }
-                operatoreNome={operatoreNome}
-                operatoreId={operatoreId}
-                operatoreRole={operatoreRole}
-              />
-            </div>}
-            {(tab === 'contenzioni' || legacyVisits.has('contenzioni')) && <div hidden={tab !== 'contenzioni'}>
-              <ContenzioniTab
-                key={paziente.id}
-                createRequest={legacyCreates.contenzioni?.patientId === paziente.id ? legacyCreates.contenzioni.request : undefined}
-                cartella={cartella}
-                paziente={paziente}
-                onUpdate={upd}
-                operatoreNome={operatoreNome}
-              />
-            </div>}
+            {(tab === 'medicazioni' || legacyVisits.has('medicazioni')) && (
+              <div hidden={tab !== 'medicazioni'}>
+                <MedicazioniTab
+                  key={paziente.id}
+                  createRequest={
+                    legacyCreates.medicazioni?.patientId === paziente.id
+                      ? legacyCreates.medicazioni.request
+                      : undefined
+                  }
+                  cartella={cartella}
+                  paziente={paziente}
+                  onUpdate={(updates) =>
+                    onUpdateCartella(cartella.pazienteId, updates, { optimistic: false })
+                  }
+                  operatoreNome={operatoreNome}
+                  operatoreId={operatoreId}
+                  operatoreRole={operatoreRole}
+                />
+              </div>
+            )}
+            {(tab === 'contenzioni' || legacyVisits.has('contenzioni')) && (
+              <div hidden={tab !== 'contenzioni'}>
+                <ContenzioniTab
+                  key={paziente.id}
+                  createRequest={
+                    legacyCreates.contenzioni?.patientId === paziente.id
+                      ? legacyCreates.contenzioni.request
+                      : undefined
+                  }
+                  cartella={cartella}
+                  paziente={paziente}
+                  onUpdate={upd}
+                  operatoreNome={operatoreNome}
+                />
+              </div>
+            )}
             {tab === 'esami-consulenze' && (
               <EsamiConsulenzeTab
                 cartella={cartella}
@@ -2747,16 +2845,22 @@ export function PatientDetail({
                 operatoreRole={operatoreRole}
               />
             )}
-            {(tab === 'braden' || legacyVisits.has('braden')) && <div hidden={tab !== 'braden'}>
-              <ScalaBradenTab
-                key={paziente.id}
-                createRequest={legacyCreates.braden?.patientId === paziente.id ? legacyCreates.braden.request : undefined}
-                cartella={cartella}
-                paziente={paziente}
-                onUpdate={upd}
-                operatoreNome={operatoreNome}
-              />
-            </div>}
+            {(tab === 'braden' || legacyVisits.has('braden')) && (
+              <div hidden={tab !== 'braden'}>
+                <ScalaBradenTab
+                  key={paziente.id}
+                  createRequest={
+                    legacyCreates.braden?.patientId === paziente.id
+                      ? legacyCreates.braden.request
+                      : undefined
+                  }
+                  cartella={cartella}
+                  paziente={paziente}
+                  onUpdate={upd}
+                  operatoreNome={operatoreNome}
+                />
+              </div>
+            )}
             {tab === 'nrs' && (
               <PainAssessmentEditor
                 mode="patient-chart"
@@ -2768,12 +2872,33 @@ export function PatientDetail({
                 onChange={() => {}}
               />
             )}
-            {(tab === 'painad' || tab === 'postural_transfers' || tab === 'tinetti' || tab === 'mna' || tab === 'gds') && (
-              <AssessmentWorkspace patient={paziente} operatorId={operatoreId} operatorRole={operatoreRole} operatorName={operatoreNome}
-                type={tab === 'gds' ? 'gds15' : tab} draftStore={assessmentStore}
-                initialAssessment={assessmentFocus?.patientId === paziente.id && assessmentFocus.assessment.id ? { type: assessmentFocus.assessment.type, id: assessmentFocus.assessment.id } : undefined}
-                initialDraftKey={assessmentFocus?.patientId === paziente.id ? assessmentFocus.assessment.localKey : undefined}
-                onOpenArchive={(documentId, assessment) => { setArchiveFocus({ patientId: paziente.id, documentId, assessment }); switchTab('documenti'); }}>
+            {(tab === 'painad' ||
+              tab === 'postural_transfers' ||
+              tab === 'tinetti' ||
+              tab === 'mna' ||
+              tab === 'gds') && (
+              <AssessmentWorkspace
+                patient={paziente}
+                operatorId={operatoreId}
+                operatorRole={operatoreRole}
+                operatorName={operatoreNome}
+                type={tab === 'gds' ? 'gds15' : tab}
+                draftStore={assessmentStore}
+                initialAssessment={
+                  assessmentFocus?.patientId === paziente.id && assessmentFocus.assessment.id
+                    ? { type: assessmentFocus.assessment.type, id: assessmentFocus.assessment.id }
+                    : undefined
+                }
+                initialDraftKey={
+                  assessmentFocus?.patientId === paziente.id
+                    ? assessmentFocus.assessment.localKey
+                    : undefined
+                }
+                onOpenArchive={(documentId, assessment) => {
+                  setArchiveFocus({ patientId: paziente.id, documentId, assessment });
+                  switchTab('documenti');
+                }}
+              >
                 {tab === 'tinetti' && <ScalaTinettiTab cartella={cartella} paziente={paziente} />}
               </AssessmentWorkspace>
             )}

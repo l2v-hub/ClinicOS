@@ -1,8 +1,18 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { API_URL } from '../../../config';
 import { IcoCheck } from '../../../icons';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
+import {
+  invalidateSessionCache,
+  readSessionCache,
+  writeSessionCache,
+} from '../../../lib/sessionCache';
+import {
+  sortTherapiesByState,
+  therapyListCacheKey as therapyCacheKey,
+  type TherapyListSnapshot,
+} from '../../../lib/patientTabSnapshots';
 import {
   loadTherapyPage,
   type TherapyListFilters,
@@ -24,7 +34,11 @@ import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { TopNav, type TopNavItem } from '../../navigation/TopNav';
 import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './farmacoRiferimento';
 import type { DocumentoFarmaco, FarmacoTrovato } from './farmacoRiferimento';
-import { VisoreDocumentoFarmaco } from './VisoreDocumentoFarmaco';
+// Il visore del foglio illustrativo trascina lo stack PDF (~1,7 MB): resta fuori dal chunk del
+// tab e si scarica solo alla prima apertura di un documento.
+const VisoreDocumentoFarmaco = lazy(() =>
+  import('./VisoreDocumentoFarmaco').then((m) => ({ default: m.VisoreDocumentoFarmaco })),
+);
 import { RicercaFarmacoModal } from './RicercaFarmaco';
 import { AvvisoAnomalieFarmaci } from './AvvisoAnomalieFarmaci';
 import { anomalieDi } from './anomalieFarmaco';
@@ -180,15 +194,22 @@ function ScheduleSummary({ t }: { t: PatientTherapyAPI }) {
 
 export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const [subTab, setSubTab] = useState<SubTab>('attivi');
-  const [therapies, setTherapies] = useState<PatientTherapyAPI[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [nextTherapyCursor, setNextTherapyCursor] = useState<string | null>(null);
+  // Ultimo elenco gia' mostrato per questo paziente in sessione: il tab si disegna subito con
+  // quello e lo rivalida in background invece di ripartire da "Caricamento…".
+  const initialSnapshot = readSessionCache<TherapyListSnapshot>(therapyCacheKey(paziente.id, {}));
+  const [therapies, setTherapies] = useState<PatientTherapyAPI[]>(
+    () => initialSnapshot?.therapies ?? [],
+  );
+  const [loading, setLoading] = useState(!initialSnapshot);
+  const [nextTherapyCursor, setNextTherapyCursor] = useState<string | null>(
+    initialSnapshot?.nextCursor ?? null,
+  );
   const [loadingMoreTherapies, setLoadingMoreTherapies] = useState(false);
   const [therapySummary, setTherapySummary] = useState<{
     total: number;
     active: number;
     inactive: number;
-  } | null>(null);
+  } | null>(initialSnapshot?.summary ?? null);
   const [therapyFilterDraft, setTherapyFilterDraft] = useState<TherapyListFilters>({});
   const [therapyFilters, setTherapyFilters] = useState<TherapyListFilters>({});
   const [error, setError] = useState('');
@@ -226,13 +247,16 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const invalidateTherapies = useCallback(() => {
     invalidateCachedGet(`${API_URL}/patients/${paziente.id}/therapies`);
     invalidateCachedGet(`${API_URL}/therapy-slots`);
+    invalidateSessionCache(`therapies:${paziente.id}:`);
   }, [paziente.id]);
 
   const loadTherapies = useCallback(async () => {
     const sequence = ++therapyLoadSequence.current;
     const requestedPatientId = paziente.id;
+    const cacheKey = therapyCacheKey(requestedPatientId, therapyFilters);
     try {
-      setLoading(true);
+      // Con un elenco gia' in cache la rivalidazione avviene senza svuotare la tabella.
+      setLoading(readSessionCache(cacheKey) === undefined);
       setLoadingMoreTherapies(false);
       setTherapyLoadError('');
       const page = await loadTherapyPage(requestedPatientId, 'tutte', null, therapyFilters);
@@ -242,11 +266,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       ) {
         return;
       }
-      const data = [...page.items];
-      data.sort((a, b) => (STATO_ORDER[a.stato] ?? 9) - (STATO_ORDER[b.stato] ?? 9));
+      const data = sortTherapiesByState(page.items);
       setTherapies(data);
       setNextTherapyCursor(page.pageInfo.nextCursor);
       setTherapySummary(page.summary);
+      writeSessionCache<TherapyListSnapshot>(cacheKey, {
+        therapies: data,
+        nextCursor: page.pageInfo.nextCursor,
+        summary: page.summary,
+      });
     } catch (err) {
       if (
         sequence === therapyLoadSequence.current &&
@@ -1568,11 +1596,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       />
 
       {documentoAperto && (
-        <VisoreDocumentoFarmaco
-          documento={documentoAperto.documento}
-          prescrizione={documentoAperto.prescrizione}
-          onChiudi={() => setDocumentoAperto(null)}
-        />
+        <Suspense fallback={<LoadingState msg="Apertura del documento…" />}>
+          <VisoreDocumentoFarmaco
+            documento={documentoAperto.documento}
+            prescrizione={documentoAperto.prescrizione}
+            onChiudi={() => setDocumentoAperto(null)}
+          />
+        </Suspense>
       )}
 
       {ricercaPer !== null && (

@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "ok": true,
+      "msg": "first row shows Moretti-AGGIORNATO-AGGIORNATO (AM Moretti-AGGIORNATO-AGGIORNATO, Andrea…)"
+    },
+    {
+      "ok": true,
+      "msg": "back on Pazienti: rows painted from cache in 77ms"
+    },
+    {
+      "ok": true,
+      "msg": "no \"Caricamento…\" placeholder on return"
+    },
+    {
+      "ok": true,
+      "msg": "cached roster shows the previous name first"
+    },
+    {
+      "ok": true,
+      "msg": "revalidated: \"Moretti-AGGIORNATO-AGGIORNATO-AGGIORNATO\" visible after 356ms"
+    },
+    {
+      "ok": true,
+      "msg": "\"Caricamento modulo…\" fallback occurrences after login: 0"
+    }
+  ],
+  "timings": {
+    "firstVisitRowsMs": 112,
+    "cachedPaintMs": 77,
+    "revalidatedMs": 356,
+    "loginFallbackMutations": 1
+  },
+  "consoleErrors": [],
+  "result": "PASS"
+}
