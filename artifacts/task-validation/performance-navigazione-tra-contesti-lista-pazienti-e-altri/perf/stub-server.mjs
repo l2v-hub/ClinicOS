@@ -14,7 +14,13 @@ const PREFLIGHT_MAX_AGE = process.env.PREFLIGHT_MAX_AGE; // undefined → no cac
 const VERBOSE = process.env.VERBOSE === '1';
 import fs from 'node:fs';
 const ASSESSMENT_VERSIONS = (() => {
-  const src = fs.readFileSync(new URL('../../../../frontend/src/lib/assessments/assessmentTypes.ts', import.meta.url), 'utf8');
+  // Le versioni dei moduli vivono in piu' file di frontend/src/lib/assessments: si leggono tutti.
+  const dir = new URL('../../../../frontend/src/lib/assessments/', import.meta.url);
+  const src = fs
+    .readdirSync(dir)
+    .filter((n) => n.endsWith('.ts'))
+    .map((n) => fs.readFileSync(new URL(n, dir), 'utf8'))
+    .join('\n');
   const v = (name) => (src.match(new RegExp(name + "_VERSION = '([^']+)'")) || [])[1] || '1';
   return { painad: v('PAINAD'), postural_transfers: v('TRANSFERS'), tinetti: v('TINETTI'), mna: v('MNA'), gds15: v('GDS15') };
 })();
@@ -545,10 +551,40 @@ const server = http.createServer(async (req, res) => {
       legacyPainError: null,
     });
   if ((mm = m(/^\/patients\/([^/]+)\/therapies$/))) return send(200, []);
-  if ((mm = m(/^\/patients\/([^/]+)\/diary$/)))
-    return send(200, { entries: [], hasMore: false, nextCursor: null });
+  if ((mm = m(new RegExp('^/patients/([^/]+)/diary$')))) {
+    const pid = decodeURIComponent(mm[1]);
+    const entries = Array.from({ length: 12 }, (_, k) => ({
+      id: `d-${pid}-${k}`,
+      patientId: pid,
+      authorType: ['medico', 'infermiere', 'oss'][k % 3],
+      authorName: ['Dr. Marco Ferretti', 'Inf. Laura Rossi', 'OSS Paolo Verdi'][k % 3],
+      title: k % 4 === 0 ? 'Controllo parametri' : null,
+      content: `Voce di diario sintetica n. ${k + 1}: paziente vigile, parametri nella norma, prosegue terapia come da prescrizione.`,
+      priority: k % 5 === 0 ? 'importante' : 'normale',
+      status: k % 3 === 0 ? 'completata' : 'aperta',
+      entryDateTime: `${TODAY}T${String(8 + k).padStart(2, '0')}:00`,
+      category: null,
+      createdAt: NOW,
+      updatedAt: NOW,
+    }));
+    return send(200, { entries, hasMore: false, nextCursor: null });
+  }
   if ((mm = m(/^\/patients\/([^/]+)\/documents$/))) return send(200, []);
-  if ((mm = m(/^\/patients\/([^/]+)\/narrative-sections$/))) return send(200, []);
+  if ((mm = m(new RegExp('^/patients/([^/]+)/narrative-sections$')))) {
+    const keys = ['anamnesi', 'esame_obiettivo', 'diagnosi', 'terapia_in_atto', 'note_cliniche'];
+    return send(200, {
+      sections: keys.map((sectionKey, k) => ({
+        sectionKey,
+        title: sectionKey.replace('_', ' '),
+        originalText: `Testo originale sintetico della sezione ${k + 1}, importato dalla lettera di dimissione.`,
+        reviewedText: '',
+        displayText: `Testo sintetico della sezione ${k + 1}: quadro clinico stabile, terapia confermata.`,
+        annotations: [],
+        sourceReferences: [],
+        reviewStatus: 'da_verificare',
+      })),
+    });
+  }
   if ((mm = m(/^\/patients\/([^/]+)\/room-assignments$/))) return send(200, []);
 
   if (path === '/consegne/overview') {

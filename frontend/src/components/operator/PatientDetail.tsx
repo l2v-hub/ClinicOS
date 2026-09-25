@@ -17,7 +17,7 @@ import {
 } from '../../lib/assessments/assessmentEntry';
 import { AssessmentCatalog } from './assessments/AssessmentCatalog';
 import type { AssessmentTarget } from '../../lib/assessments/assessmentTypes';
-import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
+import { startTransition, Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import type {
   Paziente,
   Consegna,
@@ -329,7 +329,7 @@ export function PatientDetail({
   // Dati dei tab piu' usati letti in anticipo a browser inattivo: il primo click su Clinica,
   // Terapia, Diario o Moduli non attende piu' la rete (vedi lib/patientDetailPrefetch.ts).
   useEffect(() => {
-    const timer = window.setTimeout(() => prefetchPatientDetailTabs(paziente.id), 300);
+    const timer = window.setTimeout(() => prefetchPatientDetailTabs(paziente.id), 0);
     return () => window.clearTimeout(timer);
   }, [paziente.id]);
 
@@ -350,8 +350,13 @@ export function PatientDetail({
       setLegacyVisits((previous) => new Set([...previous, tabId]));
     const target = resolvePatientTab(tabId);
     const group = patientTabGroup(target);
-    setTab(target);
-    setActiveGroup(group);
+    // Transition: il tab corrente resta visibile finche' il chunk del nuovo tab non e' pronto
+    // (gia' precaricato: un frame), invece del fallback "Caricamento sezione clinica…" che React
+    // tratterrebbe comunque per ~300 ms.
+    startTransition(() => {
+      setTab(target);
+      setActiveGroup(group);
+    });
     lastTabByGroup.current[group] = target;
   }
 
@@ -362,14 +367,18 @@ export function PatientDetail({
     }
     const group = TAB_GROUPS.find((g) => g.id === groupId);
     if (!group) return;
-    setActiveGroup(groupId);
-    if (!group.tabs.some((t) => t.id === tab)) {
-      const remembered = lastTabByGroup.current[groupId];
-      const target =
-        remembered && group.tabs.some((t) => t.id === remembered) ? remembered : group.tabs[0].id;
-      setTab(target);
-      lastTabByGroup.current[groupId] = target;
-    }
+    const keepTab = group.tabs.some((t) => t.id === tab);
+    const remembered = lastTabByGroup.current[groupId];
+    const target = keepTab
+      ? tab
+      : remembered && group.tabs.some((t) => t.id === remembered)
+        ? remembered
+        : group.tabs[0].id;
+    startTransition(() => {
+      setActiveGroup(groupId);
+      if (!keepTab) setTab(target);
+    });
+    if (!keepTab) lastTabByGroup.current[groupId] = target;
   }
 
   // ── Per-section CRUD state ─────────────────────────────────────────────────

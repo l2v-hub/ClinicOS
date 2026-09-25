@@ -11,6 +11,9 @@
 // svuotata al logout (App.handleLogout → clearSessionCache) come cachedFetch.
 
 const store = new Map<string, unknown>();
+// Letture anticipate ancora in volo per chiave: chi monta nel frattempo aspetta quella invece di
+// aprire una seconda richiesta identica.
+const pending = new Map<string, Promise<unknown>>();
 
 export function readSessionCache<T>(key: string): T | undefined {
   return store.get(key) as T | undefined;
@@ -27,4 +30,27 @@ export function invalidateSessionCache(prefix: string): void {
 
 export function clearSessionCache(): void {
   store.clear();
+  pending.clear();
+}
+
+/** Registra una lettura anticipata in volo per la chiave (rimossa al termine, esito qualsiasi). */
+export function trackSessionCache(key: string, promise: Promise<unknown>): void {
+  pending.set(key, promise);
+  // Gestisce entrambi gli esiti senza creare una catena che rigetta (una lettura fallita non deve
+  // diventare una unhandled rejection: chi aspetta ricevera' comunque un pending gia' risolto).
+  const done = () => {
+    if (pending.get(key) === promise) pending.delete(key);
+  };
+  promise.then(done, done);
+}
+
+/** La lettura anticipata in volo per la chiave, se c'e'. Non rigetta mai. */
+export function pendingSessionCache(key: string): Promise<void> | undefined {
+  const p = pending.get(key);
+  return p
+    ? p.then(
+        () => undefined,
+        () => undefined,
+      )
+    : undefined;
 }

@@ -2,11 +2,11 @@
   "checks": [
     {
       "ok": true,
-      "msg": "first row shows Moretti-AGGIORNATO-AGGIORNATO (AM Moretti-AGGIORNATO-AGGIORNATO, Andrea…)"
+      "msg": "first row shows Moretti (AM Moretti, Andrea Camera 110 · Letto B …)"
     },
     {
       "ok": true,
-      "msg": "back on Pazienti: rows painted from cache in 77ms"
+      "msg": "back on Pazienti: rows painted from cache in 71ms"
     },
     {
       "ok": true,
@@ -18,7 +18,7 @@
     },
     {
       "ok": true,
-      "msg": "revalidated: \"Moretti-AGGIORNATO-AGGIORNATO-AGGIORNATO\" visible after 356ms"
+      "msg": "revalidated: \"Moretti-AGGIORNATO\" visible after 341ms"
     },
     {
       "ok": true,
@@ -26,9 +26,9 @@
     }
   ],
   "timings": {
-    "firstVisitRowsMs": 112,
-    "cachedPaintMs": 77,
-    "revalidatedMs": 356,
+    "firstVisitRowsMs": 98,
+    "cachedPaintMs": 71,
+    "revalidatedMs": 341,
     "loginFallbackMutations": 1
   },
   "consoleErrors": [],

@@ -1,5 +1,5 @@
 import type { AssessmentCatalogData, AssessmentCatalogReader } from './assessmentCatalog';
-import { readSessionCache, writeSessionCache } from '../sessionCache';
+import { pendingSessionCache, readSessionCache, writeSessionCache } from '../sessionCache';
 export interface AssessmentCatalogState {
   status: 'loading' | 'ready' | 'error';
   data: AssessmentCatalogData | null;
@@ -35,6 +35,16 @@ export function createAssessmentCatalogState(reader: AssessmentCatalogReader, ca
       const request = ++generation;
       if (snapshot.status !== 'ready') publish({ status: 'loading', data: null, error: null });
       try {
+        // Lettura anticipata gia' in volo (apertura scheda): si aspetta quella.
+        const pendingRead = cacheKey ? pendingSessionCache(cacheKey) : undefined;
+        if (pendingRead) {
+          await pendingRead;
+          const cached = cacheKey ? readSessionCache<AssessmentCatalogData>(cacheKey) : undefined;
+          if (cached && !current.signal.aborted && request === generation) {
+            publish({ status: 'ready', data: cached, error: null });
+            return;
+          }
+        }
         const data = await reader(current.signal);
         if (!current.signal.aborted && request === generation) {
           if (cacheKey) writeSessionCache(cacheKey, data);

@@ -8,6 +8,7 @@ import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { readSessionCache, writeSessionCache } from '../../lib/sessionCache';
+import { parametersCacheKey } from '../../lib/patientParametersPrefetch';
 import { facilityLocalMinute } from '../../lib/facilityTime';
 import { fetchPatientPage } from '../../lib/patientPage';
 import { applySavedParameterSummary, resetParameterDay } from '../../lib/parameterEntrySummary';
@@ -43,7 +44,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   // Ultimo elenco gia' mostrato in sessione per giorno/ordine: la pagina compare subito con
   // quello e lo rivalida in background invece di ripartire da "Caricamento pazienti…".
   const initialItems = readSessionCache<PatientParametersPageItem[]>(
-    `parameters:${JSON.stringify(['', rosterKey, day])}`,
+    parametersCacheKey('', rosterKey, day),
   );
   const [items, setItems] = useState<PatientParametersPageItem[]>(() => initialItems ?? []);
   const itemsRef = useRef(items);
@@ -176,10 +177,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           cursor = needsMore ? page.nextCursor! : undefined;
         } while (cursor);
         loadedQuery.current = filterKey;
-        writeSessionCache(
-          `parameters:${JSON.stringify([filters.q ?? '', rosterKey, day])}`,
-          refreshed,
-        );
+        writeSessionCache(parametersCacheKey(filters.q ?? '', rosterKey, day), refreshed);
       })()
         .catch(async (cause) => {
           if (!controller.signal.aborted && version === generation.current) {

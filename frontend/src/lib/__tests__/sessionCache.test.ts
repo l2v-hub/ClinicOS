@@ -3,7 +3,9 @@ import test from 'node:test';
 import {
   clearSessionCache,
   invalidateSessionCache,
+  pendingSessionCache,
   readSessionCache,
+  trackSessionCache,
   writeSessionCache,
 } from '../sessionCache';
 import {
@@ -31,6 +33,27 @@ test('session cache stores, reads, invalidates by prefix and clears everything',
   // Logout must leave nothing behind: the next operator never sees the previous one's data.
   clearSessionCache();
   assert.equal(readSessionCache('diary:p1:tutti'), undefined);
+});
+
+test('an in-flight prefetch is exposed while pending, never rejects, and is dropped when done', async () => {
+  clearSessionCache();
+  let resolve!: (v: unknown) => void;
+  const read = new Promise((r) => (resolve = r));
+  trackSessionCache('narrative:p1', read);
+  const waiter = pendingSessionCache('narrative:p1');
+  assert.ok(waiter, 'pending promise exposed while the read is in flight');
+  resolve({ ok: true });
+  await waiter;
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(pendingSessionCache('narrative:p1'), undefined);
+
+  // A failed prefetch must not surface as a rejection to the tab awaiting it.
+  const failing = Promise.reject(new Error('rete'));
+  trackSessionCache('diary:p1:tutti', failing);
+  await assert.doesNotReject(pendingSessionCache('diary:p1:tutti')!);
+  await new Promise((r) => setTimeout(r, 0));
+  clearSessionCache();
+  assert.equal(pendingSessionCache('diary:p1:tutti'), undefined);
 });
 
 test('tab snapshot keys are scoped per patient and per query so no patient sees another chart', () => {

@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../../config';
 import { operatorHeaders } from '../../../lib/operatorSession';
-import { readSessionCache, writeSessionCache } from '../../../lib/sessionCache';
+import {
+  pendingSessionCache,
+  readSessionCache,
+  writeSessionCache,
+} from '../../../lib/sessionCache';
 import { narrativeCacheKey } from '../../../lib/patientTabSnapshots';
 import {
   NarrativeClinicalSection,
@@ -64,6 +68,17 @@ export function NarrativeSectionsTab({
       setLoading(readSessionCache(narrativeCacheKey(patientId)) === undefined);
       setError(null);
       setSaveError(null);
+      // Lettura anticipata gia' in volo (apertura scheda): si aspetta quella, niente doppia richiesta.
+      const pendingRead = pendingSessionCache(narrativeCacheKey(patientId));
+      if (pendingRead) {
+        await pendingRead;
+        const cached = readSessionCache<SectionDTO[]>(narrativeCacheKey(patientId));
+        if (cached && !controller.signal.aborted && sequence === loadSequence.current) {
+          setSections(cached);
+          setLoading(false);
+          return;
+        }
+      }
       try {
         const r = await fetch(`${API_URL}/patients/${patientId}/narrative-sections`, {
           headers: operatorHeaders(),

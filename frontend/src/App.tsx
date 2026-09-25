@@ -37,6 +37,7 @@ import {
 import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
 import { clearSessionCache } from './lib/sessionCache';
 import { prefetchPatientListSnapshot } from './components/operator/usePatientListPage';
+import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
 import {
@@ -1494,6 +1495,8 @@ export default function App() {
         headers: operatorHeaders(),
       });
       if (operatorDirectoryLoadStateRef.current === 'idle') void loadOperatorDirectory(false);
+      if (utente.ruolo === 'operatore')
+        void prefetchPatientParametersSnapshot({ rosterKey, rosterOptions });
     }, 400);
     return () => window.clearTimeout(timer);
   }, [utente, rosterKey, rosterOptions, loadOperatorDirectory]);

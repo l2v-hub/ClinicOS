@@ -7,7 +7,7 @@
 // (patientTabSnapshots.ts): al click il tab si disegna subito e rivalida in background.
 import { API_URL } from '../config';
 import { operatorHeaders } from './operatorSession';
-import { readSessionCache, writeSessionCache } from './sessionCache';
+import { readSessionCache, trackSessionCache, writeSessionCache } from './sessionCache';
 import {
   assessmentsCacheKey,
   diaryCacheKey,
@@ -92,8 +92,9 @@ export function prefetchPatientDetailTabs(patientId: string): void {
     for (const task of tasksFor(patientId)) {
       if (readSessionCache(task.key) !== undefined || inflight.has(task.key)) continue;
       inflight.add(task.key);
-      task
-        .read()
+      const read = task.read();
+      trackSessionCache(task.key, read);
+      read
         .then((value) => {
           if (value !== undefined && readSessionCache(task.key) === undefined)
             writeSessionCache(task.key, value);

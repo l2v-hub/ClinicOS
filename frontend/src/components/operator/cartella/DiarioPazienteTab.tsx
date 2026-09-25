@@ -5,7 +5,11 @@ import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { API_URL } from '../../../config';
 import { facilityLocalMinute, formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import { operatorHeaders } from '../../../lib/operatorSession';
-import { readSessionCache, writeSessionCache } from '../../../lib/sessionCache';
+import {
+  pendingSessionCache,
+  readSessionCache,
+  writeSessionCache,
+} from '../../../lib/sessionCache';
 import { diaryCacheKey, type DiarySnapshot } from '../../../lib/patientTabSnapshots';
 
 type DiaryFeedEntry = DiarioPazienteEntry & {
@@ -190,6 +194,19 @@ export function DiarioPazienteTab({
       }
       setError('');
       if (!options.append) setNotice('');
+      // Lettura anticipata gia' in volo (apertura scheda): si aspetta quella, niente doppia richiesta.
+      const pendingRead = options.append ? undefined : pendingSessionCache(cacheKey);
+      if (pendingRead) {
+        await pendingRead;
+        const cached = readSessionCache<DiarySnapshot>(cacheKey);
+        if (cached && !signal.aborted && request === readSequenceRef.current) {
+          setEntries(cached.entries);
+          setHasMore(cached.hasMore);
+          setNextCursor(cached.nextCursor);
+          setLoading(false);
+          return;
+        }
+      }
       try {
         const params = new URLSearchParams();
         if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
