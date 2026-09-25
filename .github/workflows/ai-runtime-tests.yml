@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
       - name: Install core web framework (fastapi/pydantic — not a provider SDK)
-        run: pip install fastapi 'pydantic>=2.6'
+        run: pip install fastapi 'pydantic>=2.6' 'uvicorn[standard]>=0.29'
       - name: Core tests (stdlib + fastapi/pydantic, no provider SDKs)
         run: python -m unittest discover -s tests -p "test_*.py" -v
       - name: Compile-check all modules
