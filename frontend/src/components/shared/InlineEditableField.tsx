@@ -175,6 +175,13 @@ export function InlineEditableField({
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
             >
+              {/* Senza valore il browser mostrerebbe la prima opzione come scelta, ma salverebbe
+                  il valore vuoto: meglio dichiarare che non c'è ancora una scelta. */}
+              {draft === '' && !options?.some((o) => o.value === '') && (
+                <option value="" disabled>
+                  — Seleziona —
+                </option>
+              )}
               {options?.map((o) => (
                 <option key={o.value} value={o.value}>
                   {o.label}

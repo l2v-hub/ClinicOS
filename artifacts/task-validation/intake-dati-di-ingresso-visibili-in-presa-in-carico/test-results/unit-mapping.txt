@@ -1,0 +1,23 @@
+✔ carries allergieStatus=paziente_nega into the confirmed cartella (0.7308ms)
+✔ carries allergieStatus=assenti into the confirmed cartella (0.116ms)
+✔ presenti keeps BOTH the status and the allergy list (no data loss) (0.2992ms)
+✔ omits allergieStatus when the operator never selected one (undocumented ≠ false value) (0.1357ms)
+✔ maps every draft section into the confirmed cartella (0.5667ms)
+✔ does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella (0.1152ms)
+✔ writes the whole Ingresso step into presaInCarico with the chart vocabulary (0.1617ms)
+✔ no Ingresso data means no presaInCarico (nothing is invented) (0.0983ms)
+✔ translates the wizard provenance vocabulary to the chart one (0.699ms)
+✔ keeps admission type and arrival mode apart (0.1236ms)
+✔ never invents a clinical assessment (0.1242ms)
+✔ resolve returns a saved presaInCarico untouched (0.1047ms)
+✔ resolve derives a partial presaInCarico from legacy root keys (0.5859ms)
+✔ resolve returns undefined when there is nothing to show (0.0855ms)
+✔ an empty saved presaInCarico does not hide legacy root keys (0.0959ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 139.2759

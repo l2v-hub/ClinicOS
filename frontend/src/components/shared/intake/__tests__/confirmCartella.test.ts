@@ -40,9 +40,9 @@ test('omits allergieStatus when the operator never selected one (undocumented â‰
   assert.ok(!('allergieStatus' in cartella), 'no ambiguous default status must be invented');
 });
 
-test('preserves the pre-existing mapping keys unchanged', () => {
+test('maps every draft section into the confirmed cartella', () => {
   const cartella = buildConfirmCartella({
-    ingresso: { dataIngresso: '2026-02-01', provenienza: 'domicilio' },
+    ingresso: { dataPresa: '2026-02-01', provenienza: 'ospedale' },
     allergie: [allergen()],
     diagnosi: [{ id: 'd1', descrizione: 'Dx test', stato: 'attiva' }],
     anamnesi: { remota: 'testo' },
@@ -52,8 +52,12 @@ test('preserves the pre-existing mapping keys unchanged', () => {
     allergieStatus: 'presenti',
   });
   assert.equal(cartella.statoRicovero, 'ricoverato');
-  assert.equal(cartella.dataIngresso, '2026-02-01');
-  assert.equal(cartella.provenienza, 'domicilio');
+  // I dati di ingresso vivono nella presa in carico, non alla radice della cartella.
+  assert.deepEqual(cartella.presaInCarico, {
+    dataIngresso: '2026-02-01',
+    provenienza: 'dimissione_ospedaliera',
+  });
+  assert.ok(!('dataPresa' in cartella) && !('provenienza' in cartella));
   assert.equal((cartella.allergie as AllergiaItem[]).length, 1);
   assert.equal((cartella.diagnosi as unknown[]).length, 1);
   assert.deepEqual(cartella.anamnesi, { remota: 'testo' });
@@ -72,4 +76,43 @@ test('does not leak wizard-internal keys (_accepted, _narrative, anagrafica) int
   assert.ok(!('_accepted' in cartella));
   assert.ok(!('_narrative' in cartella));
   assert.ok(!('anagrafica' in cartella));
+});
+
+test('writes the whole Ingresso step into presaInCarico with the chart vocabulary', () => {
+  const cartella = buildConfirmCartella({
+    ingresso: {
+      dataPresa: '2026-09-26',
+      oraPresa: '08:24',
+      provenienza: 'ospedale',
+      centroInviante: 'Ospedale San Carlo',
+      modalitaIngresso: 'trasferimento',
+      motivoIngresso: 'Prosecuzione cure',
+      operatoreResponsabile: 'L. Conti',
+      noteIniziali: 'Arriva con la figlia',
+    },
+  });
+  assert.deepEqual(cartella.presaInCarico, {
+    dataIngresso: '2026-09-26',
+    oraIngresso: '08:24',
+    provenienza: 'dimissione_ospedaliera',
+    centroInviante: 'Ospedale San Carlo',
+    tipoIngresso: 'trasferimento',
+    motivoIngresso: 'Prosecuzione cure',
+    operatoreResponsabile: 'L. Conti',
+    noteIniziali: 'Arriva con la figlia',
+  });
+  for (const key of [
+    'dataPresa',
+    'oraPresa',
+    'modalitaIngresso',
+    'motivoIngresso',
+    'noteIniziali',
+  ]) {
+    assert.ok(!(key in cartella), `${key} must not be duplicated at the cartella root`);
+  }
+});
+
+test('no Ingresso data means no presaInCarico (nothing is invented)', () => {
+  assert.ok(!('presaInCarico' in buildConfirmCartella({})));
+  assert.ok(!('presaInCarico' in buildConfirmCartella({ ingresso: { motivoIngresso: '  ' } })));
 });
