@@ -1870,6 +1870,34 @@ export function PatientDetail({
                           {cartella.indirizzo?.trim() || paziente.address?.trim() || 'Non indicato'}
                         </strong>
                       </div>
+                      <div className="cr-profilo-row">
+                        <span>Referente</span>
+                        <strong>
+                          {[
+                            // Le colonne del paziente sono la fonte aggiornata (intake, voce,
+                            // PATCH); la copia in cartella resta per le cartelle importate prima.
+                            paziente.emergencyContactName?.trim() ||
+                              cartella.contattoEmergenzaNome?.trim(),
+                            cartella.contattoEmergenzaRel?.trim(),
+                          ]
+                            .filter(Boolean)
+                            .join(' · ') || 'Non indicato'}
+                        </strong>
+                      </div>
+                      <div className="cr-profilo-row">
+                        <span>Telefono referente</span>
+                        <strong>
+                          {paziente.emergencyContactPhone?.trim() ||
+                            cartella.contattoEmergenzaTel?.trim() ||
+                            'Non indicato'}
+                        </strong>
+                      </div>
+                      {cartella.contattoEmergenzaAltro?.trim() && (
+                        <div className="cr-profilo-row">
+                          <span>Altro contatto di emergenza</span>
+                          <strong>{cartella.contattoEmergenzaAltro}</strong>
+                        </div>
+                      )}
                     </div>
                   )}
                   {cartella.noteGenerali && (

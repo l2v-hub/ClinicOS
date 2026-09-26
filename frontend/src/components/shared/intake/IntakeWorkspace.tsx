@@ -19,6 +19,7 @@ import { StepVerifica } from './StepVerifica';
 import { buildIntakeTherapyReview, prepareIntakeConfirmData } from './intakeTherapies';
 import { focusTherapyCorrection, type TherapyCorrectionTarget } from './intakeTherapyNavigation';
 import { buildConfirmCartella } from './confirmCartella';
+import { buildIntakeContacts } from '../../../lib/intakeContacts';
 import { CLINICAL_MODULES as CATALOG_MODULES } from '../../../lib/assessments/assessmentCatalog';
 import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 
@@ -30,8 +31,15 @@ const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Verifica'] as con
 
 // #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
 // dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
-const CLINICAL_MODULES = CATALOG_MODULES.map(module => ({ id: module.tab, label: module.label, desc: module.group, available: true }));
-const MODULE_TO_TAB_ID: Record<string, string> = Object.fromEntries(CLINICAL_MODULES.map(module => [module.id, module.id]));
+const CLINICAL_MODULES = CATALOG_MODULES.map((module) => ({
+  id: module.tab,
+  label: module.label,
+  desc: module.group,
+  available: true,
+}));
+const MODULE_TO_TAB_ID: Record<string, string> = Object.fromEntries(
+  CLINICAL_MODULES.map((module) => [module.id, module.id]),
+);
 
 interface AnagraficaData {
   firstName?: string;
@@ -359,6 +367,14 @@ export function IntakeWorkspace({
     if (!allergyConflictOverride) setAllergyConflictWarn(false);
 
     const a = data.anagrafica ?? {};
+    // Il wizard e l'import scrivono il referente in referenteNome/Telefono/Relazione e l'indirizzo
+    // spezzato in via/CAP/comune/provincia: qui diventano i campi del paziente e della cartella.
+    // I vecchi emergencyContactName/Phone restano come ripiego per le bozze che li avessero.
+    const contacts = buildIntakeContacts({
+      ...(a as Record<string, string | undefined>),
+      referenteNome: (a.referenteNome as string | undefined) ?? a.emergencyContactName,
+      referenteTelefono: (a.referenteTelefono as string | undefined) ?? a.emergencyContactPhone,
+    });
     const patient = {
       firstName: a.firstName ?? '',
       lastName: a.lastName ?? '',
@@ -367,15 +383,11 @@ export function IntakeWorkspace({
       codiceFiscale: a.codiceFiscale?.trim().toUpperCase() || null,
       phone: phoneValidation.ok ? phoneValidation.phone : null,
       ...(a.email !== undefined && { email: a.email }),
-      ...(a.address !== undefined && { address: a.address }),
-      ...(a.emergencyContactName !== undefined && { emergencyContactName: a.emergencyContactName }),
-      ...(a.emergencyContactPhone !== undefined && {
-        emergencyContactPhone: a.emergencyContactPhone,
-      }),
+      ...contacts.patient,
     };
 
     // #265: extracted pure mapper (unit-tested) — carries allergieStatus into the cartella.
-    const cartella = buildConfirmCartella(confirmData);
+    const cartella = { ...buildConfirmCartella(confirmData), ...contacts.cartella };
 
     const allTherapies = therapyReview.filter((t) => !t.excluded).map((t) => t.input);
 

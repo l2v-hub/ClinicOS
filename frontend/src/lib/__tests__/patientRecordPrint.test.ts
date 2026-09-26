@@ -99,3 +99,8 @@ test('diary print loader follows every bounded page and deduplicates entries', a
   assert.equal(urls.length, 2);
   assert.ok(urls.every((url) => url.includes('patient%2Fa/diary?limit=100')));
 });
+
+test('printed address falls back to the patient column like the Contatti tab', async () => {
+  const doc = await readFile(documentUrl, 'utf8');
+  assert.match(doc, /display\(cartella\.indirizzo\?\.trim\(\) \|\| paziente\.address\)/);
+});
