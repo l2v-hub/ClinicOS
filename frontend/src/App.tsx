@@ -39,6 +39,7 @@ import { clearSessionCache } from './lib/sessionCache';
 import { prefetchPatientListSnapshot } from './components/operator/usePatientListPage';
 import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
+import { intakeLandingTab } from './lib/intakeLandingTabs';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
 import {
   buildOperatorDirectoryPageUrl,
@@ -252,19 +253,6 @@ class LazyLoadBoundary extends Component<{ children: ReactNode }, { failed: bool
 }
 
 // ── Navigation helpers ─────────────────────────────────────────────────────────
-
-// #243: valid "Moduli" tab ids a moduleTabId coming from the intake wizard may target —
-// guards against forwarding an unexpected string as an initialTab.
-const MODULE_TAB_IDS: TabId[] = [
-  'medicazioni',
-  'contenzioni',
-  'braden',
-  'tinetti',
-  'mna',
-  'gds',
-  'nrs',
-  'dimissione',
-];
 
 const NAV_LABELS: Record<NavKey, string> = {
   login: 'Login',
@@ -3151,10 +3139,7 @@ export default function App() {
                           // La lista ricarica gia' la propria pagina. Per navigare a un paziente appena
                           // creato basta un lookup puntuale: non scaricare di nuovo l'intero roster.
                           if (!patientId) return;
-                          const tab =
-                            moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
-                              ? (moduleTabId as TabId)
-                              : undefined;
+                          const tab = intakeLandingTab(moduleTabId);
                           void selectPazienteById(patientId, tab);
                         }}
                       />

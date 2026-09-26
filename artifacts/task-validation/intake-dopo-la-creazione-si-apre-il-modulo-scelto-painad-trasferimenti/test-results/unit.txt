@@ -1,0 +1,12 @@
+✔ every module offered by the wizard is a landing tab (0.6898ms)
+✔ landing tabs live in the Moduli or Dimissione groups (0.1949ms)
+✔ unknown or missing tabs are not accepted (0.0773ms)
+✔ App.tsx uses the derived list instead of its own (source contract) (0.8941ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.8831
