@@ -3,15 +3,19 @@
 // Extracted from IntakeWorkspace.handleConfirm (#265) so the draft→cartella
 // mapping is unit-testable without mounting the wizard.
 
+import { mapIngressoToPresaInCarico } from '../../../lib/presaInCarico';
+
 /** Draft data shape (top-level keys of PatientIntakeDraft.data). */
 export type ConfirmDraftData = Record<string, unknown>;
 
 export function buildConfirmCartella(data: ConfirmDraftData): Record<string, unknown> {
-  const ingressoObj = (data.ingresso ?? {}) as Record<string, unknown>;
-  const cartella: Record<string, unknown> = {
-    statoRicovero: 'ricoverato',
-    ...ingressoObj,
-  };
+  const cartella: Record<string, unknown> = { statoRicovero: 'ricoverato' };
+  // I dati del passaggio Ingresso vanno nella presa in carico, con le chiavi e i vocabolari
+  // che il tab legge. Prima finivano alla radice e il tab non li mostrava.
+  const presaInCarico = mapIngressoToPresaInCarico(
+    (data.ingresso ?? {}) as Record<string, unknown>,
+  );
+  if (Object.keys(presaInCarico).length > 0) cartella.presaInCarico = presaInCarico;
   if (data.allergie !== undefined) cartella.allergie = data.allergie;
   // #265: the explicit allergy status chosen in the wizard (presenti/assenti/paziente_nega)
   // must persist — dropping it turns "verified absent" back into "undocumented".

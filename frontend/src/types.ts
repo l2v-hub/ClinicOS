@@ -603,6 +603,8 @@ export interface PresaInCarico {
     | 'dimissione_ospedaliera'
     | 'familiare_caregiver';
   centroInviante?: string;
+  /** Tipo di ingresso scelto nel wizard di intake (non è il mezzo di arrivo). */
+  tipoIngresso?: 'urgenza' | 'programmato' | 'trasferimento' | 'day_hospital';
   modalitaIngresso: 'ambulante' | 'barella' | 'sedia_rotelle';
   accompagnatoDa: string;
   motivoIngresso: string;

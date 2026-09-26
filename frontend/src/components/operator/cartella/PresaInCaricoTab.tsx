@@ -4,6 +4,7 @@ import type { CartellaPaziente, PresaInCarico, Paziente } from '../../../types';
 import { PrintButton, todayStr, nowTime, nowISO } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
 import { InlineEditableField, type InlineOption } from '../../shared/InlineEditableField';
+import { resolvePresaInCarico, TIPO_INGRESSO_LABEL } from '../../../lib/presaInCarico';
 
 type EditId = 'dati' | 'cond' | 'valutazione' | 'docs' | null;
 
@@ -14,16 +15,18 @@ interface Props {
   operatoreNome: string;
 }
 
-const EMPTY: PresaInCarico = {
-  dataIngresso: todayStr(),
-  oraIngresso: nowTime(),
-  provenienza: 'accesso_diretto',
+// Base di vista e modifica: un campo mai valutato resta vuoto ("—" in vista, "— Seleziona —" nei
+// menu), non diventa "Vigile" o "Autonomo". Nessuna valutazione clinica viene precompilata.
+const BLANK = {
+  dataIngresso: '',
+  oraIngresso: '',
+  provenienza: '',
   centroInviante: '',
-  modalitaIngresso: 'ambulante',
+  modalitaIngresso: '',
   accompagnatoDa: '',
   motivoIngresso: '',
   operatoreResponsabile: '',
-  condizioniGenerali: 'buone',
+  condizioniGenerali: '',
   condizioniIniziali: '',
   noteIniziali: '',
   camera: '',
@@ -31,25 +34,68 @@ const EMPTY: PresaInCarico = {
   documentiRicevuti: '',
   documentiMancanti: '',
   sigla: '',
-  statoCoscienza: 'vigile',
-  orientamento: 'orientato',
-  autonomia: 'autonomo',
-  comunicazione: 'verbale',
-  udito: 'normale',
-  vista: 'normale',
-  dentizione: 'propria',
-  alimentazione: 'autonomo',
-  eliminazioneUrinaria: 'autonoma',
-  eliminazioneIntestinale: 'autonoma',
-  mobilita: 'autonoma',
-  cuteIntegrita: 'integra',
-  dolore: 'assente',
+  statoCoscienza: '',
+  orientamento: '',
+  autonomia: '',
+  comunicazione: '',
+  udito: '',
+  vista: '',
+  dentizione: '',
+  alimentazione: '',
+  eliminazioneUrinaria: '',
+  eliminazioneIntestinale: '',
+  mobilita: '',
+  cuteIntegrita: '',
+  dolore: '',
   doloreLivello: 0,
-  materialeConsegnato: false,
+  materialeConsegnato: undefined,
   operatore: '',
   note: '',
-  compilatoAt: nowISO(),
+  compilatoAt: '',
+} as unknown as PresaInCarico;
+
+// Ogni card salva solo i propri campi: modificare "Dati di ingresso" non deve scrivere
+// valutazioni funzionali mai eseguite.
+const CARD_FIELDS: Record<Exclude<EditId, null>, (keyof PresaInCarico)[]> = {
+  dati: [
+    'dataIngresso',
+    'oraIngresso',
+    'provenienza',
+    'centroInviante',
+    'modalitaIngresso',
+    'accompagnatoDa',
+    'motivoIngresso',
+    'operatoreResponsabile',
+    'camera',
+    'letto',
+  ],
+  cond: ['condizioniGenerali', 'statoCoscienza', 'condizioniIniziali', 'noteIniziali'],
+  valutazione: [
+    'orientamento',
+    'autonomia',
+    'comunicazione',
+    'udito',
+    'vista',
+    'dentizione',
+    'alimentazione',
+    'eliminazioneUrinaria',
+    'eliminazioneIntestinale',
+    'mobilita',
+    'cuteIntegrita',
+    'dolore',
+    'doloreLivello',
+  ],
+  docs: [
+    'documentiRicevuti',
+    'documentiMancanti',
+    'sigla',
+    'materialeConsegnato',
+    'operatore',
+    'note',
+  ],
 };
+
+const SELECT_PLACEHOLDER = '— Seleziona —';
 
 const PROVENIENZA_LABEL: Record<PresaInCarico['provenienza'], string> = {
   accesso_diretto: 'Accesso diretto',
@@ -61,6 +107,9 @@ const PROVENIENZA_LABEL: Record<PresaInCarico['provenienza'], string> = {
 
 const PROVENIENZA_OPTS: InlineOption[] = (
   Object.entries(PROVENIENZA_LABEL) as [string, string][]
+).map(([value, label]) => ({ value, label }));
+const TIPO_INGRESSO_OPTS: InlineOption[] = (
+  Object.entries(TIPO_INGRESSO_LABEL) as [string, string][]
 ).map(([value, label]) => ({ value, label }));
 const MODALITA_OPTS: InlineOption[] = [
   { value: 'ambulante', label: 'Ambulante' },
@@ -117,21 +166,33 @@ function RowAlways({
 }
 
 export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
-  const pic = cartella.presaInCarico;
+  // Presa in carico salvata, oppure derivata dai campi di ingresso delle cartelle confermate
+  // prima del fix (vedi lib/presaInCarico).
+  const pic = resolvePresaInCarico(cartella as CartellaPaziente & Record<string, unknown>);
   const [editingId, setEditingId] = useState<EditId>(null);
-  const [form, setForm] = useState<PresaInCarico>(pic ?? { ...EMPTY, operatore: operatoreNome });
+  // Solo dati amministrativi hanno un default (data/ora di oggi, operatore in turno).
+  const formBase = (): PresaInCarico => ({
+    ...BLANK,
+    dataIngresso: todayStr(),
+    oraIngresso: nowTime(),
+    operatore: operatoreNome,
+    ...pic,
+  });
+  const [form, setForm] = useState<PresaInCarico>(formBase);
 
   function set(f: Partial<PresaInCarico>) {
     setForm((p) => ({ ...p, ...f }));
   }
 
   function handleSave() {
-    onUpdate({ presaInCarico: { ...form, compilatoAt: nowISO() } });
+    if (!editingId) return;
+    const changed = Object.fromEntries(CARD_FIELDS[editingId].map((k) => [k, form[k]]));
+    onUpdate({ presaInCarico: { ...pic, ...changed, compilatoAt: nowISO() } as PresaInCarico });
     setEditingId(null);
   }
 
   function startEdit(id: Exclude<EditId, null>) {
-    setForm(pic ?? { ...EMPTY, operatore: operatoreNome });
+    setForm(formBase());
     setEditingId(id);
   }
 
@@ -139,12 +200,20 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
     setEditingId(null);
   }
 
-  const safePic = pic ?? { ...EMPTY, operatore: operatoreNome };
+  const safePic: PresaInCarico = { ...BLANK, ...pic };
 
   // Persist a single field inline (used by InlineEditableField). Returns the
   // save promise so the field can stay in edit mode and show an error on failure.
   function saveField(patch: Partial<PresaInCarico>): void | Promise<boolean> {
-    return onUpdate({ presaInCarico: { ...safePic, ...patch, compilatoAt: nowISO() } });
+    // Un salvataggio che non cambia nulla non scrive nulla: niente valutazioni implicite
+    // (es. "— Seleziona —" salvato come "assente") e niente "Compilato il" aggiornato a vuoto.
+    const changed = (Object.keys(patch) as (keyof PresaInCarico)[]).some(
+      (k) => (patch[k] ?? '') !== (safePic[k] ?? ''),
+    );
+    if (!changed) return;
+    return onUpdate({
+      presaInCarico: { ...pic, ...patch, compilatoAt: nowISO() } as PresaInCarico,
+    });
   }
 
   // ── Card 1: Dati di ingresso ─────────────────────────────────────────────────
@@ -178,6 +247,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
             value={form.provenienza}
             onChange={(e) => set({ provenienza: e.target.value as PresaInCarico['provenienza'] })}
           >
+            <option value="">{SELECT_PLACEHOLDER}</option>
             {(Object.entries(PROVENIENZA_LABEL) as [PresaInCarico['provenienza'], string][]).map(
               ([k, v]) => (
                 <option key={k} value={k}>
@@ -208,6 +278,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
               set({ modalitaIngresso: e.target.value as PresaInCarico['modalitaIngresso'] })
             }
           >
+            <option value="">{SELECT_PLACEHOLDER}</option>
             <option value="ambulante">Ambulante</option>
             <option value="barella">Barella</option>
             <option value="sedia_rotelle">Sedia a rotelle</option>
@@ -287,7 +358,11 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         label="Data / Ora"
         type="datetime-local"
         value={`${safePic.dataIngresso}T${safePic.oraIngresso}`}
-        display={`${safePic.dataIngresso.split('-').reverse().join('/')} ${safePic.oraIngresso}`}
+        display={
+          safePic.dataIngresso
+            ? `${safePic.dataIngresso.split('-').reverse().join('/')} ${safePic.oraIngresso}`.trim()
+            : ''
+        }
         onSave={(v) => {
           const [dataIngresso = '', oraIngresso = ''] = v.split('T');
           return saveField({ dataIngresso, oraIngresso });
@@ -306,6 +381,14 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         value={safePic.centroInviante ?? ''}
         placeholder="Nome centro / struttura…"
         onSave={(v) => saveField({ centroInviante: v })}
+      />
+      <InlineEditableField
+        label="Tipo di ingresso"
+        type="select"
+        options={TIPO_INGRESSO_OPTS}
+        value={safePic.tipoIngresso ?? ''}
+        display={safePic.tipoIngresso ? TIPO_INGRESSO_LABEL[safePic.tipoIngresso] : ''}
+        onSave={(v) => saveField({ tipoIngresso: v as PresaInCarico['tipoIngresso'] })}
       />
       <InlineEditableField
         label="Modalità ingresso"
@@ -358,6 +441,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
               set({ condizioniGenerali: e.target.value as PresaInCarico['condizioniGenerali'] })
             }
           >
+            <option value="">{SELECT_PLACEHOLDER}</option>
             <option value="buone">Buone</option>
             <option value="discrete">Discrete</option>
             <option value="scadenti">Scadenti</option>
@@ -373,6 +457,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
               set({ statoCoscienza: e.target.value as PresaInCarico['statoCoscienza'] })
             }
           >
+            <option value="">{SELECT_PLACEHOLDER}</option>
             <option value="vigile">Vigile</option>
             <option value="confuso">Confuso</option>
             <option value="soporoso">Soporoso</option>
@@ -461,6 +546,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
             value={form.orientamento}
             onChange={(e) => set({ orientamento: e.target.value as PresaInCarico['orientamento'] })}
           >
+            <option value="">{SELECT_PLACEHOLDER}</option>
             <option value="orientato">Orientato</option>
             <option value="parzialmente_orientato">Parzialmente orientato</option>
             <option value="disorientato">Disorientato</option>
@@ -473,6 +559,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
             value={form.autonomia}
             onChange={(e) => set({ autonomia: e.target.value as PresaInCarico['autonomia'] })}
           >
+            <option value="">{SELECT_PLACEHOLDER}</option>
             <option value="autonomo">Autonomo</option>
             <option value="parzialmente_autonomo">Parzialmente autonomo</option>
             <option value="non_autonomo">Non autonomo</option>
@@ -580,6 +667,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
             value={form.dolore}
             onChange={(e) => set({ dolore: e.target.value as 'assente' | 'presente' })}
           >
+            <option value="">{SELECT_PLACEHOLDER}</option>
             <option value="assente">Assente</option>
             <option value="presente">Presente</option>
           </select>
@@ -680,10 +768,16 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         type="select"
         options={DOLORE_OPTS}
         value={safePic.dolore}
-        display={safePic.dolore === 'presente' ? 'Presente' : 'Assente'}
+        display={
+          safePic.dolore === 'presente' ? 'Presente' : safePic.dolore === 'assente' ? 'Assente' : ''
+        }
         onSave={(v) =>
           saveField(
-            v === 'presente' ? { dolore: 'presente' } : { dolore: 'assente', doloreLivello: 0 },
+            v === 'presente'
+              ? { dolore: 'presente' }
+              : v === 'assente'
+                ? { dolore: 'assente', doloreLivello: 0 }
+                : { dolore: '' as PresaInCarico['dolore'] },
           )
         }
       />
@@ -729,7 +823,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
           <input
             type="checkbox"
             style={{ width: 18, height: 18 }}
-            checked={form.materialeConsegnato}
+            checked={form.materialeConsegnato === true}
             onChange={(e) => set({ materialeConsegnato: e.target.checked })}
           />
           <span className="form-label" style={{ margin: 0 }}>
@@ -803,9 +897,15 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         label="Materiale consegnato"
         type="select"
         options={BOOLEAN_OPTS}
-        value={String(safePic.materialeConsegnato)}
-        display={safePic.materialeConsegnato ? 'Sì' : 'No'}
-        onSave={(v) => saveField({ materialeConsegnato: v === 'true' })}
+        value={safePic.materialeConsegnato === undefined ? '' : String(safePic.materialeConsegnato)}
+        display={
+          safePic.materialeConsegnato === true
+            ? 'Sì'
+            : safePic.materialeConsegnato === false
+              ? 'No'
+              : ''
+        }
+        onSave={(v) => saveField({ materialeConsegnato: v === '' ? undefined : v === 'true' })}
       />
       <InlineEditableField
         label="Operatore"
