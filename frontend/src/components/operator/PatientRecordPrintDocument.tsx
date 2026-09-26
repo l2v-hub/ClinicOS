@@ -91,7 +91,8 @@ export default function PatientRecordPrintDocument({
             </div>
             <div>
               <dt>Indirizzo</dt>
-              <dd>{display(cartella.indirizzo)}</dd>
+              {/* Stessa precedenza del tab Contatti: cartella, poi colonna del paziente. */}
+              <dd>{display(cartella.indirizzo?.trim() || paziente.address)}</dd>
             </div>
             <div>
               <dt>Stato</dt>

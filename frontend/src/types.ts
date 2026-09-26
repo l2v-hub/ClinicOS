@@ -47,6 +47,9 @@ export interface Paziente {
   email: string | null;
   phone: string | null;
   address?: string | null;
+  /** Referente del paziente (nome e telefono), salvati all'intake. */
+  emergencyContactName?: string | null;
+  emergencyContactPhone?: string | null;
   location?: PatientLocationData | null;
 }
 
@@ -525,6 +528,8 @@ export interface CartellaPaziente {
   contattoEmergenzaNome?: string;
   contattoEmergenzaTel?: string;
   contattoEmergenzaRel?: string;
+  /** Contatto di emergenza diverso dal referente, come scritto all'intake. */
+  contattoEmergenzaAltro?: string;
   medicoCurante?: string;
   codiceFiscale?: string;
   operatoreId?: string;

@@ -685,6 +685,19 @@ export default function App() {
     setRestoringPazienteFromHash(false);
     pushNav('dettaglio-paziente', p);
     loadCartella(p.id);
+    // Il riepilogo della lista non porta indirizzo e referente, che vivono solo nelle colonne del
+    // paziente: una lettura mirata completa la scheda senza bloccarne l'apertura.
+    if (!('address' in p)) {
+      const request = patientNavigationSequenceRef.current;
+      void fetchPatientById(API_URL, p.id, { headers: operatorHeaders() })
+        .then((full) => {
+          if (request !== patientNavigationSequenceRef.current) return;
+          setPazienteSelezionato((current) =>
+            current?.id === full.id ? { ...current, ...full } : current,
+          );
+        })
+        .catch(() => {});
+    }
     // Reset on every selection (not just when a module is passed) so a stale target from a
     // previous intake-created patient never leaks into an unrelated navigation.
     setPendingModuleTab(moduleTabId);

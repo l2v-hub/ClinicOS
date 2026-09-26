@@ -1,0 +1,14 @@
+✔ composes the full address from street, CAP, town and province (0.5282ms)
+✔ address keeps only the parts that were filled (0.1107ms)
+✔ address and referente go to the patient columns only; relation and extra contact to the cartella (0.4874ms)
+✔ nothing filled means nothing sent (0.0804ms)
+✔ an unknown relation code is kept as written (0.0762ms)
+✔ intake confirmation sends the mapped contacts (source contract) (0.5681ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 107.7586
