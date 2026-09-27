@@ -21,6 +21,8 @@ interface Props {
   counts: DashboardNotificationCounts;
   sections: DashboardNotificationSection[];
   loading?: boolean;
+  /** Forma compatta (schermata Turno, HMI 1): un pulsante che apre lo stesso dialogo. */
+  compact?: boolean;
 }
 
 const CATEGORIES: Array<{ tone: DashboardNotificationTone; label: string }> = [
@@ -33,7 +35,12 @@ function countFor(counts: DashboardNotificationCounts, tone: DashboardNotificati
   return counts[tone];
 }
 
-export function DashboardNotificationCenter({ counts, sections, loading = false }: Props) {
+export function DashboardNotificationCenter({
+  counts,
+  sections,
+  loading = false,
+  compact = false,
+}: Props) {
   const dialogId = useId();
   const titleId = `${dialogId}-title`;
   const descriptionId = `${dialogId}-description`;
@@ -53,70 +60,108 @@ export function DashboardNotificationCenter({ counts, sections, loading = false 
     setOpen(true);
   }
 
+  const compactButton = (
+    <button
+      type="button"
+      className={`dashboard-notification-compact dashboard-notification-compact--${
+        loading ? 'loading' : counts.total > 0 ? leadingTone : 'clear'
+      }`}
+      onClick={() => openCategory(leadingTone)}
+      aria-haspopup="dialog"
+      aria-label={`Segnalazioni operative: ${
+        loading
+          ? 'in aggiornamento'
+          : `${counts.alarm} allarmi, ${counts.warning} warning, ${counts.notice} avvisi`
+      }. Apri dettaglio`}
+    >
+      <IcoAlert />
+      <span>Segnalazioni</span>
+      <strong>{loading ? '—' : counts.total}</strong>
+    </button>
+  );
+
   return (
     <>
-      <section
-        className={`dashboard-notification-bar dashboard-notification-bar--${
-          loading ? 'loading' : counts.total > 0 ? leadingTone : 'clear'
-        }`}
-        aria-label="Centro notifiche dashboard"
-        aria-busy={loading}
-      >
-        <div
-          className="dashboard-notification-bar__intro"
-          aria-live={hasAlarms ? 'assertive' : 'polite'}
-          aria-atomic="true"
-        >
-          <span className="dashboard-notification-bar__icon" aria-hidden="true">
-            <IcoAlert />
+      {compact ? (
+        <>
+          {compactButton}
+          {/* come la barra completa: gli allarmi vengono annunciati ai lettori di schermo */}
+          <span
+            className="dashboard-notification-live"
+            aria-live={hasAlarms ? 'assertive' : 'polite'}
+            aria-atomic="true"
+          >
+            {loading ? '' : hasAlarms ? alarmLabel : ''}
           </span>
-          {hasAlarms && (
-            <span className="dashboard-notification-bar__total" aria-hidden="true">
-              {counts.alarm}
-            </span>
-          )}
-          <span className="dashboard-notification-bar__copy">
-            <strong>{hasAlarms ? alarmLabel : 'Segnalazioni operative'}</strong>
-            <span>
-              {loading
-                ? 'Aggiornamento in corso…'
-                : hasAlarms
-                  ? 'Priorità alta · richiede verifica immediata'
-                  : counts.total > 0
-                    ? 'Controlla le categorie per priorità'
-                    : 'Nessuna segnalazione aperta'}
-            </span>
-          </span>
-        </div>
-
-        <div className="dashboard-notification-bar__categories" role="group" aria-label="Categorie">
-          {CATEGORIES.map(({ tone, label }) => {
-            const count = countFor(counts, tone);
-            return (
-              <button
-                type="button"
-                key={tone}
-                className={`dashboard-notification-chip dashboard-notification-chip--${tone}`}
-                onClick={() => openCategory(tone)}
-                aria-haspopup="dialog"
-                aria-label={`${label}, ${loading ? 'conteggio in aggiornamento' : `${count} elementi attivi`}. Apri dettaglio`}
-              >
-                <span>{label}</span>
-                <strong>{loading ? '—' : count}</strong>
-              </button>
-            );
-          })}
-        </div>
-
-        <button
-          type="button"
-          className="dashboard-notification-bar__open"
-          onClick={() => openCategory(leadingTone)}
-          aria-haspopup="dialog"
+        </>
+      ) : (
+        <section
+          className={`dashboard-notification-bar dashboard-notification-bar--${
+            loading ? 'loading' : counts.total > 0 ? leadingTone : 'clear'
+          }`}
+          aria-label="Centro notifiche dashboard"
+          aria-busy={loading}
         >
-          Dettagli <IcoArrow />
-        </button>
-      </section>
+          <div
+            className="dashboard-notification-bar__intro"
+            aria-live={hasAlarms ? 'assertive' : 'polite'}
+            aria-atomic="true"
+          >
+            <span className="dashboard-notification-bar__icon" aria-hidden="true">
+              <IcoAlert />
+            </span>
+            {hasAlarms && (
+              <span className="dashboard-notification-bar__total" aria-hidden="true">
+                {counts.alarm}
+              </span>
+            )}
+            <span className="dashboard-notification-bar__copy">
+              <strong>{hasAlarms ? alarmLabel : 'Segnalazioni operative'}</strong>
+              <span>
+                {loading
+                  ? 'Aggiornamento in corso…'
+                  : hasAlarms
+                    ? 'Priorità alta · richiede verifica immediata'
+                    : counts.total > 0
+                      ? 'Controlla le categorie per priorità'
+                      : 'Nessuna segnalazione aperta'}
+              </span>
+            </span>
+          </div>
+
+          <div
+            className="dashboard-notification-bar__categories"
+            role="group"
+            aria-label="Categorie"
+          >
+            {CATEGORIES.map(({ tone, label }) => {
+              const count = countFor(counts, tone);
+              return (
+                <button
+                  type="button"
+                  key={tone}
+                  className={`dashboard-notification-chip dashboard-notification-chip--${tone}`}
+                  onClick={() => openCategory(tone)}
+                  aria-haspopup="dialog"
+                  aria-label={`${label}, ${loading ? 'conteggio in aggiornamento' : `${count} elementi attivi`}. Apri dettaglio`}
+                >
+                  <span>{label}</span>
+                  <strong>{loading ? '—' : count}</strong>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            className="dashboard-notification-bar__open"
+            onClick={() => openCategory(leadingTone)}
+            aria-haspopup="dialog"
+          >
+            Dettagli <IcoArrow />
+          </button>
+        </section>
+      )}
 
       {open && (
         <AccessibleDialogSurface

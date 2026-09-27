@@ -10,6 +10,7 @@ export type AdessoKind =
   | 'consegna-scaduta'
   | 'consegna-imminente'
   | 'terapia-imminente'
+  | 'terapia-senza-orario'
   | 'anomalia-farmaci'
   | 'consegna-urgente';
 
@@ -19,8 +20,9 @@ export const ADESSO_RANK: Record<AdessoKind, number> = {
   'consegna-scaduta': 2,
   'consegna-imminente': 3,
   'terapia-imminente': 4,
-  'anomalia-farmaci': 5,
-  'consegna-urgente': 6,
+  'terapia-senza-orario': 5,
+  'anomalia-farmaci': 6,
+  'consegna-urgente': 7,
 };
 
 export const ADESSO_KIND_LABEL: Record<AdessoKind, string> = {
@@ -28,6 +30,7 @@ export const ADESSO_KIND_LABEL: Record<AdessoKind, string> = {
   'consegna-scaduta': 'Consegna',
   'consegna-imminente': 'Consegna',
   'terapia-imminente': 'Terapia',
+  'terapia-senza-orario': 'Terapia',
   'anomalia-farmaci': 'Farmaci',
   'consegna-urgente': 'Consegna',
 };
@@ -43,6 +46,10 @@ export interface AdessoItem {
   nome: string;
   dettaglio: string;
   tempo: string;
+  /** Ora della scadenza (HH:MM) quando è nota: colonna di sinistra della riga. */
+  ora: string | null;
+  /** Camera e letto quando la fonte li porta (terapie). */
+  luogo: string | null;
   /** true = la scadenza è passata (in rosso). */
   inRitardo: boolean;
   /** Dentro il gruppo: valore più alto = più urgente. */
@@ -59,6 +66,8 @@ export interface AdessoInput {
   now: Date;
   scadute: ScadenzaTerapia[];
   prossime: ScadenzaTerapia[];
+  /** Somministrazioni senza orario verificabile: vanno controllate. */
+  senzaOrario?: ScadenzaTerapia[];
   urgenti: Consegna[];
   anomalie: AnomaliaPazienteRiga[];
 }
@@ -88,6 +97,8 @@ function consegnaItem(c: Consegna, cal: { oggi: string; minuto: number }): Adess
     patientId: c.pazienteId,
     nome: c.pazienteNome,
     dettaglio,
+    ora: ora !== null ? (c.oraScadenza ?? null) : null,
+    luogo: null,
   };
 
   if (giorni === null) {
@@ -156,14 +167,21 @@ function consegnaItem(c: Consegna, cal: { oggi: string; minuto: number }): Adess
   };
 }
 
+const luogoTerapia = (row: ScadenzaTerapia) =>
+  [row.camera ? `Camera ${row.camera}` : '', row.letto ? `Letto ${row.letto}` : '']
+    .filter(Boolean)
+    .join(' · ') || null;
+
 function terapiaItem(row: ScadenzaTerapia, kind: AdessoKind): AdessoItem {
   const minuti = row.minuti ?? 0;
   const tempo =
-    kind === 'terapia-ritardo'
-      ? `In ritardo di ${-minuti} min`
-      : minuti === 0
-        ? 'Adesso'
-        : `Tra ${minuti} min`;
+    kind === 'terapia-senza-orario'
+      ? 'Orario da verificare'
+      : kind === 'terapia-ritardo'
+        ? `In ritardo di ${-minuti} min`
+        : minuti === 0
+          ? 'Adesso'
+          : `Tra ${minuti} min`;
   return {
     key: `terapia:${row.id}`,
     kind,
@@ -171,8 +189,10 @@ function terapiaItem(row: ScadenzaTerapia, kind: AdessoKind): AdessoItem {
     nome: row.nome,
     dettaglio: `${row.farmaco} · ${row.dose} · ${row.via}`,
     tempo,
+    ora: kind === 'terapia-senza-orario' ? null : row.ora,
+    luogo: luogoTerapia(row),
     inRitardo: kind === 'terapia-ritardo',
-    urgenza: -minuti,
+    urgenza: kind === 'terapia-senza-orario' ? 0 : -minuti,
   };
 }
 
@@ -188,6 +208,10 @@ export function buildAdessoQueue(input: AdessoInput): AdessoItem[] {
       items.push(terapiaItem(row, 'terapia-imminente'));
     }
   }
+  // Orario da verificare: solo le somministrazioni di oggi (quelle di domani non sono "adesso").
+  for (const row of input.senzaOrario ?? []) {
+    if (row.data === cal.oggi) items.push(terapiaItem(row, 'terapia-senza-orario'));
+  }
   for (const c of input.urgenti) items.push(consegnaItem(c, cal));
   for (const p of input.anomalie) {
     if (p.esito.totale <= 0) continue;
@@ -199,6 +223,8 @@ export function buildAdessoQueue(input: AdessoInput): AdessoItem[] {
       nome: p.nome,
       dettaglio: `${n} ${n === 1 ? 'farmaco' : 'farmaci'} da verificare${p.esito.verificaIncompleta ? ' · verifica incompleta' : ''}`,
       tempo: 'Da verificare',
+      ora: null,
+      luogo: null,
       inRitardo: false,
       urgenza: n,
     });

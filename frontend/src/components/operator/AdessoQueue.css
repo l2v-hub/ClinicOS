@@ -1,146 +1,108 @@
-/* "Da fare subito": righe da 48 px, tempo a destra; sotto i 420 px di card il tempo va a capo. */
-.adesso-queue {
-  container: adesso-queue / inline-size;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius-sm);
-  overflow: hidden;
-}
-.adesso-queue__header {
-  margin: 0;
-  padding: 14px 18px 10px;
-}
+/* Card "Adesso" (HMI 1): righe ora · chi/cosa · pulsante; ora rossa se scaduta. */
 .adesso-queue__count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  margin-left: 8px;
-  padding: 0 7px;
-  border-radius: 11px;
-  background: var(--blue);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 .adesso-queue__notice {
   margin: 0;
-  padding: 8px 18px;
-  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font: 500 14px/20px var(--font-ui);
   color: var(--text-muted);
-  border-top: 1px solid var(--border);
 }
 .adesso-queue__notice--error {
-  color: var(--red);
+  color: #b42335;
 }
 .adesso-queue__list {
   list-style: none;
   margin: 0;
-  padding: 0 18px;
-  border-top: 1px solid var(--border);
+  padding: 0;
 }
 .adesso-queue__row {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 16px;
   align-items: center;
-  gap: 12px;
-  min-height: 48px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
 }
-.adesso-queue__row:last-child {
-  border-bottom: none;
+.adesso-queue__row:first-child {
+  border-top: 0;
+  padding-top: 0;
 }
-.adesso-queue__kind {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--surface-raised, #f5f7fa);
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  white-space: nowrap;
+.adesso-queue__ora {
+  font: 600 16px/24px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
 }
-.adesso-queue__row--terapia-ritardo .adesso-queue__kind,
-.adesso-queue__row--consegna-scaduta .adesso-queue__kind {
-  background: var(--red-bg, #fdeaec);
-  color: var(--red);
+.adesso-queue__ora.is-late {
+  color: #b42335;
 }
 .adesso-queue__main {
-  display: grid;
-  gap: 2px;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
 }
-.adesso-queue__patient {
-  justify-self: start;
-  text-align: left;
-  font-weight: 650;
-  color: var(--text);
-  min-height: 0;
-  padding: 0;
-}
-.adesso-queue__detail {
+.adesso-queue__who {
+  font: 500 14px/20px var(--font-ui);
   color: var(--text-muted);
-  font-size: 12px;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.adesso-queue__time {
-  justify-self: end;
-  color: var(--blue);
-  font-size: 12px;
-  font-weight: 700;
   white-space: nowrap;
 }
+.adesso-queue__what {
+  font: 600 16px/24px var(--font-ui);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
 .adesso-queue__time.is-late {
-  color: var(--red);
+  color: #b42335;
 }
 .adesso-queue__empty {
   margin: 0;
-  padding: 14px 18px;
-  border-top: 1px solid var(--border);
-  font-size: 13px;
+  font: 400 16px/24px var(--font-ui);
   color: var(--text-muted);
 }
 .adesso-queue__more {
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px 8px;
-  margin: 0;
-  padding: 10px 18px;
-  background: var(--surface-raised, #f5f7fa);
+  gap: 8px;
+  padding-top: 8px;
   border-top: 1px solid var(--border);
-  font-size: 12px;
+  font: 500 14px/20px var(--font-ui);
   color: var(--text-muted);
 }
-.adesso-queue__more .link-btn {
-  min-height: 32px;
-}
-.adesso-queue button:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-@container adesso-queue (max-width: 420px) {
+@container (max-width: 380px) {
   .adesso-queue__row {
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: 56px minmax(0, 1fr);
   }
-  .adesso-queue__time {
+  .adesso-queue__row .turno-btn {
     grid-column: 2;
     justify-self: start;
   }
 }
-@media (max-width: 420px) {
-  .adesso-queue__header,
-  .adesso-queue__list,
-  .adesso-queue__notice,
-  .adesso-queue__empty,
-  .adesso-queue__more {
-    padding-left: 12px;
-    padding-right: 12px;
+@media (max-width: 480px) {
+  .adesso-queue__row {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 8px 12px;
   }
+  .adesso-queue__row .turno-btn {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+.adesso-queue__foot {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
 }

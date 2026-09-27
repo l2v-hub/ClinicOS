@@ -1082,6 +1082,26 @@ export default function App() {
     void loadAppuntamenti(appointmentRangeRef.current);
   }, [loadAppuntamenti]);
 
+  // Il Turno mostra gli appuntamenti di oggi dell'operatore (la stessa richiesta del caricamento
+  // iniziale): se l'Agenda ha caricato un altro periodo o un altro filtro, tornando al Turno si
+  // ricarica esattamente quella, invece di dire "nessun appuntamento" o mostrare quelli di altri.
+  useEffect(() => {
+    if (navKey !== 'operator-dashboard' || !utente) return;
+    const today = localIsoDate();
+    const expected = {
+      from: today,
+      to: today,
+      operatorId: utente.ruolo === 'operatore' ? utente.id : undefined,
+    };
+    const range = appointmentRangeRef.current;
+    if (
+      range.from !== expected.from ||
+      range.to !== expected.to ||
+      (range.operatorId ?? undefined) !== expected.operatorId
+    )
+      void loadAppuntamenti(expected);
+  }, [navKey, utente, loadAppuntamenti]);
+
   // ── Bounded handover feed and exact dashboard read model ──────────────────
 
   const loadConsegne = useCallback(async (query?: ConsegnaFeedQuery, append = false) => {
@@ -3259,6 +3279,14 @@ export default function App() {
                           consegneOverview={consegneOverview}
                           consegneOverviewState={consegneOverviewState}
                           agenda={agendaOggi}
+                          agendaState={
+                            appointmentLoadError
+                              ? 'error'
+                              : loadingAppuntamenti
+                                ? 'loading'
+                                : 'ready'
+                          }
+                          onRetryAgenda={retryAppointmentRange}
                           onNavigate={navigate}
                           onOpenConsegneAperte={openConsegneAperte}
                           onOpenConsegneFeed={() => openConsegneFeed()}

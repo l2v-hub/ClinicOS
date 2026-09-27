@@ -1,0 +1,21 @@
+✔ groups come in the fixed urgency order and each group is sorted by urgency (2.4401ms)
+✔ time labels say exactly what is known (0.3971ms)
+✔ therapy rows without a verifiable time are not queued (0.1284ms)
+✔ an urgent consegna due within the hour but after midnight says "Domani" (0.1658ms)
+✔ untimed administrations: only today, "Orario da verificare", after imminent therapies (0.2108ms)
+✔ card shows room, age, bed and real badges in the prototype order (1.4884ms)
+✔ missing data is stated, never invented (0.1812ms)
+✔ without the clinical summary the card says it, instead of looking allergy-free (0.2055ms)
+✔ therapy line: unavailable or loading is said, never "nothing to do" (0.1448ms)
+✔ therapy line follows the prototype: overdue first, then next scheduled, then time to verify (0.4009ms)
+✔ tomorrow unreadable: "nothing" is only verified for today (0.1343ms)
+✔ discharged patients are not in the shift (0.0868ms)
+✔ next appointments: in progress, then not started past their time, then upcoming (facility clock) (0.7979ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 196.789

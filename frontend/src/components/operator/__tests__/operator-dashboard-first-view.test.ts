@@ -11,12 +11,17 @@ const sharedKpis = readFileSync(
 const styles = readFileSync(new URL('../../shared/DashboardKpiBand.css', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../../../App.tsx', import.meta.url), 'utf8');
 
-test('operator first view contains notifications then the compact clinical band', () => {
-  const notificationIndex = dashboard.indexOf('<DashboardNotificationCenter');
+test('operator first view (HMI 1 Turno): indicators, then Adesso with the compact notification center', () => {
   const kpiIndex = dashboard.indexOf('<OperatorClinicalKpiBand');
+  const adessoIndex = dashboard.indexOf('<AdessoQueue');
+  const notificationIndex = dashboard.indexOf('<DashboardNotificationCenter');
 
-  assert.ok(notificationIndex >= 0);
-  assert.ok(kpiIndex > notificationIndex);
+  assert.ok(kpiIndex >= 0);
+  assert.ok(adessoIndex > kpiIndex);
+  assert.ok(notificationIndex > adessoIndex);
+  assert.match(dashboard, /<DashboardNotificationCenter\s+compact/);
+  assert.match(dashboard, /<TurnoAppointments/);
+  assert.match(dashboard, /<TurnoPatients/);
   assert.doesNotMatch(dashboard, /className="stats-grid"/);
   assert.doesNotMatch(dashboard, /className="progress-card-grid"/);
   assert.doesNotMatch(dashboard, /I Miei Pazienti|Appuntamenti Oggi|Consegne Aperte/);
@@ -31,11 +36,9 @@ test('management-only props are removed from the operator dashboard contract', (
   assert.doesNotMatch(operatorCall, /totalePazienti|loadingPazienti/);
 });
 
-test('header patient action reuses the canonical secondary button', () => {
-  assert.match(dashboard, /type="button"/);
-  assert.match(dashboard, /className="btn-secondary operator-dashboard__patient-cta"/);
-  assert.match(dashboard, /<IcoPazienti \/> Pazienti/);
-  assert.match(dashboard, /onClick=\{\(\) => onNavigate\('pazienti'\)\}/);
+test('HMI 1 Turno: title in the app header, no duplicate Pazienti button (it is in the rail)', () => {
+  assert.match(dashboard, /<PageHeader title="Il mio turno"/);
+  assert.doesNotMatch(dashboard, /operator-dashboard__patient-cta/);
 });
 
 test('clinical snapshot uses five native compact value cards', () => {
@@ -46,8 +49,8 @@ test('clinical snapshot uses five native compact value cards', () => {
     'Parametri critici',
     'Rischi elevati',
     'Allergie gravi',
-    'Ricoverati attivi',
-    'Somministrazioni in ritardo',
+    'Ricoverati',
+    'Terapie in ritardo',
   ]) {
     assert.match(kpis, new RegExp(label));
   }

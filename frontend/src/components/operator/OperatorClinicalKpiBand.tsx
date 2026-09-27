@@ -62,9 +62,7 @@ export function OperatorClinicalKpiBand({
   onOpenTherapy,
 }: Props) {
   const administrationValue =
-    somministrazioni.inCorso || somministrazioni.fallito
-      ? '—'
-      : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`;
+    somministrazioni.inCorso || somministrazioni.fallito ? '—' : somministrazioni.inRitardo;
   const administrationTone: DashboardKpiTone = somministrazioni.fallito
     ? 'attention'
     : somministrazioni.inCorso
@@ -106,7 +104,7 @@ export function OperatorClinicalKpiBand({
     }),
     {
       id: 'ricoverati',
-      label: 'Ricoverati attivi',
+      label: 'Ricoverati',
       value: clinicalReady ? pazientiRicoverati : '—',
       status: clinicalReady
         ? pazientiRicoverati === 1
@@ -120,7 +118,7 @@ export function OperatorClinicalKpiBand({
     },
     {
       id: 'somministrazioni',
-      label: 'Somministrazioni in ritardo',
+      label: 'Terapie in ritardo',
       value: administrationValue,
       spokenValue:
         somministrazioni.inCorso || somministrazioni.fallito
@@ -130,9 +128,7 @@ export function OperatorClinicalKpiBand({
         ? 'Dato non disponibile'
         : somministrazioni.inCorso
           ? 'Aggiornamento…'
-          : somministrazioni.inRitardo > 0
-            ? 'Verifica immediata'
-            : 'Terapie puntuali',
+          : `su ${somministrazioni.daFare} da fare`,
       tone: administrationTone,
       icon: <IcoPill />,
       onOpen: onOpenTherapy,
