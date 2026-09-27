@@ -29,6 +29,22 @@ test('AIImportStatus and PatientList pass the ids through to App', () => {
   const list = src('operator/PatientList.tsx');
   assert.match(
     list,
-    /onImported=\{\(patientId, moduleTabId\) => \{\s*void loadPage\(undefined, false\);\s*onImported\?\.\(patientId, moduleTabId\);/,
+    /const handleImported = \(patientId\?: string, moduleTabId\?: string\) => \{\s*void loadPage\(undefined, false\);\s*onImported\?\.\(patientId, moduleTabId\);/,
+  );
+  // sia il pulsante "Importa dimissione" sia la scelta "Nuovo paziente → Da documenti"
+  assert.equal(list.match(/onImported=\{handleImported\}/g)?.length, 2);
+});
+
+test('"Nuovo paziente" opens the chooser; each path opens the existing flow', () => {
+  const list = src('operator/PatientList.tsx');
+  assert.equal(list.match(/onClick=\{\(\) => setNewPatient\('scelta'\)\}/g)?.length, 2);
+  assert.match(
+    list,
+    /newPatient === 'scelta' && \(\s*<NewPatientChooser onClose=\{\(\) => setNewPatient\(null\)\} onChoose=\{setNewPatient\} \/>/,
+  );
+  assert.match(list, /newPatient === 'documenti' && \([\s\S]*?<DischargeImportModal/);
+  assert.match(
+    list,
+    /newPatient === 'manuale' && \([\s\S]*?<IntakeWorkspace[\s\S]*?onImported\?\.\(patientId, moduleTabId\)/,
   );
 });
