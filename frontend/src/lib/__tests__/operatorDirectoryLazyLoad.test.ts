@@ -28,7 +28,7 @@ test('operator directory reads are abortable, session-safe, cached and retryable
   assert.match(loader, /request !== operatorDirectoryRequestRef\.current/);
   assert.match(loader, /if \(!response\.ok\) throw new Error/);
   assert.match(source, /Directory operatori non disponibile\. Riprova\./);
-  assert.match(source, /Sono mostrati gli ultimi dati disponibili/);
+  assert.match(source, /Sono mostrati gli ultimi dati\s+disponibili/);
   assert.match(source, /loadOperatorDirectory\(true\)/);
 });
 

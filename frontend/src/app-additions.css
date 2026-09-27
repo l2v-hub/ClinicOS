@@ -8147,10 +8147,12 @@ textarea.form-input {
 }
 /* ── end CDT ──────────────────────────────────────────────────── */
 
-/* === 003 CLEAN NAV: CONTENT TIGHTENING === */
-.main-area-clean .page-content,
-.main-area-clean .content-panel {
-  padding-top: 8px;
+/* === HMI 1: margine del contenuto 24 px su tutti i lati, come il prototipo (da 1024 px) === */
+@media (min-width: 1024px) {
+  .main-area-clean .page-content,
+  .main-area-clean .content-panel {
+    padding: 24px;
+  }
 }
 
 .main-area-clean .page-content > *:first-child {

@@ -1,6 +1,6 @@
-import { useId } from 'react';
-import { IcoAlert, IcoArrow } from '../../icons';
-import { ADESSO_KIND_LABEL, type AdessoItem } from '../../lib/adessoQueue';
+import { useId, type ReactNode } from 'react';
+import { IcoArrow } from '../../icons';
+import type { AdessoItem } from '../../lib/adessoQueue';
 import './AdessoQueue.css';
 
 export const ADESSO_QUEUE_LIMIT = 6;
@@ -15,10 +15,17 @@ interface Props {
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   onOpenTherapy: () => void;
   onOpenConsegne: () => void;
+  onRetryTherapy?: () => void;
+  /** Scadenze di domani (servono alle terapie imminenti dopo mezzanotte e alle card). */
+  domani?: SourceState;
+  onRefresh?: () => void;
+  refreshing?: boolean;
+  /** Azione a destra del titolo (centro segnalazioni). */
+  headerAction?: ReactNode;
 }
 
-/** "Da fare subito": la vista di triage della colonna Adesso. Le card sotto restano il dettaglio.
- *  Una fonte in caricamento o in errore viene detta: la coda non si presenta mai come vuota se
+/** Card "Adesso" della schermata Turno (HMI 1): la coda di ciò che va fatto, per urgenza.
+ *  Ogni fonte in caricamento o in errore viene detta: la coda non si presenta mai come vuota se
  *  manca un pezzo. */
 export function AdessoQueue({
   items,
@@ -28,26 +35,32 @@ export function AdessoQueue({
   onSelectPaziente,
   onOpenTherapy,
   onOpenConsegne,
+  onRetryTherapy,
+  domani = 'ready',
+  onRefresh,
+  refreshing = false,
+  headerAction,
 }: Props) {
   const titleId = useId();
   const visible = items.slice(0, ADESSO_QUEUE_LIMIT);
   const rest = items.length - visible.length;
+  const urgenti = items.filter((it) => it.inRitardo).length;
   const allReady = terapie === 'ready' && consegne === 'ready' && anomalie === 'ready';
 
   return (
-    <section className="adesso-queue" aria-labelledby={titleId}>
-      <div className="section-header adesso-queue__header">
-        <h3 className="section-header__title" id={titleId}>
-          <span className="section-header__ico">
-            <IcoAlert />
-          </span>
-          Da fare subito
-          {items.length > 0 && (
-            <span className="adesso-queue__count" aria-label={`${items.length} elementi`}>
-              {items.length}
+    <section className="adesso-queue turno-card" aria-labelledby={titleId}>
+      <div className="turno-card__head">
+        <div className="turno-card__title">
+          <h2 className="turno-h2" id={titleId}>
+            Adesso
+          </h2>
+          {urgenti > 0 && (
+            <span className="turno-badge turno-badge--crit adesso-queue__count">
+              {urgenti} urgenti
             </span>
           )}
-        </h3>
+        </div>
+        {headerAction}
       </div>
 
       {terapie === 'loading' && (
@@ -58,6 +71,26 @@ export function AdessoQueue({
       {terapie === 'error' && (
         <p className="adesso-queue__notice adesso-queue__notice--error" role="alert">
           Scadenze terapia non disponibili: la coda non le include.
+          {onRetryTherapy && (
+            <button type="button" className="link-btn" onClick={onRetryTherapy}>
+              Riprova
+            </button>
+          )}
+        </p>
+      )}
+      {terapie === 'ready' && domani === 'loading' && (
+        <p className="adesso-queue__notice" role="status">
+          Caricamento delle scadenze di domani. Sono visibili quelle di oggi.
+        </p>
+      )}
+      {terapie === 'ready' && domani === 'error' && (
+        <p className="adesso-queue__notice adesso-queue__notice--error" role="alert">
+          Scadenze di domani non disponibili: la coda mostra solo oggi.
+          {onRefresh && (
+            <button type="button" className="link-btn" onClick={onRefresh}>
+              Riprova
+            </button>
+          )}
         </p>
       )}
       {consegne === 'loading' && (
@@ -85,26 +118,30 @@ export function AdessoQueue({
         <ol className="adesso-queue__list">
           {visible.map((it) => (
             <li key={it.key} className={`adesso-queue__row adesso-queue__row--${it.kind}`}>
-              <span className="adesso-queue__kind">{ADESSO_KIND_LABEL[it.kind]}</span>
+              <span className={`adesso-queue__ora${it.inRitardo ? ' is-late' : ''}`}>
+                {it.ora ?? '—'}
+              </span>
               <div className="adesso-queue__main">
-                {onSelectPaziente ? (
-                  <button
-                    type="button"
-                    className="link-btn adesso-queue__patient"
-                    onClick={() => onSelectPaziente(it.nome, it.patientId)}
-                  >
-                    {it.nome}
-                  </button>
-                ) : (
-                  <span className="adesso-queue__patient">{it.nome}</span>
-                )}
-                <span className="adesso-queue__detail" title={it.dettaglio}>
-                  {it.dettaglio}
+                <span className="adesso-queue__who">
+                  {it.luogo ? `${it.luogo} · ${it.nome}` : it.nome}
+                </span>
+                <span className="adesso-queue__what">
+                  {it.dettaglio} ·{' '}
+                  <span className={`adesso-queue__time${it.inRitardo ? ' is-late' : ''}`}>
+                    {it.tempo.charAt(0).toLowerCase() + it.tempo.slice(1)}
+                  </span>
                 </span>
               </div>
-              <span className={`adesso-queue__time${it.inRitardo ? ' is-late' : ''}`}>
-                {it.tempo}
-              </span>
+              {onSelectPaziente ? (
+                <button
+                  type="button"
+                  className={`turno-btn ${it.inRitardo ? 'turno-btn--primary' : 'turno-btn--secondary'}`}
+                  onClick={() => onSelectPaziente(it.nome, it.patientId)}
+                  aria-label={`Apri ${it.nome}: ${it.dettaglio}, ${it.tempo}`}
+                >
+                  Apri
+                </button>
+              ) : null}
             </li>
           ))}
         </ol>
@@ -116,15 +153,28 @@ export function AdessoQueue({
 
       {rest > 0 && (
         <p className="adesso-queue__more">
-          Altre {rest} in coda ·{' '}
-          <button type="button" className="link-btn" onClick={onOpenTherapy}>
-            Apri terapia <IcoArrow />
-          </button>{' '}
-          <button type="button" className="link-btn" onClick={onOpenConsegne}>
-            Vedi consegne <IcoArrow />
+          Altre {rest} in coda
+          <button type="button" className="turno-btn turno-btn--ghost" onClick={onOpenTherapy}>
+            Terapia <IcoArrow />
+          </button>
+          <button type="button" className="turno-btn turno-btn--ghost" onClick={onOpenConsegne}>
+            Consegne <IcoArrow />
           </button>
         </p>
       )}
+      <p className="adesso-queue__foot">
+        Aggiornamento automatico ogni minuto · Orari della struttura (Roma)
+        {onRefresh && (
+          <button
+            type="button"
+            className="turno-btn turno-btn--ghost"
+            onClick={onRefresh}
+            disabled={refreshing}
+          >
+            {refreshing ? 'Aggiornamento…' : 'Aggiorna'}
+          </button>
+        )}
+      </p>
     </section>
   );
 }

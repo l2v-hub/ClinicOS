@@ -164,3 +164,32 @@ test('an urgent consegna due within the hour but after midnight says "Domani"', 
   assert.equal(items[0].kind, 'consegna-imminente');
   assert.equal(items[0].tempo, `Domani alle ${ora}`);
 });
+
+test('untimed administrations: only today, "Orario da verificare", after imminent therapies', () => {
+  const items = buildAdessoQueue({
+    now,
+    scadute: [],
+    prossime: [terapia('t1', 'Verdi', 10)],
+    senzaOrario: [
+      { ...terapia('n1', 'Neri', null), data: cal.oggi },
+      { ...terapia('n2', 'Neri', null), data: cal.domani },
+    ],
+    urgenti: [],
+    anomalie: [
+      { patientId: 'a1', nome: 'Arancio', esito: { totale: 1, verificaIncompleta: false } },
+    ],
+  });
+  assert.deepEqual(
+    items.map((i) => `${i.kind}:${i.key}`),
+    [
+      'terapia-imminente:terapia:t1',
+      'terapia-senza-orario:terapia:n1',
+      'anomalia-farmaci:anomalia:a1',
+    ],
+  );
+  const noTime = items[1];
+  assert.equal(noTime.tempo, 'Orario da verificare');
+  assert.equal(noTime.ora, null);
+  assert.equal(noTime.inRitardo, false);
+  assert.equal(noTime.luogo, 'Camera 101 · Letto A');
+});

@@ -451,3 +451,63 @@
     padding-right: 10px;
   }
 }
+
+/* Forma compatta (schermata Turno, HMI 1): pulsante 48 nella card "Adesso". */
+.dashboard-notification-compact {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 0;
+  background: transparent;
+  color: #1d4fc4;
+  font: 600 16px/24px var(--font-ui);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.dashboard-notification-compact:hover {
+  background: #eaf1fe;
+}
+.dashboard-notification-compact:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+.dashboard-notification-compact svg {
+  width: 20px;
+  height: 20px;
+}
+.dashboard-notification-compact strong {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 8px;
+  display: inline-grid;
+  place-items: center;
+  font: 600 14px/20px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  background: #eaf1fe;
+  color: #1d4fc4;
+}
+.dashboard-notification-compact--alarm strong {
+  background: #fdecee;
+  color: #b42335;
+}
+.dashboard-notification-compact--warning strong {
+  background: #fdf3e2;
+  color: #8f5500;
+}
+
+/* Annuncio degli allarmi per i lettori di schermo (forma compatta): non visibile. */
+.dashboard-notification-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

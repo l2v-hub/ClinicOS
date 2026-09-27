@@ -1,42 +1,385 @@
-.operator-dashboard__patient-cta {
-  font-weight: 650;
+/* Schermata "Il mio turno" (HMI 1). Misure del prototipo: spaziature 8/16/24, card bianche
+   raggio 16 padding 24, titoli 20/28 semibold, testo 16/24, didascalie 14/20, controlli 48. */
+
+.operator-dashboard.turno {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.operator-dashboard__patient-cta > svg {
-  color: var(--blue);
+/* ── Indicatori: etichetta grigia sopra, numero grande sotto ──────────────── */
+.turno .dashboard-kpi-band {
+  gap: 16px;
+  margin: 0;
+}
+.turno .dashboard-kpi-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 0;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: none;
+  transform: none;
+}
+.turno .dashboard-kpi-card:hover {
+  border-color: var(--blue);
+  box-shadow: none;
+  transform: none;
+}
+.turno .dashboard-kpi-card__icon,
+.turno .dashboard-kpi-card__arrow {
+  display: none;
+}
+.turno .dashboard-kpi-card__label {
+  order: 1;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.turno .dashboard-kpi-card__value {
+  order: 2;
+  font: 600 28px/36px var(--font-ui);
+  letter-spacing: 0;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.turno .dashboard-kpi-card--critical .dashboard-kpi-card__value {
+  color: #b42335;
+}
+.turno .dashboard-kpi-card--attention .dashboard-kpi-card__value {
+  color: #8f5500;
+}
+/* la riga di stato resta solo quando spiega perché manca il dato */
+.turno .dashboard-kpi-card__status {
+  order: 3;
+  display: none;
+}
+.turno .dashboard-kpi-card--unknown .dashboard-kpi-card__status,
+.turno .dashboard-kpi-card[data-unavailable] .dashboard-kpi-card__status {
+  display: inline-flex;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
 }
 
-/* HMI Turno: "Adesso" e "Oggi" affiancate dal tablet in su, impilate sul telefono. */
-.od-shift {
+/* ── Griglia: Adesso (5) · lato destro (6) ─────────────────────────────── */
+.turno-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: 24px;
   align-items: start;
-  margin-top: 24px;
 }
-.od-shift__col {
+.turno-side {
   display: flex;
   flex-direction: column;
   gap: 16px;
   min-width: 0;
 }
-.od-shift__title {
+
+/* ── Card comuni ───────────────────────────────────────────────────────── */
+.turno-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.turno-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  min-height: 48px;
+}
+.turno-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.turno-h2 {
   margin: 0;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font: 600 20px/28px var(--font-ui);
+  color: var(--text);
+}
+.turno-empty {
+  margin: 0;
+  font: 400 16px/24px var(--font-ui);
   color: var(--text-muted);
 }
-/* nella colonna la spaziatura la dà il gap: la card scadenze parte allineata a "Oggi" */
-.od-shift__col > .therapy-deadlines {
-  margin-top: 0;
+
+.turno-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  font: 500 14px/20px var(--font-ui);
+  white-space: nowrap;
+  background: #f5f7fb;
+  color: var(--text-muted);
 }
-.od-shift__section-header {
-  margin-top: 8px;
+.turno-badge svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-@media (max-width: 767px) {
-  .od-shift {
+.turno-badge--crit {
+  background: #fdecee;
+  color: #b42335;
+}
+.turno-badge--warn {
+  background: #fdf3e2;
+  color: #8f5500;
+}
+.turno-badge--blue {
+  background: #eaf1fe;
+  color: #1d4fc4;
+}
+
+.turno-btn {
+  height: 48px;
+  min-width: 48px;
+  padding: 0 24px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  font: 600 16px/24px var(--font-ui);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.turno-btn svg {
+  width: 20px;
+  height: 20px;
+}
+.turno-btn--primary {
+  background: var(--blue);
+  color: #fff;
+}
+.turno-btn--primary:hover {
+  background: #2459cf;
+}
+.turno-btn--secondary {
+  background: var(--surface);
+  color: #1d4fc4;
+  border-color: #b9c4d4;
+}
+.turno-btn--secondary:hover {
+  border-color: var(--blue);
+}
+.turno-btn--ghost {
+  background: transparent;
+  color: #1d4fc4;
+  padding: 0 16px;
+}
+.turno-btn--ghost:hover {
+  background: #eaf1fe;
+}
+.turno-btn:focus-visible,
+.turno-pcard__open:focus-visible,
+.turno-appt__who:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+
+/* ── Prossimi appuntamenti ─────────────────────────────────────────────── */
+.turno-appts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.turno-appt {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 64px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+.turno-appt:first-child {
+  border-top: 0;
+}
+.turno-appt__ora {
+  width: 56px;
+  flex: none;
+  font: 600 16px/24px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.turno-appt__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.turno-appt__what {
+  font: 600 16px/24px var(--font-ui);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.turno-appt__now {
+  font-weight: 500;
+  color: #1d4fc4;
+}
+.turno-appt__who {
+  justify-self: start;
+  text-align: left;
+  padding: 0;
+  min-height: 0;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+button.turno-appt__who:hover {
+  color: #1d4fc4;
+}
+
+/* ── Card paziente ─────────────────────────────────────────────────────── */
+.turno-pgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.turno-pcard {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.turno-pcard:hover {
+  border-color: var(--blue);
+}
+.turno-pcard__top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+.turno-pcard__bed {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 12px;
+  background: #f5f7fb;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font: 600 20px/28px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  overflow: hidden;
+}
+.turno-pcard__id {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+/* Il nome apre la cartella e con ::after rende cliccabile tutta la card. */
+.turno-pcard__open {
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: left;
+  font: 600 16px/24px var(--font-ui);
+  color: var(--text);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.turno-pcard__open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+}
+.turno-pcard__sub,
+.turno-pcard__next {
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.turno-pcard__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* il chip NEWS2 resta cliccabile sopra il collegamento della card */
+.turno-pcard__news2 {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+}
+.turno-pcard__news2:empty {
+  display: none;
+}
+
+/* ── Tablet e telefono ─────────────────────────────────────────────────── */
+@media (max-width: 1023px) {
+  .turno-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+@media (max-width: 600px) {
+  .turno-pgrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .turno-card {
+    padding: 16px;
+  }
+}
+
+/* NEWS2 nella card: stessa forma dei badge del prototipo (32 px, raggio 8). */
+.turno-pcard .news2-chip {
+  height: 32px;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  font: 500 14px/20px var(--font-ui);
+}
+.turno-pcard .news2-chip:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+.turno-pcard__next.is-late {
+  color: #b42335;
+}
+.turno-empty--error {
+  color: #b42335;
+}
+.turno-appt__ora.is-late,
+.turno-appt__late {
+  color: #b42335;
+}
+.turno-appt__late {
+  font-weight: 500;
+}
+.turno-more {
+  margin: 0;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
 }
