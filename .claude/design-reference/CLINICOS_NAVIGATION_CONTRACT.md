@@ -1,3 +1,8 @@
+> **Update 2026-09-27 (HMI 1, user-approved direction):** the patient chart no longer uses L2+L3.
+> It has ONE section rail (shared `TopNav`, `top-nav--section-grid`, wraps) with every chart tab and
+> visual-only group captions ("Ingresso", "Clinica"). The L2/L3 rules below still apply to other pages;
+> QA criteria 4–5 are superseded for the chart (Diario's author filter is a content filter, not a tab).
+
 # ClinicOS Navigation Visual Contract
 
 Source: `.claude/design-reference/*.png` analyzed 2026-06-09. Reference is an

@@ -24,7 +24,12 @@ const therapyTab = readFileSync(
   'utf8',
 );
 
-test('patient record exposes a labelled two-level navigation and controlled tab panel', () => {
+test('patient record exposes ONE labelled section rail and a controlled tab panel', () => {
+  // HMI a un livello: una sola TopNav nella cartella, costruita da TAB_GROUPS, nessun livello 3.
+  assert.equal((patientDetail.match(/<TopNav\s/g) ?? []).length, 1);
+  assert.doesNotMatch(patientDetail, /variant="level3"/);
+  assert.match(patientDetail, /items=\{chartSectionItems\}/);
+  assert.match(patientDetail, /TAB_GROUPS\.flatMap<TopNavItem>/);
   assert.match(patientDetail, /ariaLabel="Aree della cartella paziente"/);
   assert.match(patientDetail, /visualLabel="Aree cartella"/);
   assert.match(patientDetail, /className="top-nav--section-grid"/);

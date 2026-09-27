@@ -1,5 +1,6 @@
-/* Canonical two-level navigation for the clinical workspace.
-   L2 selects an area of the patient record; L3 selects content inside that area. */
+/* Navigazione condivisa (un solo componente). Nella cartella paziente è una barra unica di sezioni
+   (level2 + top-nav--section-grid, con etichette di gruppo); level3 resta per le sotto-navigazioni
+   interne di altre pagine (es. Terapia Farmacologica). */
 
 .top-nav {
   display: flex;
@@ -202,8 +203,9 @@
 }
 
 .top-nav--level2 .top-nav__item.is-active .top-nav__badge {
+  /* Sfondo scuro: contrasto ≥ 4,5:1 anche per il testo piccolo del badge (WCAG AA). */
   color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  background: #143f99;
 }
 
 @media (max-width: 900px) {
@@ -251,5 +253,71 @@
   .top-nav--level2 .top-nav__item,
   .top-nav--level3 .top-nav__item {
     font-size: 13px;
+  }
+}
+
+/* Etichette e separatori di gruppo nella barra a un livello della cartella: solo visivi. */
+.top-nav__group-label {
+  align-self: center;
+  padding: 0 2px 0 10px;
+  color: var(--text-muted, #5a6b80);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.top-nav__group-label:first-child {
+  padding-left: 4px;
+}
+.top-nav__group-sep {
+  align-self: stretch;
+  width: 1px;
+  margin: 8px 4px;
+  background: var(--border, #e6ebf2);
+}
+
+/* Barra unica della cartella (primo livello + griglia): va a capo, allineata a sinistra, etichetta
+   sopra e pillola blu piena per la sezione attiva. Sul telefono una riga sola che scorre dentro la
+   barra, così la navigazione non spinge il contenuto fuori dallo schermo. */
+.top-nav--level2.top-nav--section-grid {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  row-gap: 4px;
+}
+.top-nav--level2.top-nav--section-grid .top-nav__context-label {
+  /* Sul tablet ogni riga conta: le etichette di gruppo bastano a orientarsi. */
+  display: none;
+}
+.top-nav--level2.top-nav--section-grid .top-nav__item {
+  padding: 8px 8px;
+}
+.top-nav--level2.top-nav--section-grid .top-nav__group-sep {
+  margin: 8px 2px;
+}
+.top-nav--level2.top-nav--section-grid .top-nav__group-label {
+  padding-left: 6px;
+}
+.top-nav--level2.top-nav--section-grid .top-nav__items {
+  gap: 4px 4px;
+}
+.top-nav--level2.top-nav--section-grid .top-nav__items {
+  justify-content: flex-start;
+}
+.top-nav--level2.top-nav--section-grid .top-nav__item.is-active,
+.top-nav--level2.top-nav--section-grid .top-nav__item.is-active:hover {
+  color: #fff;
+  background: #1f5bd8;
+  border-color: #1f5bd8;
+}
+@media (max-width: 600px) {
+  .top-nav--level2.top-nav--section-grid .top-nav__items {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .top-nav--level2.top-nav--section-grid .top-nav__item {
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
 }
