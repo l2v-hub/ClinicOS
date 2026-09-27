@@ -12,7 +12,6 @@ import { AppointmentForm } from '../shared/AppointmentForm';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { AgendaLegend } from '../shared/AgendaLegend';
 import { AppuntamentoActions } from '../shared/AppuntamentoActions';
-import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { TherapySlotCard } from '../shared/TherapySlotOverlay';
 import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
 import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
@@ -131,7 +130,6 @@ export function OperatorAgenda({
   const [refDate, setRefDate] = useState(new Date());
   const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
   const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);
-  const [showNewPaziente, setShowNewPaziente] = useState(false);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
@@ -629,7 +627,8 @@ export function OperatorAgenda({
             return err;
           }}
           onCancel={() => setAptForm(null)}
-          onNewPatient={() => setShowNewPaziente(true)}
+          operatorId={operatoreId}
+          operatoreNome={nomeOperatore}
         />
       )}
       {editingApt && (
@@ -645,17 +644,10 @@ export function OperatorAgenda({
             return err;
           }}
           onCancel={() => setEditingApt(null)}
-          onNewPatient={() => setShowNewPaziente(true)}
+          operatorId={operatoreId}
+          operatoreNome={nomeOperatore}
         />
       )}
-      {/* operatorRole not available in OperatorAgenda props — not passed */}
-      <IntakeWorkspace
-        open={showNewPaziente}
-        onClose={() => setShowNewPaziente(false)}
-        onCreated={() => setShowNewPaziente(false)}
-        operatoreNome={nomeOperatore}
-        operatorId={operatoreId}
-      />
       {view === 'giornaliero' && activeSlot && onConfirmTherapy && onNotAdministeredTherapy && (
         <TherapySlotModal
           slot={activeSlot}
