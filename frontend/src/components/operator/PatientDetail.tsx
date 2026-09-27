@@ -45,7 +45,7 @@ import {
   IcoClock,
 } from '../../icons';
 import { DIARIO_AUTHOR_FILTERS } from './cartella/diarioFilters';
-import { TopNav } from '../navigation/TopNav';
+import { TopNav, type TopNavItem } from '../navigation/TopNav';
 import { AvvisoAnomalieFarmaci } from './cartella/AvvisoAnomalieFarmaci';
 import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
 import PatientCompactHeader from './PatientCompactHeader';
@@ -342,11 +342,6 @@ export function PatientDetail({
   // still mounted" (e.g. search/Agnos navigation while already viewing another patient's chart —
   // always reset to the default tab, initialTab only ever targets the patient it was requested for).
   const initialTabPatientRef = useRef<string | null>(initialTab ? paziente.id : null);
-  // Ricorda l'ultimo sotto-tab visitato in ciascun gruppo (es. "Terapia Farmacologica" dentro
-  // "Clinica"): senza, tornare a un gruppo dopo averne visitato un altro riportava sempre al
-  // primo sotto-tab, perdendo il punto in cui si era — anche nella stessa sessione sullo stesso
-  // paziente. Azzerato al cambio paziente, insieme al resto dello stato di navigazione sotto.
-  const lastTabByGroup = useRef<Partial<Record<TabGroup, TabId>>>({});
 
   function switchTab(tabId: TabId) {
     if (tabId === 'medicazioni' || tabId === 'contenzioni' || tabId === 'braden')
@@ -360,29 +355,6 @@ export function PatientDetail({
       setTab(target);
       setActiveGroup(group);
     });
-    lastTabByGroup.current[group] = target;
-    onTabNavigate?.(target);
-  }
-
-  function switchGroup(groupId: TabGroup) {
-    if (groupId === 'moduli') {
-      switchTab('moduli');
-      return;
-    }
-    const group = TAB_GROUPS.find((g) => g.id === groupId);
-    if (!group) return;
-    const keepTab = group.tabs.some((t) => t.id === tab);
-    const remembered = lastTabByGroup.current[groupId];
-    const target = keepTab
-      ? tab
-      : remembered && group.tabs.some((t) => t.id === remembered)
-        ? remembered
-        : group.tabs[0].id;
-    startTransition(() => {
-      setActiveGroup(groupId);
-      if (!keepTab) setTab(target);
-    });
-    if (!keepTab) lastTabByGroup.current[groupId] = target;
     onTabNavigate?.(target);
   }
 
@@ -491,7 +463,6 @@ export function PatientDetail({
     setCameraModalBedId('');
     setShowInvioPS(false);
     setShowPrintDialog(false);
-    lastTabByGroup.current = {};
   }, [paziente.id]);
 
   // ── Computed ───────────────────────────────────────────────────────────────
@@ -805,7 +776,6 @@ export function PatientDetail({
               className="btn-secondary"
               onClick={() => {
                 setCardModal(null);
-                switchGroup('clinica');
                 switchTab('diagnosi');
               }}
             >
@@ -873,7 +843,6 @@ export function PatientDetail({
               className="btn-secondary"
               onClick={() => {
                 setCardModal(null);
-                switchGroup('clinica');
                 switchTab('terapia-farmacologica');
               }}
             >
@@ -1019,7 +988,6 @@ export function PatientDetail({
               className="btn-secondary"
               onClick={() => {
                 setCardModal(null);
-                switchGroup('clinica');
                 switchTab('parametri');
               }}
             >
@@ -1113,7 +1081,6 @@ export function PatientDetail({
               className="btn-secondary"
               onClick={() => {
                 setCardModal(null);
-                switchGroup('panoramica');
                 switchTab('consegne');
               }}
             >
@@ -2553,12 +2520,31 @@ export function PatientDetail({
     el.classList.add('tab-panel-transition');
   }, [activeGroup, tab]);
 
-  const activeGroupDefinition = TAB_GROUPS.find((group) => group.id === activeGroup);
-  const hasSectionTabs = activeGroup !== 'moduli' && (activeGroupDefinition?.tabs.length ?? 0) > 1;
-  const patientPanelLabelledBy =
-    activeGroup !== 'diario' && hasSectionTabs
-      ? `patient-secondary-${tab}`
-      : `patient-primary-${activeGroup}`;
+  // Una sola barra di sezioni: i tab di tutti i gruppi in fila, con l'etichetta del gruppo davanti
+  // al primo. Moduli resta una voce sola (catalogo); le singole scale si aprono dal catalogo.
+  const GROUP_CAPTIONS: Partial<Record<TabGroup, string>> = {
+    panoramica: 'Ingresso',
+    clinica: 'Clinica',
+  };
+  const chartSectionItems: TopNavItem[] = TAB_GROUPS.flatMap<TopNavItem>((g) =>
+    g.id === 'moduli'
+      ? [
+          {
+            key: 'moduli',
+            label: 'Moduli',
+            badge: groupBadgeSum('moduli') || undefined,
+            groupStart: true,
+          },
+        ]
+      : g.tabs.map((t, index) => ({
+          key: t.id,
+          label: t.label,
+          badge: TAB_BADGES[t.id] || undefined,
+          ...(index === 0 ? { groupStart: true, groupLabel: GROUP_CAPTIONS[g.id] } : {}),
+        })),
+  );
+  const activeSectionKey = activeGroup === 'moduli' ? 'moduli' : tab;
+  const patientPanelLabelledBy = `patient-section-${activeSectionKey}`;
 
   return (
     <div className="patient-record-view">
@@ -2614,29 +2600,25 @@ export function PatientDetail({
         ambito="terapie attive di oggi"
         etichettaAzione="Vai alla terapia"
         onAzione={() => {
-          switchGroup('clinica');
           switchTab('terapia-farmacologica');
         }}
       />
 
-      {/* L2 — Navigazione orizzontale principale della pagina */}
+      {/* HMI a un solo livello: ogni sezione della cartella è a un tocco (prima: gruppo + sezione).
+          Stesso TopNav condiviso; i gruppi restano come etichette visive, non come sottomenu. */}
       <TopNav
         variant="level2"
+        className="top-nav--section-grid"
         ariaLabel="Aree della cartella paziente"
         visualLabel="Aree cartella"
-        idPrefix="patient-primary"
+        idPrefix="patient-section"
         panelId="patient-tab-panel"
-        items={TAB_GROUPS.map((g) => ({
-          key: g.id,
-          label: g.label,
-          badge: groupBadgeSum(g.id) || undefined,
-        }))}
-        activeKey={activeGroup}
-        onChange={(id) => switchGroup(id as TabGroup)}
+        items={chartSectionItems}
+        activeKey={activeSectionKey}
+        onChange={(id) => switchTab(id as TabId)}
       />
-      {/* L3 — Sotto-navigazione contestuale del gruppo attivo */}
+      {/* Il filtro per autore del Diario è un filtro del contenuto, non una navigazione. */}
       {(() => {
-        if (activeGroup === 'moduli') return null;
         if (activeGroup === 'diario') {
           return (
             <div
@@ -2660,24 +2642,7 @@ export function PatientDetail({
             </div>
           );
         }
-        const grp = TAB_GROUPS.find((g) => g.id === activeGroup);
-        if (!grp || grp.tabs.length <= 1) return null;
-        return (
-          <TopNav
-            variant="level3"
-            className="top-nav--section-grid"
-            ariaLabel={`Sezioni di ${grp.label}`}
-            idPrefix="patient-secondary"
-            panelId="patient-tab-panel"
-            items={grp.tabs.map((t) => ({
-              key: t.id,
-              label: t.label,
-              badge: TAB_BADGES[t.id] || undefined,
-            }))}
-            activeKey={tab}
-            onChange={(id) => switchTab(id as TabId)}
-          />
-        );
+        return null;
       })()}
 
       {/* Content layout */}

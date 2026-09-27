@@ -1,10 +1,14 @@
-import { useRef, type KeyboardEvent } from 'react';
+import { Fragment, useRef, type KeyboardEvent } from 'react';
 import './TopNav.css';
 
 export interface TopNavItem {
   key: string;
   label: string;
   badge?: number;
+  /** Primo elemento di un gruppo: separatore visivo (non interattivo) prima del tab. */
+  groupStart?: boolean;
+  /** Etichetta del gruppo mostrata prima del primo elemento (es. "Clinica"); solo visiva. */
+  groupLabel?: string;
 }
 
 interface TopNavProps {
@@ -75,26 +79,34 @@ export function TopNav({
           const active = activeKey === item.key;
           const tabId = idPrefix ? `${idPrefix}-${item.key}` : undefined;
           return (
-            <button
-              key={item.key}
-              ref={(element) => {
-                tabRefs.current[index] = element;
-              }}
-              type="button"
-              role="tab"
-              id={tabId}
-              aria-selected={active}
-              aria-controls={panelId}
-              tabIndex={active ? 0 : -1}
-              className={`top-nav__item${active ? ' is-active' : ''}`}
-              onClick={() => onChange(item.key)}
-              onKeyDown={(event) => moveFocus(event, index)}
-            >
-              {item.label}
-              {(item.badge ?? 0) > 0 && (
-                <span className="top-nav__badge">{item.badge! > 99 ? '99+' : item.badge}</span>
-              )}
-            </button>
+            <Fragment key={item.key}>
+              {item.groupLabel ? (
+                <span className="top-nav__group-label" aria-hidden="true">
+                  {item.groupLabel}
+                </span>
+              ) : item.groupStart && index > 0 ? (
+                <span className="top-nav__group-sep" aria-hidden="true" />
+              ) : null}
+              <button
+                ref={(element) => {
+                  tabRefs.current[index] = element;
+                }}
+                type="button"
+                role="tab"
+                id={tabId}
+                aria-selected={active}
+                aria-controls={panelId}
+                tabIndex={active ? 0 : -1}
+                className={`top-nav__item${active ? ' is-active' : ''}`}
+                onClick={() => onChange(item.key)}
+                onKeyDown={(event) => moveFocus(event, index)}
+              >
+                {item.label}
+                {(item.badge ?? 0) > 0 && (
+                  <span className="top-nav__badge">{item.badge! > 99 ? '99+' : item.badge}</span>
+                )}
+              </button>
+            </Fragment>
           );
         })}
       </div>
