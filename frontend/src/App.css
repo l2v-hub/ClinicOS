@@ -3,7 +3,7 @@
    Stack: React 19 + Vite, pure CSS, no external UI libs
    ────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import './app-additions.css';
 @import './clinicos-restyle.css';
 @import './form-controls.css';
@@ -88,7 +88,7 @@
   --sidebar-w: 96px;
   --sidebar-w-collapsed: 60px;
   --header-h: 64px;
-  --topbar-h: 64px;
+  --topbar-h: 72px;
   --l2-h: 44px;
   --l3-h: 32px;
   --l2-font: 14px;
@@ -109,7 +109,7 @@
   --shadow-focus: 0 0 0 3px rgba(47, 107, 237, 0.18);
 
   /* Typography */
-  --font-ui: 'Public Sans', system-ui, sans-serif;
+  --font-ui: 'Inter', -apple-system, 'Segoe UI', Roboto, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --fs-sm: 12px;
   --fs-base: 14px;
@@ -160,16 +160,16 @@
   --operational-table-header-fs: 11.5px;
 }
 
-/* Softer screen surfaces; printed documents keep the original white palette. */
+/* Superfici a schermo: palette del prototipo HMI 1 (fondo #eef1f6, card bianche, bordo #e1e7f0). */
 @media screen {
   :root {
-    --bg: #e4e8ee;
-    --surface: #f8f9fb;
-    --surface-raised: #eef1f5;
-    --border: #d4dce7;
-    --divider: #e2e7ef;
-    --hover: #edf1f6;
-    --text-muted: #52647a;
+    --bg: #eef1f6;
+    --surface: #ffffff;
+    --surface-raised: #f5f7fb;
+    --border: #e1e7f0;
+    --divider: #e6ebf2;
+    --hover: #f5f7fb;
+    --text-muted: #5a6b80;
     --text-xmuted: #57697e;
   }
 }
@@ -187,7 +187,9 @@ body {
   color: var(--text);
 }
 
-/* === 003 CLEAN NAV: SIDEBAR === */
+/* === HMI 1 · GUSCIO: barra laterale (96 px) ===
+   Misure del prototipo: logo 48 su fascia 72, voci 80 × 64 (icona 24, etichetta 14/500),
+   attiva = pillola traslucida, Assistente in fondo in colore AI. */
 
 .teams-sidebar {
   position: fixed;
@@ -195,366 +197,347 @@ body {
   top: 0;
   width: var(--sidebar-w);
   height: 100vh;
-  background: var(--sidebar-bg);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, #123056, #0f1b30);
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   flex-shrink: 0;
   z-index: 100;
   overflow: hidden;
+  padding-bottom: 8px;
 }
 
 .teams-sidebar__brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 56px;
-  flex-shrink: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  place-items: center;
+  height: 72px;
+  flex: none;
 }
 
 .teams-sidebar__brand-dot {
-  width: 30px;
-  height: 30px;
-  background: #2f6bed;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--blue);
   color: #fff;
+  display: grid;
+  place-items: center;
+}
+.teams-sidebar__brand-dot svg {
+  width: 24px;
+  height: 24px;
 }
 
 .teams-sidebar__nav {
   flex: 1;
+  /* come il prototipo: 4 px fra logo e prima voce */
+  padding-top: 4px;
   display: flex;
   flex-direction: column;
-  padding: 10px 8px;
+  align-items: center;
   gap: 4px;
   overflow-y: auto;
   overflow-x: hidden;
+  width: 100%;
 }
 
 .teams-sidebar__item {
+  width: 80px;
+  height: 64px;
+  flex: none;
+  border-radius: 14px;
+  border: 0;
+  background: transparent;
+  color: #8ea3c4;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 64px;
-  cursor: pointer;
-  color: var(--sidebar-item);
-  gap: 6px;
-  border-radius: 14px;
-  font-size: 13px;
-  user-select: none;
-  transition:
-    background 0.12s,
-    color 0.12s,
-    box-shadow 0.12s;
-  padding: 0 4px;
+  gap: 2px;
+  font: 500 14px/20px var(--font-ui);
   position: relative;
-  width: 100%;
-  border: 0;
-  background: transparent;
-  font: inherit;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
 }
 
-.teams-sidebar__item:focus-visible,
-.teams-sidebar__logout:focus-visible {
-  outline: 2px solid #fff;
+.teams-sidebar__item:focus-visible {
+  outline: 3px solid #8db0ff;
   outline-offset: 2px;
 }
 
 .teams-sidebar__item:hover:not(.active) {
-  background: var(--sidebar-item-hover-bg);
-  color: var(--sidebar-item-active);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .teams-sidebar__item.active {
-  color: var(--sidebar-item-active);
-  background: var(--sidebar-item-active-bg);
-  font-weight: 500;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
 }
 
-.teams-sidebar__item.active .teams-sidebar__item-icon {
-  color: var(--sidebar-item-active);
-}
-
-.teams-sidebar__item-icon {
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+.teams-sidebar__item-icon,
 .teams-sidebar__item-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .teams-sidebar__item-label {
-  font-size: 13px;
-  letter-spacing: 0.1px;
-  line-height: 1.15;
+  font: 500 14px/20px var(--font-ui);
   text-align: center;
+  white-space: nowrap;
 }
 
 .teams-sidebar__badge {
   position: absolute;
-  top: 6px;
-  right: 8px;
-  background: #dc2626;
-  color: #fff;
+  top: 4px;
+  right: 14px;
+  min-width: 20px;
+  height: 20px;
   border-radius: 10px;
-  font-size: 9px;
-  font-weight: 600;
-  padding: 1px 4px;
-  min-width: 16px;
+  background: var(--red);
+  color: #fff;
+  font: 600 12px/20px var(--font-ui);
+  padding: 0 4px;
   text-align: center;
-  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
 }
 
 .teams-sidebar__footer {
-  padding: 8px 0 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  padding-top: 8px;
 }
 
-.teams-sidebar__avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #2f6bed;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
+.teams-sidebar__item--ai {
+  color: #cfc2ff;
 }
 
-.teams-sidebar__logout {
-  color: var(--sidebar-item);
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  background: transparent;
-}
+/* === HMI 1 · GUSCIO: intestazione (72 px) ===
+   Sinistra: indietro (48) + titolo della pagina · centro: turno e ora · destra: ricerca (48),
+   reparto, avatar (48) con menu utente. */
 
-.teams-sidebar__logout:hover {
-  color: var(--sidebar-item-active);
-  background: var(--sidebar-item-hover-bg);
-}
-
-/* === 003 CLEAN NAV: TOPBAR === */
 .compact-topbar {
   height: var(--topbar-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  gap: 24px;
+  padding: 0 24px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-  gap: 16px;
 }
 
-/* Global search trigger (left) */
-/* Freccia "indietro" globale: dice dove porta e riporta pagina, paziente e sezione precedenti. */
 .topbar-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex: 0 1 auto;
-  /* l'icona resta sempre visibile: si accorcia solo l'etichetta */
-  min-width: 42px;
-  max-width: 280px;
-  height: 42px;
-  padding: 0 14px 0 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  width: 48px;
+  height: 48px;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  margin-right: -8px;
   border-radius: 12px;
-  color: var(--blue);
-  font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 600;
+  border: 2px solid #b9c4d4;
+  background: var(--surface);
+  color: #1d4fc4;
   cursor: pointer;
-  transition:
-    border-color 0.12s,
-    box-shadow 0.12s;
 }
 .topbar-back:hover {
   border-color: var(--blue);
 }
-.topbar-back:focus-visible {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: var(--shadow-focus);
-}
-.topbar-back svg {
-  flex: none;
-}
-.topbar-back__label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.topbar-search {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  /* si restringe fino alla sola icona: senza, il testo segnaposto (min-content ≈ 367 px) spingeva
-     la barra oltre lo schermo fra 768 e 830 px e schiacciava la freccia indietro */
-  min-width: 42px;
-  overflow: hidden;
-  max-width: 520px;
-  height: 42px;
-  padding: 0 14px;
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-muted);
-  font-family: var(--font-ui);
-  cursor: pointer;
-  transition:
-    border-color 0.12s,
-    box-shadow 0.12s;
-}
-.topbar-search:hover {
-  border-color: #c9d6ea;
-}
-.topbar-search:focus-visible {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: var(--shadow-focus);
-}
-.topbar-search svg {
-  width: 18px;
-  height: 18px;
-  color: var(--text-xmuted);
-  flex-shrink: 0;
-}
-.topbar-search__ph {
-  flex: 1;
-  text-align: left;
-  font-size: 15px;
-  color: var(--text-xmuted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.topbar-search__kbd {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-xmuted);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1px 7px;
-  flex-shrink: 0;
+.topbar-back:focus-visible,
+.topbar-search:focus-visible,
+.topbar-avatar:focus-visible,
+.topbar-user-menu__logout:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
 }
 
-/* Context cluster (right) */
-.topbar-ctx {
+.topbar-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.topbar-title .page-header__titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.topbar-title .page-header__title {
+  margin: 0;
+  font: 600 20px/28px var(--font-ui);
+  color: var(--text);
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-title .page-header__subtitle {
+  margin: 0;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-clock {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
+  gap: 8px;
+  flex: none;
 }
-.topbar-shift {
+.topbar-clock__shift {
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.topbar-clock__time {
+  font: 600 16px/24px var(--font-ui);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+}
+
+.topbar-search {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 2px solid #b9c4d4;
+  background: var(--surface);
+  color: #1d4fc4;
+  cursor: pointer;
+}
+.topbar-search:hover {
+  border-color: var(--blue);
+}
+.topbar-search svg {
+  width: 24px;
+  height: 24px;
+}
+
+.topbar-status {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--emerald-bg);
-  color: var(--teal);
-  border-radius: 999px;
-  padding: 7px 14px;
-  font-size: 13px;
-  font-weight: 700;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
   white-space: nowrap;
 }
-.topbar-shift__dot {
+.topbar-status__dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
-  background: var(--emerald);
-  flex-shrink: 0;
+  border-radius: 4px;
+  background: #16a37b;
+  flex: none;
 }
-.topbar-user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+
+.topbar-user-menu {
+  position: relative;
+  flex: none;
 }
-.topbar-user__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--blue);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
+.topbar-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: 0;
+  background: #eaf1fe;
+  color: #1d4fc4;
+  display: grid;
+  place-items: center;
+  font: 600 16px/24px var(--font-ui);
+  cursor: pointer;
 }
-.topbar-user__meta {
+.topbar-user-menu__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 300;
+  min-width: 240px;
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
+  gap: 4px;
 }
-.topbar-user__name {
-  font-size: 14px;
-  font-weight: 700;
+.topbar-user-menu__who {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px;
+}
+.topbar-user-menu__name {
+  font: 600 16px/24px var(--font-ui);
   color: var(--text);
 }
-.topbar-user__role {
-  font-size: 12px;
-  color: var(--text-xmuted);
+.topbar-user-menu__role {
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.topbar-user-menu__logout {
+  height: 48px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #1d4fc4;
+  font: 600 16px/24px var(--font-ui);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  cursor: pointer;
+  text-align: left;
+}
+.topbar-user-menu__logout:hover {
+  background: #eaf1fe;
+}
+.topbar-user-menu__logout svg {
+  width: 24px;
+  height: 24px;
 }
 
-/* Tablet: il badge della scorciatoia "/" (tastiera) non si restringe e, con la ricerca stretta,
-   verrebbe tagliato a metà: sotto i 1024 px non si mostra. */
-@media (max-width: 1023px) {
-  .topbar-search__kbd {
+/* Titolo portato nell'intestazione: nel contenuto restano solo azioni e tab. */
+.page-header--in-topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.page-header--in-topbar .page-header__actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 1100px) {
+  .topbar-status {
     display: none;
   }
 }
-
 @media (max-width: 767px) {
+  .compact-topbar {
+    gap: 12px;
+    padding: 0 12px;
+  }
   .topbar-back {
-    flex: 0 0 42px;
-    max-width: 42px;
-    justify-content: center;
-    padding: 0;
+    margin-right: 0;
   }
-  .topbar-back__label {
+  .topbar-clock__shift {
     display: none;
   }
-  .topbar-search__ph,
-  .topbar-search__kbd {
-    display: none;
+  .topbar-right {
+    gap: 8px;
   }
-  .topbar-search {
-    flex: 0 0 42px;
-    max-width: 42px;
-    justify-content: center;
-    padding: 0;
-  }
-  .topbar-shift,
-  .topbar-user__meta {
+}
+@media (max-width: 420px) {
+  .topbar-clock {
     display: none;
   }
 }
@@ -4949,12 +4932,7 @@ textarea.form-input {
 }
 
 /* === 003 CLEAN NAV: RESPONSIVE === */
-/* Tablet-landscape / small laptop: narrower sidebar (≈88px) */
-@media (min-width: 1024px) and (max-width: 1180px) {
-  :root {
-    --sidebar-w: 88px;
-  }
-}
+/* HMI 1: la barra resta 96 px anche fra 1024 e 1180 px, come il prototipo (niente banda a 88). */
 @media (max-width: 1023px) {
   /* Sidebar come drawer off-canvas: resta montata ma fuori schermo, entra con l'hamburger. */
   .teams-sidebar {
@@ -5013,13 +4991,13 @@ textarea.form-input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
-  border: 1px solid var(--border);
-  border-radius: 11px;
+  border: 2px solid #b9c4d4;
+  border-radius: 12px;
   background: var(--surface);
-  color: var(--text-muted);
+  color: #1d4fc4;
   cursor: pointer;
   transition:
     background 0.12s,
