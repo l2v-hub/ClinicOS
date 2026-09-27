@@ -1,0 +1,12 @@
+✔ groups come in the fixed urgency order and each group is sorted by urgency (1.465ms)
+✔ time labels say exactly what is known (0.3681ms)
+✔ therapy rows without a verifiable time are not queued (0.1048ms)
+✔ an urgent consegna due within the hour but after midnight says "Domani" (0.1343ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 113.9108

@@ -7,6 +7,8 @@ import { useRiepilogoSomministrazioni } from './cartella/useRiepilogoSomministra
 import { DashboardNotificationCenter } from './DashboardNotificationCenter';
 import { OperatorClinicalKpiBand } from './OperatorClinicalKpiBand';
 import { DashboardTherapyDeadlines } from '../shared/DashboardTherapyDeadlines';
+import { AdessoQueue } from './AdessoQueue';
+import { buildAdessoQueue } from '../../lib/adessoQueue';
 import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
 import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
 import './OperatorDashboard.css';
@@ -55,6 +57,14 @@ export function OperatorDashboard({
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
   const somministrazioni = useRiepilogoSomministrazioni();
+  // "Da fare subito": stessi dati dei blocchi sotto, in un solo ordine di urgenza.
+  const adesso = buildAdessoQueue({
+    now: new Date(),
+    scadute: somministrazioni.scadute,
+    prossime: somministrazioni.prossime,
+    urgenti,
+    anomalie: anomalie.pazienti,
+  });
 
   // Clinical KPIs from the constant-size server aggregate.
   const critici = clinicalOverview?.critici ?? 0;
@@ -141,6 +151,19 @@ export function OperatorDashboard({
           <h2 id="od-shift-now" className="od-shift__title">
             Adesso
           </h2>
+          <AdessoQueue
+            items={adesso}
+            terapie={
+              somministrazioni.fallito ? 'error' : somministrazioni.inCorso ? 'loading' : 'ready'
+            }
+            consegne={consegneOverviewState}
+            anomalie={anomalie.fallito ? 'error' : anomalie.inCorso ? 'loading' : 'ready'}
+            onSelectPaziente={onSelectPaziente}
+            onOpenTherapy={() => onNavigate('terapie')}
+            onOpenConsegne={() =>
+              onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne')
+            }
+          />
           <DashboardTherapyDeadlines
             summary={somministrazioni}
             onOpenTherapy={() => onNavigate('terapie')}
