@@ -377,7 +377,8 @@ body {
   align-items: center;
   gap: 6px;
   flex: 0 1 auto;
-  min-width: 0;
+  /* l'icona resta sempre visibile: si accorcia solo l'etichetta */
+  min-width: 42px;
   max-width: 280px;
   height: 42px;
   padding: 0 14px 0 10px;
@@ -414,6 +415,10 @@ body {
   align-items: center;
   gap: 10px;
   flex: 1;
+  /* si restringe fino alla sola icona: senza, il testo segnaposto (min-content ≈ 367 px) spingeva
+     la barra oltre lo schermo fra 768 e 830 px e schiacciava la freccia indietro */
+  min-width: 42px;
+  overflow: hidden;
   max-width: 520px;
   height: 42px;
   padding: 0 14px;
@@ -518,6 +523,14 @@ body {
 .topbar-user__role {
   font-size: 12px;
   color: var(--text-xmuted);
+}
+
+/* Tablet: il badge della scorciatoia "/" (tastiera) non si restringe e, con la ricerca stretta,
+   verrebbe tagliato a metà: sotto i 1024 px non si mostra. */
+@media (max-width: 1023px) {
+  .topbar-search__kbd {
+    display: none;
+  }
 }
 
 @media (max-width: 767px) {
