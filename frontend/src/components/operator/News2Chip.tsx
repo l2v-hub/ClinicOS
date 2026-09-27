@@ -19,6 +19,7 @@ import {
   news2Tone,
   type News2Point,
 } from '../../lib/news2History';
+import { createPortal } from 'react-dom';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { news2Tile, vitalTiles } from '../../lib/patientVitalsOverview';
 import './News2.css';
@@ -133,20 +134,25 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
     void load();
   }
 
-  const history = open && (
-    <News2History
-      patientName={patientName}
-      state={state}
-      points={points}
-      staleness={staleness}
-      canLoadMore={!!cursor}
-      loadingMore={loadingMore}
-      loadMoreError={loadMoreError}
-      onRetry={retry}
-      onLoadMore={() => void loadMore()}
-      onClose={() => setOpen(false)}
-    />
-  );
+  // Lo storico va a livello di pagina (portal): dentro la chip resterebbe sotto le altre chip
+  // della lista o delle card, che potrebbero aprire un secondo storico sopra il primo.
+  const history =
+    open &&
+    createPortal(
+      <News2History
+        patientName={patientName}
+        state={state}
+        points={points}
+        staleness={staleness}
+        canLoadMore={!!cursor}
+        loadingMore={loadingMore}
+        loadMoreError={loadMoreError}
+        onRetry={retry}
+        onLoadMore={() => void loadMore()}
+        onClose={() => setOpen(false)}
+      />,
+      document.body,
+    );
 
   if (variant === 'overview')
     return (

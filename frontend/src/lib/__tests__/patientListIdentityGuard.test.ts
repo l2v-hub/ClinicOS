@@ -25,7 +25,10 @@ test('patient list exposes the canonical fiscal identity and never shows MRN', (
   assert.match(list, /Cerca per nome o codice fiscale…/);
   assert.match(list, /aria-label="Cerca paziente per nome o codice fiscale"/);
   assert.doesNotMatch(list, /MRN|medicalRecordNumber/);
-  assert.match(roster, /sortButton\('fiscalCode', 'Codice fiscale'\)/);
+  // HMI 1: il codice fiscale è sotto il nome ("N anni · Letto · CF"); si ordina ancora dal
+  // selettore dell'ordinamento (opzione fiscalCode di PATIENT_SORT_LABELS).
+  assert.match(roster, /\{rosterAge\(patient\)\}[\s\S]{0,120}<PatientIdentifier patient=\{patient\} \/>/);
+  assert.match(roster, /Object\.entries\(PATIENT_SORT_LABELS\)/);
   assert.match(roster, /<PatientIdentity patient=\{patient\}/);
   assert.match(roster, /<PatientIdentifier patient=\{patient\}/);
   assert.doesNotMatch(roster, /MRN|medicalRecordNumber/);
@@ -33,9 +36,11 @@ test('patient list exposes the canonical fiscal identity and never shows MRN', (
 
 test('roster has five operational columns and native accessible actions', () => {
   assert.equal((roster.match(/<th scope="col"/g) ?? []).length, 5);
-  for (const heading of ['Paziente', 'Codice fiscale', 'Ricovero', 'Segnalazioni', 'Azione']) {
+  // HMI 1: colonna NEWS2 al posto della colonna codice fiscale (che va sotto il nome).
+  for (const heading of ['Paziente', 'Ricovero', 'Segnalazioni', 'Azione']) {
     assert.match(roster, new RegExp(heading));
   }
+  assert.match(roster, /<th scope="col">NEWS2<\/th>/);
   assert.match(roster, /<caption className="sr-only">Elenco pazienti caricati<\/caption>/);
   assert.match(roster, /aria-label={`Apri cartella di \$\{patient\.firstName\}/);
   assert.match(roster, /type="button"/);
