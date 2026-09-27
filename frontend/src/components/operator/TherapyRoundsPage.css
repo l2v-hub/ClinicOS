@@ -1,0 +1,319 @@
+/* Giro terapia — HMI 1 (artifacts/hmi-parity/proto/terapia.png). */
+.giro-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.giro-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.giro-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+.giro-slots,
+.giro-filters,
+.giro-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.giro-chip {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: 400 16px/24px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.giro-chip[aria-pressed='true'] {
+  background: #eaf1fe;
+  border-color: var(--blue);
+  color: #1d4fc4;
+  font-weight: 600;
+}
+.giro-chip:focus-visible,
+.giro-btn:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+.giro-chip--small {
+  height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+.giro-progress {
+  flex: 1 1 200px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+.giro-progress__track {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: #e8edf4;
+  overflow: hidden;
+}
+.giro-progress__track i {
+  display: block;
+  height: 100%;
+  background: #16a37b;
+}
+.giro-progress__count {
+  font: 600 16px/24px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.giro-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.giro-tools .roster-order {
+  margin: 0;
+}
+.giro-note-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--amber-bg);
+  color: #7a4a00;
+}
+
+.giro-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.giro-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.giro-row > * {
+  min-width: 0;
+}
+.giro-row--done {
+  background: #f5f7fb;
+}
+.giro-row__bed {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f5f7fb;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font: 600 18px/24px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.giro-row--done .giro-row__bed {
+  background: var(--surface);
+}
+.giro-row__who,
+.giro-row__drug {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.giro-row__name {
+  font: 600 16px/24px var(--font-ui);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.giro-row__cap {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.giro-row__act {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.giro-btn {
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 12px;
+  font: 600 16px/24px var(--font-ui);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.giro-btn svg {
+  width: 20px;
+  height: 20px;
+}
+.giro-btn--primary {
+  background: var(--blue);
+  border: 2px solid var(--blue);
+  color: #fff;
+}
+.giro-btn--primary:hover:not(:disabled) {
+  background: #1d4fc4;
+  border-color: #1d4fc4;
+}
+.giro-btn--secondary {
+  background: var(--surface);
+  border: 2px solid #c9d3e1;
+  color: #1d4fc4;
+}
+.giro-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.giro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font: 600 14px/20px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.giro-badge svg {
+  width: 16px;
+  height: 16px;
+}
+.giro-badge--ok {
+  background: #e6f6ef;
+  color: #0e7a55;
+}
+.giro-badge--warn {
+  background: var(--amber-bg);
+  color: #8a5300;
+}
+.giro-badge--due {
+  background: #eaf1fe;
+  color: #1d4fc4;
+}
+.giro-row__reasons {
+  grid-column: 2 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.giro-note {
+  height: 48px;
+  max-width: 480px;
+}
+.giro-reasons__actions {
+  display: flex;
+  gap: 8px;
+}
+.giro-empty {
+  margin: 0;
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+/* Telefono: camera + paziente in alto, farmaco sotto, azioni a tutta larghezza. */
+@media (max-width: 720px) {
+  .giro-row {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 8px 12px;
+  }
+  .giro-row__drug,
+  .giro-row__act,
+  .giro-row__reasons {
+    grid-column: 1 / -1;
+  }
+  .giro-row__act > .giro-btn {
+    flex: 1;
+    padding: 0 12px;
+  }
+  .giro-row__act {
+    justify-content: stretch;
+  }
+  .giro-row__act > .giro-badge {
+    margin-right: auto;
+  }
+}
+
+.giro-tools__right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.giro-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.giro-date label {
+  margin: 0;
+}
+.giro-date__input {
+  height: 40px;
+  width: auto;
+}
+.giro-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.giro-icon-btn:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+.giro-icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+.giro-chip--small[aria-expanded='true'] {
+  border-color: var(--blue);
+  color: #1d4fc4;
+}
+.giro-row:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}

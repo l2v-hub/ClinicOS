@@ -8,6 +8,7 @@ import type {
 } from '../../types';
 import { patientIdentifier, patientIdentityName } from '../../lib/patientIdentity';
 import { PatientIdentity } from '../shared/PatientIdentity';
+import { MOTIVI } from '../../lib/therapyGiro';
 import './TherapySlotModal.css';
 
 interface Props {
@@ -24,15 +25,6 @@ interface Props {
   onConfirm?: (info: TherapyActionInfo) => void;
   onNotAdministered?: (info: TherapyActionInfo, motivo: MotivoNonErogazione, note: string) => void;
 }
-
-const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
-  { value: 'rifiutata_paziente', label: 'Rifiutata dal paziente' },
-  { value: 'paziente_assente', label: 'Paziente assente' },
-  { value: 'sospesa_medico', label: 'Sospesa dal medico' },
-  { value: 'farmaco_non_disponibile', label: 'Farmaco non disponibile' },
-  { value: 'impossibilita_clinica', label: 'Impossibilità clinica' },
-  { value: 'altro', label: 'Altro' },
-];
 
 type FiltroStato = 'tutte' | TherapyAdministration['status'];
 
