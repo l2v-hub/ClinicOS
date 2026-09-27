@@ -16,6 +16,7 @@ import { TherapySlotCard } from '../shared/TherapySlotOverlay';
 import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
 import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
 import { PageHeader } from '../shared/PageHeader';
+import './OperatorAgendaHmi.css';
 import { TherapySlotModal } from './TherapySlotModal';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
@@ -211,6 +212,8 @@ export function OperatorAgenda({
   }
 
   const todayStr = isoDate(refDate);
+  const isToday = todayStr === isoDate(new Date());
+  const agendaTitle = view === 'giornaliero' && isToday ? 'Agenda di oggi' : 'Agenda';
   const todayApts = useMemo(
     () =>
       appuntamenti
@@ -256,16 +259,39 @@ export function OperatorAgenda({
     for (const a of todayApts) map.set(a.ora, a);
     return map;
   }, [todayApts]);
+  // "Nuovo appuntamento": prima fascia libera del giorno (oggi: non prima dell'ora attuale).
+  // Prima fascia libera non ancora iniziata (arrotondata per eccesso); nessuna nei giorni passati.
+  function firstFreeFrom(now: Date): string | null {
+    if (todayStr < isoDate(now)) return null;
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    return (
+      TIME_SLOTS.find((ora) => {
+        if (todayAptByOra.has(ora)) return false;
+        if (todayStr > isoDate(now)) return true;
+        const [h, m] = ora.split(':').map(Number);
+        return h * 60 + m >= minutes;
+      }) ?? null
+    );
+  }
+  const firstFreeSlot = firstFreeFrom(new Date());
+  const isPastDay = todayStr < isoDate(new Date());
+  const newAptHint = firstFreeSlot
+    ? undefined
+    : isPastDay
+      ? 'Giorno passato: nessun nuovo appuntamento'
+      : isToday
+        ? 'Nessuna fascia libera nelle ore rimanenti di oggi'
+        : 'Nessuna fascia libera in questa giornata';
   // Extract activeSlot OUTSIDE JSX — avoids React Compiler IIFE caching bug
   const activeSlot = selectedTherapySlotId
     ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)
     : null;
 
   return (
-    <div className="agt-view">
+    <div className="agt-view agt-view--hmi">
       <PageHeader
         breadcrumb={[{ label: 'ClinicOS' }, { label: 'Agenda' }]}
-        title="Agenda operatore"
+        title={agendaTitle}
         subtitle={
           <span className="agt-page-subtitle">
             <span className="agt-op-chip">
@@ -276,6 +302,14 @@ export function OperatorAgenda({
               ·
             </span>
             <span className="agt-header__date">{titleLabel()}</span>
+            {view === 'giornaliero' && (
+              <>
+                <span className="agt-page-subtitle__separator" aria-hidden="true">
+                  ·
+                </span>
+                <span>fasce da 30 minuti</span>
+              </>
+            )}
           </span>
         }
         actions={
@@ -372,109 +406,135 @@ export function OperatorAgenda({
 
       {/* ── DAILY VIEW ── */}
       {!loadingAppuntamenti && !appointmentLoadError && view === 'giornaliero' && (
-        <div className="agt-day-wrap">
-          {TIME_SLOTS.map((ora) => {
-            const tSlot = therapySlotsMap.get(ora);
-            // La fascia resta "occupata" anche se il filtro nasconde l'appuntamento: solo
-            // uno slot davvero libero puo' aprire il form di creazione.
-            const slotApt = todayAptByOra.get(ora);
-            const apt = slotApt && matchStato(slotApt, filtroStato) ? slotApt : undefined;
-            const isHour = ora.endsWith(':00');
-            const isSelected = apt?.id === selectedAptId;
+        <section className="agt-day-card" aria-label={`Agenda del ${fmtDateLong(refDate)}`}>
+          <div className="agt-day-card__head">
+            <div className="agt-day-card__heading">
+              <h2 className="agt-day-card__title">{fmtDateLong(refDate)}</h2>
+              <span className="agt-day-card__op">{nomeOperatore}</span>
+            </div>
+            <button
+              type="button"
+              className="agt-new-btn"
+              disabled={!firstFreeSlot}
+              title={newAptHint}
+              onClick={() => {
+                // Ricalcolata al clic: la pagina può restare aperta a lungo.
+                const ora = firstFreeFrom(new Date());
+                if (ora) setAptForm({ data: todayStr, ora });
+              }}
+            >
+              <IcoCalendar />
+              Nuovo appuntamento
+            </button>
+          </div>
+          <div className="agt-day-wrap">
+            {TIME_SLOTS.map((ora) => {
+              const tSlot = therapySlotsMap.get(ora);
+              // La fascia resta "occupata" anche se il filtro nasconde l'appuntamento: solo
+              // uno slot davvero libero puo' aprire il form di creazione.
+              const slotApt = todayAptByOra.get(ora);
+              const apt = slotApt && matchStato(slotApt, filtroStato) ? slotApt : undefined;
+              const isHour = ora.endsWith(':00');
+              const isSelected = apt?.id === selectedAptId;
 
-            return (
-              <div key={ora}>
-                {/* Therapy slot card */}
-                {tSlot && (
-                  <TherapySlotCard
-                    slot={tSlot}
-                    onClick={() => setSelectedTherapySlotId(tSlot.id)}
-                  />
-                )}
-
-                {/* Regular time slot */}
-                <div
-                  className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : ' agt-slot--free'}`}
-                  role={!slotApt ? 'button' : undefined}
-                  tabIndex={!slotApt ? 0 : undefined}
-                  aria-label={!slotApt ? `Crea appuntamento alle ${ora}` : undefined}
-                  onClick={() => {
-                    if (apt) setSelectedAptId(isSelected ? null : apt.id);
-                    else if (!slotApt) setAptForm({ data: todayStr, ora });
-                  }}
-                  onKeyDown={(event) => {
-                    if (!slotApt && (event.key === 'Enter' || event.key === ' ')) {
-                      event.preventDefault();
-                      setAptForm({ data: todayStr, ora });
-                    }
-                  }}
-                >
-                  <span className="agt-slot__time">{isHour ? ora : ''}</span>
-                  {apt ? (
-                    <div
-                      className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}
-                    >
-                      <div className="agt-apt-card__row">
-                        {onSelectPaziente && apt.pazienteNome ? (
-                          <button
-                            className="link-btn agt-apt-card__patient"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onSelectPaziente(apt.pazienteNome!, apt.pazienteId ?? undefined);
-                            }}
-                          >
-                            {apt.pazienteNome}
-                          </button>
-                        ) : (
-                          <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
-                        )}
-                        <div className="agt-apt-card__badges">
-                          {apt.priorita === 'urgente' && (
-                            <span className="agt-badge agt-badge--urgent">Urgente</span>
-                          )}
-                          <span className={`agt-badge agt-badge--${apt.stato}`}>
-                            {STATO_LABEL[apt.stato]}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="agt-apt-card__meta">
-                        <span>{TIPO_LABEL[apt.tipoIntervento]}</span>
-                        <span className="agt-meta-sep">·</span>
-                        <span>{apt.durata ?? 30} min</span>
-                      </div>
-                      {apt.note && isSelected && <p className="agt-apt-card__note">{apt.note}</p>}
-                      {isSelected && (
-                        <AppuntamentoActions
-                          apt={apt}
-                          confirmDeleteId={confirmDeleteId}
-                          onEdit={setEditingApt}
-                          onAskDelete={setConfirmDeleteId}
-                          onDelete={onDeleteAppuntamento}
-                        />
-                      )}
-                    </div>
-                  ) : slotApt ? null : (
-                    <div className="agt-free-slot">
-                      <span className="agt-free-slot__plus">
-                        <IcoPlus />
-                      </span>
-                      <span className="agt-free-slot__label">Disponibile</span>
-                    </div>
+              return (
+                <div key={ora}>
+                  {/* Therapy slot card */}
+                  {tSlot && (
+                    <TherapySlotCard
+                      slot={tSlot}
+                      onClick={() => setSelectedTherapySlotId(tSlot.id)}
+                    />
                   )}
-                </div>
-              </div>
-            );
-          })}
 
-          {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
-          {therapySlots
-            ?.filter((ts) => !TIME_SLOTS.includes(ts.ora))
-            .map((ts) => (
-              <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
-                <TherapySlotCard slot={ts} onClick={() => setSelectedTherapySlotId(ts.id)} />
-              </div>
-            ))}
-        </div>
+                  {/* Regular time slot */}
+                  <div
+                    className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : ' agt-slot--free'}`}
+                    role={!slotApt ? 'button' : undefined}
+                    tabIndex={!slotApt ? 0 : undefined}
+                    aria-label={!slotApt ? `Crea appuntamento alle ${ora}` : undefined}
+                    onClick={() => {
+                      if (apt) setSelectedAptId(isSelected ? null : apt.id);
+                      else if (!slotApt) setAptForm({ data: todayStr, ora });
+                    }}
+                    onKeyDown={(event) => {
+                      if (!slotApt && (event.key === 'Enter' || event.key === ' ')) {
+                        event.preventDefault();
+                        setAptForm({ data: todayStr, ora });
+                      }
+                    }}
+                  >
+                    <span className="agt-slot__time">{ora}</span>
+                    {apt ? (
+                      <div
+                        className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}
+                      >
+                        <div className="agt-apt-card__row">
+                          <span className="agt-apt-card__title">
+                            {TIPO_LABEL[apt.tipoIntervento] ?? apt.tipoIntervento}
+                          </span>
+                          <span className="agt-apt-card__detail">
+                            {onSelectPaziente && apt.pazienteNome ? (
+                              <button
+                                className="link-btn agt-apt-card__patient"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onSelectPaziente(apt.pazienteNome!, apt.pazienteId ?? undefined);
+                                }}
+                              >
+                                {apt.pazienteNome}
+                              </button>
+                            ) : (
+                              <span className="agt-apt-card__patient">
+                                {apt.pazienteNome ?? '—'}
+                              </span>
+                            )}
+                            <span className="agt-meta-sep">·</span>
+                            <span>{apt.durata ?? 30} min</span>
+                          </span>
+                          <div className="agt-apt-card__badges">
+                            {apt.priorita === 'urgente' && (
+                              <span className="agt-badge agt-badge--urgent">Urgente</span>
+                            )}
+                            <span className={`agt-badge agt-badge--${apt.stato}`}>
+                              {STATO_LABEL[apt.stato]}
+                            </span>
+                          </div>
+                        </div>
+                        {apt.note && isSelected && <p className="agt-apt-card__note">{apt.note}</p>}
+                        {isSelected && (
+                          <AppuntamentoActions
+                            apt={apt}
+                            confirmDeleteId={confirmDeleteId}
+                            onEdit={setEditingApt}
+                            onAskDelete={setConfirmDeleteId}
+                            onDelete={onDeleteAppuntamento}
+                          />
+                        )}
+                      </div>
+                    ) : slotApt ? null : (
+                      <div className="agt-free-slot">
+                        <span className="agt-free-slot__plus">
+                          <IcoPlus />
+                        </span>
+                        <span className="agt-free-slot__label">Disponibile</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
+            {therapySlots
+              ?.filter((ts) => !TIME_SLOTS.includes(ts.ora))
+              .map((ts) => (
+                <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
+                  <TherapySlotCard slot={ts} onClick={() => setSelectedTherapySlotId(ts.id)} />
+                </div>
+              ))}
+          </div>
+        </section>
       )}
 
       {/* ── WEEKLY VIEW ── */}
