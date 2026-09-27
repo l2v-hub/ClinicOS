@@ -10,6 +10,7 @@
 // AnamnesisEditor (stesso editor dell'intake).
 import type { AssessmentType } from '../../lib/assessments/assessmentTypes';
 export type TabId =
+  | 'panoramica'
   | 'moduli'
   | 'riepilogo'
   | 'profilo'
@@ -97,9 +98,11 @@ export const TAB_GROUPS: TabGroupDef[] = [
   },
 ];
 
-export const assessmentPatientTab = (type: AssessmentType): TabId => type === 'gds15' ? 'gds' : type;
+export const assessmentPatientTab = (type: AssessmentType): TabId =>
+  type === 'gds15' ? 'gds' : type;
 
 export function tabLabel(id: TabId): string | undefined {
+  if (id === 'panoramica') return 'Panoramica';
   if (id === 'moduli') return 'Moduli';
   if (id === 'sezioni-narrative') return 'Sezioni cliniche';
   id = resolvePatientTab(id);
@@ -112,7 +115,8 @@ export function tabLabel(id: TabId): string | undefined {
 
 /** Preserve existing dashboard/Agnos destinations after reorganizing the chart. */
 export function resolvePatientTab(id?: TabId): TabId {
-  if (!id || id === 'riepilogo') return 'profilo';
+  // HMI 1: la cartella si apre sulla Panoramica (parametri, NEWS2, diario), come il prototipo.
+  if (!id || id === 'riepilogo') return 'panoramica';
   return id === 'sezioni-narrative' ? 'diagnosi' : id;
 }
 
@@ -120,4 +124,59 @@ export function patientTabGroup(id?: TabId): TabGroup {
   if (id === 'moduli') return 'moduli';
   const tab = resolvePatientTab(id);
   return TAB_GROUPS.find((group) => group.tabs.some((item) => item.id === tab))?.id ?? 'panoramica';
+}
+
+// ── HMI 1: le 8 sezioni della cartella (una sola fila di chip, come il prototipo) ──────────────
+// Ogni sezione mostra insieme i suoi contenuti; i TabId restano le destinazioni dei link diretti
+// (assistente, rientro dopo l'intake, moduli), che aprono la sezione che li contiene.
+
+export type ChartSection =
+  | 'panoramica'
+  | 'ingresso'
+  | 'clinica'
+  | 'terapia'
+  | 'parametri'
+  | 'moduli'
+  | 'documenti'
+  | 'dimissione';
+
+export interface ChartSectionDef {
+  id: ChartSection;
+  label: string;
+  /** Contenuti mostrati insieme nella sezione, nell'ordine. */
+  tabs: TabId[];
+}
+
+const MODULE_TABS: TabId[] = [
+  'moduli',
+  'medicazioni',
+  'contenzioni',
+  'braden',
+  'tinetti',
+  'mna',
+  'gds',
+  'nrs',
+  'painad',
+  'postural_transfers',
+];
+
+export const CHART_SECTIONS: ChartSectionDef[] = [
+  { id: 'panoramica', label: 'Panoramica', tabs: ['panoramica', 'diario'] },
+  { id: 'ingresso', label: 'Dati di ingresso', tabs: ['profilo', 'contatti', 'presa-in-carico'] },
+  {
+    id: 'clinica',
+    label: 'Clinica',
+    tabs: ['diagnosi', 'esami-consulenze', 'note', 'consegne'],
+  },
+  { id: 'terapia', label: 'Terapia', tabs: ['terapia-farmacologica'] },
+  { id: 'parametri', label: 'Parametri', tabs: ['parametri'] },
+  { id: 'moduli', label: 'Moduli', tabs: MODULE_TABS },
+  { id: 'documenti', label: 'Documenti', tabs: ['documenti'] },
+  { id: 'dimissione', label: 'Dimissione', tabs: ['dimissione'] },
+];
+
+/** La sezione che contiene un tab (i link diretti aprono questa). */
+export function chartSectionOf(id?: TabId): ChartSection {
+  const tab = resolvePatientTab(id);
+  return CHART_SECTIONS.find((section) => section.tabs.includes(tab))?.id ?? 'panoramica';
 }

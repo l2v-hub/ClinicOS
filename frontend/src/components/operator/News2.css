@@ -259,3 +259,103 @@
   background: var(--amber-bg);
   color: var(--amber);
 }
+
+/* ── Panoramica (HMI 1): tessere dei parametri e del NEWS2, come il prototipo ── */
+.vitals {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+.vt {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+}
+.vt--warn {
+  background: #fdf3e2;
+  border-color: transparent;
+}
+.vt--crit {
+  background: #fdecee;
+  border-color: transparent;
+}
+.vt__label {
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.vt__value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font: 600 28px/36px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.vt__value small {
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.vt--warn .vt__value {
+  color: #8f5500;
+}
+.vt--crit .vt__value {
+  color: #b42335;
+}
+.vt__value--muted {
+  font: 600 20px/28px var(--font-ui);
+  color: var(--text-muted);
+}
+.vt__trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.vt__trend svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vt--news2 {
+  cursor: pointer;
+}
+.vt--news2:hover {
+  border-color: var(--blue);
+}
+.vt--news2:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+.vitals-note {
+  margin: 0;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.vitals-note--error {
+  color: #b42335;
+}
+@media (max-width: 1100px) {
+  .vitals {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .vitals {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
