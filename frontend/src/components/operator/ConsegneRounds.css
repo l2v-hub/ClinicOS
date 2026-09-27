@@ -173,22 +173,7 @@
 .handover-workspace__tabs {
   margin-block: 0 16px;
 }
-.handover-workspace .ho-chip {
-  height: 48px;
-  padding: 0 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font: 400 16px/24px var(--font-ui);
-  cursor: pointer;
-}
-.handover-workspace .ho-chip[aria-pressed='true'] {
-  background: #eaf1fe;
-  border-color: var(--blue);
-  color: #1d4fc4;
-  font-weight: 600;
-}
+
 .handover-rounds__layout {
   grid-template-columns: 304px minmax(0, 1fr);
   gap: 24px;
@@ -223,16 +208,7 @@
 .handover-rounds__list .handover-rounds__filters input {
   height: 48px;
 }
-.ho-link {
-  align-self: flex-start;
-  border: 0;
-  background: none;
-  padding: 0 4px;
-  min-height: 48px;
-  color: #1d4fc4;
-  font: 600 16px/24px var(--font-ui);
-  cursor: pointer;
-}
+
 .handover-rounds__roster {
   gap: 8px;
 }
@@ -338,27 +314,7 @@
   margin-right: auto;
   min-height: 48px;
 }
-.ho-btn {
-  height: 48px;
-  padding: 0 24px;
-  border-radius: 12px;
-  font: 600 16px/24px var(--font-ui);
-  cursor: pointer;
-}
-.ho-btn--primary {
-  background: var(--blue);
-  border: 2px solid var(--blue);
-  color: #fff;
-}
-.ho-btn--secondary {
-  background: var(--surface);
-  border: 2px solid #c9d3e1;
-  color: #1d4fc4;
-}
-.ho-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+
 @media (max-width: 1023px) {
   .handover-rounds__layout {
     grid-template-columns: 260px minmax(0, 1fr);
@@ -400,7 +356,8 @@
 .ho-who .patient-identity__name {
   font: 600 16px/24px var(--font-ui);
 }
-.ho-who :is(.patient-identity__location, .patient-identity__context, .patient-identity__incomplete) {
+.ho-who
+  :is(.patient-identity__location, .patient-identity__context, .patient-identity__incomplete) {
   font-size: 13px;
   line-height: 18px;
 }

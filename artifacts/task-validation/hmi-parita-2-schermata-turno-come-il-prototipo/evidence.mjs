@@ -113,7 +113,7 @@ const browser = await chromium.launch();
         who: row.querySelector('.adesso-queue__who')?.textContent,
         what: row.querySelector('.adesso-queue__what')?.textContent,
         btn: row.querySelector('button')?.textContent,
-        primary: row.querySelector('button')?.classList.contains('turno-btn--primary'),
+        primary: row.querySelector('button')?.classList.contains('ds-btn--primary'),
         btnH: Math.round(row.querySelector('button')?.getBoundingClientRect().height ?? 0),
       })),
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -205,7 +205,7 @@ const browser = await chromium.launch();
   await page.screenshot({ path: `${DIR}/screenshots/turno-1180.png` });
   await card.getByRole('button', { name: `Apri cartella di ${nome}` }).click();
   await page.waitForTimeout(1500);
-  const opened = await page.locator('.patient-compact-header', { hasText: nome }).count();
+  const opened = await page.locator('.compact-topbar .topbar-title', { hasText: nome }).count();
   check('AC3 la card apre la cartella del paziente giusto', opened > 0, nome);
   await page.close();
 }

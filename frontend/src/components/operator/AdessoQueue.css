@@ -79,7 +79,7 @@
   .adesso-queue__row {
     grid-template-columns: 56px minmax(0, 1fr);
   }
-  .adesso-queue__row .turno-btn {
+  .adesso-queue__row .ds-btn {
     grid-column: 2;
     justify-self: start;
   }
@@ -89,7 +89,7 @@
     grid-template-columns: 48px minmax(0, 1fr);
     gap: 8px 12px;
   }
-  .adesso-queue__row .turno-btn {
+  .adesso-queue__row .ds-btn {
     grid-column: 2;
     justify-self: start;
   }

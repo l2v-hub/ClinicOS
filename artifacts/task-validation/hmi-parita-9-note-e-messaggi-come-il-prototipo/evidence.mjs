@@ -46,7 +46,7 @@ const state = (page) =>
   page.evaluate(() => ({
     title: document.querySelector('.topbar-title')?.textContent ?? '',
     cardTitle: document.querySelector('.nm-card__title')?.textContent ?? '',
-    newBtnH: Math.round(document.querySelector('.nm-new-btn')?.getBoundingClientRect().height ?? 0),
+    newBtnH: Math.round(document.querySelector('.nm-card__head .ds-btn--primary')?.getBoundingClientRect().height ?? 0),
     rows: [...document.querySelectorAll('.nm-row')].map((r) => ({
       avatar: r.querySelector('.nm-avatar')?.textContent,
       unread: !!r.querySelector('.nm-dot'),
@@ -153,7 +153,7 @@ const state = (page) =>
   await page.waitForTimeout(2000);
   const r = await page.evaluate(() => ({
     avatars: [...document.querySelectorAll('.nm-avatar')].slice(0, 4).map((a) => a.textContent),
-    label: document.querySelector('.nm-icon-btn')?.getAttribute('aria-label'),
+    label: document.querySelector('.nm-row .ds-icon-btn')?.getAttribute('aria-label'),
   }));
   check('QA1 iniziali: "(Sistema)"→S, "Dr.Rossi"→R, "Dr.ssa Francesca Neri"→FN, vuoto→?', JSON.stringify(r.avatars) === JSON.stringify(['S', 'R', 'FN', '?']), JSON.stringify(r.avatars));
   check('QA1 azioni con il contesto della nota', /^Segna come risolta: nota di .+ delle /.test(r.label ?? ''), r.label ?? '');

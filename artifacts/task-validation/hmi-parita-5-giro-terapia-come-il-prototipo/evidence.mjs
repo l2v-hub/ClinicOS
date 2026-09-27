@@ -134,7 +134,7 @@ async function openGiro(width, { role = 'Operatore', failConfirm = false, partia
 const snapshot = (page) =>
   page.evaluate(() => ({
     title: document.querySelector('.topbar-title')?.textContent ?? '',
-    chips: [...document.querySelectorAll('.giro-chip--slot')].map((c) => ({
+    chips: [...document.querySelectorAll('.giro-slot')].map((c) => ({
       text: c.textContent.trim(),
       pressed: c.getAttribute('aria-pressed'),
       h: Math.round(c.getBoundingClientRect().height),

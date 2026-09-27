@@ -59,7 +59,7 @@ export function AvvisoAnomalieFarmaci({
         )}
       </div>
       {etichettaAzione && onAzione && (
-        <button type="button" className="avviso-anomalie__azione" onClick={onAzione}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={onAzione}>
           {etichettaAzione}
         </button>
       )}

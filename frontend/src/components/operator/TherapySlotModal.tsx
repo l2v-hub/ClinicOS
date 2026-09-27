@@ -147,7 +147,9 @@ export function TherapySlotModal({
             {FILTRI.map((f) => (
               <button
                 key={f.key}
-                className={`filter-chip${filtroStato === f.key ? ' active' : ''}`}
+                type="button"
+                className="ds-chip"
+                aria-pressed={filtroStato === f.key}
                 onClick={() => setFiltroStato(f.key)}
               >
                 {f.label}

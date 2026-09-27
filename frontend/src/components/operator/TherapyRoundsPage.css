@@ -27,36 +27,7 @@
   flex-wrap: wrap;
   gap: 8px;
 }
-.giro-chip {
-  height: 48px;
-  padding: 0 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font: 400 16px/24px var(--font-ui);
-  font-variant-numeric: tabular-nums;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.giro-chip[aria-pressed='true'] {
-  background: #eaf1fe;
-  border-color: var(--blue);
-  color: #1d4fc4;
-  font-weight: 600;
-}
-.giro-chip:focus-visible,
-.giro-btn:focus-visible {
-  outline: 3px solid #245bb5;
-  outline-offset: 2px;
-}
-.giro-chip--small {
-  height: 40px;
-  padding: 0 12px;
-  font-size: 14px;
-}
+
 .giro-progress {
   flex: 1 1 200px;
   display: flex;
@@ -165,40 +136,7 @@
   gap: 8px;
   justify-content: flex-end;
 }
-.giro-btn {
-  height: 48px;
-  padding: 0 24px;
-  border-radius: 12px;
-  font: 600 16px/24px var(--font-ui);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.giro-btn svg {
-  width: 20px;
-  height: 20px;
-}
-.giro-btn--primary {
-  background: var(--blue);
-  border: 2px solid var(--blue);
-  color: #fff;
-}
-.giro-btn--primary:hover:not(:disabled) {
-  background: #1d4fc4;
-  border-color: #1d4fc4;
-}
-.giro-btn--secondary {
-  background: var(--surface);
-  border: 2px solid #c9d3e1;
-  color: #1d4fc4;
-}
-.giro-btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
+
 .giro-badge {
   display: inline-flex;
   align-items: center;
@@ -259,10 +197,7 @@
   .giro-row__reasons {
     grid-column: 1 / -1;
   }
-  .giro-row__act > .giro-btn {
-    flex: 1;
-    padding: 0 12px;
-  }
+
   .giro-row__act {
     justify-content: stretch;
   }
@@ -278,42 +213,18 @@
   gap: 8px;
   margin-left: auto;
 }
-.giro-date {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.giro-date label {
-  margin: 0;
-}
-.giro-date__input {
-  height: 40px;
-  width: auto;
-}
-.giro-icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-}
-.giro-icon-btn:focus-visible {
-  outline: 3px solid #245bb5;
-  outline-offset: 2px;
-}
-.giro-icon-btn svg {
-  width: 18px;
-  height: 18px;
-}
-.giro-chip--small[aria-expanded='true'] {
-  border-color: var(--blue);
-  color: #1d4fc4;
-}
+
 .giro-row:focus-visible {
   outline: 3px solid #245bb5;
   outline-offset: 2px;
+}
+
+/* Contatori delle fasce allineati: cifre tabellari (solo tipografia numerica, non l'aspetto). */
+.giro-slot {
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 720px) {
+  .giro-row__act > .ds-btn {
+    flex: 1;
+  }
 }

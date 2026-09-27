@@ -124,17 +124,21 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
         {isModified && !editing && <span className="narrative-modified">Modificata</span>}
         <span className="narrative-section__actions">
           {onCompareSource && !editing && (
-            <button type="button" className="srev-chip" onClick={onCompareSource}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={onCompareSource}>
               Confronta con il documento
             </button>
           )}
           {src && !editing && (
-            <button type="button" className="srev-chip" onClick={() => setShowSource((s) => !s)}>
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              onClick={() => setShowSource((s) => !s)}
+            >
               {showSource ? 'Nascondi fonte' : 'Visualizza fonte'}
             </button>
           )}
           {editable && !editing && !isEmpty && (
-            <button type="button" className="srev-chip" onClick={startEdit}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={startEdit}>
               Modifica
             </button>
           )}

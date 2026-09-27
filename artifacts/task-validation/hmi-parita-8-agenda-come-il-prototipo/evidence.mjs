@@ -27,7 +27,7 @@ const state = (page) =>
     title: document.querySelector('.topbar-title')?.textContent ?? '',
     cardTitle: document.querySelector('.agt-day-card__title')?.textContent ?? '',
     newBtn: (() => {
-      const b = document.querySelector('.agt-new-btn');
+      const b = document.querySelector('.agt-day-card .ds-btn--primary');
       return b ? { h: Math.round(b.getBoundingClientRect().height), disabled: b.disabled } : null;
     })(),
     times: [...document.querySelectorAll('.agt-view--hmi .agt-slot__time')].map(
@@ -202,7 +202,7 @@ const state = (page) =>
   const page = await openAgenda(1180);
   await page.getByRole('button', { name: 'Intervallo precedente' }).click();
   await page.waitForTimeout(1000);
-  const b = await page.evaluate(() => { const x = document.querySelector('.agt-new-btn'); return { disabled: x?.disabled, title: x?.title }; });
+  const b = await page.evaluate(() => { const x = document.querySelector('.agt-day-card .ds-btn--primary'); return { disabled: x?.disabled, title: x?.title }; });
   check('QA1 giorno passato: "Nuovo appuntamento" disabilitato con spiegazione', b.disabled === true && /Giorno passato/.test(b.title ?? ''), JSON.stringify(b));
   await page.close();
 }

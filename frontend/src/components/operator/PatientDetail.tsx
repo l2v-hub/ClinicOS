@@ -2638,7 +2638,7 @@ export function PatientDetail({
         <div className="chart-sections__actions">
           <button
             type="button"
-            className="chart-action"
+            className="ds-btn ds-btn--secondary ds-btn--collapsible"
             onClick={() => setShowPrintDialog(true)}
             title="Stampa la scheda"
             aria-label="Stampa la scheda"
@@ -2646,11 +2646,11 @@ export function PatientDetail({
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M7 9V3h10v6M3 9h18v8H3zM7 14h10v7H7z" />
             </svg>
-            <span className="chart-action__label">Stampa</span>
+            <span className="ds-btn__label">Stampa</span>
           </button>
           <button
             type="button"
-            className="chart-action"
+            className="ds-btn ds-btn--secondary ds-btn--collapsible"
             onClick={() => setShowInvioPS(true)}
             title="Invio in Pronto Soccorso"
             aria-label="Invio in Pronto Soccorso"
@@ -2660,7 +2660,7 @@ export function PatientDetail({
               <circle cx="7" cy="17.5" r="2" />
               <circle cx="17" cy="17.5" r="2" />
             </svg>
-            <span className="chart-action__label">Invio in PS</span>
+            <span className="ds-btn__label">Invio in PS</span>
           </button>
         </div>
       </div>

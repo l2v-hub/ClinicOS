@@ -27,7 +27,7 @@ export function TurnoAppointments({
         <h2 className="turno-h2" id={titleId}>
           Prossimi appuntamenti
         </h2>
-        <button type="button" className="turno-btn turno-btn--ghost" onClick={onOpenAgenda}>
+        <button type="button" className="ds-link" onClick={onOpenAgenda}>
           Agenda <IcoArrow />
         </button>
       </div>

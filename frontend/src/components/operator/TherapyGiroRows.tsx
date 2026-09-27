@@ -175,7 +175,7 @@ export function TherapyGiroRows({
                 <>
                   <button
                     type="button"
-                    className="giro-btn giro-btn--secondary"
+                    className="ds-btn ds-btn--secondary"
                     aria-label={`Non erogata: ${actionTarget}`}
                     aria-expanded={expanded}
                     onClick={() => {
@@ -191,7 +191,7 @@ export function TherapyGiroRows({
                   </button>
                   <button
                     type="button"
-                    className="giro-btn giro-btn--primary"
+                    className="ds-btn ds-btn--primary"
                     aria-label={`Erogata: ${actionTarget}`}
                     disabled={isSending}
                     onClick={() => {
@@ -219,7 +219,7 @@ export function TherapyGiroRows({
                     <button
                       type="button"
                       key={m.value}
-                      className="giro-chip"
+                      className="ds-chip"
                       aria-label={`${m.label}: ${actionTarget}`}
                       aria-pressed={selectedMotivo === m.value}
                       onClick={() => setSelectedMotivo(m.value)}
@@ -240,17 +240,17 @@ export function TherapyGiroRows({
                 <div className="giro-reasons__actions">
                   <button
                     type="button"
-                    className="giro-btn giro-btn--secondary"
+                    className="ds-btn ds-btn--secondary"
                     onClick={() => {
                       closeReasons();
-                      focusRow(key, '.giro-btn--secondary');
+                      focusRow(key, '.ds-btn--secondary');
                     }}
                   >
                     Annulla
                   </button>
                   <button
                     type="button"
-                    className="giro-btn giro-btn--primary"
+                    className="ds-btn ds-btn--primary"
                     aria-label={`Conferma non erogata: ${actionTarget}`}
                     disabled={!selectedMotivo}
                     onClick={() => {

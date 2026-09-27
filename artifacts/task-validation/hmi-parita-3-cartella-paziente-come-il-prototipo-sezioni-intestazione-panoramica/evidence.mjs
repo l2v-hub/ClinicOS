@@ -97,7 +97,7 @@ async function openChart(width, readings = COMPLETE, index = 0) {
         active: c.classList.contains('is-active'),
       })),
       captions: document.querySelectorAll('.top-nav__group-label, .top-nav__group-sep').length,
-      actions: [...document.querySelectorAll('.chart-action')].map((a) => ({
+      actions: [...document.querySelectorAll('.ds-btn--collapsible')].map((a) => ({
         label: a.getAttribute('aria-label'),
         ...r(a),
       })),

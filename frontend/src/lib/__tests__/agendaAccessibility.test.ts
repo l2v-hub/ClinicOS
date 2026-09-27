@@ -17,9 +17,11 @@ test('operator and admin agendas expose the same accessible navigation contract'
   for (const source of sources) {
     assert.match(source, /role="group" aria-label="Visualizzazione agenda"/);
     assert.match(source, /aria-pressed=\{view === v\}/);
-    assert.match(source, /aria-label="Intervallo precedente"/);
-    assert.match(source, /aria-label="Vai a oggi"/);
-    assert.match(source, /aria-label="Intervallo successivo"/);
+    // Navigazione per data: componente unico DateNav (design system), stesse etichette accessibili.
+    assert.match(source, /<DateNav/);
+    assert.match(source, /prevLabel="Intervallo precedente"/);
+    assert.match(source, /todayLabel="Vai a oggi"/);
+    assert.match(source, /nextLabel="Intervallo successivo"/);
   }
 });
 

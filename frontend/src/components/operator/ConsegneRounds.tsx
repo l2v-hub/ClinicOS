@@ -140,7 +140,7 @@ export function ConsegneRounds({
           </div>
           <button
             type="button"
-            className="ho-link"
+            className="ds-link"
             aria-expanded={showOrder}
             aria-controls="ho-order"
             onClick={() => setShowOrder((value) => !value)}

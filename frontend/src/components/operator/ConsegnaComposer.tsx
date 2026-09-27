@@ -180,14 +180,14 @@ export function ConsegnaComposer({
           )}
           <button
             type="submit"
-            className="ho-btn ho-btn--secondary"
+            className="ds-btn ds-btn--secondary"
             disabled={draft.saving || blocked || !draft.fields.note.trim()}
           >
             {draft.saving ? 'Salvataggio…' : draft.pending ? 'Riprova salvataggio' : 'Salva'}
           </button>
           <button
             type="button"
-            className="ho-btn ho-btn--primary"
+            className="ds-btn ds-btn--primary"
             disabled={
               draft.saving ||
               blocked ||

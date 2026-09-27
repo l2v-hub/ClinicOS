@@ -62,9 +62,9 @@ test('operator agenda uses the canonical heading while preserving accessible con
   assert.doesNotMatch(operatorAgenda, /<div className="agt-header">/);
   assert.match(operatorAgenda, /role="group" aria-label="Visualizzazione agenda"/);
   assert.match(operatorAgenda, /aria-pressed=\{view === v\}/);
-  assert.match(operatorAgenda, /aria-label="Intervallo precedente"/);
-  assert.match(operatorAgenda, /aria-label="Vai a oggi"/);
-  assert.match(operatorAgenda, /aria-label="Intervallo successivo"/);
+  assert.match(operatorAgenda, /prevLabel="Intervallo precedente"/);
+  assert.match(operatorAgenda, /todayLabel="Vai a oggi"/);
+  assert.match(operatorAgenda, /nextLabel="Intervallo successivo"/);
 });
 
 test('operator agenda actions stack without overflow on narrow screens', () => {

@@ -120,9 +120,9 @@ const state = (page) =>
       name: r.querySelector('.ricerca-farmaco__nome')?.textContent,
       det: r.querySelector('.ricerca-farmaco__dettagli')?.textContent,
       pa: r.querySelector('.ricerca-farmaco__pa')?.textContent ?? null,
-      btn: r.querySelector('.ricerca-farmaco__apri')?.textContent ?? null,
+      btn: r.querySelector('.ds-btn')?.textContent ?? null,
       btnH: Math.round(
-        r.querySelector('.ricerca-farmaco__apri')?.getBoundingClientRect().height ?? 0,
+        r.querySelector('.ds-btn')?.getBoundingClientRect().height ?? 0,
       ),
     })),
     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,

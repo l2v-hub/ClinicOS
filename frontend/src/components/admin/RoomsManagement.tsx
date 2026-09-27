@@ -348,7 +348,7 @@ export function RoomsManagement() {
         </div>
         <button
           className="btn-success"
-          style={{ minHeight: 44 }}
+
           onClick={() => {
             setFormAperto((v) => !v);
             setEditId(null);
@@ -494,14 +494,14 @@ export function RoomsManagement() {
           <div className="op-form-panel__actions">
             <button
               className="btn-secondary"
-              style={{ minHeight: 44 }}
+
               onClick={() => setFormAperto(false)}
             >
               Annulla
             </button>
             <button
               className="btn-success"
-              style={{ minHeight: 44 }}
+
               onClick={salvaCamera}
               disabled={saving}
             >
@@ -569,7 +569,7 @@ export function RoomsManagement() {
             <button
               type="button"
               className="btn-secondary"
-              style={{ minHeight: 44 }}
+
               disabled={bedSaving}
               onClick={() => setLettoEdit(null)}
             >
@@ -578,7 +578,7 @@ export function RoomsManagement() {
             <button
               type="button"
               className="btn-success"
-              style={{ minHeight: 44 }}
+
               disabled={bedSaving}
               onClick={salvaLetto}
             >
@@ -593,8 +593,10 @@ export function RoomsManagement() {
         {reparti.map((r) => (
           <button
             key={r}
-            className={`filter-chip${filtroReparto === r ? ' active' : ''}`}
-            style={{ minHeight: 44 }}
+            type="button"
+            className="ds-chip"
+            aria-pressed={filtroReparto === r}
+
             onClick={() => setFiltroReparto(r)}
           >
             {r === 'tutti' ? 'Tutti i reparti' : r}
@@ -614,8 +616,10 @@ export function RoomsManagement() {
         ).map((f) => (
           <button
             key={f.key}
-            className={`filter-chip${filtroStatoLetto === f.key ? ' active' : ''}`}
-            style={{ minHeight: 44 }}
+            type="button"
+            className="ds-chip"
+            aria-pressed={filtroStatoLetto === f.key}
+
             onClick={() => setFiltroStatoLetto(f.key)}
           >
             {f.label}
@@ -656,15 +660,15 @@ export function RoomsManagement() {
                   </div>
                   <button
                     className="icon-btn icon-btn--sm icon-btn--edit"
-                    style={{ minHeight: 44, minWidth: 44 }}
+
                     onClick={() => apriModificaCamera(room)}
                     title="Modifica camera"
                   >
                     <IcoEdit />
                   </button>
                   <button
-                    className="icon-btn icon-btn--sm"
-                    style={{ minHeight: 44, minWidth: 44, color: 'var(--red)' }}
+                    className="icon-btn icon-btn--danger"
+
                     onClick={() => setPendingRoom(room)}
                     title="Elimina camera"
                   >
@@ -709,7 +713,7 @@ export function RoomsManagement() {
                         {bed.note && <span className="letto-note">{bed.note}</span>}
                         <button
                           className="icon-btn icon-btn--sm"
-                          style={{ minHeight: 44, minWidth: 44 }}
+
                           onClick={() => apriLettoEdit(bed)}
                           title="Modifica letto"
                         >

@@ -158,7 +158,7 @@ export function ImportReviewWorkspace({
           <button
             role="tab"
             aria-selected={pane === 'doc'}
-            className="srev-chip"
+            className="ds-chip"
             onClick={() => setPane('doc')}
           >
             Documento
@@ -166,7 +166,7 @@ export function ImportReviewWorkspace({
           <button
             role="tab"
             aria-selected={pane === 'data'}
-            className="srev-chip"
+            className="ds-chip"
             onClick={() => setPane('data')}
           >
             Dati ClinicOS
@@ -176,7 +176,9 @@ export function ImportReviewWorkspace({
           {(['doc', '5050', 'data'] as const).map((value, index) => (
             <button
               key={value}
-              className={`srev-chip${layout === value ? ' is-on' : ''}`}
+              type="button"
+              className="ds-chip"
+              aria-pressed={layout === value}
               aria-label={['Documento più grande', 'Divisione 50/50', 'Dati più grandi'][index]}
               onClick={() => setLayout(value)}
             >

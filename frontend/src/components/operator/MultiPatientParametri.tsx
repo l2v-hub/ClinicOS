@@ -317,7 +317,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
             </span>
             <button
               type="button"
-              className="par-link"
+              className="ds-link"
               aria-expanded={showOrder}
               aria-controls="par-order"
               onClick={() => setShowOrder((value) => !value)}

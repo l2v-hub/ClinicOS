@@ -84,7 +84,14 @@ function DocumentArchiveWorkspace({
       alive.current = false;
     };
   }, []);
-  const filtered = filterDocumentArchive(entries, folder.category, query, archived, folder.type, folder.assessmentType);
+  const filtered = filterDocumentArchive(
+    entries,
+    folder.category,
+    query,
+    archived,
+    folder.type,
+    folder.assessmentType,
+  );
   const folderEntries = filterDocumentArchive(entries, 'tutti', query, archived);
   const selectFolder = (next: ArchiveFolder) => {
     setFolder(next);
@@ -98,8 +105,13 @@ function DocumentArchiveWorkspace({
     if (!complete || !focusDocumentId || focusedDocument.current === focusKey) return;
     const timer = window.setTimeout(() => {
       focusedDocument.current = focusKey;
-      const entry = entries.find(item => item.document?.id === focusDocumentId);
-      if (!entry || (expectedAssessmentId && entry.document?.assessment?.id !== expectedAssessmentId) || (expectedAssessmentType && entry.document?.assessment?.type !== expectedAssessmentType)) setError('Documento della valutazione non disponibile nell’archivio corrente.');
+      const entry = entries.find((item) => item.document?.id === focusDocumentId);
+      if (
+        !entry ||
+        (expectedAssessmentId && entry.document?.assessment?.id !== expectedAssessmentId) ||
+        (expectedAssessmentType && entry.document?.assessment?.type !== expectedAssessmentType)
+      )
+        setError('Documento della valutazione non disponibile nell’archivio corrente.');
       else setPreview(entry);
     }, 0);
     return () => window.clearTimeout(timer);
@@ -107,25 +119,31 @@ function DocumentArchiveWorkspace({
   const selectedDocuments = selectedArchiveDocuments(entries, selected);
   const visibleDocuments = selectedArchiveDocuments(
     filtered.slice(0, visible),
-    new Set(entries.flatMap((entry) => entry.document ? [entry.document.id] : [])),
+    new Set(entries.flatMap((entry) => (entry.document ? [entry.document.id] : []))),
   );
   const visibleSelected = visibleDocuments.filter((document) => selected.has(document.id)).length;
-  const allVisibleSelected = visibleDocuments.length > 0 && visibleSelected === visibleDocuments.length;
+  const allVisibleSelected =
+    visibleDocuments.length > 0 && visibleSelected === visibleDocuments.length;
   const hiddenSelected = selectedDocuments.length - visibleSelected;
   useEffect(() => {
-    if (selectAllRef.current) selectAllRef.current.indeterminate = visibleSelected > 0 && !allVisibleSelected;
+    if (selectAllRef.current)
+      selectAllRef.current.indeterminate = visibleSelected > 0 && !allVisibleSelected;
   }, [visibleSelected, allVisibleSelected]);
   useEffect(() => {
-    if (complete) setSelected((current) => {
-      const existing = new Set(entries.flatMap((entry) => entry.document ? [entry.document.id] : []));
-      const next = new Set([...current].filter((id) => existing.has(id)));
-      return next.size === current.size ? current : next;
-    });
+    if (complete)
+      setSelected((current) => {
+        const existing = new Set(
+          entries.flatMap((entry) => (entry.document ? [entry.document.id] : [])),
+        );
+        const next = new Set([...current].filter((id) => existing.has(id)));
+        return next.size === current.size ? current : next;
+      });
   }, [entries, complete]);
   function toggleSelected(id: string) {
     setSelected((current) => {
       const next = new Set(current);
-      if (next.has(id)) next.delete(id); else next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   }
@@ -166,7 +184,9 @@ function DocumentArchiveWorkspace({
             <button
               type="button"
               className="btn-secondary btn-sm no-print"
-              disabled={!complete || !selectedDocuments.length || !!form || saving || !!printDocuments}
+              disabled={
+                !complete || !selectedDocuments.length || !!form || saving || !!printDocuments
+              }
               onClick={() => setPrintDocuments(selectedDocuments)}
             >
               Stampa selezionati ({selectedDocuments.length})
@@ -245,18 +265,36 @@ function DocumentArchiveWorkspace({
           </p>
           <div className="patient-document-archive__selection no-print">
             <label>
-              <input ref={selectAllRef} type="checkbox" checked={allVisibleSelected}
+              <input
+                ref={selectAllRef}
+                type="checkbox"
+                checked={allVisibleSelected}
                 disabled={!complete || !visibleDocuments.length}
-                onChange={() => setSelected((current) => {
-                  const next = new Set(current);
-                  for (const document of visibleDocuments)
-                    if (allVisibleSelected) next.delete(document.id); else next.add(document.id);
-                  return next;
-                })} />
+                onChange={() =>
+                  setSelected((current) => {
+                    const next = new Set(current);
+                    for (const document of visibleDocuments)
+                      if (allVisibleSelected) next.delete(document.id);
+                      else next.add(document.id);
+                    return next;
+                  })
+                }
+              />
               Seleziona documenti visibili
             </label>
-            <span role="status">{selectedDocuments.length} selezionati{hiddenSelected > 0 ? ` · ${hiddenSelected} non visibili in questo elenco` : ''}</span>
-            {selected.size > 0 && <button type="button" className="btn-secondary btn-sm" onClick={() => setSelected(new Set())}>Deseleziona tutti</button>}
+            <span role="status">
+              {selectedDocuments.length} selezionati
+              {hiddenSelected > 0 ? ` · ${hiddenSelected} non visibili in questo elenco` : ''}
+            </span>
+            {selected.size > 0 && (
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                onClick={() => setSelected(new Set())}
+              >
+                Deseleziona tutti
+              </button>
+            )}
           </div>
           <div className="patient-document-archive__workspace">
             <PatientArchiveTree
@@ -270,7 +308,11 @@ function DocumentArchiveWorkspace({
               aria-label="Contenuto della cartella"
             >
               <nav className="patient-document-archive__path" aria-label="Percorso documenti">
-                <button type="button" onClick={() => selectFolder({ category: 'tutti' })}>
+                <button
+                  type="button"
+                  className="link-btn"
+                  onClick={() => selectFolder({ category: 'tutti' })}
+                >
                   Documenti
                 </button>
                 {selectedCategory && (
@@ -347,11 +389,13 @@ function DocumentArchiveWorkspace({
                       </div>
                       <div className="patient-document-archive__details">
                         <label className="patient-document-archive__print-option no-print">
-                          <input type="checkbox"
+                          <input
+                            type="checkbox"
                             checked={!!entry.document && selected.has(entry.document.id)}
                             disabled={!complete || !!archivePrintUnavailable(entry)}
                             onChange={() => entry.document && toggleSelected(entry.document.id)}
-                            aria-label={`Seleziona per la stampa: ${entry.title}`} />
+                            aria-label={`Seleziona per la stampa: ${entry.title}`}
+                          />
                           {archivePrintUnavailable(entry) || 'Seleziona per la stampa'}
                         </label>
                         <button
@@ -362,9 +406,7 @@ function DocumentArchiveWorkspace({
                           {entry.title}
                         </button>
                         <div className="patient-document-archive__meta">
-                          <span className="badge badge--blue">
-                            {archiveEntryTypeLabel(entry)}
-                          </span>
+                          <span className="badge badge--blue">{archiveEntryTypeLabel(entry)}</span>
                           {entry.archived && <span className="badge">Storico</span>}
                           <span>{fmtDate(entry.date)}</span>
                           <span>
@@ -384,7 +426,13 @@ function DocumentArchiveWorkspace({
                               : 'Nessun file allegato'}
                           </p>
                         )}
-                        {entry.document?.assessment && <p>Valutata {formatFacilityLocalMinute(entry.document.assessment.assessedAt)} · Registrata {formatFacilityLocalMinute(entry.document.createdAt)}</p>}
+                        {entry.document?.assessment && (
+                          <p>
+                            Valutata{' '}
+                            {formatFacilityLocalMinute(entry.document.assessment.assessedAt)} ·
+                            Registrata {formatFacilityLocalMinute(entry.document.createdAt)}
+                          </p>
+                        )}
                         {entry.record?.provenienza && (
                           <p>Provenienza: {entry.record.provenienza}</p>
                         )}
@@ -407,14 +455,30 @@ function DocumentArchiveWorkspace({
                         >
                           {entry.document ? 'Visualizza' : 'Dettagli'}
                         </button>
-                        {entry.document?.assessment ? <button type="button" className="btn-secondary btn-sm" disabled={!onOpenAssessment} onClick={() => onOpenAssessment?.({ id: entry.document!.assessment!.id, type: entry.document!.assessment!.type })}>Apri valutazione</button> : <button
-                          type="button"
-                          className="btn-secondary btn-sm"
-                          disabled={!complete || !!form || saving}
-                          onClick={() => openForm(entry)}
-                        >
-                          Modifica dettagli
-                        </button>}
+                        {entry.document?.assessment ? (
+                          <button
+                            type="button"
+                            className="btn-secondary btn-sm"
+                            disabled={!onOpenAssessment}
+                            onClick={() =>
+                              onOpenAssessment?.({
+                                id: entry.document!.assessment!.id,
+                                type: entry.document!.assessment!.type,
+                              })
+                            }
+                          >
+                            Apri valutazione
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn-secondary btn-sm"
+                            disabled={!complete || !!form || saving}
+                            onClick={() => openForm(entry)}
+                          >
+                            Modifica dettagli
+                          </button>
+                        )}
                         {entry.record && !entry.document?.assessment && (
                           <button
                             type="button"
@@ -455,11 +519,15 @@ function DocumentArchiveWorkspace({
           onClose={() => setPreview(null)}
         />
       )}
-      {printDocuments && <ArchivePrintDialog
-        documents={printDocuments} patientId={paziente.id}
-        operatorId={operatoreId} operatorRole={operatoreRole}
-        onClose={() => setPrintDocuments(null)}
-      />}
+      {printDocuments && (
+        <ArchivePrintDialog
+          documents={printDocuments}
+          patientId={paziente.id}
+          operatorId={operatoreId}
+          operatorRole={operatoreRole}
+          onClose={() => setPrintDocuments(null)}
+        />
+      )}
       {removing && (
         <ConfirmDialog
           open

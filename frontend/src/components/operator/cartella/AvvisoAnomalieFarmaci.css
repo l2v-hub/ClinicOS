@@ -62,24 +62,6 @@
   color: var(--text-muted);
 }
 
-.avviso-anomalie__azione {
-  flex: none;
-  align-self: center;
-  padding: 6px 12px;
-  border: 1px solid #c98a00;
-  border-radius: 8px;
-  background: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  color: #7a5300;
-  cursor: pointer;
-}
-
-.avviso-anomalie__azione:hover {
-  background: #c98a00;
-  color: #fff;
-}
-
 /* Indicatore per riga di elenco: deve leggersi in mezzo a una tabella densa senza urlare. */
 .indicatore-anomalie {
   display: inline-block;

@@ -116,7 +116,7 @@ export function ImportSectionsReview({
       <button
         key={`${source.fileId ?? source.fileName}:${source.pageNumber ?? ''}:${index}`}
         type="button"
-        className="srev-chip srev-chip--inline"
+        className="ds-link"
         disabled={!source.fileId && source.fileName === 'non identificata'}
         onClick={() => onOpenSource(source.fileName, source.pageNumber, source.fileId)}
       >
@@ -238,7 +238,7 @@ export function ImportSectionsReview({
             {onOpenSource && (
               <button
                 type="button"
-                className="srev-chip srev-chip--inline"
+                className="ds-link"
                 onClick={() =>
                   onOpenSource(
                     allergy.sourceFileId
@@ -290,7 +290,8 @@ export function ImportSectionsReview({
               <span className="srev-actions">
                 <button
                   type="button"
-                  className={`srev-chip${st === 'accepted' ? ' is-on' : ''}`}
+                  className="ds-chip"
+                  aria-pressed={st === 'accepted'}
                   disabled={busy}
                   onClick={() => setSt(key, 'accepted')}
                 >
@@ -298,7 +299,8 @@ export function ImportSectionsReview({
                 </button>
                 <button
                   type="button"
-                  className={`srev-chip${st === 'modified' ? ' is-on' : ''}`}
+                  className="ds-chip"
+                  aria-pressed={st === 'modified'}
                   disabled={busy}
                   onClick={() => setSt(key, 'modified')}
                 >
@@ -306,7 +308,8 @@ export function ImportSectionsReview({
                 </button>
                 <button
                   type="button"
-                  className={`srev-chip${st === 'excluded' ? ' is-on' : ''}`}
+                  className="ds-chip"
+                  aria-pressed={st === 'excluded'}
                   disabled={busy}
                   onClick={() => setSt(key, 'excluded')}
                 >
@@ -314,7 +317,7 @@ export function ImportSectionsReview({
                 </button>
                 <button
                   type="button"
-                  className="srev-chip"
+                  className="ds-btn ds-btn--secondary"
                   disabled={busy}
                   onClick={() => {
                     setShowSource((p) => ({ ...p, [key]: !p[key] }));

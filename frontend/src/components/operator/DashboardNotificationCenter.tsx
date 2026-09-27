@@ -140,13 +140,15 @@ export function DashboardNotificationCenter({
                 <button
                   type="button"
                   key={tone}
-                  className={`dashboard-notification-chip dashboard-notification-chip--${tone}`}
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => openCategory(tone)}
                   aria-haspopup="dialog"
                   aria-label={`${label}, ${loading ? 'conteggio in aggiornamento' : `${count} elementi attivi`}. Apri dettaglio`}
                 >
                   <span>{label}</span>
-                  <strong>{loading ? '—' : count}</strong>
+                  <strong className={`ds-chip__count ds-chip__count--${tone}`}>
+                    {loading ? '—' : count}
+                  </strong>
                 </button>
               );
             })}
@@ -154,7 +156,7 @@ export function DashboardNotificationCenter({
 
           <button
             type="button"
-            className="dashboard-notification-bar__open"
+            className="ds-link"
             onClick={() => openCategory(leadingTone)}
             aria-haspopup="dialog"
           >

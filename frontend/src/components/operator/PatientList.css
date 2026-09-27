@@ -271,7 +271,6 @@
 
 .patient-roster__open,
 .patient-roster__delete,
-.patient-card__open,
 .patient-card__delete {
   min-width: 44px;
   min-height: 44px;
@@ -282,8 +281,7 @@
   cursor: pointer;
 }
 
-.patient-roster__open:hover,
-.patient-card__open:hover {
+.patient-roster__open:hover {
   background: var(--indigo-bg);
 }
 
@@ -298,7 +296,6 @@
 
 .patient-roster__open:focus-visible,
 .patient-roster__delete:focus-visible,
-.patient-card__open:focus-visible,
 .patient-card__delete:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
@@ -412,19 +409,6 @@
     font-size: 11px;
   }
 
-  .patient-card__open {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    padding: 0 7px;
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .patient-card__open svg {
-    width: 14px;
-  }
-
   .patient-card__fiscal {
     display: flex;
     flex-wrap: wrap;
@@ -502,8 +486,7 @@
   display: grid;
   place-items: center;
 }
-.plist-new__ico svg,
-.plist-btn svg {
+.plist-new__ico svg {
   width: 24px;
   height: 24px;
   fill: none;
@@ -532,30 +515,7 @@
   gap: 8px;
   flex-wrap: wrap;
 }
-.plist-btn {
-  height: 48px;
-  padding: 0 24px;
-  border-radius: 12px;
-  border: 2px solid transparent;
-  font: 600 16px/24px var(--font-ui);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.plist-btn--primary {
-  background: var(--blue);
-  color: #fff;
-}
-.plist-btn--primary:hover {
-  background: #2459cf;
-}
-.plist-btn:focus-visible,
-.plist-chip:focus-visible {
-  outline: 3px solid #245bb5;
-  outline-offset: 2px;
-}
+
 .plist-new .ai-import-btn {
   height: 48px;
   border-radius: 12px;
@@ -595,45 +555,7 @@
   flex-wrap: wrap;
   gap: 8px;
 }
-.plist-chip {
-  height: 48px;
-  padding: 0 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font: 400 16px/24px var(--font-ui);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.plist-chip[aria-pressed='true'] {
-  background: #eaf1fe;
-  border-color: var(--blue);
-  color: #1d4fc4;
-  font-weight: 600;
-}
-.plist-chip[aria-expanded='true'] {
-  border-color: var(--blue);
-  color: #1d4fc4;
-}
-.plist-chip__count {
-  min-width: 24px;
-  height: 24px;
-  padding: 0 6px;
-  border-radius: 8px;
-  background: #f5f7fb;
-  color: var(--text-muted);
-  font: 600 14px/24px var(--font-ui);
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-.plist-chip[aria-pressed='true'] .plist-chip__count {
-  background: #fff;
-  color: #1d4fc4;
-}
+
 .plist-filters {
   display: flex;
   flex-direction: column;
@@ -792,10 +714,7 @@
   font: 500 14px/20px var(--font-ui);
   color: #8f5500;
 }
-.plist-chip.is-filtered {
-  border-color: var(--blue);
-  color: #1d4fc4;
-}
+
 /* ricerca e viste sulla stessa riga, come il prototipo */
 .plist-search {
   flex: 1 1 320px;

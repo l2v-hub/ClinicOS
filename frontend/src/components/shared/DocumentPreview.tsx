@@ -142,14 +142,18 @@ export function DocumentPreview({
         </div>
         <div className="doc-preview__modes">
           <button
-            className={`srev-chip${mode === 'document' ? ' is-on' : ''}`}
+            type="button"
+            className="ds-chip"
+            aria-pressed={mode === 'document'}
             onClick={() => setMode('document')}
           >
             Documento originale
           </button>
           {showOcr && (
             <button
-              className={`srev-chip${mode === 'ocr' ? ' is-on' : ''}`}
+              type="button"
+              className="ds-chip"
+              aria-pressed={mode === 'ocr'}
               onClick={() => setMode('ocr')}
             >
               Testo riconosciuto
@@ -187,15 +191,19 @@ export function DocumentPreview({
             <button className="icon-btn" onClick={zoomIn} aria-label="Aumenta zoom" title="Zoom +">
               +
             </button>
-            <button className="srev-chip" onClick={fit} title="Adatta">
+            <button className="ds-btn ds-btn--secondary" onClick={fit} title="Adatta">
               Adatta
             </button>
             {isImage && (
-              <button className="srev-chip" onClick={rotate} title="Ruota 90°">
+              <button className="ds-btn ds-btn--secondary" onClick={rotate} title="Ruota 90°">
                 Ruota
               </button>
             )}
-            <button className="srev-chip" onClick={fullscreen} title="Schermo intero">
+            <button
+              className="ds-btn ds-btn--secondary"
+              onClick={fullscreen}
+              title="Schermo intero"
+            >
               ⛶
             </button>
           </div>
@@ -209,7 +217,7 @@ export function DocumentPreview({
               onChange={(e) => setOcrQuery(e.target.value)}
             />
             <button
-              className="srev-chip"
+              className="ds-btn ds-btn--secondary"
               onClick={() => navigator.clipboard?.writeText(ocrText)}
               title="Copia testo"
             >
@@ -237,7 +245,10 @@ export function DocumentPreview({
           <div className="doc-preview__unsupported" role={doc.error ? 'alert' : 'status'}>
             <p>{doc.error ?? 'Caricamento documento…'}</p>
             {doc.error && doc.id && onRequestDocument && (
-              <button className="srev-chip" onClick={() => onRequestDocument(doc.id!)}>
+              <button
+                className="ds-btn ds-btn--secondary"
+                onClick={() => onRequestDocument(doc.id!)}
+              >
                 Riprova
               </button>
             )}
@@ -262,7 +273,7 @@ export function DocumentPreview({
         ) : (
           <div className="doc-preview__unsupported">
             <p>{doc.name}</p>
-            <a className="srev-chip" href={doc.url} target="_blank" rel="noreferrer">
+            <a className="ds-btn ds-btn--secondary" href={doc.url} target="_blank" rel="noreferrer">
               Apri documento
             </a>
           </div>

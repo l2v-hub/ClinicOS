@@ -135,7 +135,7 @@ export function AdessoQueue({
               {onSelectPaziente ? (
                 <button
                   type="button"
-                  className={`turno-btn ${it.inRitardo ? 'turno-btn--primary' : 'turno-btn--secondary'}`}
+                  className={`ds-btn ${it.inRitardo ? 'ds-btn--primary' : 'ds-btn--secondary'}`}
                   onClick={() => onSelectPaziente(it.nome, it.patientId)}
                   aria-label={`Apri ${it.nome}: ${it.dettaglio}, ${it.tempo}`}
                 >
@@ -154,10 +154,10 @@ export function AdessoQueue({
       {rest > 0 && (
         <p className="adesso-queue__more">
           Altre {rest} in coda
-          <button type="button" className="turno-btn turno-btn--ghost" onClick={onOpenTherapy}>
+          <button type="button" className="ds-link" onClick={onOpenTherapy}>
             Terapia <IcoArrow />
           </button>
-          <button type="button" className="turno-btn turno-btn--ghost" onClick={onOpenConsegne}>
+          <button type="button" className="ds-link" onClick={onOpenConsegne}>
             Consegne <IcoArrow />
           </button>
         </p>
@@ -165,12 +165,7 @@ export function AdessoQueue({
       <p className="adesso-queue__foot">
         Aggiornamento automatico ogni minuto · Orari della struttura (Roma)
         {onRefresh && (
-          <button
-            type="button"
-            className="turno-btn turno-btn--ghost"
-            onClick={onRefresh}
-            disabled={refreshing}
-          >
+          <button type="button" className="ds-link" onClick={onRefresh} disabled={refreshing}>
             {refreshing ? 'Aggiornamento…' : 'Aggiorna'}
           </button>
         )}

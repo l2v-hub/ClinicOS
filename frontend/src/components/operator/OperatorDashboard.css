@@ -149,48 +149,6 @@
   color: #1d4fc4;
 }
 
-.turno-btn {
-  height: 48px;
-  min-width: 48px;
-  padding: 0 24px;
-  border-radius: 12px;
-  border: 2px solid transparent;
-  font: 600 16px/24px var(--font-ui);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.turno-btn svg {
-  width: 20px;
-  height: 20px;
-}
-.turno-btn--primary {
-  background: var(--blue);
-  color: #fff;
-}
-.turno-btn--primary:hover {
-  background: #2459cf;
-}
-.turno-btn--secondary {
-  background: var(--surface);
-  color: #1d4fc4;
-  border-color: #b9c4d4;
-}
-.turno-btn--secondary:hover {
-  border-color: var(--blue);
-}
-.turno-btn--ghost {
-  background: transparent;
-  color: #1d4fc4;
-  padding: 0 16px;
-}
-.turno-btn--ghost:hover {
-  background: #eaf1fe;
-}
-.turno-btn:focus-visible,
 .turno-pcard__open:focus-visible,
 .turno-appt__who:focus-visible {
   outline: 3px solid #245bb5;

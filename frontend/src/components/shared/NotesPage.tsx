@@ -113,7 +113,7 @@ export function NotesPage({
           <button
             ref={newNoteTriggerRef}
             type="button"
-            className="nm-new-btn"
+            className="ds-btn ds-btn--primary"
             aria-expanded={formAperto}
             aria-controls="nuova-nota-panel"
             onClick={() => (formAperto ? closeNewNote() : setFormAperto(true))}
@@ -155,26 +155,28 @@ export function NotesPage({
               </button>
             )}
           </div>
-          <div className="nm-filters" role="group" aria-label="Filtra messaggi">
+          <div className="ds-chip-group" role="group" aria-label="Filtra messaggi">
             {(
               [
-                { key: 'tutte', label: 'Tutte' },
-                { key: 'ricevute', label: 'Ricevute' },
-                { key: 'inviate', label: 'Inviate' },
+                { key: 'tutte', label: 'Tutte', count: 0 },
+                { key: 'ricevute', label: 'Ricevute', count: 0 },
+                { key: 'inviate', label: 'Inviate', count: 0 },
                 {
                   key: 'non_lette',
-                  label: `Non lette${unreadCount > 0 ? ` (${unreadCount})` : ''}`,
+                  label: 'Non lette',
+                  count: unreadCount,
                 },
               ] as const
             ).map((filter) => (
               <button
                 type="button"
                 key={filter.key}
-                className="nm-chip"
+                className="ds-chip"
                 onClick={() => setFiltro(filter.key)}
                 aria-pressed={filtro === filter.key}
               >
                 {filter.label}
+                {filter.count > 0 && <span className="ds-chip__count">{filter.count}</span>}
               </button>
             ))}
           </div>
@@ -251,7 +253,7 @@ export function NotesPage({
                         {item.stato === 'non_letta' && (
                           <button
                             type="button"
-                            className="nm-link"
+                            className="ds-link"
                             aria-label={`Segna come letta: ${context}`}
                             onClick={() => onUpdateStato(item.id, 'letta')}
                           >
@@ -260,7 +262,7 @@ export function NotesPage({
                         )}
                         <button
                           type="button"
-                          className="nm-icon-btn"
+                          className="ds-icon-btn"
                           onClick={() => onUpdateStato(item.id, 'risolta')}
                           title="Segna come risolta"
                           aria-label={`Segna come risolta: ${context}`}

@@ -41,12 +41,7 @@ export function NewPatientChooser({ onClose, onChoose }: Props) {
         <h3 id={titleId} className="new-patient-chooser__title">
           Nuovo paziente
         </h3>
-        <button
-          type="button"
-          className="new-patient-chooser__close"
-          aria-label="Chiudi"
-          onClick={onClose}
-        >
+        <button type="button" className="ds-icon-btn" aria-label="Chiudi" onClick={onClose}>
           <IcoX />
         </button>
       </div>

@@ -46,17 +46,6 @@
   max-width: 100%;
 }
 
-.ricerca-farmaco__criterio .filter-chip:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-
-@media (max-width: 767px) {
-  .ricerca-farmaco__criterio .filter-chip {
-    min-height: 44px;
-  }
-}
-
 .ricerca-farmaco__esiti {
   flex: 1;
   min-height: 0;
@@ -117,22 +106,6 @@
   margin: 2px 0 0;
   font-size: 11px;
   color: var(--text-muted);
-}
-
-.ricerca-farmaco__apri {
-  flex: none;
-  padding: 6px 12px;
-  border: 1px solid var(--blue);
-  border-radius: 8px;
-  background: var(--blue);
-  font-size: 12px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-}
-
-.ricerca-farmaco__apri:hover {
-  background: var(--blue-active, #1d4fc4);
 }
 
 /* ── Modale ─────────────────────────────────────────────────────────────────────────────── */
