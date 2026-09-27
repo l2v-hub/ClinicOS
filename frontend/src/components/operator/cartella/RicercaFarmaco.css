@@ -222,3 +222,30 @@
   border-color: #8a5a00;
   background: rgb(255 196 0 / 26%);
 }
+
+.ricerca-farmaco__icona {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--text);
+}
+.ricerca-farmaco__icona svg {
+  width: 20px;
+  height: 20px;
+}
+.ricerca-farmaco__testo {
+  /* Base esplicita: su schermi stretti è il pulsante ad andare a capo, non le parole a spezzarsi. */
+  flex: 1 1 200px;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+@media (max-width: 600px) {
+  .ricerca-farmaco__riga {
+    flex-wrap: wrap;
+  }
+  .ricerca-farmaco__riga > :last-child {
+    margin-left: 36px;
+  }
+}

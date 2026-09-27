@@ -1,0 +1,99 @@
+/* Farmaci — HMI 1 (artifacts/hmi-parity/proto/farmaci.png). Solo la pagina: la modale della
+   terapia usa lo stesso corpo di ricerca con i suoi stili. */
+.page-anagrafica-farmaci {
+  max-width: none;
+}
+.page-anagrafica-farmaci__corpo {
+  border-radius: 16px;
+}
+.page-anagrafica-farmaci .ricerca-farmaco {
+  padding: 24px;
+  gap: 16px;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__campo {
+  height: 48px;
+  padding: 0 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: #f5f7fb;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__campo input {
+  font-size: 16px;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__criterio .filter-chip {
+  min-height: 48px;
+  padding: 0 16px;
+  font-size: 16px;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__nota {
+  font-size: 14px;
+  line-height: 20px;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__vuoto {
+  padding: 16px 0;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__esiti {
+  overflow: visible;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__lista {
+  gap: 0;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__riga {
+  gap: 16px;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__nome {
+  font: 600 16px/24px var(--font-ui);
+}
+.page-anagrafica-farmaci .ricerca-farmaco__dettagli,
+.page-anagrafica-farmaci .ricerca-farmaco__pa {
+  font: 400 14px/20px var(--font-ui);
+}
+.page-anagrafica-farmaci .ricerca-farmaco__riga .ricerca-farmaco__apri {
+  min-height: 48px;
+  padding: 0 24px;
+  border: 2px solid #c9d3e1;
+  border-radius: 12px;
+  background: var(--surface);
+  color: #1d4fc4;
+  font: 600 16px/24px var(--font-ui);
+  white-space: nowrap;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__riga .ricerca-farmaco__apri:hover {
+  background: #eaf1fe;
+}
+.page-anagrafica-farmaci .ricerca-farmaco__apri:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .page-anagrafica-farmaci .ricerca-farmaco {
+    padding: 16px;
+  }
+  .page-anagrafica-farmaci .ricerca-farmaco__riga {
+    flex-wrap: wrap;
+  }
+  .page-anagrafica-farmaci .ricerca-farmaco__riga > :last-child {
+    margin-left: 40px;
+  }
+}
+.page-anagrafica-farmaci .ricerca-farmaco__esiti > .ricerca-farmaco__apri {
+  margin-top: 16px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 2px solid #c9d3e1;
+  border-radius: 12px;
+  background: var(--surface);
+  color: #1d4fc4;
+  font: 600 16px/24px var(--font-ui);
+}
+@media (max-width: 600px) {
+  .page-anagrafica-farmaci .ricerca-farmaco__criterio .filter-chip {
+    padding: 0 12px;
+    font-size: 15px;
+  }
+}
