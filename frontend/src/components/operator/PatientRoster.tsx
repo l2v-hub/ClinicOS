@@ -1,5 +1,8 @@
 import { memo } from 'react';
 import { PatientIdentity, PatientIdentifier } from '../shared/PatientIdentity';
+import { LazyNews2 } from './LazyNews2';
+import { parsePatientLocation } from '../../lib/patientIdentity';
+import { patientAge } from '../../lib/patientDemographics';
 import type { ClinicalSummaryEntry, Paziente } from '../../types';
 import { IcoChevronRight, IcoTrash } from '../../icons';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
@@ -109,9 +112,8 @@ const PatientCard = memo(function PatientCard({
   return (
     <article className="patient-card">
       <div className="patient-card__head">
-        <span className="patient-card__avatar" aria-hidden="true">
-          {patient.firstName[0]}
-          {patient.lastName[0]}
+        <span className="patient-card__avatar patient-roster__bed" aria-hidden="true">
+          {rosterRoom(patient)}
         </span>
         <div className="patient-card__identity">
           <PatientIdentity patient={patient} />
@@ -126,6 +128,10 @@ const PatientCard = memo(function PatientCard({
         </button>
       </div>
       <div className="patient-card__context">
+        <LazyNews2
+          patientId={patient.id}
+          patientName={`${patient.lastName}, ${patient.firstName}`}
+        />
         {state ? (
           <span className={`stato-pill stato-pill--ricovero-${state}`}>
             {STATO_RICOVERO_LABEL[state] ?? state}
@@ -157,6 +163,26 @@ const PatientCard = memo(function PatientCard({
     </article>
   );
 });
+
+// Riquadro della camera (come il letto nel prototipo) ed età: solo dati del roster.
+function rosterRoom(patient: Paziente): string {
+  const location = parsePatientLocation(patient.location);
+  return location?.status === 'assigned' && location.room ? location.room : '—';
+}
+function rosterRoomLabel(patient: Paziente): string {
+  const location = parsePatientLocation(patient.location);
+  if (!location || location.status === 'unavailable') return 'Posto letto non disponibile';
+  if (location.status === 'unassigned') return 'Posto letto non assegnato';
+  return location.room ? `Camera ${location.room}` : 'Camera non indicata';
+}
+function rosterBed(patient: Paziente): string {
+  const location = parsePatientLocation(patient.location);
+  return location?.status === 'assigned' && location.bed ? ` · Letto ${location.bed}` : '';
+}
+function rosterAge(patient: Paziente): string {
+  const age = patientAge(patient.dateOfBirth);
+  return age === null ? 'Età non disponibile' : `${age} anni`;
+}
 
 export function PatientRoster({
   patients,
@@ -232,7 +258,11 @@ export function PatientRoster({
             {sort.direction === 'asc' ? '↑ Crescente' : '↓ Decrescente'}
           </button>
         </div>
-        <span className="patient-roster-order__status" role="status" aria-live="polite">
+        <span
+          className={`patient-roster-order__status${localSortActive ? '' : ' plist-sr'}`}
+          role="status"
+          aria-live="polite"
+        >
           {localSortActive ? 'Ordine temporaneo · ' : ''}
           {localSortActive
             ? PATIENT_SORT_LABELS[sort.field]
@@ -269,12 +299,10 @@ export function PatientRoster({
               <th scope="col" aria-sort={ariaSort('patient')}>
                 {sortButton('patient', 'Paziente')}
               </th>
-              <th scope="col" aria-sort={ariaSort('fiscalCode')}>
-                {sortButton('fiscalCode', 'Codice fiscale')}
-              </th>
               <th scope="col" aria-sort={ariaSort('admission')}>
                 {sortButton('admission', 'Ricovero')}
               </th>
+              <th scope="col">NEWS2</th>
               <th scope="col" aria-sort={ariaSort('signals')}>
                 {sortButton('signals', 'Segnalazioni')}
               </th>
@@ -306,7 +334,14 @@ export function PatientRoster({
                     onMouseEnter={() => onPrefetch?.(patient)}
                     onFocus={() => onPrefetch?.(patient)}
                     onClick={(event) => {
-                      if ((event.target as HTMLElement).closest('button')) return;
+                      // un clic su un pulsante o dentro un dialogo aperto dalla riga (storico
+                      // NEWS2) non apre la cartella
+                      if (
+                        (event.target as HTMLElement).closest(
+                          'button, [role="dialog"], [role="alertdialog"], .modal-overlay',
+                        )
+                      )
+                        return;
                       onSelect(patient);
                     }}
                     onKeyDown={(event) => {
@@ -317,16 +352,20 @@ export function PatientRoster({
                     }}
                   >
                     <td>
+                      {/* HMI 1: camera nel riquadro, poi nome, età, letto e codice fiscale */}
                       <div className="patient-roster__identity">
-                        <span className="patient-roster__avatar" aria-hidden="true">
-                          {patient.firstName[0]}
-                          {patient.lastName[0]}
+                        <span className="patient-roster__bed" aria-hidden="true">
+                          {rosterRoom(patient)}
                         </span>
-                        <PatientIdentity patient={patient} showIdentifier={false} />
+                        <span className="plist-sr">{rosterRoomLabel(patient)}</span>
+                        <span className="patient-roster__who">
+                          <PatientIdentity patient={patient} showIdentifier={false} />
+                          <span className="patient-roster__meta">
+                            {rosterAge(patient)}
+                            {rosterBed(patient)} · <PatientIdentifier patient={patient} />
+                          </span>
+                        </span>
                       </div>
-                    </td>
-                    <td>
-                      <PatientIdentifier patient={patient} />
                     </td>
                     <td>
                       {state ? (
@@ -338,6 +377,12 @@ export function PatientRoster({
                           {summaryLoading ? 'Caricamento…' : 'Non disponibile'}
                         </span>
                       )}
+                    </td>
+                    <td>
+                      <LazyNews2
+                        patientId={patient.id}
+                        patientName={`${patient.lastName}, ${patient.firstName}`}
+                      />
                     </td>
                     <td>
                       <PatientSignals

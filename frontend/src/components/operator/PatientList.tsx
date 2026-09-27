@@ -8,16 +8,19 @@ import { usePatientListPage } from './usePatientListPage';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
 import { NewPatientFlow } from './NewPatientFlow';
+import {
+  LIST_VIEW_LABEL,
+  countListViews,
+  matchesListView,
+  unknownStateCount,
+  type ListView,
+} from '../../lib/patientListView';
 import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { PatientRoster } from './PatientRoster';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
-import {
-  ADMISSION_LABELS as STATO_RICOVERO_LABEL,
-  sortPatientRoster,
-  type PatientRosterSort,
-} from '../../lib/patientRosterSort';
+import { sortPatientRoster, type PatientRosterSort } from '../../lib/patientRosterSort';
 import './PatientList.css';
 
 interface PatientListProps {
@@ -89,7 +92,11 @@ export function PatientList({
   const anomalie = useAnomalieReparto();
   // Ingresso unico "Nuovo paziente": la scelta, poi il percorso (documenti o a mano).
   const [showNewPatient, setShowNewPatient] = useState(false);
-  const [filtroStatoRicovero, setFiltroStatoRicovero] = useState<string>('tutti');
+  // Vista come il prototipo: "Ricoverati" (in carico) predefinita, "Dimessi e archivio", "Tutti".
+  const [vista, setVista] = useState<ListView>('in_carico');
+  const [showFilters, setShowFilters] = useState(false);
+  // Vista scelta prima di iniziare una ricerca: cancellata la ricerca, si torna lì.
+  const [vistaPrimaDellaRicerca, setVistaPrimaDellaRicerca] = useState<ListView | null>(null);
   // TEST-ONLY: patient deletion. Backend gates it via ALLOW_PATIENT_DELETE; we hide the
   // button when disabled so production simply never shows it.
   const [deleteEnabled, setDeleteEnabled] = useState(false);
@@ -154,32 +161,26 @@ export function PatientList({
 
   const filtratiBase = pazienti;
 
-  // Chip mostrate solo per gli stati presenti nelle pagine gia' caricate. Il backend non espone
-  // ancora un filtro aggregato per stato clinico, quindi questi conteggi non sono facility-wide.
-  const statiPresenti = useMemo(() => {
-    const presenti = new Set<string>();
-    pazienti.forEach((p) => {
-      const s = summaryMap.get(p.id)?.statoRicovero;
-      if (s) presenti.add(s);
-    });
-    return Object.keys(STATO_RICOVERO_LABEL).filter((s) => presenti.has(s));
-  }, [pazienti, summaryMap]);
-
-  const contiStato = useMemo(() => {
-    const conti: Record<string, number> = {};
-    filtratiBase.forEach((p) => {
-      const s = summaryMap.get(p.id)?.statoRicovero;
-      if (s) conti[s] = (conti[s] ?? 0) + 1;
-    });
-    return conti;
-  }, [filtratiBase, summaryMap]);
-
-  const filtrati = useMemo(
+  // Conteggi sulle pagine già caricate: il backend non espone ancora un aggregato per stato.
+  const contiVista = useMemo(
     () =>
-      filtroStatoRicovero === 'tutti'
-        ? filtratiBase
-        : filtratiBase.filter((p) => summaryMap.get(p.id)?.statoRicovero === filtroStatoRicovero),
-    [filtratiBase, filtroStatoRicovero, summaryMap],
+      countListViews(
+        filtratiBase.map((p) => p.id),
+        (id) => summaryMap.get(id)?.statoRicovero,
+      ),
+    [filtratiBase, summaryMap],
+  );
+  const statiNonNoti = useMemo(
+    () =>
+      unknownStateCount(
+        filtratiBase.map((p) => p.id),
+        (id) => summaryMap.get(id)?.statoRicovero,
+      ),
+    [filtratiBase, summaryMap],
+  );
+  const filtrati = useMemo(
+    () => filtratiBase.filter((p) => matchesListView(summaryMap.get(p.id)?.statoRicovero, vista)),
+    [filtratiBase, vista, summaryMap],
   );
   const ordinati = useMemo(
     () =>
@@ -203,26 +204,43 @@ export function PatientList({
   return (
     <div className="patient-list-view">
       <PageHeader
-        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Pazienti' }]}
         title="Pazienti"
         subtitle={
           ricerca || filtroSesso !== 'tutti'
             ? `${pazienti.length} risultati caricati`
             : `${pazienti.length} caricati su ${Math.max(totalPatients, pazienti.length)}`
         }
-        actions={
-          <>
-            <AIImportStatus
-              onImported={handleImported}
-              operatorId={operatorId}
-              operatorRole={operatorRole}
-            />
-            <button className="btn-success" onClick={() => setShowNewPatient(true)}>
-              <IcoPlus /> Nuovo paziente
-            </button>
-          </>
-        }
       />
+
+      {/* HMI 1: card "Nuovo ingresso", come il prototipo */}
+      <section className="plist-card plist-new" aria-labelledby="plist-new-title">
+        <span className="plist-new__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6" />
+          </svg>
+        </span>
+        <div className="plist-new__text">
+          <h2 id="plist-new-title">Nuovo ingresso</h2>
+          <p>Da lettera di dimissione, foto o a mano: l’AI compila i dati, tu li verifichi.</p>
+        </div>
+        <div className="plist-new__actions">
+          <AIImportStatus
+            onImported={handleImported}
+            operatorId={operatorId}
+            operatorRole={operatorRole}
+          />
+          <button
+            type="button"
+            className="plist-btn plist-btn--primary"
+            onClick={() => setShowNewPatient(true)}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6" />
+            </svg>
+            Nuovo ingresso
+          </button>
+        </div>
+      </section>
 
       {/* Errore verifica impostazioni (niente fallimenti silenziosi — FR-018) */}
       {(settingsError || pageError) && (
@@ -265,151 +283,186 @@ export function PatientList({
         </p>
       )}
 
-      {/* Toolbar */}
-      <div className="toolbar">
-        <div className="search-wrap">
-          <span className="search-wrap__ico">
-            <IcoSearch />
-          </span>
-          <input
-            className="search-input"
-            type="search"
-            placeholder="Cerca per nome o codice fiscale…"
-            aria-label="Cerca paziente per nome o codice fiscale"
-            maxLength={80}
-            value={ricerca}
-            onChange={(e) => {
-              setFiltroStatoRicovero('tutti');
-              setRicerca(e.target.value);
-            }}
-          />
-          {ricerca && (
-            <button
-              className="search-clear-btn"
-              onClick={() => {
-                setFiltroStatoRicovero('tutti');
-                setRicerca('');
+      <section className="plist-card plist-list" aria-label="Elenco pazienti">
+        <div className="plist-toolbar">
+          <div className="search-wrap plist-search">
+            <span className="search-wrap__ico">
+              <IcoSearch />
+            </span>
+            <input
+              className="search-input"
+              type="search"
+              placeholder="Cerca per nome o codice fiscale…"
+              aria-label="Cerca paziente per nome o codice fiscale"
+              maxLength={80}
+              value={ricerca}
+              onChange={(e) => {
+                // la ricerca guarda tutti i pazienti, anche i dimessi; cancellata, si torna
+                // alla vista di prima
+                const value = e.target.value;
+                if (value && !ricerca) {
+                  setVistaPrimaDellaRicerca(vista);
+                  setVista('tutti');
+                } else if (!value && ricerca) {
+                  setVista(vistaPrimaDellaRicerca ?? 'in_carico');
+                  setVistaPrimaDellaRicerca(null);
+                }
+                setRicerca(value);
               }}
-              aria-label="Cancella"
-            >
-              <IcoX />
-            </button>
-          )}
-        </div>
-        <div className="filter-chips" role="group" aria-label="Filtra pazienti per sesso">
-          {(['tutti', 'M', 'F'] as const).map((s) => (
-            <button
-              key={s}
-              type="button"
-              className={`filter-chip${filtroSesso === s ? ' active' : ''}`}
-              aria-pressed={filtroSesso === s}
-              onClick={() => {
-                setFiltroStatoRicovero('tutti');
-                setFiltroSesso(s);
-              }}
-            >
-              {s === 'tutti' ? 'Tutti' : s === 'M' ? 'Maschio' : 'Femmina'}
-            </button>
-          ))}
-        </div>
-        {statiPresenti.length > 0 && (
-          <div
-            className="filter-chips"
-            role="group"
-            aria-label="Filtra per stato di ricovero nei risultati caricati"
-          >
-            <button
-              type="button"
-              className={`filter-chip${filtroStatoRicovero === 'tutti' ? ' active' : ''}`}
-              aria-pressed={filtroStatoRicovero === 'tutti'}
-              onClick={() => setFiltroStatoRicovero('tutti')}
-            >
-              Tutti gli stati caricati
-            </button>
-            {statiPresenti.map((s) => (
+            />
+            {ricerca && (
               <button
-                key={s}
-                type="button"
-                className={`filter-chip${filtroStatoRicovero === s ? ' active' : ''}`}
-                aria-pressed={filtroStatoRicovero === s}
-                onClick={() => setFiltroStatoRicovero(s)}
+                className="search-clear-btn"
+                onClick={() => {
+                  setVista(vistaPrimaDellaRicerca ?? 'in_carico');
+                  setVistaPrimaDellaRicerca(null);
+                  setRicerca('');
+                }}
+                aria-label="Cancella"
               >
-                {STATO_RICOVERO_LABEL[s]}
-                {contiStato[s] ? ` (${contiStato[s]})` : ''}
+                <IcoX />
+              </button>
+            )}
+          </div>
+          <div className="plist-views" role="group" aria-label="Vista dei pazienti caricati">
+            {(['in_carico', 'dimessi', 'tutti'] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                className="plist-chip"
+                aria-pressed={vista === v}
+                onClick={() => setVista(v)}
+              >
+                {LIST_VIEW_LABEL[v]}
+                {contiVista[v] !== null && (
+                  <span className="plist-chip__count">{contiVista[v]}</span>
+                )}
               </button>
             ))}
+            <button
+              type="button"
+              className={`plist-chip plist-chip--filters${filtroSesso !== 'tutti' ? ' is-filtered' : ''}`}
+              aria-expanded={showFilters}
+              aria-controls="plist-filters"
+              onClick={() => setShowFilters((v) => !v)}
+            >
+              Filtri e ordine
+              {/* un filtro attivo si vede anche a pannello chiuso */}
+              {filtroSesso !== 'tutti' && (
+                <span className="plist-chip__count">
+                  {filtroSesso === 'M' ? 'Maschi' : 'Femmine'}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+        {statiNonNoti > 0 && vista !== 'tutti' && (
+          <p className="plist-note" role="status">
+            {statiNonNoti === 1 ? '1 paziente ha' : `${statiNonNoti} pazienti hanno`} lo stato di
+            ricovero non ancora disponibile:{' '}
+            {vista === 'dimessi'
+              ? 'i dimessi non si possono ancora distinguere.'
+              : statiNonNoti === 1
+                ? 'resta fra i ricoverati finché il dato non arriva.'
+                : 'restano fra i ricoverati finché il dato non arriva.'}
+          </p>
+        )}
+        {filtroSesso !== 'tutti' && !showFilters && (
+          <p className="plist-note" role="status">
+            Filtro attivo: solo {filtroSesso === 'M' ? 'maschi' : 'femmine'}.{' '}
+            <button type="button" className="link-btn" onClick={() => setFiltroSesso('tutti')}>
+              Mostra tutti
+            </button>
+          </p>
+        )}
+        {showFilters && (
+          <div className="plist-filters" id="plist-filters">
+            <div className="filter-chips" role="group" aria-label="Filtra pazienti per sesso">
+              {(['tutti', 'M', 'F'] as const).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className={`filter-chip${filtroSesso === s ? ' active' : ''}`}
+                  aria-pressed={filtroSesso === s}
+                  onClick={() => {
+                    setFiltroSesso(s);
+                  }}
+                >
+                  {s === 'tutti' ? 'Tutti' : s === 'M' ? 'Maschio' : 'Femmina'}
+                </button>
+              ))}
+            </div>
+            <RosterOrderControl onSelect={() => setLocalSort(null)} />
           </div>
         )}
-      </div>
 
-      <RosterOrderControl onSelect={() => setLocalSort(null)} />
-
-      {/* Empty state */}
-      {!loading && !pageError && pazienti.length === 0 && (
-        <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
-          <div className="empty-state-card__ico" aria-hidden="true">
-            <IcoUser />
-          </div>
-          <h3 style={{ marginBottom: 8, fontSize: 18 }}>
-            {ricerca || filtroSesso !== 'tutti'
-              ? 'Nessun paziente trovato'
-              : 'Nessun paziente presente'}
-          </h3>
-          <p
-            style={{
-              color: 'var(--text-muted)',
-              marginBottom: 24,
-              maxWidth: 360,
-              margin: '0 auto 24px',
-            }}
-          >
-            {ricerca || filtroSesso !== 'tutti'
-              ? 'Prova a modificare la ricerca o i filtri.'
-              : 'Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.'}
-          </p>
-          {!ricerca && filtroSesso === 'tutti' && (
-            <button className="btn-success" onClick={() => setShowNewPatient(true)}>
-              <IcoPlus /> Aggiungi primo paziente
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* Tabella + card, sempre aperte (niente sezione collassabile) */}
-      {(loading || pazienti.length > 0) && (
-        <>
-          <PatientRoster
-            localSortActive={Boolean(localSort)}
-            serverCriterion={rosterOrder.order.criterion}
-            patients={ordinati}
-            sort={sort}
-            onSortChange={setSort}
-            hasMore={hasMore}
-            loading={loading}
-            summaryLoading={summaryLoading}
-            summaryMap={summaryMap}
-            consegneAperteMap={consegneAperteMap}
-            anomalie={anomalie}
-            deleteEnabled={deleteEnabled}
-            deletingId={deletingId}
-            onSelect={onSelect}
-            onPrefetch={onPrefetch}
-            onDelete={handleDelete}
-          />
-          {hasMore && nextCursor && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-              <button
-                type="button"
-                className="btn-ghost-outline"
-                disabled={loadingMore}
-                onClick={() => void loadPage(nextCursor, true)}
-              >
-                {loadingMore ? 'Caricamento…' : 'Carica altri pazienti'}
-              </button>
+        {/* Empty state */}
+        {!loading && !pageError && pazienti.length === 0 && (
+          <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
+            <div className="empty-state-card__ico" aria-hidden="true">
+              <IcoUser />
             </div>
-          )}
-        </>
-      )}
+            <h3 style={{ marginBottom: 8, fontSize: 18 }}>
+              {ricerca || filtroSesso !== 'tutti'
+                ? 'Nessun paziente trovato'
+                : 'Nessun paziente presente'}
+            </h3>
+            <p
+              style={{
+                color: 'var(--text-muted)',
+                marginBottom: 24,
+                maxWidth: 360,
+                margin: '0 auto 24px',
+              }}
+            >
+              {ricerca || filtroSesso !== 'tutti'
+                ? 'Prova a modificare la ricerca o i filtri.'
+                : 'Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.'}
+            </p>
+            {!ricerca && filtroSesso === 'tutti' && (
+              <button className="btn-success" onClick={() => setShowNewPatient(true)}>
+                <IcoPlus /> Aggiungi primo paziente
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Tabella + card, sempre aperte (niente sezione collassabile) */}
+        {(loading || pazienti.length > 0) && (
+          <>
+            <PatientRoster
+              localSortActive={Boolean(localSort)}
+              serverCriterion={rosterOrder.order.criterion}
+              patients={ordinati}
+              sort={sort}
+              onSortChange={setSort}
+              hasMore={hasMore}
+              loading={loading}
+              summaryLoading={summaryLoading}
+              summaryMap={summaryMap}
+              consegneAperteMap={consegneAperteMap}
+              anomalie={anomalie}
+              deleteEnabled={deleteEnabled}
+              deletingId={deletingId}
+              onSelect={onSelect}
+              onPrefetch={onPrefetch}
+              onDelete={handleDelete}
+            />
+            {hasMore && nextCursor && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+                <button
+                  type="button"
+                  className="btn-ghost-outline"
+                  disabled={loadingMore}
+                  onClick={() => void loadPage(nextCursor, true)}
+                >
+                  {loadingMore ? 'Caricamento…' : 'Carica altri pazienti'}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </section>
 
       {showNewPatient && (
         <NewPatientFlow
