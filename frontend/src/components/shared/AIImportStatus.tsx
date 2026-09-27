@@ -20,7 +20,7 @@ interface AiStatus {
 
 interface Props {
   onStart?: () => void;
-  onImported?: () => void;
+  onImported?: (patientId?: string, moduleTabId?: string) => void;
   operatorId?: string;
   operatorRole?: string;
 }

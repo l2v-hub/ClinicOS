@@ -20,7 +20,8 @@ import './import/ImportSession.css';
 interface Props {
   open: boolean;
   onClose(): void;
-  onImported?(): void;
+  /** Paziente creato o aggiornato dall'import e, se scelto nel wizard, il modulo da aprire. */
+  onImported?(patientId?: string, moduleTabId?: string): void;
   operatorId?: string;
   operatorRole?: string;
 }
@@ -263,9 +264,11 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
       if (active.current) setBusy(false);
     }
   }
-  function completed() {
+  // Inoltra chi è stato creato: senza, a fine import si tornava alla lista e l'operatore doveva
+  // cercare il paziente appena inserito.
+  function completed(patientId?: string, moduleTabId?: string) {
     importSessionMemory.clear(actor);
-    onImported?.();
+    onImported?.(patientId, moduleTabId);
     onClose();
   }
   if (step === 'workspace' && draftId)
