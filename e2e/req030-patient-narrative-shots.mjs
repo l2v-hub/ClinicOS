@@ -117,10 +117,8 @@ async function openNarrativeTab(page) {
   await page.waitForTimeout(800);
   await page.getByText('Bianchi', { exact: false }).first().click();
   await page.waitForTimeout(1000);
-  // L2 group "Clinica" (has a badge, so match by role+regex) -> L3 tab "Sezioni Cliniche (testo)"
-  await page.getByRole('tab', { name: /Clinica/ }).click();
-  await page.waitForTimeout(500);
-  await page.getByRole('tab', { name: /Sezioni Cliniche/ }).click();
+  // La cartella ha una sola barra di sezioni (nessun gruppo L2 "Clinica" da aprire prima).
+  await page.getByRole('tab', { name: /^Diagnosi/ }).click(); // le sezioni narrative sono nel tab Diagnosi
   await page.waitForSelector('[data-testid="patient-narrative-sections"]', { timeout: 15000 });
   await page.waitForTimeout(700);
 }

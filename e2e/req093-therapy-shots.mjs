@@ -42,12 +42,7 @@ async function gotoTherapy(page) {
     await page.waitForTimeout(1200);
   }
 
-  // Clinica L2 tab (label shows "Clinica 7")
-  const clinica = page.getByText(/^Clinica/).first();
-  if ((await clinica.count()) > 0) {
-    await clinica.click().catch(() => {});
-    await page.waitForTimeout(800);
-  }
+  // La cartella ha una sola barra di sezioni (nessun gruppo L2 "Clinica" da aprire prima).
   // Terapia Farmacologica L3 tab
   const tab = page.getByText('Terapia Farmacologica', { exact: false }).first();
   if ((await tab.count()) > 0) {

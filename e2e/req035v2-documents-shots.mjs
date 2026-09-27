@@ -123,9 +123,8 @@ await p
   .catch(() => {});
 await p.waitForTimeout(300);
 // narrative section compare
-await p.getByRole('tab', { name: /Clinica/ }).click();
-await p.waitForTimeout(400);
-await p.getByRole('tab', { name: /Sezioni Cliniche/ }).click();
+// La cartella ha una sola barra di sezioni (nessun gruppo L2 "Clinica" da aprire prima).
+await p.getByRole('tab', { name: /^Diagnosi/ }).click(); // le sezioni narrative sono nel tab Diagnosi
 await p.waitForTimeout(700);
 await p.locator('[data-testid="narr-ANAMNESIS"]').scrollIntoViewIfNeeded();
 await p.screenshot({ path: resolve(OUT, 'patient-section-source-action.png') });

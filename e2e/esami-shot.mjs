@@ -1,6 +1,6 @@
 // BUG-061: Screenshot proof for Esami & Consulenze tab with three distinct sections.
 // Uses vite preview (pre-built dist), mocks all backend routes,
-// navigates to patient → Clinica group → "Esami & Consulenze" tab.
+// navigates to patient → "Esami & Consulenze" tab.
 // Usage: node e2e/esami-shot.mjs [frontendUrl] [outDir]
 import { chromium } from 'playwright';
 import { resolve } from 'node:path';
@@ -164,14 +164,8 @@ try {
   if ((await row.count()) > 0) await row.click();
   await page.waitForTimeout(1200);
 
-  // Click "Clinica" L2 group
-  const clinicaGroup = page.getByText('Clinica', { exact: true }).first();
-  if ((await clinicaGroup.count()) > 0) {
-    await clinicaGroup.click();
-    await page.waitForTimeout(800);
-  }
-
-  // Click "Esami & Consulenze" L3 tab
+  // La cartella ha una sola barra di sezioni (nessun gruppo L2 "Clinica" da aprire prima).
+  // Click "Esami & Consulenze" tab
   const esamiTab = page.getByText('Esami & Consulenze', { exact: true }).first();
   if ((await esamiTab.count()) > 0) {
     await esamiTab.click();

@@ -301,11 +301,7 @@ try {
   await page.getByText('Baldini').first().click();
   await page.waitForTimeout(1200);
 
-  const clinica = page.getByText('Clinica', { exact: true }).first();
-  if ((await clinica.count()) > 0) {
-    await clinica.click();
-    await page.waitForTimeout(600);
-  }
+  // La cartella ha una sola barra di sezioni (nessun gruppo L2 "Clinica" da aprire prima).
   const tabTerapia = page.getByText(/Terapia farmacologica/i).first();
   if ((await tabTerapia.count()) > 0) {
     await tabTerapia.click();

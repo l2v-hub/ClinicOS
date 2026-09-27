@@ -13,7 +13,7 @@ async function nav(page) {
   await page.waitForTimeout(1200);
   await page.getByText('Operatore', { exact: true }).click();
   await page.waitForTimeout(1500);
-  for (const label of ['Pazienti', PATIENT, 'Clinica', 'Presa in Carico']) {
+  for (const label of ['Pazienti', PATIENT, 'Presa in Carico']) {
     await page.getByText(label).first().click();
     await page.waitForTimeout(1200);
   }

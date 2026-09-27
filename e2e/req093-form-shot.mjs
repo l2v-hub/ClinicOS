@@ -28,11 +28,7 @@ async function navTherapy(page) {
     await row.click();
     await page.waitForTimeout(1100);
   }
-  const clinica = page.getByText(/^Clinica/).first();
-  if ((await clinica.count()) > 0) {
-    await clinica.click();
-    await page.waitForTimeout(700);
-  }
+  // La cartella ha una sola barra di sezioni (nessun gruppo L2 "Clinica" da aprire prima).
   // L3 tab: target the tab specifically (TopNav level3 segmented control)
   const tab = page.getByRole('button', { name: /Terapia Farmacologica/i }).first();
   if ((await tab.count()) > 0) {

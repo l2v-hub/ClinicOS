@@ -20,7 +20,7 @@ try {
   await page.waitForTimeout(1200);
   await page.getByText('Operatore', { exact: true }).click();
   await page.waitForTimeout(1500);
-  for (const label of ['Pazienti', PATIENT, 'Clinica', 'Terapia Farmacologica']) {
+  for (const label of ['Pazienti', PATIENT, 'Terapia Farmacologica']) {
     await page.getByText(label).first().click();
     await page.waitForTimeout(1200);
   }
