@@ -1,7 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
-import { API_URL } from '../../config';
+import { lazy, Suspense, useState } from 'react';
 import { DialogLoading } from './DialogLoading';
-import { cachedGetJson } from '../../lib/cachedFetch';
+import { useAiImportStatus } from './useAiImportStatus';
 
 const DischargeImportModal = lazy(() =>
   import('./DischargeImportModal').then((module) => ({ default: module.DischargeImportModal })),
@@ -11,13 +10,6 @@ const DischargeImportModal = lazy(() =>
 // usable, without ever knowing the API key (key is backend-only). Doubles as the
 // entry point for the "Importa lettera di dimissione" flow (REQ-014).
 
-interface AiStatus {
-  available: boolean;
-  provider: string;
-  model: string;
-  errors: string[];
-}
-
 interface Props {
   onStart?: () => void;
   onImported?: (patientId?: string, moduleTabId?: string) => void;
@@ -26,36 +18,13 @@ interface Props {
 }
 
 export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }: Props) {
-  const [status, setStatus] = useState<AiStatus | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { loading, available, reason } = useAiImportStatus();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    let alive = true;
-    cachedGetJson<AiStatus>(`${API_URL}/ai/extraction/status`)
-      .then((s) => {
-        if (alive) {
-          setStatus(s);
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        if (alive) {
-          setStatus(null);
-          setLoading(false);
-        }
-      });
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  const available = status?.available === true;
   const title = loading
     ? 'Importa lettera di dimissione · Verifica disponibilità in corso'
     : available
       ? 'Importa lettera di dimissione'
-      : `Servizio AI non disponibile${status?.errors?.length ? ': ' + status.errors.join('; ') : ''}`;
+      : reason;
 
   return (
     <>

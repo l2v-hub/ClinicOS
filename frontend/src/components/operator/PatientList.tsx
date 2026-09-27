@@ -8,6 +8,7 @@ import { DialogLoading } from '../shared/DialogLoading';
 import { usePatientListPage } from './usePatientListPage';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
+import { NewPatientChooser, type NewPatientPath } from './NewPatientChooser';
 import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { PatientRoster } from './PatientRoster';
@@ -23,6 +24,11 @@ import './PatientList.css';
 const IntakeWorkspace = lazy(() =>
   import('../shared/intake/IntakeWorkspace').then((module) => ({
     default: module.IntakeWorkspace,
+  })),
+);
+const DischargeImportModal = lazy(() =>
+  import('../shared/DischargeImportModal').then((module) => ({
+    default: module.DischargeImportModal,
   })),
 );
 
@@ -93,7 +99,8 @@ export function PatientList({
   );
   // AC6/AC11: anomalie di tutto il reparto da UNA richiesta, non una per paziente.
   const anomalie = useAnomalieReparto();
-  const [showModal, setShowModal] = useState(false);
+  // Ingresso unico "Nuovo paziente": prima la scelta, poi il percorso (documenti o a mano).
+  const [newPatient, setNewPatient] = useState<'scelta' | NewPatientPath | null>(null);
   const [filtroStatoRicovero, setFiltroStatoRicovero] = useState<string>('tutti');
   // TEST-ONLY: patient deletion. Backend gates it via ALLOW_PATIENT_DELETE; we hide the
   // button when disabled so production simply never shows it.
@@ -198,6 +205,13 @@ export function PatientList({
     [filtrati, localSort, summaryMap, consegneAperteMap, anomalie.perPaziente],
   );
 
+  // Fine import (pulsante "Importa dimissione" o scelta "Da documenti"): ricarica la lista e apre
+  // il paziente creato o aggiornato, sul modulo scelto.
+  const handleImported = (patientId?: string, moduleTabId?: string) => {
+    void loadPage(undefined, false);
+    onImported?.(patientId, moduleTabId);
+  };
+
   return (
     <div className="patient-list-view">
       <PageHeader
@@ -211,14 +225,11 @@ export function PatientList({
         actions={
           <>
             <AIImportStatus
-              onImported={(patientId, moduleTabId) => {
-                void loadPage(undefined, false);
-                onImported?.(patientId, moduleTabId);
-              }}
+              onImported={handleImported}
               operatorId={operatorId}
               operatorRole={operatorRole}
             />
-            <button className="btn-success" onClick={() => setShowModal(true)}>
+            <button className="btn-success" onClick={() => setNewPatient('scelta')}>
               <IcoPlus /> Nuovo paziente
             </button>
           </>
@@ -369,7 +380,7 @@ export function PatientList({
               : 'Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.'}
           </p>
           {!ricerca && filtroSesso === 'tutti' && (
-            <button className="btn-success" onClick={() => setShowModal(true)}>
+            <button className="btn-success" onClick={() => setNewPatient('scelta')}>
               <IcoPlus /> Aggiungi primo paziente
             </button>
           )}
@@ -412,13 +423,27 @@ export function PatientList({
         </>
       )}
 
-      {showModal && (
-        <Suspense fallback={<DialogLoading onClose={() => setShowModal(false)} />}>
+      {newPatient === 'scelta' && (
+        <NewPatientChooser onClose={() => setNewPatient(null)} onChoose={setNewPatient} />
+      )}
+      {newPatient === 'documenti' && (
+        <Suspense fallback={<DialogLoading onClose={() => setNewPatient(null)} />}>
+          <DischargeImportModal
+            open
+            onClose={() => setNewPatient(null)}
+            onImported={handleImported}
+            operatorId={operatorId}
+            operatorRole={operatorRole}
+          />
+        </Suspense>
+      )}
+      {newPatient === 'manuale' && (
+        <Suspense fallback={<DialogLoading onClose={() => setNewPatient(null)} />}>
           <IntakeWorkspace
-            open={showModal}
-            onClose={() => setShowModal(false)}
+            open
+            onClose={() => setNewPatient(null)}
             onCreated={(patientId, moduleTabId) => {
-              setShowModal(false);
+              setNewPatient(null);
               if (!patientId) void loadPage(undefined, false);
               onImported?.(patientId, moduleTabId);
             }}
