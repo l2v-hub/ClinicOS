@@ -5,7 +5,6 @@ import { AppointmentForm } from '../shared/AppointmentForm';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { AgendaLegend } from '../shared/AgendaLegend';
 import { AppuntamentoActions } from '../shared/AppuntamentoActions';
-import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { TherapySlotCard } from '../shared/TherapySlotOverlay';
 import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
 import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
@@ -23,7 +22,6 @@ interface AdminAgendaProps {
   appointmentLoadError?: string | null;
   onRetryAppointments?: () => void;
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
-  onAddPaziente: (nome: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   /** Fasce terapia di reparto (GET /therapy-slots). In agenda admin sono di sola lettura:
    *  la firma di somministrazione resta un atto clinico dell'operatore erogante. */
@@ -101,7 +99,6 @@ export function AdminAgenda({
   appointmentLoadError = null,
   onRetryAppointments,
   onLoadAppointments,
-  onAddPaziente,
   onSelectPaziente,
   therapySlots,
   loadingTherapySlots = false,
@@ -120,7 +117,6 @@ export function AdminAgenda({
   const [aptForm, setAptForm] = useState<{ data: string; ora: string; operatoreId: string } | null>(
     null,
   );
-  const [showNewPaziente, setShowNewPaziente] = useState(false);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
@@ -723,7 +719,6 @@ export function AdminAgenda({
             return err;
           }}
           onCancel={() => setAptForm(null)}
-          onNewPatient={() => setShowNewPaziente(true)}
         />
       )}
       {editingApt && (
@@ -739,18 +734,8 @@ export function AdminAgenda({
             return err;
           }}
           onCancel={() => setEditingApt(null)}
-          onNewPatient={() => setShowNewPaziente(true)}
         />
       )}
-      {/* operatorId/operatorRole not available in AdminAgenda props — not passed */}
-      <IntakeWorkspace
-        open={showNewPaziente}
-        onClose={() => setShowNewPaziente(false)}
-        onCreated={(id) => {
-          onAddPaziente(id);
-          setShowNewPaziente(false);
-        }}
-      />
       {view === 'giornaliero' && activeTherapySlot && (
         <TherapySlotModal
           slot={activeTherapySlot}

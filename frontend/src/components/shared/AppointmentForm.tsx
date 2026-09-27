@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Appuntamento, Operatore, Paziente, TipoIntervento } from '../../types';
 import { IcoX, IcoCheck, IcoPlus } from '../../icons';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 import { PatientCombobox } from './PatientCombobox';
+import { NewPatientFlow } from '../operator/NewPatientFlow';
+import { API_URL } from '../../config';
+import { fetchPatientById } from '../../lib/patientPage';
+import { operatorHeaders } from '../../lib/operatorSession';
 
 interface AppointmentFormProps {
   data: string;
@@ -14,7 +18,9 @@ interface AppointmentFormProps {
   /** SPEC-015 US4: persists via REST — resolves with an error message, or null on success. */
   onSave: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onCancel: () => void;
-  onNewPatient: () => void;
+  /** Operatore per il flusso "Crea nuovo paziente" (bozze e import). */
+  operatorId?: string;
+  operatoreNome?: string;
 }
 
 const TIPO_OPTIONS: { value: TipoIntervento; label: string }[] = [
@@ -42,7 +48,8 @@ export function AppointmentForm({
   appuntamento,
   onSave,
   onCancel,
-  onNewPatient,
+  operatorId,
+  operatoreNome,
 }: AppointmentFormProps) {
   const isEdit = appuntamento !== undefined;
   const [form, setForm] = useState({
@@ -63,6 +70,16 @@ export function AppointmentForm({
   // SPEC-015 US4 (FR-018): visible saving state + explicit error (e.g. slot conflict 409).
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  // "Crea nuovo paziente": stessa scelta della lista pazienti; a fine creazione il paziente viene
+  // selezionato qui. Il campo paziente tiene la ricerca in uno stato interno, quindi si rimonta
+  // (comboKey) per mostrare il nome del paziente creato.
+  const [showNewPatient, setShowNewPatient] = useState(false);
+  const [comboKey, setComboKey] = useState(0);
+  const [newPatientError, setNewPatientError] = useState<string | null>(null);
+  const [loadingCreated, setLoadingCreated] = useState(false);
+  // Ogni caricamento del paziente creato ha un numero; una scelta a mano nel campo lo invalida,
+  // così una risposta lenta non sovrascrive mai il paziente scelto dall'operatore.
+  const createdRequestRef = useRef(0);
 
   const operatoreSelezionato = operatori.find((o) => o.id === form.operatoreId);
 
@@ -96,6 +113,34 @@ export function AppointmentForm({
     }));
   }
 
+  function choosePatientByHand(patient: Paziente | null) {
+    createdRequestRef.current += 1;
+    setLoadingCreated(false);
+    setNewPatientError(null);
+    selectPaziente(patient);
+  }
+
+  async function selectCreatedPatient(patientId: string | undefined) {
+    setShowNewPatient(false);
+    if (!patientId) return;
+    const request = ++createdRequestRef.current;
+    setNewPatientError(null);
+    setLoadingCreated(true);
+    try {
+      const patient = await fetchPatientById(API_URL, patientId, { headers: operatorHeaders() });
+      if (request !== createdRequestRef.current) return;
+      selectPaziente(patient);
+      setComboKey((key) => key + 1);
+    } catch {
+      if (request !== createdRequestRef.current) return;
+      setNewPatientError(
+        'Paziente creato, ma non è stato possibile selezionarlo: cercalo nel campo Paziente.',
+      );
+    } finally {
+      if (request === createdRequestRef.current) setLoadingCreated(false);
+    }
+  }
+
   useEffect(() => {
     if (isEdit) return; // in modifica i valori vengono dall'appuntamento, non dalla cella cliccata
     // The open dialog follows the calendar cell if the parent changes its selected slot.
@@ -104,209 +149,236 @@ export function AppointmentForm({
   }, [data, ora, operatoreId, isEdit]);
 
   return (
-    <AccessibleDialogSurface
-      labelledBy="appointment-dialog-title"
-      onClose={onCancel}
-      dismissible={!saving}
-    >
-      <div className="modal-header">
-        <h3 className="modal-title" id="appointment-dialog-title">
-          {isEdit ? 'Modifica Appuntamento' : 'Nuovo Appuntamento'}
-        </h3>
-        <button
-          type="button"
-          className="icon-btn"
-          onClick={onCancel}
-          aria-label="Chiudi"
-          data-dialog-initial-focus
-          disabled={saving}
-        >
-          <IcoX />
-        </button>
-      </div>
+    <>
+      <AccessibleDialogSurface
+        labelledBy="appointment-dialog-title"
+        onClose={onCancel}
+        dismissible={!saving}
+      >
+        <div className="modal-header">
+          <h3 className="modal-title" id="appointment-dialog-title">
+            {isEdit ? 'Modifica Appuntamento' : 'Nuovo Appuntamento'}
+          </h3>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={onCancel}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+            disabled={saving}
+          >
+            <IcoX />
+          </button>
+        </div>
 
-      <div className="modal-body">
-        {/* Il paziente non e' modificabile: PATCH /appointments/:id non accetta patientId,
+        <div className="modal-body">
+          {/* Il paziente non e' modificabile: PATCH /appointments/:id non accetta patientId,
               mostrarlo editabile prometterebbe un salvataggio che non avviene. */}
-        {isEdit ? (
-          <div className="form-field">
-            <label className="form-label">Paziente</label>
-            <p className="apt-form-readonly">{appuntamento.pazienteNome ?? '—'}</p>
-          </div>
-        ) : (
-          <div>
-            <PatientCombobox
-              inputId="appointment-patient"
-              label="Paziente"
-              selected={selectedPatient}
-              onChange={selectPaziente}
-              disabled={saving}
-            />
-            <button
-              type="button"
-              className="link-btn"
-              style={{ marginTop: 4, fontSize: 12 }}
-              onClick={onNewPatient}
-            >
-              <IcoPlus /> Crea nuovo paziente
-            </button>
-          </div>
-        )}
+          {isEdit ? (
+            <div className="form-field">
+              <label className="form-label">Paziente</label>
+              <p className="apt-form-readonly">{appuntamento.pazienteNome ?? '—'}</p>
+            </div>
+          ) : (
+            <div>
+              <PatientCombobox
+                key={comboKey}
+                inputId="appointment-patient"
+                label="Paziente"
+                selected={selectedPatient}
+                onChange={choosePatientByHand}
+                disabled={saving}
+              />
+              <button
+                type="button"
+                className="link-btn"
+                style={{ marginTop: 4, fontSize: 12 }}
+                onClick={() => setShowNewPatient(true)}
+                disabled={saving}
+              >
+                <IcoPlus /> Crea nuovo paziente
+              </button>
+              {loadingCreated && (
+                <p
+                  className="apt-form-status"
+                  role="status"
+                  style={{ margin: '4px 0 0', fontSize: 13 }}
+                >
+                  Selezione del paziente creato…
+                </p>
+              )}
+              {newPatientError && (
+                <p className="form-error" role="alert" style={{ margin: '4px 0 0', fontSize: 13 }}>
+                  {newPatientError}
+                </p>
+              )}
+            </div>
+          )}
 
-        <div
-          className="op-form-grid"
-          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}
-        >
-          <div className="form-field">
-            <label className="form-label">Data</label>
-            <input
-              className="form-input"
-              type="date"
-              value={form.data}
-              onChange={(e) => setForm((f) => ({ ...f, data: e.target.value }))}
-            />
-          </div>
-          <div className="form-field">
-            <label className="form-label">Ora</label>
-            <input
-              className="form-input"
-              type="time"
-              value={form.ora}
-              onChange={(e) => setForm((f) => ({ ...f, ora: e.target.value }))}
-            />
-          </div>
-          <div className="form-field">
-            <label className="form-label">Durata</label>
-            <select
-              className="form-select"
-              value={form.durata}
-              onChange={(e) => setForm((f) => ({ ...f, durata: Number(e.target.value) }))}
-            >
-              {DURATA_OPTIONS.map((d) => (
-                <option key={d.value} value={d.value}>
-                  {d.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-field">
-            <label className="form-label">Tipo intervento</label>
-            <select
-              className="form-select"
-              value={form.tipoIntervento}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, tipoIntervento: e.target.value as TipoIntervento }))
-              }
-            >
-              {TIPO_OPTIONS.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-field">
-            <label className="form-label">Priorità</label>
-            <select
-              className="form-select"
-              value={form.priorita}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, priorita: e.target.value as Appuntamento['priorita'] }))
-              }
-            >
-              <option value="normale">Normale</option>
-              <option value="alta">Alta</option>
-              <option value="urgente">Urgente</option>
-            </select>
-          </div>
-          <div className="form-field">
-            <label className="form-label">Operatore</label>
-            <select
-              className="form-select"
-              value={form.operatoreId}
-              onChange={(e) => setForm((f) => ({ ...f, operatoreId: e.target.value }))}
-            >
-              {operatori
-                .filter((o) => o.stato === 'attivo')
-                .map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.cognome} {o.nome}
+          <div
+            className="op-form-grid"
+            style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}
+          >
+            <div className="form-field">
+              <label className="form-label">Data</label>
+              <input
+                className="form-input"
+                type="date"
+                value={form.data}
+                onChange={(e) => setForm((f) => ({ ...f, data: e.target.value }))}
+              />
+            </div>
+            <div className="form-field">
+              <label className="form-label">Ora</label>
+              <input
+                className="form-input"
+                type="time"
+                value={form.ora}
+                onChange={(e) => setForm((f) => ({ ...f, ora: e.target.value }))}
+              />
+            </div>
+            <div className="form-field">
+              <label className="form-label">Durata</label>
+              <select
+                className="form-select"
+                value={form.durata}
+                onChange={(e) => setForm((f) => ({ ...f, durata: Number(e.target.value) }))}
+              >
+                {DURATA_OPTIONS.map((d) => (
+                  <option key={d.value} value={d.value}>
+                    {d.label}
                   </option>
                 ))}
-            </select>
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Tipo intervento</label>
+              <select
+                className="form-select"
+                value={form.tipoIntervento}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, tipoIntervento: e.target.value as TipoIntervento }))
+                }
+              >
+                {TIPO_OPTIONS.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Priorità</label>
+              <select
+                className="form-select"
+                value={form.priorita}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, priorita: e.target.value as Appuntamento['priorita'] }))
+                }
+              >
+                <option value="normale">Normale</option>
+                <option value="alta">Alta</option>
+                <option value="urgente">Urgente</option>
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Operatore</label>
+              <select
+                className="form-select"
+                value={form.operatoreId}
+                onChange={(e) => setForm((f) => ({ ...f, operatoreId: e.target.value }))}
+              >
+                {operatori
+                  .filter((o) => o.stato === 'attivo')
+                  .map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.cognome} {o.nome}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Camera (opz.)</label>
+              <input
+                className="form-input"
+                value={form.cameraId}
+                onChange={(e) => setForm((f) => ({ ...f, cameraId: e.target.value }))}
+                placeholder="N° camera"
+              />
+            </div>
+            <div className="form-field">
+              <label className="form-label">Stato</label>
+              <select
+                className="form-select"
+                value={form.stato}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, stato: e.target.value as Appuntamento['stato'] }))
+                }
+              >
+                <option value="programmato">Programmato</option>
+                <option value="in_corso">In corso</option>
+                <option value="completato">Completato</option>
+                <option value="annullato">Annullato</option>
+              </select>
+            </div>
           </div>
+
           <div className="form-field">
-            <label className="form-label">Camera (opz.)</label>
-            <input
+            <label className="form-label">Note cliniche</label>
+            <textarea
               className="form-input"
-              value={form.cameraId}
-              onChange={(e) => setForm((f) => ({ ...f, cameraId: e.target.value }))}
-              placeholder="N° camera"
+              rows={3}
+              value={form.note}
+              onChange={(e) => setForm((f) => ({ ...f, note: e.target.value }))}
+              placeholder="Note, promemoria clinico, consegna…"
             />
           </div>
-          <div className="form-field">
-            <label className="form-label">Stato</label>
-            <select
-              className="form-select"
-              value={form.stato}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, stato: e.target.value as Appuntamento['stato'] }))
-              }
+
+          {/* Operatore color preview */}
+          {operatoreSelezionato && (
+            <div className="apt-operator-preview">
+              <span className="apt-op-dot" style={{ background: operatoreSelezionato.colore }} />
+              <span>
+                {operatoreSelezionato.cognome} {operatoreSelezionato.nome} ·{' '}
+                {operatoreSelezionato.reparto}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          {saveError && (
+            <p
+              className="form-error"
+              role="alert"
+              style={{ color: 'var(--red, #DC2626)', margin: '0 auto 0 0', fontSize: 13 }}
             >
-              <option value="programmato">Programmato</option>
-              <option value="in_corso">In corso</option>
-              <option value="completato">Completato</option>
-              <option value="annullato">Annullato</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="form-field">
-          <label className="form-label">Note cliniche</label>
-          <textarea
-            className="form-input"
-            rows={3}
-            value={form.note}
-            onChange={(e) => setForm((f) => ({ ...f, note: e.target.value }))}
-            placeholder="Note, promemoria clinico, consegna…"
-          />
-        </div>
-
-        {/* Operatore color preview */}
-        {operatoreSelezionato && (
-          <div className="apt-operator-preview">
-            <span className="apt-op-dot" style={{ background: operatoreSelezionato.colore }} />
-            <span>
-              {operatoreSelezionato.cognome} {operatoreSelezionato.nome} ·{' '}
-              {operatoreSelezionato.reparto}
-            </span>
-          </div>
-        )}
-      </div>
-
-      <div className="modal-footer">
-        {saveError && (
-          <p
-            className="form-error"
-            role="alert"
-            style={{ color: 'var(--red, #DC2626)', margin: '0 auto 0 0', fontSize: 13 }}
+              {saveError}
+            </p>
+          )}
+          <button className="btn-secondary" onClick={onCancel} disabled={saving}>
+            Annulla
+          </button>
+          <button
+            className="btn-success"
+            onClick={() => {
+              void salva();
+            }}
+            disabled={saving || (!isEdit && !form.pazienteId)}
           >
-            {saveError}
-          </p>
-        )}
-        <button className="btn-secondary" onClick={onCancel} disabled={saving}>
-          Annulla
-        </button>
-        <button
-          className="btn-success"
-          onClick={() => {
-            void salva();
-          }}
-          disabled={saving || (!isEdit && !form.pazienteId)}
-        >
-          <IcoCheck /> {saving ? 'Salvataggio…' : isEdit ? 'Salva modifiche' : 'Salva appuntamento'}
-        </button>
-      </div>
-    </AccessibleDialogSurface>
+            <IcoCheck />{' '}
+            {saving ? 'Salvataggio…' : isEdit ? 'Salva modifiche' : 'Salva appuntamento'}
+          </button>
+        </div>
+      </AccessibleDialogSurface>
+      {showNewPatient && (
+        <NewPatientFlow
+          onClose={() => setShowNewPatient(false)}
+          onDone={(patientId) => void selectCreatedPatient(patientId)}
+          operatorId={operatorId}
+          operatoreNome={operatoreNome}
+        />
+      )}
+    </>
   );
 }

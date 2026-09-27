@@ -3178,7 +3178,6 @@ export default function App() {
                         appointmentLoadError={appointmentLoadError}
                         onRetryAppointments={retryAppointmentRange}
                         onLoadAppointments={loadAppointmentRange}
-                        onAddPaziente={() => {}}
                         onSelectPaziente={goToPazienteByNome}
                       />
                     )}
