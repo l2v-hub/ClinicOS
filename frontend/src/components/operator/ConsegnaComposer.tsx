@@ -3,6 +3,7 @@ import type { Operatore, Paziente, PrioritaConsegna } from '../../types';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
 import { PatientIdentity } from '../shared/PatientIdentity';
+import { patientIdentityName } from '../../lib/patientIdentity';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 const TYPES = [
   'Monitoraggio',
@@ -62,7 +63,10 @@ export function ConsegnaComposer({
     store.update(patient.id, change);
   return (
     <section className="handover-rounds__composer" aria-label="Scrivi consegna">
-      <h3>Nuova consegna</h3>
+      <div className="ho-card-head">
+        <h3>Consegna · {patientIdentityName(patient)}</h3>
+        <span className="ho-cap">{draft.dirty ? 'Bozza non salvata' : 'Nuova consegna'}</span>
+      </div>
       <form
         ref={formRef}
         aria-busy={draft.saving}
@@ -164,16 +168,26 @@ export function ConsegnaComposer({
           {draft.fields.note.length}/4000 · La nuova consegna sarà aperta.
         </span>
         <div className="handover-rounds__actions">
+          {draft.dirty && (
+            <button
+              type="button"
+              className="link-btn"
+              disabled={draft.saving}
+              onClick={() => setDiscard(true)}
+            >
+              Scarta bozza
+            </button>
+          )}
           <button
             type="submit"
-            className="btn-success"
+            className="ho-btn ho-btn--secondary"
             disabled={draft.saving || blocked || !draft.fields.note.trim()}
           >
             {draft.saving ? 'Salvataggio…' : draft.pending ? 'Riprova salvataggio' : 'Salva'}
           </button>
           <button
             type="button"
-            className="btn-primary"
+            className="ho-btn ho-btn--primary"
             disabled={
               draft.saving ||
               blocked ||
@@ -185,16 +199,6 @@ export function ConsegnaComposer({
           >
             Salva e prossimo
           </button>
-          {draft.dirty && (
-            <button
-              type="button"
-              className="link-btn"
-              disabled={draft.saving}
-              onClick={() => setDiscard(true)}
-            >
-              Scarta bozza
-            </button>
-          )}
         </div>
         {draft.outcome?.kind === 'failed' && <p role="alert">{draft.outcome.message}</p>}
         {draft.receipt && (

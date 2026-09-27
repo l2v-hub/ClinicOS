@@ -160,3 +160,305 @@
     padding: 12px;
   }
 }
+
+/* ── HMI 1 (artifacts/hmi-parity/proto/consegne.png) ─────────────────────── */
+.ho-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.handover-workspace__tabs {
+  margin-block: 0 16px;
+}
+.handover-workspace .ho-chip {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: 400 16px/24px var(--font-ui);
+  cursor: pointer;
+}
+.handover-workspace .ho-chip[aria-pressed='true'] {
+  background: #eaf1fe;
+  border-color: var(--blue);
+  color: #1d4fc4;
+  font-weight: 600;
+}
+.handover-rounds__layout {
+  grid-template-columns: 304px minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 0;
+}
+.handover-rounds__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+.ho-eyebrow {
+  font: 600 14px/20px var(--font-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.ho-label {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.handover-rounds__list .handover-rounds__filters {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+.handover-rounds__list .handover-rounds__filters > label {
+  flex: none;
+}
+.handover-rounds__list .handover-rounds__filters input {
+  height: 48px;
+}
+.ho-link {
+  align-self: flex-start;
+  border: 0;
+  background: none;
+  padding: 0 4px;
+  min-height: 48px;
+  color: #1d4fc4;
+  font: 600 16px/24px var(--font-ui);
+  cursor: pointer;
+}
+.handover-rounds__roster {
+  gap: 8px;
+}
+.handover-rounds__patient {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  overflow-wrap: normal;
+}
+.handover-rounds__patient.is-selected {
+  border-color: var(--blue);
+  background: #eaf1fe;
+  box-shadow: none;
+}
+.handover-rounds__select {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 10px;
+  border-radius: 10px;
+}
+.ho-bed {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 12px;
+  background: #f5f7fb;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font: 600 18px/24px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.ho-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ho-name {
+  font: 600 16px/24px var(--font-ui);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ho-cap {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.handover-rounds__badges {
+  margin-top: 4px;
+  gap: 4px;
+  font: 600 13px/18px var(--font-ui);
+}
+.handover-rounds__badges > span {
+  background: #f5f7fb;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.handover-rounds__patient.is-selected .handover-rounds__badges > span {
+  background: var(--surface);
+}
+.handover-rounds__composer {
+  border-radius: 16px;
+  padding: 24px;
+  top: 16px;
+}
+.ho-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.ho-card-head h3 {
+  margin: 0;
+  font: 600 20px/28px var(--font-ui);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.handover-rounds__fields label,
+.handover-rounds__note {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.handover-rounds__fields :is(input, select),
+.handover-rounds__note textarea {
+  color: var(--text);
+  font-size: 16px;
+}
+.handover-rounds__fields :is(input, select) {
+  height: 48px;
+}
+.handover-rounds__note textarea {
+  min-height: 132px;
+}
+.handover-rounds__actions {
+  justify-content: flex-end;
+  align-items: center;
+}
+.handover-rounds__actions .link-btn {
+  margin-right: auto;
+  min-height: 48px;
+}
+.ho-btn {
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 12px;
+  font: 600 16px/24px var(--font-ui);
+  cursor: pointer;
+}
+.ho-btn--primary {
+  background: var(--blue);
+  border: 2px solid var(--blue);
+  color: #fff;
+}
+.ho-btn--secondary {
+  background: var(--surface);
+  border: 2px solid #c9d3e1;
+  color: #1d4fc4;
+}
+.ho-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+@media (max-width: 1023px) {
+  .handover-rounds__layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .handover-rounds__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .handover-rounds__roster {
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  .handover-rounds__composer {
+    padding: 16px;
+  }
+}
+.handover-rounds__layout > div:last-child > p[role='status'],
+.handover-rounds__layout > div:last-child > p[role='alert'] {
+  margin: 0 0 12px;
+  font: 600 14px/20px var(--font-ui);
+}
+
+/* QA giro 1: righe mai più larghe della colonna (nomi lunghi, omonimi leggibili per intero). */
+.handover-rounds__roster {
+  grid-template-columns: minmax(0, 1fr);
+}
+.handover-rounds__patient,
+.handover-rounds__select,
+.ho-who {
+  min-width: 0;
+}
+.ho-who .patient-identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ho-who .patient-identity__name {
+  font: 600 16px/24px var(--font-ui);
+}
+.ho-who :is(.patient-identity__location, .patient-identity__context, .patient-identity__incomplete) {
+  font-size: 13px;
+  line-height: 18px;
+}
+/* La card resta a vista mentre la pagina scorre sulla lista: identità e campi sempre visibili. */
+@media (min-width: 801px) {
+  .handover-rounds__layout > div:last-child {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    /* Mai più alta dello schermo: su schermi bassi scorre al suo interno, pulsanti raggiungibili. */
+    max-height: calc(100dvh - var(--topbar-h, 72px) - 32px);
+    overflow-y: auto;
+  }
+  .handover-rounds__composer {
+    position: static;
+  }
+}
+
+/* 801–1023 px: scorre il documento (sidebar a cassetto), quindi l'aggancio parte sotto la topbar. */
+@media (min-width: 801px) and (max-width: 1023px) {
+  .handover-rounds__layout > div:last-child {
+    top: calc(var(--topbar-h, 72px) + 16px);
+  }
+}
+/* Finestre basse: la colonna scorre al suo interno verso il testo; l'identità (nome, CF, posto
+   letto) resta agganciata in cima alla colonna, come su telefono. */
+@media (min-width: 801px) {
+  .handover-rounds__layout .handover-rounds__composer-identity {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--surface);
+    padding-top: 12px;
+    box-shadow: 0 6px 6px -6px rgba(22, 32, 46, 0.2);
+  }
+}
+
+/* Da 801 px: anche la colonna pazienti scorre al suo interno. La pagina non va oltre la griglia,
+   quindi la colonna della card non viene mai trascinata sotto l'intestazione. */
+@media (min-width: 801px) {
+  .handover-rounds__list {
+    position: sticky;
+    top: 16px;
+    align-self: start;
+    max-height: calc(100dvh - var(--topbar-h, 72px) - 32px);
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+}
+@media (min-width: 801px) and (max-width: 1023px) {
+  .handover-rounds__list {
+    top: calc(var(--topbar-h, 72px) + 16px);
+  }
+}
+/* Con l'identità agganciata, i campi portati a vista dal fuoco non finiscono sotto di essa. */
+@media (min-width: 801px) {
+  .handover-rounds__layout .handover-rounds__composer :is(input, select, textarea, button) {
+    scroll-margin-block-start: calc(var(--handover-identity-height, 110px) + 16px);
+    scroll-margin-block-end: 16px;
+  }
+}

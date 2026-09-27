@@ -48,15 +48,11 @@ function WorkspaceSession({
   };
   return (
     <div className="handover-workspace">
-      <PageHeader
-        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Consegne' }]}
-        title="Consegne"
-        subtitle="Scrivi durante il giro oppure consulta il Feed delle consegne."
-      />
+      <PageHeader title="Consegne" subtitle="Giro pazienti e feed delle consegne" />
       <div className="handover-workspace__tabs" role="group" aria-label="Vista consegne">
         <button
           type="button"
-          className={mode === 'rounds' ? 'btn-primary' : 'btn-secondary'}
+          className="ho-chip"
           aria-pressed={mode === 'rounds'}
           onClick={() => change('rounds')}
         >
@@ -64,7 +60,7 @@ function WorkspaceSession({
         </button>
         <button
           type="button"
-          className={mode === 'feed' ? 'btn-primary' : 'btn-secondary'}
+          className="ho-chip"
           aria-pressed={mode === 'feed'}
           onClick={() => change('feed')}
         >

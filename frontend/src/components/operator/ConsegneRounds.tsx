@@ -4,6 +4,7 @@ import type { ConsegnaCreate } from '../../lib/consegnaCreation';
 import { submitConsegna, type ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 import { canAdvanceConsegna, type ConsegnaAdvanceToken } from '../../lib/consegnaAdvance';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
+import { TURNO_LABEL, turnoDaOra } from '../../lib/turno';
 import { useConsegneRoster } from './useConsegneRoster';
 import { ConsegnePatientRoster } from './ConsegnePatientRoster';
 import { ConsegnaComposer } from './ConsegnaComposer';
@@ -24,6 +25,7 @@ export function ConsegneRounds({
   const [message, setMessage] = useState('');
   const [lastSaved, setLastSaved] = useState('');
   const [focusRequest, setFocusRequest] = useState(0);
+  const [showOrder, setShowOrder] = useState(false);
   const selection = useRef({ id: '', generation: 0 });
   const lifecycle = useRef(0);
   useEffect(() => {
@@ -109,46 +111,47 @@ export function ConsegneRounds({
   const index = patient ? roster.items.findIndex((item) => item.id === patient.id) : -1;
   return (
     <section aria-label="Giro pazienti">
-      <RosterOrderControl />
-      <div className="handover-rounds__filters">
-        <label>
-          Cerca paziente
-          <input
-            type="search"
-            className="form-input"
-            value={query}
-            maxLength={80}
-            placeholder="Nome, cognome o codice fiscale"
-            onChange={(event) => setQuery(event.target.value)}
-          />
-        </label>
-        <label>
-          Camera
-          <input
-            type="search"
-            className="form-input"
-            value={room}
-            maxLength={80}
-            placeholder="Filtra camera"
-            onChange={(event) => setRoom(event.target.value)}
-          />
-        </label>
-      </div>
-      {roster.error && (
-        <p role="alert">
-          {roster.error}{' '}
-          <button type="button" className="link-btn" onClick={roster.retry}>
-            Ricarica giro
-          </button>
-        </p>
-      )}
-      {lastSaved && (
-        <p role="status" aria-live="polite">
-          {lastSaved}
-        </p>
-      )}
       <div className="handover-rounds__layout">
         <div className="handover-rounds__list" aria-busy={roster.loading}>
+          <span className="ho-eyebrow">Turno {TURNO_LABEL[turnoDaOra(new Date())]}</span>
+          <div className="handover-rounds__filters">
+            <label>
+              <span className="ho-label">Cerca paziente</span>
+              <input
+                type="search"
+                className="form-input"
+                value={query}
+                maxLength={80}
+                placeholder="Nome, cognome o codice fiscale"
+                onChange={(event) => setQuery(event.target.value)}
+              />
+            </label>
+            <label>
+              <span className="ho-label">Camera</span>
+              <input
+                type="search"
+                className="form-input"
+                value={room}
+                maxLength={80}
+                placeholder="Filtra camera"
+                onChange={(event) => setRoom(event.target.value)}
+              />
+            </label>
+          </div>
+          <button
+            type="button"
+            className="ho-link"
+            aria-expanded={showOrder}
+            aria-controls="ho-order"
+            onClick={() => setShowOrder((value) => !value)}
+          >
+            Ordine del giro
+          </button>
+          {showOrder && (
+            <div id="ho-order">
+              <RosterOrderControl />
+            </div>
+          )}
           {roster.loading && <p role="status">Caricamento pazienti…</p>}
           {!roster.loading && !roster.error && !roster.items.length && (
             <p>Nessun paziente per questi filtri.</p>
@@ -173,6 +176,19 @@ export function ConsegneRounds({
           )}
         </div>
         <div>
+          {roster.error && (
+            <p role="alert">
+              {roster.error}{' '}
+              <button type="button" className="link-btn" onClick={roster.retry}>
+                Ricarica giro
+              </button>
+            </p>
+          )}
+          {lastSaved && (
+            <p role="status" aria-live="polite">
+              {lastSaved}
+            </p>
+          )}
           {patient && index < 0 && (
             <p role="status">
               Paziente selezionato fuori dall’elenco corrente. La bozza è conservata.
