@@ -100,16 +100,8 @@ function verifica(nome, condizione, dettaglio = '') {
   console.log(`  ${condizione ? 'PASS' : 'FAIL'}  ${nome}${dettaglio ? ` — ${dettaglio}` : ''}`);
 }
 
-async function vaiAlTab(page, gruppoLabel, tabLabel) {
-  // Navigazione a due livelli: L2 sceglie il gruppo (Panoramica/Clinica/Diario/Moduli/Documenti),
-  // L3 il sotto-tab dentro quel gruppo — cliccare solo il sotto-tab fallisce se il gruppo giusto
-  // non e' gia' attivo, perche' quell'etichetta non e' nel DOM finche' il gruppo non e' scelto.
-  await page
-    .locator('button, [role="tab"]')
-    .filter({ hasText: new RegExp(`^${gruppoLabel}$`) })
-    .first()
-    .click();
-  await page.waitForTimeout(500);
+async function vaiAlTab(page, _gruppoLabel, tabLabel) {
+  // La cartella ha una sola barra di sezioni: il gruppo e' solo una didascalia, si clicca il tab.
   await page
     .locator('button, [role="tab"]')
     .filter({ hasText: new RegExp(`^${tabLabel}$`) })

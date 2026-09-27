@@ -1,4 +1,4 @@
-// Navigate Operatore -> Pazienti -> <patient> -> Clinica -> <tab>, optionally scroll a label
+// Navigate Operatore -> Pazienti -> <patient> -> <tab>, optionally scroll a label
 // into view / click to open an inline editor, then full-page screenshot. PHI-safe (seed data).
 //   node e2e/shot-cartella-card.mjs <patient> <tab> <scrollToText> <out.png> [click:<text>]
 // Mirrors .claude/skills/run-clinicos/driver.mjs navigation (getByText().first().click()).
@@ -16,7 +16,7 @@ try {
   await page.waitForTimeout(1200);
   await page.getByText('Operatore', { exact: true }).click();
   await page.waitForTimeout(1500);
-  for (const label of ['Pazienti', patient, 'Clinica', tab]) {
+  for (const label of ['Pazienti', patient, tab]) {
     await page.getByText(label).first().click();
     await page.waitForTimeout(1200);
     console.log(`clicked "${label}"`);

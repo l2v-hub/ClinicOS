@@ -41,12 +41,7 @@ async function openTerapia() {
   await page.waitForTimeout(600);
   await page.getByText(PATIENT, { exact: false }).first().click();
   await page.waitForTimeout(1200);
-  await page
-    .getByRole('button', { name: 'Clinica', exact: true })
-    .first()
-    .click()
-    .catch(() => clickText('Clinica'));
-  await page.waitForTimeout(500);
+  // La cartella ha una sola barra di sezioni (nessun gruppo L2 "Clinica" da aprire prima).
   await page.getByText('Terapia Farmacologica', { exact: false }).first().click();
   await page.waitForTimeout(900);
 }
