@@ -57,9 +57,9 @@ test('multi-patient quick entry reuses the ClinicOS form and action design syste
   assert.match(parametersSource, /'btn-secondary qe-row__note-btn'/);
   assert.match(parametersSource, /className="btn-success qe-row__save"/);
   assert.match(parametersSource, /className="form-input qe-row__note-textarea"/);
-  assert.match(parametersSource, /PA · mmHg/);
-  assert.match(parametersSource, /SpO₂ · %/);
-  assert.match(parametersSource, /TC · °C/);
+  // L'intestazione deriva da PARAMETER_FIELDS ("PA · mmHg", "SpO₂ · %", "TC · °C", …).
+  assert.match(parametersSource, /PARAMETER_FIELDS\.map\(\(field\) =>/);
+  assert.match(parametersSource, /` · \$\{field\.unit\}`/);
   assert.doesNotMatch(parametersSource, /\{paziente\.lastName\}, \{paziente\.firstName\}/);
   assert.match(appCss, /\.qe-row__input[\s\S]*font-family: var\(--font-ui\)/);
   assert.match(appCss, /\.qe-row__input[\s\S]*font-size: 14px/);

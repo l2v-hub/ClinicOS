@@ -174,3 +174,15 @@ test('monthly fetch keeps the month when loading the next page', async () => {
     },
   );
 });
+
+test('NEWS2 parameters follow the same rules as the backend', async () => {
+  const { parameterValuesError, formatParameterValue } = await import('../patientParameterReadings');
+  assert.equal(parameterValuesError({ fr: '18', o2: 'no', coscienza: 'A' }), null);
+  assert.equal(parameterValuesError({ o2: 'si' }), null, 'oxygen alone is a valid observation');
+  for (const values of [{ fr: '0' }, { fr: '81' }, { fr: '18,5' }, { o2: 'sì' }, { coscienza: 'vigile' }, { coscienza: 'a' }])
+    assert.notEqual(parameterValuesError(values), null, JSON.stringify(values));
+  assert.equal(formatParameterValue('o2', 'si'), 'Sì');
+  assert.equal(formatParameterValue('o2', 'no'), 'No');
+  assert.equal(formatParameterValue('coscienza', 'V'), 'V · Risponde alla voce');
+  assert.equal(formatParameterValue('fc', '72'), '72');
+});

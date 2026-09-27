@@ -1,5 +1,6 @@
 import {
   PARAMETER_FIELDS,
+  formatParameterValue,
   readingTime,
   type PatientParameterReading,
 } from '../../lib/patientParameterReadings';
@@ -37,7 +38,7 @@ export function PatientParameterMonthTable({ readings }: { readings: PatientPara
                     <div key={field.key}>
                       <dt>{field.label}</dt>
                       <dd>
-                        {reading.values[field.key]} {field.unit}
+                        {formatParameterValue(field.key, reading.values[field.key] ?? '')} {field.unit}
                       </dd>
                     </div>
                   ))}

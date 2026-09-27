@@ -5108,8 +5108,10 @@ textarea.form-input {
 }
 .qe-row {
   display: grid;
-  grid-template-columns: var(--qe-patient-col-w) repeat(6, auto) auto auto;
+  grid-template-columns: var(--qe-patient-col-w) repeat(9, auto) auto auto;
   gap: var(--qe-row-gap);
+  /* Le colonne auto non si allargano: intestazione e righe restano allineate. */
+  justify-content: start;
   align-items: center;
   min-height: var(--operational-table-row-min-h);
   padding: var(--qe-row-vpad) var(--operational-table-cell-px);
@@ -5200,6 +5202,10 @@ textarea.form-input {
 }
 .qe-row__mobile-label {
   display: none;
+}
+/* Intestazioni di Note e Salva larghe quanto i pulsanti sottostanti. */
+.qe-row__action-head {
+  min-width: 72px;
 }
 .qe-row__input--wide {
   width: var(--qe-input-w-wide);
@@ -5354,9 +5360,29 @@ textarea.form-input {
   border-top: 1px solid var(--divider);
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1320px) {
+  /* Nove campi (con FR, O₂ e coscienza del NEWS2) sul tablet: colonne più compatte, stessa
+     altezza dei controlli per il tocco. */
+  :root {
+    --qe-input-w-narrow: 54px;
+    --qe-input-w-wide: 84px;
+    --qe-row-gap: 8px;
+  }
   .qe-row {
-    grid-template-columns: 180px repeat(6, auto) auto auto;
+    grid-template-columns: 150px repeat(9, auto) auto auto;
+  }
+  .qe-row__input {
+    padding: 0 6px;
+  }
+}
+@media (max-width: 1100px) {
+  /* Tablet da 1024 px: le nove colonne entrano senza scorrimento. */
+  :root {
+    --qe-input-w-narrow: 50px;
+    --qe-row-gap: 6px;
+  }
+  .qe-row {
+    grid-template-columns: 128px repeat(9, auto) auto auto;
   }
 }
 

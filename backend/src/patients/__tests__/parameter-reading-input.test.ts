@@ -103,3 +103,28 @@ test('monthly history validates the month and binds pagination to that month', (
     assert.throws(() => parseReadingQuery('patient-a', query));
   }
 });
+
+test('accepts the NEWS2 parameters and rejects values outside their rules', () => {
+  assert.deepEqual(parseParameterReading(valid({ fr: ' 18 ', o2: 'no', coscienza: 'A' })).values, {
+    fr: '18',
+    o2: 'no',
+    coscienza: 'A',
+  });
+  assert.deepEqual(parseParameterReading(valid({ fr: '24', o2: 'si', coscienza: 'U' })).values, {
+    fr: '24',
+    o2: 'si',
+    coscienza: 'U',
+  });
+  for (const values of [
+    { fr: '0' },
+    { fr: '81' },
+    { fr: '18.5' },
+    { fr: '-3' },
+    { o2: 'sì' },
+    { o2: 'yes' },
+    { coscienza: 'a' },
+    { coscienza: 'vigile' },
+    { coscienza: 'X' },
+  ])
+    assert.throws(() => parseParameterReading(valid(values)), undefined, JSON.stringify(values));
+});

@@ -5,6 +5,7 @@ export const TREND_PARAMETERS = [
   { key: 'pa', label: 'Pressione', short: 'PA', unit: 'mmHg', color: '#2f6bed' },
   { key: 'spo2', label: 'Saturazione', short: 'SpO₂', unit: '%', color: '#087e8b' },
   { key: 'fc', label: 'Frequenza cardiaca', short: 'FC', unit: 'bpm', color: '#7855ab' },
+  { key: 'fr', label: 'Frequenza respiratoria', short: 'FR', unit: 'atti/min', color: '#b0476a' },
   { key: 'temperatura', label: 'Temperatura', short: 'TC', unit: '°C', color: '#a16013' },
   { key: 'dtx', label: 'Glicemia', short: 'DTX', unit: 'mg/dL', color: '#287647' },
 ] as const;
