@@ -55,7 +55,9 @@ test('header creation actions expose their controlled panel state', () => {
 
 test('operator agenda uses the canonical heading while preserving accessible controls', () => {
   assert.match(operatorAgenda, /<PageHeader/);
-  assert.match(operatorAgenda, /title="Agenda operatore"/);
+  // HMI 1: "Agenda di oggi" nella vista Giorno di oggi, "Agenda" altrimenti.
+  assert.match(operatorAgenda, /title=\{agendaTitle\}/);
+  assert.match(operatorAgenda, /'Agenda di oggi' : 'Agenda'/);
   assert.match(operatorAgenda, /\{ label: 'ClinicOS' \}, \{ label: 'Agenda' \}/);
   assert.doesNotMatch(operatorAgenda, /<div className="agt-header">/);
   assert.match(operatorAgenda, /role="group" aria-label="Visualizzazione agenda"/);
