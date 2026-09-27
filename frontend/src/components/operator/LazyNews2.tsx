@@ -2,7 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { News2Chip } from './News2Chip';
 
 /** NEWS2 caricato solo quando la card entra nello schermo: una lettura per paziente visibile. */
-export function LazyNews2({ patientId, patientName }: { patientId: string; patientName: string }) {
+export function LazyNews2({
+  patientId,
+  patientName,
+  compact = false,
+}: {
+  patientId: string;
+  patientName: string;
+  compact?: boolean;
+}) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const [visible, setVisible] = useState(() => typeof IntersectionObserver === 'undefined');
   useEffect(() => {
@@ -23,7 +31,13 @@ export function LazyNews2({ patientId, patientName }: { patientId: string; patie
   }, [visible]);
   return (
     <span ref={ref} className="turno-pcard__news2">
-      {visible && <News2Chip patientId={patientId} patientName={patientName} />}
+      {visible && (
+        <News2Chip
+          patientId={patientId}
+          patientName={patientName}
+          variant={compact ? 'compact' : 'chip'}
+        />
+      )}
     </span>
   );
 }
