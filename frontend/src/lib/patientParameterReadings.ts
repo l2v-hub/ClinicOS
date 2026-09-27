@@ -67,6 +67,9 @@ export class ParameterReadingSaveError extends Error {
     this.uncertain = uncertain;
   }
 }
+/** Evento emesso dopo un salvataggio riuscito (detail.patientId): il chip NEWS2 si aggiorna. */
+export const PARAMETER_READING_SAVED_EVENT = 'clinicos:parameter-reading-saved';
+
 export function parameterValuesError(values: ParameterValues): string | null {
   if (!PARAMETER_FIELDS.some((field) => values[field.key]?.trim()))
     return 'Inserisci almeno un parametro.';
@@ -157,6 +160,10 @@ export async function saveParameterReading(
       !Number.isFinite(Date.parse(data.summary.lastReadingAt))
     )
       throw new Error('Riepilogo incompleto');
+    if (typeof window !== 'undefined')
+      window.dispatchEvent(
+        new CustomEvent(PARAMETER_READING_SAVED_EVENT, { detail: { patientId } }),
+      );
     return { reading: data.reading, summary: data.summary };
   } catch (error) {
     if (error instanceof ParameterReadingSaveError) throw error;

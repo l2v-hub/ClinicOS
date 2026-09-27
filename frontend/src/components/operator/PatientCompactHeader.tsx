@@ -1,5 +1,6 @@
 import { patientAge } from '../../lib/patientDemographics';
 import type { Paziente, CartellaPaziente } from '../../types';
+import { News2Chip } from './News2Chip';
 
 interface PatientCompactHeaderProps {
   paziente: Paziente;
@@ -73,6 +74,7 @@ export default function PatientCompactHeader({
               ⚠ Allergie
             </span>
           )}
+          <News2Chip patientId={paziente.id} patientName={fullName} />
         </div>
         {meta.length > 0 && (
           <div className="patient-compact-header__meta-row">
