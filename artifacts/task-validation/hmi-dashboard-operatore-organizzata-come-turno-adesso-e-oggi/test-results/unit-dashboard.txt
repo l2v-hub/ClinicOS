@@ -1,0 +1,41 @@
+(node:20120) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ dashboard anomaly worklist is bounded in both dimensions (0.719ms)
+✔ operator and admin reuse the same bounded notification details (0.2781ms)
+✔ patient, drug chips and compact count have explicit visual hierarchy (0.3845ms)
+✔ anomaly row exposes an intentional accessible name and keyboard focus (0.1486ms)
+✔ notification bar keeps all severity labels visible and responsive (0.1089ms)
+(node:20120) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:9176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:9176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator first view contains notifications then the compact clinical band (0.818ms)
+✔ management-only props are removed from the operator dashboard contract (0.264ms)
+✔ header patient action reuses the canonical secondary button (0.1333ms)
+✔ clinical snapshot uses five native compact value cards (0.1884ms)
+✔ compact clinical cards stay scoped and responsive without horizontal scrolling (0.2803ms)
+(node:21032) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ clinical overview owns an abortable retry without reloading unrelated dashboard feeds (0.8159ms)
+✔ operator dashboard never presents unavailable clinical metrics as verified zeroes (0.3859ms)
+✔ admin dashboard shares the same explicit unavailable-data and recovery contract (0.3142ms)
+(node:21032) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26452) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ login loads only handover overview while the bounded feed is navigation-scoped (1.117ms)
+✔ dashboards consume exact overview and never derive KPI from a feed page (0.2472ms)
+✔ patient list badges come from visible-id clinical summaries, not a handover roster prop (0.2054ms)
+✔ patient detail distinguishes an exact total from the loaded page and exposes recovery (0.149ms)
+(node:26452) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 179.0355

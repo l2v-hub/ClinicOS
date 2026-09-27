@@ -5,3 +5,38 @@
 .operator-dashboard__patient-cta > svg {
   color: var(--blue);
 }
+
+/* HMI Turno: "Adesso" e "Oggi" affiancate dal tablet in su, impilate sul telefono. */
+.od-shift {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-top: 24px;
+}
+.od-shift__col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.od-shift__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+/* nella colonna la spaziatura la dà il gap: la card scadenze parte allineata a "Oggi" */
+.od-shift__col > .therapy-deadlines {
+  margin-top: 0;
+}
+.od-shift__section-header {
+  margin-top: 8px;
+}
+@media (max-width: 767px) {
+  .od-shift {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
