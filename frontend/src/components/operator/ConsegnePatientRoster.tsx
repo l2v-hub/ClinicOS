@@ -2,8 +2,14 @@ import type { Paziente } from '../../types';
 import { useEffect, useRef } from 'react';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
+import { parsePatientLocation } from '../../lib/patientIdentity';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import type { SummaryState } from './useConsegneRoster';
+/** Camera dalla posizione attuale; mai inventata. */
+function roomOf(patient: Paziente): string {
+  const location = parsePatientLocation(patient.location);
+  return location?.status === 'assigned' && location.room ? location.room : '—';
+}
 function RosterPatient({
   patient,
   selected,
@@ -32,31 +38,36 @@ function RosterPatient({
         aria-pressed={selected}
         onClick={onSelect}
       >
-        <PatientIdentity patient={patient} />
-        <span className="handover-rounds__badges">
-          {draft.dirty && <span>Bozza</span>}
-          {draft.receipt && <span>Appena salvata</span>}
-          {!summary || summary.status === 'loading' ? (
-            <span>Verifica consegne…</span>
-          ) : summary.status === 'error' ? (
-            <span>Riepilogo non disponibile</span>
-          ) : summary.status === 'unavailable' ? (
-            <span>Dati non disponibili</span>
-          ) : (
-            <>
-              <span>
-                {summary.value.total === 0
-                  ? 'Nessuna consegna'
-                  : summary.value.open === 0
-                    ? `${summary.value.total} nello storico`
-                    : `${summary.value.open} aperte`}
-              </span>
-              {summary.value.urgentOpen > 0 && <span>{summary.value.urgentOpen} urgenti</span>}
-              {summary.value.statoRicovero && (
-                <span>Ricovero: {summary.value.statoRicovero.replaceAll('_', ' ')}</span>
-              )}
-            </>
-          )}
+        <span className="ho-bed" aria-hidden="true">
+          {roomOf(patient)}
+        </span>
+        <span className="ho-who">
+          <PatientIdentity patient={patient} />
+          <span className="handover-rounds__badges">
+            {draft.dirty && <span>Bozza</span>}
+            {draft.receipt && <span>Appena salvata</span>}
+            {!summary || summary.status === 'loading' ? (
+              <span>Verifica consegne…</span>
+            ) : summary.status === 'error' ? (
+              <span>Riepilogo non disponibile</span>
+            ) : summary.status === 'unavailable' ? (
+              <span>Dati non disponibili</span>
+            ) : (
+              <>
+                <span>
+                  {summary.value.total === 0
+                    ? 'Nessuna consegna'
+                    : summary.value.open === 0
+                      ? `${summary.value.total} nello storico`
+                      : `${summary.value.open} aperte`}
+                </span>
+                {summary.value.urgentOpen > 0 && <span>{summary.value.urgentOpen} urgenti</span>}
+                {summary.value.statoRicovero && (
+                  <span>Ricovero: {summary.value.statoRicovero.replaceAll('_', ' ')}</span>
+                )}
+              </>
+            )}
+          </span>
         </span>
       </button>
       {summary?.status === 'error' && (
