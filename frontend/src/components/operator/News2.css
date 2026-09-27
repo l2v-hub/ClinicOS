@@ -1,0 +1,261 @@
+/* NEWS2: chip in testata e storico. Rosso solo per rischio clinico (≥ 5), come da palette. */
+.news2-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  /* Può andare a capo: sul telefono l'avviso "da aggiornare" non deve essere tagliato. */
+  white-space: normal;
+  max-width: 100%;
+  min-height: 28px;
+  height: auto;
+  padding-block: 4px;
+  text-align: left;
+  cursor: pointer;
+}
+.news2-chip:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+.news2-chip--static {
+  cursor: default;
+}
+.news2-chip--ok {
+  background: var(--emerald-bg);
+  border-color: transparent;
+  color: var(--emerald);
+}
+.news2-chip--low {
+  background: var(--indigo-bg);
+  border-color: transparent;
+  color: var(--blue);
+}
+.news2-chip--single {
+  background: var(--amber-bg);
+  border-color: transparent;
+  color: var(--amber);
+}
+.news2-chip--medium,
+.news2-chip--high {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: var(--red);
+}
+.news2-chip--high {
+  background: var(--red);
+  color: #fff;
+}
+/* Punteggio da aggiornare (vecchio o superato da rilevazioni incomplete) o non caricato:
+   neutro, mai verde. */
+.news2-chip--stale {
+  background: var(--surface);
+  border: 1px dashed var(--text-muted);
+  color: var(--text);
+}
+
+.modal-box.news2-dialog,
+.news2-dialog {
+  /* La tabella ha nove colonne: più larga della finestra standard. */
+  max-width: none;
+  width: min(960px, calc(100vw - 32px));
+  padding: 20px 24px;
+  box-sizing: border-box;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.news2-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.news2-dialog__title {
+  margin: 0;
+  font-size: 20px;
+}
+.news2-dialog__sub {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+}
+.news2-dialog__now {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+.news2-dialog__now--medium,
+.news2-dialog__now--high {
+  background: var(--red-bg);
+  color: var(--red);
+}
+.news2-dialog__now--single {
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+.news2-dialog__now--ok {
+  background: var(--emerald-bg);
+  color: var(--emerald);
+}
+.news2-dialog__stale {
+  display: block;
+  margin-top: 6px;
+  font-weight: 600;
+  color: var(--text);
+}
+.news2-dialog__error {
+  margin: 0;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+.news2-dialog__error p {
+  margin: 0;
+}
+.news2-dialog__note,
+.news2-dialog__empty {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.news2-chart {
+  margin: 0;
+}
+.news2-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.news2-chart__band--ok {
+  fill: var(--emerald-bg);
+}
+.news2-chart__band--low {
+  fill: var(--surface-raised);
+}
+.news2-chart__band--medium {
+  fill: var(--red-bg);
+  fill-opacity: 0.55;
+}
+.news2-chart__band--high {
+  fill: var(--red-bg);
+}
+.news2-chart__line {
+  stroke: var(--text-muted);
+  stroke-width: 2;
+}
+.news2-chart__dot {
+  fill: var(--blue);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.news2-chart__dot--ok {
+  fill: var(--emerald);
+}
+.news2-chart__dot--single {
+  fill: var(--amber);
+}
+.news2-chart__dot--medium,
+.news2-chart__dot--high {
+  fill: var(--red);
+}
+.news2-chart__axis {
+  fill: var(--text-muted);
+  font-size: 11px;
+  font-family: var(--font-ui);
+}
+.news2-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.news2-chart__key::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 3px;
+  vertical-align: -1px;
+}
+.news2-chart__key--low::before {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+}
+.news2-chart__key--medium::before {
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+}
+.news2-chart__key--high::before {
+  background: var(--red-bg);
+  border: 1px solid var(--red);
+}
+
+.news2-table-wrap {
+  overflow-x: auto;
+}
+.news2-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.news2-table th,
+.news2-table td {
+  padding: 8px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.news2-table thead th {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.news2-table tbody th small {
+  display: block;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.news2-table__row--incomplete td,
+.news2-table__row--incomplete th {
+  color: var(--text-muted);
+}
+.news2-table__missing {
+  font-size: 12px;
+  white-space: normal;
+}
+.news2-part {
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+/* Sotto-punteggi: +1/+2 neutri, +3 in ambra (singolo parametro critico). Il rosso resta al
+   totale ≥ 5. */
+.news2-part--mid {
+  background: var(--surface-raised);
+  color: var(--text-muted);
+}
+.news2-part--high {
+  background: var(--amber-bg);
+  color: var(--amber);
+}

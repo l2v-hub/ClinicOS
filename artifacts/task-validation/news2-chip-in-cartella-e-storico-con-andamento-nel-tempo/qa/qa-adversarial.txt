@@ -1,0 +1,25 @@
+R1 switch A(slow,high)->B header has B: true
+R1 B chip after A response landed: NEWS2 non calcolabile
+R2 stale(72h)+newer abnormal partial chip text: NEWS2 0 · 24/09 09:37 · da aggiornare
+R2 chip class: news2-chip news2-chip--stale
+R2 chip title: Da aggiornare. Monitoraggio ogni 12 ore. Rilevazione del 24/09/2026 09:37. Dopo questa c'è 1 rilevazione incompleta. Tocca per lo storico.
+R3 error chip: NEWS2 non caricato disabled=false
+R3 dialog text on error: Andamento NEWS2 Moretti, Andrea Chiudi Non è stato possibile caricare le rilevazioni: il NEWS2 non è verificabile in questo momento. Le rilevazioni registrate non sono andate perse. Riprova
+R4 chip when complete reading only on page 2: NEWS2 non calcolabile
+R4 after page2 500: error message shown: true
+R5 1024 chip visible/box: true {"x":289,"y":145,"width":228,"height":28} right=517 clipped=false text=NEWS2 19 · 08:37 · da aggiornare
+R5 1024 doc scrollWidth/innerWidth: 1024/1024
+R5 1024 dialog box: {"x":32,"y":88.953125,"width":960,"height":622.09375}
+R5 1024 dialog aria: modal=true labelledbyResolves=true
+R5 1024 Esc closes: true
+R5 1024 focus returns to chip: true
+R5 390 chip visible/box: true {"x":175,"y":175,"width":160,"height":40} right=335 clipped=false text=NEWS2 19 · 08:37 · da aggiornare
+R5 390 doc scrollWidth/innerWidth: 390/390
+R5 390 dialog box: {"x":16,"y":0,"width":358,"height":554.78125}
+R5 390 dialog aria: modal=true labelledbyResolves=true
+R5 390 Esc closes: true
+R5 390 focus returns to chip: true
+R6 load-more button after refresh aborted it: Carica rilevazioni precedenti disabled=false
+R6 page-2 reading visible after retry: 2
+R6 chip: NEWS2 19 · 04:38 · da aggiornare
+R7 low-risk score 8h old: NEWS2 3 · 01:38 · da aggiornare [news2-chip news2-chip--stale]

@@ -1,0 +1,23 @@
+✔ a normal set scores 0 and is complete (1.0664ms)
+✔ respiratory rate bands (0.8985ms)
+✔ SpO₂ scale 1 bands (0.1237ms)
+✔ supplemental oxygen scores 2 (0.0726ms)
+✔ systolic pressure bands use the first number of PA (0.1125ms)
+✔ heart rate bands (0.0983ms)
+✔ consciousness: only A scores 0 (0.0851ms)
+✔ temperature bands accept the decimal comma (0.086ms)
+✔ risk levels: single 3, medium 5–6, high ≥ 7 (0.1331ms)
+✔ an incomplete set is never presented as a NEWS2 (0.1849ms)
+✔ unparseable or implausible values never produce a score (0.153ms)
+✔ the chip uses the latest COMPLETE reading, not a newer partial one (1.8216ms)
+✔ no complete reading means no score (0.1315ms)
+✔ a reassuring score is stale when newer incomplete readings exist or it is older than 12 h (0.5054ms)
+✔ staleness follows the RCP monitoring frequency of each risk level (0.5162ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 147.3596
