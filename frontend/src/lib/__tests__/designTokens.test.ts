@@ -67,7 +67,8 @@ test('extra-muted text meets WCAG AA contrast on the canonical surface', () => {
 
 test('intentional responsive sidebar overrides remain media-scoped', () => {
   assert.match(css, /@media \(max-width: 640px\)[\s\S]*?:root\s*{\s*--sidebar-w:\s*220px/);
-  assert.match(
+  // HMI 1: niente banda stretta a 88 px fra 1024 e 1180: la barra resta 96 px come il prototipo.
+  assert.doesNotMatch(
     css,
     /@media \(min-width: 1024px\) and \(max-width: 1180px\)[\s\S]*?:root\s*{\s*--sidebar-w:\s*88px/,
   );
