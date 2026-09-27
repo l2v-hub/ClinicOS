@@ -40,6 +40,12 @@ import { prefetchPatientListSnapshot } from './components/operator/usePatientLis
 import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { intakeLandingTab } from './lib/intakeLandingTabs';
+import {
+  navHistoryState,
+  patientDisplayName,
+  type NavEntry,
+  type NavHistoryState,
+} from './lib/navHistory';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
 import {
   buildOperatorDirectoryPageUrl,
@@ -404,6 +410,10 @@ export default function App() {
   // Navigation history tracking
   const prevNavKeyRef = useRef<NavKey | null>(null);
   const historyDepth = useRef(0);
+  // Voce corrente della cronologia (pagina, paziente, sezione della cartella) e destinazione della
+  // freccia "indietro" mostrata nella barra superiore.
+  const currentNavEntryRef = useRef<NavEntry | null>(null);
+  const [backLabel, setBackLabel] = useState<string | null>(null);
   // Patient id parsed from the hash on mount (refresh/reopened tab). It is resolved with one
   // authenticated lookup after login; no facility-wide roster is downloaded.
   const pendingPazienteRestoreIdRef = useRef<string | null>(null);
@@ -605,7 +615,7 @@ export default function App() {
 
   // ── History API navigation ─────────────────────────────────────────────────
 
-  function pushNav(key: NavKey, paziente?: Paziente) {
+  function pushNav(key: NavKey, paziente?: Paziente, patientTab?: TabId) {
     if (key === 'orari-operatori' && navKey !== 'orari-operatori') {
       setSchedulesLoadState('idle');
       setSchedulesLoadError(null);
@@ -615,11 +625,15 @@ export default function App() {
     // #<loop-cycle-1>: encode the patient id in the hash (dettaglio-paziente only) so a page
     // refresh/reopen can restore the chart by re-fetching that id — see the mount effect below.
     const hash = key === 'dettaglio-paziente' && paziente ? `#/${key}/${paziente.id}` : `#/${key}`;
-    window.history.pushState(
-      { navKey: key, pazienteId: paziente?.id, prevNavKey: navKey },
-      '',
-      hash,
-    );
+    const next: NavEntry = {
+      navKey: key,
+      ...(paziente ? { pazienteId: paziente.id, pazienteNome: patientDisplayName(paziente) } : {}),
+      ...(patientTab ? { patientTab } : {}),
+    };
+    const state = navHistoryState(next, currentNavEntryRef.current ?? { navKey }, NAV_LABELS);
+    window.history.pushState(state, '', hash);
+    currentNavEntryRef.current = next;
+    setBackLabel(state.prevLabel ?? null);
     // Transition: se il chunk della pagina di destinazione non e' ancora in memoria, React tiene
     // a schermo la pagina corrente invece del fallback "Caricamento modulo…".
     startTransition(() => {
@@ -671,7 +685,7 @@ export default function App() {
   function selectPaziente(p: Paziente, moduleTabId?: TabId) {
     patientNavigationSequenceRef.current += 1;
     setRestoringPazienteFromHash(false);
-    pushNav('dettaglio-paziente', p);
+    pushNav('dettaglio-paziente', p, moduleTabId);
     loadCartella(p.id);
     // Il riepilogo della lista non porta indirizzo e referente, che vivono solo nelle colonne del
     // paziente: una lettura mirata completa la scheda senza bloccarne l'apertura.
@@ -742,8 +756,117 @@ export default function App() {
     [navKey, utente?.ruolo],
   );
 
+  // Ogni cambio di sezione nella cartella è un passo della cronologia: "indietro" riporta alla
+  // sezione precedente dello stesso paziente.
+  function pushPatientTab(tab: TabId) {
+    const current = currentNavEntryRef.current;
+    // Durante un ripristino in caricamento la cartella a schermo è ancora quella del paziente
+    // precedente: il clic non diventa una voce della cronologia del paziente in arrivo.
+    if (current?.pazienteId && current.pazienteId !== pazienteSelezionato?.id) return;
+    // La cartella si apre su Anagrafica quando la voce non indica una sezione.
+    if (
+      !current ||
+      current.navKey !== 'dettaglio-paziente' ||
+      (current.patientTab ?? 'profilo') === tab
+    )
+      return;
+    const next: NavEntry = { ...current, patientTab: tab };
+    const state = navHistoryState(next, current, NAV_LABELS);
+    historyDepth.current += 1;
+    window.history.pushState(state, '', window.location.hash);
+    currentNavEntryRef.current = next;
+    setBackLabel(state.prevLabel ?? null);
+  }
+
+  // Ripristino di una voce della cronologia (popstate): paziente e sezione, non solo la pagina.
+  // Riassegnato a ogni render così usa sempre lo stato e le funzioni correnti.
+  const restoreNavEntryRef = useRef<(state: NavHistoryState | null) => void>(() => {});
+  // Contatore dei soli ripristini: invalida le letture di paziente avviate da un "indietro"
+  // precedente senza toccare patientNavigationSequenceRef, che protegge anche il caricamento
+  // della cartella (azzerarlo durante un caricamento lasciava la cartella vuota).
+  const restoreSequenceRef = useRef(0);
+  restoreNavEntryRef.current = (state) => {
+    // Due "indietro" rapidi: la risposta del primo non deve atterrare sopra il paziente del secondo.
+    const restore = ++restoreSequenceRef.current;
+    const navigation = patientNavigationSequenceRef.current;
+    setBackLabel(state?.prevLabel ?? null);
+    // Dopo una ricarica la profondità di sessione è 0 ma il browser ha ancora voci precedenti.
+    if (state?.prevLabel && historyDepth.current === 0) historyDepth.current = 1;
+    if (!state?.navKey) {
+      currentNavEntryRef.current = null;
+      return;
+    }
+    const known =
+      pazienteSelezionato && pazienteSelezionato.id === state.pazienteId
+        ? pazienteSelezionato
+        : null;
+    currentNavEntryRef.current = {
+      navKey: state.navKey,
+      ...(state.pazienteId ? { pazienteId: state.pazienteId } : {}),
+      ...(known ? { pazienteNome: patientDisplayName(known) } : {}),
+      ...(state.patientTab ? { patientTab: state.patientTab } : {}),
+    };
+    if (state.navKey !== 'dettaglio-paziente' || !state.pazienteId) return;
+    const tab: TabId = state.patientTab ?? 'profilo';
+    if (known) {
+      // La cartella di questo paziente potrebbe non essere ancora arrivata: senza, la scheda
+      // mostrerebbe una cartella vuota come se fosse reale.
+      if (!cartelle.some((c) => c.pazienteId === known.id)) void loadCartella(known.id);
+      setPendingModuleTab(tab);
+      setPatientTabRequest((value) => value + 1);
+      return;
+    }
+    void fetchPatientById(API_URL, state.pazienteId, { headers: operatorHeaders() })
+      .then((patient) => {
+        // Scartata se nel frattempo c'è stato un altro ripristino o una nuova navigazione.
+        if (
+          restore !== restoreSequenceRef.current ||
+          navigation !== patientNavigationSequenceRef.current
+        )
+          return;
+        if (currentNavEntryRef.current?.pazienteId === patient.id)
+          currentNavEntryRef.current.pazienteNome = patientDisplayName(patient);
+        setPazienteSelezionato(patient);
+        void loadCartella(patient.id);
+        setPendingModuleTab(tab);
+        setPatientTabRequest((value) => value + 1);
+      })
+      .catch(() => showToast('Paziente non disponibile o non autorizzato'));
+  };
+
+  // Il nome del paziente per l'etichetta della freccia arriva quando il paziente è caricato
+  // (ripristino da cronologia o ricarica della pagina).
+  useEffect(() => {
+    const entry = currentNavEntryRef.current;
+    if (
+      entry &&
+      !entry.pazienteNome &&
+      pazienteSelezionato &&
+      pazienteSelezionato.id === entry.pazienteId
+    )
+      entry.pazienteNome = patientDisplayName(pazienteSelezionato);
+  }, [pazienteSelezionato]);
+
   // Restore nav from hash on mount + listen to popstate
   useEffect(() => {
+    // Dopo una ricarica la voce corrente e la destinazione della freccia vivono ancora in
+    // history.state: riprenderle, così i cambi di sezione restano passi della cronologia.
+    const saved = window.history.state as NavHistoryState | null;
+    if (saved?.navKey) {
+      currentNavEntryRef.current = {
+        navKey: saved.navKey,
+        ...(saved.pazienteId ? { pazienteId: saved.pazienteId } : {}),
+        ...(saved.patientTab ? { patientTab: saved.patientTab } : {}),
+      };
+      if (saved.prevLabel) {
+        setBackLabel(saved.prevLabel);
+        historyDepth.current = 1;
+      }
+      if (saved.navKey === 'dettaglio-paziente' && saved.patientTab) {
+        setPendingModuleTab(saved.patientTab);
+        setPatientTabRequest((value) => value + 1);
+      }
+    }
     const hash = window.location.hash.replace('#/', '');
     // dettaglio-paziente/<id>: restore the chart with a single lookup after authentication.
     if (hash.startsWith('dettaglio-paziente/')) {
@@ -760,6 +883,7 @@ export default function App() {
 
     function onPopState(e: PopStateEvent) {
       if (historyDepth.current > 0) historyDepth.current -= 1;
+      restoreNavEntryRef.current((e.state as NavHistoryState | null) ?? null);
       if (e.state?.navKey) {
         prevNavKeyRef.current = e.state.prevNavKey ?? null;
         if (e.state.navKey === 'orari-operatori' && e.state.prevNavKey !== 'orari-operatori') {
@@ -1604,6 +1728,9 @@ export default function App() {
     const id = pendingPazienteRestoreIdRef.current;
     pendingPazienteRestoreIdRef.current = null;
     const request = ++patientNavigationSequenceRef.current;
+    // Un "indietro" mentre questa lettura è in corso ha la precedenza: la risposta non deve
+    // sostituire il paziente ripristinato dalla cronologia.
+    const restore = restoreSequenceRef.current;
     const controller = new AbortController();
     fetchPatientById(API_URL, id, {
       headers: operatorHeaders(),
@@ -1611,6 +1738,7 @@ export default function App() {
     })
       .then((patient) => {
         if (request !== patientNavigationSequenceRef.current) return;
+        if (restore !== restoreSequenceRef.current) return;
         setPazienteSelezionato(patient);
         return loadCartella(patient.id);
       })
@@ -2811,6 +2939,30 @@ export default function App() {
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </button>
+            {backLabel && (
+              <button
+                type="button"
+                className="topbar-back"
+                onClick={() => goBack()}
+                aria-label={`Indietro: ${backLabel}`}
+                title={`Torna a ${backLabel} (Alt+←)`}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+                <span className="topbar-back__label">{backLabel}</span>
+              </button>
+            )}
             <button
               type="button"
               className="topbar-search"
@@ -3196,7 +3348,8 @@ export default function App() {
                         onRetryCamere={() => void loadCamere(true, pazienteSelezionato.id)}
                         canAssignRooms
                         onBack={() => goBack('pazienti')}
-                        backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
+                        backLabel={backLabel ?? NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
+                        onTabNavigate={pushPatientTab}
                         onAddConsegna={addConsegna}
                         consegnaDraftStore={consegnaDraftStore}
                         assessmentDraftStore={assessmentDraftStore}

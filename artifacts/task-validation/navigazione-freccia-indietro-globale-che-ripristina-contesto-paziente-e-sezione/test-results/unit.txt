@@ -1,0 +1,13 @@
+✔ page entries are labelled with the page name (0.4731ms)
+✔ patient entries are labelled with the patient and the chart section (0.1369ms)
+✔ history state keeps page, patient id, section and where back leads (0.4797ms)
+✔ the first entry has nowhere to go back to (0.0772ms)
+✔ the patient name never becomes part of the stored ids (0.1203ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 106.3411

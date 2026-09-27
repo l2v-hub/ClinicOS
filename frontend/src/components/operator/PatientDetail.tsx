@@ -143,6 +143,8 @@ interface PatientDetailProps {
    * switches while this component stays mounted still reset to the default tab. */
   initialTab?: TabId;
   navigationRequestId?: number;
+  /** Chiamato quando l'operatore cambia sezione: App ne fa un passo della cronologia. */
+  onTabNavigate?: (tab: TabId) => void;
   assistantSectionRefresh?: { actionType: string; version: number };
   /** #246: operator role, forwarded to the document-upload endpoints' auth gate (X-Operator-Role). */
   operatoreRole?: string;
@@ -288,6 +290,7 @@ export function PatientDetail({
   operatoreRole,
   initialTab,
   navigationRequestId,
+  onTabNavigate,
   assistantSectionRefresh,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));
@@ -358,6 +361,7 @@ export function PatientDetail({
       setActiveGroup(group);
     });
     lastTabByGroup.current[group] = target;
+    onTabNavigate?.(target);
   }
 
   function switchGroup(groupId: TabGroup) {
@@ -379,6 +383,7 @@ export function PatientDetail({
       if (!keepTab) setTab(target);
     });
     if (!keepTab) lastTabByGroup.current[groupId] = target;
+    onTabNavigate?.(target);
   }
 
   // ── Per-section CRUD state ─────────────────────────────────────────────────

@@ -371,6 +371,44 @@ body {
 }
 
 /* Global search trigger (left) */
+/* Freccia "indietro" globale: dice dove porta e riporta pagina, paziente e sezione precedenti. */
+.topbar-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 280px;
+  height: 42px;
+  padding: 0 14px 0 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--blue);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.12s,
+    box-shadow 0.12s;
+}
+.topbar-back:hover {
+  border-color: var(--blue);
+}
+.topbar-back:focus-visible {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: var(--shadow-focus);
+}
+.topbar-back svg {
+  flex: none;
+}
+.topbar-back__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .topbar-search {
   display: flex;
   align-items: center;
@@ -483,6 +521,15 @@ body {
 }
 
 @media (max-width: 767px) {
+  .topbar-back {
+    flex: 0 0 42px;
+    max-width: 42px;
+    justify-content: center;
+    padding: 0;
+  }
+  .topbar-back__label {
+    display: none;
+  }
   .topbar-search__ph,
   .topbar-search__kbd {
     display: none;
