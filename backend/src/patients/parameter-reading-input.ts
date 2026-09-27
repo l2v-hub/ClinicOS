@@ -3,10 +3,16 @@ export const PARAMETER_KEYS = [
   'spo2',
   'fc',
   'temperatura',
+  // NEWS2: frequenza respiratoria (atti/min), ossigeno supplementare (si/no), coscienza ACVPU.
+  'fr',
+  'o2',
+  'coscienza',
   'dtx',
   'evacuazione',
   'note',
 ] as const;
+export const OXYGEN_VALUES = ['si', 'no'] as const;
+export const ACVPU_VALUES = ['A', 'C', 'V', 'P', 'U'] as const;
 export type ParameterKey = (typeof PARAMETER_KEYS)[number];
 export type ParameterValues = Partial<Record<ParameterKey, string>>;
 export interface ParameterReadingInput {
@@ -89,6 +95,12 @@ export function parseParameterReading(value: unknown): ParameterReadingInput {
       throw new ParameterReadingError(`${key}: inserisci un numero valido`);
     if (key === 'spo2' && Number(text.replace(',', '.')) > 100)
       throw new ParameterReadingError('SpO₂ deve essere compresa tra 0 e 100');
+    if (key === 'fr' && (!/^\d{1,2}$/.test(text) || Number(text) < 1 || Number(text) > 80))
+      throw new ParameterReadingError('Frequenza respiratoria: numero intero tra 1 e 80');
+    if (key === 'o2' && !(OXYGEN_VALUES as readonly string[]).includes(text))
+      throw new ParameterReadingError('Ossigeno: indica si oppure no');
+    if (key === 'coscienza' && !(ACVPU_VALUES as readonly string[]).includes(text))
+      throw new ParameterReadingError('Coscienza: usa A, C, V, P o U');
     values[key] = text;
   }
   if (!PARAMETER_KEYS.some((key) => key !== 'note' && values[key]))

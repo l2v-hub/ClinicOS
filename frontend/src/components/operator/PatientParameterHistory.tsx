@@ -2,6 +2,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import type { CartellaPaziente } from '../../types';
 import {
   PARAMETER_FIELDS,
+  formatParameterValue,
   legacyParameterEntries,
   readingTime,
   type PatientParameterReading,
@@ -60,7 +61,7 @@ export function PatientParameterHistory({
                     <div key={field.key}>
                       <dt>{field.label}</dt>
                       <dd>
-                        {reading.values[field.key]} <small>{field.unit}</small>
+                        {formatParameterValue(field.key, reading.values[field.key] ?? '')} <small>{field.unit}</small>
                       </dd>
                     </div>
                   ))}

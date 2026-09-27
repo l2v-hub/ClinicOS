@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IcoSearch, IcoX } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
 import { createParameterDraftStore } from '../../lib/parameterEntryDrafts';
+import { PARAMETER_FIELDS } from '../../lib/patientParameterReadings';
 import { isRosterChanged } from '../../lib/rosterOrder';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
@@ -327,14 +328,20 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           <div className="qe-list" aria-busy={loading}>
             <div className="qe-row qe-row--header" aria-hidden="true">
               <span>Paziente</span>
-              <span>PA · mmHg</span>
-              <span>SpO₂ · %</span>
-              <span>FC · bpm</span>
-              <span>TC · °C</span>
-              <span>DTX</span>
-              <span>Evacuazione</span>
-              <span>Note</span>
-              <span>Salva</span>
+              {/* Stesse colonne del modulo di inserimento (PARAMETER_FIELDS). */}
+              {PARAMETER_FIELDS.map((field) => (
+                <span
+                  key={field.key}
+                  className={`qe-row__field${['pa', 'evacuazione'].includes(field.key) ? ' qe-row__field--wide' : ''}`}
+                  title={field.key === 'coscienza' ? 'Coscienza (ACVPU)' : undefined}
+                >
+                  {/* "Coscienza" non entra nella colonna stretta: la sigla clinica sì. */}
+                  {field.key === 'coscienza' ? 'ACVPU' : field.label}
+                  {field.unit && field.key !== 'dtx' ? ` · ${field.unit}` : ''}
+                </span>
+              ))}
+              <span className="qe-row__action-head">Note</span>
+              <span className="qe-row__action-head">Salva</span>
             </div>
             {sorted.map((item) => (
               <ParameterEntryRow

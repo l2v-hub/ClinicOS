@@ -3,6 +3,7 @@ import { API_URL } from '../../config';
 import { getCurrentOperator, operatorHeaders } from '../../lib/operatorSession';
 import {
   PARAMETER_FIELDS,
+  PARAMETER_OPTIONS,
   ParameterReadingSaveError,
   createParameterReadingRequest,
   parameterValuesError,
@@ -104,15 +105,37 @@ export function PatientParameterEntry({
               <span>
                 {field.label} {field.unit && <small>{field.unit}</small>}
               </span>
-              <input
-                className="form-input"
-                aria-label={`Nuova rilevazione ${field.label}`}
-                value={values[field.key] ?? ''}
-                inputMode={['pa', 'evacuazione'].includes(field.key) ? 'text' : 'decimal'}
-                maxLength={field.key === 'evacuazione' ? 200 : 32}
-                placeholder={field.key === 'pa' ? '120/80' : '—'}
-                onChange={(event) => update(field.key, event.target.value)}
-              />
+              {PARAMETER_OPTIONS[field.key] ? (
+                <select
+                  className="form-input"
+                  aria-label={`Nuova rilevazione ${field.label}`}
+                  value={values[field.key] ?? ''}
+                  onChange={(event) => update(field.key, event.target.value)}
+                >
+                  <option value="">—</option>
+                  {PARAMETER_OPTIONS[field.key]!.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  className="form-input"
+                  aria-label={`Nuova rilevazione ${field.label}`}
+                  value={values[field.key] ?? ''}
+                  inputMode={
+                    ['pa', 'evacuazione'].includes(field.key)
+                      ? 'text'
+                      : field.key === 'fr'
+                        ? 'numeric'
+                        : 'decimal'
+                  }
+                  maxLength={field.key === 'evacuazione' ? 200 : 32}
+                  placeholder={field.key === 'pa' ? '120/80' : '—'}
+                  onChange={(event) => update(field.key, event.target.value)}
+                />
+              )}
             </label>
           ))}
         </fieldset>

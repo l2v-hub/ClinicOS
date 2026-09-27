@@ -5,6 +5,8 @@ import { PatientIdentity } from '../shared/PatientIdentity';
 import type { ParameterPagePatient } from '../../lib/patientParametersPage';
 import {
   PARAMETER_FIELDS,
+  PARAMETER_OPTIONS,
+  formatParameterValue,
   ParameterReadingSaveError,
   readingTime,
   type ParameterValues,
@@ -100,22 +102,52 @@ export function ParameterEntryRow({
             {field.label}
             {field.unit && ` · ${field.unit}`}
           </span>
-          <input
-            className={`form-input qe-row__input${thresholdClass(field.key, values[field.key])}`}
-            value={values[field.key] ?? ''}
-            placeholder="—"
-            aria-label={`${field.label} per ${name}`}
-            disabled={saving || uncertain}
-            maxLength={field.key === 'evacuazione' ? 200 : 32}
-            inputMode={['pa', 'evacuazione'].includes(field.key) ? 'text' : 'decimal'}
-            onChange={(event) => update(field.key, event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                event.preventDefault();
-                void save();
+          {PARAMETER_OPTIONS[field.key] ? (
+            <select
+              className="form-input qe-row__input"
+              value={values[field.key] ?? ''}
+              aria-label={`${field.label} per ${name}`}
+              title={formatParameterValue(field.key, values[field.key] ?? '') || field.label}
+              disabled={saving || uncertain}
+              onChange={(event) => update(field.key, event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  void save();
+                }
+              }}
+            >
+              <option value="">—</option>
+              {PARAMETER_OPTIONS[field.key]!.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {field.key === 'coscienza' ? option.value : option.label}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              className={`form-input qe-row__input${thresholdClass(field.key, values[field.key])}`}
+              value={values[field.key] ?? ''}
+              placeholder="—"
+              aria-label={`${field.label} per ${name}`}
+              disabled={saving || uncertain}
+              maxLength={field.key === 'evacuazione' ? 200 : 32}
+              inputMode={
+                ['pa', 'evacuazione'].includes(field.key)
+                  ? 'text'
+                  : field.key === 'fr'
+                    ? 'numeric'
+                    : 'decimal'
               }
-            }}
-          />
+              onChange={(event) => update(field.key, event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  void save();
+                }
+              }}
+            />
+          )}
         </label>
       ))}
       <button

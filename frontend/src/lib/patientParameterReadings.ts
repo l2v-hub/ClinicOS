@@ -4,11 +4,38 @@ import { facilityLocalMinute, formatFacilityLocalMinute } from './facilityTime';
 export const PARAMETER_FIELDS = [
   { key: 'pa', label: 'PA', unit: 'mmHg' },
   { key: 'spo2', label: 'SpO₂', unit: '%' },
+  // NEWS2: ossigeno supplementare, frequenza respiratoria, coscienza (ACVPU).
+  { key: 'o2', label: 'O₂', unit: '' },
   { key: 'fc', label: 'FC', unit: 'bpm' },
+  { key: 'fr', label: 'FR', unit: 'atti/min' },
   { key: 'temperatura', label: 'TC', unit: '°C' },
+  { key: 'coscienza', label: 'Coscienza', unit: '' },
   { key: 'dtx', label: 'DTX', unit: 'mg/dL' },
   { key: 'evacuazione', label: 'Evacuazione', unit: '' },
 ] as const;
+export type ParameterFieldKey = (typeof PARAMETER_FIELDS)[number]['key'];
+/** Campi a scelta: valore salvato → etichetta mostrata. Gli altri sono testo libero/numerico. */
+export const PARAMETER_OPTIONS: Partial<
+  Record<ParameterFieldKey, readonly { value: string; label: string }[]>
+> = {
+  o2: [
+    { value: 'no', label: 'No (aria ambiente)' },
+    { value: 'si', label: 'Sì' },
+  ],
+  coscienza: [
+    { value: 'A', label: 'A · Vigile' },
+    { value: 'C', label: 'C · Confusione di nuova insorgenza' },
+    { value: 'V', label: 'V · Risponde alla voce' },
+    { value: 'P', label: 'P · Risponde al dolore' },
+    { value: 'U', label: 'U · Non risponde' },
+  ],
+};
+/** Valore leggibile: "Sì"/"No" per l'ossigeno, "A · Vigile" per la coscienza. */
+export function formatParameterValue(key: string, value: string): string {
+  const option = PARAMETER_OPTIONS[key as ParameterFieldKey]?.find((o) => o.value === value);
+  if (!option) return value;
+  return key === 'o2' ? (value === 'si' ? 'Sì' : 'No') : option.label;
+}
 export type ParameterValues = Partial<
   Record<(typeof PARAMETER_FIELDS)[number]['key'] | 'note', string>
 >;
@@ -51,6 +78,14 @@ export function parameterValuesError(values: ParameterValues): string | null {
       return `${PARAMETER_FIELDS.find((f) => f.key === key)!.label}: inserisci un numero valido.`;
   }
   if (Number(values.spo2?.replace(',', '.')) > 100) return 'SpO₂ deve essere compresa tra 0 e 100.';
+  const fr = values.fr?.trim();
+  if (fr && (!/^\d{1,2}$/.test(fr) || Number(fr) < 1 || Number(fr) > 80))
+    return 'Frequenza respiratoria: numero intero tra 1 e 80.';
+  for (const key of ['o2', 'coscienza'] as const) {
+    const text = values[key]?.trim();
+    if (text && !PARAMETER_OPTIONS[key]!.some((o) => o.value === text))
+      return `${PARAMETER_FIELDS.find((f) => f.key === key)!.label}: scegli un valore dall'elenco.`;
+  }
   return null;
 }
 export function createParameterReadingRequest(
@@ -171,7 +206,10 @@ export function legacyParameterEntries(cartella: CartellaPaziente): LegacyParame
   for (const month of cartella.parametriMensili ?? []) {
     for (const day of month.giorni ?? []) {
       const values = [
-        ...PARAMETER_FIELDS.filter((f) => f.key !== 'dtx').map((f) => [f.label, day[f.key]]),
+        // La griglia mensile storica non ha i campi NEWS2 né un DTX unico.
+        ...PARAMETER_FIELDS.filter((f) =>
+          (['pa', 'spo2', 'fc', 'temperatura', 'evacuazione'] as string[]).includes(f.key),
+        ).map((f) => [f.label, day[f.key as 'pa' | 'spo2' | 'fc' | 'temperatura' | 'evacuazione']]),
         ['DTX 08', day.dtx08],
         ['DTX 12', day.dtx12],
         ['DTX 18', day.dtx18],
