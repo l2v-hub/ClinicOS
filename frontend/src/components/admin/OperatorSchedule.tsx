@@ -115,10 +115,9 @@ export function OperatorSchedule({
         {attivi.map((op) => (
           <button
             key={op.id}
-            className={`schedule-op-btn${selectedOpId === op.id ? ' active' : ''}`}
-            style={
-              selectedOpId === op.id ? { borderColor: op.colore, background: op.colore + '18' } : {}
-            }
+            type="button"
+            className="ds-chip"
+            aria-pressed={selectedOpId === op.id}
             onClick={() => {
               setSelectedOpId(op.id);
               setEditing(false);
@@ -188,8 +187,10 @@ export function OperatorSchedule({
                         <span className="schedule-day__name">{GIORNO_LABEL[giorno]}</span>
                         {editing && (
                           <button
-                            className={`filter-chip${turno.disponibile ? ' active' : ''}`}
-                            style={{ height: 24, padding: '0 8px', fontSize: 11 }}
+                            type="button"
+                            className="ds-chip"
+                            aria-pressed={turno.disponibile}
+
                             onClick={() => toggleGiorno(giorno)}
                           >
                             {turno.disponibile ? 'On' : 'Off'}

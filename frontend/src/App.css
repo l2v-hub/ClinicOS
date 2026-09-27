@@ -3369,11 +3369,7 @@ body {
   outline-offset: 2px;
 }
 
-.btn-sm {
-  height: 34px !important;
-  padding: 0 12px !important;
-  font-size: 12.5px !important;
-}
+/* .btn-sm: nessuna regola. Una sola misura di pulsante, decisa da design-system.css. */
 
 .icon-btn {
   display: flex;
@@ -3427,30 +3423,7 @@ body {
   height: 14px;
 }
 
-.icon-btn--danger {
-  color: var(--red) !important;
-  border-color: rgba(220, 38, 38, 0.25);
-}
-.icon-btn--danger:hover {
-  background: var(--red-bg);
-}
-
-.icon-btn--success {
-  color: var(--emerald) !important;
-  border-color: rgba(5, 150, 105, 0.25);
-}
-.icon-btn--success:hover {
-  background: var(--emerald-bg);
-}
-
 /* Edit action — blue accent (icon buttons). */
-.icon-btn--edit {
-  color: var(--blue) !important;
-  border-color: rgba(47, 107, 237, 0.25);
-}
-.icon-btn--edit:hover {
-  background: rgba(47, 107, 237, 0.08);
-}
 
 /* Filter chips */
 .filter-chips {
@@ -5627,26 +5600,6 @@ textarea.form-input {
 }
 
 /* === 013 REDESIGN — Outlined ghost button (for header actions) === */
-.btn-ghost-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  min-height: 44px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.12s ease-out;
-}
-.btn-ghost-outline:hover {
-  border-color: var(--primary, var(--blue));
-  color: var(--primary, var(--blue));
-  background: var(--hover);
-}
 
 /* === 013 REDESIGN — AI Assistant floating action button === */
 .ai-fab {

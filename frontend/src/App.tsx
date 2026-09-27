@@ -11,6 +11,8 @@ import {
 } from 'react';
 import type { ReactNode } from 'react';
 import './App.css';
+// Ultimo foglio: il design system canonico decide l'aspetto di ogni controllo.
+import './design-system.css';
 import { API_URL } from './config';
 import { useRosterOrder } from './lib/useRosterOrder';
 import {

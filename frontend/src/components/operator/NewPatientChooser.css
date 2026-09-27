@@ -17,23 +17,7 @@
   font-weight: 700;
   color: var(--text);
 }
-.new-patient-chooser__close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  margin: -8px -8px -8px 0;
-  border: 0;
-  border-radius: 12px;
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-}
-.new-patient-chooser__close svg {
-  width: 20px;
-  height: 20px;
-}
+
 .new-patient-chooser__desc {
   margin: 8px 0 16px;
   font-size: 14px;
@@ -73,8 +57,7 @@
   background: var(--border);
   color: var(--text-muted);
 }
-.new-patient-chooser__option:focus-visible,
-.new-patient-chooser__close:focus-visible {
+.new-patient-chooser__option:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }

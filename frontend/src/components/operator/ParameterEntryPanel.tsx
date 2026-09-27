@@ -177,7 +177,7 @@ export function ParameterEntryPanel({
             <h2 className="par-form__name">{name}</h2>
             <span className="par-cap">{patientIdentifier(patient)}</span>
           </div>
-          <button type="button" className="par-link" onClick={onOpenHistory}>
+          <button type="button" className="ds-link" onClick={onOpenHistory}>
             Storico
           </button>
         </div>
@@ -233,12 +233,12 @@ export function ParameterEntryPanel({
           <span className="par-choice__label" id={`par-o2-${patient.id}`}>
             Ossigeno
           </span>
-          <div className="par-chips" role="group" aria-labelledby={`par-o2-${patient.id}`}>
+          <div className="ds-chip-group" role="group" aria-labelledby={`par-o2-${patient.id}`}>
             {PARAMETER_OPTIONS.o2!.map((option) => (
               <button
                 type="button"
                 key={option.value}
-                className="par-chip"
+                className="ds-chip"
                 aria-pressed={values.o2 === option.value}
                 disabled={locked}
                 onClick={() => set('o2', values.o2 === option.value ? '' : option.value)}
@@ -253,12 +253,12 @@ export function ParameterEntryPanel({
           <span className="par-choice__label" id={`par-acvpu-${patient.id}`}>
             Coscienza
           </span>
-          <div className="par-chips" role="group" aria-labelledby={`par-acvpu-${patient.id}`}>
+          <div className="ds-chip-group" role="group" aria-labelledby={`par-acvpu-${patient.id}`}>
             {PARAMETER_OPTIONS.coscienza!.map((option) => (
               <button
                 type="button"
                 key={option.value}
-                className="par-chip"
+                className="ds-chip"
                 title={option.label}
                 aria-label={option.label}
                 aria-pressed={values.coscienza === option.value}
@@ -324,7 +324,7 @@ export function ParameterEntryPanel({
         </div>
         <button
           type="button"
-          className="par-next"
+          className="ds-btn ds-btn--secondary par-wide"
           disabled={locked}
           onPointerDown={(event) => event.preventDefault()}
           onClick={() => {
@@ -352,7 +352,7 @@ export function ParameterEntryPanel({
         </div>
         <button
           type="button"
-          className="par-save"
+          className="ds-btn ds-btn--primary par-wide"
           disabled={saving || !hasValues}
           aria-busy={saving}
           aria-label={`Salva parametri per ${name}`}
@@ -370,7 +370,7 @@ export function ParameterEntryPanel({
           <div className="par-error" role="alert">
             {error}
             {uncertain && (
-              <button className="par-link" type="button" onClick={onOpenHistory}>
+              <button className="ds-link" type="button" onClick={onOpenHistory}>
                 Controlla lo storico
               </button>
             )}

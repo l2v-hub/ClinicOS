@@ -533,11 +533,7 @@ function FollowUpSection({
 
   return (
     <div style={{ borderTop: '1px solid var(--border)', paddingTop: 8, marginTop: 6 }}>
-      <button
-        className="btn-secondary btn-sm"
-        onClick={() => setOpen((o) => !o)}
-        style={{ fontSize: '12px' }}
-      >
+      <button className="btn-secondary btn-sm" onClick={() => setOpen((o) => !o)}>
         {open ? '▲' : '▼'} Follow-up medicazione ({followUps.length})
       </button>
 
@@ -714,9 +710,17 @@ export function MedicazioniTab({
   const entryGate = useRef<HTMLDivElement>(null);
   const [entryBlocked, setEntryBlocked] = useState(false);
   function applyEntry(action: 'request' | 'resume' | 'discard') {
-    const next = legacyEntryTransition(action, { editId, form }, () => ({ ...EMPTY_FORM, data: todayStr() }));
-    setEditId(next.editId); setForm(next.form); setEntryBlocked(next.blocked); setShowAdd(next.showForm); setModulo(false);
-    if (action !== 'request') setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
+    const next = legacyEntryTransition(action, { editId, form }, () => ({
+      ...EMPTY_FORM,
+      data: todayStr(),
+    }));
+    setEditId(next.editId);
+    setForm(next.form);
+    setEntryBlocked(next.blocked);
+    setShowAdd(next.showForm);
+    setModulo(false);
+    if (action !== 'request')
+      setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
   }
   const requestEntry = useEffectEvent(() => applyEntry('request'));
   useEffect(() => {
@@ -724,9 +728,19 @@ export function MedicazioniTab({
     let focusTimer: ReturnType<typeof setTimeout> | undefined;
     const timer = setTimeout(() => {
       requestEntry();
-      focusTimer = setTimeout(() => (entryGate.current?.querySelector<HTMLButtonElement>('button') ?? entryForm.current?.querySelector<HTMLInputElement>('input'))?.focus(), 0);
+      focusTimer = setTimeout(
+        () =>
+          (
+            entryGate.current?.querySelector<HTMLButtonElement>('button') ??
+            entryForm.current?.querySelector<HTMLInputElement>('input')
+          )?.focus(),
+        0,
+      );
     }, 0);
-    return () => { clearTimeout(timer); clearTimeout(focusTimer); };
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(focusTimer);
+    };
   }, [createRequest]);
 
   function set(f: Partial<typeof form>) {
@@ -842,11 +856,28 @@ export function MedicazioniTab({
           }
         >
           <div className="cts__body--padded">
-            {entryBlocked && <div ref={entryGate} role="alert" data-legacy-entry-gate>
-              <p>È presente una modifica non salvata. Riprendila oppure annullala prima di iniziare una nuova medicazione.</p>
-              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('resume')}>Riprendi modifica</button>
-              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('discard')}>Annulla modifica e inizia nuova</button>
-            </div>}
+            {entryBlocked && (
+              <div ref={entryGate} role="alert" data-legacy-entry-gate>
+                <p>
+                  È presente una modifica non salvata. Riprendila oppure annullala prima di iniziare
+                  una nuova medicazione.
+                </p>
+                <button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  onClick={() => applyEntry('resume')}
+                >
+                  Riprendi modifica
+                </button>
+                <button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  onClick={() => applyEntry('discard')}
+                >
+                  Annulla modifica e inizia nuova
+                </button>
+              </div>
+            )}
             {showAdd && (
               <div className="cr-inline-form" ref={entryForm}>
                 <div className="cr-form-section__title">

@@ -22,7 +22,7 @@ export function NavChips({ navigation, onNavigate, formatLabel, max = 8 }: Props
           <button
             key={i}
             type="button"
-            className="srev-chip"
+            className="ds-btn ds-btn--secondary"
             title={label}
             onClick={() => onNavigate?.(n)}
           >

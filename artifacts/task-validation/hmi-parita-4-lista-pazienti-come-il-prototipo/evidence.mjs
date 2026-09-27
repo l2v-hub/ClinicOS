@@ -83,10 +83,10 @@ const roster = (await (await fetch('http://localhost:3001/patients/page?limit=25
     return {
       title: document.querySelector('.topbar-title .page-header__title')?.textContent,
       newTitle: document.querySelector('#plist-new-title')?.textContent,
-      primary: document.querySelector('.plist-btn--primary')?.textContent?.trim(),
-      primaryBox: r('.plist-btn--primary'),
+      primary: document.querySelector('.plist-new .ds-btn--primary')?.textContent?.trim(),
+      primaryBox: r('.plist-new .ds-btn--primary'),
       search: r('.plist-search .search-input'),
-      chips: [...document.querySelectorAll('.plist-chip')].map((c) => ({
+      chips: [...document.querySelectorAll('.plist-list .ds-chip')].map((c) => ({
         t: c.textContent.trim(),
         pressed: c.getAttribute('aria-pressed'),
         h: Math.round(c.getBoundingClientRect().height),
@@ -170,7 +170,7 @@ const roster = (await (await fetch('http://localhost:3001/patients/page?limit=25
   await page.getByRole('button', { name: /^Ricoverati/ }).click();
   await page.locator('.plist-search .search-input').fill('Rossi');
   await page.waitForTimeout(2000);
-  const pressed = await page.locator('.plist-chip[aria-pressed="true"]').innerText();
+  const pressed = await page.locator('.plist-views .ds-chip[aria-pressed="true"]').innerText();
   check('AC3 la ricerca passa a "Tutti" (trova anche i dimessi)', /^Tutti/.test(pressed), pressed);
   await page.locator('.plist-search .search-input').fill('');
   await page.waitForTimeout(1500);
@@ -244,7 +244,7 @@ for (const [label, handler] of [
   await page.locator('.plist-list').waitFor({ timeout: 15000 });
   await page.waitForTimeout(2500);
   const r = await page.evaluate(() => ({
-    chips: [...document.querySelectorAll('.plist-views .plist-chip')].slice(0, 3).map((c) => c.textContent.trim()),
+    chips: [...document.querySelectorAll('.plist-views .ds-chip')].slice(0, 3).map((c) => c.textContent.trim()),
     rows: [...document.querySelectorAll('.patient-roster tbody tr.patient-roster__row')].filter((x) => x.getBoundingClientRect().height > 0).length,
     note: document.querySelector('.plist-note')?.textContent ?? '',
   }));
@@ -263,7 +263,7 @@ for (const [label, handler] of [
   await page.locator('.teams-sidebar__item[title="Pazienti"]').click();
   await page.waitForTimeout(1800);
   const r = await page.evaluate(() => ({
-    toggle: document.querySelector('.plist-chip--filters')?.textContent?.trim(),
+    toggle: [...document.querySelectorAll('.plist-list .ds-chip')].find((b) => /^Filtri e ordine/.test(b.textContent.trim()))?.textContent?.trim(),
     note: [...document.querySelectorAll('.plist-note')].map((n) => n.textContent.trim()),
   }));
   check('QA1 filtro "Femmine" visibile sul pulsante e in un avviso anche a pannello chiuso, dopo la navigazione', /Femmine/.test(r.toggle ?? '') && r.note.some((n) => /Filtro attivo: solo femmine/.test(n)), JSON.stringify(r));

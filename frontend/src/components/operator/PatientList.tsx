@@ -231,7 +231,7 @@ export function PatientList({
           />
           <button
             type="button"
-            className="plist-btn plist-btn--primary"
+            className="ds-btn ds-btn--primary"
             onClick={() => setShowNewPatient(true)}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -329,19 +329,17 @@ export function PatientList({
               <button
                 key={v}
                 type="button"
-                className="plist-chip"
+                className="ds-chip"
                 aria-pressed={vista === v}
                 onClick={() => setVista(v)}
               >
                 {LIST_VIEW_LABEL[v]}
-                {contiVista[v] !== null && (
-                  <span className="plist-chip__count">{contiVista[v]}</span>
-                )}
+                {contiVista[v] !== null && <span className="ds-chip__count">{contiVista[v]}</span>}
               </button>
             ))}
             <button
               type="button"
-              className={`plist-chip plist-chip--filters${filtroSesso !== 'tutti' ? ' is-filtered' : ''}`}
+              className="ds-chip"
               aria-expanded={showFilters}
               aria-controls="plist-filters"
               onClick={() => setShowFilters((v) => !v)}
@@ -349,9 +347,7 @@ export function PatientList({
               Filtri e ordine
               {/* un filtro attivo si vede anche a pannello chiuso */}
               {filtroSesso !== 'tutti' && (
-                <span className="plist-chip__count">
-                  {filtroSesso === 'M' ? 'Maschi' : 'Femmine'}
-                </span>
+                <span className="ds-chip__count">{filtroSesso === 'M' ? 'Maschi' : 'Femmine'}</span>
               )}
             </button>
           </div>

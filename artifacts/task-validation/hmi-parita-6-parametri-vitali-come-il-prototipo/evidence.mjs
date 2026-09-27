@@ -123,8 +123,8 @@ const state = (page) =>
     })),
     news2: document.querySelector('.par-news2')?.textContent ?? '',
     keys: document.querySelectorAll('.par-pad__key').length,
-    save: document.querySelector('.par-save')?.textContent,
-    saveDisabled: document.querySelector('.par-save')?.disabled,
+    save: document.querySelector('.par-wide.ds-btn--primary')?.textContent,
+    saveDisabled: document.querySelector('.par-wide.ds-btn--primary')?.disabled,
     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
   }));
 async function pad(page, text) {

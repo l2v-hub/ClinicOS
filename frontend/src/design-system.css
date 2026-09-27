@@ -1,0 +1,518 @@
+/* ─────────────────────────────────────────────────────────────────────────────────────────────
+   ClinicOS — design system canonico (HMI 1).
+
+   UNICA fonte dell'aspetto dei controlli: chip/filtri/selettori di vista, pulsanti, pulsanti icona,
+   navigazione per data, card. Caricato dopo ogni altro foglio (App.tsx).
+
+   Regola "paranoica": i selettori canonici hanno una spinta di specificità da id (`:not(#ds)`), così
+   nessuna regola di pagina può cambiare l'aspetto di un controllo. Le pagine decidono solo il layout
+   (margini, flex, ordine), mai altezza, raggio, bordo, colori o tipografia di un controllo.
+   Una sola misura per tipo di controllo: niente varianti "small".
+
+   Classi legacy allineate (stesso aspetto ovunque, anche nelle pagine non ancora ridisegnate):
+   chip → .filter-chip .agt-filter-chip .agt-view-btn
+   primario → .btn-primary .btn-success   secondario → .btn-secondary .btn-ghost .btn-ghost-outline
+   icona → .icon-btn
+   Le schede di navigazione (L2/L3) restano il componente unico TopNav.
+   ───────────────────────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --ds-control-h: 48px;
+  --ds-radius: 12px;
+  --ds-card-radius: 16px;
+  --ds-border-w: 2px;
+  --ds-border: #e1e7f0;
+  --ds-border-strong: #c9d3e1;
+  --ds-blue: #2f6bed;
+  --ds-blue-active: #1d4fc4;
+  --ds-blue-tint: #eaf1fe;
+  --ds-surface: #ffffff;
+  --ds-surface-2: #f5f7fb;
+  --ds-text: #16202e;
+  --ds-text-muted: #5a6b80;
+  --ds-focus: 3px solid #245bb5;
+  --ds-font: var(--font-ui, 'Inter', system-ui, sans-serif);
+}
+
+/* ── Chip: filtri, selettori di vista, scelte ─────────────────────────────────────────────── */
+:is(
+  .ds-chip,
+  .filter-chip,
+  .agt-filter-chip,
+  .agt-view-btn,
+  .srev-chip,
+  .schedule-op-btn,
+  .dashboard-notification-chip
+):not(#ds) {
+  box-sizing: border-box;
+  height: var(--ds-control-h);
+  min-height: var(--ds-control-h);
+  padding: 0 16px;
+  border: var(--ds-border-w) solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font: 400 16px/24px var(--ds-font);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  transition:
+    background-color 0.12s,
+    border-color 0.12s;
+}
+:is(
+    .ds-chip,
+    .filter-chip,
+    .agt-filter-chip,
+    .agt-view-btn,
+    .srev-chip,
+    .schedule-op-btn,
+    .dashboard-notification-chip
+  ):not(#ds):hover:not(:disabled):not(
+    [aria-pressed='true'],
+    [aria-selected='true'],
+    .active,
+    .is-active,
+    .is-on,
+    [aria-expanded='true']
+  ) {
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+}
+:is(
+    .ds-chip,
+    .filter-chip,
+    .agt-filter-chip,
+    .agt-view-btn,
+    .srev-chip,
+    .schedule-op-btn,
+    .dashboard-notification-chip
+  ):is([aria-pressed='true'], [aria-selected='true'], .active, .is-active, .is-on):not(#ds) {
+  background: var(--ds-blue-tint);
+  border-color: var(--ds-blue);
+  color: var(--ds-blue-active);
+  font-weight: 600;
+}
+:is(
+    .ds-chip,
+    .filter-chip,
+    .agt-filter-chip,
+    .agt-view-btn,
+    .srev-chip,
+    .schedule-op-btn,
+    .dashboard-notification-chip
+  )[aria-expanded='true']:not(#ds) {
+  border-color: var(--ds-blue);
+  color: var(--ds-blue-active);
+}
+/* Contatore dentro una chip */
+.ds-chip__count:not(#ds) {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: var(--ds-surface-2);
+  color: var(--ds-text-muted);
+  font: 600 14px/24px var(--ds-font);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+:is(
+    .ds-chip,
+    .filter-chip,
+    .agt-filter-chip,
+    .agt-view-btn,
+    .srev-chip,
+    .schedule-op-btn,
+    .dashboard-notification-chip
+  )[aria-pressed='true']
+  .ds-chip__count:not(#ds) {
+  background: var(--ds-surface);
+  color: var(--ds-blue-active);
+}
+/* Gruppo di chip: niente contenitore "segmentato" di pagina, solo spaziatura */
+:is(.ds-chip-group, .filter-chips, .agt-filter-row, .agt-view-switcher):not(#ds) {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ── Pulsanti ─────────────────────────────────────────────────────────────────────────────── */
+:is(
+  .ds-btn,
+  .btn-primary,
+  .btn-success,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-ghost-outline,
+  .btn-sm,
+  .btn-danger
+):not(#ds) {
+  box-sizing: border-box;
+  height: var(--ds-control-h);
+  min-height: var(--ds-control-h);
+  padding: 0 24px;
+  border-radius: var(--ds-radius);
+  font: 600 16px/24px var(--ds-font);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: none;
+  text-decoration: none;
+}
+:is(.ds-btn--primary, .btn-primary, .btn-success):not(#ds) {
+  background: var(--ds-blue);
+  border: var(--ds-border-w) solid var(--ds-blue);
+  color: #fff;
+}
+:is(.ds-btn--primary, .btn-primary, .btn-success):not(#ds):hover:not(:disabled) {
+  background: var(--ds-blue-active);
+  border-color: var(--ds-blue-active);
+}
+:is(
+  .ds-btn--secondary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-ghost-outline,
+  .btn-sm:not(.btn-primary, .btn-success, .btn-danger, .btn-secondary, .btn-ghost)
+):not(#ds) {
+  background: var(--ds-surface);
+  border: var(--ds-border-w) solid var(--ds-border-strong);
+  color: var(--ds-blue-active);
+}
+:is(
+    .ds-btn--secondary,
+    .btn-secondary,
+    .btn-ghost,
+    .btn-ghost-outline,
+    .btn-sm:not(.btn-primary, .btn-success, .btn-danger, .btn-secondary, .btn-ghost)
+  ):not(#ds):hover:not(:disabled) {
+  background: var(--ds-blue-tint);
+}
+:is(
+    .ds-btn,
+    .btn-primary,
+    .btn-success,
+    .btn-secondary,
+    .btn-ghost,
+    .btn-ghost-outline,
+    .btn-sm,
+    .btn-danger
+  )
+  svg:not(#ds) {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+/* Link d'azione (testo blu, area di tocco 48) */
+:is(.ds-link, .btn-link):not(#ds) {
+  min-height: var(--ds-control-h);
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--ds-blue-active);
+  font: 600 16px/24px var(--ds-font);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── Pulsante icona ───────────────────────────────────────────────────────────────────────── */
+:is(.ds-icon-btn, .icon-btn):not(#ds) {
+  box-sizing: border-box;
+  width: var(--ds-control-h);
+  height: var(--ds-control-h);
+  min-width: var(--ds-control-h);
+  padding: 0;
+  border: var(--ds-border-w) solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  display: inline-grid;
+  place-items: center;
+  font: 600 16px/24px var(--ds-font);
+  cursor: pointer;
+  box-shadow: none;
+}
+:is(.ds-icon-btn, .icon-btn):not(#ds):hover:not(:disabled) {
+  background: var(--ds-surface-2);
+}
+:is(.ds-icon-btn, .icon-btn) svg:not(#ds) {
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Stati comuni ─────────────────────────────────────────────────────────────────────────── */
+:is(
+    .ds-chip,
+    .filter-chip,
+    .agt-filter-chip,
+    .agt-view-btn,
+    .ds-btn,
+    .btn-primary,
+    .btn-success,
+    .btn-secondary,
+    .btn-ghost,
+    .btn-ghost-outline,
+    .btn-sm,
+    .btn-danger,
+    .srev-chip,
+    .schedule-op-btn,
+    .dashboard-notification-chip,
+    .link-btn,
+    .btn-link,
+    .ds-link,
+    .ds-icon-btn,
+    .icon-btn
+  ):not(#ds):focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}
+:is(
+    .ds-chip,
+    .filter-chip,
+    .agt-filter-chip,
+    .agt-view-btn,
+    .ds-btn,
+    .btn-primary,
+    .btn-success,
+    .btn-secondary,
+    .btn-ghost,
+    .btn-ghost-outline,
+    .btn-sm,
+    .btn-danger,
+    .srev-chip,
+    .schedule-op-btn,
+    .dashboard-notification-chip,
+    .link-btn,
+    .btn-link,
+    .ds-link,
+    .ds-icon-btn,
+    .icon-btn
+  ):not(#ds):disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Navigazione per data (componente DateNav) ───────────────────────────────────────────── */
+.ds-date-nav:not(#ds) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ds-date-nav__input:not(#ds) {
+  box-sizing: border-box;
+  height: var(--ds-control-h);
+  padding: 0 12px;
+  border: var(--ds-border-w) solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  font: 400 16px/24px var(--ds-font);
+  width: auto;
+}
+.ds-date-nav__label:not(#ds) {
+  font: 600 16px/24px var(--ds-font);
+  color: var(--ds-text);
+  padding: 0 4px;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────────────────────── */
+.ds-card:not(#ds) {
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-card-radius);
+  padding: 24px;
+  min-width: 0;
+}
+.ds-card__head:not(#ds) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.ds-card__title:not(#ds) {
+  margin: 0;
+  font: 600 20px/28px var(--ds-font);
+  color: var(--ds-text);
+}
+.ds-eyebrow:not(#ds) {
+  font: 600 14px/20px var(--ds-font);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ds-text-muted);
+}
+.ds-caption:not(#ds) {
+  font: 400 14px/20px var(--ds-font);
+  color: var(--ds-text-muted);
+}
+@media (max-width: 600px) {
+  .ds-card:not(#ds) {
+    padding: 16px;
+  }
+}
+
+/* ── Solo per lettori di schermo ──────────────────────────────────────────────────────────── */
+.ds-sr-only:not(#ds) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.ds-chip svg:not(#ds) {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.ds-date-nav__field:not(#ds) {
+  margin: 0;
+  display: inline-flex;
+}
+
+/* ── Pulsante che diventa solo icona (azioni di intestazione) ─────────────────────────────── */
+/* Sotto i 1400 px: quadrato da 48 con la sola icona; il nome resta in aria-label e tooltip. */
+@media (max-width: 1399px) {
+  .ds-btn--collapsible:not(#ds) {
+    width: var(--ds-control-h);
+    padding: 0;
+  }
+  /* Nascosta alla vista ma non ai lettori di schermo: il nome del pulsante resta completo. */
+  .ds-btn--collapsible .ds-btn__label:not(#ds) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+/* ── Varianti semantiche del pulsante icona ───────────────────────────────────────────────── */
+/* Solo l'azione distruttiva ha un colore proprio (rosso = allarmi, errori, eliminazioni). */
+:is(.ds-icon-btn--danger, .icon-btn--danger):not(#ds) {
+  color: var(--red, #d93a4a);
+}
+:is(.ds-icon-btn--danger, .icon-btn--danger):not(#ds):hover:not(:disabled) {
+  background: #fdecee;
+}
+
+/* ── Campo di ricerca nelle barre di strumenti ────────────────────────────────────────────── */
+/* Stessa altezza dei controlli; non si schiaccia accanto alle chip (va a capo prima). */
+.search-wrap:not(#ds) {
+  box-sizing: border-box;
+  height: var(--ds-control-h);
+}
+.toolbar > .search-wrap:not(#ds) {
+  flex: 1 1 280px;
+  min-width: min(100%, 240px);
+}
+
+/* ── Avatar con il colore dell'operatore: iniziali sempre leggibili ───────────────────────── */
+.op-avatar-sm[style*='background']:not(#ds) {
+  color: #fff;
+}
+
+/* Icone a tratto nei pulsanti con etichetta comprimibile (azioni di intestazione della cartella). */
+.ds-btn--collapsible svg:not(#ds) {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Pulsante distruttivo (eliminare, disattivare): il rosso è riservato a questo e agli allarmi ─ */
+:is(.ds-btn--danger, .btn-danger):not(#ds) {
+  background: var(--ds-surface);
+  border: var(--ds-border-w) solid #e8a3aa;
+  color: #b3261e;
+}
+:is(.ds-btn--danger, .btn-danger):not(#ds):hover:not(:disabled) {
+  background: #fdecee;
+}
+
+/* ── Icone nei link d'azione ─────────────────────────────────────────────────────────────── */
+:is(.ds-link, .btn-link) svg:not(#ds) {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+/* ── Link nel testo (dentro frasi e righe dense): stesso colore, peso e fuoco ovunque ───────── */
+.link-btn:not(#ds) {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ds-blue-active);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+/* ── Conteggio con tono (segnalazioni): il colore dice la gravità, la chip resta canonica ──── */
+.ds-chip__count--alarm:not(#ds) {
+  background: #fdecee;
+  color: #b3261e;
+}
+.ds-chip__count--warning:not(#ds) {
+  background: #fdf3e2;
+  color: #8a5300;
+}
+.ds-chip__count--notice:not(#ds) {
+  background: var(--ds-blue-tint);
+  color: var(--ds-blue-active);
+}
+
+/* ── Campi: stessa altezza, bordo, raggio, testo e fuoco dei controlli ───────────────────── */
+:is(input.form-input, select.form-input, select.form-select, .ds-date-nav__input):not(#ds) {
+  box-sizing: border-box;
+  min-height: var(--ds-control-h);
+  border-width: var(--ds-border-w);
+  border-style: solid;
+  border-radius: var(--ds-radius);
+  font-size: 16px;
+}
+textarea.form-input:not(#ds) {
+  border-width: var(--ds-border-w);
+  border-style: solid;
+  border-radius: var(--ds-radius);
+  font-size: 16px;
+}
+:is(
+    input.form-input,
+    select.form-input,
+    select.form-select,
+    textarea.form-input,
+    .ds-date-nav__input
+  ):not(#ds):focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}

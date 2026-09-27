@@ -25,7 +25,12 @@ export function DemographicsStatus({
         {fields.map((field) => (
           <li key={field}>
             {onEdit ? (
-              <button type="button" onClick={() => onEdit(field)} disabled={busy}>
+              <button
+                type="button"
+                className="ds-link"
+                onClick={() => onEdit(field)}
+                disabled={busy}
+              >
                 {DEMOGRAPHIC_LABELS[field]}
               </button>
             ) : (

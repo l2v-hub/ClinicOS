@@ -94,7 +94,9 @@ export function ConsegnePage({
   const [filtroStato, setFiltroStato] = useState<'tutte' | 'attive' | Consegna['stato']>(
     initialFiltroStato ?? 'tutte',
   );
-  const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>(initialQuery?.priority ?? 'tutte');
+  const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>(
+    initialQuery?.priority ?? 'tutte',
+  );
   const [ricerca, setRicerca] = useState(initialQuery?.q ?? '');
   const [formAperto, setFormAperto] = useState(false);
 
@@ -186,11 +188,13 @@ export function ConsegnePage({
             </button>
           )}
         </div>
-        <div className="filter-chips">
+        <div className="ds-chip-group" role="group" aria-label="Filtra per stato">
           {(['tutte', 'attive', 'aperta', 'in_corso', 'completata'] as const).map((s) => (
             <button
+              type="button"
               key={s}
-              className={`filter-chip${filtroStato === s ? ' active' : ''}`}
+              className="ds-chip"
+              aria-pressed={filtroStato === s}
               onClick={() => setFiltroStato(s)}
             >
               {s === 'tutte'
@@ -205,11 +209,13 @@ export function ConsegnePage({
             </button>
           ))}
         </div>
-        <div className="filter-chips">
+        <div className="ds-chip-group" role="group" aria-label="Filtra per priorità">
           {(['tutte', 'urgente', 'alta', 'normale'] as const).map((p) => (
             <button
+              type="button"
               key={p}
-              className={`filter-chip filter-chip--priorita${filtroPriorita === p ? ' active' : ''} ${p !== 'tutte' ? `filter-chip--${p}` : ''}`}
+              className="ds-chip"
+              aria-pressed={filtroPriorita === p}
               onClick={() => setFiltroPriorita(p)}
             >
               {p === 'tutte' ? 'Tutte' : p.charAt(0).toUpperCase() + p.slice(1)}

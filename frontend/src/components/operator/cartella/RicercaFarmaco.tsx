@@ -114,7 +114,7 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
         {(search.nextCursor || search.phase === 'error') && (
           <button
             type="button"
-            className="ricerca-farmaco__apri"
+            className="ds-btn ds-btn--secondary"
             disabled={search.phase === 'loading'}
             onClick={search.phase === 'error' ? search.retry : search.loadMore}
           >
@@ -170,7 +170,7 @@ function RigaEsito({
       {documento && onApriDocumento ? (
         <button
           type="button"
-          className="ricerca-farmaco__apri"
+          className="ds-btn ds-btn--secondary"
           onClick={() => onApriDocumento(documento, farmaco)}
         >
           Apri {documento.tipo === 'rcp' ? 'RCP' : 'foglietto'}

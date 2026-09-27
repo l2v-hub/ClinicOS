@@ -105,7 +105,8 @@ const box = (page, sel) =>
   // azione di pagina ancora presente
   await page.locator('.teams-sidebar__item[title="Pazienti"]').click();
   await page.waitForTimeout(1200);
-  await page.getByRole('button', { name: 'Nuovo paziente' }).first().click();
+  // Dal ciclo 4 il pulsante della lista si chiama "Nuovo ingresso" (apre la stessa scelta).
+  await page.getByRole('button', { name: /^(Nuovo ingresso|Nuovo paziente)$/ }).first().click();
   const chooser = await page.getByRole('dialog', { name: 'Nuovo paziente' }).count();
   check('AC2 le azioni della pagina restano (Nuovo paziente apre la scelta)', chooser > 0);
   await page.keyboard.press('Escape');

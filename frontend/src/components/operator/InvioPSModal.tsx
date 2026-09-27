@@ -59,7 +59,7 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               {model.patient.cognomeNome} · {model.patient.mrn}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             {loading && (
               <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Caricamento terapie…</span>
             )}

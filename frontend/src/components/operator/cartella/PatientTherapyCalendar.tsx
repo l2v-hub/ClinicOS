@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PatientTherapyAPI } from '../../../types';
-import { IcoChevronLeft, IcoChevronRight, IcoPill } from '../../../icons';
+import { IcoPill } from '../../../icons';
+import { DateNav } from '../../shared/DateNav';
 import { localIsoDate } from '../../../lib/appointmentRange';
 import {
   buildPatientTherapyDay,
@@ -78,33 +79,16 @@ export function PatientTherapyCalendar({ patientId }: { patientId: string }) {
   return (
     <section className="patient-therapy-calendar" aria-label="Calendario terapie del paziente">
       <div className="patient-therapy-calendar__toolbar">
-        <div className="agt-nav" role="group" aria-label="Navigazione calendario terapie">
-          <button
-            type="button"
-            className="agt-nav-btn"
-            aria-label="Giorno precedente"
-            disabled={shiftCalendarDate(date, -1) === date}
-            onClick={() => setDate(shiftCalendarDate(date, -1))}
-          >
-            <span aria-hidden="true">
-              <IcoChevronLeft />
-            </span>
-          </button>
-          <button type="button" className="agt-today-btn" onClick={() => setDate(localIsoDate())}>
-            Oggi
-          </button>
-          <button
-            type="button"
-            className="agt-nav-btn"
-            aria-label="Giorno successivo"
-            disabled={shiftCalendarDate(date, 1) === date}
-            onClick={() => setDate(shiftCalendarDate(date, 1))}
-          >
-            <span aria-hidden="true">
-              <IcoChevronRight />
-            </span>
-          </button>
-        </div>
+        <DateNav
+          isToday={date === localIsoDate()}
+          onPrev={() => setDate(shiftCalendarDate(date, -1))}
+          onToday={() => setDate(localIsoDate())}
+          onNext={() => setDate(shiftCalendarDate(date, 1))}
+          prevDisabled={shiftCalendarDate(date, -1) === date}
+          nextDisabled={shiftCalendarDate(date, 1) === date}
+          todayLabel="Oggi"
+          groupLabel="Navigazione calendario terapie"
+        />
         <label className="patient-therapy-calendar__date">
           <span>Data</span>
           <input

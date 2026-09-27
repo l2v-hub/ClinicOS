@@ -24,31 +24,7 @@
 .agt-view--hmi .agt-day-card__title::first-letter {
   text-transform: uppercase;
 }
-.agt-view--hmi .agt-new-btn {
-  height: 48px;
-  padding: 0 24px;
-  border-radius: 12px;
-  border: 0;
-  background: var(--blue);
-  color: #fff;
-  font: 600 16px/24px var(--font-ui);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-.agt-view--hmi .agt-new-btn svg {
-  width: 20px;
-  height: 20px;
-}
-.agt-view--hmi .agt-new-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.agt-view--hmi .agt-new-btn:focus-visible {
-  outline: 3px solid #245bb5;
-  outline-offset: 2px;
-}
+
 .agt-view--hmi .agt-day-wrap {
   overflow: visible;
 }
@@ -153,10 +129,6 @@
   .agt-view--hmi .agt-apt-card__detail {
     order: 3;
     flex-basis: 100%;
-  }
-  .agt-view--hmi .agt-new-btn {
-    width: 100%;
-    justify-content: center;
   }
 }
 /* Allineamento al prototipo sopra gli stili storici dell'agenda (app-additions.css). */

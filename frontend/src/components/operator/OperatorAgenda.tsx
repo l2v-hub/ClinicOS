@@ -7,7 +7,8 @@ import type {
   TherapySlotPageInfo,
   TherapyActionInfo,
 } from '../../types';
-import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
+import { IcoCalendar, IcoPlus } from '../../icons';
+import { DateNav } from '../shared/DateNav';
 import { AppointmentForm } from '../shared/AppointmentForm';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { AgendaLegend } from '../shared/AgendaLegend';
@@ -287,6 +288,15 @@ export function OperatorAgenda({
     ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)
     : null;
 
+  // "Oggi" è premuto quando l'intervallo mostrato contiene oggi.
+  const showsToday = (() => {
+    const today = new Date();
+    if (view === 'giornaliero') return isoDate(refDate) === isoDate(today);
+    if (view === 'settimanale')
+      return getWeekDays(refDate).some((d) => isoDate(d) === isoDate(today));
+    return refDate.getFullYear() === today.getFullYear() && refDate.getMonth() === today.getMonth();
+  })();
+
   return (
     <div className="agt-view agt-view--hmi">
       <PageHeader
@@ -327,32 +337,15 @@ export function OperatorAgenda({
                 </button>
               ))}
             </div>
-            <div className="agt-nav">
-              <button
-                type="button"
-                className="agt-nav-btn"
-                onClick={() => navigate(-1)}
-                aria-label="Intervallo precedente"
-              >
-                <IcoChevronLeft />
-              </button>
-              <button
-                type="button"
-                className="agt-today-btn"
-                onClick={goToday}
-                aria-label="Vai a oggi"
-              >
-                <IcoCalendar /> Oggi
-              </button>
-              <button
-                type="button"
-                className="agt-nav-btn"
-                onClick={() => navigate(1)}
-                aria-label="Intervallo successivo"
-              >
-                <IcoChevronRight />
-              </button>
-            </div>
+            <DateNav
+              isToday={showsToday}
+              onPrev={() => navigate(-1)}
+              onToday={goToday}
+              onNext={() => navigate(1)}
+              prevLabel="Intervallo precedente"
+              nextLabel="Intervallo successivo"
+              todayLabel="Vai a oggi"
+            />
           </div>
         }
       />
@@ -414,7 +407,7 @@ export function OperatorAgenda({
             </div>
             <button
               type="button"
-              className="agt-new-btn"
+              className="ds-btn ds-btn--primary"
               disabled={!firstFreeSlot}
               title={newAptHint}
               onClick={() => {

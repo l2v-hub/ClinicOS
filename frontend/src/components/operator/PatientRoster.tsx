@@ -120,7 +120,7 @@ const PatientCard = memo(function PatientCard({
         </div>
         <button
           type="button"
-          className="patient-card__open"
+          className="ds-btn ds-btn--secondary"
           onClick={() => onSelect(patient)}
           aria-label={`Apri cartella di ${patient.firstName} ${patient.lastName}`}
         >

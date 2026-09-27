@@ -14,23 +14,27 @@ export function AgendaStatoFilterRow({
   appuntamenti,
 }: AgendaStatoFilterRowProps) {
   return (
-    <div className="agt-filter-row">
+    <div className="ds-chip-group" role="group" aria-label="Filtra per stato">
       <button
-        className={`agt-filter-chip${filtro === 'tutti' ? ' active' : ''}`}
+        type="button"
+        className="ds-chip"
+        aria-pressed={filtro === 'tutti'}
         onClick={() => onChange('tutti')}
       >
-        Tutti gli stati ({appuntamenti.length})
+        Tutti gli stati <span className="ds-chip__count">{appuntamenti.length}</span>
       </button>
       {STATI_APPUNTAMENTO.map((s) => {
         const n = appuntamenti.filter((a) => a.stato === s).length;
         return (
           <button
+            type="button"
             key={s}
-            className={`agt-filter-chip${filtro === s ? ' active' : ''}`}
+            className="ds-chip"
+            aria-pressed={filtro === s}
             onClick={() => onChange(filtro === s ? 'tutti' : s)}
           >
             {STATO_LABEL[s]}
-            {n > 0 ? ` (${n})` : ''}
+            {n > 0 && <span className="ds-chip__count">{n}</span>}
           </button>
         );
       })}

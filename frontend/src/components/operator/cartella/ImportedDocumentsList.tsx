@@ -122,10 +122,13 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
               {fmtDate(d.createdAt)}
             </span>
             <span className="imported-docs__actions">
-              <button className="srev-chip" onClick={() => setOpen({ fileName: d.originalName })}>
+              <button
+                className="ds-btn ds-btn--secondary"
+                onClick={() => setOpen({ fileName: d.originalName })}
+              >
                 Anteprima
               </button>
-              <button className="srev-chip" onClick={() => openDoc(d)}>
+              <button className="ds-btn ds-btn--secondary" onClick={() => openDoc(d)}>
                 Apri
               </button>
             </span>

@@ -58,7 +58,7 @@ const state = (page) =>
     card: document.querySelector('.ho-card-head h3')?.textContent ?? '',
     cardState: document.querySelector('.ho-card-head .ho-cap')?.textContent ?? '',
     primary: (() => {
-      const b = document.querySelector('.handover-rounds__actions .ho-btn--primary');
+      const b = document.querySelector('.handover-rounds__actions .ds-btn--primary');
       const r = b?.getBoundingClientRect();
       const card = document.querySelector('.handover-rounds__composer')?.getBoundingClientRect();
       return b

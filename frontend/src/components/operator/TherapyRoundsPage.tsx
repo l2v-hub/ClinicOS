@@ -11,7 +11,7 @@ import { TherapyGiroRows, type FiltroStato } from './TherapyGiroRows';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { isCalendarDate, shiftCalendarDate } from '../../lib/patientTherapyCalendar';
 import { initialSlotId, slotDone, sortedSlots } from '../../lib/therapyGiro';
-import { IcoChevronLeft, IcoChevronRight } from '../../icons';
+import { DateNav } from '../shared/DateNav';
 import './TherapyRoundsPage.css';
 
 interface Props {
@@ -63,17 +63,11 @@ export function TherapyRoundsPage({
   const done = active ? slotDone(active) : 0;
   const total = active?.summary.total ?? 0;
   const s = active?.summary;
-  const FILTRI: { key: FiltroStato; label: string }[] = [
-    { key: 'tutte', label: 'Tutte' },
-    { key: 'pending', label: `Da erogare${s && s.pending > 0 ? ` (${s.pending})` : ''}` },
-    {
-      key: 'administered',
-      label: `Erogate${s && s.administered > 0 ? ` (${s.administered})` : ''}`,
-    },
-    {
-      key: 'not_administered',
-      label: `Non erogate${s && s.notAdministered > 0 ? ` (${s.notAdministered})` : ''}`,
-    },
+  const FILTRI: { key: FiltroStato; label: string; count: number }[] = [
+    { key: 'tutte', label: 'Tutte', count: 0 },
+    { key: 'pending', label: 'Da erogare', count: s?.pending ?? 0 },
+    { key: 'administered', label: 'Erogate', count: s?.administered ?? 0 },
+    { key: 'not_administered', label: 'Non erogate', count: s?.notAdministered ?? 0 },
   ];
   const dayLabel = new Date(`${date}T12:00:00`).toLocaleDateString('it-IT', {
     weekday: 'long',
@@ -94,7 +88,7 @@ export function TherapyRoundsPage({
               <button
                 type="button"
                 key={slot.id}
-                className="giro-chip giro-chip--slot"
+                className="ds-chip giro-slot"
                 aria-pressed={slot.id === activeId}
                 aria-label={`${slot.label}, ore ${slot.ora}: ${slotDone(slot)} fatte su ${slot.summary.total}${slot.summary.pending > 0 ? `, ${slot.summary.pending} da erogare` : ''}`}
                 onClick={() => setSelected(slot.id)}
@@ -127,56 +121,31 @@ export function TherapyRoundsPage({
               <button
                 type="button"
                 key={f.key}
-                className="giro-chip giro-chip--small"
+                className="ds-chip"
                 aria-pressed={filtro === f.key}
                 onClick={() => setFiltro(f.key)}
               >
                 {f.label}
+                {f.count > 0 && <span className="ds-chip__count">{f.count}</span>}
               </button>
             ))}
           </div>
         )}
         <div className="giro-tools__right">
-          <div className="giro-date" role="group" aria-label="Data del giro">
-            <button
-              type="button"
-              className="giro-icon-btn"
-              aria-label="Giorno precedente"
-              onClick={() => changeDate(shiftCalendarDate(date, -1))}
-            >
-              <IcoChevronLeft />
-            </button>
-            <button
-              type="button"
-              className="giro-chip giro-chip--small"
-              aria-pressed={date === localIsoDate()}
-              onClick={() => changeDate(localIsoDate())}
-            >
-              Oggi
-            </button>
-            <label>
-              <span className="giro-sr">Data terapia</span>
-              <input
-                className="form-input giro-date__input"
-                type="date"
-                value={date}
-                min="1900-01-01"
-                max="9999-12-31"
-                onChange={(event) => changeDate(event.target.value)}
-              />
-            </label>
-            <button
-              type="button"
-              className="giro-icon-btn"
-              aria-label="Giorno successivo"
-              onClick={() => changeDate(shiftCalendarDate(date, 1))}
-            >
-              <IcoChevronRight />
-            </button>
-          </div>
+          <DateNav
+            isToday={date === localIsoDate()}
+            onPrev={() => changeDate(shiftCalendarDate(date, -1))}
+            onToday={() => changeDate(localIsoDate())}
+            onNext={() => changeDate(shiftCalendarDate(date, 1))}
+            date={date}
+            onDateChange={changeDate}
+            dateLabel="Data terapia"
+            todayLabel="Oggi"
+            groupLabel="Data del giro"
+          />
           <button
             type="button"
-            className="giro-chip giro-chip--small"
+            className="ds-chip"
             aria-expanded={showOrder}
             aria-controls="giro-order"
             onClick={() => setShowOrder((v) => !v)}

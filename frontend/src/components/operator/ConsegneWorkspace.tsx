@@ -52,7 +52,7 @@ function WorkspaceSession({
       <div className="handover-workspace__tabs" role="group" aria-label="Vista consegne">
         <button
           type="button"
-          className="ho-chip"
+          className="ds-chip"
           aria-pressed={mode === 'rounds'}
           onClick={() => change('rounds')}
         >
@@ -60,7 +60,7 @@ function WorkspaceSession({
         </button>
         <button
           type="button"
-          className="ho-chip"
+          className="ds-chip"
           aria-pressed={mode === 'feed'}
           onClick={() => change('feed')}
         >
