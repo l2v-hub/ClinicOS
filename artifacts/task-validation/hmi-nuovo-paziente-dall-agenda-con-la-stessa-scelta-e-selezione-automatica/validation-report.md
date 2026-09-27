@@ -19,6 +19,10 @@
   - "Crea nuovo paziente" apre `NewPatientFlow`;
   - a fine creazione carica il paziente (`fetchPatientById` con gli header dell'operatore) e lo
     seleziona nel campo, che viene rimontato perché mostri il nome;
+  - ogni caricamento ha un numero di richiesta: una scelta a mano nel campo lo invalida, quindi una
+    risposta lenta non sovrascrive mai il paziente scelto dall'operatore (correzione emersa dalla
+    QA);
+  - durante il caricamento mostra "Selezione del paziente creato…";
   - se il caricamento fallisce mostra un messaggio e non seleziona nulla;
   - il modulo resta aperto.
 - **`OperatorAgenda.tsx` / `AdminAgenda.tsx`:**
@@ -53,7 +57,7 @@
 | Unit             |   PASS | importLandsOnPatient.test.ts 5/5 |
 | Integration      |     NA | |
 | API              |     NA | |
-| Playwright       |   PASS | evidence.mjs 11/11; regressione lista 18/18 |
+| Playwright       |   PASS | evidence.mjs 14/14 (con caricamento lento e scelta a mano); regressione lista 18/18 |
 | Persistence      |     NA | |
 | Agnos AI         |     NA | |
 | Voice            |     NA | |
@@ -65,7 +69,21 @@
 - screenshots/agenda-scelta.png, agenda-paziente-selezionato.png, agenda-errore-selezione.png,
   agenda-admin-paziente-selezionato.png
 
+## Independent QA
+
+- Primo giro, READY FOR QA con un avviso: con un caricamento lento, la scelta a mano veniva
+  sovrascritta dal paziente creato. Corretto con il numero di richiesta e lo stato di attesa.
+- Secondo giro, READY FOR QA:
+  - build, suite 834/843 (baseline), eslint pulito;
+  - evidence 14/14; probe 34/34 e probe sulle concorrenze 16/16: scelta a mano durante il
+    caricamento, rimozione del paziente, errore tardivo, doppia creazione, annulla durante il
+    caricamento; POST con il pazienteId corretto.
+
 ## Residual Risks
+
+- Se l'operatore scrive nel campo senza scegliere un risultato mentre il paziente creato si carica,
+  all'arrivo il paziente creato sostituisce il testo digitato. Nessuna scelta era stata fatta, quindi
+  è il comportamento atteso.
 
 - La conferma del wizard nel browser è simulata con page.route (bozze intake). Il wizard reale è
   percorso passo per passo, e il paziente selezionato è un paziente reale dello stub API.
@@ -73,4 +91,4 @@
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
