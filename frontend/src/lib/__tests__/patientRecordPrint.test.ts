@@ -29,10 +29,12 @@ test('global patient print always opens the selective dialog instead of printing
     readFile(headerUrl, 'utf8'),
     readFile(patientDetailUrl, 'utf8'),
   ]);
+  // HMI 1: "Stampa" è nella barra delle sezioni della cartella (la vecchia card intestazione resta
+  // per compatibilità ma non è più montata); in entrambi i casi apre la finestra di selezione.
   assert.match(header, /onPrint\?: \(\) => void/);
-  assert.match(header, /onClick=\{onPrint\}/);
   assert.doesNotMatch(header, /window\.print\(\)/);
-  assert.match(detail, /onPrint=\{\(\) => setShowPrintDialog\(true\)\}/);
+  assert.doesNotMatch(detail, /window\.print\(\)/);
+  assert.match(detail, /className="chart-action"\s+onClick=\{\(\) => setShowPrintDialog\(true\)\}/);
   assert.match(detail, /<PatientRecordPrintDialog/);
 });
 

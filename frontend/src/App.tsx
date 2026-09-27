@@ -112,7 +112,7 @@ import { OPERATOR_COLOR_PALETTE } from './types';
 import { createDefaultCartella } from './mockData';
 
 import { Login } from './components/Login';
-import type { TabId } from './components/operator/tabGroups';
+import { resolvePatientTab, type TabId } from './components/operator/tabGroups';
 import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
@@ -768,11 +768,11 @@ export default function App() {
     // Durante un ripristino in caricamento la cartella a schermo è ancora quella del paziente
     // precedente: il clic non diventa una voce della cronologia del paziente in arrivo.
     if (current?.pazienteId && current.pazienteId !== pazienteSelezionato?.id) return;
-    // La cartella si apre su Anagrafica quando la voce non indica una sezione.
+    // La cartella si apre sulla sezione predefinita (Panoramica) quando la voce non ne indica una.
     if (
       !current ||
       current.navKey !== 'dettaglio-paziente' ||
-      (current.patientTab ?? 'profilo') === tab
+      (current.patientTab ?? resolvePatientTab()) === tab
     )
       return;
     const next: NavEntry = { ...current, patientTab: tab };
@@ -812,7 +812,7 @@ export default function App() {
       ...(state.patientTab ? { patientTab: state.patientTab } : {}),
     };
     if (state.navKey !== 'dettaglio-paziente' || !state.pazienteId) return;
-    const tab: TabId = state.patientTab ?? 'profilo';
+    const tab: TabId = state.patientTab ?? resolvePatientTab();
     if (known) {
       // La cartella di questo paziente potrebbe non essere ancora arrivata: senza, la scheda
       // mostrerebbe una cartella vuota come se fosse reale.

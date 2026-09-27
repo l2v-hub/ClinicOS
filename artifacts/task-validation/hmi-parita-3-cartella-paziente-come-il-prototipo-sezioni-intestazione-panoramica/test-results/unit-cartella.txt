@@ -1,0 +1,29 @@
+✔ chart groups organize intake and clinical work while legacy links keep their destination (1.567ms)
+✔ discharge opens directly beside Documents and legacy links keep the same module (0.2562ms)
+✔ Agnos opens the separate therapy page for both roles without confusing the agenda (0.3527ms)
+✔ demographic write preview opens the page that displays the field being changed (0.3419ms)
+✔ HMI 1: 8 chart sections as in the prototype; every legacy tab opens the section that holds it (0.7243ms)
+✔ patient record exposes ONE labelled section rail and a controlled tab panel (1.7403ms)
+✔ top navigation follows the keyboard tab pattern with one focusable active tab (0.4552ms)
+✔ therapy sections reuse the canonical contextual navigation (0.5118ms)
+✔ overview removes duplicated KPI tiles and uses semantic operational sections (0.4215ms)
+✔ overview is three columns on wide screens, two on tablet and one on phone (0.8401ms)
+✔ patient record applies one screen-only contract to cards, key-value rows and tables (0.2858ms)
+✔ patient record data contract keeps tablet overflow local and stacks key-value rows on phones (0.5649ms)
+✔ global patient print always opens the selective dialog instead of printing the active tab (7.4746ms)
+✔ print dialog supports all or subset selection and blocks incomplete output (1.7292ms)
+✔ selective print has a dedicated responsive dialog and isolated A4 document (5.7786ms)
+✔ diary print loader follows every bounded page and deduplicates entries (19.7204ms)
+✔ printed address falls back to the patient column like the Contatti tab (1.0035ms)
+✔ tiles show the latest value, the unit and the trend against the previous value (2.4691ms)
+✔ a parameter never measured says so; a single value has no trend (0.2513ms)
+✔ NEWS2 tile: score of the latest complete reading (prototype example = 6) (0.4723ms)
+✔ NEWS2 tile: not computable says which parameters are missing (0.7348ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 212.9353

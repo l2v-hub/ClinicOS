@@ -321,3 +321,62 @@
     white-space: nowrap;
   }
 }
+
+/* ── HMI 1: sezioni della cartella a chip (prototipo) ─────────────────────────
+   Chip 48 px, bordo 2 px, raggio 12; attiva = fondo azzurro, bordo blu, testo blu semibold.
+   Nessuna etichetta di contesto: le chip parlano da sole. */
+.top-nav--chips {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.top-nav--chips .top-nav__context-label {
+  display: none;
+}
+.top-nav--chips .top-nav__items {
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0;
+}
+.top-nav--chips .top-nav__item {
+  height: 48px;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 2px solid var(--border, #e1e7f0);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  color: var(--text, #16202e);
+  font: 400 16px/24px var(--font-ui);
+  box-shadow: none;
+}
+.top-nav--chips .top-nav__item:hover {
+  background: var(--surface, #fff);
+  border-color: var(--blue, #2f6bed);
+  color: var(--text, #16202e);
+}
+.top-nav--chips .top-nav__item.is-active {
+  background: #eaf1fe;
+  border-color: var(--blue, #2f6bed);
+  color: #1d4fc4;
+  font-weight: 600;
+  box-shadow: none;
+}
+.top-nav--chips .top-nav__item.is-active .top-nav__badge {
+  color: #1d4fc4;
+  background: #fff;
+}
+.top-nav--chips .top-nav__item:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+@media (max-width: 900px) {
+  .top-nav--chips {
+    flex-direction: row;
+    margin: 0;
+  }
+}

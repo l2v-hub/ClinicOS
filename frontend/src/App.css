@@ -540,6 +540,10 @@ body {
   .topbar-clock {
     display: none;
   }
+  /* telefono: più spazio al titolo (nome del paziente) */
+  .compact-topbar {
+    gap: 8px;
+  }
 }
 
 /* .page-tabs/.section-tabs (former L2/L3 tab-bar impl, feature 009) removed in Ciclo 18 —

@@ -10807,3 +10807,222 @@ textarea.form-input {
     text-align: left;
   }
 }
+
+/* ── HMI 1 · cartella paziente ─────────────────────────────────────────────── */
+/* Barra delle sezioni: bianca, a tutta larghezza sotto l'intestazione (annulla il margine 24 del
+   contenuto), azioni Stampa e Invio in PS a destra. */
+.chart-sections {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 8px var(--chart-gutter, 24px);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  min-width: 0;
+}
+.chart-sections__actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+  margin-left: auto;
+}
+.chart-action {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 2px solid #b9c4d4;
+  background: var(--surface);
+  color: #1d4fc4;
+  font: 600 16px/24px var(--font-ui);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.chart-action:hover {
+  border-color: var(--blue);
+}
+.chart-action:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+.chart-action svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@media (max-width: 1023px) {
+  .chart-sections {
+    flex-wrap: wrap;
+  }
+  .chart-sections .top-nav--chips {
+    flex-basis: 100%;
+  }
+  .chart-sections__actions {
+    margin-left: 0;
+  }
+}
+
+/* Titolo del paziente nell'intestazione dell'app: nome, badge allergia, dettagli. */
+.patient-topbar-title__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+.patient-topbar-title__allergy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: #fdecee;
+  color: #b42335;
+  font: 500 14px/20px var(--font-ui);
+  white-space: nowrap;
+  /* il nome ha la precedenza: il badge si accorcia per primo */
+  flex: 0 3 auto;
+  min-width: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.patient-topbar-title__row .page-header__title {
+  /* il nome ha la precedenza sul badge: non si accorcia finché c'è spazio */
+  flex: 0 0 auto;
+  max-width: 100%;
+  min-width: 0;
+}
+@media (max-width: 420px) {
+  /* telefono: nome a 16 px; il badge allergie resta nella fascia di sicurezza sotto l'intestazione */
+  .topbar-title .patient-topbar-title__row .page-header__title {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .patient-topbar-title__allergy {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  /* tablet stretto e telefono: il badge diventa la sola icona di allerta (il testo resta letto) */
+  .patient-topbar-title__allergy {
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+    font-size: 0;
+  }
+  .patient-topbar-title__allergy svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+.patient-topbar-title__allergy svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Sezioni con più parti: una sotto l'altra, 24 px fra le parti. */
+.chart-part + .chart-part {
+  margin-top: 24px;
+}
+.chart-part {
+  scroll-margin-top: 24px;
+}
+
+/* Panoramica: tessere, poi diario al centro e quadro operativo a lato (come il prototipo). */
+.chart-overview {
+  margin-top: 24px;
+}
+.chart-overview__side {
+  min-width: 0;
+}
+.chart-overview__side .cr-riepilogo-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (max-width: 1023px) {
+  .chart-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Sotto i 1400 px le azioni diventano quadrati da 48 a sola icona (nome in aria-label e tooltip),
+   così le 8 chip restano tutte visibili. */
+@media (max-width: 1399px) {
+  .chart-action {
+    width: 48px;
+    padding: 0;
+    justify-content: center;
+  }
+  .chart-action__label {
+    display: none;
+  }
+  .top-nav--chips .top-nav__item {
+    padding: 0 12px;
+  }
+}
+
+/* La barra delle sezioni corre a tutta larghezza sotto l'intestazione (come il prototipo): la
+   pagina della cartella non ha margine proprio, lo hanno i contenuti sotto la barra. */
+.main-area-clean .page-content:has(.patient-record-view) {
+  --chart-gutter: 24px;
+  padding: 0;
+}
+.patient-record-view > :not(.chart-sections) {
+  margin-left: var(--chart-gutter, 24px);
+  margin-right: var(--chart-gutter, 24px);
+}
+@media (max-width: 1023px) {
+  .main-area-clean .page-content:has(.patient-record-view) {
+    --chart-gutter: 16px;
+  }
+}
+/* Chip più strette sotto i 1280 px: le 8 sezioni restano tutte visibili. */
+@media (max-width: 1279px) {
+  .chart-sections .top-nav--chips .top-nav__items {
+    gap: 6px;
+  }
+  .chart-sections .top-nav--chips .top-nav__item {
+    padding: 0 10px;
+    font-size: 15px;
+  }
+}
+/* Colonna laterale della Panoramica: card compatte come quelle laterali del prototipo. */
+.chart-overview__side .cr-overview-header {
+  display: none;
+}
+.chart-overview__side .cr-overview-section {
+  margin: 0 0 16px;
+}
+.chart-overview__side .cr-overview-section__header h3 {
+  font: 600 20px/28px var(--font-ui);
+  margin: 0;
+}
+.chart-overview__side .cr-overview-section__header p {
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+/* Icona allergia nella riga dei dettagli: solo al telefono, dove il badge del titolo non entra. */
+.patient-topbar-title__allergy-mini {
+  display: none;
+}
+@media (max-width: 420px) {
+  .patient-topbar-title__allergy-mini {
+    display: inline;
+    margin-right: 4px;
+    color: #b42335;
+    font-weight: 700;
+  }
+}

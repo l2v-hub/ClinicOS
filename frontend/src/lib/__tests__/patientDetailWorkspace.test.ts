@@ -28,11 +28,13 @@ test('patient record exposes ONE labelled section rail and a controlled tab pane
   // HMI a un livello: una sola TopNav nella cartella, costruita da TAB_GROUPS, nessun livello 3.
   assert.equal((patientDetail.match(/<TopNav\s/g) ?? []).length, 1);
   assert.doesNotMatch(patientDetail, /variant="level3"/);
+  // HMI 1: 8 sezioni a chip come il prototipo, nessuna didascalia di gruppo non cliccabile.
   assert.match(patientDetail, /items=\{chartSectionItems\}/);
-  assert.match(patientDetail, /TAB_GROUPS\.flatMap<TopNavItem>/);
-  assert.match(patientDetail, /ariaLabel="Aree della cartella paziente"/);
-  assert.match(patientDetail, /visualLabel="Aree cartella"/);
-  assert.match(patientDetail, /className="top-nav--section-grid"/);
+  assert.match(patientDetail, /CHART_SECTIONS\.map\(\(s\) =>/);
+  assert.match(patientDetail, /ariaLabel="Sezioni della cartella"/);
+  assert.match(patientDetail, /className="top-nav--chips"/);
+  assert.doesNotMatch(patientDetail, /groupLabel/);
+  assert.doesNotMatch(patientDetail, /GROUP_CAPTIONS/);
   assert.doesNotMatch(patientDetail, /visualLabel=\{`\$\{grp\.label\} · contenuti`\}/);
   assert.doesNotMatch(patientDetail, /ariaLabel="Sezioni del profilo paziente"/);
   assert.doesNotMatch(patientDetail, /visualLabel="Dettagli profilo"/);
@@ -70,15 +72,17 @@ test('therapy sections reuse the canonical contextual navigation', () => {
   assert.match(appStyles, /@media \(max-width: 768px\)[\s\S]*?\.tf-subtabs \.top-nav--level3/);
 });
 
-test('overview removes duplicated KPI tiles and uses semantic operational sections', () => {
+test('HMI 1 Panoramica: parameter and NEWS2 tiles from the real readings, then the diary', () => {
   assert.doesNotMatch(patientDetail, /className="cr-quick-stats"/);
-  assert.match(patientDetail, />Stato clinico</);
-  assert.match(patientDetail, />Operatività e degenza</);
-  assert.match(patientDetail, /<article className="cr-riepilogo-card/);
-  assert.match(patientDetail, /className="cr-overview-action"/);
-  assert.doesNotMatch(
+  assert.match(patientDetail, /<News2Chip\s+variant="overview"/);
+  // Il vecchio quadro operativo leggeva dati legacy (parametriVitali, farmaci) in contrasto con
+  // tessere e terapia: non è più nella cartella.
+  assert.doesNotMatch(patientDetail, /function renderRiepilogo/);
+  assert.match(patientDetail, /renderTab\('diario'\)/);
+  // i moduli già aperti restano in un punto fisso: la bozza non si perde cambiando sezione
+  assert.match(
     patientDetail,
-    /<button[\s\S]{0,160}className="cr-riepilogo-card cr-riepilogo-card--nav"/,
+    /<div className="chart-keepalive">\{renderKeepAliveModules\(\)\}<\/div>/,
   );
 });
 

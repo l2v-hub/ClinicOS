@@ -21,8 +21,9 @@ test('chart groups organize intake and clinical work while legacy links keep the
     TAB_GROUPS[1].tabs.map((tab) => tab.id),
     ['diagnosi', 'terapia-farmacologica', 'consegne', 'parametri', 'esami-consulenze', 'note'],
   );
-  assert.equal(resolvePatientTab(), 'profilo');
-  assert.equal(resolvePatientTab('riepilogo'), 'profilo');
+  // HMI 1: la cartella si apre sulla Panoramica (parametri, NEWS2, diario), come il prototipo.
+  assert.equal(resolvePatientTab(), 'panoramica');
+  assert.equal(resolvePatientTab('riepilogo'), 'panoramica');
   assert.equal(resolvePatientTab('sezioni-narrative'), 'diagnosi');
   assert.equal(patientTabGroup('sezioni-narrative'), 'clinica');
   assert.equal(patientTabGroup('presa-in-carico'), 'panoramica');
@@ -34,8 +35,13 @@ test('discharge opens directly beside Documents and legacy links keep the same m
   assert.equal(TAB_GROUPS[documentIndex + 1].id, 'dimissione');
   assert.equal(patientTabGroup('dimissione'), 'dimissione');
   assert.equal(resolvePatientTab('dimissione'), 'dimissione');
-  assert.equal(TAB_GROUPS.flatMap((group) => group.tabs).filter((tab) => tab.id === 'dimissione').length, 1);
-  assert.ok(!TAB_GROUPS.find((group) => group.id === 'moduli')!.tabs.some((tab) => tab.id === 'dimissione'));
+  assert.equal(
+    TAB_GROUPS.flatMap((group) => group.tabs).filter((tab) => tab.id === 'dimissione').length,
+    1,
+  );
+  assert.ok(
+    !TAB_GROUPS.find((group) => group.id === 'moduli')!.tabs.some((tab) => tab.id === 'dimissione'),
+  );
 });
 
 test('Agnos opens the separate therapy page for both roles without confusing the agenda', async () => {
@@ -79,4 +85,46 @@ test('demographic write preview opens the page that displays the field being cha
     );
     assert.equal(nav.patientId, 'qa-alpha');
   }
+});
+
+test('HMI 1: 8 chart sections as in the prototype; every legacy tab opens the section that holds it', async () => {
+  const { CHART_SECTIONS, chartSectionOf } = await import('../../components/operator/tabGroups');
+  assert.deepEqual(
+    CHART_SECTIONS.map((s) => s.label),
+    [
+      'Panoramica',
+      'Dati di ingresso',
+      'Clinica',
+      'Terapia',
+      'Parametri',
+      'Moduli',
+      'Documenti',
+      'Dimissione',
+    ],
+  );
+  const expected: Record<string, string> = {
+    panoramica: 'panoramica',
+    diario: 'panoramica',
+    profilo: 'ingresso',
+    contatti: 'ingresso',
+    'presa-in-carico': 'ingresso',
+    diagnosi: 'clinica',
+    'sezioni-narrative': 'clinica',
+    'esami-consulenze': 'clinica',
+    note: 'clinica',
+    consegne: 'clinica',
+    'terapia-farmacologica': 'terapia',
+    parametri: 'parametri',
+    moduli: 'moduli',
+    braden: 'moduli',
+    painad: 'moduli',
+    postural_transfers: 'moduli',
+    documenti: 'documenti',
+    dimissione: 'dimissione',
+  };
+  for (const [tab, section] of Object.entries(expected))
+    assert.equal(chartSectionOf(tab as never), section, tab);
+  // ogni tab esistente appartiene a una e una sola sezione
+  const all = CHART_SECTIONS.flatMap((s) => s.tabs);
+  assert.equal(new Set(all).size, all.length);
 });
