@@ -211,9 +211,9 @@ export function PatientList({
         actions={
           <>
             <AIImportStatus
-              onImported={() => {
+              onImported={(patientId, moduleTabId) => {
                 void loadPage(undefined, false);
-                onImported?.();
+                onImported?.(patientId, moduleTabId);
               }}
               operatorId={operatorId}
               operatorRole={operatorRole}

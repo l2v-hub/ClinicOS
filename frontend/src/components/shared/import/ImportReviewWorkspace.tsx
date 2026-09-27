@@ -21,7 +21,7 @@ interface Props {
   onJob(job: ImportJob): void;
   onWorkspace(id: string): void;
   onBack(): void;
-  onImported(): void;
+  onImported(patientId?: string): void;
   onBusy(value: boolean): void;
 }
 export function ImportReviewWorkspace({
@@ -113,7 +113,7 @@ export function ImportReviewWorkspace({
           confirmAllergyConflict: opts.confirmAllergyConflict,
           ...result._source,
         });
-        onImported();
+        onImported(result._target.patientId);
         return;
       }
       await openDraft({ patient, cartella });
