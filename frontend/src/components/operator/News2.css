@@ -359,3 +359,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+/* Variante compatta: un punteggio da aggiornare resta del suo colore ma col bordo tratteggiato. */
+.news2-chip--old {
+  border-style: dashed;
+}

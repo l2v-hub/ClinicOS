@@ -28,7 +28,8 @@ interface Props {
   patientId: string;
   patientName: string;
   /** 'overview': tessere dei parametri + tessera NEWS2 della Panoramica (HMI 1), stesso storico. */
-  variant?: 'chip' | 'overview';
+  /** 'compact': solo "NEWS2 n" (colonne strette); ora e stato restano in title e aria-label. */
+  variant?: 'chip' | 'compact' | 'overview';
 }
 
 export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
@@ -120,6 +121,14 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
         : latest
           ? `NEWS2 ${latest.result.total} · ${news2When(latest.reading.measuredAt)}${staleness.stale ? ' · da aggiornare' : ''}`
           : 'NEWS2 non calcolabile';
+  const compactLabel =
+    state === 'loading'
+      ? 'NEWS2 …'
+      : state === 'error'
+        ? 'NEWS2 ?'
+        : latest
+          ? `NEWS2 ${latest.result.total}`
+          : 'NEWS2 —';
   const title =
     state === 'error'
       ? 'Non è stato possibile caricare le rilevazioni. Tocca per riprovare.'
@@ -172,7 +181,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
     <>
       <button
         type="button"
-        className={`news2-chip news2-chip--${state === 'error' ? 'stale' : tone}`}
+        className={`news2-chip news2-chip--${state === 'error' ? 'stale' : tone}${variant === 'compact' && staleness.stale ? ' news2-chip--old' : ''}`}
         onClick={() => {
           if (state === 'error') retry();
           setOpen(true);
@@ -181,7 +190,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
         title={title}
         aria-label={`${label}. Apri lo storico NEWS2`}
       >
-        {label}
+        {variant === 'compact' ? compactLabel : label}
       </button>
       {history}
     </>

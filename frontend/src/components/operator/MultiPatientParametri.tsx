@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IcoSearch, IcoX } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
 import { createParameterDraftStore } from '../../lib/parameterEntryDrafts';
-import { PARAMETER_FIELDS } from '../../lib/patientParameterReadings';
 import { isRosterChanged } from '../../lib/rosterOrder';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
@@ -23,9 +22,11 @@ import {
   type ParameterReadingRequest,
   type SavedParameterReading,
 } from '../../lib/patientParameterReadings';
-import { ParameterEntryRow } from './ParameterEntryRow';
+import { ParameterEntryPanel } from './ParameterEntryPanel';
+import { ParameterPatientPick } from './ParameterPatientPick';
 import { ParameterEntryClock } from './ParameterEntryClock';
 import './PatientParameters.css';
+import './ParametriVitali.css';
 
 interface Props {
   operatoreNome: string;
@@ -42,6 +43,8 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   useEffect(() => () => draftStore.clear(), [draftStore]);
   const [day, setDay] = useState(() => facilityLocalMinute().slice(0, 10));
   const [query, setQuery] = useState('');
+  const [selected, setSelected] = useState<PatientParametersPageItem | null>(null);
+  const [showOrder, setShowOrder] = useState(false);
   // Ultimo elenco gia' mostrato in sessione per giorno/ordine: la pagina compare subito con
   // quello e lo rivalida in background invece di ripartire da "Caricamento pazienti…".
   const initialItems = readSessionCache<PatientParametersPageItem[]>(
@@ -263,117 +266,126 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     }
     return reading;
   }
-  const sorted = items;
   const recorded = items.filter((item) => (item.cartella.readingCount ?? 0) > 0).length;
+  // Il paziente scelto resta nel modulo anche se una ricerca lo toglie dall'elenco: il modulo non
+  // cambia paziente da solo. Senza scelta, il primo dell'elenco.
+  // La scelta automatica del primo paziente diventa esplicita appena arriva l'elenco: una ricerca
+  // successiva non deve cambiare (o far sparire) il paziente su cui si sta scrivendo.
+  if (!selected && items.length > 0) setSelected(items[0]);
+  const listed = selected
+    ? items.find((item) => item.patient.id === selected.patient.id)
+    : undefined;
+  const selectedItem = listed ?? selected ?? items[0];
+  const selectedOutside = Boolean(selected && !listed);
   return (
-    <div className="patient-list-view parameter-entry-page">
-      <PageHeader
-        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Parametri' }]}
-        title="Registrazione parametri"
-        subtitle="Compilazione rapida giornaliera. Ogni salvataggio aggiunge una rilevazione allo storico del paziente."
-      />
-      <ParameterEntryClock onDayChange={setDay} />
-      <RosterOrderControl />
-      <div className="toolbar">
-        <div className="search-wrap">
-          <span className="search-wrap__ico">
-            <IcoSearch />
-          </span>
-          <input
-            type="search"
-            className="search-input"
-            placeholder="Cerca per nome o camera…"
-            aria-label="Cerca paziente per nome o camera"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          {query && (
-            <button
-              className="search-clear-btn"
-              onClick={() => setQuery('')}
-              aria-label="Cancella ricerca"
-            >
-              <IcoX />
-            </button>
-          )}
-        </div>
-        <span className="parameter-entry-progress" role="status">
-          {summaryLoading
-            ? 'Aggiornamento rilevazioni e note di oggi…'
-            : error
-              ? 'Riepilogo giornaliero non disponibile'
-              : `${recorded}/${items.length} pazienti caricati con rilevazioni oggi`}
-        </span>
-      </div>
-      {loading && <p role="status">Caricamento pazienti…</p>}
-      {error && (
-        <div className="parameter-history-error" role="alert">
-          {error}{' '}
-          <button
-            type="button"
-            className="btn-secondary btn-sm"
-            onClick={() =>
-              failedMore.current ? void loadMore() : setRevision((value) => value + 1)
-            }
-          >
-            Riprova caricamento
-          </button>
-        </div>
-      )}
-      {!loading && !error && items.length === 0 && (
-        <p className="empty-state-card">Nessun paziente in elenco.</p>
-      )}
-      {items.length > 0 && (
-        <section className="qe-section qe-table-surface" aria-label="Inserimento rapido parametri">
-          <div className="qe-list" aria-busy={loading}>
-            <div className="qe-row qe-row--header" aria-hidden="true">
-              <span>Paziente</span>
-              {/* Stesse colonne del modulo di inserimento (PARAMETER_FIELDS). */}
-              {PARAMETER_FIELDS.map((field) => (
-                <span
-                  key={field.key}
-                  className={`qe-row__field${['pa', 'evacuazione'].includes(field.key) ? ' qe-row__field--wide' : ''}`}
-                  title={field.key === 'coscienza' ? 'Coscienza (ACVPU)' : undefined}
-                >
-                  {/* "Coscienza" non entra nella colonna stretta: la sigla clinica sì. */}
-                  {field.key === 'coscienza' ? 'ACVPU' : field.label}
-                  {field.unit && field.key !== 'dtx' ? ` · ${field.unit}` : ''}
-                </span>
-              ))}
-              <span className="qe-row__action-head">Note</span>
-              <span className="qe-row__action-head">Salva</span>
-            </div>
-            {sorted.map((item) => (
-              <ParameterEntryRow
-                key={item.patient.id}
-                patient={item.patient}
-                draftStore={draftStore}
-                readingCount={item.cartella.readingCount}
-                noteCount={item.cartella.noteCount}
-                summaryPending={item.summaryPending && summaryLoading}
-                lastReadingAt={item.cartella.lastReadingAt}
-                onOpenHistory={() => onSelectPaziente(item.patient.id)}
-                onSave={(request) => save(item.patient.id, request)}
-              />
-            ))}
-          </div>
-          {nextCursor && (
-            <div className="qe-load-more">
+    <div className="par-view">
+      <PageHeader title="Parametri vitali" subtitle="Rilevazione rapida con NEWS2" />
+      <ParameterEntryClock onDayChange={setDay} hidden />
+      <div className="par-grid">
+        <section className="par-patients" aria-label="Pazienti">
+          <span className="par-eyebrow">Paziente</span>
+          <div className="par-search">
+            <span className="par-search__ico" aria-hidden="true">
+              <IcoSearch />
+            </span>
+            <input
+              type="search"
+              className="par-search__input"
+              placeholder="Cerca paziente"
+              aria-label="Cerca paziente per nome o camera"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            {query && (
               <button
                 type="button"
-                className="btn-secondary"
-                disabled={loading || loadingMore || summaryLoading}
-                onClick={() => void loadMore()}
+                className="par-search__clear"
+                onClick={() => setQuery('')}
+                aria-label="Cancella ricerca"
               >
-                {loadingMore ? 'Caricamento…' : 'Carica altri 25 pazienti'}
+                <IcoX />
+              </button>
+            )}
+          </div>
+          <div className="par-patients__tools">
+            <span className="par-cap" role="status">
+              {summaryLoading
+                ? 'Aggiornamento rilevazioni di oggi…'
+                : error
+                  ? 'Riepilogo giornaliero non disponibile'
+                  : `${recorded}/${items.length} con rilevazioni oggi`}
+            </span>
+            <button
+              type="button"
+              className="par-link"
+              aria-expanded={showOrder}
+              aria-controls="par-order"
+              onClick={() => setShowOrder((value) => !value)}
+            >
+              Ordine del giro
+            </button>
+          </div>
+          {showOrder && (
+            <div id="par-order">
+              <RosterOrderControl />
+            </div>
+          )}
+          {loading && <p role="status">Caricamento pazienti…</p>}
+          {error && (
+            <div className="parameter-history-error" role="alert">
+              {error}{' '}
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                onClick={() =>
+                  failedMore.current ? void loadMore() : setRevision((value) => value + 1)
+                }
+              >
+                Riprova caricamento
               </button>
             </div>
           )}
+          {!loading && !error && items.length === 0 && (
+            <p className="empty-state-card">Nessun paziente in elenco.</p>
+          )}
+          <ul className="par-plist" aria-busy={loading}>
+            {items.map((item) => (
+              <ParameterPatientPick
+                key={item.patient.id}
+                item={item}
+                draftStore={draftStore}
+                selected={item.patient.id === selectedItem?.patient.id}
+                summaryPending={Boolean(item.summaryPending && summaryLoading)}
+                onSelect={() => setSelected(item)}
+              />
+            ))}
+          </ul>
+          {nextCursor && (
+            <button
+              type="button"
+              className="btn-secondary par-more"
+              disabled={loading || loadingMore || summaryLoading}
+              onClick={() => void loadMore()}
+            >
+              {loadingMore ? 'Caricamento…' : 'Carica altri 25 pazienti'}
+            </button>
+          )}
         </section>
-      )}
+        {selectedItem && (
+          <ParameterEntryPanel
+            key={selectedItem.patient.id}
+            patient={selectedItem.patient}
+            draftStore={draftStore}
+            noteCount={selectedItem.cartella.noteCount}
+            summaryPending={Boolean(selectedItem.summaryPending && summaryLoading)}
+            outsideResults={selectedOutside}
+            onOpenHistory={() => onSelectPaziente(selectedItem.patient.id)}
+            onSave={(request) => save(selectedItem.patient.id, request)}
+          />
+        )}
+      </div>
       <p className="parameter-entry-help">
-        Operatore: {operatoreNome}. Data e ora vengono registrate quando premi Salva. Seleziona il
-        paziente per aprire lo storico.
+        Operatore: {operatoreNome}. Data e ora vengono registrate quando premi Salva.
       </p>
     </div>
   );

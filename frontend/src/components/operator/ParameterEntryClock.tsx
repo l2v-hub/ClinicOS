@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { FACILITY_TIME_ZONE, facilityLocalMinute } from '../../lib/facilityTime';
-export function ParameterEntryClock({ onDayChange }: { onDayChange: (day: string) => void }) {
+/** Con `hidden` resta solo il cambio di giorno a mezzanotte: l'ora è già nell'intestazione. */
+export function ParameterEntryClock({
+  onDayChange,
+  hidden = false,
+}: {
+  onDayChange: (day: string) => void;
+  hidden?: boolean;
+}) {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -8,6 +15,7 @@ export function ParameterEntryClock({ onDayChange }: { onDayChange: (day: string
   }, []);
   const local = facilityLocalMinute(now);
   useEffect(() => onDayChange(local.slice(0, 10)), [local, onDayChange]);
+  if (hidden) return null;
   return (
     <div className="parameter-entry-clock" aria-label="Data e ora di rilevazione">
       <span>Ora della rilevazione</span>
