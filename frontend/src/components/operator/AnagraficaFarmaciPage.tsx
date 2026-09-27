@@ -10,6 +10,7 @@
 import { lazy, Suspense, useState } from 'react';
 import { PageHeader } from '../shared/PageHeader';
 import { RicercaFarmaco } from './cartella/RicercaFarmaco';
+import './AnagraficaFarmaciPage.css';
 // Il visore del foglio illustrativo trascina lo stack PDF (~1,7 MB): resta fuori dal chunk
 // della pagina e si scarica solo alla prima apertura di un documento.
 const VisoreDocumentoFarmaco = lazy(() =>
@@ -30,7 +31,8 @@ export function AnagraficaFarmaciPage() {
     <div className="page-anagrafica-farmaci">
       <PageHeader
         breadcrumb={[{ label: 'ClinicOS' }, { label: 'Farmaci' }]}
-        title="Anagrafica farmaci"
+        title="Farmaci"
+        subtitle="Anagrafica AIFA"
       />
 
       <div className="page-anagrafica-farmaci__corpo">

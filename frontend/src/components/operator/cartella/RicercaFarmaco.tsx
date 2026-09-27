@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useMedicationSearch } from './useMedicationSearch';
 import type { MedicationSearchCriterion } from './medicationSearch';
-import { IcoSearch, IcoX } from '../../../icons';
+import { IcoPill, IcoSearch, IcoX } from '../../../icons';
 import { documentoDi, testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
 import type { DocumentoFarmaco } from './farmacoDocumento';
 import './RicercaFarmaco.css';
@@ -82,6 +82,12 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
       </div>
 
       <div className="ricerca-farmaco__esiti" aria-live="polite">
+        {query.trim().length === 0 && (
+          <p className="ricerca-farmaco__nota ricerca-farmaco__vuoto">
+            Scrivi almeno tre lettere del nome commerciale o del principio attivo: l'anagrafica AIFA
+            si consulta cercando.
+          </p>
+        )}
         {search.phase === 'idle' && query.trim().length > 0 && query.trim().length < 3 && (
           <p className="ricerca-farmaco__nota">Almeno tre caratteri per cercare.</p>
         )}
@@ -135,7 +141,10 @@ function RigaEsito({
 
   return (
     <li className="ricerca-farmaco__riga">
-      <div>
+      <span className="ricerca-farmaco__icona" aria-hidden="true">
+        <IcoPill />
+      </span>
+      <div className="ricerca-farmaco__testo">
         <p className="ricerca-farmaco__nome">
           {farmaco.denominazione}
           {revocato && (
@@ -144,8 +153,12 @@ function RigaEsito({
             <span className="ricerca-farmaco__revocato">{farmaco.statoAmministrativo}</span>
           )}
         </p>
-        <p className="ricerca-farmaco__dettagli">{testoConfezione(farmaco)}</p>
-        <p className="ricerca-farmaco__dettagli">AIC {farmaco.aic}</p>
+        <p className="ricerca-farmaco__dettagli">
+          {[farmaco.descrizione, farmaco.forma].filter(Boolean).join(' · ') ||
+            testoConfezione(farmaco)}{' '}
+          · AIC{' '}
+          {farmaco.aic}
+        </p>
         {farmaco.principiAttivi && farmaco.principiAttivi.length > 0 && (
           <p className="ricerca-farmaco__pa">
             {farmaco.principiAttivi
