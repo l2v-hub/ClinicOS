@@ -187,6 +187,31 @@ test('retired own-shaped controls get their look only from the design system', (
   for (const [file, re] of markup) assert.match(read(file), re, file);
 });
 
+test('the assistant opens from the sidebar and its controls are canonical (HMI 1)', () => {
+  // nessun pulsante flottante: si apre dalla voce "Assistente" della sidebar
+  for (const file of ['App.tsx', 'components/shared/AgnosPanel.tsx'])
+    assert.doesNotMatch(read(file), /className="ai-fab"/, file);
+  const offenders: string[] = [];
+  for (const file of walk('.', '.css')) {
+    if (file.endsWith('design-system.css')) continue;
+    for (const [selector, body] of blocks(read(file)))
+      if (/\.(ai-fab|agnos-tts|agnos-mic)(?![\w-])/.test(selector) && VISUAL.test(body))
+        offenders.push(`${file}: ${selector}`);
+  }
+  assert.deepEqual(offenders, []);
+  assert.match(read('components/shared/TeamsLikeSidebar.tsx'), /aria-expanded=\{assistantOpen\}/);
+  const composer = read('components/shared/agnos/AgnosComposer.tsx');
+  assert.match(
+    composer,
+    /className=\{`ds-icon-btn agnos-mic\$\{voice\.listening \? ' ds-icon-btn--recording' : ''\}`\}/,
+  );
+  assert.match(composer, /placeholder=\{[^}]*'Chiedi o detta'\}/);
+  // premuto e registrazione sono stati del design system
+  const ds = read('design-system.css');
+  assert.match(ds, /\[aria-pressed='true'\]:not\(#ds\)/);
+  assert.match(ds, /\.ds-icon-btn\.ds-icon-btn--recording:not\(#ds\)/);
+});
+
 test('the status badge is styled only by the design system', () => {
   const offenders: string[] = [];
   for (const file of walk('.', '.css')) {

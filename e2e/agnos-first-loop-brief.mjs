@@ -190,7 +190,7 @@ try {
   // ── Admin: facility snapshot ──
   {
     const { page, planCalls, consoleErrors } = await session('Amministratore');
-    await page.click('.ai-fab');
+    await page.click('.teams-sidebar__item--ai');
     await page.waitForSelector('.agnos-brief', { timeout: 5000 });
     await page.waitForTimeout(800);
     ok(
@@ -237,7 +237,7 @@ try {
     );
 
     // Riapro: nessuna seconda fetch del brief
-    await page.click('.ai-fab');
+    await page.click('.teams-sidebar__item--ai');
     await page.waitForTimeout(800);
     ok(
       'brief recuperato una sola volta per sessione',
@@ -265,7 +265,7 @@ try {
   // ── Operatore: coda di lavoro ──
   {
     const { page, planCalls, consoleErrors } = await session('Operatore');
-    await page.click('.ai-fab');
+    await page.click('.teams-sidebar__item--ai');
     await page.waitForSelector('.agnos-brief', { timeout: 5000 });
     await page.waitForTimeout(800);
     const brief = await page.locator('.agnos-brief').innerText();

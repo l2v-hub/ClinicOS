@@ -38,7 +38,6 @@ const COMPONENTS = [
   '.cr-alert-strip', // strisce d'allarme della cartella
   '.cdt__sort-btn', // intestazioni ordinabili delle tabelle
   '.table-filters__toggle', // apertura del pannello filtri tabella
-  '.ai-fab', // pulsante dell'assistente (da sostituire col pannello)
   '.exp-card__head',
   '.modal-overlay .icon-btn',
   '.new-patient-chooser__option', // grandi card di scelta (Da documenti / A mano)
@@ -102,8 +101,13 @@ async function collect(page, where) {
         [...document.querySelectorAll(sel)].filter(vis).filter((el) => !el.disabled);
       for (const el of enabled('.ds-btn--primary, .btn-primary, .btn-success'))
         add('primario', el, false);
+      // scelte in elenco (pulsante a tutta larghezza): stessa forma, testo che va a capo
+      for (const el of enabled('.ds-btn--block')) {
+        const cs = getComputedStyle(el);
+        out.push({ where, cat: 'scelta-in-elenco', sig: [cs.minHeight, cs.borderTopLeftRadius, cs.borderTopWidth, cs.fontSize, cs.fontWeight, cs.backgroundColor, cs.color].join(' | '), text: el.textContent.trim().slice(0, 30) });
+      }
       for (const el of enabled(
-        '.ds-btn--secondary, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-secondary)',
+        '.ds-btn--secondary:not(.ds-btn--block), .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-secondary)',
       ))
         add('secondario', el, false);
       for (const el of enabled('.ds-btn--danger, .btn-danger')) add('distruttivo', el, false);
@@ -248,6 +252,12 @@ async function snap(page, name, width) {
 for (const width of WIDTHS) {
   const page = await login(width);
   await snap(page, 'turno', width);
+  // pannello dell'assistente aperto dalla sidebar
+  await go(page, 'Assistente', width);
+  await page.waitForTimeout(800);
+  await snap(page, 'assistente', width);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
   await go(page, 'Pazienti', width);
   await page
     .getByRole('button', { name: /^Filtri e ordine/ })

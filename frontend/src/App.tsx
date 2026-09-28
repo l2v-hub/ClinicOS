@@ -122,7 +122,7 @@ import { TopbarTitleSlot } from './components/shared/topbarTitleSlot';
 import { ShiftClock } from './components/shared/ShiftClock';
 import { UserMenu } from './components/shared/UserMenu';
 
-import { IcoAI, IcoSearch, IcoX } from './icons';
+import { IcoSearch, IcoX } from './icons';
 
 // I moduli di pagina sono chunk separati. Le stesse funzioni di import alimentano sia i
 // componenti lazy sia il precaricamento dopo il login (preloadRouteModules): cosi' il primo accesso
@@ -378,11 +378,25 @@ export default function App() {
   const [aiOpen, setAiOpen] = useState(false);
   const [aiOpenTrigger, setAiOpenTrigger] = useState(0);
   const [aiLoaded, setAiLoaded] = useState(false);
+  const [aiVisible, setAiVisible] = useState(false);
 
   function openAiAssistant() {
     setAiLoaded(true);
     setAiOpen(true);
     setAiOpenTrigger((trigger) => trigger + 1);
+  }
+
+  // Chiuso il pannello, il fuoco torna alla voce "Assistente" della sidebar (o al menu, se la
+  // sidebar è il drawer chiuso del telefono/tablet).
+  function closeAiAssistant(options?: { restoreFocus: boolean }) {
+    setAiOpen(false);
+    // Chiuso con un clic fuori: il fuoco resta dove si è cliccato (un campo della pagina).
+    if (options?.restoreFocus === false) return;
+    requestAnimationFrame(() => {
+      const item = document.querySelector<HTMLElement>('.teams-sidebar__item--ai');
+      const visible = item && item.getBoundingClientRect().right > 0;
+      (visible ? item : document.querySelector<HTMLElement>('.topbar-hamburger'))?.focus();
+    });
   }
 
   function showToast(msg: string) {
@@ -660,7 +674,9 @@ export default function App() {
   function navigate(key: NavKey) {
     setMobileNavOpen(false); // chiudi il drawer di navigazione mobile a ogni cambio sezione
     if (key === 'ai-assistant') {
-      openAiAssistant();
+      // la voce "Assistente" alterna apertura e chiusura (dichiara aria-expanded)
+      if (aiVisible) closeAiAssistant();
+      else openAiAssistant();
       return;
     }
     // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
@@ -2937,6 +2953,7 @@ export default function App() {
           utente={utente}
           onNavigate={(k) => navigate(k)}
           unreadNotes={notesUnreadCount}
+          assistantOpen={aiVisible}
         />
 
         {/* Main */}
@@ -3439,22 +3456,12 @@ export default function App() {
 
         {aiLoaded ? (
           <LazyLoadBoundary>
-            <Suspense
-              fallback={
-                <button
-                  type="button"
-                  className="ai-fab"
-                  disabled
-                  aria-label="Caricamento assistente"
-                >
-                  <IcoAI />
-                </button>
-              }
-            >
+            <Suspense fallback={null}>
               <AgnosPanel
                 openRequestId={aiOpenTrigger}
                 forceOpen={aiOpen}
-                onClose={() => setAiOpen(false)}
+                onClose={closeAiAssistant}
+                onVisibleChange={setAiVisible}
                 operatorId={utente?.id}
                 operatorRole={utente?.ruolo}
                 operatorName={utente?.nome}
@@ -3508,17 +3515,7 @@ export default function App() {
               />
             </Suspense>
           </LazyLoadBoundary>
-        ) : (
-          <button
-            type="button"
-            className="ai-fab"
-            onClick={openAiAssistant}
-            aria-label="Assistente virtuale ClinicOS"
-            title="Assistente virtuale ClinicOS"
-          >
-            <IcoAI />
-          </button>
-        )}
+        ) : null}
       </div>
     </RosterOrderContext.Provider>
   );

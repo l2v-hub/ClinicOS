@@ -19,30 +19,28 @@ export function AgnosSuggestedPrompts({
 
   return (
     <section className="agnos-suggestions" aria-labelledby="agnos-suggestions-title">
-      <div className="agnos-suggestions__header">
-        <h2 id="agnos-suggestions-title">Domande suggerite</h2>
-        <p id="agnos-suggestions-help">
-          Scegli una domanda: potrai rileggerla e modificarla prima di inviarla.
-        </p>
-      </div>
+      {/* HMI 1: solo l'elenco; titolo e aiuto restano per i lettori di schermo */}
+      <h2 id="agnos-suggestions-title" className="ds-sr-only">
+        Domande suggerite
+      </h2>
+      <p id="agnos-suggestions-help" className="ds-sr-only">
+        Scegli una domanda: potrai rileggerla e modificarla prima di inviarla.
+      </p>
       {groups.map((group) => (
         <div className="agnos-suggestions__group" key={group.id}>
-          <h3>{group.label}</h3>
+          {groups.length > 1 && <h3 className="ds-eyebrow">{group.label}</h3>}
           <div className="agnos-suggestions__list">
             {group.prompts.map((prompt) => (
               <button
                 key={prompt.id}
                 type="button"
-                className="agnos-suggestions__button"
+                className="ds-btn ds-btn--secondary ds-btn--block"
                 disabled={disabled}
                 aria-describedby="agnos-suggestions-help"
                 data-selected={selectedText.trim() === prompt.text || undefined}
                 onClick={() => onSelect(prompt.text)}
               >
-                <span>{prompt.text}</span>
-                <span className="agnos-suggestions__arrow" aria-hidden="true">
-                  →
-                </span>
+                {prompt.text}
               </button>
             ))}
           </div>

@@ -12,8 +12,8 @@ const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
 await page.goto(FRONTEND + '/', { waitUntil: 'networkidle' });
 await page.locator('text="Operatore"').first().click();
 await page.waitForLoadState('networkidle');
-await page.waitForSelector('.ai-fab', { timeout: 20000 });
-await page.locator('.ai-fab').click();
+await page.waitForSelector('.teams-sidebar__item--ai', { timeout: 20000 });
+await page.locator('.teams-sidebar__item--ai').click();
 await page.waitForSelector('.agnos-panel');
 await page.fill(
   '.agnos-input',

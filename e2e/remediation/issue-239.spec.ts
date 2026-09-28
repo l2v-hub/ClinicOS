@@ -40,7 +40,8 @@ async function selectOperatoreRole(page: Page) {
 }
 
 async function openAgnos(page: Page) {
-  await page.getByRole('button', { name: 'Assistente virtuale ClinicOS' }).click();
+  // HMI 1: l'assistente si apre dalla voce "Assistente" della sidebar (nessun pulsante flottante)
+  await page.locator('.teams-sidebar__item[title="Assistente"]').click();
   await expect(page.getByRole('dialog', { name: 'Assistente virtuale ClinicOS' })).toBeVisible();
 }
 

@@ -31,7 +31,10 @@ import {
 interface Props {
   forceOpen?: boolean;
   openRequestId?: number;
-  onClose?: () => void;
+  /** `restoreFocus: false` quando la chiusura nasce da un clic fuori: il fuoco resta dove si è cliccato. */
+  onClose?: (options?: { restoreFocus: boolean }) => void;
+  /** Pannello davvero visibile (aperto e non ridotto): la voce della sidebar lo dichiara. */
+  onVisibleChange?: (visible: boolean) => void;
   operatorId?: string;
   operatorRole?: string;
   operatorName?: string;
@@ -59,6 +62,7 @@ export function AgnosPanel({
   forceOpen,
   openRequestId,
   onClose,
+  onVisibleChange,
   operatorId,
   operatorRole,
   operatorName,
@@ -137,14 +141,64 @@ export function AgnosPanel({
     // `forceOpen` is an external imperative signal, so mirroring it is intentional.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (forceOpen) { setOpen(true); setMinimized(false); }
-  }, [forceOpen, openRequestId]);
+    else { cancelDictationRef.current(); stopSpeech(); setOpen(false); setMinimized(false); }
+  }, [forceOpen, openRequestId, stopSpeech]);
   // Il pannello non si smonta più alla chiusura: la messa a fuoco alla riapertura va rifatta a
   // mano, altrimenti un dialog che resta nel DOM riapre senza dare il focus a nulla.
   const wasOpenRef = useRef(false);
+  const visible = open && !minimized;
   useEffect(() => {
-    if (open && !wasOpenRef.current) inputRef.current?.focus();
-    wasOpenRef.current = open;
-  }, [open]);
+    if (visible && !wasOpenRef.current) inputRef.current?.focus();
+    wasOpenRef.current = visible;
+    onVisibleChange?.(visible);
+  }, [visible, onVisibleChange]);
+  // Esc e clic fuori: ascoltati sul documento, così funzionano anche quando il fuoco non è nel
+  // pannello (es. dopo il consenso vocale). Con il consenso aperto Esc lo chiude come "Annulla".
+  const asideRef = useRef<HTMLElement>(null);
+  const focusMic = () =>
+    requestAnimationFrame(() => asideRef.current?.querySelector<HTMLElement>('.agnos-mic')?.focus());
+  const escRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    if (!visible) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || event.defaultPrevented) return;
+      // un altro dialogo aperto sopra (es. storico NEWS2) gestisce il suo Esc
+      const other = [...document.querySelectorAll('[role="dialog"], [role="alertdialog"]')].some(
+        (d) => d !== asideRef.current && d.getAttribute('aria-hidden') !== 'true',
+      );
+      if (other) return;
+      event.preventDefault();
+      escRef.current();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [visible]);
+  const closeRef = useRef<() => void>(() => {});
+  const cancelDictationRef = useRef<() => void>(() => {});
+  // i gestori del documento usano sempre lo stato e le funzioni correnti
+  useEffect(() => {
+    escRef.current = () => {
+      if (consentPrompt) {
+        setConsentPrompt(false);
+        focusMic();
+      } else handleClose();
+    };
+    closeRef.current = () => handleClose(false);
+    cancelDictationRef.current = cancelDictation;
+  });
+  useEffect(() => {
+    if (!visible || workspace) return;
+    // Clic fuori: chiude il pannello e il clic prosegue (nessun velo che lo assorbe). La voce
+    // "Assistente" della sidebar gestisce da sé apertura e chiusura.
+    const onDown = (event: PointerEvent) => {
+      const target = event.target as Element | null;
+      if (!target || asideRef.current?.contains(target)) return;
+      if (target.closest('.teams-sidebar__item--ai, [role="dialog"], [role="alertdialog"], .agnos-workflow-dock')) return;
+      closeRef.current();
+    };
+    document.addEventListener('pointerdown', onDown, true);
+    return () => document.removeEventListener('pointerdown', onDown, true);
+  }, [visible, workspace]);
   useEffect(() => {
     const body = bodyRef.current;
     if (!body) return;
@@ -184,11 +238,11 @@ export function AgnosPanel({
     voice.cancel();
   }
 
-  function handleClose() {
+  function handleClose(restoreFocus = true) {
     cancelDictation();
     tts.stop(); // FR-017: chiusura pannello = stop riproduzione
     setOpen(false);
-    onClose?.();
+    onClose?.({ restoreFocus });
   }
 
   function showPage() {
@@ -253,17 +307,6 @@ export function AgnosPanel({
 
   return (
     <>
-      <button
-        type="button"
-        className="ai-fab"
-        onClick={() => { setOpen(true); setMinimized(false); }}
-        aria-label="Assistente virtuale ClinicOS"
-        title="Assistente virtuale ClinicOS"
-      >
-        <IcoAI />
-      </button>
-
-      {open && !workspace && !minimized && <div className="ai-drawer__scrim" onClick={handleClose} />}
       {open && minimized && <div className="agnos-workflow-dock" role="status">
         <span>{statusText || 'Assistente in attesa'}</span>
         <button className="btn-primary" onClick={() => setMinimized(false)}>Torna all’assistente</button>
@@ -277,26 +320,19 @@ export function AgnosPanel({
         aria-label="Assistente virtuale ClinicOS"
         aria-hidden={!open || minimized}
         inert={!open || minimized ? true : undefined}
+        ref={asideRef}
       >
         <header className="ai-drawer__header">
-          <div className="ai-drawer__title">
-            <span className="ai-drawer__icon">
-              <IcoAI />
-            </span>
-            <span className="assistant-id">
-              <span className="assistant-id__name">
-                Assistente virtuale <span className="assistant-id__badge">IA</span>
-              </span>
-              <span className="assistant-id__sub">
-                Non è un operatore umano · risponde solo con i dati presenti in ClinicOS
-              </span>
-            </span>
-          </div>
+          {/* HMI 1: "✧ Assistente"; la natura di IA resta dichiarata (etichetta e riga sotto) */}
+          <h2 className="ai-drawer__title agnos-title">
+            <IcoAI />
+            Assistente <span className="assistant-id__badge">IA</span>
+          </h2>
           <div className="agnos-header-actions">
             {tts.supported && (
               <button
                 type="button"
-                className={`icon-btn agnos-tts${tts.enabled ? ' agnos-tts--on' : ''}`}
+                className="ds-icon-btn agnos-tts"
                 onClick={tts.toggle}
                 aria-pressed={tts.enabled}
                 aria-label={
@@ -307,17 +343,28 @@ export function AgnosPanel({
                 title={tts.enabled ? 'Disattiva lettura vocale' : 'Attiva lettura vocale'}
               >
                 <SpeakerIcon muted={!tts.enabled} />
-                <span>Leggi risposte</span>
               </button>
             )}
-            <button type="button" className="icon-btn" onClick={handleClose} aria-label="Chiudi">
+            <button
+              type="button"
+              className="ds-icon-btn"
+              onClick={() => handleClose()}
+              aria-label="Chiudi l'assistente"
+            >
               <IcoX />
             </button>
           </div>
         </header>
 
-        <div className="ai-asst__scope" aria-label="Perimetro">
-          {scopeLabel}
+        <div className="agnos-intro">
+          <p className="agnos-intro__text">
+            Assistente virtuale (IA), non un operatore umano: legge i dati della vista in cui sei.
+            Ogni scrittura passa dalla scheda di conferma.
+          </p>
+          <p className="agnos-intro__scope">
+            <span className="ds-sr-only">Perimetro: </span>
+            {scopeLabel}
+          </p>
         </div>
         {statusText && <div className="agnos-workflow-status" data-phase={phase} role="status" aria-live="polite" aria-busy={busy}>
           {busy && <span className="agnos-workflow-spinner" aria-hidden="true" />}
@@ -388,7 +435,7 @@ export function AgnosPanel({
 
         <AgnosComposer inputRef={inputRef} input={input} dictated={dictatedRef.current}
           busy={busy || pending?.uncertain === true} voice={voice} tts={tts} consentPrompt={consentPrompt}
-          onAcceptConsent={() => startDictation(true)} onDismissConsent={() => setConsentPrompt(false)}
+          onAcceptConsent={() => { startDictation(true); focusMic(); }} onDismissConsent={() => { setConsentPrompt(false); focusMic(); }}
           onCancelVoice={cancelDictation} onRevokeConsent={() => { cancelDictation(); voice.revokeConsent(); }}
           onInput={(value) => {
             setInput(value); if (!value.trim()) dictatedRef.current = false;

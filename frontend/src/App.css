@@ -5594,48 +5594,12 @@ textarea.form-input {
 
 /* === 013 REDESIGN — Outlined ghost button (for header actions) === */
 
-/* === 013 REDESIGN — AI Assistant floating action button === */
-.ai-fab {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--primary, var(--blue));
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow:
-    0 6px 20px rgba(26, 86, 219, 0.32),
-    0 2px 6px rgba(0, 0, 0, 0.12);
-  z-index: 90;
-  transition:
-    transform 0.15s ease-out,
-    box-shadow 0.15s ease-out;
-}
-.ai-fab:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 10px 28px rgba(26, 86, 219, 0.4),
-    0 4px 8px rgba(0, 0, 0, 0.14);
-}
-.ai-fab:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
-}
-.ai-fab svg {
-  width: 22px;
-  height: 22px;
-}
-
+/* L'assistente si apre dalla voce "Assistente" della sidebar (HMI 1): nessun pulsante flottante.
+   La pagina dietro il pannello non si oscura; il velo trasparente chiude il pannello al clic fuori. */
 .ai-drawer__scrim {
   position: fixed;
   inset: 0;
-  background: rgba(12, 30, 53, 0.42);
+  background: transparent;
   z-index: 200;
   animation: aiFade 160ms ease-out both;
 }
@@ -5702,21 +5666,7 @@ textarea.form-input {
   font-size: 15px;
   color: var(--text);
 }
-/* Identità dell'assistente: nome + badge IA + riga che dichiara che non è una persona. */
-.assistant-id {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-.assistant-id__name {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--text);
-}
+/* Etichetta "IA" accanto al titolo: la natura di assistente virtuale resta dichiarata. */
 .assistant-id__badge {
   font-size: 10px;
   font-weight: 700;
@@ -5725,26 +5675,6 @@ textarea.form-input {
   border-radius: 999px;
   background: var(--blue-dim);
   color: var(--primary, var(--blue));
-}
-.assistant-id__sub {
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.35;
-  color: var(--text-muted);
-}
-.ai-drawer__icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--blue-dim);
-  color: var(--primary, var(--blue));
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.ai-drawer__icon svg {
-  width: 16px;
-  height: 16px;
 }
 .ai-drawer__body {
   padding: 18px;
@@ -5894,8 +5824,7 @@ textarea.form-input {
 @media (prefers-reduced-motion: reduce) {
   .ai-drawer,
   .agnos-panel,
-  .ai-drawer__scrim,
-  .ai-fab {
+  .ai-drawer__scrim {
     animation: none !important;
     transition: none !important;
   }
@@ -6257,20 +6186,10 @@ textarea.form-input {
 .agnos-compose {
   align-items: flex-end;
 }
+/* Il campo è il form-input canonico (48px, bordo 2, raggio 12, testo 16): qui solo il layout. */
 .agnos-input {
   flex: 1;
   resize: none;
-  border: 1px solid var(--border, #d0d5dd);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font: inherit;
-  font-size: 14px;
-  box-sizing: border-box;
-  min-height: 40px;
-}
-.agnos-input:focus {
-  outline: none;
-  border-color: var(--c-primary, var(--blue));
 }
 .agnos-input:disabled {
   background: var(--surface-raised, #f4f7fb);
@@ -6285,32 +6204,7 @@ textarea.form-input {
   gap: 8px;
 }
 
-.agnos-tts--on {
-  color: var(--c-primary, var(--blue));
-  border-color: var(--c-primary, var(--blue));
-  background: var(--c-primary-bg, #eef3fe);
-}
-.agnos-tts--on:hover {
-  background: var(--c-primary-bg, #eef3fe);
-  color: var(--c-primary-active, #1d4fc4);
-}
-
-.agnos-mic {
-  min-width: 44px;
-  min-height: 44px;
-  color: var(--c-primary, var(--blue));
-}
-.agnos-mic--listening,
-.agnos-mic--listening:hover {
-  background: var(--red, #dc2626);
-  border-color: var(--red, #dc2626);
-  color: #fff;
-  animation: voicePulse 1s infinite;
-}
-.agnos-mic:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* Lettura vocale e microfono sono ds-icon-btn: premuto e registrazione stanno nel design system. */
 
 /* Barra stato voce/lettura: sopra il campo di composizione. */
 .agnos-voicebar {
@@ -6347,7 +6241,6 @@ textarea.form-input {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .agnos-mic--listening,
   .agnos-voice-status__dot {
     animation: none !important;
   }
