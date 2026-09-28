@@ -645,3 +645,52 @@ button.ds-badge:not(#ds):disabled {
     animation: none;
   }
 }
+
+/* ── Intestazioni delle tabelle e intestazione ordinabile ───────────────────────────────────
+   Una sola tipografia per le intestazioni (lista pazienti e tabelle cliniche, come il prototipo)
+   e un solo controllo per ordinare: tutta la cella, 48px, freccia ↑ ↓ ↕, blu se ordinata. */
+:is(.clinicos-table thead th, .patient-roster th):not(#ds) {
+  font: 500 14px/20px var(--ds-font);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ds-text-muted);
+}
+/* intestazione alta quanto il controllo (48px): niente spazio verticale in più attorno */
+.clinicos-table thead th:not(#ds) {
+  height: var(--ds-control-h);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.ds-sort:not(#ds) {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-height: var(--ds-control-h);
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  text-transform: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ds-sort:not(#ds):hover,
+th[aria-sort] .ds-sort:not(#ds) {
+  color: var(--ds-blue-active);
+}
+.ds-sort:not(#ds):focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}
+.ds-sort__arrow:not(#ds) {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}

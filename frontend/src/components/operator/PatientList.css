@@ -58,39 +58,7 @@
   width: 25%;
 }
 
-.patient-roster__sort {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  width: 100%;
-  min-height: 44px;
-  padding: 0;
-  color: inherit;
-  background: transparent;
-  border: 0;
-  font: inherit;
-  letter-spacing: inherit;
-  text-align: left;
-  text-transform: inherit;
-  cursor: pointer;
-}
-
-.patient-roster__sort:hover,
-.patient-roster th[aria-sort] .patient-roster__sort {
-  color: var(--blue);
-}
-
-.patient-roster__sort:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-  border-radius: 3px;
-}
-
-.patient-roster__sort-arrow {
-  flex-shrink: 0;
-  font-size: 15px;
-}
+/* intestazione ordinabile: ds-sort canonico (design-system.css) */
 .patient-roster-order {
   margin-bottom: 10px;
 }

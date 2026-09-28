@@ -156,6 +156,8 @@ const RETIRED_LOOKS = [
   'patient-roster__open',
   'patient-roster__delete',
   'patient-card__delete',
+  'patient-roster__sort',
+  'cdt__sort-btn',
 ];
 
 test('retired own-shaped controls get their look only from the design system', () => {
@@ -210,6 +212,25 @@ test('the assistant opens from the sidebar and its controls are canonical (HMI 1
   const ds = read('design-system.css');
   assert.match(ds, /\[aria-pressed='true'\]:not\(#ds\)/);
   assert.match(ds, /\.ds-icon-btn\.ds-icon-btn--recording:not\(#ds\)/);
+});
+
+test('sortable table headers are the canonical ds-sort, styled only by the design system', () => {
+  assert.match(
+    read('components/operator/PatientRoster.tsx'),
+    /className="ds-sort patient-roster__sort"/,
+  );
+  const table = read('components/operator/cartella/ClinicalTable.tsx');
+  assert.match(table, /className="ds-sort cdt__sort-btn"/);
+  assert.match(table, /aria-sort=\{/);
+  assert.match(table, /aria-label=\{sortActionLabel\(col\.label, col\.key\)\}/);
+  const offenders: string[] = [];
+  for (const file of walk('.', '.css')) {
+    if (file.endsWith('design-system.css')) continue;
+    for (const [selector, body] of blocks(read(file)))
+      if (/\.ds-sort(?![\w])/.test(selector) && VISUAL.test(body))
+        offenders.push(`${file}: ${selector}`);
+  }
+  assert.deepEqual(offenders, []);
 });
 
 test('the status badge is styled only by the design system', () => {
