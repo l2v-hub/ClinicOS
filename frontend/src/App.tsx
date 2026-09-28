@@ -592,6 +592,8 @@ export default function App() {
     nextCursor: null,
   });
   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
+  // Giorno del giro caricato: la pagina Terapia riparte da qui quando viene rimontata.
+  const [therapyDate, setTherapyDate] = useState(localIsoDate);
   const [loadingTherapySlots, setLoadingTherapySlots] = useState(true);
   const [loadingMoreTherapySlots, setLoadingMoreTherapySlots] = useState(false);
   const [therapyLoadError, setTherapyLoadError] = useState<string | null>(null);
@@ -919,6 +921,7 @@ export default function App() {
       const d = date || therapyDateRef.current;
       const append = options.append === true;
       therapyDateRef.current = d;
+      setTherapyDate(d);
       therapyAbortControllerRef.current?.abort();
       const controller = new AbortController();
       therapyAbortControllerRef.current = controller;
@@ -3216,6 +3219,7 @@ export default function App() {
                       {/* ── SHARED ── */}
                       {navKey === 'terapie' && (
                         <TherapyRoundsPage
+                          date={therapyDate}
                           slots={therapySlots}
                           loading={loadingTherapySlots}
                           error={therapyLoadError}

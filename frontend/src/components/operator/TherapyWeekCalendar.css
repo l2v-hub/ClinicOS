@@ -1,0 +1,134 @@
+/* Calendario del giro terapia (settimana × fasce). Controlli e colori dai token del design system. */
+.tcal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.tcal__note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+  font: 400 14px/20px var(--ds-font);
+}
+.tcal__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-card-radius);
+  background: var(--ds-surface);
+}
+.tcal__table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.tcal__table th,
+.tcal__table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--ds-border);
+  text-align: center;
+}
+.tcal__corner,
+.tcal__fascia {
+  width: 72px;
+}
+.tcal__fascia {
+  font: 600 16px/24px var(--ds-font);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-text);
+  text-align: left;
+}
+.tcal__day {
+  font: 400 14px/20px var(--ds-font);
+  color: var(--ds-text-muted);
+}
+.tcal__weekday {
+  display: block;
+  text-transform: capitalize;
+}
+.tcal__date {
+  display: block;
+  font-weight: 600;
+  color: var(--ds-text);
+}
+.tcal__day--today {
+  background: var(--ds-blue-tint);
+  color: var(--ds-blue-active);
+}
+.tcal__day--today .tcal__date {
+  color: var(--ds-blue-active);
+}
+.tcal__cell {
+  height: 72px;
+}
+.tcal__none,
+.tcal__cell--wait {
+  color: var(--ds-text-muted);
+}
+/* La cella è un pulsante di griglia (componente dichiarato), non una chip. */
+.tcal__btn {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 56px;
+  padding: 4px;
+  border: var(--ds-border-w) solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+}
+.tcal__btn:hover {
+  border-color: var(--ds-blue);
+}
+.tcal__btn:focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}
+.tcal__count {
+  font: 600 16px/24px var(--ds-font);
+  font-variant-numeric: tabular-nums;
+}
+.tcal__hint {
+  font: 400 12px/16px var(--ds-font);
+}
+.tcal__btn--completa {
+  background: var(--emerald-bg);
+  border-color: var(--emerald);
+  color: color-mix(in srgb, var(--emerald) 65%, black);
+}
+.tcal__btn--da-fare {
+  background: var(--ds-blue-tint);
+  border-color: var(--ds-blue);
+  color: var(--ds-blue-active);
+}
+.tcal__btn--mancanti {
+  background: var(--amber-bg);
+  border-color: var(--amber);
+  color: color-mix(in srgb, var(--amber) 70%, black);
+}
+/* Totali non esatti (pageInfo.summaryExact falso): nessun colore di stato, solo il dato parziale. */
+.tcal__btn--parziale {
+  background: var(--ds-surface-2);
+  border-style: dashed;
+  color: var(--ds-text);
+}
+/* La colonna delle ore resta ferma mentre i giorni scorrono (telefono). */
+.tcal__corner,
+.tcal__fascia {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--ds-surface);
+}
