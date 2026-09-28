@@ -22,12 +22,19 @@ import { buildConfirmCartella } from './confirmCartella';
 import { buildIntakeContacts } from '../../../lib/intakeContacts';
 import { CLINICAL_MODULES as CATALOG_MODULES } from '../../../lib/assessments/assessmentCatalog';
 import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
+import { IcoCheck, IcoX } from '../../../icons';
+import { IntakeIndex } from './IntakeIndex';
+import './IntakePage.css';
+import {
+  INTAKE_SECTIONS,
+  intakeProgress,
+  type IntakeMissingStep,
+  type IntakeSectionId,
+} from './intakeProgress';
 
-// "Documenti" (import/scatta foto in questo step) non e' ancora implementato (F5): finche' resta
-// un placeholder senza alcun contenuto, tenerlo nel wizard costringe ogni creazione paziente a un
-// click "Avanti" in piu' per attraversare uno step vuoto. Va reintrodotto qui quando F5 sara'
-// pronto, non prima.
-const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Verifica'] as const;
+// Scheda d'ingresso su una pagina (HMI 1, artifacts/hmi-parity/proto/ingresso-docs.png): indice
+// con lo stato delle sezioni a sinistra, sezioni una sotto l'altra, "Crea paziente" nell'indice.
+// Le sezioni sono in intakeProgress.ts (INTAKE_SECTIONS), con le stesse regole di conferma.
 
 // #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
 // dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
@@ -97,9 +104,10 @@ export function IntakeWorkspace({
   onBackToDocuments,
 }: IntakeWorkspaceProps) {
   const op = { operatorId, operatorRole };
-  // Import flow starts at step 3 (Clinica) — anagrafica is already prefilled.
-  const initialStep = importDraftId ? 3 : 1;
-  const [step, setStep] = useState(initialStep);
+  // Sezione visibile nel corpo (evidenziata nell'indice).
+  const [active, setActive] = useState<IntakeSectionId>('anagrafica');
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const warningRef = useRef<HTMLDivElement | null>(null);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -134,23 +142,23 @@ export function IntakeWorkspace({
   const [focusField, setFocusField] = useState<DemographicField | null>(null);
   const [therapyCorrection, setTherapyCorrection] = useState<TherapyCorrectionTarget | null>(null);
   useEffect(() => {
-    if (step !== 3 || !therapyCorrection) return;
-    // Wait for the opened manual form and the step's scroll reset before focusing.
+    if (!therapyCorrection) return;
+    // Wait for the opened manual form before focusing the row to correct.
     const frame = window.requestAnimationFrame(() => {
       if (bodyRef.current) focusTherapyCorrection(bodyRef.current, therapyCorrection);
       setTherapyCorrection(null);
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [step, therapyCorrection]);
+  }, [therapyCorrection]);
   useEffect(() => {
-    if (step !== 1 || !focusField) return;
+    if (!focusField) return;
     const control = bodyRef.current?.querySelector<HTMLElement>(
       `[data-demographic-field="${focusField}"]`,
     );
     control?.focus();
     control?.scrollIntoView({ block: 'center' });
     setFocusField(null);
-  }, [step, focusField]);
+  }, [focusField]);
   useEffect(
     () => () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -166,7 +174,8 @@ export function IntakeWorkspace({
   useEffect(() => {
     if (!open) {
       if (debounceRef.current) clearTimeout(debounceRef.current);
-      setStep(importDraftId ? 3 : 1);
+      setActive('anagrafica');
+      setSavedAt(null);
       setDraftId(null);
       setError(null);
       setData({});
@@ -202,7 +211,6 @@ export function IntakeWorkspace({
           operatorRole,
         });
         if (draft.data && typeof draft.data === 'object') setData(draft.data as DraftData);
-        setStep(importDraftId ? 3 : 1);
       })
       .catch(() => {
         if (!active) return;
@@ -214,11 +222,28 @@ export function IntakeWorkspace({
     };
   }, [open, draftId, importDraftId, operatorId, operatorRole]);
 
-  // BUG-074: each phase shares the same scrollable body — reset it to the top when
-  // the phase changes so the operator starts at the beginning of the new section.
+  // Indice: evidenzia la sezione in vista mentre si scorre il corpo.
   useEffect(() => {
-    bodyRef.current?.scrollTo({ top: 0 });
-  }, [step]);
+    const root = bodyRef.current;
+    if (!root || loading || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        const id = visible?.target.getAttribute('data-intake-section') as IntakeSectionId | null;
+        if (id) setActive(id);
+      },
+      { root, rootMargin: '0px 0px -65% 0px' },
+    );
+    root.querySelectorAll('[data-intake-section]').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [loading, draftId, error]);
+  // Avvisi di duplicato o di allergie contrastanti: portati in vista quando compaiono.
+  useEffect(() => {
+    if (duplicateWarn || allergyConflictWarn)
+      warningRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [duplicateWarn, allergyConflictWarn]);
 
   // BUG-074: lock the underlying page scroll while the workspace is open, so only the
   // inner body scrolls (never the page behind the popup). Restored on close/unmount.
@@ -232,9 +257,6 @@ export function IntakeWorkspace({
   }, [open]);
 
   if (!open) return null;
-
-  const isFirst = step === 1;
-  const isLast = step === STEPS.length;
 
   /** Update a top-level section key and debounce-patch the draft */
   function persistDraft(next: DraftData) {
@@ -252,7 +274,10 @@ export function IntakeWorkspace({
     setSaveState('saving');
     debounceRef.current = setTimeout(() => {
       persistDraft(next)
-        .then(() => setSaveState('saved'))
+        .then(() => {
+          setSaveState('saved');
+          setSavedAt(new Date());
+        })
         .catch(() => {
           // #234: no longer swallowed — surface an error state (no PHI in the log).
           setSaveState('error');
@@ -325,13 +350,8 @@ export function IntakeWorkspace({
     return acc.demographics === true && acc.therapy === true && !pending && !proposalUncertain;
   }
 
-  function anagraficaValid(): boolean {
-    return Object.keys(intakeDemographicErrors(data.anagrafica ?? {})).length === 0;
-  }
-
   function reviewDemographicField(field: DemographicField) {
     setFocusField(field);
-    setStep(1);
   }
 
   async function handleConfirm(force = false, allergyConflictOverride = false) {
@@ -443,25 +463,49 @@ export function IntakeWorkspace({
     }
   }
 
-  function handleNext() {
-    if (step === 1) {
-      // Missing optional identity details can be completed on the same patient later.
-      if (!anagraficaValid()) {
-        setSubmitAttempted(true);
-        window.requestAnimationFrame(() => {
-          const firstInvalid = bodyRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
-          firstInvalid?.focus({ preventScroll: true });
-          firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-        return;
-      }
-    }
-    if (isLast) {
-      // On the last step the "Avanti" / "Conferma" footer button triggers confirm
-      void handleConfirm(false);
+  /** Porta una sezione in vista (indice e passaggi mancanti). */
+  function jump(id: IntakeSectionId) {
+    setActive(id);
+    bodyRef.current
+      ?.querySelector<HTMLElement>(`[data-intake-section="${id}"]`)
+      ?.scrollIntoView({ block: 'start' });
+  }
+
+  /** Un passaggio mancante porta al punto da sistemare: campo anagrafico, riga di terapia o
+   *  pulsante di conferma della sezione. */
+  function goToMissing(step: IntakeMissingStep) {
+    if (step.label === 'Decisione in attesa di risposta') {
+      bodyRef.current?.scrollTo({ top: 0 });
+      window.requestAnimationFrame(() =>
+        bodyRef.current
+          ?.querySelector<HTMLElement>('[data-testid="intake-retry-decision"]')
+          ?.focus(),
+      );
       return;
     }
-    setStep((s) => s + 1);
+    if (step.target) {
+      setSubmitError(null);
+      setTherapyCorrection(step.target);
+      jump('terapia');
+      return;
+    }
+    if (step.section === 'anagrafica' && !step.label.startsWith('Conferma')) {
+      // Mostra gli errori di campo e porta il fuoco sul primo campo non valido.
+      setSubmitAttempted(true);
+      jump('anagrafica');
+      window.requestAnimationFrame(() => {
+        const firstInvalid = bodyRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+        firstInvalid?.focus({ preventScroll: true });
+        firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      return;
+    }
+    jump(step.section);
+    const accept = step.section === 'anagrafica' ? 'accept-demographics' : 'accept-therapy';
+    if (step.label.startsWith('Conferma'))
+      window.requestAnimationFrame(() =>
+        bodyRef.current?.querySelector<HTMLElement>(`[data-testid="${accept}"]`)?.focus(),
+      );
   }
 
   async function saveAndClose(close = onClose) {
@@ -486,8 +530,38 @@ export function IntakeWorkspace({
     }
   }
 
-  function handleBack() {
-    if (!isFirst) setStep((s) => s - 1);
+  // ── Pagina unica (HMI 1): indice con stato, sezioni una sotto l'altra, azioni nell'indice ──
+  const progress = intakeProgress(data, {
+    moduleSelected: selectedModuleId !== null,
+    proposalUncertain,
+  });
+  const accepted = acceptedFlags();
+  const therapyEmpty =
+    !(Array.isArray(data.terapiaImport) && data.terapiaImport.length > 0) &&
+    !(Array.isArray(data.terapia) && data.terapia.length > 0);
+  const who = [data.anagrafica?.lastName, data.anagrafica?.firstName]
+    .filter((v) => typeof v === 'string' && v.trim())
+    .join(' ');
+  const savedTime = savedAt
+    ? savedAt.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+    : null;
+
+  function sectionProps(id: IntakeSectionId) {
+    return {
+      id: `intake-sec-${id}`,
+      'data-intake-section': id,
+      'data-testid': `intake-section-${id}`,
+      'aria-labelledby': `intake-sec-${id}-title`,
+      className: 'ds-card intake-section',
+    };
+  }
+  function sectionTitle(id: IntakeSectionId) {
+    const label = INTAKE_SECTIONS.find((s) => s.id === id)?.label ?? id;
+    return (
+      <h3 id={`intake-sec-${id}-title`} className="intake-section__title">
+        {label}
+      </h3>
+    );
   }
 
   return (
@@ -497,105 +571,208 @@ export function IntakeWorkspace({
       dismissible={!submitting}
       closeOnOverlay={false}
       surfaceClassName="modal-card"
-      className="import-modal import-modal--intake"
+      className="import-modal import-modal--intake intake-page"
     >
       <header className="import-modal__head" data-testid="patient-intake-header">
         <div className="intake-dialog__title-group">
-          <h2 id="patient-intake-dialog-title">Nuovo paziente</h2>
-          <p data-testid="patient-intake-step-summary">
-            {STEPS[step - 1]} · Passaggio {step} di {STEPS.length}
+          <h2 id="patient-intake-dialog-title">Nuovo ingresso{who ? ` · ${who}` : ''}</h2>
+          {/* #234: stato del salvataggio visibile e annunciato a ogni larghezza; dopo un errore
+              non si mostra più l'ora dell'ultimo salvataggio riuscito. */}
+          <p
+            data-testid="patient-intake-step-summary"
+            className="intake-page__savestate"
+            role="status"
+            aria-live="polite"
+            data-state={saveState}
+          >
+            {saveState === 'error'
+              ? 'Bozza non salvata: errore di salvataggio, riprova'
+              : saveState === 'saving'
+                ? 'Salvataggio della bozza…'
+                : savedTime
+                  ? `Bozza salvata alle ${savedTime}`
+                  : 'Bozza in compilazione'}
             {operatoreNome ? ` · ${operatoreNome}` : ''}
           </p>
         </div>
         <button
           type="button"
-          className="icon-btn"
+          className="ds-icon-btn"
           onClick={() => void saveAndClose()}
-          aria-label="Chiudi"
+          aria-label="Chiudi e salva la bozza"
           data-dialog-initial-focus
           disabled={submitting}
         >
-          ✕
+          <IcoX />
         </button>
       </header>
 
-      {/* 6-step stepper */}
-      <ol
-        className="import-modal__steps"
-        aria-label="Fasi di registrazione"
-        data-testid="patient-intake-stepper"
-      >
-        {STEPS.map((label, i) => {
-          const n = i + 1;
-          const isDone = n < step;
-          const isActive = n === step;
-          return (
-            <li
-              key={label}
-              className={isDone ? 'is-done' : isActive ? 'is-active' : ''}
-              aria-current={isActive ? 'step' : undefined}
-            >
-              <span className="import-step__marker" aria-hidden="true">
-                {isDone ? '✓' : n}
-              </span>
-              <span className="import-step__label">{label}</span>
-            </li>
-          );
-        })}
-      </ol>
+      <div className="intake-page__grid">
+        <IntakeIndex
+          sections={progress.sections}
+          active={active}
+          missing={progress.missing}
+          onJump={jump}
+          onMissing={goToMissing}
+          busy={submitting || loading || !!error}
+          saveDisabled={submitting}
+          ready={!loading && !error && !!draftId}
+          creating={submitting}
+          onCreate={() => void handleConfirm(false)}
+          saveLabel={onBackToDocuments ? '← Torna alla revisione' : 'Salva bozza e chiudi'}
+          onSave={() => void (onBackToDocuments ? saveAndClose(onBackToDocuments) : saveAndClose())}
+          error={allergyConflictWarn || duplicateWarn ? null : submitError}
+        />
 
-      {/* Body — the only scrollable region (BUG-074) */}
-      <div
-        className="import-modal__body"
-        data-testid="patient-intake-body"
-        ref={bodyRef}
-        inert={submitting}
-        aria-busy={submitting}
-      >
-        {proposalUncertain && (
-          <div role="alert" className="import-modal__warning">
-            <p>
-              Risposta non ricevuta. Risolvi la decisione in attesa prima di modificare la bozza.
-            </p>
-            <button
-              className="btn-primary"
-              onClick={() => {
-                const pending = proposalRequestRef.current;
-                if (pending) void decideProposal(pending.id, pending.action);
-              }}
+        {/* Corpo: l'unica area che scorre (BUG-074) */}
+        <div
+          className="import-modal__body intake-page__body"
+          data-testid="patient-intake-body"
+          ref={bodyRef}
+          inert={submitting}
+          aria-busy={submitting}
+        >
+          {proposalUncertain && (
+            <div role="alert" className="import-modal__warning">
+              <p>
+                Risposta non ricevuta. Risolvi la decisione in attesa prima di modificare la bozza.
+              </p>
+              <button
+                type="button"
+                className="ds-btn ds-btn--primary"
+                data-testid="intake-retry-decision"
+                onClick={() => {
+                  const pending = proposalRequestRef.current;
+                  if (pending) void decideProposal(pending.id, pending.action);
+                }}
+              >
+                Riprova decisione
+              </button>
+            </div>
+          )}
+          {loading && (
+            <div className="import-modal__progress" role="status" aria-live="polite">
+              <span className="import-modal__spinner" aria-hidden="true" />
+              <span className="import-modal__progress-txt">Apertura scheda…</span>
+            </div>
+          )}
+          {error && <p className="import-modal__error">{error}</p>}
+          {!loading && !error && (
+            <div
+              className="intake-page__sections"
+              inert={proposalUncertain}
+              data-draft-id={draftId ?? undefined}
             >
-              Riprova decisione
-            </button>
-          </div>
-        )}
-        {loading && (
-          <div className="import-modal__progress" role="status" aria-live="polite">
-            <span className="import-modal__spinner" aria-hidden="true" />
-            <span className="import-modal__progress-txt">Apertura scheda…</span>
-          </div>
-        )}
-        {error && <p className="import-modal__error">{error}</p>}
-        {!loading && !error && (
-          <div inert={proposalUncertain}>
-            {step === 1 && (
-              <div data-testid="intake-step-1" data-draft-id={draftId ?? undefined}>
+              {duplicateWarn && (
+                <div className="import-modal__warning" role="alert" ref={warningRef}>
+                  <p>
+                    <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati
+                    potrebbe già esistere.
+                  </p>
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn--secondary"
+                    onClick={() => void handleConfirm(true)}
+                    disabled={submitting}
+                  >
+                    Crea comunque
+                  </button>
+                </div>
+              )}
+              {allergyConflictWarn && (
+                <div className="import-modal__warning" role="alert" ref={warningRef}>
+                  <p>
+                    <strong>Allergie contrastanti rilevate.</strong> {submitError}
+                  </p>
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn--secondary"
+                    onClick={() => void handleConfirm(false, true)}
+                    disabled={submitting}
+                  >
+                    Conferma comunque
+                  </button>
+                </div>
+              )}
+
+              <section {...sectionProps('anagrafica')}>
+                <header className="intake-section__head">
+                  {sectionTitle('anagrafica')}
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn--secondary ds-btn--wrap"
+                    data-testid="accept-demographics"
+                    aria-pressed={accepted.demographics === true}
+                    disabled={submitting}
+                    onClick={() =>
+                      updateSection('_accepted', {
+                        ...accepted,
+                        demographics: accepted.demographics !== true,
+                      })
+                    }
+                  >
+                    <IcoCheck />
+                    {accepted.demographics === true
+                      ? 'Dati anagrafici confermati'
+                      : 'Conferma i dati anagrafici'}
+                  </button>
+                </header>
                 <StepAnagrafica
                   value={data.anagrafica ?? {}}
                   onChange={(v) => updateSection('anagrafica', v)}
                   submitAttempted={submitAttempted}
                 />
-              </div>
-            )}
-            {step === 2 && (
-              <div data-testid="intake-step-2" data-draft-id={draftId ?? undefined}>
+              </section>
+
+              <section {...sectionProps('ingresso')}>
+                <header className="intake-section__head">{sectionTitle('ingresso')}</header>
                 <StepIngresso
                   value={data.ingresso ?? {}}
                   onChange={(v) => updateSection('ingresso', v)}
                 />
-              </div>
-            )}
-            {step === 3 && (
-              <div data-testid="intake-step-3" data-draft-id={draftId ?? undefined}>
+              </section>
+
+              <section {...sectionProps('allergie')}>
+                <header className="intake-section__head">{sectionTitle('allergie')}</header>
+                <StepClinica
+                  data={data}
+                  onUpdateSection={updateSection}
+                  operatoreNome={operatoreNome}
+                  importedFields={(data._importedFields as string[] | undefined) ?? []}
+                  narrative={data._narrative as Record<string, unknown> | undefined}
+                  only={['allergie']}
+                  therapyBlock={false}
+                  showLegacyPain={false}
+                  showTitles={false}
+                />
+              </section>
+
+              <section {...sectionProps('terapia')}>
+                <header className="intake-section__head">
+                  {sectionTitle('terapia')}
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn--secondary ds-btn--wrap"
+                    data-testid="accept-therapy"
+                    aria-pressed={accepted.therapy === true}
+                    disabled={submitting}
+                    onClick={() =>
+                      updateSection('_accepted', {
+                        ...accepted,
+                        therapy: accepted.therapy !== true,
+                      })
+                    }
+                  >
+                    <IcoCheck />
+                    {accepted.therapy === true
+                      ? therapyEmpty
+                        ? 'Nessuna terapia: confermato'
+                        : 'Terapia confermata'
+                      : therapyEmpty
+                        ? 'Conferma: nessuna terapia da inserire'
+                        : 'Conferma la terapia'}
+                  </button>
+                </header>
                 <ImportProposalsReview
                   proposals={
                     Array.isArray(data._importProposals)
@@ -612,15 +789,44 @@ export function IntakeWorkspace({
                   importedFields={(data._importedFields as string[] | undefined) ?? []}
                   narrative={data._narrative as Record<string, unknown> | undefined}
                   therapyCorrection={therapyCorrection}
+                  only={['terapia']}
+                  showTherapyAcceptance={false}
+                  showLegacyPain={false}
+                  showTitles={false}
                 />
-              </div>
-            )}
-            {step === 4 && (
-              <div data-testid="intake-step-4" data-draft-id={draftId ?? undefined}>
-                <p className="cr-empty" style={{ marginBottom: 12 }}>
-                  Moduli operativi disponibili nella sezione <strong>Moduli</strong> della scheda
-                  paziente dopo la presa in carico. Seleziona (facoltativo) il modulo da aprire
-                  subito dopo la creazione del paziente.
+              </section>
+
+              <section {...sectionProps('diagnosi')}>
+                <header className="intake-section__head">{sectionTitle('diagnosi')}</header>
+                <StepClinica
+                  data={data}
+                  onUpdateSection={updateSection}
+                  operatoreNome={operatoreNome}
+                  importedFields={(data._importedFields as string[] | undefined) ?? []}
+                  narrative={data._narrative as Record<string, unknown> | undefined}
+                  only={['anamnesi', 'diagnosi']}
+                  therapyBlock={false}
+                  showLegacyPain={false}
+                />
+              </section>
+
+              <section {...sectionProps('parametri')}>
+                <header className="intake-section__head">{sectionTitle('parametri')}</header>
+                <StepClinica
+                  data={data}
+                  onUpdateSection={updateSection}
+                  operatoreNome={operatoreNome}
+                  only={['parametri']}
+                  therapyBlock={false}
+                  showTitles={false}
+                />
+              </section>
+
+              <section {...sectionProps('moduli')}>
+                <header className="intake-section__head">{sectionTitle('moduli')}</header>
+                <p className="intake-section__hint">
+                  Facoltativo: il modulo scelto si apre subito dopo la creazione del paziente. Tutti
+                  i moduli restano nella sezione <strong>Moduli</strong> della cartella.
                 </p>
                 <div className="intake-modules-grid" role="list" data-testid="intake-modules-grid">
                   {CLINICAL_MODULES.map((m) => {
@@ -657,112 +863,30 @@ export function IntakeWorkspace({
                     );
                   })}
                 </div>
-              </div>
-            )}
-            {step === 5 && (
-              <div data-draft-id={draftId ?? undefined}>
-                {duplicateWarn && (
-                  <div className="import-modal__warning" role="alert">
-                    <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati
-                    potrebbe già esistere.
-                    <br />
-                    <button
-                      className="btn-secondary"
-                      onClick={() => void handleConfirm(true)}
-                      disabled={submitting}
-                      style={{ marginTop: '0.5rem' }}
-                    >
-                      Crea comunque
-                    </button>
-                  </div>
-                )}
-                {allergyConflictWarn && (
-                  <div className="import-modal__warning" role="alert">
-                    <strong>Allergie contrastanti rilevate.</strong> {submitError}
-                    <br />
-                    <button
-                      className="btn-secondary"
-                      onClick={() => void handleConfirm(false, true)}
-                      disabled={submitting}
-                      style={{ marginTop: '0.5rem' }}
-                    >
-                      Conferma comunque
-                    </button>
-                  </div>
-                )}
+              </section>
+
+              <section {...sectionProps('riepilogo')}>
+                <header className="intake-section__head">{sectionTitle('riepilogo')}</header>
                 <StepVerifica
                   data={data}
                   busy={submitting}
-                  error={allergyConflictWarn ? null : submitError}
+                  error={null}
                   onConfirm={() => void handleConfirm(false)}
                   onUpdateSection={updateSection}
                   onReviewDemographics={reviewDemographicField}
                   onReviewTherapies={(target) => {
                     setSubmitError(null);
-                    setTherapyCorrection(target ?? null);
-                    setStep(3);
+                    if (target) setTherapyCorrection(target);
+                    else jump('terapia');
                   }}
+                  showAcceptance={false}
+                  showCreate={false}
                 />
-              </div>
-            )}
-          </div>
-        )}
+              </section>
+            </div>
+          )}
+        </div>
       </div>
-
-      <footer className="import-modal__foot" data-testid="patient-intake-footer">
-        {/* #234: unobtrusive autosave status (accessible, muted; red only on error). */}
-        <span
-          className="import-modal__savestate"
-          role="status"
-          aria-live="polite"
-          data-state={saveState}
-          style={{
-            marginRight: 'auto',
-            alignSelf: 'center',
-            fontSize: '0.8125rem',
-            color: saveState === 'error' ? 'var(--red)' : 'var(--muted, #667085)',
-          }}
-        >
-          {saveState === 'saving' && 'Salvataggio…'}
-          {saveState === 'saved' && 'Salvato'}
-          {saveState === 'error' && 'Errore salvataggio — riprova'}
-        </span>
-        {onBackToDocuments ? (
-          <button
-            className="btn-ghost"
-            onClick={() => void saveAndClose(onBackToDocuments)}
-            disabled={submitting}
-          >
-            ← Torna alla revisione
-          </button>
-        ) : (
-          <button className="btn-ghost" onClick={() => void saveAndClose()} disabled={submitting}>
-            Salva bozza e chiudi
-          </button>
-        )}
-        <button
-          className="btn-secondary"
-          onClick={handleBack}
-          disabled={isFirst || loading || submitting}
-        >
-          ← Indietro
-        </button>
-        <button
-          className="btn-primary"
-          onClick={handleNext}
-          disabled={
-            loading ||
-            !!error ||
-            // #294 (QA F1/F3): lo step 1 NON disabilita più il bottone — il click passa da
-            // handleNext, che con anagrafica invalida imposta submitAttempted e fa comparire
-            // gli errori di campo (incluso il CF). Un bottone grigio senza spiegazione era
-            // feedback irraggiungibile.
-            (isLast && (submitting || !acceptanceComplete()))
-          }
-        >
-          {isLast ? 'Conferma' : 'Avanti →'}
-        </button>
-      </footer>
     </AccessibleDialogSurface>
   );
 }

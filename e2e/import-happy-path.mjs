@@ -137,10 +137,11 @@ try {
       await page.waitForTimeout(300);
       await page.screenshot({ path: resolve(outDir, `${tag}-3-prefilled.png`) });
 
-      // "Crea paziente" hands off to the IntakeWorkspace wizard at step 3 (Clinica).
+      // "Crea paziente" hands off to the IntakeWorkspace, now a single page with a section index
+      // (HMI 1): every section is on the same page.
       await page.getByRole('button', { name: /Crea paziente/i }).click();
       await page
-        .locator('[data-testid="intake-step-3"]')
+        .locator('[data-testid="intake-section-terapia"]')
         .waitFor({ state: 'visible', timeout: 15000 });
 
       // #265: the allergy selection must actually update the draft. Before the fix the button
@@ -165,29 +166,28 @@ try {
         );
 
       // #235 gate: explicit therapy acceptance (empty therapy in the mock fixture).
-      await page.locator('[data-testid="accept-therapy"] input[type=checkbox]').check();
+      // Conferma = interruttore nella testata della sezione Terapia (aria-pressed).
+      await page.locator('[data-testid="accept-therapy"]').click();
+      await page.waitForFunction(
+        () =>
+          document.querySelector('[data-testid="accept-therapy"]')?.getAttribute('aria-pressed') ===
+          'true',
+        null,
+        { timeout: 5000 },
+      );
       await page.waitForTimeout(700); // allow the debounced autosave to flush
       await page.screenshot({ path: resolve(outDir, `${tag}-4-step3-clinica.png`) });
 
-      // Step 4 (Moduli) has no required input -> advance to 5 (Verifica). "Documenti" was a
-      // step between these two but was an unimplemented placeholder (F5) with nothing to
-      // interact with, so it was removed from the wizard (see IntakeWorkspace.tsx STEPS) —
-      // one fewer "Avanti" click for every patient created, real or synthetic.
-      await page.getByRole('button', { name: /Avanti/i }).click();
-      await page
-        .locator('[data-testid="intake-step-4"]')
-        .waitFor({ state: 'visible', timeout: 10000 });
-      await page.getByRole('button', { name: /Avanti/i }).click();
-      await page
-        .locator('[data-testid="intake-step-5"]')
-        .waitFor({ state: 'visible', timeout: 10000 });
-
-      // #235 gate: explicit demographics acceptance, then create.
-      await page.locator('[data-testid="accept-demographics"] input[type=checkbox]').check();
+      // #235 gate: explicit demographics acceptance (header toggle of the Anagrafica section),
+      // then "Crea paziente" from the section index once nothing required is missing.
+      await page.locator('[data-testid="accept-demographics"]').click();
       await page.waitForTimeout(700); // allow the debounced autosave to flush
-      await page.screenshot({ path: resolve(outDir, `${tag}-5-step5-verifica.png`) });
       await page
-        .locator('[data-testid="intake-step-5"]')
+        .locator('[data-testid="intake-missing"]', { hasText: 'Pronto per la creazione' })
+        .waitFor({ state: 'visible', timeout: 10000 });
+      await page.screenshot({ path: resolve(outDir, `${tag}-5-riepilogo.png`) });
+      await page
+        .locator('.intake-index__actions')
         .getByRole('button', { name: /Crea paziente/i })
         .click();
 

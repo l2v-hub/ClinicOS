@@ -27,6 +27,9 @@ interface StepVerificaProps {
   onUpdateSection: (key: string, value: unknown) => void;
   onReviewTherapies?: (target?: TherapyCorrectionTarget) => void;
   onReviewDemographics?: (field: DemographicField) => void;
+  /** Pagina unica (HMI 1): conferme nelle testate delle sezioni e "Crea paziente" nell'indice. */
+  showAcceptance?: boolean;
+  showCreate?: boolean;
 }
 
 function countFilled(value: unknown): boolean {
@@ -45,6 +48,8 @@ export function StepVerifica({
   onUpdateSection,
   onReviewTherapies,
   onReviewDemographics,
+  showAcceptance = true,
+  showCreate = true,
 }: StepVerificaProps) {
   const a = (data.anagrafica ?? {}) as AnagraficaData;
 
@@ -80,8 +85,8 @@ export function StepVerifica({
         : 'Dati anagrafici obbligatori',
       ok: missingDemo.length === 0,
     },
-    { label: 'Accetta anagrafica', ok: demoAccepted },
-    { label: 'Accetta terapia', ok: therapyAccepted },
+    { label: 'Conferma i dati anagrafici', ok: demoAccepted },
+    { label: 'Conferma la terapia', ok: therapyAccepted },
     ...invalidTherapies.flatMap((t) =>
       t.diagnostics.map((issue) => ({
         label: `Terapia ${t.index}: ${issue.message}`,
@@ -133,7 +138,7 @@ export function StepVerifica({
             ) : null;
           })}
         </dl>
-        <label className="step-verifica__accept" data-testid="accept-demographics">
+        {showAcceptance && <label className="step-verifica__accept" data-testid="accept-demographics">
           <input
             type="checkbox"
             checked={demoAccepted}
@@ -143,7 +148,7 @@ export function StepVerifica({
             }
           />
           <span>Confermo i dati anagrafici disponibili; i dati mancanti restano da completare</span>
-        </label>
+        </label>}
       </section>
 
       {/* #281: recap leggibile — allergie, terapie, anamnesi/diagnosi con i VALORI reali */}
@@ -200,7 +205,7 @@ export function StepVerifica({
         {/* #282: la conferma terapia deve essere sbloccabile QUI — prima viveva solo nello step 3
             (Clinica): chi arrivava al riepilogo senza averla spuntata trovava il bottone "Crea
             paziente" disabilitato senza alcun controllo per rimediare. */}
-        <label className="step-verifica__accept" data-testid="accept-therapy-verifica">
+        {showAcceptance && <label className="step-verifica__accept" data-testid="accept-therapy-verifica">
           <input
             type="checkbox"
             checked={therapyAccepted}
@@ -214,7 +219,7 @@ export function StepVerifica({
               ? 'Confermo di aver revisionato la terapia'
               : 'Confermo: nessuna terapia da inserire'}
           </span>
-        </label>
+        </label>}
         {review.length > 0 && onReviewTherapies && (
           <button
             type="button"
@@ -296,11 +301,11 @@ export function StepVerifica({
 
       {error && <p className="import-modal__error">{error}</p>}
 
-      <div className="step-verifica__actions">
+      {showCreate && <div className="step-verifica__actions">
         <button className="btn-success" onClick={onConfirm} disabled={busy || !canCreate}>
           <IcoCheck /> {busy ? 'Creazione…' : 'Crea paziente'}
         </button>
-      </div>
+      </div>}
     </div>
   );
 }

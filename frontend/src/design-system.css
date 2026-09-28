@@ -694,3 +694,23 @@ th[aria-sort] .ds-sort:not(#ds) {
   width: 16px;
   height: 16px;
 }
+
+/* Pulsante secondario come interruttore (es. "Conferma i dati anagrafici" della scheda
+   d'ingresso): premuto = tinta blu, come la chip attiva. */
+.ds-btn.ds-btn--secondary[aria-pressed='true']:not(#ds),
+.ds-btn.ds-btn--secondary[aria-pressed='true']:not(#ds):hover:not(:disabled) {
+  background: var(--ds-blue-tint);
+  border-color: var(--ds-blue);
+  color: var(--ds-blue-active);
+}
+
+/* Pulsante che può andare a capo: stesso aspetto, ma su schermi stretti il testo non viene
+   tagliato (il pulsante cresce oltre i 48px solo quando serve). */
+.ds-btn.ds-btn--wrap:not(#ds) {
+  max-width: 100%;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal;
+  text-align: center;
+}

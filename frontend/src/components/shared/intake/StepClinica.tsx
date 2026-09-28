@@ -41,6 +41,16 @@ interface StepClinicaProps {
   /** The _narrative object from the draft data (has sourceReferences). */
   narrative?: Record<string, unknown>;
   therapyCorrection?: TherapyCorrectionTarget | null;
+  /** Pagina unica (HMI 1): solo queste sezioni (default: tutte). */
+  only?: string[];
+  /** Blocco terapia importata (testo, revisione, conferma): default presente. */
+  therapyBlock?: boolean;
+  /** Casella di conferma terapia: nella pagina unica è l'interruttore nella testata. */
+  showTherapyAcceptance?: boolean;
+  /** Dati dolore precedenti (sola lettura). */
+  showLegacyPain?: boolean;
+  /** Titoli delle sezioni: nascosti quando la card della pagina ha già il titolo. */
+  showTitles?: boolean;
 }
 
 /** Inline compare panel for a single import section. */
@@ -69,11 +79,16 @@ export function StepClinica({
   importedFields = [],
   narrative,
   therapyCorrection,
+  only,
+  therapyBlock = true,
+  showTherapyAcceptance = true,
+  showLegacyPain = true,
+  showTitles = true,
 }: StepClinicaProps) {
   // Keep manual additions next to the imported drugs, before the other clinical sections.
-  const sections = intakeSections().sort(
-    (a, b) => Number(b.sectionKey === 'terapia') - Number(a.sectionKey === 'terapia'),
-  );
+  const sections = intakeSections()
+    .filter((s) => !only || only.includes(s.sectionKey))
+    .sort((a, b) => Number(b.sectionKey === 'terapia') - Number(a.sectionKey === 'terapia'));
   const [showSource, setShowSource] = useState<Record<string, boolean>>({});
 
   const narrativeData = narrative as NarrativeData | undefined;
@@ -97,7 +112,7 @@ export function StepClinica({
 
   return (
     <>
-      {typeof data._terapiaText === 'string' && data._terapiaText.trim() && (
+      {therapyBlock && typeof data._terapiaText === 'string' && data._terapiaText.trim() && (
         <details className="step-clinica__section" data-testid="therapy-source-comparison">
           <summary>Confronta con il testo completo della terapia</summary>
           <p className="form-hint">
@@ -112,7 +127,7 @@ export function StepClinica({
           </pre>
         </details>
       )}
-      {terapiaImport.length > 0 && (
+      {therapyBlock && terapiaImport.length > 0 && (
         <div className="step-clinica__section">
           <DischargeTherapyReview
             rows={terapiaImport}
@@ -125,7 +140,7 @@ export function StepClinica({
         </div>
       )}
       {/* #235: explicit therapy acceptance — required before the patient can be created. */}
-      <div className="step-clinica__section">
+      {therapyBlock && showTherapyAcceptance && <div className="step-clinica__section">
         <label className="step-clinica__accept" data-testid="accept-therapy">
           <input
             type="checkbox"
@@ -140,8 +155,8 @@ export function StepClinica({
               : 'Confermo di aver revisionato la terapia proposta'}
           </span>
         </label>
-      </div>
-      {legacyPainPresent(data) && <NrsLegacyContent value={data.dolore} title="Dati dolore precedenti della bozza" intake />}
+      </div>}
+      {showLegacyPain && legacyPainPresent(data) && <NrsLegacyContent value={data.dolore} title="Dati dolore precedenti della bozza" intake />}
       {sections.map((def) => {
         const { sectionKey, title, component: Editor } = def;
 
@@ -193,7 +208,7 @@ export function StepClinica({
             {isImported && showSource[sectionKey] && hasSource && (
               <SourceComparePanel refs={refs} />
             )}
-            <div className="step-clinica__section-title">{title}</div>
+            {showTitles && <div className="step-clinica__section-title">{title}</div>}
             <EditorCast
               mode="intake"
               value={data[sectionKey]}

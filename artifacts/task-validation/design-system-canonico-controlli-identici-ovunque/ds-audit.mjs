@@ -45,6 +45,8 @@ const COMPONENTS = [
   '.patient-archive-tree', // albero delle cartelle documenti
   '.tcal__table', // celle del calendario terapia (componente di griglia)
   '.nps-option', // card di scelta della pagina Nuovo ingresso
+  '.intake-index__nav', // indice delle sezioni della scheda d'ingresso (navigazione, come TopNav)
+  '.intake-module-card', // card selezionabili dei moduli da pianificare (grande superficie di scelta)
 ].join(', ');
 const CANONICAL =
   '.ds-chip, .ds-btn, .ds-link, .ds-icon-btn, .ds-badge, .ds-sort, .filter-chip, .agt-filter-chip, .agt-view-btn, .btn-primary, .btn-success, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm, .btn-danger, .icon-btn, .link-btn, .btn-link, .search-clear-btn, .dashboard-notification-chip';
@@ -103,12 +105,30 @@ async function collect(page, where) {
       // scelte in elenco (pulsante a tutta larghezza): stessa forma, testo che va a capo
       for (const el of enabled('.ds-btn--block')) {
         const cs = getComputedStyle(el);
-        out.push({ where, cat: 'scelta-in-elenco', sig: [cs.minHeight, cs.borderTopLeftRadius, cs.borderTopWidth, cs.fontSize, cs.fontWeight, cs.backgroundColor, cs.color].join(' | '), text: el.textContent.trim().slice(0, 30) });
+        out.push({
+          where,
+          cat: 'scelta-in-elenco',
+          sig: [
+            cs.minHeight,
+            cs.borderTopLeftRadius,
+            cs.borderTopWidth,
+            cs.fontSize,
+            cs.fontWeight,
+            cs.backgroundColor,
+            cs.color,
+          ].join(' | '),
+          text: el.textContent.trim().slice(0, 30),
+        });
       }
       for (const el of enabled(
-        '.ds-btn--secondary:not(.ds-btn--block), .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-secondary)',
+        '.ds-btn--secondary:not(.ds-btn--block):not(.ds-btn--wrap), .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-secondary)',
       ))
         add('secondario', el, false);
+      // pulsante che va a capo: stessa forma, altezza minima 48 (cresce solo col testo)
+      for (const el of enabled('.ds-btn--secondary.ds-btn--wrap:not([aria-pressed="true"])')) {
+        const cs = getComputedStyle(el);
+        out.push({ where, cat: 'secondario', sig: [cs.minHeight, cs.borderTopLeftRadius, cs.borderTopWidth, cs.fontSize, cs.fontFamily.split(',')[0], cs.backgroundColor, cs.color, cs.fontWeight].join(' | '), text: el.textContent.trim().slice(0, 30) });
+      }
       for (const el of enabled('.ds-btn--danger, .btn-danger')) add('distruttivo', el, false);
       for (const el of enabled('.ds-icon-btn, .icon-btn').filter(
         (e) => !e.matches('.icon-btn--danger, .ds-icon-btn--danger'),
@@ -119,21 +139,53 @@ async function collect(page, where) {
       for (const el of enabled('.ds-sort')) {
         const cs = getComputedStyle(el);
         const sorted = !!el.closest('th[aria-sort]');
-        out.push({ where, cat: sorted ? 'ordinamento-attivo' : 'ordinamento', sig: [cs.minHeight, cs.fontSize, cs.fontWeight, cs.fontFamily.split(',')[0], cs.textTransform, cs.color].join(' | '), text: el.textContent.trim().slice(0, 30) });
+        out.push({
+          where,
+          cat: sorted ? 'ordinamento-attivo' : 'ordinamento',
+          sig: [
+            cs.minHeight,
+            cs.fontSize,
+            cs.fontWeight,
+            cs.fontFamily.split(',')[0],
+            cs.textTransform,
+            cs.color,
+          ].join(' | '),
+          text: el.textContent.trim().slice(0, 30),
+        });
       }
       // badge di stato: stessa forma per tutti, stessi colori per tono
       for (const el of [...document.querySelectorAll('.ds-badge')].filter(vis)) {
-        const tone = [...el.classList].find((c) => c.startsWith('ds-badge--') && c !== 'ds-badge--dashed');
+        const tone = [...el.classList].find(
+          (c) => c.startsWith('ds-badge--') && c !== 'ds-badge--dashed',
+        );
         const cs = getComputedStyle(el);
-        out.push({ where, cat: 'badge-forma', sig: [cs.minHeight, cs.borderTopLeftRadius, cs.borderTopWidth, cs.fontSize, cs.fontWeight, cs.fontFamily.split(',')[0]].join(' | '), text: el.textContent.trim().slice(0, 30) });
-        out.push({ where, cat: `badge-${tone ?? 'neutro'}`, sig: [cs.backgroundColor, cs.color].join(' | '), text: el.textContent.trim().slice(0, 30) });
+        out.push({
+          where,
+          cat: 'badge-forma',
+          sig: [
+            cs.minHeight,
+            cs.borderTopLeftRadius,
+            cs.borderTopWidth,
+            cs.fontSize,
+            cs.fontWeight,
+            cs.fontFamily.split(',')[0],
+          ].join(' | '),
+          text: el.textContent.trim().slice(0, 30),
+        });
+        out.push({
+          where,
+          cat: `badge-${tone ?? 'neutro'}`,
+          sig: [cs.backgroundColor, cs.color].join(' | '),
+          text: el.textContent.trim().slice(0, 30),
+        });
         // cliccabile: area di tocco di 48px (pseudo-elemento) e dichiara cosa apre
         if (el.tagName === 'BUTTON') {
           // area di tocco misurata col hit-test reale: a 7.5px sopra e sotto il badge il clic lo colpisce ancora
           // (area ≥ 48px su un badge da 32). Solo badge interamente visibili e non coperti.
           const r = el.getBoundingClientRect();
           const cx = r.left + r.width / 2;
-          const inView = r.top > 12 && r.bottom < innerHeight - 12 && r.left >= 0 && r.right <= innerWidth;
+          const inView =
+            r.top > 12 && r.bottom < innerHeight - 12 && r.left >= 0 && r.right <= innerWidth;
           // anche dentro i contenitori che scorrono: l'area di tocco deve essere tutta nella parte visibile
           let clipOk = inView;
           for (let p = el.parentElement; p && clipOk; p = p.parentElement) {
@@ -145,7 +197,12 @@ async function collect(page, where) {
           const hits = (y) => el.contains(document.elementFromPoint(cx, y));
           if (!clipOk || !hits(r.top + r.height / 2)) continue;
           const touch = r.height >= 48 || (hits(r.top - 7.5) && hits(r.bottom + 7.5));
-          out.push({ where, cat: 'badge-cliccabile', sig: `area48:${touch} haspopup:${el.hasAttribute('aria-haspopup')}`, text: el.textContent.trim().slice(0, 30) });
+          out.push({
+            where,
+            cat: 'badge-cliccabile',
+            sig: `area48:${touch} haspopup:${el.hasAttribute('aria-haspopup')}`,
+            text: el.textContent.trim().slice(0, 30),
+          });
         }
       }
       // campi: altezza (non per textarea), bordo, raggio, carattere
@@ -213,7 +270,10 @@ async function collect(page, where) {
           const r = el.getBoundingClientRect();
           return (r.left < -1 || r.right > innerWidth + 1) && !scrolls(el);
         })
-        .map((el) => `«${(el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 20)}» ${Math.round(el.getBoundingClientRect().left)}→${Math.round(el.getBoundingClientRect().right)}`);
+        .map(
+          (el) =>
+            `«${(el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 20)}» ${Math.round(el.getBoundingClientRect().left)}→${Math.round(el.getBoundingClientRect().right)}`,
+        );
       return { controls: out, stateless, other, overflow, clipped };
     },
     { where, COMPONENTS, CANONICAL },
@@ -223,6 +283,26 @@ async function collect(page, where) {
 async function login(width, role = 'Operatore') {
   const page = await browser.newPage({ viewport: { width, height: 820 } });
   page.on('dialog', (d) => d.dismiss());
+  // Bozze d'ingresso simulate (lo stub non le implementa): così la scheda d'ingresso mostra il
+  // suo contenuto e l'audit ne misura i controlli.
+  const drafts = new Map();
+  await page.route(/\/intake\/drafts(\/[^/?]+)?(\?.*)?$/, (route) => {
+    const req = route.request();
+    const id = new URL(req.url()).pathname.split('/')[3];
+    if (req.method() === 'POST' && !id) {
+      const d = { id: `audit${drafts.size + 1}`, version: 1, status: 'draft', data: {} };
+      drafts.set(d.id, d);
+      return route.fulfill({ status: 201, json: d });
+    }
+    const d = drafts.get(id);
+    if (!d) return route.fulfill({ status: 404, json: {} });
+    if (req.method() === 'PATCH') {
+      const { expectedDraftVersion, ...patch } = JSON.parse(req.postData() || '{}');
+      Object.assign(d.data, patch);
+      d.version += 1;
+    }
+    return route.fulfill({ json: d });
+  });
   await page.goto(BASE);
   await page.getByText(role, { exact: true }).first().click();
   await page.waitForTimeout(1200);
@@ -277,7 +357,11 @@ for (const width of WIDTHS) {
     .catch(() => {});
   await page.waitForTimeout(900);
   await snap(page, 'nuovo-ingresso-scelta', width);
-  await page.locator('.nps-option').last().click().catch(() => {});
+  await page
+    .locator('.nps-option')
+    .last()
+    .click()
+    .catch(() => {});
   await page.waitForTimeout(1200);
   await snap(page, 'intake-manuale', width);
   await page.keyboard.press('Escape');
@@ -313,7 +397,12 @@ for (const width of WIDTHS) {
   await snap(page, 'farmaci', width);
   // cartella: ogni sezione della barra
   await go(page, 'Pazienti', width);
-  await page.locator('.patient-roster__who:visible, .patient-roster__card:visible, .patient-card .ds-btn:visible').first().click();
+  await page
+    .locator(
+      '.patient-roster__who:visible, .patient-roster__card:visible, .patient-card .ds-btn:visible',
+    )
+    .first()
+    .click();
   await page.waitForTimeout(2500);
   const tabs = await page.locator('.chart-sections .top-nav__item').allTextContents();
   for (let i = 0; i < tabs.length; i++) {
@@ -405,7 +494,11 @@ check(
   overflows.length === 0,
   overflows.join(', '),
 );
-check(`AC4 nessun controllo tagliato fuori dallo schermo (${WIDTHS.join(', ')} px)`, clippedAll.length === 0, clippedAll.join(' || '));
+check(
+  `AC4 nessun controllo tagliato fuori dallo schermo (${WIDTHS.join(', ')} px)`,
+  clippedAll.length === 0,
+  clippedAll.join(' || '),
+);
 
 writeFileSync(`${DIR}/logs/ds-audit-altri-pulsanti.txt`, others.join('\n') + '\n');
 await browser.close();
