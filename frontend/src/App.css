@@ -5031,11 +5031,12 @@ textarea.form-input {
   margin-top: 12px;
 }
 .clinical-card__header {
-  height: var(--card-header-h);
+  /* ospita il ds-icon-btn da 48px */
+  min-height: var(--card-header-h);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--card-padding-x);
+  padding: 4px var(--card-padding-x);
   cursor: pointer;
   user-select: none;
   background: transparent;
@@ -5074,19 +5075,11 @@ textarea.form-input {
 .clinical-card__edit:hover {
   background: rgba(26, 86, 219, 0.08);
 }
-.clinical-card__toggle {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-soft, currentColor);
+/* Il pulsante è il ds-icon-btn canonico: qui solo la rotazione della freccia. */
+.clinical-card__toggle svg {
   transition: transform var(--tab-transition-duration) var(--tab-transition-easing);
 }
-.clinical-card--collapsed .clinical-card__toggle {
+.clinical-card--collapsed .clinical-card__toggle svg {
   transform: rotate(-90deg);
 }
 .clinical-card__content {
@@ -5506,7 +5499,7 @@ textarea.form-input {
 @media (prefers-reduced-motion: reduce) {
   .tab-panel-transition,
   .clinical-card__content,
-  .clinical-card__toggle {
+  .clinical-card__toggle svg {
     animation: none !important;
     transition: none !important;
   }

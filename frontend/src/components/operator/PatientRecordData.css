@@ -80,16 +80,6 @@
     background: var(--indigo-bg, #eef3fe);
   }
 
-  .patient-record-view .clinical-card__toggle {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-  }
-
-  .patient-record-view .clinical-card__toggle:hover {
-    background: var(--hover, #f7f9fc);
-  }
-
   .patient-record-view .clinical-card__content-inner:has(> :is(.cr-form-section, .pic-edit-form)) {
     padding: 0;
   }
@@ -423,7 +413,6 @@
       .clinical-card__header,
       .cts__header,
       .clinical-card__edit,
-      .clinical-card__toggle,
       .inline-edit-row,
       .cdt__sort-btn
     ):focus-visible {

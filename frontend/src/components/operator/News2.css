@@ -1,63 +1,17 @@
-/* NEWS2: chip in testata e storico. Rosso solo per rischio clinico (≥ 5), come da palette. */
-.news2-chip {
+/* NEWS2: il badge (testata, lista, turno, storico) è il ds-badge canonico di design-system.css;
+   qui il contenitore (lista, turno) e lo storico. Rosso solo per rischio clinico (medio/alto). */
+
+/* contenitore del badge: resta cliccabile sopra il collegamento della card del turno; nella
+   colonna della lista si accorcia (…) invece di uscire dalla cella */
+.turno-pcard__news2 {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
-  align-items: center;
-  padding: 0 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface-raised);
-  color: var(--text-muted);
-  font-family: var(--font-ui);
-  font-size: 12.5px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  /* Può andare a capo: sul telefono l'avviso "da aggiornare" non deve essere tagliato. */
-  white-space: normal;
   max-width: 100%;
-  min-height: 28px;
-  height: auto;
-  padding-block: 4px;
-  text-align: left;
-  cursor: pointer;
+  min-width: 0;
 }
-.news2-chip:focus-visible {
-  outline: none;
-  box-shadow: var(--shadow-focus);
-}
-.news2-chip--static {
-  cursor: default;
-}
-.news2-chip--ok {
-  background: var(--emerald-bg);
-  border-color: transparent;
-  color: var(--emerald);
-}
-.news2-chip--low {
-  background: var(--indigo-bg);
-  border-color: transparent;
-  color: var(--blue);
-}
-.news2-chip--single {
-  background: var(--amber-bg);
-  border-color: transparent;
-  color: var(--amber);
-}
-.news2-chip--medium,
-.news2-chip--high {
-  background: var(--red-bg);
-  border-color: var(--red-border);
-  color: var(--red);
-}
-.news2-chip--high {
-  background: var(--red);
-  color: #fff;
-}
-/* Punteggio da aggiornare (vecchio o superato da rilevazioni incomplete) o non caricato:
-   neutro, mai verde. */
-.news2-chip--stale {
-  background: var(--surface);
-  border: 1px dashed var(--text-muted);
-  color: var(--text);
+.turno-pcard__news2:empty {
+  display: none;
 }
 
 .modal-box.news2-dialog,
@@ -358,8 +312,4 @@
   .vitals {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-/* Variante compatta: un punteggio da aggiornare resta del suo colore ma col bordo tratteggiato. */
-.news2-chip--old {
-  border-style: dashed;
 }

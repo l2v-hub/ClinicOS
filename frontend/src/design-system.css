@@ -516,3 +516,90 @@ textarea.form-input:not(#ds) {
   outline: var(--ds-focus);
   outline-offset: 2px;
 }
+
+/* ── Badge di stato: stato clinico o di dato (NEWS2, "non in anagrafica") ──────────────────
+   Come i badge del prototipo: 32px, raggio 8, 14/500, 8px ai lati (bordo compreso). Il testo clinico
+   non si taglia mai: se non sta su una riga va a capo e il badge cresce ("da aggiornare" resta visibile). Un solo aspetto per tono; il rosso solo per
+   il rischio clinico. Se è cliccabile (apre un dettaglio) ha un'area di tocco di 48px. */
+.ds-badge:not(#ds) {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: auto;
+  min-height: 32px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 4px 6px;
+  border: var(--ds-border-w) solid transparent;
+  border-radius: 8px;
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+  font: 500 14px/20px var(--ds-font);
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  vertical-align: middle;
+  box-shadow: none;
+  cursor: default;
+}
+button.ds-badge:not(#ds) {
+  cursor: pointer;
+}
+/* area di tocco di 48px attorno al badge cliccabile: il pseudo-elemento parte dal bordo interno
+   (28px dentro un badge da 32 con bordo 2), quindi 10px sopra e sotto portano a 48 */
+button.ds-badge:not(#ds)::before {
+  content: '';
+  position: absolute;
+  inset: -10px -4px;
+}
+button.ds-badge:not(#ds):hover:not(:disabled) {
+  border-color: currentColor;
+}
+button.ds-badge:not(#ds):focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}
+button.ds-badge:not(#ds):disabled {
+  cursor: default;
+}
+/* il testo resta intero e va a capo dentro la colonna: il badge non esce mai dalla sua cella */
+.ds-badge__text:not(#ds) {
+  min-width: 0;
+}
+.ds-badge--ok:not(#ds) {
+  background: var(--emerald-bg, #e7f7f0);
+  color: color-mix(in srgb, var(--emerald, #16a37b) 65%, black);
+}
+.ds-badge--info:not(#ds) {
+  background: var(--ds-blue-tint);
+  color: var(--ds-blue-active);
+}
+.ds-badge--warning:not(#ds) {
+  background: var(--amber-bg, #fdf3e2);
+  color: color-mix(in srgb, var(--amber, #c77700) 70%, black);
+}
+.ds-badge--alarm:not(#ds) {
+  background: var(--red-bg, #fdecee);
+  border-color: var(--red-border, #f6c9ce);
+  color: color-mix(in srgb, var(--red, #d93a4a) 85%, black);
+}
+.ds-badge--alarm-strong:not(#ds) {
+  background: var(--red, #d93a4a);
+  color: #fff;
+}
+/* da aggiornare / non caricato: neutro, mai verde */
+.ds-badge--stale:not(#ds) {
+  background: var(--ds-surface);
+  border: var(--ds-border-w) dashed var(--ds-text-muted);
+  color: var(--ds-text);
+}
+/* punteggio vecchio che conserva il suo tono */
+.ds-badge--dashed:not(#ds) {
+  border-style: dashed;
+  border-color: currentColor;
+}

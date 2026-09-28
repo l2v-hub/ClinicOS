@@ -763,7 +763,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {(risoluzione?.stato === 'non-trovato' || risoluzione?.stato === 'senza-documento') && (
           <button
             type="button"
-            className="farmaco-non-trovato"
+            className="ds-badge ds-badge--warning farmaco-non-trovato"
+            aria-haspopup="dialog"
             onClick={() => setRicercaPer(v)}
             title={
               risoluzione.stato === 'non-trovato'
@@ -776,9 +777,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         )}
         {risoluzione?.stato === 'fonte-non-disponibile' && (
           <span
-            className="farmaco-non-trovato"
+            className="ds-badge ds-badge--stale farmaco-non-trovato"
             title="L'anagrafica farmaci non ha risposto: non è detto che il farmaco sia assente"
-            style={{ cursor: 'default' }}
           >
             anagrafica non raggiungibile
           </span>

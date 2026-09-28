@@ -152,7 +152,7 @@ const PatientCard = memo(function PatientCard({
       {deleteEnabled && (
         <button
           type="button"
-          className="patient-card__delete"
+          className="ds-btn ds-btn--danger patient-card__delete"
           disabled={deleting}
           onClick={(event) => onDelete(patient, event)}
           aria-label={`Elimina ${patient.firstName} ${patient.lastName}`}
@@ -397,7 +397,7 @@ export function PatientRoster({
                       {deleteEnabled && (
                         <button
                           type="button"
-                          className="patient-roster__delete"
+                          className="ds-icon-btn ds-icon-btn--danger patient-roster__delete"
                           disabled={deletingId === patient.id}
                           onClick={(event) => onDelete(patient, event)}
                           aria-label={`Elimina ${patient.firstName} ${patient.lastName}`}
@@ -407,7 +407,7 @@ export function PatientRoster({
                       )}
                       <button
                         type="button"
-                        className="patient-roster__open"
+                        className="ds-icon-btn patient-roster__open"
                         onClick={() => onSelect(patient)}
                         aria-label={openLabel}
                       >

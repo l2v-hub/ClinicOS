@@ -39,20 +39,17 @@ const COMPONENTS = [
   '.cdt__sort-btn', // intestazioni ordinabili delle tabelle
   '.table-filters__toggle', // apertura del pannello filtri tabella
   '.ai-fab', // pulsante dell'assistente (da sostituire col pannello)
-  '.news2-chip', // chip di stato NEWS2
   '.exp-card__head',
   '.modal-overlay .icon-btn',
   '.new-patient-chooser__option', // grandi card di scelta (Da documenti / A mano)
   '.app-toast', // notifiche temporanee
-  '.clinical-card__toggle', // apertura/chiusura delle card cliniche espandibili
   '.inline-edit-row', // righe modificabili in linea
-  '.farmaco-non-trovato', // stato "non in anagrafica" che apre la ricerca farmaco
   '.patient-archive-tree', // albero delle cartelle documenti
   '.tcal__table', // celle del calendario terapia (componente di griglia)
   '.nps-option', // card di scelta della pagina Nuovo ingresso
 ].join(', ');
 const CANONICAL =
-  '.ds-chip, .ds-btn, .ds-link, .ds-icon-btn, .filter-chip, .agt-filter-chip, .agt-view-btn, .btn-primary, .btn-success, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm, .btn-danger, .icon-btn, .link-btn, .btn-link, .search-clear-btn, .dashboard-notification-chip';
+  '.ds-chip, .ds-btn, .ds-link, .ds-icon-btn, .ds-badge, .filter-chip, .agt-filter-chip, .agt-view-btn, .btn-primary, .btn-success, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm, .btn-danger, .icon-btn, .link-btn, .btn-link, .search-clear-btn, .dashboard-notification-chip';
 
 const browser = await chromium.launch();
 
@@ -115,6 +112,33 @@ async function collect(page, where) {
       ))
         add('icona', el, false);
       for (const el of enabled('.ds-link, .btn-link')) add('link-azione', el, false);
+      // badge di stato: stessa forma per tutti, stessi colori per tono
+      for (const el of [...document.querySelectorAll('.ds-badge')].filter(vis)) {
+        const tone = [...el.classList].find((c) => c.startsWith('ds-badge--') && c !== 'ds-badge--dashed');
+        const cs = getComputedStyle(el);
+        out.push({ where, cat: 'badge-forma', sig: [cs.minHeight, cs.borderTopLeftRadius, cs.borderTopWidth, cs.fontSize, cs.fontWeight, cs.fontFamily.split(',')[0]].join(' | '), text: el.textContent.trim().slice(0, 30) });
+        out.push({ where, cat: `badge-${tone ?? 'neutro'}`, sig: [cs.backgroundColor, cs.color].join(' | '), text: el.textContent.trim().slice(0, 30) });
+        // cliccabile: area di tocco di 48px (pseudo-elemento) e dichiara cosa apre
+        if (el.tagName === 'BUTTON') {
+          // area di tocco misurata col hit-test reale: a 7.5px sopra e sotto il badge il clic lo colpisce ancora
+          // (area ≥ 48px su un badge da 32). Solo badge interamente visibili e non coperti.
+          const r = el.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const inView = r.top > 12 && r.bottom < innerHeight - 12 && r.left >= 0 && r.right <= innerWidth;
+          // anche dentro i contenitori che scorrono: l'area di tocco deve essere tutta nella parte visibile
+          let clipOk = inView;
+          for (let p = el.parentElement; p && clipOk; p = p.parentElement) {
+            const o = getComputedStyle(p);
+            if (o.overflowY === 'visible' && o.overflowX === 'visible') continue;
+            const pr = p.getBoundingClientRect();
+            clipOk = r.top - 10 >= pr.top && r.bottom + 10 <= pr.bottom;
+          }
+          const hits = (y) => el.contains(document.elementFromPoint(cx, y));
+          if (!clipOk || !hits(r.top + r.height / 2)) continue;
+          const touch = r.height >= 48 || (hits(r.top - 7.5) && hits(r.bottom + 7.5));
+          out.push({ where, cat: 'badge-cliccabile', sig: `area48:${touch} haspopup:${el.hasAttribute('aria-haspopup')}`, text: el.textContent.trim().slice(0, 30) });
+        }
+      }
       // campi: altezza (non per textarea), bordo, raggio, carattere
       for (const el of [
         ...document.querySelectorAll(
@@ -341,6 +365,14 @@ for (const [cat, map] of Object.entries(byCat)) {
     `AC1 ${cat}: una sola firma di stile su tutte le pagine e larghezze (${[...map.values()].flat().length} controlli)`,
     map.size === 1,
     map.size === 1 ? [...map.keys()][0] : detail,
+  );
+}
+{
+  const clickable = [...(byCat['badge-cliccabile']?.keys() ?? [])];
+  check(
+    `AC2 badge cliccabili: area di tocco di 48px e aria-haspopup (${[...(byCat['badge-cliccabile']?.values() ?? [])].flat().length})`,
+    clickable.every((k) => k === 'area48:true haspopup:true'),
+    clickable.join(', '),
   );
 }
 check(
