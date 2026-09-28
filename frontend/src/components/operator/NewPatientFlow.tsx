@@ -24,6 +24,8 @@ interface Props {
   operatorId?: string;
   operatorRole?: string;
   operatoreNome?: string;
+  /** Percorso già scelto (pagina Nuovo ingresso): niente finestra di scelta. */
+  initialPath?: NewPatientPath;
 }
 
 /** Ingresso unico "Nuovo paziente": la scelta, poi l'import dei documenti o il wizard manuale.
@@ -34,8 +36,9 @@ export function NewPatientFlow({
   operatorId,
   operatorRole,
   operatoreNome,
+  initialPath,
 }: Props) {
-  const [path, setPath] = useState<NewPatientPath | null>(null);
+  const [path, setPath] = useState<NewPatientPath | null>(initialPath ?? null);
 
   if (path === null) return <NewPatientChooser onClose={onClose} onChoose={setPath} />;
 

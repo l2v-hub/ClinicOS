@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
@@ -8,6 +8,8 @@ import { usePatientListPage } from './usePatientListPage';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
 import { NewPatientFlow } from './NewPatientFlow';
+import { NewPatientStart } from './NewPatientStart';
+import type { NewPatientPath } from './NewPatientChooser';
 import {
   LIST_VIEW_LABEL,
   countListViews,
@@ -43,6 +45,10 @@ interface PatientListProps {
   /** REQ-019: operator identity for import authorization. */
   operatorId?: string;
   operatorRole?: string;
+  /** Pagina "Nuovo ingresso" (voce di navigazione #/nuovo-ingresso) al posto dell'elenco. */
+  newIntake?: boolean;
+  onOpenNewIntake?: () => void;
+  onCloseNewIntake?: () => void;
 }
 
 export function PatientList({
@@ -57,6 +63,9 @@ export function PatientList({
   onDeleted,
   operatorId,
   operatorRole,
+  newIntake = false,
+  onOpenNewIntake,
+  onCloseNewIntake,
 }: PatientListProps) {
   const {
     patients: pazienti,
@@ -90,8 +99,18 @@ export function PatientList({
   );
   // AC6/AC11: anomalie di tutto il reparto da UNA richiesta, non una per paziente.
   const anomalie = useAnomalieReparto();
-  // Ingresso unico "Nuovo paziente": la scelta, poi il percorso (documenti o a mano).
-  const [showNewPatient, setShowNewPatient] = useState(false);
+  // Nuovo ingresso: pagina di scelta (HMI 1), poi il flusso scelto nella sua finestra di sempre.
+  // Tornando all'elenco il fuoco torna su "Nuovo ingresso" (la card che lo aveva non c'è più).
+  const [newPatientPath, setNewPatientPath] = useState<NewPatientPath | null>(null);
+  const newIntakeButtonRef = useRef<HTMLButtonElement>(null);
+  const focusNewIntakeRef = useRef(false);
+  useEffect(() => {
+    // Qualunque uscita dalla pagina (link, freccia, sidebar, flusso chiuso) torna qui.
+    if (newIntake) focusNewIntakeRef.current = true;
+    if (!focusNewIntakeRef.current || newIntake || newPatientPath) return;
+    focusNewIntakeRef.current = false;
+    newIntakeButtonRef.current?.focus();
+  });
   // Vista come il prototipo: "Ricoverati" (in carico) predefinita, "Dimessi e archivio", "Tutti".
   const [vista, setVista] = useState<ListView>('in_carico');
   const [showFilters, setShowFilters] = useState(false);
@@ -201,6 +220,17 @@ export function PatientList({
     onImported?.(patientId, moduleTabId);
   };
 
+  if (newIntake)
+    return (
+      <NewPatientStart
+        onBack={() => onCloseNewIntake?.()}
+        onChoose={(path) => {
+          setNewPatientPath(path);
+          onCloseNewIntake?.();
+        }}
+      />
+    );
+
   return (
     <div className="patient-list-view">
       <PageHeader
@@ -230,9 +260,10 @@ export function PatientList({
             operatorRole={operatorRole}
           />
           <button
+            ref={newIntakeButtonRef}
             type="button"
             className="ds-btn ds-btn--primary"
-            onClick={() => setShowNewPatient(true)}
+            onClick={onOpenNewIntake}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6" />
@@ -416,7 +447,7 @@ export function PatientList({
                 : 'Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.'}
             </p>
             {!ricerca && filtroSesso === 'tutti' && (
-              <button className="btn-success" onClick={() => setShowNewPatient(true)}>
+              <button className="btn-success" onClick={onOpenNewIntake}>
                 <IcoPlus /> Aggiungi primo paziente
               </button>
             )}
@@ -460,11 +491,15 @@ export function PatientList({
         )}
       </section>
 
-      {showNewPatient && (
+      {newPatientPath && (
         <NewPatientFlow
-          onClose={() => setShowNewPatient(false)}
+          initialPath={newPatientPath}
+          onClose={() => {
+            focusNewIntakeRef.current = true;
+            setNewPatientPath(null);
+          }}
           onDone={(patientId, moduleTabId, path) => {
-            setShowNewPatient(false);
+            setNewPatientPath(null);
             // l'import può aggiornare un paziente esistente: la lista si ricarica sempre
             if (path === 'documenti' || !patientId) void loadPage(undefined, false);
             onImported?.(patientId, moduleTabId);

@@ -25,6 +25,7 @@ export type NavKey =
   | 'note'
   | 'operator-dashboard'
   | 'pazienti'
+  | 'nuovo-ingresso'
   | 'dettaglio-paziente'
   | 'consegne'
   | 'agenda-operatore'
