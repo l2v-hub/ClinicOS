@@ -48,6 +48,7 @@ const COMPONENTS = [
   '.inline-edit-row', // righe modificabili in linea
   '.farmaco-non-trovato', // stato "non in anagrafica" che apre la ricerca farmaco
   '.patient-archive-tree', // albero delle cartelle documenti
+  '.tcal__table', // celle del calendario terapia (componente di griglia)
 ].join(', ');
 const CANONICAL =
   '.ds-chip, .ds-btn, .ds-link, .ds-icon-btn, .filter-chip, .agt-filter-chip, .agt-view-btn, .btn-primary, .btn-success, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm, .btn-danger, .icon-btn, .link-btn, .btn-link, .search-clear-btn, .dashboard-notification-chip';
@@ -255,6 +256,11 @@ for (const width of WIDTHS) {
     await go(page, title, width);
     await snap(page, name, width);
   }
+  await go(page, 'Terapia', width);
+  await page.getByRole('button', { name: /Calendario/ }).click();
+  await page.waitForTimeout(2000);
+  await snap(page, 'terapia-calendario', width);
+  await go(page, 'Consegne', width);
   await page.getByRole('button', { name: 'Feed consegne' }).click();
   await page.waitForTimeout(1500);
   await snap(page, 'consegne-feed', width);
