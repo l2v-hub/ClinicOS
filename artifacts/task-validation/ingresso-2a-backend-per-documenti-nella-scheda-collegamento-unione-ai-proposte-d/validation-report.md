@@ -45,9 +45,9 @@ Solo backend, additivo, **nessuna migrazione**. Il frontend in produzione non ch
 | AC  |                     Result | Evidence                                                                                                                                                                                                                                                                    |
 | --- | -------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AC1 |                       PASS | `draft-merge.test.ts`: 32/32 in locale. Coperti riempimento dei vuoti, campi dell'operatore → proposta, campo svuotato, allergie come unità, finale con sostituzione, azzeramento e pulizia, terapia `terapiaImport` o proposte, per-lettera che non tocca terapia e fonte. |
-| AC2 |                      IN CI | Test DB su proprietà, `owner_mismatch`, secondo collegamento 409, job confermato/annullato/scaduto, scollegamento dopo `_importSource`. Revisione QA: corretti e deterministici.                                                                                            |
-| AC3 |                      IN CI | Test DB su versione vecchia 409, stesso `requestId` → stesso risultato, `idempotency_conflict`, per-lettera con hash vecchio, finale con revisione corrente, apply/keep via HTTP.                                                                                           |
-| AC4 | PASS (codice) / IN CI (DB) | PATCH con chiavi riservate → 200. from-import, refresh-import, seed e conferma invariati (confronto riga per riga di `mutateDraft` / `mutateLinkedDraft` e dell'hash della ricevuta). Conferma bloccata con proposte in attesa.                                             |
+| AC2 | PASS (CI #372) | Test DB su proprietà, `owner_mismatch`, secondo collegamento 409, job confermato/annullato/scaduto, scollegamento dopo `_importSource`. Revisione QA: corretti e deterministici.                                                                                            |
+| AC3 | PASS (CI #372) | Test DB su versione vecchia 409, stesso `requestId` → stesso risultato, `idempotency_conflict`, per-lettera con hash vecchio, finale con revisione corrente, apply/keep via HTTP.                                                                                           |
+| AC4 | PASS | PATCH con chiavi riservate → 200. from-import, refresh-import, seed e conferma invariati (confronto riga per riga di `mutateDraft` / `mutateLinkedDraft` e dell'hash della ricevuta). Conferma bloccata con proposte in attesa.                                             |
 | AC5 |                PASS locale | Build backend e root ok. Suite backend 647/729: 81 fallimenti, contro gli 80 della baseline di origin/main. L'unico nuovo è il file DB, per assenza di Postgres locale. Nessun test prima verde è diventato rosso.                                                          |
 
 ## Test Results
@@ -55,7 +55,7 @@ Solo backend, additivo, **nessuna migrazione**. Il frontend in produzione non ch
 | Test                 |           Result | Evidence                                                 |
 | -------------------- | ---------------: | -------------------------------------------------------- |
 | Unit                 |             PASS | draft-merge 32/32                                        |
-| Integration/API (DB) |            IN CI | draft-import-link-db.test.ts, job `gate`                 |
+| Integration/API (DB) | PASS | draft-import-link-db.test.ts nel job `gate` della PR #372: 15/15 ok |
 | Security/ownership   | PASS (revisione) | proprietà e stesso creatore; nessun dato clinico nei log |
 | Playwright           |               NA | nessun cambiamento visibile                              |
 
@@ -70,6 +70,10 @@ Solo backend, additivo, **nessuna migrazione**. Il frontend in produzione non ch
 - **Correzioni:** tutte applicate, con 13 unit test e test DB nuovi. Decisione del coordinatore su A1: un campo svuotato resta dell'operatore.
 - **Secondo giro: READY FOR QA**, a condizione che il test DB passi nel job `gate`. Sonde avversarie sulle allergie tra lettere e finale, apply/keep in vari ordini, svuotamento di anagrafica e CF, A5 con defer/select, A6 contro il frontend in produzione, ordine dei lock: tutto PASS.
 
+## CI
+
+- PR #372, job `gate` (run 36495505191): i 15 test DB nuovi passano tutti. I 21 fallimenti del job sono tutti nella lista dei fallimenti noti del backend; nessun fallimento nuovo.
+
 ## Residual Risks
 
 - Nel PR frontend `editableDraftPatch` deve escludere le chiavi riservate, per evitare falsi conflitti.
@@ -78,4 +82,4 @@ Solo backend, additivo, **nessuna migrazione**. Il frontend in produzione non ch
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED (in attesa dell'esito del test DB nel job `gate` della CI)
+CLOSED — VERIFIED
