@@ -36,6 +36,7 @@ import {
   assertPreparedPageArchive,
   persistPageArchive,
 } from './pages/archive.js';
+import { pendingFieldProposals } from './pages/draft-merge.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -250,6 +251,12 @@ async function confirm(
         if (draft && draft.status !== 'draft')
           throw new AiExtractionError('config', 'La bozza non è più confermabile');
         const draftData = asData(draft?.data);
+        if (pendingFieldProposals(draftData) > 0)
+          throw new ImportSessionError(
+            409,
+            'field_proposals_pending',
+            'Decidi le proposte dei documenti sui campi prima di confermare',
+          );
         const jobData = asData(job?.resultData);
         if (job && asData(job.manifest).version === 1)
           assertPreparedPageArchive(

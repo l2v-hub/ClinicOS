@@ -1,6 +1,6 @@
 import { prisma } from '../../../lib/prisma.js';
 import { Prisma } from '@prisma/client';
-import { extractionConfig, groupHash, pageHash } from './inputs.js';
+import { currentGroupUnits, extractionConfig } from './inputs.js';
 import {
   LIMITS,
   ImportSessionError,
@@ -79,12 +79,9 @@ export async function getPageJob(jobId: string) {
   const m = manifest(job.manifest);
   const cfgHash = extractionConfig().digest;
   const shas = new Map(job.documents.map((d) => [d.id, d.sha256]));
-  const state = (kind: string, key: string, inputHash: string) =>
-    job.processingUnits.find(
-      (u) => u.kind === kind && u.unitKey === key && u.inputHash === inputHash,
-    );
+  const units = currentGroupUnits(m, shas, job.processingUnits, cfgHash);
   const pages = m.pages.map((p) => {
-    const u = state('ocr', p.id, pageHash(p, shas.get(p.documentId) ?? ''));
+    const u = units.pages.get(p.id);
     return {
       ...p,
       status: u?.status ?? 'pending',
@@ -97,14 +94,8 @@ export async function getPageJob(jobId: string) {
       error: u?.errorMessage ?? null,
     };
   });
-  const outputs = new Map(
-    pages.map((p) => [
-      p.id,
-      state('ocr', p.id, pageHash(p, shas.get(p.documentId) ?? ''))?.outputHash ?? '',
-    ]),
-  );
   const groups = m.groups.map((g) => {
-    const u = state('extraction', g.id, groupHash(m, g.id, shas, cfgHash, outputs));
+    const u = units.groups.get(g.id)?.unit;
     return {
       ...g,
       status: u?.status ?? 'pending',
@@ -112,6 +103,8 @@ export async function getPageJob(jobId: string) {
       completedPages: pages.filter((p) => p.groupId === g.id && p.status === 'completed').length,
       errorCode: u?.errorCode ?? null,
       error: u?.errorMessage ?? null,
+      // Output hash of the current letter result: lets a client ask for a per-letter merge.
+      resultHash: u?.status === 'completed' ? (u.outputHash ?? null) : null,
       pdfUrl: pages.some((p) => p.groupId === g.id)
         ? `/ai/extraction/jobs/${jobId}/groups/${g.id}/pdf`
         : null,

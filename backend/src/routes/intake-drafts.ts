@@ -12,6 +12,12 @@ import { AiExtractionError } from '../ai/types.js';
 import { importJobIsAccessible, requireOwnedIntakeDraft } from '../ai/ownership.js';
 import { ImportSessionError } from '../ai/upload/pages/model.js';
 import { refreshImportDraft, decideImportProposal } from '../ai/upload/pages/draft-mutations.js';
+import {
+  linkImportJob,
+  unlinkImportJob,
+  mergeImportIntoDraft,
+  decideDraftFieldProposal,
+} from '../ai/upload/pages/draft-link.js';
 
 // ── Intake Drafts Router — mounted at /intake/drafts (F3 EPIC #120 / #125) ───
 // Operator-gated CRUD + autosave endpoints for PatientIntakeDraft.
@@ -131,6 +137,48 @@ intakeDraftsRouter.post('/:id/import-proposals/:proposalId/decide', async (req, 
   try {
     return res.json(
       await decideImportProposal(String(req.params.id), String(req.params.proposalId), req.body),
+    );
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// Documents inside an open draft (additive; see ai/upload/pages/draft-link.ts for the rules).
+// POST /intake/drafts/:id/import-job { importJobId, expectedDraftVersion, requestId }
+intakeDraftsRouter.post('/:id/import-job', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator!;
+    return res.json(await linkImportJob(String(req.params.id), req.body, op));
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+// DELETE /intake/drafts/:id/import-job — only before the final merge; cancels the session.
+intakeDraftsRouter.delete('/:id/import-job', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator!;
+    return res.json(await unlinkImportJob(String(req.params.id), req.body, op));
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+// POST /intake/drafts/:id/merge-import — per letter { groupId? } or final { manifestRevision, resultHash }
+intakeDraftsRouter.post('/:id/merge-import', async (req, res) => {
+  try {
+    return res.json(await mergeImportIntoDraft(String(req.params.id), req.body));
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+// POST /intake/drafts/:id/field-proposals/:proposalId/decide { action: 'apply'|'keep', ... }
+intakeDraftsRouter.post('/:id/field-proposals/:proposalId/decide', async (req, res) => {
+  try {
+    return res.json(
+      await decideDraftFieldProposal(
+        String(req.params.id),
+        String(req.params.proposalId),
+        req.body,
+      ),
     );
   } catch (err) {
     return handleError(res, err);

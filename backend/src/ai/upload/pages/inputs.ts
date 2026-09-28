@@ -33,3 +33,28 @@ export function groupHash(
     ]),
   ]);
 }
+type UnitRef = { kind: string; unitKey: string; inputHash: string; outputHash: string | null };
+/**
+ * Current processing units of a manifest: a unit counts only when its input hash matches the
+ * present pages, documents and extraction config. Shared by the job view and the AI draft merge.
+ */
+export function currentGroupUnits<U extends UnitRef>(
+  m: Manifest,
+  shas: Map<string, string>,
+  units: U[],
+  configHash: string,
+) {
+  const state = (kind: string, key: string, inputHash: string) =>
+    units.find((u) => u.kind === kind && u.unitKey === key && u.inputHash === inputHash);
+  const pages = new Map(
+    m.pages.map((p) => [p.id, state('ocr', p.id, pageHash(p, shas.get(p.documentId) ?? ''))]),
+  );
+  const outputs = new Map(m.pages.map((p) => [p.id, pages.get(p.id)?.outputHash ?? '']));
+  const groups = new Map(
+    m.groups.map((g) => {
+      const inputHash = groupHash(m, g.id, shas, configHash, outputs);
+      return [g.id, { inputHash, unit: state('extraction', g.id, inputHash) }];
+    }),
+  );
+  return { pages, groups };
+}
