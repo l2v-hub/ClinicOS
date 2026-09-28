@@ -1,0 +1,271 @@
+/* Scheda d'ingresso su una pagina (HMI 1, artifacts/hmi-parity/proto/ingresso-docs.png).
+   Indice a sinistra con lo stato delle sezioni e le azioni; sezioni una sotto l'altra al centro.
+   Solo layout e superfici: i controlli sono quelli del design system. */
+.import-modal--intake.intake-page {
+  width: min(1440px, calc(100vw - 32px));
+  max-width: 1440px;
+  height: calc(100svh - 32px);
+  padding: 0;
+  gap: 0;
+}
+.intake-page > .import-modal__head {
+  min-height: 72px;
+  padding: 12px 16px 12px 24px;
+  border-bottom: 1px solid var(--ds-border, #e1e7f0);
+  box-sizing: border-box;
+}
+.intake-page .intake-dialog__title-group h2 {
+  margin: 0;
+  font: 600 20px/28px var(--ds-font);
+}
+.intake-page .intake-dialog__title-group p {
+  font: 400 14px/20px var(--ds-font);
+}
+.intake-page__grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+}
+.intake-page > .intake-page__grid > .import-modal__body,
+.intake-page__body {
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px;
+  background: var(--bg, #eef1f6);
+  scrollbar-gutter: stable;
+}
+.intake-page__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.intake-section {
+  scroll-margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.intake-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.intake-section__title {
+  margin: 0;
+  font: 600 20px/28px var(--ds-font);
+  color: var(--ds-text, #16202e);
+}
+.intake-section__hint {
+  margin: 0;
+  font: 400 14px/20px var(--ds-font);
+  color: var(--ds-text-muted, #5a6b80);
+}
+
+/* ── Indice ─────────────────────────────────────────────────────────────────────────────── */
+.intake-index {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-right: 1px solid var(--ds-border, #e1e7f0);
+  background: var(--ds-surface, #fff);
+  overflow-y: auto;
+}
+.intake-index__nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+/* Voce dell'indice: componente di navigazione dichiarato (come TopNav), non un pulsante d'azione. */
+.intake-index__item {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--ds-text, #16202e);
+  font: 400 16px/24px var(--ds-font);
+  text-align: left;
+  cursor: pointer;
+}
+.intake-index__item:hover {
+  background: var(--ds-surface-2, #f5f7fb);
+}
+.intake-index__item[aria-current='location'] {
+  background: var(--ds-blue-tint, #eaf1fe);
+  color: var(--ds-blue-active, #1d4fc4);
+  font-weight: 600;
+}
+.intake-index__item:focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}
+.intake-index__label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.intake-index__mark {
+  box-sizing: border-box;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--ds-border-strong, #c9d3e1);
+  display: grid;
+  place-items: center;
+  font: 600 12px/1 var(--ds-font);
+}
+.intake-index__mark--issues {
+  border-color: transparent;
+  background: var(--amber, #c77700);
+  color: #fff;
+}
+.intake-index__mark--confirm {
+  border-color: var(--ds-blue, #2f6bed);
+  border-style: dashed;
+}
+.intake-index__mark--done {
+  border-color: transparent;
+  background: var(--emerald, #16a37b);
+  color: #fff;
+}
+.intake-index__mark--done svg {
+  width: 14px;
+  height: 14px;
+}
+.intake-index__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.intake-index__missing summary,
+.intake-index__ready {
+  margin: 0;
+  font: 400 14px/20px var(--ds-font);
+  color: var(--ds-text-muted, #5a6b80);
+}
+.intake-index__missing summary {
+  cursor: pointer;
+  min-height: 24px;
+}
+.intake-index__missing ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.intake-index__ready {
+  color: var(--ds-text, #16202e);
+  font-weight: 600;
+}
+.intake-index__actions .ds-btn {
+  width: 100%;
+}
+.intake-page__savestate[data-state='error'] {
+  color: var(--red, #d93a4a);
+  font-weight: 600;
+}
+
+/* ── Tablet e telefono: indice in alto (scorre di lato), azioni in una barra in basso ─────── */
+@media (max-width: 1023px) {
+  .import-modal--intake.intake-page {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100svh;
+    max-height: 100svh;
+    border-radius: 0;
+  }
+  .intake-page__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .intake-index {
+    display: contents;
+  }
+  .intake-index__nav {
+    grid-row: 1;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--ds-border, #e1e7f0);
+    background: var(--ds-surface, #fff);
+    padding: 8px 12px;
+  }
+  .intake-index__nav ul {
+    flex-direction: row;
+    width: max-content;
+  }
+  .intake-index__item {
+    width: auto;
+    white-space: nowrap;
+  }
+  .intake-page__body {
+    grid-row: 2;
+    padding: 16px;
+  }
+  .intake-index__actions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--ds-surface, #fff);
+    border-top: 1px solid var(--ds-border, #e1e7f0);
+    box-shadow: 0 -4px 16px rgba(16, 32, 54, 0.08);
+  }
+  .intake-index__actions .ds-btn {
+    width: auto;
+  }
+  .intake-index__missing ul {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: calc(100% + 8px);
+    max-height: 50svh;
+    overflow-y: auto;
+    padding: 12px;
+    background: var(--ds-surface, #fff);
+    border: 1px solid var(--ds-border, #e1e7f0);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(16, 32, 54, 0.16);
+  }
+  /* spazio per la barra delle azioni */
+  .intake-page__sections {
+    padding-bottom: 96px;
+  }
+}
+@media (max-width: 600px) {
+  .intake-index__actions {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .intake-index__actions > .intake-index__missing,
+  .intake-index__actions > .intake-index__ready,
+  .intake-index__actions > .import-modal__error {
+    grid-column: 1 / -1;
+  }
+  .intake-page__sections {
+    padding-bottom: 160px;
+  }
+}
