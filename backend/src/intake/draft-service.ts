@@ -5,12 +5,14 @@ import type { Operator } from '../ai/auth.js';
 import { canAccessOwnedResource } from '../ai/ownership-policy.js';
 import { AiExtractionError } from '../ai/types.js';
 import { hasClinicalPassage, importedPastHistory, splitPastHistory } from './clinical-history.js';
-import { object, renewedExpiry } from '../ai/upload/pages/model.js';
+import { ImportSessionError, object, renewedExpiry } from '../ai/upload/pages/model.js';
 import { assertCurrentReview, assertDraftSource } from '../ai/upload/pages/review.js';
 import { attachPageDraftSource, pageDraftNarrative } from '../ai/upload/pages/draft-source.js';
 import {
   IMMUTABLE_DRAFT_FIELDS,
+  SERVER_DRAFT_KEYS,
   assertDraftVersion,
+  draftLinkChanged,
   draftPatchReceipt,
   guardPageRows,
 } from '../ai/upload/pages/draft-mutations.js';
@@ -76,7 +78,14 @@ export async function getDraft(id: string) {
   return prisma.patientIntakeDraft.findUnique({ where: { id } });
 }
 
-export async function patchDraft(id: string, patch: Record<string, unknown>) {
+export async function patchDraft(id: string, rawPatch: Record<string, unknown>) {
+  // AI merge bookkeeping is server-owned. The deployed frontend autosaves whole sections, so these
+  // keys are dropped silently instead of rejected.
+  const patch = Object.fromEntries(
+    Object.entries(rawPatch).filter(
+      ([key]) => !(SERVER_DRAFT_KEYS as readonly string[]).includes(key),
+    ),
+  );
   for (const immutableKey of IMMUTABLE_DRAFT_FIELDS) {
     if (Object.hasOwn(patch, immutableKey)) {
       throw new AiExtractionError(
@@ -94,6 +103,9 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
       await tx.$queryRaw`SELECT "id" FROM "ImportJob" WHERE "id"=${hint.importJobId} FOR UPDATE`;
     await tx.$queryRaw`SELECT "id" FROM "PatientIntakeDraft" WHERE "id" = ${id} FOR UPDATE`;
     const current = await tx.patientIntakeDraft.findUniqueOrThrow({ where: { id } });
+    // Locks are always job → draft; a link or unlink since the unlocked hint means the job row
+    // was not locked first, so refuse (retryable) instead of risking a lock-order inversion.
+    if (current.importJobId !== hint.importJobId) throw draftLinkChanged();
     if (current.status !== 'draft')
       throw new AiExtractionError(
         'config',
@@ -103,7 +115,24 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
     const pageSession = !!existingData._importSource;
     const r = await draftPatchReceipt(tx, current, patch);
     if (r?.previous) return current;
-    assertDraftVersion(current, patch.expectedDraftVersion, pageSession);
+    // A draft linked to a page session before the final merge is versioned too: merges write
+    // into it concurrently with autosave, so a blind write could silently undo them.
+    const linkedJob =
+      !pageSession && current.importJobId
+        ? await tx.importJob.findUnique({
+            where: { id: current.importJobId },
+            select: { status: true, manifest: true },
+          })
+        : null;
+    const linkedPage = !!linkedJob && object(linkedJob.manifest).version === 1;
+    if (linkedPage && patch.expectedDraftVersion === undefined)
+      throw new ImportSessionError(
+        409,
+        'draft_version_required',
+        'La bozza è collegata a documenti: ricarica prima di salvare.',
+        { currentVersion: current.version },
+      );
+    assertDraftVersion(current, patch.expectedDraftVersion, pageSession || linkedPage);
     const { expectedDraftVersion: _version, requestId: _requestId, ...editable } = patch;
     const job =
       pageSession && current.importJobId
@@ -146,6 +175,12 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
       });
       if (!['cancelled', 'expired', 'confirmed'].includes(job.status))
         await tx.importJob.update({ where: { id: job.id }, data: { expiresAt: renewedExpiry() } });
+    } else if (linkedPage && !['cancelled', 'expired', 'confirmed'].includes(linkedJob.status)) {
+      // A draft linked to a page session keeps its temporary documents alive while edited.
+      await tx.importJob.update({
+        where: { id: current.importJobId! },
+        data: { expiresAt: renewedExpiry() },
+      });
     }
     return updated;
   });

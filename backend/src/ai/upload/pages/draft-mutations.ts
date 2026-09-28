@@ -25,6 +25,15 @@ export const IMMUTABLE_DRAFT_FIELDS = [
   '_importProposals',
   '_importReview',
 ];
+/** Server-owned AI merge keys: silently dropped from client PATCH payloads (never rejected). */
+export const SERVER_DRAFT_KEYS = ['_fieldOrigin', '_fieldProposals', '_aiMerge'] as const;
+export const draftLinkChanged = () =>
+  new ImportSessionError(
+    409,
+    'draft_link_changed',
+    'I documenti collegati alla scheda sono cambiati. Ricarica e riprova.',
+    { retryable: true },
+  );
 export function assertDraftVersion(draft: PatientIntakeDraft, expected: unknown, required = true) {
   if (!required && expected === undefined) return;
   if (!Number.isSafeInteger(expected) || expected !== draft.version)
@@ -100,11 +109,25 @@ export function guardPageRows(previous: Json, patch: Json, result: Json | undefi
   });
 }
 
-async function mutateDraft(
+export type LinkedDraftChange = (ctx: {
+  tx: Tx;
+  job: Awaited<ReturnType<typeof lockJob>>;
+  draft: PatientIntakeDraft;
+  existing: Json;
+  body: Json;
+}) => Promise<Json | null> | Json | null;
+
+/**
+ * Shared locked mutation of a draft linked to a page session: job lock → draft lock →
+ * idempotency receipt → state and version checks → change → version bump + receipt.
+ * `change` returning null means "nothing to write" (receipt still recorded).
+ */
+export async function mutateLinkedDraft(
   idValue: string,
   body: unknown,
-  action: 'refresh-import' | 'import-proposal',
-  proposalId?: string,
+  action: string,
+  receiptExtra: Json,
+  change: LinkedDraftChange,
 ) {
   const b = object(body);
   const hint = await prisma.patientIntakeDraft.findUniqueOrThrow({
@@ -122,53 +145,26 @@ async function mutateDraft(
       const job = await lockJob(tx, hint.importJobId!);
       await tx.$queryRaw`SELECT "id" FROM "PatientIntakeDraft" WHERE "id"=${idValue} FOR UPDATE`;
       const draft = await tx.patientIntakeDraft.findUniqueOrThrow({ where: { id: idValue } });
+      // The link may have changed between the unlocked hint and the locks.
+      if (draft.importJobId !== job.id) throw draftLinkChanged();
       const r = await receipt(tx, job.id, b.requestId, action, {
         ...b,
         draftId: idValue,
-        proposalId,
+        ...receiptExtra,
       });
       if (r.previous) return draft;
       if (draft.status !== 'draft')
         throw new ImportSessionError(409, 'draft_closed', 'La bozza è già confermata');
       assertDraftVersion(draft, b.expectedDraftVersion);
-      const result = assertCurrentReview(job, action === 'refresh-import' ? b : undefined);
-      const existing = object(draft.data);
-      let data: Json;
-      if (action === 'refresh-import') data = refreshedPageData(existing, result);
-      else {
-        assertDraftSource(existing, result);
-        const proposals = Array.isArray(existing._importProposals)
-          ? (structuredClone(existing._importProposals) as Json[])
-          : [];
-        const proposal = proposals.find((p) => p.id === id(proposalId, 'proposalId'));
-        if (!proposal || !['add', 'defer'].includes(String(b.action)))
-          throw new ImportSessionError(400, 'invalid_proposal', 'Proposta non valida');
-        if (proposal.status !== 'pending')
-          throw new ImportSessionError(409, 'proposal_decided', 'La proposta è già stata gestita');
-        const rows = Array.isArray(existing.terapiaImport) ? [...existing.terapiaImport] : [];
-        if (b.action === 'add') {
-          if (object(proposal.row).conflictDeferred)
-            throw new ImportSessionError(
-              409,
-              'conflict_deferred',
-              'La terapia rinviata non può essere aggiunta',
-            );
-          if (rows.some((row) => object(row).originalText === object(proposal.row).originalText))
-            throw new ImportSessionError(
-              409,
-              'proposal_duplicate',
-              'Questa terapia è già presente nella bozza',
-            );
-          rows.push({ ...object(proposal.row), stato: 'da_verificare' });
-        }
-        proposal.status = b.action === 'add' ? 'added' : 'deferred';
-        data = { ...existing, terapiaImport: rows, _importProposals: proposals };
-      }
-      const updated = await tx.patientIntakeDraft.update({
-        where: { id: idValue },
-        data: { data: jsonInput(data), version: { increment: 1 } },
-      });
-      await tx.importJob.update({ where: { id: job.id }, data: { expiresAt: renewedExpiry() } });
+      const data = await change({ tx, job, draft, existing: object(draft.data), body: b });
+      const updated = data
+        ? await tx.patientIntakeDraft.update({
+            where: { id: idValue },
+            data: { data: jsonInput(data), version: { increment: 1 } },
+          })
+        : draft;
+      if (!['cancelled', 'expired', 'confirmed'].includes(job.status))
+        await tx.importJob.update({ where: { id: job.id }, data: { expiresAt: renewedExpiry() } });
       await saveReceipt(tx, job.id, r, action, job.manifestRevision, {
         draftId: idValue,
         version: updated.version,
@@ -177,6 +173,45 @@ async function mutateDraft(
     },
     { timeout: 30000, maxWait: 15000 },
   );
+}
+
+function mutateDraft(
+  idValue: string,
+  body: unknown,
+  action: 'refresh-import' | 'import-proposal',
+  proposalId?: string,
+) {
+  return mutateLinkedDraft(idValue, body, action, { proposalId }, ({ job, existing, body: b }) => {
+    const result = assertCurrentReview(job, action === 'refresh-import' ? b : undefined);
+    if (action === 'refresh-import') return refreshedPageData(existing, result);
+    assertDraftSource(existing, result);
+    const proposals = Array.isArray(existing._importProposals)
+      ? (structuredClone(existing._importProposals) as Json[])
+      : [];
+    const proposal = proposals.find((p) => p.id === id(proposalId, 'proposalId'));
+    if (!proposal || !['add', 'defer'].includes(String(b.action)))
+      throw new ImportSessionError(400, 'invalid_proposal', 'Proposta non valida');
+    if (proposal.status !== 'pending')
+      throw new ImportSessionError(409, 'proposal_decided', 'La proposta è già stata gestita');
+    const rows = Array.isArray(existing.terapiaImport) ? [...existing.terapiaImport] : [];
+    if (b.action === 'add') {
+      if (object(proposal.row).conflictDeferred)
+        throw new ImportSessionError(
+          409,
+          'conflict_deferred',
+          'La terapia rinviata non può essere aggiunta',
+        );
+      if (rows.some((row) => object(row).originalText === object(proposal.row).originalText))
+        throw new ImportSessionError(
+          409,
+          'proposal_duplicate',
+          'Questa terapia è già presente nella bozza',
+        );
+      rows.push({ ...object(proposal.row), stato: 'da_verificare' });
+    }
+    proposal.status = b.action === 'add' ? 'added' : 'deferred';
+    return { ...existing, terapiaImport: rows, _importProposals: proposals };
+  });
 }
 export const refreshImportDraft = (draftId: string, body: unknown) =>
   mutateDraft(draftId, body, 'refresh-import');
