@@ -1,17 +1,21 @@
 .agnos-panel { height: 100dvh; max-width: 100%; }
-.agnos-panel > header, .agnos-panel > .ai-asst__scope,
+.agnos-panel > header, .agnos-panel > .agnos-intro,
 .agnos-workflow-status, .agnos-composer { flex-shrink: 0; }
-.agnos-panel .ai-drawer__body { min-height: 0; overscroll-behavior: contain; }
-.agnos-panel .ai-drawer__header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 12px; }
-.agnos-panel .ai-drawer__title { min-width: 0; }
-.agnos-panel .agnos-tts { width: 64px; height: auto; min-height: 48px; display: flex; flex-direction: column; gap: 2px; padding: 4px; }
-.agnos-panel .agnos-tts span { font-size: 10px; line-height: 1.15; font-weight: 600; }
-.agnos-panel .agnos-tts svg { width: 18px; height: 18px; }
-.agnos-panel .agnos-compose { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 14px; }
+.agnos-panel .ai-drawer__body { min-height: 0; overscroll-behavior: contain; padding: 16px 24px; }
+/* HMI 1: testata alta come la barra in alto, titolo "✧ Assistente" viola, poi la dichiarazione. */
+.agnos-panel .ai-drawer__header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 72px; padding: 12px 16px 12px 24px; box-sizing: border-box; }
+.agnos-panel .agnos-title { display: flex; align-items: center; gap: 8px; min-width: 0; margin: 0; font: 600 20px/28px var(--ds-font); color: var(--purple, #6c4bd1); }
+.agnos-panel .agnos-title svg { width: 20px; height: 20px; flex: none; }
+.agnos-intro { padding: 16px 24px 0; }
+.agnos-intro p { margin: 0; }
+.agnos-intro__text { font: 400 14px/20px var(--ds-font); color: var(--text-muted); }
+.agnos-intro .agnos-intro__scope { margin-top: 8px; font: 600 14px/20px var(--ds-font); color: var(--ds-blue-active); }
+.agnos-panel .agnos-compose { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 16px 24px; }
+.agnos-compose-row { display: flex; align-items: flex-end; gap: 8px; }
 .agnos-compose-label { font-size: 13px; font-weight: 650; color: var(--text); }
-.agnos-panel .agnos-input { width: 100%; min-height: 76px; max-height: 150px; flex: auto; line-height: 1.45; }
-.agnos-compose-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.agnos-compose-actions button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+/* il campo parte da una riga (48px) e cresce col testo o con la dettatura */
+.agnos-panel textarea.agnos-input { width: 100%; min-width: 0; min-height: 48px; height: auto; max-height: 150px; flex: auto; field-sizing: content; line-height: 24px; padding-block: 10px; resize: none; }
+.agnos-compose-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
 .agnos-compose-help { margin: 0; padding: 0 12px 8px; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
 .agnos-compose .agnos-compose-help { padding: 0; }
 .agnos-panel .agnos-voice-consent { padding: 0 14px max(8px, env(safe-area-inset-bottom)); }
@@ -44,10 +48,10 @@
 }
 @media (max-width: 480px) {
   .agnos-panel--workspace { top: 0; height: 100dvh; border-radius: 0; }
-  .agnos-panel .ai-drawer__icon { display: none; }
-  .agnos-panel .assistant-id__sub { font-size: 10px; }
-  .agnos-panel .agnos-compose { padding: 8px 12px; }
-  .agnos-panel .agnos-input { min-height: 64px; }
+  .agnos-panel .agnos-compose { padding: 12px 16px; }
+  .agnos-panel .ai-drawer__header { padding-left: 16px; }
+  .agnos-intro { padding: 12px 16px 0; }
+  .agnos-panel .ai-drawer__body { padding: 12px 16px; }
 }
 @media (prefers-reduced-motion: reduce) { .agnos-workflow-spinner { animation: none; } }
 @media print { .agnos-workflow-dock { display: none !important; } }

@@ -89,7 +89,7 @@ async function perf(outFile) {
 }
 
 async function openAgnos(page) {
-  await page.locator('.ai-fab').click();
+  await page.locator('.teams-sidebar__item--ai').click();
   await page.waitForSelector('.agnos-panel');
 }
 

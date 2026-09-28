@@ -41,6 +41,8 @@ interface TeamsLikeSidebarProps {
   utente: UtenteApp;
   onNavigate: (key: NavKey) => void;
   unreadNotes?: number;
+  /** Pannello dell'assistente aperto: la voce lo dichiara (aria-expanded) e resta evidenziata. */
+  assistantOpen?: boolean;
 }
 
 interface NavItem {
@@ -80,6 +82,7 @@ export default function TeamsLikeSidebar({
   activeKey,
   utente,
   onNavigate,
+  assistantOpen = false,
   unreadNotes = 0,
 }: TeamsLikeSidebarProps) {
   const items = getNavItems(utente, unreadNotes);
@@ -87,7 +90,7 @@ export default function TeamsLikeSidebar({
   // La cartella appartiene a Pazienti.
   const resolvedActiveKey: NavKey =
     activeKey === 'dettaglio-paziente' || activeKey === 'nuovo-ingresso' ? 'pazienti' : activeKey;
-  const assistantActive = resolvedActiveKey === 'ai-assistant';
+  const assistantActive = resolvedActiveKey === 'ai-assistant' || assistantOpen;
 
   return (
     <nav className="teams-sidebar" aria-label="Navigazione principale">
@@ -124,7 +127,8 @@ export default function TeamsLikeSidebar({
           className={`teams-sidebar__item teams-sidebar__item--ai${assistantActive ? ' active' : ''}`}
           onClick={() => onNavigate('ai-assistant')}
           title="Assistente"
-          aria-current={assistantActive ? 'page' : undefined}
+          aria-expanded={assistantOpen}
+          aria-haspopup="dialog"
         >
           <span className="teams-sidebar__item-icon">
             <RailIcon name="ai" />

@@ -61,7 +61,7 @@ try {
   await page.waitForTimeout(500);
 
   // Apri il pannello Agnos (nessun currentPatientId perché non siamo nel dettaglio).
-  await page.locator('.ai-fab').click();
+  await page.locator('.teams-sidebar__item--ai').click();
   await page.waitForSelector('.agnos-panel');
   await shot('f0-01-panel.png');
 

@@ -255,7 +255,7 @@
   cursor: pointer;
   box-shadow: none;
 }
-:is(.ds-icon-btn, .icon-btn):not(#ds):hover:not(:disabled) {
+:is(.ds-icon-btn, .icon-btn):not(#ds):hover:not(:disabled, [aria-pressed='true']) {
   background: var(--ds-surface-2);
 }
 :is(.ds-icon-btn, .icon-btn) svg:not(#ds) {
@@ -602,4 +602,46 @@ button.ds-badge:not(#ds):disabled {
 .ds-badge--dashed:not(#ds) {
   border-style: dashed;
   border-color: currentColor;
+}
+
+/* ── Pulsante icona premuto (interruttore: lettura vocale, dettatura) ─────────────────────── */
+:is(.ds-icon-btn, .icon-btn)[aria-pressed='true']:not(#ds) {
+  background: var(--ds-blue-tint);
+  border-color: var(--ds-blue);
+  color: var(--ds-blue-active);
+}
+
+/* ── Pulsante a tutta larghezza (scelte in elenco, es. domande suggerite) ───────────────────
+   Stesso aspetto del pulsante secondario; il testo sta a sinistra e va a capo (mai tagliato):
+   il pulsante cresce oltre i 48px solo quando serve. */
+.ds-btn.ds-btn--block:not(#ds) {
+  width: 100%;
+  height: auto;
+  padding: 12px 16px;
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-weight: 400;
+  color: var(--ds-text);
+}
+
+/* Pulsante icona in registrazione (microfono attivo): l'unico rosso di un controllo, perché è uno
+   stato da non perdere di vista (il microfono sta ascoltando). */
+.ds-icon-btn.ds-icon-btn--recording:not(#ds),
+.ds-icon-btn.ds-icon-btn--recording:not(#ds):hover:not(:disabled) {
+  background: var(--red, #d93a4a);
+  border-color: var(--red, #d93a4a);
+  color: #fff;
+  animation: dsRecording 1s infinite;
+}
+@keyframes dsRecording {
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--red, #d93a4a) 25%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-icon-btn.ds-icon-btn--recording:not(#ds) {
+    animation: none;
+  }
 }

@@ -39,7 +39,7 @@ async function clickText(page, label) {
 
 async function openAgnos(page) {
   if (await page.locator('.agnos-panel').count()) return;
-  await page.locator('.ai-fab').click();
+  await page.locator('.teams-sidebar__item--ai').click();
   await page.waitForSelector('.agnos-panel');
 }
 
