@@ -1,0 +1,122 @@
+/* Nuovo ingresso — HMI 1 (artifacts/hmi-parity/proto/ingresso-start.png). Token del design system. */
+.nps {
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+.nps__top {
+  display: flex;
+  justify-content: flex-start;
+}
+.nps__options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+/* Card di scelta: componente dichiarato del design system (grande superficie cliccabile). */
+.nps-option {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 240px;
+  padding: 24px;
+  border: var(--ds-border-w) solid var(--ds-border);
+  border-radius: var(--ds-card-radius);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+.nps-option:hover:not(:disabled) {
+  border-color: var(--ds-blue);
+}
+.nps-option:focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}
+.nps-option:disabled {
+  cursor: not-allowed;
+  background: var(--ds-surface-2);
+}
+/* Disabilitata: attenuati icona e testi, non il motivo (va letto). */
+.nps-option:disabled .nps-option__icon,
+.nps-option:disabled .nps-option__title,
+.nps-option:disabled .nps-option__text {
+  opacity: 0.6;
+}
+.nps-option__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ds-radius);
+  background: var(--ds-blue-tint);
+  color: var(--ds-blue-active);
+  display: grid;
+  place-items: center;
+}
+.nps-option__icon svg {
+  width: 24px;
+  height: 24px;
+}
+.nps-option__title {
+  font: 600 20px/28px var(--ds-font);
+}
+.nps-option__text {
+  font: 400 16px/24px var(--ds-font);
+  color: var(--ds-text);
+}
+.nps-option__status {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--ds-radius);
+  background: color-mix(in srgb, var(--purple) 12%, white);
+  color: color-mix(in srgb, var(--purple) 80%, black);
+  font: 600 14px/20px var(--ds-font);
+}
+.nps-option__status svg {
+  width: 16px;
+  height: 16px;
+}
+.nps-option__status--off {
+  background: var(--ds-surface);
+  color: var(--ds-text);
+}
+.nps__how {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.nps__how h2 {
+  margin: 0;
+}
+.nps__how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.nps__how-title {
+  margin: 0 0 4px;
+  font: 600 16px/24px var(--ds-font);
+  color: var(--ds-text);
+}
+.nps__how-text {
+  margin: 0;
+  font: 400 16px/24px var(--ds-font);
+  color: var(--ds-text);
+}
+@media (max-width: 1023px) {
+  .nps__options,
+  .nps__how-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nps-option {
+    min-height: 0;
+  }
+}

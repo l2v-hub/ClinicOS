@@ -49,6 +49,7 @@ const COMPONENTS = [
   '.farmaco-non-trovato', // stato "non in anagrafica" che apre la ricerca farmaco
   '.patient-archive-tree', // albero delle cartelle documenti
   '.tcal__table', // celle del calendario terapia (componente di griglia)
+  '.nps-option', // card di scelta della pagina Nuovo ingresso
 ].join(', ');
 const CANONICAL =
   '.ds-chip, .ds-btn, .ds-link, .ds-icon-btn, .filter-chip, .agt-filter-chip, .agt-view-btn, .btn-primary, .btn-success, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm, .btn-danger, .icon-btn, .link-btn, .btn-link, .search-clear-btn, .dashboard-notification-chip';
@@ -237,11 +238,7 @@ for (const width of WIDTHS) {
     .catch(() => {});
   await page.waitForTimeout(900);
   await snap(page, 'nuovo-ingresso-scelta', width);
-  await page
-    .getByRole('button', { name: /A mano|Inserimento manuale|manuale/i })
-    .first()
-    .click()
-    .catch(() => {});
+  await page.locator('.nps-option').last().click().catch(() => {});
   await page.waitForTimeout(1200);
   await snap(page, 'intake-manuale', width);
   await page.keyboard.press('Escape');

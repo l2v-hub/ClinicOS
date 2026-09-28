@@ -34,12 +34,27 @@ test('AIImportStatus and PatientList pass the ids through to App', () => {
   assert.match(list, /<AIImportStatus\s+onImported=\{handleImported\}/);
 });
 
-test('"Nuovo paziente" opens the shared NewPatientFlow and lands on the created patient', () => {
+test('"Nuovo ingresso" opens the start page, then the shared NewPatientFlow, and lands on the created patient', () => {
   const list = src('operator/PatientList.tsx');
-  assert.equal(list.match(/onClick=\{\(\) => setShowNewPatient\(true\)\}/g)?.length, 2);
+  // HMI 1: pagina "Nuovo ingresso" con la scelta, poi il flusso scelto (stesso NewPatientFlow).
+  // La pagina è una voce di navigazione (#/nuovo-ingresso): App la apre e la chiude.
+  assert.equal(list.match(/onClick=\{onOpenNewIntake\}/g)?.length, 2);
+  assert.match(list, /if \(newIntake\)\s*return \(\s*<NewPatientStart/);
   assert.match(
     list,
-    /<NewPatientFlow[\s\S]*?onDone=\{\(patientId, moduleTabId, path\) => \{\s*setShowNewPatient\(false\);[\s\S]*?if \(path === 'documenti' \|\| !patientId\) void loadPage\(undefined, false\);\s*onImported\?\.\(patientId, moduleTabId\);/,
+    /<NewPatientStart[\s\S]*?onChoose=\{\(path\) => \{[\s\S]*?setNewPatientPath\(path\);\s*onCloseNewIntake\?\.\(\);/,
+  );
+  const app = src('../App.tsx');
+  assert.match(
+    app,
+    /navKey === 'pazienti' \|\| navKey === 'nuovo-ingresso'\) && \(\s*<PatientList\s+newIntake=\{navKey === 'nuovo-ingresso'\}/,
+  );
+  assert.match(app, /onOpenNewIntake=\{\(\) => navigate\('nuovo-ingresso'\)\}/);
+  assert.match(app, /onCloseNewIntake=\{\(\) => goBack\('pazienti'\)\}/);
+  assert.match(list, /<NewPatientFlow\s+initialPath=\{newPatientPath\}/);
+  assert.match(
+    list,
+    /<NewPatientFlow[\s\S]*?onDone=\{\(patientId, moduleTabId, path\) => \{\s*setNewPatientPath\(null\);[\s\S]*?if \(path === 'documenti' \|\| !patientId\) void loadPage\(undefined, false\);\s*onImported\?\.\(patientId, moduleTabId\);/,
   );
   const flow = src('operator/NewPatientFlow.tsx');
   assert.match(

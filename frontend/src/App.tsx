@@ -275,6 +275,7 @@ const NAV_LABELS: Record<NavKey, string> = {
   note: 'Note',
   'operator-dashboard': 'Dashboard',
   pazienti: 'Pazienti',
+  'nuovo-ingresso': 'Nuovo ingresso',
   'dettaglio-paziente': 'Scheda Paziente',
   consegne: 'Consegne',
   'agenda-operatore': 'Agenda',
@@ -297,6 +298,7 @@ const OPERATOR_DIRECTORY_NAV_KEYS = new Set<NavKey>([
 
 const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
   'dettaglio-paziente': 'pazienti',
+  'nuovo-ingresso': 'pazienti',
   'parametri-multipaziente': 'operator-dashboard',
   'anagrafica-farmaci': 'operator-dashboard',
   'gestione-operatori': 'admin-dashboard',
@@ -3302,8 +3304,13 @@ export default function App() {
                           onRetryClinicalOverview={() => void loadClinicalOverview()}
                         />
                       )}
-                      {!isAdmin && navKey === 'pazienti' && (
+                      {/* Nuovo ingresso è una voce di navigazione: la lista resta montata sotto
+                          (ricerca e filtri conservati), freccia e sidebar riportano ai pazienti. */}
+                      {!isAdmin && (navKey === 'pazienti' || navKey === 'nuovo-ingresso') && (
                         <PatientList
+                          newIntake={navKey === 'nuovo-ingresso'}
+                          onOpenNewIntake={() => navigate('nuovo-ingresso')}
+                          onCloseNewIntake={() => goBack('pazienti')}
                           totalPatients={clinicalOverview?.totalPatients ?? 0}
                           ricerca={pazientiRicerca}
                           onRicercaChange={setPazientiRicerca}

@@ -85,7 +85,8 @@ export default function TeamsLikeSidebar({
   const items = getNavItems(utente, unreadNotes);
 
   // La cartella appartiene a Pazienti.
-  const resolvedActiveKey: NavKey = activeKey === 'dettaglio-paziente' ? 'pazienti' : activeKey;
+  const resolvedActiveKey: NavKey =
+    activeKey === 'dettaglio-paziente' || activeKey === 'nuovo-ingresso' ? 'pazienti' : activeKey;
   const assistantActive = resolvedActiveKey === 'ai-assistant';
 
   return (
