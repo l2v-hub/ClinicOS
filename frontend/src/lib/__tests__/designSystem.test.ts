@@ -147,6 +147,59 @@ test('retired control classes are gone from the markup', () => {
   assert.deepEqual(found, []);
 });
 
+// Controlli che avevano una forma propria: ora sono canonici. La vecchia classe resta solo come
+// aggancio (test, evidenze), nessun foglio di pagina può ridarle un aspetto.
+const RETIRED_LOOKS = [
+  'news2-chip',
+  'farmaco-non-trovato',
+  'clinical-card__toggle',
+  'patient-roster__open',
+  'patient-roster__delete',
+  'patient-card__delete',
+];
+
+test('retired own-shaped controls get their look only from the design system', () => {
+  const offenders: string[] = [];
+  const hook = new RegExp(`\\.(${RETIRED_LOOKS.join('|')})(?![\\w-])`);
+  for (const file of walk('.', '.css')) {
+    if (file.endsWith('design-system.css')) continue;
+    for (const [selector, body] of blocks(read(file))) {
+      // la freccia del toggle ruota (svg interno): è contenuto, non l'aspetto del controllo
+      if (/clinical-card__toggle svg/.test(selector) && !VISUAL.test(body)) continue;
+      if (hook.test(selector) && VISUAL.test(body)) offenders.push(`${file}: ${selector}`);
+    }
+  }
+  assert.deepEqual(offenders, []);
+  const markup: [string, RegExp][] = [
+    ['components/operator/News2Chip.tsx', /className=\{`news2-chip \$\{badgeClass\(/],
+    [
+      'components/operator/cartella/TerapiaFarmacologicaTab.tsx',
+      /"ds-badge ds-badge--warning farmaco-non-trovato"/,
+    ],
+    ['components/shared/ClinicalCard.tsx', /"ds-icon-btn clinical-card__toggle"/],
+    ['components/operator/PatientRoster.tsx', /"ds-icon-btn patient-roster__open"/],
+    [
+      'components/operator/PatientRoster.tsx',
+      /"ds-icon-btn ds-icon-btn--danger patient-roster__delete"/,
+    ],
+    ['components/operator/PatientRoster.tsx', /"ds-btn ds-btn--danger patient-card__delete"/],
+  ];
+  for (const [file, re] of markup) assert.match(read(file), re, file);
+});
+
+test('the status badge is styled only by the design system', () => {
+  const offenders: string[] = [];
+  for (const file of walk('.', '.css')) {
+    if (file.endsWith('design-system.css')) continue;
+    for (const [selector, body] of blocks(read(file)))
+      // anche i toni (--ok…) e il testo (__text): nessuna pagina li ridisegna
+      if (/\.ds-badge(?![\w])/.test(selector) && VISUAL.test(body))
+        offenders.push(`${file}: ${selector}`);
+  }
+  assert.deepEqual(offenders, []);
+  assert.match(read('design-system.css'), /\.ds-badge:not\(#ds\)/);
+});
+
 test('canonical controls carry no inline visual style (only layout: margin, flex, gap)', () => {
   const found: string[] = [];
   for (const file of walk('.', '.tsx'))

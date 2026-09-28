@@ -23,6 +23,7 @@ export function ClinicalCard({
 }: ClinicalCardProps) {
   const reactId = useId();
   const titleId = `cc-${reactId}`;
+  const contentId = `cc-content-${reactId}`;
   const [internalExpanded, setInternalExpanded] = useState<boolean>(defaultExpanded);
   const isControlled = expanded !== undefined;
   const isExpanded = isControlled ? !!expanded : internalExpanded;
@@ -50,13 +51,6 @@ export function ClinicalCard({
     onToggle?.(next);
   }
 
-  function onHeaderKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleToggle();
-    }
-  }
-
   function handleEditClick(e: React.MouseEvent) {
     e.stopPropagation();
     onEdit?.();
@@ -74,14 +68,9 @@ export function ClinicalCard({
 
   return (
     <section className={sectionClass} role="region" aria-labelledby={titleId}>
-      <div
-        className="clinical-card__header"
-        role="button"
-        tabIndex={0}
-        aria-expanded={isExpanded}
-        onClick={handleToggle}
-        onKeyDown={onHeaderKeyDown}
-      >
+      {/* Il clic sulla testata apre/chiude (comodità col mouse); da tastiera e per i lettori di
+          schermo il controllo è il pulsante icona, con aria-expanded: niente pulsanti annidati. */}
+      <div className="clinical-card__header" onClick={handleToggle}>
         <h3 id={titleId} className="clinical-card__title">
           {title}
         </h3>
@@ -97,14 +86,16 @@ export function ClinicalCard({
           )}
           <button
             type="button"
-            className="clinical-card__toggle"
-            aria-label="Espandi / Comprimi"
+            className="ds-icon-btn clinical-card__toggle"
+            aria-expanded={isExpanded}
+            aria-controls={contentId}
+            aria-label={`${isExpanded ? 'Comprimi' : 'Espandi'} ${title}`}
             onClick={(e) => {
               e.stopPropagation();
               handleToggle();
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false">
+            <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false">
               <path
                 d="M3 5l4 4 4-4"
                 fill="none"
@@ -117,7 +108,7 @@ export function ClinicalCard({
           </button>
         </div>
       </div>
-      <div className="clinical-card__content" style={contentStyle}>
+      <div id={contentId} className="clinical-card__content" style={contentStyle}>
         <div ref={innerRef} className="clinical-card__content-inner">
           {children}
         </div>

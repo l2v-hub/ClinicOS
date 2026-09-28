@@ -32,6 +32,17 @@ interface Props {
   variant?: 'chip' | 'compact' | 'overview';
 }
 
+/** Tono NEWS2 → tono del badge canonico (rosso solo per rischio medio/alto). */
+const BADGE_TONE: Record<string, string> = {
+  ok: 'ok',
+  low: 'info',
+  single: 'warning',
+  medium: 'alarm',
+  high: 'alarm-strong',
+  stale: 'stale',
+};
+const badgeClass = (tone: string) => `ds-badge ds-badge--${BADGE_TONE[tone] ?? 'stale'}`;
+
 export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
   const [readings, setReadings] = useState<PatientParameterReading[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
@@ -181,7 +192,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
     <>
       <button
         type="button"
-        className={`news2-chip news2-chip--${state === 'error' ? 'stale' : tone}${variant === 'compact' && staleness.stale ? ' news2-chip--old' : ''}`}
+        className={`news2-chip ${badgeClass(state === 'error' ? 'stale' : tone)}${variant === 'compact' && staleness.stale && tone !== 'stale' ? ' ds-badge--dashed' : ''}`}
         onClick={() => {
           if (state === 'error') retry();
           setOpen(true);
@@ -189,8 +200,9 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
         disabled={state === 'loading' && !open}
         title={title}
         aria-label={`${label}. Apri lo storico NEWS2`}
+        aria-haspopup="dialog"
       >
-        {variant === 'compact' ? compactLabel : label}
+        <span className="ds-badge__text">{variant === 'compact' ? compactLabel : label}</span>
       </button>
       {history}
     </>
@@ -440,9 +452,7 @@ function News2History({
                 })}
                 <td className="news2-table__total">
                   {result.complete ? (
-                    <span
-                      className={`news2-chip news2-chip--static news2-chip--${news2Tone({ reading, result })}`}
-                    >
+                    <span className={badgeClass(news2Tone({ reading, result }))}>
                       {result.total}
                     </span>
                   ) : (

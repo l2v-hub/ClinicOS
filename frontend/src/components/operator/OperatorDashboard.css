@@ -286,15 +286,6 @@ button.turno-appt__who:hover {
   flex-wrap: wrap;
   gap: 8px;
 }
-/* il chip NEWS2 resta cliccabile sopra il collegamento della card */
-.turno-pcard__news2 {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-}
-.turno-pcard__news2:empty {
-  display: none;
-}
 
 /* ── Tablet e telefono ─────────────────────────────────────────────────── */
 @media (max-width: 1023px) {
@@ -311,18 +302,6 @@ button.turno-appt__who:hover {
   }
 }
 
-/* NEWS2 nella card: stessa forma dei badge del prototipo (32 px, raggio 8). */
-.turno-pcard .news2-chip {
-  height: 32px;
-  min-height: 32px;
-  padding: 0 8px;
-  border-radius: 8px;
-  font: 500 14px/20px var(--font-ui);
-}
-.turno-pcard .news2-chip:focus-visible {
-  outline: 3px solid #245bb5;
-  outline-offset: 2px;
-}
 .turno-pcard__next.is-late {
   color: #b42335;
 }

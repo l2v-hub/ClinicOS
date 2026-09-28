@@ -269,43 +269,7 @@
   white-space: nowrap;
 }
 
-.patient-roster__open,
-.patient-roster__delete,
-.patient-card__delete {
-  min-width: 44px;
-  min-height: 44px;
-  color: var(--blue);
-  background: transparent;
-  border: 0;
-  border-radius: 9px;
-  cursor: pointer;
-}
-
-.patient-roster__open:hover {
-  background: var(--indigo-bg);
-}
-
-.patient-roster__delete {
-  color: var(--red);
-}
-
-.patient-roster__delete:hover,
-.patient-card__delete:hover {
-  background: var(--red-bg);
-}
-
-.patient-roster__open:focus-visible,
-.patient-roster__delete:focus-visible,
-.patient-card__delete:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-
-.patient-roster__open svg,
-.patient-roster__delete svg {
-  width: 17px;
-  height: 17px;
-}
+/* apri/elimina: ds-icon-btn canonici (design-system.css) */
 
 .patient-roster__empty {
   height: 88px;
@@ -435,17 +399,7 @@
   }
 
   .patient-card__delete {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     margin-top: 9px;
-    padding: 0 8px;
-    color: var(--red);
-    font-size: 11.5px;
-  }
-
-  .patient-card__delete svg {
-    width: 15px;
   }
 }
 
@@ -625,13 +579,6 @@
   font: inherit;
   color: inherit;
 }
-.plist-list .news2-chip {
-  height: 32px;
-  min-height: 32px;
-  padding: 0 8px;
-  border-radius: 8px;
-  font: 500 14px/20px var(--font-ui);
-}
 /* la camera è nel riquadro e il letto accanto all'età: la riga "Camera · Letto" non si ripete */
 /* la riga "Camera · Letto" non si ripete; la provenienza e la data del posto letto restano */
 .plist-list .patient-roster__who .patient-identity__location {
@@ -640,12 +587,6 @@
 .plist-list .patient-roster__who .patient-identity__context {
   font: 500 12px/16px var(--font-ui);
   color: var(--text-muted);
-}
-.plist-list .news2-chip {
-  white-space: nowrap;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .plist-sr {
   position: absolute;
@@ -691,16 +632,21 @@
 
 /* colonne: più spazio alle segnalazioni, così i badge stanno su una riga e la riga resta bassa */
 .plist-list .patient-roster th:nth-child(1) {
-  width: 34%;
+  width: 32%;
 }
 .plist-list .patient-roster th:nth-child(2) {
   width: 13%;
 }
+/* NEWS2: il badge con punteggio e ora ("NEWS2 10 · 19:29") sta nella colonna */
 .plist-list .patient-roster th:nth-child(3) {
-  width: 15%;
+  width: 17%;
 }
+/* azioni: un pulsante icona da 48px, due se l'eliminazione di test è attiva */
 .plist-list .patient-roster th:nth-child(5) {
-  width: 64px;
+  width: 80px;
+}
+.plist-list .patient-roster:has(.patient-roster__delete) th:nth-child(5) {
+  width: 136px;
 }
 .plist-list .patient-signals {
   flex-wrap: wrap;
