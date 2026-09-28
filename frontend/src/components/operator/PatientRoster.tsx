@@ -1,3 +1,4 @@
+import { SortArrow } from '../shared/SortArrow';
 import { memo } from 'react';
 import { PatientIdentity, PatientIdentifier } from '../shared/PatientIdentity';
 import { LazyNews2 } from './LazyNews2';
@@ -214,19 +215,19 @@ export function PatientRoster({
     return (
       <button
         type="button"
-        className="patient-roster__sort"
+        className="ds-sort patient-roster__sort"
         aria-label={action}
         title={field === 'signals' ? `${action} · Numero di segnalazioni disponibili` : action}
         onClick={() => onSortChange(next)}
       >
         {label}
-        <span aria-hidden="true" className="patient-roster__sort-arrow">
-          {sort.field === field && (localSortActive || serverCriterion === 'name')
-            ? sort.direction === 'asc'
-              ? '↑'
-              : '↓'
-            : '↕'}
-        </span>
+        <SortArrow
+          dir={
+            sort.field === field && (localSortActive || serverCriterion === 'name')
+              ? sort.direction
+              : null
+          }
+        />
       </button>
     );
   };

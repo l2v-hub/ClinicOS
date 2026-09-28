@@ -36,7 +36,6 @@ const COMPONENTS = [
   '.dashboard-kpi-card', // card KPI
   '.dashboard-notification-compact',
   '.cr-alert-strip', // strisce d'allarme della cartella
-  '.cdt__sort-btn', // intestazioni ordinabili delle tabelle
   '.table-filters__toggle', // apertura del pannello filtri tabella
   '.exp-card__head',
   '.modal-overlay .icon-btn',
@@ -48,7 +47,7 @@ const COMPONENTS = [
   '.nps-option', // card di scelta della pagina Nuovo ingresso
 ].join(', ');
 const CANONICAL =
-  '.ds-chip, .ds-btn, .ds-link, .ds-icon-btn, .ds-badge, .filter-chip, .agt-filter-chip, .agt-view-btn, .btn-primary, .btn-success, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm, .btn-danger, .icon-btn, .link-btn, .btn-link, .search-clear-btn, .dashboard-notification-chip';
+  '.ds-chip, .ds-btn, .ds-link, .ds-icon-btn, .ds-badge, .ds-sort, .filter-chip, .agt-filter-chip, .agt-view-btn, .btn-primary, .btn-success, .btn-secondary, .btn-ghost, .btn-ghost-outline, .btn-sm, .btn-danger, .icon-btn, .link-btn, .btn-link, .search-clear-btn, .dashboard-notification-chip';
 
 const browser = await chromium.launch();
 
@@ -116,6 +115,12 @@ async function collect(page, where) {
       ))
         add('icona', el, false);
       for (const el of enabled('.ds-link, .btn-link')) add('link-azione', el, false);
+      // intestazioni ordinabili: stessa forma e testo; blu solo la colonna ordinata
+      for (const el of enabled('.ds-sort')) {
+        const cs = getComputedStyle(el);
+        const sorted = !!el.closest('th[aria-sort]');
+        out.push({ where, cat: sorted ? 'ordinamento-attivo' : 'ordinamento', sig: [cs.minHeight, cs.fontSize, cs.fontWeight, cs.fontFamily.split(',')[0], cs.textTransform, cs.color].join(' | '), text: el.textContent.trim().slice(0, 30) });
+      }
       // badge di stato: stessa forma per tutti, stessi colori per tono
       for (const el of [...document.querySelectorAll('.ds-badge')].filter(vis)) {
         const tone = [...el.classList].find((c) => c.startsWith('ds-badge--') && c !== 'ds-badge--dashed');

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- legacy generic table accepts heterogeneous clinical DTOs */
+import { SortArrow } from '../../shared/SortArrow';
 import { useState, useMemo } from 'react';
 import { ClinicalTableSection } from './shared';
 import { TableFilters } from '../../shared/TableFilters';
@@ -127,6 +128,14 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
     });
   }
 
+  // Nome del pulsante: l'ordine che il clic applicherà (crescente → decrescente → nessuno).
+  function sortActionLabel(label: string, key: string) {
+    const name = label.toLowerCase();
+    if (sort.key !== key || !sort.dir) return `Ordina per ${name} in ordine crescente`;
+    if (sort.dir === 'asc') return `Ordina per ${name} in ordine decrescente`;
+    return `Togli l'ordinamento per ${name}`;
+  }
+
   function setFilter(key: string, value: string) {
     setFilters((prev) => ({ ...prev, [key]: value }));
     setPage(1);
@@ -176,6 +185,13 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
               {columns.map((col) => (
                 <th
                   key={col.key}
+                  aria-sort={
+                    col.sortable && !disableSorting && sort.key === col.key && sort.dir
+                      ? sort.dir === 'asc'
+                        ? 'ascending'
+                        : 'descending'
+                      : undefined
+                  }
                   style={{
                     ...(col.width ? { width: col.width } : {}),
                     ...(col.align ? { textAlign: col.align } : {}),
@@ -185,17 +201,13 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
                     {col.sortable && !disableSorting ? (
                       <button
                         type="button"
-                        className="cdt__sort-btn"
+                        className="ds-sort cdt__sort-btn"
                         onClick={() => handleSort(col.key)}
+                        aria-label={sortActionLabel(col.label, col.key)}
+                        title={sortActionLabel(col.label, col.key)}
                       >
                         {col.label}
-                        <span className="cdt__sort-icon">
-                          {sort.key === col.key && sort.dir === 'asc'
-                            ? '▲'
-                            : sort.key === col.key && sort.dir === 'desc'
-                              ? '▼'
-                              : '⇅'}
-                        </span>
+                        <SortArrow dir={sort.key === col.key ? sort.dir : null} />
                       </button>
                     ) : (
                       col.label

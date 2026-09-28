@@ -413,8 +413,7 @@
       .clinical-card__header,
       .cts__header,
       .clinical-card__edit,
-      .inline-edit-row,
-      .cdt__sort-btn
+      .inline-edit-row
     ):focus-visible {
     outline: 3px solid color-mix(in srgb, var(--blue, #2f6bed) 30%, transparent);
     outline-offset: -2px;
