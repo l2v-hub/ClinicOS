@@ -189,6 +189,7 @@ test('AC2: anteprima 200 con la forma attesa', async () => {
     'prescriptionRange',
     'row',
     'source',
+    'warnings',
   ]);
   assert.equal(json.source, 'deterministic');
   assert.equal(json.intent, 'prescrizione');
