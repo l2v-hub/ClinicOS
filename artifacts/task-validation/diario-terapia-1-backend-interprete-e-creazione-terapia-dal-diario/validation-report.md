@@ -41,8 +41,8 @@ Solo backend e migrazione additiva. Il frontend di produzione non chiama ancora 
 | --- | --------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | AC1 |            PASS | 329 test del parser verdi, compreso l'esempio del contract. I 38 test del parser dimissioni restano verdi, con codice e test identici a origin/main.                     |
 | AC2 |            PASS | 17 test di contratto: 401, 404 fuori ambito, 400 per terapia non valida, conflitto o intento (senza scrittura), anteprima 200.                                           |
-| AC3 | PENDING CI gate | `patient-diary-therapy-db.test.ts` gira solo nel job `gate`, su Postgres di servizio.                                                                                    |
-| AC4 | PENDING CI gate | `prisma migrate diff` produce SQL identico a `migration.sql` e `prisma validate` è pulito. L'applicazione della migrazione si verifica nel job `gate`.                   |
+| AC3 | PASS | CI gate run 36641104921: ok 911 (stesso requestId → stessa coppia, una terapia), 912 (POST paralleli → una terapia), 913 (transazione atomica), 914 (therapy.stato anche sospesa; cancellata → therapyId null), 917 (menzione crea). |
+| AC4 | PASS | Migrazione applicata su Postgres di servizio nel job gate (run 36641104921); migrate diff = migration.sql. Il job gate ha 20 fallimenti, tutti già noti (/tmp/known18.txt): nessuno nuovo. |
 | AC5 |            PASS | Build backend e frontend ok. Suite backend: 1076 test, 82 falliti; l'unico file in più rispetto alla baseline è il test DB, che fallisce per `DATABASE_URL is required`. |
 
 ## Test Results
@@ -51,13 +51,13 @@ Solo backend e migrazione additiva. Il frontend di produzione non chiama ancora 
 | ------------------------- | ---------: | --------------------------------------------------------------------------------------------------------- |
 | Unit                      |       PASS | parser 329, dimissioni 38                                                                                 |
 | API                       |       PASS | contratti 17                                                                                              |
-| Integration / Persistence | PENDING CI | test DB nel job `gate`                                                                                    |
+| Integration / Persistence | PASS | test DB 908–917 verdi nel job gate |
 | Security/privacy          |       PASS | stessi controlli della creazione terapia; audit solo con nomi di campo; nessun testo clinico in URL o log |
 | Playwright                |         NA | nessuna UI in questo PR                                                                                   |
 
 ## Independent QA
 
-clinicos-qa, 11 giri avversariali con circa 1.000 frasi in totale. I giri 1–10 sono FAILED VALIDATION, ciascuno corretto dopo; l'undicesimo è **READY FOR QA**, con la condizione che il job `gate` della CI sia verde sui test DB.
+clinicos-qa, 11 giri avversariali con circa 1.000 frasi in totale. I giri 1–10 sono FAILED VALIDATION, ciascuno corretto dopo; l'undicesimo è **READY FOR QA**, con la condizione che il job `gate` della CI sia verde sui test DB: soddisfatta (run 36641104921, dopo aver aggiunto `warnings` all'elenco di chiavi atteso nel test di anteprima).
 
 ## Residual Risks
 
@@ -68,4 +68,4 @@ clinicos-qa, 11 giri avversariali con circa 1.000 frasi in totale. I giri 1–10
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
