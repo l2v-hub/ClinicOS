@@ -23,6 +23,25 @@ interface DiaryFeedRow {
   updatedAt: Date;
   sourceType: 'diary' | 'consegna';
   sourceId: string;
+  therapyId: string | null;
+  therapyFarmacoNome: string | null;
+  therapyStato: string | null;
+}
+
+export interface DiaryEntryTherapyRef {
+  id: string;
+  farmacoNome: string;
+  stato: string;
+}
+
+/** Diario terapia: la voce espone la terapia collegata (o null). Le Consegna hanno sempre null. */
+function withTherapy(row: DiaryFeedRow) {
+  const { therapyId, therapyFarmacoNome, therapyStato, ...entry } = row;
+  const therapy: DiaryEntryTherapyRef | null =
+    therapyId && therapyFarmacoNome !== null && therapyStato !== null
+      ? { id: therapyId, farmacoNome: therapyFarmacoNome, stato: therapyStato }
+      : null;
+  return { ...entry, therapy };
 }
 
 /** One read model, no mirrored diary records. Existing handovers remain the source of truth. */
@@ -55,8 +74,11 @@ export async function loadPatientDiary(
     SELECT * FROM (
       SELECT d."id", d."patientId", d."authorType", d."authorName", d."title", d."content",
         d."priority", d."status", d."entryDateTime", d."category", d."createdAt", d."updatedAt",
-        'diary'::text AS "sourceType", d."id" AS "sourceId"
-      FROM "PatientDiaryEntry" d WHERE d."patientId" = ${patientId}
+        'diary'::text AS "sourceType", d."id" AS "sourceId",
+        t."id" AS "therapyId", t."farmacoNome" AS "therapyFarmacoNome", t."stato" AS "therapyStato"
+      FROM "PatientDiaryEntry" d
+      LEFT JOIN "PatientTherapy" t ON t."id" = d."therapyId" AND t."patientId" = d."patientId"
+      WHERE d."patientId" = ${patientId}
       UNION ALL
       SELECT 'consegna:' || c."id", c."pazienteId",
         CASE WHEN lower(trim(o."ruolo")) IN ('medico', 'infermiere', 'oss', 'fisioterapista', 'operatore', 'altro')
@@ -66,7 +88,8 @@ export async function loadPatientDiary(
         CASE WHEN c."priorita" = 'alta' THEN 'importante' ELSE c."priorita" END,
         CASE WHEN c."stato" = 'completata' THEN 'completata' ELSE 'aperta' END,
         to_char(c."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Rome', 'YYYY-MM-DD"T"HH24:MI'),
-        'Consegna', c."createdAt", c."updatedAt", 'consegna', c."id"
+        'Consegna', c."createdAt", c."updatedAt", 'consegna', c."id",
+        NULL::text, NULL::text, NULL::text
       FROM "Consegna" c
       LEFT JOIN "Operator" o ON o."id" = c."creatoDaId"
       LEFT JOIN "User" u ON u."id" = o."userId"
@@ -77,7 +100,7 @@ export async function loadPatientDiary(
     LIMIT ${input.limit + 1} OFFSET ${input.offset ?? 0}
   `);
   const hasMore = rows.length > input.limit;
-  const entries = rows.slice(0, input.limit);
+  const entries = rows.slice(0, input.limit).map(withTherapy);
   const last = entries.at(-1);
   return {
     entries,

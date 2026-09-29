@@ -424,6 +424,7 @@ model PatientTherapy {
   giorniSettimana         String?
   schedules               TherapySchedule[]
   administrations         MedicationAdministration[]
+  diaryEntries            PatientDiaryEntry[]
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   patient              Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
@@ -605,15 +606,23 @@ model PatientDiaryEntry {
   status        String   @default("aperta")   // aperta | completata | da_rivedere
   entryDateTime String   // ISO datetime string YYYY-MM-DDTHH:mm
   category      String?
+  // Diario terapia (additivo): la voce che ha prescritto una terapia la referenzia. SetNull alla
+  // cancellazione della terapia: la voce clinica resta. therapyRequestId = chiave di idempotenza
+  // del client, unica per paziente (NULL ammessi più volte).
+  therapyId        String?
+  therapyRequestId String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  therapy       PatientTherapy? @relation(fields: [therapyId], references: [id], onDelete: SetNull)
 
+  @@unique([patientId, therapyRequestId])
   @@index([patientId])
   @@index([authorType])
   @@index([entryDateTime])
   @@index([patientId, entryDateTime, id])
   @@index([patientId, authorType, entryDateTime, id])
+  @@index([therapyId])
 }
 
 // ── Patient intake draft (F3 EPIC #120 / Issue #125) ─────────────────────────

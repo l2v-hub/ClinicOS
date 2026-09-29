@@ -5,10 +5,24 @@ import { requirePatientScope } from '../patients/access.js';
 import { DiaryPageInputError } from '../patients/diary-pagination.js';
 import { loadPatientDiary } from '../patients/diary-read-service.js';
 import {
+  DIARY_TIME_ZONE,
   DiaryWriteInputError,
   parseDiaryCreateBody,
   parseDiaryPatchBody,
 } from '../patients/diary-write-validation.js';
+import {
+  assertPrescriptionEntry,
+  createDiaryEntryWithTherapy,
+  DiaryTherapyInputError,
+  DiaryTherapyReplayConflictError,
+  diaryTherapyAuditFields,
+  parseTherapyRequestId,
+  prepareDiaryTherapyInput,
+} from '../patients/diary-therapy-service.js';
+import { parseDiaryTherapyText } from '../therapies/diary-therapy-parse.js';
+import { TherapyInputError } from '../therapies/input-validation.js';
+import { InvalidTherapySchedulesError, TherapyDateRangeError } from '../lib/therapy-dose.js';
+import { recordOperationalAudit } from '../ai/audit-store.js';
 
 const router = Router();
 
@@ -177,6 +191,165 @@ router.delete('/:patientId/diary/:entryId', async (req, res) => {
   } catch (error) {
     console.error('DELETE /diary/:entryId error:', error);
     res.status(500).json({ error: 'Errore nella eliminazione della voce' });
+  }
+});
+
+// ── Diario terapia (PR 1) ────────────────────────────────────────────────────────────────────
+// Stesso gate del resto del diario (requireOperator + requirePatientScope via router.use).
+// PRIVACY: il testo clinico viaggia solo nel corpo della richiesta, mai in URL, log o audit.
+
+const MAX_THERAPY_PREVIEW_CHARS = 2000;
+const TODAY_IN_FACILITY = new Intl.DateTimeFormat('en-CA', {
+  timeZone: DIARY_TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+function routePatientId(req: AuthedRequest): string {
+  const raw = req.params.patientId;
+  return (Array.isArray(raw) ? raw[0] : raw) ?? '';
+}
+
+/** Solo nome e codice dell'errore: il messaggio puo' contenere dati clinici. */
+function safeErrorTag(error: unknown): [string, string] {
+  const name = error instanceof Error ? error.name : 'unknown';
+  const code = (error as { code?: unknown } | null)?.code;
+  return [name, typeof code === 'string' ? code : ''];
+}
+
+function isTherapyValidationError(error: unknown): error is Error {
+  return (
+    error instanceof DiaryWriteInputError ||
+    error instanceof DiaryTherapyInputError ||
+    error instanceof TherapyInputError ||
+    error instanceof InvalidTherapySchedulesError ||
+    error instanceof TherapyDateRangeError ||
+    (error instanceof Error && error.message.includes('Campi obbligatori'))
+  );
+}
+
+function therapyValidationBody(error: Error): Record<string, unknown> {
+  if (error instanceof DiaryTherapyInputError) {
+    return {
+      error: error.message,
+      code: error.code,
+      ...(error.fasciaConflicts.length ? { fasciaConflicts: error.fasciaConflicts } : {}),
+      ...(error.intent ? { intent: error.intent } : {}),
+    };
+  }
+  return { error: error.message };
+}
+
+// POST /patients/:patientId/diary/therapy-preview  { text, entryDateTime? }
+// Sola lettura: interpreta il testo in modo deterministico, non scrive nulla.
+router.post('/:patientId/diary/therapy-preview', (req: AuthedRequest, res) => {
+  const body = req.body as Record<string, unknown> | undefined;
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    res.status(400).json({ error: 'Corpo richiesta non valido' });
+    return;
+  }
+  const unknownKey = Object.keys(body).find((k) => k !== 'text' && k !== 'entryDateTime');
+  if (unknownKey) {
+    res.status(400).json({ error: `Campo non consentito: ${unknownKey}` });
+    return;
+  }
+  const { text, entryDateTime } = body;
+  if (typeof text !== 'string' || !text.trim()) {
+    res.status(400).json({ error: 'text obbligatorio' });
+    return;
+  }
+  if (text.length > MAX_THERAPY_PREVIEW_CHARS) {
+    res.status(400).json({ error: `text supera ${MAX_THERAPY_PREVIEW_CHARS} caratteri` });
+    return;
+  }
+  if (
+    entryDateTime !== undefined &&
+    (typeof entryDateTime !== 'string' || !/^\d{4}-\d{2}-\d{2}/.test(entryDateTime))
+  ) {
+    res.status(400).json({ error: 'entryDateTime non valida' });
+    return;
+  }
+  const entryDate =
+    typeof entryDateTime === 'string' ? entryDateTime : TODAY_IN_FACILITY.format(new Date());
+  const parsed = parseDiaryTherapyText(text, entryDate);
+  res.status(200).json({ ...parsed, source: 'deterministic' });
+});
+
+// POST /patients/:patientId/diary/with-therapy  { requestId, entry, therapy }
+// Voce di diario (category 'terapia') + terapia in una sola transazione. 201 alla creazione,
+// 200 con la coppia esistente quando il requestId e' gia' stato usato per questo paziente con lo
+// stesso contenuto; 409 request_id_reused se il contenuto e' diverso. Sospensione, somministrazione
+// gia' fatta o modifica (400 intent_not_prescription) e una terapia periodica senza orari espliciti
+// (400 schedule_required) non creano nulla.
+router.post('/:patientId/diary/with-therapy', async (req: AuthedRequest, res) => {
+  const patientId = routePatientId(req);
+  const actor = req.operator!;
+  const body = req.body as Record<string, unknown> | undefined;
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    res.status(400).json({ error: 'Corpo richiesta non valido' });
+    return;
+  }
+  const unknownKey = Object.keys(body).find(
+    (k) => k !== 'requestId' && k !== 'entry' && k !== 'therapy',
+  );
+  if (unknownKey) {
+    res.status(400).json({ error: `Campo non consentito: ${unknownKey}` });
+    return;
+  }
+
+  let requestId;
+  let entry;
+  let therapy;
+  try {
+    requestId = parseTherapyRequestId(body.requestId);
+    entry = parseDiaryCreateBody(body.entry);
+    assertPrescriptionEntry(entry);
+    therapy = prepareDiaryTherapyInput(body.therapy, actor.name || actor.id);
+  } catch (error) {
+    if (isTherapyValidationError(error)) {
+      res.status(400).json(therapyValidationBody(error));
+      return;
+    }
+    console.error('POST /diary/with-therapy validation error:', ...safeErrorTag(error));
+    res.status(500).json({ error: 'Errore durante creazione terapia' });
+    return;
+  }
+
+  try {
+    const author = await authoritativeDiaryAuthor(actor);
+    const result = await createDiaryEntryWithTherapy({
+      patientId,
+      requestId,
+      author,
+      entry,
+      therapy,
+    });
+    recordOperationalAudit({
+      requestId,
+      actorId: actor.id,
+      actorRole: actor.role,
+      action: 'diary_therapy_create',
+      kind: 'create',
+      patientId,
+      fields: diaryTherapyAuditFields(entry, therapy),
+      outcome: result.replay ? 'deduped' : 'ok',
+    });
+    console.log(
+      `POST /patients/${patientId}/diary/with-therapy → ${result.replay ? 'replay' : 'created'} entry=${result.entry.id} therapy=${result.therapy?.id ?? 'null'}`,
+    );
+    res.status(result.replay ? 200 : 201).json({ entry: result.entry, therapy: result.therapy });
+  } catch (error) {
+    if (error instanceof DiaryTherapyReplayConflictError) {
+      res.status(409).json({ error: error.message, code: error.code });
+      return;
+    }
+    if (isTherapyValidationError(error)) {
+      res.status(400).json(therapyValidationBody(error));
+      return;
+    }
+    console.error('POST /diary/with-therapy error:', ...safeErrorTag(error));
+    res.status(500).json({ error: 'Errore durante creazione terapia' });
   }
 });
 
