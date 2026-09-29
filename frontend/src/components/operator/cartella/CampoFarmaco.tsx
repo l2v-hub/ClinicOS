@@ -32,6 +32,8 @@ interface Props {
   packageDetached?: boolean;
   onCambia: (dati: Partial<TherapyFormValue>) => void;
   validation?: TherapyFieldAttributes;
+  /** Nome letto da un testo libero (Diario): non verificato in anagrafica, non "gia' in terapia". */
+  nomeDaTesto?: boolean;
 }
 
 export function CampoFarmaco({
@@ -41,6 +43,7 @@ export function CampoFarmaco({
   packageDetached,
   onCambia,
   validation,
+  nomeDaTesto = false,
 }: Props) {
   const fieldId = useId();
   const [query, setQuery] = useState('');
@@ -89,13 +92,15 @@ export function CampoFarmaco({
                   ? 'Confezione AIFA scollegata dopo la modifica della forma: seleziona nuovamente il prodotto.'
                   : fuoriAnagrafica
                     ? 'Nome libero: non risulta in anagrafica AIFA, comparirà fra le anomalie da sanare'
-                    : 'Nome già presente in terapia: non verificato in questa maschera'}
+                    : nomeDaTesto
+                      ? 'Nome letto dal testo: non verificato in anagrafica AIFA. Scegli il prodotto con «Cambia», altrimenti comparirà fra le anomalie da sanare'
+                      : 'Nome già presente in terapia: non verificato in questa maschera'}
               </p>
             )}{' '}
           </div>
           <button
             type="button"
-            className="campo-farmaco__cambia"
+            className="ds-btn ds-btn--secondary"
             onClick={cambiaFarmaco}
             {...validation}
           >
@@ -187,7 +192,7 @@ export function CampoFarmaco({
         {(search.nextCursor || search.phase === 'error') && (
           <button
             type="button"
-            className="campo-farmaco__cambia"
+            className="ds-btn ds-btn--secondary"
             disabled={search.phase === 'loading'}
             onClick={search.phase === 'error' ? search.retry : search.loadMore}
           >

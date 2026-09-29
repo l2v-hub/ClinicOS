@@ -29,7 +29,7 @@ export interface DischargeTherapyRow {
   sourceReviewHash?: string;
 }
 
-const CODE_TO_FORM_VIA: Record<string, string> = {
+export const CODE_TO_FORM_VIA: Record<string, string> = {
   OS: 'orale',
   IM: 'IM',
   SC: 'SC',
@@ -46,12 +46,12 @@ const CODE_TO_FORM_VIA: Record<string, string> = {
   VAG: 'vaginale',
 };
 const DAY_ABBR = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
-function dayToIso(d: string): number {
+export function dayToIso(d: string): number {
   // Keep an invalid marker instead of turning an unknown restriction into every day.
   return DAY_ABBR.findIndex((x) => x.toLowerCase() === (d || '').trim().toLowerCase()) + 1;
 }
 
-function mapForma(raw: string): string | null {
+export function mapForma(raw: string): string | null {
   const f = (raw || '').trim().toLowerCase();
   if (isInhalerForm(f)) return 'inalatore';
   if (/\bcpr\b|compress/.test(f)) return 'compressa';
@@ -110,7 +110,7 @@ const DOSE_UNIT_MAP: Record<string, string> = {
   UI: 'UI',
   ML: 'ml',
 };
-function parseDosaggio(raw: string) {
+export function parseDosaggio(raw: string) {
   // Compound strengths must stay raw: "20mg/ml" is not "20mg".
   const m = (raw || '').trim().match(/^(\d+(?:[.,]\d+)?)\s*(MGR|MCG|MG|GR|G|UI|ML)$/i);
   return m ? { value: m[1].replace(',', '.'), unit: DOSE_UNIT_MAP[m[2].toUpperCase()] } : null;

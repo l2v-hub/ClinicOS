@@ -163,19 +163,3 @@
 .campo-farmaco__scelto.is-fuori-anagrafica .campo-farmaco__stato {
   color: #8a5a00;
 }
-
-.campo-farmaco__cambia {
-  flex: none;
-  padding: 5px 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fff;
-  font-size: 12px;
-  color: var(--text);
-  cursor: pointer;
-}
-
-.campo-farmaco__cambia:hover {
-  border-color: var(--blue);
-  color: var(--blue);
-}

@@ -43,6 +43,7 @@ import { RicercaFarmacoModal } from './RicercaFarmaco';
 import { AvvisoAnomalieFarmaci } from './AvvisoAnomalieFarmaci';
 import { anomalieDi } from './anomalieFarmaco';
 import type { PrescrizioneDaAbbinare } from './farmacoCorrispondenza';
+import './TherapyRowFocus.css';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -102,6 +103,9 @@ interface MedAdmin {
 interface Props {
   paziente: Paziente;
   operatoreNome: string;
+  /** Diario terapia: riga da mettere a fuoco ed evidenziare. Se non e' fra le terapie caricate,
+   *  la scheda si apre normalmente, senza errori. */
+  focusTherapyId?: string;
 }
 
 // ── Form helpers ──────────────────────────────────────────────────────────────
@@ -192,7 +196,7 @@ function ScheduleSummary({ t }: { t: PatientTherapyAPI }) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
+export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyId }: Props) {
   const [subTab, setSubTab] = useState<SubTab>('attivi');
   // Ultimo elenco gia' mostrato per questo paziente in sessione: il tab si disegna subito con
   // quello e lo rivalida in background invece di ripartire da "Caricamento…".
@@ -584,6 +588,34 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   const attive = therapies.filter((t) => t.stato === 'attiva');
   const inattive = therapies.filter((t) => t.stato !== 'attiva');
+
+  // ── Diario terapia: riga messa a fuoco ("apri" dalla voce del diario) ──────────
+  const [focusedTherapyId, setFocusedTherapyId] = useState<string | null>(null);
+  const [focusHandled, setFocusHandled] = useState(false);
+  const tabRootRef = useRef<HTMLDivElement>(null);
+  // Stato derivato durante il render (non in un effetto): appena la terapia compare fra quelle
+  // caricate si apre la sua sotto-scheda. Non ancora (o mai) caricata: nessun errore.
+  const focusTarget =
+    focusTherapyId && !focusHandled ? therapies.find((t) => t.id === focusTherapyId) : undefined;
+  if (focusTarget) {
+    setFocusHandled(true);
+    setSubTab(focusTarget.stato === 'attiva' ? 'attivi' : 'sospese');
+    setFocusedTherapyId(focusTarget.id);
+  }
+  useEffect(() => {
+    if (!focusedTherapyId) return;
+    const frame = window.requestAnimationFrame(() => {
+      const row = tabRootRef.current?.querySelector('tr.therapy-list-row--focus');
+      row?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    });
+    const timer = window.setTimeout(() => setFocusedTherapyId(null), 6000);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [focusedTherapyId]);
+  const focusRowClass = (t: PatientTherapyAPI) =>
+    t.id === focusedTherapyId ? 'therapy-list-row--focus' : '';
 
   // Gli stessi campi che `handleSave` pretende, elencati per nome: prima il salvataggio usciva
   // in silenzio e il clic sembrava non aver fatto nulla.
@@ -1226,7 +1258,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   // ── Render ─────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="cr-tab-content">
+    <div className="cr-tab-content" ref={tabRootRef}>
       <ClinicalTableSection
         title="Terapia Farmacologica"
         count={subTab === 'calendario' ? undefined : (therapySummary?.active ?? attive.length)}
@@ -1400,6 +1432,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                 data={attive}
                 emptyMessage="Nessun farmaco attivo."
                 columns={attiviColumns}
+                rowClassName={focusRowClass}
               />
               {therapyPager}
             </>
@@ -1562,6 +1595,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                 pageSize={25}
                 disableSorting={Boolean(nextTherapyCursor)}
                 data={inattive}
+                rowClassName={focusRowClass}
                 emptyMessage={
                   nextTherapyCursor
                     ? 'Nessuna terapia sospesa o conclusa tra quelle caricate.'

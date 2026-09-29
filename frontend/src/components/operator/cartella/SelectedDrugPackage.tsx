@@ -49,7 +49,7 @@ export function SelectedDrugPackage({
           Dettagli della confezione non disponibili. L’AIC selezionato è conservato.{' '}
           <button
             type="button"
-            className="campo-farmaco__cambia"
+            className="ds-btn ds-btn--secondary"
             onClick={() => setAttempt((n) => n + 1)}
           >
             Riprova

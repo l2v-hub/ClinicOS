@@ -17,6 +17,8 @@ const TerapiaFarmacologicaTab = lazy(() =>
 type TherapyEditorProps = SectionProps<TherapyFormValue[]> & {
   paziente?: Paziente;
   therapyCorrection?: TherapyCorrectionTarget | null;
+  /** Diario terapia: riga da mettere a fuoco nella cartella (se non c'e', nessun errore). */
+  focusTherapyId?: string;
 };
 
 export function TherapyEditor({
@@ -26,11 +28,16 @@ export function TherapyEditor({
   paziente,
   operatoreNome,
   therapyCorrection,
+  focusTherapyId,
 }: TherapyEditorProps) {
   if (mode === 'patient-chart' && paziente) {
     return (
       <Suspense fallback={<ClinicalSectionLoading />}>
-        <TerapiaFarmacologicaTab paziente={paziente} operatoreNome={operatoreNome ?? ''} />
+        <TerapiaFarmacologicaTab
+          paziente={paziente}
+          operatoreNome={operatoreNome ?? ''}
+          focusTherapyId={focusTherapyId}
+        />
       </Suspense>
     );
   }

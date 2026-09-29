@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
 import { ClinicalTableSection, LoadingState, EmptyState } from './shared';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
@@ -11,10 +11,26 @@ import {
   writeSessionCache,
 } from '../../../lib/sessionCache';
 import { diaryCacheKey, type DiarySnapshot } from '../../../lib/patientTabSnapshots';
+import {
+  THERAPY_STATO_LABELS,
+  linkedTherapyState,
+  therapyStatoTone,
+  type DiaryEntryTherapyRef,
+} from './diaryTherapyLink';
+import type { DiaryEntryWithTherapy } from './DiaryTherapyPanel';
+import './DiaryTherapyPanel.css';
+
+// Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
+const DiaryTherapyPanel = lazy(() =>
+  import('./DiaryTherapyPanel').then((m) => ({ default: m.DiaryTherapyPanel })),
+);
 
 type DiaryFeedEntry = DiarioPazienteEntry & {
   sourceType?: 'diary' | 'consegna';
   sourceId?: string;
+  /** Diario terapia: terapia collegata (null se cancellata o assente). */
+  therapy?: DiaryEntryTherapyRef | null;
+  therapyId?: string | null;
 };
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -134,6 +150,8 @@ interface Props {
   legacyInfermieristico?: DiarioEntry[];
   legacyMedico?: DiarioEntry[];
   filterBy?: string;
+  /** Diario terapia: apre la scheda Terapia con la riga di questa terapia in evidenza. */
+  onOpenTherapy?: (therapyId: string) => void;
 }
 
 // ── Main component ─────────────────────────────────────────────────────────────
@@ -143,6 +161,7 @@ export function DiarioPazienteTab({
   legacyInfermieristico,
   legacyMedico,
   filterBy,
+  onOpenTherapy,
 }: Props) {
   // Ultima pagina gia' mostrata in sessione per questo paziente/filtro: il diario compare subito
   // e si rivalida in background invece di ripartire da "Caricamento…".
@@ -162,6 +181,8 @@ export function DiarioPazienteTab({
   const [showAdd, setShowAdd] = useState(false);
   const [editEntry, setEditEntry] = useState<DiarioPazienteEntry | null>(null);
   const [saving, setSaving] = useState(false);
+  // Diario terapia: anteprima aperta (numero = apertura, rimonta il pannello a ogni "Valida").
+  const [therapyPanel, setTherapyPanel] = useState<number | null>(null);
   const readSequenceRef = useRef(0);
   const loadMoreControllerRef = useRef<AbortController | null>(null);
 
@@ -326,12 +347,46 @@ export function DiarioPazienteTab({
       }
       setForm(emptyForm());
       setShowAdd(false);
+      setTherapyPanel(null);
       setRefreshVersion((version) => version + 1);
     } catch {
       setError('Errore nel salvataggio della voce.');
     } finally {
       setSaving(false);
     }
+  }
+
+  // ── Diario terapia: voce + terapia create insieme ─────────────────────────────
+
+  // Dopo la conferma il pannello si chiude: il focus va sul link "apri" della voce appena creata.
+  const focusTherapyLinkRef = useRef<string | null>(null);
+  const addButtonRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    const focusTherapyLink = focusTherapyLinkRef.current;
+    if (!focusTherapyLink) return;
+    const link = document.querySelector<HTMLButtonElement>(
+      `.diario-card__therapy[data-therapy-id="${CSS.escape(focusTherapyLink)}"] button`,
+    );
+    if (!link) return;
+    link.focus();
+    focusTherapyLinkRef.current = null;
+  }, [entries]);
+
+  function handleTherapyCreated(entry: DiaryEntryWithTherapy) {
+    const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
+    const visible = resolvedFilter === 'tutti' || resolvedFilter === entry.authorType;
+    // Voce fuori dal filtro autore: niente link da mettere a fuoco, il focus torna su "Aggiungi voce".
+    focusTherapyLinkRef.current = visible ? (entry.therapy?.id ?? null) : null;
+    if (!visible) window.requestAnimationFrame(() => addButtonRef.current?.focus());
+    if (visible) {
+      setEntries((prev) =>
+        [entry, ...prev.filter((current) => current.id !== entry.id)].slice(0, DIARY_PAGE_SIZE),
+      );
+    }
+    setTherapyPanel(null);
+    setForm(emptyForm());
+    setShowAdd(false);
+    setRefreshVersion((version) => version + 1);
   }
 
   // ── Save edited entry ────────────────────────────────────────────────────────
@@ -353,7 +408,17 @@ export function DiarioPazienteTab({
       });
       if (!res.ok) throw new Error();
       const data = (await res.json()) as { entry: DiarioPazienteEntry };
-      setEntries((prev) => prev.map((e) => (e.id === data.entry.id ? data.entry : e)));
+      // La PUT restituisce la riga senza il riferimento alla terapia: si conserva quello letto.
+      setEntries((prev) =>
+        prev.map((e) =>
+          e.id === data.entry.id
+            ? {
+                ...data.entry,
+                therapy: (data.entry as DiaryFeedEntry).therapy ?? (e as DiaryFeedEntry).therapy,
+              }
+            : e,
+        ),
+      );
       setEditEntry(null);
       setRefreshVersion((version) => version + 1);
     } catch {
@@ -480,11 +545,46 @@ export function DiarioPazienteTab({
         <div className="diario-card__author">{row.authorName}</div>
         {row.title && <div className="diario-card__title">{row.title}</div>}
         <div className="diario-card__content">{row.content}</div>
+        {renderTherapyLink(row)}
         {row.sourceType === 'consegna' && (
           <small className="form-hint">
             Consegna registrata · gestibile dalla sezione Consegne
           </small>
         )}
+      </div>
+    );
+  }
+
+  function renderTherapyLink(row: DiaryFeedEntry) {
+    const state = linkedTherapyState(row);
+    if (state === 'none') return null;
+    if (state === 'removed' || !row.therapy) {
+      return (
+        <div className="diario-card__therapy">
+          <span className="ds-badge ds-badge--stale">Terapia non più presente</span>
+        </div>
+      );
+    }
+    const therapy = row.therapy;
+    return (
+      <div className="diario-card__therapy" data-therapy-id={therapy.id}>
+        <span>
+          Terapia aggiunta: <strong>{therapy.farmacoNome}</strong>
+          {onOpenTherapy ? ' —' : ''}
+        </span>
+        {onOpenTherapy && (
+          <button
+            type="button"
+            className="ds-link"
+            aria-label={`apri la terapia ${therapy.farmacoNome} nella scheda Terapia`}
+            onClick={() => onOpenTherapy(therapy.id)}
+          >
+            apri
+          </button>
+        )}
+        <span className={`ds-badge ${therapyStatoTone(therapy.stato)}`.trim()}>
+          {THERAPY_STATO_LABELS[therapy.stato] ?? therapy.stato}
+        </span>
       </div>
     );
   }
@@ -497,7 +597,9 @@ export function DiarioPazienteTab({
     onSave: () => void,
     onCancel: () => void,
     title: string,
+    therapy?: { onValidate: () => void; open: boolean },
   ) {
+    const locked = Boolean(therapy?.open);
     return (
       <div className="cr-inline-form" style={{ marginBottom: 16 }}>
         <div
@@ -530,7 +632,14 @@ export function DiarioPazienteTab({
             onChange={(e) => setF((prev) => ({ ...prev, content: e.target.value }))}
             placeholder="Descrizione, note cliniche…"
             style={{ resize: 'vertical' }}
+            readOnly={locked}
+            aria-describedby={locked ? 'diario-therapy-locked' : undefined}
           />
+          {locked && (
+            <small id="diario-therapy-locked" className="form-hint">
+              Testo bloccato durante l’anteprima della terapia: chiudi l’anteprima per modificarlo.
+            </small>
+          )}
         </div>
         <div className="form-row">
           <label className="form-label">Priorità</label>
@@ -567,12 +676,23 @@ export function DiarioPazienteTab({
             type="datetime-local"
             value={f.entryDateTime}
             onChange={(e) => setF((prev) => ({ ...prev, entryDateTime: e.target.value }))}
+            readOnly={locked}
           />
         </div>
-        <div className="cr-inline-form__actions">
+        <div className="cr-inline-form__actions diario-form__actions">
           <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
             Annulla
           </button>
+          {therapy && (
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              onClick={therapy.onValidate}
+              disabled={saving || therapy.open || !f.content.trim()}
+            >
+              Valida terapia
+            </button>
+          )}
           <button
             className="btn-success btn-sm"
             onClick={onSave}
@@ -592,6 +712,24 @@ export function DiarioPazienteTab({
             {saving ? 'Salvataggio…' : 'Salva'}
           </button>
         </div>
+        {therapy?.open && therapyPanel !== null && (
+          <Suspense fallback={<LoadingState msg="Apertura dell’anteprima…" />}>
+            <DiaryTherapyPanel
+              key={therapyPanel}
+              pazienteId={pazienteId}
+              entry={{
+                title: f.title.trim() || null,
+                content: f.content.trim(),
+                priority: f.priority,
+                status: f.status,
+                entryDateTime: f.entryDateTime,
+              }}
+              onCreated={handleTherapyCreated}
+              onClose={() => setTherapyPanel(null)}
+              onConflict={() => setRefreshVersion((version) => version + 1)}
+            />
+          </Suspense>
+        )}
       </div>
     );
   }
@@ -600,10 +738,12 @@ export function DiarioPazienteTab({
 
   const sectionActions = (
     <button
+      ref={addButtonRef}
       className="btn-success btn-sm"
       onClick={() => {
         setShowAdd((v) => !v);
         setEditEntry(null);
+        setTherapyPanel(null);
       }}
     >
       <svg
@@ -669,9 +809,14 @@ export function DiarioPazienteTab({
             handleSave,
             () => {
               setShowAdd(false);
+              setTherapyPanel(null);
               setForm(emptyForm());
             },
             'Nuova voce diario',
+            {
+              open: therapyPanel !== null,
+              onValidate: () => setTherapyPanel((opened) => (opened ?? 0) + 1),
+            },
           )}
 
         {/* Edit form */}
