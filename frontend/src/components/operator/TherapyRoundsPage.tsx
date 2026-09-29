@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type {
   TherapyActionInfo,
   TherapySlot,
@@ -12,7 +12,7 @@ import { TherapyWeekCalendar } from './TherapyWeekCalendar';
 import type { FasciaOrariaTerapia } from '../../types';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { isCalendarDate, shiftCalendarDate } from '../../lib/patientTherapyCalendar';
-import { initialSlotId, slotDone, sortedSlots } from '../../lib/therapyGiro';
+import { giroTimeDone, giroTimes, initialGiroTime } from '../../lib/therapyGiro';
 import { weekDays } from '../../lib/therapyWeek';
 import { DateNav } from '../shared/DateNav';
 import { IcoCalendar } from '../../icons';
@@ -64,22 +64,26 @@ export function TherapyRoundsPage({
     onLoad(value);
   }
   const ready = !loading && !error;
-  const ordered = sortedSlots(slots);
-  // La fascia si fissa una volta per data, appena arrivano i dati: ricalcolarla a ogni render la
-  // farebbe saltare alla fascia successiva quando l'ultima riga da fare diventa erogata, e un
-  // secondo clic finirebbe su un'altra fascia. Si ricalcola solo se la fascia scelta sparisce.
+  // Fasce del giro = ore reali delle prescrizioni (07:00, 08:00, 12:00, …), non le fasce del server.
+  // stessa identità finché le fasce non cambiano: la protezione dal doppio invio la usa
+  const times = useMemo(() => giroTimes(slots), [slots]);
+  // L'ora si fissa una volta per data, appena arrivano i dati: ricalcolarla a ogni render la farebbe
+  // saltare all'ora successiva quando l'ultimo farmaco da fare diventa erogato, e un secondo clic
+  // finirebbe su un'altra ora. Si ricalcola solo se l'ora scelta sparisce.
   if (error && wantedFascia) setWantedFascia(null);
   if (ready && wantedFascia) {
-    const wanted = ordered.find((slot) => slot.fascia === wantedFascia);
+    // dal calendario (per fascia del server): la prima ora reale di quella fascia
+    const wanted = times.find((t) =>
+      t.patients.some((g) => g.items.some((item) => item.fascia === wantedFascia)),
+    );
     setWantedFascia(null);
-    if (wanted) setSelected(wanted.id);
-  } else if (ready && ordered.length > 0 && !ordered.some((slot) => slot.id === selected))
-    setSelected(initialSlotId(ordered));
-  const activeId = ordered.some((s) => s.id === selected) ? selected : null;
-  const active = ordered.find((s) => s.id === activeId);
-  const done = active ? slotDone(active) : 0;
-  const total = active?.summary.total ?? 0;
-  const s = active?.summary;
+    if (wanted) setSelected(wanted.ora);
+  } else if (ready && times.length > 0 && !times.some((t) => t.ora === selected))
+    setSelected(initialGiroTime(times));
+  const active = times.find((t) => t.ora === selected);
+  const done = active ? giroTimeDone(active) : 0;
+  const total = active?.total ?? 0;
+  const s = active;
   const FILTRI: { key: FiltroStato; label: string; count: number }[] = [
     { key: 'tutte', label: 'Tutte', count: 0 },
     { key: 'pending', label: 'Da erogare', count: s?.pending ?? 0 },
@@ -111,23 +115,23 @@ export function TherapyRoundsPage({
         title="Giro terapia"
         subtitle={
           giro
-            ? `Somministrazioni per fascia oraria · ${dayLabel}`
+            ? `Somministrazioni per ora e per paziente · ${dayLabel}`
             : `Calendario della settimana · ${weekLabel(weekOf)}`
         }
       />
       {giro && ready && active && (
         <div className="giro-bar">
-          <div className="giro-slots" role="group" aria-label="Fascia oraria">
-            {ordered.map((slot) => (
+          <div className="giro-slots" role="group" aria-label="Ora della terapia">
+            {times.map((t) => (
               <button
                 type="button"
-                key={slot.id}
+                key={t.ora}
                 className="ds-chip giro-slot"
-                aria-pressed={slot.id === activeId}
-                aria-label={`${slot.label}, ore ${slot.ora}: ${slotDone(slot)} fatte su ${slot.summary.total}${slot.summary.pending > 0 ? `, ${slot.summary.pending} da erogare` : ''}`}
-                onClick={() => setSelected(slot.id)}
+                aria-pressed={t.ora === active.ora}
+                aria-label={`Ore ${t.ora}: ${giroTimeDone(t)} fatte su ${t.total}${t.pending > 0 ? `, ${t.pending} da erogare` : ''}`}
+                onClick={() => setSelected(t.ora)}
               >
-                {slot.ora} · {slotDone(slot)}/{slot.summary.total}
+                {t.ora} · {giroTimeDone(t)}/{t.total}
               </button>
             ))}
           </div>
@@ -135,7 +139,7 @@ export function TherapyRoundsPage({
             <div
               className="giro-progress__track"
               role="progressbar"
-              aria-label={`Avanzamento fascia delle ${active.ora}`}
+              aria-label={`Avanzamento delle ${active.ora}`}
               aria-valuemin={0}
               aria-valuemax={total}
               aria-valuenow={done}
@@ -239,14 +243,14 @@ export function TherapyRoundsPage({
           </button>
         </div>
       )}
-      {giro && ready && ordered.length === 0 && (
+      {giro && ready && times.length === 0 && (
         <p className="empty-state-card">Nessuna terapia programmata per questa data.</p>
       )}
       {giro && ready && active && pageInfo.hasMore && (
         <div className="giro-note-box" role="status">
           <span>
-            <strong>Visualizzazione parziale.</strong> I totali sono esatti; dettagli caricati per{' '}
-            {pageInfo.loadedTherapies} terapie.
+            <strong>Visualizzazione parziale.</strong> Ore e conteggi riguardano le{' '}
+            {pageInfo.loadedTherapies} terapie caricate: carica le altre per il giro completo.
           </span>
           {loadMoreError && <span role="alert">{loadMoreError}</span>}
           <button
@@ -261,8 +265,8 @@ export function TherapyRoundsPage({
       )}
       {giro && ready && active && (
         <TherapyGiroRows
-          key={`${active.id}|${filtro}`}
-          slot={active}
+          key={`${active.ora}|${filtro}`}
+          time={active}
           date={date}
           filtro={filtro}
           readOnly={readOnly}
