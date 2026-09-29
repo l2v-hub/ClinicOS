@@ -8,6 +8,8 @@ import { TherapyRoundsPage } from '../TherapyRoundsPage';
 import { identityTherapySlot } from './operationalIdentity.fixtures';
 import {
   administeredTime,
+  giroTimes,
+  initialGiroTime,
   initialSlotId,
   motivoLabel,
   slotDone,
@@ -53,7 +55,7 @@ test('reason labels map known codes and keep free text; time is facility time', 
 test('rows name patient, identifier and drug on every action; never the stale room fields', () => {
   const html = render(
     React.createElement(TherapyGiroRows, {
-      slot: identityTherapySlot,
+      time: giroTimes([identityTherapySlot])[0],
       date: '2026-09-23',
       filtro: 'tutte',
     }),
@@ -69,14 +71,15 @@ test('rows name patient, identifier and drug on every action; never the stale ro
     html,
     /aria-label="Non erogata: Rossi, Mario · Nato\/a il 15\/06\/1975 · CF da completare · Farmaco sintetico · 1 mg"/,
   );
-  assert.match(html, /orale · 09:00/);
+  // l'ora è quella della fascia selezionata: il farmaco mostra via (e quantità), non l'ora
+  assert.match(html, /class="giro-drug__cap">orale</);
   assert.doesNotMatch(html, /STALE-ROOM|STALE-BED|MRN-NEVER-RENDER/);
 });
 
 test('read-only rows offer no signing; done rows show time, operator and reason', () => {
   const readonly = render(
     React.createElement(TherapyGiroRows, {
-      slot: identityTherapySlot,
+      time: giroTimes([identityTherapySlot])[0],
       date: '2026-09-23',
       filtro: 'tutte',
       readOnly: true,
@@ -113,19 +116,27 @@ test('read-only rows offer no signing; done rows show time, operator and reason'
     ],
   };
   const html = render(
-    React.createElement(TherapyGiroRows, { slot: done, date: '2026-09-23', filtro: 'tutte' }),
+    React.createElement(TherapyGiroRows, {
+      time: giroTimes([done])[0],
+      date: '2026-09-23',
+      filtro: 'tutte',
+    }),
   );
   assert.match(html, /08:12 · L\. Conti/);
   assert.match(html, /Non somm\. · Rifiutata dal paziente/);
   assert.doesNotMatch(html, />Somministra</);
 
   const onlyPending = render(
-    React.createElement(TherapyGiroRows, { slot: done, date: '2026-09-23', filtro: 'pending' }),
+    React.createElement(TherapyGiroRows, {
+      time: giroTimes([done])[0],
+      date: '2026-09-23',
+      filtro: 'pending',
+    }),
   );
   assert.match(onlyPending, /Nessuna somministrazione con questo stato/);
 });
 
-test('page shows the round inline with slot chips and exact progress', () => {
+test('page shows the round by real time: only hours with administrations, counts from them', () => {
   const html = render(
     React.createElement(TherapyRoundsPage, {
       slots: [
@@ -153,8 +164,85 @@ test('page shows the round inline with slot chips and exact progress', () => {
     }),
   );
   assert.match(html, /Giro terapia/);
-  assert.match(html, /09:00 · 1\/7/);
-  assert.match(html, /12:00 · 0\/3/);
-  assert.match(html, /aria-valuenow="1"/);
+  // 09:00 ha due somministrazioni caricate (da erogare); le 12:00 non hanno farmaci: non compaiono
+  assert.match(html, /09:00 · 0\/2/);
+  assert.doesNotMatch(html, /12:00 ·/);
+  assert.match(html, /aria-valuenow="0"/);
+  assert.match(html, /class="giro-patient"/);
   assert.match(html, /aria-label="Erogata: Rossi, Mario/);
+});
+
+const adm = (
+  therapyId: string,
+  scheduledTime: string,
+  status: 'pending' | 'administered' = 'pending',
+) => ({
+  administrationId: null,
+  therapyId,
+  drugName: `Farmaco ${therapyId}`,
+  dosage: '1 mg',
+  route: 'orale',
+  scheduledTime,
+  status,
+  administeredAt: null,
+  administeredBy: null,
+  notAdministeredReason: null,
+});
+
+test('the round is by real prescription time and by patient, whatever the server band', () => {
+  const [p1, p2] = identityTherapySlot.patients;
+  const mattina: TherapySlot = {
+    ...slot('mattina', '07:00', { total: 3 }),
+    fascia: 'mattina',
+    patients: [
+      { ...p1, administrations: [adm('a', '07:00'), adm('b', '08:00', 'administered')] },
+      { ...p2, administrations: [adm('c', '07:00')] },
+    ],
+  };
+  const sera: TherapySlot = {
+    ...slot('sera', '18:00', { total: 2 }),
+    fascia: 'sera',
+    patients: [{ ...p1, administrations: [adm('d', '18:00'), adm('e', '20:00')] }],
+  };
+  const times = giroTimes([sera, mattina]);
+  assert.deepEqual(
+    times.map((t) => t.ora),
+    ['07:00', '08:00', '18:00', '20:00'],
+  );
+  // 07:00: due pazienti, nell'ordine del giro; ogni farmaco porta la fascia del server
+  assert.deepEqual(
+    times[0].patients.map((g) => [
+      g.patient.patientId,
+      g.items.map((i) => [i.a.therapyId, i.fascia]),
+    ]),
+    [
+      [p1.patientId, [['a', 'mattina']]],
+      [p2.patientId, [['c', 'mattina']]],
+    ],
+  );
+  assert.equal(times[2].patients[0].items[0].fascia, 'sera');
+  assert.deepEqual([times[1].total, times[1].administered, times[1].pending], [1, 1, 0]);
+  // ora iniziale: la prima con farmaci da fare
+  assert.equal(initialGiroTime(times), '07:00');
+  assert.equal(initialGiroTime([times[1]]), '08:00');
+  assert.equal(initialGiroTime([]), null);
+});
+
+test('one group per patient with all its drugs of that hour; the action sends the server band', () => {
+  const [p1] = identityTherapySlot.patients;
+  const mattina: TherapySlot = {
+    ...slot('mattina', '08:00', { total: 2 }),
+    patients: [{ ...p1, administrations: [adm('a', '08:00'), adm('b', '08:00')] }],
+  };
+  const html = render(
+    React.createElement(TherapyGiroRows, {
+      time: giroTimes([mattina])[0],
+      date: '2026-09-23',
+      filtro: 'tutte',
+    }),
+  );
+  assert.equal(html.match(/class="giro-patient"/g)?.length, 1);
+  assert.equal(html.match(/class="giro-drug"/g)?.length, 2);
+  assert.match(html, /Farmaco a 1 mg/);
+  assert.match(html, /Farmaco b 1 mg/);
 });

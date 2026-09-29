@@ -228,3 +228,95 @@
     flex: 1;
   }
 }
+
+/* ── Giro per paziente: testata del paziente, sotto i suoi farmaci dell'ora ─────────────────
+   Il nome del paziente conserva il carattere di prima (giro-row__name); i farmaci usano un
+   carattere diverso e più piccolo, come richiesto. */
+.giro-patients {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.giro-patient {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 0;
+}
+.giro-patient--done {
+  background: #f5f7fb;
+}
+.giro-patient--done .giro-row__bed {
+  background: var(--surface);
+}
+.giro-patient__head {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.giro-drugs {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 64px;
+  display: flex;
+  flex-direction: column;
+}
+.giro-drug {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 16px;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  min-width: 0;
+}
+.giro-drug__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.giro-drug__name {
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.giro-drug__cap {
+  font: 400 13px/18px var(--font-ui);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.giro-drug--done .giro-drug__name {
+  color: var(--text-muted);
+}
+.giro-drug > .giro-row__reasons {
+  grid-column: 1 / -1;
+}
+.giro-drug:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+@media (max-width: 720px) {
+  .giro-drugs {
+    padding-left: 0;
+  }
+  .giro-drug {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .giro-drug > .giro-row__act {
+    justify-content: stretch;
+  }
+  .giro-drug > .giro-row__act > .giro-badge {
+    margin-right: auto;
+  }
+  .giro-drug > .giro-row__act > .ds-btn {
+    flex: 1;
+  }
+}
