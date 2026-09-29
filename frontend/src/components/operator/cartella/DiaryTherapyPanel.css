@@ -1,0 +1,121 @@
+/* Diario terapia: pannello "Valida terapia" dentro il modulo di nuova voce del diario.
+   Solo layout e superfici del pannello: l'aspetto dei controlli (ds-btn, ds-badge, ds-link) lo
+   decide design-system.css. */
+
+.diary-therapy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 16px;
+  border: 2px solid var(--border, #e6ebf2);
+  border-radius: 16px;
+  background: var(--surface, #fff);
+}
+
+.diary-therapy__head h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #16202e);
+}
+.diary-therapy__head p {
+  margin: 0;
+}
+
+.diary-therapy__source {
+  margin: 0;
+  min-width: 0;
+}
+.diary-therapy__source blockquote {
+  margin: 4px 0 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--blue, #2f6bed);
+  border-radius: 8px;
+  background: var(--bg, #eef1f6);
+  color: var(--text-primary, #16202e);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.diary-therapy__notices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.diary-therapy__notices li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.diary-therapy__intent {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--amber-bg, #fdf3e2);
+  color: var(--text-primary, #16202e);
+}
+.diary-therapy__intent p {
+  margin: 0;
+}
+.diary-therapy__intent p + p {
+  margin-top: 4px;
+}
+
+.diary-therapy__alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--red-bg, #fdecee);
+  color: var(--red, #d93a4a);
+  overflow-wrap: anywhere;
+}
+
+.diary-therapy__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+.diary-therapy__blockers {
+  flex: 1 1 100%;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary, #5a6b80);
+  font-size: 0.875rem;
+}
+
+/* Riga "Terapia aggiunta: FARMACO — apri" nella card della voce */
+.diario-card__therapy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Il modulo della voce ha tre azioni: su schermi stretti vanno a capo invece di uscire */
+.cr-inline-form__actions.diario-form__actions {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .diary-therapy {
+    padding: 12px;
+  }
+  .diary-therapy__actions > button {
+    flex: 1 1 auto;
+  }
+}

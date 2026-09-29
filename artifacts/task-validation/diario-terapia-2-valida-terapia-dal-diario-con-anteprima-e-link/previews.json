@@ -1,0 +1,132 @@
+{
+  "Ramipril 5 mg 1 cpr per os ore 8": {
+    "row": {
+      "farmacoNome": "RAMIPRIL",
+      "forma": "",
+      "dosaggio": "5 mg",
+      "viaSomministrazione": "OS",
+      "quantita": "1 cpr",
+      "orari": [
+        "08:00"
+      ],
+      "giorni": [],
+      "dataInizio": "",
+      "classe": "",
+      "note": "",
+      "originalText": "Ramipril 5 mg 1 cpr per os ore 8",
+      "stato": "ok",
+      "dataFine": "",
+      "quantitaValore": "1",
+      "quantityNumerator": 1,
+      "quantityDenominator": 1,
+      "unitaSomministrazione": "compressa"
+    },
+    "intent": "prescrizione",
+    "inferred": [],
+    "ambiguous": [],
+    "fasciaConflicts": [],
+    "warnings": [],
+    "prescriptionRange": {
+      "start": 0,
+      "end": 32
+    },
+    "source": "deterministic"
+  },
+  "Febbre Tachipirina 1000 mg 1 cpr per os ore 8": {
+    "row": {
+      "farmacoNome": "",
+      "forma": "",
+      "dosaggio": "",
+      "viaSomministrazione": "",
+      "quantita": "",
+      "orari": [],
+      "giorni": [],
+      "dataInizio": "",
+      "classe": "",
+      "note": "Febbre Tachipirina 1000 mg 1 cpr per os ore 8",
+      "originalText": "Febbre Tachipirina 1000 mg 1 cpr per os ore 8",
+      "stato": "da_verificare",
+      "dataFine": "",
+      "quantitaValore": "",
+      "quantityNumerator": null,
+      "quantityDenominator": null,
+      "unitaSomministrazione": ""
+    },
+    "intent": "prescrizione",
+    "inferred": [],
+    "ambiguous": [],
+    "fasciaConflicts": [],
+    "warnings": [
+      "testo_non_classificato"
+    ],
+    "prescriptionRange": {
+      "start": 0,
+      "end": 45
+    },
+    "source": "deterministic"
+  },
+  "Ramipril 5 mg 1 cpr per os ore 8 e 10": {
+    "row": {
+      "farmacoNome": "RAMIPRIL",
+      "forma": "",
+      "dosaggio": "5 mg",
+      "viaSomministrazione": "OS",
+      "quantita": "1 cpr",
+      "orari": [
+        "08:00",
+        "10:00"
+      ],
+      "giorni": [],
+      "dataInizio": "",
+      "classe": "",
+      "note": "",
+      "originalText": "Ramipril 5 mg 1 cpr per os ore 8 e 10",
+      "stato": "da_verificare",
+      "dataFine": "",
+      "quantitaValore": "1",
+      "quantityNumerator": 1,
+      "quantityDenominator": 1,
+      "unitaSomministrazione": "compressa"
+    },
+    "intent": "prescrizione",
+    "inferred": [],
+    "ambiguous": [],
+    "fasciaConflicts": [
+      "mattina: 08:00, 10:00"
+    ],
+    "warnings": [],
+    "prescriptionRange": {
+      "start": 0,
+      "end": 37
+    },
+    "source": "deterministic"
+  },
+  "Sospendere Ramipril": {
+    "row": {
+      "farmacoNome": "",
+      "forma": "",
+      "dosaggio": "",
+      "viaSomministrazione": "",
+      "quantita": "",
+      "orari": [],
+      "giorni": [],
+      "dataInizio": "",
+      "classe": "",
+      "note": "Sospendere Ramipril",
+      "originalText": "Sospendere Ramipril",
+      "stato": "da_verificare",
+      "dataFine": "",
+      "quantitaValore": "",
+      "quantityNumerator": null,
+      "quantityDenominator": null,
+      "unitaSomministrazione": ""
+    },
+    "intent": "sospensione",
+    "inferred": [],
+    "ambiguous": [],
+    "fasciaConflicts": [],
+    "warnings": [],
+    "prescriptionRange": null,
+    "source": "deterministic"
+  }
+}

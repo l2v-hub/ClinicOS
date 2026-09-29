@@ -317,6 +317,11 @@ export function PatientDetail({
     documentId: string;
     assessment: AssessmentTarget;
   } | null>(null);
+  // Diario terapia: "apri" dalla voce del diario mette a fuoco la riga della terapia in Terapia.
+  const [therapyFocus, setTherapyFocus] = useState<{
+    patientId: string;
+    therapyId: string;
+  } | null>(null);
   useEffect(() => {
     if (!initialTab || navigationRequestId === undefined) return;
     setAssessmentFocus(null);
@@ -346,6 +351,7 @@ export function PatientDetail({
       setLegacyVisits((previous) => new Set([...previous, tabId]));
     const target = resolvePatientTab(tabId);
     const group = patientTabGroup(target);
+    if (target !== 'terapia-farmacologica') setTherapyFocus(null);
     // Transition: il tab corrente resta visibile finche' il chunk del nuovo tab non e' pronto
     // (gia' precaricato: un frame), invece del fallback "Caricamento sezione clinica…" che React
     // tratterrebbe comunque per ~300 ms.
@@ -2456,6 +2462,9 @@ export function PatientDetail({
             operatoreNome={operatoreNome}
             value={undefined as never}
             onChange={() => {}}
+            focusTherapyId={
+              therapyFocus?.patientId === paziente.id ? therapyFocus.therapyId : undefined
+            }
           />
         )}
         {current === 'note' && renderNote()}
@@ -2552,6 +2561,10 @@ export function PatientDetail({
             legacyInfermieristico={cartella.diarioInfermieristico}
             legacyMedico={cartella.diarioMedico}
             filterBy={diarioFilter}
+            onOpenTherapy={(therapyId) => {
+              setTherapyFocus({ patientId: paziente.id, therapyId });
+              switchTab('terapia-farmacologica');
+            }}
           />
         )}
         {current === 'esami-consulenze' && (

@@ -109,6 +109,8 @@ interface TherapyFormFieldsProps {
   onChange: (next: TherapyFormValue) => void;
   operatoreNome?: string;
   issues?: readonly TherapyFieldIssue[];
+  /** Il nome del farmaco viene da un testo libero (Diario), non dall'anagrafica. */
+  nomeDaTesto?: boolean;
 }
 
 const THERAPY_TYPES = [
@@ -117,7 +119,12 @@ const THERAPY_TYPES = [
   { value: 'al_bisogno', label: 'Al bisogno', hint: 'Secondo le indicazioni' },
 ] as const;
 
-export function TherapyFormFields({ value, onChange, issues }: TherapyFormFieldsProps) {
+export function TherapyFormFields({
+  value,
+  onChange,
+  issues,
+  nomeDaTesto,
+}: TherapyFormFieldsProps) {
   const id = useId();
   const feedback = therapyFieldFeedback(id, issues);
   // Keep pending custom quantities across changes of therapy type.
@@ -149,6 +156,7 @@ export function TherapyFormFields({ value, onChange, issues }: TherapyFormFields
           packageDetached={value.drugPackageDetached}
           onCambia={update}
           validation={feedback.attributes('farmacoNome')}
+          nomeDaTesto={nomeDaTesto}
         />
         {feedback.error('farmacoNome')}
         {value.farmacoNome && needsCommercialStrengthReview(value) && (
