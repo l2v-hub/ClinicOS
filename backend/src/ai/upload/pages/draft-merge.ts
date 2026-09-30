@@ -14,11 +14,16 @@
 //   - an AI-owned value it does not carry is cleared and its origin removed.
 // Allergy unit (`allergie` + `allergieStatus`): a merge never leaves 'assenti'/'paziente_nega'
 // next to allergy rows; whichever side this merge would have written becomes a proposal instead.
+// Page provenance: with `ctx.pages`, every written origin and every proposal also records
+// `pages: [{groupId, pageId, documentId}]` where the value was found — only when all those pages
+// are in the single letter that produced the value (then, in the final merge, `groupIds` is that
+// letter). Otherwise, or with no certain match: no `pages` and the letter-level `groupIds`.
 import { mergeExtractions } from '../../merge.js';
 import { buildImportDraftData } from '../../../intake/draft-service.js';
 import { attachPageDraftSource, pageDraftNarrative, refreshedPageData } from './draft-source.js';
 import { ImportSessionError, canonical, hash, object, sourcePair, type Json } from './model.js';
 import type { GroupResult } from './results.js';
+import { locateFieldPages, type PageRef, type PageText } from './page-locate.js';
 
 export { SERVER_DRAFT_KEYS } from './draft-mutations.js';
 
@@ -46,6 +51,11 @@ export type MergeContext = {
   groupId?: string;
   inputHash?: string;
   resultHash?: string;
+  /**
+   * Current OCR text of the pages this merge draws on (the letter's pages, or every page for the
+   * final merge), in manifest order. Absent or empty: no page provenance, today's behaviour.
+   */
+  pages?: PageText[];
 };
 export type MergeChanges = {
   anagrafica: boolean;
@@ -105,6 +115,11 @@ function clear(data: Json, path: string) {
 /** Intake statuses that assert there is no allergy to record. */
 const negativeAllergyStatus = (status: unknown) =>
   status === 'assenti' || status === 'paziente_nega';
+/** Page refs of a pending proposal plus new ones, deduplicated by page, first seen first. */
+function unionPages(prior: unknown, next: PageRef[]): PageRef[] {
+  const all = [...(Array.isArray(prior) ? (prior as PageRef[]) : []), ...next];
+  return all.filter((p, i) => all.findIndex((q) => q?.pageId === p?.pageId) === i);
+}
 const proposalId = (path: string, value: unknown) =>
   hash(['field-proposal', path, comparable(value)]);
 
@@ -181,10 +196,36 @@ export function mergeAiIntoDraft(
     allergie: false,
     therapy: false,
   };
+  const anagraficaAi = object(source.fields.anagrafica);
+  const related = { firstName: anagraficaAi.firstName, lastName: anagraficaAi.lastName };
+  // Final merge: each letter's own fields, to tell which letter(s) produced a merged value.
+  let letterFields: Array<{ groupId: string; fields: Json }> | null = null;
+  const producers = (path: string, value: unknown): string[] => {
+    if (!final) return ctx.groupId ? [ctx.groupId] : [];
+    letterFields ??= (
+      Array.isArray(source.result?._groups) ? (source.result._groups as GroupResult[]) : []
+    ).map((g) => ({ groupId: g.groupId, fields: aiDraftFields(letterResult(g)) }));
+    return letterFields.filter((l) => same(read(l.fields, path), value)).map((l) => l.groupId);
+  };
+  /**
+   * Provenance of an AI value. Pages are recorded only when every page found is in the one
+   * letter that produced the value; any doubt (pages in several letters, several producing
+   * letters, pages outside the producer) keeps today's letter-level groupIds and no pages.
+   */
+  const provenance = (path: string, value: unknown): { groupIds: string[]; pages?: PageRef[] } => {
+    const pages = ctx.pages?.length ? locateFieldPages(path, value, ctx.pages, related) : [];
+    if (!pages.length) return { groupIds: ctx.groupIds };
+    const letters = new Set(pages.map((p) => p.groupId));
+    const made = producers(path, value);
+    if (letters.size !== 1 || made.length !== 1 || !letters.has(made[0]))
+      return { groupIds: ctx.groupIds };
+    return { groupIds: final ? made : ctx.groupIds, pages };
+  };
   const dropPending = (path: string, keep: (p: Json) => boolean = () => false) => {
     proposals = proposals.filter((p) => p.path !== path || p.status !== 'pending' || keep(p));
   };
-  const propose = (path: string, ai: unknown, current: unknown, groupIds = ctx.groupIds) => {
+  const propose = (path: string, ai: unknown, current: unknown) => {
+    const { groupIds, pages } = provenance(path, ai);
     // Dedupe by path + value, whatever the decision was: a kept/applied value is not raised again.
     const prior = proposals.find((p) => p.path === path && same(p.value, ai));
     if (prior) {
@@ -193,6 +234,7 @@ export function mergeAiIntoDraft(
         prior.groupIds = [
           ...new Set([...(Array.isArray(prior.groupIds) ? prior.groupIds : []), ...groupIds]),
         ];
+        if (pages) prior.pages = unionPages(prior.pages, pages);
       }
       return;
     }
@@ -202,6 +244,7 @@ export function mergeAiIntoDraft(
       value: structuredClone(ai),
       current: structuredClone(current),
       groupIds,
+      ...(pages ? { pages } : {}),
       status: 'pending',
     });
   };
@@ -230,7 +273,7 @@ export function mergeAiIntoDraft(
     const take = () => {
       written.set(path, { value: structuredClone(current), origin: origin[path], ai });
       write(data, path, ai);
-      origin[path] = { by: 'ai', value: structuredClone(ai), groupIds: ctx.groupIds, final };
+      origin[path] = { by: 'ai', value: structuredClone(ai), ...provenance(path, ai), final };
       changed[sectionOf(path)] = true;
       dropPending(path);
     };
@@ -241,7 +284,11 @@ export function mergeAiIntoDraft(
       continue;
     }
     if (same(current, ai)) {
-      if (aiOwned && final) origin[path] = { ...recorded, final: true };
+      if (aiOwned && final) {
+        // Refresh the provenance only on a certain match; otherwise keep the recorded one.
+        const found = provenance(path, ai);
+        origin[path] = { ...recorded, ...(found.pages ? found : {}), final: true };
+      }
       dropPending(path, (p) => !same(p.value, ai));
       continue;
     }
@@ -331,17 +378,21 @@ export function decideFieldProposal(existing: Json, proposalIdValue: string, act
         'Ci sono allergie registrate: rimuovile prima di indicare che non ci sono allergie',
       );
     write(data, path, proposal.value);
-    const operatorOrigin = (value: unknown) => ({
+    // The applied value keeps the proposal's pages; a status derived from it gets none.
+    const operatorOrigin = (value: unknown, withPages = true) => ({
       by: 'operator',
       value: structuredClone(value),
       groupIds: proposal.groupIds ?? [],
+      ...(withPages && Array.isArray(proposal.pages)
+        ? { pages: structuredClone(proposal.pages) }
+        : {}),
       final: false,
       proposalId: proposal.id,
     });
     const origins: Json = { ...object(data._fieldOrigin), [path]: operatorOrigin(proposal.value) };
     if (path === 'allergie' && negativeAllergyStatus(data.allergieStatus)) {
       data.allergieStatus = 'presenti';
-      origins.allergieStatus = operatorOrigin('presenti');
+      origins.allergieStatus = operatorOrigin('presenti', false);
     }
     // Rows now recorded: a pending "no allergies" proposal can no longer be applied.
     if (path === 'allergie')

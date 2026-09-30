@@ -22,6 +22,7 @@ import {
 import { pageUpload, uploadMetadata } from '../ai/upload/pages/multipart.js';
 import { groupPdf, verifiedBytes } from '../ai/upload/pages/pdf.js';
 import { saveReview } from '../ai/upload/pages/review.js';
+import { pageTextHandler } from '../ai/upload/pages/page-text.js';
 const router = Router();
 router.param('id', requireOwnedImportJob);
 type Handler = (req: Request, res: Response) => Promise<unknown>;
@@ -116,6 +117,10 @@ router.post(
     ),
   ),
 );
+// OCR text of one page at its current version: `{ pageId, status, rawText, manifestRevision }`.
+// Clinical text: private, no-store, never logged. Unknown page (also after expiry/cancel, when
+// the manifest is emptied) → 404 like the other page resources.
+router.get('/:id/pages/:pageId/text', pageOnly, handle(pageTextHandler()));
 router.get(
   '/:id/files/:docId/content',
   pageOnly,

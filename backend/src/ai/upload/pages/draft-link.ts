@@ -18,6 +18,7 @@ import { assertCurrentReview } from './review.js';
 import { assertDraftVersion, mutateLinkedDraft, SERVER_DRAFT_KEYS } from './draft-mutations.js';
 import { currentGroupUnits, extractionConfig } from './inputs.js';
 import { clearPageSession } from './cleanup.js';
+import { loadPageTexts } from './page-text.js';
 import {
   aiDraftFields,
   decideFieldProposal,
@@ -179,8 +180,11 @@ export function mergeImportIntoDraft(draftId: string, body: unknown) {
           resultHash: b.resultHash,
         });
         const groupIds = ((result._groups ?? []) as GroupResult[]).map((g) => g.groupId);
+        // The review is current, so the job manifest is the one the result was built from.
+        const pages = await loadPageTexts(tx, job.id, manifest(job.manifest), groupIds);
         return mergeAiIntoDraft(existing, { fields: aiDraftFields(result), result }, 'final', {
           groupIds,
+          pages,
         }).data;
       }
       assertEditable(job.status);
@@ -240,10 +244,12 @@ export function mergeImportIntoDraft(draftId: string, body: unknown) {
           select: { result: true },
         });
         const group = row.result as unknown as GroupResult;
+        const pages = await loadPageTexts(tx, job.id, m, [groupId]);
         data = mergeAiIntoDraft(data, { fields: aiDraftFields(letterResult(group)) }, 'letter', {
           groupIds: [groupId],
           groupId,
           inputHash,
+          pages,
         }).data;
         merged++;
       }
