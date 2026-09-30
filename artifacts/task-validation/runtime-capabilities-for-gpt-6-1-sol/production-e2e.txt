@@ -1,0 +1,13 @@
+Production AI runtime, 2026-09-30, synthetic discharge letter (fictitious data), real page pipeline
+(OCR_PROMPT/OCR_SCHEMA, then extractionConfig schema+prompt on the OCR text):
+ocr: review_ready
+ocr: model=mistral:mistral-ocr-4-0 truncated=false
+ocr text contains Ramipril: true | Furosemide: true
+extraction: review_ready
+extraction: model=azure:gpt-6.1-sol truncated=false
+  extraction contains ramipril: true
+  extraction contains furosemide: true
+  extraction contains penicillin: true
+  extraction contains scompenso: true
+Before the fix (same probe): extraction failed kind=capability "mancano image_input, pdf_input";
+runtime logs before the model switch: Azure 404 DeploymentNotFound for gpt-5.5 / gpt-5.4-mini.
