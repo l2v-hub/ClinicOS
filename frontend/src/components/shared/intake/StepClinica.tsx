@@ -202,7 +202,7 @@ export function StepClinica({
           >
             {aiFields.length > 0 && (
               <div className="intake-field__head intake-ai-section">
-                <AiBadge />
+                <AiBadge paths={aiFields} />
                 <span className="intake-ai-section__text">
                   Letto dai documenti: {aiFields.map(fieldLabel).join(', ')}
                 </span>

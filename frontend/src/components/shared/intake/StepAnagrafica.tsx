@@ -159,7 +159,7 @@ function NpmField({
           {label}
           {required && <span className="npm-required"> *</span>}
         </label>
-        {ai && <AiBadge />}
+        {ai && path && <AiBadge paths={[path]} />}
       </div>
       {control}
       {error && (

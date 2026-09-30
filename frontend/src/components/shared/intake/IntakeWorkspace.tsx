@@ -22,9 +22,11 @@ import {
   rebaseLocalEdits,
   type FieldProposal,
 } from './intakeDocuments';
-import { IntakeAiOriginContext } from './intakeAiOrigin';
+import { IntakeAiProvider } from './intakeAiOrigin';
 import { useIntakeDocuments } from './useIntakeDocuments';
 import { IntakeDocumentsCard } from './IntakeDocumentsCard';
+import { IntakeDocumentPanel, type DocumentPanelRequest } from './IntakeDocumentPanel';
+import type { PanelTarget } from './intakeDocumentPages';
 import { IntakeFieldProposals } from './IntakeFieldProposals';
 import { ImportProposalsReview, type ImportProposal } from './ImportProposalsReview';
 import { StepAnagrafica } from './StepAnagrafica';
@@ -307,7 +309,45 @@ export function IntakeWorkspace({
     },
   );
 
+  // Documento a fianco (ciclo 3a): aperto dal chip di provenienza o da "Vedi documenti"; alla
+  // chiusura il focus torna a chi l'ha aperto. Sparisce con i documenti scollegati o la scheda chiusa.
+  const [docPanel, setDocPanel] = useState<DocumentPanelRequest | null>(null);
+  const docPanelSeq = useRef(0);
+  const docPanelOpener = useRef<HTMLElement | null>(null);
+  const docsJob = open && !importDraftId && draftId ? docs.job : null;
+  if (docPanel && !docsJob) setDocPanel(null);
+  // Documenti scollegati a pannello aperto: chip e pannello spariscono, il focus va su un punto
+  // stabile della card Documenti ("Carica file", o il suo titolo) invece di restare sul body.
+  const docPanelShown = useRef(false);
+  const docsCardOpen = open && !importDraftId && !!draftId;
+  useEffect(() => {
+    if (docsJob || !docPanelShown.current || !docsCardOpen) return;
+    const upload = document.querySelector<HTMLButtonElement>(
+      '[data-testid="intake-documents-upload"]',
+    );
+    if (upload && !upload.disabled) return upload.focus();
+    const title = document.getElementById('intake-docs-title');
+    if (!title) return;
+    title.tabIndex = -1;
+    title.focus();
+  }, [docsJob, docsCardOpen]);
+  useEffect(() => {
+    docPanelShown.current = !!(docPanel && docsJob);
+  });
+
   if (!open) return null;
+
+  function openDocPanel(target: PanelTarget | null, opener: HTMLElement) {
+    docPanelOpener.current = opener;
+    docPanelSeq.current += 1;
+    setDocPanel({ target, seq: docPanelSeq.current });
+  }
+  function closeDocPanel() {
+    setDocPanel(null);
+    const opener = docPanelOpener.current;
+    docPanelOpener.current = null;
+    if (opener?.isConnected) opener.focus();
+  }
 
   /** Update a top-level section key and debounce-patch the draft */
   function persistDraft(next: DraftData | (() => DraftData)) {
@@ -789,7 +829,7 @@ export function IntakeWorkspace({
         </button>
       </header>
 
-      <div className="intake-page__grid">
+      <div className={`intake-page__grid${docPanel && docsJob ? ' intake-page__grid--doc' : ''}`}>
         <IntakeIndex
           sections={progress.sections}
           active={active}
@@ -840,7 +880,10 @@ export function IntakeWorkspace({
           )}
           {error && <p className="import-modal__error">{error}</p>}
           {!loading && !error && (
-            <IntakeAiOriginContext.Provider value={aiPaths}>
+            <IntakeAiProvider
+              paths={aiPaths}
+              source={{ data, job: docsJob, open: docsJob ? openDocPanel : null }}
+            >
               <div
                 className="intake-page__sections"
                 inert={proposalUncertain}
@@ -849,7 +892,11 @@ export function IntakeWorkspace({
                 {/* Card Documenti (HMI 1): solo sulla scheda compilata qui; il flusso "da documenti"
                   ha già i suoi documenti e resta invariato. */}
                 {!importDraftId && draftId && (
-                  <IntakeDocumentsCard docs={docs} disabled={submitting} />
+                  <IntakeDocumentsCard
+                    docs={docs}
+                    disabled={submitting}
+                    onShowDocuments={(opener) => openDocPanel(null, opener)}
+                  />
                 )}
                 <IntakeFieldProposals
                   proposals={fieldProposals}
@@ -1086,9 +1133,17 @@ export function IntakeWorkspace({
                   />
                 </section>
               </div>
-            </IntakeAiOriginContext.Provider>
+            </IntakeAiProvider>
           )}
         </div>
+        {docPanel && docsJob && (
+          <IntakeDocumentPanel
+            job={docsJob}
+            api={docs.api}
+            request={docPanel}
+            onClose={closeDocPanel}
+          />
+        )}
       </div>
     </AccessibleDialogSurface>
   );
