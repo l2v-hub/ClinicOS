@@ -23,7 +23,7 @@ export const ROLE_IDS = {
 export const BASELINE_ROLES: RoleDefinition[] = [
   {
     id: 'administrator',
-    label: 'Administrator',
+    label: 'Amministratore',
     description:
       'Amministratore tecnico: ruoli e permessi, operatori, struttura (camere/letti), configurazione. Nessuna scrittura clinica.',
     legacyRole: 'admin',
@@ -31,7 +31,7 @@ export const BASELINE_ROLES: RoleDefinition[] = [
   },
   {
     id: 'supervisor',
-    label: 'Supervisor',
+    label: 'Supervisore',
     description:
       'Coordinatore operativo: supervisione di reparto, agenda multi-operatore, consegne, turni, posti letto. Letture cliniche complete, nessuna prescrizione.',
     legacyRole: 'manager',
@@ -39,7 +39,7 @@ export const BASELINE_ROLES: RoleDefinition[] = [
   },
   {
     id: 'doctor',
-    label: 'Doctor',
+    label: 'Medico',
     description:
       'Medico: cartella clinica, anamnesi, prescrizioni (con conferma), diario, valutazioni.',
     legacyRole: 'operatore',
@@ -47,7 +47,7 @@ export const BASELINE_ROLES: RoleDefinition[] = [
   },
   {
     id: 'nurse',
-    label: 'Nurse',
+    label: 'Infermiere',
     description:
       'Infermiere: somministrazioni, parametri, diario, scale di valutazione, consegne. Nessuna prescrizione.',
     legacyRole: 'operatore',
@@ -63,7 +63,7 @@ export const BASELINE_ROLES: RoleDefinition[] = [
   },
   {
     id: 'operator',
-    label: 'Operator (legacy)',
+    label: 'Operatore (legacy)',
     description:
       'Ruolo storico "Operatore": mantenuto per le identità non ancora migrate. Stessi permessi di oggi.',
     legacy: true,
@@ -72,7 +72,7 @@ export const BASELINE_ROLES: RoleDefinition[] = [
   },
   {
     id: 'legacy_admin',
-    label: 'Administrator (legacy)',
+    label: 'Amministratore (legacy)',
     description:
       'Ruolo storico "Amministratore/Manager": mantenuto per le identità non ancora migrate. Stessi permessi di oggi (tutto).',
     legacy: true,

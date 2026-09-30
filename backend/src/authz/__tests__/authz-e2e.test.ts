@@ -94,7 +94,7 @@ test('Doctor 1 → allowed tool (with confirmation) → backend → business log
     where: { id: confirmed.body.data.id },
   });
   assert.equal(therapy.farmacoNome, 'Bisoprololo');
-  assert.equal(therapy.operatoreInseritore, 'Doctor 1', 'prescription attributed to Doctor 1');
+  assert.equal(therapy.operatoreInseritore, 'Medico 1', 'prescription attributed to Medico 1');
 
   const audit = await waitForAudit({ requestId, actionType: 'tool:therapy.create' });
   assert.equal(audit?.operatorId, 'SIM-DOCTOR-1');

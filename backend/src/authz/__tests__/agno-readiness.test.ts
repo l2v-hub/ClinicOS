@@ -44,7 +44,7 @@ test('1. identity: the session names the identity; the role comes from the serve
   const me = await call(base, doctor, 'GET', '/auth/me');
   assert.equal(me.status, 200);
   assert.equal(me.body.id, 'SIM-DOCTOR-1');
-  assert.equal(me.body.name, 'Doctor 1');
+  assert.equal(me.body.name, 'Medico 1');
   assert.equal(me.body.appRole, 'doctor');
   assert.equal(me.body.roleSource, 'assignment');
   assert.equal(me.body.identitySource, 'simulator');
@@ -129,7 +129,7 @@ test('4-5-7. allowed invocation reaches the business logic and is attributed to 
   });
   assert.equal(entry.patientId, doctorPatientId);
   assert.equal(entry.authorType, 'medico', 'identity reached the business rule (Operator.ruolo)');
-  assert.equal(entry.authorName, 'Doctor 1');
+  assert.equal(entry.authorName, 'Medico 1');
 
   const audit = await waitForAudit({ requestId, actionType: 'tool:diary.create' });
   assert.ok(audit, 'audit row persisted');
