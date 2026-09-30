@@ -20,7 +20,8 @@ function unmappedRoutesDenied(env: NodeJS.ProcessEnv = process.env): boolean {
 
 // Routes that are part of the authorization/identity/tool infrastructure itself and enforce their
 // own capability checks (or are pre-auth by design).
-const SELF_GOVERNED_PREFIXES = ['/auth/', '/authz/', '/tools'];
+// /skills composes Tool Layer tools: every tool call is re-authorized by the tool hook.
+const SELF_GOVERNED_PREFIXES = ['/auth/', '/authz/', '/tools', '/skills'];
 
 function channelOf(req: Request): AiAuditChannel {
   return req.path.startsWith('/ai/') ? 'ai' : 'gui';

@@ -23,6 +23,7 @@ from pydantic import ValidationError
 
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
+from ..agents.skill_router import run_skill_route
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.env_config import safe_config_summary, llm_health_summary
 from ..models.providers.base import Attachment
@@ -30,7 +31,7 @@ from ..models.providers.completion import completion_text
 from ..models.registry import ModelRegistry
 from ..domain.contracts import (
     CreateJobRequest, RunRequest, RetryRequest, AssistantPlanRequest, AssistantPlanResponse,
-    AssistantComposeRequest, AssistantComposeResponse,
+    AssistantComposeRequest, AssistantComposeResponse, SkillRouteRequest, SkillRouteResponse,
 )
 from .job_control import can_retry, current_attempt, existing_job
 
@@ -244,6 +245,22 @@ async def assistant_compose(req: AssistantComposeRequest, authorization: str | N
     except Exception as ex:  # pragma: no cover
         _log.error("assistant compose failed: %s: %s", type(ex).__name__, str(ex)[:300])
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"{type(ex).__name__}: {str(ex)[:200]}")
+
+
+# Phase 3: Agno skill router. Riceve il messaggio e le SOLE skill che l'utente può usare (già
+# filtrate dalla policy del backend); ritorna {skillId, slot}. Non esegue e non conferma nulla.
+@app.post("/v1/assistant/skill-route", response_model=SkillRouteResponse)
+async def assistant_skill_route(req: SkillRouteRequest, authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    try:
+        out = await run_skill_route(_REGISTRY, req.message, req.skills, req.pending, req.today, req.valueKeys)
+        return SkillRouteResponse(route=out["route"], model=out["model"])
+    except RuntimeError_ as ex:
+        _log.warning("skill route runtime error: %s", ex.to_dict().get("message", "router error"))
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "router error"))
+    except Exception as ex:  # pragma: no cover
+        _log.error("skill route failed: %s", type(ex).__name__)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, type(ex).__name__)
 
 
 @app.post("/v1/document-jobs", status_code=201)

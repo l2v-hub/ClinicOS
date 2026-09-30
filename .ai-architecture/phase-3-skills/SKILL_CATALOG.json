@@ -1,0 +1,638 @@
+{
+  "schema": "clinicos.ai-architecture.skill-catalog/v1",
+  "source_of_record": "backend/src/skills/catalog.ts",
+  "confirmation_policy_version": 1,
+  "totals": {
+    "skills": 16,
+    "TESTED": 14,
+    "DESIGNED": 2
+  },
+  "skills": [
+    {
+      "skill_id": "vitals.record",
+      "name": "Registra parametri vitali",
+      "description": "Registra una rilevazione di parametri vitali (pressione, SpO2, frequenza cardiaca, temperatura, frequenza respiratoria, glicemia/DTX, ossigeno, coscienza) per un ospite.",
+      "category": "clinical",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "patients.search",
+        "parameters.create_reading"
+      ],
+      "optional_capabilities": [
+        "parameters.list_readings"
+      ],
+      "input_context": [
+        "patient",
+        "values"
+      ],
+      "output": "Rilevazione salvata (id, orario) e verificata rileggendo le rilevazioni del giorno.",
+      "workflow_steps": [
+        "identify_patient: patients.search | contesto pagina",
+        "collect_values: slot values (validazione con parseParameterReading, la stessa del servizio)",
+        "preview: ospite, valori, orario, origine AI",
+        "confirm: atto esplicito dell’utente",
+        "execute: parameters.create_reading (requestId stabile → retry senza duplicati)",
+        "verify: parameters.list_readings (se disponibile)",
+        "audit: skill:vitals.record:* + tool:parameters.create_reading"
+      ],
+      "kind": "write",
+      "confirmation": "SENSITIVE_WRITE",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Valori mancanti o non validi → NEEDS_CLARIFICATION sui valori.",
+      "failure_handling": "Errore di validazione/servizio → FAILED con il messaggio del backend; retry riusa lo stesso requestId (dedupe del servizio).",
+      "audit": "request, proposal (nomi dei campi), confirmation, execute (outcome) + evento del tool.",
+      "sensitivity": "high",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › B + I",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › C",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › D",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › E",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › H",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor)"
+      ]
+    },
+    {
+      "skill_id": "diary.add_observation",
+      "name": "Aggiungi osservazione al diario",
+      "description": "Aggiunge un'osservazione (nota di diario clinico-assistenziale) alla cartella di un ospite, attribuita all'operatore corrente.",
+      "category": "clinical",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "patients.search",
+        "diary.create"
+      ],
+      "optional_capabilities": [
+        "diary.list"
+      ],
+      "input_context": [
+        "patient",
+        "text"
+      ],
+      "output": "Voce di diario creata (id, autore risolto dal server).",
+      "workflow_steps": [
+        "identify_patient: patients.search | contesto pagina",
+        "collect_text: slot text (testo integrale, mai riscritto)",
+        "preview: ospite, testo, categoria, origine AI",
+        "confirm",
+        "execute: diary.create (una sola esecuzione per workflow: il tool non è idempotente)",
+        "audit"
+      ],
+      "kind": "write",
+      "confirmation": "SENSITIVE_WRITE",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.",
+      "failure_handling": "diary.create non è idempotente: il workflow blocca una seconda esecuzione; dopo un esito incerto non ritenta da solo.",
+      "audit": "request, proposal, confirmation, execute + tool:diary.create.",
+      "sensitivity": "high",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › F",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
+      ]
+    },
+    {
+      "skill_id": "handover.create",
+      "name": "Crea consegna",
+      "description": "Crea una consegna (passaggio di informazioni al turno) riferita a un ospite.",
+      "category": "operational",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "patients.search",
+        "consegne.create"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "patient",
+        "text"
+      ],
+      "output": "Consegna creata (id, priorità normale).",
+      "workflow_steps": [
+        "identify_patient",
+        "collect_text",
+        "preview: ospite, testo, priorità normale, tipo assistenziale",
+        "confirm",
+        "execute: consegne.create (requestId stabile)",
+        "audit"
+      ],
+      "kind": "write",
+      "confirmation": "LOW_RISK_WRITE",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.",
+      "failure_handling": "FAILED con il messaggio del backend; retry idempotente sul requestId.",
+      "audit": "request, proposal, confirmation, execute + tool:consegne.create.",
+      "sensitivity": "medium",
+      "customer_validation": "Priorità e tipo di default (normale / assistenziale) da validare con il cliente.",
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › G",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
+      ]
+    },
+    {
+      "skill_id": "therapy.prescribe",
+      "name": "Prescrivi terapia",
+      "description": "Nuova prescrizione farmacologica. Clinicamente critica: il medico la compila e conferma dalla scheda Terapia, l’assistente non la esegue.",
+      "category": "clinical",
+      "intended_roles": [
+        "doctor"
+      ],
+      "required_capabilities": [
+        "patients.search",
+        "diary.therapy_preview",
+        "therapy.create"
+      ],
+      "optional_capabilities": [
+        "drugs.search"
+      ],
+      "input_context": [
+        "patient",
+        "text"
+      ],
+      "output": "Nessuna scrittura: indirizzamento alla scheda Terapia.",
+      "workflow_steps": [
+        "classify HIGH_RISK",
+        "handoff: scheda Terapia / Diario → Terapia (conferma umana)"
+      ],
+      "kind": "write",
+      "confirmation": "HIGH_RISK",
+      "ambiguity_handling": "Non applicabile: nessuna esecuzione.",
+      "failure_handling": "Non applicabile: nessuna esecuzione.",
+      "audit": "request + denied (human_control_required).",
+      "sensitivity": "critical",
+      "customer_validation": "Se e come l’assistente possa preparare (mai confermare) una prescrizione va deciso con il cliente e il direttore sanitario.",
+      "implementation_status": "DESIGNED",
+      "executable_by_assistant": false,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › D (hand-off, human_control_required)"
+      ]
+    },
+    {
+      "skill_id": "administration.record",
+      "name": "Registra somministrazione",
+      "description": "Conferma o mancata somministrazione di una terapia. Clinicamente critica: si esegue dal giro terapia, l’assistente non la esegue.",
+      "category": "clinical",
+      "intended_roles": [
+        "nurse"
+      ],
+      "required_capabilities": [
+        "administration.list_slots",
+        "administration.confirm"
+      ],
+      "optional_capabilities": [
+        "administration.record_not_administered"
+      ],
+      "input_context": [
+        "patient"
+      ],
+      "output": "Nessuna scrittura: indirizzamento al giro terapia.",
+      "workflow_steps": [
+        "classify HIGH_RISK",
+        "handoff: Terapia → giro somministrazioni"
+      ],
+      "kind": "action",
+      "confirmation": "HIGH_RISK",
+      "ambiguity_handling": "Non applicabile: nessuna esecuzione.",
+      "failure_handling": "Non applicabile: nessuna esecuzione.",
+      "audit": "request + denied (human_control_required).",
+      "sensitivity": "critical",
+      "customer_validation": "Somministrazione assistita da voce/AI da definire con il cliente (doppio controllo, identificazione ospite).",
+      "implementation_status": "DESIGNED",
+      "executable_by_assistant": false,
+      "test_status": "NOT_TESTED",
+      "test_evidence": []
+    },
+    {
+      "skill_id": "vitals.recent",
+      "name": "Parametri recenti",
+      "description": "Mostra le ultime rilevazioni dei parametri vitali di un ospite.",
+      "category": "query",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "patients.search",
+        "parameters.list_readings"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "patient"
+      ],
+      "output": "Ultime rilevazioni (orario, valori).",
+      "workflow_steps": [
+        "identify_patient",
+        "read: parameters.list_readings (limit 5)",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.",
+      "failure_handling": "Errore di lettura → FAILED con il messaggio del backend.",
+      "audit": "request + tool:parameters.list_readings.",
+      "sensitivity": "high",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › A",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
+      ]
+    },
+    {
+      "skill_id": "diary.recent",
+      "name": "Diario recente",
+      "description": "Mostra le ultime voci del diario di un ospite.",
+      "category": "query",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "patients.search",
+        "diary.list"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "patient"
+      ],
+      "output": "Ultime voci di diario (data, autore, testo breve).",
+      "workflow_steps": [
+        "identify_patient",
+        "read: diary.list",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:diary.list.",
+      "sensitivity": "high",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse)"
+      ]
+    },
+    {
+      "skill_id": "patient.overview",
+      "name": "Informazioni sull’ospite",
+      "description": "Mostra le informazioni disponibili su un ospite: stato ricovero, allergie, terapie, consegne aperte, ultimi parametri.",
+      "category": "query",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "patients.search",
+        "patients.clinical_summary"
+      ],
+      "optional_capabilities": [
+        "parameters.list_readings"
+      ],
+      "input_context": [
+        "patient"
+      ],
+      "output": "Sintesi clinica + ultima rilevazione (se consentita).",
+      "workflow_steps": [
+        "identify_patient",
+        "read: patients.clinical_summary",
+        "read (opzionale): parameters.list_readings",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.",
+      "failure_handling": "FAILED con il messaggio del backend; un tool opzionale negato riduce la risposta.",
+      "audit": "request + tool:* invocati.",
+      "sensitivity": "high",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › A",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor)"
+      ]
+    },
+    {
+      "skill_id": "clinical.question",
+      "name": "Domanda sulla cartella",
+      "description": "Risponde a una domanda puntuale sulla cartella (allergie, terapie in corso, documenti) tramite l’assistente di sola lettura esistente.",
+      "category": "query",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "assistant.query"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "query",
+        "patient?"
+      ],
+      "output": "Risposta dell’assistente di sola lettura con le fonti.",
+      "workflow_steps": [
+        "read: assistant.query (domanda + ospite corrente)",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "L’assistente di lettura gestisce da sé ospiti ambigui (chiede di specificare).",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:assistant.query.",
+      "sensitivity": "high",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse)"
+      ]
+    },
+    {
+      "skill_id": "therapy.due_administrations",
+      "name": "Somministrazioni del giorno",
+      "description": "Elenca le somministrazioni previste in una giornata (giro terapia).",
+      "category": "operational",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "administration.list_slots"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "date?"
+      ],
+      "output": "Somministrazioni per fascia e stato.",
+      "workflow_steps": [
+        "read: administration.list_slots (data, default oggi)",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Data assente → oggi (fuso Europe/Rome).",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:administration.list_slots.",
+      "sensitivity": "high",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › D (OSS denied)",
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse)"
+      ]
+    },
+    {
+      "skill_id": "handover.overview",
+      "name": "Situazione consegne",
+      "description": "Riepilogo delle consegne aperte del reparto.",
+      "category": "supervisory",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "consegne.overview"
+      ],
+      "optional_capabilities": [],
+      "input_context": [],
+      "output": "Conteggi e consegne aperte.",
+      "workflow_steps": [
+        "read: consegne.overview",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Nessuna.",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:consegne.overview.",
+      "sensitivity": "medium",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
+      ]
+    },
+    {
+      "skill_id": "appointments.day",
+      "name": "Appuntamenti del giorno",
+      "description": "Elenca gli appuntamenti di una giornata.",
+      "category": "operational",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "appointments.list"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "date?"
+      ],
+      "output": "Appuntamenti (ora, ospite, tipologia).",
+      "workflow_steps": [
+        "read: appointments.list (data, default oggi)",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Data assente → oggi.",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:appointments.list.",
+      "sensitivity": "medium",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor)"
+      ]
+    },
+    {
+      "skill_id": "facility.occupancy",
+      "name": "Occupazione posti letto",
+      "description": "Mostra l’occupazione di camere e posti letto della struttura.",
+      "category": "supervisory",
+      "intended_roles": [
+        "supervisor",
+        "administrator"
+      ],
+      "required_capabilities": [
+        "rooms.occupancy"
+      ],
+      "optional_capabilities": [],
+      "input_context": [],
+      "output": "Posti letto totali, occupati, liberi.",
+      "workflow_steps": [
+        "read: rooms.occupancy",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Nessuna.",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:rooms.occupancy.",
+      "sensitivity": "low",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (supervisor, administrator)"
+      ]
+    },
+    {
+      "skill_id": "drug.lookup",
+      "name": "Cerca farmaco",
+      "description": "Cerca un farmaco nell’anagrafica farmaci.",
+      "category": "query",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor",
+        "administrator"
+      ],
+      "required_capabilities": [
+        "drugs.search"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "query"
+      ],
+      "output": "Farmaci corrispondenti (nome, principio attivo).",
+      "workflow_steps": [
+        "read: drugs.search",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Nome assente → NEEDS_CLARIFICATION.",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:drugs.search.",
+      "sensitivity": "low",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (administrator)"
+      ]
+    },
+    {
+      "skill_id": "patient.find",
+      "name": "Cerca ospite",
+      "description": "Cerca un ospite per nome, cognome o codice fiscale.",
+      "category": "query",
+      "intended_roles": [
+        "doctor",
+        "nurse",
+        "oss",
+        "supervisor",
+        "administrator"
+      ],
+      "required_capabilities": [
+        "patients.search"
+      ],
+      "optional_capabilities": [],
+      "input_context": [
+        "query"
+      ],
+      "output": "Ospiti trovati (nome, camera/letto).",
+      "workflow_steps": [
+        "read: patients.search",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Testo assente → NEEDS_CLARIFICATION.",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:patients.search.",
+      "sensitivity": "medium",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse)"
+      ]
+    },
+    {
+      "skill_id": "admin.roster_contexts",
+      "name": "Ordinamenti dei reparti",
+      "description": "Elenca i contesti di ordinamento degli elenchi ospiti (configurazione).",
+      "category": "administrative",
+      "intended_roles": [
+        "administrator",
+        "supervisor"
+      ],
+      "required_capabilities": [
+        "roster.list_contexts"
+      ],
+      "optional_capabilities": [],
+      "input_context": [],
+      "output": "Contesti e ordinamento predefinito.",
+      "workflow_steps": [
+        "read: roster.list_contexts",
+        "answer"
+      ],
+      "kind": "read",
+      "confirmation": "READ",
+      "ambiguity_handling": "Nessuna.",
+      "failure_handling": "FAILED con il messaggio del backend.",
+      "audit": "request + tool:roster.list_contexts.",
+      "sensitivity": "low",
+      "customer_validation": null,
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (administrator)"
+      ]
+    }
+  ]
+}

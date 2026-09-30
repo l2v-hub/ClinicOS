@@ -1,0 +1,875 @@
+{
+  "schema": "clinicos.ai-architecture.role-skill-matrix/v1",
+  "version": 1,
+  "policy_basis": "baseline policy v0 (backend/src/authz/baseline.ts) via decide(); live availability = GET /skills",
+  "rule": "skill available ⇔ executable ∧ every required tool allowed for the role by the active policy",
+  "roles": [
+    {
+      "role": "administrator",
+      "available": [
+        "patient.overview",
+        "therapy.due_administrations",
+        "handover.overview",
+        "appointments.day",
+        "facility.occupancy",
+        "drug.lookup",
+        "patient.find",
+        "admin.roster_contexts"
+      ],
+      "skills": [
+        {
+          "skill_id": "vitals.record",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "parameters.create_reading"
+          ],
+          "missing_optional": [
+            "parameters.list_readings"
+          ],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.add_observation",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "diary.create"
+          ],
+          "missing_optional": [
+            "diary.list"
+          ],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.create",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "consegne.create"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "therapy.prescribe",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [
+            "diary.therapy_preview",
+            "therapy.create"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "administration.record",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [
+            "administration.confirm"
+          ],
+          "missing_optional": [
+            "administration.record_not_administered"
+          ],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "vitals.recent",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "parameters.list_readings"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.recent",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "diary.list"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.overview",
+          "available": true,
+          "state": "PARTIAL",
+          "intended": false,
+          "missing_required": [],
+          "missing_optional": [
+            "parameters.list_readings"
+          ],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "clinical.question",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "assistant.query"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "therapy.due_administrations",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": false,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "handover.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": false,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "appointments.day",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": false,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "facility.occupancy",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "drug.lookup",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.find",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "admin.roster_contexts",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        }
+      ]
+    },
+    {
+      "role": "supervisor",
+      "available": [
+        "vitals.record",
+        "diary.add_observation",
+        "handover.create",
+        "vitals.recent",
+        "diary.recent",
+        "patient.overview",
+        "clinical.question",
+        "therapy.due_administrations",
+        "handover.overview",
+        "appointments.day",
+        "facility.occupancy",
+        "drug.lookup",
+        "patient.find",
+        "admin.roster_contexts"
+      ],
+      "skills": [
+        {
+          "skill_id": "vitals.record",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.add_observation",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.create",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "therapy.prescribe",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [
+            "therapy.create"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "administration.record",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "vitals.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "clinical.question",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "therapy.due_administrations",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "appointments.day",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "facility.occupancy",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "drug.lookup",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.find",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "admin.roster_contexts",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        }
+      ]
+    },
+    {
+      "role": "doctor",
+      "available": [
+        "vitals.record",
+        "diary.add_observation",
+        "handover.create",
+        "vitals.recent",
+        "diary.recent",
+        "patient.overview",
+        "clinical.question",
+        "therapy.due_administrations",
+        "handover.overview",
+        "appointments.day",
+        "drug.lookup",
+        "patient.find"
+      ],
+      "skills": [
+        {
+          "skill_id": "vitals.record",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.add_observation",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.create",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "therapy.prescribe",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "administration.record",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [
+            "administration.confirm"
+          ],
+          "missing_optional": [
+            "administration.record_not_administered"
+          ],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "vitals.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "clinical.question",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "therapy.due_administrations",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "appointments.day",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "facility.occupancy",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "rooms.occupancy"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "drug.lookup",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.find",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "admin.roster_contexts",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "roster.list_contexts"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        }
+      ]
+    },
+    {
+      "role": "nurse",
+      "available": [
+        "vitals.record",
+        "diary.add_observation",
+        "handover.create",
+        "vitals.recent",
+        "diary.recent",
+        "patient.overview",
+        "clinical.question",
+        "therapy.due_administrations",
+        "handover.overview",
+        "appointments.day",
+        "drug.lookup",
+        "patient.find"
+      ],
+      "skills": [
+        {
+          "skill_id": "vitals.record",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.add_observation",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.create",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "therapy.prescribe",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [
+            "therapy.create"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "administration.record",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "vitals.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "clinical.question",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "therapy.due_administrations",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "appointments.day",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "facility.occupancy",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "rooms.occupancy"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "drug.lookup",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.find",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "admin.roster_contexts",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "roster.list_contexts"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        }
+      ]
+    },
+    {
+      "role": "oss",
+      "available": [
+        "vitals.record",
+        "diary.add_observation",
+        "handover.create",
+        "vitals.recent",
+        "diary.recent",
+        "patient.overview",
+        "clinical.question",
+        "handover.overview",
+        "appointments.day",
+        "drug.lookup",
+        "patient.find"
+      ],
+      "skills": [
+        {
+          "skill_id": "vitals.record",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.add_observation",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.create",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "therapy.prescribe",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [
+            "diary.therapy_preview",
+            "therapy.create"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "administration.record",
+          "available": false,
+          "state": "HUMAN_ONLY",
+          "intended": false,
+          "missing_required": [
+            "administration.list_slots",
+            "administration.confirm"
+          ],
+          "missing_optional": [
+            "administration.record_not_administered"
+          ],
+          "needs_customer_validation": true
+        },
+        {
+          "skill_id": "vitals.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "diary.recent",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "clinical.question",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "therapy.due_administrations",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "administration.list_slots"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "handover.overview",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "appointments.day",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "facility.occupancy",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "rooms.occupancy"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "drug.lookup",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "patient.find",
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
+          "missing_required": [],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        },
+        {
+          "skill_id": "admin.roster_contexts",
+          "available": false,
+          "state": "UNAVAILABLE",
+          "intended": false,
+          "missing_required": [
+            "roster.list_contexts"
+          ],
+          "missing_optional": [],
+          "needs_customer_validation": false
+        }
+      ]
+    }
+  ]
+}

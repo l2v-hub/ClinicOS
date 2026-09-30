@@ -30,6 +30,9 @@ class _MockRunner:
             return json.dumps(EMPTY_PLAN)
         # 016 F2: per la composizione ritorna una risposta NON fondata (vuota) — mai inventa;
         # il post-check del backend la scarta e mostra la vista strutturata.
+        # Phase 3: skill router → rotta VUOTA (mai sceglie una skill da solo).
+        if "SKILL_ROUTE_V1" in prompt:
+            return json.dumps({"skillId": None})
         if "ASSISTANT_COMPOSE_V1" in prompt:
             return json.dumps({"answerText": "", "citedSources": []})
         return json.dumps(EMPTY_EXTRACTION)
