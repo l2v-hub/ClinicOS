@@ -35,6 +35,7 @@ import { SKILL_CATALOG, skillById } from './catalog.js';
 import { confirmationFor, isExplicitCancellation, isExplicitConfirmation } from './confirmation.js';
 import { buildPreview, executeSkill, type SkillInvoke } from './executors.js';
 import type { Interpreter } from './interpreter.js';
+import type { SpeechToTextProvider } from '../voice/stt.js';
 import type { WorkflowStore } from './store.js';
 import {
   TERMINAL_STATUSES,
@@ -55,6 +56,8 @@ export interface SkillEngineDeps {
   now?: () => Date;
   /** Sandbox hook for failure tests: wraps the real Tool Layer invoker (never replaces policy). */
   wrapInvoke?: (invoke: SkillInvoke) => SkillInvoke;
+  /** Phase 5: speech-to-text provider of the voice channel (default: the AI runtime). */
+  stt?: SpeechToTextProvider;
 }
 
 type Identity = ToolContext['identity'];
@@ -69,6 +72,8 @@ interface Turn {
   context: { currentPatientId?: string; currentPatientLabel?: string };
   /** The request carried a `context` (the UI always does): used to detect a resident change. */
   contextProvided: boolean;
+  /** Phase 5: the message is a reviewed voice transcript (audit only). */
+  voiceInput?: boolean;
 }
 
 const WRITE_RETRY_SAFE = new Set([
@@ -99,7 +104,10 @@ function audit(
     actionType: `skill:${skillId}:${stage}`,
     kind,
     channel: 'ai_assistant',
-    fields: fields.slice(0, 20),
+    fields: (turn.voiceInput && stage === 'request' ? ['input:voice', ...fields] : fields).slice(
+      0,
+      20,
+    ),
     outcome,
   });
 }
@@ -880,6 +888,7 @@ async function converseTurn(
         : {}),
     },
     contextProvided: request.context !== undefined,
+    voiceInput: request.inputChannel === 'voice',
   };
   const message = typeof request.message === 'string' ? request.message.trim() : '';
   const available = SKILL_CATALOG.filter((skill) => turn.availability.get(skill.id)?.available);

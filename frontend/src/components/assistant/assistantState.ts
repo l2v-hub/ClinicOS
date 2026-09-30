@@ -148,7 +148,11 @@ export function assistantReducer(state: AssistantState, action: AssistantAction)
           ...state.transcript,
           item(
             'assistant',
-            r.status === 'NEEDS_CONFIRMATION' && r.preview
+            // A NEW preview gets a short pointer; the SAME preview (e.g. after a typed/spoken
+            // «conferma») keeps the server reply, which says to press «Conferma».
+            r.status === 'NEEDS_CONFIRMATION' &&
+              r.preview &&
+              r.preview.previewId !== state.workflow?.preview?.previewId
               ? `Anteprima pronta: ${r.preview.action}. Controllala qui sotto.`
               : r.reply,
             r.status,

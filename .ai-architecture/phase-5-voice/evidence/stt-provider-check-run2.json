@@ -1,0 +1,431 @@
+{
+  "at": "2026-09-30T22:07:24.477Z",
+  "runtime": "http://127.0.0.1:8765",
+  "model": "gemini-3.5-flash-lite",
+  "passed": 21,
+  "total": 22,
+  "latencyMs": {
+    "p50": 1204,
+    "p90": 8989,
+    "max": 20172
+  },
+  "audioSecondsTotal": 141.8,
+  "tokens": {
+    "input": 6055,
+    "output": 277
+  },
+  "results": [
+    {
+      "run": 0,
+      "file": "read-overview.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Dimmi tutto su questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1221,
+      "usage": {
+        "inputTokens": 251,
+        "outputTokens": 8,
+        "totalTokens": 259
+      },
+      "roundTripMs": 1259,
+      "audioSeconds": 4.95,
+      "bytes": 158284
+    },
+    {
+      "run": 0,
+      "file": "vitals-120-80.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra pressione 120 su 80 per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1601,
+      "usage": {
+        "inputTokens": 296,
+        "outputTokens": 16,
+        "totalTokens": 312
+      },
+      "roundTripMs": 1607,
+      "audioSeconds": 6.75,
+      "bytes": 216204
+    },
+    {
+      "run": 0,
+      "file": "vitals-140-90.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra pressione 140 su 90 per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1203,
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 16,
+        "totalTokens": 316
+      },
+      "roundTripMs": 1209,
+      "audioSeconds": 6.91,
+      "bytes": 221004
+    },
+    {
+      "run": 0,
+      "file": "conferma.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Conferma.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1076,
+      "usage": {
+        "inputTokens": 224,
+        "outputTokens": 4,
+        "totalTokens": 228
+      },
+      "roundTripMs": 1084,
+      "audioSeconds": 3.87,
+      "bytes": 123724
+    },
+    {
+      "run": 0,
+      "file": "ambiguous-ferri.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra pressione 130 su 80 per Ferri.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1135,
+      "usage": {
+        "inputTokens": 286,
+        "outputTokens": 15,
+        "totalTokens": 301
+      },
+      "roundTripMs": 1146,
+      "audioSeconds": 6.35,
+      "bytes": 203244,
+      "surnameCapitalized": true
+    },
+    {
+      "run": 0,
+      "file": "out-of-scope.wav",
+      "pass": true,
+      "status": 200,
+      "text": "registra pressione 120 su 80 per esposito",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1298,
+      "usage": {
+        "inputTokens": 291,
+        "outputTokens": 14,
+        "totalTokens": 305
+      },
+      "roundTripMs": 1307,
+      "audioSeconds": 6.53,
+      "bytes": 208844,
+      "surnameCapitalized": false
+    },
+    {
+      "run": 0,
+      "file": "prescribe.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Prescrivi paracetamolo 1000 mg, una compressa per bocca alle 8:00 e alle 20:00 per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 8981,
+      "usage": {
+        "inputTokens": 377,
+        "outputTokens": 39,
+        "totalTokens": 416
+      },
+      "roundTripMs": 8989,
+      "audioSeconds": 9.98,
+      "bytes": 319564
+    },
+    {
+      "run": 0,
+      "file": "administration.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra una somministrazione per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 996,
+      "usage": {
+        "inputTokens": 279,
+        "outputTokens": 10,
+        "totalTokens": 289
+      },
+      "roundTripMs": 1004,
+      "audioSeconds": 6.07,
+      "bytes": 194284
+    },
+    {
+      "run": 0,
+      "file": "silence.wav",
+      "pass": true,
+      "status": 200,
+      "text": "",
+      "empty": true,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1077,
+      "usage": {
+        "inputTokens": 327,
+        "outputTokens": 8,
+        "totalTokens": 335
+      },
+      "roundTripMs": 1084,
+      "audioSeconds": 8,
+      "bytes": 256044
+    },
+    {
+      "run": 0,
+      "file": "steady-noise.wav",
+      "pass": true,
+      "status": 200,
+      "text": "",
+      "empty": true,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1460,
+      "usage": {
+        "inputTokens": 327,
+        "outputTokens": 8,
+        "totalTokens": 335
+      },
+      "roundTripMs": 1466,
+      "audioSeconds": 8,
+      "bytes": 256044
+    },
+    {
+      "run": 0,
+      "file": "noise-burst.wav",
+      "pass": true,
+      "status": 200,
+      "text": "",
+      "empty": true,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1084,
+      "usage": {
+        "inputTokens": 215,
+        "outputTokens": 8,
+        "totalTokens": 223
+      },
+      "roundTripMs": 1090,
+      "audioSeconds": 3.5,
+      "bytes": 112044
+    },
+    {
+      "run": 1,
+      "file": "read-overview.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Dimmi tutto su questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1098,
+      "usage": {
+        "inputTokens": 251,
+        "outputTokens": 8,
+        "totalTokens": 259
+      },
+      "roundTripMs": 1107,
+      "audioSeconds": 4.95,
+      "bytes": 158284
+    },
+    {
+      "run": 1,
+      "file": "vitals-120-80.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra pressione 120 su 80 per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1212,
+      "usage": {
+        "inputTokens": 296,
+        "outputTokens": 16,
+        "totalTokens": 312
+      },
+      "roundTripMs": 1218,
+      "audioSeconds": 6.75,
+      "bytes": 216204
+    },
+    {
+      "run": 1,
+      "file": "vitals-140-90.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra pressione 140 su 90 per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1115,
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 16,
+        "totalTokens": 316
+      },
+      "roundTripMs": 1123,
+      "audioSeconds": 6.91,
+      "bytes": 221004
+    },
+    {
+      "run": 1,
+      "file": "conferma.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Conferma",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1127,
+      "usage": {
+        "inputTokens": 224,
+        "outputTokens": 3,
+        "totalTokens": 227
+      },
+      "roundTripMs": 1132,
+      "audioSeconds": 3.87,
+      "bytes": 123724
+    },
+    {
+      "run": 1,
+      "file": "ambiguous-ferri.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra pressione 130 su 80 per Ferri.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1037,
+      "usage": {
+        "inputTokens": 286,
+        "outputTokens": 15,
+        "totalTokens": 301
+      },
+      "roundTripMs": 1042,
+      "audioSeconds": 6.35,
+      "bytes": 203244,
+      "surnameCapitalized": true
+    },
+    {
+      "run": 1,
+      "file": "out-of-scope.wav",
+      "pass": false,
+      "status": 504,
+      "text": "",
+      "roundTripMs": 20172,
+      "audioSeconds": 6.53,
+      "bytes": 208844
+    },
+    {
+      "run": 1,
+      "file": "prescribe.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Prescrivi paracetamolo 1000 mg, una compressa per bocca alle 8:00 e alle 20:00 per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1194,
+      "usage": {
+        "inputTokens": 377,
+        "outputTokens": 39,
+        "totalTokens": 416
+      },
+      "roundTripMs": 1204,
+      "audioSeconds": 9.98,
+      "bytes": 319564
+    },
+    {
+      "run": 1,
+      "file": "administration.wav",
+      "pass": true,
+      "status": 200,
+      "text": "Registra una somministrazione per questo ospite.",
+      "empty": false,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 18637,
+      "usage": {
+        "inputTokens": 279,
+        "outputTokens": 10,
+        "totalTokens": 289
+      },
+      "roundTripMs": 18644,
+      "audioSeconds": 6.07,
+      "bytes": 194284
+    },
+    {
+      "run": 1,
+      "file": "silence.wav",
+      "pass": true,
+      "status": 200,
+      "text": "",
+      "empty": true,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1145,
+      "usage": {
+        "inputTokens": 327,
+        "outputTokens": 8,
+        "totalTokens": 335
+      },
+      "roundTripMs": 1154,
+      "audioSeconds": 8,
+      "bytes": 256044
+    },
+    {
+      "run": 1,
+      "file": "steady-noise.wav",
+      "pass": true,
+      "status": 200,
+      "text": "",
+      "empty": true,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1204,
+      "usage": {
+        "inputTokens": 327,
+        "outputTokens": 8,
+        "totalTokens": 335
+      },
+      "roundTripMs": 1208,
+      "audioSeconds": 8,
+      "bytes": 256044
+    },
+    {
+      "run": 1,
+      "file": "noise-burst.wav",
+      "pass": true,
+      "status": 200,
+      "text": "",
+      "empty": true,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "providerMs": 1105,
+      "usage": {
+        "inputTokens": 215,
+        "outputTokens": 8,
+        "totalTokens": 223
+      },
+      "roundTripMs": 1114,
+      "audioSeconds": 3.5,
+      "bytes": 112044
+    }
+  ]
+}

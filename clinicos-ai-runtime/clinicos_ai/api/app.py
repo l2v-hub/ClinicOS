@@ -24,6 +24,7 @@ from pydantic import ValidationError
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..agents.skill_router import run_skill_route
+from ..voice.stt import SttError, stt_status, transcribe as stt_transcribe
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.env_config import safe_config_summary, llm_health_summary
 from ..models.providers.base import Attachment
@@ -262,6 +263,49 @@ async def assistant_skill_route(req: SkillRouteRequest, authorization: str | Non
     except Exception as ex:  # pragma: no cover
         _log.error("skill route failed: %s", type(ex).__name__)
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, type(ex).__name__)
+
+
+# Phase 5: speech-to-text. Receives ONE captured utterance (already VAD-trimmed by the client),
+# returns the transcript. Audio is never stored; logs carry sizes/durations only.
+MAX_STT_AUDIO_BYTES = 2_000_000
+
+
+@app.get("/v1/voice/stt-status")
+def voice_stt_status(authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    return stt_status()
+
+
+@app.post("/v1/voice/transcribe")
+async def voice_transcribe(request: Request, authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    try:
+        declared = int(request.headers.get("content-length") or 0)
+    except ValueError:
+        declared = 0
+    if declared > MAX_STT_AUDIO_BYTES * 4 // 3 + 4096:
+        raise HTTPException(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, "Audio troppo grande")
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "JSON non valido")
+    audio_b64 = body.get("audio_base64") if isinstance(body, dict) else None
+    if not isinstance(audio_b64, str) or not audio_b64 or len(audio_b64) > MAX_STT_AUDIO_BYTES * 4 // 3 + 4:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Audio mancante o troppo grande")
+    try:
+        audio = base64.b64decode(audio_b64, validate=True)
+    except Exception:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Audio non valido")
+    mime = str(body.get("mime_type") or "audio/wav")
+    locale = str(body.get("locale") or "it-IT")[:10]
+    try:
+        result = await stt_transcribe(audio, mime, locale)
+    except SttError as ex:
+        raise HTTPException(ex.status, {"kind": ex.kind, "message": str(ex)})
+    except Exception as ex:  # never an unhandled 500 with provider details
+        _log.warning("stt unexpected failure: %s", type(ex).__name__)
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"kind": "provider_error", "message": "Errore STT"})
+    return result.to_dict()
 
 
 @app.post("/v1/document-jobs", status_code=201)

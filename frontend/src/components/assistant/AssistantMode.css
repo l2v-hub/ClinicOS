@@ -393,3 +393,119 @@
     max-width: 100%;
   }
 }
+
+/* ── Phase 5: voice channel (push-to-talk) ─────────────────────────────────────────────── */
+
+.am-mic {
+  /* layout only: size and colours come from the canonical .ds-btn (design-system.css) */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.am-voice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.am-voice__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.am-voice__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--border);
+  flex: none;
+}
+
+.am-voice__dot.is-live {
+  background: var(--blue);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 25%, transparent);
+  animation: am-voice-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes am-voice-pulse {
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--blue) 12%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .am-voice__dot.is-live {
+    animation: none;
+  }
+}
+
+.am-voice__meter {
+  width: 120px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.am-voice__meter > span {
+  display: block;
+  height: 100%;
+  background: var(--blue);
+  transition: width 80ms linear;
+}
+
+.am-voice__spacer {
+  flex: 1;
+}
+
+.am-voice__tts {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.am-voice__notice,
+.am-voice__hint,
+.am-voice__review-label {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.am-voice__notice--error {
+  color: var(--field-error);
+}
+
+.am-voice__review {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.am-voice__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 700px) {
+  .am-voice {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .am-mic__label {
+    display: none;
+  }
+}
+
+.am-msg__source {
+  display: block;
+  font-size: 12px;
+  opacity: 0.85;
+  margin-bottom: 2px;
+}

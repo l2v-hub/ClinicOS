@@ -188,3 +188,20 @@ test('QA H1/M1: context resident kept; prescription confirmable only once the pa
   assert.equal(canConfirm(bound), true);
   assert.equal(therapyAttachment(response({ preview: boundPreview })), null, 'never re-attached');
 });
+
+test('Phase 5: a spoken/typed «conferma» on the same preview shows the server hint, not a new preview', () => {
+  let s = assistantReducer(initialAssistantState, { type: 'response', response: response() });
+  assert.match(s.transcript.at(-1)!.text, /^Anteprima pronta/);
+  s = assistantReducer(s, { type: 'request_started', userText: 'Conferma.', source: 'voice' });
+  assert.equal(s.transcript.at(-1)!.source, 'voice');
+  s = assistantReducer(s, {
+    type: 'response',
+    response: response({ reply: 'Per confermare premi «Conferma» sull’anteprima.' }),
+  });
+  assert.equal(s.transcript.at(-1)!.text, 'Per confermare premi «Conferma» sull’anteprima.');
+  const edited = assistantReducer(s, {
+    type: 'response',
+    response: response({ preview: preview({ previewId: '22222222-2222-4222-8222-222222222222' }) }),
+  });
+  assert.match(edited.transcript.at(-1)!.text, /^Anteprima pronta/, 'a new preview is announced');
+});
