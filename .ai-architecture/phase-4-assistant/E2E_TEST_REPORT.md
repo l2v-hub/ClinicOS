@@ -76,3 +76,23 @@ Dedicated QA agent (did not write the code), three rounds:
    (stato, prescrittore, drugPackageRef, allowedFractions); LOW: fascia conflict confirmable once bound.
 3. **READY FOR QA** — all findings fixed with regression tests (assistant-e2e C hidden-field loop,
    QA H1 test, skills-unit `bindableTherapy`), probe re-run on fresh DBs (38/38, 7/7, tsc clean).
+
+## 6. Deployed environment (demo backend, main @ 6bd5d3da)
+
+Merged PR #390; production backend deploy and Vercel production green; demo backend deployed
+(`railway up`). Read-only / no-write checks on `clinicos-backend-demo` (synthetic data):
+
+| check | result |
+|---|---|
+| `/skills/session` Infermiere | 200, role «Infermiere», starters from available skills |
+| OSS starters | no prescription/administration |
+| Administrator available skills | aggregates/metadata only (no patient.overview, vitals, therapy slots) |
+| «come sono le consegne?» (Infermiere) | COMPLETED via **agno** |
+| resident picker / `/skills/context` | scoped results, 200 for an in-scope resident |
+| «registra pressione 120/80 per questo ospite» | NEEDS_CONFIRMATION via agno, SENSITIVE_WRITE, previewId present |
+| typed «sì» | still NEEDS_CONFIRMATION (not a confirmation) |
+| Annulla | CANCELLED, nothing written |
+| OSS «quali somministrazioni ci sono oggi?» | DENIED via agno |
+
+The production frontend is behind Entra: the UI is verified locally (browser E2E) and by the user
+with a hard reload.
