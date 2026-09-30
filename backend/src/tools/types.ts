@@ -15,7 +15,8 @@ export type ToolAuditKind = 'read' | 'create' | 'update' | 'delete' | 'action';
 export type ToolSensitivity = 'low' | 'medium' | 'high' | 'critical';
 
 /** Who/what triggered the invocation. Metadata only: it never widens permissions. */
-export type ToolOrigin = 'gui' | 'ai' | 'tool' | 'test';
+/** 'ai_assistant' = Phase 4 AI Assistant (skills engine). */
+export type ToolOrigin = 'gui' | 'ai' | 'ai_assistant' | 'tool' | 'test';
 
 export interface ToolIdentity {
   operatorId: string;

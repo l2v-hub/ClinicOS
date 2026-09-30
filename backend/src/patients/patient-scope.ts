@@ -1,4 +1,7 @@
 import type { Operator } from '../ai/auth.js';
+import { residentScopeModeForRole, residentScopeWhere } from '../access-scope/resident-access-scope.js';
+
+// Thin compatibility layer: the rule lives in access-scope/resident-access-scope.ts (Phase 4).
 
 export interface PatientScopeReader {
   patient: {
@@ -9,15 +12,13 @@ export interface PatientScopeReader {
   };
 }
 
-const GLOBAL_PATIENT_ROLES = new Set(['admin', 'manager']);
-
 export function hasGlobalPatientScope(role: string): boolean {
-  return GLOBAL_PATIENT_ROLES.has(role.trim().toLowerCase());
+  return residentScopeModeForRole(role) === 'all';
 }
 
-/** Prisma-compatible ownership predicate. Empty only for facility-wide roles. */
+/** Prisma-compatible ownership predicate. Empty only for facility-wide scope ('all'). */
 export function patientScopeWhere(operator: Operator): { registeredById?: string } {
-  return hasGlobalPatientScope(operator.role) ? {} : { registeredById: operator.id };
+  return residentScopeWhere(operator);
 }
 
 export async function patientIsInOperatorScope(

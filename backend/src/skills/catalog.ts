@@ -1,7 +1,7 @@
-// Skill Catalog of record (Phase 3). Every skill is a COMPOSITION of Tool Layer tools that exist
-// in backend/src/tools (checked by skills-catalog.test.ts); none adds business logic.
-// `.ai-architecture/phase-3-skills/SKILL_CATALOG.json` is generated from this file by
-// scripts/ai-architecture/build-skill-catalog.mjs.
+// Skill Catalog of record (Phase 3, extended in Phase 4). Every skill is a COMPOSITION of Tool
+// Layer tools that exist in backend/src/tools (checked by skills-unit.test.ts); none adds business
+// logic. `.ai-architecture/phase-3-skills/SKILL_CATALOG.json` is generated from this file by
+// scripts/ai-architecture/build-skill-catalog.ts.
 //
 // Order matters for the deterministic interpreter: the first skill whose keywords match wins, so
 // writes ("registra", "aggiungi") come before the reads that share their nouns.
@@ -27,10 +27,10 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     slots: ['patient', 'values'],
     output: 'Rilevazione salvata (id, orario) e verificata rileggendo le rilevazioni del giorno.',
     steps: [
-      'identify_patient: patients.search | contesto pagina',
+      'identify_patient: patients.search | contesto pagina + resident access scope',
       'collect_values: slot values (validazione con parseParameterReading, la stessa del servizio)',
-      'preview: ospite, valori, orario, origine AI',
-      'confirm: atto esplicito dell’utente',
+      'preview: ospite, valori, orario, autore, origine AI',
+      'confirm: evento UI esplicito legato al previewId',
       'execute: parameters.create_reading (requestId stabile → retry senza duplicati)',
       'verify: parameters.list_readings (se disponibile)',
       'audit: skill:vitals.record:* + tool:parameters.create_reading',
@@ -42,8 +42,14 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
       PATIENT_AMBIGUITY + ' Valori mancanti o non validi → NEEDS_CLARIFICATION sui valori.',
     failure:
       'Errore di validazione/servizio → FAILED con il messaggio del backend; retry riusa lo stesso requestId (dedupe del servizio).',
-    audit: 'request, proposal (nomi dei campi), confirmation, execute (outcome) + evento del tool.',
+    audit:
+      'request, proposal (preview id, nomi dei campi), confirmation, execute + evento del tool.',
     executable: true,
+    classicScreen: { screen: 'parametri-multipaziente', label: 'Parametri' },
+    starters: {
+      withResident: 'Registra i parametri di questo ospite',
+      general: 'Registra i parametri di un ospite',
+    },
     keywords: [
       /\b(registra|inserisci|aggiungi|annota|salva|segna)\b.*\b(parametr|pressione|pa\b|saturazion|spo2|temperatur|temp\b|febbre|frequenza|fc\b|fr\b|polso|glicemi|dtx|ossigeno)/i,
       /\b(pressione|pa)\s*\d{2,3}\s*\/\s*\d{2,3}/i,
@@ -61,10 +67,10 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     slots: ['patient', 'text'],
     output: 'Voce di diario creata (id, autore risolto dal server).',
     steps: [
-      'identify_patient: patients.search | contesto pagina',
+      'identify_patient: patients.search | contesto pagina + resident access scope',
       'collect_text: slot text (testo integrale, mai riscritto)',
-      'preview: ospite, testo, categoria, origine AI',
-      'confirm',
+      'preview: ospite, testo, data, autore, origine AI',
+      'confirm: evento UI esplicito legato al previewId',
       'execute: diary.create (una sola esecuzione per workflow: il tool non è idempotente)',
       'audit',
     ],
@@ -76,6 +82,12 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
       'diary.create non è idempotente: il workflow blocca una seconda esecuzione; dopo un esito incerto non ritenta da solo.',
     audit: 'request, proposal, confirmation, execute + tool:diary.create.',
     executable: true,
+    classicScreen: {
+      screen: 'dettaglio-paziente',
+      label: 'Cartella → Diario',
+      needsResident: true,
+    },
+    starters: { withResident: 'Aggiungi un’osservazione nel diario di questo ospite' },
     keywords: [
       /\b(aggiungi|registra|scrivi|annota|inserisci|metti)\b.*\b(osservazion|nota|diario|annotazion)/i,
     ],
@@ -83,18 +95,20 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
   {
     id: 'handover.create',
     name: 'Crea consegna',
-    description: 'Crea una consegna (passaggio di informazioni al turno) riferita a un ospite.',
+    description:
+      'Crea una consegna (passaggio di informazioni al turno) riferita a un ospite. Priorità normale e tipo «Assistente AI» di default; l’urgenza viene solo segnalata.',
     category: 'operational',
     intendedRoles: CARE_AND_SUPERVISION,
     requiredTools: ['patients.search', 'consegne.create'],
     optionalTools: [],
     slots: ['patient', 'text'],
-    output: 'Consegna creata (id, priorità normale).',
+    output: 'Consegna creata (id, priorità, tipo Assistente AI).',
     steps: [
-      'identify_patient',
+      'identify_patient + resident access scope',
       'collect_text',
-      'preview: ospite, testo, priorità normale, tipo assistenziale',
-      'confirm',
+      'preview: ospite, testo, priorità normale, tipo Assistente AI, avviso se il testo sembra urgente',
+      'modify (facoltativo): cambio priorità esplicito → nuova anteprima',
+      'confirm: evento UI esplicito legato al previewId',
       'execute: consegne.create (requestId stabile)',
       'audit',
     ],
@@ -104,57 +118,94 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     ambiguity: PATIENT_AMBIGUITY,
     failure: 'FAILED con il messaggio del backend; retry idempotente sul requestId.',
     audit: 'request, proposal, confirmation, execute + tool:consegne.create.',
-    customerValidation:
-      'Priorità e tipo di default (normale / assistenziale) da validare con il cliente.',
     executable: true,
+    classicScreen: { screen: 'consegne', label: 'Consegne' },
+    starters: { withResident: 'Crea una consegna per questo ospite' },
     keywords: [/\b(crea|aggiungi|registra|lascia|scrivi|nuova)\b.*\bconsegn/i],
   },
-  // ── HIGH-RISK: catalogued, never executed by the assistant ────────────────────────────────
+  // ── HIGH_RISK: prepared by the assistant, confirmed ONLY by the professional (UI event) ──
   {
     id: 'therapy.prescribe',
-    name: 'Prescrivi terapia',
+    name: 'Prepara prescrizione',
     description:
-      'Nuova prescrizione farmacologica. Clinicamente critica: il medico la compila e conferma dalla scheda Terapia, l’assistente non la esegue.',
+      'Prepara una nuova prescrizione dal testo dettato (stesso interprete del Diario → Terapia): anteprima strutturata, poi SOLO il medico la conferma con il pulsante Conferma. L’assistente non conferma mai.',
     category: 'clinical',
     intendedRoles: ['doctor'],
-    requiredTools: ['patients.search', 'diary.therapy_preview', 'therapy.create'],
-    optionalTools: ['drugs.search'],
+    requiredTools: ['patients.search', 'diary.therapy_preview', 'diary.create_with_therapy'],
+    optionalTools: [],
     slots: ['patient', 'text'],
-    output: 'Nessuna scrittura: indirizzamento alla scheda Terapia.',
-    steps: ['classify HIGH_RISK', 'handoff: scheda Terapia / Diario → Terapia (conferma umana)'],
+    output: 'Voce di diario «terapia» + terapia collegata (ids), create dal medico.',
+    steps: [
+      'identify_patient + resident access scope',
+      'prepare: diary.therapy_preview (regole + proposta AI solo sui campi vuoti)',
+      'preview: farmaco, dosaggio, via, orari, date, avvisi; Conferma nascosta se mancano dati',
+      'confirm: evento UI esplicito legato al previewId, con la terapia mappata dal form Terapia',
+      'check: la terapia confermata corrisponde alla bozza (farmaco, orari, inizio)',
+      'execute: diary.create_with_therapy (requestId stabile)',
+      'audit',
+    ],
     kind: 'write',
     confirmation: 'HIGH_RISK',
     sensitivity: 'critical',
-    ambiguity: 'Non applicabile: nessuna esecuzione.',
-    failure: 'Non applicabile: nessuna esecuzione.',
-    audit: 'request + denied (human_control_required).',
+    ambiguity:
+      PATIENT_AMBIGUITY +
+      ' Testo che indica sospensione/somministrazione/modifica → non è una prescrizione: rimando alla scheda Terapia.',
+    failure:
+      'Dati mancanti o conflitti di fascia → nessun pulsante Conferma, rimando alla scheda Terapia; errore del servizio → FAILED.',
+    audit:
+      'request, proposal (preview id), confirmation (preview id), execute + tool:diary.create_with_therapy.',
     customerValidation:
-      'Se e come l’assistente possa preparare (mai confermare) una prescrizione va deciso con il cliente e il direttore sanitario.',
-    executable: false,
+      'Prescrizione preparata dall’assistente e confermata dal medico: validare con il direttore sanitario prima dell’uso reale.',
+    executable: true,
+    classicScreen: {
+      screen: 'dettaglio-paziente',
+      label: 'Cartella → Terapia',
+      needsResident: true,
+    },
+    starters: {
+      withResident: 'Prepara una prescrizione per questo ospite',
+      general: 'Prepara una prescrizione',
+    },
     keywords: [/\b(prescriv|prescrizion|nuova terapia|imposta (una )?terapia)/i],
   },
   {
     id: 'administration.record',
     name: 'Registra somministrazione',
     description:
-      'Conferma o mancata somministrazione di una terapia. Clinicamente critica: si esegue dal giro terapia, l’assistente non la esegue.',
+      'Prepara la registrazione di una somministrazione in attesa dell’ospite (giro terapia del giorno): anteprima, poi SOLO l’operatore autorizzato conferma con il pulsante Conferma dopo aver somministrato.',
     category: 'clinical',
-    intendedRoles: ['nurse'],
-    requiredTools: ['administration.list_slots', 'administration.confirm'],
-    optionalTools: ['administration.record_not_administered'],
-    slots: ['patient'],
-    output: 'Nessuna scrittura: indirizzamento al giro terapia.',
-    steps: ['classify HIGH_RISK', 'handoff: Terapia → giro somministrazioni'],
+    intendedRoles: ['nurse', 'supervisor'],
+    requiredTools: ['patients.search', 'administration.list_slots', 'administration.confirm'],
+    optionalTools: [],
+    slots: ['patient', 'administration'],
+    optionalSlots: ['date'],
+    output: 'Somministrazione registrata (terapia, fascia, data) dall’operatore autenticato.',
+    steps: [
+      'identify_patient + resident access scope',
+      'read: administration.list_slots (oggi) → somministrazioni in attesa dell’ospite',
+      'choose: una sola → selezionata; più → scelta esplicita',
+      'preview: farmaco, dose, via, fascia/ora, data, avviso «conferma solo dopo la somministrazione»',
+      'confirm: evento UI esplicito legato al previewId',
+      'execute: administration.confirm',
+      'audit',
+    ],
     kind: 'action',
     confirmation: 'HIGH_RISK',
     sensitivity: 'critical',
-    ambiguity: 'Non applicabile: nessuna esecuzione.',
-    failure: 'Non applicabile: nessuna esecuzione.',
-    audit: 'request + denied (human_control_required).',
+    ambiguity:
+      PATIENT_AMBIGUITY + ' Più somministrazioni in attesa → scelta esplicita tra i candidati.',
+    failure:
+      'Nessuna somministrazione in attesa → nessuna scrittura; errore del servizio → FAILED.',
+    audit:
+      'request, proposal (preview id), confirmation (preview id), execute + tool:administration.confirm.',
     customerValidation:
-      'Somministrazione assistita da voce/AI da definire con il cliente (doppio controllo, identificazione ospite).',
-    executable: false,
-    keywords: [/\b(somministrat[oa]|segna (la )?somministrazion|non somministrat)/i],
+      'Doppio controllo / identificazione dell’ospite al letto: da definire con il cliente prima dell’uso in reparto.',
+    executable: true,
+    classicScreen: { screen: 'terapie', label: 'Terapia → somministrazioni' },
+    starters: { withResident: 'Registra una somministrazione per questo ospite' },
+    keywords: [
+      /\b(registra|segna|conferma)\b.*\bsomministrazion|\bsomministrat[oa]\b|non somministrat/i,
+    ],
   },
   // ── Query / knowledge (READ) ──────────────────────────────────────────────────────────────
   {
@@ -175,6 +226,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'Errore di lettura → FAILED con il messaggio del backend.',
     audit: 'request + tool:parameters.list_readings.',
     executable: true,
+    classicScreen: { screen: 'parametri-multipaziente', label: 'Parametri' },
+    starters: { withResident: 'Mostrami i parametri recenti di questo ospite' },
     keywords: [/\b(parametr|pressione|saturazion|temperatur|rilevazion|vital)/i],
   },
   {
@@ -195,6 +248,12 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:diary.list.',
     executable: true,
+    classicScreen: {
+      screen: 'dettaglio-paziente',
+      label: 'Cartella → Diario',
+      needsResident: true,
+    },
+    starters: { withResident: 'Mostrami il diario di questo ospite' },
     keywords: [/\b(diario\b|osservazion|note\b)/i],
   },
   {
@@ -221,6 +280,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend; un tool opzionale negato riduce la risposta.',
     audit: 'request + tool:* invocati.',
     executable: true,
+    classicScreen: { screen: 'dettaglio-paziente', label: 'Cartella ospite', needsResident: true },
+    starters: { withResident: 'Dimmi tutto su questo ospite' },
     keywords: [
       /\b(informazion|scheda|riepilogo|sintesi|situazion|come sta\b|dimmi (tutto )?(su|di)\b)/i,
     ],
@@ -245,6 +306,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:assistant.query.',
     executable: true,
+    classicScreen: { screen: 'dettaglio-paziente', label: 'Cartella ospite', needsResident: true },
+    starters: { withResident: 'Quali allergie ha questo ospite?' },
     keywords: [
       /\b(allergi|intolleranz|quali terapie|terapie in corso|che farmaci prende|document)/i,
     ],
@@ -268,6 +331,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:administration.list_slots.',
     executable: true,
+    classicScreen: { screen: 'terapie', label: 'Terapia' },
+    starters: { general: 'Quali somministrazioni ci sono oggi?' },
     keywords: [/\b(somministrazion|giro (di )?terapi|terapie da (dare|fare|somministrare))/i],
   },
   {
@@ -288,6 +353,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:consegne.overview.',
     executable: true,
+    classicScreen: { screen: 'consegne', label: 'Consegne' },
+    starters: { general: 'Come sono le consegne?' },
     keywords: [/\bconsegn/i],
   },
   {
@@ -309,6 +376,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:appointments.list.',
     executable: true,
+    classicScreen: { screen: 'agenda-operatore', label: 'Agenda' },
+    starters: { general: 'Appuntamenti di oggi' },
     keywords: [/\b(appuntament|agenda\b|visite\b)/i],
   },
   {
@@ -329,6 +398,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:rooms.occupancy.',
     executable: true,
+    classicScreen: { screen: 'posti-letto', label: 'Posti letto' },
+    starters: { general: 'Quanti posti letto sono occupati?' },
     keywords: [/\b(occupazion|posti letto|letti liberi|camere (libere|occupate)|occupat)/i],
   },
   {
@@ -349,6 +420,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:drugs.search.',
     executable: true,
+    classicScreen: { screen: 'anagrafica-farmaci', label: 'Anagrafica farmaci' },
+    starters: { general: 'Cerca un farmaco' },
     keywords: [/\b(farmac|medicinal|principio attivo)/i],
   },
   {
@@ -360,7 +433,7 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     requiredTools: ['patients.search'],
     optionalTools: [],
     slots: ['query'],
-    output: 'Ospiti trovati (nome, camera/letto).',
+    output: 'Ospiti trovati (nome).',
     steps: ['read: patients.search', 'answer'],
     kind: 'read',
     confirmation: 'READ',
@@ -369,6 +442,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:patients.search.',
     executable: true,
+    classicScreen: { screen: 'pazienti', label: 'Pazienti' },
+    starters: { general: 'Cerca un ospite' },
     keywords: [/\b(cerca|trova|dov['’]?è|dove si trova)\b.*\b(ospit|pazient|residente)/i],
   },
   // ── Administrative ─────────────────────────────────────────────────────────────────────────
@@ -390,6 +465,8 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'FAILED con il messaggio del backend.',
     audit: 'request + tool:roster.list_contexts.',
     executable: true,
+    classicScreen: { screen: 'pazienti', label: 'Pazienti' },
+    starters: { general: 'Mostrami gli ordinamenti dei reparti' },
     keywords: [/\b(ordinament|contest[oi] (di )?ordin|roster)/i],
   },
 ];
@@ -398,4 +475,29 @@ const BY_ID = new Map(SKILL_CATALOG.map((skill) => [skill.id, skill]));
 
 export function skillById(id: string): SkillDefinition | undefined {
   return BY_ID.get(id);
+}
+
+/** Starter suggestions for the Assistant UI: only executable skills AVAILABLE to the caller. */
+export function startersFor(
+  availableIds: ReadonlySet<string>,
+  hasResident: boolean,
+  limit = 8,
+): { skillId: string; label: string }[] {
+  const out: { skillId: string; label: string }[] = [];
+  for (const skill of SKILL_CATALOG) {
+    if (!skill.executable || !availableIds.has(skill.id) || !skill.starters) continue;
+    const label = hasResident
+      ? (skill.starters.withResident ?? skill.starters.general)
+      : skill.starters.general;
+    if (label) out.push({ skillId: skill.id, label });
+  }
+  // With a resident open, resident-centred actions first.
+  if (hasResident) {
+    out.sort(
+      (a, b) =>
+        Number(!skillById(a.skillId)?.slots.includes('patient')) -
+        Number(!skillById(b.skillId)?.slots.includes('patient')),
+    );
+  }
+  return out.slice(0, limit);
 }

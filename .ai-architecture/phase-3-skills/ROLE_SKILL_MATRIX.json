@@ -7,8 +7,6 @@
     {
       "role": "administrator",
       "available": [
-        "patient.overview",
-        "therapy.due_administrations",
         "handover.overview",
         "appointments.day",
         "facility.occupancy",
@@ -52,16 +50,16 @@
             "consegne.create"
           ],
           "missing_optional": [],
-          "needs_customer_validation": true
+          "needs_customer_validation": false
         },
         {
           "skill_id": "therapy.prescribe",
           "available": false,
-          "state": "HUMAN_ONLY",
+          "state": "UNAVAILABLE",
           "intended": false,
           "missing_required": [
             "diary.therapy_preview",
-            "therapy.create"
+            "diary.create_with_therapy"
           ],
           "missing_optional": [],
           "needs_customer_validation": true
@@ -69,14 +67,13 @@
         {
           "skill_id": "administration.record",
           "available": false,
-          "state": "HUMAN_ONLY",
+          "state": "UNAVAILABLE",
           "intended": false,
           "missing_required": [
+            "administration.list_slots",
             "administration.confirm"
           ],
-          "missing_optional": [
-            "administration.record_not_administered"
-          ],
+          "missing_optional": [],
           "needs_customer_validation": true
         },
         {
@@ -103,14 +100,16 @@
         },
         {
           "skill_id": "patient.overview",
-          "available": true,
-          "state": "PARTIAL",
+          "available": false,
+          "state": "UNAVAILABLE",
           "intended": false,
-          "missing_required": [],
+          "missing_required": [
+            "patients.clinical_summary"
+          ],
           "missing_optional": [
             "parameters.list_readings"
           ],
-          "needs_customer_validation": true
+          "needs_customer_validation": false
         },
         {
           "skill_id": "clinical.question",
@@ -125,12 +124,14 @@
         },
         {
           "skill_id": "therapy.due_administrations",
-          "available": true,
-          "state": "AVAILABLE",
+          "available": false,
+          "state": "UNAVAILABLE",
           "intended": false,
-          "missing_required": [],
+          "missing_required": [
+            "administration.list_slots"
+          ],
           "missing_optional": [],
-          "needs_customer_validation": true
+          "needs_customer_validation": false
         },
         {
           "skill_id": "handover.overview",
@@ -194,6 +195,7 @@
         "vitals.record",
         "diary.add_observation",
         "handover.create",
+        "administration.record",
         "vitals.recent",
         "diary.recent",
         "patient.overview",
@@ -232,24 +234,24 @@
           "intended": true,
           "missing_required": [],
           "missing_optional": [],
-          "needs_customer_validation": true
+          "needs_customer_validation": false
         },
         {
           "skill_id": "therapy.prescribe",
           "available": false,
-          "state": "HUMAN_ONLY",
+          "state": "UNAVAILABLE",
           "intended": false,
           "missing_required": [
-            "therapy.create"
+            "diary.create_with_therapy"
           ],
           "missing_optional": [],
           "needs_customer_validation": true
         },
         {
           "skill_id": "administration.record",
-          "available": false,
-          "state": "HUMAN_ONLY",
-          "intended": false,
+          "available": true,
+          "state": "AVAILABLE",
+          "intended": true,
           "missing_required": [],
           "missing_optional": [],
           "needs_customer_validation": true
@@ -361,6 +363,7 @@
         "vitals.record",
         "diary.add_observation",
         "handover.create",
+        "therapy.prescribe",
         "vitals.recent",
         "diary.recent",
         "patient.overview",
@@ -397,12 +400,12 @@
           "intended": true,
           "missing_required": [],
           "missing_optional": [],
-          "needs_customer_validation": true
+          "needs_customer_validation": false
         },
         {
           "skill_id": "therapy.prescribe",
-          "available": false,
-          "state": "HUMAN_ONLY",
+          "available": true,
+          "state": "AVAILABLE",
           "intended": true,
           "missing_required": [],
           "missing_optional": [],
@@ -411,14 +414,12 @@
         {
           "skill_id": "administration.record",
           "available": false,
-          "state": "HUMAN_ONLY",
+          "state": "UNAVAILABLE",
           "intended": false,
           "missing_required": [
             "administration.confirm"
           ],
-          "missing_optional": [
-            "administration.record_not_administered"
-          ],
+          "missing_optional": [],
           "needs_customer_validation": true
         },
         {
@@ -532,6 +533,7 @@
         "vitals.record",
         "diary.add_observation",
         "handover.create",
+        "administration.record",
         "vitals.recent",
         "diary.recent",
         "patient.overview",
@@ -568,23 +570,23 @@
           "intended": true,
           "missing_required": [],
           "missing_optional": [],
-          "needs_customer_validation": true
+          "needs_customer_validation": false
         },
         {
           "skill_id": "therapy.prescribe",
           "available": false,
-          "state": "HUMAN_ONLY",
+          "state": "UNAVAILABLE",
           "intended": false,
           "missing_required": [
-            "therapy.create"
+            "diary.create_with_therapy"
           ],
           "missing_optional": [],
           "needs_customer_validation": true
         },
         {
           "skill_id": "administration.record",
-          "available": false,
-          "state": "HUMAN_ONLY",
+          "available": true,
+          "state": "AVAILABLE",
           "intended": true,
           "missing_required": [],
           "missing_optional": [],
@@ -736,16 +738,16 @@
           "intended": true,
           "missing_required": [],
           "missing_optional": [],
-          "needs_customer_validation": true
+          "needs_customer_validation": false
         },
         {
           "skill_id": "therapy.prescribe",
           "available": false,
-          "state": "HUMAN_ONLY",
+          "state": "UNAVAILABLE",
           "intended": false,
           "missing_required": [
             "diary.therapy_preview",
-            "therapy.create"
+            "diary.create_with_therapy"
           ],
           "missing_optional": [],
           "needs_customer_validation": true
@@ -753,15 +755,13 @@
         {
           "skill_id": "administration.record",
           "available": false,
-          "state": "HUMAN_ONLY",
+          "state": "UNAVAILABLE",
           "intended": false,
           "missing_required": [
             "administration.list_slots",
             "administration.confirm"
           ],
-          "missing_optional": [
-            "administration.record_not_administered"
-          ],
+          "missing_optional": [],
           "needs_customer_validation": true
         },
         {

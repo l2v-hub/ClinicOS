@@ -1,11 +1,10 @@
 {
   "schema": "clinicos.ai-architecture.skill-catalog/v1",
   "source_of_record": "backend/src/skills/catalog.ts",
-  "confirmation_policy_version": 1,
+  "confirmation_policy_version": 2,
   "totals": {
     "skills": 16,
-    "TESTED": 14,
-    "DESIGNED": 2
+    "TESTED": 16
   },
   "skills": [
     {
@@ -32,10 +31,10 @@
       ],
       "output": "Rilevazione salvata (id, orario) e verificata rileggendo le rilevazioni del giorno.",
       "workflow_steps": [
-        "identify_patient: patients.search | contesto pagina",
+        "identify_patient: patients.search | contesto pagina + resident access scope",
         "collect_values: slot values (validazione con parseParameterReading, la stessa del servizio)",
-        "preview: ospite, valori, orario, origine AI",
-        "confirm: atto esplicito dell’utente",
+        "preview: ospite, valori, orario, autore, origine AI",
+        "confirm: evento UI esplicito legato al previewId",
         "execute: parameters.create_reading (requestId stabile → retry senza duplicati)",
         "verify: parameters.list_readings (se disponibile)",
         "audit: skill:vitals.record:* + tool:parameters.create_reading"
@@ -44,7 +43,7 @@
       "confirmation": "SENSITIVE_WRITE",
       "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Valori mancanti o non validi → NEEDS_CLARIFICATION sui valori.",
       "failure_handling": "Errore di validazione/servizio → FAILED con il messaggio del backend; retry riusa lo stesso requestId (dedupe del servizio).",
-      "audit": "request, proposal (nomi dei campi), confirmation, execute (outcome) + evento del tool.",
+      "audit": "request, proposal (preview id, nomi dei campi), confirmation, execute + evento del tool.",
       "sensitivity": "high",
       "customer_validation": null,
       "implementation_status": "TESTED",
@@ -84,10 +83,10 @@
       ],
       "output": "Voce di diario creata (id, autore risolto dal server).",
       "workflow_steps": [
-        "identify_patient: patients.search | contesto pagina",
+        "identify_patient: patients.search | contesto pagina + resident access scope",
         "collect_text: slot text (testo integrale, mai riscritto)",
-        "preview: ospite, testo, categoria, origine AI",
-        "confirm",
+        "preview: ospite, testo, data, autore, origine AI",
+        "confirm: evento UI esplicito legato al previewId",
         "execute: diary.create (una sola esecuzione per workflow: il tool non è idempotente)",
         "audit"
       ],
@@ -110,7 +109,7 @@
     {
       "skill_id": "handover.create",
       "name": "Crea consegna",
-      "description": "Crea una consegna (passaggio di informazioni al turno) riferita a un ospite.",
+      "description": "Crea una consegna (passaggio di informazioni al turno) riferita a un ospite. Priorità normale e tipo «Assistente AI» di default; l’urgenza viene solo segnalata.",
       "category": "operational",
       "intended_roles": [
         "doctor",
@@ -127,12 +126,13 @@
         "patient",
         "text"
       ],
-      "output": "Consegna creata (id, priorità normale).",
+      "output": "Consegna creata (id, priorità, tipo Assistente AI).",
       "workflow_steps": [
-        "identify_patient",
+        "identify_patient + resident access scope",
         "collect_text",
-        "preview: ospite, testo, priorità normale, tipo assistenziale",
-        "confirm",
+        "preview: ospite, testo, priorità normale, tipo Assistente AI, avviso se il testo sembra urgente",
+        "modify (facoltativo): cambio priorità esplicito → nuova anteprima",
+        "confirm: evento UI esplicito legato al previewId",
         "execute: consegne.create (requestId stabile)",
         "audit"
       ],
@@ -142,7 +142,7 @@
       "failure_handling": "FAILED con il messaggio del backend; retry idempotente sul requestId.",
       "audit": "request, proposal, confirmation, execute + tool:consegne.create.",
       "sensitivity": "medium",
-      "customer_validation": "Priorità e tipo di default (normale / assistenziale) da validare con il cliente.",
+      "customer_validation": null,
       "implementation_status": "TESTED",
       "executable_by_assistant": true,
       "test_status": "TESTED",
@@ -154,8 +154,8 @@
     },
     {
       "skill_id": "therapy.prescribe",
-      "name": "Prescrivi terapia",
-      "description": "Nuova prescrizione farmacologica. Clinicamente critica: il medico la compila e conferma dalla scheda Terapia, l’assistente non la esegue.",
+      "name": "Prepara prescrizione",
+      "description": "Prepara una nuova prescrizione dal testo dettato (stesso interprete del Diario → Terapia): anteprima strutturata, poi SOLO il medico la conferma con il pulsante Conferma. L’assistente non conferma mai.",
       "category": "clinical",
       "intended_roles": [
         "doctor"
@@ -163,68 +163,85 @@
       "required_capabilities": [
         "patients.search",
         "diary.therapy_preview",
-        "therapy.create"
+        "diary.create_with_therapy"
       ],
-      "optional_capabilities": [
-        "drugs.search"
-      ],
+      "optional_capabilities": [],
       "input_context": [
         "patient",
         "text"
       ],
-      "output": "Nessuna scrittura: indirizzamento alla scheda Terapia.",
+      "output": "Voce di diario «terapia» + terapia collegata (ids), create dal medico.",
       "workflow_steps": [
-        "classify HIGH_RISK",
-        "handoff: scheda Terapia / Diario → Terapia (conferma umana)"
+        "identify_patient + resident access scope",
+        "prepare: diary.therapy_preview (regole + proposta AI solo sui campi vuoti)",
+        "preview: farmaco, dosaggio, via, orari, date, avvisi; Conferma nascosta se mancano dati",
+        "confirm: evento UI esplicito legato al previewId, con la terapia mappata dal form Terapia",
+        "check: la terapia confermata corrisponde alla bozza (farmaco, orari, inizio)",
+        "execute: diary.create_with_therapy (requestId stabile)",
+        "audit"
       ],
       "kind": "write",
       "confirmation": "HIGH_RISK",
-      "ambiguity_handling": "Non applicabile: nessuna esecuzione.",
-      "failure_handling": "Non applicabile: nessuna esecuzione.",
-      "audit": "request + denied (human_control_required).",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Testo che indica sospensione/somministrazione/modifica → non è una prescrizione: rimando alla scheda Terapia.",
+      "failure_handling": "Dati mancanti o conflitti di fascia → nessun pulsante Conferma, rimando alla scheda Terapia; errore del servizio → FAILED.",
+      "audit": "request, proposal (preview id), confirmation (preview id), execute + tool:diary.create_with_therapy.",
       "sensitivity": "critical",
-      "customer_validation": "Se e come l’assistente possa preparare (mai confermare) una prescrizione va deciso con il cliente e il direttore sanitario.",
-      "implementation_status": "DESIGNED",
-      "executable_by_assistant": false,
+      "customer_validation": "Prescrizione preparata dall’assistente e confermata dal medico: validare con il direttore sanitario prima dell’uso reale.",
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
       "test_status": "TESTED",
       "test_evidence": [
-        "backend/src/skills/__tests__/skills-e2e.test.ts › D (hand-off, human_control_required)"
+        "backend/src/skills/__tests__/skills-e2e.test.ts › D (OSS denied)",
+        "backend/src/skills/__tests__/assistant-e2e.test.ts › C (prepare → UI confirm → with-therapy)",
+        "scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser C",
+        "scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser (Agno)"
       ]
     },
     {
       "skill_id": "administration.record",
       "name": "Registra somministrazione",
-      "description": "Conferma o mancata somministrazione di una terapia. Clinicamente critica: si esegue dal giro terapia, l’assistente non la esegue.",
+      "description": "Prepara la registrazione di una somministrazione in attesa dell’ospite (giro terapia del giorno): anteprima, poi SOLO l’operatore autorizzato conferma con il pulsante Conferma dopo aver somministrato.",
       "category": "clinical",
       "intended_roles": [
-        "nurse"
+        "nurse",
+        "supervisor"
       ],
       "required_capabilities": [
+        "patients.search",
         "administration.list_slots",
         "administration.confirm"
       ],
-      "optional_capabilities": [
-        "administration.record_not_administered"
-      ],
+      "optional_capabilities": [],
       "input_context": [
-        "patient"
+        "patient",
+        "administration",
+        "date?"
       ],
-      "output": "Nessuna scrittura: indirizzamento al giro terapia.",
+      "output": "Somministrazione registrata (terapia, fascia, data) dall’operatore autenticato.",
       "workflow_steps": [
-        "classify HIGH_RISK",
-        "handoff: Terapia → giro somministrazioni"
+        "identify_patient + resident access scope",
+        "read: administration.list_slots (oggi) → somministrazioni in attesa dell’ospite",
+        "choose: una sola → selezionata; più → scelta esplicita",
+        "preview: farmaco, dose, via, fascia/ora, data, avviso «conferma solo dopo la somministrazione»",
+        "confirm: evento UI esplicito legato al previewId",
+        "execute: administration.confirm",
+        "audit"
       ],
       "kind": "action",
       "confirmation": "HIGH_RISK",
-      "ambiguity_handling": "Non applicabile: nessuna esecuzione.",
-      "failure_handling": "Non applicabile: nessuna esecuzione.",
-      "audit": "request + denied (human_control_required).",
+      "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Più somministrazioni in attesa → scelta esplicita tra i candidati.",
+      "failure_handling": "Nessuna somministrazione in attesa → nessuna scrittura; errore del servizio → FAILED.",
+      "audit": "request, proposal (preview id), confirmation (preview id), execute + tool:administration.confirm.",
       "sensitivity": "critical",
-      "customer_validation": "Somministrazione assistita da voce/AI da definire con il cliente (doppio controllo, identificazione ospite).",
-      "implementation_status": "DESIGNED",
-      "executable_by_assistant": false,
-      "test_status": "NOT_TESTED",
-      "test_evidence": []
+      "customer_validation": "Doppio controllo / identificazione dell’ospite al letto: da definire con il cliente prima dell’uso in reparto.",
+      "implementation_status": "TESTED",
+      "executable_by_assistant": true,
+      "test_status": "TESTED",
+      "test_evidence": [
+        "backend/src/skills/__tests__/assistant-e2e.test.ts › I (prepare → UI confirm, backend failure, retry)",
+        "scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser I",
+        "scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser (Agno)"
+      ]
     },
     {
       "skill_id": "vitals.recent",
@@ -587,7 +604,7 @@
       "input_context": [
         "query"
       ],
-      "output": "Ospiti trovati (nome, camera/letto).",
+      "output": "Ospiti trovati (nome).",
       "workflow_steps": [
         "read: patients.search",
         "answer"

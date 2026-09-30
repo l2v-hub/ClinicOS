@@ -23,7 +23,11 @@ export type SkillSlot =
   /** Calendar day YYYY-MM-DD (defaults to today in the facility). */
   | 'date'
   /** Free search text (drug name, question). */
-  | 'query';
+  | 'query'
+  /** One pending therapy administration of the resident (administration.record). */
+  | 'administration'
+  /** Structured edit after «Modifica» (values / text / priority). */
+  | 'edit';
 
 export interface SkillDefinition {
   id: string;
@@ -51,8 +55,15 @@ export interface SkillDefinition {
   audit: string;
   /** Needs functional validation with the customer before being enabled for real users. */
   customerValidation?: string;
-  /** HIGH_RISK skills are catalogued but never executed by the assistant (human control). */
+  /**
+   * False = catalogued only. HIGH_RISK skills ARE executable since Phase 4, but only after an
+   * explicit UI confirmation bound to a preview (never an LLM/text confirmation).
+   */
   executable: boolean;
+  /** Classic GUI screen that covers the same need (fallback, Prompt 4 §13). */
+  classicScreen?: ClassicScreen;
+  /** Starter phrases for the Assistant UI (Prompt 4 §5), answered by the same interpreters. */
+  starters?: { withResident?: string; general?: string };
   /** Italian keywords used by the deterministic interpreter (Agno receives the description). */
   keywords: readonly RegExp[];
 }
@@ -77,6 +88,13 @@ export const TERMINAL_STATUSES: ReadonlySet<WorkflowStatus> = new Set([
   'CANCELLED',
 ]);
 
+/** NavKey of the classic GUI (frontend/src/types.ts) + whether it needs the resident. */
+export interface ClassicScreen {
+  screen: string;
+  label: string;
+  needsResident?: boolean;
+}
+
 export interface PatientRef {
   id: string;
   label: string;
@@ -92,6 +110,32 @@ export interface WorkflowSlots {
   query?: string;
   /** Instant of the request (ISO), fixed at preview time so a retry writes the same reading. */
   at?: string;
+  /** Handover priority (default 'normale'; raised only by an explicit edit). */
+  priority?: 'normale' | 'alta' | 'urgente';
+  /** Selected pending administration (administration.record). */
+  administration?: {
+    therapyId: string;
+    fascia: string;
+    date: string;
+    drugName: string;
+    dosage: string;
+    route: string;
+    scheduledTime: string;
+  };
+  /** Pending administrations offered when there is more than one (administration.record). */
+  administrationOptions?: Array<{
+    therapyId: string;
+    fascia: string;
+    date: string;
+    drugName: string;
+    dosage: string;
+    route: string;
+    scheduledTime: string;
+  }>;
+  /** Prescription draft from diary.therapy_preview (therapy.prescribe). */
+  therapyDraft?: { preview: Record<string, unknown>; entryDateTime: string };
+  /** Therapy input confirmed by the professional (bound to the preview). */
+  therapyInput?: Record<string, unknown>;
 }
 
 export interface WorkflowEvent {
@@ -101,6 +145,8 @@ export interface WorkflowEvent {
 }
 
 export interface SkillPreview {
+  /** Binds a confirmation to THIS preview: any change of payload issues a new id. */
+  previewId: string;
   skillId: string;
   action: string;
   patient: PatientRef | null;
@@ -110,6 +156,19 @@ export interface SkillPreview {
   origin: 'ai';
   tool: string;
   confirmationClass: ConfirmationClass;
+  /** Who will be recorded as author/actor (server identity). */
+  actor: { name: string; role: string };
+  /** Things the user must read before confirming (never blocking by themselves). */
+  warnings: string[];
+  /** False → the UI must NOT show «Conferma» (missing data, conflicts): use the classic screen. */
+  confirmable: boolean;
+  blockedReason?: string;
+  /** Fields «Modifica» may change. */
+  editable: Array<'values' | 'text' | 'priority'>;
+  /** Prescription: true when the values shown ARE the therapy payload that will be written. */
+  therapyBound?: boolean;
+  /** HIGH_RISK prescription: the draft the UI maps with the classic Terapia form mapper. */
+  therapyDraft?: { preview: Record<string, unknown>; entryDateTime: string };
 }
 
 export interface WorkflowState {
@@ -130,6 +189,8 @@ export interface WorkflowState {
   result: unknown;
   error: { code: string; message: string } | null;
   interpreter: 'agno' | 'deterministic';
+  /** Page resident when the workflow started: a different page resident invalidates it (§6). */
+  contextPatientId: string | null;
   /** Optimistic concurrency: a save from a stale copy is refused (no lost update, no 2nd write). */
   version: number;
   turns: number;
@@ -158,9 +219,18 @@ export interface Interpretation {
 export interface ConverseRequest {
   workflowId?: string;
   message?: string;
-  action?: 'confirm' | 'cancel' | 'retry';
-  /** Page context (UI). The id is re-verified through the Tool Layer; the label is display only. */
-  context?: { currentPatientId?: string; currentPatientLabel?: string };
+  action?: 'confirm' | 'cancel' | 'retry' | 'modify' | 'edit';
+  /** Required with action 'confirm': the preview being confirmed. */
+  previewId?: string;
+  /** action 'edit' (after 'modify'): structured changes, no LLM involved. */
+  edit?: { values?: Record<string, string>; text?: string; priority?: 'normale' | 'alta' | 'urgente' };
+  /** action 'confirm' of a prescription: therapy input built by the UI with the Terapia mapper. */
+  payload?: { therapy?: Record<string, unknown> };
+  /**
+   * Page context (UI). The id is re-verified by the Resident Access Scope; the label is display
+   * only. `null` id = no resident open. Omitting `context` keeps the previous context.
+   */
+  context?: { currentPatientId?: string | null; currentPatientLabel?: string };
 }
 
 export interface ConverseResponse {
@@ -174,6 +244,12 @@ export interface ConverseResponse {
   result?: unknown;
   error?: { code: string; message: string } | null;
   interpreter?: 'agno' | 'deterministic';
+  /** Resident the workflow is bound to (server-verified). */
+  resident?: PatientRef | null;
+  /** Classic GUI screen to continue there (fallback). */
+  classicScreen?: ClassicScreen & { patientId?: string };
+  /** After «Modifica»: current editable values. */
+  editable?: { values?: Record<string, string>; text?: string; priority?: string } | null;
   /** Skills the caller may use right now (only when no skill could be selected). */
   suggestions?: { id: string; name: string }[];
 }

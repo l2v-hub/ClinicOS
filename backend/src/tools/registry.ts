@@ -10,7 +10,7 @@
 import { randomUUID } from 'node:crypto';
 import { Ajv, type ValidateFunction } from 'ajv';
 import { prisma } from '../lib/prisma.js';
-import { patientIsInOperatorScope } from '../patients/patient-scope.js';
+import { canAccessResident, type ResidentReader } from '../access-scope/resident-access-scope.js';
 import { ToolError, toToolErrorShape, toolError } from './errors.js';
 import { currentAuthorizationHook, emitToolAudit, type ToolAuditOutcome } from './hooks.js';
 import {
@@ -189,7 +189,15 @@ export function createToolRegistry(definitions: readonly ToolDefinition[]): Tool
     if (tool.patientScoped) {
       let allowed: boolean;
       try {
-        allowed = await patientIsInOperatorScope(String(input.patientId), actorOf(ctx), prisma);
+        // Resident Access Scope (Phase 4): same rule for GUI routes, tools and skills.
+        allowed = (
+          await canAccessResident(
+            actorOf(ctx),
+            String(input.patientId),
+            { operation: 'tool', tool: tool.name },
+            prisma as unknown as ResidentReader,
+          )
+        ).allowed;
       } catch {
         audit('error', 'scope_unavailable');
         return fail(

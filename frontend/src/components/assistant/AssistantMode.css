@@ -1,0 +1,395 @@
+/* AI Assistant full-screen mode (Phase 4). Tablet-first: large touch targets (≥48px), few
+   elements, readable preview, composer pinned to the bottom (virtual keyboard friendly). */
+
+.am {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.am-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--navy);
+  color: #fff;
+  min-height: 64px;
+}
+
+.am-title {
+  flex: 1;
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.am-back {
+  min-height: 48px;
+}
+
+.am-identity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.am-identity__name {
+  font-weight: 600;
+}
+
+.am-resident {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.am-resident__current {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+}
+
+.am-resident__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.am-resident__name {
+  font-size: 18px;
+}
+
+.am-resident__target {
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--amber-bg);
+  font-size: 14px;
+  align-self: flex-start;
+}
+
+.am-resident__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.am-picker {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.am-picker__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.am-picker__item {
+  width: 100%;
+  min-height: 48px;
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.am-notice {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  font-size: 15px;
+}
+
+.am-notice--info {
+  background: var(--blue-glow);
+}
+
+.am-notice--error {
+  background: var(--red-bg);
+  color: var(--text);
+}
+
+.am-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.am-transcript {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.am-msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 16px;
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+.am-msg p {
+  margin: 0;
+}
+
+.am-msg--user {
+  align-self: flex-end;
+  background: var(--blue);
+  color: #fff;
+}
+
+.am-msg--assistant {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.am-msg--system {
+  align-self: center;
+  background: var(--red-bg);
+  font-size: 14px;
+}
+
+.am-status {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.am-status--completed {
+  color: var(--c-success);
+}
+
+.am-status--denied,
+.am-status--failed {
+  color: var(--red);
+}
+
+.am-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.am-card__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.am-preview {
+  border: 2px solid var(--blue);
+}
+
+.am-preview__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.am-preview__data {
+  display: grid;
+  grid-template-columns: minmax(120px, 30%) 1fr;
+  gap: 6px 12px;
+  margin: 0;
+  font-size: 16px;
+}
+
+.am-preview__row {
+  display: contents;
+}
+
+.am-preview__data dt {
+  color: var(--text-muted);
+}
+
+.am-preview__data dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.am-warnings {
+  margin: 0;
+  padding: 10px 14px 10px 30px;
+  background: var(--amber-bg);
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.am-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.am-confirm {
+  min-width: 160px;
+}
+
+.am-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.am-edit__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.am-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--field-label);
+}
+
+.am-input {
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--field-border);
+  border-radius: 10px;
+  background: var(--field-bg);
+  font: inherit;
+  font-size: 16px;
+  color: var(--text);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.am-input:focus {
+  outline: 2px solid var(--field-focus);
+  outline-offset: 1px;
+}
+
+.am-starters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.am-starter {
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.am-starter:hover:not(:disabled) {
+  border-color: var(--blue);
+}
+
+.am-composer {
+  display: flex;
+  gap: 10px;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.am-composer__input {
+  flex: 1;
+  resize: none;
+}
+
+.am-send {
+  min-height: 48px;
+  min-width: 96px;
+}
+
+.am-loading {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.am-error {
+  margin: 0;
+  color: var(--field-error);
+}
+
+.am-muted {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.am-link {
+  background: none;
+  border: none;
+  color: var(--blue);
+  font: inherit;
+  cursor: pointer;
+  min-height: 32px;
+}
+
+@media (max-width: 700px) {
+  .am-header {
+    flex-wrap: wrap;
+    padding: 10px 12px;
+  }
+  .am-title {
+    font-size: 18px;
+  }
+  .am-main,
+  .am-resident,
+  .am-composer {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .am-preview__data {
+    grid-template-columns: 1fr;
+  }
+  .am-msg {
+    max-width: 100%;
+  }
+}

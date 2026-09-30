@@ -8,6 +8,7 @@
 //
 //   node scripts/skills/agno-live-e2e.mjs --base http://127.0.0.1:3099 [--out report.json]
 //
+// Confirmation policy v2: confirmations are explicit actions bound to the preview id.
 // Every scenario asserts `interpreter: "agno"` (the skill was chosen by Agno, not by the
 // deterministic fallback) plus the workflow outcome. Exit code 1 on any failure.
 
@@ -98,7 +99,7 @@ check(
   b1,
 );
 const b2 = b1.workflowId
-  ? await turn('B confirm', nurse, { workflowId: b1.workflowId, action: 'confirm' })
+  ? await turn('B confirm', nurse, { workflowId: b1.workflowId, action: 'confirm', previewId: b1.preview?.previewId })
   : {};
 check(
   'B confirm → COMPLETED and verified',
@@ -132,7 +133,7 @@ check(
   { e1, e2, e3 },
 );
 const e4 = e3.workflowId
-  ? await turn('E4', nurse, { workflowId: e1.workflowId, message: 'sì' })
+  ? await turn('E4', nurse, { workflowId: e1.workflowId, action: 'confirm', previewId: e3.preview?.previewId })
   : {};
 check('E confirm → COMPLETED', e4.status === 'COMPLETED', e4);
 

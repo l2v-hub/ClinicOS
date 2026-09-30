@@ -38,7 +38,6 @@ test('catalog: every skill composes REAL Tool Layer tools and has a stable uniqu
       assert.ok(toolNames.has(tool), `${skill.id} uses unknown tool ${tool}`);
     }
     assert.ok(skill.requiredTools.length > 0, skill.id);
-    if (skill.confirmation === 'HIGH_RISK') assert.equal(skill.executable, false, skill.id);
     if (skill.kind === 'read') assert.equal(skill.confirmation, 'READ', skill.id);
   }
   assert.ok(SKILL_CATALOG.length >= 14);
@@ -110,10 +109,15 @@ test('confirmation policy: classes, policy effect upgrade, explicit acts only', 
   assert.deepEqual(confirmationFor(skillById('vitals.recent')!, ['parameters.list_readings']), {
     mode: 'preview_and_confirm',
     reason: 'policy_effect',
+    professional: false,
   });
   assert.equal(confirmationFor(skillById('vitals.record')!, []).mode, 'preview_and_confirm');
   assert.equal(confirmationFor(skillById('handover.create')!, []).mode, 'preview_and_confirm');
-  assert.deepEqual(confirmationFor(skillById('therapy.prescribe')!, []), { mode: 'human_only' });
+  assert.deepEqual(confirmationFor(skillById('therapy.prescribe')!, []), {
+    mode: 'preview_and_confirm',
+    reason: 'class',
+    professional: true,
+  });
   for (const yes of ['sì', 'Conferma', 'confermo.', 'ok', 'procedi'])
     assert.ok(isExplicitConfirmation(yes), yes);
   for (const notYes of ['sì ma cambia la pressione', 'forse', 'registra', '']) {
@@ -188,4 +192,28 @@ test('Agno interpreter falls back to the deterministic one when the runtime is u
   });
   assert.equal(result.source, 'deterministic');
   assert.equal(result.skillId, 'vitals.record');
+});
+
+test('bindable therapy: only classic-mapper keys; hidden fields forced or refused', async () => {
+  const { bindableTherapy } = await import('../engine.js');
+  const base = {
+    farmacoNome: 'PARACETAMOLO',
+    drugPackageRef: null,
+    dataInizio: '2026-09-30',
+    viaSomministrazione: 'orale',
+    tipo: 'periodica',
+    stato: 'attiva',
+    commercialStrengthValue: 1000,
+    commercialStrengthUnit: 'mg',
+    allowedFractions: '1',
+    schedules: [],
+    giorniSettimana: '',
+  };
+  assert.deepEqual(bindableTherapy(base), { ...base, stato: 'attiva', drugPackageRef: null });
+  assert.equal(bindableTherapy({ ...base, prescrittore: 'Dr. X' }), null);
+  assert.equal(bindableTherapy({ ...base, stato: 'sospesa' }), null);
+  assert.equal(bindableTherapy({ ...base, drugPackageRef: 'AIC-1' }), null);
+  assert.equal(bindableTherapy({ ...base, tipo: 'una_tantum' }), null);
+  assert.equal(bindableTherapy({ ...base, operatoreInseritore: 'X' }), null);
+  assert.deepEqual(bindableTherapy({ ...base, prescrittore: '' }), { ...base, stato: 'attiva', drugPackageRef: null });
 });
