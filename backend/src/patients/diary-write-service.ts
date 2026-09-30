@@ -20,6 +20,14 @@ import {
 } from './diary-therapy-service.js';
 import { parseDiaryTherapyText } from '../therapies/diary-therapy-parse.js';
 import {
+  diaryTherapyAiEnabled,
+  mergeAiProposal,
+  needsAiFallback,
+  runtimeDiaryTherapyProposer,
+  type DiaryTherapyAiProposer,
+  type DiaryTherapyPreviewResult,
+} from '../therapies/diary-therapy-ai.js';
+import {
   DIARY_TIME_ZONE,
   DiaryWriteInputError,
   parseDiaryCreateBody,
@@ -121,10 +129,17 @@ const TODAY_IN_FACILITY = new Intl.DateTimeFormat('en-CA', {
 });
 
 /**
- * Read-only deterministic preview of a prescription written in diary text. Envelope errors throw
- * DiaryWriteInputError (route → 400 with the same messages); nothing is written or logged.
+ * Read-only preview of a prescription written in diary text: deterministic rules first, then (only
+ * when they leave drug, dose or times empty) an AI proposal for the EMPTY fields
+ * (therapies/diary-therapy-ai.ts). Envelope errors throw DiaryWriteInputError (route → 400 with the
+ * same messages); nothing is written or logged. AI failure never fails the preview.
  */
-export function previewDiaryTherapy(rawBody: unknown) {
+export async function previewDiaryTherapy(
+  rawBody: unknown,
+  proposer: DiaryTherapyAiProposer | null = diaryTherapyAiEnabled()
+    ? runtimeDiaryTherapyProposer
+    : null,
+): Promise<DiaryTherapyPreviewResult> {
   const body = rawBody as Record<string, unknown> | undefined;
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     throw new DiaryWriteInputError('Corpo richiesta non valido');
@@ -149,5 +164,14 @@ export function previewDiaryTherapy(rawBody: unknown) {
   const entryDate =
     typeof entryDateTime === 'string' ? entryDateTime : TODAY_IN_FACILITY.format(new Date());
   const parsed = parseDiaryTherapyText(text, entryDate);
-  return { ...parsed, source: 'deterministic' as const };
+  if (!proposer || !needsAiFallback(parsed)) return { ...parsed, source: 'deterministic' };
+  const proposal = await proposer(text, entryDate.slice(0, 10)).catch(() => null);
+  if (!proposal) {
+    return {
+      ...parsed,
+      source: 'deterministic',
+      warnings: [...parsed.warnings, 'ai_non_disponibile'],
+    };
+  }
+  return mergeAiProposal(parsed, proposal);
 }

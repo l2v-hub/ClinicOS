@@ -56,6 +56,10 @@ export interface DiaryTherapyPreview {
   warnings: string[];
   prescriptionRange: { start: number; end: number } | null;
   source?: string;
+  /** Campi vuoti per le regole e proposti dall'AI (source 'deterministic+ai'): da verificare. */
+  aiFields?: string[];
+  /** Correzioni di refusi e dubbi dichiarati dall'AI, mostrati tali e quali. */
+  aiNotes?: string[];
 }
 
 export type { DiaryEntryTherapyRef } from './diaryTherapyLink';
@@ -236,6 +240,19 @@ const WARNING_TEXTS: Record<string, string> = {
   menzione_modifica: 'Il testo menziona una modifica: verifica prima di confermare',
   compilazione_manuale:
     'Lettura automatica non riuscita: compila la terapia a mano (il testo del diario è nelle note)',
+  proposta_ai: 'Alcuni campi sono proposti dall’AI: controllali prima di confermare',
+  ai_non_disponibile:
+    'Proposta AI non disponibile in questo momento: completa a mano i campi mancanti',
+};
+
+const AI_FIELD_LABELS: Record<string, string> = {
+  farmacoNome: 'farmaco',
+  dosaggio: 'dosaggio',
+  viaSomministrazione: 'via di somministrazione',
+  forma: 'forma',
+  orari: 'orari',
+  quantita: 'quantità',
+  dataInizio: 'data di inizio',
 };
 
 const AMBIGUOUS_TEXTS: Record<string, string> = {
@@ -265,6 +282,16 @@ export function previewNotices(
       tone: 'warning',
       text: WARNING_TEXTS[w] ?? 'Avviso dell’interprete: verifica il testo',
     });
+  const aiFields = (preview.aiFields ?? []).map((f) => AI_FIELD_LABELS[f] ?? f);
+  if (aiFields.length)
+    out.push({
+      key: 'ai-fields',
+      tone: 'warning',
+      text: `Proposti dall’AI: ${aiFields.join(', ')}`,
+    });
+  (preview.aiNotes ?? []).forEach((note, i) =>
+    out.push({ key: `ai-note-${i}`, tone: 'info', text: `AI: ${note}` }),
+  );
   for (const a of preview.ambiguous ?? [])
     out.push({
       key: `a-${a}`,

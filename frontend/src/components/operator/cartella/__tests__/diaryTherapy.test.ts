@@ -460,3 +460,19 @@ test('partial preview lists what the interpreter did not understand', () => {
   const vague = unreadFields(realPreview('iniziare paracetamolo'));
   assert.ok(vague.includes('orari'), JSON.stringify(vague));
 });
+
+test('AI proposal: proposed fields and AI notes are shown, AI outage is explained', () => {
+  const p = {
+    ...realPreview('Terapia techipirina 1000mg ogni 8ore parte dalle 8.00'),
+    source: 'deterministic+ai',
+    aiFields: ['farmacoNome', 'orari'],
+    aiNotes: ['techipirina → TACHIPIRINA'],
+    warnings: ['proposta_ai'],
+  };
+  const texts = previewNotices(p, ENTRY_AT).map((n) => n.text);
+  assert.ok(texts.includes('Proposti dall’AI: farmaco, orari'), JSON.stringify(texts));
+  assert.ok(texts.includes('AI: techipirina → TACHIPIRINA'));
+  assert.ok(texts.some((t) => /proposti dall’AI: controllali/.test(t)));
+  const down = { ...realPreview('iniziare paracetamolo'), warnings: ['ai_non_disponibile'] };
+  assert.ok(previewNotices(down, ENTRY_AT).some((n) => /Proposta AI non disponibile/.test(n.text)));
+});

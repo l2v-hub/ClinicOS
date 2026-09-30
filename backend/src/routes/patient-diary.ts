@@ -175,11 +175,11 @@ function therapyValidationBody(error: Error): Record<string, unknown> {
 }
 
 // POST /patients/:patientId/diary/therapy-preview  { text, entryDateTime? }
-// Sola lettura: interpreta il testo in modo deterministico, non scrive nulla.
-router.post('/:patientId/diary/therapy-preview', (req: AuthedRequest, res) => {
-  // Envelope checks + parse: patients/diary-write-service.ts#previewDiaryTherapy.
+// Sola lettura: regole deterministiche, poi proposta AI solo per i campi vuoti; non scrive nulla.
+router.post('/:patientId/diary/therapy-preview', async (req: AuthedRequest, res) => {
+  // Envelope checks + parse (+ AI fallback): patients/diary-write-service.ts#previewDiaryTherapy.
   try {
-    res.status(200).json(previewDiaryTherapy(req.body));
+    res.status(200).json(await previewDiaryTherapy(req.body));
   } catch (error) {
     if (error instanceof DiaryWriteInputError) {
       res.status(400).json({ error: error.message });
