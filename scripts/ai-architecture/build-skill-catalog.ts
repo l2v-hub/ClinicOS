@@ -12,18 +12,18 @@ import { CONFIRMATION_POLICY_VERSION } from '../../backend/src/skills/confirmati
 
 const DIR = '.ai-architecture/phase-3-skills';
 const E2E = 'backend/src/skills/__tests__/skills-e2e.test.ts';
-const LIVE = 'scripts/skills/agno-live-e2e.mjs';
+const LIVE = 'scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)';
 
 // Automated evidence per skill (test names in skills-e2e.test.ts; live = real Agno runtime).
 const EVIDENCE: Record<string, string[]> = {
-  'vitals.record': ['B + I', 'C', 'D', 'E', 'H', 'per-role coverage (doctor)'],
-  'diary.add_observation': ['F', 'per-role coverage (oss)'],
-  'handover.create': ['G', 'per-role coverage (oss)'],
-  'vitals.recent': ['A', 'per-role coverage (oss)'],
+  'vitals.record': ['B + I', 'C', 'D', 'E', 'H', 'per-role coverage (doctor)', 'live Agno'],
+  'diary.add_observation': ['F', 'per-role coverage (oss)', 'live Agno'],
+  'handover.create': ['G', 'per-role coverage (oss)', 'live Agno'],
+  'vitals.recent': ['A', 'per-role coverage (oss)', 'live Agno'],
   'diary.recent': ['per-role coverage (nurse)'],
   'patient.overview': ['A', 'per-role coverage (doctor)'],
   'clinical.question': ['per-role coverage (nurse)'],
-  'therapy.due_administrations': ['D (OSS denied)', 'per-role coverage (nurse)'],
+  'therapy.due_administrations': ['D (OSS denied)', 'per-role coverage (nurse)', 'live Agno'],
   'handover.overview': ['per-role coverage (oss)'],
   'appointments.day': ['per-role coverage (doctor)'],
   'facility.occupancy': ['per-role coverage (supervisor, administrator)'],

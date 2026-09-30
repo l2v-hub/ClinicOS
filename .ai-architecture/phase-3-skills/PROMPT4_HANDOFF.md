@@ -11,7 +11,7 @@ AI Assistant UI (Prompt 4)  ──►  POST /skills/converse   (one call = one w
                                    │ requireOperator → identity; requireAuthorizationContext → role
                                    │ evaluateTools(): policy per turn (same hook as GET /tools)
                                    ├─► Agno skill router  POST {AI_RUNTIME_URL}/v1/assistant/skill-route
-                                   │     (only AVAILABLE skills are sent; returns skill + slots)
+                                   │     (AVAILABLE skills + id/name of forbidden ones; returns skill + slots)
                                    ├─► workflow engine (structured state, clarification, preview)
                                    └─► ToolRegistry.invoke (policy re-check, validation, scope, audit)
                                           └─► Phase 1 services → Postgres
@@ -28,7 +28,7 @@ AI Assistant UI (Prompt 4)  ──►  POST /skills/converse   (one call = one w
 | Agno entry point               | runtime `clinicos_ai/agents/skill_router.py` · backend `skills/interpreter.ts`                                                            |
 | HTTP                           | `backend/src/skills/http.ts` mounted at `/skills` in `backend/src/app.ts`                                                                 |
 | NL harness                     | `scripts/skills/nl-harness.mjs` (CLI over HTTP, Role Simulator)                                                                           |
-| Live Agno E2E                  | `scripts/skills/agno-live-e2e.mjs` (+ `seed-demo-patients.ts`)                                                                            |
+| Live Agno E2E                  | `scripts/skills/agno-live-e2e.mjs` (+ `seed-demo-patients.mts`)                                                                            |
 
 ## 2. Contracts for the AI Assistant UI
 
@@ -68,15 +68,33 @@ node scripts/skills/agno-live-e2e.mjs --base http://127.0.0.1:3099 --out live.js
 node scripts/skills/nl-harness.mjs --base http://127.0.0.1:3099 --as SIM-NURSE-1
 ```
 
-## 5. Known gaps
+## 5. E2E evidence
 
-See `CURRENT_STATE.md` § Gaps (in-process workflow store, G1 ownership data scope, Italian-only
-fallback keywords, pre-existing 16-char codice-fiscale search quirk, HIGH_RISK skills human-only).
+- Automated (CI-safe): 22/22 — A–J, per-role coverage, QA race/near-confirmation/context tests (`evidence/skills-tests.txt`).
+- Live Agno (deployed runtime, Azure gpt-6.1-sol): 9/9 PASS in two runs (`evidence/agno-live-e2e-run1.json`, `-run2.json`), ≈2.6 s per Agno turn.
+- Deployed demo backend: read-only checks via `nl-harness.mjs` (occupancy COMPLETED, OSS administrations DENIED, both via Agno).
+- Independent QA: READY FOR QA. Details: `E2E_TEST_REPORT.md`.
 
-## 6. Decisions that need the customer
+## 6. Known gaps
+
+See `CURRENT_STATE.md` § Gaps (P3-G1…G6 + inherited Phase 2 gaps): in-process workflow store,
+Italian-only fallback keywords, pre-existing 16-char codice-fiscale search quirk, shared rate
+limiter, preview label fallback, HIGH_RISK skills human-only.
+
+## 7. Decisions that need the customer
 
 1. Whether the assistant may PREPARE (never confirm) prescriptions/administrations (today: hand-off only).
 2. `handover.create` defaults (priorità normale, tipo Monitoraggio).
 3. Administrator READ_ONLY clinical reads (inherited from Phase 2 baseline) — keep or remove.
 4. Ward/team data scope for Doctor/Nurse/OSS (Phase 2 G1) — affects which residents a skill can target.
 5. Retention of the AI audit trail and whether messages may be stored (today: never stored).
+
+## 8. Guidance for the AI Assistant UI (Prompt 4)
+
+- One conversation panel driving `/skills/converse`; the workflow card is the unit of UI state
+  (status chip, pending question, candidates, preview card, result).
+- The page context (`currentPatientId` + visible name) goes in every request; the server verifies it.
+- Always render the preview before any write; the confirm button sends `action:"confirm"`.
+- Show `interpreter` only in a debug view; show `DENIED` reasons in plain Italian with a link to
+  the GUI screen for `human_control_required`.
+- Do not store the free text client-side beyond the session; the server never stores it either.
