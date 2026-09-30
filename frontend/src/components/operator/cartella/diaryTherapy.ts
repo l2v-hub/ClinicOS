@@ -234,6 +234,8 @@ const WARNING_TEXTS: Record<string, string> = {
   menzione_sospensione: 'Il testo menziona una sospensione: verifica prima di confermare',
   menzione_somministrazione: 'Il testo menziona una somministrazione: verifica prima di confermare',
   menzione_modifica: 'Il testo menziona una modifica: verifica prima di confermare',
+  compilazione_manuale:
+    'Lettura automatica non riuscita: compila la terapia a mano (il testo del diario è nelle note)',
 };
 
 const AMBIGUOUS_TEXTS: Record<string, string> = {
@@ -410,8 +412,11 @@ export function diaryTherapyErrorMessage(status: number, body: unknown): string 
   return 'Errore durante la creazione della terapia. Riprova: la stessa conferma non verrà duplicata.';
 }
 
-/** Errore di therapy-preview → messaggio italiano. */
-export function diaryPreviewErrorMessage(status: number, body: unknown): string {
+/**
+ * Errore di therapy-preview → messaggio italiano CON IL MOTIVO. `status` 0 = rete non
+ * raggiungibile; `malformed` = risposta 2xx non leggibile.
+ */
+export function diaryPreviewErrorMessage(status: number, body: unknown, malformed = false): string {
   const b = (body && typeof body === 'object' ? body : {}) as ServerErrorBody;
   const serverText = typeof b.error === 'string' ? b.error.trim() : '';
   if (status === 400)
@@ -420,5 +425,68 @@ export function diaryPreviewErrorMessage(status: number, body: unknown): string 
       : 'Impossibile leggere il testo della voce.';
   if (status === 401) return 'Sessione scaduta: accedi di nuovo e riprova.';
   if (status === 403) return 'Non hai i permessi per questo paziente.';
-  return 'Anteprima non disponibile. Riprova.';
+  if (malformed) return 'Anteprima non disponibile: risposta dell’interprete non leggibile.';
+  if (status === 0) return 'Anteprima non disponibile: server non raggiungibile.';
+  if (status === 404)
+    return 'Anteprima non disponibile: l’interprete del testo non è attivo su questo server (404).';
+  if (status === 503)
+    return `Anteprima non disponibile: servizio temporaneamente non disponibile (503)${serverText ? ` — ${serverText}` : ''}.`;
+  return `Anteprima non disponibile: errore dell’interprete (${status}).`;
+}
+
+/**
+ * Dopo un errore di anteprima si passa comunque alla compilazione manuale, salvo sessione
+ * scaduta o permessi mancanti (la conferma verrebbe rifiutata comunque).
+ */
+export function previewFailureAllowsManual(status: number): boolean {
+  return status !== 401 && status !== 403;
+}
+
+/**
+ * Anteprima "vuota" per la compilazione a mano: nessun campo dedotto, testo del diario nelle
+ * note, stato da verificare. La conferma passa dallo stesso with-therapy (validazione server).
+ */
+export function manualTherapyPreview(text: string): DiaryTherapyPreview {
+  return {
+    row: {
+      farmacoNome: '',
+      forma: '',
+      dosaggio: '',
+      viaSomministrazione: '',
+      quantita: '',
+      orari: [],
+      giorni: [],
+      dataInizio: '',
+      classe: '',
+      note: text.trim(),
+      originalText: text,
+      stato: 'da_verificare',
+      dataFine: '',
+      quantitaValore: '',
+      quantityNumerator: null,
+      quantityDenominator: null,
+      unitaSomministrazione: '',
+    },
+    intent: 'prescrizione',
+    inferred: [],
+    ambiguous: [],
+    fasciaConflicts: [],
+    warnings: ['compilazione_manuale'],
+    prescriptionRange: null,
+    source: 'manuale',
+  };
+}
+
+/** Cosa l'interprete non ha capito dal testo: campi da compilare a mano (vuoto = tutto letto). */
+export function unreadFields(preview: DiaryTherapyPreview): string[] {
+  if (isBlockingIntent(preview.intent) || preview.source === 'manuale') return [];
+  const r = preview.row;
+  const out: string[] = [];
+  if (!(r.farmacoNome || '').trim()) out.push('farmaco');
+  if (!(r.dosaggio || '').trim()) out.push('dosaggio');
+  if (!(r.viaSomministrazione || '').trim()) out.push('via di somministrazione');
+  if (preview.intent !== 'al_bisogno' && !(Array.isArray(r.orari) && r.orari.length))
+    out.push('orari');
+  if (r.quantityNumerator === null && !(r.quantita || '').trim()) out.push('quantità per dose');
+  return out;
 }

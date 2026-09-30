@@ -13,9 +13,12 @@ import {
   diaryTherapyIssues,
   intentMessage,
   isBlockingIntent,
+  manualTherapyPreview,
+  previewFailureAllowsManual,
   previewNotices,
   previewToTherapyForm,
   requestIdForVersion,
+  unreadFields,
   type DiaryEntryTherapyRef,
   type DiaryTherapyEntryDraft,
   type DiaryTherapyPreview,
@@ -64,6 +67,16 @@ export function DiaryTherapyPanel({ pazienteId, entry, onCreated, onClose, onCon
   useEffect(() => {
     const controller = new AbortController();
     const { text, entryDateTime } = source;
+    // Lettura automatica fallita: si spiega il motivo e, se possibile, si apre comunque il form
+    // Terapia vuoto (testo del diario nelle note) per la compilazione a mano.
+    const failPreview = (status: number, body: unknown, malformed: boolean) => {
+      setLoadError(diaryPreviewErrorMessage(status, body, malformed));
+      if (!previewFailureAllowsManual(status)) return;
+      const manual = manualTherapyPreview(text);
+      setPreview(manual);
+      setForm(previewToTherapyForm(manual, entryDateTime));
+      versionRef.current = null;
+    };
     (async () => {
       try {
         const res = await fetch(`${API_URL}/patients/${pazienteId}/diary/therapy-preview`, {
@@ -75,7 +88,7 @@ export function DiaryTherapyPanel({ pazienteId, entry, onCreated, onClose, onCon
         const body: unknown = await res.json().catch(() => null);
         if (controller.signal.aborted) return;
         if (!res.ok || !body || typeof body !== 'object' || !('row' in body)) {
-          setLoadError(diaryPreviewErrorMessage(res.ok ? 0 : res.status, body));
+          failPreview(res.ok ? 0 : res.status, body, res.ok);
           return;
         }
         const next = body as DiaryTherapyPreview;
@@ -84,7 +97,7 @@ export function DiaryTherapyPanel({ pazienteId, entry, onCreated, onClose, onCon
         versionRef.current = null;
       } catch (error) {
         if ((error as { name?: string }).name === 'AbortError') return;
-        setLoadError(diaryPreviewErrorMessage(0, null));
+        failPreview(0, null, false);
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -93,6 +106,8 @@ export function DiaryTherapyPanel({ pazienteId, entry, onCreated, onClose, onCon
   }, [pazienteId, source, loadVersion]);
 
   function retryPreview() {
+    setPreview(null);
+    setForm(null);
     setLoading(true);
     setLoadError('');
     setLoadVersion((v) => v + 1);
@@ -101,6 +116,7 @@ export function DiaryTherapyPanel({ pazienteId, entry, onCreated, onClose, onCon
   const issues = form ? diaryTherapyIssues(form) : [];
   const blocked = preview ? isBlockingIntent(preview.intent) : false;
   const notices = preview ? previewNotices(preview, source.entryDateTime) : [];
+  const unread = preview ? unreadFields(preview) : [];
   const blockerMessages = [...new Set(issues.map((issue) => issue.message))];
 
   const handleChange = useCallback((next: TherapyFormValue) => {
@@ -201,6 +217,15 @@ export function DiaryTherapyPanel({ pazienteId, entry, onCreated, onClose, onCon
             </li>
           ))}
         </ul>
+      )}
+
+      {preview && !blocked && unread.length > 0 && (
+        <div className="diary-therapy__unread" role="status" data-testid="diary-therapy-unread">
+          <span className="ds-badge ds-badge--warning">Da compilare a mano</span>
+          <span>
+            Dal testo non ho capito: {unread.join(', ')}. Completa questi campi prima di confermare.
+          </span>
+        </div>
       )}
 
       {preview && blocked && (
