@@ -26,7 +26,7 @@ export interface SimulatedIdentity {
 export const SIMULATED_IDENTITIES: readonly SimulatedIdentity[] = [
   {
     id: 'SIM-ADMIN',
-    name: 'Administrator',
+    name: 'Amministratore',
     email: 'sim-admin@clinicos.local',
     ruolo: 'altro',
     userRole: 'MANAGER',
@@ -34,7 +34,7 @@ export const SIMULATED_IDENTITIES: readonly SimulatedIdentity[] = [
   },
   {
     id: 'SIM-SUPERVISOR-1',
-    name: 'Supervisor 1',
+    name: 'Supervisore 1',
     email: 'sim-supervisor-1@clinicos.local',
     ruolo: 'coordinatore',
     userRole: 'MANAGER',
@@ -42,7 +42,7 @@ export const SIMULATED_IDENTITIES: readonly SimulatedIdentity[] = [
   },
   {
     id: 'SIM-DOCTOR-1',
-    name: 'Doctor 1',
+    name: 'Medico 1',
     email: 'sim-doctor-1@clinicos.local',
     ruolo: 'medico',
     userRole: 'OPERATOR',
@@ -50,7 +50,7 @@ export const SIMULATED_IDENTITIES: readonly SimulatedIdentity[] = [
   },
   {
     id: 'SIM-NURSE-1',
-    name: 'Nurse 1',
+    name: 'Infermiere 1',
     email: 'sim-nurse-1@clinicos.local',
     ruolo: 'infermiere',
     userRole: 'OPERATOR',

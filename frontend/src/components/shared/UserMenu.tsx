@@ -11,7 +11,7 @@ export function UserMenu({
 }: {
   utente: UtenteApp;
   onLogout: () => void;
-  /** Etichetta del ruolo risolta dal server (GET /auth/me), es. "Doctor". */
+  /** Etichetta del ruolo risolta dal server (GET /auth/me), es. "Medico". */
   roleLabel?: string;
   /** Sessione del Simulatore ruoli (solo sviluppo). */
   simulator?: boolean;

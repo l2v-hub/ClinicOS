@@ -103,7 +103,7 @@ test('auth/me returns the server-resolved demo identity outside production', asy
     expiresAt: null,
   });
   assert.equal(appRole, 'operator', 'unassigned identity → legacy Operator role');
-  assert.equal(roleLabel, 'Operator (legacy)');
+  assert.equal(roleLabel, 'Operatore (legacy)');
   assert.equal(roleSource, 'legacy');
   assert.equal(identitySource, 'demo-header');
   assert.equal(uiShell, 'operator');
