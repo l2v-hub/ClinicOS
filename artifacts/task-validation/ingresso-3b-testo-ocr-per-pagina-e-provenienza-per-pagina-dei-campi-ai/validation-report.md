@@ -39,8 +39,8 @@ Solo backend, tutto additivo, **nessuna migrazione**.
 | --- | --------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AC1 |            PASS | page-locate.test.ts: date, CF con spazi, token interi, nessuna corrispondenza, più pagine, allergie, sesso. Include le sonde negative della QA (Rosa, Basso, Santa Maria, firma di un medico omonimo, allergie negate). |
 | AC2 |            PASS | draft-merge-pages.test.ts: `pages` per lettera e nella finale, proposte, apply, lettera produttrice, regressione BASS0/basso, bozze vecchie.                                                                            |
-| AC3 | PENDING CI gate | Contratto offline in page-text-contract.test.ts (proprietà, 404, `rawText` null, no-store); versione DB in import-page-provenance-db.test.ts, che gira solo in CI.                                                      |
-| AC4 | PENDING CI gate | import-page-provenance-db.test.ts, unione con testo OCR per pagina, in CI.                                                                                                                                              |
+| AC3 | PASS | CI gate run 36683752532: import-page-provenance-db — owner 200 + no-store, altro operatore e pagina sconosciuta 404, OCR non pronto rawText null, pagina sostituita mai testo vecchio, sessione annullata 404, testo mai nei log: tutti ok. Contratto offline in page-text-contract.test.ts. |
+| AC4 | PASS | CI gate run 36683752532: "per letter and final: _fieldOrigin carries the right pages; GET and PATCH…" ok. Il job gate ha 19 fallimenti, tutti già noti: nessuno nuovo. |
 | AC5 |            PASS | tsc del backend ok; unit e contratto locali 71/71; suite completa: nessun file prima verde diventa rosso, gli unici file in più falliscono per `DATABASE_URL`, come atteso in locale.                                   |
 
 ## Independent QA
@@ -65,4 +65,4 @@ clinicos-qa:
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
