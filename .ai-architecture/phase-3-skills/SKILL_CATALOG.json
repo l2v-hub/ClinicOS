@@ -56,7 +56,8 @@
         "backend/src/skills/__tests__/skills-e2e.test.ts › D",
         "backend/src/skills/__tests__/skills-e2e.test.ts › E",
         "backend/src/skills/__tests__/skills-e2e.test.ts › H",
-        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor)"
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor)",
+        "scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)"
       ]
     },
     {
@@ -102,7 +103,8 @@
       "test_status": "TESTED",
       "test_evidence": [
         "backend/src/skills/__tests__/skills-e2e.test.ts › F",
-        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)",
+        "scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)"
       ]
     },
     {
@@ -146,7 +148,8 @@
       "test_status": "TESTED",
       "test_evidence": [
         "backend/src/skills/__tests__/skills-e2e.test.ts › G",
-        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)",
+        "scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)"
       ]
     },
     {
@@ -260,7 +263,8 @@
       "test_status": "TESTED",
       "test_evidence": [
         "backend/src/skills/__tests__/skills-e2e.test.ts › A",
-        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)",
+        "scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)"
       ]
     },
     {
@@ -417,7 +421,8 @@
       "test_status": "TESTED",
       "test_evidence": [
         "backend/src/skills/__tests__/skills-e2e.test.ts › D (OSS denied)",
-        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse)"
+        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse)",
+        "scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)"
       ]
     },
     {

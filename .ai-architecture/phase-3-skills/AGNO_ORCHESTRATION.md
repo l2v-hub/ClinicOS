@@ -38,6 +38,7 @@ bypassare il Tool Layer". No business rule is in the Agno prompt (only extractio
   "skills": [
     { "id": "vitals.record", "name": "…", "description": "…", "slots": ["patient", "values"] }
   ],
+  "forbiddenSkills": [{ "id": "therapy.due_administrations", "name": "Somministrazioni del giorno" }],
   "valueKeys": ["pa", "spo2", "fc", "temperatura", "fr", "o2", "coscienza", "dtx", "evacuazione"]
 }
 ```
@@ -50,8 +51,10 @@ The backend validates again (skill offered, value keys allowed, bounded strings)
 
 - Runtime missing, HTTP error, timeout, unparseable/empty route → deterministic interpreter
   (`interpreter: "deterministic"` in the response and in the audit `request` event).
-- Agno returns no skill → deterministic pass over the FULL catalog, so a skill the user may not
-  use is answered DENIED explicitly (backend decision) instead of "not understood".
+- Out-of-policy requests: Agno also receives id + name (never tools) of the skills the user may NOT
+  use and returns that id; the engine answers DENIED (added after the live loop found Agno routing an
+  OSS administrations request to the nearest allowed skill). If Agno returns no skill, a deterministic
+  pass over the full catalog gives the same explicit DENIED.
 - Cancellation phrases never go to the LLM. Confirmation is never taken from the LLM.
 - PRIVACY: the message goes to the runtime only in the request body; runtime logs contain skill id
   and slot NAMES only; backend audit contains field names only.

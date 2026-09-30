@@ -1,245 +1,218 @@
 {
   "schema": "clinicos.ai-architecture.current-state/v1",
-  "version": 2,
-  "phase": 2,
-  "phase_name": "Identity, Roles, Capability Policy & Authorization",
+  "version": 3,
+  "phase": 3,
+  "phase_name": "Skills, Workflows & Agno Operational Readiness",
   "phase_status": "COMPLETED",
-  "timestamp": "2026-09-30T02:02:32.784Z",
+  "timestamp": "2026-09-30T17:10:00.000Z",
   "repository": {
-    "worktree": "C:/Workspace/ClinicOSHouse-worktrees/capability-layer",
-    "branch": "feat/capability-tool-layer",
-    "base": "origin/main@76ac4c60",
-    "committed": false,
-    "pushed": false,
-    "deployed": false
+    "base": "origin/main",
+    "merged": [
+      "#386 94f335d1",
+      "#387 5a62fcfd"
+    ],
+    "deployed": {
+      "backend_production": true,
+      "ai_runtime_production": true,
+      "backend_demo": true
+    }
   },
   "artifacts": {
-    "current_state_md": ".ai-architecture/phase-2-authorization/CURRENT_STATE.md",
-    "role_capability_matrix": ".ai-architecture/phase-2-authorization/ROLE_CAPABILITY_MATRIX.json",
-    "authorization_architecture": ".ai-architecture/phase-2-authorization/AUTHORIZATION_ARCHITECTURE.md",
-    "policy_contract": ".ai-architecture/phase-2-authorization/POLICY_CONTRACT.md",
-    "agno_readiness": ".ai-architecture/phase-2-authorization/AGNO_READINESS.md",
-    "test_report": ".ai-architecture/phase-2-authorization/TEST_REPORT.md",
-    "prompt3_handoff": ".ai-architecture/phase-2-authorization/PROMPT3_HANDOFF.md",
-    "quality_gate": "artifacts/task-validation/phase-2-roles-authorization-and-capability-policy/",
-    "phase1": {
-      "current_state_md": ".ai-architecture/phase-1-capabilities/CURRENT_STATE.md",
-      "capability_catalog_json": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.json",
-      "capability_catalog_md": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.md",
-      "tool_layer_assessment": ".ai-architecture/phase-1-capabilities/TOOL_LAYER_ASSESSMENT.md",
-      "target_tool_architecture": ".ai-architecture/phase-1-capabilities/TARGET_TOOL_ARCHITECTURE.md",
-      "regression_baseline": ".ai-architecture/phase-1-capabilities/REGRESSION_BASELINE.md",
-      "migration_plan": ".ai-architecture/phase-1-capabilities/MIGRATION_PLAN.md",
-      "prompt2_handoff": ".ai-architecture/phase-1-capabilities/PROMPT2_HANDOFF.md",
-      "quality_gate": "artifacts/task-validation/phase-1-capability-catalog-and-tool-layer/"
+    "current_state_md": ".ai-architecture/phase-3-skills/CURRENT_STATE.md",
+    "skill_catalog_json": ".ai-architecture/phase-3-skills/SKILL_CATALOG.json",
+    "skill_catalog_md": ".ai-architecture/phase-3-skills/SKILL_CATALOG.md",
+    "workflow_architecture": ".ai-architecture/phase-3-skills/WORKFLOW_ARCHITECTURE.md",
+    "role_skill_matrix": ".ai-architecture/phase-3-skills/ROLE_SKILL_MATRIX.json",
+    "confirmation_policy": ".ai-architecture/phase-3-skills/CONFIRMATION_POLICY.md",
+    "agno_orchestration": ".ai-architecture/phase-3-skills/AGNO_ORCHESTRATION.md",
+    "e2e_test_report": ".ai-architecture/phase-3-skills/E2E_TEST_REPORT.md",
+    "evidence": ".ai-architecture/phase-3-skills/evidence/",
+    "prompt4_handoff": ".ai-architecture/phase-3-skills/PROMPT4_HANDOFF.md",
+    "quality_gate": "artifacts/task-validation/phase-3-skills-workflows-agno/",
+    "phase2": {
+      "current_state_md": ".ai-architecture/phase-2-authorization/CURRENT_STATE.md",
+      "role_capability_matrix": ".ai-architecture/phase-2-authorization/ROLE_CAPABILITY_MATRIX.json",
+      "authorization_architecture": ".ai-architecture/phase-2-authorization/AUTHORIZATION_ARCHITECTURE.md",
+      "policy_contract": ".ai-architecture/phase-2-authorization/POLICY_CONTRACT.md",
+      "agno_readiness": ".ai-architecture/phase-2-authorization/AGNO_READINESS.md",
+      "test_report": ".ai-architecture/phase-2-authorization/TEST_REPORT.md",
+      "prompt3_handoff": ".ai-architecture/phase-2-authorization/PROMPT3_HANDOFF.md",
+      "quality_gate": "artifacts/task-validation/phase-2-roles-authorization-and-capability-policy/",
+      "phase1": {
+        "current_state_md": ".ai-architecture/phase-1-capabilities/CURRENT_STATE.md",
+        "capability_catalog_json": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.json",
+        "capability_catalog_md": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.md",
+        "tool_layer_assessment": ".ai-architecture/phase-1-capabilities/TOOL_LAYER_ASSESSMENT.md",
+        "target_tool_architecture": ".ai-architecture/phase-1-capabilities/TARGET_TOOL_ARCHITECTURE.md",
+        "regression_baseline": ".ai-architecture/phase-1-capabilities/REGRESSION_BASELINE.md",
+        "migration_plan": ".ai-architecture/phase-1-capabilities/MIGRATION_PLAN.md",
+        "prompt2_handoff": ".ai-architecture/phase-1-capabilities/PROMPT2_HANDOFF.md",
+        "quality_gate": "artifacts/task-validation/phase-1-capability-catalog-and-tool-layer/"
+      }
     }
   },
-  "policy": {
-    "version_in_code_baseline": 0,
-    "storage": "AuthzPolicyVersion (migration 20260930090000_authz_policy_versions)",
-    "default_effect": "DENIED",
-    "effects": [
-      "ALLOWED",
-      "READ_ONLY",
-      "ALLOWED_WITH_CONFIRMATION",
-      "DENIED"
-    ],
-    "doubtful_cells": 80
+  "skills": {
+    "total": 16,
+    "DESIGNED": 2,
+    "IMPLEMENTED": 0,
+    "EXECUTABLE": 14,
+    "TESTED": 14,
+    "BLOCKED": 0,
+    "live_agno_tested": 5
   },
-  "roles": [
-    {
-      "id": "administrator",
-      "label": "Administrator",
-      "legacy": false,
-      "legacyRole": "admin",
-      "uiShell": "admin"
+  "role_skill_matrix_version": 1,
+  "role_skill_counts_baseline": {
+    "administrator": 8,
+    "supervisor": 14,
+    "doctor": 12,
+    "nurse": 12,
+    "oss": 11
+  },
+  "confirmation_policy_version": 1,
+  "e2e": {
+    "automated": {
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "scenarios": "A,B,C,D,E,F,G,H,I,J + per-role + QA H1/M1/L1"
     },
-    {
-      "id": "supervisor",
-      "label": "Supervisor",
-      "legacy": false,
-      "legacyRole": "manager",
-      "uiShell": "admin"
-    },
-    {
-      "id": "doctor",
-      "label": "Doctor",
-      "legacy": false,
-      "legacyRole": "operatore",
-      "uiShell": "operator"
-    },
-    {
-      "id": "nurse",
-      "label": "Nurse",
-      "legacy": false,
-      "legacyRole": "operatore",
-      "uiShell": "operator"
-    },
-    {
-      "id": "oss",
-      "label": "OSS",
-      "legacy": false,
-      "legacyRole": "operatore",
-      "uiShell": "operator"
-    },
-    {
-      "id": "operator",
-      "label": "Operator (legacy)",
-      "legacy": true,
-      "legacyRole": "operatore",
-      "uiShell": "operator"
-    },
-    {
-      "id": "legacy_admin",
-      "label": "Administrator (legacy)",
-      "legacy": true,
-      "legacyRole": "admin",
-      "uiShell": "admin"
-    }
-  ],
-  "role_effect_counts": {
-    "administrator": {
-      "ALLOWED": 32,
-      "READ_ONLY": 15,
-      "ALLOWED_WITH_CONFIRMATION": 2,
-      "DENIED": 95,
-      "effectively_allowed": 49
-    },
-    "supervisor": {
-      "ALLOWED": 107,
-      "READ_ONLY": 1,
-      "ALLOWED_WITH_CONFIRMATION": 5,
-      "DENIED": 31,
-      "effectively_allowed": 113
-    },
-    "doctor": {
-      "ALLOWED": 97,
-      "READ_ONLY": 0,
-      "ALLOWED_WITH_CONFIRMATION": 9,
-      "DENIED": 38,
-      "effectively_allowed": 106
-    },
-    "nurse": {
-      "ALLOWED": 97,
-      "READ_ONLY": 1,
-      "ALLOWED_WITH_CONFIRMATION": 5,
-      "DENIED": 41,
-      "effectively_allowed": 102
-    },
-    "oss": {
-      "ALLOWED": 35,
-      "READ_ONLY": 5,
-      "ALLOWED_WITH_CONFIRMATION": 0,
-      "DENIED": 104,
-      "effectively_allowed": 40
-    },
-    "operator": {
-      "ALLOWED": 112,
-      "READ_ONLY": 0,
-      "ALLOWED_WITH_CONFIRMATION": 0,
-      "DENIED": 32,
-      "effectively_allowed": 112
-    },
-    "legacy_admin": {
-      "ALLOWED": 144,
-      "READ_ONLY": 0,
-      "ALLOWED_WITH_CONFIRMATION": 0,
-      "DENIED": 0,
-      "effectively_allowed": 144
+    "live_agno": {
+      "runs": 2,
+      "checks_per_run": 9,
+      "pass": 9,
+      "fail": 0,
+      "model": "azure:gpt-6.1-sol (Agno Agent, role agent)"
     }
   },
-  "simulated_identities": {
-    "SIM-ADMIN": "administrator",
-    "SIM-SUPERVISOR-1": "supervisor",
-    "SIM-DOCTOR-1": "doctor",
-    "SIM-NURSE-1": "nurse",
-    "SIM-OSS-1": "oss"
-  },
-  "capabilities": {
-    "catalog_total": 202,
-    "policy_governed": 144,
-    "derived": 32,
-    "outside_role_policy": 26,
-    "tools": 56
-  },
-  "tests": {
-    "authz": {
-      "files": 3,
-      "tests": 19,
-      "pass": 19,
-      "fail": 0
-    },
-    "allow_deny_e2e": {
-      "allow_cases": 7,
-      "deny_cases": 12
-    },
-    "agno_readiness": {
-      "steps": 7,
-      "tests": 5,
-      "pass": 5,
-      "fail": 0
-    },
-    "agno_visibility": "pass (discovery per role; changes after Save/Apply and restore)",
-    "browser": {
-      "steps": 10,
-      "pass": 10,
-      "console_errors": 0
-    },
-    "backend_serial_fresh_db": {
-      "main": {
-        "tests": 1396,
-        "pass": 1374,
-        "fail": 21,
-        "skipped": 1
-      },
-      "branch": {
-        "tests": 1494,
-        "pass": 1472,
-        "fail": 21,
-        "skipped": 1
-      },
+  "regression": {
+    "backend_full_fresh_db": {
+      "tests": 1567,
+      "pass": 1533,
+      "fail": 33,
       "new_failures": 0
     },
-    "frontend": {
-      "main": {
-        "tests": 908,
-        "pass": 899,
-        "fail": 9
-      },
-      "branch": {
-        "tests": 924,
-        "pass": 915,
-        "fail": 9
-      },
-      "new_failures": 0
+    "ci_gate": "19 failures identical to main (pre-existing)",
+    "runtime": {
+      "tests": 176,
+      "pass": 176
     },
-    "builds": {
-      "backend": "pass",
-      "frontend": "pass"
-    },
-    "independent_qa": "READY FOR QA (after fixing 1 HIGH + 3 MEDIUM findings)"
+    "typecheck": "pass",
+    "backend_build": "pass"
   },
-  "failures": [],
+  "independent_qa": "READY FOR QA (after fixing H1 HIGH, M1 MEDIUM, L1 LOW)",
+  "blockers": [],
   "gaps": [
-    "G1 ownership data scope for doctor/nurse/oss",
-    "G2 confirmation not enforced on GUI routes",
-    "G3 Agnos divergent writers",
-    "G4 GAP capabilities without tools",
-    "G5 lock-out check role-level",
-    "G6 unassignment falls back to legacy (flagged)",
-    "G7 X-Tool-Origin client metadata",
-    "G8 pre-existing hardening items",
-    "R1 query_data coarse governance",
-    "R2 occupancy counts via assistant"
+    "P3-G1 in-process workflow store",
+    "P3-G2 Italian-only fallback keywords",
+    "P3-G3 patients.search 16-char CF quirk (pre-existing)",
+    "P3-G4 shared rate limiter",
+    "P3-G5 preview label fallback",
+    "P3-G6 HIGH_RISK human-only (customer decision)"
   ],
   "decisions": [
-    "One versioned policy document (roles, grants, assignments) governs GUI routes, Tool Layer, Agnos and the admin API through a single decide() function.",
-    "Legacy Operator/Administrator kept as legacy roles with legacy-equivalent policy; migration by explicit assignment.",
-    "Role never from the client: simulator token = identity only; role resolved from the active policy on each protected request.",
-    "Route gate before all routers, case-insensitive and HEAD-aware; tool hook re-resolves the role server-side.",
-    "Revocation via per-request active-version check (no re-login).",
-    "Additive schema change only (AuthzPolicyVersion)."
+    "Agno interprets (skill + slots) over policy-filtered skills; the backend runs workflow, confirmation, tools and audit.",
+    "Confirmation is an explicit user act, never an LLM output.",
+    "No new capability, no schema change; audit reuses AiAuditEvent."
   ],
+  "roles_labels_it": {
+    "administrator": "Amministratore",
+    "supervisor": "Supervisore",
+    "doctor": "Medico",
+    "nurse": "Infermiere",
+    "oss": "OSS"
+  },
+  "phase2_state": {
+    "phase": 2,
+    "phase_status": "COMPLETED",
+    "policy": {
+      "version_in_code_baseline": 0,
+      "storage": "AuthzPolicyVersion (migration 20260930090000_authz_policy_versions)",
+      "default_effect": "DENIED",
+      "effects": [
+        "ALLOWED",
+        "READ_ONLY",
+        "ALLOWED_WITH_CONFIRMATION",
+        "DENIED"
+      ],
+      "doubtful_cells": 80
+    },
+    "capabilities": {
+      "catalog_total": 202,
+      "policy_governed": 144,
+      "derived": 32,
+      "outside_role_policy": 26,
+      "tools": 56
+    },
+    "tests": {
+      "authz": {
+        "files": 3,
+        "tests": 19,
+        "pass": 19,
+        "fail": 0
+      },
+      "allow_deny_e2e": {
+        "allow_cases": 7,
+        "deny_cases": 12
+      },
+      "agno_readiness": {
+        "steps": 7,
+        "tests": 5,
+        "pass": 5,
+        "fail": 0
+      },
+      "agno_visibility": "pass (discovery per role; changes after Save/Apply and restore)",
+      "browser": {
+        "steps": 10,
+        "pass": 10,
+        "console_errors": 0
+      },
+      "backend_serial_fresh_db": {
+        "main": {
+          "tests": 1396,
+          "pass": 1374,
+          "fail": 21,
+          "skipped": 1
+        },
+        "branch": {
+          "tests": 1494,
+          "pass": 1472,
+          "fail": 21,
+          "skipped": 1
+        },
+        "new_failures": 0
+      },
+      "frontend": {
+        "main": {
+          "tests": 908,
+          "pass": 899,
+          "fail": 9
+        },
+        "branch": {
+          "tests": 924,
+          "pass": 915,
+          "fail": 9
+        },
+        "new_failures": 0
+      },
+      "builds": {
+        "backend": "pass",
+        "frontend": "pass"
+      },
+      "independent_qa": "READY FOR QA (after fixing 1 HIGH + 3 MEDIUM findings)"
+    },
+    "gaps": [
+      "G1 ownership data scope for doctor/nurse/oss",
+      "G2 confirmation not enforced on GUI routes",
+      "G3 Agnos divergent writers",
+      "G4 GAP capabilities without tools",
+      "G5 lock-out check role-level",
+      "G6 unassignment falls back to legacy (flagged)",
+      "G7 X-Tool-Origin client metadata",
+      "G8 pre-existing hardening items",
+      "R1 query_data coarse governance",
+      "R2 occupancy counts via assistant"
+    ]
+  },
   "phase1_state": {
     "phase": 1,
     "phase_status": "COMPLETED",
@@ -293,6 +266,6 @@
       "backend_build": "pass"
     }
   },
-  "next_phase": 3,
-  "next_handoff_path": ".ai-architecture/phase-2-authorization/PROMPT3_HANDOFF.md"
+  "next_phase": 4,
+  "next_handoff_path": ".ai-architecture/phase-3-skills/PROMPT4_HANDOFF.md"
 }

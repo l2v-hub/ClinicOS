@@ -1,0 +1,434 @@
+{
+  "base": "http://127.0.0.1:3099",
+  "at": "2026-09-30T17:00:00.684Z",
+  "passed": 9,
+  "failed": 0,
+  "results": [
+    {
+      "name": "A read → vitals.recent via Agno, COMPLETED",
+      "pass": true,
+      "detail": {
+        "workflowId": "d98f3a60-1ba7-4aa6-aa82-1daff4de4f6c",
+        "status": "COMPLETED",
+        "skillId": "vitals.recent",
+        "reply": "Ultime rilevazioni di Rossi Mario:\n• 30/09, 18:59 — Pressione 128/82, SpO₂ 95\n• 30/09, 18:39 — Pressione 128/82, SpO₂ 95",
+        "pending": null,
+        "preview": null,
+        "result": {
+          "readings": [
+            {
+              "id": "cf9ecaa1-1f27-4e35-96fa-95a7638f882c",
+              "patientId": "cmuoaxhaz0000u8lpzqab5pr7",
+              "requestId": "db5b7771-664a-41a0-b743-810ff5bea8f3",
+              "values": {
+                "pa": "128/82",
+                "spo2": "95"
+              },
+              "authorOperatorId": "SIM-NURSE-1",
+              "authorName": "Infermiere 1",
+              "measuredAt": "2026-09-30T16:59:09.094Z",
+              "createdAt": "2026-09-30T16:59:11.866Z"
+            },
+            {
+              "id": "f9e9f764-c2d3-437e-9cc9-8638d3928847",
+              "patientId": "cmuoaxhaz0000u8lpzqab5pr7",
+              "requestId": "b5da918c-61c9-4da6-9ceb-eb2e01e61e26",
+              "values": {
+                "pa": "128/82",
+                "spo2": "95"
+              },
+              "authorOperatorId": "SIM-NURSE-1",
+              "authorName": "Infermiere 1",
+              "measuredAt": "2026-09-30T16:39:37.140Z",
+              "createdAt": "2026-09-30T16:39:39.889Z"
+            }
+          ]
+        },
+        "error": null,
+        "interpreter": "agno"
+      }
+    },
+    {
+      "name": "B write → vitals.record via Agno, NEEDS_CONFIRMATION with preview",
+      "pass": true,
+      "detail": {
+        "workflowId": "3d92b942-9684-4902-bf91-01c9b4a95e87",
+        "status": "NEEDS_CONFIRMATION",
+        "skillId": "vitals.record",
+        "reply": "Registrazione parametri vitali\nOspite: Rossi Mario\nPressione: 128/82\nSpO₂: 95\nOrario rilevazione: 30/09, 18:59\nAutore: operatore corrente (risolto dal server).\nOrigine: richiesta all’assistente (AI).\nConfermi? Rispondi «conferma» per procedere o «annulla».",
+        "pending": null,
+        "preview": {
+          "skillId": "vitals.record",
+          "patient": {
+            "id": "cmuoaxhaz0000u8lpzqab5pr7",
+            "label": "Rossi Mario"
+          },
+          "origin": "ai",
+          "notes": [
+            "Autore: operatore corrente (risolto dal server)."
+          ],
+          "action": "Registrazione parametri vitali",
+          "values": {
+            "Pressione": "128/82",
+            "SpO₂": "95",
+            "Orario rilevazione": "30/09, 18:59"
+          },
+          "tool": "parameters.create_reading",
+          "confirmationClass": "SENSITIVE_WRITE"
+        },
+        "error": null,
+        "interpreter": "agno"
+      }
+    },
+    {
+      "name": "B confirm → COMPLETED and verified",
+      "pass": true,
+      "detail": {
+        "workflowId": "3d92b942-9684-4902-bf91-01c9b4a95e87",
+        "status": "COMPLETED",
+        "skillId": "vitals.record",
+        "reply": "Parametri registrati per Rossi Mario: Pressione 128/82, SpO₂ 95. Verificato: la rilevazione è presente nel registro.",
+        "pending": null,
+        "preview": {
+          "skillId": "vitals.record",
+          "patient": {
+            "id": "cmuoaxhaz0000u8lpzqab5pr7",
+            "label": "Rossi Mario"
+          },
+          "origin": "ai",
+          "notes": [
+            "Autore: operatore corrente (risolto dal server)."
+          ],
+          "action": "Registrazione parametri vitali",
+          "values": {
+            "Pressione": "128/82",
+            "SpO₂": "95",
+            "Orario rilevazione": "30/09, 18:59"
+          },
+          "tool": "parameters.create_reading",
+          "confirmationClass": "SENSITIVE_WRITE"
+        },
+        "result": {
+          "readingId": "1c655c0c-dd79-412a-a535-282ebb029373",
+          "replayed": false,
+          "verified": true
+        },
+        "error": null,
+        "interpreter": "agno"
+      }
+    },
+    {
+      "name": "C ambiguous → NEEDS_CLARIFICATION (patient)",
+      "pass": true,
+      "detail": {
+        "workflowId": "187df7e1-a117-4333-a98e-3f9cec20077d",
+        "status": "NEEDS_CLARIFICATION",
+        "skillId": "vitals.record",
+        "reply": "Per quale ospite?",
+        "pending": "patient",
+        "preview": null,
+        "error": null,
+        "interpreter": "agno"
+      }
+    },
+    {
+      "name": "E multi-turn → diary.add_observation reaches NEEDS_CONFIRMATION",
+      "pass": true,
+      "detail": {
+        "e1": {
+          "workflowId": "8688875d-33e9-4c4a-b4b0-fe8d6ad8e1d5",
+          "status": "NEEDS_CLARIFICATION",
+          "skillId": "diary.add_observation",
+          "reply": "Per quale ospite?",
+          "pending": "patient",
+          "preview": null,
+          "error": null,
+          "interpreter": "agno"
+        },
+        "e2": {
+          "workflowId": "8688875d-33e9-4c4a-b4b0-fe8d6ad8e1d5",
+          "status": "NEEDS_CLARIFICATION",
+          "skillId": "diary.add_observation",
+          "reply": "Cosa devo scrivere nel diario?",
+          "pending": "text",
+          "preview": null,
+          "error": null,
+          "interpreter": "agno"
+        },
+        "e3": {
+          "workflowId": "8688875d-33e9-4c4a-b4b0-fe8d6ad8e1d5",
+          "status": "NEEDS_CONFIRMATION",
+          "skillId": "diary.add_observation",
+          "reply": "Nuova osservazione nel diario\nOspite: Bianchi Anna\nTesto: ha passato una notte tranquilla, nessun dolore riferito\nData: 30/09, 18:59\nIl testo viene salvato così com’è, senza riscritture.\nOrigine: richiesta all’assistente (AI).\nConfermi? Rispondi «conferma» per procedere o «annulla».",
+          "pending": null,
+          "preview": {
+            "skillId": "diary.add_observation",
+            "patient": {
+              "id": "cmuoaxhb90001u8lp54rquqy5",
+              "label": "Bianchi Anna"
+            },
+            "origin": "ai",
+            "notes": [
+              "Il testo viene salvato così com’è, senza riscritture."
+            ],
+            "action": "Nuova osservazione nel diario",
+            "values": {
+              "Testo": "ha passato una notte tranquilla, nessun dolore riferito",
+              "Data": "30/09, 18:59"
+            },
+            "tool": "diary.create",
+            "confirmationClass": "SENSITIVE_WRITE"
+          },
+          "error": null,
+          "interpreter": "agno"
+        }
+      }
+    },
+    {
+      "name": "E confirm → COMPLETED",
+      "pass": true,
+      "detail": {
+        "workflowId": "8688875d-33e9-4c4a-b4b0-fe8d6ad8e1d5",
+        "status": "COMPLETED",
+        "skillId": "diary.add_observation",
+        "reply": "Osservazione aggiunta al diario di Bianchi Anna (autore: Infermiere 1).",
+        "pending": null,
+        "preview": {
+          "skillId": "diary.add_observation",
+          "patient": {
+            "id": "cmuoaxhb90001u8lp54rquqy5",
+            "label": "Bianchi Anna"
+          },
+          "origin": "ai",
+          "notes": [
+            "Il testo viene salvato così com’è, senza riscritture."
+          ],
+          "action": "Nuova osservazione nel diario",
+          "values": {
+            "Testo": "ha passato una notte tranquilla, nessun dolore riferito",
+            "Data": "30/09, 18:59"
+          },
+          "tool": "diary.create",
+          "confirmationClass": "SENSITIVE_WRITE"
+        },
+        "result": {
+          "entryId": "cmuocp26l001iwglpnlhl2umf",
+          "authorName": "Infermiere 1"
+        },
+        "error": null,
+        "interpreter": "agno"
+      }
+    },
+    {
+      "name": "D administrator → DENIED",
+      "pass": true,
+      "detail": {
+        "workflowId": "c3f85881-2f45-40cc-8e6e-07dbc9bc8aa8",
+        "status": "DENIED",
+        "skillId": "vitals.record",
+        "reply": "Non sei autorizzato a «Registra parametri vitali»: servono parameters.create_reading.",
+        "pending": null,
+        "preview": null,
+        "error": {
+          "code": "capability_denied",
+          "message": "Non sei autorizzato a «Registra parametri vitali»: servono parameters.create_reading."
+        },
+        "interpreter": "agno"
+      }
+    },
+    {
+      "name": "D2 OSS asks for administrations → DENIED via Agno",
+      "pass": true,
+      "detail": {
+        "workflowId": "42e2f765-e72c-4765-9f6a-1546a9afd02d",
+        "status": "DENIED",
+        "skillId": "therapy.due_administrations",
+        "reply": "Non sei autorizzato a «Somministrazioni del giorno»: servono administration.list_slots.",
+        "pending": null,
+        "preview": null,
+        "error": {
+          "code": "capability_denied",
+          "message": "Non sei autorizzato a «Somministrazioni del giorno»: servono administration.list_slots."
+        },
+        "interpreter": "agno"
+      }
+    },
+    {
+      "name": "G handover.create via Agno → CANCELLED",
+      "pass": true,
+      "detail": {
+        "g1": {
+          "workflowId": "00d3781d-9de5-46a5-b017-ec445005830d",
+          "status": "NEEDS_CONFIRMATION",
+          "skillId": "handover.create",
+          "reply": "Nuova consegna\nOspite: Rossi Mario\nNota: controllare la glicemia prima di cena\nPriorità: normale\nTipo: Monitoraggio\nOrigine: richiesta all’assistente (AI).\nConfermi? Rispondi «conferma» per procedere o «annulla».",
+          "pending": null,
+          "preview": {
+            "skillId": "handover.create",
+            "patient": {
+              "id": "cmuoaxhaz0000u8lpzqab5pr7",
+              "label": "Rossi Mario"
+            },
+            "origin": "ai",
+            "notes": [],
+            "action": "Nuova consegna",
+            "values": {
+              "Nota": "controllare la glicemia prima di cena",
+              "Priorità": "normale",
+              "Tipo": "Monitoraggio"
+            },
+            "tool": "consegne.create",
+            "confirmationClass": "LOW_RISK_WRITE"
+          },
+          "error": null,
+          "interpreter": "agno"
+        },
+        "g2": {
+          "workflowId": "00d3781d-9de5-46a5-b017-ec445005830d",
+          "status": "CANCELLED",
+          "skillId": "handover.create",
+          "reply": "Annullato. Nessuna modifica è stata eseguita.",
+          "pending": null,
+          "preview": {
+            "skillId": "handover.create",
+            "patient": {
+              "id": "cmuoaxhaz0000u8lpzqab5pr7",
+              "label": "Rossi Mario"
+            },
+            "origin": "ai",
+            "notes": [],
+            "action": "Nuova consegna",
+            "values": {
+              "Nota": "controllare la glicemia prima di cena",
+              "Priorità": "normale",
+              "Tipo": "Monitoraggio"
+            },
+            "tool": "consegne.create",
+            "confirmationClass": "LOW_RISK_WRITE"
+          },
+          "error": null,
+          "interpreter": "agno"
+        }
+      }
+    }
+  ],
+  "transcript": [
+    {
+      "label": "A read",
+      "request": "mi fai vedere gli ultimi parametri vitali di questo ospite?",
+      "status": "COMPLETED",
+      "skill": "vitals.recent",
+      "interpreter": "agno",
+      "reply": "Ultime rilevazioni di Rossi Mario:\n• 30/09, 18:59 — Pressione 128/82, SpO₂ 95\n• 30/09, 18:39 — Pressione 128/82, SpO₂ 95",
+      "ms": 2430
+    },
+    {
+      "label": "B write",
+      "request": "al signor Mario Rossi ho misurato adesso la pressione: 128 su 82, saturazione 95 per cento",
+      "status": "NEEDS_CONFIRMATION",
+      "skill": "vitals.record",
+      "interpreter": "agno",
+      "reply": "Registrazione parametri vitali\nOspite: Rossi Mario\nPressione: 128/82\nSpO₂: 95\nOrario rilevazione: 30/09, 18:59\nAutore: operatore corrente (risolto dal server).\nOrigine: richiesta all’assistente (AI).\nConfermi? Rispondi «conferma» per procedere o «annulla».",
+      "ms": 2745
+    },
+    {
+      "label": "B confirm",
+      "request": "confirm",
+      "status": "COMPLETED",
+      "skill": "vitals.record",
+      "interpreter": "agno",
+      "reply": "Parametri registrati per Rossi Mario: Pressione 128/82, SpO₂ 95. Verificato: la rilevazione è presente nel registro.",
+      "ms": 22
+    },
+    {
+      "label": "C ambiguous",
+      "request": "segna una pressione di 120/80",
+      "status": "NEEDS_CLARIFICATION",
+      "skill": "vitals.record",
+      "interpreter": "agno",
+      "reply": "Per quale ospite?",
+      "ms": 2802
+    },
+    {
+      "label": "C cancel",
+      "request": "cancel",
+      "status": "CANCELLED",
+      "skill": "vitals.record",
+      "interpreter": "agno",
+      "reply": "Annullato. Nessuna modifica è stata eseguita.",
+      "ms": 13
+    },
+    {
+      "label": "E1",
+      "request": "devo annotare una osservazione nel diario",
+      "status": "NEEDS_CLARIFICATION",
+      "skill": "diary.add_observation",
+      "interpreter": "agno",
+      "reply": "Per quale ospite?",
+      "ms": 2450
+    },
+    {
+      "label": "E2",
+      "request": "per la signora Anna Bianchi",
+      "status": "NEEDS_CLARIFICATION",
+      "skill": "diary.add_observation",
+      "interpreter": "agno",
+      "reply": "Cosa devo scrivere nel diario?",
+      "ms": 2468
+    },
+    {
+      "label": "E3",
+      "request": "ha passato una notte tranquilla, nessun dolore riferito",
+      "status": "NEEDS_CONFIRMATION",
+      "skill": "diary.add_observation",
+      "interpreter": "agno",
+      "reply": "Nuova osservazione nel diario\nOspite: Bianchi Anna\nTesto: ha passato una notte tranquilla, nessun dolore riferito\nData: 30/09, 18:59\nIl testo viene salvato così com’è, senza riscritture.\nOrigine: richiesta all’assistente (AI).\nConfermi? Rispondi «conferma» per procedere o «annulla».",
+      "ms": 2504
+    },
+    {
+      "label": "E4",
+      "request": "sì",
+      "status": "COMPLETED",
+      "skill": "diary.add_observation",
+      "interpreter": "agno",
+      "reply": "Osservazione aggiunta al diario di Bianchi Anna (autore: Infermiere 1).",
+      "ms": 21
+    },
+    {
+      "label": "D denied",
+      "request": "registra pressione 120/80 per Mario Rossi",
+      "status": "DENIED",
+      "skill": "vitals.record",
+      "interpreter": "agno",
+      "reply": "Non sei autorizzato a «Registra parametri vitali»: servono parameters.create_reading.",
+      "ms": 2703
+    },
+    {
+      "label": "D2 denied (Agno)",
+      "request": "quali somministrazioni ci sono oggi?",
+      "status": "DENIED",
+      "skill": "therapy.due_administrations",
+      "interpreter": "agno",
+      "reply": "Non sei autorizzato a «Somministrazioni del giorno»: servono administration.list_slots.",
+      "ms": 2619
+    },
+    {
+      "label": "G",
+      "request": "lascia una consegna per Mario Rossi: controllare la glicemia prima di cena",
+      "status": "NEEDS_CONFIRMATION",
+      "skill": "handover.create",
+      "interpreter": "agno",
+      "reply": "Nuova consegna\nOspite: Rossi Mario\nNota: controllare la glicemia prima di cena\nPriorità: normale\nTipo: Monitoraggio\nOrigine: richiesta all’assistente (AI).\nConfermi? Rispondi «conferma» per procedere o «annulla».",
+      "ms": 2276
+    },
+    {
+      "label": "G cancel",
+      "request": "annulla",
+      "status": "CANCELLED",
+      "skill": "handover.create",
+      "interpreter": "agno",
+      "reply": "Annullato. Nessuna modifica è stata eseguita.",
+      "ms": 15
+    }
+  ]
+}

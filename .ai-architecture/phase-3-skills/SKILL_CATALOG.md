@@ -7,16 +7,16 @@ Totals: skills 16 · TESTED 14 · DESIGNED 2 · confirmation policy v1
 
 | skill_id | nome | categoria | tipo | conferma | tool richiesti | tool opzionali | ruoli previsti | stato | evidenze |
 |---|---|---|---|---|---|---|---|---|---|
-| `vitals.record` | Registra parametri vitali | clinical | write | SENSITIVE_WRITE | patients.search, parameters.create_reading | parameters.list_readings | doctor, nurse, oss, supervisor | TESTED | 6 |
-| `diary.add_observation` | Aggiungi osservazione al diario | clinical | write | SENSITIVE_WRITE | patients.search, diary.create | diary.list | doctor, nurse, oss, supervisor | TESTED | 2 |
-| `handover.create` | Crea consegna | operational | write | LOW_RISK_WRITE | patients.search, consegne.create | — | doctor, nurse, oss, supervisor | TESTED | 2 |
+| `vitals.record` | Registra parametri vitali | clinical | write | SENSITIVE_WRITE | patients.search, parameters.create_reading | parameters.list_readings | doctor, nurse, oss, supervisor | TESTED | 7 |
+| `diary.add_observation` | Aggiungi osservazione al diario | clinical | write | SENSITIVE_WRITE | patients.search, diary.create | diary.list | doctor, nurse, oss, supervisor | TESTED | 3 |
+| `handover.create` | Crea consegna | operational | write | LOW_RISK_WRITE | patients.search, consegne.create | — | doctor, nurse, oss, supervisor | TESTED | 3 |
 | `therapy.prescribe` | Prescrivi terapia | clinical | write | HIGH_RISK | patients.search, diary.therapy_preview, therapy.create | drugs.search | doctor | DESIGNED | 1 |
 | `administration.record` | Registra somministrazione | clinical | action | HIGH_RISK | administration.list_slots, administration.confirm | administration.record_not_administered | nurse | DESIGNED | 0 |
-| `vitals.recent` | Parametri recenti | query | read | READ | patients.search, parameters.list_readings | — | doctor, nurse, oss, supervisor | TESTED | 2 |
+| `vitals.recent` | Parametri recenti | query | read | READ | patients.search, parameters.list_readings | — | doctor, nurse, oss, supervisor | TESTED | 3 |
 | `diary.recent` | Diario recente | query | read | READ | patients.search, diary.list | — | doctor, nurse, oss, supervisor | TESTED | 1 |
 | `patient.overview` | Informazioni sull’ospite | query | read | READ | patients.search, patients.clinical_summary | parameters.list_readings | doctor, nurse, oss, supervisor | TESTED | 2 |
 | `clinical.question` | Domanda sulla cartella | query | read | READ | assistant.query | — | doctor, nurse, oss, supervisor | TESTED | 1 |
-| `therapy.due_administrations` | Somministrazioni del giorno | operational | read | READ | administration.list_slots | — | doctor, nurse, supervisor | TESTED | 2 |
+| `therapy.due_administrations` | Somministrazioni del giorno | operational | read | READ | administration.list_slots | — | doctor, nurse, supervisor | TESTED | 3 |
 | `handover.overview` | Situazione consegne | supervisory | read | READ | consegne.overview | — | doctor, nurse, oss, supervisor | TESTED | 1 |
 | `appointments.day` | Appuntamenti del giorno | operational | read | READ | appointments.list | — | doctor, nurse, oss, supervisor | TESTED | 1 |
 | `facility.occupancy` | Occupazione posti letto | supervisory | read | READ | rooms.occupancy | — | supervisor, administrator | TESTED | 1 |
@@ -35,7 +35,7 @@ Registra una rilevazione di parametri vitali (pressione, SpO2, frequenza cardiac
 - Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Valori mancanti o non validi → NEEDS_CLARIFICATION sui valori.
 - Errori: Errore di validazione/servizio → FAILED con il messaggio del backend; retry riusa lo stesso requestId (dedupe del servizio).
 - Audit: request, proposal (nomi dei campi), confirmation, execute (outcome) + evento del tool. · Sensibilità: high
-- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › B + I; backend/src/skills/__tests__/skills-e2e.test.ts › C; backend/src/skills/__tests__/skills-e2e.test.ts › D; backend/src/skills/__tests__/skills-e2e.test.ts › E; backend/src/skills/__tests__/skills-e2e.test.ts › H; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor)
+- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › B + I; backend/src/skills/__tests__/skills-e2e.test.ts › C; backend/src/skills/__tests__/skills-e2e.test.ts › D; backend/src/skills/__tests__/skills-e2e.test.ts › E; backend/src/skills/__tests__/skills-e2e.test.ts › H; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor); scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)
 
 ### `diary.add_observation` — Aggiungi osservazione al diario
 
@@ -46,7 +46,7 @@ Aggiunge un'osservazione (nota di diario clinico-assistenziale) alla cartella di
 - Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.
 - Errori: diary.create non è idempotente: il workflow blocca una seconda esecuzione; dopo un esito incerto non ritenta da solo.
 - Audit: request, proposal, confirmation, execute + tool:diary.create. · Sensibilità: high
-- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › F; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)
+- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › F; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss); scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)
 
 ### `handover.create` — Crea consegna
 
@@ -58,7 +58,7 @@ Crea una consegna (passaggio di informazioni al turno) riferita a un ospite.
 - Errori: FAILED con il messaggio del backend; retry idempotente sul requestId.
 - Audit: request, proposal, confirmation, execute + tool:consegne.create. · Sensibilità: medium
 - **Da validare con il cliente:** Priorità e tipo di default (normale / assistenziale) da validare con il cliente.
-- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › G; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)
+- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › G; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss); scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)
 
 ### `therapy.prescribe` — Prescrivi terapia
 
@@ -93,7 +93,7 @@ Mostra le ultime rilevazioni dei parametri vitali di un ospite.
 - Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.
 - Errori: Errore di lettura → FAILED con il messaggio del backend.
 - Audit: request + tool:parameters.list_readings. · Sensibilità: high
-- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › A; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)
+- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › A; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss); scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)
 
 ### `diary.recent` — Diario recente
 
@@ -137,7 +137,7 @@ Elenca le somministrazioni previste in una giornata (giro terapia).
 - Ambiguità: Data assente → oggi (fuso Europe/Rome).
 - Errori: FAILED con il messaggio del backend.
 - Audit: request + tool:administration.list_slots. · Sensibilità: high
-- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › D (OSS denied); backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse)
+- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › D (OSS denied); backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (nurse); scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)
 
 ### `handover.overview` — Situazione consegne
 
