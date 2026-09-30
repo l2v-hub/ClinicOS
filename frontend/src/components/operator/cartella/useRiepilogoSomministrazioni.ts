@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { API_URL } from '../../../config';
 import { readDashboardTherapyDay } from '../../../lib/dashboardTherapyRead';
 import { peekCachedGet } from '../../../lib/cachedFetch';
+import { useCan } from '../../../lib/capabilities';
 import { parseTherapySlots } from '../../../lib/therapySlotPage';
 import {
   summarizeDashboardTherapies,
@@ -50,7 +51,9 @@ function seededDay(date: string): DayState {
   }
 }
 
-export function useRiepilogoSomministrazioni(attivo = true): RiepilogoSomministrazioni {
+export function useRiepilogoSomministrazioni(attivoRichiesto = true): RiepilogoSomministrazioni {
+  // Ruoli senza accesso alle somministrazioni (es. OSS): nessuna richiesta a /therapy-slots.
+  const attivo = useCan('administration.list_slots') && attivoRichiesto;
   const [now, setNow] = useState(() => new Date());
   const [revision, setRevision] = useState(0);
   const { oggi, domani } = therapyCalendar(now);

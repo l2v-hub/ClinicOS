@@ -5,6 +5,7 @@
 // and `assistantQuery` runs IN-PROCESS over the read-only Data Gateway (REQ-039). SOURCE_ONLY answers,
 // clinical-advice refused, cross-patient role+env gated — all enforced downstream.
 
+import { authzOf, enforcementEnabled, ensureAuthorization } from '../authz/request-context.js';
 import { Router, type Response } from 'express';
 import { operatorAuthMode, requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { importRateLimit } from '../ai/rate-limit.js';
@@ -25,6 +26,8 @@ assistantPublicRouter.use(importRateLimit);
 // audit; restore it to the context only once operator identity is cryptographically verified.
 const NON_PRIVILEGED_ROLE = 'operatore';
 const MAX_ASSISTANT_PATIENT_SCOPE = 100;
+/** Questions are truncated to this length (route and Tool Layer `assistant.query`). */
+export const MAX_ASSISTANT_QUESTION_LENGTH = 500;
 
 export type AssistantPatientScopeLoader = (operatorId: string) => Promise<string[]>;
 
@@ -45,6 +48,20 @@ async function loadAssistantPatientScope(operatorId: string): Promise<string[]> 
   return patients.map((patient) => patient.id);
 }
 
+/** Capability policy of the caller applied to each Agnos read tool (ai.read.<tool> → functional capability). */
+async function readToolPolicy(req: AuthedRequest): Promise<Pick<UserContext, 'readToolAllowed'>> {
+  if (!enforcementEnabled()) return {};
+  // Resolve the context if the route gate did not (router used standalone); fail closed otherwise.
+  const authz = authzOf(req) ?? (await ensureAuthorization(req).catch(() => undefined));
+  if (!authz) return { readToolAllowed: () => false };
+  return {
+    readToolAllowed: (tool) =>
+      // Dispatcher-only facility read without its own catalog entry: governed, as before Phase 2,
+      // by the assistant capability itself.
+      authz.can(tool === 'query_rooms_occupancy' ? 'assistant.query' : `ai.read.${tool}`).allowed,
+  };
+}
+
 export async function ctxFromOperator(
   req: AuthedRequest,
   loadScope: AssistantPatientScopeLoader = loadAssistantPatientScope,
@@ -57,6 +74,7 @@ export async function ctxFromOperator(
     roles: [NON_PRIVILEGED_ROLE], // privilege never derives from a public header (see note above)
     permittedPatientIds: hasVerifiedGlobalScope ? null : await loadScope(op.id),
     requestId: `op-${op.id}-${req.header('X-Request-Id') ?? 'web'}`,
+    ...(await readToolPolicy(req)),
   };
 }
 
@@ -79,7 +97,7 @@ function fail(res: Response, err: unknown) {
 // POST /ai/assistant/query  { question, currentPatientId? }
 assistantPublicRouter.post('/query', async (req, res) => {
   try {
-    const question = String(req.body?.question ?? '').slice(0, 500);
+    const question = String(req.body?.question ?? '').slice(0, MAX_ASSISTANT_QUESTION_LENGTH);
     const currentPatientId = req.body?.currentPatientId
       ? String(req.body.currentPatientId)
       : undefined;

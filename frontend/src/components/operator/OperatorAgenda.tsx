@@ -19,6 +19,7 @@ import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared
 import { PageHeader } from '../shared/PageHeader';
 import './OperatorAgendaHmi.css';
 import { TherapySlotModal } from './TherapySlotModal';
+import { useCan } from '../../lib/capabilities';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
@@ -128,6 +129,8 @@ export function OperatorAgenda({
   onNotAdministeredTherapy,
   onLoadTherapySlots,
 }: OperatorAgendaProps) {
+  // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
+  const canCreateAppointment = useCan('appointments.create');
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
   const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
@@ -408,8 +411,8 @@ export function OperatorAgenda({
             <button
               type="button"
               className="ds-btn ds-btn--primary"
-              disabled={!firstFreeSlot}
-              title={newAptHint}
+              disabled={!firstFreeSlot || !canCreateAppointment}
+              title={canCreateAppointment ? newAptHint : 'Il tuo ruolo non può creare appuntamenti'}
               onClick={() => {
                 // Ricalcolata al clic: la pagina può restare aperta a lungo.
                 const ora = firstFreeFrom(new Date());
@@ -668,7 +671,7 @@ export function OperatorAgenda({
         </div>
       )}
 
-      {aptForm && (
+      {aptForm && canCreateAppointment && (
         <AppointmentForm
           data={aptForm.data}
           ora={aptForm.ora}

@@ -18,7 +18,11 @@ import {
   dosaggiInCommercio,
   invalidaIndice,
 } from '../services/farmaci/ricerca.js';
-import { FarmaciQueryError, parseSearchInput } from '../services/farmaci/query.js';
+import {
+  FarmaciQueryError,
+  MAX_FARMACI_QUERY_LENGTH,
+  parseSearchInput,
+} from '../services/farmaci/query.js';
 
 // Le rotte in LETTURA sono aperte: servono open data AIFA (licenza CC-BY 4.0), gli stessi gia'
 // pubblici su medicinali.aifa.gov.it, e nessun dato di paziente passa di qui. Tenerle dietro
@@ -31,7 +35,7 @@ const farmaciRouter = Router();
 farmaciRouter.use('/documento', creaRouterDocumentoFarmaco());
 
 const RUOLI_PRIVILEGIATI = new Set(['admin', 'manager']);
-export const MAX_FARMACI_QUERY_LENGTH = 80;
+export { MAX_FARMACI_QUERY_LENGTH };
 
 // Both public lookup paths can trigger CPU/DB work. Share one per-IP budget so alternating routes
 // cannot multiply the allowed work.

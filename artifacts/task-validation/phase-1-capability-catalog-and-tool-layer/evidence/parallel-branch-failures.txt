@@ -1,0 +1,40 @@
+✖ DB validation rejects malformed and incomplete Transfers without weakening PAINAD
+✖ HTTP pages expose globally ordered results and keep textual searches behind POST/auth
+✖ NRS import has no absent/empty exception and rejected new-patient writes fully roll back
+✖ a divided patch in the final row rejects the entire confirmation before writes
+✖ a new process replays the persisted creation and finalization after response loss
+✖ assignment POST and PUT apply the exact database overlap predicate before materializing
+✖ both reviewed import paths assign the authenticated operator to the new patient
+✖ bounded patient roster projects and searches the canonical fiscal identity
+✖ catalog is exactly five empty metadata rows and rejects query/scope without writes
+✖ clinical notes/administration do not invalidate roster; therapy and schedule do
+✖ confirmDraft: persists therapies + vitals/pain into Cartella.data
+✖ consegne feed is private, bounded, keyset paged and scoped before limit
+✖ corrected retry persists precise schedules, actor and weekdays; replay is idempotent
+✖ createTherapyInTx: rejects when farmacoNome is missing
+✖ cursor binds normalized room and epoch; malformed room cannot become a silent broad query
+✖ diary create and update ignore spoofed authorship
+✖ diary keyset pages are bounded, stable and exact at the final page
+✖ failing tests:
+✖ finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella
+✖ handover creation resolves the patient inside the authenticated scope
+✖ intake autosave cannot replace extraction-owned narrative metadata
+✖ invalid therapy returns indexed 400 before any transaction or patient write
+✖ location/asc: patients and parameters sort globally before limit with stable boundaries
+✖ location/asc: therapy candidates preserve patient order and partial-patient continuation
+✖ location/desc keeps missing keys last, canonical numeric ties stable and arbitrary-length numbers exact
+✖ location/desc: patients and parameters sort globally before limit with stable boundaries
+✖ location/desc: therapy candidates preserve patient order and partial-patient continuation
+✖ name/asc: patients and parameters sort globally before limit with stable boundaries
+✖ name/asc: therapy candidates preserve patient order and partial-patient continuation
+✖ name/desc: patients and parameters sort globally before limit with stable boundaries
+✖ name/desc: therapy candidates preserve patient order and partial-patient continuation
+✖ one imported and three manual therapies persist in order including whole patches
+✖ ordinary operators cannot read or mutate another owner patient; managers retain global scope
+✖ own patient access works and client authorship is ignored
+✖ patient room reads validate input, enforce scope, and bound active and legacy history
+✖ patient rosters and aggregate projections carry the authenticated ownership scope
+✖ persistence failure rolls back all writes, sanitizes audit, and permits retry
+✖ rollback leaves epoch unchanged and RepeatableRead keeps epoch and enrichment coherent
+✖ room and POST name search intersect; ownership applies before either filter
+✖ room filter precedes limit for all pages under location/desc

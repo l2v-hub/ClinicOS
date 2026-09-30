@@ -24,6 +24,13 @@ import voiceRouter from './routes/ai-voice.js';
 import aiActionsRouter from './routes/ai-actions.js';
 import aiAuditRouter from './routes/ai-audit.js';
 import farmaciRouter from './routes/farmaci.js';
+import { createToolRouter, isLargeBodyToolInvoke } from './tools/http.js';
+import { authzRouter, simulatorRouter } from './routes/authz.js';
+import { capabilityRouteGate } from './authz/route-gate.js';
+import { authzOf, requireAuthorizationContext } from './authz/request-context.js';
+import { effectiveCapabilities, roleDefinition } from './authz/decision.js';
+import { simulatorEnabled } from './authz/simulator.js';
+import { defaultToolRegistry } from './tools/index.js';
 import {
   operatorAuthMode,
   productionDemoAuthEnabled,
@@ -130,7 +137,13 @@ const standardJsonParser = express.json({ limit: STANDARD_JSON_LIMIT });
 app.use((req, res, next) => {
   // The deprecated base64 intake path owns a larger parser behind auth + RBAC in its router.
   // Skipping it here prevents anonymous 8 MB parsing while all current JSON APIs stay bounded.
-  if (req.path === '/patient-intake' || req.path.startsWith('/patient-intake/')) {
+  // Same for Tool Layer invocations that declare a larger body (base64 uploads): parsed by the
+  // tool router after requireOperator.
+  if (
+    req.path === '/patient-intake' ||
+    req.path.startsWith('/patient-intake/') ||
+    (req.method === 'POST' && isLargeBodyToolInvoke(defaultToolRegistry, req.path))
+  ) {
     next();
     return;
   }
@@ -145,25 +158,53 @@ app.get('/auth/status', (_req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   res.status(200).json({
     mode: operatorAuthMode(),
+    simulator: simulatorEnabled(operatorAuthMode()),
     temporaryDemo: productionDemoAuthEnabled(),
     syntheticOnly: process.env.DEMO_DATASET_ID === 'synthetic-v1',
     expiresAt: process.env.DEMO_AUTH_EXPIRES_AT || null,
   });
 });
 
-app.get('/auth/me', requireOperator, (req, res) => {
+app.get('/auth/me', requireOperator, requireAuthorizationContext, (req, res) => {
   const operator = (req as AuthedRequest).operator;
+  const authz = authzOf(req)!;
+  const role = roleDefinition(authz.policy.document, authz.identity.roleId);
   res.setHeader('Cache-Control', 'private, no-store');
   res.status(200).json({
     id: operator!.id,
+    // Compat role (admin|manager|operatore|operator) kept for existing clients.
     role: operator!.role,
     name: operator!.name,
+    // Identity → Role → Capability policy (server-resolved; the client cannot assert any of it).
+    appRole: authz.identity.roleId,
+    roleLabel: role?.label ?? authz.identity.roleId,
+    roleSource: authz.identity.roleSource,
+    identitySource: authz.identity.identitySource,
+    uiShell:
+      role?.uiShell ?? (['admin', 'manager'].includes(operator!.role) ? 'admin' : 'operator'),
+    policyVersion: authz.policy.version,
+    capabilities: Object.fromEntries(
+      effectiveCapabilities(authz.policy.document, authz.identity.roleId).map((cap) => [
+        cap.id,
+        {
+          effect: cap.effect,
+          allowed: cap.allowed,
+          requiresConfirmation: cap.requiresConfirmation,
+        },
+      ]),
+    ),
     authMode: operatorAuthMode(),
     temporaryDemo: productionDemoAuthEnabled(),
     syntheticOnly: process.env.DEMO_DATASET_ID === 'synthetic-v1',
     expiresAt: process.env.DEMO_AUTH_EXPIRES_AT || null,
   });
 });
+
+// Phase 2: Role Simulator (dev identity source) and the Role & Capability policy API.
+app.use('/auth/simulator', simulatorRouter);
+app.use('/authz', authzRouter);
+// Backend enforcement of the capability policy for every catalogued route, before any router.
+app.use(capabilityRouteGate);
 
 app.use('/admin', adminRoomsRouter);
 app.use('/admin', adminRosterOrderRouter);
@@ -205,6 +246,9 @@ app.use('/ai/voice', voiceRouter);
 app.use('/ai/actions', aiActionsRouter);
 // SPEC-015 (US2): persistent AI audit consultation — admin/manager only.
 app.use('/ai/audit', aiAuditRouter);
+// Phase 1 Tool Layer: catalogued capabilities invocable by an orchestrator (Agno) through the
+// same services as the GUI routes, behind requireOperator + authorization/audit hooks.
+app.use('/tools', createToolRouter(defaultToolRegistry));
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
 

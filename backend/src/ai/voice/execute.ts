@@ -17,7 +17,9 @@ export type VoiceErrorKind =
   | 'confirmation_required'
   // SPEC-015 (Agnos orchestrator): allowlist violation and delete refusal at the execute boundary.
   | 'not_in_catalog'
-  | 'delete_forbidden';
+  | 'delete_forbidden'
+  // Phase 2: the caller's role may not perform the functional capability behind the action.
+  | 'capability_denied';
 
 export class VoiceError extends Error {
   constructor(

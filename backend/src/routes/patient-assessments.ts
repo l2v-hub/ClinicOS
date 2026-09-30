@@ -1,15 +1,11 @@
 import { Router, type Response } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { AssessmentError } from '../assessments/types.js';
-import {
-  createAssessment,
-  finalizeAssessment,
-  getAssessment,
-  patchAssessment,
-} from '../assessments/service.js';
+import { createAssessment, getAssessment, patchAssessment } from '../assessments/service.js';
 import { listAssessments } from '../assessments/history.js';
 import { retryAssessmentPdf } from '../assessments/pdf-service.js';
 import { bodyObject } from '../assessments/input.js';
+import { finalizeAssessmentWithPdf } from '../assessments/finalize.js';
 import { currentAssessment } from '../assessments/current.js';
 import { assessmentCatalog } from '../assessments/catalog.js';
 import { attestAssessment, listAttestations } from '../assessments/attestations.js';
@@ -94,10 +90,8 @@ router.post(
   '/:patientId/assessments/:id/finalize',
   requireOperator,
   handle(async (req, res) => {
-    const result = await finalizeAssessment(patient(req), id(req), req.body, req.operator!);
-    if (!result.replayed)
-      result.assessment = await retryAssessmentPdf(patient(req), id(req), req.operator!);
-    res.json(result);
+    // finalize + PDF composition: assessments/finalize.ts (shared with the Tool Layer).
+    res.json(await finalizeAssessmentWithPdf(patient(req), id(req), req.body, req.operator!));
   }),
 );
 router.post(

@@ -8,10 +8,12 @@
 // Prisma is imported LAZILY so this module stays importable and unit-testable without a database;
 // tests inject a spy via setAuditPersistence().
 
-export type AiAuditKind = 'read' | 'create' | 'update' | 'refusal';
+// 'delete' | 'action' are written by the capability route gate and the Tool Layer (free text column).
+export type AiAuditKind = 'read' | 'create' | 'update' | 'refusal' | 'delete' | 'action';
 // 'ui' = operational action performed through the traditional REST/UI (issue #223), alongside the
 // Agnos channels 'testo'/'voce'. The DB column is a free String, so this needs no migration.
-export type AiAuditChannel = 'testo' | 'voce' | 'ui';
+// Tool Layer invocations (backend/src/tools) record their origin: gui | ai | tool | test.
+export type AiAuditChannel = 'testo' | 'voce' | 'ui' | 'gui' | 'ai' | 'tool' | 'test';
 export type AiAuditOutcome = 'ok' | 'denied' | 'error' | 'deduped' | 'empty';
 
 export interface AiAuditEventInput {

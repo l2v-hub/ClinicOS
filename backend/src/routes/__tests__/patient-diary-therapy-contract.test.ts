@@ -11,6 +11,7 @@ import express from 'express';
 process.env.DATABASE_URL ??= 'postgresql://unit:unit@127.0.0.1:1/unit_no_db';
 
 const routeUrl = new URL('../patient-diary.ts', import.meta.url);
+const writeServiceUrl = new URL('../../patients/diary-write-service.ts', import.meta.url);
 let server: Server;
 let base = '';
 let service: typeof import('../../patients/diary-therapy-service.js');
@@ -56,8 +57,11 @@ test('AC2: le nuove route stanno dietro lo stesso gate del diario', async () => 
 });
 
 test('AC2: la creazione valida tutto prima di toccare il database', async () => {
-  const source = await readFile(routeUrl, 'utf8');
-  const block = source.split("'/:patientId/diary/with-therapy'")[1] ?? '';
+  // Composition moved verbatim from the route to the shared write service (Tool Layer phase 1).
+  const source = await readFile(writeServiceUrl, 'utf8');
+  const block = source.split('export async function createPatientDiaryEntryWithTherapy(')[1] ?? '';
+  const route = (await readFile(routeUrl, 'utf8')).split("'/:patientId/diary/with-therapy'")[1];
+  assert.match(route ?? '', /createPatientDiaryEntryWithTherapy\(patientId, req\.body/);
   const validation = block.indexOf('prepareDiaryTherapyInput(');
   assert.ok(validation > 0);
   assert.ok(block.indexOf('parseDiaryCreateBody(body.entry)') < validation);
@@ -496,6 +500,10 @@ test("Privacy: i log della creazione riportano solo nome e codice dell'errore", 
   const source = await readFile(routeUrl, 'utf8');
   const create = source.split("'/:patientId/diary/with-therapy'")[1] ?? '';
   const errorLogs = create.match(/console\.error\([\s\S]*?\);/g) ?? [];
-  assert.ok(errorLogs.length >= 2);
+  // The route now has a single catch (validation moved to patients/diary-write-service.ts, which
+  // does not log at all).
+  assert.ok(errorLogs.length >= 1);
+  const service = await readFile(writeServiceUrl, 'utf8');
+  assert.doesNotMatch(service, /console\./);
   for (const call of errorLogs) assert.match(call, /\.\.\.safeErrorTag\(error\)\);$/, call);
 });

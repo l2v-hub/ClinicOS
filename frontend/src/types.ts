@@ -13,6 +13,39 @@ export interface UtenteApp {
   reparto: string;
 }
 
+// ── Autorizzazione (Identity → Role → Capability, risolta dal server) ─────────────
+
+export type CapabilityEffect = 'ALLOWED' | 'READ_ONLY' | 'ALLOWED_WITH_CONFIRMATION' | 'DENIED';
+
+export interface CapabilityDecision {
+  effect: CapabilityEffect;
+  allowed: boolean;
+  requiresConfirmation: boolean;
+}
+
+export type CapabilityMap = Record<string, CapabilityDecision>;
+
+/** Contesto autorizzativo da GET /auth/me. La GUI lo usa solo per nascondere/disabilitare. */
+export interface AuthzContext {
+  appRole: string;
+  roleLabel: string;
+  uiShell: 'admin' | 'operator';
+  policyVersion: number | null;
+  capabilities: CapabilityMap | null;
+  /** Sessione del Simulatore ruoli (solo sviluppo). */
+  simulator: boolean;
+}
+
+/** Profilo del Simulatore ruoli (GET /auth/simulator/identities). */
+export interface SimulatorIdentity {
+  id: string;
+  name: string;
+  ruolo: string;
+  roleId: string;
+  roleLabel: string;
+  roleDescription: string;
+}
+
 // ── Navigation ─────────────────────────────────────────────────────────────────
 
 export type NavKey =
@@ -32,7 +65,8 @@ export type NavKey =
   | 'terapie'
   | 'parametri-multipaziente'
   | 'ai-assistant'
-  | 'anagrafica-farmaci';
+  | 'anagrafica-farmaci'
+  | 'ruoli-permessi';
 
 // ── Patient (API) ──────────────────────────────────────────────────────────────
 

@@ -19,6 +19,7 @@ import {
   type TherapyListType,
 } from '../../../lib/therapyPages';
 import { operatorHeaders } from '../../../lib/operatorSession';
+import { useCan } from '../../../lib/capabilities';
 import { loadMedicationAdministrationPage } from '../../../lib/medicationAdministrationPages';
 import { ClinicalTableSection, LoadingState } from './shared';
 import { LoadErrorState } from './LoadErrorState';
@@ -198,6 +199,8 @@ function ScheduleSummary({ t }: { t: PatientTherapyAPI }) {
 
 export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyId }: Props) {
   const [subTab, setSubTab] = useState<SubTab>('attivi');
+  // La GUI nasconde la prescrizione se il ruolo non la consente (il backend la rifiuta comunque).
+  const canCreateTherapy = useCan('therapy.create');
   // Ultimo elenco gia' mostrato per questo paziente in sessione: il tab si disegna subito con
   // quello e lo rivalida in background invece di ripartire da "Caricamento…".
   const initialSnapshot = readSessionCache<TherapyListSnapshot>(therapyCacheKey(paziente.id, {}));
@@ -1468,13 +1471,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
               </div>
             ) : (
               <>
-                <button
-                  className="btn-success btn-sm"
-                  style={{ marginBottom: 12 }}
-                  onClick={openAdd}
-                >
-                  + Nuova terapia
-                </button>
+                {canCreateTherapy && (
+                  <button
+                    className="btn-success btn-sm"
+                    style={{ marginBottom: 12 }}
+                    onClick={openAdd}
+                  >
+                    + Nuova terapia
+                  </button>
+                )}
                 {loading ? (
                   <LoadingState />
                 ) : therapyLoadError && therapies.length === 0 ? null : (

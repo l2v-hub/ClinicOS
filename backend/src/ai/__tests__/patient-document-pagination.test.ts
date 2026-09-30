@@ -16,6 +16,11 @@ const routeSource = readFileSync(
   new URL('../../routes/patient-documents.ts', import.meta.url),
   'utf8',
 );
+// The route's query parsing lives in a module shared with the Tool Layer (documents.list).
+const listQuerySource = readFileSync(
+  new URL('../upload/patient-document-list-query.ts', import.meta.url),
+  'utf8',
+);
 
 test('patient document cursor is opaque, stable and bound to its patient', () => {
   const cursor = encodePatientDocumentCursor('patient-a', { sortOrder: 7, id: 'doc-9' });
@@ -55,10 +60,18 @@ test('patient document metadata query is bounded and keyset ordered', () => {
 });
 
 test('HTTP contract rejects invalid cursors and caps the requested page size', () => {
-  assert.match(routeSource, /Math\.min\(parsedLimit, PATIENT_DOCUMENT_PAGE_MAX\)/);
-  assert.match(routeSource, /decodePatientDocumentCursor\(rawCursor, patientId\)/);
-  assert.match(routeSource, /code: 'invalid_cursor'/);
-  assert.match(routeSource, /sourceFileName: rawSourceFileName \|\| undefined/);
+  assert.match(
+    routeSource,
+    /parsePatientDocumentListQuery\(req\.query as Record<string, unknown>, patientId\)/,
+  );
+  assert.match(
+    routeSource,
+    /error instanceof PatientDocumentListQueryError[\s\S]*?res\.status\(400\)/,
+  );
+  assert.match(listQuerySource, /Math\.min\(parsedLimit, PATIENT_DOCUMENT_PAGE_MAX\)/);
+  assert.match(listQuerySource, /decodePatientDocumentCursor\(rawCursor, patientId\)/);
+  assert.match(listQuerySource, /'invalid_cursor'/);
+  assert.match(listQuerySource, /sourceFileName: rawSourceFileName \|\| undefined/);
   assert.match(routeSource, /res\.status\(200\)\.json\(page\)/);
   assert.match(
     serviceSource,

@@ -531,6 +531,10 @@ export async function assistantQuery(
       break;
     }
     calls++;
+    // Phase 2: each read tool is governed by its functional capability for the caller's role.
+    if (ctx.readToolAllowed && !ctx.readToolAllowed(call.tool)) {
+      return empty({ notFound: false, refusal: 'Dato non consentito al tuo ruolo.' });
+    }
     try {
       const r = await dispatch(call.tool, call.args, ctx, env, effectiveCtx.operatorName);
       sourceTruncated ||= r.truncated === true;

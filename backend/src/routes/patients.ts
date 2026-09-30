@@ -15,7 +15,7 @@ import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js'
 import { PatientPageInputError } from '../patients/pagination.js';
 import { RosterError } from '../roster/order-contract.js';
 import { loadPatientIdentityPage } from '../patients/identity-page.js';
-import { PatientSummaryInputError, parsePatientSummaryIds } from '../patients/summary-query.js';
+import { PatientSummaryInputError } from '../patients/summary-query.js';
 import { loadPatientParametersPage } from '../patients/parameters-page.js';
 import { parameterReadingsRouter } from './patient-parameter-readings.js';
 import {
@@ -23,14 +23,10 @@ import {
   PatientParametersNotFoundError,
   savePatientParameterMonth,
 } from '../patients/parameters-update.js';
-import { loadPatientConsegnaCounts } from '../consegne/read-service.js';
 import { requirePatientScope } from '../patients/access.js';
+import { loadScopedPatientClinicalSummaries } from '../patients/clinical-summary-service.js';
 import { CartellaUpdateError, saveCartella } from '../patients/cartella-update.js';
-import { hasGlobalPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
-import {
-  assemblePatientClinicalSummaries,
-  loadPatientClinicalSummaryRows,
-} from '../patients/clinical-summary.js';
+import { hasGlobalPatientScope } from '../patients/patient-scope.js';
 
 const router = Router();
 
@@ -213,22 +209,8 @@ router.get('/clinical-summary/overview', async (req, res) => {
 router.get('/clinical-summary', async (req, res) => {
   try {
     const actor = (req as AuthedRequest).operator!;
-    const patientIds = parsePatientSummaryIds(req.query.patientIds);
-    const allowedPatients = await prisma.patient.findMany({
-      where: { id: { in: patientIds }, ...patientScopeWhere(actor) },
-      select: { id: true },
-    });
-    const allowedIds = new Set(allowedPatients.map((patient) => patient.id));
-    const scopedPatientIds = patientIds.filter((patientId) => allowedIds.has(patientId));
-    const [clinicalRows, consegneCounts] = await Promise.all([
-      loadPatientClinicalSummaryRows(scopedPatientIds),
-      loadPatientConsegnaCounts(scopedPatientIds),
-    ]);
-    const summary = assemblePatientClinicalSummaries(
-      scopedPatientIds,
-      clinicalRows,
-      consegneCounts,
-    );
+    // Scope + composition: patients/clinical-summary-service.ts (shared with the Tool Layer).
+    const summary = await loadScopedPatientClinicalSummaries(req.query.patientIds, actor);
     res.status(200).json(summary);
   } catch (error) {
     if (error instanceof PatientSummaryInputError) {

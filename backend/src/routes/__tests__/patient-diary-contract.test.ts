@@ -4,6 +4,17 @@ import { test } from 'node:test';
 
 const routeUrl = new URL('../patient-diary.ts', import.meta.url);
 const assistantWriterUrl = new URL('../../ai/voice/write-services.ts', import.meta.url);
+// Create logic moved verbatim from the route to the shared write service (Tool Layer phase 1).
+const writeServiceUrl = new URL('../../patients/diary-write-service.ts', import.meta.url);
+
+async function createServiceBlock(): Promise<string> {
+  const service = await readFile(writeServiceUrl, 'utf8');
+  return (
+    service
+      .split('export async function createPatientDiaryEntry(')[1]
+      ?.split('export async function ')[0] ?? ''
+  );
+}
 
 test('patient diary route is scoped, no-store and bounded by default', async () => {
   const source = await readFile(routeUrl, 'utf8');
@@ -26,8 +37,10 @@ test('patient diary authorship is server authoritative on create and immutable o
     source.split('// POST /patients/:patientId/diary')[1]?.split('// GET ')[0] ?? '';
   const updateBlock =
     source.split('// PUT /patients/:patientId/diary/:entryId')[1]?.split('// DELETE ')[0] ?? '';
-  assert.match(createBlock, /authoritativeDiaryAuthor\(req\.operator!\)/);
-  assert.match(createBlock, /\.\.\.author/);
+  assert.match(createBlock, /createPatientDiaryEntry\(patientId, req\.body, req\.operator!\)/);
+  const serviceBlock = await createServiceBlock();
+  assert.match(serviceBlock, /authoritativeDiaryAuthor\(actor\)/);
+  assert.match(serviceBlock, /\.\.\.author/);
   assert.doesNotMatch(updateBlock, /authorType !== undefined|authorName !== undefined/);
 });
 
@@ -39,10 +52,11 @@ test('patient and assistant diary writes share validation before persistence', a
   const updateBlock =
     source.split('// PUT /patients/:patientId/diary/:entryId')[1]?.split('// DELETE ')[0] ?? '';
 
-  assert.ok(
-    createBlock.indexOf('parseDiaryCreateBody(req.body)') <
-      createBlock.indexOf('authoritativeDiaryAuthor(req.operator!)'),
-  );
+  assert.match(createBlock, /createPatientDiaryEntry\(patientId, req\.body, req\.operator!\)/);
+  const serviceBlock = await createServiceBlock();
+  const parseAt = serviceBlock.indexOf('parseDiaryCreateBody(body)');
+  assert.ok(parseAt >= 0);
+  assert.ok(parseAt < serviceBlock.indexOf('authoritativeDiaryAuthor(actor)'));
   assert.ok(
     updateBlock.indexOf('parseDiaryPatchBody(req.body)') <
       updateBlock.indexOf('prisma.patientDiaryEntry.findFirst'),

@@ -13,6 +13,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { API_URL } from '../../../config';
 import { cachedGetJson, peekCachedGet } from '../../../lib/cachedFetch';
+import { useCan } from '../../../lib/capabilities';
 import { anomalieDi, NESSUNA_ANOMALIA, type AnomaliePaziente } from './anomalieFarmaco';
 import {
   trovaRisoluzione,
@@ -76,7 +77,9 @@ function oggi(): string {
  * `attivo` permette di non interrogare nulla dove la funzione non serve: un hook non si puo'
  * chiamare condizionalmente, ma si puo' spegnere.
  */
-export function useAnomalieReparto(attivo = true): AnomalieReparto {
+export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
+  // Ruoli senza accesso alle somministrazioni (es. OSS): nessuna richiesta a /therapy-slots.
+  const attivo = useCan('administration.list_slots') && attivoRichiesto;
   // Ultima risposta gia' vista in sessione (anche scaduta): la pagina si disegna con quella e
   // la rivalida sotto, invece di ripartire da "verifica in corso" a ogni cambio contesto.
   const [slots, setSlots] = useState<Slot[] | null>(() => {

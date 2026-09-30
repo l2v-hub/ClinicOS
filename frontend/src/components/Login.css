@@ -1,0 +1,109 @@
+/* Simulatore ruoli (solo sviluppo): elenco dei profili definiti dal server. */
+.login-sim {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.login-sim__banner {
+  display: grid;
+  gap: 3px;
+  padding: 10px 14px;
+  border: 1px dashed var(--amber);
+  border-radius: var(--radius-sm);
+  background: var(--amber-bg);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.login-sim__list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.login-sim__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--touch-target, 48px);
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-ui);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.login-sim__item:hover {
+  border-color: var(--blue);
+  background: var(--c-primary-bg, var(--hover));
+}
+
+.login-sim__item:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-color: var(--blue);
+}
+
+.login-sim__item:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.login-sim__avatar {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.login-sim__text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.login-sim__name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.login-sim__role {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.login-sim__desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.login-sim__retry {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--blue);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

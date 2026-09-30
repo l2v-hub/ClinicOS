@@ -1,0 +1,3110 @@
+{
+  "schema": "clinicos.role-capability-matrix/v1",
+  "note": "Baseline (policy version 0) for development/demo. Editable by Administrator; not a normative truth.",
+  "policy_version": 0,
+  "default_effect": "DENIED",
+  "roles": [
+    {
+      "id": "administrator",
+      "label": "Administrator",
+      "description": "Amministratore tecnico: ruoli e permessi, operatori, struttura (camere/letti), configurazione. Nessuna scrittura clinica.",
+      "legacyRole": "admin",
+      "uiShell": "admin"
+    },
+    {
+      "id": "supervisor",
+      "label": "Supervisor",
+      "description": "Coordinatore operativo: supervisione di reparto, agenda multi-operatore, consegne, turni, posti letto. Letture cliniche complete, nessuna prescrizione.",
+      "legacyRole": "manager",
+      "uiShell": "admin"
+    },
+    {
+      "id": "doctor",
+      "label": "Doctor",
+      "description": "Medico: cartella clinica, anamnesi, prescrizioni (con conferma), diario, valutazioni.",
+      "legacyRole": "operatore",
+      "uiShell": "operator"
+    },
+    {
+      "id": "nurse",
+      "label": "Nurse",
+      "description": "Infermiere: somministrazioni, parametri, diario, scale di valutazione, consegne. Nessuna prescrizione.",
+      "legacyRole": "operatore",
+      "uiShell": "operator"
+    },
+    {
+      "id": "oss",
+      "label": "OSS",
+      "description": "Operatore socio-sanitario: assistenza di base, parametri, diario assistenziale, consegne. Nessun accesso a farmaci e documenti clinici.",
+      "legacyRole": "operatore",
+      "uiShell": "operator"
+    },
+    {
+      "id": "operator",
+      "label": "Operator (legacy)",
+      "description": "Ruolo storico \"Operatore\": mantenuto per le identità non ancora migrate. Stessi permessi di oggi.",
+      "legacy": true,
+      "legacyRole": "operatore",
+      "uiShell": "operator"
+    },
+    {
+      "id": "legacy_admin",
+      "label": "Administrator (legacy)",
+      "description": "Ruolo storico \"Amministratore/Manager\": mantenuto per le identità non ancora migrate. Stessi permessi di oggi (tutto).",
+      "legacy": true,
+      "legacyRole": "admin",
+      "uiShell": "admin"
+    }
+  ],
+  "assignments": {
+    "SIM-ADMIN": "administrator",
+    "SIM-SUPERVISOR-1": "supervisor",
+    "SIM-DOCTOR-1": "doctor",
+    "SIM-NURSE-1": "nurse",
+    "SIM-OSS-1": "oss"
+  },
+  "counts": {
+    "administrator": {
+      "ALLOWED": 32,
+      "READ_ONLY": 15,
+      "ALLOWED_WITH_CONFIRMATION": 2,
+      "DENIED": 96,
+      "effectively_allowed": 49
+    },
+    "supervisor": {
+      "ALLOWED": 108,
+      "READ_ONLY": 1,
+      "ALLOWED_WITH_CONFIRMATION": 5,
+      "DENIED": 31,
+      "effectively_allowed": 114
+    },
+    "doctor": {
+      "ALLOWED": 98,
+      "READ_ONLY": 0,
+      "ALLOWED_WITH_CONFIRMATION": 9,
+      "DENIED": 38,
+      "effectively_allowed": 107
+    },
+    "nurse": {
+      "ALLOWED": 98,
+      "READ_ONLY": 1,
+      "ALLOWED_WITH_CONFIRMATION": 5,
+      "DENIED": 41,
+      "effectively_allowed": 103
+    },
+    "oss": {
+      "ALLOWED": 35,
+      "READ_ONLY": 5,
+      "ALLOWED_WITH_CONFIRMATION": 0,
+      "DENIED": 105,
+      "effectively_allowed": 40
+    },
+    "operator": {
+      "ALLOWED": 113,
+      "READ_ONLY": 0,
+      "ALLOWED_WITH_CONFIRMATION": 0,
+      "DENIED": 32,
+      "effectively_allowed": 113
+    },
+    "legacy_admin": {
+      "ALLOWED": 145,
+      "READ_ONLY": 0,
+      "ALLOWED_WITH_CONFIRMATION": 0,
+      "DENIED": 0,
+      "effectively_allowed": 145
+    }
+  },
+  "doubtful_total": 80,
+  "governed_capabilities": 145,
+  "derived_capabilities": [
+    {
+      "capability_id": "agnos.action.add_diary_note",
+      "governed_by": "diary.create"
+    },
+    {
+      "capability_id": "agnos.action.create_appointment",
+      "governed_by": "appointments.create"
+    },
+    {
+      "capability_id": "agnos.action.create_consegna",
+      "governed_by": "consegne.create"
+    },
+    {
+      "capability_id": "agnos.action.create_vital_sign",
+      "governed_by": "parameters.create_reading"
+    },
+    {
+      "capability_id": "agnos.action.read",
+      "governed_by": "assistant.query"
+    },
+    {
+      "capability_id": "agnos.action.update_appointment",
+      "governed_by": "appointments.update"
+    },
+    {
+      "capability_id": "agnos.action.update_narrative_section",
+      "governed_by": "narrative.save"
+    },
+    {
+      "capability_id": "agnos.action.update_patient_demographics",
+      "governed_by": "patients.update_demographics"
+    },
+    {
+      "capability_id": "ai.read.correlate_structured_data",
+      "governed_by": "clinical_record.get"
+    },
+    {
+      "capability_id": "ai.read.get_facility_snapshot",
+      "governed_by": "rooms.occupancy"
+    },
+    {
+      "capability_id": "ai.read.get_operator_queue",
+      "governed_by": "consegne.list"
+    },
+    {
+      "capability_id": "ai.read.get_patient_allergies",
+      "governed_by": "clinical_record.get"
+    },
+    {
+      "capability_id": "ai.read.get_patient_appointments",
+      "governed_by": "appointments.list"
+    },
+    {
+      "capability_id": "ai.read.get_patient_therapies",
+      "governed_by": "therapy.list"
+    },
+    {
+      "capability_id": "ai.read.get_patient_timeline",
+      "governed_by": "clinical_record.get"
+    },
+    {
+      "capability_id": "ai.read.get_patient_vital_signs",
+      "governed_by": "parameters.list_readings"
+    },
+    {
+      "capability_id": "ai.read.query_appointments_today",
+      "governed_by": "appointments.list"
+    },
+    {
+      "capability_id": "ai.read.query_data",
+      "governed_by": "therapy.list"
+    },
+    {
+      "capability_id": "ai.read.query_staff_list",
+      "governed_by": "operators.directory_page"
+    },
+    {
+      "capability_id": "ai.read.search_across_patients",
+      "governed_by": "patients.search"
+    },
+    {
+      "capability_id": "ai.read.search_clinical_sections",
+      "governed_by": "narrative.list"
+    },
+    {
+      "capability_id": "ai.read.search_documents",
+      "governed_by": "documents.list"
+    },
+    {
+      "capability_id": "ai.read.search_patients",
+      "governed_by": "patients.search"
+    },
+    {
+      "capability_id": "import_pages.add_files",
+      "governed_by": "import_jobs.add_files"
+    },
+    {
+      "capability_id": "import_pages.cancel",
+      "governed_by": "import_jobs.cancel"
+    },
+    {
+      "capability_id": "import_pages.create_session",
+      "governed_by": "import_jobs.create"
+    },
+    {
+      "capability_id": "import_pages.get",
+      "governed_by": "import_jobs.get"
+    },
+    {
+      "capability_id": "import_pages.legacy_mutation_block",
+      "governed_by": "import_jobs.reorder"
+    },
+    {
+      "capability_id": "import_pages.process",
+      "governed_by": "import_jobs.process"
+    },
+    {
+      "capability_id": "import_pages.reopen",
+      "governed_by": "import_jobs.reopen"
+    },
+    {
+      "capability_id": "import_pages.result",
+      "governed_by": "import_jobs.result"
+    },
+    {
+      "capability_id": "import_pages.retry",
+      "governed_by": "import_jobs.retry"
+    }
+  ],
+  "outside_role_policy": [
+    {
+      "capability_id": "ai_extraction.capabilities",
+      "gate": "public"
+    },
+    {
+      "capability_id": "ai_extraction.schema",
+      "gate": "public"
+    },
+    {
+      "capability_id": "ai_extraction.status",
+      "gate": "public"
+    },
+    {
+      "capability_id": "drugs.document",
+      "gate": "public"
+    },
+    {
+      "capability_id": "drugs.search",
+      "gate": "public"
+    },
+    {
+      "capability_id": "drugs.status",
+      "gate": "public"
+    },
+    {
+      "capability_id": "drugs.strengths",
+      "gate": "public"
+    },
+    {
+      "capability_id": "identity.auth_status",
+      "gate": "public"
+    },
+    {
+      "capability_id": "identity.me",
+      "gate": "identity"
+    },
+    {
+      "capability_id": "infra.health",
+      "gate": "public"
+    },
+    {
+      "capability_id": "internal_ai.assistant_query",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.patient_allergies",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.patient_demographics",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.patient_diary",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.patient_documents",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.patient_narrative_sections",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.patient_therapies",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.query_appointments",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.query_correlate",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.query_timeline",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.query_vital_signs",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.search_across_patients",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.search_clinical_sections",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.search_documents",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.search_patients",
+      "gate": "service"
+    },
+    {
+      "capability_id": "internal_ai.source_get",
+      "gate": "service"
+    }
+  ],
+  "matrix": [
+    {
+      "capability_id": "administration.confirm",
+      "name": "Conferma somministrazione (erogata)",
+      "domain": "administration",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED_WITH_CONFIRMATION",
+        "doctor": "DENIED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Il coordinatore è spesso infermiere: somministrazione ammessa con conferma?",
+        "doctor": "Somministrazione = atto infermieristico; il medico può averne bisogno in urgenza."
+      }
+    },
+    {
+      "capability_id": "administration.history",
+      "name": "Storico somministrazioni (legacy)",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Informazioni su farmaci e somministrazioni."
+      }
+    },
+    {
+      "capability_id": "administration.history_page",
+      "name": "Storico somministrazioni paginato",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Informazioni su farmaci e somministrazioni."
+      }
+    },
+    {
+      "capability_id": "administration.list_slots",
+      "name": "Slot somministrazione del giorno",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Informazioni su farmaci e somministrazioni."
+      }
+    },
+    {
+      "capability_id": "administration.list_slots_page",
+      "name": "Agenda somministrazioni paginata",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Informazioni su farmaci e somministrazioni."
+      }
+    },
+    {
+      "capability_id": "administration.record_not_administered",
+      "name": "Registra mancata somministrazione",
+      "domain": "administration",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED_WITH_CONFIRMATION",
+        "doctor": "DENIED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Il coordinatore è spesso infermiere: somministrazione ammessa con conferma?",
+        "doctor": "Somministrazione = atto infermieristico; il medico può averne bisogno in urgenza."
+      }
+    },
+    {
+      "capability_id": "agnos.catalog",
+      "name": "Agnos — catalogo azioni",
+      "domain": "agnos",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico."
+      }
+    },
+    {
+      "capability_id": "agnos.execute_command",
+      "name": "Agnos — esegui comando confermato",
+      "domain": "agnos",
+      "type": "action",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico.",
+        "oss": "Le azioni AI restano filtrate dal permesso funzionale sottostante."
+      }
+    },
+    {
+      "capability_id": "agnos.plan_command",
+      "name": "Agnos — pianifica comando (testo/voce)",
+      "domain": "agnos",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico.",
+        "oss": "Le azioni AI restano filtrate dal permesso funzionale sottostante."
+      }
+    },
+    {
+      "capability_id": "ai.audit.list",
+      "name": "Audit AI — elenco eventi",
+      "domain": "ai_audit",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "appointments.create",
+      "name": "Agenda — crea appuntamento",
+      "domain": "appointments",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "In passato l’amministratore gestiva l’agenda globale: ora è compito del Supervisor."
+      }
+    },
+    {
+      "capability_id": "appointments.delete",
+      "name": "Agenda — elimina appuntamento",
+      "domain": "appointments",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED_WITH_CONFIRMATION",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "ALLOWED_WITH_CONFIRMATION",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "In passato l’amministratore gestiva l’agenda globale: ora è compito del Supervisor."
+      }
+    },
+    {
+      "capability_id": "appointments.list",
+      "name": "Agenda — elenco appuntamenti",
+      "domain": "appointments",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "appointments.update",
+      "name": "Agenda — modifica / sposta appuntamento",
+      "domain": "appointments",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "In passato l’amministratore gestiva l’agenda globale: ora è compito del Supervisor."
+      }
+    },
+    {
+      "capability_id": "assessments.attest",
+      "name": "Valutazioni — conferma scheda",
+      "domain": "assessments",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Scale di valutazione compilate da medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.catalog",
+      "name": "Valutazioni — catalogo scale",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "READ_ONLY",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Consultazione delle scale; compilazione a medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.create_draft",
+      "name": "Valutazioni — crea bozza",
+      "domain": "assessments",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Scale di valutazione compilate da medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.current",
+      "name": "Valutazioni — corrente per tipo",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "READ_ONLY",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Consultazione delle scale; compilazione a medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.finalize",
+      "name": "Valutazioni — finalizza + PDF",
+      "domain": "assessments",
+      "type": "action",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Scale di valutazione compilate da medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.get",
+      "name": "Valutazioni — dettaglio",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "READ_ONLY",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Consultazione delle scale; compilazione a medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.list",
+      "name": "Valutazioni — storico",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "READ_ONLY",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Consultazione delle scale; compilazione a medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.list_attestations",
+      "name": "Valutazioni — elenco conferme",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "assessments.retry_pdf",
+      "name": "Valutazioni — rigenera PDF",
+      "domain": "assessments",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Scale di valutazione compilate da medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assessments.update_draft",
+      "name": "Valutazioni — aggiorna bozza",
+      "domain": "assessments",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Scale di valutazione compilate da medico/infermiere."
+      }
+    },
+    {
+      "capability_id": "assistant.query",
+      "name": "Assistente ClinicOS — domanda (sola lettura)",
+      "domain": "assistant",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico.",
+        "oss": "Le letture AI restano filtrate dai permessi dei singoli dati."
+      }
+    },
+    {
+      "capability_id": "authz.manage_policy",
+      "name": "Ruoli e permessi — modifica, Save/Apply",
+      "domain": "authz",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "authz.view_policy",
+      "name": "Ruoli e permessi — consultazione",
+      "domain": "authz",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "READ_ONLY",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "clinical_record.get",
+      "name": "Cartella clinica — lettura",
+      "domain": "clinical_record",
+      "type": "read",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "READ_ONLY",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Cartella completa (diagnosi, allergie): utile per l’assistenza?"
+      }
+    },
+    {
+      "capability_id": "clinical_record.save",
+      "name": "Cartella clinica — salva",
+      "domain": "clinical_record",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Anamnesi/cartella: redazione medica.",
+        "nurse": "Il salvataggio cartella copre sezioni infermieristiche e mediche insieme (da separare)."
+      }
+    },
+    {
+      "capability_id": "patients.settings",
+      "name": "Pazienti — impostazioni UI",
+      "domain": "config",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "consegne.create",
+      "name": "Consegne — crea",
+      "domain": "consegne",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Consegne cliniche: di norma non competono all’amministratore tecnico."
+      }
+    },
+    {
+      "capability_id": "consegne.delete",
+      "name": "Consegne — elimina",
+      "domain": "consegne",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED_WITH_CONFIRMATION",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "ALLOWED_WITH_CONFIRMATION",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Consegne cliniche: di norma non competono all’amministratore tecnico."
+      }
+    },
+    {
+      "capability_id": "consegne.list",
+      "name": "Consegne — feed",
+      "domain": "consegne",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "consegne.overview",
+      "name": "Consegne — riepilogo dashboard",
+      "domain": "consegne",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "consegne.patient_summary",
+      "name": "Consegne — conteggi per paziente",
+      "domain": "consegne",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "consegne.update",
+      "name": "Consegne — modifica / stato / riassegna",
+      "domain": "consegne",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Consegne cliniche: di norma non competono all’amministratore tecnico."
+      }
+    },
+    {
+      "capability_id": "patients.demo_setup",
+      "name": "Pazienti — demo setup",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Solo sviluppo: non serve in esercizio."
+      }
+    },
+    {
+      "capability_id": "patients.seed",
+      "name": "Pazienti — seed dev",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Solo sviluppo: non serve in esercizio."
+      }
+    },
+    {
+      "capability_id": "diary.create",
+      "name": "Diario paziente — nuova voce",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Diario assistenziale OSS (tipo autore \"oss\")."
+      }
+    },
+    {
+      "capability_id": "diary.create_with_therapy",
+      "name": "Diario terapia — voce + prescrizione",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Prescrizione = atto medico.",
+        "nurse": "Crea una prescrizione dal diario: atto medico."
+      }
+    },
+    {
+      "capability_id": "diary.delete_entry",
+      "name": "Diario paziente — elimina voce",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "doctor": "Hard delete senza controllo autore."
+      }
+    },
+    {
+      "capability_id": "diary.get_entry",
+      "name": "Diario paziente — singola voce",
+      "domain": "diary",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "diary.list",
+      "name": "Diario paziente — elenco",
+      "domain": "diary",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "diary.therapy_preview",
+      "name": "Diario terapia — anteprima",
+      "domain": "diary",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "diary.update_entry",
+      "name": "Diario paziente — modifica voce",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "La modifica voce diario non verifica l’autore (GAP).",
+        "doctor": "La modifica voce diario non verifica l’autore (GAP).",
+        "nurse": "La modifica voce diario non verifica l’autore (GAP)."
+      }
+    },
+    {
+      "capability_id": "documents.get_content",
+      "name": "Documenti paziente — contenuto file",
+      "domain": "documents",
+      "type": "read",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "documents.get_metadata",
+      "name": "Documenti paziente — metadati",
+      "domain": "documents",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "documents.list",
+      "name": "Documenti paziente — elenco metadati",
+      "domain": "documents",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "documents.update_type",
+      "name": "Documenti paziente — riclassifica tipologia",
+      "domain": "documents",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "documents.upload",
+      "name": "Documenti paziente — carica file",
+      "domain": "documents",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "drugs.reload",
+      "name": "Ricarica anagrafica AIFA",
+      "domain": "drugs",
+      "type": "action",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED_WITH_CONFIRMATION",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Scarica ~82 MB da AIFA e sostituisce l’anagrafica."
+      }
+    },
+    {
+      "capability_id": "import_jobs.add_files",
+      "name": "Import AI — aggiungi file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.cancel",
+      "name": "Import AI — annulla job",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.confirm",
+      "name": "Import AI — conferma (crea paziente)",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "ALLOWED_WITH_CONFIRMATION",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "nurse": "Conferma ingresso da parte dell’infermiere?"
+      }
+    },
+    {
+      "capability_id": "import_jobs.create",
+      "name": "Import AI — crea job + upload file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.get",
+      "name": "Import AI — stato job",
+      "domain": "import_jobs",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.process",
+      "name": "Import AI — avvia estrazione",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.remove_file",
+      "name": "Import AI — rimuovi file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.reopen",
+      "name": "Import AI — riapri job",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.reorder",
+      "name": "Import AI — riordina file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.result",
+      "name": "Import AI — risultato estrazione",
+      "domain": "import_jobs",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.retry",
+      "name": "Import AI — riprova estrazione",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.set_logical_doc",
+      "name": "Import AI — documento logico",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_jobs.sweep",
+      "name": "Import AI — pulizia job scaduti",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_pages.edit_manifest",
+      "name": "Import pagine — modifica manifest",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_pages.file_content",
+      "name": "Import pagine — contenuto file",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_pages.group_pdf",
+      "name": "Import pagine — PDF gruppo",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_pages.page_text",
+      "name": "Import pagine — testo OCR della pagina",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_pages.remove_page",
+      "name": "Import pagine — rimuovi pagina",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_pages.replace_page",
+      "name": "Import pagine — sostituisci pagina",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "import_pages.save_review",
+      "name": "Import pagine — salva revisione",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.confirm_draft",
+      "name": "Bozze ingresso — conferma (crea paziente)",
+      "domain": "intake",
+      "type": "action",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "ALLOWED_WITH_CONFIRMATION",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "nurse": "Conferma ingresso da parte dell’infermiere?"
+      }
+    },
+    {
+      "capability_id": "intake.create_draft",
+      "name": "Bozze ingresso — crea",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.decide_field_proposal",
+      "name": "Bozze ingresso — decisione proposta campo",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.decide_import_proposal",
+      "name": "Bozze ingresso — decisione proposta import",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.get_draft",
+      "name": "Bozze ingresso — dettaglio",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.legacy_apply_letter",
+      "name": "Legacy — applica lettera a paziente",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Endpoint deprecato del vecchio import."
+      }
+    },
+    {
+      "capability_id": "intake.legacy_extract_letter",
+      "name": "Legacy — estrazione regex da OCR",
+      "domain": "intake",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Endpoint deprecato del vecchio import."
+      }
+    },
+    {
+      "capability_id": "intake.legacy_list_documents",
+      "name": "Legacy — documenti intake paziente",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Endpoint deprecato del vecchio import."
+      }
+    },
+    {
+      "capability_id": "intake.legacy_upload_letter",
+      "name": "Legacy — upload lettera dimissione base64",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Endpoint deprecato del vecchio import."
+      }
+    },
+    {
+      "capability_id": "intake.link_import_job",
+      "name": "Bozze ingresso — collega documenti",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.list_drafts",
+      "name": "Bozze ingresso — elenco",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.merge_import",
+      "name": "Bozze ingresso — merge import",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.patient_review",
+      "name": "Ingresso — revisione paziente",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.refresh_import",
+      "name": "Bozze ingresso — aggiorna da import",
+      "domain": "intake",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.seed_from_import",
+      "name": "Bozze ingresso — crea da import AI",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.unlink_import_job",
+      "name": "Bozze ingresso — scollega documenti",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "intake.update_draft",
+      "name": "Bozze ingresso — autosalvataggio",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "narrative.get",
+      "name": "Sezioni narrative — singola sezione",
+      "domain": "narrative",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "narrative.list",
+      "name": "Sezioni narrative — elenco",
+      "domain": "narrative",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "narrative.save",
+      "name": "Sezioni narrative — salva revisione",
+      "domain": "narrative",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED",
+        "nurse": "READ_ONLY",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Anamnesi/cartella: redazione medica.",
+        "nurse": "Anamnesi e sezioni narrative: redazione medica."
+      }
+    },
+    {
+      "capability_id": "notes.create",
+      "name": "Note/messaggi — crea",
+      "domain": "notes",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "notes.delete",
+      "name": "Note/messaggi — elimina",
+      "domain": "notes",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED_WITH_CONFIRMATION",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "ALLOWED_WITH_CONFIRMATION",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "notes.list",
+      "name": "Note/messaggi — mailbox",
+      "domain": "notes",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "notes.update",
+      "name": "Note/messaggi — modifica / stato lettura",
+      "domain": "notes",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.create",
+      "name": "Operatore — crea",
+      "domain": "operators",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Anagrafica utenti = amministrazione tecnica."
+      }
+    },
+    {
+      "capability_id": "operators.directory",
+      "name": "Directory operativa — completa",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.directory_page",
+      "name": "Directory operativa — pagina",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.directory_schedules",
+      "name": "Orari struttura (senza note private)",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.list",
+      "name": "Operatori — lista admin completa",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.page",
+      "name": "Operatori — pagina admin",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.schedules",
+      "name": "Orari operatori (con note)",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.set_schedule",
+      "name": "Orario operatore — upsert",
+      "domain": "operators",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "operators.update",
+      "name": "Operatore — modifica",
+      "domain": "operators",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Anagrafica utenti = amministrazione tecnica."
+      }
+    },
+    {
+      "capability_id": "parameters.create_reading",
+      "name": "Parametri — nuova rilevazione",
+      "domain": "parameters",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Rilevazione parametri da parte dell’OSS."
+      }
+    },
+    {
+      "capability_id": "parameters.list_page",
+      "name": "Parametri — pagina multi-paziente",
+      "domain": "parameters",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "parameters.list_readings",
+      "name": "Parametri — storico rilevazioni",
+      "domain": "parameters",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "parameters.save_month",
+      "name": "Parametri — salva mese",
+      "domain": "parameters",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Rilevazione parametri da parte dell’OSS."
+      }
+    },
+    {
+      "capability_id": "patients.clinical_overview",
+      "name": "Pazienti — panoramica clinica dashboard",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "patients.clinical_summary",
+      "name": "Pazienti — riepilogo clinico",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "patients.create",
+      "name": "Pazienti — crea",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "nurse": "I pazienti nascono dall’ingresso (bozza confermata)."
+      }
+    },
+    {
+      "capability_id": "patients.delete",
+      "name": "Pazienti — elimina",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "patients.get",
+      "name": "Pazienti — dettaglio",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "patients.list_legacy",
+      "name": "Pazienti — elenco legacy (dismesso)",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "patients.list_page",
+      "name": "Pazienti — pagina elenco",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "patients.search",
+      "name": "Pazienti — ricerca testuale",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "patients.update_demographics",
+      "name": "Pazienti — aggiorna anagrafica",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "room_assignments.create",
+      "name": "Assegnazione letto — crea",
+      "domain": "room_assignments",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Gestione posti letto: tecnica o di coordinamento?",
+        "doctor": "Assegnazione letto: di solito il coordinatore.",
+        "nurse": "Assegnazione letto: di solito il coordinatore."
+      }
+    },
+    {
+      "capability_id": "room_assignments.delete",
+      "name": "Assegnazione letto — elimina",
+      "domain": "room_assignments",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED_WITH_CONFIRMATION",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Cancellazione definitiva: preferire la chiusura del ricovero."
+      }
+    },
+    {
+      "capability_id": "room_assignments.list",
+      "name": "Assegnazioni letto paziente — elenco",
+      "domain": "room_assignments",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "room_assignments.update",
+      "name": "Assegnazione letto — sposta / chiudi",
+      "domain": "room_assignments",
+      "type": "write",
+      "sensitivity": "medium",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "Gestione posti letto: tecnica o di coordinamento?",
+        "doctor": "Assegnazione letto: di solito il coordinatore.",
+        "nurse": "Assegnazione letto: di solito il coordinatore."
+      }
+    },
+    {
+      "capability_id": "rooms.add_bed",
+      "name": "Letto — aggiungi",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Struttura camere/letti = amministrazione tecnica."
+      }
+    },
+    {
+      "capability_id": "rooms.available_beds",
+      "name": "Letti disponibili per periodo",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "rooms.create",
+      "name": "Camera — crea",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Struttura camere/letti = amministrazione tecnica."
+      }
+    },
+    {
+      "capability_id": "rooms.delete",
+      "name": "Camera — elimina",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Struttura camere/letti = amministrazione tecnica."
+      }
+    },
+    {
+      "capability_id": "rooms.delete_bed",
+      "name": "Letto — elimina",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Struttura camere/letti = amministrazione tecnica."
+      }
+    },
+    {
+      "capability_id": "rooms.get",
+      "name": "Camera — dettaglio",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "rooms.list",
+      "name": "Camere — elenco con occupanti",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "medium",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "rooms.list_beds",
+      "name": "Letti di una camera",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "rooms.occupancy",
+      "name": "Occupazione struttura — KPI",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "rooms.patient_room_options",
+      "name": "Opzioni camera/letto per paziente",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "rooms.update",
+      "name": "Camera — modifica",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "DENIED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Struttura camere/letti = amministrazione tecnica."
+      }
+    },
+    {
+      "capability_id": "rooms.update_bed",
+      "name": "Letto — modifica / manutenzione",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Manutenzione letto: operativa o tecnica?"
+      }
+    },
+    {
+      "capability_id": "roster.get_my_order",
+      "name": "Ordinamento elenco pazienti — lettura personale",
+      "domain": "roster",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "READ_ONLY",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "roster.list_contexts",
+      "name": "Contesti reparto — elenco (admin)",
+      "domain": "roster",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "roster.set_context_default",
+      "name": "Contesto reparto — imposta default (admin)",
+      "domain": "roster",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": true,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "DENIED",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "DENIED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "roster.set_my_order",
+      "name": "Ordinamento elenco pazienti — imposta personale",
+      "domain": "roster",
+      "type": "write",
+      "sensitivity": "low",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "ALLOWED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {}
+    },
+    {
+      "capability_id": "therapy.create",
+      "name": "Crea prescrizione terapia",
+      "domain": "therapy",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Prescrizione = atto medico."
+      }
+    },
+    {
+      "capability_id": "therapy.delete",
+      "name": "Elimina prescrizione",
+      "domain": "therapy",
+      "type": "write",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Prescrizione = atto medico.",
+        "doctor": "Cancellazione definitiva della prescrizione."
+      }
+    },
+    {
+      "capability_id": "therapy.list",
+      "name": "Terapie paziente (legacy)",
+      "domain": "therapy",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Informazioni su farmaci e somministrazioni."
+      }
+    },
+    {
+      "capability_id": "therapy.list_page",
+      "name": "Terapie paziente paginate",
+      "domain": "therapy",
+      "type": "read",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "oss": "Informazioni su farmaci e somministrazioni."
+      }
+    },
+    {
+      "capability_id": "therapy.update",
+      "name": "Aggiorna prescrizione",
+      "domain": "therapy",
+      "type": "write",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "DENIED",
+        "doctor": "ALLOWED_WITH_CONFIRMATION",
+        "nurse": "DENIED",
+        "oss": "DENIED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "supervisor": "Prescrizione = atto medico."
+      }
+    },
+    {
+      "capability_id": "voice.execute",
+      "name": "Voce — esegui (legacy)",
+      "domain": "voice",
+      "type": "action",
+      "sensitivity": "critical",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico.",
+        "oss": "Le azioni AI restano filtrate dal permesso funzionale sottostante."
+      }
+    },
+    {
+      "capability_id": "voice.plan",
+      "name": "Voce — pianifica (legacy)",
+      "domain": "voice",
+      "type": "action",
+      "sensitivity": "high",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico.",
+        "oss": "Le azioni AI restano filtrate dal permesso funzionale sottostante."
+      }
+    },
+    {
+      "capability_id": "voice.stt_status",
+      "name": "Voce — stato STT",
+      "domain": "voice",
+      "type": "read",
+      "sensitivity": "low",
+      "legacy_admin_only": false,
+      "effects": {
+        "administrator": "DENIED",
+        "supervisor": "ALLOWED",
+        "doctor": "ALLOWED",
+        "nurse": "ALLOWED",
+        "oss": "ALLOWED",
+        "operator": "ALLOWED",
+        "legacy_admin": "ALLOWED"
+      },
+      "doubtful": {
+        "administrator": "L’assistente legge dati clinici: minimo privilegio per l’amministratore tecnico."
+      }
+    }
+  ]
+}

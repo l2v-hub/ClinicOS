@@ -1,7 +1,5 @@
-import { prisma } from '../lib/prisma.js';
-import { Prisma } from '@prisma/client';
 import { Router } from 'express';
-import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest, type Operator } from '../ai/auth.js';
 import {
   buildTherapySlotPage,
   buildTherapySlots,
@@ -9,8 +7,6 @@ import {
 } from '../therapies/therapy-slots.js';
 import { AppointmentListInputError, parseIsoCalendarDate } from '../appointments/list-query.js';
 import {
-  parseTherapyAdministrationBody,
-  resolveAuthoritativeTherapy,
   TherapyNotDueError,
   TherapyNotFoundError,
   TherapyWriteInputError,
@@ -21,16 +17,13 @@ import {
   TherapySlotPageInputError,
 } from '../therapies/slot-page-query.js';
 import { RosterError } from '../roster/order-contract.js';
+import {
+  isConcurrentWriteConflict,
+  recordTherapyAdministration,
+  TherapyAlreadyAdministeredError,
+} from '../therapies/administration-record.js';
 
 const router = Router();
-
-class TherapyAlreadyAdministeredError extends Error {}
-
-function isConcurrentWriteConflict(error: unknown): boolean {
-  return Boolean(
-    error && typeof error === 'object' && (error as { code?: string }).code === 'P2034',
-  );
-}
 
 // Gate minimo (header-based, non IdP): gli slot terapia espongono nominativi paziente e
 // farmaci somministrati, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
@@ -40,11 +33,15 @@ router.use((_req, res, next) => {
 });
 router.use(requireOperator);
 
-function patientAccess(req: AuthedRequest) {
-  const actor = req.operator!;
+/** Therapy-slot patient filter for an operator (exported for the Tool Layer; same derivation). */
+export function therapySlotPatientAccess(actor: Operator) {
   return {
     ...(!hasGlobalPatientScope(actor.role) && { registeredById: actor.id }),
   };
+}
+
+function patientAccess(req: AuthedRequest) {
+  return therapySlotPatientAccess(req.operator!);
 }
 
 // GET /therapy-slots/page?date=YYYY-MM-DD&limit=100&cursor=...
@@ -115,52 +112,11 @@ router.get('/', async (req, res) => {
 // POST /therapy-slots/confirm
 // Actor identity always comes from req.operator; client-supplied actor fields are ignored.
 // `therapyId` is mandatory; drug/dose/route/time are resolved from the prescription server-side.
+// The Serializable upsert lives in therapies/administration-record.ts (shared with the Tool Layer).
 router.post('/confirm', async (req, res) => {
   try {
-    const input = parseTherapyAdministrationBody(req.body, false);
     const actor = (req as AuthedRequest).operator!;
-    const record = await prisma.$transaction(
-      async (tx) => {
-        const authoritative = await resolveAuthoritativeTherapy(tx, input, actor);
-        const { therapyId, patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora } =
-          authoritative;
-        const existing = await tx.medicationAdministration.findUnique({
-          where: { therapyId_date_fascia: { therapyId, date, fascia } },
-        });
-        if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
-        return tx.medicationAdministration.upsert({
-          where: { therapyId_date_fascia: { therapyId, date, fascia } },
-          create: {
-            therapyId,
-            patientId,
-            farmacoNome,
-            farmacoDose: farmacoDose || '',
-            farmacoVia: farmacoVia || 'orale',
-            date,
-            fascia,
-            ora: ora || '',
-            stato: 'erogata',
-            operatoreId: actor.id,
-            operatoreNome: actor.name || actor.id,
-            confirmedAt: new Date(),
-          },
-          update: {
-            patientId,
-            farmacoNome,
-            farmacoDose,
-            farmacoVia,
-            ora,
-            stato: 'erogata',
-            operatoreId: actor.id,
-            operatoreNome: actor.name || actor.id,
-            confirmedAt: new Date(),
-            motivo: null,
-            note: null,
-          },
-        });
-      },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-    );
+    const record = await recordTherapyAdministration(req.body, actor, { notAdministered: false });
 
     res.status(200).json(record);
   } catch (error) {
@@ -196,62 +152,8 @@ router.post('/confirm', async (req, res) => {
 // `therapyId` is mandatory; only reason/note are accepted as clinical input from the client.
 router.post('/not-administered', async (req, res) => {
   try {
-    const input = parseTherapyAdministrationBody(req.body, true);
     const actor = (req as AuthedRequest).operator!;
-    const record = await prisma.$transaction(
-      async (tx) => {
-        const authoritative = await resolveAuthoritativeTherapy(tx, input, actor);
-        const {
-          therapyId,
-          patientId,
-          farmacoNome,
-          farmacoDose,
-          farmacoVia,
-          date,
-          fascia,
-          ora,
-          motivo = '',
-          note: noteText,
-        } = authoritative;
-        const existing = await tx.medicationAdministration.findUnique({
-          where: { therapyId_date_fascia: { therapyId, date, fascia } },
-          select: { stato: true },
-        });
-        if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
-        return tx.medicationAdministration.upsert({
-          where: { therapyId_date_fascia: { therapyId, date, fascia } },
-          create: {
-            therapyId,
-            patientId,
-            farmacoNome,
-            farmacoDose: farmacoDose || '',
-            farmacoVia: farmacoVia || 'orale',
-            date,
-            fascia,
-            ora: ora || '',
-            stato: 'non_erogata',
-            operatoreId: actor.id,
-            operatoreNome: actor.name || actor.id,
-            motivo,
-            note: noteText || null,
-          },
-          update: {
-            patientId,
-            farmacoNome,
-            farmacoDose,
-            farmacoVia,
-            ora,
-            stato: 'non_erogata',
-            motivo,
-            note: noteText || null,
-            operatoreId: actor.id,
-            operatoreNome: actor.name || actor.id,
-            confirmedAt: null,
-          },
-        });
-      },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-    );
+    const record = await recordTherapyAdministration(req.body, actor, { notAdministered: true });
 
     res.status(200).json(record);
   } catch (error) {
