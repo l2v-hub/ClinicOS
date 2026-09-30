@@ -4,7 +4,7 @@
 // Prerequisites: a backend started with AI_RUNTIME_URL + AI_RUNTIME_SERVICE_TOKEN pointing to a
 // clinicos-ai-runtime that serves POST /v1/assistant/skill-route, AUTH_MODE=demo,
 // ROLE_SIMULATOR_ENABLED=true, and synthetic patients "Mario Rossi" / "Anna Bianchi" /
-// "Luca Bianchi" owned by SIM-NURSE-1 (scripts/skills/seed-demo-patients.ts).
+// "Luca Bianchi" owned by SIM-NURSE-1 (scripts/skills/seed-demo-patients.mts).
 //
 //   node scripts/skills/agno-live-e2e.mjs --base http://127.0.0.1:3099 [--out report.json]
 //
@@ -139,6 +139,18 @@ check('E confirm → COMPLETED', e4.status === 'COMPLETED', e4);
 // D — unauthorized: the administrator cannot record vitals (backend denial).
 const d = await turn('D denied', admin, { message: 'registra pressione 120/80 per Mario Rossi' });
 check('D administrator → DENIED', d.status === 'DENIED', d);
+
+// D2 — a request that maps to a skill the OSS may NOT use: Agno recognises it (id + name only are
+// sent), the workflow answers DENIED instead of routing to a different allowed skill.
+const oss = await login('SIM-OSS-1');
+const d2 = await turn('D2 denied (Agno)', oss, { message: 'quali somministrazioni ci sono oggi?' });
+check(
+  'D2 OSS asks for administrations → DENIED via Agno',
+  d2.status === 'DENIED' &&
+    d2.skillId === 'therapy.due_administrations' &&
+    d2.interpreter === 'agno',
+  d2,
+);
 
 // G — cancellation.
 const g1 = await turn('G', nurse, {

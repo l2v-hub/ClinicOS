@@ -28,6 +28,8 @@ _SYSTEM = (
     "Dato il MESSAGGIO dell'operatore, scegli AL MASSIMO UNA skill tra quelle ELENCATE (sono le sole "
     "che l'operatore può usare) ed estrai i dati presenti nel messaggio. Regole:\n"
     "- usa SOLO gli id di skill elencati; se nessuna è adatta usa skillId null;\n"
+    "- se invece la richiesta corrisponde a una SKILL NON CONSENTITA restituisci il SUO id (il sistema "
+    "risponderà che non è autorizzata): non ripiegare su una skill consentita diversa;\n"
     "- non inventare: estrai solo ciò che è scritto; non dedurre valori clinici;\n"
     "- patientQuery: nome e/o cognome dell'ospite come scritto (es. \"Mario Rossi\"); se il messaggio "
     "dice 'questo ospite/paziente', 'lui', 'lei' usa currentPatient true;\n"
@@ -67,12 +69,17 @@ def sanitize_route(raw: dict[str, Any] | None, allowed: set[str]) -> dict[str, A
 
 async def run_skill_route(registry: ModelRegistry, message: str, skills: list[dict], pending: dict | None,
                           today: str, value_keys: list[str],
-                          correlation_id: str | None = None) -> dict[str, Any]:
+                          correlation_id: str | None = None,
+                          forbidden: list[dict] | None = None) -> dict[str, Any]:
     built = registry.build("agent")
-    allowed = {s.get("id") for s in skills if isinstance(s, dict) and isinstance(s.get("id"), str)}
+    forbidden = forbidden or []
+    allowed = {s.get("id") for s in [*skills, *forbidden]
+               if isinstance(s, dict) and isinstance(s.get("id"), str)}
     prompt = (
         f"{_SYSTEM}\n\nOGGI: {today}\nVALUE_KEYS: {json.dumps(value_keys)}\n"
         f"SKILL DISPONIBILI:\n{json.dumps(skills, ensure_ascii=False)}\n"
+        f"SKILL NON CONSENTITE (solo per riconoscerle, id e nome):\n"
+        f"{json.dumps(forbidden, ensure_ascii=False)}\n"
         f"DOMANDA IN SOSPESO: {json.dumps(pending, ensure_ascii=False) if pending else 'nessuna'}\n\n"
         f"MESSAGGIO:\n{message}\n"
     )

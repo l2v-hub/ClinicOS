@@ -18,6 +18,12 @@ export interface InterpretInput {
   message: string;
   /** Skills available to the identity right now (Agno sees only these). */
   available: readonly SkillDefinition[];
+  /**
+   * Skills the identity may NOT use (id + name only, never tools): lets Agno recognise an
+   * out-of-policy request so the workflow answers DENIED instead of routing to the nearest
+   * allowed skill. The backend denies them anyway.
+   */
+  unavailable?: readonly SkillDefinition[];
   /** Workflow waiting for a slot: the message is read as the answer to that question. */
   pending: { skillId: string; slot: SkillSlot } | null;
   today: string;
@@ -213,7 +219,9 @@ export function createAgnoInterpreter(
     // A pending question answered with a plain value does not need the LLM.
     if (!agnoEnabled(env)) return fallback(input);
     if (isExplicitCancellation(input.message)) return fallback(input);
-    const allowed = new Set(input.available.map((skill) => skill.id));
+    const allowed = new Set(
+      [...input.available, ...(input.unavailable ?? [])].map((skill) => skill.id),
+    );
     try {
       const response = await fetch(
         `${String(env.AI_RUNTIME_URL).replace(/\/$/, '')}/v1/assistant/skill-route`,
@@ -232,6 +240,10 @@ export function createAgnoInterpreter(
               name: skill.name,
               description: skill.description,
               slots: [...skill.slots, ...(skill.optionalSlots ?? [])],
+            })),
+            forbiddenSkills: (input.unavailable ?? []).map((skill) => ({
+              id: skill.id,
+              name: skill.name,
             })),
             valueKeys: PARAMETER_KEYS.filter((key) => key !== 'note'),
           }),

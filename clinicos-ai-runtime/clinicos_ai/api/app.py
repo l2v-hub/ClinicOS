@@ -253,7 +253,8 @@ async def assistant_compose(req: AssistantComposeRequest, authorization: str | N
 async def assistant_skill_route(req: SkillRouteRequest, authorization: str | None = Header(default=None)):
     _auth(authorization)
     try:
-        out = await run_skill_route(_REGISTRY, req.message, req.skills, req.pending, req.today, req.valueKeys)
+        out = await run_skill_route(_REGISTRY, req.message, req.skills, req.pending, req.today, req.valueKeys,
+                                    forbidden=req.forbiddenSkills)
         return SkillRouteResponse(route=out["route"], model=out["model"])
     except RuntimeError_ as ex:
         _log.warning("skill route runtime error: %s", ex.to_dict().get("message", "router error"))
