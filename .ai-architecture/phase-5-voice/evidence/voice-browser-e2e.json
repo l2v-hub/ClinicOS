@@ -1,0 +1,521 @@
+{
+  "at": "2026-09-30T22:43:54.152Z",
+  "passed": 78,
+  "failed": 0,
+  "results": [
+    {
+      "name": "A mic idle and evident before use",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A mic → LISTENING → SPEECH_ACTIVE → TRANSCRIBING → TRANSCRIPT_READY",
+      "pass": true,
+      "detail": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "name": "A transcript from the real STT",
+      "pass": true,
+      "detail": "Dimmi tutto su questo ospite."
+    },
+    {
+      "name": "A nothing sent to the Assistant before «Invia»",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A read skill COMPLETED",
+      "pass": true,
+      "detail": "{\"workflowId\":\"071b4748-477f-481a-b39d-272bccf8f707\",\"status\":\"COMPLETED\",\"skillId\":\"patient.overview\",\"reply\":\"Ospite: Neri Dario\\nStato ricovero: non indicato\\nAllergie registrate: 0\\nTerapie: 0 (co"
+    },
+    {
+      "name": "A chat marks the user message as dictated by voice",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A request carried inputChannel=voice",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A interpreted by Agno",
+      "pass": true,
+      "detail": "agno"
+    },
+    {
+      "name": "A voice state COMPLETED",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A audit: voice:transcribe (channel voce) + skill request with input:voice",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B transcript «pressione 120 su 80»",
+      "pass": true,
+      "detail": "Registra pressione 120 su 80 per questo ospite."
+    },
+    {
+      "name": "K double «Invia» → one Assistant request",
+      "pass": true,
+      "detail": "1"
+    },
+    {
+      "name": "B preview NEEDS_CONFIRMATION 120/80",
+      "pass": true,
+      "detail": "{\"workflowId\":\"925588b6-bd55-4d77-b194-188c5e9f05f5\",\"status\":\"NEEDS_CONFIRMATION\",\"skillId\":\"vitals.record\",\"reply\":\"Registrazione parametri vitali\\nOspite: Galli Nora\\nPressione: 120/80\\nOrario rilevazione: 01/10, 00:41\\nAutore: operatore"
+    },
+    {
+      "name": "B preview targets the context resident",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B zero write before confirmation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B voice AWAITING_CONFIRMATION + button-only hint",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B spoken «conferma» transcribed",
+      "pass": true,
+      "detail": "Conferma"
+    },
+    {
+      "name": "B spoken «conferma» does NOT confirm",
+      "pass": true,
+      "detail": "{\"workflowId\":\"925588b6-bd55-4d77-b194-188c5e9f05f5\",\"status\":\"NEEDS_CONFIRMATION\",\"skillId\":\"vitals.record\",\"reply\":\"Per confermare premi «Conferma» sull’anteprima.\",\"pending\":null,\"preview\":{\"previe"
+    },
+    {
+      "name": "B chat shows the server hint (press «Conferma»), not a new preview",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B still zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B UI «Conferma» → COMPLETED",
+      "pass": true,
+      "detail": "{\"workflowId\":\"925588b6-bd55-4d77-b194-188c5e9f05f5\",\"status\":\"COMPLETED\",\"skillId\":\"vitals.record\",\"reply\":\"Parametri registrati per Galli Nora: Pressione 120/80. Verificato: la rilevazione è present"
+    },
+    {
+      "name": "K double «Conferma» → exactly one write",
+      "pass": true,
+      "detail": "9 → 10"
+    },
+    {
+      "name": "B written values are the previewed ones",
+      "pass": true,
+      "detail": "{\"id\":\"52b029bb-aacd-4889-a68e-bfb99a5120e1\",\"patientId\":\"cmuomq7jy0006mklpm4fg4x4t\",\"requestId\":\"558e06fb-c99f-4d84-8851-fc16b9aad468\",\"measuredAt\":\"2026-10-01T00:41:06.848Z\",\"values\":{\"pa\":\"120/80\"}"
+    },
+    {
+      "name": "B audit execute ok",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B voice state COMPLETED",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C transcript names Ferri (after «Ripeti» if misheard)",
+      "pass": true,
+      "detail": "Registra pressione 130 su 80 per Ferri."
+    },
+    {
+      "name": "C NEEDS_CLARIFICATION with both Ferri",
+      "pass": true,
+      "detail": "NEEDS_CLARIFICATION Ferri Marco | Ferri Marta Ho trovato più ospiti per «Ferri»:\n1) Ferri Marco\n2) Ferri Marta\nQuale? (scegli o rispondi con il numero)"
+    },
+    {
+      "name": "C no preview, zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D transcript: paracetamolo 1000 mg",
+      "pass": true,
+      "detail": "Prescrivi paracetamolo 1000 mg, una compressa per bocca alle 8 e alle 20 per questo ospite."
+    },
+    {
+      "name": "D prescription only proposed (HIGH_RISK preview)",
+      "pass": true,
+      "detail": "{\"workflowId\":\"06944501-a9bc-45e4-8d32-dfb2de74cb6d\",\"status\":\"NEEDS_CONFIRMATION\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Nuova prescrizione (conferma del medico)\\nOspite: Neri Dario\\nFarmaco: PARACETAMOLO\\nDosaggio: 1000 mg\\nVia: OS\\nOrari"
+    },
+    {
+      "name": "D zero therapy written without the button",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D cancel → CANCELLED, zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D administration transcript",
+      "pass": true,
+      "detail": "Registra una somministrazione per questo ospite."
+    },
+    {
+      "name": "D administration only prepared (preview, not executed)",
+      "pass": true,
+      "detail": "{\"workflowId\":\"87fa3f4d-be90-4b12-851e-651653a7bfc5\",\"status\":\"NEEDS_CONFIRMATION\",\"skillId\":\"administration.record\",\"reply\":\"Registrazione somministrazione (conferma dell’operatore)\\nOspite: Ferri Ma"
+    },
+    {
+      "name": "D zero administration written",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E heard 140/90",
+      "pass": true,
+      "detail": "Registra pressione 140 su 90 per questo ospite."
+    },
+    {
+      "name": "E preview uses the corrected value 135/85",
+      "pass": true,
+      "detail": "{\"Pressione\":\"135/85\",\"Orario rilevazione\":\"01/10, 00:42\"}"
+    },
+    {
+      "name": "E zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "F «Annulla» on the transcript → CANCELLED",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "F nothing sent to the Assistant",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "F cancel while listening → mic released, no audio sent",
+      "pass": true,
+      "detail": "1 CANCELLED"
+    },
+    {
+      "name": "F zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H1 resident change while listening → CANCELLED, 0 audio uploaded",
+      "pass": true,
+      "detail": "CANCELLED transcribe=0"
+    },
+    {
+      "name": "H1 every mic track stopped",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H1 cancel during the permission prompt → no audio uploaded",
+      "pass": true,
+      "detail": "CANCELLED transcribe=0"
+    },
+    {
+      "name": "H1 the late stream is stopped immediately (mic never left open)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "M4 speech starting at the tap is transcribed in full",
+      "pass": true,
+      "detail": "TRANSCRIPT_READY registra pressione 120 su 80 per questo ospite"
+    },
+    {
+      "name": "G preview ready",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "G policy revoked (201)",
+      "pass": true,
+      "detail": "201"
+    },
+    {
+      "name": "G confirm after revocation → DENIED",
+      "pass": true,
+      "detail": "{\"workflowId\":\"95bbc92b-16e0-4f4c-94de-04db3bf4b793\",\"status\":\"DENIED\",\"skillId\":\"vitals.record\",\"reply\":\"Operazione non eseguita: i tuoi permessi non consentono più parameters.create_reading.\",\"pendi"
+    },
+    {
+      "name": "G zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "G voice state ERROR (no false success)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H transcript names Esposito",
+      "pass": true,
+      "detail": "Registra pressione 120 su 80 per esposito."
+    },
+    {
+      "name": "H no preview for an out-of-scope resident (never re-targeted to the context)",
+      "pass": true,
+      "detail": "{\"workflowId\":\"a2d5cf5b-e24b-4a68-bcad-3dc367408586\",\"status\":\"NEEDS_CLARIFICATION\",\"skillId\":\"vitals.record\",\"reply\":\"Nessun ospite trovato per «esposito». Per quale ospite?\",\"pending\":\"patient\",\"preview\":null,\"error\":null,\"interpreter\":\"a"
+    },
+    {
+      "name": "H zero write (Esposito and context resident)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I STT unavailable → ERROR with a clear message",
+      "pass": true,
+      "detail": "ERROR"
+    },
+    {
+      "name": "I text fallback still works",
+      "pass": true,
+      "detail": "{\"workflowId\":\"c8cd85aa-39ff-43ef-a0c0-c13db4c85c41\",\"status\":\"COMPLETED\",\"skillId\":\"patient.overview\",\"reply\":\"Ospite: Galli Nora\\nStato ricovero: non indicato"
+    },
+    {
+      "name": "I mic permission denied → ERROR + text fallback hint",
+      "pass": true,
+      "detail": "ERROR Microfono non disponibile: scrivi il messaggio."
+    },
+    {
+      "name": "I no audio sent when the mic is denied",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J silence.wav: no transcript, no command",
+      "pass": true,
+      "detail": "IDLE "
+    },
+    {
+      "name": "J silence.wav: user told nothing was sent",
+      "pass": true,
+      "detail": "Nessun parlato rilevato: non è stato inviato nulla."
+    },
+    {
+      "name": "J silence.wav: VAD sent NO audio to the network",
+      "pass": true,
+      "detail": "0"
+    },
+    {
+      "name": "J silence.wav: zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J steady-noise.wav: no transcript, no command",
+      "pass": true,
+      "detail": "IDLE "
+    },
+    {
+      "name": "J steady-noise.wav: user told nothing was sent",
+      "pass": true,
+      "detail": "Nessun parlato rilevato: non è stato inviato nulla."
+    },
+    {
+      "name": "J steady-noise.wav: VAD sent NO audio to the network",
+      "pass": true,
+      "detail": "0"
+    },
+    {
+      "name": "J steady-noise.wav: zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J noise-burst.wav: no transcript, no command",
+      "pass": true,
+      "detail": "IDLE "
+    },
+    {
+      "name": "J noise-burst.wav: user told nothing was sent",
+      "pass": true,
+      "detail": "Non ho capito le parole: nessun comando inviato. Riprova o scrivi."
+    },
+    {
+      "name": "J noise-burst: reached STT once, STT returned empty",
+      "pass": true,
+      "detail": "1"
+    },
+    {
+      "name": "J noise-burst.wav: zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Resident change → pending transcript discarded (never re-targeted)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Phone: voice panel without horizontal scroll",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "M classic GUI back after the Assistant",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "M classic GUI: all operator sections render",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "M classic GUI: no console errors while navigating",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "M classic patient list still lists the residents",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "timings": [
+    {
+      "label": "A read",
+      "captureEndToTranscriptMs": 1357,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "A transcript→result",
+      "uiTurnMs": 2483
+    },
+    {
+      "label": "B write",
+      "captureEndToTranscriptMs": 1445,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "B transcript→preview",
+      "uiTurnMs": 2514
+    },
+    {
+      "label": "B spoken conferma",
+      "captureEndToTranscriptMs": 980,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "B spoken conferma",
+      "uiTurnMs": 267
+    },
+    {
+      "label": "B confirm→backend result",
+      "uiTurnMs": 288
+    },
+    {
+      "label": "C ambiguous",
+      "captureEndToTranscriptMs": 1417,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "C transcript→clarification",
+      "uiTurnMs": 2566
+    },
+    {
+      "label": "D prescribe",
+      "captureEndToTranscriptMs": 2150,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "D transcript→prescription preview",
+      "uiTurnMs": 5187
+    },
+    {
+      "label": "D administration",
+      "captureEndToTranscriptMs": 2159,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "D transcript→administration",
+      "uiTurnMs": 2305
+    },
+    {
+      "label": "E correction",
+      "captureEndToTranscriptMs": 1612,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "E corrected transcript→preview",
+      "uiTurnMs": 2564
+    },
+    {
+      "label": "F review",
+      "captureEndToTranscriptMs": 1464,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "M4 no leading silence",
+      "captureEndToTranscriptMs": 1613,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "G voice",
+      "captureEndToTranscriptMs": 1514,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "G confirm after revoke",
+      "uiTurnMs": 232
+    },
+    {
+      "label": "H out of scope",
+      "captureEndToTranscriptMs": 1549,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    },
+    {
+      "label": "H transcript→denial",
+      "uiTurnMs": 2141
+    },
+    {
+      "label": "I stt down",
+      "captureEndToTranscriptMs": null,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>ERROR"
+    },
+    {
+      "label": "J silence.wav",
+      "captureEndToTranscriptMs": null,
+      "states": "LISTENING>IDLE"
+    },
+    {
+      "label": "J steady-noise.wav",
+      "captureEndToTranscriptMs": null,
+      "states": "LISTENING>IDLE"
+    },
+    {
+      "label": "J noise-burst.wav",
+      "captureEndToTranscriptMs": null,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>IDLE"
+    },
+    {
+      "label": "resident change",
+      "captureEndToTranscriptMs": 1579,
+      "states": "LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY"
+    }
+  ],
+  "sttMisses": [],
+  "consoleErrors": []
+}

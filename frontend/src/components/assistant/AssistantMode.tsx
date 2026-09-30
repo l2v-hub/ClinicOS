@@ -5,8 +5,8 @@
 // workflow state all come from the server. «Conferma» is an explicit UI event bound to the preview
 // id shown; «Modifica» returns to an editable state (new preview id); «Annulla» writes nothing.
 //
-// Prompt 5 (voice) integration point: `submitText(text, 'voice')` — push-to-talk / VAD / streaming
-// transcript feed the SAME function as the keyboard; confirmation stays a button (never spoken).
+// Phase 5 (voice): push-to-talk → local VAD → STT → transcript REVIEWED by the user → the SAME
+// `submitText(text, 'voice')` as the keyboard; confirmation stays a button (never spoken).
 
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import {
@@ -29,6 +29,9 @@ import {
   isActive,
   prescriptionPayload,
 } from './assistantState';
+import { VoiceMicButton, VoicePanel } from './voice/VoicePanel';
+import { useVoiceChannel } from './voice/useVoiceChannel';
+import type { AssistantTurnStatus } from './voice/audioSession';
 import './AssistantMode.css';
 
 export type AssistantInputSource = 'keyboard' | 'starter' | 'voice';
@@ -76,6 +79,8 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
   const mainEnd = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const residentId = state.resident?.id ?? null;
+  /** Latest voice channel callback: server outcome of every turn → audio session state. */
+  const voiceTurn = useRef<(status: AssistantTurnStatus | 'REQUEST_FAILED') => void>(() => {});
 
   const refreshSession = useCallback(async (resident: string | null) => {
     try {
@@ -118,7 +123,11 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         confirming: body.action === 'confirm' ? (body.previewId ?? null) : null,
       });
       try {
-        let response = await converse({ ...body, context: { currentPatientId: contextId } });
+        let response = await converse({
+          ...body,
+          context: { currentPatientId: contextId },
+          ...(source === 'voice' ? { inputChannel: 'voice' as const } : {}),
+        });
         // Prescription draft: attach the therapy built with the classic mapper → the preview is
         // rebuilt from that exact payload (and gets a new previewId) before any «Conferma».
         const therapy = therapyAttachment(response);
@@ -131,6 +140,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           });
         }
         dispatch({ type: 'response', response });
+        voiceTurn.current(response.status);
         if (response.status === 'COMPLETED' || response.status === 'DENIED') {
           // Capabilities may have changed (e.g. revocation): refresh skills/starters from the server.
           void refreshSession(contextId);
@@ -140,6 +150,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           type: 'request_failed',
           message: error instanceof Error ? error.message : 'Errore imprevisto',
         });
+        voiceTurn.current('REQUEST_FAILED');
       } finally {
         inFlight.current = false;
       }
@@ -159,6 +170,19 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
       source,
     );
   }
+
+  const voice = useVoiceChannel({
+    residentId,
+    busy: state.busy,
+    onSubmit: (text) => submitText(text, 'voice'),
+    onSwitchToText: (text) => {
+      setDraft(text);
+      inputRef.current?.focus();
+    },
+  });
+  useEffect(() => {
+    voiceTurn.current = voice.onAssistant;
+  }, [voice.onAssistant]);
 
   async function changeResident(next: AssistantResident | null) {
     setPickerOpen(false);
@@ -240,6 +264,11 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
       onKeyDown={(e) => {
         if (e.key === 'Escape' && !state.busy) {
           e.stopPropagation();
+          // First Escape stops an open microphone / pending transcript; the next one closes.
+          if (['LISTENING', 'SPEECH_ACTIVE', 'TRANSCRIBING', 'TRANSCRIPT_READY'].includes(voice.audio.state)) {
+            voice.cancel();
+            return;
+          }
           onClose();
           return;
         }
@@ -373,6 +402,11 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
               {t.status && t.who === 'assistant' && (
                 <span className={`am-status am-status--${t.status.toLowerCase()}`}>
                   {STATUS_LABELS[t.status]}
+                </span>
+              )}
+              {t.who === 'user' && t.source === 'voice' && (
+                <span className="am-msg__source" data-testid="am-msg-voice">
+                  Dettato a voce
                 </span>
               )}
               <p>{t.text}</p>
@@ -553,6 +587,8 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         <div ref={mainEnd} aria-hidden="true" />
       </main>
 
+      <VoicePanel voice={voice} busy={state.busy} />
+
       <form
         className="am-composer"
         onSubmit={(e) => {
@@ -579,6 +615,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
             }
           }}
         />
+        <VoiceMicButton voice={voice} busy={state.busy} />
         <button
           type="submit"
           className="ds-btn ds-btn--primary am-send"

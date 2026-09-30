@@ -231,6 +231,11 @@ export interface ConverseRequest {
    * only. `null` id = no resident open. Omitting `context` keeps the previous context.
    */
   context?: { currentPatientId?: string | null; currentPatientLabel?: string };
+  /**
+   * Phase 5: how the user produced `message` ('voice' = a reviewed STT transcript). Traceability
+   * only (audit field `input:voice`): it never changes interpretation, policy or confirmation.
+   */
+  inputChannel?: 'text' | 'voice';
 }
 
 export interface ConverseResponse {

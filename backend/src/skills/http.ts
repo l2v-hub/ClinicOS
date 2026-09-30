@@ -8,23 +8,38 @@
 //   GET  /skills/residents?q=         → resident search for the context picker (Tool Layer, scoped)
 //   POST /skills/converse             → one workflow turn
 //   GET  /skills/workflows/:id        → structured state of the caller's own workflow
+//   GET  /skills/voice/status         → voice channel availability + VAD parameters (Phase 5)
+//   POST /skills/voice/transcribe     → ONE utterance (audio body) → transcript, never an action
 //
 // Identity comes only from `requireOperator` (Role Simulator / Entra), the role from the active
 // policy (`requireAuthorizationContext`). Every tool a skill runs is re-authorized by the Tool Layer.
 
-import { Router, type Response } from 'express';
+import { randomUUID } from 'node:crypto';
+import express, { Router, type Response } from 'express';
 import { describeResident, residentScopeFor } from '../access-scope/resident-access-scope.js';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
-import { importRateLimit } from '../ai/rate-limit.js';
+import { recordAuditEvent, type AiAuditOutcome } from '../ai/audit-store.js';
+import { importRateLimit, voiceTranscribeRateLimit } from '../ai/rate-limit.js';
 import { roleDefinition } from '../authz/decision.js';
 import { loadActivePolicyCached } from '../authz/policy-cache.js';
-import { requireAuthorizationContext } from '../authz/request-context.js';
+import { authzOf, requireAuthorizationContext } from '../authz/request-context.js';
 import type { ToolContext } from '../tools/types.js';
 import { skillAvailability } from './availability.js';
 import { startersFor } from './catalog.js';
 import { CONFIRMATION_POLICY_VERSION, confirmationFor } from './confirmation.js';
 import { converse, type SkillEngineDeps } from './engine.js';
 import type { ConverseRequest } from './types.js';
+import {
+  MAX_UTTERANCE_BYTES,
+  MIN_UTTERANCE_BYTES,
+  STT_MIME_TYPES,
+  SttUnavailableError,
+  createRuntimeSttProvider,
+  looksLikeWav,
+  runtimeSttAvailable,
+  voiceChannelEnabled,
+} from '../voice/stt.js';
+import { voiceVadConfig } from '../voice/vad-config.js';
 
 const MAX_MESSAGE = 4000;
 const ID = /^[A-Za-z0-9_-]{1,128}$/;
@@ -55,6 +70,7 @@ function parseConverse(body: unknown): ConverseRequest | string {
     'previewId',
     'edit',
     'payload',
+    'inputChannel',
   ]);
   const unknown = Object.keys(body).find((key) => !allowed.has(key));
   if (unknown) return `Campo non consentito: ${unknown}`;
@@ -119,6 +135,8 @@ function parseConverse(body: unknown): ConverseRequest | string {
     if (JSON.stringify(o.payload).length > 20_000) return 'payload troppo grande';
     payload = o.payload as ConverseRequest['payload'];
   }
+  if (o.inputChannel !== undefined && o.inputChannel !== 'text' && o.inputChannel !== 'voice')
+    return 'inputChannel non valido';
   if (o.message === undefined && o.action === undefined) return 'message o action obbligatori';
   return {
     ...(typeof o.message === 'string' ? { message: o.message } : {}),
@@ -128,6 +146,7 @@ function parseConverse(body: unknown): ConverseRequest | string {
     ...(context ? { context } : {}),
     ...(edit ? { edit } : {}),
     ...(payload ? { payload } : {}),
+    ...(o.inputChannel === 'voice' ? { inputChannel: 'voice' as const } : {}),
   };
 }
 
@@ -263,6 +282,130 @@ export function createSkillRouter(deps: SkillEngineDeps): Router {
       })),
     });
   });
+
+  // ── Phase 5: voice channel ────────────────────────────────────────────────────────────────
+  // Voice is a CHANNEL: this route only turns ONE captured utterance into text. The transcript is
+  // shown to the user and then goes through /skills/converse exactly like typed text. Gated by the
+  // existing voice capability (`voice.plan`) of the Phase 2 policy. Audio is never stored or logged.
+  function voiceAllowed(req: AuthedRequest): boolean {
+    return authzOf(req)?.can('voice.plan').allowed === true;
+  }
+
+  router.get('/voice/status', async (req: AuthedRequest, res: Response) => {
+    const identity = requireIdentity(req, res);
+    if (!identity) return;
+    const channelEnabled = voiceChannelEnabled();
+    res.status(200).json({
+      voiceAllowed: voiceAllowed(req),
+      channelEnabled,
+      sttConfigured: channelEnabled && (Boolean(deps.stt) || (await runtimeSttAvailable())),
+      locale: 'it-IT',
+      maxUtteranceBytes: MAX_UTTERANCE_BYTES,
+      vad: voiceVadConfig(),
+    });
+  });
+
+  /** Capability + per-environment switch BEFORE the body is buffered (no 2 MB for nothing). */
+  function voiceGate(req: AuthedRequest, res: Response, next: () => void) {
+    const identity = requireIdentity(req, res);
+    if (!identity) return;
+    const refuse = (status: number, code: string, error: string, outcome: AiAuditOutcome) => {
+      recordAuditEvent({
+        requestId: `voice-${randomUUID()}`,
+        operatorId: identity.operatorId,
+        operatorRole: identity.appRole ?? identity.role,
+        patientId: null,
+        actionType: 'voice:transcribe',
+        kind: 'read',
+        channel: 'voce',
+        fields: [`code:${code === 'voice_denied' ? 'capability_denied' : code}`],
+        outcome,
+      });
+      res.status(status).json({ error, code });
+    };
+    if (!voiceAllowed(req)) {
+      refuse(403, 'voice_denied', 'Canale vocale non consentito al tuo ruolo', 'denied');
+      return;
+    }
+    if (!voiceChannelEnabled()) {
+      refuse(503, 'voice_disabled', 'Canale vocale non attivo in questo ambiente', 'error');
+      return;
+    }
+    next();
+  }
+
+  router.post(
+    '/voice/transcribe',
+    voiceTranscribeRateLimit,
+    voiceGate,
+    express.raw({ type: [...STT_MIME_TYPES], limit: MAX_UTTERANCE_BYTES }),
+    async (req: AuthedRequest, res: Response) => {
+      const identity = requireIdentity(req, res);
+      if (!identity) return;
+      const requestId = `voice-${randomUUID()}`;
+      const auditVoice = (outcome: AiAuditOutcome, fields: string[]) =>
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:transcribe',
+          kind: 'read',
+          channel: 'voce',
+          fields,
+          outcome,
+        });
+      const mimeType = String(req.headers['content-type'] ?? '')
+        .split(';')[0]
+        .trim()
+        .toLowerCase();
+      const bytes = Buffer.isBuffer(req.body) ? req.body : Buffer.alloc(0);
+      if (
+        !STT_MIME_TYPES.has(mimeType) ||
+        bytes.length < MIN_UTTERANCE_BYTES ||
+        (mimeType.includes('wav') && !looksLikeWav(bytes))
+      ) {
+        auditVoice('error', ['code:invalid_audio']);
+        res.status(400).json({ error: 'Audio non valido', code: 'invalid_audio' });
+        return;
+      }
+      const declared = Number(req.headers['x-utterance-ms']);
+      const durationMs = Number.isFinite(declared) && declared > 0 ? declared : undefined;
+      const bucket = !durationMs
+        ? 'unknown'
+        : durationMs < 1000
+          ? 'lt1s'
+          : durationMs < 5000
+            ? '1-5s'
+            : durationMs < 15000
+              ? '5-15s'
+              : 'gt15s';
+      try {
+        const provider = deps.stt ?? createRuntimeSttProvider();
+        const source = String(req.headers['x-audio-source'] ?? 'browser-mic').slice(0, 32);
+        const result = await provider.transcribe({ bytes, mimeType, durationMs, source }, 'it-IT', {
+          requestId,
+        });
+        auditVoice(result.empty ? 'empty' : 'ok', [
+          `provider:${result.metadata.provider}`,
+          `audio:${bucket}`,
+          `sttMs:${result.metadata.roundTripMs}`,
+        ]);
+        res.status(200).json(result);
+      } catch (error) {
+        const e =
+          error instanceof SttUnavailableError
+            ? error
+            : new SttUnavailableError(
+                'stt_provider_error',
+                'Errore del servizio di trascrizione',
+                502,
+              );
+        auditVoice('error', [`code:${e.code}`, `audio:${bucket}`]);
+        res.status(e.status).json({ error: e.message, code: e.code });
+      }
+    },
+  );
 
   router.post('/converse', async (req: AuthedRequest, res: Response) => {
     const identity = requireIdentity(req, res);

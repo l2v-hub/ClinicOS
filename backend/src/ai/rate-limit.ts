@@ -75,6 +75,14 @@ const intEnv = (name: string, fallback: number): number => {
 // General import API: default 60 requests / minute per operator.
 export const importRateLimit = makeLimiter(60_000, intEnv('AI_RATE_LIMIT_PER_MIN', 60), 'import');
 
+// Phase 5 cost guard on speech-to-text: default 20 utterances / minute per operator (every call is
+// a paid provider request; a human dictating commands stays far below it).
+export const voiceTranscribeRateLimit = makeLimiter(
+  60_000,
+  intEnv('VOICE_STT_RATE_LIMIT_PER_MIN', 20),
+  'trascrizione vocale',
+);
+
 // Cost guard on extraction: default 10 model runs / 5 minutes per operator.
 export const extractionCostGuard = makeLimiter(
   5 * 60_000,

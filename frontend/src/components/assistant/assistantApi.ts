@@ -98,6 +98,8 @@ export interface ConverseRequest {
   edit?: { values?: Record<string, string>; text?: string; priority?: string };
   payload?: { therapy?: Record<string, unknown> };
   context: { currentPatientId: string | null };
+  /** Phase 5: the message is a reviewed voice transcript (audit traceability only). */
+  inputChannel?: 'text' | 'voice';
 }
 
 export class AssistantHttpError extends Error {

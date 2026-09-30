@@ -34,7 +34,11 @@ export type Interpreter = (input: InterpretInput) => Promise<Interpretation>;
 // ── Deterministic interpreter ──────────────────────────────────────────────────────────────
 
 const VALUE_PATTERNS: ReadonlyArray<[string, RegExp]> = [
-  ['pa', /(?:pressione(?:\s+arteriosa)?|\bpa\b)?\s*(?:di|a|:)?\s*(\d{2,3}\s*\/\s*\d{2,3})/i],
+  // "120/80" or the spoken form "120 su 80" (voice transcripts); both become "120/80".
+  [
+    'pa',
+    /(?:pressione(?:\s+arteriosa)?|\bpa\b)?\s*(?:di|a|è|:)?\s*(\d{2,3}\s*(?:\/|\bsu\b)\s*\d{2,3})/i,
+  ],
   [
     'fr',
     /(?:frequenza\s+respiratoria|\bfr\b|atti\s+respiratori|respiri)\s*(?:di|a|:)?\s*(\d{1,2})\b/i,
@@ -50,19 +54,34 @@ const VALUE_PATTERNS: ReadonlyArray<[string, RegExp]> = [
   ['coscienza', /(?:coscienza|acvpu)\s*:?\s*([ACVPU])\b/],
 ];
 
+const PA_PATTERN = new RegExp(VALUE_PATTERNS[0][1].source, 'gi');
+
+/**
+ * First acceptable blood-pressure pair. Without «pressione»/«PA» in the match: a bare «30/09» is a
+ * date (first number < 70), and the spoken «95 su 100» is NOT a pressure (saturation, Barthel
+ * «90 su 100» …) — «su» counts only next to «pressione»/«PA». A rejected pair never hides a later,
+ * explicit one.
+ */
+function bloodPressureMatch(text: string): RegExpExecArray | null {
+  PA_PATTERN.lastIndex = 0;
+  for (let match = PA_PATTERN.exec(text); match; match = PA_PATTERN.exec(text)) {
+    const named = /pressione|\bpa\b/i.test(match[0]);
+    const spoken = /\bsu\b/i.test(match[1]);
+    if (named || (!spoken && Number(match[1].split('/')[0]) >= 70)) return match;
+  }
+  return null;
+}
+
 export function extractValues(message: string): Record<string, string> {
   const values: Record<string, string> = {};
   // "frequenza respiratoria" must not be read as cardiac frequency: consume matches in order.
   let rest = message;
   for (const [key, pattern] of VALUE_PATTERNS) {
-    const match = pattern.exec(rest);
+    const match = key === 'pa' ? bloodPressureMatch(rest) : pattern.exec(rest);
     if (!match) continue;
     // A bare "120/80" counts as blood pressure only through the 'pa' pattern.
-    let value = match[1].replace(/\s+/g, '');
+    let value = match[1].replace(/\s*su\s*/i, '/').replace(/\s+/g, '');
     if (key === 'o2') value = /^s/i.test(value) ? 'si' : 'no';
-    // Without "pressione"/"PA" a bare "30/09" is a date, not a blood pressure.
-    if (key === 'pa' && !/pressione|\bpa\b/i.test(match[0]) && Number(value.split('/')[0]) < 70)
-      continue;
     values[key] = value;
     rest =
       rest.slice(0, match.index) +
