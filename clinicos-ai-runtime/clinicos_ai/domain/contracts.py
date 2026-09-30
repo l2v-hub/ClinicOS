@@ -132,6 +132,8 @@ class SkillRouteRequest(BaseModel):
     today: str = ""
     pending: Optional[dict[str, Any]] = None
     skills: list[dict[str, Any]] = Field(default_factory=list)
+    # id + name of the skills the user may NOT use (recognised → the backend answers DENIED)
+    forbiddenSkills: list[dict[str, Any]] = Field(default_factory=list)
     valueKeys: list[str] = Field(default_factory=list)
 
 

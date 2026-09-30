@@ -690,6 +690,7 @@ async function converseTurn(
   const interpretation = await deps.interpreter({
     message,
     available,
+    unavailable: SKILL_CATALOG.filter((skill) => !available.includes(skill)),
     pending: null,
     today: turn.today,
   });

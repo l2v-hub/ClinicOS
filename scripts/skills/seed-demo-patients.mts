@@ -1,5 +1,5 @@
 // Synthetic patients for the Phase 3 harness / live Agno E2E (never real data).
-// Usage (repo root): DATABASE_URL=<local or demo DB> npx tsx scripts/skills/seed-demo-patients.ts
+// Usage (repo root): DATABASE_URL=<local or demo DB> npx tsx scripts/skills/seed-demo-patients.mts
 import { prisma } from '../../backend/src/lib/prisma.js';
 
 const PATIENTS: [owner: string, firstName: string, lastName: string][] = [
