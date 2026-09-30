@@ -126,6 +126,20 @@ class AssistantComposeRequest(BaseModel):
     model: Optional[str] = None
 
 
+# Phase 3: Agno skill router (message → skill + slots over the skills the user may use).
+class SkillRouteRequest(BaseModel):
+    message: str = ""
+    today: str = ""
+    pending: Optional[dict[str, Any]] = None
+    skills: list[dict[str, Any]] = Field(default_factory=list)
+    valueKeys: list[str] = Field(default_factory=list)
+
+
+class SkillRouteResponse(BaseModel):
+    route: dict[str, Any]
+    model: str
+
+
 class AssistantComposeResponse(BaseModel):
     answerText: str = ""
     citedSources: list[str] = Field(default_factory=list)
