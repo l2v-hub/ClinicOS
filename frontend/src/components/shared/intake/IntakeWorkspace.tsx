@@ -8,8 +8,24 @@ import {
   VersionedDraftSaveQueue,
   confirmPersistedDraft,
   decideImportProposal,
+  decideFieldProposal,
   DraftApiError,
+  type DraftResponse,
 } from './intakeDraftApi';
+import {
+  aiFieldPaths,
+  documentsErrorMessage,
+  FIELD_PROPOSALS_PENDING_MESSAGE,
+  focusAfterFieldDecision,
+  mutateWithVersionRetry,
+  pendingFieldProposals,
+  rebaseLocalEdits,
+  type FieldProposal,
+} from './intakeDocuments';
+import { IntakeAiOriginContext } from './intakeAiOrigin';
+import { useIntakeDocuments } from './useIntakeDocuments';
+import { IntakeDocumentsCard } from './IntakeDocumentsCard';
+import { IntakeFieldProposals } from './IntakeFieldProposals';
 import { ImportProposalsReview, type ImportProposal } from './ImportProposalsReview';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
@@ -112,6 +128,14 @@ export function IntakeWorkspace({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<DraftData>({});
+  // Bozza più recente (anche fra due render) e ultima bozza nota al server: dopo un'unione AI o una
+  // decisione la scheda si ricarica senza perdere quanto l'operatore sta scrivendo.
+  const dataRef = useRef<DraftData>({});
+  const baseRef = useRef<DraftData>({});
+  // Card Documenti: job d'import a pagine collegato alla bozza.
+  const [importJobId, setImportJobId] = useState<string | null>(null);
+  const [fieldDeciding, setFieldDeciding] = useState<string | null>(null);
+  const [fieldError, setFieldError] = useState<string | null>(null);
   const [submitAttempted, setSubmitAttempted] = useState(false);
   // #234: autosave status for the debounced patchDraft (no longer swallowed silently).
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -179,6 +203,11 @@ export function IntakeWorkspace({
       setDraftId(null);
       setError(null);
       setData({});
+      dataRef.current = {};
+      baseRef.current = {};
+      setImportJobId(null);
+      setFieldDeciding(null);
+      setFieldError(null);
       setSubmitAttempted(false);
       setSubmitting(false);
       setSubmitError(null);
@@ -206,11 +235,20 @@ export function IntakeWorkspace({
           return;
         }
         setDraftId(draft.id);
-        saveQueueRef.current = new VersionedDraftSaveQueue(draft.id, draft.version, {
+        const queue = new VersionedDraftSaveQueue(draft.id, draft.version, {
           operatorId,
           operatorRole,
         });
-        if (draft.data && typeof draft.data === 'object') setData(draft.data as DraftData);
+        queue.onSaved = (saved) => {
+          baseRef.current = (saved.data ?? {}) as DraftData;
+        };
+        saveQueueRef.current = queue;
+        setImportJobId(draft.importJobId ?? null);
+        if (draft.data && typeof draft.data === 'object') {
+          baseRef.current = draft.data as DraftData;
+          dataRef.current = draft.data as DraftData;
+          setData(draft.data as DraftData);
+        }
       })
       .catch(() => {
         if (!active) return;
@@ -256,34 +294,160 @@ export function IntakeWorkspace({
     };
   }, [open]);
 
+  const docs = useIntakeDocuments(
+    open && !importDraftId && !!draftId,
+    { operatorId, operatorRole },
+    {
+      draftId,
+      importJobId,
+      data,
+      getData: () => dataRef.current,
+      mutate: mutateDraft,
+      reload: reloadDraft,
+    },
+  );
+
   if (!open) return null;
 
   /** Update a top-level section key and debounce-patch the draft */
-  function persistDraft(next: DraftData) {
+  function persistDraft(next: DraftData | (() => DraftData)) {
     if (!saveQueueRef.current) return Promise.reject(new Error('Bozza non disponibile.'));
     return saveQueueRef.current.save(next);
   }
 
-  function updateSection(key: keyof DraftData, value: unknown) {
-    if (submittingRef.current || proposalRequestRef.current) return;
-    const next = { ...data, [key]: value };
+  function commitLocal(next: DraftData) {
+    dataRef.current = next;
     setData(next);
+  }
 
-    if (!draftId) return;
+  /**
+   * Bozza nuova dal server (unione AI, decisione, ricarica), versione compresa. Le modifiche locali
+   * non ancora salvate restano e si salvano sulla versione nuova.
+   */
+  function applyServerDraft(saved: DraftResponse, schedule = true) {
+    const server = (saved.data ?? {}) as DraftData;
+    const { data: next, dirty } = rebaseLocalEdits(baseRef.current, dataRef.current, server);
+    baseRef.current = server;
+    commitLocal(next as DraftData);
+    if (saved.importJobId !== undefined) setImportJobId(saved.importJobId ?? null);
+    saveQueueRef.current?.reset(saved.version);
+    if (dirty && schedule) scheduleAutosave();
+  }
+
+  /** Ricarica la bozza in coda ai salvataggi (mai in parallelo a un'altra scrittura). */
+  function reloadDraft(schedule = true): Promise<DraftResponse> {
+    const queue = saveQueueRef.current;
+    if (!draftId || !queue) return Promise.reject(new Error('Bozza non disponibile.'));
+    const id = draftId;
+    return queue.exclusive(async () => {
+      const fresh = await getDraft(id, op);
+      applyServerDraft(fresh, schedule);
+      return fresh;
+    });
+  }
+
+  /** Mutazione versionata (documenti, unioni, proposte): su 409 di versione ricarica e ripete. */
+  function mutateDraft(
+    run: (version: number | undefined, requestId: string) => Promise<DraftResponse>,
+    skip?: (fresh: DraftResponse) => boolean,
+  ): Promise<DraftResponse> {
+    const queue = saveQueueRef.current;
+    if (!draftId || !queue) return Promise.reject(new Error('Bozza non disponibile.'));
+    const id = draftId;
+    return queue.exclusive(async (version) => {
+      const saved = await mutateWithVersionRetry({
+        version,
+        run,
+        reload: async () => {
+          const fresh = await getDraft(id, op);
+          applyServerDraft(fresh);
+          return fresh;
+        },
+        skip,
+        newKey: () => crypto.randomUUID(),
+      });
+      applyServerDraft(saved);
+      return saved;
+    });
+  }
+
+  function scheduleAutosave() {
+    if (!saveQueueRef.current) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
     setSaveState('saving');
-    debounceRef.current = setTimeout(() => {
-      persistDraft(next)
-        .then(() => {
-          setSaveState('saved');
-          setSavedAt(new Date());
-        })
-        .catch(() => {
-          // #234: no longer swallowed — surface an error state (no PHI in the log).
-          setSaveState('error');
-          console.error('[ClinicOS] autosave bozza intake non riuscito');
-        });
-    }, 500);
+    debounceRef.current = setTimeout(() => void autosave(), 500);
+  }
+
+  // La bozza si legge al momento dell'invio: un'unione arrivata nel frattempo non viene sovrascritta.
+  async function autosave(retried = false): Promise<void> {
+    try {
+      await persistDraft(() => dataRef.current);
+      setSaveState('saved');
+      setSavedAt(new Date());
+    } catch (e) {
+      // Versione superata (un'unione AI o un'altra scheda): ricarica e ripeti una sola volta.
+      if (
+        !retried &&
+        e instanceof DraftApiError &&
+        e.status === 409 &&
+        ['draft_version_conflict', 'draft_version_required', 'draft_link_changed'].includes(
+          e.code ?? '',
+        )
+      ) {
+        const reloaded = await reloadDraft(false).then(
+          () => true,
+          () => false,
+        );
+        if (reloaded) return autosave(true);
+      }
+      // #234: no longer swallowed — surface an error state (no PHI in the log).
+      setSaveState('error');
+      console.error('[ClinicOS] autosave bozza intake non riuscito');
+    }
+  }
+
+  function updateSection(key: keyof DraftData, value: unknown) {
+    if (submittingRef.current || proposalRequestRef.current) return;
+    const next = { ...dataRef.current, [key]: value };
+    commitLocal(next);
+
+    if (!draftId) return;
+    scheduleAutosave();
+  }
+
+  /** "Usa questo valore" / "Tieni il mio" su una proposta dei documenti. */
+  async function decideField(proposal: FieldProposal, action: 'apply' | 'keep') {
+    if (!draftId || fieldDeciding || submittingRef.current) return;
+    const id = draftId;
+    setFieldDeciding(proposal.id);
+    setFieldError(null);
+    // Le modifiche in attesa si salvano prima della decisione (stessa coda, in ordine).
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+      void autosave();
+    }
+    try {
+      await mutateDraft((version, requestId) =>
+        decideFieldProposal(
+          id,
+          proposal.id,
+          { action, requestId, expectedDraftVersion: version },
+          op,
+        ),
+      );
+      setSaveState('saved');
+      setSavedAt(new Date());
+      // Il pannello si chiude quando le proposte finiscono: il focus va alla proposta successiva
+      // o, se era l'ultima, al campo appena deciso (mai perso su BODY).
+      window.requestAnimationFrame(() => focusAfterFieldDecision(proposal.path));
+    } catch (e) {
+      if (e instanceof DraftApiError && e.code === 'proposal_decided')
+        await reloadDraft().catch(() => null);
+      else setFieldError(documentsErrorMessage(e));
+    } finally {
+      setFieldDeciding(null);
+    }
   }
 
   async function decideProposal(proposalId: string, action: 'add' | 'defer') {
@@ -322,8 +486,7 @@ export function IntakeWorkspace({
       );
       proposalRequestRef.current = null;
       setProposalUncertain(false);
-      saveQueueRef.current!.version = saved.version;
-      setData(saved.data as DraftData);
+      applyServerDraft(saved);
       setSaveState('saved');
     } catch (e) {
       if (e instanceof DraftApiError && e.status < 500) proposalRequestRef.current = null;
@@ -423,7 +586,7 @@ export function IntakeWorkspace({
 
     try {
       if (debounceRef.current) clearTimeout(debounceRef.current);
-      setData(confirmData);
+      commitLocal(confirmData);
       const res = await confirmPersistedDraft(
         draftId,
         payload,
@@ -438,6 +601,9 @@ export function IntakeWorkspace({
         onClose();
       } else if (res.status === 'duplicate') {
         setDuplicateWarn(true);
+      } else if (res.code === 'field_proposals_pending') {
+        setSubmitError(FIELD_PROPOSALS_PENDING_MESSAGE(Math.max(1, fieldProposals.length)));
+        showFieldProposals();
       } else if (res.code === 'import_review_outdated') {
         setSubmitError(
           'Le pagine sono cambiate. Torna ai documenti e scegli «Rivedi le nuove pagine». Le correzioni nella bozza sono conservate.',
@@ -473,7 +639,21 @@ export function IntakeWorkspace({
 
   /** Un passaggio mancante porta al punto da sistemare: campo anagrafico, riga di terapia o
    *  pulsante di conferma della sezione. */
+  function showFieldProposals() {
+    const panel = bodyRef.current?.querySelector<HTMLElement>(
+      '[data-testid="intake-field-proposals"]',
+    );
+    panel?.scrollIntoView({ block: 'start' });
+    window.requestAnimationFrame(() =>
+      panel?.querySelector<HTMLElement>('[data-testid="intake-proposal-apply"]')?.focus(),
+    );
+  }
+
   function goToMissing(step: IntakeMissingStep) {
+    if (step.kind === 'fieldProposals') {
+      showFieldProposals();
+      return;
+    }
     if (step.label === 'Decisione in attesa di risposta') {
       bodyRef.current?.scrollTo({ top: 0 });
       window.requestAnimationFrame(() =>
@@ -536,6 +716,8 @@ export function IntakeWorkspace({
     proposalUncertain,
   });
   const accepted = acceptedFlags();
+  const fieldProposals = pendingFieldProposals(data);
+  const aiPaths = aiFieldPaths(data);
   const therapyEmpty =
     !(Array.isArray(data.terapiaImport) && data.terapiaImport.length > 0) &&
     !(Array.isArray(data.terapia) && data.terapia.length > 0);
@@ -658,232 +840,253 @@ export function IntakeWorkspace({
           )}
           {error && <p className="import-modal__error">{error}</p>}
           {!loading && !error && (
-            <div
-              className="intake-page__sections"
-              inert={proposalUncertain}
-              data-draft-id={draftId ?? undefined}
-            >
-              {duplicateWarn && (
-                <div className="import-modal__warning" role="alert" ref={warningRef}>
-                  <p>
-                    <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati
-                    potrebbe già esistere.
-                  </p>
-                  <button
-                    type="button"
-                    className="ds-btn ds-btn--secondary"
-                    onClick={() => void handleConfirm(true)}
-                    disabled={submitting}
-                  >
-                    Crea comunque
-                  </button>
-                </div>
-              )}
-              {allergyConflictWarn && (
-                <div className="import-modal__warning" role="alert" ref={warningRef}>
-                  <p>
-                    <strong>Allergie contrastanti rilevate.</strong> {submitError}
-                  </p>
-                  <button
-                    type="button"
-                    className="ds-btn ds-btn--secondary"
-                    onClick={() => void handleConfirm(false, true)}
-                    disabled={submitting}
-                  >
-                    Conferma comunque
-                  </button>
-                </div>
-              )}
+            <IntakeAiOriginContext.Provider value={aiPaths}>
+              <div
+                className="intake-page__sections"
+                inert={proposalUncertain}
+                data-draft-id={draftId ?? undefined}
+              >
+                {/* Card Documenti (HMI 1): solo sulla scheda compilata qui; il flusso "da documenti"
+                  ha già i suoi documenti e resta invariato. */}
+                {!importDraftId && draftId && (
+                  <IntakeDocumentsCard docs={docs} disabled={submitting} />
+                )}
+                <IntakeFieldProposals
+                  proposals={fieldProposals}
+                  data={data}
+                  deciding={fieldDeciding}
+                  disabled={submitting}
+                  error={fieldError}
+                  onDecide={(p, action) => void decideField(p, action)}
+                />
+                {duplicateWarn && (
+                  <div className="import-modal__warning" role="alert" ref={warningRef}>
+                    <p>
+                      <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati
+                      potrebbe già esistere.
+                    </p>
+                    <button
+                      type="button"
+                      className="ds-btn ds-btn--secondary"
+                      onClick={() => void handleConfirm(true)}
+                      disabled={submitting}
+                    >
+                      Crea comunque
+                    </button>
+                  </div>
+                )}
+                {allergyConflictWarn && (
+                  <div className="import-modal__warning" role="alert" ref={warningRef}>
+                    <p>
+                      <strong>Allergie contrastanti rilevate.</strong> {submitError}
+                    </p>
+                    <button
+                      type="button"
+                      className="ds-btn ds-btn--secondary"
+                      onClick={() => void handleConfirm(false, true)}
+                      disabled={submitting}
+                    >
+                      Conferma comunque
+                    </button>
+                  </div>
+                )}
 
-              <section {...sectionProps('anagrafica')}>
-                <header className="intake-section__head">
-                  {sectionTitle('anagrafica')}
-                  <button
-                    type="button"
-                    className="ds-btn ds-btn--secondary ds-btn--wrap"
-                    data-testid="accept-demographics"
-                    aria-pressed={accepted.demographics === true}
-                    disabled={submitting}
-                    onClick={() =>
-                      updateSection('_accepted', {
-                        ...accepted,
-                        demographics: accepted.demographics !== true,
-                      })
+                <section {...sectionProps('anagrafica')}>
+                  <header className="intake-section__head">
+                    {sectionTitle('anagrafica')}
+                    <button
+                      type="button"
+                      className="ds-btn ds-btn--secondary ds-btn--wrap"
+                      data-testid="accept-demographics"
+                      aria-pressed={accepted.demographics === true}
+                      disabled={submitting}
+                      onClick={() =>
+                        updateSection('_accepted', {
+                          ...accepted,
+                          demographics: accepted.demographics !== true,
+                        })
+                      }
+                    >
+                      <IcoCheck />
+                      {accepted.demographics === true
+                        ? 'Dati anagrafici confermati'
+                        : 'Conferma i dati anagrafici'}
+                    </button>
+                  </header>
+                  <StepAnagrafica
+                    value={data.anagrafica ?? {}}
+                    onChange={(v) => updateSection('anagrafica', v)}
+                    submitAttempted={submitAttempted}
+                  />
+                </section>
+
+                <section {...sectionProps('ingresso')}>
+                  <header className="intake-section__head">{sectionTitle('ingresso')}</header>
+                  <StepIngresso
+                    value={data.ingresso ?? {}}
+                    onChange={(v) => updateSection('ingresso', v)}
+                  />
+                </section>
+
+                <section {...sectionProps('allergie')}>
+                  <header className="intake-section__head">{sectionTitle('allergie')}</header>
+                  <StepClinica
+                    data={data}
+                    onUpdateSection={updateSection}
+                    operatoreNome={operatoreNome}
+                    importedFields={(data._importedFields as string[] | undefined) ?? []}
+                    narrative={data._narrative as Record<string, unknown> | undefined}
+                    only={['allergie']}
+                    therapyBlock={false}
+                    showLegacyPain={false}
+                    showTitles={false}
+                  />
+                </section>
+
+                <section {...sectionProps('terapia')}>
+                  <header className="intake-section__head">
+                    {sectionTitle('terapia')}
+                    <button
+                      type="button"
+                      className="ds-btn ds-btn--secondary ds-btn--wrap"
+                      data-testid="accept-therapy"
+                      aria-pressed={accepted.therapy === true}
+                      disabled={submitting}
+                      onClick={() =>
+                        updateSection('_accepted', {
+                          ...accepted,
+                          therapy: accepted.therapy !== true,
+                        })
+                      }
+                    >
+                      <IcoCheck />
+                      {accepted.therapy === true
+                        ? therapyEmpty
+                          ? 'Nessuna terapia: confermato'
+                          : 'Terapia confermata'
+                        : therapyEmpty
+                          ? 'Conferma: nessuna terapia da inserire'
+                          : 'Conferma la terapia'}
+                    </button>
+                  </header>
+                  <ImportProposalsReview
+                    proposals={
+                      Array.isArray(data._importProposals)
+                        ? (data._importProposals as ImportProposal[])
+                        : []
                     }
+                    busy={submitting}
+                    onDecision={(id, action) => void decideProposal(id, action)}
+                  />
+                  <StepClinica
+                    data={data}
+                    onUpdateSection={updateSection}
+                    operatoreNome={operatoreNome}
+                    importedFields={(data._importedFields as string[] | undefined) ?? []}
+                    narrative={data._narrative as Record<string, unknown> | undefined}
+                    therapyCorrection={therapyCorrection}
+                    only={['terapia']}
+                    showTherapyAcceptance={false}
+                    showLegacyPain={false}
+                    showTitles={false}
+                  />
+                </section>
+
+                <section {...sectionProps('diagnosi')}>
+                  <header className="intake-section__head">{sectionTitle('diagnosi')}</header>
+                  <StepClinica
+                    data={data}
+                    onUpdateSection={updateSection}
+                    operatoreNome={operatoreNome}
+                    importedFields={(data._importedFields as string[] | undefined) ?? []}
+                    narrative={data._narrative as Record<string, unknown> | undefined}
+                    only={['anamnesi', 'diagnosi']}
+                    therapyBlock={false}
+                    showLegacyPain={false}
+                  />
+                </section>
+
+                <section {...sectionProps('parametri')}>
+                  <header className="intake-section__head">{sectionTitle('parametri')}</header>
+                  <StepClinica
+                    data={data}
+                    onUpdateSection={updateSection}
+                    operatoreNome={operatoreNome}
+                    only={['parametri']}
+                    therapyBlock={false}
+                    showTitles={false}
+                  />
+                </section>
+
+                <section {...sectionProps('moduli')}>
+                  <header className="intake-section__head">{sectionTitle('moduli')}</header>
+                  <p className="intake-section__hint">
+                    Facoltativo: il modulo scelto si apre subito dopo la creazione del paziente.
+                    Tutti i moduli restano nella sezione <strong>Moduli</strong> della cartella.
+                  </p>
+                  <div
+                    className="intake-modules-grid"
+                    role="list"
+                    data-testid="intake-modules-grid"
                   >
-                    <IcoCheck />
-                    {accepted.demographics === true
-                      ? 'Dati anagrafici confermati'
-                      : 'Conferma i dati anagrafici'}
-                  </button>
-                </header>
-                <StepAnagrafica
-                  value={data.anagrafica ?? {}}
-                  onChange={(v) => updateSection('anagrafica', v)}
-                  submitAttempted={submitAttempted}
-                />
-              </section>
+                    {CLINICAL_MODULES.map((m) => {
+                      const selected = selectedModuleId === m.id;
+                      return (
+                        <div key={m.id} role="listitem">
+                          <button
+                            type="button"
+                            className={`intake-module-card${selected ? ' intake-module-card--selected' : ''}`}
+                            data-testid={`intake-module-${m.id}`}
+                            aria-pressed={selected}
+                            disabled={!m.available}
+                            onClick={() =>
+                              setSelectedModuleId((cur) => (cur === m.id ? null : m.id))
+                            }
+                          >
+                            <div className="intake-module-card__head">
+                              <span className="intake-module-card__title">{m.label}</span>
+                              <span
+                                className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}
+                              >
+                                {m.available ? 'Disponibile' : 'In arrivo'}
+                              </span>
+                            </div>
+                            <p className="intake-module-card__desc">{m.desc}</p>
+                            {selected && (
+                              <p
+                                className="intake-module-card__hint"
+                                data-testid={`intake-module-${m.id}-hint`}
+                              >
+                                Si aprirà dopo la creazione del paziente
+                              </p>
+                            )}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
 
-              <section {...sectionProps('ingresso')}>
-                <header className="intake-section__head">{sectionTitle('ingresso')}</header>
-                <StepIngresso
-                  value={data.ingresso ?? {}}
-                  onChange={(v) => updateSection('ingresso', v)}
-                />
-              </section>
-
-              <section {...sectionProps('allergie')}>
-                <header className="intake-section__head">{sectionTitle('allergie')}</header>
-                <StepClinica
-                  data={data}
-                  onUpdateSection={updateSection}
-                  operatoreNome={operatoreNome}
-                  importedFields={(data._importedFields as string[] | undefined) ?? []}
-                  narrative={data._narrative as Record<string, unknown> | undefined}
-                  only={['allergie']}
-                  therapyBlock={false}
-                  showLegacyPain={false}
-                  showTitles={false}
-                />
-              </section>
-
-              <section {...sectionProps('terapia')}>
-                <header className="intake-section__head">
-                  {sectionTitle('terapia')}
-                  <button
-                    type="button"
-                    className="ds-btn ds-btn--secondary ds-btn--wrap"
-                    data-testid="accept-therapy"
-                    aria-pressed={accepted.therapy === true}
-                    disabled={submitting}
-                    onClick={() =>
-                      updateSection('_accepted', {
-                        ...accepted,
-                        therapy: accepted.therapy !== true,
-                      })
-                    }
-                  >
-                    <IcoCheck />
-                    {accepted.therapy === true
-                      ? therapyEmpty
-                        ? 'Nessuna terapia: confermato'
-                        : 'Terapia confermata'
-                      : therapyEmpty
-                        ? 'Conferma: nessuna terapia da inserire'
-                        : 'Conferma la terapia'}
-                  </button>
-                </header>
-                <ImportProposalsReview
-                  proposals={
-                    Array.isArray(data._importProposals)
-                      ? (data._importProposals as ImportProposal[])
-                      : []
-                  }
-                  busy={submitting}
-                  onDecision={(id, action) => void decideProposal(id, action)}
-                />
-                <StepClinica
-                  data={data}
-                  onUpdateSection={updateSection}
-                  operatoreNome={operatoreNome}
-                  importedFields={(data._importedFields as string[] | undefined) ?? []}
-                  narrative={data._narrative as Record<string, unknown> | undefined}
-                  therapyCorrection={therapyCorrection}
-                  only={['terapia']}
-                  showTherapyAcceptance={false}
-                  showLegacyPain={false}
-                  showTitles={false}
-                />
-              </section>
-
-              <section {...sectionProps('diagnosi')}>
-                <header className="intake-section__head">{sectionTitle('diagnosi')}</header>
-                <StepClinica
-                  data={data}
-                  onUpdateSection={updateSection}
-                  operatoreNome={operatoreNome}
-                  importedFields={(data._importedFields as string[] | undefined) ?? []}
-                  narrative={data._narrative as Record<string, unknown> | undefined}
-                  only={['anamnesi', 'diagnosi']}
-                  therapyBlock={false}
-                  showLegacyPain={false}
-                />
-              </section>
-
-              <section {...sectionProps('parametri')}>
-                <header className="intake-section__head">{sectionTitle('parametri')}</header>
-                <StepClinica
-                  data={data}
-                  onUpdateSection={updateSection}
-                  operatoreNome={operatoreNome}
-                  only={['parametri']}
-                  therapyBlock={false}
-                  showTitles={false}
-                />
-              </section>
-
-              <section {...sectionProps('moduli')}>
-                <header className="intake-section__head">{sectionTitle('moduli')}</header>
-                <p className="intake-section__hint">
-                  Facoltativo: il modulo scelto si apre subito dopo la creazione del paziente. Tutti
-                  i moduli restano nella sezione <strong>Moduli</strong> della cartella.
-                </p>
-                <div className="intake-modules-grid" role="list" data-testid="intake-modules-grid">
-                  {CLINICAL_MODULES.map((m) => {
-                    const selected = selectedModuleId === m.id;
-                    return (
-                      <div key={m.id} role="listitem">
-                        <button
-                          type="button"
-                          className={`intake-module-card${selected ? ' intake-module-card--selected' : ''}`}
-                          data-testid={`intake-module-${m.id}`}
-                          aria-pressed={selected}
-                          disabled={!m.available}
-                          onClick={() => setSelectedModuleId((cur) => (cur === m.id ? null : m.id))}
-                        >
-                          <div className="intake-module-card__head">
-                            <span className="intake-module-card__title">{m.label}</span>
-                            <span
-                              className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}
-                            >
-                              {m.available ? 'Disponibile' : 'In arrivo'}
-                            </span>
-                          </div>
-                          <p className="intake-module-card__desc">{m.desc}</p>
-                          {selected && (
-                            <p
-                              className="intake-module-card__hint"
-                              data-testid={`intake-module-${m.id}-hint`}
-                            >
-                              Si aprirà dopo la creazione del paziente
-                            </p>
-                          )}
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-
-              <section {...sectionProps('riepilogo')}>
-                <header className="intake-section__head">{sectionTitle('riepilogo')}</header>
-                <StepVerifica
-                  data={data}
-                  busy={submitting}
-                  error={null}
-                  onConfirm={() => void handleConfirm(false)}
-                  onUpdateSection={updateSection}
-                  onReviewDemographics={reviewDemographicField}
-                  onReviewTherapies={(target) => {
-                    setSubmitError(null);
-                    if (target) setTherapyCorrection(target);
-                    else jump('terapia');
-                  }}
-                  showAcceptance={false}
-                  showCreate={false}
-                />
-              </section>
-            </div>
+                <section {...sectionProps('riepilogo')}>
+                  <header className="intake-section__head">{sectionTitle('riepilogo')}</header>
+                  <StepVerifica
+                    data={data}
+                    busy={submitting}
+                    error={null}
+                    onConfirm={() => void handleConfirm(false)}
+                    onUpdateSection={updateSection}
+                    onReviewDemographics={reviewDemographicField}
+                    onReviewTherapies={(target) => {
+                      setSubmitError(null);
+                      if (target) setTherapyCorrection(target);
+                      else jump('terapia');
+                    }}
+                    showAcceptance={false}
+                    showCreate={false}
+                  />
+                </section>
+              </div>
+            </IntakeAiOriginContext.Provider>
           )}
         </div>
       </div>

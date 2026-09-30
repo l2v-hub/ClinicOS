@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { API_URL } from '../../config';
-import { getCurrentOperator, operatorHeaders } from '../../lib/operatorSession';
+import { getCurrentOperator } from '../../lib/operatorSession';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
 import { ImportDocumentsWorkspace } from './import/ImportDocumentsWorkspace';
 import { ImportReviewWorkspace } from './import/ImportReviewWorkspace';
 import { canStartNewImport, ImportApiError, ImportSessionApi } from './import/importSessionApi';
+import { operatorImportApi } from './import/operatorImportApi';
 import { importSessionMemory } from './import/importSessionMemory';
 import { ImportSourceCache } from './import/importSourceCache';
 import {
@@ -52,23 +52,10 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
   const active = useRef(true);
   const busyRef = useRef(false);
   const jobRef = useRef<ImportJob | null>(null);
-  const api = useMemo(() => {
-    const actorRequired = getCurrentOperator() !== null;
-    return new ImportSessionApi(async (path, options = {}) => {
-      const current = getCurrentOperator();
-      if (
-        (actorRequired && !current) ||
-        (current && (current.id !== actor.operatorId || current.role !== actor.operatorRole))
-      )
-        throw new Error('Operatore cambiato. Riapri la sessione con il tuo accesso.');
-      const headers = operatorHeaders();
-      if (actor.operatorId && !headers['X-Operator-Id'])
-        headers['X-Operator-Id'] = actor.operatorId;
-      if (actor.operatorRole && !headers['X-Operator-Role'])
-        headers['X-Operator-Role'] = actor.operatorRole;
-      return fetch(path, { ...options, headers: { ...headers, ...options.headers } });
-    }, `${API_URL}/ai/extraction/jobs`);
-  }, [actor.operatorId, actor.operatorRole]);
+  const api = useMemo(
+    () => operatorImportApi({ operatorId: actor.operatorId, operatorRole: actor.operatorRole }),
+    [actor.operatorId, actor.operatorRole],
+  );
   const updateJob = useCallback((value: ImportJob) => {
     jobRef.current = value;
     if (active.current) setJob(value);

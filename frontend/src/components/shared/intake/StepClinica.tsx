@@ -2,7 +2,10 @@
 // Iterates the intake-eligible section registry and renders each editor in mode="intake".
 // Controlled: no fetches here — parent IntakeWorkspace owns patchDraft via onUpdateSection.
 
-import { useState, type ComponentType } from 'react';
+import { useContext, useState, type ComponentType } from 'react';
+import { IntakeAiOriginContext } from './intakeAiOrigin';
+import { AiBadge } from './IntakeAiBadge';
+import { fieldLabel, sectionOfPath } from './intakeDocuments';
 import type { SectionProps } from '../../operator/sections/types';
 import type { AllergiaItem, AllergyStatus } from '../../../types';
 import { intakeSections } from '../../operator/sections/patientSections';
@@ -90,6 +93,8 @@ export function StepClinica({
     .filter((s) => !only || only.includes(s.sectionKey))
     .sort((a, b) => Number(b.sectionKey === 'terapia') - Number(a.sectionKey === 'terapia'));
   const [showSource, setShowSource] = useState<Record<string, boolean>>({});
+  // Campi scritti dall'AI (card Documenti): segnalati per sezione, un solo punto per tutti gli editor.
+  const aiPaths = [...useContext(IntakeAiOriginContext)];
 
   const narrativeData = narrative as NarrativeData | undefined;
   const sourceRefs: SourceReference[] = narrativeData?.sourceReferences ?? [];
@@ -187,9 +192,22 @@ export function StepClinica({
         const isImported = importedFields.includes(sectionKey);
         const refs = refsForSection(sectionKey);
         const hasSource = refs.length > 0;
+        const aiFields = aiPaths.filter((path) => sectionOfPath(path) === sectionKey);
 
         return (
-          <div key={sectionKey} className="step-clinica__section">
+          <div
+            key={sectionKey}
+            className={`step-clinica__section${aiFields.length ? ' intake-ai-block' : ''}`}
+            data-ai-section={aiFields.length ? sectionKey : undefined}
+          >
+            {aiFields.length > 0 && (
+              <div className="intake-field__head intake-ai-section">
+                <AiBadge />
+                <span className="intake-ai-section__text">
+                  Letto dai documenti: {aiFields.map(fieldLabel).join(', ')}
+                </span>
+              </div>
+            )}
             {isImported && (
               <div className="step-clinica__provenance">
                 <span className="step-clinica__badge">Importato dal documento</span>

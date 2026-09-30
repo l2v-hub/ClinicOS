@@ -31,6 +31,11 @@
   --ds-text: #16202e;
   --ds-text-muted: #5a6b80;
   --ds-focus: 3px solid #245bb5;
+  /* Tinta AI (HMI 1, scheda d'ingresso): campi scritti dall'AI, etichetta "AI", lettura in corso. */
+  --ds-ai: #6a3fd0;
+  --ds-ai-strong: #5329b3;
+  --ds-ai-tint: #f1ecfd;
+  --ds-ai-border: #8a66e3;
   --ds-font: var(--font-ui, 'Inter', system-ui, sans-serif);
 }
 
@@ -591,6 +596,11 @@ button.ds-badge:not(#ds):disabled {
 .ds-badge--alarm-strong:not(#ds) {
   background: var(--red, #d93a4a);
   color: #fff;
+}
+/* scritto dall'AI (scheda d'ingresso): tinta viola del prototipo, mai un colore di stato clinico */
+.ds-badge--ai:not(#ds) {
+  background: var(--ds-ai-tint);
+  color: var(--ds-ai-strong);
 }
 /* da aggiornare / non caricato: neutro, mai verde */
 .ds-badge--stale:not(#ds) {

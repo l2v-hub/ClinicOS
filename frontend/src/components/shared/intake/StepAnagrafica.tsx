@@ -14,6 +14,8 @@ import {
 } from 'react';
 
 import { deriveAutoCFUpdate, normalizeCF, type FiscalCodeOrigin } from '../../../lib/codiceFiscale';
+import { useAiField } from './intakeAiOrigin';
+import { AiBadge } from './IntakeAiBadge';
 import { PATIENT_PHONE_MAX_LENGTH, validatePatientPhone } from '../../../lib/patientPhone';
 
 interface AnagraficaData {
@@ -115,6 +117,7 @@ function NpmField({
   hint,
   span2,
   error,
+  path,
   children,
 }: {
   label: string;
@@ -122,8 +125,11 @@ function NpmField({
   hint?: string;
   span2?: boolean;
   error?: string;
+  /** Percorso nella bozza (es. 'anagrafica.firstName'): stile ed etichetta AI da `_fieldOrigin`. */
+  path?: string;
   children: ReactNode;
 }) {
+  const ai = useAiField(path);
   const inputId = useId();
   const descriptionId = `${inputId}-description`;
   const control = isValidElement(children)
@@ -144,11 +150,17 @@ function NpmField({
     : children;
 
   return (
-    <div className={`npm-field${span2 ? ' npm-span-2' : ''}${error ? ' npm-field--error' : ''}`}>
-      <label className="npm-label" htmlFor={inputId}>
-        {label}
-        {required && <span className="npm-required"> *</span>}
-      </label>
+    <div
+      className={`npm-field${span2 ? ' npm-span-2' : ''}${error ? ' npm-field--error' : ''}${ai ? ' intake-field--ai' : ''}`}
+      data-ai-field={ai ? path : undefined}
+    >
+      <div className="intake-field__head">
+        <label className="npm-label" htmlFor={inputId}>
+          {label}
+          {required && <span className="npm-required"> *</span>}
+        </label>
+        {ai && <AiBadge />}
+      </div>
       {control}
       {error && (
         <span id={descriptionId} className="npm-field-error" role="alert">
@@ -256,7 +268,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
         statusTone={requiredCompleted === 2 ? 'complete' : submitAttempted ? 'error' : 'progress'}
       >
         <div className="npm-grid npm-grid--identity">
-          <NpmField label="Nome" required error={errors.firstName}>
+          <NpmField label="Nome" path="anagrafica.firstName" required error={errors.firstName}>
             <input
               className={`npm-input${errors.firstName ? ' npm-input--error' : ''}`}
               data-demographic-field="firstName"
@@ -266,7 +278,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               autoComplete="given-name"
             />
           </NpmField>
-          <NpmField label="Cognome" required error={errors.lastName}>
+          <NpmField label="Cognome" path="anagrafica.lastName" required error={errors.lastName}>
             <input
               className={`npm-input${errors.lastName ? ' npm-input--error' : ''}`}
               data-demographic-field="lastName"
@@ -276,7 +288,11 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               autoComplete="family-name"
             />
           </NpmField>
-          <NpmField label="Data di nascita" error={errors.dateOfBirth}>
+          <NpmField
+            label="Data di nascita"
+            path="anagrafica.dateOfBirth"
+            error={errors.dateOfBirth}
+          >
             <input
               type="date"
               className={`npm-input${errors.dateOfBirth ? ' npm-input--error' : ''}`}
@@ -285,7 +301,11 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               onChange={f('dateOfBirth')}
             />
           </NpmField>
-          <NpmField label="Sesso" hint="Necessario per il calcolo automatico del codice fiscale">
+          <NpmField
+            label="Sesso"
+            path="anagrafica.sex"
+            hint="Necessario per il calcolo automatico del codice fiscale"
+          >
             <select className="npm-input npm-select" value={value.sex ?? ''} onChange={f('sex')}>
               <option value="">— Seleziona —</option>
               <option value="M">Maschio</option>
@@ -312,6 +332,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
           </NpmField>
           <NpmField
             label="Codice fiscale"
+            path="anagrafica.codiceFiscale"
             span2
             error={errors.codiceFiscale}
             hint={
@@ -355,7 +376,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
         statusTone={phoneValidation.ok ? 'complete' : submitAttempted ? 'error' : 'progress'}
       >
         <div className="npm-grid npm-grid--contacts">
-          <NpmField label="Telefono" error={errors.phone}>
+          <NpmField label="Telefono" path="anagrafica.phone" error={errors.phone}>
             <input
               type="tel"
               maxLength={PATIENT_PHONE_MAX_LENGTH}
@@ -367,7 +388,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               autoComplete="tel"
             />
           </NpmField>
-          <NpmField label="Email">
+          <NpmField label="Email" path="anagrafica.email">
             <input
               type="email"
               className="npm-input"
@@ -377,7 +398,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               autoComplete="email"
             />
           </NpmField>
-          <NpmField label="Indirizzo" span2>
+          <NpmField label="Indirizzo" path="anagrafica.address" span2>
             <input
               className="npm-input"
               value={value.address ?? ''}
