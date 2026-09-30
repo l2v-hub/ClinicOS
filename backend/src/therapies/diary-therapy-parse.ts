@@ -46,7 +46,11 @@ export type DiaryTherapyWarning =
   | 'menzione_somministrazione'
   | 'menzione_modifica'
   /** Nella prescrizione avanza testo non classificato (campi vuoti): va letto dall'operatore. */
-  | 'testo_non_classificato';
+  | 'testo_non_classificato'
+  /** Campi vuoti riempiti da una proposta AI (therapies/diary-therapy-ai.ts): da verificare. */
+  | 'proposta_ai'
+  /** Servirebbe la proposta AI ma il servizio non ha risposto: resta la lettura delle regole. */
+  | 'ai_non_disponibile';
 
 export interface DiaryParsedTherapyRow extends ParsedTherapyRow {
   /** ISO YYYY-MM-DD o '' quando il testo non dice "al dd/mm[/yyyy]" (o non e' coerente). */
