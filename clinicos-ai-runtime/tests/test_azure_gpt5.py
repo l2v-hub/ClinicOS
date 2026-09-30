@@ -30,10 +30,22 @@ class TestGpt5Capabilities(unittest.TestCase):
         caps = capabilities_for(ModelSpec.parse("azure:gpt-5.5"))
         self.assertEqual(req.unmet(caps), [])
 
+    def test_gpt6_family_is_vision_and_pdf(self):
+        # Deployment Azure 2026-09-30: gpt-6.1-sol sostituisce gpt-5.5 sullo stesso endpoint.
+        req = CapabilityRequirement(image_input=True, pdf_input=True)
+        for model in ("azure:gpt-6.1-sol", "azure:gpt-6", "openai:gpt-6.2-mini", "azure:gpt-5.4-mini"):
+            caps = capabilities_for(ModelSpec.parse(model))
+            self.assertTrue(caps.image_input, model)
+            self.assertTrue(caps.pdf_input, model)
+            self.assertEqual(req.unmet(caps), [], model)
+
     def test_older_azure_models_unchanged(self):
         caps = capabilities_for(ModelSpec.parse("azure:gpt-4o"))
         self.assertTrue(caps.image_input)
-        self.assertFalse(caps.pdf_input)  # pdf solo per famiglia gpt-5
+        self.assertFalse(caps.pdf_input)  # pdf solo per famiglia gpt >= 5
+        caps41 = capabilities_for(ModelSpec.parse("azure:gpt-4.1"))
+        self.assertTrue(caps41.image_input)
+        self.assertFalse(caps41.pdf_input)
 
 
 class _FakeResp:
