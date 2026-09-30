@@ -1,6 +1,10 @@
 import { prisma } from '../lib/prisma.js';
 import type { AuthedRequest, Operator } from './auth.js';
-import { canAccessOwnedResource, createOwnedResourceParamGuard } from './ownership-policy.js';
+import {
+  canAccessOwnedResource,
+  createOwnedResourceParamGuard,
+  type OwnerLoader,
+} from './ownership-policy.js';
 
 export { canAccessOwnedResource } from './ownership-policy.js';
 
@@ -21,8 +25,12 @@ export const requireOwnedImportJob = createOwnedResourceParamGuard(
   'Job non trovato',
 );
 
+/** Owner loader of `requireOwnedIntakeDraft`, exported so the Tool Layer applies the same check. */
+export const loadIntakeDraftOwner: OwnerLoader = (id) =>
+  prisma.patientIntakeDraft.findUnique({ where: { id }, select: { createdById: true } });
+
 export const requireOwnedIntakeDraft = createOwnedResourceParamGuard(
-  (id) => prisma.patientIntakeDraft.findUnique({ where: { id }, select: { createdById: true } }),
+  loadIntakeDraftOwner,
   'Bozza non trovata',
 );
 

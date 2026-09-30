@@ -9,6 +9,7 @@ import {
   createStandardPublicClientApplication,
   type IPublicClientApplication,
 } from '@azure/msal-browser';
+import { isSimulatorSession, operatorHeaders } from './operatorSession';
 
 const CLIENT_ID = (import.meta.env.VITE_ENTRA_CLIENT_ID as string | undefined)?.trim();
 const TENANT_ID = (import.meta.env.VITE_ENTRA_TENANT_ID as string | undefined)?.trim();
@@ -70,6 +71,8 @@ export async function documentAuthHeaders(
   operatorId?: string,
   operatorRole?: string,
 ): Promise<Record<string, string>> {
+  // Simulatore ruoli: solo il Bearer della sessione simulata, nessuna identità auto-dichiarata.
+  if (isSimulatorSession()) return { ...operatorHeaders(), 'X-Demo-Patient-Id': patientId };
   const h: Record<string, string> = {};
   if (operatorId) h['X-Operator-Id'] = operatorId;
   if (operatorRole) h['X-Operator-Role'] = operatorRole;

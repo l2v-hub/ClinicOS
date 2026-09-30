@@ -40,6 +40,7 @@ function mapError(res: Response, err: unknown) {
       feature_disabled: 403,
       writes_disabled: 403,
       not_in_catalog: 403,
+      capability_denied: 403,
       delete_forbidden: 403,
       not_executable: 400,
       ambiguous: 422,

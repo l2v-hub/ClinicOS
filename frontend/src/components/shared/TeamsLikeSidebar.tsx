@@ -1,4 +1,5 @@
-import type { UtenteApp, NavKey } from '../../types';
+import type { CapabilityMap, UtenteApp, NavKey } from '../../types';
+import { canNavigate } from '../../lib/capabilities';
 
 // Icone della barra laterale: stessi tracciati del prototipo HMI 1 (24 px, tratto 2).
 const PATHS = {
@@ -17,6 +18,7 @@ const PATHS = {
   bed: 'M3 5v15M3 16h18v4M21 16v-3a3 3 0 0 0-3-3h-8v6M6.5 14a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z',
   clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
   team: 'M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6',
+  shield: 'M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6zM9 12l2 2 4-4',
 } as const;
 type IconName = keyof typeof PATHS;
 
@@ -43,6 +45,8 @@ interface TeamsLikeSidebarProps {
   unreadNotes?: number;
   /** Pannello dell'assistente aperto: la voce lo dichiara (aria-expanded) e resta evidenziata. */
   assistantOpen?: boolean;
+  /** Capability della sessione: le voci delle pagine non consentite non compaiono. */
+  capabilities?: CapabilityMap | null;
 }
 
 interface NavItem {
@@ -50,6 +54,8 @@ interface NavItem {
   label: string;
   icon: IconName;
   badge?: number;
+  /** Nome completo (tooltip) quando l'etichetta della barra è abbreviata. */
+  title?: string;
 }
 
 function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
@@ -63,6 +69,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
       { key: 'orari-operatori', label: 'Orari', icon: 'clock' },
       { key: 'consegne', label: 'Consegne', icon: 'clipboard' },
       { key: 'note', label: 'Note', icon: 'msg', badge: unreadNotes },
+      { key: 'ruoli-permessi', label: 'Ruoli', icon: 'shield', title: 'Ruoli e permessi' },
     ];
   }
   // Ordine ed etichette del prototipo HMI 1.
@@ -84,8 +91,11 @@ export default function TeamsLikeSidebar({
   onNavigate,
   assistantOpen = false,
   unreadNotes = 0,
+  capabilities = null,
 }: TeamsLikeSidebarProps) {
-  const items = getNavItems(utente, unreadNotes);
+  const items = getNavItems(utente, unreadNotes).filter((item) =>
+    canNavigate(capabilities, item.key),
+  );
 
   // La cartella appartiene a Pazienti.
   const resolvedActiveKey: NavKey =
@@ -107,7 +117,7 @@ export default function TeamsLikeSidebar({
             key={item.key}
             className={`teams-sidebar__item${resolvedActiveKey === item.key ? ' active' : ''}`}
             onClick={() => onNavigate(item.key)}
-            title={item.label}
+            title={item.title ?? item.label}
             aria-current={resolvedActiveKey === item.key ? 'page' : undefined}
           >
             <span className="teams-sidebar__item-icon">

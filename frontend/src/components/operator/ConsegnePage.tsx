@@ -13,6 +13,7 @@ import { ConfirmDialog } from '../shared/ConfirmDialog';
 import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
 import { PageHeader } from '../shared/PageHeader';
 import { ConsegnaCreateForm } from './ConsegnaCreateForm';
+import { useCan } from '../../lib/capabilities';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import { parsePatientIdentity, patientIdentityName } from '../../lib/patientIdentity';
 import type { ConsegnaCreate } from '../../lib/consegnaCreation';
@@ -99,6 +100,7 @@ export function ConsegnePage({
   );
   const [ricerca, setRicerca] = useState(initialQuery?.q ?? '');
   const [formAperto, setFormAperto] = useState(false);
+  const canCreate = useCan('consegne.create');
 
   useEffect(() => {
     const timer = window.setTimeout(
@@ -131,7 +133,8 @@ export function ConsegnePage({
       ? ' · riepilogo indipendente dai filtri'
       : ''
   }`;
-  const createAction = (
+  // Il ruolo non consente di creare consegne: il pulsante non compare (il backend decide).
+  const createAction = canCreate && (
     <button
       type="button"
       className="btn-success"
@@ -159,7 +162,7 @@ export function ConsegnePage({
         />
       )}
 
-      {formAperto && (
+      {formAperto && canCreate && (
         <ConsegnaCreateForm
           operatori={operatori}
           isAdmin={isAdmin}

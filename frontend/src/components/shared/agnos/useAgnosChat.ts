@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../../config';
 import type { AssistantAnswer, AssistantNav } from '../AIAssistantButton';
-import { operatorHeaders } from '../../../lib/operatorSession';
+import { isSimulatorSession, operatorHeaders } from '../../../lib/operatorSession';
 import {
   navigationScope,
   readActionNavigation,
@@ -59,6 +59,8 @@ export interface AgnosOperatorIdentity {
 }
 export function buildAgnosHeaders(id: AgnosOperatorIdentity): Record<string, string> {
   const h: Record<string, string> = { 'Content-Type': 'application/json', ...operatorHeaders() };
+  // Simulatore ruoli: il Bearer è l'unica identità, nessun header auto-dichiarato.
+  if (isSimulatorSession()) return h;
   if (id.operatorId) h['X-Operator-Id'] = id.operatorId;
   if (id.operatorRole) h['X-Operator-Role'] = id.operatorRole;
   if (id.operatorName) h['X-Operator-Name'] = id.operatorName;

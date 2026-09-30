@@ -21,12 +21,24 @@ export function getCurrentOperator(): CurrentOperator | null {
   return currentOperator;
 }
 
+// Token del Simulatore ruoli (solo sviluppo): prefisso fisso emesso dal backend.
+const SIMULATOR_TOKEN_PREFIX = 'sim.';
+
+/** Sessione del Simulatore ruoli: il token è l'unica credenziale, nessun header X-Operator-*. */
+export function isSimulatorSession(): boolean {
+  return currentOperator?.accessToken?.startsWith(SIMULATOR_TOKEN_PREFIX) === true;
+}
+
 // Ogni fetch verso una route dietro `requireOperator` deve allegare questi header,
 // altrimenti riceve 401 (vedi il precedente in farmaci.ts). Senza operatore loggato
 // non aggiungiamo nulla: meglio un 401 esplicito che una richiesta incompleta.
+// Con il Simulatore ruoli si invia SOLO il Bearer: il ruolo lo decide il server.
 export function operatorHeaders(): Record<string, string> {
   const op = currentOperator;
   if (!op) return {};
+  if (op.accessToken && isSimulatorSession()) {
+    return { Authorization: `Bearer ${op.accessToken}` };
+  }
   const headers: Record<string, string> = {
     'X-Operator-Id': op.id,
     'X-Operator-Role': op.role,

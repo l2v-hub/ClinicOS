@@ -1,6 +1,9 @@
 import { normalizza, nucleoNome } from './normalizza.js';
 
 export class FarmaciQueryError extends Error {}
+
+/** Max length of the free-text `q` / `pa` parameters (route GET /farmaci/* and drug tools). */
+export const MAX_FARMACI_QUERY_LENGTH = 80;
 export interface Strength {
   value: number;
   unit: string | null;

@@ -59,6 +59,11 @@ export interface AgnosOperatorContext {
   operatorId: string;
   operatorName: string;
   gatewayCtx: UserContext;
+  /**
+   * Phase 2 capability policy: may this caller perform the action (agnos.action.<type>, governed by
+   * the same functional capability as the GUI, e.g. create_consegna → consegne.create)?
+   */
+  allowsAction?: (actionType: string) => boolean;
 }
 
 export type AgnosPlan = ActionPlan & { channel: AgnosChannel };
@@ -159,6 +164,19 @@ export async function planCommand(
   const text = String(input.text ?? '').slice(0, 500);
   const planCtx: VoicePlanContext = { currentPatientId: input.currentPatientId };
   const plan: AgnosPlan = { ...derivePlan(text, planCtx), channel: input.channel };
+
+  // Phase 2 capability policy: an action (or the read delegation) the caller's role may not perform
+  // is refused already at plan time, so the assistant never proposes it.
+  const allows = input.operatorCtx.allowsAction;
+  const governed =
+    plan.actionType === 'read' || plan.actionType === 'unknown'
+      ? 'read'
+      : isWriteAction(plan.actionType)
+        ? plan.actionType
+        : null;
+  if (allows && governed && !allows(governed)) {
+    throw new VoiceError('capability_denied', 'Azione non consentita al tuo ruolo.');
+  }
 
   // Preview/read grounding must never become a side-channel for a patient outside the
   // server-derived operator scope. Appointment/consegna grounding receives the same scope below.
@@ -301,6 +319,14 @@ export async function executeCommand(
       'not_in_catalog',
       'Azione non presente nel catalogo delle azioni consentite o disabilitata.',
     );
+  }
+  // 2b) capability policy of the caller's role (same decision as the GUI route of the action)
+  if (
+    isWriteAction(plan.actionType) &&
+    input.operatorCtx.allowsAction &&
+    !input.operatorCtx.allowsAction(plan.actionType)
+  ) {
+    deny('capability_denied', 'Azione non consentita al tuo ruolo.');
   }
   // 3) refusals: deletion attempts are rejected with a dedicated kind, everything else as not executable
   if (plan.actionType === 'refuse_forbidden' || plan.actionType === 'refuse_clinical') {

@@ -39,6 +39,11 @@ export interface UserContext {
   /** When provided, the caller may ONLY touch these patients. null = verified global scope. */
   permittedPatientIds: string[] | null;
   requestId: string;
+  /**
+   * Phase 2 capability policy: whether the caller's role may use a given read tool (the tool's
+   * functional capability, e.g. get_patient_therapies → therapy.list). Absent = no policy filter.
+   */
+  readToolAllowed?: (tool: string) => boolean;
 }
 
 export interface SourcedResult<T> {

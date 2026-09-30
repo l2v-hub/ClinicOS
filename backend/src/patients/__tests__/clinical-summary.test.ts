@@ -75,12 +75,19 @@ test('patients route no longer selects Cartella.data for the page summary', () =
     .split("router.get('/clinical-summary',")[1]
     ?.split("router.patch('/:id/parameters'")[0];
   assert.ok(block);
-  assert.match(block, /loadPatientClinicalSummaryRows\(scopedPatientIds\)/);
-  assert.match(block, /assemblePatientClinicalSummaries/);
+  // The composition is shared with the Tool Layer (patients/clinical-summary-service.ts).
+  assert.match(block, /loadScopedPatientClinicalSummaries\(req\.query\.patientIds, actor\)/);
   assert.doesNotMatch(block, /cartella\.findMany|select:\s*\{\s*patientId:\s*true,\s*data:\s*true/);
+  const service = readFileSync(new URL('../clinical-summary-service.ts', import.meta.url), 'utf8');
+  assert.match(service, /loadPatientClinicalSummaryRows\(scopedPatientIds\)/);
+  assert.match(service, /assemblePatientClinicalSummaries/);
+  assert.doesNotMatch(
+    service,
+    /cartella\.findMany|select:\s*\{\s*patientId:\s*true,\s*data:\s*true/,
+  );
   assert.ok(
-    block.indexOf('patientScopeWhere(actor)') <
-      block.indexOf('loadPatientClinicalSummaryRows(scopedPatientIds)'),
+    service.indexOf('patientScopeWhere(actor)') <
+      service.indexOf('loadPatientClinicalSummaryRows(scopedPatientIds)'),
     'ownership must be resolved before clinical rows are loaded',
   );
 });

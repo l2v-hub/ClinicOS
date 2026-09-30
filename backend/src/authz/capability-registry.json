@@ -1,0 +1,3600 @@
+{
+  "schema": "clinicos.authz-capability-registry/v1",
+  "source": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.json",
+  "capabilities": [
+    {
+      "id": "administration.confirm",
+      "name": "Conferma somministrazione (erogata)",
+      "domain": "administration",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/therapy-slots/confirm"
+        }
+      ]
+    },
+    {
+      "id": "administration.history",
+      "name": "Storico somministrazioni (legacy)",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/medication-administrations"
+        }
+      ]
+    },
+    {
+      "id": "administration.history_page",
+      "name": "Storico somministrazioni paginato",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/medication-administrations/page"
+        }
+      ]
+    },
+    {
+      "id": "administration.list_slots",
+      "name": "Slot somministrazione del giorno",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        }
+      ]
+    },
+    {
+      "id": "administration.list_slots_page",
+      "name": "Agenda somministrazioni paginata",
+      "domain": "administration",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page"
+        }
+      ]
+    },
+    {
+      "id": "administration.record_not_administered",
+      "name": "Registra mancata somministrazione",
+      "domain": "administration",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/therapy-slots/not-administered"
+        }
+      ]
+    },
+    {
+      "id": "agnos.action.add_diary_note",
+      "name": "Agnos action — add_diary_note",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "diary.create",
+      "routes": []
+    },
+    {
+      "id": "agnos.action.create_appointment",
+      "name": "Agnos action — create_appointment",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "appointments.create",
+      "routes": []
+    },
+    {
+      "id": "agnos.action.create_consegna",
+      "name": "Agnos action — create_consegna",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "consegne.create",
+      "routes": []
+    },
+    {
+      "id": "agnos.action.create_vital_sign",
+      "name": "Agnos action — create_vital_sign",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "parameters.create_reading",
+      "routes": []
+    },
+    {
+      "id": "agnos.action.read",
+      "name": "Agnos action — read",
+      "domain": "agnos",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "assistant.query",
+      "routes": []
+    },
+    {
+      "id": "agnos.action.update_appointment",
+      "name": "Agnos action — update_appointment",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "appointments.update",
+      "routes": []
+    },
+    {
+      "id": "agnos.action.update_narrative_section",
+      "name": "Agnos action — update_narrative_section",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "narrative.save",
+      "routes": []
+    },
+    {
+      "id": "agnos.action.update_patient_demographics",
+      "name": "Agnos action — update_patient_demographics",
+      "domain": "agnos",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "patients.update_demographics",
+      "routes": []
+    },
+    {
+      "id": "agnos.catalog",
+      "name": "Agnos — catalogo azioni",
+      "domain": "agnos",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/actions/catalog"
+        }
+      ]
+    },
+    {
+      "id": "agnos.execute_command",
+      "name": "Agnos — esegui comando confermato",
+      "domain": "agnos",
+      "type": "action",
+      "sensitivity": "critical",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/actions/execute"
+        }
+      ]
+    },
+    {
+      "id": "agnos.plan_command",
+      "name": "Agnos — pianifica comando (testo/voce)",
+      "domain": "agnos",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/actions/plan"
+        }
+      ]
+    },
+    {
+      "id": "ai.audit.list",
+      "name": "Audit AI — elenco eventi",
+      "domain": "ai_audit",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/audit"
+        }
+      ]
+    },
+    {
+      "id": "ai_extraction.capabilities",
+      "name": "Import AI — capacità modello",
+      "domain": "ai_extraction",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/capabilities"
+        }
+      ]
+    },
+    {
+      "id": "ai_extraction.schema",
+      "name": "Import AI — schema estrazione",
+      "domain": "ai_extraction",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/schema"
+        }
+      ]
+    },
+    {
+      "id": "ai_extraction.status",
+      "name": "Import AI — stato servizio",
+      "domain": "ai_extraction",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        }
+      ]
+    },
+    {
+      "id": "ai.read.correlate_structured_data",
+      "name": "Agnos read tool — correlate_structured_data",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "clinical_record.get",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_facility_snapshot",
+      "name": "Agnos read tool — get_facility_snapshot",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "rooms.occupancy",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_operator_queue",
+      "name": "Agnos read tool — get_operator_queue",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "consegne.list",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_patient_allergies",
+      "name": "Agnos read tool — get_patient_allergies",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "clinical_record.get",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_patient_appointments",
+      "name": "Agnos read tool — get_patient_appointments",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "appointments.list",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_patient_therapies",
+      "name": "Agnos read tool — get_patient_therapies",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "therapy.list",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_patient_timeline",
+      "name": "Agnos read tool — get_patient_timeline",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "clinical_record.get",
+      "routes": []
+    },
+    {
+      "id": "ai.read.get_patient_vital_signs",
+      "name": "Agnos read tool — get_patient_vital_signs",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "parameters.list_readings",
+      "routes": []
+    },
+    {
+      "id": "ai.read.query_appointments_today",
+      "name": "Agnos read tool — query_appointments_today",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "appointments.list",
+      "routes": []
+    },
+    {
+      "id": "ai.read.query_data",
+      "name": "Agnos read tool — query_data",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "therapy.list",
+      "routes": []
+    },
+    {
+      "id": "ai.read.query_staff_list",
+      "name": "Agnos read tool — query_staff_list",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "operators.directory_page",
+      "routes": []
+    },
+    {
+      "id": "ai.read.search_across_patients",
+      "name": "Agnos read tool — search_across_patients",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "patients.search",
+      "routes": []
+    },
+    {
+      "id": "ai.read.search_clinical_sections",
+      "name": "Agnos read tool — search_clinical_sections",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "narrative.list",
+      "routes": []
+    },
+    {
+      "id": "ai.read.search_documents",
+      "name": "Agnos read tool — search_documents",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "documents.list",
+      "routes": []
+    },
+    {
+      "id": "ai.read.search_patients",
+      "name": "Agnos read tool — search_patients",
+      "domain": "ai_read",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "AGNOS_INTERNAL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "patients.search",
+      "routes": []
+    },
+    {
+      "id": "appointments.create",
+      "name": "Agenda — crea appuntamento",
+      "domain": "appointments",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/appointments"
+        }
+      ]
+    },
+    {
+      "id": "appointments.delete",
+      "name": "Agenda — elimina appuntamento",
+      "domain": "appointments",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "GUI_ONLY",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/appointments/:id"
+        }
+      ]
+    },
+    {
+      "id": "appointments.list",
+      "name": "Agenda — elenco appuntamenti",
+      "domain": "appointments",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/appointments"
+        }
+      ]
+    },
+    {
+      "id": "appointments.update",
+      "name": "Agenda — modifica / sposta appuntamento",
+      "domain": "appointments",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/appointments/:id"
+        }
+      ]
+    },
+    {
+      "id": "assessments.attest",
+      "name": "Valutazioni — conferma scheda",
+      "domain": "assessments",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/assessments/:id/attestations"
+        }
+      ]
+    },
+    {
+      "id": "assessments.catalog",
+      "name": "Valutazioni — catalogo scale",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/assessments/catalog"
+        }
+      ]
+    },
+    {
+      "id": "assessments.create_draft",
+      "name": "Valutazioni — crea bozza",
+      "domain": "assessments",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/assessments"
+        }
+      ]
+    },
+    {
+      "id": "assessments.current",
+      "name": "Valutazioni — corrente per tipo",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/assessments/current"
+        }
+      ]
+    },
+    {
+      "id": "assessments.finalize",
+      "name": "Valutazioni — finalizza + PDF",
+      "domain": "assessments",
+      "type": "action",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/assessments/:id/finalize"
+        }
+      ]
+    },
+    {
+      "id": "assessments.get",
+      "name": "Valutazioni — dettaglio",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/assessments/:id"
+        }
+      ]
+    },
+    {
+      "id": "assessments.list",
+      "name": "Valutazioni — storico",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/assessments"
+        }
+      ]
+    },
+    {
+      "id": "assessments.list_attestations",
+      "name": "Valutazioni — elenco conferme",
+      "domain": "assessments",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/assessments/:id/attestations"
+        }
+      ]
+    },
+    {
+      "id": "assessments.retry_pdf",
+      "name": "Valutazioni — rigenera PDF",
+      "domain": "assessments",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/assessments/:id/pdf/retry"
+        }
+      ]
+    },
+    {
+      "id": "assessments.update_draft",
+      "name": "Valutazioni — aggiorna bozza",
+      "domain": "assessments",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/patients/:patientId/assessments/:id"
+        }
+      ]
+    },
+    {
+      "id": "assistant.query",
+      "name": "Assistente ClinicOS — domanda (sola lettura)",
+      "domain": "assistant",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/assistant/query"
+        }
+      ]
+    },
+    {
+      "id": "authz.manage_policy",
+      "name": "Ruoli e permessi — modifica, Save/Apply",
+      "domain": "authz",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "GUI_ONLY",
+      "technicalState": "READY",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/authz/policy/versions"
+        }
+      ]
+    },
+    {
+      "id": "authz.view_policy",
+      "name": "Ruoli e permessi — consultazione",
+      "domain": "authz",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "GUI_ONLY",
+      "technicalState": "READY",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/authz/policy"
+        }
+      ]
+    },
+    {
+      "id": "clinical_record.get",
+      "name": "Cartella clinica — lettura",
+      "domain": "clinical_record",
+      "type": "read",
+      "sensitivity": "critical",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:id/cartella"
+        }
+      ]
+    },
+    {
+      "id": "clinical_record.save",
+      "name": "Cartella clinica — salva",
+      "domain": "clinical_record",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/patients/:id/cartella"
+        }
+      ]
+    },
+    {
+      "id": "patients.settings",
+      "name": "Pazienti — impostazioni UI",
+      "domain": "config",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        }
+      ]
+    },
+    {
+      "id": "consegne.create",
+      "name": "Consegne — crea",
+      "domain": "consegne",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/consegne"
+        }
+      ]
+    },
+    {
+      "id": "consegne.delete",
+      "name": "Consegne — elimina",
+      "domain": "consegne",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/consegne/:id"
+        }
+      ]
+    },
+    {
+      "id": "consegne.list",
+      "name": "Consegne — feed",
+      "domain": "consegne",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/consegne"
+        }
+      ]
+    },
+    {
+      "id": "consegne.overview",
+      "name": "Consegne — riepilogo dashboard",
+      "domain": "consegne",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        }
+      ]
+    },
+    {
+      "id": "consegne.patient_summary",
+      "name": "Consegne — conteggi per paziente",
+      "domain": "consegne",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/consegne/patient-summary"
+        }
+      ]
+    },
+    {
+      "id": "consegne.update",
+      "name": "Consegne — modifica / stato / riassegna",
+      "domain": "consegne",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/consegne/:id"
+        }
+      ]
+    },
+    {
+      "id": "patients.demo_setup",
+      "name": "Pazienti — demo setup",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "low",
+      "exposure": "DEV_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/demo-setup"
+        }
+      ]
+    },
+    {
+      "id": "patients.seed",
+      "name": "Pazienti — seed dev",
+      "domain": "dev",
+      "type": "action",
+      "sensitivity": "low",
+      "exposure": "DEV_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/seed"
+        }
+      ]
+    },
+    {
+      "id": "diary.create",
+      "name": "Diario paziente — nuova voce",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/diary"
+        }
+      ]
+    },
+    {
+      "id": "diary.create_with_therapy",
+      "name": "Diario terapia — voce + prescrizione",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/diary/with-therapy"
+        }
+      ]
+    },
+    {
+      "id": "diary.delete_entry",
+      "name": "Diario paziente — elimina voce",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/patients/:patientId/diary/:entryId"
+        }
+      ]
+    },
+    {
+      "id": "diary.get_entry",
+      "name": "Diario paziente — singola voce",
+      "domain": "diary",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/diary/:entryId"
+        }
+      ]
+    },
+    {
+      "id": "diary.list",
+      "name": "Diario paziente — elenco",
+      "domain": "diary",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/diary"
+        }
+      ]
+    },
+    {
+      "id": "diary.therapy_preview",
+      "name": "Diario terapia — anteprima",
+      "domain": "diary",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/diary/therapy-preview"
+        }
+      ]
+    },
+    {
+      "id": "diary.update_entry",
+      "name": "Diario paziente — modifica voce",
+      "domain": "diary",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/patients/:patientId/diary/:entryId"
+        }
+      ]
+    },
+    {
+      "id": "documents.get_content",
+      "name": "Documenti paziente — contenuto file",
+      "domain": "documents",
+      "type": "read",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/documents/:documentId/content"
+        }
+      ]
+    },
+    {
+      "id": "documents.get_metadata",
+      "name": "Documenti paziente — metadati",
+      "domain": "documents",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/documents/:documentId"
+        }
+      ]
+    },
+    {
+      "id": "documents.list",
+      "name": "Documenti paziente — elenco metadati",
+      "domain": "documents",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/documents"
+        }
+      ]
+    },
+    {
+      "id": "documents.update_type",
+      "name": "Documenti paziente — riclassifica tipologia",
+      "domain": "documents",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/patients/:patientId/documents/:documentId"
+        }
+      ]
+    },
+    {
+      "id": "documents.upload",
+      "name": "Documenti paziente — carica file",
+      "domain": "documents",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/documents"
+        }
+      ]
+    },
+    {
+      "id": "drugs.document",
+      "name": "Documento AIFA (FI/RCP)",
+      "domain": "drugs",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/farmaci/documento"
+        }
+      ]
+    },
+    {
+      "id": "drugs.reload",
+      "name": "Ricarica anagrafica AIFA",
+      "domain": "drugs",
+      "type": "action",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/farmaci/ricarica"
+        }
+      ]
+    },
+    {
+      "id": "drugs.search",
+      "name": "Ricerca anagrafica farmaci",
+      "domain": "drugs",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca"
+        }
+      ]
+    },
+    {
+      "id": "drugs.status",
+      "name": "Stato anagrafica farmaci",
+      "domain": "drugs",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/farmaci/stato"
+        }
+      ]
+    },
+    {
+      "id": "drugs.strengths",
+      "name": "Dosaggi in commercio",
+      "domain": "drugs",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/farmaci/dosaggi"
+        }
+      ]
+    },
+    {
+      "id": "identity.auth_status",
+      "name": "Modalità di autenticazione",
+      "domain": "identity",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        }
+      ]
+    },
+    {
+      "id": "identity.me",
+      "name": "Identità risolta dell’operatore",
+      "domain": "identity",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "identity",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.add_files",
+      "name": "Import AI — aggiungi file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/files"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.cancel",
+      "name": "Import AI — annulla job",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/cancel"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.confirm",
+      "name": "Import AI — conferma (crea paziente)",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "critical",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/confirm"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.create",
+      "name": "Import AI — crea job + upload file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.get",
+      "name": "Import AI — stato job",
+      "domain": "import_jobs",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/jobs/:id"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.process",
+      "name": "Import AI — avvia estrazione",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/process"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.remove_file",
+      "name": "Import AI — rimuovi file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/ai/extraction/jobs/:id/files/:docId"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.reopen",
+      "name": "Import AI — riapri job",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/reopen"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.reorder",
+      "name": "Import AI — riordina file",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/reorder"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.result",
+      "name": "Import AI — risultato estrazione",
+      "domain": "import_jobs",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/jobs/:id/result"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.retry",
+      "name": "Import AI — riprova estrazione",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/retry"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.set_logical_doc",
+      "name": "Import AI — documento logico",
+      "domain": "import_jobs",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/files/:docId/logical"
+        }
+      ]
+    },
+    {
+      "id": "import_jobs.sweep",
+      "name": "Import AI — pulizia job scaduti",
+      "domain": "import_jobs",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/sweep"
+        }
+      ]
+    },
+    {
+      "id": "import_pages.add_files",
+      "name": "Import pagine — upload pagine",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.add_files",
+      "routes": []
+    },
+    {
+      "id": "import_pages.cancel",
+      "name": "Import pagine — annulla",
+      "domain": "import_pages",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.cancel",
+      "routes": []
+    },
+    {
+      "id": "import_pages.create_session",
+      "name": "Import pagine — crea sessione",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.create",
+      "routes": []
+    },
+    {
+      "id": "import_pages.edit_manifest",
+      "name": "Import pagine — modifica manifest",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/ai/extraction/jobs/:id/manifest"
+        }
+      ]
+    },
+    {
+      "id": "import_pages.file_content",
+      "name": "Import pagine — contenuto file",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/jobs/:id/files/:docId/content"
+        }
+      ]
+    },
+    {
+      "id": "import_pages.get",
+      "name": "Import pagine — sessione",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.get",
+      "routes": []
+    },
+    {
+      "id": "import_pages.group_pdf",
+      "name": "Import pagine — PDF gruppo",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/jobs/:id/groups/:groupId/pdf"
+        }
+      ]
+    },
+    {
+      "id": "import_pages.legacy_mutation_block",
+      "name": "Import pagine — blocco API legacy",
+      "domain": "import_pages",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.reorder",
+      "routes": []
+    },
+    {
+      "id": "import_pages.page_text",
+      "name": "Import pagine — testo OCR della pagina",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/extraction/jobs/:id/pages/:pageId/text"
+        }
+      ]
+    },
+    {
+      "id": "import_pages.process",
+      "name": "Import pagine — avvia estrazione",
+      "domain": "import_pages",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.process",
+      "routes": []
+    },
+    {
+      "id": "import_pages.remove_page",
+      "name": "Import pagine — rimuovi pagina",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/ai/extraction/jobs/:id/pages/:pageId"
+        }
+      ]
+    },
+    {
+      "id": "import_pages.reopen",
+      "name": "Import pagine — riapri",
+      "domain": "import_pages",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.reopen",
+      "routes": []
+    },
+    {
+      "id": "import_pages.replace_page",
+      "name": "Import pagine — sostituisci pagina",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/extraction/jobs/:id/pages/:pageId/replace"
+        }
+      ]
+    },
+    {
+      "id": "import_pages.result",
+      "name": "Import pagine — risultato",
+      "domain": "import_pages",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.result",
+      "routes": []
+    },
+    {
+      "id": "import_pages.retry",
+      "name": "Import pagine — riprova",
+      "domain": "import_pages",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": "import_jobs.retry",
+      "routes": []
+    },
+    {
+      "id": "import_pages.save_review",
+      "name": "Import pagine — salva revisione",
+      "domain": "import_pages",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/ai/extraction/jobs/:id/review"
+        }
+      ]
+    },
+    {
+      "id": "infra.health",
+      "name": "Liveness",
+      "domain": "infra",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "public",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/health"
+        }
+      ]
+    },
+    {
+      "id": "intake.confirm_draft",
+      "name": "Bozze ingresso — conferma (crea paziente)",
+      "domain": "intake",
+      "type": "action",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts/:id/confirm"
+        }
+      ]
+    },
+    {
+      "id": "intake.create_draft",
+      "name": "Bozze ingresso — crea",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts"
+        }
+      ]
+    },
+    {
+      "id": "intake.decide_field_proposal",
+      "name": "Bozze ingresso — decisione proposta campo",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts/:id/field-proposals/:proposalId/decide"
+        }
+      ]
+    },
+    {
+      "id": "intake.decide_import_proposal",
+      "name": "Bozze ingresso — decisione proposta import",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts/:id/import-proposals/:proposalId/decide"
+        }
+      ]
+    },
+    {
+      "id": "intake.get_draft",
+      "name": "Bozze ingresso — dettaglio",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/intake/drafts/:id"
+        }
+      ]
+    },
+    {
+      "id": "intake.legacy_apply_letter",
+      "name": "Legacy — applica lettera a paziente",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "DEPRECATED",
+      "technicalState": "READY",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patient-intake/discharge-letter/apply"
+        }
+      ]
+    },
+    {
+      "id": "intake.legacy_extract_letter",
+      "name": "Legacy — estrazione regex da OCR",
+      "domain": "intake",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "DEPRECATED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patient-intake/discharge-letter/extract"
+        }
+      ]
+    },
+    {
+      "id": "intake.legacy_list_documents",
+      "name": "Legacy — documenti intake paziente",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "DEPRECATED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patient-intake/documents/:patientId"
+        }
+      ]
+    },
+    {
+      "id": "intake.legacy_upload_letter",
+      "name": "Legacy — upload lettera dimissione base64",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "DEPRECATED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patient-intake/discharge-letter/upload"
+        }
+      ]
+    },
+    {
+      "id": "intake.link_import_job",
+      "name": "Bozze ingresso — collega documenti",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts/:id/import-job"
+        }
+      ]
+    },
+    {
+      "id": "intake.list_drafts",
+      "name": "Bozze ingresso — elenco",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/intake/drafts"
+        }
+      ]
+    },
+    {
+      "id": "intake.merge_import",
+      "name": "Bozze ingresso — merge import",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts/:id/merge-import"
+        }
+      ]
+    },
+    {
+      "id": "intake.patient_review",
+      "name": "Ingresso — revisione paziente",
+      "domain": "intake",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:id/intake-review"
+        }
+      ]
+    },
+    {
+      "id": "intake.refresh_import",
+      "name": "Bozze ingresso — aggiorna da import",
+      "domain": "intake",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts/:id/refresh-import"
+        }
+      ]
+    },
+    {
+      "id": "intake.seed_from_import",
+      "name": "Bozze ingresso — crea da import AI",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/intake/drafts/from-import"
+        }
+      ]
+    },
+    {
+      "id": "intake.unlink_import_job",
+      "name": "Bozze ingresso — scollega documenti",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/intake/drafts/:id/import-job"
+        }
+      ]
+    },
+    {
+      "id": "intake.update_draft",
+      "name": "Bozze ingresso — autosalvataggio",
+      "domain": "intake",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/intake/drafts/:id"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.assistant_query",
+      "name": "Gateway interno — assistant/query",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/assistant/query"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.patient_allergies",
+      "name": "Gateway interno — patient/allergies",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/patient/allergies"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.patient_demographics",
+      "name": "Gateway interno — patient/demographics",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/patient/demographics"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.patient_diary",
+      "name": "Gateway interno — patient/diary",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/patient/diary"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.patient_documents",
+      "name": "Gateway interno — patient/documents",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/patient/documents"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.patient_narrative_sections",
+      "name": "Gateway interno — patient/narrative-sections",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/patient/narrative-sections"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.patient_therapies",
+      "name": "Gateway interno — patient/therapies",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/patient/therapies"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.query_appointments",
+      "name": "Gateway interno — query/appointments",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/query/appointments"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.query_correlate",
+      "name": "Gateway interno — query/correlate",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/query/correlate"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.query_timeline",
+      "name": "Gateway interno — query/timeline",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/query/timeline"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.query_vital_signs",
+      "name": "Gateway interno — query/vital-signs",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/query/vital-signs"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.search_across_patients",
+      "name": "Gateway interno — search/across-patients",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/search/across-patients"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.search_clinical_sections",
+      "name": "Gateway interno — search/clinical-sections",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/search/clinical-sections"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.search_documents",
+      "name": "Gateway interno — search/documents",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/search/documents"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.search_patients",
+      "name": "Gateway interno — search/patients",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/internal/ai/search/patients"
+        }
+      ]
+    },
+    {
+      "id": "internal_ai.source_get",
+      "name": "Gateway interno — risolvi fonte",
+      "domain": "internal_ai",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "service",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/internal/ai/sources/:sourceType/:recordId"
+        }
+      ]
+    },
+    {
+      "id": "narrative.get",
+      "name": "Sezioni narrative — singola sezione",
+      "domain": "narrative",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/narrative-sections/:sectionKey"
+        }
+      ]
+    },
+    {
+      "id": "narrative.list",
+      "name": "Sezioni narrative — elenco",
+      "domain": "narrative",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/narrative-sections"
+        }
+      ]
+    },
+    {
+      "id": "narrative.save",
+      "name": "Sezioni narrative — salva revisione",
+      "domain": "narrative",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/patients/:patientId/narrative-sections/:sectionKey"
+        },
+        {
+          "method": "PATCH",
+          "path": "/patients/:patientId/narrative-sections/:sectionKey"
+        }
+      ]
+    },
+    {
+      "id": "notes.create",
+      "name": "Note/messaggi — crea",
+      "domain": "notes",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/notes"
+        }
+      ]
+    },
+    {
+      "id": "notes.delete",
+      "name": "Note/messaggi — elimina",
+      "domain": "notes",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/notes/:id"
+        }
+      ]
+    },
+    {
+      "id": "notes.list",
+      "name": "Note/messaggi — mailbox",
+      "domain": "notes",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/notes"
+        }
+      ]
+    },
+    {
+      "id": "notes.update",
+      "name": "Note/messaggi — modifica / stato lettura",
+      "domain": "notes",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/notes/:id"
+        }
+      ]
+    },
+    {
+      "id": "operators.create",
+      "name": "Operatore — crea",
+      "domain": "operators",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/operators"
+        }
+      ]
+    },
+    {
+      "id": "operators.directory",
+      "name": "Directory operativa — completa",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/operators/directory"
+        }
+      ]
+    },
+    {
+      "id": "operators.directory_page",
+      "name": "Directory operativa — pagina",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        }
+      ]
+    },
+    {
+      "id": "operators.directory_schedules",
+      "name": "Orari struttura (senza note private)",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/operators/directory/schedules"
+        }
+      ]
+    },
+    {
+      "id": "operators.list",
+      "name": "Operatori — lista admin completa",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/operators"
+        }
+      ]
+    },
+    {
+      "id": "operators.page",
+      "name": "Operatori — pagina admin",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        }
+      ]
+    },
+    {
+      "id": "operators.schedules",
+      "name": "Orari operatori (con note)",
+      "domain": "operators",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/operators/schedules"
+        }
+      ]
+    },
+    {
+      "id": "operators.set_schedule",
+      "name": "Orario operatore — upsert",
+      "domain": "operators",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/operators/:operatorId/schedule"
+        }
+      ]
+    },
+    {
+      "id": "operators.update",
+      "name": "Operatore — modifica",
+      "domain": "operators",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/operators/:operatorId"
+        }
+      ]
+    },
+    {
+      "id": "parameters.create_reading",
+      "name": "Parametri — nuova rilevazione",
+      "domain": "parameters",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:id/parameter-readings"
+        }
+      ]
+    },
+    {
+      "id": "parameters.list_page",
+      "name": "Parametri — pagina multi-paziente",
+      "domain": "parameters",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        }
+      ]
+    },
+    {
+      "id": "parameters.list_readings",
+      "name": "Parametri — storico rilevazioni",
+      "domain": "parameters",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:id/parameter-readings"
+        }
+      ]
+    },
+    {
+      "id": "parameters.save_month",
+      "name": "Parametri — salva mese",
+      "domain": "parameters",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/patients/:id/parameters"
+        }
+      ]
+    },
+    {
+      "id": "patients.clinical_overview",
+      "name": "Pazienti — panoramica clinica dashboard",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        }
+      ]
+    },
+    {
+      "id": "patients.clinical_summary",
+      "name": "Pazienti — riepilogo clinico",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        }
+      ]
+    },
+    {
+      "id": "patients.create",
+      "name": "Pazienti — crea",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients"
+        }
+      ]
+    },
+    {
+      "id": "patients.delete",
+      "name": "Pazienti — elimina",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/patients/:id"
+        }
+      ]
+    },
+    {
+      "id": "patients.get",
+      "name": "Pazienti — dettaglio",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:id"
+        }
+      ]
+    },
+    {
+      "id": "patients.list_legacy",
+      "name": "Pazienti — elenco legacy (dismesso)",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "DEPRECATED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients"
+        }
+      ]
+    },
+    {
+      "id": "patients.list_page",
+      "name": "Pazienti — pagina elenco",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        }
+      ]
+    },
+    {
+      "id": "patients.search",
+      "name": "Pazienti — ricerca testuale",
+      "domain": "patients",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/page/search"
+        }
+      ]
+    },
+    {
+      "id": "patients.update_demographics",
+      "name": "Pazienti — aggiorna anagrafica",
+      "domain": "patients",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/patients/:id"
+        }
+      ]
+    },
+    {
+      "id": "room_assignments.create",
+      "name": "Assegnazione letto — crea",
+      "domain": "room_assignments",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/room-assignments"
+        }
+      ]
+    },
+    {
+      "id": "room_assignments.delete",
+      "name": "Assegnazione letto — elimina",
+      "domain": "room_assignments",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/patients/:patientId/room-assignments/:assignmentId"
+        }
+      ]
+    },
+    {
+      "id": "room_assignments.list",
+      "name": "Assegnazioni letto paziente — elenco",
+      "domain": "room_assignments",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/room-assignments"
+        }
+      ]
+    },
+    {
+      "id": "room_assignments.update",
+      "name": "Assegnazione letto — sposta / chiudi",
+      "domain": "room_assignments",
+      "type": "write",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/patients/:patientId/room-assignments/:assignmentId"
+        }
+      ]
+    },
+    {
+      "id": "rooms.add_bed",
+      "name": "Letto — aggiungi",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/admin/rooms/:roomId/beds"
+        }
+      ]
+    },
+    {
+      "id": "rooms.available_beds",
+      "name": "Letti disponibili per periodo",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/admin/beds/available"
+        }
+      ]
+    },
+    {
+      "id": "rooms.create",
+      "name": "Camera — crea",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/admin/rooms"
+        }
+      ]
+    },
+    {
+      "id": "rooms.delete",
+      "name": "Camera — elimina",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/admin/rooms/:roomId"
+        }
+      ]
+    },
+    {
+      "id": "rooms.delete_bed",
+      "name": "Letto — elimina",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/admin/beds/:bedId"
+        }
+      ]
+    },
+    {
+      "id": "rooms.get",
+      "name": "Camera — dettaglio",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/admin/rooms/:roomId"
+        }
+      ]
+    },
+    {
+      "id": "rooms.list",
+      "name": "Camere — elenco con occupanti",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "medium",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        }
+      ]
+    },
+    {
+      "id": "rooms.list_beds",
+      "name": "Letti di una camera",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/admin/rooms/:roomId/beds"
+        }
+      ]
+    },
+    {
+      "id": "rooms.occupancy",
+      "name": "Occupazione struttura — KPI",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        }
+      ]
+    },
+    {
+      "id": "rooms.patient_room_options",
+      "name": "Opzioni camera/letto per paziente",
+      "domain": "rooms",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/room-options"
+        }
+      ]
+    },
+    {
+      "id": "rooms.update",
+      "name": "Camera — modifica",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/admin/rooms/:roomId"
+        }
+      ]
+    },
+    {
+      "id": "rooms.update_bed",
+      "name": "Letto — modifica / manutenzione",
+      "domain": "rooms",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/admin/beds/:bedId"
+        }
+      ]
+    },
+    {
+      "id": "roster.get_my_order",
+      "name": "Ordinamento elenco pazienti — lettura personale",
+      "domain": "roster",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        }
+      ]
+    },
+    {
+      "id": "roster.list_contexts",
+      "name": "Contesti reparto — elenco (admin)",
+      "domain": "roster",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/admin/roster-contexts"
+        }
+      ]
+    },
+    {
+      "id": "roster.set_context_default",
+      "name": "Contesto reparto — imposta default (admin)",
+      "domain": "roster",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [
+        "admin",
+        "manager"
+      ],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/admin/roster-contexts/:id"
+        }
+      ]
+    },
+    {
+      "id": "roster.set_my_order",
+      "name": "Ordinamento elenco pazienti — imposta personale",
+      "domain": "roster",
+      "type": "write",
+      "sensitivity": "low",
+      "exposure": "TOOL",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PATCH",
+          "path": "/me/roster-order"
+        }
+      ]
+    },
+    {
+      "id": "therapy.create",
+      "name": "Crea prescrizione terapia",
+      "domain": "therapy",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "TOOL",
+      "technicalState": "WRAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/therapies"
+        }
+      ]
+    },
+    {
+      "id": "therapy.delete",
+      "name": "Elimina prescrizione",
+      "domain": "therapy",
+      "type": "write",
+      "sensitivity": "critical",
+      "exposure": "GUI_ONLY",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "DELETE",
+          "path": "/patients/:patientId/therapies/:therapyId"
+        }
+      ]
+    },
+    {
+      "id": "therapy.list",
+      "name": "Terapie paziente (legacy)",
+      "domain": "therapy",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/therapies"
+        }
+      ]
+    },
+    {
+      "id": "therapy.list_page",
+      "name": "Terapie paziente paginate",
+      "domain": "therapy",
+      "type": "read",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/patients/:patientId/therapies/page"
+        }
+      ]
+    },
+    {
+      "id": "therapy.update",
+      "name": "Aggiorna prescrizione",
+      "domain": "therapy",
+      "type": "write",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "GAP",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/patients/:patientId/therapies/:therapyId"
+        }
+      ]
+    },
+    {
+      "id": "voice.execute",
+      "name": "Voce — esegui (legacy)",
+      "domain": "voice",
+      "type": "action",
+      "sensitivity": "critical",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/voice/execute"
+        }
+      ]
+    },
+    {
+      "id": "voice.plan",
+      "name": "Voce — pianifica (legacy)",
+      "domain": "voice",
+      "type": "action",
+      "sensitivity": "high",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/ai/voice/plan"
+        }
+      ]
+    },
+    {
+      "id": "voice.stt_status",
+      "name": "Voce — stato STT",
+      "domain": "voice",
+      "type": "read",
+      "sensitivity": "low",
+      "exposure": "NOT_EXPOSED",
+      "technicalState": "READY",
+      "legacyRoles": [],
+      "gate": "policy",
+      "governedBy": null,
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/ai/voice/stt"
+        }
+      ]
+    }
+  ]
+}

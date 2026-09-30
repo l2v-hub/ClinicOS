@@ -8,6 +8,12 @@ const candidates = readFileSync(
   new URL('../../therapies/therapy-candidate-page.ts', import.meta.url),
   'utf8',
 );
+// The confirm/not-administered transaction moved verbatim to therapies/administration-record.ts
+// (shared with the Tool Layer); the route delegates to it.
+const administrationRecord = readFileSync(
+  new URL('../../therapies/administration-record.ts', import.meta.url),
+  'utf8',
+);
 const writer = readFileSync(new URL('../../therapies/therapy-write.ts', import.meta.url), 'utf8');
 const assistant = readFileSync(new URL('../../ai/assistant/service.ts', import.meta.url), 'utf8');
 const dueQuery = readFileSync(
@@ -22,7 +28,12 @@ const schema = readFileSync(new URL('../../../../prisma/schema.prisma', import.m
 
 test('therapy reads and writes apply patient scope before loading clinical data', () => {
   assert.match(route, /registeredById:\s*actor\.id/);
-  assert.match(route, /resolveAuthoritativeTherapy\(tx, input, actor\)/g);
+  assert.match(route, /recordTherapyAdministration\(req\.body, actor, \{ notAdministered: false \}\)/);
+  assert.match(route, /recordTherapyAdministration\(req\.body, actor, \{ notAdministered: true \}\)/);
+  assert.equal(
+    administrationRecord.match(/resolveAuthoritativeTherapy\(tx, input, actor\)/g)?.length,
+    2,
+  );
   assert.match(writer, /patient:\s*\{ registeredById: actor\.id \}/);
   assert.match(writer, /if \(!therapy\) throw new TherapyNotFoundError/);
   assert.match(assistant, /findTherapiesDue\([\s\S]*patientIds: ctx\.permittedPatientIds/);

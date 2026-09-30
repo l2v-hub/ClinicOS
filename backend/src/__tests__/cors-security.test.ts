@@ -82,7 +82,19 @@ test('auth/me returns the server-resolved demo identity outside production', asy
     headers: { 'X-Operator-Id': 'operator-server', 'X-Operator-Role': 'operatore' },
   });
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), {
+  const body = (await response.json()) as Record<string, unknown>;
+  // Phase 2 extends the contract additively: role + capabilities are server-resolved from the policy.
+  const {
+    appRole,
+    roleLabel,
+    roleSource,
+    identitySource,
+    uiShell,
+    policyVersion,
+    capabilities,
+    ...legacy
+  } = body;
+  assert.deepEqual(legacy, {
     id: 'operator-server',
     role: 'operatore',
     authMode: 'demo',
@@ -90,6 +102,16 @@ test('auth/me returns the server-resolved demo identity outside production', asy
     syntheticOnly: false,
     expiresAt: null,
   });
+  assert.equal(appRole, 'operator', 'unassigned identity → legacy Operator role');
+  assert.equal(roleLabel, 'Operator (legacy)');
+  assert.equal(roleSource, 'legacy');
+  assert.equal(identitySource, 'demo-header');
+  assert.equal(uiShell, 'operator');
+  assert.equal(typeof policyVersion, 'number');
+  assert.equal(
+    (capabilities as Record<string, { allowed: boolean }>)['operators.create'].allowed,
+    false,
+  );
 });
 
 test('auth/status is public, cache-disabled, and discloses no identities', async () => {
@@ -98,6 +120,8 @@ test('auth/status is public, cache-disabled, and discloses no identities', async
   assert.equal(response.headers.get('cache-control'), 'no-store');
   assert.deepEqual(await response.json(), {
     mode: 'demo',
+    // Phase 2: whether the Role Simulator is offered (no identity is disclosed here).
+    simulator: false,
     temporaryDemo: false,
     syntheticOnly: false,
     expiresAt: null,

@@ -5,6 +5,7 @@ import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import { patientIdentityName } from '../../lib/patientIdentity';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
+import { useCan } from '../../lib/capabilities';
 const TYPES = [
   'Monitoraggio',
   'Terapia',
@@ -33,6 +34,7 @@ export function ConsegnaComposer({
   focusRequest?: number;
 }) {
   const draft = useConsegnaDraft(store, patient.id);
+  const canCreate = useCan('consegne.create');
   const id = useId();
   const [discard, setDiscard] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -61,6 +63,13 @@ export function ConsegnaComposer({
     draft.outcome?.kind === 'failed' && !draft.outcome.uncertain && Boolean(draft.pending);
   const field = (change: Parameters<ConsegnaDraftStore['update']>[1]) =>
     store.update(patient.id, change);
+  // Il ruolo non consente di scrivere consegne: niente modulo (il backend la rifiuterebbe).
+  if (!canCreate)
+    return (
+      <section className="handover-rounds__composer" aria-label="Scrivi consegna">
+        <p className="cr-empty">Il tuo ruolo non può creare consegne.</p>
+      </section>
+    );
   return (
     <section className="handover-rounds__composer" aria-label="Scrivi consegna">
       <div className="ho-card-head">

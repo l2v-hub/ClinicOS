@@ -6,11 +6,24 @@
 
 import type { NextFunction, Request, Response } from 'express';
 import { entraConfig, requireEntraOperator } from '../lib/entra-auth.js';
+import {
+  SIMULATOR_TOKEN_PREFIX,
+  simulatedIdentity,
+  simulatorEnabled,
+  verifySimulatorToken,
+} from '../authz/simulator.js';
+import type { ResolvedIdentity } from '../authz/types.js';
 
 export interface Operator {
   id: string;
+  /**
+   * Compat role string read by the pre-existing services (data scope: admin|manager = facility).
+   * Resolved server-side from the active policy (assigned role) or kept as verified (legacy).
+   */
   role: string;
   name?: string;
+  /** Role of the Identity → Role → Capability policy (e.g. doctor, nurse). Server-resolved. */
+  appRole?: string;
 }
 
 // Accept the app's role values plus canonical names; everything else is forbidden.
@@ -62,6 +75,8 @@ export function productionDemoAuthEnabled(env: NodeJS.ProcessEnv = process.env):
 // Augment Express Request with the resolved operator (no global d.ts needed).
 export interface AuthedRequest extends Request {
   operator?: Operator;
+  /** Which identity source established `operator` (read by authz/request-context). */
+  identitySource?: ResolvedIdentity['identitySource'];
 }
 
 export type OperatorAuthMode = 'entra' | 'demo' | 'disabled';
@@ -81,7 +96,21 @@ export function operatorAuthMode(env: NodeJS.ProcessEnv = process.env): Operator
   return 'disabled';
 }
 
+/**
+ * The single identity gate: establishes WHO the caller is (Entra token, Role Simulator session or
+ * the legacy demo headers). The ROLE is resolved afterwards from the active policy by
+ * authz/request-context.ts#ensureAuthorization (route gate, Tool Layer, /authz, /auth/me).
+ * Idempotent within one request.
+ */
 export function requireOperator(req: AuthedRequest, res: Response, next: NextFunction): void {
+  if (req.operator && req.identitySource) {
+    next();
+    return;
+  }
+  const finish = (source: ResolvedIdentity['identitySource']) => {
+    req.identitySource = source;
+    next();
+  };
   const mode = operatorAuthMode();
   if (mode === 'entra') {
     const config = entraConfig();
@@ -92,7 +121,13 @@ export function requireOperator(req: AuthedRequest, res: Response, next: NextFun
       });
       return;
     }
-    requireEntraOperator(config)(req, res, next);
+    requireEntraOperator(config)(req, res, (error?: unknown) => {
+      if (error) {
+        next(error);
+        return;
+      }
+      finish('entra');
+    });
     return;
   }
   if (mode === 'disabled') {
@@ -100,6 +135,32 @@ export function requireOperator(req: AuthedRequest, res: Response, next: NextFun
       error: 'Endpoint clinici disabilitati: configurare esplicitamente AUTH_MODE',
       code: 'auth_disabled',
     });
+    return;
+  }
+
+  if (simulatorEnabled(mode)) {
+    // Role Simulator: only a server-signed session names the identity; X-Operator-* are ignored,
+    // so a client can never self-assign identity or role.
+    const header = req.header('Authorization') || '';
+    const token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
+    const identityId = token.startsWith(SIMULATOR_TOKEN_PREFIX)
+      ? verifySimulatorToken(token)
+      : null;
+    const identity = identityId ? simulatedIdentity(identityId) : undefined;
+    if (!identity) {
+      res.status(401).json({
+        error: 'Sessione non valida: scegli un profilo dal simulatore',
+        code: 'simulator_session_required',
+      });
+      return;
+    }
+    req.operator = {
+      id: identity.id,
+      role: identity.userRole === 'MANAGER' ? 'manager' : 'operator',
+      name: identity.name,
+    };
+    res.setHeader('X-ClinicOS-Auth-Mode', 'demo-simulator');
+    finish('simulator');
     return;
   }
 
@@ -144,7 +205,7 @@ export function requireOperator(req: AuthedRequest, res: Response, next: NextFun
     };
   }
   res.setHeader('X-ClinicOS-Auth-Mode', 'demo');
-  next();
+  finish(productionDemoAuthEnabled() ? 'demo-production' : 'demo-header');
 }
 
 export function requireRole(...allowedRoles: string[]) {

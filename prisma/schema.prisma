@@ -792,6 +792,31 @@ model AiAuditEvent {
   @@index([outcome])
 }
 
+// ── Autorizzazioni: Identity → Role → Capability policy (Phase 2) ─────────────────────────────
+// Ogni riga e' una VERSIONE immutabile del documento di autorizzazione: ruoli, matrice
+// ruolo × capability (ALLOWED | READ_ONLY | ALLOWED_WITH_CONFIRMATION | DENIED) e assegnazioni
+// identita' → ruolo. La versione attiva e' la piu' alta con status 'active'; salvare crea una nuova
+// riga ('draft' o 'active'), applicare marca le precedenti 'superseded'. Nessuna riga viene mai
+// riscritta nel contenuto: `changeSummary` conserva il before/after rispetto a `basedOnVersion`.
+// Nessuna FK verso Operator: lo storico deve sopravvivere alla cancellazione degli autori.
+model AuthzPolicyVersion {
+  id             String    @id @default(cuid())
+  version        Int       @unique
+  status         String // draft | active | superseded
+  document       Json
+  basedOnVersion Int?
+  changeSummary  Json
+  note           String?
+  createdById    String
+  createdByName  String?
+  createdByRole  String
+  createdAt      DateTime  @default(now())
+  appliedAt      DateTime?
+  appliedById    String?
+
+  @@index([status, version])
+}
+
 // ── Anagrafica farmaci AIFA ───────────────────────────────────────────────────
 // Copia locale della Banca Dati Farmaci (drive.aifa.gov.it), aggiornata periodicamente.
 // Serve locale e non via servizio esterno: la ricerca risponde mentre l'operatore digita,

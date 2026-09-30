@@ -3,6 +3,7 @@
 // gateway role clamped to 'operatore' (privilege never derives from a public header).
 // Errors follow the SPEC-015 contract shape: { error: { kind, message } }.
 
+import { authzOf, enforcementEnabled, ensureAuthorization } from '../authz/request-context.js';
 import { Router, type Response } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { importRateLimit } from '../ai/rate-limit.js';
@@ -29,12 +30,24 @@ actionsRouter.use(requireOperator);
 actionsRouter.use(importRateLimit);
 
 /** Operator identity + role-clamped gateway context, shared with the voice routes. */
+/** Capability policy of the caller for Agnos actions (agnos.action.<type> → functional capability). */
+async function actionPolicy(
+  req: AuthedRequest,
+): Promise<Pick<AgnosOperatorContext, 'allowsAction'>> {
+  if (!enforcementEnabled()) return {};
+  // Resolve the context if the route gate did not (router used standalone); fail closed otherwise.
+  const authz = authzOf(req) ?? (await ensureAuthorization(req).catch(() => undefined));
+  if (!authz) return { allowsAction: () => false };
+  return { allowsAction: (actionType) => authz.can(`agnos.action.${actionType}`).allowed };
+}
+
 export async function agnosOperatorFrom(req: AuthedRequest): Promise<AgnosOperatorContext> {
   const op = req.operator!; // requireOperator guarantees it
   return {
     operatorId: op.id,
     operatorName: op.name?.trim() || op.id,
     gatewayCtx: await ctxFromOperator(req),
+    ...(await actionPolicy(req)),
   };
 }
 
@@ -46,6 +59,7 @@ const VOICE_ERROR_STATUS: Record<string, number> = {
   feature_disabled: 403,
   writes_disabled: 403,
   not_in_catalog: 403,
+  capability_denied: 403,
   delete_forbidden: 403,
   not_executable: 400,
   ambiguous: 422,
@@ -91,8 +105,16 @@ function fail(res: Response, err: unknown) {
 }
 
 // GET /ai/actions/catalog — inspectable allowlist (proof: zero delete actions).
-actionsRouter.get('/catalog', (_req, res) => {
-  res.status(200).json(listCatalog());
+actionsRouter.get('/catalog', async (req: AuthedRequest, res) => {
+  // Phase 2: an action the caller's role may not perform is reported as disabled for this caller.
+  const policy = (await actionPolicy(req)).allowsAction;
+  res
+    .status(200)
+    .json(
+      listCatalog().map((entry) =>
+        policy && entry.enabled && !policy(entry.name) ? { ...entry, enabled: false } : entry,
+      ),
+    );
 });
 
 // POST /ai/actions/plan  { text, channel, currentPatientId? } → { plan, preview, read }

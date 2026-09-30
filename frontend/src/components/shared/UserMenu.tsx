@@ -3,13 +3,25 @@ import type { UtenteApp } from '../../types';
 import { IcoLogout } from '../../icons';
 
 /** Avatar dell'intestazione (HMI 1): apre il menu con nome, ruolo ed "Esci". */
-export function UserMenu({ utente, onLogout }: { utente: UtenteApp; onLogout: () => void }) {
+export function UserMenu({
+  utente,
+  onLogout,
+  roleLabel,
+  simulator = false,
+}: {
+  utente: UtenteApp;
+  onLogout: () => void;
+  /** Etichetta del ruolo risolta dal server (GET /auth/me), es. "Doctor". */
+  roleLabel?: string;
+  /** Sessione del Simulatore ruoli (solo sviluppo). */
+  simulator?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const initials = utente.iniziali || (utente.nome ? utente.nome.slice(0, 2).toUpperCase() : 'CL');
-  const ruolo = utente.ruolo === 'admin' ? 'Amministratore' : 'Operatore';
+  const ruolo = roleLabel || (utente.ruolo === 'admin' ? 'Amministratore' : 'Operatore');
 
   useEffect(() => {
     if (!open) return;
@@ -52,9 +64,12 @@ export function UserMenu({ utente, onLogout }: { utente: UtenteApp; onLogout: ()
               {ruolo}
               {utente.reparto ? ` · ${utente.reparto}` : ''}
             </span>
+            {simulator && (
+              <span className="topbar-user-menu__role">Simulatore ruoli — solo sviluppo</span>
+            )}
           </div>
           <button type="button" className="topbar-user-menu__logout" onClick={onLogout}>
-            <IcoLogout /> Esci
+            <IcoLogout /> {simulator ? 'Cambia profilo' : 'Esci'}
           </button>
         </div>
       )}

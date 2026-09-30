@@ -1,0 +1,689 @@
+/* Amministrazione → Ruoli e permessi. Solo layout e colori degli effetti: i controlli (chip,
+   pulsanti, campi) restano quelli canonici di design-system.css. Rosso solo per gli errori. */
+
+.rp-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  /* .page-content already provides the page gutter. */
+  padding: 0;
+}
+
+.rp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding-bottom: 24px;
+}
+
+.rp-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.rp-muted {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.rp-mono {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+/* ── Banner ─────────────────────────────────────────────────────────────────────────────── */
+.rp-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+}
+.rp-banner__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rp-banner--success {
+  background: var(--emerald-bg);
+  border-color: color-mix(in srgb, var(--emerald) 35%, transparent);
+}
+.rp-banner--warning {
+  background: var(--amber-bg);
+  border-color: color-mix(in srgb, var(--amber) 35%, transparent);
+  color: color-mix(in srgb, var(--amber) 55%, black);
+}
+.rp-banner--error {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: color-mix(in srgb, var(--red) 80%, black);
+}
+.rp-warnings {
+  display: block;
+  margin-bottom: 12px;
+  padding-left: 32px;
+}
+.rp-warnings li + li {
+  margin-top: 4px;
+}
+
+/* ── Filtri ─────────────────────────────────────────────────────────────────────────────── */
+.rp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.rp-filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+}
+.rp-filters__field--grow {
+  flex: 1 1 240px;
+}
+.rp-filters__label {
+  color: var(--field-label);
+  font-size: 12px;
+  font-weight: 700;
+}
+.rp-filters__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rp-filters__count {
+  margin-left: auto;
+  align-self: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.rp-capability-picker {
+  max-width: 640px;
+}
+
+/* ── Etichette ──────────────────────────────────────────────────────────────────────────── */
+.rp-tags,
+.rp-name-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.rp-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: var(--c-neutral-bg);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.rp-tag--write,
+.rp-tag--action {
+  background: var(--c-primary-bg);
+  color: var(--c-primary-active);
+}
+.rp-tag--sens-high,
+.rp-tag--sens-critical {
+  background: var(--amber-bg);
+  color: color-mix(in srgb, var(--amber) 65%, black);
+}
+.rp-tag--sens-critical {
+  font-weight: 800;
+}
+.rp-tag--tool,
+.rp-tag--sim {
+  background: color-mix(in srgb, var(--purple) 12%, white);
+  color: var(--purple);
+}
+.rp-tag--active,
+.rp-tag--gain {
+  background: var(--emerald-bg);
+  color: color-mix(in srgb, var(--emerald) 60%, black);
+}
+.rp-tag--loss {
+  background: var(--c-neutral-bg);
+  color: var(--text);
+  text-decoration: line-through;
+}
+.rp-legacy-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px dashed var(--text-xmuted);
+  border-radius: 6px;
+  color: var(--text-xmuted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 16px;
+  text-transform: lowercase;
+}
+.rp-count {
+  display: inline-flex;
+  align-items: center;
+  min-width: 24px;
+  justify-content: center;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: var(--c-neutral-bg);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.rp-count--doubt {
+  background: var(--amber-bg);
+  color: color-mix(in srgb, var(--amber) 65%, black);
+}
+.rp-count--changed {
+  background: var(--c-primary-bg);
+  color: var(--c-primary-active);
+}
+
+/* ── Effetti ────────────────────────────────────────────────────────────────────────────── */
+.rp-effect,
+.rp-effect-badge {
+  --rp-bg: var(--c-neutral-bg);
+  --rp-fg: var(--text-muted);
+  --rp-bd: #d3dbe6;
+  background-color: var(--rp-bg);
+  color: var(--rp-fg);
+  border: 1px solid var(--rp-bd);
+}
+.rp-effect--ALLOWED,
+.rp-effect-badge--ALLOWED {
+  --rp-bg: var(--emerald-bg);
+  --rp-fg: color-mix(in srgb, var(--emerald) 60%, black);
+  --rp-bd: color-mix(in srgb, var(--emerald) 40%, white);
+}
+.rp-effect--ALLOWED_WITH_CONFIRMATION,
+.rp-effect-badge--ALLOWED_WITH_CONFIRMATION {
+  --rp-bg: var(--amber-bg);
+  --rp-fg: color-mix(in srgb, var(--amber) 65%, black);
+  --rp-bd: color-mix(in srgb, var(--amber) 40%, white);
+}
+.rp-effect--READ_ONLY,
+.rp-effect-badge--READ_ONLY {
+  --rp-bg: var(--ds-blue-tint, #eaf1fe);
+  --rp-fg: var(--c-primary-active);
+  --rp-bd: color-mix(in srgb, var(--blue) 30%, white);
+}
+
+.rp-effect {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 132px;
+  height: 40px;
+  padding: 0 28px 0 10px;
+  border-radius: var(--radius-sm);
+  font: 600 13px/1 var(--font-ui);
+  cursor: pointer;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 9px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+.rp-effect:focus-visible {
+  outline: var(--ds-focus, 3px solid #245bb5);
+  outline-offset: 1px;
+}
+.rp-effect option {
+  background: var(--surface);
+  color: var(--text);
+}
+.rp-effect--changed {
+  box-shadow: inset 0 0 0 2px var(--blue);
+  border-color: var(--blue);
+}
+.rp-effect--inert {
+  border-style: dashed;
+  text-decoration: line-through;
+}
+
+.rp-effect-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.rp-effect-badge--none {
+  border-style: dashed;
+}
+
+.rp-doubt {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--amber-bg);
+  border: 1px solid color-mix(in srgb, var(--amber) 50%, white);
+  color: color-mix(in srgb, var(--amber) 65%, black);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: help;
+}
+.rp-doubt:focus-visible {
+  outline: var(--ds-focus, 3px solid #245bb5);
+  outline-offset: 1px;
+}
+.rp-note {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--text);
+  font-size: 13px;
+  white-space: normal;
+}
+
+.rp-outcome {
+  font-weight: 700;
+}
+.rp-outcome--yes {
+  color: color-mix(in srgb, var(--emerald) 60%, black);
+}
+.rp-outcome--no {
+  color: var(--text-muted);
+}
+
+/* ── Matrice ────────────────────────────────────────────────────────────────────────────── */
+.rp-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.rp-matrix__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rp-matrix__wrap {
+  max-height: calc(100vh - 300px);
+  min-height: 320px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  margin-bottom: 0;
+  background: var(--surface);
+}
+.rp-matrix__table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.rp-matrix__table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  vertical-align: bottom;
+  white-space: normal;
+}
+.rp-matrix__cap-col {
+  left: 0;
+  z-index: 4 !important;
+  min-width: 260px;
+}
+.rp-matrix__role-col {
+  min-width: 144px;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+.rp-matrix__role-label {
+  color: var(--text);
+  font-size: 13px;
+}
+.rp-col--legacy {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 8px,
+    rgba(90, 107, 128, 0.05) 8px 16px
+  );
+}
+.rp-matrix__table tbody td.rp-matrix__cell {
+  height: auto;
+  min-height: 0;
+  padding: 6px 8px;
+}
+.rp-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+:is(.rp-matrix__table, .rp-list-table) tbody th.rp-matrix__cap {
+  padding: 8px 14px;
+  border-bottom: 1px solid #f0f4f8;
+  background: var(--surface);
+  text-align: left;
+  font-weight: 400;
+  vertical-align: middle;
+}
+.rp-matrix__table tbody th.rp-matrix__cap {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  max-width: 340px;
+  box-shadow: 1px 0 0 var(--border);
+}
+.rp-cap-name {
+  display: block;
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.rp-cap-id {
+  display: block;
+  margin: 1px 0 4px;
+  color: var(--text-xmuted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.rp-group-row th {
+  position: sticky;
+  left: 0;
+  padding: 0;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.rp-group-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: 700 14px/1.3 var(--font-ui);
+  text-align: left;
+  cursor: pointer;
+}
+.rp-group-toggle:hover {
+  background: var(--hover);
+}
+.rp-group-toggle:focus-visible {
+  outline: var(--ds-focus, 3px solid #245bb5);
+  outline-offset: -3px;
+}
+.rp-chevron {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease-out;
+}
+.rp-chevron--open {
+  transform: rotate(45deg);
+}
+
+/* ── Per ruolo / per capability ─────────────────────────────────────────────────────────── */
+.rp-list-table tbody td {
+  height: auto;
+  min-height: 0;
+  padding: 8px 14px;
+}
+.rp-list-table .rp-effect {
+  max-width: 220px;
+}
+.rp-row--legacy td,
+.rp-row--legacy th {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 8px,
+    rgba(90, 107, 128, 0.05) 8px 16px
+  );
+}
+.rp-role-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rp-role-summary__desc {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+}
+.rp-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px 16px;
+  margin: 0;
+}
+.rp-facts dt {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.rp-facts dd {
+  margin: 2px 0 0;
+  color: var(--text);
+  font-size: 14px;
+}
+.rp-subtitle {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.rp-identity-list,
+.rp-derived-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rp-identity-list li,
+.rp-derived-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+}
+.rp-derived-list .rp-cap-name,
+.rp-derived-list .rp-cap-id {
+  display: inline;
+  margin: 0;
+}
+
+/* ── Identità ───────────────────────────────────────────────────────────────────────────── */
+.rp-assign {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.rp-assign__select {
+  min-width: 220px;
+}
+select.rp-assign__select--changed:not(#ds) {
+  border-color: var(--blue);
+  box-shadow: inset 0 0 0 1px var(--blue);
+}
+
+/* ── Storico ────────────────────────────────────────────────────────────────────────────── */
+.rp-history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rp-history__item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.rp-history__item.is-open {
+  border-color: color-mix(in srgb, var(--blue) 35%, var(--border));
+}
+.rp-history__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 12px;
+}
+.rp-history__toggle {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.rp-history__version {
+  font-variant-numeric: tabular-nums;
+}
+.rp-history__meta,
+.rp-history__counts {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+.rp-history__counts {
+  margin-left: auto;
+}
+.rp-history__note,
+.rp-history__item > .rp-muted {
+  margin: 0;
+  padding: 0 14px 10px 36px;
+  font-size: 13.5px;
+}
+.rp-history__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--divider);
+}
+.rp-history__roles {
+  margin: 0;
+  font-size: 13.5px;
+}
+
+/* ── Impatto e conferma ─────────────────────────────────────────────────────────────────── */
+.rp-impact__table td {
+  vertical-align: top;
+  min-width: 140px;
+}
+.rp-confirm-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rp-confirm-summary__line {
+  display: block;
+}
+.rp-confirm-summary__warning {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--amber-bg);
+  color: color-mix(in srgb, var(--amber) 65%, black);
+}
+
+/* ── Barra modifiche ────────────────────────────────────────────────────────────────────── */
+.rp-changebar {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0 calc(var(--gutter, 20px) * -1);
+  padding: 12px var(--gutter, 20px);
+  border-top: 2px solid var(--blue);
+  background: var(--surface);
+  box-shadow: 0 -6px 18px rgba(16, 32, 54, 0.1);
+}
+.rp-changebar__count {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: var(--text);
+}
+.rp-changebar__count strong {
+  font-size: 18px;
+  color: var(--c-primary-active);
+}
+.rp-changebar__note {
+  flex: 1 1 240px;
+  min-width: 200px;
+}
+.rp-changebar__note .form-input {
+  width: 100%;
+}
+.rp-changebar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 1023px) {
+  .rp-page {
+    padding: 0;
+  }
+  .rp-changebar {
+    margin: 0 -14px;
+    padding: 10px 14px;
+  }
+  .rp-matrix__cap-col {
+    min-width: 200px;
+  }
+  .rp-matrix__table tbody th.rp-matrix__cap {
+    max-width: 220px;
+  }
+  .rp-filters__count {
+    margin-left: 0;
+  }
+  .rp-history__counts {
+    margin-left: 0;
+  }
+}
+
+/* Views (L3) and the reload action share one row: no empty action row above the tabs. */
+.rp-tabs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}

@@ -57,8 +57,19 @@ import {
   type OperatorDirectoryStatus,
   type OperatorDirectorySummary,
 } from './lib/operatorDirectoryPage';
-import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
+import {
+  getCurrentOperator,
+  isSimulatorSession,
+  setCurrentOperator,
+  operatorHeaders,
+} from './lib/operatorSession';
 import { acquireApiToken } from './lib/entraAuth';
+import {
+  can,
+  canNavigate,
+  capabilityDeniedMessage,
+  setSessionCapabilities,
+} from './lib/capabilities';
 import {
   buildAppointmentRangeUrl,
   localIsoDate,
@@ -86,6 +97,9 @@ import {
 
 import type {
   UtenteApp,
+  AuthzContext,
+  CapabilityMap,
+  SimulatorIdentity,
   Paziente,
   Operatore,
   Consegna,
@@ -143,6 +157,7 @@ const routeLoaders = {
   MultiPatientParametri: () => import('./components/operator/MultiPatientParametri'),
   AnagraficaFarmaciPage: () => import('./components/operator/AnagraficaFarmaciPage'),
   AgnosPanel: () => import('./components/shared/AgnosPanel'),
+  RolePermissionsPage: () => import('./components/admin/RolePermissionsPage'),
 };
 
 const AdminDashboard = lazy(() =>
@@ -193,6 +208,9 @@ const AnagraficaFarmaciPage = lazy(() =>
 );
 const AgnosPanel = lazy(() =>
   routeLoaders.AgnosPanel().then((module) => ({ default: module.AgnosPanel })),
+);
+const RolePermissionsPage = lazy(() =>
+  routeLoaders.RolePermissionsPage().then((module) => ({ default: module.RolePermissionsPage })),
 );
 
 let routeModulesPreloaded = false;
@@ -283,6 +301,7 @@ const NAV_LABELS: Record<NavKey, string> = {
   'parametri-multipaziente': 'Parametri',
   'anagrafica-farmaci': 'Anagrafica farmaci',
   'ai-assistant': 'Assistente ClinicOS',
+  'ruoli-permessi': 'Ruoli e permessi',
 };
 
 const OPERATOR_DIRECTORY_NAV_KEYS = new Set<NavKey>([
@@ -306,7 +325,34 @@ const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
   'orari-operatori': 'admin-dashboard',
   'agenda-admin': 'admin-dashboard',
   'agenda-operatore': 'operator-dashboard',
+  'ruoli-permessi': 'admin-dashboard',
 };
+
+// Risposta di GET /auth/me (campi usati dalla GUI; la policy la applica il server).
+interface AuthMeResponse {
+  id: string;
+  role: string;
+  name?: string;
+  appRole?: string;
+  roleLabel?: string;
+  uiShell?: 'admin' | 'operator';
+  policyVersion?: number | null;
+  capabilities?: CapabilityMap;
+  authMode: 'entra' | 'demo' | 'disabled';
+  temporaryDemo: boolean;
+}
+
+function authzFromIdentity(identity: AuthMeResponse, simulator: boolean): AuthzContext {
+  const legacyAdmin = ['admin', 'manager'].includes(identity.role.toLowerCase());
+  return {
+    appRole: identity.appRole ?? identity.role,
+    roleLabel: identity.roleLabel ?? (legacyAdmin ? 'Amministratore' : 'Operatore'),
+    uiShell: identity.uiShell ?? (legacyAdmin ? 'admin' : 'operator'),
+    policyVersion: identity.policyVersion ?? null,
+    capabilities: identity.capabilities ?? null,
+    simulator,
+  };
+}
 
 // ── Appuntamenti: mapping DTO backend → tipo Appuntamento della UI (SPEC-015 US4) ──
 //
@@ -370,7 +416,13 @@ export default function App() {
   const [authStatus, setAuthStatus] = useState<{
     mode: 'entra' | 'demo' | 'disabled';
     temporaryDemo: boolean;
+    simulator?: boolean;
   } | null>(null);
+  // Ruolo, etichetta, shell e capability della sessione (GET /auth/me). Stato separato da
+  // `utente`: aggiornarlo al focus non deve rilanciare i caricamenti legati all'utente.
+  const [authz, setAuthz] = useState<AuthzContext | null>(null);
+  // I componenti profondi (es. "+ Nuova terapia") leggono le capability con useCan.
+  useEffect(() => setSessionCapabilities(authz?.capabilities ?? null), [authz]);
   const [loginPending, setLoginPending] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
@@ -419,6 +471,7 @@ export default function App() {
         return response.json() as Promise<{
           mode: 'entra' | 'demo' | 'disabled';
           temporaryDemo: boolean;
+          simulator?: boolean;
         }>;
       })
       .then(setAuthStatus)
@@ -1064,7 +1117,9 @@ export default function App() {
           const message =
             res.status === 422
               ? 'Troppi appuntamenti: restringi periodo o operatore'
-              : 'Impossibile caricare gli appuntamenti';
+              : res.status === 403
+                ? 'Agenda non consentita per il tuo ruolo'
+                : 'Impossibile caricare gli appuntamenti';
           setAppointmentLoadError(message);
           showToast(message);
         }
@@ -1167,7 +1222,11 @@ export default function App() {
         sessionEpoch === sessionEpochRef.current &&
         request === consegneRequestSequenceRef.current
       ) {
-        setConsegneLoadError('Consegne non disponibili. Riprova.');
+        setConsegneLoadError(
+          (error as Error).message === 'consegne_403'
+            ? 'Consegne non consentite per il tuo ruolo.'
+            : 'Consegne non disponibili. Riprova.',
+        );
       }
     } finally {
       if (
@@ -1309,7 +1368,11 @@ export default function App() {
     } catch (error) {
       if ((error as { name?: string }).name === 'AbortError') return;
       if (sessionEpoch === sessionEpochRef.current && request === notesRequestSequenceRef.current) {
-        setNotesLoadError('Note non disponibili. Riprova.');
+        setNotesLoadError(
+          (error as Error).message === 'notes_403'
+            ? 'Note non consentite per il tuo ruolo.'
+            : 'Note non disponibili. Riprova.',
+        );
       }
     } finally {
       if (sessionEpoch === sessionEpochRef.current && request === notesRequestSequenceRef.current) {
@@ -1831,7 +1894,60 @@ export default function App() {
 
   // ── Auth ────────────────────────────────────────────────────────────────────
 
-  async function handleLogin(u: UtenteApp) {
+  // Revoca: ricarica ruolo e capability da /auth/me (al focus della finestra e dopo l'applicazione
+  // di una nuova policy). Il backend resta l'unico arbitro; qui si aggiorna solo la GUI.
+  const refreshAuthz = useCallback(async () => {
+    const operator = getCurrentOperator();
+    if (!operator) return;
+    const epoch = sessionEpochRef.current;
+    try {
+      const response = await fetch(`${API_URL}/auth/me`, {
+        headers: operatorHeaders(),
+        cache: 'no-store',
+      });
+      if (!response.ok || epoch !== sessionEpochRef.current) return;
+      const identity = (await response.json()) as AuthMeResponse;
+      if (epoch !== sessionEpochRef.current) return;
+      const next = authzFromIdentity(identity, isSimulatorSession());
+      setSessionCapabilities(next.capabilities);
+      setAuthz(next);
+      const ruolo = next.uiShell === 'admin' ? 'admin' : 'operatore';
+      if (operator.role === ruolo) return;
+      // Il ruolo ora appartiene all'altra shell: si torna alla sua dashboard.
+      setCurrentOperator({ ...operator, role: ruolo });
+      setUtente((prev) => (prev ? { ...prev, ruolo } : prev));
+      const key: NavKey = ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard';
+      window.history.replaceState({ navKey: key }, '', `#/${key}`);
+      setNavKey(key);
+    } catch {
+      // Rete assente: restano le capability note, il server continua a far rispettare la policy.
+    }
+  }, []);
+
+  const loggedIn = utente !== null;
+  useEffect(() => {
+    if (!loggedIn) return;
+    const onFocus = () => void refreshAuthz();
+    window.addEventListener('focus', onFocus);
+    return () => window.removeEventListener('focus', onFocus);
+  }, [loggedIn, refreshAuthz]);
+
+  // Simulatore ruoli: il profilo scelto è solo un id; nome, ruolo e permessi arrivano dal server.
+  function handleSimulatorLogin(identity: SimulatorIdentity) {
+    const parts = identity.name.trim().split(/\s+/);
+    void handleLogin(
+      {
+        id: identity.id,
+        nome: identity.name,
+        ruolo: 'operatore',
+        iniziali: `${parts[0]?.[0] ?? ''}${parts[1]?.[0] ?? ''}`.toUpperCase(),
+        reparto: '',
+      },
+      identity.id,
+    );
+  }
+
+  async function handleLogin(u: UtenteApp, simulatorIdentityId?: string) {
     if (loginPending) return;
     setLoginPending(true);
     setLoginError(null);
@@ -1872,7 +1988,26 @@ export default function App() {
     // The selected card is only a demo/local hint: with a token, id and UI role are replaced by
     // the identity resolved server-side so an operator cannot unlock admin UI by choosing a card.
     try {
-      const accessToken = await acquireApiToken();
+      let accessToken: string | null;
+      if (simulatorIdentityId) {
+        // Sessione firmata dal server: il token è l'unica credenziale (nessun ruolo dentro).
+        const sessionResponse = await fetch(`${API_URL}/auth/simulator/session`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identityId: simulatorIdentityId }),
+        });
+        const session = (await sessionResponse.json().catch(() => null)) as {
+          token?: string;
+          error?: string;
+        } | null;
+        if (!sessionResponse.ok || !session?.token) {
+          setLoginError(session?.error ?? 'Profilo simulato non disponibile');
+          return;
+        }
+        accessToken = session.token;
+      } else {
+        accessToken = await acquireApiToken();
+      }
       const identityHeaders: Record<string, string> = accessToken
         ? { Authorization: `Bearer ${accessToken}` }
         : { 'X-Operator-Id': u.id, 'X-Operator-Role': u.ruolo };
@@ -1886,17 +2021,17 @@ export default function App() {
         setLoginError(payload?.error ?? 'Identità non autorizzata in ClinicOS');
         return;
       }
-      const identity = (await identityResponse.json()) as {
-        id: string;
-        role: string;
-        name?: string;
-        authMode: 'entra' | 'demo' | 'disabled';
-        temporaryDemo: boolean;
-      };
-      setAuthStatus({ mode: identity.authMode, temporaryDemo: identity.temporaryDemo });
-      const resolvedRole = ['admin', 'manager'].includes(identity.role.toLowerCase())
-        ? 'admin'
-        : 'operatore';
+      const identity = (await identityResponse.json()) as AuthMeResponse;
+      setAuthStatus((prev) => ({
+        mode: identity.authMode,
+        temporaryDemo: identity.temporaryDemo,
+        simulator: prev?.simulator,
+      }));
+      const nextAuthz = authzFromIdentity(identity, Boolean(simulatorIdentityId));
+      setSessionCapabilities(nextAuthz.capabilities);
+      setAuthz(nextAuthz);
+      // La shell (admin/operatore) la decide il ruolo risolto dal server.
+      const resolvedRole = nextAuthz.uiShell === 'admin' ? 'admin' : 'operatore';
       const resolvedUser: UtenteApp = {
         ...u,
         id: identity.id,
@@ -1996,6 +2131,7 @@ export default function App() {
       summaryExact: true,
     });
     setCurrentOperator(null);
+    setAuthz(null);
     clearCachedGet();
     clearSessionCache();
     loadedAppointmentRangeRef.current = null;
@@ -2270,7 +2406,12 @@ export default function App() {
       } & Record<string, unknown>;
       if (res.status === 409)
         return body.error?.message ?? 'Slot già occupato: scegli un altro orario.';
-      if (!res.ok) return body.error?.message ?? 'Impossibile salvare l’appuntamento.';
+      if (!res.ok)
+        return (
+          capabilityDeniedMessage(res.status, body) ??
+          body.error?.message ??
+          'Impossibile salvare l’appuntamento.'
+        );
       setAppuntamenti((prev) => [...prev, mapAppointmentDTO(body)]);
       showToast('Appuntamento salvato');
       return null;
@@ -2303,7 +2444,12 @@ export default function App() {
       } & Record<string, unknown>;
       if (res.status === 409)
         return body.error?.message ?? 'Slot gia occupato: scegli un altro orario.';
-      if (!res.ok) return body.error?.message ?? 'Impossibile aggiornare l’appuntamento.';
+      if (!res.ok)
+        return (
+          capabilityDeniedMessage(res.status, body) ??
+          body.error?.message ??
+          'Impossibile aggiornare l’appuntamento.'
+        );
       const updated = mapAppointmentDTO(body);
       setAppuntamenti((prev) => prev.map((a) => (a.id === id ? updated : a)));
       showToast('Appuntamento aggiornato');
@@ -2896,6 +3042,11 @@ export default function App() {
 
   const utenteId = utente?.id ?? '';
   const isAdmin = utente?.ruolo === 'admin';
+  // Capability della sessione: la GUI nasconde/disabilita, il backend applica la policy.
+  const capabilities = authz?.capabilities ?? null;
+  const canAdministerTherapy =
+    can(capabilities, 'administration.confirm') &&
+    can(capabilities, 'administration.record_not_administered');
 
   // ── Login gate ──────────────────────────────────────────────────────────────
 
@@ -2906,6 +3057,8 @@ export default function App() {
         demoMode={authStatus?.temporaryDemo === true}
         loading={loginPending}
         error={loginError}
+        simulator={authStatus?.simulator === true}
+        onSimulatorLogin={handleSimulatorLogin}
       />
     );
 
@@ -2954,6 +3107,7 @@ export default function App() {
           onNavigate={(k) => navigate(k)}
           unreadNotes={notesUnreadCount}
           assistantOpen={aiVisible}
+          capabilities={authz?.capabilities ?? null}
         />
 
         {/* Main */}
@@ -3024,11 +3178,23 @@ export default function App() {
               </button>
               {utente && (
                 <>
-                  <span className="topbar-status">
-                    <span className="topbar-status__dot" aria-hidden="true" />
-                    {utente.reparto}
-                  </span>
-                  <UserMenu utente={utente} onLogout={handleLogout} />
+                  {utente.reparto && (
+                    <span className="topbar-status">
+                      <span className="topbar-status__dot" aria-hidden="true" />
+                      {utente.reparto}
+                    </span>
+                  )}
+                  {authz?.simulator && (
+                    <span className="badge badge--amber" title="Simulatore ruoli — solo sviluppo">
+                      Simulatore
+                    </span>
+                  )}
+                  <UserMenu
+                    utente={utente}
+                    onLogout={handleLogout}
+                    roleLabel={authz?.roleLabel}
+                    simulator={authz?.simulator === true}
+                  />
                 </>
               )}
             </div>
@@ -3234,6 +3400,15 @@ export default function App() {
                           onSave={saveSchedule}
                         />
                       )}
+                      {navKey === 'ruoli-permessi' &&
+                        (canNavigate(capabilities, 'ruoli-permessi') ? (
+                          <RolePermissionsPage onPolicyApplied={() => void refreshAuthz()} />
+                        ) : (
+                          <div className="page-load-error" role="alert">
+                            <strong>Accesso non consentito</strong>
+                            <span>Il tuo ruolo non può consultare ruoli e permessi.</span>
+                          </div>
+                        ))}
 
                       {/* ── SHARED ── */}
                       {navKey === 'terapie' && (
@@ -3247,7 +3422,7 @@ export default function App() {
                           loadMoreError={therapyLoadMoreError}
                           onLoad={loadTherapySlots}
                           onLoadMore={loadMoreTherapySlots}
-                          readOnly={isAdmin}
+                          readOnly={isAdmin || !canAdministerTherapy}
                           onConfirm={confirmTherapy}
                           onNotAdministered={notAdministeredTherapy}
                         />

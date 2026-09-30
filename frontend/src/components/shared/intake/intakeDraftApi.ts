@@ -1,7 +1,7 @@
 // Intake draft API client.
 
 import { API_URL } from '../../../config';
-import { operatorHeaders } from '../../../lib/operatorSession';
+import { isSimulatorSession, operatorHeaders } from '../../../lib/operatorSession';
 import type { ImportSource } from '../import/importSessionTypes';
 import { SERVER_DRAFT_KEYS } from './intakeDocuments';
 
@@ -61,6 +61,7 @@ function buildHeaders(op?: OperatorHeaders): Record<string, string> {
     'Content-Type': 'application/json',
     ...operatorHeaders(),
   };
+  if (isSimulatorSession()) return headers;
   if (op?.operatorId && !headers['X-Operator-Id']) headers['X-Operator-Id'] = op.operatorId;
   if (op?.operatorRole && !headers['X-Operator-Role']) headers['X-Operator-Role'] = op.operatorRole;
   return headers;

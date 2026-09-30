@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { IcoAI, IcoX } from '../../icons';
 import { API_URL } from '../../config';
+import { isSimulatorSession, operatorHeaders } from '../../lib/operatorSession';
 import { NavChips } from './agnos/NavChips';
 import { PARTIAL_RESULTS_MESSAGE } from './agnos/assistantFeedback';
 
@@ -92,9 +93,14 @@ export function AIAssistantButton({
     setTurns((t) => [...t, { question, loading: true }]);
     setQuestion('');
     try {
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (operatorId) headers['X-Operator-Id'] = operatorId;
-      if (operatorRole) headers['X-Operator-Role'] = operatorRole;
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        ...operatorHeaders(),
+      };
+      if (!isSimulatorSession()) {
+        if (operatorId) headers['X-Operator-Id'] = operatorId;
+        if (operatorRole) headers['X-Operator-Role'] = operatorRole;
+      }
       const res = await fetch(`${API_URL}/ai/assistant/query`, {
         method: 'POST',
         headers,
