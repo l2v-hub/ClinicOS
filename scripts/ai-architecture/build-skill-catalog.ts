@@ -12,6 +12,8 @@ import { CONFIRMATION_POLICY_VERSION } from '../../backend/src/skills/confirmati
 
 const DIR = '.ai-architecture/phase-3-skills';
 const E2E = 'backend/src/skills/__tests__/skills-e2e.test.ts';
+const P4 = 'backend/src/skills/__tests__/assistant-e2e.test.ts';
+const P4_BROWSER = 'scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence)';
 const LIVE = 'scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)';
 
 // Automated evidence per skill (test names in skills-e2e.test.ts; live = real Agno runtime).
@@ -30,8 +32,8 @@ const EVIDENCE: Record<string, string[]> = {
   'drug.lookup': ['per-role coverage (administrator)'],
   'patient.find': ['per-role coverage (nurse)'],
   'admin.roster_contexts': ['per-role coverage (administrator)'],
-  'therapy.prescribe': ['D (hand-off, human_control_required)'],
-  'administration.record': [],
+  'therapy.prescribe': ['D (OSS denied)', 'P4 C (prepare → UI confirm → with-therapy)', 'P4 browser C', 'P4 browser (Agno)'],
+  'administration.record': ['P4 I (prepare → UI confirm, backend failure, retry)', 'P4 browser I', 'P4 browser (Agno)'],
 };
 
 const ROLES = ['administrator', 'supervisor', 'doctor', 'nurse', 'oss'] as const;
@@ -61,7 +63,15 @@ const skills = SKILL_CATALOG.map((skill) => {
     implementation_status: status,
     executable_by_assistant: skill.executable,
     test_status: evidence.length ? 'TESTED' : 'NOT_TESTED',
-    test_evidence: evidence.map((name) => (name === 'live Agno' ? `${LIVE}` : `${E2E} › ${name}`)),
+    test_evidence: evidence.map((name) =>
+      name === 'live Agno'
+        ? LIVE
+        : name.startsWith('P4 browser')
+          ? `${P4_BROWSER} › ${name}`
+          : name.startsWith('P4 ')
+            ? `${P4} › ${name.slice(3)}`
+            : `${E2E} › ${name}`,
+    ),
   };
 });
 

@@ -6,28 +6,28 @@
   "roles": [
     {
       "id": "administrator",
-      "label": "Administrator",
+      "label": "Amministratore",
       "description": "Amministratore tecnico: ruoli e permessi, operatori, struttura (camere/letti), configurazione. Nessuna scrittura clinica.",
       "legacyRole": "admin",
       "uiShell": "admin"
     },
     {
       "id": "supervisor",
-      "label": "Supervisor",
+      "label": "Supervisore",
       "description": "Coordinatore operativo: supervisione di reparto, agenda multi-operatore, consegne, turni, posti letto. Letture cliniche complete, nessuna prescrizione.",
       "legacyRole": "manager",
       "uiShell": "admin"
     },
     {
       "id": "doctor",
-      "label": "Doctor",
+      "label": "Medico",
       "description": "Medico: cartella clinica, anamnesi, prescrizioni (con conferma), diario, valutazioni.",
       "legacyRole": "operatore",
       "uiShell": "operator"
     },
     {
       "id": "nurse",
-      "label": "Nurse",
+      "label": "Infermiere",
       "description": "Infermiere: somministrazioni, parametri, diario, scale di valutazione, consegne. Nessuna prescrizione.",
       "legacyRole": "operatore",
       "uiShell": "operator"
@@ -41,7 +41,7 @@
     },
     {
       "id": "operator",
-      "label": "Operator (legacy)",
+      "label": "Operatore (legacy)",
       "description": "Ruolo storico \"Operatore\": mantenuto per le identità non ancora migrate. Stessi permessi di oggi.",
       "legacy": true,
       "legacyRole": "operatore",
@@ -49,7 +49,7 @@
     },
     {
       "id": "legacy_admin",
-      "label": "Administrator (legacy)",
+      "label": "Amministratore (legacy)",
       "description": "Ruolo storico \"Amministratore/Manager\": mantenuto per le identità non ancora migrate. Stessi permessi di oggi (tutto).",
       "legacy": true,
       "legacyRole": "admin",
@@ -66,10 +66,10 @@
   "counts": {
     "administrator": {
       "ALLOWED": 32,
-      "READ_ONLY": 15,
+      "READ_ONLY": 10,
       "ALLOWED_WITH_CONFIRMATION": 2,
-      "DENIED": 96,
-      "effectively_allowed": 49
+      "DENIED": 101,
+      "effectively_allowed": 44
     },
     "supervisor": {
       "ALLOWED": 108,
@@ -114,7 +114,7 @@
       "effectively_allowed": 145
     }
   },
-  "doubtful_total": 80,
+  "doubtful_total": 85,
   "governed_capabilities": 145,
   "derived_capabilities": [
     {
@@ -422,7 +422,7 @@
       "sensitivity": "high",
       "legacy_admin_only": false,
       "effects": {
-        "administrator": "READ_ONLY",
+        "administrator": "DENIED",
         "supervisor": "ALLOWED",
         "doctor": "ALLOWED",
         "nurse": "ALLOWED",
@@ -431,6 +431,7 @@
         "legacy_admin": "ALLOWED"
       },
       "doubtful": {
+        "administrator": "Contenuto clinico per singolo ospite: non implicito per l’amministratore tecnico (Prompt 4 §1.3). Riattivabile se serve a una funzione amministrativa reale.",
         "oss": "Informazioni su farmaci e somministrazioni."
       }
     },
@@ -442,7 +443,7 @@
       "sensitivity": "high",
       "legacy_admin_only": false,
       "effects": {
-        "administrator": "READ_ONLY",
+        "administrator": "DENIED",
         "supervisor": "ALLOWED",
         "doctor": "ALLOWED",
         "nurse": "ALLOWED",
@@ -451,6 +452,7 @@
         "legacy_admin": "ALLOWED"
       },
       "doubtful": {
+        "administrator": "Contenuto clinico per singolo ospite: non implicito per l’amministratore tecnico (Prompt 4 §1.3). Riattivabile se serve a una funzione amministrativa reale.",
         "oss": "Informazioni su farmaci e somministrazioni."
       }
     },
@@ -995,7 +997,7 @@
       "sensitivity": "medium",
       "legacy_admin_only": false,
       "effects": {
-        "administrator": "READ_ONLY",
+        "administrator": "DENIED",
         "supervisor": "ALLOWED",
         "doctor": "ALLOWED",
         "nurse": "ALLOWED",
@@ -1003,7 +1005,9 @@
         "operator": "ALLOWED",
         "legacy_admin": "ALLOWED"
       },
-      "doubtful": {}
+      "doubtful": {
+        "administrator": "Contenuto clinico per singolo ospite: non implicito per l’amministratore tecnico (Prompt 4 §1.3). Riattivabile se serve a una funzione amministrativa reale."
+      }
     },
     {
       "capability_id": "consegne.overview",
@@ -1031,7 +1035,7 @@
       "sensitivity": "medium",
       "legacy_admin_only": false,
       "effects": {
-        "administrator": "READ_ONLY",
+        "administrator": "DENIED",
         "supervisor": "ALLOWED",
         "doctor": "ALLOWED",
         "nurse": "ALLOWED",
@@ -1039,7 +1043,9 @@
         "operator": "ALLOWED",
         "legacy_admin": "ALLOWED"
       },
-      "doubtful": {}
+      "doubtful": {
+        "administrator": "Contenuto clinico per singolo ospite: non implicito per l’amministratore tecnico (Prompt 4 §1.3). Riattivabile se serve a una funzione amministrativa reale."
+      }
     },
     {
       "capability_id": "consegne.update",
@@ -2423,7 +2429,7 @@
       "sensitivity": "high",
       "legacy_admin_only": false,
       "effects": {
-        "administrator": "READ_ONLY",
+        "administrator": "DENIED",
         "supervisor": "ALLOWED",
         "doctor": "ALLOWED",
         "nurse": "ALLOWED",
@@ -2431,7 +2437,9 @@
         "operator": "ALLOWED",
         "legacy_admin": "ALLOWED"
       },
-      "doubtful": {}
+      "doubtful": {
+        "administrator": "Contenuto clinico per singolo ospite: non implicito per l’amministratore tecnico (Prompt 4 §1.3). Riattivabile se serve a una funzione amministrativa reale."
+      }
     },
     {
       "capability_id": "patients.create",

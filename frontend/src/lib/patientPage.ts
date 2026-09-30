@@ -125,6 +125,9 @@ export async function fetchPatientClinicalSummary(
         signal: options.signal,
       },
     );
+    // 403: the role has no per-resident clinical summary (e.g. Administrator): the list still
+    // works without badges. Any other failure is a real error.
+    if (response.status === 403) return [];
     if (!response.ok) throw new Error('Impossibile caricare i badge clinici');
     const summary: unknown = await response.json();
     if (!Array.isArray(summary)) throw new Error('Risposta riepilogo clinico non valida');

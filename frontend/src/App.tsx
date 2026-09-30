@@ -136,7 +136,7 @@ import { TopbarTitleSlot } from './components/shared/topbarTitleSlot';
 import { ShiftClock } from './components/shared/ShiftClock';
 import { UserMenu } from './components/shared/UserMenu';
 
-import { IcoSearch, IcoX } from './icons';
+import { IcoAI, IcoSearch, IcoX } from './icons';
 
 // I moduli di pagina sono chunk separati. Le stesse funzioni di import alimentano sia i
 // componenti lazy sia il precaricamento dopo il login (preloadRouteModules): cosi' il primo accesso
@@ -209,6 +209,8 @@ const AnagraficaFarmaciPage = lazy(() =>
 const AgnosPanel = lazy(() =>
   routeLoaders.AgnosPanel().then((module) => ({ default: module.AgnosPanel })),
 );
+// Phase 4: full-screen AI Assistant (skills + policy + resident scope). Loaded on demand.
+const AssistantMode = lazy(() => import('./components/assistant/AssistantMode'));
 const RolePermissionsPage = lazy(() =>
   routeLoaders.RolePermissionsPage().then((module) => ({ default: module.RolePermissionsPage })),
 );
@@ -428,6 +430,7 @@ export default function App() {
   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [aiOpen, setAiOpen] = useState(false);
+  const [assistantModeOpen, setAssistantModeOpen] = useState(false);
   const [aiOpenTrigger, setAiOpenTrigger] = useState(0);
   const [aiLoaded, setAiLoaded] = useState(false);
   const [aiVisible, setAiVisible] = useState(false);
@@ -3167,6 +3170,19 @@ export default function App() {
             <div className="topbar-title" ref={setTopbarTitleSlot} />
             <ShiftClock />
             <div className="topbar-right">
+              {utente && (
+                <button
+                  type="button"
+                  className="topbar-search topbar-assistant"
+                  onClick={() => setAssistantModeOpen(true)}
+                  title="Assistente AI (schermo intero)"
+                  aria-label="Apri l’Assistente AI a schermo intero"
+                  data-testid="assistant-entry"
+                >
+                  <IcoAI />
+                  <span className="topbar-assistant__label">Assistente AI</span>
+                </button>
+              )}
               <button
                 type="button"
                 className="topbar-search"
@@ -3628,6 +3644,29 @@ export default function App() {
             </TopbarTitleSlot.Provider>
           </main>
         </div>
+
+        {assistantModeOpen && utente && (
+          <LazyLoadBoundary>
+            <Suspense fallback={null}>
+              <AssistantMode
+                pageResident={
+                  navKey === 'dettaglio-paziente' && pazienteSelezionato
+                    ? { id: pazienteSelezionato.id }
+                    : null
+                }
+                onClose={() => setAssistantModeOpen(false)}
+                onOpenClassic={(target) => {
+                  setAssistantModeOpen(false);
+                  if (target.needsResident && target.patientId) {
+                    void selectPazienteById(target.patientId);
+                  } else {
+                    navigate(target.screen as NavKey);
+                  }
+                }}
+              />
+            </Suspense>
+          </LazyLoadBoundary>
+        )}
 
         {aiLoaded ? (
           <LazyLoadBoundary>

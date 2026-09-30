@@ -52,6 +52,15 @@ function say(session: Session, body: Record<string, unknown>) {
   return call(base, session, 'POST', '/skills/converse', body);
 }
 
+/** Confirmation policy v2: an explicit UI event bound to the preview being confirmed. */
+function confirmPreview(session: Session, response: { body: any }) {
+  return say(session, {
+    workflowId: response.body.workflowId,
+    action: 'confirm',
+    previewId: response.body.preview?.previewId,
+  });
+}
+
 const readings = (patientId: string) =>
   prisma.patientParameterReading.count({ where: { patientId } });
 
@@ -64,17 +73,22 @@ async function activePolicy() {
   };
 }
 
+/** Save+Apply one grant; other test files may apply policies concurrently → retry on 409. */
 async function setGrant(role: string, capability: string, effect: string, note: string) {
-  const policy = await activePolicy();
-  const document = structuredClone(policy.document);
-  document.grants[role][capability] = effect;
-  const saved = await call(base, admin, 'POST', '/authz/policy/versions', {
-    document,
-    basedOnVersion: policy.version,
-    note: `${runTag}: ${note}`,
-    apply: true,
-  });
-  assert.equal(saved.status, 201, JSON.stringify(saved.body));
+  for (let attempt = 0; ; attempt += 1) {
+    const policy = await activePolicy();
+    const document = structuredClone(policy.document);
+    document.grants[role][capability] = effect;
+    const saved = await call(base, admin, 'POST', '/authz/policy/versions', {
+      document,
+      basedOnVersion: policy.version,
+      note: `${runTag}: ${note}`,
+      apply: true,
+    });
+    if (saved.status === 409 && attempt < 10) continue;
+    assert.equal(saved.status, 201, JSON.stringify(saved.body));
+    return;
+  }
 }
 
 before(async () => {
@@ -156,7 +170,7 @@ test('A — read skill: natural language → skill → authorized read tool → 
   });
   assert.ok(tool, 'the read went through the Tool Layer');
   assert.equal(tool.outcome, 'ok');
-  assert.equal(tool.channel, 'ai');
+  assert.equal(tool.channel, 'ai_assistant');
 
   const overview = await say(nurse, {
     message: 'mostrami le informazioni disponibili su questo paziente',
@@ -181,7 +195,7 @@ test('B + I — write skill: preview → explicit confirmation → persisted →
   assert.equal(preview.origin, 'ai');
   assert.equal(await readings(patients.rossi), before, 'nothing written before confirmation');
 
-  const done = await say(nurse, { workflowId: start.body.workflowId, action: 'confirm' });
+  const done = await confirmPreview(nurse, start);
   assert.equal(done.body.status, 'COMPLETED', JSON.stringify(done.body));
   assert.equal(done.body.result.verified, true, 'read back through parameters.list_readings');
   assert.equal(await readings(patients.rossi), before + 1);
@@ -201,13 +215,18 @@ test('B + I — write skill: preview → explicit confirmation → persisted →
     assert.ok(event);
     assert.equal(event!.operatorId, 'SIM-NURSE-1');
     assert.equal(event!.operatorRole, 'nurse');
-    assert.equal(event!.channel, 'ai');
+    assert.equal(event!.channel, 'ai_assistant');
   }
   assert.ok(request!.fields.includes('interpreter:deterministic'));
   assert.ok(proposal!.fields.includes('tool:parameters.create_reading'));
   assert.ok(proposal!.fields.includes('value:pa'), 'field NAMES only');
-  assert.ok(!proposal!.fields.some((f) => f.includes('120')), 'no values (PHI-safe)');
-  assert.deepEqual(confirmation!.fields, ['confirmed']);
+  assert.ok(
+    !proposal!.fields.some((f) => !f.startsWith('preview:') && f.includes('120')),
+    'no values (PHI-safe)',
+  );
+  assert.ok(confirmation!.fields.includes('confirmed'));
+  assert.ok(confirmation!.fields.includes(`preview:${preview.previewId}`), 'bound to the preview');
+  assert.ok(confirmation!.fields.includes('ui_event'));
   assert.equal(execution!.outcome, 'ok');
   assert.equal(execution!.patientId, patients.rossi);
   const toolEvent = await waitForAudit({ requestId, actionType: 'tool:parameters.create_reading' });
@@ -263,12 +282,19 @@ test('D — identity without the capability → DENIED, confirmed by the backend
       actionType: 'skill:therapy.due_administrations:denied',
     }),
   );
-  // HIGH_RISK: even an allowed doctor gets a hand-off, never an execution.
-  const prescribe = await say(doctor, {
-    message: `prescrivi paracetamolo 1 g per Dario Neri${Tag}`,
+  // HIGH_RISK outside the role: the OSS may not even prepare a prescription.
+  const prescribe = await say(oss, {
+    message: `prescrivi paracetamolo 1 g per Olga Verdi${Tag}`,
   });
-  assert.equal(prescribe.body.status, 'DENIED');
-  assert.equal(prescribe.body.error.code, 'human_control_required');
+  assert.equal(prescribe.body.status, 'DENIED', JSON.stringify(prescribe.body));
+  assert.equal(prescribe.body.error.code, 'capability_denied');
+  // …and the doctor only gets a PREPARED draft, never an execution without the UI confirmation.
+  const draft = await say(doctor, {
+    message: `prescrivi paracetamolo 1 g alle 8 per Dario Neri${Tag}`,
+  });
+  assert.equal(draft.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(draft.body));
+  assert.equal(draft.body.preview.confirmationClass, 'HIGH_RISK');
+  await say(doctor, { workflowId: draft.body.workflowId, action: 'cancel' });
 });
 
 test('E — multi-turn: structured state across turns, then completion', async () => {
@@ -288,7 +314,9 @@ test('E — multi-turn: structured state across turns, then completion', async (
   const t4 = await say(nurse, { workflowId: id, message: 'pressione 118/76, fc 70' });
   assert.equal(t4.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(t4.body));
   assert.equal(t4.body.preview.patient.id, patients.bianchiLuca);
-  const t5 = await say(nurse, { workflowId: id, message: 'sì' });
+  const typed = await say(nurse, { workflowId: id, message: 'sì' });
+  assert.equal(typed.body.status, 'NEEDS_CONFIRMATION', 'a typed «sì» is not a confirmation');
+  const t5 = await confirmPreview(nurse, t4);
   assert.equal(t5.body.status, 'COMPLETED', JSON.stringify(t5.body));
   assert.equal(await readings(patients.bianchiLuca), before + 1);
   const state = await call(base, nurse, 'GET', `/skills/workflows/${id}`);
@@ -326,7 +354,7 @@ test('F — capability revoked during the workflow → policy re-evaluated → D
     const skill = skills.body.skills.find((s: { id: string }) => s.id === 'diary.add_observation');
     assert.equal(skill.available, false);
     assert.deepEqual(skill.missingRequired, ['diary.create']);
-    const confirm = await say(nurse, { workflowId: start.body.workflowId, action: 'confirm' });
+    const confirm = await confirmPreview(nurse, start);
     assert.equal(confirm.body.status, 'DENIED', JSON.stringify(confirm.body));
     assert.equal(confirm.body.error.code, 'capability_revoked');
     assert.equal(
@@ -340,7 +368,7 @@ test('F — capability revoked during the workflow → policy re-evaluated → D
   const again = await say(nurse, {
     message: `aggiungi questa osservazione per Mario ${rossi}: "cena consumata"`,
   });
-  const ok = await say(nurse, { workflowId: again.body.workflowId, action: 'confirm' });
+  const ok = await confirmPreview(nurse, again);
   assert.equal(ok.body.status, 'COMPLETED', JSON.stringify(ok.body));
   assert.equal(
     await prisma.patientDiaryEntry.count({ where: { patientId: patients.rossi } }),
@@ -390,7 +418,7 @@ test('H — backend failure: no false success; retry does not duplicate the writ
   );
   const first = await say(nurse, { message: `registra temperatura 37.9 per Anna ${bianchi}` });
   assert.equal(first.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(first.body));
-  const failed = await say(nurse, { workflowId: first.body.workflowId, action: 'confirm' });
+  const failed = await confirmPreview(nurse, first);
   assert.equal(failed.body.status, 'FAILED');
   assert.match(failed.body.reply, /NON eseguita/);
   assert.doesNotMatch(failed.body.reply, /registrati/);
@@ -409,7 +437,7 @@ test('H — backend failure: no false success; retry does not duplicate the writ
       : result;
   });
   const second = await say(nurse, { message: `registra temperatura 38.1 per Anna ${bianchi}` });
-  const lost = await say(nurse, { workflowId: second.body.workflowId, action: 'confirm' });
+  const lost = await confirmPreview(nurse, second);
   assert.equal(lost.body.status, 'FAILED');
   assert.equal(await readings(patients.bianchiAnna), before + 1, 'the write did happen');
   setSkillInvokeWrapper(null);
@@ -427,7 +455,7 @@ test('H — backend failure: no false success; retry does not duplicate the writ
   assert.equal(stale.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(stale.body));
   await prisma.patient.delete({ where: { id: tempId } });
   delete patients.temp;
-  const gone = await say(nurse, { workflowId: stale.body.workflowId, action: 'confirm' });
+  const gone = await confirmPreview(nurse, stale);
   assert.equal(gone.body.status, 'FAILED', JSON.stringify(gone.body));
   assert.match(gone.body.reply, /NON eseguita/);
 });
@@ -470,14 +498,14 @@ test('per-role coverage: every executable skill completes for an intended role',
   const note = `consegna completata ${runTag}`;
   const start = await say(oss, { message: `crea una consegna per Olga Verdi${Tag}: "${note}"` });
   assert.equal(start.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(start.body));
-  const done = await say(oss, { workflowId: start.body.workflowId, message: 'conferma' });
+  const done = await confirmPreview(oss, start);
   assert.equal(done.body.status, 'COMPLETED', JSON.stringify(done.body));
   assert.equal(await prisma.consegna.count({ where: { note } }), 1);
   // doctor records vitals too (intended role), OSS adds an observation.
   const vit = await say(doctor, { message: `registra pressione 140/90 per Dario Neri${Tag}` });
-  assert.equal((await say(doctor, { workflowId: vit.body.workflowId, action: 'confirm' })).body.status, 'COMPLETED');
+  assert.equal((await confirmPreview(doctor, vit)).body.status, 'COMPLETED');
   const obs = await say(oss, { message: `aggiungi questa osservazione per Olga Verdi${Tag}: "passeggiata in giardino"` });
-  assert.equal((await say(oss, { workflowId: obs.body.workflowId, action: 'confirm' })).body.status, 'COMPLETED');
+  assert.equal((await confirmPreview(oss, obs)).body.status, 'COMPLETED');
 });
 
 test('QA H1 — a slow correction racing a confirmation cannot produce a second write', async () => {
@@ -500,11 +528,19 @@ test('QA H1 — a slow correction racing a confirmation cannot produce a second 
   const correction = converse(deps, identity, { workflowId: start.workflowId!, message: 'pressione 130/80' });
   await new Promise((resolve) => setTimeout(resolve, 100));
   slow = false;
-  const confirmed = await converse(deps, identity, { workflowId: start.workflowId!, action: 'confirm' });
+  const confirmed = await converse(deps, identity, {
+    workflowId: start.workflowId!,
+    action: 'confirm',
+    previewId: start.preview!.previewId,
+  });
   assert.equal(confirmed.status, 'COMPLETED', JSON.stringify(confirmed));
   const late = await correction;
   assert.equal(late.status, 'COMPLETED', `the stale correction must not reopen the workflow: ${JSON.stringify(late)}`);
-  const again = await converse(deps, identity, { workflowId: start.workflowId!, action: 'confirm' });
+  const again = await converse(deps, identity, {
+    workflowId: start.workflowId!,
+    action: 'confirm',
+    previewId: start.preview!.previewId,
+  });
   assert.equal(again.status, 'COMPLETED');
   assert.equal(await readings(patients.rossi), before + 1, 'exactly one write');
 });
@@ -527,7 +563,8 @@ test('QA L1 — page context: exactly the verified id, label from server data', 
     message: 'registra pressione 120/80 per questo ospite',
     context: { currentPatientId: `${patients.rossi},${patients.bianchiAnna}` },
   });
-  assert.equal(listCtx.body.status, 'NEEDS_CLARIFICATION', JSON.stringify(listCtx.body));
+  assert.equal(listCtx.body.status, 'DENIED', JSON.stringify(listCtx.body));
+  assert.equal(listCtx.body.error.code, 'resident_out_of_scope');
   const spoofed = await say(nurse, {
     message: 'registra pressione 120/80 per questo ospite',
     context: { currentPatientId: patients.rossi, currentPatientLabel: `Anna ${bianchi}` },

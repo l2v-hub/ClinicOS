@@ -3,15 +3,15 @@
 > Generated from `SKILL_CATALOG.json` (source of record `backend/src/skills/catalog.ts`) by
 > `scripts/ai-architecture/build-skill-catalog.ts` + `render-skill-catalog.mjs`. Do not edit by hand.
 
-Totals: skills 16 · TESTED 14 · DESIGNED 2 · confirmation policy v1
+Totals: skills 16 · TESTED 16 · confirmation policy v2
 
 | skill_id | nome | categoria | tipo | conferma | tool richiesti | tool opzionali | ruoli previsti | stato | evidenze |
 |---|---|---|---|---|---|---|---|---|---|
 | `vitals.record` | Registra parametri vitali | clinical | write | SENSITIVE_WRITE | patients.search, parameters.create_reading | parameters.list_readings | doctor, nurse, oss, supervisor | TESTED | 7 |
 | `diary.add_observation` | Aggiungi osservazione al diario | clinical | write | SENSITIVE_WRITE | patients.search, diary.create | diary.list | doctor, nurse, oss, supervisor | TESTED | 3 |
 | `handover.create` | Crea consegna | operational | write | LOW_RISK_WRITE | patients.search, consegne.create | — | doctor, nurse, oss, supervisor | TESTED | 3 |
-| `therapy.prescribe` | Prescrivi terapia | clinical | write | HIGH_RISK | patients.search, diary.therapy_preview, therapy.create | drugs.search | doctor | DESIGNED | 1 |
-| `administration.record` | Registra somministrazione | clinical | action | HIGH_RISK | administration.list_slots, administration.confirm | administration.record_not_administered | nurse | DESIGNED | 0 |
+| `therapy.prescribe` | Prepara prescrizione | clinical | write | HIGH_RISK | patients.search, diary.therapy_preview, diary.create_with_therapy | — | doctor | TESTED | 4 |
+| `administration.record` | Registra somministrazione | clinical | action | HIGH_RISK | patients.search, administration.list_slots, administration.confirm | — | nurse, supervisor | TESTED | 3 |
 | `vitals.recent` | Parametri recenti | query | read | READ | patients.search, parameters.list_readings | — | doctor, nurse, oss, supervisor | TESTED | 3 |
 | `diary.recent` | Diario recente | query | read | READ | patients.search, diary.list | — | doctor, nurse, oss, supervisor | TESTED | 1 |
 | `patient.overview` | Informazioni sull’ospite | query | read | READ | patients.search, patients.clinical_summary | parameters.list_readings | doctor, nurse, oss, supervisor | TESTED | 2 |
@@ -31,10 +31,10 @@ Totals: skills 16 · TESTED 14 · DESIGNED 2 · confirmation policy v1
 Registra una rilevazione di parametri vitali (pressione, SpO2, frequenza cardiaca, temperatura, frequenza respiratoria, glicemia/DTX, ossigeno, coscienza) per un ospite.
 
 - Input/contesto: patient, values · Output: Rilevazione salvata (id, orario) e verificata rileggendo le rilevazioni del giorno.
-- Workflow: identify_patient: patients.search | contesto pagina → collect_values: slot values (validazione con parseParameterReading, la stessa del servizio) → preview: ospite, valori, orario, origine AI → confirm: atto esplicito dell’utente → execute: parameters.create_reading (requestId stabile → retry senza duplicati) → verify: parameters.list_readings (se disponibile) → audit: skill:vitals.record:* + tool:parameters.create_reading
+- Workflow: identify_patient: patients.search | contesto pagina + resident access scope → collect_values: slot values (validazione con parseParameterReading, la stessa del servizio) → preview: ospite, valori, orario, autore, origine AI → confirm: evento UI esplicito legato al previewId → execute: parameters.create_reading (requestId stabile → retry senza duplicati) → verify: parameters.list_readings (se disponibile) → audit: skill:vitals.record:* + tool:parameters.create_reading
 - Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Valori mancanti o non validi → NEEDS_CLARIFICATION sui valori.
 - Errori: Errore di validazione/servizio → FAILED con il messaggio del backend; retry riusa lo stesso requestId (dedupe del servizio).
-- Audit: request, proposal (nomi dei campi), confirmation, execute (outcome) + evento del tool. · Sensibilità: high
+- Audit: request, proposal (preview id, nomi dei campi), confirmation, execute + evento del tool. · Sensibilità: high
 - Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › B + I; backend/src/skills/__tests__/skills-e2e.test.ts › C; backend/src/skills/__tests__/skills-e2e.test.ts › D; backend/src/skills/__tests__/skills-e2e.test.ts › E; backend/src/skills/__tests__/skills-e2e.test.ts › H; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (doctor); scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)
 
 ### `diary.add_observation` — Aggiungi osservazione al diario
@@ -42,7 +42,7 @@ Registra una rilevazione di parametri vitali (pressione, SpO2, frequenza cardiac
 Aggiunge un'osservazione (nota di diario clinico-assistenziale) alla cartella di un ospite, attribuita all'operatore corrente.
 
 - Input/contesto: patient, text · Output: Voce di diario creata (id, autore risolto dal server).
-- Workflow: identify_patient: patients.search | contesto pagina → collect_text: slot text (testo integrale, mai riscritto) → preview: ospite, testo, categoria, origine AI → confirm → execute: diary.create (una sola esecuzione per workflow: il tool non è idempotente) → audit
+- Workflow: identify_patient: patients.search | contesto pagina + resident access scope → collect_text: slot text (testo integrale, mai riscritto) → preview: ospite, testo, data, autore, origine AI → confirm: evento UI esplicito legato al previewId → execute: diary.create (una sola esecuzione per workflow: il tool non è idempotente) → audit
 - Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.
 - Errori: diary.create non è idempotente: il workflow blocca una seconda esecuzione; dopo un esito incerto non ritenta da solo.
 - Audit: request, proposal, confirmation, execute + tool:diary.create. · Sensibilità: high
@@ -50,39 +50,38 @@ Aggiunge un'osservazione (nota di diario clinico-assistenziale) alla cartella di
 
 ### `handover.create` — Crea consegna
 
-Crea una consegna (passaggio di informazioni al turno) riferita a un ospite.
+Crea una consegna (passaggio di informazioni al turno) riferita a un ospite. Priorità normale e tipo «Assistente AI» di default; l’urgenza viene solo segnalata.
 
-- Input/contesto: patient, text · Output: Consegna creata (id, priorità normale).
-- Workflow: identify_patient → collect_text → preview: ospite, testo, priorità normale, tipo assistenziale → confirm → execute: consegne.create (requestId stabile) → audit
+- Input/contesto: patient, text · Output: Consegna creata (id, priorità, tipo Assistente AI).
+- Workflow: identify_patient + resident access scope → collect_text → preview: ospite, testo, priorità normale, tipo Assistente AI, avviso se il testo sembra urgente → modify (facoltativo): cambio priorità esplicito → nuova anteprima → confirm: evento UI esplicito legato al previewId → execute: consegne.create (requestId stabile) → audit
 - Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.
 - Errori: FAILED con il messaggio del backend; retry idempotente sul requestId.
 - Audit: request, proposal, confirmation, execute + tool:consegne.create. · Sensibilità: medium
-- **Da validare con il cliente:** Priorità e tipo di default (normale / assistenziale) da validare con il cliente.
 - Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › G; backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss); scripts/skills/agno-live-e2e.mjs (evidence/agno-live-e2e-run*.json)
 
-### `therapy.prescribe` — Prescrivi terapia
+### `therapy.prescribe` — Prepara prescrizione
 
-Nuova prescrizione farmacologica. Clinicamente critica: il medico la compila e conferma dalla scheda Terapia, l’assistente non la esegue.
+Prepara una nuova prescrizione dal testo dettato (stesso interprete del Diario → Terapia): anteprima strutturata, poi SOLO il medico la conferma con il pulsante Conferma. L’assistente non conferma mai.
 
-- Input/contesto: patient, text · Output: Nessuna scrittura: indirizzamento alla scheda Terapia.
-- Workflow: classify HIGH_RISK → handoff: scheda Terapia / Diario → Terapia (conferma umana)
-- Ambiguità: Non applicabile: nessuna esecuzione.
-- Errori: Non applicabile: nessuna esecuzione.
-- Audit: request + denied (human_control_required). · Sensibilità: critical
-- **Da validare con il cliente:** Se e come l’assistente possa preparare (mai confermare) una prescrizione va deciso con il cliente e il direttore sanitario.
-- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › D (hand-off, human_control_required)
+- Input/contesto: patient, text · Output: Voce di diario «terapia» + terapia collegata (ids), create dal medico.
+- Workflow: identify_patient + resident access scope → prepare: diary.therapy_preview (regole + proposta AI solo sui campi vuoti) → preview: farmaco, dosaggio, via, orari, date, avvisi; Conferma nascosta se mancano dati → confirm: evento UI esplicito legato al previewId, con la terapia mappata dal form Terapia → check: la terapia confermata corrisponde alla bozza (farmaco, orari, inizio) → execute: diary.create_with_therapy (requestId stabile) → audit
+- Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Testo che indica sospensione/somministrazione/modifica → non è una prescrizione: rimando alla scheda Terapia.
+- Errori: Dati mancanti o conflitti di fascia → nessun pulsante Conferma, rimando alla scheda Terapia; errore del servizio → FAILED.
+- Audit: request, proposal (preview id), confirmation (preview id), execute + tool:diary.create_with_therapy. · Sensibilità: critical
+- **Da validare con il cliente:** Prescrizione preparata dall’assistente e confermata dal medico: validare con il direttore sanitario prima dell’uso reale.
+- Evidenze: backend/src/skills/__tests__/skills-e2e.test.ts › D (OSS denied); backend/src/skills/__tests__/assistant-e2e.test.ts › C (prepare → UI confirm → with-therapy); scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser C; scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser (Agno)
 
 ### `administration.record` — Registra somministrazione
 
-Conferma o mancata somministrazione di una terapia. Clinicamente critica: si esegue dal giro terapia, l’assistente non la esegue.
+Prepara la registrazione di una somministrazione in attesa dell’ospite (giro terapia del giorno): anteprima, poi SOLO l’operatore autorizzato conferma con il pulsante Conferma dopo aver somministrato.
 
-- Input/contesto: patient · Output: Nessuna scrittura: indirizzamento al giro terapia.
-- Workflow: classify HIGH_RISK → handoff: Terapia → giro somministrazioni
-- Ambiguità: Non applicabile: nessuna esecuzione.
-- Errori: Non applicabile: nessuna esecuzione.
-- Audit: request + denied (human_control_required). · Sensibilità: critical
-- **Da validare con il cliente:** Somministrazione assistita da voce/AI da definire con il cliente (doppio controllo, identificazione ospite).
-- Evidenze: nessuna (non eseguibile dall’assistente)
+- Input/contesto: patient, administration, date? · Output: Somministrazione registrata (terapia, fascia, data) dall’operatore autenticato.
+- Workflow: identify_patient + resident access scope → read: administration.list_slots (oggi) → somministrazioni in attesa dell’ospite → choose: una sola → selezionata; più → scelta esplicita → preview: farmaco, dose, via, fascia/ora, data, avviso «conferma solo dopo la somministrazione» → confirm: evento UI esplicito legato al previewId → execute: administration.confirm → audit
+- Ambiguità: Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo. Più somministrazioni in attesa → scelta esplicita tra i candidati.
+- Errori: Nessuna somministrazione in attesa → nessuna scrittura; errore del servizio → FAILED.
+- Audit: request, proposal (preview id), confirmation (preview id), execute + tool:administration.confirm. · Sensibilità: critical
+- **Da validare con il cliente:** Doppio controllo / identificazione dell’ospite al letto: da definire con il cliente prima dell’uso in reparto.
+- Evidenze: backend/src/skills/__tests__/assistant-e2e.test.ts › I (prepare → UI confirm, backend failure, retry); scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser I; scripts/assistant/assistant-browser-e2e.mjs (.ai-architecture/phase-4-assistant/evidence) › P4 browser (Agno)
 
 ### `vitals.recent` — Parametri recenti
 
@@ -187,7 +186,7 @@ Cerca un farmaco nell’anagrafica farmaci.
 
 Cerca un ospite per nome, cognome o codice fiscale.
 
-- Input/contesto: query · Output: Ospiti trovati (nome, camera/letto).
+- Input/contesto: query · Output: Ospiti trovati (nome).
 - Workflow: read: patients.search → answer
 - Ambiguità: Testo assente → NEEDS_CLARIFICATION.
 - Errori: FAILED con il messaggio del backend.

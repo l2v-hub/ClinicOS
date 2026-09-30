@@ -143,6 +143,16 @@ export function verifySimulatorToken(token: string, now = Date.now()): string | 
 
 /** Idempotently provisions the User + Operator rows of a simulated identity (simulator only). */
 export async function ensureSimulatedIdentity(identity: SimulatedIdentity): Promise<void> {
+  try {
+    await upsertSimulatedIdentity(identity);
+  } catch (error) {
+    // Two first logins at the same time race on the unique email/id: the loser simply re-runs.
+    if ((error as { code?: string })?.code !== 'P2002') throw error;
+    await upsertSimulatedIdentity(identity);
+  }
+}
+
+async function upsertSimulatedIdentity(identity: SimulatedIdentity): Promise<void> {
   const { prisma } = await import('../lib/prisma.js');
   const user = await prisma.user.upsert({
     where: { email: identity.email },

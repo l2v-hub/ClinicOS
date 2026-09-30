@@ -125,19 +125,16 @@ const TECHNICAL = new Set([
   'import_jobs.sweep',
 ]);
 
-// Operational overview reads the Administrator dashboard needs (no clinical detail).
+// Operational overview reads the Administrator dashboard needs: aggregates and identity/bed
+// metadata only. Phase 4 (Prompt 4 §1.3): per-resident clinical content (clinical summary
+// badges, handover texts, therapy administration slots) is NOT implicit for the technical role.
 const ADMIN_OVERVIEW_READS = new Set([
   'patients.list_page',
   'patients.search',
   'patients.clinical_overview',
-  'patients.clinical_summary',
   'patients.settings',
   'consegne.overview',
-  'consegne.list',
-  'consegne.patient_summary',
   'appointments.list',
-  'administration.list_slots',
-  'administration.list_slots_page',
   'room_assignments.list',
   'rooms.patient_room_options',
   'notes.list',
@@ -167,6 +164,20 @@ function administrator(cap: CapabilityEntry): Rule {
     return {
       effect: 'DENIED',
       review: 'In passato l’amministratore gestiva l’agenda globale: ora è compito del Supervisor.',
+    };
+  if (
+    [
+      'patients.clinical_summary',
+      'consegne.list',
+      'consegne.patient_summary',
+      'administration.list_slots',
+      'administration.list_slots_page',
+    ].includes(cap.id)
+  )
+    return {
+      effect: 'DENIED',
+      review:
+        'Contenuto clinico per singolo ospite: non implicito per l’amministratore tecnico (Prompt 4 §1.3). Riattivabile se serve a una funzione amministrativa reale.',
     };
   if (['assistant', 'agnos', 'voice'].includes(cap.domain))
     return {

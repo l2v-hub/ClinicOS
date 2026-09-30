@@ -106,6 +106,21 @@ export function extractDate(message: string, today: string): string | undefined 
   return `${year}-${match[2].padStart(2, '0')}-${match[1].padStart(2, '0')}`;
 }
 
+const PRESCRIPTION_LEAD =
+  /^\s*(?:prepara(?:mi)?\s+(?:una\s+)?(?:nuova\s+)?prescrizione|prescriv\w*|nuova\s+terapia|imposta\s+(?:una\s+)?terapia)\s*(?::|di|con)?\s*/i;
+
+/** Prescription text = the message without the lead verb and the resident reference. */
+export function extractPrescriptionText(message: string): string | undefined {
+  const quoted = extractText(message);
+  if (quoted) return quoted;
+  let text = message.replace(PRESCRIPTION_LEAD, '');
+  const ref = PATIENT_REF.exec(text);
+  if (ref) text = text.slice(0, ref.index) + text.slice(ref.index + ref[0].length);
+  text = text.replace(CURRENT_PATIENT, '').replace(/\s+(?:per|a|al|alla)\s*$/i, '');
+  text = text.replace(/\s{2,}/g, ' ').trim();
+  return /[a-zà-ù]{3,}/i.test(text) ? text : undefined;
+}
+
 function extractQuery(message: string, skillId: string | null): string | undefined {
   if (skillId === 'drug.lookup') {
     const match =
@@ -147,7 +162,13 @@ export const deterministicInterpreter: Interpreter = async ({ message, pending, 
     ...(CURRENT_PATIENT.test(text) ? { currentPatient: true } : {}),
     ...(extractPatientQuery(text) ? { patientQuery: extractPatientQuery(text) } : {}),
     ...(Object.keys(values).length ? { values } : {}),
-    ...(extractText(text) ? { text: extractText(text) } : {}),
+    ...(skillId === 'therapy.prescribe'
+      ? extractPrescriptionText(text)
+        ? { text: extractPrescriptionText(text) }
+        : {}
+      : extractText(text)
+        ? { text: extractText(text) }
+        : {}),
     ...(extractDate(text, today) ? { date: extractDate(text, today) } : {}),
     ...(extractQuery(text, skillId) ? { query: extractQuery(text, skillId) } : {}),
   };

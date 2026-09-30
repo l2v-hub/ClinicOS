@@ -13,7 +13,8 @@ export type AiAuditKind = 'read' | 'create' | 'update' | 'refusal' | 'delete' | 
 // 'ui' = operational action performed through the traditional REST/UI (issue #223), alongside the
 // Agnos channels 'testo'/'voce'. The DB column is a free String, so this needs no migration.
 // Tool Layer invocations (backend/src/tools) record their origin: gui | ai | tool | test.
-export type AiAuditChannel = 'testo' | 'voce' | 'ui' | 'gui' | 'ai' | 'tool' | 'test';
+// 'ai_assistant' = Phase 4 AI Assistant (origin = AI_ASSISTANT).
+export type AiAuditChannel = 'testo' | 'voce' | 'ui' | 'gui' | 'ai' | 'ai_assistant' | 'tool' | 'test';
 export type AiAuditOutcome = 'ok' | 'denied' | 'error' | 'deduped' | 'empty';
 
 export interface AiAuditEventInput {

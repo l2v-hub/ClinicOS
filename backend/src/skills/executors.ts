@@ -4,6 +4,7 @@
 // executors map workflow slots to tool inputs and tool results to a short Italian answer.
 
 import { facilityToday } from '../patients/parameter-reading-input.js';
+import { scheduleFasciaConflicts } from '../therapies/diary-therapy-parse.js';
 import type { ToolResult, ToolErrorShape } from '../tools/types.js';
 import type { SkillPreview, WorkflowState } from './types.js';
 
@@ -121,10 +122,68 @@ function facilityMinute(now: Date): string {
   return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
 }
 
-/** Structured preview of a write (Prompt 3 §9). Built from slots only: nothing is written yet. */
-export function buildPreview(state: WorkflowState, now: Date): SkillPreview {
+/** Handover default type: marks the origin (Prompt 4 §1.2, "AI_ASSISTED" equivalent). */
+export const AI_HANDOVER_TYPE = 'Assistente AI';
+
+// Deterministic hint only: urgency is SUGGESTED, never applied (Prompt 4 §1.2).
+const URGENT_HINT =
+  /\b(urgent\w*|subito|immediat\w*|cadut[oa]|dolore toracico|dispnea|non risponde|sanguin\w*|emorragi\w*|convulsion\w*|desatur\w*|febbre alta|svenut[oa]|incoscient\w*)\b/i;
+
+export function looksUrgent(text: string | undefined): boolean {
+  return typeof text === 'string' && URGENT_HINT.test(text);
+}
+
+const PREVIEW_WARNINGS: Record<string, string> = {
+  proposta_ai: 'Alcuni campi sono proposti dall’AI: verificali.',
+  ai_non_disponibile: 'Proposta AI non disponibile: controlla i campi mancanti.',
+  testo_non_classificato: 'Parte del testo non è stata classificata: controlla le note.',
+  menzione_sospensione: 'Il testo menziona una sospensione.',
+  menzione_somministrazione: 'Il testo menziona una somministrazione.',
+  menzione_modifica: 'Il testo menziona una modifica.',
+};
+
+function draftRow(state: WorkflowState): Record<string, unknown> {
+  const preview = (state.slots.therapyDraft?.preview ?? {}) as { row?: Record<string, unknown> };
+  return preview.row ?? {};
+}
+
+/** What is still missing before a prescription draft can be confirmed (empty = confirmable). */
+export function prescriptionGaps(state: WorkflowState): string[] {
+  const preview = (state.slots.therapyDraft?.preview ?? {}) as {
+    intent?: string;
+    fasciaConflicts?: unknown[];
+  };
+  const row = draftRow(state);
+  const gaps: string[] = [];
+  if (!String(row.farmacoNome ?? '').trim()) gaps.push('farmaco');
+  const orari = Array.isArray(row.orari) ? row.orari : [];
+  if (preview.intent !== 'al_bisogno' && orari.length === 0) gaps.push('orari');
+  if (Array.isArray(preview.fasciaConflicts) && preview.fasciaConflicts.length)
+    gaps.push('orari nella stessa fascia');
+  return gaps;
+}
+
+/**
+ * Structured preview of a write (Prompt 3 §9, Prompt 4 §7). Built from slots only: nothing is
+ * written yet. `previewId` binds the confirmation to exactly this content.
+ */
+export function buildPreview(
+  state: WorkflowState,
+  now: Date,
+  previewId: string,
+  actor: { name: string; role: string },
+): SkillPreview {
   const patient = state.slots.patient ?? null;
-  const common = { skillId: state.skillId, patient, origin: 'ai' as const, notes: [] as string[] };
+  const common = {
+    previewId,
+    skillId: state.skillId,
+    patient,
+    origin: 'ai' as const,
+    actor,
+    notes: [] as string[],
+    warnings: [] as string[],
+    confirmable: true,
+  };
   if (state.skillId === 'vitals.record') {
     const values: Record<string, string> = {};
     for (const [key, value] of Object.entries(state.slots.values ?? {})) {
@@ -138,6 +197,7 @@ export function buildPreview(state: WorkflowState, now: Date): SkillPreview {
       tool: 'parameters.create_reading',
       confirmationClass: 'SENSITIVE_WRITE',
       notes: ['Autore: operatore corrente (risolto dal server).'],
+      editable: ['values'],
     };
   }
   if (state.skillId === 'diary.add_observation') {
@@ -148,14 +208,147 @@ export function buildPreview(state: WorkflowState, now: Date): SkillPreview {
       tool: 'diary.create',
       confirmationClass: 'SENSITIVE_WRITE',
       notes: ['Il testo viene salvato così com’è, senza riscritture.'],
+      editable: ['text'],
     };
   }
+  if (state.skillId === 'therapy.prescribe') {
+    const row = draftRow(state);
+    const draft = (state.slots.therapyDraft?.preview ?? {}) as {
+      intent?: string;
+      warnings?: string[];
+      aiNotes?: string[];
+      fasciaConflicts?: string[];
+    };
+    const orari = Array.isArray(row.orari) ? (row.orari as string[]) : [];
+    const gaps = prescriptionGaps(state);
+    const warnings = [
+      ...(draft.warnings ?? []).map((w) => PREVIEW_WARNINGS[w] ?? `Avviso: ${w}`),
+      ...(draft.aiNotes ?? []).map((n) => `AI: ${n}`),
+      ...(draft.fasciaConflicts?.length
+        ? [`Più orari nella stessa fascia: ${draft.fasciaConflicts.join(', ')}.`]
+        : []),
+      'Prescrizione preparata dall’assistente: la conferma è del medico.',
+    ];
+    const bound = state.slots.therapyInput;
+    if (bound) {
+      // The confirmation binds THIS payload: every clinically relevant field is shown as written.
+      const schedules = Array.isArray(bound.schedules)
+        ? (bound.schedules as {
+            time?: string;
+            quantityNumerator?: number;
+            quantityDenominator?: number;
+            administrationUnit?: string;
+          }[])
+        : [];
+      const strength = [bound.commercialStrengthValue, bound.commercialStrengthUnit]
+        .filter((v) => v !== undefined && v !== null && String(v).trim())
+        .join(' ');
+      const boundConflicts = scheduleFasciaConflicts(
+        schedules.map((s) => String(s.time ?? '')).filter(Boolean),
+      );
+      const giorni = Array.isArray(bound.giorniSettimana)
+        ? (bound.giorniSettimana as unknown[]).join(',')
+        : String(bound.giorniSettimana ?? '');
+      return {
+        ...common,
+        action: 'Nuova prescrizione (conferma del medico)',
+        values: {
+          Farmaco: String(bound.farmacoNome ?? ''),
+          Dosaggio: strength || String(bound.dosaggio ?? '') || '—',
+          Forma: String(bound.pharmaceuticalForm ?? '') || '—',
+          'Frazioni consentite': String(bound.allowedFractions ?? '') || '—',
+          Via: String(bound.viaSomministrazione ?? '') || '—',
+          Tipo: String(bound.tipo ?? '') || '—',
+          Orari:
+            schedules
+              .map(
+                (s) =>
+                  `${s.time ?? ''}${s.quantityNumerator ? ` (${s.quantityNumerator}${s.quantityDenominator && s.quantityDenominator !== 1 ? `/${s.quantityDenominator}` : ''} ${s.administrationUnit ?? ''})` : ''}`,
+              )
+              .join(', ') || (bound.tipo === 'al_bisogno' ? 'al bisogno' : '—'),
+          ...(giorni ? { Giorni: giorni } : {}),
+          Inizio: String(bound.dataInizio ?? ''),
+          Fine: String(bound.dataFine ?? '') || '—',
+          ...(String(bound.note ?? '').trim() ? { Note: String(bound.note) } : {}),
+          Testo: state.slots.text ?? '',
+        },
+        tool: 'diary.create_with_therapy',
+        confirmationClass: 'HIGH_RISK',
+        notes: ['Verrà creata la voce di diario «terapia» collegata alla terapia.'],
+        warnings: boundConflicts.length
+          ? [...warnings, `Più orari nella stessa fascia: ${boundConflicts.join(', ')}.`]
+          : warnings,
+        confirmable: boundConflicts.length === 0,
+        ...(boundConflicts.length
+          ? { blockedReason: 'Da completare nella scheda Terapia: orari nella stessa fascia.' }
+          : {}),
+        therapyBound: true,
+        editable: ['text'],
+        therapyDraft: state.slots.therapyDraft,
+      };
+    }
+    return {
+      ...common,
+      action: 'Nuova prescrizione (conferma del medico)',
+      therapyBound: false,
+      values: {
+        Farmaco: String(row.farmacoNome ?? '') || '—',
+        Dosaggio: String(row.dosaggio ?? '') || '—',
+        Via: String(row.viaSomministrazione ?? '') || '—',
+        Orari:
+          draft.intent === 'al_bisogno' ? 'al bisogno' : orari.length ? orari.join(', ') : '—',
+        Inizio: String(row.dataInizio ?? '') || 'data della voce',
+        ...(row.dataFine ? { Fine: String(row.dataFine) } : {}),
+        Testo: state.slots.text ?? '',
+      },
+      tool: 'diary.create_with_therapy',
+      confirmationClass: 'HIGH_RISK',
+      notes: ['Verrà creata la voce di diario «terapia» collegata alla terapia.'],
+      warnings,
+      confirmable: gaps.length === 0,
+      ...(gaps.length
+        ? { blockedReason: `Da completare nella scheda Terapia: ${gaps.join(', ')}.` }
+        : {}),
+      editable: ['text'],
+      therapyDraft: state.slots.therapyDraft,
+    };
+  }
+  if (state.skillId === 'administration.record') {
+    const a = state.slots.administration!;
+    return {
+      ...common,
+      action: 'Registrazione somministrazione (conferma dell’operatore)',
+      values: {
+        Farmaco: a.drugName,
+        Dose: a.dosage || '—',
+        Via: a.route || '—',
+        Fascia: `${a.fascia}${a.scheduledTime ? ` (${a.scheduledTime})` : ''}`,
+        Data: a.date,
+      },
+      tool: 'administration.confirm',
+      confirmationClass: 'HIGH_RISK',
+      notes: ['Esecutore: operatore autenticato.'],
+      warnings: ['Conferma solo dopo aver somministrato davvero il farmaco all’ospite.'],
+      editable: [],
+    };
+  }
+  const priority = state.slots.priority ?? 'normale';
+  const urgent = looksUrgent(state.slots.text);
   return {
     ...common,
     action: 'Nuova consegna',
-    values: { Nota: state.slots.text ?? '', Priorità: 'normale', Tipo: 'Monitoraggio' },
+    values: { Nota: state.slots.text ?? '', Priorità: priority, Tipo: AI_HANDOVER_TYPE },
     tool: 'consegne.create',
     confirmationClass: 'LOW_RISK_WRITE',
+    warnings:
+      urgent && priority === 'normale'
+        ? [
+            'Il testo sembra urgente: la priorità resta «normale». Se serve, usa Modifica per alzarla.',
+          ]
+        : priority !== 'normale'
+          ? [`Priorità «${priority}» impostata esplicitamente.`]
+          : [],
+    editable: ['text', 'priority'],
   };
 }
 
@@ -234,8 +427,8 @@ export async function executeSkill(
         {
           body: {
             pazienteId: patientId,
-            priorita: 'normale',
-            tipo: 'Monitoraggio',
+            priorita: state.slots.priority ?? 'normale',
+            tipo: AI_HANDOVER_TYPE,
             note: state.slots.text ?? '',
             requestId: state.writeRequestId,
           },
@@ -248,7 +441,63 @@ export async function executeSkill(
         ok: true,
         toolsUsed: used,
         result: { consegnaId: id },
-        reply: `Consegna creata per ${label}.`,
+        reply: `Consegna creata per ${label} (priorità ${state.slots.priority ?? 'normale'}).`,
+      };
+    }
+    case 'therapy.prescribe': {
+      const tool = 'diary.create_with_therapy';
+      const result = await call(
+        tool,
+        {
+          patientId,
+          body: {
+            requestId: state.writeRequestId,
+            entry: {
+              content: state.slots.text ?? '',
+              entryDateTime: state.slots.therapyDraft?.entryDateTime ?? facilityMinute(now),
+            },
+            therapy: state.slots.therapyInput ?? {},
+          },
+        },
+        true,
+      );
+      if (!result.ok) return failure(result, tool, used);
+      const data = result.data as {
+        entry?: { id?: string };
+        therapy?: { id?: string; farmacoNome?: string };
+        replay?: boolean;
+      };
+      return {
+        ok: true,
+        toolsUsed: used,
+        result: {
+          entryId: data.entry?.id,
+          therapyId: data.therapy?.id,
+          replayed: data.replay === true,
+        },
+        reply: `Prescrizione registrata per ${label}: ${data.therapy?.farmacoNome ?? ''} (terapia e voce di diario collegate).`,
+      };
+    }
+    case 'administration.record': {
+      const tool = 'administration.confirm';
+      const a = state.slots.administration!;
+      const result = await call(
+        tool,
+        { body: { patientId, therapyId: a.therapyId, date: a.date, fascia: a.fascia } },
+        true,
+      );
+      if (!result.ok) return failure(result, tool, used);
+      const data = result.data as { id?: string; administrationId?: string };
+      return {
+        ok: true,
+        toolsUsed: used,
+        result: {
+          administrationId: data.id ?? data.administrationId ?? null,
+          therapyId: a.therapyId,
+          fascia: a.fascia,
+          date: a.date,
+        },
+        reply: `Somministrazione registrata per ${label}: ${a.drugName}, ${a.fascia} del ${a.date}.`,
       };
     }
     case 'vitals.recent': {

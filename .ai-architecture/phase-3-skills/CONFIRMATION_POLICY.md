@@ -1,5 +1,9 @@
 # Confirmation Policy — version 1
 
+> **Superseded by version 2 (Phase 4)**: `../phase-4-assistant/SAFETY_AND_CONFIRMATION_RULES.md` —
+> confirmations are only explicit UI events bound to a `previewId`; HIGH_RISK skills are prepared by
+> the assistant and confirmed by the professional.
+
 Code of record: `backend/src/skills/confirmation.ts` (`CONFIRMATION_POLICY_VERSION = 1`).
 
 | class               | examples                                           | behaviour                                                                                              |
