@@ -3,6 +3,7 @@
 import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
 import { buildIntakeTherapyReview } from './intakeTherapies';
 import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
+import { pendingFieldProposals, proposalsLeftText } from './intakeDocuments';
 
 export const INTAKE_SECTIONS = [
   { id: 'anagrafica', label: 'Anagrafica' },
@@ -25,6 +26,8 @@ export interface IntakeMissingStep {
   section: IntakeSectionId;
   /** Terapia da correggere: porta al campo della riga. */
   target?: TherapyCorrectionTarget;
+  /** Proposte dei documenti sui campi: porta al riepilogo delle proposte. */
+  kind?: 'fieldProposals';
 }
 
 function filled(value: unknown): boolean {
@@ -73,6 +76,14 @@ export function intakeProgress(
   if (options.proposalUncertain)
     missing.push({ label: 'Decisione in attesa di risposta', section: 'terapia' });
   if (accepted.therapy !== true) missing.push({ label: 'Conferma la terapia', section: 'terapia' });
+  // Proposte dei documenti sui campi: il backend rifiuta la conferma (409 field_proposals_pending).
+  const fieldProposals = pendingFieldProposals(data).length;
+  if (fieldProposals > 0)
+    missing.push({
+      label: proposalsLeftText(fieldProposals),
+      section: 'riepilogo',
+      kind: 'fieldProposals',
+    });
 
   const count = (section: IntakeSectionId) => missing.filter((m) => m.section === section);
   const anagraficaIssues = count('anagrafica').filter((m) => !m.label.startsWith('Conferma'));

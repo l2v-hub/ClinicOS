@@ -3,22 +3,24 @@
 import { API_URL } from '../../../config';
 import { operatorHeaders } from '../../../lib/operatorSession';
 import type { ImportSource } from '../import/importSessionTypes';
+import { SERVER_DRAFT_KEYS } from './intakeDocuments';
+
+/** Chiavi mai inviate dal PATCH: sorgente dell'import (immutabile) e contabilità AI del server. */
+const NON_EDITABLE_DRAFT_KEYS: readonly string[] = [
+  '_narrative',
+  '_sections',
+  '_terapiaText',
+  '_confirmation',
+  '_importedFields',
+  '_importSource',
+  '_importProposals',
+  '_importReview',
+  ...SERVER_DRAFT_KEYS,
+];
 
 export function editableDraftPatch(data: Record<string, unknown>) {
   return Object.fromEntries(
-    Object.entries(data).filter(
-      ([key]) =>
-        ![
-          '_narrative',
-          '_sections',
-          '_terapiaText',
-          '_confirmation',
-          '_importedFields',
-          '_importSource',
-          '_importProposals',
-          '_importReview',
-        ].includes(key),
-    ),
+    Object.entries(data).filter(([key]) => !NON_EDITABLE_DRAFT_KEYS.includes(key)),
   );
 }
 
@@ -28,6 +30,8 @@ export interface DraftResponse {
   status?: string;
   confirmedPatientId?: string | null;
   version?: number;
+  /** Job d'import a pagine collegato alla bozza (card Documenti). */
+  importJobId?: string | null;
 }
 
 export interface ConfirmResponse {
@@ -137,18 +141,19 @@ async function draftMutation(
   path: string,
   body: object,
   op?: OperatorHeaders,
+  method: 'POST' | 'DELETE' = 'POST',
 ): Promise<DraftResponse> {
   const res = await fetch(`${API_URL}/intake/drafts/${encodeURIComponent(id)}/${path}`, {
-    method: 'POST',
+    method,
     headers: buildHeaders(op),
     body: JSON.stringify(body),
   });
-  const value = await res.json();
-  if (!res.ok)
+  const value = await res.json().catch(() => null);
+  if (!res.ok || !value)
     throw new DraftApiError(
-      value.error ?? 'La bozza è cambiata. Le modifiche sono conservate; riapri e riprova.',
+      value?.error ?? 'La bozza è cambiata. Le modifiche sono conservate; riapri e riprova.',
       res.status,
-      value.code,
+      value?.code,
     );
   return value as DraftResponse;
 }
@@ -170,6 +175,41 @@ export function decideImportProposal(
   op?: OperatorHeaders,
 ) {
   return draftMutation(id, `import-proposals/${encodeURIComponent(proposalId)}/decide`, body, op);
+}
+
+// ── Documenti nella scheda aperta (ciclo 2b): collegamento, unione AI, proposte sui campi ──
+export function linkImportJob(
+  id: string,
+  body: { importJobId: string; requestId: string; expectedDraftVersion?: number },
+  op?: OperatorHeaders,
+) {
+  return draftMutation(id, 'import-job', body, op);
+}
+export function unlinkImportJob(
+  id: string,
+  body: { expectedDraftVersion?: number },
+  op?: OperatorHeaders,
+) {
+  return draftMutation(id, 'import-job', body, op, 'DELETE');
+}
+export type MergeImportBody =
+  | { requestId: string; expectedDraftVersion?: number; groupId: string; resultHash: string }
+  | {
+      requestId: string;
+      expectedDraftVersion?: number;
+      manifestRevision: number;
+      resultHash: string;
+    };
+export function mergeImportIntoDraft(id: string, body: MergeImportBody, op?: OperatorHeaders) {
+  return draftMutation(id, 'merge-import', body, op);
+}
+export function decideFieldProposal(
+  id: string,
+  proposalId: string,
+  body: { action: 'apply' | 'keep'; requestId: string; expectedDraftVersion?: number },
+  op?: OperatorHeaders,
+) {
+  return draftMutation(id, `field-proposals/${encodeURIComponent(proposalId)}/decide`, body, op);
 }
 
 function canonical(value: unknown): string {
@@ -226,6 +266,8 @@ export class VersionedDraftSaveQueue {
   private id: string;
   private op?: OperatorHeaders;
   public version: number | undefined;
+  /** Ogni salvataggio riuscito (bozza del server): la scheda aggiorna la sua base. */
+  public onSaved?: (saved: DraftResponse) => void;
 
   constructor(id: string, version: number | undefined, op?: OperatorHeaders) {
     this.id = id;
@@ -239,6 +281,7 @@ export class VersionedDraftSaveQueue {
       const saved = await patchDraftWithRecovery(this.id, pending.patch, this.op, pending.version);
       this.version = saved.version;
       this.pending = null;
+      this.onSaved?.(saved);
       return saved;
     } catch (error) {
       // A definitive validation/authorization rejection has no uncertain write to replay.
@@ -248,11 +291,14 @@ export class VersionedDraftSaveQueue {
     }
   }
 
-  save(data: Record<string, unknown>): Promise<DraftResponse> {
-    const patch = structuredClone(editableDraftPatch(data));
+  /** `data` può essere una funzione: la bozza si legge al momento dell'invio, dopo le unioni. */
+  save(data: Record<string, unknown> | (() => Record<string, unknown>)): Promise<DraftResponse> {
     const saving = this.tail
       .catch(() => undefined)
       .then(async () => {
+        const patch = structuredClone(
+          editableDraftPatch(typeof data === 'function' ? data() : data),
+        );
         if (this.pending) {
           const same = canonical(this.pending.patch) === canonical(patch);
           const recovered = await this.sendPending();
@@ -263,6 +309,29 @@ export class VersionedDraftSaveQueue {
       });
     this.tail = saving;
     return saving;
+  }
+
+  /**
+   * Mutazione del server (collegamento, unione AI, decisione) in coda ai salvataggi: mai due
+   * scritture concorrenti sulla stessa versione. Un salvataggio incerto viene prima riconciliato.
+   */
+  exclusive(run: (version: number | undefined) => Promise<DraftResponse>): Promise<DraftResponse> {
+    const step = this.tail
+      .catch(() => undefined)
+      .then(async () => {
+        if (this.pending) await this.sendPending().catch(() => undefined);
+        const saved = await run(this.version);
+        if (saved.version !== undefined) this.version = saved.version;
+        return saved;
+      });
+    this.tail = step;
+    return step;
+  }
+
+  /** Bozza ricaricata dal server: nuova versione, il salvataggio in sospeso è superato. */
+  reset(version: number | undefined) {
+    this.version = version;
+    this.pending = null;
   }
 }
 

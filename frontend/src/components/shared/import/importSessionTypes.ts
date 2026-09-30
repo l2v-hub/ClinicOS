@@ -23,6 +23,8 @@ export interface ImportGroup {
   completedPages: number;
   error: string | null;
   pdfUrl: string | null;
+  /** Hash del risultato della lettera, presente quando la lettera è letta (unione per lettera). */
+  resultHash?: string | null;
 }
 export interface ImportDocument {
   id: string;
