@@ -6,8 +6,16 @@ requirement BEFORE any call. Refine as new models are added.
 """
 from __future__ import annotations
 
+import re
+
 from .capabilities import ModelCapabilities
 from .spec import ModelSpec
+
+
+def _gpt_major(model_id: str) -> int:
+    """Versione maggiore di un id GPT ("gpt-6.1-sol" -> 6, "gpt-5.5" -> 5), 0 se non GPT."""
+    match = re.search(r"gpt-(\d+)", model_id)
+    return int(match.group(1)) if match else 0
 
 
 def capabilities_for(spec: ModelSpec) -> ModelCapabilities:
@@ -28,10 +36,12 @@ def capabilities_for(spec: ModelSpec) -> ModelCapabilities:
         )
 
     if p in ("openai", "azure", "openai-like"):
-        vision = any(k in m for k in ("4o", "vision", "o1", "o3", "4.1", "gpt-5"))
-        # La famiglia gpt-5 (deployment Azure Foundry, API v1) accetta anche PDF come
-        # file content parts; i modelli vision precedenti restano solo-immagine.
-        pdf = "gpt-5" in m
+        # Famiglia GPT dalla 5 in poi (gpt-5.x, gpt-6.1-sol, ...): immagini e PDF come file
+        # content parts (verificato su Azure Foundry per gpt-5.5 e gpt-6.1-sol). I modelli
+        # vision precedenti restano solo-immagine.
+        modern_gpt = _gpt_major(m) >= 5
+        vision = modern_gpt or any(k in m for k in ("4o", "vision", "o1", "o3", "4.1"))
+        pdf = modern_gpt
         return ModelCapabilities(
             text_input=True, image_input=vision, pdf_input=pdf, file_upload=True,
             json_mode=True, native_structured_output=True, tool_calling=True,
