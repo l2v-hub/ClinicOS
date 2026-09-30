@@ -396,6 +396,8 @@ export function useIntakeDocuments(
     job.manifest.pages.length > 0;
   return {
     job,
+    /** Accesso ai file del job con le intestazioni dell'operatore (pannello documento). */
+    api,
     progress,
     busy,
     error: error || pollError,

@@ -2,6 +2,15 @@ import type { PDFDocumentLoadingTask, PDFDocumentProxy } from 'pdfjs-dist';
 import type { ImportFetch } from './importSessionApi';
 import type { ImportDocument, ImportPage } from './importSessionTypes';
 
+/** Originale non scaricato: lo stato HTTP resta disponibile per un messaggio preciso (404, 410…). */
+export class ImportSourceError extends Error {
+  readonly status: number;
+  constructor(status: number) {
+    super('Originale non disponibile. Riprova.');
+    this.status = status;
+  }
+}
+
 /** Active-session memory only. One download per immutable source, serialized bounded thumbnails. */
 export class ImportSourceCache {
   private blobs = new Map<string, Promise<Blob>>();
@@ -52,7 +61,7 @@ export class ImportSourceCache {
         cache: 'no-store',
       })
         .then(async (response) => {
-          if (!response.ok) throw new Error('Originale non disponibile. Riprova.');
+          if (!response.ok) throw new ImportSourceError(response.status);
           const length = Number(response.headers.get('Content-Length') || 0);
           if (length > this.maxFileBytes)
             throw new Error('Anteprima oltre il limite della sessione.');

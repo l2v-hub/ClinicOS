@@ -65,13 +65,20 @@ export function ImportPageContent({
   document,
   page,
   cache,
+  errorMessage,
+  canRetry,
 }: {
   document: ImportDocument;
   page: ImportPage;
   cache: ImportSourceCache;
+  /** Messaggio per l'errore di caricamento (es. 404/410/rete); se assente, quello generico. */
+  errorMessage?: (error: unknown) => string;
+  /** false per gli errori che un nuovo tentativo non risolve (es. originale illeggibile). */
+  canRetry?: (error: unknown) => boolean;
 }) {
   const [data, setData] = useState<{ blob: Blob; url: string } | null>(null);
   const [error, setError] = useState('');
+  const [retry, setRetry] = useState(true);
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     let active = true;
@@ -83,21 +90,29 @@ export function ImportPageContent({
       .then(([blob, url]) => {
         if (active) setData({ blob, url });
       })
-      .catch(() => {
-        if (active)
-          setError('Impossibile caricare l’originale. Le pagine salvate sono conservate.');
+      .catch((e: unknown) => {
+        if (!active) return;
+        setRetry(canRetry?.(e) ?? true);
+        setError(
+          errorMessage?.(e) ??
+            'Impossibile caricare l’originale. Le pagine salvate sono conservate.',
+        );
       });
     return () => {
       active = false;
     };
+    // errorMessage e canRetry traducono solo l'errore: non deve riscaricare l'originale
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cache, document, attempt]);
   if (error)
     return (
       <div role="alert">
         <p>{error}</p>
-        <button className="btn-secondary" onClick={() => setAttempt((n) => n + 1)}>
-          Riprova anteprima
-        </button>
+        {retry && (
+          <button className="btn-secondary" onClick={() => setAttempt((n) => n + 1)}>
+            Riprova anteprima
+          </button>
+        )}
       </div>
     );
   if (!data) return <p role="status">Caricamento originale…</p>;

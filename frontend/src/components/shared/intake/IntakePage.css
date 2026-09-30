@@ -326,6 +326,118 @@
   margin-top: 8px;
 }
 
+/* ── Documento a fianco (ciclo 3a): "Lettera N · p. M", schede delle pagine, pagina ──────────
+   Terza colonna da 1180px (come il prototipo); sotto, pannello sovrapposto a tutta larghezza.
+   Misura a 1180: finestra 1148 − indice 264 − documento 336 = 548px per la scheda (500 di
+   contenuto), come la colonna centrale del prototipo; l'anagrafica passa a due colonne. */
+.intake-doc-panel {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--ds-surface, #fff);
+  border-left: 1px solid var(--ds-border, #e1e7f0);
+}
+.intake-doc-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+}
+.intake-doc-panel__title {
+  margin: 0;
+  min-width: 0;
+  font: 600 18px/24px var(--ds-font);
+  color: var(--ds-text, #16202e);
+  overflow-wrap: anywhere;
+}
+.intake-doc-panel__tabs {
+  padding: 0 16px 16px;
+  border-bottom: 1px solid var(--ds-border, #e1e7f0);
+}
+.intake-doc-panel__state {
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.intake-doc-panel__state svg {
+  width: 100%;
+  height: 100%;
+}
+.intake-doc-panel__tab[data-state='error'] .intake-doc-panel__state {
+  color: var(--amber, #c77700);
+}
+.intake-doc-panel__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  background: var(--ds-surface-2, #f5f7fb);
+}
+.intake-doc-panel__body:focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: -3px;
+}
+/* i figli (immagine, anteprima PDF con barra e zoom) restano larghi quanto il pannello: il PDF si
+   adatta alla larghezza e la sua barra va a capo, niente scorrimento orizzontale */
+.intake-doc-panel__body .import-page-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+}
+.intake-doc-panel__body .import-page-preview > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.intake-doc-panel__body .import-page-preview > a {
+  align-self: flex-start;
+}
+.intake-doc-panel__body .import-page-preview > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: var(--ds-surface, #fff);
+  box-shadow: 0 1px 4px rgba(16, 32, 54, 0.12);
+}
+.intake-doc-panel__body [role='alert'] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.intake-doc-panel__body p,
+.intake-doc-panel__note {
+  margin: 0;
+  font: 400 14px/20px var(--ds-font);
+  color: var(--ds-text-muted, #5a6b80);
+  overflow-wrap: anywhere;
+}
+/* sovrapposto (< 1180px): copre la scheda a tutta larghezza, con la sua chiusura */
+.intake-doc-panel--overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  border-left: 0;
+  box-shadow: 0 8px 32px rgba(16, 32, 54, 0.24);
+}
+@media (min-width: 1180px) {
+  .intake-page__grid--doc {
+    grid-template-columns: 264px minmax(0, 1fr) 336px;
+  }
+  .intake-page .intake-page__grid--doc .npm-grid--identity,
+  .intake-page .intake-page__grid--doc .npm-grid--contacts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* ── Tablet e telefono: indice in alto (scorre di lato), azioni in una barra in basso ─────── */
 @media (max-width: 1023px) {
   .import-modal--intake.intake-page {

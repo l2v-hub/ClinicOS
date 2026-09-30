@@ -2,14 +2,23 @@
 // conteggio delle pagine lette, "Scatta pagina" / "Carica file", barra di lettura e frase AI.
 // Tutta la logica è in useIntakeDocuments / intakeDocuments.ts: qui solo la presentazione.
 import { useRef, useState } from 'react';
-import { IcoAI, IcoCamera, IcoUpload } from '../../../icons';
+import { IcoAI, IcoCamera, IcoImage, IcoUpload } from '../../../icons';
 import { ConfirmDialog } from '../ConfirmDialog';
 import type { useIntakeDocuments } from './useIntakeDocuments';
 
 type Documents = ReturnType<typeof useIntakeDocuments>;
 const DEFAULT_ACCEPT = 'application/pdf,image/jpeg,image/png';
 
-export function IntakeDocumentsCard({ docs, disabled }: { docs: Documents; disabled: boolean }) {
+export function IntakeDocumentsCard({
+  docs,
+  disabled,
+  onShowDocuments,
+}: {
+  docs: Documents;
+  disabled: boolean;
+  /** "Vedi documenti": apre il documento a fianco (ciclo 3a); `opener` riceve il focus alla chiusura. */
+  onShowDocuments?: (opener: HTMLElement) => void;
+}) {
   const files = useRef<HTMLInputElement>(null);
   const camera = useRef<HTMLInputElement>(null);
   const [confirmUnlink, setConfirmUnlink] = useState(false);
@@ -56,6 +65,16 @@ export function IntakeDocumentsCard({ docs, disabled }: { docs: Documents; disab
         >
           <IcoUpload /> Carica file
         </button>
+        {onShowDocuments && job && job.manifest.pages.length > 0 && (
+          <button
+            type="button"
+            className="ds-btn ds-btn--secondary"
+            data-testid="intake-documents-view"
+            onClick={(event) => onShowDocuments(event.currentTarget)}
+          >
+            <IcoImage /> Vedi documenti
+          </button>
+        )}
         <input
           ref={camera}
           type="file"
