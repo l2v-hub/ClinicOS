@@ -13,11 +13,14 @@ import {
   formFasciaConflicts,
   intentMessage,
   isBlockingIntent,
+  manualTherapyPreview,
   newRequestId,
+  previewFailureAllowsManual,
   previewNotices,
   previewToTherapyForm,
   requestIdForVersion,
   scheduleFasciaConflicts,
+  unreadFields,
   type DiaryTherapyEntryDraft,
   type DiaryTherapyPreview,
   type DiaryTherapyPreviewRow,
@@ -381,4 +384,79 @@ test('diary card link: linked therapy, deleted therapy, ordinary entry', () => {
   assert.equal(therapyStatoTone('sospesa'), 'ds-badge--warning');
   // Nessun rosso per lo stato della terapia.
   assert.doesNotMatch(therapyStatoTone('conclusa'), /alarm/);
+});
+
+// ── Anteprima non riuscita: motivo esplicito + compilazione a mano ─────────────────────────────
+
+test('preview failure: each cause has its own reason; only 401/403 block the manual form', () => {
+  assert.match(diaryPreviewErrorMessage(0, null), /server non raggiungibile/);
+  assert.match(diaryPreviewErrorMessage(404, null), /non è attivo su questo server \(404\)/);
+  assert.match(
+    diaryPreviewErrorMessage(503, { error: 'Endpoint clinici disabilitati' }),
+    /\(503\) — Endpoint clinici disabilitati/,
+  );
+  assert.match(diaryPreviewErrorMessage(502, null), /errore dell’interprete \(502\)/);
+  assert.match(diaryPreviewErrorMessage(0, {}, true), /non leggibile/);
+  for (const status of [0, 400, 404, 500, 502, 503])
+    assert.equal(previewFailureAllowsManual(status), true);
+  for (const status of [401, 403]) assert.equal(previewFailureAllowsManual(status), false);
+});
+
+test('manual fallback: empty therapy form, diary text in the notes, nothing inferred', () => {
+  const text = 'Iniziare terapia con quel farmaco di ieri, dose da decidere';
+  const manual = manualTherapyPreview(text);
+  const notices = previewNotices(manual, ENTRY_AT).map((n) => n.text);
+  assert.ok(notices.some((t) => /compila la terapia a mano/.test(t)));
+  const form = previewToTherapyForm(manual, ENTRY_AT);
+  assert.equal(form.farmacoNome, '');
+  assert.equal(form.note, text);
+  assert.equal(form.tipo, 'periodica');
+  assert.equal(form.dataInizio, '2026-09-30', 'start date proposed from the diary entry');
+  assert.ok(diaryTherapyIssues(form).length > 0, 'the operator must complete the fields');
+  assert.deepEqual(unreadFields(manual), [], 'manual mode shows one summary, not a field list');
+});
+
+test('partial preview lists what the interpreter did not understand', () => {
+  assert.deepEqual(
+    unreadFields(preview({ row: row({ farmacoNome: 'RAMIPRIL', dosaggio: '5 mg' }) })),
+    ['via di somministrazione', 'orari', 'quantità per dose'],
+  );
+  assert.deepEqual(
+    unreadFields(
+      preview({
+        row: row({
+          farmacoNome: 'RAMIPRIL',
+          dosaggio: '5 mg',
+          viaSomministrazione: 'OS',
+          orari: ['08:00'],
+          quantityNumerator: 1,
+          quantityDenominator: 1,
+        }),
+      }),
+    ),
+    [],
+  );
+  assert.deepEqual(
+    unreadFields(
+      preview({
+        intent: 'al_bisogno',
+        row: row({
+          farmacoNome: 'X',
+          dosaggio: '1 g',
+          viaSomministrazione: 'OS',
+          quantita: '1 cp',
+        }),
+      }),
+    ),
+    [],
+    'al bisogno has no times',
+  );
+  assert.deepEqual(
+    unreadFields(preview({ intent: 'sospensione' })),
+    [],
+    'blocking intent: no form',
+  );
+  // Real interpreter on a vague text: the missing fields are named.
+  const vague = unreadFields(realPreview('iniziare paracetamolo'));
+  assert.ok(vague.includes('orari'), JSON.stringify(vague));
 });
