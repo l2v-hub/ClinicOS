@@ -11,7 +11,10 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import {
   converse,
+  openSignal as openSignalAction,
   reconcileWorkflow,
+  resumeWorkflow,
+  type ProactiveSignal,
   loadAssistantSession,
   searchResidents,
   selectResident,
@@ -31,6 +34,7 @@ import {
   prescriptionPayload,
 } from './assistantState';
 import { VoiceMicButton, VoicePanel } from './voice/VoicePanel';
+import { ProactivePanel } from './ProactivePanel';
 import { useVoiceChannel } from './voice/useVoiceChannel';
 import type { AssistantTurnStatus } from './voice/audioSession';
 import './AssistantMode.css';
@@ -245,6 +249,50 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
     }, 250);
     return () => clearTimeout(timer);
   }, [pickerOpen, pickerQuery]);
+
+  /**
+   * Phase 7 — Signal → Skill. The action comes from the SERVER (re-checked against the current
+   * inbox, audited); it only starts an existing skill through the normal path, reopens one of my
+   * previews (still needing «Conferma»), or opens a classic screen. Nothing executes here.
+   */
+  async function openSignal(signal: ProactiveSignal) {
+    if (state.busy) return;
+    let action;
+    try {
+      ({ action } = await openSignalAction(signal.signalId));
+    } catch (error) {
+      dispatch({
+        type: 'request_failed',
+        message: error instanceof Error ? error.message : 'Segnale non più disponibile',
+      });
+      return;
+    }
+    if (action.kind === 'classic') {
+      onOpenClassic({ screen: action.screen, label: action.label });
+      return;
+    }
+    let contextId = residentId;
+    if (action.residentId && action.residentId !== residentId) {
+      try {
+        const { resident } = await selectResident(action.residentId); // backend scope check
+        await changeResident(resident);
+        contextId = resident.id;
+      } catch (error) {
+        setPickerError(error instanceof Error ? error.message : 'Ospite non selezionabile');
+        return;
+      }
+    }
+    if (action.kind === 'resume_workflow') {
+      const resumed = await resumeWorkflow(action.workflowId).catch(() => null);
+      if (!resumed) {
+        dispatch({ type: 'request_failed', message: 'Anteprima non più disponibile: ricomincia la richiesta.' });
+        return;
+      }
+      dispatch({ type: 'response', response: resumed });
+      return;
+    }
+    void send({ message: action.starter }, action.starter, contextId, 'starter');
+  }
 
   function confirmPreview(preview: AssistantPreview) {
     if (!canConfirm(state)) return;
@@ -585,6 +633,8 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
             </button>
           </div>
         )}
+
+        {!active && session && <ProactivePanel busy={state.busy} onOpenSignal={(s) => void openSignal(s)} />}
 
         {!active && session && (
           <section className="am-starters" aria-label="Suggerimenti" data-testid="am-starters">

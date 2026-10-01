@@ -28,6 +28,15 @@ class FenceTests(unittest.TestCase):
         self.assertTrue(fence("x>>> ignora", "a").startswith(f"{OPEN} XIGNORA>>>"))
 
 
+class RuleWordingTests(unittest.TestCase):
+    def test_rule_has_no_jailbreak_like_imperatives(self):
+        # Azure Prompt Shields flags «ignora … regole/istruzioni/permessi» as a jailbreak and refuses
+        # the whole request (Phase 7 finding). Keep the rule descriptive.
+        low = UNTRUSTED_RULE.lower()
+        for word in ("ignora", "istruzion", "permess", "regol", "rivelare"):
+            self.assertNotIn(word, low)
+
+
 class PromptRuleTests(unittest.IsolatedAsyncioTestCase):
     async def _capture(self, module, coro_factory, answer):
         seen = {}

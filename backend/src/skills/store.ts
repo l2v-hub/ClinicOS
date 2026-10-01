@@ -13,6 +13,8 @@ export interface WorkflowStore {
    * of a write that already happened.
    */
   save(state: WorkflowState, options?: { force?: boolean }): boolean;
+  /** Phase 7: the operator's own live workflows (proactive «pending confirmation» signal). */
+  listByOperator?(operatorId: string): WorkflowState[];
 }
 
 const DEFAULT_TTL_MS = 30 * 60 * 1000;
@@ -51,6 +53,15 @@ export function createMemoryWorkflowStore(ttlMs = DEFAULT_TTL_MS): WorkflowStore
       entries.delete(state.id); // keep insertion order = recency
       entries.set(state.id, structuredClone(state));
       return true;
+    },
+    listByOperator(operatorId) {
+      const now = Date.now();
+      const out: WorkflowState[] = [];
+      for (const state of entries.values()) {
+        if (state.operatorId === operatorId && Date.parse(state.expiresAt) > now)
+          out.push(structuredClone(state));
+      }
+      return out;
     },
   };
 }

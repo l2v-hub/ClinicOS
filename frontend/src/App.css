@@ -6259,6 +6259,23 @@ textarea.form-input {
 /* Phase 4: AI Assistant entry point (full-screen mode). Icon on narrow screens, icon + label wider. */
 .topbar-search.topbar-assistant {
   gap: 6px;
+  position: relative;
+}
+/* Phase 7: signals still to see (count badge — red is allowed for count badges). */
+.topbar-assistant__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: var(--red);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
 }
 .topbar-assistant__label {
   display: none;

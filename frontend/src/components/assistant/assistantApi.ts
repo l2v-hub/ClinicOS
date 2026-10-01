@@ -204,3 +204,101 @@ export async function reconcileWorkflow(workflowId: string): Promise<ConverseRes
     return null;
   }
 }
+
+// ── Phase 7: proactive intelligence (Attention Inbox, ack/seen, shift briefing) ───────────────
+
+export type SignalAction =
+  | { kind: 'skill'; skillId: string; label: string; starter: string; residentId: string | null }
+  | { kind: 'resume_workflow'; workflowId: string; label: string; residentId: string | null }
+  | { kind: 'classic'; screen: string; label: string };
+
+export interface ProactiveSignal {
+  signalId: string;
+  rev: string;
+  type: string;
+  eventType: string;
+  priority: 'normale' | 'alta' | 'urgente';
+  priorityRule: string;
+  title: string;
+  detail: string | null;
+  residentId: string | null;
+  residentLabel: string | null;
+  occurredAt: string;
+  origin: string;
+  reason: string;
+  count: number;
+  sourceEventIds: string[];
+  status: 'nuovo' | 'visto' | 'preso_visione';
+  changedSinceLastView: boolean;
+  action: SignalAction | null;
+}
+
+export interface ProactiveInbox {
+  generatedAt: string;
+  since: string;
+  watermark: string | null;
+  signals: ProactiveSignal[];
+  counts: { total: number; toSee: number; new: number; changed: number };
+  /** Event sources that failed this time: the list may be incomplete. */
+  degraded?: string[];
+}
+
+export interface ShiftBriefing {
+  period: { from: string; to: string; shift: string; previousShift: string };
+  facts: ProactiveSignal[];
+  byResident: { residentId: string | null; residentLabel: string; signalIds: string[] }[];
+  summary: { text: string; composed: boolean; citedSignalIds: string[] };
+  fallback: string;
+  metrics?: { aiSkipped?: 'same_facts' | 'cooldown' | null };
+}
+
+/** `poll` = automatic refresh of an already-open panel (no new «shown» audit row). */
+export function loadProactiveInbox(poll = false): Promise<ProactiveInbox> {
+  return request<ProactiveInbox>(`/skills/proactive/inbox${poll ? '?view=poll' : ''}`);
+}
+
+export function loadProactiveCount(): Promise<{ counts: ProactiveInbox['counts'] }> {
+  return request('/skills/proactive/inbox?view=count');
+}
+
+export function acknowledgeSignals(
+  acks: { signalId: string; rev: string }[],
+): Promise<{ acknowledged: string[]; ignored: string[] }> {
+  return request('/skills/proactive/ack', { method: 'POST', body: JSON.stringify({ acks }) });
+}
+
+export function markSignalsSeen(): Promise<{ watermark: string }> {
+  return request('/skills/proactive/seen', { method: 'POST', body: '{}' });
+}
+
+/** Records the opening and returns the SERVER-side action of the signal (never trusted from UI). */
+export function openSignal(signalId: string): Promise<{ action: SignalAction }> {
+  return request('/skills/proactive/open', { method: 'POST', body: JSON.stringify({ signalId }) });
+}
+
+export function loadShiftBriefing(): Promise<ShiftBriefing> {
+  return request<ShiftBriefing>('/skills/proactive/briefing');
+}
+
+/** Reopens one of MY workflows awaiting confirmation: the preview is shown again, nothing runs. */
+export async function resumeWorkflow(workflowId: string): Promise<ConverseResponse | null> {
+  const { workflow } = await request<{
+    workflow: {
+      id: string;
+      status: WorkflowStatus;
+      skillId: string;
+      preview: AssistantPreview | null;
+      slots?: { patient?: { id: string; label: string } | null };
+    };
+  }>(`/skills/workflows/${encodeURIComponent(workflowId)}`);
+  if (workflow.status !== 'NEEDS_CONFIRMATION' || !workflow.preview) return null;
+  const patient = workflow.slots?.patient ?? null;
+  return {
+    workflowId: workflow.id,
+    skillId: workflow.skillId,
+    status: workflow.status,
+    preview: workflow.preview,
+    resident: patient ? { id: patient.id, label: patient.label } : null,
+    reply: 'Anteprima riaperta: controlla i dati e premi «Conferma» solo se sono corretti.',
+  };
+}

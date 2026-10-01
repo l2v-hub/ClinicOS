@@ -509,3 +509,122 @@
   opacity: 0.85;
   margin-bottom: 2px;
 }
+
+/* ── Phase 7: «Per te» (Attention Inbox, cambiamenti, briefing turno) ───────────────────────── */
+.am-proactive__head,
+.am-proactive__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.am-signals,
+.am-briefing__facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.am-signal {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.am-signal--alta {
+  border-left-color: var(--amber);
+}
+
+.am-signal--urgente {
+  border-left-color: var(--red);
+}
+
+.am-signal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.am-signal__title {
+  font-size: 16px;
+}
+
+.am-signal__badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.am-signal__meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.am-signal__resident {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.am-signal__detail,
+.am-signal__reason {
+  margin: 0;
+  font-size: 14px;
+}
+
+.am-signal__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.am-card__subtitle {
+  margin: 4px 0 0;
+  font-weight: 700;
+}
+
+.am-briefing {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.am-briefing__summary {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.am-briefing__text {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.am-briefing__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.am-briefing__facts li {
+  font-size: 15px;
+}
