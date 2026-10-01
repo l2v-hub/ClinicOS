@@ -37,7 +37,10 @@ test('patient diary authorship is server authoritative on create and immutable o
     source.split('// POST /patients/:patientId/diary')[1]?.split('// GET ')[0] ?? '';
   const updateBlock =
     source.split('// PUT /patients/:patientId/diary/:entryId')[1]?.split('// DELETE ')[0] ?? '';
-  assert.match(createBlock, /createPatientDiaryEntry\(patientId, req\.body, req\.operator!\)/);
+  // Phase 6: the idempotency key is stripped first; the rest of the client body goes to the
+  // shared service and the author is still the authenticated operator.
+  assert.match(createBlock, /takeRequestId\(req\.body\)/);
+  assert.match(createBlock, /createPatientDiaryEntry\(patientId, rest, req\.operator!\)/);
   const serviceBlock = await createServiceBlock();
   assert.match(serviceBlock, /authoritativeDiaryAuthor\(actor\)/);
   assert.match(serviceBlock, /\.\.\.author/);
@@ -52,7 +55,10 @@ test('patient and assistant diary writes share validation before persistence', a
   const updateBlock =
     source.split('// PUT /patients/:patientId/diary/:entryId')[1]?.split('// DELETE ')[0] ?? '';
 
-  assert.match(createBlock, /createPatientDiaryEntry\(patientId, req\.body, req\.operator!\)/);
+  // Phase 6: the idempotency key is stripped first; the rest of the client body goes to the
+  // shared service and the author is still the authenticated operator.
+  assert.match(createBlock, /takeRequestId\(req\.body\)/);
+  assert.match(createBlock, /createPatientDiaryEntry\(patientId, rest, req\.operator!\)/);
   const serviceBlock = await createServiceBlock();
   const parseAt = serviceBlock.indexOf('parseDiaryCreateBody(body)');
   assert.ok(parseAt >= 0);

@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { createSubmissionKey } from '../../../lib/submissionKey';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { API_URL } from '../../../config';
 import { IcoCheck } from '../../../icons';
@@ -486,6 +487,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
     setForm(emptyForm());
   };
 
+  const [createKey] = useState(createSubmissionKey);
   const handleSave = async () => {
     if (!form.farmacoNome.trim() || !form.dataInizio) return;
     if (form.tipo === 'periodica' && hasDividedPatch(form.schedules)) {
@@ -503,12 +505,16 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
       const url = editId
         ? `${API_URL}/patients/${paziente.id}/therapies/${editId}`
         : `${API_URL}/patients/${paziente.id}/therapies`;
+      // Phase 6: a retried creation (lost response, double submit) reuses the same requestId →
+      // the backend replays the first prescription instead of creating a duplicate.
+      const body = editId ? payload : { ...payload, requestId: createKey.for(payload) };
       const res = await fetch(url, {
         method: editId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
+      createKey.reset();
       closeForm();
       invalidateTherapies();
       await loadTherapies();

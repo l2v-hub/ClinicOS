@@ -4,7 +4,7 @@
 
 import type { PatientDiaryEntry } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
-import { recordOperationalAudit } from '../ai/audit-store.js';
+import { recordOperationalAudit, type AiAuditChannel } from '../ai/audit-store.js';
 import { prisma } from '../lib/prisma.js';
 import { InvalidTherapySchedulesError, TherapyDateRangeError } from '../lib/therapy-dose.js';
 import { TherapyInputError } from '../therapies/input-validation.js';
@@ -80,6 +80,8 @@ export async function createPatientDiaryEntryWithTherapy(
   patientId: string,
   rawBody: unknown,
   actor: Operator,
+  /** Phase 6: audit origin (the Assistant passes 'ai_assistant'; the GUI route keeps 'ui'). */
+  channel?: AiAuditChannel,
 ): Promise<DiaryTherapyResult> {
   const body = rawBody as Record<string, unknown> | undefined;
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
@@ -114,6 +116,7 @@ export async function createPatientDiaryEntryWithTherapy(
     patientId,
     fields: diaryTherapyAuditFields(entry, therapy),
     outcome: result.replay ? 'deduped' : 'ok',
+    ...(channel ? { channel } : {}),
   });
   return result;
 }

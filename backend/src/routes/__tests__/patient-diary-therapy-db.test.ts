@@ -135,7 +135,7 @@ after(async () => {
   await dropFailTrigger();
   // L'audit e' fire-and-forget: attende le scritture in volo prima di ripulire.
   await new Promise((resolve) => setTimeout(resolve, 300));
-  await prisma.aiAuditEvent.deleteMany({ where: { patientId: { in: [patientAId, patientBId] } } });
+  // AiAuditEvent is append-only (Phase 6 trigger): audit rows are kept.
   await prisma.consegna.deleteMany({ where: { id: consegnaId } });
   await prisma.patient.deleteMany({ where: { id: { in: [patientAId, patientBId] } } });
   await prisma.user.deleteMany({ where: { email: { startsWith: marker } } });

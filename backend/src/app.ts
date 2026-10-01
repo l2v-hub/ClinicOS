@@ -277,4 +277,34 @@ app.use(
   },
 );
 
+// Phase 6 (error disclosure): last-resort handler. Clients never receive stack traces, internal
+// messages, provider details or prompts — only a generic error; diagnostics stay server-side.
+app.use(
+  (error: unknown, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (res.headersSent) {
+      next(error);
+      return;
+    }
+    const message = error instanceof Error ? error.message : String(error);
+    if (message.startsWith('CORS:')) {
+      res.status(403).json({ error: 'Origine non consentita', code: 'cors_forbidden' });
+      return;
+    }
+    // Client errors raised by middleware (malformed URI, unsupported charset, payload too large…)
+    // keep their 4xx status, still with a generic body.
+    const status = Number(
+      (error as { status?: unknown; statusCode?: unknown })?.status ??
+        (error as { statusCode?: unknown })?.statusCode,
+    );
+    if (Number.isInteger(status) && status >= 400 && status < 500) {
+      res.status(status).json({ error: 'Richiesta non valida', code: 'bad_request' });
+      return;
+    }
+    console.error(
+      `[unhandled] ${req.method} ${req.path}: ${error instanceof Error ? error.name : typeof error}: ${message.slice(0, 200)}`,
+    );
+    res.status(500).json({ error: 'Errore interno del servizio', code: 'internal_error' });
+  },
+);
+
 export default app;

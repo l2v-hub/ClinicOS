@@ -25,7 +25,9 @@ test('therapy creation overwrites client-supplied authorship with the verified a
   const source = await readFile(therapyRouteUrl, 'utf8');
   const createBlock =
     source.split('// POST /patients/:patientId/therapies')[1]?.split('// PUT ')[0] ?? '';
-  const spreadIndex = createBlock.indexOf('...(req.body as TherapyCreateInput)');
+  // Phase 6: the idempotency key is stripped from req.body first; the remainder is the input.
+  assert.ok(createBlock.includes('takeRequestId(req.body)'), 'input must come from the request body');
+  const spreadIndex = createBlock.indexOf('...(input as unknown as TherapyCreateInput)');
   const actorIndex = createBlock.indexOf('operatoreInseritore: actor.name || actor.id');
   assert.ok(spreadIndex >= 0, 'the request body should be copied into the normalized input');
   assert.ok(actorIndex > spreadIndex, 'verified actor must overwrite any client authorship field');

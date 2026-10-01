@@ -157,3 +157,50 @@ export function converse(body: ConverseRequest): Promise<ConverseResponse> {
     body: JSON.stringify(body),
   });
 }
+
+/**
+ * Phase 6 (result integrity): after a confirmation without an answer, ask the server what really
+ * happened to the workflow. Returns a converse-like answer, or null when the state is unknown.
+ */
+export async function reconcileWorkflow(workflowId: string): Promise<ConverseResponse | null> {
+  try {
+    const { workflow } = await request<{
+      workflow: {
+        id: string;
+        status: WorkflowStatus;
+        skillId: string;
+        preview: AssistantPreview | null;
+        result: Record<string, unknown> | null;
+        error: { code: string; message: string } | null;
+      };
+    }>(`/skills/workflows/${encodeURIComponent(workflowId)}`);
+    const base = { workflowId: workflow.id, skillId: workflow.skillId, status: workflow.status };
+    switch (workflow.status) {
+      case 'COMPLETED':
+        return {
+          ...base,
+          result: workflow.result,
+          reply: 'Esito verificato dopo un problema di rete: operazione completata dal sistema.',
+        };
+      case 'FAILED':
+      case 'DENIED':
+        return {
+          ...base,
+          error: workflow.error,
+          reply: `Esito verificato: operazione NON eseguita (${workflow.error?.message ?? 'errore'}).`,
+        };
+      case 'NEEDS_CONFIRMATION':
+        return {
+          ...base,
+          preview: workflow.preview,
+          reply:
+            'La conferma non è arrivata al sistema: nessuna registrazione eseguita. Puoi confermare di nuovo.',
+        };
+      default:
+        // EXECUTING or anything else: not verifiable yet → caller shows «esito non verificato».
+        return null;
+    }
+  } catch {
+    return null;
+  }
+}

@@ -34,6 +34,24 @@ function sourceIds(sources: SourceReference[]): Set<string> {
   return ids;
 }
 
+// First-person / just-happened success claims only («ho registrato», «registrazione eseguita con
+// successo»): third-party facts in the data («la terapia è stata modificata ieri») stay allowed.
+const ACTION_CLAIM = new RegExp(
+  String.raw`\b(ho|abbiamo|l'?assistente ha)\s+(gi[aà]\s+)?(registrat|salvat|eseguit|confermat|somministrat|prescritt|modificat|cancellat|eliminat|inviat|aggiornat)\w*` +
+    String.raw`|(registrat|salvat|eseguit|confermat|somministrat|prescritt)\w*\s+(con successo|correttamente)` +
+    // Passive «just happened» claims about the system («…è stata salvata nel sistema», «registrata
+    // ora»): a read answer never reports its own effect.
+    String.raw`|(registrat|salvat|eseguit|confermat|inserit|aggiornat)\w*\s+(ora|adesso|appena|nel sistema|in cartella)\b` +
+    String.raw`|^\s*(somministrazione|prescrizione|terapia|pressione|parametr\w*|nota|voce)\s+(registrat|salvat|confermat|inserit)\w*\s*[.!]?\s*$`,
+  'im',
+);
+const OVERRIDE_ECHO =
+  /(ignora(re)?\s+(le\s+)?(regole|istruzioni)|nuove istruzioni|system prompt|prompt di sistema|DATI_NON_ATTENDIBILI)/i;
+
+export function claimsActionOrOverride(text: string): boolean {
+  return ACTION_CLAIM.test(text) || OVERRIDE_ECHO.test(text);
+}
+
 export async function composeAnswer(
   question: string,
   results: unknown[],
@@ -50,6 +68,10 @@ export async function composeAnswer(
     const ids = sourceIds(sources);
     // POST-CHECK: ogni fonte citata deve essere tra quelle fornite → altrimenti invenzione, scarta.
     if (!cited.every((c) => ids.has(c))) return { composed: false };
+    // Phase 6 POST-CHECK: the composer never executes anything. A text claiming an action was
+    // performed, or echoing override instructions, comes from injected data or hallucination →
+    // discard it (the structured, deterministic view is shown instead).
+    if (claimsActionOrOverride(text)) return { composed: false };
     return { answerText: text, composed: true };
   } catch {
     return { composed: false }; // runtime assente/timeout/errore → risposta strutturata

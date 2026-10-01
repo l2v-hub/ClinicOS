@@ -112,22 +112,64 @@ test('patient-documents gate: role "guest" -> 403', () => {
   assert.equal(res._out.code, 403);
 });
 
-test('patient-documents gate: valid "operatore" role passes and is attached to the request', () => {
-  const req = mockReq({
-    'X-Operator-Id': 'op-1',
-    'X-Operator-Role': 'operatore',
-    'X-Demo-Patient-Id': 'patient-a',
+// Phase 6: after identity, the gate applies the Resident Access Scope (same check as every other
+// patient route). The scope reader is stubbed: patient-a is owned by op-1 only.
+async function withScopeStub(run: () => Promise<void>) {
+  const { prisma } = await import('../../lib/prisma.js');
+  const original = prisma.patient;
+  Object.assign(prisma, {
+    patient: {
+      findFirst: async ({ where }: { where: { id: string; registeredById?: string } }) =>
+        where.id === 'patient-a' && where.registeredById === 'op-1' ? { id: where.id } : null,
+    },
   });
-  const res = mockRes();
-  let nexted = false;
-  withAuthMode('demo', 'test', () =>
-    requirePatientDocumentAccess(req as never, res as never, () => {
-      nexted = true;
-    }),
-  );
-  assert.equal(nexted, true);
-  assert.equal(req.operator?.id, 'op-1');
-  assert.equal(req.operator?.role, 'operatore');
+  try {
+    await run();
+  } finally {
+    Object.assign(prisma, { patient: original });
+  }
+}
+const settle = () => new Promise((resolve) => setImmediate(resolve));
+
+test('patient-documents gate: valid "operatore" role passes and is attached to the request', async () => {
+  await withScopeStub(async () => {
+    const req = mockReq({
+      'X-Operator-Id': 'op-1',
+      'X-Operator-Role': 'operatore',
+      'X-Demo-Patient-Id': 'patient-a',
+    });
+    const res = mockRes();
+    let nexted = false;
+    withAuthMode('demo', 'test', () =>
+      requirePatientDocumentAccess(req as never, res as never, () => {
+        nexted = true;
+      }),
+    );
+    await settle();
+    assert.equal(nexted, true);
+    assert.equal(req.operator?.id, 'op-1');
+    assert.equal(req.operator?.role, 'operatore');
+  });
+});
+
+test('patient-documents gate: operator outside the resident scope -> 404, no next', async () => {
+  await withScopeStub(async () => {
+    const req = mockReq({
+      'X-Operator-Id': 'op-2',
+      'X-Operator-Role': 'operatore',
+      'X-Demo-Patient-Id': 'patient-a',
+    });
+    const res = mockRes();
+    let nexted = false;
+    withAuthMode('demo', 'test', () =>
+      requirePatientDocumentAccess(req as never, res as never, () => {
+        nexted = true;
+      }),
+    );
+    await settle();
+    assert.equal(nexted, false);
+    assert.equal(res._out.code, 404);
+  });
 });
 
 test('patient-documents gate: demo request scoped to another patient -> 403', () => {

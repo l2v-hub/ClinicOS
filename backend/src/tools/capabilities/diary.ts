@@ -180,6 +180,7 @@ export const diaryTools: ToolDefinition[] = [
         String(input.patientId),
         input.body,
         actorOf(ctx),
+        ctx.origin === 'ai_assistant' || ctx.origin === 'ai' ? ctx.origin : undefined,
       );
       return { entry: result.entry, therapy: result.therapy, replayed: result.replay };
     },

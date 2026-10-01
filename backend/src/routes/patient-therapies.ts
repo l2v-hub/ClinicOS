@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma.js';
+import { IdempotencyError, runIdempotent, takeRequestId } from '../lib/idempotency.js';
 import type { Prisma } from '@prisma/client';
 import { Router } from 'express';
 import {
@@ -205,8 +206,19 @@ router.get('/:patientId/therapies', async (req, res) => {
 router.post('/:patientId/therapies', async (req, res) => {
   const { patientId } = req.params;
   const actor = (req as AuthedRequest).operator!;
+  // Phase 6: optional idempotency key — a retried submission (double click, lost response,
+  // timeout after commit) replays the first result instead of creating a second prescription.
+  let requestId: string | undefined;
+  let input: Record<string, unknown>;
+  try {
+    ({ requestId, rest: input } = takeRequestId(req.body));
+  } catch (error) {
+    const e = error as IdempotencyError;
+    res.status(e.status).json({ error: e.message, code: e.code });
+    return;
+  }
   const body = {
-    ...(req.body as TherapyCreateInput),
+    ...(input as unknown as TherapyCreateInput),
     operatoreInseritore: actor.name || actor.id,
   };
 
@@ -219,13 +231,26 @@ router.post('/:patientId/therapies', async (req, res) => {
   }
 
   try {
-    const therapy = await prisma.$transaction((tx) => createTherapyInTx(tx, patientId, body));
-
-    console.log(
-      `POST /patients/${patientId}/therapies → created id=${therapy.id} (${therapy.schedules.length} schedules)`,
+    const outcome = await runIdempotent(
+      'therapy.create',
+      actor.id,
+      requestId,
+      { patientId, input },
+      async () => {
+        const therapy = await prisma.$transaction((tx) => createTherapyInTx(tx, patientId, body));
+        console.log(
+          `POST /patients/${patientId}/therapies → created id=${therapy.id} (${therapy.schedules.length} schedules)`,
+        );
+        return { status: 201, body: therapy };
+      },
     );
-    res.status(201).json(therapy);
+    if (outcome.replayed) res.setHeader('Idempotent-Replayed', 'true');
+    res.status(outcome.status).json(outcome.body);
   } catch (error) {
+    if (error instanceof IdempotencyError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
     const msg = error instanceof Error ? error.message : '';
     if (
       msg.includes('Campi obbligatori') ||

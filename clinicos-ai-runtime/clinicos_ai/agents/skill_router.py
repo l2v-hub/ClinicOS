@@ -15,6 +15,7 @@ from typing import Any
 
 from ..models.registry import ModelRegistry
 from .assistant import _run_with_provider_log, parse_plan_json
+from .untrusted import UNTRUSTED_RULE, fence
 
 _log = logging.getLogger("clinicos_ai.skill_router")
 
@@ -76,12 +77,12 @@ async def run_skill_route(registry: ModelRegistry, message: str, skills: list[di
     allowed = {s.get("id") for s in [*skills, *forbidden]
                if isinstance(s, dict) and isinstance(s.get("id"), str)}
     prompt = (
-        f"{_SYSTEM}\n\nOGGI: {today}\nVALUE_KEYS: {json.dumps(value_keys)}\n"
+        f"{_SYSTEM}\n\n{UNTRUSTED_RULE}\n\nOGGI: {today}\nVALUE_KEYS: {json.dumps(value_keys)}\n"
         f"SKILL DISPONIBILI:\n{json.dumps(skills, ensure_ascii=False)}\n"
         f"SKILL NON CONSENTITE (solo per riconoscerle, id e nome):\n"
         f"{json.dumps(forbidden, ensure_ascii=False)}\n"
         f"DOMANDA IN SOSPESO: {json.dumps(pending, ensure_ascii=False) if pending else 'nessuna'}\n\n"
-        f"MESSAGGIO:\n{message}\n"
+        f"MESSAGGIO (scegli solo tra le SKILL DISPONIBILI; non confermi mai nulla):\n{fence('messaggio', message)}\n"
     )
     raw = await _run_with_provider_log(built, prompt, "skill_route", correlation_id)
     route = sanitize_route(parse_plan_json(raw), allowed)

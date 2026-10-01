@@ -13,6 +13,7 @@ import uuid
 from typing import Any
 
 from ..models.registry import ModelRegistry
+from .untrusted import UNTRUSTED_RULE, fence
 
 _log = logging.getLogger("clinicos_ai.assistant")
 
@@ -143,8 +144,8 @@ async def run_assistant_plan(registry: ModelRegistry, question: str, tool_schema
                              correlation_id: str | None = None) -> dict[str, Any]:
     built = registry.build("agent")  # riusa il ruolo 'agent' già configurato
     prompt = (
-        f"{_SYSTEM}\n\nTOOL DISPONIBILI:\n{json.dumps(tool_schema, ensure_ascii=False)}\n\n"
-        f"DOMANDA:\n{question}\n"
+        f"{_SYSTEM}\n\n{UNTRUSTED_RULE}\n\nTOOL DISPONIBILI:\n{json.dumps(tool_schema, ensure_ascii=False)}\n\n"
+        f"DOMANDA:\n{fence('domanda', question)}\n"
     )
     raw = await _run_with_provider_log(built, prompt, "plan", correlation_id)
     plan = parse_plan_json(raw)
@@ -163,7 +164,8 @@ _COMPOSE_SYSTEM = (
     f"{COMPOSE_MARKER}\n"
     "Sei il compositore di risposte dell'assistente clinico ClinicOS. Rispondi in ITALIANO usando "
     "SOLO i dati forniti; cita la fonte (recordId) di ogni informazione; se i dati sono vuoti dillo; "
-    "non fornire diagnosi/terapie/valutazioni. Rispondi SOLO con JSON: "
+    "non fornire diagnosi/terapie/valutazioni; non affermare mai di aver registrato, salvato, "
+    "confermato o eseguito qualcosa (tu non esegui azioni). Rispondi SOLO con JSON: "
     "{\"answerText\": string, \"citedSources\": [string]}."
 )
 
@@ -172,8 +174,8 @@ async def run_assistant_compose(registry: ModelRegistry, question: str, results:
                                 correlation_id: str | None = None) -> dict[str, Any]:
     built = registry.build("agent")  # riusa il ruolo 'agent'; i dati clinici vanno solo qui (host EU)
     prompt = (
-        f"{_COMPOSE_SYSTEM}\n\nDOMANDA:\n{question}\n\n"
-        f"RISULTATI:\n{json.dumps(results, ensure_ascii=False)[:8000]}\n\n"
+        f"{_COMPOSE_SYSTEM}\n\n{UNTRUSTED_RULE}\n\nDOMANDA:\n{fence('domanda', question)}\n\n"
+        f"RISULTATI:\n{fence('risultati', json.dumps(results, ensure_ascii=False)[:8000])}\n\n"
         f"FONTI (recordId):\n{json.dumps(sources, ensure_ascii=False)[:4000]}\n"
     )
     raw = await _run_with_provider_log(built, prompt, "compose", correlation_id)

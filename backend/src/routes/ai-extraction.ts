@@ -11,15 +11,22 @@ const aiExtractionRouter = Router();
 
 // GET /ai/extraction/status — does the frontend know if the service is usable?
 // Never returns the API key or any secret.
+// Phase 6 (error disclosure): this route is public → configuration errors (file paths, env var
+// names) are summarized; the details stay in the server log.
+function publicErrors(errors: string[]): string[] {
+  return errors.length ? ['Configurazione AI incompleta (dettagli nei log del server)'] : [];
+}
+
 aiExtractionRouter.get('/status', (_req, res) => {
-  res.status(200).json(publicStatus());
+  const status = publicStatus();
+  res.status(200).json({ ...status, errors: publicErrors(status.errors) });
 });
 
 // GET /ai/extraction/capabilities — model capability probe (images/docs/structured).
 aiExtractionRouter.get('/capabilities', async (_req, res) => {
   const cfg = loadAiConfig();
   if (!cfg.available) {
-    return res.status(503).json({ available: false, errors: cfg.errors });
+    return res.status(503).json({ available: false, errors: publicErrors(cfg.errors) });
   }
   try {
     const provider = createExtractionProvider(cfg);
@@ -27,10 +34,8 @@ aiExtractionRouter.get('/capabilities', async (_req, res) => {
     res.status(200).json({ available: true, model: provider.model, capabilities: caps });
   } catch (err) {
     // Controlled error, no secrets.
-    res.status(503).json({
-      available: false,
-      error: err instanceof Error ? err.message : 'Errore configurazione AI',
-    });
+    console.error('[ai-extraction] capabilities:', err instanceof Error ? err.message : err);
+    res.status(503).json({ available: false, error: 'Servizio AI non disponibile' });
   }
 });
 

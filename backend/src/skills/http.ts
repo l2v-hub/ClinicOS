@@ -16,6 +16,7 @@
 
 import { randomUUID } from 'node:crypto';
 import express, { Router, type Response } from 'express';
+import { guardAsyncRoutes } from '../lib/async-guard.js';
 import { describeResident, residentScopeFor } from '../access-scope/resident-access-scope.js';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { recordAuditEvent, type AiAuditOutcome } from '../ai/audit-store.js';
@@ -151,7 +152,8 @@ function parseConverse(body: unknown): ConverseRequest | string {
 }
 
 export function createSkillRouter(deps: SkillEngineDeps): Router {
-  const router = Router();
+  // Phase 6: an unexpected async failure (DB/scope check) answers 503, never hangs or crashes.
+  const router = guardAsyncRoutes(Router(), 'skills');
   router.use((_req, res, next) => {
     res.setHeader('Cache-Control', 'private, no-store');
     next();
