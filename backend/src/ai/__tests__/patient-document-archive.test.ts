@@ -69,6 +69,12 @@ beforeEach(() => {
     $executeRaw: async () => 0,
     patient: {
       findUnique: async ({ where }: any) => (where.id === 'patient-a' ? { id: where.id } : null),
+      // Phase 6: documents follow the Resident Access Scope (patient-a is owned by archive-qa).
+      findFirst: async ({ where }: any) =>
+        where.id === 'patient-a' &&
+        (where.registeredById === undefined || where.registeredById === 'archive-qa')
+          ? { id: where.id }
+          : null,
     },
     patientDocument: {
       aggregate: async () => ({ _max: { sortOrder: null } }),
@@ -191,6 +197,13 @@ test('anonymous, forbidden-role and foreign-patient access fail without writes',
   );
   assert.equal((await patch('foreign', { documentType: 'esame' })).status, 404);
   assert.equal((await fetch(`${base}/foreign/content`, { headers })).status, 404);
+  // Phase 6: another ordinary operator is outside patient-a's Resident Access Scope.
+  const otherOperator = { ...headers, 'X-Operator-Id': 'archive-other' };
+  assert.equal((await fetch(base, { headers: otherOperator })).status, 404);
+  const body = new FormData();
+  body.append('file', new Blob([pdf as BlobPart], { type: 'application/pdf' }), 'referto.pdf');
+  body.append('documentType', 'esame');
+  assert.equal((await fetch(base, { method: 'POST', headers: otherOperator, body })).status, 404);
   assert.equal(writes, 0);
 });
 

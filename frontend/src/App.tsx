@@ -2151,6 +2151,8 @@ export default function App() {
     setSearchQuery('');
     setAiOpen(false);
     setAiLoaded(false);
+    // Phase 6: the full-screen Assistant never reopens for the next operator.
+    setAssistantModeOpen(false);
     setToastMsg(null);
     setMobileNavOpen(false);
     setPazientiRicerca('');

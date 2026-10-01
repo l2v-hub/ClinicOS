@@ -110,6 +110,8 @@ export interface OperationalAuditInput {
   /** Field NAMES touched — NEVER values (PHI-safe). Capped at 20 downstream. */
   fields?: string[];
   outcome?: AiAuditOutcome;
+  /** Origin channel (default 'ui'); e.g. 'ai_assistant' when the write comes from the Assistant. */
+  channel?: AiAuditChannel;
   /** ISO timestamp; omitted ⇒ DB default now(). */
   at?: string;
 }
@@ -123,7 +125,7 @@ export function recordOperationalAudit(input: OperationalAuditInput): void {
     patientId: input.patientId ?? null,
     actionType: input.action,
     kind: input.kind ?? 'update',
-    channel: 'ui',
+    channel: input.channel ?? 'ui',
     fields: (input.fields ?? []).slice(0, 20),
     outcome: input.outcome ?? 'ok',
     ...(input.at ? { createdAt: input.at } : {}),

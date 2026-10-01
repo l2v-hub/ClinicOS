@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { createSubmissionKey } from '../../../lib/submissionKey';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
 import { ClinicalTableSection, LoadingState, EmptyState } from './shared';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
@@ -319,22 +320,26 @@ export function DiarioPazienteTab({
 
   // ── Save new entry ───────────────────────────────────────────────────────────
 
+  const [saveKey] = useState(createSubmissionKey);
   async function handleSave() {
     if (!form.content.trim()) return;
     setSaving(true);
     try {
+      const entryPayload = {
+        title: form.title.trim() || null,
+        content: form.content.trim(),
+        priority: form.priority,
+        status: form.status,
+        entryDateTime: form.entryDateTime,
+      };
+      // Phase 6: same content → same requestId on retry (no duplicate entry after a lost response).
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({
-          title: form.title.trim() || null,
-          content: form.content.trim(),
-          priority: form.priority,
-          status: form.status,
-          entryDateTime: form.entryDateTime,
-        }),
+        body: JSON.stringify({ ...entryPayload, requestId: saveKey.for(entryPayload) }),
       });
       if (!res.ok) throw new Error();
+      saveKey.reset();
       const data = (await res.json()) as { entry: DiarioPazienteEntry };
       const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
       if (resolvedFilter === 'tutti' || resolvedFilter === data.entry.authorType) {

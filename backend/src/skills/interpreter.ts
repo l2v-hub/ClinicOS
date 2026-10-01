@@ -33,23 +33,26 @@ export type Interpreter = (input: InterpretInput) => Promise<Interpretation>;
 
 // ── Deterministic interpreter ──────────────────────────────────────────────────────────────
 
+// Phase 6 (wrong-number defense): every number is delimited — «1200/80», «saturazione 1000»,
+// «temperatura 375» are NOT shortened to 200/80, 100, 37: the value stays unextracted and the
+// workflow asks for it (never a silently different, plausible clinical value).
 const VALUE_PATTERNS: ReadonlyArray<[string, RegExp]> = [
   // "120/80" or the spoken form "120 su 80" (voice transcripts); both become "120/80".
   [
     'pa',
-    /(?:pressione(?:\s+arteriosa)?|\bpa\b)?\s*(?:di|a|è|:)?\s*(\d{2,3}\s*(?:\/|\bsu\b)\s*\d{2,3})/i,
+    /(?:pressione(?:\s+arteriosa)?|\bpa\b)?\s*(?:di|a|è|:)?\s*(?<![\d.,/])(\d{2,3}\s*(?:\/|\bsu\b)\s*\d{2,3})(?!\d|[.,]\d|\s*\/\s*\d)/i,
   ],
   [
     'fr',
-    /(?:frequenza\s+respiratoria|\bfr\b|atti\s+respiratori|respiri)\s*(?:di|a|:)?\s*(\d{1,2})\b/i,
+    /(?:frequenza\s+respiratoria|\bfr\b|atti\s+respiratori|respiri)\s*(?:di|a|:)?\s*(\d{1,2})(?!\d|[.,]\d)/i,
   ],
-  ['spo2', /(?:spo2|sp02|saturazione|\bsat\b)\s*(?:di|a|al|:)?\s*(\d{2,3})\s*%?/i],
-  ['fc', /(?:frequenza(?:\s+cardiaca)?|\bfc\b|polso|battiti)\s*(?:di|a|:)?\s*(\d{2,3})\b/i],
+  ['spo2', /(?:spo2|sp02|saturazione|\bsat\b)\s*(?:di|a|al|:)?\s*(\d{2,3})(?!\d|[.,]\d)\s*%?/i],
+  ['fc', /(?:frequenza(?:\s+cardiaca)?|\bfc\b|polso|battiti)\s*(?:di|a|:)?\s*(\d{2,3})(?!\d|[.,]\d)/i],
   [
     'temperatura',
-    /(?:temperatura|\btemp\b|febbre|\btc\b)\s*(?:di|a|:)?\s*(\d{2}(?:[.,]\d{1,2})?)/i,
+    /(?:temperatura|\btemp\b|febbre|\btc\b)\s*(?:di|a|:)?\s*(\d{2}(?:[.,]\d{1,2})?)(?!\d|[.,]\d)/i,
   ],
-  ['dtx', /(?:\bdtx\b|glicemia|stick glicemico)\s*(?:di|a|:)?\s*(\d{2,3})\b/i],
+  ['dtx', /(?:\bdtx\b|glicemia|stick glicemico)\s*(?:di|a|:)?\s*(\d{2,3})(?!\d|[.,]\d)/i],
   ['o2', /ossigeno\s*(?:terapia)?\s*:?\s*(s[iì]|no)\b/i],
   ['coscienza', /(?:coscienza|acvpu)\s*:?\s*([ACVPU])\b/],
 ];

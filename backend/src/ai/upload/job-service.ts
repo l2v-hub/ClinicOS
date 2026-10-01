@@ -7,6 +7,7 @@
 // REQ-023: extraction is delegated to the AI Runtime service via neutral HTTP contract.
 // The backend has NO Google/provider imports — only AI_RUNTIME_URL + AI_RUNTIME_SERVICE_TOKEN.
 
+import { UNTRUSTED_RULE, fenceUntrusted } from '../untrusted-prompt.js';
 import { access, readFile } from 'node:fs/promises';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
@@ -355,9 +356,10 @@ async function runtimeClinicalLists(
   // Con una trascrizione fedele al layout il compito diventa "leggi queste righe" invece di
   // "interpreta queste immagini": e' sugli elenchi di farmaci, dove dose e posologia sono
   // allineate in colonna, che la differenza si sente di piu'.
+  // Phase 6: document text is untrusted data (fenced; it can never become an instruction).
   const prompt = rawText.trim()
-    ? `${CLINICAL_LISTS_PROMPT}\n\nTESTO DEL DOCUMENTO (ogni riga e' una voce a se'):\n${rawText}`
-    : CLINICAL_LISTS_PROMPT;
+    ? `${CLINICAL_LISTS_PROMPT}\n\n${UNTRUSTED_RULE}\n\nTESTO DEL DOCUMENTO (ogni riga e' una voce a se'):\n${fenceUntrusted('documento', rawText)}`
+    : `${CLINICAL_LISTS_PROMPT}\n\n${UNTRUSTED_RULE}`;
   const rid = await runtimeCreateJob(jobId, documents, CLINICAL_LISTS_SCHEMA, prompt);
   await runtimeRunJob(rid);
   const deadline = Date.now() + 10 * 60 * 1000;
@@ -856,8 +858,8 @@ export async function runJob(jobId: string): Promise<void> {
     const OCR_ENOUGH_CHARS = 200;
     const ocrUsable = rawText.trim().length >= OCR_ENOUGH_CHARS;
     const extractionPrompt = ocrUsable
-      ? `${prompt}\n\nTESTO DEL DOCUMENTO (trascrizione fedele al layout: ogni riga e' una voce a se'):\n${rawText}`
-      : prompt;
+      ? `${prompt}\n\n${UNTRUSTED_RULE}\n\nTESTO DEL DOCUMENTO (trascrizione fedele al layout: ogni riga e' una voce a se'):\n${fenceUntrusted('documento', rawText)}`
+      : `${prompt}\n\n${UNTRUSTED_RULE}`;
     const extractionFiles = ocrUsable ? [] : docFiles;
 
     // 3. Create runtime job

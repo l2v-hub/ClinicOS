@@ -24,6 +24,11 @@ import {
 
 const intakeDraftsRouter = Router();
 
+// Phase 6 (leakage): draft patient data must never be stored by browsers or intermediaries.
+intakeDraftsRouter.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
 intakeDraftsRouter.use(requireOperator);
 intakeDraftsRouter.param('id', requireOwnedIntakeDraft);
 

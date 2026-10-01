@@ -11,6 +11,7 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import {
   converse,
+  reconcileWorkflow,
   loadAssistantSession,
   searchResidents,
   selectResident,
@@ -146,6 +147,23 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           void refreshSession(contextId);
         }
       } catch (error) {
+        // Phase 6 (result integrity): a confirmation without an answer has an UNKNOWN outcome —
+        // never show it as failed-and-retryable. Ask the server for the real workflow state.
+        if (body.action === 'confirm' && body.workflowId) {
+          const verified = await reconcileWorkflow(body.workflowId);
+          if (verified) {
+            dispatch({ type: 'response', response: verified });
+            voiceTurn.current(verified.status);
+            return;
+          }
+          dispatch({
+            type: 'request_failed',
+            message:
+              'Esito NON verificato: la conferma non ha avuto risposta. Non ripetere l’operazione: controlla prima la scheda dell’ospite.',
+          });
+          voiceTurn.current('REQUEST_FAILED');
+          return;
+        }
         dispatch({
           type: 'request_failed',
           message: error instanceof Error ? error.message : 'Errore imprevisto',
@@ -265,7 +283,11 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         if (e.key === 'Escape' && !state.busy) {
           e.stopPropagation();
           // First Escape stops an open microphone / pending transcript; the next one closes.
-          if (['LISTENING', 'SPEECH_ACTIVE', 'TRANSCRIBING', 'TRANSCRIPT_READY'].includes(voice.audio.state)) {
+          if (
+            ['LISTENING', 'SPEECH_ACTIVE', 'TRANSCRIBING', 'TRANSCRIPT_READY'].includes(
+              voice.audio.state,
+            )
+          ) {
             voice.cancel();
             return;
           }
@@ -366,8 +388,8 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
               {pickerQuery.trim().length >= 2 &&
                 visiblePickerResults.length === 0 &&
                 !pickerError && (
-                <li className="am-muted">Nessun ospite tra quelli a cui hai accesso.</li>
-              )}
+                  <li className="am-muted">Nessun ospite tra quelli a cui hai accesso.</li>
+                )}
             </ul>
           </div>
         )}
@@ -685,7 +707,11 @@ function AssistantEditForm({ editable, busy, onSubmit, onCancel }: EditFormProps
       {editable.priority !== undefined && (
         <label className="am-field">
           <span>Priorità</span>
-          <select className="am-input" value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <select
+            className="am-input"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          >
             <option value="normale">Normale</option>
             <option value="alta">Alta</option>
             <option value="urgente">Urgente</option>
@@ -696,7 +722,12 @@ function AssistantEditForm({ editable, busy, onSubmit, onCancel }: EditFormProps
         <button type="submit" className="ds-btn ds-btn--primary" disabled={busy}>
           Prepara nuova anteprima
         </button>
-        <button type="button" className="ds-btn ds-btn--secondary" disabled={busy} onClick={onCancel}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          disabled={busy}
+          onClick={onCancel}
+        >
           Annulla
         </button>
       </div>

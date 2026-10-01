@@ -1,3 +1,4 @@
+import { IdempotencyError, runIdempotent, takeRequestId } from '../lib/idempotency.js';
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
@@ -63,9 +64,25 @@ router.post('/:patientId/diary', async (req: AuthedRequest, res) => {
   const rawPatientId = req.params.patientId;
   const patientId = (Array.isArray(rawPatientId) ? rawPatientId[0] : rawPatientId) ?? '';
   try {
-    const entry = await createPatientDiaryEntry(patientId, req.body, req.operator!);
-    res.status(201).json({ entry });
+    // Phase 6: optional idempotency key (retry/double submit never creates a second entry).
+    const { requestId, rest } = takeRequestId(req.body);
+    const outcome = await runIdempotent(
+      'diary.create',
+      req.operator!.id,
+      requestId,
+      { patientId, rest },
+      async () => ({
+        status: 201,
+        body: { entry: await createPatientDiaryEntry(patientId, rest, req.operator!) },
+      }),
+    );
+    if (outcome.replayed) res.setHeader('Idempotent-Replayed', 'true');
+    res.status(outcome.status).json(outcome.body);
   } catch (error) {
+    if (error instanceof IdempotencyError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
     if (error instanceof DiaryWriteInputError) {
       res.status(400).json({ error: error.message });
       return;

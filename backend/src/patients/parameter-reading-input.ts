@@ -29,6 +29,16 @@ export class ParameterReadingError extends Error {
   }
 }
 export const PARAMETER_PATIENT_ID = /^[A-Za-z0-9_-]{1,128}$/;
+const PLAUSIBLE_RANGES: Partial<Record<ParameterKey, [number, number]>> = {
+  fc: [20, 300],
+  temperatura: [25, 45],
+  dtx: [10, 900],
+};
+const PARAMETER_LABELS: Partial<Record<ParameterKey, string>> = {
+  fc: 'Frequenza cardiaca',
+  temperatura: 'Temperatura',
+  dtx: 'Glicemia',
+};
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
 export function parameterDate(value: unknown): string {
@@ -95,6 +105,22 @@ export function parseParameterReading(value: unknown): ParameterReadingInput {
       throw new ParameterReadingError(`${key}: inserisci un numero valido`);
     if (key === 'spo2' && Number(text.replace(',', '.')) > 100)
       throw new ParameterReadingError('SpO₂ deve essere compresa tra 0 e 100');
+    // Phase 6 (wrong number): physiologically impossible values — a typo or a misheard number
+    // («120/800», «375» for 37,5) — are REJECTED, never stored and never corrected. Same ranges
+    // as the GUI (ParametriTab PLAUSIBLE_RANGES).
+    if (key === 'pa') {
+      const [sist, dias] = text.split('/').map((part) => Number(part.trim()));
+      if (sist < 40 || sist > 300 || dias < 20 || dias > 200 || dias >= sist)
+        throw new ParameterReadingError('Pressione fuori dai valori possibili: ricontrolla');
+    }
+    const plausible = PLAUSIBLE_RANGES[key];
+    if (plausible) {
+      const n = Number(text.replace(',', '.'));
+      if (n < plausible[0] || n > plausible[1])
+        throw new ParameterReadingError(
+          `${PARAMETER_LABELS[key] ?? key}: valore fuori dai limiti possibili (${plausible[0]}–${plausible[1]})`,
+        );
+    }
     if (key === 'fr' && (!/^\d{1,2}$/.test(text) || Number(text) < 1 || Number(text) > 80))
       throw new ParameterReadingError('Frequenza respiratoria: numero intero tra 1 e 80');
     if (key === 'o2' && !(OXYGEN_VALUES as readonly string[]).includes(text))

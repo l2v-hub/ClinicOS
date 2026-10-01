@@ -43,7 +43,7 @@ after(async () => {
   // The with-therapy composition records its (best-effort) operational audit itself.
   await new Promise((resolve) => setTimeout(resolve, 300));
   const ids = [patientId, strangerPatientId];
-  await prisma.aiAuditEvent.deleteMany({ where: { patientId: { in: ids } } });
+  // AiAuditEvent is append-only (Phase 6 trigger): audit rows are kept.
   await prisma.patientDiaryEntry.deleteMany({ where: { patientId: { in: ids } } });
   await prisma.patientTherapy.deleteMany({ where: { patientId: { in: ids } } });
   await cleanup([owner, stranger], ids);

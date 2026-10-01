@@ -295,8 +295,7 @@ export function buildPreview(
         Farmaco: String(row.farmacoNome ?? '') || '—',
         Dosaggio: String(row.dosaggio ?? '') || '—',
         Via: String(row.viaSomministrazione ?? '') || '—',
-        Orari:
-          draft.intent === 'al_bisogno' ? 'al bisogno' : orari.length ? orari.join(', ') : '—',
+        Orari: draft.intent === 'al_bisogno' ? 'al bisogno' : orari.length ? orari.join(', ') : '—',
         Inizio: String(row.dataInizio ?? '') || 'data della voce',
         ...(row.dataFine ? { Fine: String(row.dataFine) } : {}),
         Testo: state.slots.text ?? '',
@@ -481,6 +480,50 @@ export async function executeSkill(
     case 'administration.record': {
       const tool = 'administration.confirm';
       const a = state.slots.administration!;
+      // Phase 6 (G2): the service re-resolves drug/dose from the CURRENT prescription at write time.
+      // Recheck before commit that the slot is still pending with exactly the drug/dose/route the
+      // operator confirmed in the preview; any change → no write, new preview needed.
+      const check = await call('administration.list_slots', { query: { date: a.date } });
+      if (!check.ok) return failure(check, 'administration.list_slots', used);
+      type Pending = {
+        therapyId: string;
+        drugName: string;
+        dosage: string;
+        route: string;
+        status: string;
+      };
+      const slots = (Array.isArray(check.data) ? check.data : []) as {
+        fascia: string;
+        patients: { patientId: string; administrations: Pending[] }[];
+      }[];
+      const current = slots
+        .filter((s) => s.fascia === a.fascia)
+        .flatMap((s) => s.patients ?? [])
+        .filter((p) => p.patientId === patientId)
+        .flatMap((p) => p.administrations ?? [])
+        .find((x) => x.therapyId === a.therapyId);
+      const unchanged =
+        current &&
+        current.status === 'pending' &&
+        current.drugName === a.drugName &&
+        (current.dosage ?? '') === (a.dosage ?? '') &&
+        (current.route ?? '') === (a.route ?? '');
+      if (!unchanged)
+        return {
+          ok: false,
+          tool,
+          toolsUsed: used,
+          error: {
+            code: 'conflict',
+            status: 409,
+            domainCode: 'preview_stale',
+            message: current
+              ? current.status === 'pending'
+                ? 'La prescrizione è cambiata dopo l’anteprima: nessuna somministrazione registrata. Rivedi la nuova anteprima.'
+                : 'Questa somministrazione risulta già registrata o chiusa: nessuna nuova registrazione eseguita. Verifica il registro somministrazioni.'
+              : 'Somministrazione non più disponibile: nessuna registrazione eseguita.',
+          },
+        };
       const result = await call(
         tool,
         { body: { patientId, therapyId: a.therapyId, date: a.date, fascia: a.fascia } },

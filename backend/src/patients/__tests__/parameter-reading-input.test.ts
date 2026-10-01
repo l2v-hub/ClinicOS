@@ -128,3 +128,23 @@ test('accepts the NEWS2 parameters and rejects values outside their rules', () =
   ])
     assert.throws(() => parseParameterReading(valid(values)), undefined, JSON.stringify(values));
 });
+
+test('rejects physiologically impossible values (wrong number), never corrects them', () => {
+  for (const values of [
+    { pa: '120/800' },
+    { pa: '1200/80' },
+    { pa: '80/120' },
+    { pa: '30/20' },
+    { fc: '1000' },
+    { fc: '5' },
+    { temperatura: '375' },
+    { temperatura: '20' },
+    { dtx: '5' },
+    { dtx: '1200' },
+  ])
+    assert.throws(() => parseParameterReading(valid(values)), undefined, JSON.stringify(values));
+  assert.deepEqual(
+    parseParameterReading(valid({ pa: '120/80', fc: '72', temperatura: '37,5', dtx: '110' })).values,
+    { pa: '120/80', fc: '72', temperatura: '37,5', dtx: '110' },
+  );
+});

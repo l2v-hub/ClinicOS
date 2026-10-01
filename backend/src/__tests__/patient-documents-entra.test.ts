@@ -21,6 +21,8 @@ let jwksServer: Server;
 let jwksUrl = '';
 let userId = '';
 let operatorId = '';
+let ownPatientId = '';
+let foreignPatientId = '';
 const savedEnv: Record<string, string | undefined> = {};
 
 function setEnv(vars: Record<string, string | undefined>) {
@@ -55,9 +57,26 @@ before(async () => {
   });
   userId = user.id;
   operatorId = user.operator!.id;
+  // Phase 6: documents follow the Resident Access Scope — one own and one foreign resident.
+  const patient = (n: string, registeredById: string | null) =>
+    prisma.patient.create({
+      data: {
+        medicalRecordNumber: `GATE-${STAMP}-${n}`,
+        firstName: 'Gate',
+        lastName: `Synthetic${n}`,
+        dateOfBirth: new Date('1940-01-01T00:00:00.000Z'),
+        sex: 'F',
+        registeredById,
+      },
+    });
+  ownPatientId = (await patient('own', operatorId)).id;
+  foreignPatientId = (await patient('foreign', null)).id;
 });
 
 after(async () => {
+  await prisma.patient
+    .deleteMany({ where: { id: { in: [ownPatientId, foreignPatientId].filter(Boolean) } } })
+    .catch(() => {});
   await prisma.operator.deleteMany({ where: { userId } }).catch(() => {});
   await prisma.user.delete({ where: { id: userId } }).catch(() => {});
   await new Promise<void>((r) => jwksServer.close(() => r()));
@@ -68,12 +87,12 @@ after(async () => {
   await prisma.$disconnect().catch(() => {});
 });
 
-function mockReq(headers: Record<string, string>): AuthedRequest {
+function mockReq(headers: Record<string, string>, patientId = 'patient-gate'): AuthedRequest {
   const lower: Record<string, string> = {};
   for (const [k, v] of Object.entries(headers)) lower[k.toLowerCase()] = v;
   return {
     header: (n: string) => lower[n.toLowerCase()],
-    params: { patientId: 'patient-gate' },
+    params: { patientId },
     operator: undefined,
   } as unknown as AuthedRequest;
 }
@@ -153,7 +172,7 @@ test('AC1-AC3: verified Bearer token authenticates and attaches the mapped opera
     ENTRA_AUDIENCE: AUDIENCE,
     ENTRA_JWKS_URL: jwksUrl,
   });
-  const req = mockReq({ Authorization: `Bearer ${await token()}` });
+  const req = mockReq({ Authorization: `Bearer ${await token()}` }, ownPatientId);
   const res = mockRes();
   await new Promise<void>((resolve, reject) => {
     requirePatientDocumentAccess(req, res as never, () => resolve());
@@ -161,6 +180,16 @@ test('AC1-AC3: verified Bearer token authenticates and attaches the mapped opera
   });
   assert.equal(req.operator?.id, operatorId, 'operator id must come from server-side mapping');
   assert.equal(req.operator?.role, 'operator');
+
+  // Phase 6: a verified operator is still bound to its residents (no «struttura» exception).
+  const foreign = mockRes();
+  requirePatientDocumentAccess(
+    mockReq({ Authorization: `Bearer ${await token()}` }, foreignPatientId),
+    foreign as never,
+    () => assert.fail('a resident outside the operator scope must not reach the documents'),
+  );
+  await foreign.done;
+  assert.equal(foreign._out.code, 404);
 });
 
 test('AC4: forged token in entra mode → 401 without enumeration', async () => {

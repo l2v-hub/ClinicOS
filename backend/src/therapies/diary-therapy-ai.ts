@@ -7,6 +7,7 @@
 // doubts). AI unavailable or slow → deterministic preview + warning, never an error.
 // PRIVACY: the diary text travels only in the runtime request body; it is never logged.
 
+import { UNTRUSTED_RULE, fenceUntrusted } from '../ai/untrusted-prompt.js';
 import { createHash, randomUUID } from 'node:crypto';
 import type { DiaryTherapyParseResult } from './diary-therapy-parse.js';
 import { NON_PRESCRIPTION_INTENTS, scheduleFasciaConflicts } from './diary-therapy-parse.js';
@@ -222,8 +223,9 @@ export function diaryTherapyAiPrompt(text: string, entryDate: string): string {
     '- Orari nel formato HH:MM. Dosaggio con unità separata da spazio (es. "1000 mg").',
     '- Non dedurre la via se non è scritta.',
     `Data della voce di diario: ${entryDate}.`,
+    UNTRUSTED_RULE,
     'Testo della voce di diario:',
-    text,
+    fenceUntrusted('diario', text),
   ].join('\n');
 }
 

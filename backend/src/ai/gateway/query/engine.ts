@@ -194,6 +194,22 @@ async function vitalStep(
   };
 }
 
+/**
+ * Phase 6 (security): ANY entity that carries a patient id (patient, roomAssignment, appointment…)
+ * is restricted to the caller's permitted residents, whatever its authz class. Before this, the
+ * `patient` entity was 'public' and facility entities with a patient relation were unfiltered, so
+ * a planned `query_data` step could list residents outside the operator's scope.
+ */
+export function scopeToPermittedPatients(
+  entity: { patientIdField?: string },
+  where: Record<string, unknown>,
+  ctx: UserContext,
+): Record<string, unknown> {
+  if (!entity.patientIdField || ctx.permittedPatientIds === null) return where;
+  const scope = { [entity.patientIdField]: { in: ctx.permittedPatientIds } };
+  return Object.keys(where).length ? { AND: [where, scope] } : scope;
+}
+
 async function runStep(
   step: ValidatedStep,
   ctx: UserContext,
@@ -217,7 +233,7 @@ async function runStep(
   }
 
   const delegate = (prisma as unknown as Record<string, any>)[entity.prismaModel!];
-  const where = whereFromFilters(filters);
+  const where = scopeToPermittedPatients(entity, whereFromFilters(filters), ctx);
 
   if (step.aggregate) {
     const a = step.aggregate;

@@ -56,7 +56,14 @@ function inputFieldNames(input: unknown): string[] {
 
 function patientIdOf(input: unknown): string | null {
   if (!input || typeof input !== 'object') return null;
-  const value = (input as Record<string, unknown>).patientId;
+  const record = input as Record<string, unknown>;
+  // Phase 6 (audit integrity): body-scoped writes (administrations, consegne…) carry the resident
+  // in `body.patientId` — the audit row must still name it.
+  const body =
+    record.body && typeof record.body === 'object'
+      ? (record.body as Record<string, unknown>)
+      : null;
+  const value = record.patientId ?? body?.patientId ?? body?.pazienteId;
   return typeof value === 'string' && value ? value : null;
 }
 

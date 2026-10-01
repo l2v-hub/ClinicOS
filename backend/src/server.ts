@@ -21,6 +21,14 @@ const parsePort = (value: string | undefined): number => {
 
 const port = process.env.PORT || 3001;
 
+// Phase 6 (availability): a stray rejected promise must not take the whole service down for every
+// operator. It is logged (no payloads) — request handlers answer their own errors.
+process.on('unhandledRejection', (reason) => {
+  console.error(
+    `[unhandledRejection] ${reason instanceof Error ? `${reason.name}: ${reason.message.slice(0, 200)}` : typeof reason}`,
+  );
+});
+
 const server = app.listen(port, () => {
   console.log(`ClinicOS backend listening on port ${port}`);
   // Controlled AI config validation at startup (secret-free).

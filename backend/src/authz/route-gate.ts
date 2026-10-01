@@ -14,8 +14,13 @@ import { governingCapability, matchRoute } from './registry.js';
 import { authzOf, enforcementEnabled, ensureAuthorization } from './request-context.js';
 import type { CapabilityEntry, Decision } from './types.js';
 
+/**
+ * Phase 6 (fail closed): a route missing from the capability catalog is DENIED by default — a new
+ * uncatalogued endpoint must never become reachable without a capability check. `allow` remains an
+ * explicit, documented escape hatch for local development only.
+ */
 function unmappedRoutesDenied(env: NodeJS.ProcessEnv = process.env): boolean {
-  return (env.AUTHZ_UNMAPPED_ROUTES || 'allow').trim().toLowerCase() === 'deny';
+  return (env.AUTHZ_UNMAPPED_ROUTES || 'deny').trim().toLowerCase() !== 'allow';
 }
 
 // Routes that are part of the authorization/identity/tool infrastructure itself and enforce their
@@ -47,7 +52,11 @@ function patientIdOf(req: Request): string | null {
       return match[1].slice(0, 64);
     }
   }
-  return null;
+  // Phase 6 (audit integrity): body-scoped writes (/therapy-slots/confirm, /consegne…) name the
+  // resident in the body — record it (as an identifier only; never other body values).
+  const body = req.body as Record<string, unknown> | undefined;
+  const fromBody = body && typeof body === 'object' ? (body.patientId ?? body.pazienteId) : null;
+  return typeof fromBody === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(fromBody) ? fromBody : null;
 }
 
 function audit(

@@ -292,15 +292,32 @@ try {
     await page.getByRole('button', { name: 'Chiudi contesto' }).click();
     await page.getByTestId('am-resident-name').getByText('Nessun ospite').waitFor();
     const nino = await resident('Conti');
-    const ninoBefore = await prisma.patientParameterReading.count({ where: { patientId: nino.id } });
+    const ninoBefore = await prisma.patientParameterReading.count({
+      where: { patientId: nino.id },
+    });
     const n1 = await say(page, 'registra i parametri per Nino Conti');
-    check('H1 named resident → asks for values', n1.status === 'NEEDS_CLARIFICATION' && n1.pending === 'values', JSON.stringify(n1).slice(0, 200));
+    check(
+      'H1 named resident → asks for values',
+      n1.status === 'NEEDS_CLARIFICATION' && n1.pending === 'values',
+      JSON.stringify(n1).slice(0, 200),
+    );
     const n2 = await say(page, 'fc 76');
     check('H1 preview targets the named resident', n2.preview?.patient?.label === 'Conti Nino');
-    check('H1 operation target shown in the resident bar', (await page.getByTestId('am-operation-target').innerText()).includes('Conti Nino'));
+    check(
+      'H1 operation target shown in the resident bar',
+      (await page.getByTestId('am-operation-target').innerText()).includes('Conti Nino'),
+    );
     const n3 = await turn(page, () => page.getByTestId('am-confirm').click());
-    check('H1 named-resident workflow completes (not cancelled)', n3.status === 'COMPLETED', JSON.stringify(n3).slice(0, 200));
-    check('H1 one reading written', (await prisma.patientParameterReading.count({ where: { patientId: nino.id } })) === ninoBefore + 1);
+    check(
+      'H1 named-resident workflow completes (not cancelled)',
+      n3.status === 'COMPLETED',
+      JSON.stringify(n3).slice(0, 200),
+    );
+    check(
+      'H1 one reading written',
+      (await prisma.patientParameterReading.count({ where: { patientId: nino.id } })) ===
+        ninoBefore + 1,
+    );
     // F — out-of-scope resident is never offered by the picker
     await page.getByRole('button', { name: 'Cambia ospite' }).click();
     await page.getByLabel('Cerca ospite').fill('Verdi');
@@ -324,7 +341,23 @@ try {
     if (adm.status === 'NEEDS_CONFIRMATION') {
       await page.route('**/skills/converse', (route) => route.abort('failed'), { times: 1 });
       await page.getByTestId('am-confirm').click();
-      await page.getByRole('alert').waitFor({ timeout: 10000 });
+      // Phase 6: the UI reconciles with the server instead of guessing; a confirm that never
+      // arrived is reported as «nessuna registrazione eseguita» (an alert if unverifiable).
+      await page
+        .getByRole('alert')
+        .or(page.getByText('La conferma non è arrivata al sistema'))
+        .first()
+        .waitFor({ timeout: 10000 });
+      check(
+        'I outcome stated from the server: nothing recorded',
+        // scoped to THIS step: the latest assistant message or the alert, not the whole transcript
+        /nessuna registrazione eseguita|Esito NON verificato/.test(
+          (await page.locator('.am-msg').last().innerText()) +
+            ((await page.getByRole('alert').count())
+              ? await page.getByRole('alert').first().innerText()
+              : ''),
+        ),
+      );
       check(
         'I network failure → error shown, no success card',
         (await page.getByTestId('am-result').count()) === 0,

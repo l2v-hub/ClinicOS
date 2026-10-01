@@ -25,6 +25,7 @@ import {
   PatientDocumentListQueryError,
 } from '../ai/upload/patient-document-list-query.js';
 import { AssessmentError } from '../assessments/types.js';
+import { requirePatientScope } from '../patients/access.js';
 
 const router = Router();
 // #246 FIX: NON usare router.use(requireOperator). Questo router è montato su '/patients'
@@ -63,9 +64,9 @@ export function documentAuthMode(env: NodeJS.ProcessEnv = process.env): Document
 /**
  * Document-endpoint gate.
  * - `entra` (#260): verified Entra JWT (signature/issuer/audience/expiry vs tenant JWKS) with
- *   server-side identity mapping — the ONLY production-grade mode. Struttura scope (PO decision):
- *   a mapped, active operator may access every patient's documents. Incomplete tenant config
- *   fails closed. Self-declared X-Operator-* / X-Demo-Patient-Id headers are ignored (AC6).
+ *   server-side identity mapping — the ONLY production-grade mode. Phase 6: the operator must ALSO
+ *   have the patient in its Resident Access Scope (out of scope → 404, scope check failure → 503).
+ *   Incomplete tenant config fails closed. Self-declared X-Operator-* / X-Demo-Patient-Id headers are ignored (AC6).
  * - `demo`: explicit synthetic-QA mode. Production requires a second opt-in and only the two
  *   fixed seed identities accepted by requireOperator.
  */
@@ -85,7 +86,9 @@ export function requirePatientDocumentAccess(
       });
       return;
     }
-    requireEntraOperator(config)(req, res, next);
+    // Phase 6: the verified operator is ALSO bound to the Resident Access Scope (parity with the
+    // chart, Tool Layer and Assistant). Supersedes the former «struttura» exception for documents.
+    requireEntraOperator(config)(req, res, () => requirePatientScope(req, res, next));
     return;
   }
   if (mode !== 'demo') {
@@ -103,7 +106,7 @@ export function requirePatientDocumentAccess(
         .json({ error: 'Paziente fuori dallo scope demo', code: 'demo_patient_scope_denied' });
       return;
     }
-    next();
+    requirePatientScope(req, res, next);
   });
 }
 
