@@ -41,6 +41,8 @@ priorita_dalla_fonte}` — max 30 facts; `fatto` is a FIXED phrase per event typ
   action-claiming prose.
 - AI failure / disabled / filtered → `composed:false`, `summary.text = fallback`; facts unchanged;
   nothing is acknowledged or resolved.
+- AI timeout for the briefing: `PROACTIVE_BRIEFING_TIMEOUT_MS` (default 25 s; the interactive
+  Assistant keeps `AI_ASSISTANT_TIMEOUT_MS`, 8 s). Found on demo: ~8 s syntheses hit the 8 s limit.
 - AI enabled with the existing flags `AI_ASSISTANT_LLM_ENABLED` + `AI_ASSISTANT_COMPOSE_ENABLED` +
   `AI_ASSISTANT_COMPOSE_MODEL` (production: `azure:gpt-6.1-sol`).
 
