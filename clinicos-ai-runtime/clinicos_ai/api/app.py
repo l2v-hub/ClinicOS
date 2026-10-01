@@ -24,7 +24,8 @@ from pydantic import ValidationError
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..agents.skill_router import run_skill_route
-from ..voice.stt import SttError, stt_status, transcribe as stt_transcribe
+from ..voice.azure_realtime import health as azure_health, negotiate_call, realtime_config
+from ..voice.stt import SttError, stt_model, stt_status, transcribe as stt_transcribe
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.env_config import safe_config_summary, llm_health_summary
 from ..models.providers.base import Attachment
@@ -274,6 +275,64 @@ MAX_STT_AUDIO_BYTES = 2_000_000
 def voice_stt_status(authorization: str | None = Header(default=None)):
     _auth(authorization)
     return stt_status()
+
+
+@app.get("/v1/voice/health")
+async def voice_health(authorization: str | None = Header(default=None)):
+    """Non-destructive Azure STT diagnostic (endpoint, auth, deployment). Never returns secrets."""
+    _auth(authorization)
+    configured = stt_model()
+    requested = (os.environ.get("AI_STT_PROVIDER") or "").strip().lower()
+    if configured is None and requested and requested != "azure_openai":
+        return {"ok": False, "provider": requested, "code": "invalid_config",
+                "message": "AI_STT_PROVIDER/AI_STT_MODEL non validi o incompleti"}
+    if configured and configured[0] != "azure_openai":
+        return {"ok": configured[0] == "mock", "provider": configured[0], "code": "not_azure",
+                "message": f"Provider STT esplicito: {configured[0]}"}
+    return {"provider": "azure_openai", **await asyncio.to_thread(azure_health, realtime_config())}
+
+
+MAX_SDP_BYTES = 64_000
+
+
+@app.post("/v1/voice/realtime-call")
+async def voice_realtime_call(request: Request, authorization: str | None = Header(default=None)):
+    """WebRTC negotiation for ONE browser transcription session: SDP offer in, SDP answer out.
+    The ephemeral client secret is minted and used here (session config fixed server-side);
+    neither the API key nor the token is returned."""
+    _auth(authorization)
+    try:
+        declared = int(request.headers.get("content-length") or 0)
+    except ValueError:
+        declared = 0
+    if declared > MAX_SDP_BYTES:
+        raise HTTPException(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, "SDP troppo grande")
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "JSON non valido")
+    sdp = body.get("sdp") if isinstance(body, dict) else None
+    if not isinstance(sdp, str) or not sdp.startswith("v=") or len(sdp) > MAX_SDP_BYTES:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, {"kind": "invalid_sdp", "message": "Offerta SDP non valida"})
+    configured = stt_model()
+    if configured is None:
+        raise HTTPException(503, {"kind": "not_configured", "message": "STT realtime non configurato"})
+    provider = configured[0]
+    if provider == "mock":  # tests only: a fake answer for the in-page fake peer
+        return {"sdp": "v=0\r\no=mock 0 0 IN IP4 127.0.0.1\r\ns=mock\r\n", "deployment": "mock",
+                "model": "mock", "expiresAt": None, "transport": "webrtc", "mock": True}
+    if provider != "azure_openai":
+        raise HTTPException(409, {"kind": "transport_unsupported",
+                                  "message": f"Il provider {provider} non supporta il realtime WebRTC"})
+    t0 = time.monotonic()
+    try:
+        answer = await asyncio.to_thread(negotiate_call, realtime_config(), sdp)
+    except SttError as ex:
+        _log.warning("stt realtime-call outcome=%s", ex.kind)
+        raise HTTPException(ex.status, {"kind": ex.kind, "message": str(ex)})
+    _log.info("stt realtime-call provider=azure_openai deployment=%s durationMs=%d outcome=ok",
+              answer["deployment"], int((time.monotonic() - t0) * 1000))
+    return answer
 
 
 @app.post("/v1/voice/transcribe")

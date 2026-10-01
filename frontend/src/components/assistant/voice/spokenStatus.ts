@@ -8,7 +8,7 @@ import type { AudioState } from './audioSession';
 const KEY = 'clinicos.assistant.voiceFeedback';
 
 export const SPOKEN_STATUS: Partial<Record<AudioState, string>> = {
-  TRANSCRIPT_READY: 'Controlla la trascrizione sullo schermo.',
+  TRANSCRIPT_FINAL: 'Controlla la trascrizione sullo schermo.',
   AWAITING_CONFIRMATION: 'Anteprima pronta. Controlla e premi Conferma.',
   COMPLETED: 'Operazione completata.',
   CANCELLED: 'Annullato.',

@@ -36,7 +36,9 @@ import {
   SttUnavailableError,
   createRuntimeSttProvider,
   looksLikeWav,
-  runtimeSttAvailable,
+  runtimeSttHealth,
+  runtimeSttStatus,
+  voiceTransport,
   voiceChannelEnabled,
 } from '../voice/stt.js';
 import { voiceVadConfig } from '../voice/vad-config.js';
@@ -295,10 +297,15 @@ export function createSkillRouter(deps: SkillEngineDeps): Router {
     const identity = requireIdentity(req, res);
     if (!identity) return;
     const channelEnabled = voiceChannelEnabled();
+    const stt = deps.stt ? null : await runtimeSttStatus();
     res.status(200).json({
       voiceAllowed: voiceAllowed(req),
       channelEnabled,
-      sttConfigured: channelEnabled && (Boolean(deps.stt) || (await runtimeSttAvailable())),
+      sttConfigured: channelEnabled && (Boolean(deps.stt) || Boolean(stt?.available)),
+      provider: stt ? stt.provider : 'injected',
+      model: stt?.model ?? null,
+      deployment: stt?.deployment ?? null,
+      transport: stt ? voiceTransport(stt) : deps.stt?.negotiateRealtimeCall ? 'webrtc' : 'server',
       locale: 'it-IT',
       maxUtteranceBytes: MAX_UTTERANCE_BYTES,
       vad: voiceVadConfig(),
@@ -333,6 +340,81 @@ export function createSkillRouter(deps: SkillEngineDeps): Router {
     }
     next();
   }
+
+  // Non-destructive STT diagnostic (endpoint, auth, deployment) — never secrets.
+  router.get(
+    '/voice/health',
+    voiceTranscribeRateLimit,
+    async (req: AuthedRequest, res: Response) => {
+      const identity = requireIdentity(req, res);
+      if (!identity) return;
+      if (authzOf(req)?.can('voice.stt_status').allowed !== true) {
+        res.status(403).json({ error: 'Diagnostica voce non consentita', code: 'voice_denied' });
+        return;
+      }
+      res
+        .status(200)
+        .json({ channelEnabled: voiceChannelEnabled(), stt: await runtimeSttHealth() });
+    },
+  );
+
+  // Realtime transport: WebRTC negotiation for ONE transcription session. The browser sends its SDP
+  // offer; the runtime mints the ephemeral session (config fixed server-side) and performs the SDP
+  // exchange with Azure. Neither the API key nor the ephemeral token reaches the browser (and no
+  // browser→Azure fetch is needed: the CSP stays unchanged). Same gate + limit as transcription.
+  router.post(
+    '/voice/realtime-call',
+    voiceTranscribeRateLimit,
+    voiceGate,
+    express.text({ type: 'application/sdp', limit: '64kb' }),
+    async (req: AuthedRequest, res: Response) => {
+      const identity = requireIdentity(req, res);
+      if (!identity) return;
+      const requestId = `voice-${randomUUID()}`;
+      const audit = (outcome: AiAuditOutcome, fields: string[]) =>
+        recordAuditEvent({
+          requestId,
+          operatorId: identity.operatorId,
+          operatorRole: identity.appRole ?? identity.role,
+          patientId: null,
+          actionType: 'voice:session',
+          kind: 'read',
+          channel: 'voce',
+          fields,
+          outcome,
+        });
+      const offer = typeof req.body === 'string' ? req.body : '';
+      if (!offer.startsWith('v=')) {
+        audit('error', ['code:invalid_sdp']);
+        res.status(400).json({ error: 'Offerta WebRTC non valida', code: 'invalid_sdp' });
+        return;
+      }
+      const provider = deps.stt ?? createRuntimeSttProvider();
+      if (!provider.negotiateRealtimeCall) {
+        audit('error', ['code:transport_unsupported']);
+        res
+          .status(409)
+          .json({ error: 'Trascrizione realtime non disponibile', code: 'transport_unsupported' });
+        return;
+      }
+      try {
+        const answer = await provider.negotiateRealtimeCall(offer, { requestId });
+        audit('ok', [`deployment:${answer.deployment}`, 'transport:webrtc']);
+        res.status(200).json(answer);
+      } catch (error) {
+        const e =
+          error instanceof SttUnavailableError
+            ? error
+            : new SttUnavailableError(
+                'stt_provider_error',
+                'Errore del servizio di trascrizione',
+                502,
+              );
+        audit('error', [`code:${e.code}`]);
+        res.status(e.status).json({ error: e.message, code: e.code });
+      }
+    },
+  );
 
   router.post(
     '/voice/transcribe',

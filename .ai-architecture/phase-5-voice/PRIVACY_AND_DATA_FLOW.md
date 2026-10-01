@@ -1,5 +1,25 @@
 # Phase 5 — Privacy and data flow
 
+## Azure `gpt-live-transcribe` (primary)
+
+| Step | Audio | Transcript | Credentials |
+| --- | --- | --- | --- |
+| Browser, REQUESTING_PERMISSION | mic opened on tap; SDP offer to ClinicOS | — | runtime mints an **ephemeral** client secret for one session and uses it for the SDP exchange (after identity, `voice.plan`, channel switch, rate limit); the browser receives only the SDP answer; audit `voice:session` |
+| Browser → Azure (WebRTC) | streamed **only while the push-to-talk turn is open** (from connection to commit/close; ≤ no-speech timeout 6 s when silent, ≤ 15 s cap) | partial deltas + final over the data channel | none in the browser: key and token stay server-side |
+| ClinicOS backend/runtime | not relayed (WebRTC goes browser → Azure) | final transcript only when the user presses «Invia» (as typed text) | — |
+| Server transport (optional) | WAV utterance in memory → runtime → Azure WebSocket | returned | api-key server-side |
+
+- Same Azure OpenAI resource as the rest of the AI stack: no new processor is introduced by STT.
+- Retention / abuse monitoring / data processing follow the Azure OpenAI terms of the resource's
+  subscription — **not verified here, no guarantee claimed**.
+- No silent fallback to Google (different processor): verified by the `azure-missing` E2E.
+- ClinicOS stores no audio; logs carry outcome/duration/deployment only; tokens are never logged or
+  audited (runtime + backend tests).
+
+---
+
+## Previous iteration (server transport, Gemini opt-in)
+
 Only what is implemented and verified is stated here. Provider-side retention is governed by the
 provider's terms and is **not** guaranteed by ClinicOS.
 

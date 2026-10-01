@@ -1,10 +1,10 @@
 {
   "schema": "clinicos.ai-architecture.current-state/v1",
-  "version": 5,
+  "version": 6,
   "phase": 5,
-  "phase_name": "Voice & Realtime Interaction (voice channel of the AI Assistant)",
-  "phase_status": "COMPLETED",
-  "timestamp": "2026-10-01T00:00:00.000Z",
+  "phase_name": "Voice & Realtime on Azure OpenAI gpt-live-transcribe",
+  "phase_status": "BLOCKED",
+  "timestamp": "2026-10-01T12:00:00.000Z",
   "artifacts": {
     "current_state_md": ".ai-architecture/phase-5-voice/CURRENT_STATE.md",
     "voice_architecture": ".ai-architecture/phase-5-voice/VOICE_ARCHITECTURE.md",
@@ -16,7 +16,7 @@
     "e2e_test_report": ".ai-architecture/phase-5-voice/E2E_TEST_REPORT.md",
     "evidence": ".ai-architecture/phase-5-voice/evidence/",
     "prompt6_handoff": ".ai-architecture/phase-5-voice/PROMPT6_HANDOFF.md",
-    "quality_gate": "artifacts/task-validation/phase-5-voice-realtime/",
+    "quality_gate": "artifacts/task-validation/phase-5-azure-gpt-live-transcribe/",
     "phase4": {
       "current_state_md": ".ai-architecture/phase-4-assistant/CURRENT_STATE.md",
       "ux_architecture": ".ai-architecture/phase-4-assistant/ASSISTANT_UX_ARCHITECTURE.md",
@@ -62,143 +62,102 @@
           }
         }
       }
-    }
+    },
+    "azure_realtime_configuration": ".ai-architecture/phase-5-voice/AZURE_REALTIME_CONFIGURATION.md",
+    "stt_provider_contract": ".ai-architecture/phase-5-voice/STT_PROVIDER_CONTRACT.md",
+    "quality_gate_previous_iteration": "artifacts/task-validation/phase-5-voice-realtime/"
   },
   "voice_entry_point": "AI Assistant composer mic «Parla» (VoiceMicButton, data-testid am-mic) → frontend/src/components/assistant/voice/useVoiceChannel.ts → submitText(text, 'voice')",
-  "push_to_talk": {
-    "status": "implemented",
-    "mode": "tap to talk, VAD end of turn, «Fine», «Annulla»",
-    "states": [
-      "IDLE",
-      "LISTENING",
-      "SPEECH_ACTIVE",
-      "TRANSCRIBING",
-      "TRANSCRIPT_READY",
-      "PROCESSING",
-      "AWAITING_CONFIRMATION",
-      "COMPLETED",
-      "ERROR",
-      "CANCELLED"
-    ]
-  },
-  "vad": {
-    "status": "implemented (client-side energy VAD, no LLM)",
-    "config_env": "VOICE_VAD_*",
-    "defaults": {
-      "speechMarginDb": 12,
-      "minSpeechDb": -50,
-      "minSpeechMs": 300,
-      "endSilenceMs": 900,
-      "maxUtteranceMs": 15000,
-      "noSpeechTimeoutMs": 6000
-    }
-  },
-  "stt": {
-    "contract": "SpeechToTextProvider.transcribe(audio, locale, context?) → TranscriptResult (backend/src/voice/stt.ts)",
-    "adapter": "clinicos-ai-runtime/clinicos_ai/voice/stt.py via AI_STT_MODEL=provider:model",
-    "providers": {
-      "google": "verified (gemini-3.5-flash-lite, real audio fixtures, 22/22 + 21/22)",
-      "azure": "implemented, NOT provider-tested (no transcription deployment in the resource)",
-      "mock": "CI"
-    },
-    "locale": "it-IT",
-    "enabled_in": [],
-    "enable_switches": [
-      "runtime AI_STT_MODEL",
-      "backend VOICE_CHANNEL_ENABLED=true"
-    ]
-  },
-  "tts": {
-    "status": "optional, implemented, off by default",
-    "content": "fixed status phrases only (no clinical data)",
-    "controls": [
-      "mute",
-      "stop"
-    ]
-  },
-  "session_mode": {
-    "status": "not implemented (optional; deferred)"
-  },
+  "stt_provider": "azure_openai",
+  "stt_model": "gpt-live-transcribe",
+  "stt_deployment": "gpt-live-transcribe (AI_STT_DEPLOYMENT, configurable) — NOT DEPLOYED in the resource",
+  "azure_endpoint_source": "AZURE_OPENAI_ENDPOINT (same resource as the AI runtime; optional AZURE_OPENAI_REALTIME_ENDPOINT override); API key from AZURE_OPENAI_API_KEY (existing credential strategy)",
+  "realtime_transport": "webrtc (browser ↔ Azure Realtime GA; SDP negotiation proxied by ClinicOS, ephemeral token minted+used server-side, never in the browser); server WebSocket transport for the utterance path",
+  "push_to_talk_status": "implemented and browser-tested (mock transport); real Azure pending",
+  "vad_status": "client-side energy VAD; turn commit by the client (gpt-live-transcribe has no server VAD); silence/steady noise never committed",
+  "partial_transcript_status": "implemented, display-only, never submittable (unit + browser mock)",
+  "final_transcript_status": "implemented (commit → completed → TRANSCRIPT_FINAL → user «Invia»); real Azure pending",
+  "tts_status": "optional, off by default, fixed status phrases",
+  "session_mode_status": "not implemented (optional)",
   "e2e": {
-    "browser_voice_real_stt_agno": {
-      "checks": 78,
-      "pass": 78,
-      "fail": 0,
-      "scenarios": "Prompt 5 §16 A–M"
+    "browser_mock_realtime_transport": {
+      "checks": 34,
+      "pass": 34,
+      "label": "MOCK transport — Azure not used"
     },
-    "backend_integration": {
-      "tests": 10,
-      "pass": 10
+    "browser_real_azure_missing_deployment": {
+      "checks": 5,
+      "pass": 5
+    },
+    "browser_real_azure_full": "BLOCKED (deployment missing)",
+    "azure_stt_check": "BLOCKED (health: deployment_missing)",
+    "runtime_unit_azure": {
+      "tests": 13,
+      "pass": 13
+    },
+    "backend_integration_voice": {
+      "tests": 13,
+      "pass": 13
     },
     "frontend_unit_voice": {
-      "tests": 20,
-      "pass": 20
+      "tests": 27,
+      "pass": 27
     },
-    "runtime_unit_voice": {
-      "tests": 6,
-      "pass": 6
-    },
-    "provider_dependent": {
-      "runs": 2,
-      "results": [
-        "22/22",
-        "21/22 (1 provider timeout, typed)"
-      ]
+    "prompt_18": {
+      "A": "BLOCKED",
+      "B": "BLOCKED (mock PASS)",
+      "C": "PASS (mock)",
+      "D": "PASS (mock transport, real Agno)",
+      "E": "PASS (mock)",
+      "F": "PASS (mock)",
+      "G": "PASS",
+      "H": "PASS",
+      "I": "PASS",
+      "J": "PASS (real Azure)",
+      "K": "PASS",
+      "L": "PASS",
+      "M": "PASS",
+      "N": "PASS"
     }
   },
   "regression": {
-    "assistant_text_browser_e2e": {
+    "assistant_text_browser_e2e_fresh_db": {
       "checks": 46,
       "pass": 46
     },
     "backend_full_fresh_db_serial": {
-      "tests": 1596,
-      "pass": 1574,
+      "tests": 1599,
       "fail": 21,
       "new_failure_files": 0
     },
+    "backend_skills_voice": {
+      "tests": 47,
+      "pass": 47
+    },
     "frontend": {
-      "tests": 998,
+      "tests": 1005,
       "fail": 9,
       "new_failures": 0
     },
-    "runtime": {
-      "tests": 182,
-      "pass": 182
-    },
-    "builds_typecheck": "pass",
-    "classic_gui": "browser E2E M: 8 operator sections render, no console errors"
+    "runtime": "unittest discover OK",
+    "builds_typecheck_lint": "pass",
+    "classic_gui": "browser N: 8 operator sections, no console errors"
   },
-  "latency_baseline_ms": {
-    "capture_end_to_transcript": "1204–1853 (median ≈ 1300)",
-    "end_of_turn_silence": 900,
-    "transcript_to_agno_ui_state": "1956–2444; prescription 4984",
-    "confirmation_to_backend_result": "251–277",
-    "stt_provider_p50": "1145–1204",
-    "stt_provider_tail": "up to 20172 (timeout)"
+  "latency_baseline": {
+    "real_azure": "NOT MEASURED (deployment missing)",
+    "final_transcript_to_agno_ui_ms": "2004–2943; prescription 5137",
+    "confirmation_to_backend_result_ms": 250,
+    "end_of_turn_silence_ms": 900
   },
   "cost_observations": {
-    "stt_calls_per_utterance": 1,
-    "stt_calls_for_silence_or_steady_noise": 0,
-    "tokens_short_command": {
-      "input": 296,
-      "output": 16
-    },
-    "tokens_per_audio_second": "≈ 43 input",
-    "provider_quota": "Gemini 429 on bursts (~15–20 calls/min unpaced)",
-    "rate_limit": "VOICE_STT_RATE_LIMIT_PER_MIN default 20 per operator"
+    "pricing": "Azure prices gpt-live-transcribe by audio duration (Azure pricing page; not verified here). OpenAI public price $0.017/min for reference only.",
+    "billed_window": "push-to-talk window only (connect → commit/close); silent tap ≤ 6 s; turn cap 15 s",
+    "llm_calls_per_command": "1 Agno skill-route per sent final transcript; partials never call an LLM",
+    "shift_40_minutes": "only the seconds of tapped commands are streamed, not the shift"
   },
-  "external_blockers": [],
-  "pending_decisions": [
-    "Enable voice in demo/production: sends utterances to the STT provider (Google Gemini API) — DPA/privacy decision of the owner",
-    "Azure transcription deployment (optional alternative provider)"
+  "blockers": [
+    "Azure deployment `gpt-live-transcribe` does not exist in the Azure OpenAI resource (DeploymentNotFound; realtime routes 404). Owner action: deploy it (Foundry → Deploy base model) or set AI_STT_DEPLOYMENT."
   ],
-  "manual_tests_missing": [
-    "tablet checklist (E2E_TEST_REPORT.md)",
-    "real voices/accents",
-    "hosted latency on Railway"
-  ],
-  "independent_qa": "READY FOR QA (2 rounds: round 1 FAILED VALIDATION H1, M2-M4, L5-L9 → all fixed; round 2 residual LOWs fixed or documented)",
   "gaps": [
     "P5-G1 voice disabled by default everywhere (decision pending)",
     "P5-G2 Azure STT untested (no deployment)",
@@ -206,14 +165,106 @@
     "P5-G4 tablet/hardware tests manual only",
     "P5-G5 ScriptProcessorNode on main thread (AudioWorklet later)",
     "P5-G6 rate limit/workflow store in-memory per instance",
-    "P5-G7 deterministic fallback does not recognise lowercase surnames from STT (Agno does); preview + Conferma mitigate"
+    "P5-G7 deterministic fallback does not recognise lowercase surnames from STT (Agno does); preview + Conferma mitigate",
+    "P5A-G1 real Azure latency/quality unmeasured",
+    "P5A-G2 WebRTC on tablets/facility network untested",
+    "P5A-G3 data-channel session.update by the client not prevented (no token exposed)"
   ],
-  "decisions": [
-    "Voice is a channel: transcript reviewed by the user, then the Phase 4 submitText path",
-    "Confirmation stays a UI button; spoken «conferma» refused",
-    "Per-environment VOICE_CHANNEL_ENABLED (default off) because the runtime is shared",
-    "STT via the AI runtime (credentials server-side), Gemini system instruction, literal transcription"
-  ],
+  "independent_qa": "READY FOR QA (3 rounds: R1 FAILED VALIDATION H1 CSP/H2 mic-after-error + M/L → fixed; R2 R1-R5 → fixed; R3 lint fix applied). Real Azure BLOCKED (deployment missing).",
+  "previous_iteration": {
+    "phase_status": "COMPLETED",
+    "stt": {
+      "contract": "SpeechToTextProvider.transcribe(audio, locale, context?) → TranscriptResult (backend/src/voice/stt.ts)",
+      "adapter": "clinicos-ai-runtime/clinicos_ai/voice/stt.py via AI_STT_MODEL=provider:model",
+      "providers": {
+        "google": "verified (gemini-3.5-flash-lite, real audio fixtures, 22/22 + 21/22)",
+        "azure": "implemented, NOT provider-tested (no transcription deployment in the resource)",
+        "mock": "CI"
+      },
+      "locale": "it-IT",
+      "enabled_in": [],
+      "enable_switches": [
+        "runtime AI_STT_MODEL",
+        "backend VOICE_CHANNEL_ENABLED=true"
+      ]
+    },
+    "e2e": {
+      "browser_voice_real_stt_agno": {
+        "checks": 78,
+        "pass": 78,
+        "fail": 0,
+        "scenarios": "Prompt 5 §16 A–M"
+      },
+      "backend_integration": {
+        "tests": 10,
+        "pass": 10
+      },
+      "frontend_unit_voice": {
+        "tests": 20,
+        "pass": 20
+      },
+      "runtime_unit_voice": {
+        "tests": 6,
+        "pass": 6
+      },
+      "provider_dependent": {
+        "runs": 2,
+        "results": [
+          "22/22",
+          "21/22 (1 provider timeout, typed)"
+        ]
+      }
+    },
+    "regression": {
+      "assistant_text_browser_e2e": {
+        "checks": 46,
+        "pass": 46
+      },
+      "backend_full_fresh_db_serial": {
+        "tests": 1596,
+        "pass": 1574,
+        "fail": 21,
+        "new_failure_files": 0
+      },
+      "frontend": {
+        "tests": 998,
+        "fail": 9,
+        "new_failures": 0
+      },
+      "runtime": {
+        "tests": 182,
+        "pass": 182
+      },
+      "builds_typecheck": "pass",
+      "classic_gui": "browser E2E M: 8 operator sections render, no console errors"
+    },
+    "latency_baseline_ms": {
+      "capture_end_to_transcript": "1204–1853 (median ≈ 1300)",
+      "end_of_turn_silence": 900,
+      "transcript_to_agno_ui_state": "1956–2444; prescription 4984",
+      "confirmation_to_backend_result": "251–277",
+      "stt_provider_p50": "1145–1204",
+      "stt_provider_tail": "up to 20172 (timeout)"
+    },
+    "cost_observations": {
+      "stt_calls_per_utterance": 1,
+      "stt_calls_for_silence_or_steady_noise": 0,
+      "tokens_short_command": {
+        "input": 296,
+        "output": 16
+      },
+      "tokens_per_audio_second": "≈ 43 input",
+      "provider_quota": "Gemini 429 on bursts (~15–20 calls/min unpaced)",
+      "rate_limit": "VOICE_STT_RATE_LIMIT_PER_MIN default 20 per operator"
+    },
+    "independent_qa": "READY FOR QA (2 rounds: round 1 FAILED VALIDATION H1, M2-M4, L5-L9 → all fixed; round 2 residual LOWs fixed or documented)",
+    "decisions": [
+      "Voice is a channel: transcript reviewed by the user, then the Phase 4 submitText path",
+      "Confirmation stays a UI button; spoken «conferma» refused",
+      "Per-environment VOICE_CHANNEL_ENABLED (default off) because the runtime is shared",
+      "STT via the AI runtime (credentials server-side), Gemini system instruction, literal transcription"
+    ]
+  },
   "phase4_state": {
     "phase": 4,
     "phase_status": "COMPLETED",
@@ -352,5 +403,6 @@
     }
   },
   "next_phase": 6,
+  "next_handoff": ".ai-architecture/phase-5-voice/PROMPT6_HANDOFF.md",
   "next_handoff_path": ".ai-architecture/phase-5-voice/PROMPT6_HANDOFF.md"
 }

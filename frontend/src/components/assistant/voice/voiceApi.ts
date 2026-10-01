@@ -12,6 +12,12 @@ export interface VoiceStatus {
   channelEnabled: boolean;
   /** Channel on AND the runtime has an STT model configured. */
   sttConfigured: boolean;
+  /** STT provider / model / deployment (e.g. azure_openai · gpt-live-transcribe). No secrets. */
+  provider?: string | null;
+  model?: string | null;
+  deployment?: string | null;
+  /** 'webrtc' = realtime partial + final transcripts; 'server' = one utterance upload. */
+  transport?: 'webrtc' | 'server';
   locale: string;
   maxUtteranceBytes: number;
   vad: VadConfig & { sessionIdleTimeoutMs?: number };
@@ -72,4 +78,46 @@ export async function transcribeUtterance(
       response.status === 413 ? 'utterance_too_long' : body?.code,
     );
   return body as VoiceTranscript;
+}
+
+/**
+ * WebRTC negotiation through ClinicOS: SDP offer → SDP answer. The ephemeral Azure session token is
+ * minted and used server-side; the browser never receives it.
+ */
+export async function negotiateRealtimeCall(
+  offerSdp: string,
+  signal: AbortSignal,
+): Promise<string> {
+  const timeout = AbortSignal.timeout(20_000);
+  const combined =
+    typeof AbortSignal.any === 'function' ? AbortSignal.any([signal, timeout]) : signal;
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}/skills/voice/realtime-call`, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { ...operatorHeaders(), 'Content-Type': 'application/sdp' },
+      body: offerSdp,
+      signal: combined,
+    });
+  } catch (error) {
+    if (signal.aborted) throw error;
+    throw new AssistantHttpError(
+      0,
+      'Servizio di trascrizione non raggiungibile.',
+      'stt_unreachable',
+    );
+  }
+  const body = (await response.json().catch(() => null)) as {
+    sdp?: string;
+    error?: string;
+    code?: string;
+  } | null;
+  if (!response.ok || typeof body?.sdp !== 'string')
+    throw new AssistantHttpError(
+      response.status,
+      body?.error || `Sessione vocale non disponibile (${response.status}).`,
+      body?.code ?? 'stt_unavailable',
+    );
+  return body.sdp;
 }

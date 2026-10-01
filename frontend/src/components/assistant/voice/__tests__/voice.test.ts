@@ -8,6 +8,12 @@ import {
   type AudioEvent,
   type AudioSession,
 } from '../audioSession';
+import {
+  RealtimeTransportError,
+  openRealtimeTranscription,
+  parseRealtimeEvent,
+  type RealtimeEvent,
+} from '../realtimeTransport';
 import { SPOKEN_STATUS } from '../spokenStatus';
 import { DEFAULT_VAD_CONFIG, createVad, rmsDb, type VadEvent } from '../vad';
 import { STT_SAMPLE_RATE, encodeWav, resample, utteranceToWav } from '../wav';
@@ -206,7 +212,7 @@ function play(events: AudioEvent[], from: AudioSession = initialAudioSession) {
 }
 
 test('session: push-to-talk happy path to AWAITING_CONFIRMATION and COMPLETED', () => {
-  let s = play([{ type: 'start', residentId: 'r1' }]);
+  let s = play([{ type: 'start', residentId: 'r1' }, { type: 'listening' }]);
   assert.equal(s.state, 'LISTENING');
   assert.equal(micOpen(s.state), true);
   s = play([{ type: 'speech_start' }, { type: 'utterance', speechMs: 1800 }], s);
@@ -219,7 +225,7 @@ test('session: push-to-talk happy path to AWAITING_CONFIRMATION and COMPLETED', 
     empty: false,
     sttMs: 1500,
   });
-  assert.equal(s.state, 'TRANSCRIPT_READY');
+  assert.equal(s.state, 'TRANSCRIPT_FINAL');
   assert.equal(s.transcript, 'registra pressione 120 su 80', 'verbatim, only trimmed');
   s = audioReducer(s, { type: 'edit', text: 'registra pressione 130 su 80' });
   s = audioReducer(s, { type: 'submit' });
@@ -235,6 +241,7 @@ test('session: push-to-talk happy path to AWAITING_CONFIRMATION and COMPLETED', 
 test('session: a transcript is never sent by itself; empty STT goes back to IDLE', () => {
   let s = play([
     { type: 'start', residentId: null },
+    { type: 'listening' },
     { type: 'speech_start' },
     { type: 'utterance', speechMs: 900 },
   ]);
@@ -244,7 +251,7 @@ test('session: a transcript is never sent by itself; empty STT goes back to IDLE
     text: 'ciao',
     empty: false,
   });
-  assert.equal(ready.state, 'TRANSCRIPT_READY', 'waits for the user');
+  assert.equal(ready.state, 'TRANSCRIPT_FINAL', 'waits for the user');
   s = audioReducer(s, { type: 'transcribed', captureId: s.captureId, text: '', empty: true });
   assert.equal(s.state, 'IDLE');
   assert.match(s.notice ?? '', /nessun comando inviato/);
@@ -253,6 +260,7 @@ test('session: a transcript is never sent by itself; empty STT goes back to IDLE
 test('session: stale STT answers of a cancelled capture are ignored', () => {
   let s = play([
     { type: 'start', residentId: 'r1' },
+    { type: 'listening' },
     { type: 'speech_start' },
     { type: 'utterance', speechMs: 900 },
   ]);
@@ -272,6 +280,7 @@ test('session: stale STT answers of a cancelled capture are ignored', () => {
 test('session: resident change discards a pending transcript (never re-targeted)', () => {
   let s = play([
     { type: 'start', residentId: 'r1' },
+    { type: 'listening' },
     { type: 'speech_start' },
     { type: 'utterance', speechMs: 900 },
   ]);
@@ -291,6 +300,7 @@ test('session: resident change discards a pending transcript (never re-targeted)
 test('session: STT / mic failures → ERROR with a code (text fallback), no transcript', () => {
   const s = play([
     { type: 'start', residentId: null },
+    { type: 'listening' },
     { type: 'failed', code: 'mic_denied', message: 'Permesso negato' },
   ]);
   assert.equal(s.state, 'ERROR');
@@ -299,7 +309,14 @@ test('session: STT / mic failures → ERROR with a code (text fallback), no tran
 });
 
 test('session: no new capture while audio or a request is in flight', () => {
-  for (const state of ['LISTENING', 'SPEECH_ACTIVE', 'TRANSCRIBING', 'PROCESSING'] as const) {
+  for (const state of [
+    'REQUESTING_PERMISSION',
+    'LISTENING',
+    'SPEECH_ACTIVE',
+    'TRANSCRIPT_PARTIAL',
+    'TRANSCRIBING',
+    'PROCESSING',
+  ] as const) {
     const s = { ...initialAudioSession, state };
     assert.equal(audioReducer(s, { type: 'start', residentId: null }), s, state);
   }
@@ -308,6 +325,7 @@ test('session: no new capture while audio or a request is in flight', () => {
 test('session: discarded audio (silence / too short) → IDLE with a notice', () => {
   const s = play([
     { type: 'start', residentId: null },
+    { type: 'listening' },
     { type: 'discarded', reason: 'no_speech' },
   ]);
   assert.equal(s.state, 'IDLE');
@@ -317,4 +335,254 @@ test('session: discarded audio (silence / too short) → IDLE with a notice', ()
 test('spoken feedback never carries clinical data: fixed phrases only', () => {
   for (const phrase of Object.values(SPOKEN_STATUS))
     assert.doesNotMatch(phrase ?? '', /\d|mg|pressione|ospite/i);
+});
+
+// ── Azure gpt-live-transcribe: partial vs final, realtime events, WebRTC transport ─────────────
+
+test('session: start → REQUESTING_PERMISSION; LISTENING only when the mic/transport is ready', () => {
+  const s = audioReducer(initialAudioSession, { type: 'start', residentId: null });
+  assert.equal(s.state, 'REQUESTING_PERMISSION');
+  assert.equal(micOpen(s.state), false);
+  assert.equal(audioReducer(s, { type: 'speech_start' }), s, 'no speech before listening');
+  assert.equal(audioReducer(s, { type: 'listening' }).state, 'LISTENING');
+  assert.equal(audioReducer(s, { type: 'cancel' }).state, 'CANCELLED', 'cancel while requesting');
+});
+
+test('session: PARTIAL transcripts are display-only — never submittable, never final', () => {
+  let s = play([
+    { type: 'start', residentId: 'r1' },
+    { type: 'listening' },
+    { type: 'speech_start' },
+  ]);
+  const id = s.captureId;
+  s = audioReducer(s, { type: 'partial', captureId: id, delta: 'Registra ', atMs: 420 });
+  assert.equal(s.state, 'TRANSCRIPT_PARTIAL');
+  assert.equal(micOpen(s.state), true, 'still listening while partials arrive');
+  s = audioReducer(s, { type: 'partial', captureId: id, delta: 'pressione', atMs: 600 });
+  assert.equal(s.partial, 'Registra pressione');
+  assert.equal(s.metrics.firstPartialMs, 420);
+  assert.equal(audioReducer(s, { type: 'submit' }), s, 'a partial can never be sent');
+  assert.equal(audioReducer(s, { type: 'edit', text: 'x' }), s, 'a partial is not editable');
+  assert.equal(
+    audioReducer(s, { type: 'partial', captureId: id - 1, delta: 'old' }),
+    s,
+    'late delta of an older capture ignored',
+  );
+  s = audioReducer(s, { type: 'utterance', speechMs: 1500 });
+  assert.equal(s.state, 'TRANSCRIBING');
+  s = audioReducer(s, { type: 'partial', captureId: id, delta: ' 120 su 80' });
+  assert.equal(s.state, 'TRANSCRIBING', 'deltas after the commit do not reopen anything');
+  s = audioReducer(s, {
+    type: 'transcribed',
+    captureId: id,
+    text: 'Registra pressione 120 su 80.',
+    empty: false,
+    sttMs: 350,
+  });
+  assert.equal(s.state, 'TRANSCRIPT_FINAL');
+  assert.equal(s.partial, '', 'partial cleared by the final');
+  assert.equal(audioReducer(s, { type: 'submit' }).state, 'PROCESSING', 'only the final is sent');
+});
+
+test('parseRealtimeEvent: delta / completed / failed / error / ignored', () => {
+  assert.deepEqual(
+    parseRealtimeEvent({
+      type: 'conversation.item.input_audio_transcription.delta',
+      item_id: 'i1',
+      delta: 'Ciao',
+    }),
+    { kind: 'partial', itemId: 'i1', delta: 'Ciao' },
+  );
+  assert.deepEqual(
+    parseRealtimeEvent({
+      type: 'conversation.item.input_audio_transcription.completed',
+      item_id: 'i1',
+      transcript: 'Ciao a tutti.',
+    }),
+    { kind: 'final', itemId: 'i1', transcript: 'Ciao a tutti.' },
+  );
+  assert.equal(
+    parseRealtimeEvent({ type: 'conversation.item.input_audio_transcription.failed', error: {} })
+      ?.kind,
+    'failed',
+  );
+  assert.deepEqual(
+    parseRealtimeEvent({ type: 'error', error: { code: 'input_audio_buffer_commit_empty' } }),
+    {
+      kind: 'error',
+      code: 'input_audio_buffer_commit_empty',
+      message: 'Errore del servizio realtime',
+    },
+  );
+  assert.equal(parseRealtimeEvent({ type: 'session.updated' }), null);
+  assert.equal(parseRealtimeEvent('nope'), null);
+});
+
+class FakeChannel {
+  readyState = 'connecting';
+  sent: string[] = [];
+  private listeners: Record<string, ((e: { data?: string }) => void)[]> = {};
+  addEventListener(type: string, fn: (e: { data?: string }) => void) {
+    (this.listeners[type] ??= []).push(fn);
+  }
+  emit(type: string, data?: unknown) {
+    if (type === 'open') this.readyState = 'open';
+    for (const fn of this.listeners[type] ?? []) fn({ data: JSON.stringify(data) });
+  }
+  send(m: string) {
+    this.sent.push(m);
+  }
+  close() {
+    this.readyState = 'closed';
+  }
+}
+
+function fakePeer() {
+  const state = { channel: new FakeChannel(), tracks: 0, closed: false, remote: '' };
+  class Peer {
+    addTrack() {
+      state.tracks += 1;
+    }
+    createDataChannel(label: string) {
+      assert.equal(label, 'oai-events');
+      return state.channel;
+    }
+    async createOffer() {
+      return { type: 'offer', sdp: 'v=0 offer' };
+    }
+    async setLocalDescription() {}
+    async setRemoteDescription(d: { sdp: string }) {
+      state.remote = d.sdp;
+      setTimeout(() => state.channel.emit('open'), 5);
+    }
+    close() {
+      state.closed = true;
+    }
+  }
+  return { state, Peer: Peer as unknown as typeof RTCPeerConnection };
+}
+
+const stream = { getAudioTracks: () => [{}] } as unknown as MediaStream;
+
+test('WebRTC transport: SDP negotiated by ClinicOS (no token in the browser), events, commit, close', async () => {
+  const { state, Peer } = fakePeer();
+  const offers: string[] = [];
+  const negotiate = async (offer: string) => {
+    offers.push(offer);
+    return 'v=0 answer';
+  };
+  const events: RealtimeEvent[] = [];
+  const transport = await openRealtimeTranscription(negotiate, stream, (e) => events.push(e), {
+    Peer,
+  });
+  assert.deepEqual(offers, ['v=0 offer']);
+  assert.equal(state.remote, 'v=0 answer');
+  assert.equal(state.tracks, 1);
+  state.channel.emit('message', {
+    type: 'conversation.item.input_audio_transcription.delta',
+    item_id: 'i',
+    delta: 'Ciao',
+  });
+  transport.commit();
+  assert.deepEqual(JSON.parse(state.channel.sent[0]), { type: 'input_audio_buffer.commit' });
+  state.channel.emit('message', {
+    type: 'conversation.item.input_audio_transcription.completed',
+    item_id: 'i',
+    transcript: 'Ciao.',
+  });
+  assert.deepEqual(
+    events.map((e) => e.kind),
+    ['partial', 'final'],
+  );
+  transport.close();
+  assert.equal(state.closed, true);
+  transport.commit();
+  assert.equal(state.channel.sent.length, 1, 'no commit after close');
+});
+
+test('WebRTC transport: negotiation refused → typed error, peer closed', async () => {
+  const { state, Peer } = fakePeer();
+  const refused = async () => {
+    throw Object.assign(new Error('Trascrizione vocale non disponibile'), {
+      code: 'stt_unavailable',
+    });
+  };
+  await assert.rejects(
+    openRealtimeTranscription(refused, stream, () => {}, { Peer }),
+    (e: unknown) => e instanceof RealtimeTransportError && e.code === 'stt_unavailable',
+  );
+  assert.equal(state.closed, true);
+});
+
+test('WebRTC transport: cancel during negotiation closes the peer; a dropped link is reported', async () => {
+  const pending = fakePeer();
+  const controller = new AbortController();
+  const slow = (_offer: string, signal: AbortSignal) =>
+    new Promise<string>((_resolve, reject) =>
+      signal.addEventListener('abort', () => reject(new Error('aborted'))),
+    );
+  const opening = openRealtimeTranscription(slow, stream, () => {}, {
+    Peer: pending.Peer,
+    signal: controller.signal,
+  });
+  controller.abort();
+  await assert.rejects(opening);
+  assert.equal(pending.state.closed, true, 'nothing keeps streaming after a cancel');
+
+  const live = fakePeer();
+  const events: RealtimeEvent[] = [];
+  await openRealtimeTranscription(
+    async () => 'v=0 answer',
+    stream,
+    (e) => events.push(e),
+    {
+      Peer: live.Peer,
+    },
+  );
+  live.state.channel.emit('close');
+  assert.deepEqual(events.at(-1), {
+    kind: 'error',
+    code: 'realtime_disconnected',
+    message: 'Connessione di trascrizione interrotta',
+  });
+  assert.equal(live.state.closed, true);
+});
+
+test('WebRTC transport: a brief «disconnected» is tolerated, «failed» is reported at once', async () => {
+  const listeners: Record<string, (() => void)[]> = {};
+  const { state, Peer: BasePeer } = fakePeer();
+  const Base = BasePeer as unknown as new () => object;
+  class Peer extends Base {
+    connectionState = 'connected';
+    addEventListener(type: string, fn: () => void) {
+      (listeners[type] ??= []).push(fn);
+    }
+  }
+  const events: RealtimeEvent[] = [];
+  const created: Peer[] = [];
+  const Tracked = class extends Peer {
+    constructor() {
+      super();
+      created.push(this);
+    }
+  } as unknown as typeof RTCPeerConnection;
+  await openRealtimeTranscription(
+    async () => 'v=0 answer',
+    stream,
+    (e) => events.push(e),
+    {
+      Peer: Tracked,
+    },
+  );
+  const set = (s: string) => {
+    created[0].connectionState = s;
+    for (const fn of listeners.connectionstatechange ?? []) fn();
+  };
+  set('disconnected');
+  set('connected');
+  await new Promise((r) => setTimeout(r, 3_100));
+  assert.equal(events.length, 0, 'recovered within the grace period: no error');
+  set('failed');
+  assert.equal(events.at(-1)?.kind, 'error');
+  assert.equal(state.closed, true);
 });

@@ -1,5 +1,89 @@
 # PROMPT 6 — Handoff from Phase 5 (Voice & Realtime)
 
+> **Iteration 2 (2026-10-01): Azure OpenAI `gpt-live-transcribe` is the primary STT.** Phase 5
+> status: **BLOCKED** only on the missing Azure deployment. Sections A–J below describe the current
+> architecture; the older sections further down describe the first iteration (server transport,
+> Gemini — now explicit opt-in only).
+
+## A. Azure STT architecture
+Browser WebRTC ↔ Azure Realtime GA transcription session (`gpt-live-transcribe`); SDP negotiation
+proxied by ClinicOS (runtime mints and uses the ephemeral client secret; the browser gets only the
+SDP answer), local VAD commits each turn, partial deltas
+display-only, final transcript reviewed then sent through `submitText(text,'voice')` to the
+unchanged Assistant → Agno → Skill → Policy + Resident Scope → preview → «Conferma» → Tool →
+backend → audit. Server WebSocket transport on the same deployment for the utterance path.
+Details: VOICE_ARCHITECTURE.md, AZURE_REALTIME_CONFIGURATION.md.
+
+## B. Endpoint / deployment / auth
+Same `AZURE_OPENAI_ENDPOINT` + `AZURE_OPENAI_API_KEY` as the AI runtime (key-based today; if the
+resource moves to Entra ID, swap the `api-key` header in `azure_realtime._request` /
+`transcribe_ws` for a bearer token — no browser change). `AI_STT_PROVIDER=azure_openai`,
+`AI_STT_MODEL=gpt-live-transcribe`, `AI_STT_DEPLOYMENT` (configurable), optional
+`AZURE_OPENAI_REALTIME_ENDPOINT`, `AI_STT_LANGUAGE`, `AI_STT_PROMPT`, `AI_STT_KEYWORDS`,
+`AI_STT_DELAY`. Backend: `VOICE_CHANNEL_ENABLED`, `VOICE_STT_TRANSPORT`.
+
+## C. Entry points (file / symbol)
+| What | Where |
+| --- | --- |
+| Azure adapter | `clinicos-ai-runtime/clinicos_ai/voice/azure_realtime.py` — `realtime_config`, `session_config`, `mint_client_secret`, `negotiate_call`, `transcribe_ws`, `wav_to_pcm24k`, `health` |
+| Provider selection | `clinicos_ai/voice/stt.py` — `stt_model`, `stt_status`, `transcribe` |
+| Runtime endpoints | `clinicos_ai/api/app.py` — `/v1/voice/realtime-call`, `/v1/voice/health`, `/v1/voice/stt-status`, `/v1/voice/transcribe` |
+| Backend contract | `backend/src/voice/stt.ts` — `SpeechToTextProvider.negotiateRealtimeCall`, `RealtimeCallAnswer`, `runtimeSttStatus`, `runtimeSttHealth`, `voiceTransport` |
+| Backend routes | `backend/src/skills/http.ts` — `POST /skills/voice/realtime-call`, `GET /skills/voice/health`, `GET /skills/voice/status` |
+| Browser transport | `frontend/src/components/assistant/voice/realtimeTransport.ts` — `openRealtimeTranscription`, `parseRealtimeEvent` |
+| Orchestration | `voice/useVoiceChannel.ts` (`onRealtime`, `closeRealtime`, final timeout), `voice/useVoiceCapture.ts` (`beforeListen`, `listening`) |
+| States | `voice/audioSession.ts` (`TRANSCRIPT_PARTIAL`, `TRANSCRIPT_FINAL`, `capturing`) |
+
+## D. Audio lifecycle / VAD / partial-final
+Mic opened on tap; WebRTC connected before LISTENING; local VAD (pre-roll, end-of-turn 0.9 s,
+no-speech 6 s, cap 15 s) commits or discards; mic tracks released at end of turn; peer closed on the
+final (or 15 s timeout, cancel, resident change, tab hidden, unmount). Partials never submittable.
+
+## E. Confirmation / resident / audit / failure
+Unchanged Phase 4 rules (VOICE_CONFIRMATION_RULES.md §1–9). Audit: `voice:session` (deployment,
+outcome, never the token), skill request `input:voice`, execute audit unchanged. Failures →
+ERROR + text fallback; no silent fallback to another provider.
+
+## F. Unblock — exact steps (owner)
+1. Foundry portal, same resource → Deploy base model `gpt-live-transcribe` (Global Standard). Name
+   `gpt-live-transcribe` or set `AI_STT_DEPLOYMENT`.
+2. Runtime env: nothing else required (defaults to `azure_openai`/`gpt-live-transcribe`).
+3. Verify: `AI_RUNTIME_URL=… AI_RUNTIME_SERVICE_TOKEN=… node scripts/voice/azure-stt-check.mjs`
+   (expects PASS: health ok, ephemeral session minted, Italian fixtures transcribed).
+4. Browser: runtime with `AI_STT_PROVIDER=azure_openai`, backend `VOICE_CHANNEL_ENABLED=true`, then
+   `node scripts/voice/voice-realtime-e2e.mjs --mode azure` (real WebRTC from Chromium's fake mic).
+5. Enable per environment (`VOICE_CHANNEL_ENABLED=true` on the chosen backend) — privacy decision.
+
+## G. Latency / cost baseline
+PERFORMANCE_AND_COST.md: real Azure latency pending; Assistant segments measured (final → Agno
+2.0–2.9 s, confirm → result 0.25 s). Cost by audio duration of the push-to-talk window only.
+
+## H. Tests
+Unit: runtime `tests/test_voice_azure_realtime.py`; frontend `voice/__tests__/voice.test.ts`.
+Integration: backend `src/voice/__tests__/voice-e2e.test.ts`. Azure-dependent:
+`scripts/voice/azure-stt-check.mjs`. Browser: `scripts/voice/voice-realtime-e2e.mjs --mode mock |
+azure-missing | azure`. Manual: tablet checklist (E2E_TEST_REPORT.md) incl. WebRTC through the
+facility network (UDP/TURN).
+
+## I. Known gaps
+- Real Azure path not executed (deployment missing) → latency, transcript quality on Italian
+  clinical speech, keyword effectiveness, token TTL behaviour unmeasured.
+- WebRTC on tablets / restrictive networks untested; fallback `VOICE_STT_TRANSPORT=server` exists.
+- Ephemeral token TTL is the provider default (`expires_at` reported, not configured); the token is
+  used once server-side and never exposed.
+- CSP: no change needed (no browser → Azure HTTP call); WebRTC media is not governed by `connect-src`.
+- Lowercase surnames in transcripts are not recognised by the deterministic fallback (Agno is).
+- Silence before the VAD end-of-turn is billed (≤ 6 s per silent tap).
+
+## J. Security / clinical scenarios for Prompt 6
+Everything in §13 below, plus: (token is never exposed to the browser); browser
+tampering with the data channel (sending its own `session.update`, e.g. a different prompt or
+model — verify Azure rejects or that it is harmless); keywords injection via env; partial/final
+divergence (partial shows a value, final another); network drop between commit and final;
+WebRTC renegotiation; very long push-to-talk; two tablets same operator.
+
+---
+
 Authoritative entry for the next phase. Read with `.ai-architecture/CURRENT_STATE.json` (phase 5).
 Phase 5 added voice as a **channel** of the Phase 4 Assistant; nothing in Tool Layer, policy,
 skills, Agno routing or confirmation was rewritten.
@@ -62,8 +146,9 @@ PRIVACY_AND_DATA_FLOW.md. Audio never stored or logged; provider retention per p
 
 ### How to enable (owner decision: sends utterances to the STT provider)
 
-1. Runtime service (shared): `AI_STT_MODEL=google:gemini-3.5-flash-lite` (requires `GOOGLE_API_KEY`,
-   already present) — or deploy an Azure transcription model and use `azure:<deployment>`.
+1. (Superseded) Runtime service: STT now defaults to Azure `gpt-live-transcribe` (see §F above).
+   `AI_STT_MODEL=google:gemini-3.5-flash-lite` remains possible only as an EXPLICIT opt-in; an
+   environment that sets it keeps Gemini on purpose.
 2. Backend of the chosen environment: `VOICE_CHANNEL_ENABLED=true`.
 3. Optional: `VOICE_STT_RATE_LIMIT_PER_MIN`, `VOICE_VAD_*`.
 4. Check `GET /skills/voice/status` → `sttConfigured: true`; the mic button becomes active.

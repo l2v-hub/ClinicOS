@@ -2,10 +2,16 @@
 
     transcribe(audio, mime_type, locale) -> TranscriptResult
 
-Provider chosen by AI_STT_MODEL ("provider:model"):
-  - google:<gemini model>   Gemini generateContent with inline audio (GOOGLE_API_KEY)
-  - azure:<deployment>      Azure OpenAI /audio/transcriptions (whisper / gpt-4o-transcribe deployments)
-  - mock:<anything>         deterministic, no network (CI): returns an empty transcript
+Provider (AI_STT_PROVIDER, default azure_openai):
+  - azure_openai            DEFAULT. Azure OpenAI Realtime API (GA) with the `gpt-live-transcribe`
+                            deployment (AI_STT_MODEL / AI_STT_DEPLOYMENT) on the same resource as the
+                            rest of the AI stack (AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_API_KEY).
+                            See azure_realtime.py.
+  - google                  explicit opt-in only (AI_STT_PROVIDER=google, AI_STT_MODEL=<gemini model>)
+  - azure_batch             explicit opt-in: /audio/transcriptions deployments (whisper, gpt-transcribe)
+  - mock                    deterministic, no network (CI): returns an empty transcript
+Legacy `AI_STT_MODEL=provider:model` is still read as an EXPLICIT choice. There is never a silent
+fallback from one provider to another (different privacy/cost/behaviour).
 
 The runtime never stores audio: bytes live only in this request. Logs carry provider, model,
 duration and outcome — never audio or text. The transcript is a PROPOSAL of what was said: it is
@@ -75,18 +81,44 @@ class TranscriptResult:
         }
 
 
+PROVIDERS = {"azure_openai", "google", "azure_batch", "mock"}
+_LEGACY = {"azure": "azure_batch"}
+
+
 def stt_model() -> tuple[str, str] | None:
-    raw = (os.environ.get("AI_STT_MODEL") or "").strip()
-    if not raw or ":" not in raw:
+    """(provider, model) of the configured STT, or None when it cannot run in this environment."""
+    raw_model = (os.environ.get("AI_STT_MODEL") or "").strip()
+    provider = (os.environ.get("AI_STT_PROVIDER") or "").strip().lower()
+    if not provider and ":" in raw_model:  # legacy explicit form, e.g. "google:gemini-…", "mock:mock"
+        legacy, model = raw_model.split(":", 1)
+        provider = _LEGACY.get(legacy.strip().lower(), legacy.strip().lower())
+        return (provider, model.strip()) if provider in PROVIDERS else None
+    provider = provider or "azure_openai"
+    if provider not in PROVIDERS:
         return None
-    provider, model = raw.split(":", 1)
-    return provider.strip().lower(), model.strip()
+    if provider == "azure_openai":
+        from .azure_realtime import realtime_config
+        cfg = realtime_config()
+        return (provider, cfg.model) if cfg else None
+    if provider == "mock":
+        return provider, raw_model or "mock"
+    return (provider, raw_model) if raw_model else None
 
 
 def stt_status() -> dict[str, Any]:
     configured = stt_model()
-    return {"available": configured is not None, "provider": configured[0] if configured else None,
-            "model": configured[1] if configured else None}
+    status: dict[str, Any] = {"available": configured is not None,
+                              "provider": configured[0] if configured else None,
+                              "model": configured[1] if configured else None}
+    if configured and configured[0] == "azure_openai":
+        from .azure_realtime import realtime_config
+        cfg = realtime_config()
+        status.update({"deployment": cfg.deployment, "transports": ["webrtc", "server"],
+                       "languages": list(cfg.languages)})
+    elif configured:
+        # mock (tests only) also issues fake realtime sessions so the browser flow can be exercised.
+        status["transports"] = ["webrtc", "server"] if configured[0] == "mock" else ["server"]
+    return status
 
 
 def _http_json(url: str, body: bytes, headers: dict[str, str], timeout: float) -> dict[str, Any]:
@@ -159,7 +191,7 @@ async def transcribe(audio: bytes, mime_type: str, locale: str = "it-IT",
                      timeout_seconds: float = 20.0) -> TranscriptResult:
     configured = stt_model()
     if configured is None:
-        raise SttError("not_configured", "AI_STT_MODEL non configurato", 503)
+        raise SttError("not_configured", "STT non configurato (AI_STT_PROVIDER / Azure OpenAI)", 503)
     provider, model = configured
     if mime_type not in ALLOWED_MIME:
         raise SttError("invalid_audio", "Formato audio non supportato", 400)
@@ -168,9 +200,18 @@ async def transcribe(audio: bytes, mime_type: str, locale: str = "it-IT",
     t0 = time.monotonic()
     outcome = "ok"
     try:
-        if provider == "google":
+        if provider == "azure_openai":
+            from .azure_realtime import realtime_config, transcribe_ws, wav_to_pcm24k
+            if mime_type not in ("audio/wav", "audio/x-wav"):
+                raise SttError("invalid_audio", "Il trasporto realtime accetta WAV PCM16", 400)
+            pcm = await asyncio.to_thread(wav_to_pcm24k, audio)  # CPU work off the event loop
+            live = await transcribe_ws(realtime_config(), pcm, timeout_seconds)
+            text, usage = live.text, {"partials": live.partials,
+                                      **({"firstPartialMs": live.first_partial_ms}
+                                         if live.first_partial_ms is not None else {})}
+        elif provider == "google":
             text, usage = await asyncio.to_thread(_google, model, audio, mime_type, timeout_seconds)
-        elif provider == "azure":
+        elif provider == "azure_batch":
             text, usage = await asyncio.to_thread(_azure, model, audio, mime_type, locale, timeout_seconds), None
         elif provider == "mock":
             text, usage = "", None

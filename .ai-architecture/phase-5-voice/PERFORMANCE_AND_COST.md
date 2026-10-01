@@ -1,5 +1,30 @@
 # Phase 5 — Performance and cost
 
+## Azure `gpt-live-transcribe` — what was measured, what is pending
+
+**Real Azure latency: NOT MEASURED** (deployment missing). Measurable today:
+
+| Segment | Measured | Source |
+| --- | --- | --- |
+| tap → LISTENING (permission + server-side session mint + SDP negotiation + WebRTC connect) | 48–78 ms **with the mock transport** (no network) — real value pending Azure | voice-realtime-e2e-mock.json |
+| start speech → first partial | pending Azure (mock scripted at ~1.8 s, not a measurement) | — |
+| end speech → final transcript | 0.9 s VAD end-of-turn silence + provider time (pending Azure) | config |
+| final transcript → Agno → preview/result | 2.0–2.9 s (real Agno, gpt-6.1-sol); prescription 5.1 s | mock E2E (real Assistant) |
+| confirmation → backend result | 0.25 s | mock E2E (real backend) |
+| Azure negotiation failure (deployment missing) | immediate ERROR, text fallback | azure-missing E2E |
+
+**Cost model.** Azure prices `gpt-live-transcribe` by **audio duration** (see the Audio Models
+section of the Azure OpenAI pricing page; OpenAI lists $0.017/minute for its own API — Azure's
+price is not verified here). Billed duration ≈ the push-to-talk window: connection → commit/close.
+Local VAD keeps it short: silence is never committed and the session closes at the no-speech
+timeout (6 s) or 0.9 s after the end of speech; max 15 s per turn. **40 minutes on shift are not 40
+minutes of STT**: only the seconds of each tapped command are streamed (e.g. 30 commands × ~5 s ≈
+2.5 minutes). One Agno call per sent transcript; partials never trigger LLM calls.
+
+---
+
+## Previous iteration (server transport, Gemini opt-in)
+
 Measured on 2026-09-30/10-01 with the local stack (Vite + backend + Postgres on this machine, AI
 runtime on this machine with the production provider credentials, real Google Gemini STT, real Agno
 skill router on Azure `gpt-6.1-sol`). Network to the providers: public internet from this

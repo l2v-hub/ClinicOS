@@ -509,3 +509,14 @@
   opacity: 0.85;
   margin-bottom: 2px;
 }
+
+.am-voice__partial {
+  margin: 0;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.am-voice__partial-label {
+  font-style: normal;
+  font-size: 12px;
+}

@@ -1,5 +1,5 @@
 {
-  "at": "2026-09-30T22:36:04.226Z",
+  "at": "2026-10-01T06:34:20.380Z",
   "passed": 46,
   "failed": 0,
   "results": [
@@ -16,7 +16,7 @@
     {
       "name": "A OSS prescription → DENIED",
       "pass": true,
-      "detail": "{\"workflowId\":\"79d6f594-0615-47b1-9463-a7258657c9c3\",\"status\":\"DENIED\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Non sei autorizzato a «Prepara prescrizione»: servono diary.therapy_preview, diary.create_"
+      "detail": "{\"workflowId\":\"0caaf3fa-7a9a-42b9-950c-af1c309d974c\",\"status\":\"DENIED\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Non sei autorizzato a «Prepara prescrizione»: servono diary.therapy_preview, diary.create_"
     },
     {
       "name": "A no Conferma shown when denied",
@@ -56,12 +56,12 @@
     {
       "name": "C confirmed → COMPLETED",
       "pass": true,
-      "detail": "{\"workflowId\":\"a91209bd-b482-4404-a1d1-e5b01130b424\",\"status\":\"COMPLETED\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Prescrizione registrata per Neri Dario: PARACETAMOLO (terapia e voce di diario collegate).\",\"pending\":null,\"preview\":{\"previewId\":\"0434c18d-0c78-4256-921a-6036fac1217a\",\"skillId\":\"therapy"
+      "detail": "{\"workflowId\":\"3bec1ca4-e655-4dc4-aa8f-bba086d31787\",\"status\":\"COMPLETED\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Prescrizione registrata per Neri Dario: PARACETAMOLO (terapia e voce di diario collegate).\",\"pending\":null,\"preview\":{\"previewId\":\"e8f5bdc8-e23e-4b8e-a646-77d8ce374b7a\",\"skillId\":\"therapy"
     },
     {
       "name": "C exactly one therapy written (double click safe)",
       "pass": true,
-      "detail": "1→2"
+      "detail": "0→1"
     },
     {
       "name": "C therapy from the classic mapper (2 schedules)",
@@ -71,7 +71,7 @@
     {
       "name": "C audit origin AI_ASSISTANT",
       "pass": true,
-      "detail": "{\"id\":\"cmuooouxo007r80lp6nba79j5\",\"requestId\":\"skill-a91209bd-b482-4404-a1d1-e5b01130b424\",\"operatorId\":\"SIM-DOCTOR-1\",\"operatorRole\":\"doctor\",\"patientId\":\"cmuomq7jt0005mklphj35ctxu\",\"actionType\":\"skill:therapy.prescribe:execute\",\"kind\":\"action\",\"channel\":\"ai_assistant\",\"fields\":[\"tool:diary.create_"
+      "detail": "{\"id\":\"cmup5rxej000m8olpa1tkkeq5\",\"requestId\":\"skill-3bec1ca4-e655-4dc4-aa8f-bba086d31787\",\"operatorId\":\"SIM-DOCTOR-1\",\"operatorRole\":\"doctor\",\"patientId\":\"cmup5r0vn0005x8lp9fykznd6\",\"actionType\":\"skill:therapy.prescribe:execute\",\"kind\":\"action\",\"channel\":\"ai_assistant\",\"fields\":[\"tool:diary.create_"
     },
     {
       "name": "D handover preview (priority normale, type Assistente AI)",
@@ -126,7 +126,7 @@
     {
       "name": "G change resident → workflow invalidated",
       "pass": true,
-      "detail": "{\"workflowId\":\"d97d6b6a-38c5-4f34-91be-8b3c42d04aa3\",\"status\":\"CANCELLED\",\"skillId\":\"diary.add_observation\",\"reply\":\"Hai cambiato ospite: l’operazione preparata per Galli Nora è stata annullata. Nessu"
+      "detail": "{\"workflowId\":\"d96f8d99-535c-431b-bb91-d03402dcae38\",\"status\":\"CANCELLED\",\"skillId\":\"diary.add_observation\",\"reply\":\"Hai cambiato ospite: l’operazione preparata per Galli Nora è stata annullata. Nessu"
     },
     {
       "name": "G preview removed from screen",
@@ -141,7 +141,7 @@
     {
       "name": "H1 named resident → asks for values",
       "pass": true,
-      "detail": "{\"workflowId\":\"c185693d-0ec6-4ca1-be34-954595008ae8\",\"status\":\"NEEDS_CLARIFICATION\",\"skillId\":\"vitals.record\",\"reply\":\"Quali valori devo registrare? (es. pressione 120/80, SpO2 97, FC 72, temperatura "
+      "detail": "{\"workflowId\":\"43eebf79-2dde-47ff-8b05-9ebdc0e1637f\",\"status\":\"NEEDS_CLARIFICATION\",\"skillId\":\"vitals.record\",\"reply\":\"Quali valori devo registrare? (es. pressione 120/80, SpO2 97, FC 72, temperatura "
     },
     {
       "name": "H1 preview targets the named resident",
@@ -156,7 +156,7 @@
     {
       "name": "H1 named-resident workflow completes (not cancelled)",
       "pass": true,
-      "detail": "{\"workflowId\":\"c185693d-0ec6-4ca1-be34-954595008ae8\",\"status\":\"COMPLETED\",\"skillId\":\"vitals.record\",\"reply\":\"Parametri registrati per Conti Nino: Frequenza cardiaca 76. Verificato: la rilevazione è pr"
+      "detail": "{\"workflowId\":\"43eebf79-2dde-47ff-8b05-9ebdc0e1637f\",\"status\":\"COMPLETED\",\"skillId\":\"vitals.record\",\"reply\":\"Parametri registrati per Conti Nino: Frequenza cardiaca 76. Verificato: la rilevazione è pr"
     },
     {
       "name": "H1 one reading written",
@@ -216,7 +216,7 @@
     {
       "name": "H revoked → DENIED without restart",
       "pass": true,
-      "detail": "{\"workflowId\":\"1229d047-e7c5-44fb-8633-6f3a1ba8e00a\",\"status\":\"DENIED\",\"skillId\":\"vitals.record\",\"reply\":\"Operazione non eseguita: i tuoi permessi non consentono più parameters.create_reading.\",\"pendi"
+      "detail": "{\"workflowId\":\"8099b262-7ed2-4e65-91e2-d5603d6a09e5\",\"status\":\"DENIED\",\"skillId\":\"vitals.record\",\"reply\":\"Operazione non eseguita: i tuoi permessi non consentono più parameters.create_reading.\",\"pendi"
     },
     {
       "name": "H revoked skill no longer suggested",

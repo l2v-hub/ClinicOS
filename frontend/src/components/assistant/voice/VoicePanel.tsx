@@ -2,7 +2,7 @@
 // transcript review (edit / send / repeat / cancel / write by hand), optional spoken status.
 
 import { MicIcon, SpeakerIcon } from '../../shared/agnos/AgnosVoiceIcons';
-import { AUDIO_STATE_LABELS, micOpen } from './audioSession';
+import { AUDIO_STATE_LABELS, capturing, micOpen } from './audioSession';
 import type { VoiceChannel } from './useVoiceChannel';
 
 export function VoiceMicButton({ voice, busy }: { voice: VoiceChannel; busy: boolean }) {
@@ -37,7 +37,11 @@ export function VoiceMicButton({ voice, busy }: { voice: VoiceChannel; busy: boo
       type="button"
       className={`ds-btn ${listening ? 'ds-btn--primary' : 'ds-btn--secondary'} am-mic`}
       disabled={
-        !listening && (busy || audio.state === 'TRANSCRIBING' || audio.state === 'PROCESSING')
+        !listening &&
+        (busy ||
+          audio.state === 'REQUESTING_PERMISSION' ||
+          audio.state === 'TRANSCRIBING' ||
+          audio.state === 'PROCESSING')
       }
       aria-pressed={listening}
       aria-label={
@@ -94,7 +98,7 @@ export function VoicePanel({ voice, busy }: { voice: VoiceChannel; busy: boolean
             <span>{voice.spoken ? 'Voce on' : 'Voce off'}</span>
           </button>
         )}
-        {(listening || audio.state === 'TRANSCRIBING') && (
+        {capturing(audio.state) && (
           <button
             type="button"
             className="ds-btn ds-btn--secondary"
@@ -106,6 +110,14 @@ export function VoicePanel({ voice, busy }: { voice: VoiceChannel; busy: boolean
         )}
       </div>
 
+      {audio.partial &&
+        (audio.state === 'TRANSCRIPT_PARTIAL' || audio.state === 'TRANSCRIBING') && (
+          <p className="am-voice__partial" aria-live="polite" data-testid="am-voice-partial">
+            <span className="am-voice__partial-label">Testo provvisorio (non viene inviato):</span>{' '}
+            {audio.partial}
+          </p>
+        )}
+
       {audio.notice && (
         <p
           className={`am-voice__notice${audio.state === 'ERROR' ? ' am-voice__notice--error' : ''}`}
@@ -115,7 +127,7 @@ export function VoicePanel({ voice, busy }: { voice: VoiceChannel; busy: boolean
         </p>
       )}
 
-      {audio.state === 'TRANSCRIPT_READY' && (
+      {audio.state === 'TRANSCRIPT_FINAL' && (
         <form
           className="am-voice__review"
           data-testid="am-voice-review"
