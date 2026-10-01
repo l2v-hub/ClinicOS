@@ -1,0 +1,42 @@
+{
+ "SIM-OSS-1": {
+  "p50ms": 21,
+  "p95ms": 98,
+  "homeBytes": 2234,
+  "starters": 4,
+  "shortcuts": 3,
+  "skills": "11/16"
+ },
+ "SIM-NURSE-1": {
+  "p50ms": 31,
+  "p95ms": 40,
+  "homeBytes": 3260,
+  "starters": 5,
+  "shortcuts": 3,
+  "skills": "13/16"
+ },
+ "SIM-DOCTOR-1": {
+  "p50ms": 25,
+  "p95ms": 30,
+  "homeBytes": 2761,
+  "starters": 6,
+  "shortcuts": 3,
+  "skills": "13/16"
+ },
+ "SIM-SUPERVISOR-1": {
+  "p50ms": 20,
+  "p95ms": 34,
+  "homeBytes": 2120,
+  "starters": 6,
+  "shortcuts": 3,
+  "skills": "15/16"
+ },
+ "SIM-ADMIN": {
+  "p50ms": 12,
+  "p95ms": 30,
+  "homeBytes": 1449,
+  "starters": 1,
+  "shortcuts": 3,
+  "skills": "6/16"
+ }
+}

@@ -29,6 +29,7 @@ import {
 } from './catalog.js';
 import { COLLECTORS, type ProactiveEvent } from './sources.js';
 import { romeParts, shiftWindow } from './time.js';
+import { profileFor } from '../copilot/profiles.js';
 
 export type Priority = 'normale' | 'alta' | 'urgente';
 
@@ -730,8 +731,10 @@ const BRIEFING_QUESTION =
 
 function fallbackText(facts: Signal[]): string {
   if (!facts.length) return 'Nessun fatto nuovo o attività in sospeso nel periodo.';
-  return facts
-    .slice(0, 12)
+  // All non-«normale» facts first and never truncated; routine facts up to 12 lines in total.
+  const important = facts.filter((f) => f.priority !== 'normale');
+  const routine = facts.filter((f) => f.priority === 'normale');
+  return [...important, ...routine.slice(0, Math.max(0, 12 - important.length))]
     .map(
       (s) =>
         `• ${s.residentLabel ? `${s.residentLabel}: ` : ''}${s.title}${s.priority !== 'normale' ? ` [${s.priority}]` : ''}`,
@@ -760,7 +763,21 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
   const window = shiftWindow(now);
   const since = new Date(window.previous.start);
   const inbox = await buildInbox(who, deps, { since, audit: false });
-  const facts = inbox.signals;
+  // Phase 8: the role profile only ORDERS the authorized facts (preferred event types first) and
+  // caps what the AI sees; it never adds or removes authorized facts from the list.
+  const profile = profileFor(who.roleId, env);
+  const rank = (t: string) => {
+    const i = profile.signals.preferredEventTypes.indexOf(t as EventType);
+    return i < 0 ? 999 : i;
+  };
+  // Safety first (Prompt 8 §13–§14): source priority stays the primary order; the role preference
+  // only orders facts of the SAME priority.
+  const facts = [...inbox.signals].sort(
+    (a, b) =>
+      PRIORITY_RANK[b.priority] - PRIORITY_RANK[a.priority] ||
+      Number(b.type === 'OVERDUE_ACTIVITY') - Number(a.type === 'OVERDUE_ACTIVITY') ||
+      rank(a.eventType) - rank(b.eventType),
+  );
   const byResidentMap = new Map<
     string,
     { residentId: string | null; residentLabel: string; signalIds: string[] }
@@ -792,7 +809,12 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
   // Minimum necessary context: already-authorized signals as FIXED templates only — no free text
   // written by users (diary titles, note / handover bodies, drug names typed in a prescription)
   // reaches the LLM; the operator reads the details in the facts list.
-  const results = facts.slice(0, 30).map((s) => ({
+  // Every non-«normale» fact is always in the AI context (never cut by the role cap); the cap only
+  // limits the routine ones.
+  const cap = Math.min(30, profile.briefing.maxFacts);
+  const important = facts.filter((f) => f.priority !== 'normale');
+  const aiFacts = [...important, ...facts.filter((f) => f.priority === 'normale').slice(0, Math.max(0, cap - important.length))];
+  const results = aiFacts.map((s) => ({
     id: s.signalId,
     tipo: s.type,
     ospite: s.residentLabel ?? 'più ospiti / struttura',
@@ -827,7 +849,8 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
     contextChars = JSON.stringify(results).length;
     llmCalls = 1;
     const a0 = Date.now();
-    const out = await composeAnswer(BRIEFING_QUESTION, results, sources, {
+    const question = profile.briefing.focus ? `${BRIEFING_QUESTION} ${profile.briefing.focus}` : BRIEFING_QUESTION;
+    const out = await composeAnswer(question, results, sources, {
       callComposeRuntime: runtime,
     });
     aiLatencyMs = Date.now() - a0;

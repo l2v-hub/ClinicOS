@@ -31,6 +31,7 @@ import {
 import type { ToolRegistry } from '../tools/registry.js';
 import type { ToolContext } from '../tools/types.js';
 import { availabilityOf, evaluateTools, type SkillAvailability } from './availability.js';
+import { profileFor } from '../copilot/profiles.js';
 import { SKILL_CATALOG, skillById } from './catalog.js';
 import { confirmationFor, isExplicitCancellation, isExplicitConfirmation } from './confirmation.js';
 import { buildPreview, executeSkill, type SkillInvoke } from './executors.js';
@@ -1152,6 +1153,8 @@ async function converseTurn(
     unavailable: SKILL_CATALOG.filter((skill) => !available.includes(skill)),
     pending: null,
     today: turn.today,
+    // Phase 8: role profile wording only; the skill list above is already the authorized subset.
+    roleHint: profileFor(turn.roleId).assistantHint,
   });
   const skill = interpretation.skillId ? skillById(interpretation.skillId) : undefined;
   if (!skill) {

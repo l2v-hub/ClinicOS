@@ -255,7 +255,7 @@ async def assistant_skill_route(req: SkillRouteRequest, authorization: str | Non
     _auth(authorization)
     try:
         out = await run_skill_route(_REGISTRY, req.message, req.skills, req.pending, req.today, req.valueKeys,
-                                    forbidden=req.forbiddenSkills)
+                                    forbidden=req.forbiddenSkills, role_hint=req.roleHint)
         return SkillRouteResponse(route=out["route"], model=out["model"])
     except RuntimeError_ as ex:
         _log.warning("skill route runtime error: %s", ex.to_dict().get("message", "router error"))

@@ -39,6 +39,34 @@ interface Props {
   onOpenSignal: (signal: ProactiveSignal) => void;
   /** Count of signals still to see (for the entry badge). */
   onCount?: (toSee: number) => void;
+  /** Phase 8 — role presentation (ordering / density only; the server already filtered). */
+  initialTab?: Tab;
+  preferredEventTypes?: string[];
+  maxVisible?: number;
+  /** Increment to open a tab from outside (shortcuts, voice); briefing tabs also load it. */
+  request?: { tab: Tab; n: number } | null;
+}
+
+const RANK: Record<ProactiveSignal['priority'], number> = { urgente: 3, alta: 2, normale: 1 };
+
+/** Source priority first (never hidden by density), then the role's preferred types, then time. */
+function present(signals: ProactiveSignal[], preferred: string[], max: number) {
+  const pref = (t: string) => {
+    const i = preferred.indexOf(t);
+    return i < 0 ? 999 : i;
+  };
+  const sorted = [...signals].sort(
+    (a, b) =>
+      RANK[b.priority] - RANK[a.priority] ||
+      pref(a.eventType) - pref(b.eventType) ||
+      b.occurredAt.localeCompare(a.occurredAt),
+  );
+  const important = sorted.filter((s) => s.priority !== 'normale');
+  const rest = sorted.filter((s) => s.priority === 'normale');
+  return {
+    visible: [...important, ...rest.slice(0, Math.max(0, max - important.length))],
+    total: sorted.length,
+  };
 }
 
 function SignalCard({
@@ -115,23 +143,35 @@ function SignalCard({
   );
 }
 
-export function ProactivePanel({ busy, onOpenSignal, onCount }: Props) {
-  const [tab, setTab] = useState<Tab>('da-vedere');
+export function ProactivePanel({
+  busy,
+  onOpenSignal,
+  onCount,
+  initialTab = 'da-vedere',
+  preferredEventTypes = [],
+  maxVisible = 50,
+  request = null,
+}: Props) {
+  const [tab, setTab] = useState<Tab>(initialTab);
+  const [showAll, setShowAll] = useState(false);
   const [inbox, setInbox] = useState<ProactiveInbox | null>(null);
   const [briefing, setBriefing] = useState<ShiftBriefing | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loadingBriefing, setLoadingBriefing] = useState(false);
 
-  const refresh = useCallback(async (poll = false) => {
-    try {
-      const next = await loadProactiveInbox(poll);
-      setInbox(next);
-      setError(null);
-      onCount?.(next.counts.new);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Segnali non disponibili');
-    }
-  }, [onCount]);
+  const refresh = useCallback(
+    async (poll = false) => {
+      try {
+        const next = await loadProactiveInbox(poll);
+        setInbox(next);
+        setError(null);
+        onCount?.(next.counts.new);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Segnali non disponibili');
+      }
+    },
+    [onCount],
+  );
 
   useEffect(() => {
     // Polling with the server as the source of truth (no realtime channel exists in the stack).
@@ -155,7 +195,7 @@ export function ProactivePanel({ busy, onOpenSignal, onCount }: Props) {
     await refresh();
   }
 
-  async function prepareBriefing() {
+  const prepareBriefing = useCallback(async () => {
     setLoadingBriefing(true);
     try {
       setBriefing(await loadShiftBriefing());
@@ -165,11 +205,26 @@ export function ProactivePanel({ busy, onOpenSignal, onCount }: Props) {
     } finally {
       setLoadingBriefing(false);
     }
-  }
+  }, []);
+
+  // Phase 8: a shortcut / voice phrase opens a tab (and prepares the briefing) on the SAME panel.
+  useEffect(() => {
+    if (!request) return;
+    const timer = window.setTimeout(() => {
+      setTab(request.tab);
+      if (request.tab === 'briefing') void prepareBriefing();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [request, prepareBriefing]);
 
   const toSee = inbox?.signals.filter((s) => s.status !== 'preso_visione') ?? [];
   const changed = inbox?.signals.filter((s) => s.changedSinceLastView) ?? [];
-  const list = tab === 'da-vedere' ? toSee : changed;
+  const shown = present(
+    tab === 'da-vedere' ? toSee : changed,
+    preferredEventTypes,
+    showAll ? 500 : maxVisible,
+  );
+  const list = shown.visible;
   const factById = new Map((briefing?.facts ?? []).map((s) => [s.signalId, s]));
 
   return (
@@ -201,7 +256,8 @@ export function ProactivePanel({ busy, onOpenSignal, onCount }: Props) {
         )}
         {inbox?.degraded && inbox.degraded.length > 0 && (
           <p className="am-muted" role="status" data-testid="am-proactive-degraded">
-            Alcune fonti non sono disponibili in questo momento: l’elenco potrebbe essere incompleto.
+            Alcune fonti non sono disponibili in questo momento: l’elenco potrebbe essere
+            incompleto.
           </p>
         )}
 
@@ -245,6 +301,16 @@ export function ProactivePanel({ busy, onOpenSignal, onCount }: Props) {
                 ))}
               </ul>
             )}
+            {shown.total > list.length && (
+              <button
+                type="button"
+                className="am-link"
+                onClick={() => setShowAll(true)}
+                data-testid="am-signals-more"
+              >
+                Mostra tutti ({shown.total})
+              </button>
+            )}
           </>
         )}
 
@@ -276,7 +342,9 @@ export function ProactivePanel({ busy, onOpenSignal, onCount }: Props) {
                       : 'Sintesi AI non disponibile: elenco dei fatti'}
                   </span>
                   {briefing.metrics?.aiSkipped === 'cooldown' && (
-                    <p className="am-muted">Sintesi AI appena generata: riprova tra un minuto. Intanto ecco i fatti.</p>
+                    <p className="am-muted">
+                      Sintesi AI appena generata: riprova tra un minuto. Intanto ecco i fatti.
+                    </p>
                   )}
                   <p className="am-briefing__text">{briefing.summary.text}</p>
                 </div>

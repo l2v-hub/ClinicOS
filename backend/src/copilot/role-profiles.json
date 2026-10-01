@@ -1,0 +1,520 @@
+{
+  "schema": "clinicos.copilot.role-profiles/v1",
+  "version": 1,
+  "note": "Role Experience Profiles (Phase 8). PRESENTATION ONLY: order, wording, density and shortcuts. They never grant anything: every skill, shortcut and signal is filtered per request by the ACTIVE policy and the Resident Access Scope. Override the file with COPILOT_PROFILES_FILE.",
+  "profiles": {
+    "oss": {
+      "label": "Copilota OSS",
+      "primaryGoals": [
+        "giro ospiti e parametri",
+        "osservazioni assistenziali",
+        "consegne del turno",
+        "cosa fare adesso"
+      ],
+      "commonWorkflows": [
+        "start_shift",
+        "round_vitals",
+        "handovers"
+      ],
+      "density": "minimal",
+      "landing": "home",
+      "emphasis": "write-assist",
+      "confirmationUx": "large-targets",
+      "escalation": "Segnala al personale infermieristico o medico tramite consegna; nessuna valutazione clinica.",
+      "terminology": {
+        "resident": "ospite",
+        "focus": "Cosa devo fare adesso"
+      },
+      "assistantHint": "Operatore socio-sanitario: risposte brevi e pratiche, attività assistenziali, nessuna valutazione clinica.",
+      "starterOrder": [
+        "vitals.record",
+        "diary.add_observation",
+        "handover.create",
+        "vitals.recent",
+        "diary.recent",
+        "handover.overview",
+        "patient.overview",
+        "patient.find"
+      ],
+      "shortcuts": [
+        {
+          "id": "start_shift",
+          "kind": "start_shift",
+          "label": "Inizia il turno",
+          "phrases": [
+            "inizia il turno",
+            "iniziamo il turno",
+            "cosa devo sapere del turno",
+            "cosa devo fare adesso"
+          ]
+        },
+        {
+          "id": "round_vitals",
+          "kind": "resident_round",
+          "label": "Inizia giro parametri",
+          "steps": [
+            "vitals.record",
+            "diary.add_observation",
+            "vitals.recent"
+          ],
+          "phrases": [
+            "iniziamo il giro",
+            "inizia il giro",
+            "giro parametri",
+            "inizia giro parametri"
+          ]
+        },
+        {
+          "id": "handovers",
+          "kind": "skill",
+          "label": "Le consegne",
+          "skillId": "handover.overview",
+          "phrases": [
+            "le consegne",
+            "mostrami le consegne"
+          ]
+        }
+      ],
+      "signals": {
+        "preferredEventTypes": [
+          "handover.open",
+          "workflow.pending",
+          "note.received",
+          "vitals.recorded",
+          "diary.entry_created",
+          "room.changed"
+        ],
+        "defaultTab": "da-vedere",
+        "maxVisible": 5
+      },
+      "briefing": {
+        "focus": "Metti per prime le consegne e le attività da fare adesso; frasi molto brevi.",
+        "maxFacts": 12
+      },
+      "sections": [
+        "shortcuts",
+        "continue",
+        "signals",
+        "starters"
+      ]
+    },
+    "nurse": {
+      "label": "Copilota Infermiere",
+      "primaryGoals": [
+        "terapia e somministrazioni",
+        "parametri",
+        "consegne",
+        "follow-up",
+        "variazioni recenti"
+      ],
+      "commonWorkflows": [
+        "start_shift",
+        "round_therapy",
+        "handovers"
+      ],
+      "density": "operational",
+      "landing": "home",
+      "emphasis": "write-assist",
+      "confirmationUx": "preview-and-confirm",
+      "escalation": "Le decisioni cliniche restano al medico; l'assistente prepara, l'infermiere conferma.",
+      "terminology": {
+        "resident": "ospite",
+        "focus": "Terapia e attività del turno"
+      },
+      "assistantHint": "Infermiere: terapia, somministrazioni, parametri e consegne; nessuna decisione clinica autonoma.",
+      "starterOrder": [
+        "therapy.due_administrations",
+        "administration.record",
+        "vitals.record",
+        "vitals.recent",
+        "handover.overview",
+        "handover.create",
+        "diary.add_observation",
+        "diary.recent",
+        "patient.overview"
+      ],
+      "shortcuts": [
+        {
+          "id": "start_shift",
+          "kind": "start_shift",
+          "label": "Inizia il turno",
+          "phrases": [
+            "inizia il turno",
+            "iniziamo il turno",
+            "cosa devo sapere del turno"
+          ]
+        },
+        {
+          "id": "round_therapy",
+          "kind": "resident_round",
+          "label": "Inizia giro terapia",
+          "intro": "therapy.due_administrations",
+          "steps": [
+            "administration.record",
+            "vitals.record",
+            "diary.add_observation"
+          ],
+          "phrases": [
+            "iniziamo il giro",
+            "inizia giro terapia",
+            "giro terapia"
+          ]
+        },
+        {
+          "id": "due_today",
+          "kind": "skill",
+          "label": "Somministrazioni di oggi",
+          "skillId": "therapy.due_administrations",
+          "phrases": [
+            "somministrazioni di oggi"
+          ]
+        }
+      ],
+      "signals": {
+        "preferredEventTypes": [
+          "administration.due",
+          "handover.open",
+          "workflow.pending",
+          "therapy.prescribed",
+          "therapy.changed",
+          "administration.recorded",
+          "vitals.recorded",
+          "diary.entry_created",
+          "note.received",
+          "document.added",
+          "room.changed"
+        ],
+        "defaultTab": "da-vedere",
+        "maxVisible": 8
+      },
+      "briefing": {
+        "focus": "Metti per prime le somministrazioni da fare o in ritardo, poi consegne e variazioni di terapia.",
+        "maxFacts": 20
+      },
+      "sections": [
+        "shortcuts",
+        "continue",
+        "signals",
+        "starters",
+        "recent"
+      ]
+    },
+    "doctor": {
+      "label": "Copilota Medico",
+      "primaryGoals": [
+        "quadro sintetico del paziente",
+        "cosa è cambiato",
+        "documentazione",
+        "prescrizioni da preparare",
+        "follow-up"
+      ],
+      "commonWorkflows": [
+        "prepare_visit",
+        "changes"
+      ],
+      "density": "clinical",
+      "landing": "home",
+      "emphasis": "read-synthesis",
+      "confirmationUx": "preview-and-confirm",
+      "escalation": "L'assistente sintetizza e prepara; prescrizioni e giudizio clinico restano del medico.",
+      "terminology": {
+        "resident": "paziente",
+        "focus": "Cosa è cambiato e cosa preparare"
+      },
+      "assistantHint": "Medico: sintesi clinica con fonti, preparazione di prescrizioni da confermare; mai prescrivere o confermare da solo.",
+      "starterOrder": [
+        "patient.overview",
+        "clinical.question",
+        "vitals.recent",
+        "diary.recent",
+        "therapy.prescribe",
+        "diary.add_observation",
+        "handover.create",
+        "appointments.day",
+        "patient.find"
+      ],
+      "shortcuts": [
+        {
+          "id": "prepare_visit",
+          "kind": "resident_round",
+          "label": "Prepara visita",
+          "steps": [
+            "patient.overview",
+            "vitals.recent",
+            "diary.recent",
+            "therapy.prescribe"
+          ],
+          "phrases": [
+            "prepara visita",
+            "prepara la visita",
+            "fammi il quadro"
+          ]
+        },
+        {
+          "id": "changes",
+          "kind": "proactive_tab",
+          "label": "Cosa è cambiato",
+          "tab": "cambiato",
+          "phrases": [
+            "cosa è cambiato",
+            "cosa e cambiato",
+            "novità"
+          ]
+        },
+        {
+          "id": "appointments",
+          "kind": "skill",
+          "label": "Appuntamenti di oggi",
+          "skillId": "appointments.day",
+          "phrases": [
+            "appuntamenti di oggi"
+          ]
+        }
+      ],
+      "signals": {
+        "preferredEventTypes": [
+          "diary.entry_created",
+          "document.added",
+          "administration.recorded",
+          "vitals.recorded",
+          "therapy.changed",
+          "handover.open",
+          "workflow.pending",
+          "note.received",
+          "therapy.prescribed",
+          "room.changed"
+        ],
+        "defaultTab": "cambiato",
+        "maxVisible": 10
+      },
+      "briefing": {
+        "focus": "Raggruppa per paziente le novità cliniche registrate (diario, documenti, somministrazioni non erogate) con le fonti.",
+        "maxFacts": 25
+      },
+      "sections": [
+        "shortcuts",
+        "continue",
+        "signals",
+        "starters",
+        "recent"
+      ]
+    },
+    "supervisor": {
+      "label": "Copilota Supervisore",
+      "primaryGoals": [
+        "stato del turno",
+        "attività pendenti",
+        "consegne",
+        "copertura ospiti",
+        "criticità operative da regole"
+      ],
+      "commonWorkflows": [
+        "facility_briefing",
+        "handovers",
+        "occupancy"
+      ],
+      "density": "aggregated",
+      "landing": "home",
+      "emphasis": "read-aggregate",
+      "confirmationUx": "preview-and-confirm",
+      "escalation": "Dati operativi aggregati; nessun giudizio o classifica sul personale.",
+      "terminology": {
+        "resident": "ospite",
+        "focus": "Stato della struttura"
+      },
+      "assistantHint": "Supervisore: quadro operativo aggregato da dati e conteggi reali; mai giudizi o classifiche sulle persone.",
+      "starterOrder": [
+        "handover.overview",
+        "therapy.due_administrations",
+        "facility.occupancy",
+        "appointments.day",
+        "patient.find",
+        "patient.overview"
+      ],
+      "shortcuts": [
+        {
+          "id": "facility_briefing",
+          "kind": "briefing",
+          "label": "Briefing struttura",
+          "phrases": [
+            "briefing struttura",
+            "cosa devo sapere del turno",
+            "stato del turno"
+          ]
+        },
+        {
+          "id": "handovers",
+          "kind": "skill",
+          "label": "Consegne aperte",
+          "skillId": "handover.overview",
+          "phrases": [
+            "consegne aperte"
+          ]
+        },
+        {
+          "id": "occupancy",
+          "kind": "skill",
+          "label": "Posti letto",
+          "skillId": "facility.occupancy",
+          "phrases": [
+            "posti letto"
+          ]
+        }
+      ],
+      "signals": {
+        "preferredEventTypes": [
+          "administration.due",
+          "handover.open",
+          "access.denied_summary",
+          "workflow.pending",
+          "note.received",
+          "room.changed",
+          "document.added",
+          "therapy.prescribed",
+          "diary.entry_created",
+          "vitals.recorded",
+          "policy.applied"
+        ],
+        "defaultTab": "da-vedere",
+        "maxVisible": 15
+      },
+      "briefing": {
+        "focus": "Dai un quadro aggregato della struttura: attività in ritardo e consegne aperte per ospite; nessun giudizio sulle persone.",
+        "maxFacts": 30
+      },
+      "sections": [
+        "shortcuts",
+        "continue",
+        "signals",
+        "starters",
+        "recent"
+      ]
+    },
+    "administrator": {
+      "label": "Copilota Amministratore",
+      "primaryGoals": [
+        "ruoli e permessi",
+        "operatori",
+        "configurazione e struttura",
+        "audit e accessi negati"
+      ],
+      "commonWorkflows": [
+        "roles",
+        "operators",
+        "roster_contexts"
+      ],
+      "density": "technical",
+      "landing": "home",
+      "emphasis": "configuration",
+      "confirmationUx": "classic-screens",
+      "escalation": "Nessun dato clinico: le richieste cliniche vanno al personale sanitario.",
+      "terminology": {
+        "resident": "ospite",
+        "focus": "Configurazione e governo"
+      },
+      "assistantHint": "Amministratore tecnico: configurazione, ruoli, audit; nessun dato o azione clinica.",
+      "starterOrder": [
+        "admin.roster_contexts",
+        "facility.occupancy"
+      ],
+      "shortcuts": [
+        {
+          "id": "roles",
+          "kind": "classic",
+          "label": "Controlla configurazione ruoli",
+          "screen": "ruoli-permessi",
+          "requiresCapability": "authz.view_policy",
+          "phrases": [
+            "controlla configurazione ruoli",
+            "ruoli e permessi"
+          ]
+        },
+        {
+          "id": "operators",
+          "kind": "classic",
+          "label": "Gestione operatori",
+          "screen": "gestione-operatori",
+          "requiresCapability": "operators.list",
+          "phrases": [
+            "gestione operatori"
+          ]
+        },
+        {
+          "id": "roster_contexts",
+          "kind": "skill",
+          "label": "Ordinamenti dei reparti",
+          "skillId": "admin.roster_contexts",
+          "phrases": [
+            "ordinamenti dei reparti"
+          ]
+        }
+      ],
+      "signals": {
+        "preferredEventTypes": [
+          "access.denied_summary",
+          "policy.applied",
+          "note.received",
+          "workflow.pending"
+        ],
+        "defaultTab": "da-vedere",
+        "maxVisible": 10
+      },
+      "briefing": {
+        "focus": "Solo fatti tecnici e amministrativi.",
+        "maxFacts": 10
+      },
+      "sections": [
+        "shortcuts",
+        "signals",
+        "starters",
+        "recent"
+      ],
+      "startersFromProfileOnly": true
+    },
+    "default": {
+      "label": "Assistente",
+      "primaryGoals": [
+        "azioni consentite dal ruolo"
+      ],
+      "commonWorkflows": [],
+      "density": "operational",
+      "landing": "home",
+      "emphasis": "balanced",
+      "confirmationUx": "preview-and-confirm",
+      "escalation": "Le azioni sensibili richiedono sempre anteprima e conferma.",
+      "terminology": {
+        "resident": "ospite",
+        "focus": "Cosa vuoi fare"
+      },
+      "assistantHint": "",
+      "starterOrder": [],
+      "shortcuts": [
+        {
+          "id": "start_shift",
+          "kind": "start_shift",
+          "label": "Inizia il turno",
+          "phrases": [
+            "inizia il turno",
+            "cosa devo sapere del turno"
+          ]
+        }
+      ],
+      "signals": {
+        "preferredEventTypes": [],
+        "defaultTab": "da-vedere",
+        "maxVisible": 10
+      },
+      "briefing": {
+        "focus": "",
+        "maxFacts": 30
+      },
+      "sections": [
+        "shortcuts",
+        "continue",
+        "signals",
+        "starters",
+        "recent"
+      ]
+    }
+  }
+}

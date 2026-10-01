@@ -39,6 +39,27 @@ class SkillRouteTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(SKILL_ROUTE_MARKER.startswith("SKILL_ROUTE"))
 
 
+class RoleHintTests(unittest.IsolatedAsyncioTestCase):
+    async def _prompt(self, hint):
+        from unittest import mock
+        from clinicos_ai.agents import skill_router
+        seen = {}
+
+        async def fake(_built, prompt, _stage, _cid):
+            seen["p"] = prompt
+            return '{"skillId": null}'
+
+        with mock.patch.object(skill_router, "_run_with_provider_log", fake):
+            await run_skill_route(ModelRegistry(), "ciao", SKILLS, None, "2026-10-01", ["pa"], role_hint=hint)
+        return seen["p"]
+
+    async def test_role_hint_is_one_short_optional_line(self):
+        with_hint = await self._prompt("Infermiere: terapia e consegne")
+        self.assertIn("PROFILO DEL RUOLO (solo tono e priorità): Infermiere: terapia e consegne", with_hint)
+        self.assertNotIn("PROFILO DEL RUOLO", await self._prompt(""))
+        self.assertNotIn("x" * 201, await self._prompt("x" * 500))
+
+
 class SkillRouteEndpointTests(unittest.IsolatedAsyncioTestCase):
     async def test_endpoint_requires_service_token_and_answers(self):
         os.environ["AI_RUNTIME_SERVICE_TOKEN"] = "test-token"

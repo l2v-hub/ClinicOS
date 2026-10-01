@@ -42,6 +42,7 @@ import {
 } from '../voice/stt.js';
 import { voiceVadConfig } from '../voice/vad-config.js';
 import { registerProactiveRoutes } from '../proactive/http.js';
+import { registerCopilotRoutes } from '../copilot/http.js';
 import type { ProactiveDeps } from '../proactive/engine.js';
 
 const MAX_MESSAGE = 4000;
@@ -438,7 +439,15 @@ export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDe
   });
 
   // Phase 7: Attention Inbox, ack/seen, shift briefing (read-only; actions reuse existing skills).
-  registerProactiveRoutes(router, proactive ?? { listWorkflows: (id) => deps.store.listByOperator?.(id) ?? [] });
+  const proactiveDeps = proactive ?? { listWorkflows: (id: string) => deps.store.listByOperator?.(id) ?? [] };
+  registerProactiveRoutes(router, proactiveDeps);
+  // Phase 8: role copilot home + resident round (presentation over the same skills / policy / scope).
+  registerCopilotRoutes(router, {
+    registry: deps.registry,
+    identityOf,
+    listWorkflows: (id) => deps.store.listByOperator?.(id) ?? [],
+    proactive: proactiveDeps,
+  });
 
   return router;
 }

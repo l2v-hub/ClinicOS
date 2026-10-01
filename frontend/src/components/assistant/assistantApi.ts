@@ -302,3 +302,54 @@ export async function resumeWorkflow(workflowId: string): Promise<ConverseRespon
     reply: 'Anteprima riaperta: controlla i dati e premi «Conferma» solo se sono corretti.',
   };
 }
+
+// ── Phase 8: role copilot (home + resident round) ──────────────────────────────────────────────
+
+export interface CopilotShortcut {
+  id: string;
+  kind: 'skill' | 'resident_round' | 'start_shift' | 'briefing' | 'proactive_tab' | 'classic';
+  label: string;
+  phrases: string[];
+  skillId?: string;
+  starter?: string;
+  intro?: { skillId: string; label: string };
+  steps?: { skillId: string; label: string; needsResident: boolean }[];
+  tab?: 'da-vedere' | 'cambiato' | 'briefing';
+  screen?: string;
+}
+
+export interface CopilotHome {
+  role: { id: string; label: string; copilot: string };
+  profile: {
+    density: 'minimal' | 'operational' | 'clinical' | 'aggregated' | 'technical';
+    terminology: { resident: string; focus: string };
+    primaryGoals: string[];
+    escalation: string;
+    confirmationUx: string;
+    sections: Array<'shortcuts' | 'continue' | 'signals' | 'starters' | 'recent'>;
+    signals: { preferredEventTypes: string[]; defaultTab: 'da-vedere' | 'cambiato' | 'briefing'; maxVisible: number };
+    briefingFocus: string;
+  };
+  resident: AssistantResident | null;
+  starters: { skillId: string; label: string; reasons: string[] }[];
+  shortcuts: CopilotShortcut[];
+  continueWork: { workflowId: string; skillId: string; skillName: string; action: string | null; residentId: string | null; residentLabel: string | null; updatedAt: string }[];
+  recent: { skillId: string; skillName: string; at: string; residentLabel: string | null }[];
+}
+
+export function loadCopilotHome(residentId: string | null): Promise<CopilotHome> {
+  const query = residentId ? `?residentId=${encodeURIComponent(residentId)}` : '';
+  return request<CopilotHome>(`/skills/copilot/home${query}`);
+}
+
+export function loadRoundResidents(): Promise<{ residents: (AssistantResident & { room: string | null; bed: string | null })[]; hasMore: boolean }> {
+  return request('/skills/copilot/round');
+}
+
+/** Same matching for typed and dictated text: a shortcut phrase of the CURRENT role profile. */
+export function matchShortcut(text: string, shortcuts: CopilotShortcut[]): CopilotShortcut | null {
+  const t = text.toLowerCase().replace(/[«»"'’.!?,]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!t) return null;
+  for (const s of shortcuts) for (const p of s.phrases) if (t === p || t === `${p} per favore`) return s;
+  return null;
+}
