@@ -72,6 +72,11 @@ function unreadWhere(actor: Operator): Prisma.NotaWhereInput {
   };
 }
 
+/** Phase 7: the same unread-mailbox rule, reused by the proactive inbox (no second rule). */
+export function unreadNotesWhere(actor: Operator): Prisma.NotaWhereInput {
+  return unreadWhere(actor);
+}
+
 function visibleWhere(actor: Operator): Prisma.NotaWhereInput {
   return { OR: [{ autoreId: actor.id }, receivedWhere(actor)] };
 }

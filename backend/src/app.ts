@@ -32,7 +32,7 @@ import { effectiveCapabilities, roleDefinition } from './authz/decision.js';
 import { simulatorEnabled } from './authz/simulator.js';
 import { defaultToolRegistry } from './tools/index.js';
 import { createSkillRouter } from './skills/http.js';
-import { defaultSkillDeps } from './skills/index.js';
+import { defaultProactiveDeps, defaultSkillDeps } from './skills/index.js';
 import {
   operatorAuthMode,
   productionDemoAuthEnabled,
@@ -252,7 +252,7 @@ app.use('/ai/audit', aiAuditRouter);
 // same services as the GUI routes, behind requireOperator + authorization/audit hooks.
 app.use('/tools', createToolRouter(defaultToolRegistry));
 // Phase 3 Skill layer: natural language → skill → workflow → Tool Layer (see .ai-architecture/phase-3-skills).
-app.use('/skills', createSkillRouter(defaultSkillDeps));
+app.use('/skills', createSkillRouter(defaultSkillDeps, defaultProactiveDeps));
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
 

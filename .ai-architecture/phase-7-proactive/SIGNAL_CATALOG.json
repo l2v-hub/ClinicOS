@@ -1,0 +1,79 @@
+{
+  "schema": "clinicos.phase7.signal-catalog/v1",
+  "generatedBy": "scripts/proactive/export-catalog.mts",
+  "generatedAt": "2026-10-01T17:32:52.801Z",
+  "rule": "Signals are deterministic projections of events; an AI summary is never a signal and never a clinical alert.",
+  "signals": [
+    {
+      "type": "NEW_INFORMATION",
+      "meaning": "Nuovo fatto registrato da qualcun altro (parametri, diario, nota).",
+      "from_events": [
+        "vitals.recorded",
+        "diary.entry_created",
+        "note.received"
+      ],
+      "clinical_alert": false
+    },
+    {
+      "type": "PENDING_ACTIVITY",
+      "meaning": "Attività prevista a breve o in attesa di una tua conferma.",
+      "from_events": [
+        "administration.due",
+        "workflow.pending"
+      ],
+      "clinical_alert": false
+    },
+    {
+      "type": "OVERDUE_ACTIVITY",
+      "meaning": "Attività prevista con orario superato e non ancora registrata.",
+      "from_events": [
+        "administration.due"
+      ],
+      "clinical_alert": false
+    },
+    {
+      "type": "HANDOVER_ITEM",
+      "meaning": "Consegna aperta che ti riguarda (creata da te o assegnata a te, o di reparto se supervisore).",
+      "from_events": [
+        "handover.open"
+      ],
+      "clinical_alert": false
+    },
+    {
+      "type": "STATE_CHANGE",
+      "meaning": "Cambio di stato registrato (prescrizione, somministrazione, stanza, policy).",
+      "from_events": [
+        "therapy.prescribed",
+        "therapy.changed",
+        "administration.recorded",
+        "room.changed",
+        "policy.applied"
+      ],
+      "clinical_alert": false
+    },
+    {
+      "type": "FOLLOW_UP",
+      "meaning": "Fatto registrato che di solito richiede una verifica (es. somministrazione non erogata).",
+      "from_events": [
+        "administration.recorded"
+      ],
+      "clinical_alert": false
+    },
+    {
+      "type": "DOCUMENT_AVAILABLE",
+      "meaning": "Nuovo documento nella scheda di un ospite.",
+      "from_events": [
+        "document.added"
+      ],
+      "clinical_alert": false
+    },
+    {
+      "type": "ATTENTION_REQUIRED",
+      "meaning": "Soglia tecnica superata (es. accessi negati) — mai una deduzione clinica.",
+      "from_events": [
+        "access.denied_summary"
+      ],
+      "clinical_alert": false
+    }
+  ]
+}

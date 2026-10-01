@@ -41,6 +41,8 @@ import {
   voiceChannelEnabled,
 } from '../voice/stt.js';
 import { voiceVadConfig } from '../voice/vad-config.js';
+import { registerProactiveRoutes } from '../proactive/http.js';
+import type { ProactiveDeps } from '../proactive/engine.js';
 
 const MAX_MESSAGE = 4000;
 const ID = /^[A-Za-z0-9_-]{1,128}$/;
@@ -151,7 +153,7 @@ function parseConverse(body: unknown): ConverseRequest | string {
   };
 }
 
-export function createSkillRouter(deps: SkillEngineDeps): Router {
+export function createSkillRouter(deps: SkillEngineDeps, proactive?: ProactiveDeps): Router {
   // Phase 6: an unexpected async failure (DB/scope check) answers 503, never hangs or crashes.
   const router = guardAsyncRoutes(Router(), 'skills');
   router.use((_req, res, next) => {
@@ -434,6 +436,9 @@ export function createSkillRouter(deps: SkillEngineDeps): Router {
     }
     res.status(200).json({ workflow: state });
   });
+
+  // Phase 7: Attention Inbox, ack/seen, shift briefing (read-only; actions reuse existing skills).
+  registerProactiveRoutes(router, proactive ?? { listWorkflows: (id) => deps.store.listByOperator?.(id) ?? [] });
 
   return router;
 }

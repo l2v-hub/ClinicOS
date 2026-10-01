@@ -1,0 +1,58 @@
+{
+ "SIM-NURSE-1": {
+  "p50ms": 34,
+  "p95ms": 270,
+  "events": 14,
+  "signals": 10,
+  "dedup": 1.4,
+  "typesAllowed": 11,
+  "typesFiltered": 2
+ },
+ "briefing": {
+  "ms": 7670,
+  "eventsProcessed": 14,
+  "signals": 10,
+  "llmCalls": 1,
+  "contextChars": 2232,
+  "latencyMs": 7665,
+  "aiLatencyMs": 7641,
+  "eventTypesFiltered": 2,
+  "composed": true
+ },
+ "SIM-SUPERVISOR-1": {
+  "p50ms": 25,
+  "p95ms": 34,
+  "events": 35,
+  "signals": 21,
+  "dedup": 1.67,
+  "typesAllowed": 13,
+  "typesFiltered": 0
+ },
+ "SIM-OSS-1": {
+  "p50ms": 10,
+  "p95ms": 17,
+  "events": 1,
+  "signals": 1,
+  "dedup": 1,
+  "typesAllowed": 6,
+  "typesFiltered": 7
+ },
+ "SIM-ADMIN": {
+  "p50ms": 5,
+  "p95ms": 6,
+  "events": 7,
+  "signals": 7,
+  "dedup": 1,
+  "typesAllowed": 4,
+  "typesFiltered": 9
+ },
+ "SIM-DOCTOR-1": {
+  "p50ms": 16,
+  "p95ms": 22,
+  "events": 7,
+  "signals": 6,
+  "dedup": 1.17,
+  "typesAllowed": 11,
+  "typesFiltered": 2
+ }
+}

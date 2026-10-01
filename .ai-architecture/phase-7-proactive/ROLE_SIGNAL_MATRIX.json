@@ -1,0 +1,156 @@
+{
+  "schema": "clinicos.phase7.role-signal-matrix/v1",
+  "generatedBy": "scripts/proactive/export-catalog.mts",
+  "generatedAt": "2026-10-01T17:32:52.801Z",
+  "version": "f2b159ec8050",
+  "policy": "baseline (version 0); live matrix = ACTIVE policy evaluated per request",
+  "configurable_by": [
+    "«Ruoli e permessi» (capability grants)",
+    "PROACTIVE_DISABLED_EVENTS",
+    "PROACTIVE_* time thresholds"
+  ],
+  "careFeedCapability": "diary.list",
+  "roles": {
+    "administrator": {
+      "allowed": [
+        "note.received",
+        "workflow.pending",
+        "policy.applied",
+        "access.denied_summary"
+      ],
+      "denied": {
+        "vitals.recorded": [
+          "parameters.list_readings",
+          "diary.list"
+        ],
+        "diary.entry_created": [
+          "diary.list"
+        ],
+        "handover.open": [
+          "consegne.list",
+          "diary.list"
+        ],
+        "therapy.prescribed": [
+          "administration.list_slots",
+          "diary.list"
+        ],
+        "therapy.changed": [
+          "administration.list_slots",
+          "diary.list"
+        ],
+        "administration.recorded": [
+          "administration.list_slots",
+          "diary.list"
+        ],
+        "administration.due": [
+          "administration.list_slots",
+          "diary.list"
+        ],
+        "document.added": [
+          "documents.list",
+          "diary.list"
+        ],
+        "room.changed": [
+          "diary.list"
+        ]
+      }
+    },
+    "supervisor": {
+      "allowed": [
+        "vitals.recorded",
+        "diary.entry_created",
+        "handover.open",
+        "therapy.prescribed",
+        "therapy.changed",
+        "administration.recorded",
+        "administration.due",
+        "document.added",
+        "room.changed",
+        "note.received",
+        "workflow.pending",
+        "policy.applied",
+        "access.denied_summary"
+      ],
+      "denied": {}
+    },
+    "doctor": {
+      "allowed": [
+        "vitals.recorded",
+        "diary.entry_created",
+        "handover.open",
+        "therapy.prescribed",
+        "therapy.changed",
+        "administration.recorded",
+        "administration.due",
+        "document.added",
+        "room.changed",
+        "note.received",
+        "workflow.pending"
+      ],
+      "denied": {
+        "policy.applied": [
+          "authz.view_policy"
+        ],
+        "access.denied_summary": [
+          "ai.audit.list"
+        ]
+      }
+    },
+    "nurse": {
+      "allowed": [
+        "vitals.recorded",
+        "diary.entry_created",
+        "handover.open",
+        "therapy.prescribed",
+        "therapy.changed",
+        "administration.recorded",
+        "administration.due",
+        "document.added",
+        "room.changed",
+        "note.received",
+        "workflow.pending"
+      ],
+      "denied": {
+        "policy.applied": [
+          "authz.view_policy"
+        ],
+        "access.denied_summary": [
+          "ai.audit.list"
+        ]
+      }
+    },
+    "oss": {
+      "allowed": [
+        "vitals.recorded",
+        "diary.entry_created",
+        "handover.open",
+        "room.changed",
+        "note.received",
+        "workflow.pending"
+      ],
+      "denied": {
+        "therapy.prescribed": [
+          "administration.list_slots"
+        ],
+        "therapy.changed": [
+          "administration.list_slots"
+        ],
+        "administration.recorded": [
+          "administration.list_slots"
+        ],
+        "administration.due": [
+          "administration.list_slots"
+        ],
+        "document.added": [
+          "documents.list"
+        ],
+        "policy.applied": [
+          "authz.view_policy"
+        ],
+        "access.denied_summary": [
+          "ai.audit.list"
+        ]
+      }
+    }
+  }
+}

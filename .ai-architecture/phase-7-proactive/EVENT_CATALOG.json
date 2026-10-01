@@ -1,0 +1,387 @@
+{
+  "schema": "clinicos.phase7.event-catalog/v1",
+  "generatedBy": "scripts/proactive/export-catalog.mts",
+  "generatedAt": "2026-10-01T17:32:52.801Z",
+  "total": 13,
+  "integrated": 13,
+  "events": [
+    {
+      "event_id": "vitals.recorded",
+      "domain": "parameters",
+      "source": "PatientParameterReading (immutable rows, createdAt)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "high",
+      "audience": "care",
+      "required_capabilities": [
+        "parameters.list_readings",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "oss",
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "residentScopeWhere(operator) inside the SQL query",
+      "potential_signals": [
+        "NEW_INFORMATION"
+      ],
+      "priority_source": "normale (no clinical scoring in this phase)",
+      "proposed_skill": "vitals.recent",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "diary.entry_created",
+      "domain": "diary",
+      "source": "PatientDiaryEntry (createdAt, authorType, priority set by the author)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "high",
+      "audience": "care",
+      "required_capabilities": [
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "oss",
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "residentScopeWhere(operator) inside the SQL query",
+      "potential_signals": [
+        "NEW_INFORMATION"
+      ],
+      "priority_source": "source field PatientDiaryEntry.priority (normale | importante→alta | urgente)",
+      "proposed_skill": "diary.recent",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "handover.open",
+      "domain": "consegne",
+      "source": "Consegna via consegne/read-service.loadConsegnaFeed (existing visibility rule)",
+      "timestamp": "creation time of the still-open item",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "medium",
+      "audience": "care",
+      "required_capabilities": [
+        "consegne.list",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "oss",
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "existing consegne feed rule (creator / assignee; facility for supervisors)",
+      "potential_signals": [
+        "HANDOVER_ITEM"
+      ],
+      "priority_source": "source field Consegna.priorita set by a human / handover.create rule (default normale)",
+      "proposed_skill": "handover.overview",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "therapy.prescribed",
+      "domain": "therapy",
+      "source": "PatientTherapy (createdAt)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "high",
+      "audience": "care",
+      "required_capabilities": [
+        "administration.list_slots",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "residentScopeWhere(operator) inside the SQL query",
+      "potential_signals": [
+        "STATE_CHANGE"
+      ],
+      "priority_source": "normale",
+      "proposed_skill": "patient.overview",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "therapy.changed",
+      "domain": "therapy",
+      "source": "PatientTherapy (updatedAt > createdAt, stato)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "high",
+      "audience": "care",
+      "required_capabilities": [
+        "administration.list_slots",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "residentScopeWhere(operator) inside the SQL query",
+      "potential_signals": [
+        "STATE_CHANGE"
+      ],
+      "priority_source": "normale",
+      "proposed_skill": "patient.overview",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "administration.recorded",
+      "domain": "administration",
+      "source": "MedicationAdministration (confirmedAt, stato erogata | non_erogata)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "high",
+      "audience": "care",
+      "required_capabilities": [
+        "administration.list_slots",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "residentScopeWhere(operator) inside the SQL query",
+      "potential_signals": [
+        "STATE_CHANGE",
+        "FOLLOW_UP"
+      ],
+      "priority_source": "rule: non_erogata → FOLLOW_UP (normale); erogata → STATE_CHANGE (normale)",
+      "proposed_skill": "therapy.due_administrations",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "administration.due",
+      "domain": "administration",
+      "source": "therapies/therapy-slots.buildTherapySlots(today) — pending slots",
+      "timestamp": "slot time (facility time)",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "high",
+      "audience": "care",
+      "required_capabilities": [
+        "administration.list_slots",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "therapySlotPatientAccess (same as GET /therapy-slots)",
+      "potential_signals": [
+        "PENDING_ACTIVITY",
+        "OVERDUE_ACTIVITY"
+      ],
+      "priority_source": "time rule (config PROACTIVE_OVERDUE_GRACE_MIN, default 30): pending past slot time → OVERDUE_ACTIVITY alta; within PROACTIVE_DUE_AHEAD_MIN (60) → PENDING_ACTIVITY normale",
+      "proposed_skill": "therapy.due_administrations",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "document.added",
+      "domain": "documents",
+      "source": "PatientDocument (createdAt)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "medium",
+      "audience": "care",
+      "required_capabilities": [
+        "documents.list",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "residentScopeWhere(operator) inside the SQL query",
+      "potential_signals": [
+        "DOCUMENT_AVAILABLE"
+      ],
+      "priority_source": "normale",
+      "proposed_skill": "patient.overview",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "room.changed",
+      "domain": "rooms",
+      "source": "PatientRoomAssignment (createdAt)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "Patient id (Resident Access Scope applied in the query)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "low",
+      "audience": "care",
+      "required_capabilities": [
+        "room_assignments.list",
+        "diary.list"
+      ],
+      "eligible_roles_baseline": [
+        "oss",
+        "nurse",
+        "doctor",
+        "supervisor"
+      ],
+      "scope_requirements": "residentScopeWhere(operator) inside the SQL query",
+      "potential_signals": [
+        "STATE_CHANGE"
+      ],
+      "priority_source": "normale",
+      "proposed_skill": "patient.overview",
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "note.received",
+      "domain": "notes",
+      "source": "Nota unread for this mailbox (routes/note.ts unreadNotesWhere)",
+      "timestamp": "creation time of the still-open item",
+      "resident_reference": "optional (disclosed only if in the reader scope)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "medium",
+      "audience": "personal",
+      "required_capabilities": [
+        "notes.list"
+      ],
+      "eligible_roles_baseline": [
+        "oss",
+        "nurse",
+        "doctor",
+        "supervisor",
+        "administrator"
+      ],
+      "scope_requirements": "existing notes mailbox rule; resident shown only if in scope",
+      "potential_signals": [
+        "NEW_INFORMATION"
+      ],
+      "priority_source": "source field Nota.priorita set by the author",
+      "proposed_skill": null,
+      "classic_screen": "note",
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "workflow.pending",
+      "domain": "assistant",
+      "source": "Skills workflow store: own workflows in NEEDS_CONFIRMATION",
+      "timestamp": "creation time of the still-open item",
+      "resident_reference": "optional (disclosed only if in the reader scope)",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "medium",
+      "audience": "personal",
+      "required_capabilities": [],
+      "eligible_roles_baseline": [
+        "oss",
+        "nurse",
+        "doctor",
+        "supervisor",
+        "administrator"
+      ],
+      "scope_requirements": "none (no resident data)",
+      "potential_signals": [
+        "PENDING_ACTIVITY"
+      ],
+      "priority_source": "normale",
+      "proposed_skill": null,
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "policy.applied",
+      "domain": "authz",
+      "source": "AuthzPolicyVersion (appliedAt)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "none",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "low",
+      "audience": "technical",
+      "required_capabilities": [
+        "authz.view_policy"
+      ],
+      "eligible_roles_baseline": [
+        "supervisor",
+        "administrator"
+      ],
+      "scope_requirements": "none (no resident data)",
+      "potential_signals": [
+        "STATE_CHANGE"
+      ],
+      "priority_source": "normale",
+      "proposed_skill": null,
+      "classic_screen": "ruoli-permessi",
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    },
+    {
+      "event_id": "access.denied_summary",
+      "domain": "audit",
+      "source": "AiAuditEvent outcome=denied, aggregated by action (no resident data)",
+      "timestamp": "createdAt / confirmedAt / appliedAt of the source row",
+      "resident_reference": "none",
+      "actor_origin": "author operator id/name from the source row, or «Sistema» / «Piano terapeutico»",
+      "structured_payload": "ids, enums, counts, short labels — never free clinical text (except an author title shown as data, never sent to the LLM)",
+      "sensitivity": "low",
+      "audience": "technical",
+      "required_capabilities": [
+        "ai.audit.list"
+      ],
+      "eligible_roles_baseline": [
+        "supervisor",
+        "administrator"
+      ],
+      "scope_requirements": "none (no resident data)",
+      "potential_signals": [
+        "ATTENTION_REQUIRED"
+      ],
+      "priority_source": "threshold rule PROACTIVE_DENIED_THRESHOLD (default 10 per window) → alta; below → normale",
+      "proposed_skill": null,
+      "classic_screen": null,
+      "implementation_status": "integrated",
+      "test_evidence": "backend/src/proactive/__tests__/proactive-e2e.test.ts; scripts/proactive/proactive-browser-e2e.mjs"
+    }
+  ]
+}
