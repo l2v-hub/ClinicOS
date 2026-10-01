@@ -71,13 +71,19 @@ def sanitize_route(raw: dict[str, Any] | None, allowed: set[str]) -> dict[str, A
 async def run_skill_route(registry: ModelRegistry, message: str, skills: list[dict], pending: dict | None,
                           today: str, value_keys: list[str],
                           correlation_id: str | None = None,
-                          forbidden: list[dict] | None = None) -> dict[str, Any]:
+                          forbidden: list[dict] | None = None,
+                          role_hint: str = "") -> dict[str, Any]:
     built = registry.build("agent")
     forbidden = forbidden or []
     allowed = {s.get("id") for s in [*skills, *forbidden]
                if isinstance(s, dict) and isinstance(s.get("id"), str)}
+    # Phase 8: role profile wording (tone / priorities). The SKILL list below is the only source of
+    # what the user may do; the hint never adds permissions.
+    hint = " ".join(str(role_hint or "").split())[:200]
+    role_line = f"PROFILO DEL RUOLO (solo tono e priorità): {hint}\n" if hint else ""
     prompt = (
         f"{_SYSTEM}\n\n{UNTRUSTED_RULE}\n\nOGGI: {today}\nVALUE_KEYS: {json.dumps(value_keys)}\n"
+        f"{role_line}"
         f"SKILL DISPONIBILI:\n{json.dumps(skills, ensure_ascii=False)}\n"
         f"SKILL NON CONSENTITE (solo per riconoscerle, id e nome):\n"
         f"{json.dumps(forbidden, ensure_ascii=False)}\n"

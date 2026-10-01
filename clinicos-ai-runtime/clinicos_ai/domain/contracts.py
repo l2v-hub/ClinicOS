@@ -135,6 +135,8 @@ class SkillRouteRequest(BaseModel):
     # id + name of the skills the user may NOT use (recognised → the backend answers DENIED)
     forbiddenSkills: list[dict[str, Any]] = Field(default_factory=list)
     valueKeys: list[str] = Field(default_factory=list)
+    # Phase 8: one short line from the role profile (tone/priorities only, never permissions)
+    roleHint: str = Field(default="", max_length=200)
 
 
 class SkillRouteResponse(BaseModel):

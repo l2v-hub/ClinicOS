@@ -1,0 +1,16 @@
+runtime compose OK {"answerText": "Pressione arteriosa: 120/80 (recordId: r1). Il record non riporta una data, quindi no
+runtime plan OK {"plan": {"intent": "therapies", "scope": "cross_patient", "tools": [], "requiresCrossPatientAccess": tr
+runtime briefing OK {"answerText": "Galli Nora: nuova rilevazione di parametri (vitals:p1:2026-10-01).", "citedSources":
+backend extraction OK {"farmaci":["Furosemide","Ramipril"]}
+profile oss briefing OK {"answerText": "Galli Nora: nuove rilevazioni di parametri vitali (vitals:p1:2026-10-01)."
+profile oss skill-route OK {"route": {"skillId": "vitals.recent", "patientQuery": "Galli"}, "model": "azure:gpt-6.1-s
+profile nurse briefing OK {"answerText": "Galli Nora: nuove rilevazioni di parametri vitali (vitals:p1:2026-10-01)."
+profile nurse skill-route OK {"route": {"skillId": "vitals.recent", "patientQuery": "Galli"}, "model": "azure:gpt-6.1-s
+profile doctor briefing OK {"answerText": "Galli Nora: nuove rilevazioni di parametri vitali (vitals:p1:2026-10-01)."
+profile doctor skill-route OK {"route": {"skillId": "vitals.recent", "patientQuery": "Galli"}, "model": "azure:gpt-6.1-s
+profile supervisor briefing OK {"answerText": "Galli Nora: sono presenti nuove rilevazioni di parametri vitali (vitals:p
+profile supervisor skill-route OK {"route": {"skillId": "vitals.recent", "patientQuery": "Galli"}, "model": "azure:gpt-6
+profile administrator briefing OK {"answerText": "Galli Nora: nuove rilevazioni di parametri vitali (vitals:p1:2026-10-0
+profile administrator skill-route OK {"route": {"skillId": "vitals.recent", "patientQuery": "Galli"}, "model": "azure:gp
+profile default briefing OK {"answerText": "Galli Nora: nuove rilevazioni di parametri vitali (vitals:p1:2026-10-01)."
+profile default skill-route OK {"route": {"skillId": "vitals.recent", "patientQuery": "Galli"}, "model": "azure:gpt-6.1-

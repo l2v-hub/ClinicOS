@@ -1,0 +1,243 @@
+{
+  "schema": "clinicos.phase8.role-workflow-catalog/v1",
+  "generatedBy": "scripts/copilot/export-profiles.mts",
+  "generatedAt": "2026-10-01T19:24:27.754Z",
+  "policy": "baseline (live = ACTIVE policy per request)",
+  "composites": {
+    "start_shift": [
+      "load role profile",
+      "load scoped signals (Phase 7 inbox)",
+      "open the shift briefing (facts + optional AI)",
+      "pending activities + handovers as signals",
+      "suggest first actions (ranked starters)"
+    ],
+    "resident_round": [
+      "list residents in scope (patients.list_page)",
+      "select resident (POST /skills/context, scope check)",
+      "role steps = existing skill starters (normal converse)",
+      "writes: preview + «Conferma»",
+      "next / close → resident context changes (pending sensitive workflow cancelled)"
+    ]
+  },
+  "roles": {
+    "oss": [
+      {
+        "id": "start_shift",
+        "kind": "start_shift",
+        "label": "Inizia il turno",
+        "voiceAndTextPhrases": [
+          "inizia il turno",
+          "iniziamo il turno",
+          "cosa devo sapere del turno",
+          "cosa devo fare adesso"
+        ],
+        "reusesSkills": [],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "round_vitals",
+        "kind": "resident_round",
+        "label": "Inizia giro parametri",
+        "voiceAndTextPhrases": [
+          "iniziamo il giro",
+          "inizia il giro",
+          "giro parametri",
+          "inizia giro parametri"
+        ],
+        "reusesSkills": [
+          "vitals.record",
+          "diary.add_observation",
+          "vitals.recent"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "handovers",
+        "kind": "skill",
+        "label": "Le consegne",
+        "voiceAndTextPhrases": [
+          "le consegne",
+          "mostrami le consegne"
+        ],
+        "reusesSkills": [
+          "handover.overview"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      }
+    ],
+    "nurse": [
+      {
+        "id": "start_shift",
+        "kind": "start_shift",
+        "label": "Inizia il turno",
+        "voiceAndTextPhrases": [
+          "inizia il turno",
+          "iniziamo il turno",
+          "cosa devo sapere del turno"
+        ],
+        "reusesSkills": [],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "round_therapy",
+        "kind": "resident_round",
+        "label": "Inizia giro terapia",
+        "voiceAndTextPhrases": [
+          "iniziamo il giro",
+          "inizia giro terapia",
+          "giro terapia"
+        ],
+        "reusesSkills": [
+          "therapy.due_administrations",
+          "administration.record",
+          "vitals.record",
+          "diary.add_observation"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "due_today",
+        "kind": "skill",
+        "label": "Somministrazioni di oggi",
+        "voiceAndTextPhrases": [
+          "somministrazioni di oggi"
+        ],
+        "reusesSkills": [
+          "therapy.due_administrations"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      }
+    ],
+    "doctor": [
+      {
+        "id": "prepare_visit",
+        "kind": "resident_round",
+        "label": "Prepara visita",
+        "voiceAndTextPhrases": [
+          "prepara visita",
+          "prepara la visita",
+          "fammi il quadro"
+        ],
+        "reusesSkills": [
+          "patient.overview",
+          "vitals.recent",
+          "diary.recent",
+          "therapy.prescribe"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "changes",
+        "kind": "proactive_tab",
+        "label": "Cosa è cambiato",
+        "voiceAndTextPhrases": [
+          "cosa è cambiato",
+          "cosa e cambiato",
+          "novità"
+        ],
+        "reusesSkills": [],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "appointments",
+        "kind": "skill",
+        "label": "Appuntamenti di oggi",
+        "voiceAndTextPhrases": [
+          "appuntamenti di oggi"
+        ],
+        "reusesSkills": [
+          "appointments.day"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      }
+    ],
+    "supervisor": [
+      {
+        "id": "facility_briefing",
+        "kind": "briefing",
+        "label": "Briefing struttura",
+        "voiceAndTextPhrases": [
+          "briefing struttura",
+          "cosa devo sapere del turno",
+          "stato del turno"
+        ],
+        "reusesSkills": [],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "handovers",
+        "kind": "skill",
+        "label": "Consegne aperte",
+        "voiceAndTextPhrases": [
+          "consegne aperte"
+        ],
+        "reusesSkills": [
+          "handover.overview"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "occupancy",
+        "kind": "skill",
+        "label": "Posti letto",
+        "voiceAndTextPhrases": [
+          "posti letto"
+        ],
+        "reusesSkills": [
+          "facility.occupancy"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      }
+    ],
+    "administrator": [
+      {
+        "id": "roles",
+        "kind": "classic",
+        "label": "Controlla configurazione ruoli",
+        "voiceAndTextPhrases": [
+          "controlla configurazione ruoli",
+          "ruoli e permessi"
+        ],
+        "reusesSkills": [],
+        "screen": "ruoli-permessi",
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "operators",
+        "kind": "classic",
+        "label": "Gestione operatori",
+        "voiceAndTextPhrases": [
+          "gestione operatori"
+        ],
+        "reusesSkills": [],
+        "screen": "gestione-operatori",
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      },
+      {
+        "id": "roster_contexts",
+        "kind": "skill",
+        "label": "Ordinamenti dei reparti",
+        "voiceAndTextPhrases": [
+          "ordinamenti dei reparti"
+        ],
+        "reusesSkills": [
+          "admin.roster_contexts"
+        ],
+        "screen": null,
+        "confirmation": "every write step = existing skill preview + «Conferma» (never bypassed)"
+      }
+    ]
+  }
+}

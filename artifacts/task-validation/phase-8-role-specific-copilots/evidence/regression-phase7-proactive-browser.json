@@ -1,0 +1,176 @@
+{
+  "at": "2026-10-01T19:41:33.670Z",
+  "passed": 29,
+  "failed": 0,
+  "results": [
+    {
+      "name": "fixtures present",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "badge with the count of signals to see",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A nurse sees her residents",
+      "pass": true,
+      "detail": "Per te\n\nAggiorna\nDa vedere\n10\nCosa è cambiato\n10\nBriefing turno\nSomministrazioni non ancora registrate — fascia sera (20:00): 2 per 2 ospiti\nPriorità alta\nNuovo\n\noggi 20:30\nOrigine: Piano terapeutico\n2 eventi\n\nFerri Marta, Conti Nino\n\nPerché lo vedi: Ospite nel tuo ambito · permesso administration.l"
+    },
+    {
+      "name": "B out-of-scope resident never shown",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H new prescription shown (authorized)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I handover shown with source priority",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "signal shows when, origin and why",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "L injected title is shown as data only",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "K acknowledged signal leaves «Da vedere»",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "K source fact unchanged",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "K ack audited with identity, role and resident",
+      "pass": true,
+      "detail": "{\"id\":\"cmupxwfoy001faklp8ge4lcv7\",\"requestId\":\"proactive-ack-01e847ad-3713-4008-a15d-2bb1692d9fb8\",\"operatorId\":\"SIM-NURSE-1\",\"operatorRole\":\"nurse\",\"patientId\":\"cmupxujoe0007oklp97pohxll\",\"actionType\":\"proactive:ack\",\"kind\":\"read\",\"channel\":\"ai_assistant\",\"fields\":[\"ack:vitals:cmupxujoe0007oklp97po"
+    },
+    {
+      "name": "D after «Segna tutto come visto» nothing changed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D the new fact appears in «Cosa è cambiato»",
+      "pass": true,
+      "detail": "3 nuove rilevazioni di parametri\nNuovo\n\nGalli Nora\noggi 21:41\nOrigine: Collega (demo)\n3 eventi\n\nfr, fc, pa, spo2\n\nPerché lo vedi: Ospite nel tuo ambito · permesso parameters.list_readings\n\nApri nell’A"
+    },
+    {
+      "name": "G signal opened the existing vitals skill for that resident",
+      "pass": true,
+      "detail": "Mostrami gli ultimi parametri di questo ospite\n\nCOMPLETATO\n\nUltime rilevazioni di Galli Nora:\n• 01/10, 21:41 — Pressione 121/77\n• 01/10, 19:41 — Frequenza respiratoria 18\n• 01/10, 19:40 — Frequenza cardiaca 88\n• 01/10, 19:40 — Pressione 132/84, SpO₂ 96"
+    },
+    {
+      "name": "G no confirmation requested, no write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "G action opening audited",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "pending preview is a signal",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "reopened preview still requires «Conferma» (zero writes so far)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "after the human click exactly one write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C briefing states the period",
+      "pass": true,
+      "detail": "Periodo: dal turno «pomeriggio» (oggi 14:00) a ora\n\nSintesi AI — verifica sui fatti qui sotto\n\nPiù ospiti/struttura: 2 somministrazioni previste o non ancora registrate alle 20:30, con priorità alta ("
+    },
+    {
+      "name": "C briefing separates AI synthesis from facts",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C facts grouped by resident, only accessible ones",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C summary does not leak the injected instruction as an instruction",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C briefing audited with AI metadata",
+      "pass": true,
+      "detail": "[\"signals:10\",\"composed:true\",\"llm_calls:1\",\"context_chars:2112\",\"ai_skipped:no\",\"from:2026-10-01T12:00:00.000Z\",\"signal:adm-due:2026-10-01:sera:overdue\",\"signal:adm-due:2026-10-01:mattina:overdue\",\"signal:diary:cmupxujoc0006oklpcl9bgja4:2026-10-01\",\"signal:handover:cmupxv19500049olps9uoj0yt\",\"signa"
+    },
+    {
+      "name": "A OSS sees only own residents",
+      "pass": true,
+      "detail": "Per te\n\nAggiorna\nDa vedere\n2\nCosa è cambiato\n2\nBriefing turno\nNuova nota da Medico 1\nNuovo\n\noggi 21:40\nOrigine: Medico 1\n\nPerché lo vedi: Nota indirizzata a te o a tutti, non ancora letta\n\nApri la schermata\nPreso visione\nNuova rilevazione di parametri\nNuovo\n\nVerdi Olga\noggi 21:40\nOrigine: Collega (d"
+    },
+    {
+      "name": "A OSS gets no prescription / administration signals",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E supervisor aggregates the facility (scope «all»)",
+      "pass": true,
+      "detail": "Per te\n\nAggiorna\nDa vedere\n14\nCosa è cambiato\n14\nBriefing turno\nSomministrazioni non ancora registrate — fascia sera (20:00): 2 per 2 ospiti\nPriorità alta\nNuovo\n\noggi 20:30\nOrigine: Piano terapeutico\n2 eventi\n\nFerri Marta, Conti Nino\n\nPerché lo vedi: Ospite nel tuo ambito · permesso administration.l"
+    },
+    {
+      "name": "F administrator: no resident / clinical feed",
+      "pass": true,
+      "detail": "Per te\n\nAggiorna\nDa vedere\n2\nCosa è cambiato\n2\nBriefing turno\n2 operazioni negate dalla policy\nNuovo\n\noggi 21:41\nOrigine: Audit\n\npatients.clinical_summary×2\n\nPerché lo vedi: Segnale tecnico del tuo ruolo (ai.audit.list)\n\nPreso visione\nNuova nota da Medico 1\nNuovo\n\noggi 21:40\nOrigine: Medico 1\n\nPerch"
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "timings": {
+    "inboxVisibleMs": 432,
+    "briefingMs": 8114,
+    "briefingComposed": true,
+    "briefingFields": [
+      "signals:10",
+      "composed:true",
+      "llm_calls:1",
+      "context_chars:2112",
+      "ai_skipped:no",
+      "from:2026-10-01T12:00:00.000Z",
+      "signal:adm-due:2026-10-01:sera:overdue",
+      "signal:adm-due:2026-10-01:mattina:overdue",
+      "signal:diary:cmupxujoc0006oklpcl9bgja4:2026-10-01",
+      "signal:handover:cmupxv19500049olps9uoj0yt",
+      "signal:therapy-new:cmupxv18p00029olp5clqoygo",
+      "signal:therapy-new:cmupxushu0003dclpu19nipto",
+      "signal:therapy-new:cmupxujpm0009oklpp9dfj0ws",
+      "signal:vitals:cmupxujoc0006oklpcl9bgja4:2026-10-01",
+      "signal:vitals:cmupxujoe0007oklp97pohxll:2026-10-01",
+      "signal:note:cmupxv19e00059olp2nfn95nt"
+    ]
+  },
+  "consoleErrors": []
+}

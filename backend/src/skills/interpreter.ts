@@ -27,6 +27,8 @@ export interface InterpretInput {
   /** Workflow waiting for a slot: the message is read as the answer to that question. */
   pending: { skillId: string; slot: SkillSlot } | null;
   today: string;
+  /** Phase 8: one short line from the role profile (tone / priorities). Never capabilities. */
+  roleHint?: string;
 }
 
 export type Interpreter = (input: InterpretInput) => Promise<Interpretation>;
@@ -289,6 +291,7 @@ export function createAgnoInterpreter(
               name: skill.name,
             })),
             valueKeys: PARAMETER_KEYS.filter((key) => key !== 'note'),
+            ...(input.roleHint ? { roleHint: input.roleHint.slice(0, 200) } : {}),
           }),
           signal: AbortSignal.timeout(AGNO_TIMEOUT_MS),
         },

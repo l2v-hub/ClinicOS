@@ -11,6 +11,10 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import {
   converse,
+  loadCopilotHome,
+  matchShortcut,
+  type CopilotHome as CopilotHomeData,
+  type CopilotShortcut,
   openSignal as openSignalAction,
   reconcileWorkflow,
   resumeWorkflow,
@@ -35,6 +39,8 @@ import {
 } from './assistantState';
 import { VoiceMicButton, VoicePanel } from './voice/VoicePanel';
 import { ProactivePanel } from './ProactivePanel';
+import { CopilotHome } from './CopilotHome';
+import { RoundPanel } from './RoundPanel';
 import { useVoiceChannel } from './voice/useVoiceChannel';
 import type { AssistantTurnStatus } from './voice/audioSession';
 import './AssistantMode.css';
@@ -79,6 +85,11 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
   const [pickerQuery, setPickerQuery] = useState('');
   const [pickerResults, setPickerResults] = useState<AssistantResident[]>([]);
   const [pickerError, setPickerError] = useState<string | null>(null);
+  // Phase 8: role copilot home (server-built), active composite workflow, panel requests.
+  const [home, setHome] = useState<CopilotHomeData | null | undefined>(undefined);
+  const homeSeq = useRef(0);
+  const [round, setRound] = useState<CopilotShortcut | null>(null);
+  const [panelRequest, setPanelRequest] = useState<{ tab: 'da-vedere' | 'cambiato' | 'briefing'; n: number } | null>(null);
   const inFlight = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const mainEnd = useRef<HTMLDivElement>(null);
@@ -88,6 +99,19 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
   const voiceTurn = useRef<(status: AssistantTurnStatus | 'REQUEST_FAILED') => void>(() => {});
 
   const refreshSession = useCallback(async (resident: string | null) => {
+    // Phase 8: the role home is rebuilt with the session (policy / scope / resident changes apply).
+    // Out-of-order guard: only the LATEST home request may update the state.
+    const seq = ++homeSeq.current;
+    loadCopilotHome(resident)
+      .then((next) => {
+        if (seq !== homeSeq.current) return;
+        // A different role (policy change) ends any composite workflow of the previous role.
+        setHome((prev) => {
+          if (prev && prev.role.id !== next.role.id) setRound(null);
+          return next;
+        });
+      })
+      .catch(() => seq === homeSeq.current && setHome(null));
     try {
       dispatch({ type: 'session_loaded', session: await loadAssistantSession(resident) });
     } catch (error) {
@@ -185,6 +209,13 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
     const message = text.trim();
     if (!message || state.busy) return;
     setDraft('');
+    // Phase 8: typed and dictated text take the SAME path; an exact shortcut phrase of the current
+    // role profile starts that shortcut (which itself only uses existing skills).
+    const shortcut = !active && home ? matchShortcut(message, home.shortcuts) : null;
+    if (shortcut) {
+      runShortcut(shortcut, source);
+      return;
+    }
     void send(
       { message, ...(active && workflow?.workflowId ? { workflowId: workflow.workflowId } : {}) },
       message,
@@ -255,6 +286,45 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
    * inbox, audited); it only starts an existing skill through the normal path, reopens one of my
    * previews (still needing «Conferma»), or opens a classic screen. Nothing executes here.
    */
+  /** Phase 8 — role shortcuts: every kind ends in an existing skill, panel or classic screen. */
+  function runShortcut(s: CopilotShortcut, source: AssistantInputSource = 'starter') {
+    if (state.busy) return;
+    if (s.kind === 'skill' && s.starter) {
+      void send({ message: s.starter }, s.starter, residentId, source);
+    } else if (s.kind === 'resident_round') {
+      setRound(s);
+    } else if (s.kind === 'start_shift' || s.kind === 'briefing') {
+      setPanelRequest((r) => ({ tab: 'briefing', n: (r?.n ?? 0) + 1 }));
+    } else if (s.kind === 'proactive_tab' && s.tab) {
+      const tab = s.tab;
+      setPanelRequest((r) => ({ tab, n: (r?.n ?? 0) + 1 }));
+    } else if (s.kind === 'classic' && s.screen) {
+      onOpenClassic({ screen: s.screen, label: s.label });
+    }
+    // A dictated phrase that opened a panel (no server turn) must hand the mic back.
+    if (source === 'voice' && s.kind !== 'skill') voiceTurn.current('COMPLETED');
+  }
+
+  async function resumeOwnWorkflow(workflowId: string) {
+    if (state.busy) return;
+    const resumed = await resumeWorkflow(workflowId).catch(() => null);
+    if (!resumed) {
+      dispatch({ type: 'request_failed', message: 'Anteprima non più disponibile: ricomincia la richiesta.' });
+      void refreshSession(residentId);
+      return;
+    }
+    if (resumed.resident && resumed.resident.id !== residentId) {
+      try {
+        const { resident } = await selectResident(resumed.resident.id); // backend scope check
+        await changeResident(resident);
+      } catch {
+        dispatch({ type: 'request_failed', message: 'Ospite non più nel tuo ambito: anteprima non riaperta.' });
+        return;
+      }
+    }
+    dispatch({ type: 'response', response: resumed });
+  }
+
   async function openSignal(signal: ProactiveSignal) {
     if (state.busy) return;
     let action;
@@ -634,9 +704,48 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           </div>
         )}
 
-        {!active && session && <ProactivePanel busy={state.busy} onOpenSignal={(s) => void openSignal(s)} />}
+        {round && (
+          <RoundPanel
+            key={round.id}
+            shortcut={round}
+            busy={state.busy}
+            activeResidentId={residentId}
+            residentWord={home?.profile.terminology.resident ?? 'ospite'}
+            onSelect={async (r) => {
+              const { resident } = await selectResident(r.id); // backend scope check
+              await changeResident(resident);
+            }}
+            onStep={(label) => submitText(label, 'starter')}
+            onClose={() => {
+              setRound(null);
+              void changeResident(null);
+            }}
+          />
+        )}
 
-        {!active && session && (
+        {!active && session && home && (
+          <CopilotHome
+            home={home}
+            busy={state.busy}
+            onShortcut={(s) => runShortcut(s)}
+            onStarter={(label) => submitText(label, 'starter')}
+            onResume={(id) => void resumeOwnWorkflow(id)}
+          />
+        )}
+
+        {!active && session && home !== undefined && (!home || home.profile.sections.includes('signals')) && (
+          <ProactivePanel
+            key={home?.role.id ?? 'none'}
+            busy={state.busy}
+            onOpenSignal={(s) => void openSignal(s)}
+            initialTab={home?.profile.signals.defaultTab}
+            preferredEventTypes={home?.profile.signals.preferredEventTypes}
+            maxVisible={home?.profile.signals.maxVisible}
+            request={panelRequest}
+          />
+        )}
+
+        {!active && session && home === null && (
           <section className="am-starters" aria-label="Suggerimenti" data-testid="am-starters">
             {session.starters.map((s) => (
               <button

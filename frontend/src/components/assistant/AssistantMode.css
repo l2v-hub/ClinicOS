@@ -628,3 +628,50 @@
 .am-briefing__facts li {
   font-size: 15px;
 }
+
+/* ── Phase 8: role copilot home ─────────────────────────────────────────────────────────────── */
+.am-home__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.am-home__shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.am-home__continue,
+.am-home__recent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.am-home__recent-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+/* OSS (minimal density): fewer items, larger touch targets — via the design-system token. */
+.am-home--minimal {
+  --ds-control-h: 56px;
+}
+
+.am-home--minimal .am-shortcut {
+  font-size: 17px;
+}
+
+.am-home--minimal .am-starter {
+  min-height: 52px;
+  font-size: 16px;
+}
+
+.am-round {
+  border: 2px solid var(--blue);
+}
