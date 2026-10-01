@@ -700,6 +700,11 @@ export interface Briefing {
   };
 }
 
+export function briefingTimeoutMs(env: NodeJS.ProcessEnv = process.env): number {
+  const n = Number.parseInt(env.PROACTIVE_BRIEFING_TIMEOUT_MS ?? '', 10);
+  return Number.isFinite(n) && n >= 1000 && n <= 60_000 ? n : 25_000;
+}
+
 /** Fixed wording per event type for the LLM (never user-written text). */
 const AI_FACT: Record<string, string> = {
   'vitals.recorded': 'nuove rilevazioni di parametri vitali',
@@ -779,7 +784,10 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
   const runtime =
     deps.composeRuntime ??
     (cfg.composeEnabled && cfg.composeModel
-      ? (req: Parameters<typeof callComposeRuntime>[0]) => callComposeRuntime(req, cfg)
+      ? (req: Parameters<typeof callComposeRuntime>[0]) =>
+          // The briefing is requested explicitly and awaited with a loading state: it gets its own
+          // timeout (PROACTIVE_BRIEFING_TIMEOUT_MS, default 25 s) instead of the 8 s interactive one.
+          callComposeRuntime(req, { ...cfg, timeoutMs: briefingTimeoutMs(env) })
       : null);
   // Minimum necessary context: already-authorized signals as FIXED templates only — no free text
   // written by users (diary titles, note / handover bodies, drug names typed in a prescription)

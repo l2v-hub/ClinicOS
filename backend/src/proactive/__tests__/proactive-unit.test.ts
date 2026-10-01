@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { romeInstant, shiftWindow } from '../time.js';
-import { eligibility, projectSignals } from '../engine.js';
+import { briefingTimeoutMs, eligibility, projectSignals } from '../engine.js';
 import type { ProactiveEvent } from '../sources.js';
 import { EVENT_CATALOG } from '../catalog.js';
 
@@ -94,4 +94,11 @@ test('eligibility fails closed when the policy check throws', () => {
   } as never;
   const e = eligibility(authz, {});
   assert.equal(e.allowed.filter((t) => t !== 'workflow.pending').length, 0);
+});
+
+test('briefing AI timeout: own default (25 s), bounded override', () => {
+  assert.equal(briefingTimeoutMs({}), 25_000);
+  assert.equal(briefingTimeoutMs({ PROACTIVE_BRIEFING_TIMEOUT_MS: '40000' }), 40_000);
+  assert.equal(briefingTimeoutMs({ PROACTIVE_BRIEFING_TIMEOUT_MS: '999999' }), 25_000);
+  assert.equal(briefingTimeoutMs({ PROACTIVE_BRIEFING_TIMEOUT_MS: 'x' }), 25_000);
 });
