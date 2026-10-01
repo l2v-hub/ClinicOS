@@ -1,6 +1,7 @@
 // Phase 5 — microphone capture for ONE utterance (push-to-talk).
 //
-// getUserMedia → AudioContext → frame tap → local VAD (vad.ts) → 16 kHz WAV (wav.ts).
+// getUserMedia → [optional realtime transport connects on the same stream] → AudioContext → frame
+// tap → local VAD (vad.ts) → end of turn (16 kHz WAV for the server transport, commit for realtime).
 // The mic is opened only by an explicit user gesture and is released as soon as the utterance ends,
 // is discarded, is cancelled, the tab is hidden or the component unmounts. Frames are analysed in
 // memory; nothing is stored, nothing is sent until the VAD has a finished utterance.
@@ -11,13 +12,14 @@ import { createVad, type Vad, type VadConfig } from './vad';
 import { utteranceToWav } from './wav';
 
 export type CaptureEvent =
+  | { type: 'listening' }
   | { type: 'speech_start' }
   | { type: 'utterance'; wav: Uint8Array; speechMs: number; capped: boolean }
   | { type: 'discarded'; reason: 'no_speech' | 'too_short' }
   | { type: 'interrupted'; reason: string }
   | {
       type: 'error';
-      code: 'mic_denied' | 'mic_missing' | 'mic_unsupported' | 'mic_error';
+      code: 'mic_denied' | 'mic_missing' | 'mic_unsupported' | 'mic_error' | string;
       message: string;
     };
 
@@ -52,6 +54,8 @@ interface Capture {
 
 export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
   const capture = useRef<Capture | null>(null);
+  /** Mic stream between getUserMedia and «listening» (realtime connecting): cancel must stop it. */
+  const pendingStream = useRef<MediaStream | null>(null);
   // A start is pending while the permission prompt is open: cancel / unmount / a newer start must
   // stop the stream the browser hands back later (QA H1) — the mic never opens behind the UI.
   const gate = useRef(createVoiceStartGate());
@@ -65,6 +69,8 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
 
   const release = useCallback(() => {
     gate.current.cancel();
+    pendingStream.current?.getTracks().forEach((track) => track.stop());
+    pendingStream.current = null;
     const current = capture.current;
     capture.current = null;
     if (!current) return;
@@ -81,7 +87,11 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
   }, []);
 
   const start = useCallback(
-    async (config: VadConfig) => {
+    /**
+     * `beforeListen` runs with the open mic stream before the VAD starts (e.g. connect the realtime
+     * transport): «LISTENING» is announced only when audio actually goes somewhere useful.
+     */
+    async (config: VadConfig, beforeListen?: (stream: MediaStream) => Promise<void>) => {
       if (capture.current) return;
       const token = gate.current.begin();
       if (token === null) return; // a start is already pending
@@ -114,6 +124,32 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
         handler.current({ type: 'error', ...mapped });
         return;
       }
+      if (!gate.current.isCurrent(token)) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+      if (beforeListen) {
+        pendingStream.current = stream;
+        try {
+          await beforeListen(stream);
+          if (pendingStream.current === stream) pendingStream.current = null;
+        } catch (error) {
+          if (pendingStream.current === stream) pendingStream.current = null;
+          stream.getTracks().forEach((track) => track.stop());
+          if (!gate.current.complete(token)) return; // cancelled while connecting
+          const code =
+            error && typeof error === 'object' && 'code' in error
+              ? String(error.code)
+              : 'transport_error';
+          handler.current({
+            type: 'error',
+            code,
+            message:
+              error instanceof Error ? error.message : 'Trascrizione realtime non disponibile',
+          });
+          return;
+        }
+      }
       if (!gate.current.complete(token)) {
         stream.getTracks().forEach((track) => track.stop());
         return;
@@ -129,6 +165,7 @@ export function useVoiceCapture(onEvent: (event: CaptureEvent) => void) {
       const vad = createVad(context.sampleRate, config);
       capture.current = { stream, context, processor, vad };
       setActive(true);
+      handler.current({ type: 'listening' });
       let frames = 0;
       processor.onaudioprocess = (audio) => {
         if (capture.current?.processor !== processor) return;

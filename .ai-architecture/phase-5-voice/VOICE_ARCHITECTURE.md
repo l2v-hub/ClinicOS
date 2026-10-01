@@ -1,5 +1,35 @@
 # Phase 5 — Voice architecture
 
+## Primary path — Azure OpenAI `gpt-live-transcribe` (realtime, WebRTC)
+
+```
+tap «Parla» → REQUESTING_PERMISSION
+  → getUserMedia (mic stream)                                   voice/useVoiceCapture.ts (beforeListen)
+  → RTCPeerConnection(mic track) + data channel "oai-events" + SDP offer   voice/realtimeTransport.ts
+  → POST /skills/voice/realtime-call (SDP offer; identity, voice.plan, VOICE_CHANNEL_ENABLED, rate limit, audit voice:session)
+      → runtime POST /v1/voice/realtime-call (service token)
+      → Azure POST {AZURE_OPENAI_ENDPOINT}/openai/v1/realtime/client_secrets   (api-key; session fixed server-side)
+      → Azure POST {endpoint}/openai/v1/realtime/calls (SDP offer, Bearer <ephemeral>) — token used and dropped server-side
+      ← SDP answer only (no key, no token)
+  → setRemoteDescription(answer); media flows browser ↔ Azure over WebRTC
+  → LISTENING (local VAD armed on the same stream)
+  ◀ …input_audio_transcription.delta  → TRANSCRIPT_PARTIAL (display only)
+  local VAD end of turn / «Fine» → ▶ input_audio_buffer.commit → TRANSCRIBING (mic released)
+  ◀ …input_audio_transcription.completed → TRANSCRIPT_FINAL (editable; peer closed)
+  «Invia» → submitText(text,'voice') → /skills/converse {inputChannel:'voice'}
+  → Agno skill router → Skill → Policy + Resident Access Scope → preview → «Conferma» button
+  → Tool Layer → backend → verified result → audit
+```
+
+Silence / no speech → VAD discards → **no commit**, session closed, nothing transcribed.
+Server transport (`VOICE_STT_TRANSPORT=server`): the WAV utterance goes to the runtime, which streams
+it to the same deployment over the Realtime WebSocket (`azure_realtime.transcribe_ws`).
+The STT layer never authorizes, selects residents, plans skills or executes tools.
+
+---
+
+## Previous iteration (server transport, Gemini opt-in)
+
 Voice is a **channel** on top of the Phase 4 AI Assistant. It adds no business layer, no second
 interpreter, no new permission system: after the user has reviewed the transcript, voice enters the
 same `submitText(text, source)` the keyboard uses.

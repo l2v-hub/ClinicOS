@@ -194,7 +194,7 @@ async function speak(page, label, { inject } = {}) {
       const log = window.__voiceLog.map((e) => e.state);
       const listened = log.includes('LISTENING');
       const s = document.querySelector('[data-testid="am-voice"]')?.getAttribute('data-state');
-      return listened && ['TRANSCRIPT_READY', 'IDLE', 'ERROR', 'CANCELLED'].includes(s ?? 'IDLE');
+      return listened && ['TRANSCRIPT_FINAL', 'IDLE', 'ERROR', 'CANCELLED'].includes(s ?? 'IDLE');
     },
     null,
     { timeout: 45000 },
@@ -204,15 +204,15 @@ async function speak(page, label, { inject } = {}) {
   const entry = {
     label,
     captureEndToTranscriptMs:
-      at('TRANSCRIPT_READY') && at('TRANSCRIBING')
-        ? Math.round(at('TRANSCRIPT_READY') - at('TRANSCRIBING'))
+      at('TRANSCRIPT_FINAL') && at('TRANSCRIBING')
+        ? Math.round(at('TRANSCRIPT_FINAL') - at('TRANSCRIBING'))
         : null,
     states: log.map((e) => e.state).join('>'),
   };
   timings.push(entry);
   const state = await voiceState(page);
   const transcript =
-    state === 'TRANSCRIPT_READY' ? await page.getByTestId('am-voice-transcript').inputValue() : '';
+    state === 'TRANSCRIPT_FINAL' ? await page.getByTestId('am-voice-transcript').inputValue() : '';
   return { state, transcript, log: entry.states };
 }
 
@@ -289,8 +289,8 @@ try {
     check('A mic idle and evident before use', (await voiceState(page)) === 'IDLE');
     const heard = await speak(page, 'A read');
     check(
-      'A mic → LISTENING → SPEECH_ACTIVE → TRANSCRIBING → TRANSCRIPT_READY',
-      /LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_READY/.test(heard.log),
+      'A mic → LISTENING → SPEECH_ACTIVE → TRANSCRIBING → TRANSCRIPT_FINAL',
+      /LISTENING>SPEECH_ACTIVE>TRANSCRIBING>TRANSCRIPT_FINAL/.test(heard.log),
       heard.log,
     );
     check(
@@ -663,7 +663,7 @@ try {
     const heard = await speak(page, 'M4 no leading silence');
     check(
       'M4 speech starting at the tap is transcribed in full',
-      heard.state === 'TRANSCRIPT_READY' && /registra.*pressione.*120.*80/i.test(heard.transcript),
+      heard.state === 'TRANSCRIPT_FINAL' && /registra.*pressione.*120.*80/i.test(heard.transcript),
       `${heard.state} ${heard.transcript}`,
     );
     await browser.close();

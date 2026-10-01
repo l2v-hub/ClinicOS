@@ -1,5 +1,24 @@
 # Phase 5 — Transcript contract
 
+## Azure `gpt-live-transcribe`: partial vs final
+
+- **Partial** = `conversation.item.input_audio_transcription.delta`: appended to `audio.partial`,
+  shown as «Testo provvisorio (non viene inviato)». Never editable, never submittable, never sent
+  to `/skills/converse` (browser test C: 0 Assistant requests and no send button during partials).
+- **Final** = `…completed.transcript` after the local-VAD `input_audio_buffer.commit`: shown in the
+  editable box; only «Invia» sends it (`inputChannel:'voice'`).
+- `…failed` / `error` → ERROR (or empty when the provider reports an empty buffer).
+- `gpt-live-transcribe` returns no confidence, timestamps or speaker labels: `confidence: null`,
+  `timestamps: []` (not invented).
+- Context: `languages:["it"]`, a short dictation `prompt`, optional `keywords` (drugs, sigle,
+  reparti) — never clinical records. Numbers/doses are transcribed, then extracted and validated by
+  the Assistant/backend; the STT layer does no clinical conversion.
+Full contract: STT_PROVIDER_CONTRACT.md.
+
+---
+
+## Previous iteration (server transport, Gemini opt-in)
+
 ## STT abstraction
 
 ```ts

@@ -31,7 +31,7 @@ import {
 } from './assistantState';
 import { VoiceMicButton, VoicePanel } from './voice/VoicePanel';
 import { useVoiceChannel } from './voice/useVoiceChannel';
-import type { AssistantTurnStatus } from './voice/audioSession';
+import { capturing, type AssistantTurnStatus } from './voice/audioSession';
 import './AssistantMode.css';
 
 export type AssistantInputSource = 'keyboard' | 'starter' | 'voice';
@@ -265,7 +265,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         if (e.key === 'Escape' && !state.busy) {
           e.stopPropagation();
           // First Escape stops an open microphone / pending transcript; the next one closes.
-          if (['LISTENING', 'SPEECH_ACTIVE', 'TRANSCRIBING', 'TRANSCRIPT_READY'].includes(voice.audio.state)) {
+          if (capturing(voice.audio.state) || voice.audio.state === 'TRANSCRIPT_FINAL') {
             voice.cancel();
             return;
           }
@@ -366,8 +366,8 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
               {pickerQuery.trim().length >= 2 &&
                 visiblePickerResults.length === 0 &&
                 !pickerError && (
-                <li className="am-muted">Nessun ospite tra quelli a cui hai accesso.</li>
-              )}
+                  <li className="am-muted">Nessun ospite tra quelli a cui hai accesso.</li>
+                )}
             </ul>
           </div>
         )}
@@ -685,7 +685,11 @@ function AssistantEditForm({ editable, busy, onSubmit, onCancel }: EditFormProps
       {editable.priority !== undefined && (
         <label className="am-field">
           <span>Priorità</span>
-          <select className="am-input" value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <select
+            className="am-input"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          >
             <option value="normale">Normale</option>
             <option value="alta">Alta</option>
             <option value="urgente">Urgente</option>
@@ -696,7 +700,12 @@ function AssistantEditForm({ editable, busy, onSubmit, onCancel }: EditFormProps
         <button type="submit" className="ds-btn ds-btn--primary" disabled={busy}>
           Prepara nuova anteprima
         </button>
-        <button type="button" className="ds-btn ds-btn--secondary" disabled={busy} onClick={onCancel}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          disabled={busy}
+          onClick={onCancel}
+        >
           Annulla
         </button>
       </div>

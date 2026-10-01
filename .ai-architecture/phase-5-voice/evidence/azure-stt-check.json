@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-01T07:13:52.987Z",
+  "verdict": "BLOCKED",
+  "steps": [
+    {
+      "name": "health (endpoint/auth/deployment)",
+      "pass": null,
+      "detail": "deployment_missing: Deployment 'gpt-live-transcribe' assente nella risorsa Azure OpenAI: crealo (modello gpt-live-transcribe) o imposta AI_STT_DEPLOYMENT"
+    }
+  ],
+  "health": {
+    "provider": "azure_openai",
+    "endpointHost": "services.ai.azure.com",
+    "deployment": "gpt-live-transcribe",
+    "ok": false,
+    "code": "deployment_missing",
+    "message": "Deployment 'gpt-live-transcribe' assente nella risorsa Azure OpenAI: crealo (modello gpt-live-transcribe) o imposta AI_STT_DEPLOYMENT"
+  }
+}

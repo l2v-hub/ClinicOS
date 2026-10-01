@@ -27,3 +27,7 @@ confirm.
    heard 140/90, corrected to 135/85, preview 135/85).
 8. **Failure is never success.** DENIED / FAILED / transport errors map the voice state to ERROR;
    the verified result comes only from a `COMPLETED` backend answer.
+
+9. **Partial transcripts never act.** Realtime deltas are display-only; only a FINAL transcript,
+   sent by the user's «Invia», reaches the Assistant (unit + browser test C). The Azure STT has no
+   role in confirmation: it never sees previews, policy or the «Conferma» event.

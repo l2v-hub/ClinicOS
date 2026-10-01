@@ -1,0 +1,294 @@
+{
+  "at": "2026-10-01T07:19:34.917Z",
+  "mode": "mock",
+  "transport": "MOCK realtime transport (Azure not used)",
+  "passed": 34,
+  "failed": 0,
+  "results": [
+    {
+      "name": "A/B realtime session minted by the backend (ephemeral)",
+      "pass": true,
+      "detail": "1"
+    },
+    {
+      "name": "A/B browser receives only the SDP answer (no token, no key)",
+      "pass": true,
+      "detail": "{\"sdp\":\"v=0\\r\\no=mock 0 0 IN IP4 127.0.0.1\\r\\ns=mock\\r\\n\",\"model\":\"mock\",\"deployment\":\"mock\",\"expiresAt\":null,\"transport"
+    },
+    {
+      "name": "C PARTIAL transcript shown while speaking",
+      "pass": true,
+      "detail": "{\"partialText\":\"Testo provvisorio (non viene inviato): Dimmi tutto\",\"sendButtons\":0,\"converse\":0}"
+    },
+    {
+      "name": "C PARTIAL causes no action (no send button, no Assistant request)",
+      "pass": true,
+      "detail": "{\"partialText\":\"Testo provvisorio (non viene inviato): Dimmi tutto\",\"sendButtons\":0,\"converse\":0}"
+    },
+    {
+      "name": "B FINAL transcript after the local-VAD commit",
+      "pass": true,
+      "detail": "TRANSCRIPT_FINAL Dimmi tutto su questo ospite. REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "name": "C states: REQUESTING_PERMISSION → LISTENING → … → TRANSCRIBING → TRANSCRIPT_FINAL",
+      "pass": true,
+      "detail": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "name": "C nothing reaches the Assistant before «Invia»",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B one commit per turn",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D read skill COMPLETED via Agno",
+      "pass": true,
+      "detail": "COMPLETED patient.overview agno"
+    },
+    {
+      "name": "D inputChannel=voice",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D audit voice:session ok (no token)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E FINAL «pressione 120 su 80»",
+      "pass": true,
+      "detail": "Registra pressione 120 su 80 per questo ospite."
+    },
+    {
+      "name": "E preview 120/80, zero write",
+      "pass": true,
+      "detail": "{\"workflowId\":\"d19a11ef-dd74-4ddf-a983-8920478c69d9\",\"status\":\"NEEDS_CONFIRMATION\",\"skillId\":\"vitals.record\",\"reply\":\"Registrazione parametri vitali\\nOspite: Galli Nora\\nPressione: 120/80\\nOrario rile"
+    },
+    {
+      "name": "E spoken «conferma» does not confirm",
+      "pass": true,
+      "detail": "Conferma. NEEDS_CONFIRMATION"
+    },
+    {
+      "name": "E/L UI «Conferma» → COMPLETED, exactly one write",
+      "pass": true,
+      "detail": "COMPLETED 6"
+    },
+    {
+      "name": "E audit execute",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "F spoken numbers → preview values exactly as said (140/90)",
+      "pass": true,
+      "detail": "Registra pressione 140 su 90 per questo ospite. {\"Pressione\":\"140/90\",\"Orario rilevazione\":\"01/10, 09:17\"}"
+    },
+    {
+      "name": "F zero write",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "G NEEDS_CLARIFICATION with both Ferri, no preview, zero write",
+      "pass": true,
+      "detail": "NEEDS_CLARIFICATION Ferri Marco | Ferri Marta"
+    },
+    {
+      "name": "H prescription only proposed (HIGH_RISK), zero therapy",
+      "pass": true,
+      "detail": "{\"workflowId\":\"5024ef5a-3ddc-49db-8d67-8e778e5359e1\",\"status\":\"NEEDS_CONFIRMATION\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Nuova prescrizione (conferma del medico)\\nOspite: Neri Dario\\nFarmaco: PARACET"
+    },
+    {
+      "name": "H administration only prepared (HIGH_RISK), zero written",
+      "pass": true,
+      "detail": "{\"workflowId\":\"7c2ea963-816f-4169-95a6-0ea53a895394\",\"status\":\"NEEDS_CONFIRMATION\",\"skillId\":\"administration.record\",\"reply\":\"Registrazione somministrazione (conferma dell’operatore)\\nOspite: Ferri Ma"
+    },
+    {
+      "name": "I revocation before commit → DENIED, zero write",
+      "pass": true,
+      "detail": "DENIED"
+    },
+    {
+      "name": "J negotiation refused → ERROR, peer closed, no upload, no other STT used",
+      "pass": true,
+      "detail": "ERROR 0"
+    },
+    {
+      "name": "J text fallback works",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "K silence.wav: no command, zero write",
+      "pass": true,
+      "detail": "IDLE commits=0"
+    },
+    {
+      "name": "K silence.wav: turn never committed (local VAD)",
+      "pass": true,
+      "detail": "0"
+    },
+    {
+      "name": "K silence.wav: session closed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "K steady-noise.wav: no command, zero write",
+      "pass": true,
+      "detail": "IDLE commits=0"
+    },
+    {
+      "name": "K steady-noise.wav: turn never committed (local VAD)",
+      "pass": true,
+      "detail": "0"
+    },
+    {
+      "name": "K steady-noise.wav: session closed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "K noise-burst.wav: no command, zero write",
+      "pass": true,
+      "detail": "IDLE commits=1"
+    },
+    {
+      "name": "K noise-burst.wav: session closed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "N classic GUI sections render, no console errors",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "timings": [
+    {
+      "label": "D read",
+      "tapToListeningMs": 69,
+      "listeningToFirstPartialMs": 1782,
+      "commitToFinalMs": 564,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "D final→result",
+      "uiTurnMs": 3660
+    },
+    {
+      "label": "E write",
+      "tapToListeningMs": 59,
+      "listeningToFirstPartialMs": 1792,
+      "commitToFinalMs": 677,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "E final→preview",
+      "uiTurnMs": 2073
+    },
+    {
+      "label": "E spoken conferma",
+      "tapToListeningMs": 46,
+      "listeningToFirstPartialMs": 1787,
+      "commitToFinalMs": 444,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "E confirm→result",
+      "uiTurnMs": 263
+    },
+    {
+      "label": "F numbers",
+      "tapToListeningMs": 67,
+      "listeningToFirstPartialMs": 1798,
+      "commitToFinalMs": 689,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "F final→preview",
+      "uiTurnMs": 2234
+    },
+    {
+      "label": "G ambiguous",
+      "tapToListeningMs": 61,
+      "listeningToFirstPartialMs": 1783,
+      "commitToFinalMs": 641,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "G final→clarification",
+      "uiTurnMs": 2181
+    },
+    {
+      "label": "H prescribe",
+      "tapToListeningMs": 63,
+      "listeningToFirstPartialMs": 1780,
+      "commitToFinalMs": 1007,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "H final→prescription preview",
+      "uiTurnMs": 4622
+    },
+    {
+      "label": "H administration",
+      "tapToListeningMs": 58,
+      "listeningToFirstPartialMs": 1784,
+      "commitToFinalMs": 612,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "H final→administration",
+      "uiTurnMs": 2565
+    },
+    {
+      "label": "I voice",
+      "tapToListeningMs": 65,
+      "listeningToFirstPartialMs": 1785,
+      "commitToFinalMs": 680,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIPT_PARTIAL>TRANSCRIBING>TRANSCRIPT_FINAL"
+    },
+    {
+      "label": "J refused",
+      "tapToListeningMs": null,
+      "listeningToFirstPartialMs": null,
+      "commitToFinalMs": null,
+      "states": "REQUESTING_PERMISSION>ERROR"
+    },
+    {
+      "label": "K silence.wav",
+      "tapToListeningMs": 55,
+      "listeningToFirstPartialMs": null,
+      "commitToFinalMs": null,
+      "states": "REQUESTING_PERMISSION>LISTENING>IDLE"
+    },
+    {
+      "label": "K steady-noise.wav",
+      "tapToListeningMs": 56,
+      "listeningToFirstPartialMs": null,
+      "commitToFinalMs": null,
+      "states": "REQUESTING_PERMISSION>LISTENING>IDLE"
+    },
+    {
+      "label": "K noise-burst.wav",
+      "tapToListeningMs": 58,
+      "listeningToFirstPartialMs": null,
+      "commitToFinalMs": null,
+      "states": "REQUESTING_PERMISSION>LISTENING>SPEECH_ACTIVE>TRANSCRIBING>IDLE"
+    }
+  ],
+  "consoleErrors": []
+}

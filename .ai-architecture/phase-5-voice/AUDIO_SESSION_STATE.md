@@ -1,5 +1,26 @@
 # Phase 5 — Audio session state
 
+## Current state machine (Azure realtime)
+
+```
+IDLE → REQUESTING_PERMISSION (mic permission + realtime session/connection)
+     → LISTENING (only once audio actually reaches the STT) → SPEECH_ACTIVE
+     ⇄ TRANSCRIPT_PARTIAL (delta received while speaking — display only, mic open)
+     → TRANSCRIBING (turn committed, mic released; late deltas only update the provisional text)
+     → TRANSCRIPT_FINAL (editable; the ONLY state from which «Invia» works)
+     → PROCESSING → AWAITING_CONFIRMATION | COMPLETED | ERROR | CANCELLED
+discarded (no speech / too short) → IDLE (no commit) · cancel / tab hidden / resident change → CANCELLED
+```
+
+New in this iteration: `REQUESTING_PERMISSION`, `TRANSCRIPT_PARTIAL`, `TRANSCRIPT_FINAL` (was
+TRANSCRIPT_READY), `partial` text + `metrics.firstPartialMs`; `capturing()` helper. A final
+transcript must arrive within 15 s of the commit (else `stt_timeout`). Unit tests:
+`voice/__tests__/voice.test.ts` (25).
+
+---
+
+## Previous iteration (server transport, Gemini opt-in)
+
 Source: `frontend/src/components/assistant/voice/audioSession.ts` (pure reducer, unit-tested in
 `voice/__tests__/voice.test.ts`). The voice state is exposed as `data-state` on the mic button
 (`am-mic`) and the voice panel (`am-voice`), and as a visible label (`AUDIO_STATE_LABELS`).

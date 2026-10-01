@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-01T07:13:52.908Z",
+  "mode": "azure-missing",
+  "transport": "real Azure",
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "name": "J real Azure: realtime session requested once",
+      "pass": true,
+      "detail": "1"
+    },
+    {
+      "name": "J real Azure: deployment missing → ERROR with a clear message",
+      "pass": true,
+      "detail": "ERROR Trascrizione vocale non disponibile ora: scrivi il messaggio."
+    },
+    {
+      "name": "J no silent fallback to another STT (no utterance upload)",
+      "pass": true,
+      "detail": "0"
+    },
+    {
+      "name": "J text Assistant still works",
+      "pass": true,
+      "detail": "{\"workflowId\":\"a1b6f1d8-58cd-4891-b87e-57d97e5196de\",\"status\":\"COMPLETED\",\"skillId\":\"patient.overview\",\"reply\":\"Ospite: Galli Nora\\nStato ricovero: non indicato"
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "timings": [
+    {
+      "label": "J azure missing",
+      "tapToListeningMs": null,
+      "listeningToFirstPartialMs": null,
+      "commitToFinalMs": null,
+      "states": "REQUESTING_PERMISSION>ERROR"
+    }
+  ],
+  "consoleErrors": []
+}

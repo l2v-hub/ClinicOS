@@ -28,6 +28,7 @@ import {
   MAX_UTTERANCE_BYTES,
   SttUnavailableError,
   createRuntimeSttProvider,
+  type RealtimeCallAnswer,
   type SpeechToTextProvider,
   type TranscriptResult,
 } from '../stt.js';
@@ -416,6 +417,142 @@ test('B/K — voice transcript → preview, zero write; spoken «conferma» neve
   assert.equal(bad.status, 400);
 });
 
+// ── Azure gpt-live-transcribe: realtime session (browser WebRTC with an ephemeral token) ──────
+
+test('realtime call: gate, SDP answer only (no token to the browser), audit, typed errors', async () => {
+  const answer: RealtimeCallAnswer = {
+    sdp: 'v=0\r\no=azure 1 1 IN IP4 0.0.0.0\r\n',
+    model: 'gpt-live-transcribe',
+    deployment: 'gpt-live-transcribe',
+    expiresAt: Math.floor(Date.now() / 1000) + 60,
+    transport: 'webrtc',
+  };
+  const offers: string[] = [];
+  setSttProvider({
+    ...scripted(''),
+    async negotiateRealtimeCall(offer) {
+      offers.push(offer);
+      return answer;
+    },
+  });
+  const post = async (
+    session: Session | null,
+    body = 'v=0\r\no=browser 1 1 IN IP4 0.0.0.0\r\n',
+  ) => {
+    const r = await fetch(`${base}/skills/voice/realtime-call`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/sdp',
+        ...(session ? { Authorization: `Bearer ${session.token}` } : {}),
+      },
+      body,
+    });
+    return { status: r.status, body: await r.json().catch(() => null) };
+  };
+  assert.equal((await post(null)).status, 401);
+  assert.equal((await post(admin)).status, 403, 'voice.plan denied for the administrator');
+  process.env.VOICE_CHANNEL_ENABLED = 'false';
+  try {
+    assert.equal((await post(nurse)).status, 503, 'channel off in this environment');
+  } finally {
+    process.env.VOICE_CHANNEL_ENABLED = 'true';
+  }
+  assert.equal((await post(nurse, 'not an sdp')).status, 400);
+  assert.equal(offers.length, 0, 'nothing negotiated for refused / invalid requests');
+  const status = await call(base, nurse, 'GET', '/skills/voice/status');
+  assert.equal(status.body.transport, 'webrtc');
+  const ok = await post(nurse);
+  assert.equal(ok.status, 200, JSON.stringify(ok.body));
+  assert.deepEqual(ok.body, answer);
+  assert.equal('token' in ok.body, false, 'no ephemeral token for the browser');
+  assert.ok(offers[0].startsWith('v=0'));
+  const row = await waitForAudit({
+    operatorId: 'SIM-NURSE-1',
+    actionType: 'voice:session',
+    outcome: 'ok',
+  });
+  assert.ok(row);
+  assert.ok((row!.fields as string[]).includes('deployment:gpt-live-transcribe'));
+
+  setSttProvider({
+    ...scripted(''),
+    async negotiateRealtimeCall() {
+      throw new SttUnavailableError('stt_unavailable', 'deployment mancante', 503);
+    },
+  });
+  const missing = await post(nurse);
+  assert.equal(missing.status, 503);
+  assert.equal(missing.body.code, 'stt_unavailable');
+  setSttProvider(scripted(''));
+  assert.equal((await post(nurse)).status, 409, 'provider without a realtime transport');
+  const serverStatus = await call(base, nurse, 'GET', '/skills/voice/status');
+  assert.equal(serverStatus.body.transport, 'server');
+});
+
+test('runtime client: realtime call request and diagnostics mapping', async () => {
+  let reply: { status: number; body: unknown } = {
+    status: 200,
+    body: {
+      sdp: 'v=0 answer',
+      model: 'gpt-live-transcribe',
+      deployment: 'glt',
+      expiresAt: 9,
+      transport: 'webrtc',
+    },
+  };
+  let seen: { path?: string; auth?: string; body?: string } = {};
+  const server = http.createServer((req, res) => {
+    let raw = '';
+    req.on('data', (c) => (raw += c));
+    req.on('end', () => {
+      seen = { path: req.url, auth: req.headers.authorization, body: raw };
+      res.writeHead(reply.status, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(reply.body));
+    });
+  });
+  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const port = (server.address() as { port: number }).port;
+  const provider = createRuntimeSttProvider({
+    AI_RUNTIME_URL: `http://127.0.0.1:${port}`,
+    AI_RUNTIME_SERVICE_TOKEN: 'svc',
+  });
+  try {
+    const out = await provider.negotiateRealtimeCall!('v=0 offer');
+    assert.equal(seen.path, '/v1/voice/realtime-call');
+    assert.equal(seen.auth, 'Bearer svc');
+    assert.deepEqual(JSON.parse(seen.body!), { sdp: 'v=0 offer' });
+    assert.equal(out.sdp, 'v=0 answer');
+    assert.equal(out.deployment, 'glt');
+    for (const [kind, text] of [
+      ['not_configured', /non configurato/],
+      ['rate_limited', /troppe richieste/],
+      ['auth_failed', /credenziali/],
+    ] as const) {
+      reply = { status: 503, body: { detail: { kind, message: 'x' } } };
+      await assert.rejects(
+        provider.negotiateRealtimeCall!('v=0'),
+        (e: unknown) =>
+          e instanceof SttUnavailableError && e.code === 'stt_unavailable' && text.test(e.message),
+      );
+    }
+    reply = { status: 200, body: { nope: true } };
+    await assert.rejects(
+      provider.negotiateRealtimeCall!('v=0'),
+      (e: unknown) => e instanceof SttUnavailableError && e.code === 'stt_provider_error',
+    );
+  } finally {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  }
+});
+
+test('voice health: diagnostic for allowed roles only, no secrets', async () => {
+  const forNurse = await call(base, nurse, 'GET', '/skills/voice/health');
+  assert.equal(forNurse.status, 200);
+  assert.equal(typeof forNurse.body.stt.ok, 'boolean');
+  assert.equal((await call(base, admin, 'GET', '/skills/voice/health')).status, 403);
+});
+
+// Last: it exhausts the nurse's per-minute STT quota.
 test('STT cost guard: per-operator utterance rate limit → 429, provider not called', async () => {
   let providerCalls = 0;
   setSttProvider({

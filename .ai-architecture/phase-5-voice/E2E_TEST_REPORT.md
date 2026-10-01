@@ -1,5 +1,44 @@
 # Phase 5 — E2E test report
 
+## Azure `gpt-live-transcribe` iteration (2026-10-01)
+
+| Layer | Where | Result |
+| --- | --- | --- |
+| Unit — runtime Azure adapter (config, session shape, provider selection/no fallback, mint, server-side SDP negotiation, diagnostics, health + data-plane probe, WAV→24 kHz + malformed WAV, **real local WebSocket server** speaking the Realtime protocol, failures/timeout, endpoints) | `clinicos-ai-runtime/tests/test_voice_azure_realtime.py` | 13/13 (runtime total OK) |
+| Unit — frontend (state machine partial/final, realtime event parser, WebRTC transport with fake peer: negotiation through ClinicOS, refusal, cancel during negotiation, dropped link, disconnect grace; VAD, WAV) | `voice/__tests__/voice.test.ts` | 27/27 |
+| Integration — backend (realtime-call gate/SDP-only answer/audit/errors, runtime client mapping by cause, health roles + rate limit, status transport) | `backend/src/voice/__tests__/voice-e2e.test.ts` | 13/13 (skills+voice 47/47) |
+| **Azure-dependent** (health, mint, WebSocket transcription of fixtures) | `scripts/voice/azure-stt-check.mjs` → `evidence/azure-stt-check.json` | **BLOCKED** — `deployment_missing` |
+| Browser — **real Azure failure path** (deployment missing → diagnostic, no fallback, text works) | `voice-realtime-e2e.mjs --mode azure-missing` | 5/5 |
+| Browser — **MOCK realtime transport** (fake RTCPeerConnection; real mic VAD, SDP negotiation through backend+runtime mock, Agno, policy, DB, audit) | `voice-realtime-e2e.mjs --mode mock` | 34/34 |
+| Browser — real Azure end-to-end | `voice-realtime-e2e.mjs --mode azure` | **BLOCKED** (not run) |
+| Regression — text Assistant (Phase 4 E2E, fresh DB) | `assistant-browser-e2e.mjs` | 46/46 |
+| Regression — frontend / backend skills+voice / backend full serial (fresh DB) / build | `npm test`, suites | 1003+ tests, 9 baseline fails (0 new) / 47/47 / 1599 tests, 21 fails in 14 baseline files (0 new) / build OK |
+
+Prompt §18 mapping: A Azure connectivity **BLOCKED** (health = deployment_missing; endpoint + key
+valid: v1 models/chat 200) · B audio→gpt-live-transcribe→final **BLOCKED** (mock: PASS) · C partial
+no action PASS (mock) · D Doctor read PASS (mock transport, real Agno) · E write/preview/confirm/audit
+PASS (mock) · F numbers PASS (mock) · G ambiguous PASS · H prescription/administration PASS ·
+I revocation PASS · J Azure failure → text fallback **PASS on real Azure** · K silence/noise PASS
+(no commit for silence/steady noise) · L duplicate confirmation PASS · M Assistant regression PASS ·
+N GUI regression PASS.
+
+Independent QA round 1 (FAILED VALIDATION) → fixed: H1 CSP blocked the browser→Azure SDP call →
+negotiation proxied server-side (token never in the browser); H2 mic kept running after a realtime
+error and could upload via the server path → `stopAll()` on realtime errors + transport bound per
+capture; M1 cancel during negotiation → pending stream released + negotiation aborted (raced);
+M2 dropped link detected (`realtime_disconnected`); L1 errors by cause; L2 health rate-limited +
+data-plane probe + config errors reported; L3 WAV off the event loop + malformed WAV = 400;
+L4 commit delayed 250 ms (cancellable) + narrower empty-buffer match; L6 docs.
+Independent QA round 2 (code READY FOR QA) residuals → fixed: R1 webrtc captures never take the
+upload path (`captureMode` guard); R2 the 250 ms commit delay implemented; R3 `azure-stt-check.mjs`
+now negotiates a real Chromium WebRTC offer through `/v1/voice/realtime-call`; R4 the deployment
+probe only trusts an explicit operation-level refusal; R5 `invalid_sdp` message, `disconnected`
+tolerated for 3 s (`failed` immediate), timeouts runtime 6+10 s < backend 18 s < browser 20 s.
+
+---
+
+## Previous iteration (server transport, Gemini opt-in)
+
 Date: 2026-09-30 → 2026-10-01. Branch `feat/phase5-voice` (from origin/main 71af6723).
 All clinical data synthetic (DEMO-P4 / DEMO-P5 residents). Local disposable Postgres only.
 
