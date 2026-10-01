@@ -44,9 +44,26 @@ if (isBackendWorkspace) {
   if (!Object.hasOwn(childEnv, 'AUTH_MODE')) childEnv.AUTH_MODE = 'demo';
   if (!Object.hasOwn(childEnv, 'NODE_ENV')) childEnv.NODE_ENV = 'test';
 }
-const res = spawnSync(
-  process.execPath,
-  ['--import', 'tsx', '--import', stubCss, '--test', ...files],
-  { stdio: 'inherit', env: childEnv },
-);
-process.exit(res.status ?? 1);
+// Suites that page through the roster assert on the GLOBAL roster epoch (bumped by any Patient /
+// PatientTherapy / room write). Run concurrently with other DB-writing files they fail with
+// «Elenco aggiornato» or an unexpected epoch: they run in a second, isolated pass (one at a time).
+const EPOCH_SENSITIVE = [
+  'src/roster/__tests__/order-key-db.test.ts',
+  'src/roster/__tests__/roster-pagination-db.test.ts',
+  'src/roster/__tests__/preferences-db.test.ts',
+  'src/patients/__tests__/alphabetical-pages-db.test.ts',
+  'src/patients/__tests__/room-filter-db.test.ts',
+];
+const isolated = files.filter((f) => EPOCH_SENSITIVE.includes(f));
+const concurrent = files.filter((f) => !EPOCH_SENSITIVE.includes(f));
+const run = (list, extra = []) =>
+  list.length === 0
+    ? 0
+    : (spawnSync(process.execPath, ['--import', 'tsx', '--import', stubCss, '--test', ...extra, ...list], {
+        stdio: 'inherit',
+        env: childEnv,
+      }).status ?? 1);
+const first = run(concurrent);
+if (isolated.length) console.log(`run-node-tests: isolated pass for ${isolated.length} roster-epoch suite(s)`);
+const second = run(isolated, ['--test-concurrency=1']);
+process.exit(first || second);
