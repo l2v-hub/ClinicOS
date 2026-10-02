@@ -1,3 +1,4 @@
+import { aiEnabled } from '../../lib/ai-flags.js';
 // REQ-041: voice feature configuration. Model-agnostic and Railway-overridable. Closed-by-default
 // for anything destructive. Pure function over the environment → fully unit-testable.
 
@@ -25,7 +26,7 @@ function intEnv(env: NodeJS.ProcessEnv, key: string, def: number): number {
 export function loadVoiceConfig(env: NodeJS.ProcessEnv = process.env): VoiceConfig {
   const sttRaw = (env.AI_STT_MODEL ?? '').trim();
   return {
-    voiceEnabled: boolEnv(env, 'AI_VOICE_ENABLED', true),
+    voiceEnabled: aiEnabled(env) && boolEnv(env, 'AI_VOICE_ENABLED', true),
     writeActionsEnabled: boolEnv(env, 'AI_WRITE_ACTIONS_ENABLED', true),
     deleteActionsEnabled: false, // v1: voice deletes are never enabled, regardless of env
     requireWriteConfirmation: boolEnv(env, 'AI_REQUIRE_WRITE_CONFIRMATION', true),

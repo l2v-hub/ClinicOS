@@ -5,7 +5,7 @@ import os
 from ..errors import ProviderUnavailableError, ConfigError
 from ..spec import ModelSpec
 from .base import BuiltModel
-from ._common import make_built
+from ._common import make_built, sdk_retry_kwargs
 from .completion import CompletionMetadataMixin
 
 
@@ -24,7 +24,8 @@ def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) 
 
         return Agent(
             model=CompletionOpenAILike(id=spec.model_id, base_url=base_url,
-                             api_key=os.environ.get("OPENAI_LIKE_API_KEY"), temperature=temperature),
+                             api_key=os.environ.get("OPENAI_LIKE_API_KEY"), temperature=temperature,
+                             **sdk_retry_kwargs(OpenAILike)),
             markdown=False, telemetry=False,
         )
     return make_built(spec, build_agent, timeout_seconds, "OpenAILike")

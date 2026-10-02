@@ -489,7 +489,13 @@ export interface Inbox {
   since: string;
   watermark: string | null;
   signals: Signal[];
-  counts: { total: number; toSee: number; new: number; changed: number; byType: Record<string, number> };
+  counts: {
+    total: number;
+    toSee: number;
+    new: number;
+    changed: number;
+    byType: Record<string, number>;
+  };
   /** Event sources that failed this time (fail closed: their events are omitted, never widened). */
   degraded: string[];
   eligibility: Eligibility;
@@ -745,7 +751,10 @@ function fallbackText(facts: Signal[]): string {
 // Cost guard (per operator): facts are ALWAYS recomputed (policy / scope revocations apply at once);
 // only the AI wording is rate-limited. Same facts → the previous summary is reused (no LLM call);
 // different facts inside PROACTIVE_BRIEFING_COOLDOWN_S (default 60 s) → deterministic fallback.
-const summaryCache = new Map<string, { at: number; signature: string; summary: Briefing['summary'] }>();
+const summaryCache = new Map<
+  string,
+  { at: number; signature: string; summary: Briefing['summary'] }
+>();
 
 /** Test hook: forget cached AI summaries. */
 export function resetBriefingCache(): void {
@@ -800,11 +809,11 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
   const cfg = loadAssistantLlmConfig(env);
   const runtime =
     deps.composeRuntime ??
-    (cfg.composeEnabled && cfg.composeModel
+    (cfg.composeEnabled && cfg.runtimeUrl
       ? (req: Parameters<typeof callComposeRuntime>[0]) =>
           // The briefing is requested explicitly and awaited with a loading state: it gets its own
           // timeout (PROACTIVE_BRIEFING_TIMEOUT_MS, default 25 s) instead of the 8 s interactive one.
-          callComposeRuntime(req, { ...cfg, timeoutMs: briefingTimeoutMs(env) })
+          callComposeRuntime(req, { ...cfg, timeoutMs: briefingTimeoutMs(env) }, 'briefing')
       : null);
   // Minimum necessary context: already-authorized signals as FIXED templates only — no free text
   // written by users (diary titles, note / handover bodies, drug names typed in a prescription)
@@ -813,7 +822,10 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
   // limits the routine ones.
   const cap = Math.min(30, profile.briefing.maxFacts);
   const important = facts.filter((f) => f.priority !== 'normale');
-  const aiFacts = [...important, ...facts.filter((f) => f.priority === 'normale').slice(0, Math.max(0, cap - important.length))];
+  const aiFacts = [
+    ...important,
+    ...facts.filter((f) => f.priority === 'normale').slice(0, Math.max(0, cap - important.length)),
+  ];
   const results = aiFacts.map((s) => ({
     id: s.signalId,
     tipo: s.type,
@@ -833,7 +845,12 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
   const reuse = Number.parseInt(env.PROACTIVE_BRIEFING_REUSE_S ?? '', 10);
   const reuseMs = (Number.isFinite(reuse) && reuse >= 0 ? reuse : 600) * 1000;
   let aiSkipped: 'same_facts' | 'cooldown' | null = null;
-  if (cached && cached.signature === signature && cached.summary.composed && Date.now() - cached.at < reuseMs) {
+  if (
+    cached &&
+    cached.signature === signature &&
+    cached.summary.composed &&
+    Date.now() - cached.at < reuseMs
+  ) {
     summary = cached.summary;
     aiSkipped = 'same_facts';
   } else if (cached && Date.now() - cached.at < windowMs) {
@@ -849,7 +866,9 @@ async function composeBriefing(who: Who, deps: ProactiveDeps): Promise<Briefing>
     contextChars = JSON.stringify(results).length;
     llmCalls = 1;
     const a0 = Date.now();
-    const question = profile.briefing.focus ? `${BRIEFING_QUESTION} ${profile.briefing.focus}` : BRIEFING_QUESTION;
+    const question = profile.briefing.focus
+      ? `${BRIEFING_QUESTION} ${profile.briefing.focus}`
+      : BRIEFING_QUESTION;
     const out = await composeAnswer(question, results, sources, {
       callComposeRuntime: runtime,
     });

@@ -14,13 +14,22 @@ from .capabilities import CapabilityRequirement, DEFAULT_ROLE_REQUIREMENTS
 from .errors import ConfigError
 from .spec import ModelSpec
 from .env_config import resolve_agnos_llm, resolve_ocr, resolve_extraction, resolve_repair
+from .provider_registry import PROVIDERS, normalize_provider, provider_entry
 
-ROLES = ("ocr", "extraction", "agent", "repair")
+# Phase 9: logical model roles (contract.ModelRole). Legacy names stay accepted as aliases.
+ROLES = ("ocr", "vision", "command_parser", "reasoning", "summary", "fast")
+LEGACY_ROLE_ALIASES = {"agent": "command_parser", "extraction": "vision", "repair": "fast"}
+NEW_STYLE_ROLES = ("command_parser", "reasoning", "summary", "fast", "vision")
 
-# Resolver env-driven per ambito (i tre ambiti separati mai incrociati fra loro).
-# 'repair' segue l'ambito Agnos (passo LLM): un deployment nudo eredita il provider di Agnos.
-_ROLE_RESOLVERS = {"agent": resolve_agnos_llm, "ocr": resolve_ocr,
-                   "extraction": resolve_extraction, "repair": resolve_repair}
+# Legacy resolution (AI_PROVIDER unset): the pre-Phase-9 scopes feed the logical roles, so an
+# existing deployment keeps working unchanged. 'repair' follows Agnos; OCR is always its own scope.
+_LEGACY_RESOLVERS = {"command_parser": resolve_agnos_llm, "reasoning": resolve_agnos_llm,
+                     "summary": resolve_agnos_llm, "fast": resolve_repair,
+                     "vision": resolve_extraction, "ocr": resolve_ocr}
+_LEGACY_ENV_NAME = {"command_parser": "AGENT", "reasoning": "AGENT", "summary": "AGENT",
+                    "fast": "REPAIR", "vision": "EXTRACTION", "ocr": "OCR"}
+_DEFAULT_TIMEOUT = {"command_parser": 30, "reasoning": 30, "summary": 30, "fast": 60,
+                    "vision": 300, "ocr": 300}
 
 
 @dataclass(frozen=True)
@@ -28,7 +37,8 @@ class RoleConfig:
     role: str
     model: ModelSpec
     fallback: ModelSpec | None
-    temperature: float
+    # None = do not send a temperature (some reasoning models accept only their default).
+    temperature: float | None
     timeout_seconds: int
     requirement: CapabilityRequirement
 
@@ -51,7 +61,13 @@ class RuntimeConfig:
     def available(self) -> bool:
         return not self.errors
 
+    # "new" = AI_PROVIDER single switch; "legacy" = per-scope variables (AGNOS_LLM_*, ...).
+    mode: str = "legacy"
+    provider: str | None = None
+    fallback_enabled: bool = False
+
     def role(self, name: str) -> RoleConfig:
+        name = LEGACY_ROLE_ALIASES.get(name, name)
         cfg = self.roles.get(name)
         if cfg is None:
             raise ConfigError(f"Ruolo AI sconosciuto: '{name}' (ammessi: {', '.join(ROLES)})")
@@ -100,34 +116,61 @@ def load_runtime_config(env: Mapping[str, str] | None = None) -> RuntimeConfig:
     req_tools = _get(e, "AI_REQUIRE_TOOL_CALLING", default="false") == "true"
     req_struct = _get(e, "AI_REQUIRE_NATIVE_STRUCTURED_OUTPUT", default="false") == "true"
 
+    provider_raw = _get(e, "AI_PROVIDER")
+    mode = "new" if provider_raw else "legacy"
+    provider = normalize_provider(provider_raw) if provider_raw else None
+    if provider is not None and provider_entry(provider) is None:
+        errors.append(f"AI_PROVIDER '{provider_raw}' non registrato (ammessi: {', '.join(sorted(PROVIDERS))})")
+    fallback_enabled = _get(e, "AI_FALLBACK_ENABLED", default="false") == "true"
+    fallback_provider_raw = _get(e, "AI_FALLBACK_PROVIDER")
+    fallback_provider = normalize_provider(fallback_provider_raw) if fallback_provider_raw else None
+    if fallback_enabled and (fallback_provider is None or provider_entry(fallback_provider) is None):
+        errors.append("AI_FALLBACK_ENABLED=true richiede AI_FALLBACK_PROVIDER registrato")
+        fallback_enabled = False
+
     for role in ROLES:
         up = role.upper()
-        resolver = _ROLE_RESOLVERS.get(role)
-        agnos_temperature: float | None = None
-        if resolver is not None:
-            cfg, role_errors = resolver(e)
-            if cfg is None:
-                errors.extend(role_errors)
-                continue
-            model = cfg.model
-            # la temperatura di Agnos viene dal suo ambito (AGNOS_LLM_TEMPERATURE / legacy)
-            agnos_temperature = getattr(cfg, "temperature", None)
-        else:
-            model_raw = _get(e, f"AI_{up}_MODEL")
-            if not model_raw:
-                errors.append(f"AI_{up}_MODEL mancante (atteso 'provider:model_id')")
+        temperature: float | None = None
+        fallback: ModelSpec | None = None
+        if mode == "new" and role in NEW_STYLE_ROLES:
+            raw = _get(e, f"AI_MODEL_{up}", "AI_MODEL_DEFAULT")
+            if not raw:
+                errors.append(f"AI_MODEL_{up} (o AI_MODEL_DEFAULT) mancante per AI_PROVIDER={provider_raw}")
                 continue
             try:
-                model = ModelSpec.parse(model_raw)
+                model = ModelSpec.parse(raw) if ":" in raw else ModelSpec.parse(f"{provider}:{raw}")
             except ConfigError as ex:
-                errors.append(f"AI_{up}_MODEL: {ex.message}")
+                errors.append(f"AI_MODEL_{up}: {ex.message}")
                 continue
-        # fallback supports both spellings: AI_<ROLE>_FALLBACK_MODEL and AI_FALLBACK_<ROLE>_MODEL
-        try:
-            fallback = ModelSpec.parse_optional(_get(e, f"AI_{up}_FALLBACK_MODEL", f"AI_FALLBACK_{up}_MODEL"))
-        except ConfigError as ex:
-            errors.append(f"fallback {up}: {ex.message}")
-            fallback = None
+            if _get(e, f"AI_TEMPERATURE_{up}", "AI_TEMPERATURE_DEFAULT"):
+                temperature = _float(e, f"AI_TEMPERATURE_{up}", "AI_TEMPERATURE_DEFAULT", default=0.0)
+            if fallback_enabled and fallback_provider:
+                fb_raw = _get(e, f"AI_FALLBACK_MODEL_{up}", "AI_FALLBACK_MODEL_DEFAULT")
+                if fb_raw:
+                    try:
+                        fallback = (ModelSpec.parse(fb_raw) if ":" in fb_raw
+                                    else ModelSpec.parse(f"{fallback_provider}:{fb_raw}"))
+                    except ConfigError as ex:
+                        errors.append(f"AI_FALLBACK_MODEL_{up}: {ex.message}")
+                else:
+                    errors.append(f"AI_FALLBACK_MODEL_{up} (o AI_FALLBACK_MODEL_DEFAULT) mancante con fallback attivo")
+            timeout = _int(e, f"AI_TIMEOUT_SECONDS_{up}", "AI_PROVIDER_TIMEOUT_SECONDS",
+                           default=_DEFAULT_TIMEOUT[role])
+        else:
+            cfg, role_errors = _LEGACY_RESOLVERS[role](e)
+            if cfg is None:
+                errors.extend(f"[{role}] {msg}" for msg in role_errors)
+                continue
+            model = cfg.model
+            temperature = getattr(cfg, "temperature", None)
+            legacy = _LEGACY_ENV_NAME[role]
+            try:
+                fallback = ModelSpec.parse_optional(_get(e, f"AI_{legacy}_FALLBACK_MODEL", f"AI_FALLBACK_{legacy}_MODEL"))
+            except ConfigError as ex:
+                errors.append(f"fallback {legacy}: {ex.message}")
+            if temperature is None:
+                temperature = _float(e, f"AI_{legacy}_TEMPERATURE", "AI_TEMPERATURE", default=0.0)
+            timeout = _int(e, f"AI_{legacy}_TIMEOUT_SECONDS", "AI_PROVIDER_TIMEOUT_SECONDS", default=300)
 
         base_req = DEFAULT_ROLE_REQUIREMENTS.get(role, CapabilityRequirement())
         requirement = CapabilityRequirement(
@@ -135,18 +178,11 @@ def load_runtime_config(env: Mapping[str, str] | None = None) -> RuntimeConfig:
             image_input=base_req.image_input and req_image,
             pdf_input=base_req.pdf_input and req_file,
             file_upload=base_req.file_upload,
-            tool_calling=(role == "agent" and req_tools),
+            tool_calling=(role == "command_parser" and req_tools),
             native_structured_output=req_struct and base_req.native_structured_output,
         )
-        roles[role] = RoleConfig(
-            role=role,
-            model=model,
-            fallback=fallback,
-            temperature=agnos_temperature if agnos_temperature is not None
-            else _float(e, f"AI_{up}_TEMPERATURE", "AI_TEMPERATURE", default=0.0),
-            timeout_seconds=_int(e, f"AI_{up}_TIMEOUT_SECONDS", "AI_PROVIDER_TIMEOUT_SECONDS", default=300),
-            requirement=requirement,
-        )
+        roles[role] = RoleConfig(role=role, model=model, fallback=fallback, temperature=temperature,
+                                 timeout_seconds=timeout, requirement=requirement)
 
     return RuntimeConfig(
         roles=roles,
@@ -157,4 +193,7 @@ def load_runtime_config(env: Mapping[str, str] | None = None) -> RuntimeConfig:
         job_retention_seconds=_int(e, "AI_JOB_RETENTION_SECONDS", default=3600),
         max_upload_bytes=_int(e, "AI_MAX_UPLOAD_BYTES", default=50_000_000),
         errors=errors,
+        mode=mode,
+        provider=provider,
+        fallback_enabled=fallback_enabled,
     )

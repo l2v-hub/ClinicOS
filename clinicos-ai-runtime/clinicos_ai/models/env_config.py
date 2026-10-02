@@ -17,21 +17,8 @@ from typing import Mapping
 from .errors import ConfigError
 from .spec import ModelSpec, SUPPORTED_PROVIDERS
 
-# Alias env-friendly → provider interno del runtime. 'azure-openai' è il valore che imposta il
-# committente su Railway; il codice non deve conoscere il nome del deployment, solo leggerlo.
-PROVIDER_ALIASES = {
-    "azure-openai": "azure",
-    "openai-azure": "azure",
-    # OCR con analisi di layout (ex ruolo di Mistral Document AI). Gli alias sono i nomi
-    # leggibili che il committente imposta su Railway; il codice usa 'azure-docintel'.
-    "azure-document-intelligence": "azure-docintel",
-    "document-intelligence": "azure-docintel",
-}
-
-
-def normalize_provider(provider: str) -> str:
-    p = (provider or "").strip().lower()
-    return PROVIDER_ALIASES.get(p, p)
+# Alias env-friendly → provider interno: unica fonte nel provider registry.
+from .provider_registry import ALIASES as PROVIDER_ALIASES, PROVIDERS as _PROVIDERS, normalize_provider
 
 
 def _get(env: Mapping[str, str], *keys: str, default: str | None = None) -> str | None:
@@ -205,18 +192,8 @@ def safe_config_summary(env: Mapping[str, str]) -> list[str]:
     return lines
 
 
-# Credenziale (env-key) per provider dell'ambito Agnos — SOLO per verificarne la PRESENZA,
-# mai il valore. Duplicato locale (evita import circolare con registry.py).
-_AGNOS_CREDENTIAL_ENV: dict[str, tuple[str, ...]] = {
-    "azure": ("AZURE_OPENAI_API_KEY",),
-    "azure-docintel": ("AZURE_DOCINTEL_API_KEY", "AZURE_OPENAI_API_KEY"),
-    "google": ("GOOGLE_API_KEY", "GEMINI_API_KEY"),
-    "openai": ("OPENAI_API_KEY",),
-    "anthropic": ("ANTHROPIC_API_KEY",),
-    "mistral": ("MISTRAL_API_KEY",),
-    "openai-like": ("OPENAI_LIKE_API_KEY",),
-    "mock": (),
-}
+# Credenziale (env-key) per provider — SOLO per verificarne la PRESENZA, mai il valore.
+_AGNOS_CREDENTIAL_ENV: dict[str, tuple[str, ...]] = {n: e.credential_env for n, e in _PROVIDERS.items()}
 
 # Reverse degli alias: il provider interno 'azure' si mostra col nome env-facing 'azure-openai'.
 _PROVIDER_DISPLAY = {"azure": "azure-openai"}

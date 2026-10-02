@@ -14,7 +14,8 @@ import logging
 from typing import Any
 
 from ..models.registry import ModelRegistry
-from .assistant import _run_with_provider_log, parse_plan_json
+from ..models.contract import ModelRole
+from .assistant import _ask, parse_plan_json
 from .untrusted import UNTRUSTED_RULE, fence
 
 _log = logging.getLogger("clinicos_ai.skill_router")
@@ -73,7 +74,6 @@ async def run_skill_route(registry: ModelRegistry, message: str, skills: list[di
                           correlation_id: str | None = None,
                           forbidden: list[dict] | None = None,
                           role_hint: str = "") -> dict[str, Any]:
-    built = registry.build("agent")
     forbidden = forbidden or []
     allowed = {s.get("id") for s in [*skills, *forbidden]
                if isinstance(s, dict) and isinstance(s.get("id"), str)}
@@ -90,8 +90,8 @@ async def run_skill_route(registry: ModelRegistry, message: str, skills: list[di
         f"DOMANDA IN SOSPESO: {json.dumps(pending, ensure_ascii=False) if pending else 'nessuna'}\n\n"
         f"MESSAGGIO (scegli solo tra le SKILL DISPONIBILI; non confermi mai nulla):\n{fence('messaggio', message)}\n"
     )
-    raw = await _run_with_provider_log(built, prompt, "skill_route", correlation_id)
-    route = sanitize_route(parse_plan_json(raw), allowed)
+    resp = await _ask(registry, ModelRole.COMMAND_PARSER, prompt, "skill_route", correlation_id)
+    route = sanitize_route(parse_plan_json(resp.text), allowed)
     _log.info("skill route: skill=%s slots=%s", route.get("skillId"),
               sorted(k for k in route if k != "skillId"))
-    return {"route": route, "model": str(built.spec)}
+    return {"route": route, "model": f"{resp.provider}:{resp.model}", "ai": resp.metadata()}

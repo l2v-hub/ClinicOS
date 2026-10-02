@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "note": "Synthetic, non-sensitive fixtures. No real patient data. Expected values are what the BACKEND needs from the command parser / planner; the runtime never decides authorization.",
+  "command_parser": [
+    {
+      "id": "cp-01",
+      "message": "registra pressione 130/85 a questo ospite",
+      "skill": "vitals.record",
+      "values": { "pa": "130/85" },
+      "currentPatient": true
+    },
+    {
+      "id": "cp-02",
+      "message": "pressione 120 su 80 per questo ospite",
+      "skill": "vitals.record",
+      "values": { "pa": "120/80" },
+      "currentPatient": true
+    },
+    {
+      "id": "cp-03",
+      "message": "saturazione 95 e frequenza 72 per Mario Bianchi",
+      "skill": "vitals.record",
+      "values": { "spo2": "95", "fc": "72" },
+      "patientQuery": "Mario Bianchi"
+    },
+    {
+      "id": "cp-04",
+      "message": "temperatura 37.8 a questo ospite",
+      "skill": "vitals.record",
+      "values": { "temperatura": "37.8" },
+      "currentPatient": true
+    },
+    {
+      "id": "cp-05",
+      "message": "mostrami gli ultimi parametri di questo ospite",
+      "skill": "vitals.recent",
+      "currentPatient": true
+    },
+    {
+      "id": "cp-06",
+      "message": "cerca il farmaco paracetamolo",
+      "skill": "drug.lookup",
+      "query": "paracetamolo"
+    },
+    { "id": "cp-07", "message": "quali appuntamenti ci sono oggi", "skill": "appointments.day" },
+    { "id": "cp-08", "message": "come sono le consegne del turno", "skill": "handover.overview" },
+    {
+      "id": "cp-09",
+      "message": "aggiungi nel diario: ospite tranquillo, ha mangiato tutto",
+      "skill": "diary.add_observation",
+      "text": "ospite tranquillo, ha mangiato tutto"
+    },
+    { "id": "cp-10", "message": "quante camere sono libere", "skill": "facility.occupancy" },
+    { "id": "cp-11", "message": "trova l'ospite Rossi", "skill": "patient.find", "query": "Rossi" },
+    { "id": "cp-12", "message": "che tempo fa domani a Milano", "skill": null },
+    {
+      "id": "cp-13",
+      "message": "prescrivi paracetamolo 1000 mg per questo ospite",
+      "skill": "therapy.prescribe",
+      "forbiddenForRole": true
+    }
+  ],
+  "reasoning": [
+    { "id": "rs-01", "question": "quali allergie ha l'ospite?", "intent": "allergies" },
+    { "id": "rs-02", "question": "che terapie sta facendo l'ospite?", "intent": "therapies" },
+    { "id": "rs-03", "question": "ultimi parametri vitali dell'ospite", "intent": "vitals_recent" },
+    { "id": "rs-04", "question": "la camera 12 è occupata e da chi?", "intent": "data_query" },
+    { "id": "rs-05", "question": "qual è la capitale della Francia?", "intent": "unknown" }
+  ],
+  "summary": [
+    {
+      "id": "sm-01",
+      "question": "quali allergie ha?",
+      "results": [{ "recordId": "alg-1", "allergene": "penicillina", "reazione": "orticaria" }],
+      "sources": ["alg-1"]
+    },
+    {
+      "id": "sm-02",
+      "question": "ultima pressione?",
+      "results": [{ "recordId": "vit-9", "pa": "128/82", "rilevato": "2026-10-01T08:00" }],
+      "sources": ["vit-9"]
+    },
+    { "id": "sm-03", "question": "allergie note?", "results": [], "sources": [] }
+  ],
+  "stt": [
+    {
+      "id": "stt-01",
+      "file": "vitals-120-80.wav",
+      "expected": "registra pressione 120 su 80 per questo ospite"
+    },
+    {
+      "id": "stt-02",
+      "file": "vitals-140-90.wav",
+      "expected": "registra pressione 140 su 90 per questo ospite"
+    },
+    { "id": "stt-03", "file": "read-overview.wav", "expected": "dimmi tutto su questo ospite" },
+    {
+      "id": "stt-04",
+      "file": "administration.wav",
+      "expected": "registra una somministrazione per questo ospite"
+    },
+    { "id": "stt-05", "file": "silence.wav", "expected": "" }
+  ]
+}

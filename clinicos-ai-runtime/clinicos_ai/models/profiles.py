@@ -19,7 +19,18 @@ def _gpt_major(model_id: str) -> int:
 
 
 def capabilities_for(spec: ModelSpec) -> ModelCapabilities:
-    p, m = spec.provider, spec.model_id.lower()
+    """Declared capabilities of a configured model, resolved through the provider registry."""
+    from .provider_registry import provider_entry  # lazy: registry imports this module lazily too
+
+    entry = provider_entry(spec.provider)
+    if entry is not None and entry.capabilities is not None:
+        return entry.capabilities(spec.model_id)
+    return ModelCapabilities(text_input=True)
+
+
+def provider_capabilities(provider: str, model_id: str) -> ModelCapabilities:
+    """Per-provider capability heuristics (configuration data, not SDK code)."""
+    p, m = provider, model_id.lower()
 
     if p == "mock":
         return ModelCapabilities(text_input=True, image_input=True, pdf_input=True,

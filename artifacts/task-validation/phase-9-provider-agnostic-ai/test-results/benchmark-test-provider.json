@@ -1,0 +1,690 @@
+{
+  "config": {
+    "mode": "new",
+    "provider": "test",
+    "roles": {
+      "ocr": "mock:mock",
+      "vision": "test:deterministic",
+      "command_parser": "test:deterministic",
+      "reasoning": "test:deterministic",
+      "summary": "test:deterministic",
+      "fast": "test:deterministic"
+    },
+    "stt": {
+      "available": true,
+      "provider": "test",
+      "model": "deterministic"
+    }
+  },
+  "suites": {
+    "command_parser": {
+      "summary": {
+        "cases": 13,
+        "correct": 5,
+        "accuracyPct": 38.5,
+        "validityPct": 100.0,
+        "latencyMsP50": 0,
+        "latencyMsMax": 2,
+        "inputTokens": 18475,
+        "outputTokens": 147,
+        "errors": {}
+      },
+      "cases": [
+        {
+          "id": "cp-01",
+          "ok": true,
+          "valid": true,
+          "checks": {
+            "skill": true,
+            "values": true,
+            "currentPatient": true
+          },
+          "error": null,
+          "ms": 2,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1427,
+              "output_tokens": 20,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-02",
+          "ok": true,
+          "valid": true,
+          "checks": {
+            "skill": true,
+            "values": true,
+            "currentPatient": true
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1426,
+              "output_tokens": 20,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-03",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": true,
+            "values": true,
+            "patientQuery": false
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1429,
+              "output_tokens": 16,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-04",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": true,
+            "values": false,
+            "currentPatient": true
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1425,
+              "output_tokens": 13,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-05",
+          "ok": true,
+          "valid": true,
+          "checks": {
+            "skill": true,
+            "currentPatient": true
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1428,
+              "output_tokens": 13,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-06",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": true,
+            "query": false
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1424,
+              "output_tokens": 6,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-07",
+          "ok": true,
+          "valid": true,
+          "checks": {
+            "skill": true
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1425,
+              "output_tokens": 7,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-08",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": false
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1425,
+              "output_tokens": 7,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-09",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": true,
+            "text": false
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1431,
+              "output_tokens": 9,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-10",
+          "ok": true,
+          "valid": true,
+          "checks": {
+            "skill": true
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1423,
+              "output_tokens": 8,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-11",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": false,
+            "query": false
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1422,
+              "output_tokens": 7,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-12",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": false
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1424,
+              "output_tokens": 8,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "cp-13",
+          "ok": false,
+          "valid": true,
+          "checks": {
+            "skill": false
+          },
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "command_parser",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 1366,
+              "output_tokens": 13,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        }
+      ]
+    },
+    "reasoning": {
+      "summary": {
+        "cases": 5,
+        "correct": 1,
+        "accuracyPct": 20.0,
+        "validityPct": 100.0,
+        "latencyMsP50": 0,
+        "latencyMsMax": 0,
+        "inputTokens": 4035,
+        "outputTokens": 120,
+        "errors": {}
+      },
+      "cases": [
+        {
+          "id": "rs-01",
+          "ok": false,
+          "valid": true,
+          "intent": "unknown",
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "reasoning",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 806,
+              "output_tokens": 24,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "rs-02",
+          "ok": false,
+          "valid": true,
+          "intent": "unknown",
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "reasoning",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 807,
+              "output_tokens": 24,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "rs-03",
+          "ok": false,
+          "valid": true,
+          "intent": "unknown",
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "reasoning",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 808,
+              "output_tokens": 24,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "rs-04",
+          "ok": false,
+          "valid": true,
+          "intent": "unknown",
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "reasoning",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 807,
+              "output_tokens": 24,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "rs-05",
+          "ok": true,
+          "valid": true,
+          "intent": "unknown",
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "reasoning",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 807,
+              "output_tokens": 24,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        }
+      ]
+    },
+    "summary": {
+      "summary": {
+        "cases": 3,
+        "correct": 1,
+        "accuracyPct": 33.3,
+        "validityPct": 100.0,
+        "latencyMsP50": 0,
+        "latencyMsMax": 0,
+        "inputTokens": 809,
+        "outputTokens": 27,
+        "errors": {}
+      },
+      "cases": [
+        {
+          "id": "sm-01",
+          "ok": false,
+          "valid": true,
+          "grounded": true,
+          "answered": false,
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "summary",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 277,
+              "output_tokens": 9,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "sm-02",
+          "ok": false,
+          "valid": true,
+          "grounded": true,
+          "answered": false,
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "summary",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 276,
+              "output_tokens": 9,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        },
+        {
+          "id": "sm-03",
+          "ok": true,
+          "valid": true,
+          "grounded": true,
+          "answered": false,
+          "error": null,
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "role": "summary",
+            "latencyMs": 0,
+            "fallbackUsed": false,
+            "finishReason": "completed",
+            "usage": {
+              "input_tokens": 256,
+              "output_tokens": 9,
+              "cached_input_tokens": 0,
+              "provider": "test",
+              "model": "deterministic"
+            }
+          }
+        }
+      ]
+    },
+    "stt": {
+      "summary": {
+        "cases": 5,
+        "correct": 0,
+        "accuracyPct": 0.0,
+        "validityPct": 100.0,
+        "latencyMsP50": 0,
+        "latencyMsMax": 3,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "errors": {}
+      },
+      "cases": [
+        {
+          "id": "stt-01",
+          "ok": false,
+          "valid": true,
+          "accuracy": 0.5,
+          "transcript": "pressione 120 su 80",
+          "ms": 3,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "usage": {
+              "inputTokens": 216,
+              "outputTokens": 4,
+              "audioSeconds": 6.75
+            }
+          }
+        },
+        {
+          "id": "stt-02",
+          "ok": false,
+          "valid": true,
+          "accuracy": 0.25,
+          "transcript": "pressione 120 su 80",
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "usage": {
+              "inputTokens": 221,
+              "outputTokens": 4,
+              "audioSeconds": 6.91
+            }
+          }
+        },
+        {
+          "id": "stt-03",
+          "ok": false,
+          "valid": true,
+          "accuracy": 0.2,
+          "transcript": "pressione 120 su 80",
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "usage": {
+              "inputTokens": 158,
+              "outputTokens": 4,
+              "audioSeconds": 4.95
+            }
+          }
+        },
+        {
+          "id": "stt-04",
+          "ok": false,
+          "valid": true,
+          "accuracy": 0.0,
+          "transcript": "pressione 120 su 80",
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "usage": {
+              "inputTokens": 194,
+              "outputTokens": 4,
+              "audioSeconds": 6.07
+            }
+          }
+        },
+        {
+          "id": "stt-05",
+          "ok": false,
+          "valid": true,
+          "accuracy": 0.0,
+          "transcript": "pressione 120 su 80",
+          "ms": 0,
+          "ai": {
+            "provider": "test",
+            "model": "deterministic",
+            "usage": {
+              "inputTokens": 256,
+              "outputTokens": 4,
+              "audioSeconds": 8.0
+            }
+          }
+        }
+      ]
+    }
+  }
+}

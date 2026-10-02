@@ -18,6 +18,10 @@ __pycache__/
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+.env.staging
+.env.test
 frontend/.env
 frontend/.env.local
 backend/.env

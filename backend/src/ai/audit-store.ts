@@ -14,7 +14,8 @@ export type AiAuditKind = 'read' | 'create' | 'update' | 'refusal' | 'delete' | 
 // Agnos channels 'testo'/'voce'. The DB column is a free String, so this needs no migration.
 // Tool Layer invocations (backend/src/tools) record their origin: gui | ai | tool | test.
 // 'ai_assistant' = Phase 4 AI Assistant (origin = AI_ASSISTANT).
-export type AiAuditChannel = 'testo' | 'voce' | 'ui' | 'gui' | 'ai' | 'ai_assistant' | 'tool' | 'test';
+export type AiAuditChannel =
+  'testo' | 'voce' | 'ui' | 'gui' | 'ai' | 'ai_assistant' | 'tool' | 'test';
 export type AiAuditOutcome = 'ok' | 'denied' | 'error' | 'deduped' | 'empty';
 
 export interface AiAuditEventInput {
@@ -33,6 +34,8 @@ export interface AiAuditEventInput {
   /** ISO timestamp; omitted ⇒ DB default now(). */
   createdAt?: string;
 }
+
+import { currentRequestId, logEvent } from '../lib/observability.js';
 
 type AuditPersistence = (evt: AiAuditEventInput) => Promise<void>;
 
@@ -77,6 +80,19 @@ export function setAuditPersistence(fn: AuditPersistence | null): void {
 /** Best-effort, fire-and-forget audit write. An audit failure must NEVER fail the operator's
  *  action: every error is caught and logged, nothing is ever thrown or awaited by callers. */
 export function recordAuditEvent(evt: AiAuditEventInput): void {
+  // Phase 9 correlation: link the durable audit row (its own requestId: workflow / op id) to the
+  // HTTP request that produced it. Ids and codes only — the audit row stays the record of truth.
+  const httpRequestId = currentRequestId();
+  if (httpRequestId) {
+    logEvent('audit', {
+      req: httpRequestId,
+      auditRequestId: evt.requestId.slice(0, 80),
+      action: evt.actionType,
+      kind: evt.kind,
+      channel: evt.channel,
+      outcome: evt.outcome,
+    });
+  }
   const logFailure = (err: unknown) =>
     console.error(
       '[ai-audit] persistenza fallita (azione NON bloccata):',

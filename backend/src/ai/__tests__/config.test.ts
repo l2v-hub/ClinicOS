@@ -6,7 +6,6 @@ import {
   loadExtractionSchema,
   loadExtractionPrompt,
 } from '../config.js';
-import { createExtractionProvider } from '../provider-factory.js';
 import { maskSecret, redactForLog, truncateForLog } from '../redact.js';
 import { MockExtractionProvider } from '../providers/mock.js';
 
@@ -15,6 +14,9 @@ function resetEnv(overrides: Record<string, string | undefined>) {
     'AI_PROVIDER',
     'AI_MODEL',
     'GEMINI_API_KEY',
+    'AI_RUNTIME_URL',
+    'AI_RUNTIME_SERVICE_TOKEN',
+    'AI_ENABLED',
     'AI_STRUCTURED_MODEL',
     'AI_TIMEOUT_MS',
     'AI_MAX_RETRIES',
@@ -31,49 +33,56 @@ function resetEnv(overrides: Record<string, string | undefined>) {
   }
 }
 
-test('valid config: google provider with key is available', () => {
+test('Phase 9: extraction availability = AI runtime configured, never a vendor key', () => {
   resetEnv({
-    AI_PROVIDER: 'google',
-    AI_MODEL: 'gemma-4-31b-it',
-    GEMINI_API_KEY: 'FAKEKEY-TESTONLY-1234567890',
+    AI_RUNTIME_URL: 'http://127.0.0.1:1',
+    AI_RUNTIME_SERVICE_TOKEN: 'service-token-test',
+    GEMINI_API_KEY: undefined,
   });
   const cfg = loadAiConfig(true);
   assert.equal(cfg.available, true);
-  assert.equal(cfg.provider, 'google');
-  assert.equal(cfg.model, 'gemma-4-31b-it');
+  assert.equal(cfg.provider, 'runtime');
+  assert.equal(cfg.model, 'vision', 'logical role, not a model name');
   assert.deepEqual(cfg.errors, []);
 });
 
-test('absent config: missing GEMINI_API_KEY produces controlled error, never throws', () => {
-  resetEnv({ AI_PROVIDER: 'google', GEMINI_API_KEY: undefined });
+test('runtime not configured: controlled error, never throws, no vendor variable named', () => {
+  resetEnv({ AI_RUNTIME_URL: undefined, AI_RUNTIME_SERVICE_TOKEN: undefined });
   const cfg = loadAiConfig(true);
   assert.equal(cfg.available, false);
-  assert.ok(cfg.errors.some((e) => e.includes('GEMINI_API_KEY')));
+  assert.ok(cfg.errors.some((e) => e.includes('AI runtime non configurato')));
+  assert.ok(!cfg.errors.join(' ').match(/GEMINI|OPENAI|AZURE|GOOGLE/i));
 });
 
-test('changing AI_MODEL changes the model (no frontend change needed)', () => {
+test('vendor variables are irrelevant to the backend (legacy AI_PROVIDER/AI_MODEL ignored)', () => {
   resetEnv({
     AI_PROVIDER: 'google',
     AI_MODEL: 'gemini-2.0-flash',
-    GEMINI_API_KEY: 'FAKEKEY-TESTONLY-1234567890',
+    AI_RUNTIME_URL: 'http://127.0.0.1:1',
+    AI_RUNTIME_SERVICE_TOKEN: 'service-token-test',
   });
   const cfg = loadAiConfig(true);
-  assert.equal(cfg.model, 'gemini-2.0-flash');
-  assert.equal(publicStatus(cfg).model, 'gemini-2.0-flash');
+  assert.equal(cfg.provider, 'runtime');
+  assert.equal(publicStatus(cfg).model, 'vision');
 });
 
-test('mock provider is selectable without a key (CI path)', () => {
-  resetEnv({ AI_PROVIDER: 'mock', GEMINI_API_KEY: undefined });
+test('mock provider is selectable without a runtime (CI path)', () => {
+  resetEnv({ AI_PROVIDER: 'mock' });
   const cfg = loadAiConfig(true);
   assert.equal(cfg.available, true);
-  const provider = createExtractionProvider(cfg);
-  assert.ok(provider instanceof MockExtractionProvider);
+  assert.equal(cfg.provider, 'mock');
+  assert.ok(new MockExtractionProvider() instanceof MockExtractionProvider);
 });
 
-test('factory throws controlled config error when google selected but unavailable', () => {
-  resetEnv({ AI_PROVIDER: 'google', GEMINI_API_KEY: undefined });
+test('AI_ENABLED=false makes extraction unavailable (master switch)', () => {
+  resetEnv({
+    AI_ENABLED: 'false',
+    AI_RUNTIME_URL: 'http://127.0.0.1:1',
+    AI_RUNTIME_SERVICE_TOKEN: 'service-token-test',
+  });
   const cfg = loadAiConfig(true);
-  assert.throws(() => createExtractionProvider(cfg), /non disponibile|config/i);
+  assert.equal(cfg.available, false);
+  assert.ok(cfg.errors.some((e) => e.includes('AI_ENABLED=false')));
 });
 
 test('schema and prompt assets load and are versioned', () => {

@@ -14,17 +14,11 @@ from .configuration import RuntimeConfig, RoleConfig, load_runtime_config
 from .errors import ConfigError, RuntimeError_, ErrorKind
 from .spec import ModelSpec
 
-# Which env var holds each provider's credential (checked, never logged).
+# Credential env vars per provider: single source in provider_registry (kept as a view for callers).
+from .provider_registry import PROVIDERS as _PROVIDERS, has_credentials as _has_credentials
+
 PROVIDER_CREDENTIAL_ENV: dict[str, tuple[str, ...]] = {
-    "google": ("GOOGLE_API_KEY", "GEMINI_API_KEY"),
-    "openai": ("OPENAI_API_KEY",),
-    "anthropic": ("ANTHROPIC_API_KEY",),
-    "azure": ("AZURE_OPENAI_API_KEY",),
-    # Document Intelligence vive sulla stessa risorsa: accetta la chiave dedicata o quella Azure.
-    "azure-docintel": ("AZURE_DOCINTEL_API_KEY", "AZURE_OPENAI_API_KEY"),
-    "openai-like": ("OPENAI_LIKE_API_KEY",),
-    "mistral": ("MISTRAL_API_KEY",),
-    "mock": (),  # no credentials needed
+    name: entry.credential_env for name, entry in _PROVIDERS.items()
 }
 
 
@@ -54,27 +48,36 @@ class ModelRegistry:
         return specs
 
     def has_credentials(self, provider: str) -> bool:
-        if provider == "mistral":
-            # An explicit Mistral key remains valid for existing custom endpoints. Azure
-            # fallback is permitted only after checking the configured destination host.
-            if (self._env.get("MISTRAL_API_KEY") or "").strip():
-                return True
-            from .mistral_config import resolve_mistral_connection
-            try:
-                resolve_mistral_connection(self._env)
-                return True
-            except RuntimeError_:
-                return False
-        keys = PROVIDER_CREDENTIAL_ENV.get(provider)
-        if keys is None:
-            return False
-        if len(keys) == 0:
-            return True  # mock
-        return any(bool((self._env.get(k) or "").strip()) for k in keys)
+        return _has_credentials(provider, self._env)
 
     def usable_specs(self, role: str) -> list[ModelSpec]:
         """Resolved specs whose provider has credentials configured."""
         return [s for s in self.resolve(role) if self.has_credentials(s.provider)]
+
+    def candidates(self, role: str, include_fallback: bool = True) -> list:
+        """Built models to try for a logical role: the configured primary, then the configured
+        fallback (only if present and allowed). Never picks an unconfigured model. Raises the last
+        normalized error when nothing is usable (missing credentials -> CREDENTIALS)."""
+        from .factory import ModelFactory  # lazy: keeps registry stdlib-importable
+
+        rc = self._config.role(role)
+        specs = [rc.model] + ([rc.fallback] if include_fallback and rc.fallback is not None else [])
+        factory = ModelFactory(env=self._env)
+        built: list = []
+        last_err: RuntimeError_ | None = None
+        for spec in specs:
+            if not self.has_credentials(spec.provider):
+                last_err = RuntimeError_(ErrorKind.CREDENTIALS,
+                                         f"Credenziali mancanti per provider '{spec.provider}' (ruolo {rc.role})")
+                continue
+            try:
+                built.append(factory.create(spec, role=rc.role, requirement=rc.requirement,
+                                            temperature=rc.temperature, timeout_seconds=rc.timeout_seconds))
+            except RuntimeError_ as ex:
+                last_err = ex
+        if not built:
+            raise last_err or RuntimeError_(ErrorKind.CONFIG, f"Nessun modello utilizzabile per il ruolo '{role}'")
+        return built
 
     def build(self, role: str):
         """Build the role's Agno model via the factory, checking capabilities.
@@ -112,6 +115,9 @@ class ModelRegistry:
             }
         return {
             "available": self._config.available,
+            "mode": self._config.mode,
+            "provider": self._config.provider,
+            "fallbackEnabled": self._config.fallback_enabled,
             "errors": self._config.errors,
             "max_retries": self._config.max_retries,
             "job_max_duration_seconds": self._config.job_max_duration_seconds,

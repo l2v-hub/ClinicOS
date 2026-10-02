@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { loadAiConfig, loadExtractionSchema, publicStatus } from '../ai/config.js';
-import { createExtractionProvider } from '../ai/provider-factory.js';
 
 const aiExtractionRouter = Router();
 
@@ -22,20 +21,33 @@ aiExtractionRouter.get('/status', (_req, res) => {
   res.status(200).json({ ...status, errors: publicErrors(status.errors) });
 });
 
-// GET /ai/extraction/capabilities — model capability probe (images/docs/structured).
+// GET /ai/extraction/capabilities — which logical role serves extraction and whether it is usable.
+// Phase 9: provider/model live in the AI runtime configuration; the backend never names a vendor.
+// The runtime's own capability health (no provider call) is relayed when reachable.
 aiExtractionRouter.get('/capabilities', async (_req, res) => {
   const cfg = loadAiConfig();
   if (!cfg.available) {
     return res.status(503).json({ available: false, errors: publicErrors(cfg.errors) });
   }
+  if (cfg.provider === 'mock') {
+    return res.status(200).json({ available: true, provider: 'mock', role: cfg.model });
+  }
   try {
-    const provider = createExtractionProvider(cfg);
-    const caps = await provider.capabilities();
-    res.status(200).json({ available: true, model: provider.model, capabilities: caps });
-  } catch (err) {
-    // Controlled error, no secrets.
-    console.error('[ai-extraction] capabilities:', err instanceof Error ? err.message : err);
-    res.status(503).json({ available: false, error: 'Servizio AI non disponibile' });
+    const base = String(process.env.AI_RUNTIME_URL).replace(/\/$/, '');
+    const response = await fetch(`${base}/v1/runtime/ai-health`, {
+      signal: AbortSignal.timeout(3_000),
+    });
+    const health = response.ok
+      ? ((await response.json()) as { roles?: Record<string, unknown> })
+      : null;
+    res.status(200).json({
+      available: true,
+      provider: 'runtime',
+      role: cfg.model,
+      model: (health?.roles?.[cfg.model] as { model?: string } | undefined)?.model ?? null,
+    });
+  } catch {
+    res.status(200).json({ available: true, provider: 'runtime', role: cfg.model, model: null });
   }
 });
 

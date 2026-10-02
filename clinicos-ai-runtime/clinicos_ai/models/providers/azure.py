@@ -23,7 +23,7 @@ from ..errors import ProviderUnavailableError, RuntimeError_, ErrorKind
 from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
-from ._common import classify_provider_exception
+from ._common import classify_provider_exception, sdk_retry_kwargs
 from .completion import CompletionMetadataMixin, agent_completion, completion_text, response_reason
 
 
@@ -45,7 +45,8 @@ class _AzureRunner:
         class CompletionAzure(CompletionMetadataMixin, AzureOpenAI):
             pass
 
-        return Agent(model=CompletionAzure(id=self._spec.model_id, temperature=self._temperature),
+        return Agent(model=CompletionAzure(id=self._spec.model_id, temperature=self._temperature,
+                                           **sdk_retry_kwargs(AzureOpenAI)),
                      markdown=False, telemetry=False)
 
     async def run(self, prompt: str, attachments: list[Attachment]) -> str:
@@ -76,7 +77,7 @@ class _AzureRunner:
             raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except Exception as ex:
             msg = str(ex)
-            kind = classify_provider_exception(msg)
+            kind = classify_provider_exception(ex)
             raise RuntimeError_(kind, f"Azure: {msg[:200]}") from ex
 
         return agent_completion(resp, "Azure")
@@ -177,7 +178,7 @@ class _AzureRunner:
                                 f"Azure structured: {str(ex.reason)[:200]}") from ex
         except Exception as ex:
             msg = str(ex)
-            kind = classify_provider_exception(msg)
+            kind = classify_provider_exception(ex)
             raise RuntimeError_(kind, f"Azure structured: {msg[:200]}") from ex
 
 

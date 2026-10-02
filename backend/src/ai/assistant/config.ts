@@ -1,12 +1,14 @@
+import { aiEnabled } from '../../lib/ai-flags.js';
+
 // 016 F1/F2: configurazione dell'interprete LLM delle letture. Default = deterministico
 // (flag off): senza attivazione esplicita il comportamento è identico a oggi (nessuna regressione).
+// Phase 9: niente nomi di modello qui — il runtime sceglie provider/modello per ruolo logico
+// (REASONING per il planner, SUMMARY per il composer). AI_ENABLED=false spegne tutto.
 
 export interface AssistantLlmConfig {
   llmEnabled: boolean; // master
   planEnabled: boolean; // F1: planner LLM
   composeEnabled: boolean; // F2: composer LLM
-  planModel: string; // provider:model_id
-  composeModel: string; // provider:model_id (solo host EU/self-hosted approvato)
   timeoutMs: number;
   runtimeUrl: string; // clinicos-ai-runtime
 }
@@ -18,13 +20,11 @@ const int = (v: string | undefined, d: number) => {
 };
 
 export function loadAssistantLlmConfig(env: NodeJS.ProcessEnv = process.env): AssistantLlmConfig {
-  const llmEnabled = bool(env.AI_ASSISTANT_LLM_ENABLED);
+  const llmEnabled = aiEnabled(env) && bool(env.AI_ASSISTANT_LLM_ENABLED);
   return {
     llmEnabled,
     planEnabled: llmEnabled && bool(env.AI_ASSISTANT_PLAN_ENABLED),
     composeEnabled: llmEnabled && bool(env.AI_ASSISTANT_COMPOSE_ENABLED),
-    planModel: (env.AI_ASSISTANT_PLAN_MODEL ?? '').trim(),
-    composeModel: (env.AI_ASSISTANT_COMPOSE_MODEL ?? '').trim(),
     timeoutMs: int(env.AI_ASSISTANT_TIMEOUT_MS, 8000),
     runtimeUrl: (env.AI_RUNTIME_URL ?? '').trim(),
   };

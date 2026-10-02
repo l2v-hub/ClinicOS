@@ -46,3 +46,8 @@ export function operatorHeaders(): Record<string, string> {
   if (op.accessToken) headers.Authorization = `Bearer ${op.accessToken}`;
   return headers;
 }
+
+/** Phase 9: sostituisce il token della sessione corrente (rinnovo silenzioso Entra). */
+export function updateAccessToken(token: string): void {
+  if (currentOperator) currentOperator = { ...currentOperator, accessToken: token };
+}

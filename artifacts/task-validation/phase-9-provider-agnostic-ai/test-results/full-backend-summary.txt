@@ -1,0 +1,28 @@
+Full backend regression — provider-agnostic final code, fresh DB, serial, 214 files
+ℹ tests 1710
+ℹ pass 1688
+ℹ fail 21
+ℹ cancelled 0
+ℹ skipped 1
+Failures not in base (9a2402de): 0
+✖ DB validation rejects malformed and incomplete Transfers without weakening PAINAD
+✖ a divided patch in the final row rejects the entire confirmation before writes
+✖ a new process replays the persisted creation and finalization after response loss
+✖ assignment POST and PUT apply the exact database overlap predicate before materializing
+✖ both reviewed import paths assign the authenticated operator to the new patient
+✖ bounded patient roster projects and searches the canonical fiscal identity
+✖ confirmDraft: persists therapies + vitals/pain into Cartella.data
+✖ corrected retry persists precise schedules, actor and weekdays; replay is idempotent
+✖ createTherapyInTx: rejects when farmacoNome is missing
+✖ diary create and update ignore spoofed authorship
+✖ diary keyset pages are bounded, stable and exact at the final page
+✖ finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella
+✖ handover creation resolves the patient inside the authenticated scope
+✖ intake autosave cannot replace extraction-owned narrative metadata
+✖ invalid therapy returns indexed 400 before any transaction or patient write
+✖ one imported and three manual therapies persist in order including whole patches
+✖ ordinary operators cannot read or mutate another owner patient; managers retain global scope
+✖ own patient access works and client authorship is ignored
+✖ patient room reads validate input, enforce scope, and bound active and legacy history
+✖ patient rosters and aggregate projections carry the authenticated ownership scope
+✖ persistence failure rolls back all writes, sanitizes audit, and permits retry

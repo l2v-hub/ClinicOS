@@ -8,6 +8,19 @@
 // provider credentials and the model choice (AI_STT_MODEL, e.g. google:gemini-3.5-flash-lite).
 // Audio lives only in memory for the duration of the request; it is never stored or logged.
 
+import { classifyAiFailure, correlationHeaders, recordAiCall } from '../lib/observability.js';
+import { aiEnabled } from '../lib/ai-flags.js';
+import type { AiCallMeta } from '../lib/observability.js';
+
+/** STT metadata -> provider-agnostic call metadata (provider/model/usage), never the transcript. */
+function sttMeta(body: Record<string, unknown> | null): AiCallMeta | undefined {
+  const meta = body?.metadata as
+    { provider?: string; model?: string; usage?: AiCallMeta['usage'] } | undefined;
+  return meta
+    ? { provider: meta.provider, model: meta.model, role: 'stt', usage: meta.usage }
+    : undefined;
+}
+
 export interface Utterance {
   bytes: Buffer;
   mimeType: string;
@@ -75,7 +88,11 @@ export function createRuntimeSttProvider(
       try {
         response = await fetch(`${base}/v1/voice/transcribe`, {
           method: 'POST',
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            ...correlationHeaders(),
+          },
           body: JSON.stringify({
             audio_base64: audio.bytes.toString('base64'),
             mime_type: audio.mimeType,
@@ -85,6 +102,7 @@ export function createRuntimeSttProvider(
         });
       } catch (error) {
         const timeout = error instanceof Error && error.name === 'TimeoutError';
+        recordAiCall('stt', classifyAiFailure(error), Date.now() - t0);
         throw new SttUnavailableError(
           timeout ? 'stt_timeout' : 'stt_unavailable',
           timeout ? 'Trascrizione troppo lenta' : 'Servizio di trascrizione non raggiungibile',
@@ -92,6 +110,14 @@ export function createRuntimeSttProvider(
         );
       }
       const body = (await response.json().catch(() => null)) as Record<string, unknown> | null;
+      // Phase 9: audio size is recorded as bytes in the size slot (never the audio itself).
+      recordAiCall(
+        'stt',
+        response.ok ? (body ? 'ok' : 'malformed') : classifyAiFailure(null, response.status),
+        Date.now() - t0,
+        audio.bytes.length,
+        sttMeta(body),
+      );
       if (!response.ok) {
         const detail = (body?.detail ?? {}) as { kind?: string };
         if (response.status === 503 || detail.kind === 'not_configured')
@@ -162,7 +188,7 @@ export const MIN_UTTERANCE_BYTES = 1000;
  * opts in with VOICE_CHANNEL_ENABLED=true (sending audio to the STT provider is a privacy decision).
  */
 export function voiceChannelEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
-  return (env.VOICE_CHANNEL_ENABLED || '').trim().toLowerCase() === 'true';
+  return aiEnabled(env) && (env.VOICE_CHANNEL_ENABLED || '').trim().toLowerCase() === 'true';
 }
 
 let runtimeStatusCache: { at: number; available: boolean } | null = null;

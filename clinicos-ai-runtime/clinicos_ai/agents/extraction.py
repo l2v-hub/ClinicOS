@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.providers.base import Attachment
 from ..models.providers.completion import completion_text
+from ..models.contract import AIRequest, ModelRole, generate
 from ..models.registry import ModelRegistry
 
 
@@ -53,9 +54,8 @@ async def run_extraction(registry: ModelRegistry, prompt: str, schema: dict,
         # Sola trascrizione, col ruolo 'ocr': un motore di layout (Document Intelligence)
         # restituisce markdown gia' strutturato — niente JSON, niente repair. Il backend
         # legge `rawText`, la stessa forma del passaggio di trascrizione precedente.
-        ocr = registry.build("ocr")
-        text = await ocr.runner.run(prompt, attachments)
-        text = completion_text(text, getattr(text, "finish_reason", None))
+        ocr = await generate(registry, AIRequest(ModelRole.OCR, prompt, attachments, purpose="ocr"))
+        text = completion_text(ocr.text, ocr.finish_reason)
         finish_reason = text.finish_reason
         # Il ruolo 'ocr' puo' essere servito da un motore di layout (markdown grezzo) oppure,
         # in configurazioni precedenti, da un modello di chat che obbedisce al prompt e
@@ -71,26 +71,19 @@ async def run_extraction(registry: ModelRegistry, prompt: str, schema: dict,
                 pass  # non era JSON: e' gia' la trascrizione
         if not text.strip():
             raise RuntimeError_(ErrorKind.SCHEMA_VALIDATION, "Nessun testo OCR leggibile.")
-        return ExtractionOutput(model=str(ocr.spec), data={"rawText": text}, warnings=warnings,
+        return ExtractionOutput(model=f"{ocr.provider}:{ocr.model}", data={"rawText": text}, warnings=warnings,
                                 finish_reason=finish_reason)
 
-    built = registry.build("extraction")  # capability-checked, fallback-aware
-    # Structured-output adapters (e.g. Mistral Document AI) take the JSON Schema directly
-    # and return JSON; chat adapters get the schema embedded in the prompt.
-    runner = built.runner
-    if hasattr(runner, "run_structured"):
-        raw = await runner.run_structured(prompt, schema, attachments)
-    else:
-        full_prompt = (
-            f"{prompt}\n\nSCHEMA (compila i valori, non inventare):\n{json.dumps(schema)}\n"
-            "Rispondi SOLO con JSON valido."
-        )
-        raw = await runner.run(full_prompt, attachments)
-    raw = completion_text(raw, getattr(raw, "finish_reason", None))
+    # VISION role, structured: adapters with native structured output receive the JSON Schema;
+    # the gateway embeds it in the prompt for the others (contract.generate).
+    extracted = await generate(registry, AIRequest(ModelRole.VISION, prompt, attachments, schema=schema,
+                                                   purpose="extraction"))
+    model_name = f"{extracted.provider}:{extracted.model}"
+    raw = completion_text(extracted.text, extracted.finish_reason)
     cleaned = _strip_fences(raw)
 
     try:
-        return _output(str(built.spec), raw, warnings)
+        return _output(model_name, raw, warnings)
     except json.JSONDecodeError:
         warnings.append("output non JSON: tentativo di riparazione")
 
@@ -99,15 +92,14 @@ async def run_extraction(registry: ModelRegistry, prompt: str, schema: dict,
         raise RuntimeError_(ErrorKind.OUTPUT_INCOMPLETE,
                             "Output troppo lungo per una riparazione integrale.",
                             finish_reason="repair_input_limit")
-    repair = registry.build("repair")
     repair_prompt = (
         "Il testo seguente doveva essere JSON valido conforme allo schema ClinicOS ma non lo è. "
         "Restituisci SOLO il JSON corretto, senza testo aggiuntivo.\n\n"
         f"TESTO:\n{cleaned}"
     )
-    fixed = await repair.runner.run(repair_prompt, [])
+    fixed = (await generate(registry, AIRequest(ModelRole.FAST, repair_prompt, purpose="repair"))).completion()
     try:
-        return _output(str(built.spec), fixed, warnings)
+        return _output(model_name, fixed, warnings)
     except json.JSONDecodeError as ex:
         raise RuntimeError_(ErrorKind.SCHEMA_VALIDATION,
                             "Output non JSON dopo il tentativo di riparazione") from ex

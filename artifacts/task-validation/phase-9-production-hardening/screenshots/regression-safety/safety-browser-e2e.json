@@ -1,0 +1,98 @@
+{
+  "at": "2026-10-01T22:04:42.362Z",
+  "passed": 18,
+  "failed": 0,
+  "results": [
+    {
+      "name": "fixtures: seeded residents present",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R1 UI asks the server for the real outcome",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "R1 shows «Esito verificato… completata»",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R1 exactly one reading written",
+      "pass": true,
+      "detail": "5 → 6"
+    },
+    {
+      "name": "R1 no Conferma left to press again",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R2 says nothing was recorded",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R2 zero writes",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R2 Conferma still available (same preview)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R2 second press records exactly once",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R3 outcome unknown is said explicitly",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R3 the commit did happen server-side (one reading)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "R3 never claims success",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S1 Assistant open before logout",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S1 after identity change the Assistant is closed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S1 no previous conversation visible to the new user",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D1 the retry reused the same requestId",
+      "pass": true,
+      "detail": "[\"b29e8c51-66ce-4f16-86ac-55fdfb111d7c\",\"b29e8c51-66ce-4f16-86ac-55fdfb111d7c\"]"
+    },
+    {
+      "name": "D1 exactly one diary entry after lost answer + retry",
+      "pass": true,
+      "detail": "count=1"
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": []
+}

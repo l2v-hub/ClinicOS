@@ -62,8 +62,9 @@ import {
   isSimulatorSession,
   setCurrentOperator,
   operatorHeaders,
+  updateAccessToken,
 } from './lib/operatorSession';
-import { acquireApiToken } from './lib/entraAuth';
+import { acquireApiToken, clearEntraSession, renewApiTokenSilently } from './lib/entraAuth';
 import {
   can,
   canNavigate,
@@ -497,9 +498,12 @@ export default function App() {
   const pendingPazienteRestoreIdRef = useRef<string | null>(null);
   const patientNavigationSequenceRef = useRef(0);
   const sessionEpochRef = useRef(0);
+  // Phase 9: rinnovo silenzioso del token Entra (gli access token scadono in ~60-90 min).
+  const tokenRenewalRef = useRef<number | null>(null);
   useEffect(
     () => () => {
       sessionEpochRef.current++;
+      if (tokenRenewalRef.current !== null) window.clearInterval(tokenRenewalRef.current);
       consegnaDraftStore.clear();
       assessmentDraftStore.clear();
     },
@@ -2047,6 +2051,16 @@ export default function App() {
         role: resolvedUser.ruolo,
         accessToken: accessToken ?? undefined,
       });
+      if (tokenRenewalRef.current !== null) window.clearInterval(tokenRenewalRef.current);
+      tokenRenewalRef.current = null;
+      if (accessToken && !simulatorIdentityId) {
+        const epoch = sessionEpochRef.current;
+        tokenRenewalRef.current = window.setInterval(() => {
+          void renewApiTokenSilently().then((token) => {
+            if (token && sessionEpochRef.current === epoch) updateAccessToken(token);
+          });
+        }, 4 * 60_000);
+      }
       setClinicalOverview(null);
       setClinicalOverviewState('loading');
       setUtente(resolvedUser);
@@ -2070,6 +2084,18 @@ export default function App() {
   function handleLogout() {
     if (!confirmAssessmentExit()) return;
     if (!confirmConsegneExit()) return;
+    // Phase 9: simulatore → sessione revocata lato server; Entra → token e account rimossi dalla
+    // cache MSAL locale (la sessione SSO dell'IdP resta: il JWT vale fino alla scadenza).
+    if (tokenRenewalRef.current !== null) window.clearInterval(tokenRenewalRef.current);
+    tokenRenewalRef.current = null;
+    if (isSimulatorSession()) {
+      void fetch(`${API_URL}/auth/simulator/logout`, {
+        method: 'POST',
+        headers: operatorHeaders(),
+      }).catch(() => undefined);
+    } else {
+      void clearEntraSession();
+    }
     sessionEpochRef.current += 1;
     consegnaDraftStore.clear();
     assessmentDraftStore.clear();

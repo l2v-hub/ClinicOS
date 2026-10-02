@@ -11,6 +11,7 @@ import { UNTRUSTED_RULE, fenceUntrusted } from '../ai/untrusted-prompt.js';
 import { createHash, randomUUID } from 'node:crypto';
 import type { DiaryTherapyParseResult } from './diary-therapy-parse.js';
 import { NON_PRESCRIPTION_INTENTS, scheduleFasciaConflicts } from './diary-therapy-parse.js';
+import { aiEnabled } from '../lib/ai-flags.js';
 
 export interface AiTherapyProposal {
   farmacoNome: string;
@@ -230,6 +231,7 @@ export function diaryTherapyAiPrompt(text: string, entryDate: string): string {
 }
 
 export function diaryTherapyAiEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  if (!aiEnabled(env)) return false;
   if ((env.DIARY_THERAPY_AI || '').trim().toLowerCase() === 'off') return false;
   return Boolean(env.AI_RUNTIME_URL && env.AI_RUNTIME_SERVICE_TOKEN);
 }

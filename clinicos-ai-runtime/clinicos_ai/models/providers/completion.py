@@ -1,15 +1,18 @@
 """Preserve completion metadata without changing the runners' string interface."""
 from __future__ import annotations
 
-from ..errors import ErrorKind, RuntimeError_
+from ..errors import ErrorKind, RuntimeError_, classify_exception
 
 
 class CompletionText(str):
     finish_reason: str | None
+    # Normalized token counts of the call that produced this text (contract.Usage fields).
+    usage: dict | None
 
-    def __new__(cls, text: str, finish_reason: str | None = None):
+    def __new__(cls, text: str, finish_reason: str | None = None, usage: dict | None = None):
         value = super().__new__(cls, text)
         value.finish_reason = finish_reason
+        value.usage = usage
         return value
 
 
@@ -59,12 +62,18 @@ def agent_completion(response, label: str) -> CompletionText:
     status = _get(response, "status")
     status = str(getattr(status, "value", status)).upper() if status is not None else None
     if status == "ERROR":
+        # Agno swallows the SDK exception and returns an ERROR run: classify its message with the
+        # shared provider-agnostic classifier (429 must stay RATE_LIMIT, 401 AUTH, ...).
         detail = str(_get(response, "content") or "provider error")[:200]
-        raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"{label}: {detail}")
+        raise RuntimeError_(classify_exception(Exception(detail)), f"{label}: {detail}")
     if status in {"CANCELLED", "CANCELED", "PAUSED"}:
         raise RuntimeError_(ErrorKind.OUTPUT_INCOMPLETE, "Elaborazione del provider incompleta.",
                             finish_reason=status.lower())
-    return completion_text(_get(response, "content") or "", response_reason(response))
+    out = completion_text(_get(response, "content") or "", response_reason(response))
+    from ..contract import usage_from_metrics  # lazy: contract imports providers.base
+
+    out.usage = usage_from_metrics(_get(response, "metrics")) or None
+    return out
 
 
 class CompletionMetadataMixin:

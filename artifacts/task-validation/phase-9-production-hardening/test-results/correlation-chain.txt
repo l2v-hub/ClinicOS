@@ -1,0 +1,4 @@
+[{"ts":"2026-10-01T21:58:29.487Z","evt":"ai_call","kind":"skill_route","outcome":"ok","ms":3764,"chars":2657,"req":"c472ae4a-3589-45cc-8253-795c590d0c0b"},
+{"ts":"2026-10-01T21:58:29.487Z","evt":"audit","req":"c472ae4a-3589-45cc-8253-795c590d0c0b","auditRequestId":"skill-8e9b0b60-9c91-443b-a6fa-bb8843f34de8","action":"skill:vitals.record:request","kind":"read","channel":"ai_assistant","outcome":"ok"},
+{"ts":"2026-10-01T21:58:29.492Z","evt":"http","req":"c472ae4a-3589-45cc-8253-795c590d0c0b","method":"POST","route":"/skills/converse","status":200,"ms":3810,"src":"simulator"}]
+ai_call outcomes {"skill_route:ok":17,"briefing:ok":2,"assistant_plan:ok":1,"assistant_compose:ok":1}
