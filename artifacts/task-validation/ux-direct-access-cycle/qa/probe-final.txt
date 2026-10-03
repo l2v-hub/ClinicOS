@@ -1,0 +1,8 @@
+invalid points create 400
+create 201 assessment,requestId,replayed b916c372-84ce-410d-919d-006f153470b8 1
+finalize 200 {"assessment":{"id":"b916c372-84ce-410d-919d-006f153470b8","patientId":"cmuseipng0000qglpept1wll7","status":"final","version":2,"assessedAt":"2026-10-03T13:04:07.312Z","createdAt":"2026-10-03T13:04:07
+oss create 403
+patch final via API 400
+UPDATE "PatientAssessment" SET answers=jsonb_ -> refused P0001 assessment_final_immutable
+UPDATE "PatientAssessment" SET "finalSnapshot -> refused P0001 assessment_final_immutable
+DELETE FROM "PatientAssessment" WHERE id=$1 -> refused P0001 assessment_delete_forbidden

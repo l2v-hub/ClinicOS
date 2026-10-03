@@ -1,0 +1,152 @@
+{
+  "date": "2026-10-03T12:56:16.471Z",
+  "today": "2026-10-03",
+  "results": [
+    {
+      "id": "W2-01",
+      "name": "Calendar event shows drug, strength + quantity, route, status in words, prescriber, note — without a click",
+      "result": "PASS",
+      "detail": "08:00 Metformina 1 compressa — 500 mg orale In ritardo di 415 min Prescr. Dr. Medico Uno · Dopo il pasto"
+    },
+    {
+      "id": "W2-01b",
+      "name": "Information visible with the slot detail closed",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-02",
+      "name": "Week view lists every dose with dose and status",
+      "result": "PASS",
+      "detail": "8 doses"
+    },
+    {
+      "id": "W2-06",
+      "name": "Nurse sees no Modifica / Sospendi / Elimina",
+      "result": "PASS",
+      "detail": "0"
+    },
+    {
+      "id": "W2-06b",
+      "name": "Nurse sees no «+ Aggiungi farmaco»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-03",
+      "name": "Tap drug → Somministra → persisted erogata by Infermiere 1 (1 row)",
+      "result": "PASS",
+      "detail": "[{\"stato\":\"erogata\",\"motivo\":null,\"note\":null,\"operatoreId\":\"SIM-NURSE-1\"}]"
+    },
+    {
+      "id": "W2-03b",
+      "name": "Panel shows the administered badge (time · operator)",
+      "result": "PASS",
+      "detail": "14:55 · Infermiere 1"
+    },
+    {
+      "id": "W2-04a",
+      "name": "«Altro» requires the note before Conferma",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-04",
+      "name": "Non somm. with reason persisted (non_erogata, motivo altro + note)",
+      "result": "PASS",
+      "detail": "[{\"stato\":\"non_erogata\",\"motivo\":\"altro\",\"note\":\"Paziente nauseata (sintetico)\",\"operatoreId\":\"SIM-NURSE-1\"}]"
+    },
+    {
+      "id": "W2-05a",
+      "name": "PRN without indication is refused in the app",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-05",
+      "name": "PRN persisted twice the same day, dose from the prescription, server date",
+      "result": "PASS",
+      "detail": "[{\"farmacoDose\":\"1000 mg compressa\",\"indicazione\":\"Dolore 6/10 ginocchio (sintetico)\",\"operatoreId\":\"SIM-NURSE-1\",\"date\":\"2026-10-03\"},{\"farmacoDose\":\"1000 mg compressa\",\"indicazione\":\"Febbre 38,4 °C (sintetico)\",\"operatoreId\":\"SIM-NURSE-1\",\"date\":\"2026-10-03\"}]"
+    },
+    {
+      "id": "W2-05b",
+      "name": "Panel lists both PRN doses of today",
+      "result": "PASS",
+      "detail": "2"
+    },
+    {
+      "id": "W2-07",
+      "name": "Somministrazioni giornaliere: pending row has Somministra in place",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-08a",
+      "name": "Server rejects supervisor administration without explicit confirmation (428)",
+      "result": "PASS",
+      "detail": "428 confirmation_required"
+    },
+    {
+      "id": "W2-08b",
+      "name": "Nothing written by the rejected call",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-08c",
+      "name": "Supervisor sees no prescriber actions",
+      "result": "PASS",
+      "detail": "0"
+    },
+    {
+      "id": "W2-08",
+      "name": "Supervisor: Somministra opens a confirmation dialog before the POST",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-08d",
+      "name": "Confirmed supervisor administration persisted (erogata by Supervisore 1)",
+      "result": "PASS",
+      "detail": "[{\"stato\":\"erogata\",\"motivo\":null,\"note\":null,\"operatoreId\":\"SIM-SUPERVISOR-1\"}]"
+    },
+    {
+      "id": "W2-09",
+      "name": "Doctor: tap drug → read-only panel, no Somministra; Modifica present",
+      "result": "PASS",
+      "detail": "ro=1 administer=0 modifica=1"
+    },
+    {
+      "id": "W2-10",
+      "name": "Ward week calendar cells list patient · drug · dose · status (no tap)",
+      "result": "PASS",
+      "detail": "Galli, Nora Furosemide · 1 compressa — 25 mg In ritardo di 415 min Neri, Dario Ramipril · 1 compressa — 5 mg In ritardo di 415 min Nanni, Miriam Metformina · 1 compressa — 500 mg Non somministrata · A"
+    },
+    {
+      "id": "W2-11",
+      "name": "820x1180: chart panel, calendar day/week and ward week readable without horizontal scroll",
+      "result": "PASS",
+      "detail": "attivi=true day=true week=true ward=true stacked=true"
+    },
+    {
+      "id": "W2-14",
+      "name": "Giro rows: late pending dose shows «In ritardo di N min» (or every dose already recorded)",
+      "result": "PASS",
+      "detail": "— Galli, Nora Posto letto non assegnato · Nato/a il 05/04/1939 · CF da completare Furosemide 1 compressa — 25 mg · orale In ritardo di 416 min Non somm. Somministra — Nanni, Miriam Posto letto non assegnato · Nato/a il 12/11/1936 · CF da co"
+    },
+    {
+      "id": "W2-12",
+      "name": "No console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-13",
+      "name": "No 403/4xx/5xx from the UI",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": []
+}

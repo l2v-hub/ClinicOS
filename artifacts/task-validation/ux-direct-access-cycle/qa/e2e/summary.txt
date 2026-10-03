@@ -1,0 +1,37 @@
+=== ux-w1-navigation
+exit=0
+     11 PASS A
+      2 PASS B
+      2 PASS C
+      6 PASS L
+      1 PASS M
+      4 PASS N
+      1 PASS O
+      1 PASS P
+      7 PASS S
+      9 PASS T
+=== ux-w2-therapy
+exit=0
+     24 PASS W
+=== ux-w3-moduli
+exit=0
+      7 PASS b
+      1 PASS c
+      7 PASS g
+      1 PASS h
+      2 PASS l
+      8 PASS m
+      2 PASS o
+      7 PASS p
+      7 PASS t
+      7 PASS u
+=== ux-w4-misc
+exit=1
+      4 PASS W
+=== phase10-acceptance
+exit=0
+     27 PASS A
+=== phase10-intake-deferred
+exit=0
+      7 PASS P
+done

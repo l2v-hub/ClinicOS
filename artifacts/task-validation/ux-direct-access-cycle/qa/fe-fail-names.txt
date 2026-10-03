@@ -1,0 +1,9 @@
+✖ a single parameters table is always visible and uses the operational table contract
+✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll
+✖ multi-patient parameters uses one bounded page instead of cartella fan-out
+✖ multi-patient quick entry exposes every action and field to assistive technology
+✖ multi-patient quick entry reuses the ClinicOS form and action design system
+✖ multi-patient refresh keeps the previous roster visible and announces progress
+✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance
+✖ src\components\operator\__tests__\assessmentCatalogUi.test.ts
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells

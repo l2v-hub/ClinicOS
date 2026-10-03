@@ -1,0 +1,150 @@
+{
+  "results": [
+    {
+      "id": "W4-01",
+      "name": "Nurse: urgent entry shows «Da vedere» + «Presa visione»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W4-02",
+      "name": "Nurse: diary header counts urgent entries to see",
+      "result": "PASS",
+      "detail": "1 voce urgente da vedere"
+    },
+    {
+      "id": "W4-03",
+      "name": "F8 Nurse: «Modifica» shown, «Elimina» hidden (diary.delete_entry DENIED)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W4-04",
+      "name": "Nurse acks: POST 201, button gone, «Visto da: te hh:mm» shown",
+      "result": "PASS",
+      "detail": "201 · Visto da: te 13:59"
+    },
+    {
+      "id": "W4-05",
+      "name": "Persisted after reload: no longer «da vedere» for the nurse",
+      "result": "PASS",
+      "detail": "Visto da: te 13:59"
+    },
+    {
+      "id": "W4-06",
+      "name": "DB: one ack row (server name/role) + diary:ack audit row",
+      "result": "PASS",
+      "detail": "{\"row\":{\"operatorName\":\"Infermiere 1\",\"operatorRole\":\"infermiere\"},\"audit\":{\"n\":1}}"
+    },
+    {
+      "id": "W4-07",
+      "name": "NEWS2 tile «Non calcolabile» is not clipped at 1180",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W4-08",
+      "name": "F10 «Rileva ora» opens Parametri entry for this patient",
+      "result": "PASS",
+      "detail": "Parametri"
+    },
+    {
+      "id": "W4-09",
+      "name": "Allergen names fully visible at 1180 (strip, not truncated)",
+      "result": "PASS",
+      "detail": "Allergia: Penicillina, Lattice, Acido acetilsalicilico"
+    },
+    {
+      "id": "W4-10",
+      "name": "Other reader: still «Presa visione» for the supervisor, sees «Visto da: Infermiere 1 hh:mm»",
+      "result": "PASS",
+      "detail": "Visto da: Infermiere 1 13:59"
+    },
+    {
+      "id": "W4-11",
+      "name": "F8 Supervisor: no «Modifica» / «Elimina» (both DENIED by policy)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W4-12",
+      "name": "Manager week: operator NAME + status word on every appointment (not colour only)",
+      "result": "PASS",
+      "detail": "Infermiere 1 · Visita · Programmato | Infermiere 1 · Controllo · Programmato"
+    },
+    {
+      "id": "W4-13",
+      "name": "Manager month: all appointments listed (no «+N»)",
+      "result": "PASS",
+      "detail": "4 items"
+    },
+    {
+      "id": "W4-14",
+      "name": "Agenda day: appointment note visible inline without selecting the card",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W4-15",
+      "name": "Agenda week: type + status in words on each appointment",
+      "result": "PASS",
+      "detail": "Visita · Programmato | Controllo · Programmato"
+    },
+    {
+      "id": "W4-16",
+      "name": "Agenda month: all 4 appointments of the day, no «+N»",
+      "result": "PASS",
+      "detail": "4 items"
+    },
+    {
+      "id": "W4-17",
+      "name": "Allergen NAMES visible at 820 (strip, not a bare ⚠ / tooltip)",
+      "result": "PASS",
+      "detail": "Allergia: Penicillina, Lattice, Acido acetilsalicilico"
+    },
+    {
+      "id": "W4-18",
+      "name": "Agenda subtitle wraps at 820: week range fully visible (no ellipsis)",
+      "result": "PASS",
+      "detail": "{\"ws\":\"normal\",\"to\":\"clip\",\"overflowX\":false,\"overflowY\":false,\"date\":\"28 set – 4 ott 2026\",\"dateClipped\":false}"
+    },
+    {
+      "id": "W4-19",
+      "name": "Compact NEWS2 chip text carries time / state inline (not tooltip-only)",
+      "result": "PASS",
+      "detail": "NEWS2 non calcolabile | NEWS2 0 · 10:59 | NEWS2 non calcolabile | NEWS2 non calcolabile"
+    },
+    {
+      "id": "W4-20",
+      "name": "Phone: allergen names visible in a strip that wraps inside the viewport",
+      "result": "PASS",
+      "detail": "Allergia: Penicillina, Lattice, Acido acetilsalicilico"
+    },
+    {
+      "id": "W4-21",
+      "name": "F8 OSS: diary actions hidden (no 403 reachable from the UI)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W4-22",
+      "name": "clinical-summary: allergeni / parametriCritici / rischiElevati names",
+      "result": "PASS",
+      "detail": "{\"allergeni\":[{\"gravita\":\"grave\",\"allergene\":\"Penicillina\"},{\"gravita\":\"moderata\",\"allergene\":\"Lattice\"},{\"gravita\":\"grave\",\"allergene\":\"Acido acetilsalicilico\"}],\"parametriCritici\":[{\"unita\":\"mmHg\",\"valore\":\"85/50\",\"etichetta\":\"PA\"}],\"rischiElevati\":[{\"tipo\":\"caduta\",\"livello\":\"alto\",\"descrizione\":\"Morse 55\"}]}"
+    },
+    {
+      "id": "W4-23",
+      "name": "No console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W4-24",
+      "name": "No 403 / 4xx / 5xx responses during the journeys",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": []
+}
