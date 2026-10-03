@@ -42,7 +42,7 @@ interface TeamsLikeSidebarProps {
   activeKey: NavKey;
   utente: UtenteApp;
   onNavigate: (key: NavKey) => void;
-  unreadNotes?: number;
+  criticalHandovers?: number | null;
   /** Pannello dell'assistente aperto: la voce lo dichiara (aria-expanded) e resta evidenziata. */
   assistantOpen?: boolean;
   /** Capability della sessione: le voci delle pagine non consentite non compaiono. */
@@ -58,7 +58,7 @@ interface NavItem {
   title?: string;
 }
 
-function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
+function getNavItems(utente: UtenteApp, criticalHandovers: number | null): NavItem[] {
   if (utente.ruolo === 'admin') {
     return [
       { key: 'admin-dashboard', label: 'Dashboard', icon: 'home' },
@@ -67,8 +67,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
       { key: 'terapie', label: 'Terapia', icon: 'pill' },
       { key: 'posti-letto', label: 'Posti Letto', icon: 'bed' },
       { key: 'orari-operatori', label: 'Orari', icon: 'clock' },
-      { key: 'consegne', label: 'Consegne', icon: 'clipboard' },
-      { key: 'note', label: 'Note', icon: 'msg', badge: unreadNotes },
+      { key: 'consegne', label: 'Consegne', icon: 'clipboard', badge: criticalHandovers ?? undefined },
       { key: 'ruoli-permessi', label: 'Ruoli', icon: 'shield', title: 'Ruoli e permessi' },
     ];
   }
@@ -78,9 +77,8 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
     { key: 'pazienti', label: 'Pazienti', icon: 'users' },
     { key: 'terapie', label: 'Terapia', icon: 'pill' },
     { key: 'parametri-multipaziente', label: 'Parametri', icon: 'activity' },
-    { key: 'consegne', label: 'Consegne', icon: 'clipboard' },
+    { key: 'consegne', label: 'Consegne', icon: 'clipboard', badge: criticalHandovers ?? undefined },
     { key: 'agenda-operatore', label: 'Agenda', icon: 'calendar' },
-    { key: 'note', label: 'Note', icon: 'msg', badge: unreadNotes },
     { key: 'anagrafica-farmaci', label: 'Farmaci', icon: 'flask' },
   ];
 }
@@ -90,10 +88,10 @@ export default function TeamsLikeSidebar({
   utente,
   onNavigate,
   assistantOpen = false,
-  unreadNotes = 0,
+  criticalHandovers = 0,
   capabilities = null,
 }: TeamsLikeSidebarProps) {
-  const items = getNavItems(utente, unreadNotes).filter((item) =>
+  const items = getNavItems(utente, criticalHandovers).filter((item) =>
     canNavigate(capabilities, item.key),
   );
 
@@ -118,6 +116,9 @@ export default function TeamsLikeSidebar({
             className={`teams-sidebar__item${resolvedActiveKey === item.key ? ' active' : ''}`}
             onClick={() => onNavigate(item.key)}
             title={item.title ?? item.label}
+            aria-label={item.key === 'consegne'
+              ? `Consegne, ${criticalHandovers === null ? 'conteggio non disponibile' : `${criticalHandovers} critiche da prendere in carico`}`
+              : undefined}
             aria-current={resolvedActiveKey === item.key ? 'page' : undefined}
           >
             <span className="teams-sidebar__item-icon">
@@ -127,6 +128,7 @@ export default function TeamsLikeSidebar({
             {item.badge != null && item.badge > 0 && (
               <span className="teams-sidebar__badge">{item.badge > 99 ? '99+' : item.badge}</span>
             )}
+            {item.key === 'consegne' && criticalHandovers === null && <span className="teams-sidebar__badge" aria-hidden="true">…</span>}
           </button>
         ))}
       </div>
@@ -138,14 +140,15 @@ export default function TeamsLikeSidebar({
             type="button"
             className={`teams-sidebar__item teams-sidebar__item--ai${assistantActive ? ' active' : ''}`}
             onClick={() => onNavigate('ai-assistant')}
-            title="Assistente"
+            title="Milo · assistente clinico AI"
+            aria-label="Apri Milo, assistente clinico AI"
             aria-expanded={assistantOpen}
             aria-haspopup="dialog"
           >
             <span className="teams-sidebar__item-icon">
               <RailIcon name="ai" />
             </span>
-            <span className="teams-sidebar__item-label">Assistente</span>
+            <span className="teams-sidebar__item-label">Milo</span>
           </button>
         )}
       </div>

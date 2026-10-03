@@ -46,6 +46,7 @@ export function AdessoQueue({
   const visible = items.slice(0, ADESSO_QUEUE_LIMIT);
   const rest = items.length - visible.length;
   const urgenti = items.filter((it) => it.inRitardo).length;
+  const consegneUrgenti = items.filter((it) => it.kind.startsWith('consegna-')).length;
   const allReady = terapie === 'ready' && consegne === 'ready' && anomalie === 'ready';
 
   return (
@@ -57,9 +58,10 @@ export function AdessoQueue({
           </h2>
           {urgenti > 0 && (
             <span className="turno-badge turno-badge--crit adesso-queue__count">
-              {urgenti} urgenti
+              {urgenti} in ritardo
             </span>
           )}
+          {consegneUrgenti > 0 && <span className="turno-badge turno-badge--crit">{consegneUrgenti} {consegneUrgenti === 1 ? 'consegna urgente' : 'consegne urgenti'}</span>}
         </div>
         {headerAction}
       </div>
@@ -123,15 +125,10 @@ export function AdessoQueue({
                 {it.ora ?? '—'}
               </span>
               <div className="adesso-queue__main">
-                <span className="adesso-queue__who">
-                  {it.luogo ? `${it.luogo} · ${it.nome}` : it.nome}
-                </span>
-                <span className="adesso-queue__what">
-                  {it.dettaglio} ·{' '}
-                  <span className={`adesso-queue__time${it.inRitardo ? ' is-late' : ''}`}>
-                    {it.tempo.charAt(0).toLowerCase() + it.tempo.slice(1)}
-                  </span>
-                </span>
+                <strong className="adesso-queue__who">{it.nome}</strong>
+                {it.luogo && <span className="adesso-queue__location">{it.luogo}</span>}
+                <span className="adesso-queue__what">{it.dettaglio}</span>
+                <span className={`adesso-queue__time${it.inRitardo ? ' is-late' : ''}`}>{it.tempo}</span>
               </div>
               {onSelectPaziente ? (
                 <button
@@ -141,7 +138,7 @@ export function AdessoQueue({
                   onClick={() => onSelectPaziente(it.nome, it.patientId, it.landing)}
                   aria-label={`Apri ${it.nome}: ${it.dettaglio}, ${it.tempo}`}
                 >
-                  Apri
+                  {it.kind.startsWith('consegna-') ? 'Leggi' : it.kind.startsWith('terapia-') ? 'Apri terapia' : 'Verifica'}
                 </button>
               ) : null}
             </li>

@@ -675,3 +675,4 @@
 .am-round {
   border: 2px solid var(--blue);
 }
+.am-title small { display: block; margin-top: 2px; font-size: 12px; font-weight: 400; opacity: .85; }

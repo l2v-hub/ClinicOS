@@ -27,7 +27,7 @@ interface Props {
 
 const CATEGORIES: Array<{ tone: DashboardNotificationTone; label: string }> = [
   { tone: 'alarm', label: 'Allarmi' },
-  { tone: 'warning', label: 'Warning' },
+  { tone: 'warning', label: 'Attenzioni' },
   { tone: 'notice', label: 'Avvisi' },
 ];
 
@@ -71,12 +71,12 @@ export function DashboardNotificationCenter({
       aria-label={`Segnalazioni operative: ${
         loading
           ? 'in aggiornamento'
-          : `${counts.alarm} allarmi, ${counts.warning} warning, ${counts.notice} avvisi`
+          : `${counts.alarm} allarmi, ${counts.warning} attenzioni, ${counts.notice} avvisi`
       }. Apri dettaglio`}
     >
       <IcoAlert />
-      <span>Segnalazioni</span>
-      <strong>{loading ? '—' : counts.total}</strong>
+      <span>{loading ? 'In verifica' : counts.total === 0 ? 'Nessuna segnalazione' : CATEGORIES.find((category) => category.tone === leadingTone)?.label}</span>
+      <strong>{loading ? '—' : counts[leadingTone]}</strong>
     </button>
   );
 

@@ -10,3 +10,4 @@
   font: 600 14px/20px var(--font-ui);
   color: var(--red);
 }
+.diario-ack-error { margin: 0 0 12px; padding: 12px 16px; border: 1px solid #efc3cb; border-radius: 12px; background: #fdecee; color: #b42335; font-size: 14px; line-height: 1.5; }

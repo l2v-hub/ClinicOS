@@ -21,8 +21,7 @@ import {
 } from '../../lib/news2History';
 import { createPortal } from 'react-dom';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
-import { news2Tile, vitalTiles } from '../../lib/patientVitalsOverview';
-import { useCan } from '../../lib/capabilities';
+import { VitalsOverview } from './VitalsOverview';
 import './News2.css';
 
 interface Props {
@@ -213,120 +212,6 @@ export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNo
   );
 }
 
-const TREND_PATH = {
-  up: 'M4 16l5-5 4 4 7-7M15 8h5v5',
-  down: 'M4 8l5 5 4-4 7 7M15 16h5v-5',
-  flat: 'M4 12h16M16 8l4 4-4 4',
-} as const;
-
-/** Tessere della Panoramica come il prototipo: FR, SpO2, PA, FC, Temp. e NEWS2. */
-function VitalsOverview({
-  state,
-  readings,
-  stale,
-  onRetry,
-  onOpenHistory,
-  onRecordNow,
-}: {
-  state: 'loading' | 'ready' | 'error';
-  readings: PatientParameterReading[];
-  stale: boolean;
-  onRetry: () => void;
-  onOpenHistory: () => void;
-  onRecordNow?: () => void;
-}) {
-  // F10: l'azione naturale sulla tessera (rilevare) solo per chi può registrare parametri.
-  const canRecord = useCan('parameters.create_reading');
-  if (state === 'error')
-    return (
-      <p className="vitals-note vitals-note--error" role="alert">
-        Parametri non disponibili: non è stato possibile caricare le rilevazioni.{' '}
-        <button type="button" className="link-btn" onClick={onRetry}>
-          Riprova
-        </button>
-      </p>
-    );
-  if (state === 'loading')
-    return (
-      <p className="vitals-note" role="status">
-        Caricamento dei parametri…
-      </p>
-    );
-  const tiles = vitalTiles(readings);
-  const n = news2Tile(readings);
-  const newsTone =
-    n.score === null
-      ? 'none'
-      : n.tone === 'high' || n.tone === 'medium'
-        ? 'crit'
-        : n.tone === 'single'
-          ? 'warn'
-          : 'none';
-  return (
-    <section className="vitals" aria-label="Ultimi parametri e NEWS2">
-      {tiles.map((t) => (
-        <div key={t.key} className={`vt vt--${t.tone}`}>
-          <span className="vt__label">{t.label}</span>
-          <span className="vt__value">
-            {t.value ?? '—'}
-            <small>{t.value === null ? 'non rilevato' : t.unit}</small>
-          </span>
-          <span className="vt__trend">
-            {t.direction && (
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d={TREND_PATH[t.direction]} />
-              </svg>
-            )}
-            {t.trend ?? (t.at ? `alle ${t.at}` : 'nessuna rilevazione')}
-          </span>
-        </div>
-      ))}
-      <div className={`vt vt--news2 vt--${newsTone}`}>
-        <button
-          type="button"
-          className="vt__open"
-          onClick={onOpenHistory}
-          aria-label={
-            n.score === null
-              ? `NEWS2 non calcolabile${n.missing.length ? `: mancano ${n.missing.join(', ')}` : ''}. Apri lo storico NEWS2`
-              : `NEWS2 ${n.score} alle ${n.at}: ${n.response}${stale ? '. Da aggiornare' : ''}. Apri lo storico NEWS2`
-          }
-        >
-          <span className="vt__label">NEWS2{n.at ? ` · ${n.at}` : ''}</span>
-          {n.score === null ? (
-            <>
-              <span className="vt__value vt__value--muted">Non calcolabile</span>
-              <span className="vt__trend">
-                {n.missing.length ? `Mancano ${n.missing.join(', ')}` : 'Nessuna rilevazione'}
-              </span>
-            </>
-          ) : (
-            <>
-              <span className="vt__value">
-                {n.score}
-                <small>punti</small>
-              </span>
-              <span className="vt__trend">
-                {stale ? 'Da aggiornare · ' : ''}
-                {n.response}
-              </span>
-            </>
-          )}
-        </button>
-        {onRecordNow && canRecord && (
-          <button
-            type="button"
-            className="ds-btn ds-btn--secondary vt__record"
-            onClick={onRecordNow}
-            aria-label="Rileva ora i parametri di questo paziente"
-          >
-            Rileva ora
-          </button>
-        )}
-      </div>
-    </section>
-  );
-}
 
 const incompleteText = (n: number) =>
   n === 1 ? "c'è 1 rilevazione incompleta" : `ci sono ${n} rilevazioni incomplete`;

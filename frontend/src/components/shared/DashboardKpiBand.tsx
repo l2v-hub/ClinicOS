@@ -37,6 +37,7 @@ export function DashboardKpiBand({ label, items, loading = false }: Props) {
           className={`dashboard-kpi-card dashboard-kpi-card--${item.tone}`}
           onClick={item.onOpen}
           key={item.id}
+          data-kpi-id={item.id}
           data-unavailable={item.value === '—' || undefined}
           aria-label={`${item.label}: ${item.spokenValue ?? item.value}. ${item.status}. ${item.actionLabel}`}
         >

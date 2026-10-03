@@ -103,7 +103,7 @@ test('UX2 W8 trace: «Urgenza presa in carico da X (ruolo) alle hh:mm», older d
   );
   assert.equal(
     urgencyTraceText(taken({ byMe: true }), NOW),
-    'Urgenza presa in carico da te alle 08:12',
+    'Urgenza presa in carico da Medico 1 (medico) alle 08:12',
   );
   assert.equal(
     urgencyTraceText({ state: 'taken', takenBy: null, isAuthor: false, canAcknowledge: false }),
@@ -168,7 +168,9 @@ test('NEWS2: compact label carries time and «da aggiornare»; tile offers «Ril
   assert.match(compact, /da aggiornare/);
   assert.match(compact, /NEWS2 non calcolabile/);
   assert.match(src, /Rileva ora/);
-  assert.match(src, /useCan\('parameters\.create_reading'\)/);
+  const overview = readFileSync(new URL('../../VitalsOverview.tsx', import.meta.url), 'utf8');
+  assert.match(overview, /useCan\('parameters\.create_reading'\)/);
+  assert.match(overview, /Rileva ora/);
   const css = readFileSync(new URL('../../News2.css', import.meta.url), 'utf8');
   assert.match(css, /\.vt--news2 \.vt__value--muted \{\s*white-space: normal;/);
 });

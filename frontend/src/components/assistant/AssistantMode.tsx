@@ -401,7 +401,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
       className="am"
       role="dialog"
       aria-modal="true"
-      aria-label="Assistente AI"
+      aria-label="Milo · assistente clinico AI"
       onKeyDown={(e) => {
         if (e.key === 'Escape' && !state.busy) {
           e.stopPropagation();
@@ -440,7 +440,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         <button type="button" className="ds-btn ds-btn--secondary am-back" onClick={onClose}>
           ← Torna all’applicazione
         </button>
-        <h1 className="am-title">Assistente AI</h1>
+        <h1 className="am-title">Milo <small>Assistente clinico AI</small></h1>
         <div className="am-identity" data-testid="am-identity">
           {session ? (
             <>

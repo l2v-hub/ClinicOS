@@ -1,0 +1,23 @@
+.topbar-handovers {
+  position: relative;
+  flex: none;
+}
+.topbar-handovers.has-critical {
+  color: #b42335;
+  border-color: #efc3cb;
+  background: #fffafb;
+}
+.topbar-handovers__badge {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #b42335;
+  color: white;
+  border: 2px solid var(--surface);
+  font: 600 11px/16px var(--font-ui);
+  text-align: center;
+}

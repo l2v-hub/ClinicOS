@@ -558,6 +558,27 @@ body {
   }
 }
 
+/* Mantiene titolo e accessi alle consegne leggibili sui telefoni, anche nel simulatore. */
+@media (max-width: 600px) {
+  .compact-topbar {
+    height: auto;
+    min-height: var(--topbar-h);
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 12px 8px;
+  }
+  .topbar-title {
+    flex: 1 1 calc(100% - 120px);
+  }
+  .topbar-clock {
+    display: none;
+  }
+  .topbar-right {
+    flex: 1 1 100%;
+    justify-content: flex-end;
+  }
+}
+
 /* .page-tabs/.section-tabs (former L2/L3 tab-bar impl, feature 009) removed in Ciclo 18 —
    dead CSS for an orphaned component (NavComponents.tsx, zero import sites); TopNav.tsx is the
    canonical, live L2/L3 nav. See design-system/README.md, Ciclo 18. */

@@ -450,6 +450,12 @@
   background: #fdecee;
   color: #b42335;
 }
+.dashboard-notification-compact--alarm { color: #b42335; background: #fdecee; border: 1px solid #efc3cb; }
+.dashboard-notification-compact--alarm:hover { background: #fbdce2; }
+.dashboard-notification-compact--warning { color: #8f5500; background: #fdf3e2; border: 1px solid #ead0a7; }
+.dashboard-notification-compact--warning:hover { background: #fae9cc; }
+.dashboard-notification-compact--loading { color: var(--text-muted); background: var(--surface); }
+.dashboard-notification-compact--clear { color: var(--text-muted); }
 .dashboard-notification-compact--warning strong {
   background: #fdf3e2;
   color: #8f5500;

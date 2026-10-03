@@ -85,7 +85,7 @@ test('anomaly row exposes an intentional accessible name and keyboard focus', ()
 
 test('notification bar keeps all severity labels visible and responsive', () => {
   assert.match(notificationCenter, /label: 'Allarmi'/);
-  assert.match(notificationCenter, /label: 'Warning'/);
+  assert.match(notificationCenter, /label: 'Attenzioni'/);
   assert.match(notificationCenter, /label: 'Avvisi'/);
   assert.match(notificationCenter, /data-dialog-initial-focus/);
   assert.match(notificationStyles, /position: sticky/);

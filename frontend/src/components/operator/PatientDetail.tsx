@@ -2823,13 +2823,14 @@ export function PatientDetail({
           {hasAllergie && (
             <button
               className="cr-alert-strip cr-alert-strip--allergie"
+              type="button"
               onClick={() => setCardModal('allergie')}
             >
               <span className="cr-alert-strip__ico">
                 <IcoWarning />
               </span>
               <span>
-                <strong>ALLERGIE GRAVI:</strong> {allergieGravi.map((a) => a.allergene).join(', ')}
+                <strong>Attenzione permanente · allergie gravi:</strong> {allergieGravi.map((a) => a.allergene).join(', ')}
               </span>
               <span className="cr-alert-strip__link">Gestisci →</span>
             </button>

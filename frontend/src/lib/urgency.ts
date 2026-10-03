@@ -5,6 +5,7 @@
 // Regole pure (testabili). Il backend è la fonte di verità (lib/urgency.ts lato server).
 import { facilityLocalMinute } from './facilityTime';
 import type { UrgencyView } from '../types';
+export const URGENCY_ACKNOWLEDGED_EVENT = 'clinicos:urgency-acknowledged';
 
 /** Urgenza ancora da prendere in carico (conta in badge, Turno, KPI, notifiche). */
 export function isActiveUrgency(u: UrgencyView | null | undefined): boolean {
@@ -60,8 +61,8 @@ export function urgencyTraceText(
   if (u.state === 'active')
     return u.isAuthor ? 'Urgente · in attesa che un collega la prenda in carico' : 'Urgente';
   if (!u.takenBy) return 'Urgenza chiusa';
-  const who = u.takenBy.byMe ? 'te' : u.takenBy.operatorName;
-  const role = u.takenBy.byMe ? '' : (ROLE_LABEL[u.takenBy.operatorRole] ?? u.takenBy.operatorRole);
+  const who = u.takenBy.operatorName;
+  const role = ROLE_LABEL[u.takenBy.operatorRole] ?? u.takenBy.operatorRole;
   const time = urgencyTime(u.takenBy.acknowledgedAt, now);
   return `Urgenza presa in carico da ${who}${role ? ` (${role})` : ''}${time ? ` alle ${time}` : ''}`;
 }

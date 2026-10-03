@@ -2,6 +2,7 @@
 .adesso-queue__count {
   font-variant-numeric: tabular-nums;
 }
+.adesso-queue { container-type: inline-size; }
 .adesso-queue__notice {
   margin: 0;
   display: flex;
@@ -24,13 +25,16 @@
   grid-template-columns: 56px minmax(0, 1fr) auto;
   gap: 16px;
   align-items: center;
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 .adesso-queue__row:first-child {
-  border-top: 0;
-  padding-top: 0;
+  padding-top: 16px;
 }
+.adesso-queue__row--terapia-ritardo,
+.adesso-queue__row--consegna-scaduta { border-left: 4px solid #b42335; background: #fffafb; }
 .adesso-queue__ora {
   font: 600 16px/24px var(--font-ui);
   font-variant-numeric: tabular-nums;
@@ -43,14 +47,15 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  gap: 6px;
 }
 .adesso-queue__who {
-  font: 500 14px/20px var(--font-ui);
-  color: var(--text-muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font: 600 16px/24px var(--font-ui);
+  color: var(--text);
+  overflow-wrap: anywhere;
 }
+.adesso-queue__location { font: 400 13px/20px var(--font-ui); color: var(--text-muted); }
+.adesso-queue__time { align-self: flex-start; font: 500 13px/20px var(--font-ui); padding: 3px 8px; border-radius: 6px; background: #eaf1fe; color: #1d4fc4; }
 .adesso-queue__what {
   font: 600 16px/24px var(--font-ui);
   color: var(--text);
@@ -58,6 +63,7 @@
 }
 .adesso-queue__time.is-late {
   color: #b42335;
+  background: #fdecee;
 }
 .adesso-queue__empty {
   margin: 0;
@@ -75,7 +81,7 @@
   font: 500 14px/20px var(--font-ui);
   color: var(--text-muted);
 }
-@container (max-width: 380px) {
+@container (max-width: 520px) {
   .adesso-queue__row {
     grid-template-columns: 56px minmax(0, 1fr);
   }

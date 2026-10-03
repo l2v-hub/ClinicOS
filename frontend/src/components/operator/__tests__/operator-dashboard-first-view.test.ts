@@ -21,7 +21,8 @@ test('operator first view (HMI 1 Turno): indicators, then Adesso with the compac
   assert.ok(notificationIndex > adessoIndex);
   assert.match(dashboard, /<DashboardNotificationCenter\s+compact/);
   assert.match(dashboard, /<TurnoAppointments/);
-  assert.match(dashboard, /<TurnoPatients/);
+  assert.match(dashboard, /<TurnoHandovers/);
+  assert.doesNotMatch(dashboard, /<TurnoPatients/);
   assert.doesNotMatch(dashboard, /className="stats-grid"/);
   assert.doesNotMatch(dashboard, /className="progress-card-grid"/);
   assert.doesNotMatch(dashboard, /I Miei Pazienti|Appuntamenti Oggi|Consegne Aperte/);

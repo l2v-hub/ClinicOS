@@ -158,7 +158,7 @@ export function turnoPatientCard(
           'Allergia',
           summary.allergeni?.map((a) => a.allergene),
         ),
-        tone: 'crit',
+          tone: 'warn',
         alert: true,
         landing: badgeLanding(patient.id, 'allergy'),
       });

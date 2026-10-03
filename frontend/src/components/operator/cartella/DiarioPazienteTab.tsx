@@ -26,7 +26,7 @@ import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload'
 import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
 import { UrgencyNotice } from '../../shared/UrgencyNotice';
-import { isActiveUrgency, postUrgencyAck } from '../../../lib/urgency';
+import { isActiveUrgency, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -195,6 +195,7 @@ export function DiarioPazienteTab({
   const canDeleteEntry = useCan('diary.delete_entry');
   // «Ho capito» su un'urgenza: voce in corso di registrazione (blocca il doppio tocco).
   const [acking, setAcking] = useState<string | null>(null);
+  const [ackError, setAckError] = useState('');
 
   function emptyForm(): DiarioForm {
     return {
@@ -481,6 +482,7 @@ export function DiarioPazienteTab({
 
   async function handleAck(entry: DiaryFeedEntry) {
     if (acking) return;
+    setAckError('');
     setAcking(entry.id);
     try {
       // Una consegna nel diario si prende in carico sulla consegna stessa (stessa regola).
@@ -494,10 +496,11 @@ export function DiarioPazienteTab({
       setEntries((prev) =>
         prev.map((e) => (e.id === entry.id ? { ...e, urgency: result.urgency } : e)),
       );
+      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
       // Rivalida in background (la pagina in cache resta visibile): stato condiviso con gli altri.
       setRefreshVersion((version) => version + 1);
     } catch (error) {
-      setError(
+      setAckError(
         error instanceof Error && error.message
           ? error.message
           : 'Presa in carico non registrata. Riprova.',
@@ -553,7 +556,7 @@ export function DiarioPazienteTab({
     return (
       <div
         key={row.id}
-        className={`diario-card diario-card--${row.authorType}${toSee ? ' diario-card--to-see' : ''}`}
+        className={`diario-card diario-card--${row.authorType}${toSee ? ' diario-card--to-see' : ''}${urgentActive ? ' diario-card--urgent' : row.urgency?.state === 'taken' ? ' diario-card--taken' : ''}`}
         data-entry-id={row.id}
         data-diary-entry-id={row.id}
       >
@@ -854,6 +857,7 @@ export function DiarioPazienteTab({
 
   return (
     <div className="cr-tab-content">
+      {ackError && <p className="diario-ack-error" role="alert">{ackError}</p>}
       {/* Error message */}
       {error && (
         <div

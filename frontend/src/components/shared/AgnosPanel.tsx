@@ -317,7 +317,7 @@ export function AgnosPanel({
       <aside
         className={`ai-drawer agnos-panel${workspace ? ' agnos-panel--workspace' : ''}${minimized ? ' agnos-panel--minimized' : ''}`}
         role="dialog"
-        aria-label="Assistente virtuale ClinicOS"
+        aria-label="Milo · assistente clinico AI"
         aria-hidden={!open || minimized}
         inert={!open || minimized ? true : undefined}
         ref={asideRef}
@@ -326,7 +326,7 @@ export function AgnosPanel({
           {/* HMI 1: "✧ Assistente"; la natura di IA resta dichiarata (etichetta e riga sotto) */}
           <h2 className="ai-drawer__title agnos-title">
             <IcoAI />
-            Assistente <span className="assistant-id__badge">IA</span>
+            Milo <span className="assistant-id__badge">IA</span>
           </h2>
           <div className="agnos-header-actions">
             {tts.supported && (

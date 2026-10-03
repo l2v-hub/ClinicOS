@@ -5,6 +5,9 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  max-width: none;
+  margin: 0;
+  width: 100%;
 }
 
 /* ── Indicatori: etichetta grigia sopra, numero grande sotto ──────────────── */
@@ -59,6 +62,7 @@
   display: none;
 }
 .turno .dashboard-kpi-card--unknown .dashboard-kpi-card__status,
+.turno .dashboard-kpi-card[data-kpi-id='allergie'] .dashboard-kpi-card__status,
 .turno .dashboard-kpi-card[data-unavailable] .dashboard-kpi-card__status {
   display: inline-flex;
   font: 500 14px/20px var(--font-ui);

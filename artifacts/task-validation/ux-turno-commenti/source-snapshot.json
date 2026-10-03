@@ -1,0 +1,171 @@
+{
+  "lockfile": "A7C71D1FB154F0D72EC2DE6E207780CB352960848C8C47C5EF1BC300F2CF6E7F",
+  "files": [
+    {
+      "sha256": "D4B93EE32B1112879C9FE1DBB494682FEF022B3DE673DB0C9EA722336CC33EE4",
+      "path": "frontend/src/App.css"
+    },
+    {
+      "sha256": "53E98743D69C5774BDD869EA1029B9FC9A5F4EEC1CE6AE2A97131495403C7833",
+      "path": "frontend/src/App.tsx"
+    },
+    {
+      "sha256": "8A35C55EC16EAF1F6AC8734F28664D57ED3F4B5475411D2F06BC130CAA739567",
+      "path": "frontend/src/components/assistant/AssistantMode.css"
+    },
+    {
+      "sha256": "DFD8575EC5273B1584EBFB930044F4CA3347D8B2DD912B6C8B561634AA4A5077",
+      "path": "frontend/src/components/assistant/AssistantMode.tsx"
+    },
+    {
+      "sha256": "E141FF20DF068E7F93B508F88BBA7BBA658F01EF713C32208724BED7FFE9C5BE",
+      "path": "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts"
+    },
+    {
+      "sha256": "1BE50B7A7868C49669F404EE31FF31B258EA3B556EB04D0022F5C0CA4E4555A4",
+      "path": "frontend/src/components/operator/__tests__/operator-dashboard-first-view.test.ts"
+    },
+    {
+      "sha256": "315BE6179C6C57C182F08A96991D249BC2F2F927347097F2BE945E7AD3C3A199",
+      "path": "frontend/src/components/operator/__tests__/turno-review-ui.test.ts"
+    },
+    {
+      "sha256": "E5FACA0FF0E6BB4D31EAEB43E093F0603F00866746507D49F5C41EE705E57063",
+      "path": "frontend/src/components/operator/AdessoQueue.css"
+    },
+    {
+      "sha256": "FF326F1EECEEC77AC26C80712A4E45E7EE070C8AC433B3FA8BE38B3D56B88F62",
+      "path": "frontend/src/components/operator/AdessoQueue.tsx"
+    },
+    {
+      "sha256": "B1477AB9309CEA1478A1B5BD52C8AA22E978C0E5157F549282C32EE6E1D9F960",
+      "path": "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts"
+    },
+    {
+      "sha256": "B21E06679C2F957FBDAB947CC2C4B3491E1B80E7A43886DA59C45C38257B4536",
+      "path": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx"
+    },
+    {
+      "sha256": "442B5C6A9AF113C2469B0945826394C79DF0FFAB799BEE6417EC204C8267D585",
+      "path": "frontend/src/components/operator/cartella/DiaryAck.css"
+    },
+    {
+      "sha256": "434D8CD889ACD64167B563ACD1BDB1384BB920C877EAF6D61193EDE8BBAD75F1",
+      "path": "frontend/src/components/operator/DashboardNotificationCenter.css"
+    },
+    {
+      "sha256": "EB00D155DF0491B424FF45C9E7D3D468BF9153EC4FA2D4FEBC93C2B104F36E4F",
+      "path": "frontend/src/components/operator/DashboardNotificationCenter.tsx"
+    },
+    {
+      "sha256": "59FFE37D467D578C3834E23B8E1C6E5E922222CFFC3F151F1F13C4FA9D3AA688",
+      "path": "frontend/src/components/operator/News2.css"
+    },
+    {
+      "sha256": "F00D2C45FFC49445683E5BAA140A149157405ADAE42B7FC0463E26617C4D239D",
+      "path": "frontend/src/components/operator/News2Chip.tsx"
+    },
+    {
+      "sha256": "F85650C47B1216BA7EE9D68B059786DE0782A7FB15FB4408B5D8105560E6F522",
+      "path": "frontend/src/components/operator/OperatorDashboard.css"
+    },
+    {
+      "sha256": "A4874047C1284DE8EB50A2A8818C312B7E46BCBD89DA566AD256578A64CD61BC",
+      "path": "frontend/src/components/operator/OperatorDashboard.tsx"
+    },
+    {
+      "sha256": "B67DBFF874EB85EA91AF881C5EBFEDFDEFB3F1A226E898B3862D769724576EEC",
+      "path": "frontend/src/components/operator/PatientDetail.tsx"
+    },
+    {
+      "sha256": "3BDDDA149702396E12615A313E8F89D331368B1E49943F695A9879D6953748C5",
+      "path": "frontend/src/components/operator/PatientRecordData.css"
+    },
+    {
+      "sha256": "37070B232D737580B9F243E6D2E831E9AF8896E4349A0D80E130977E0DF9AE7C",
+      "path": "frontend/src/components/operator/TurnoHandovers.css"
+    },
+    {
+      "sha256": "76C96369A96683613A441C2CF3DBD81CCF21251C1C84DD3E66B51B0DE8624E16",
+      "path": "frontend/src/components/operator/TurnoHandovers.tsx"
+    },
+    {
+      "sha256": "E639B299B378E2B868100A720EDD2CD4FB061DD78EB977B452D48673EFF946AE",
+      "path": "frontend/src/components/operator/VitalsOverview.tsx"
+    },
+    {
+      "sha256": "C3C4534DF44A26749F147E1B2A8263071D132FC7707AA9A67220B0A879929817",
+      "path": "frontend/src/components/shared/AgnosPanel.tsx"
+    },
+    {
+      "sha256": "9531B7D32577758B38CF96858F813A218BA11C215C8507F9D3B8894C1D11ECF6",
+      "path": "frontend/src/components/shared/DashboardKpiBand.tsx"
+    },
+    {
+      "sha256": "D8F8B9845DE66CE7434CB73E05815E862C39CB02F6DAA0415BA6C2C06E4B9A7F",
+      "path": "frontend/src/components/shared/HandoverEntryButton.css"
+    },
+    {
+      "sha256": "D928D6678E06DE0518D42123896BA4854DEE4EB78B52870662B5F230DA3F26ED",
+      "path": "frontend/src/components/shared/HandoverEntryButton.tsx"
+    },
+    {
+      "sha256": "56F1907D80AAFE0CFE308A7DC34AA04686F48F9CA7E770A0466E96D722255683",
+      "path": "frontend/src/components/shared/TeamsLikeSidebar.tsx"
+    },
+    {
+      "sha256": "9C5CFC4521E6157DA4ECFFE49F926FE05640C5947C216AB979D65545114074FE",
+      "path": "frontend/src/lib/__tests__/handoverPreview.test.ts"
+    },
+    {
+      "sha256": "7A91DAF87EE0DE32C4E946C185FC2FF18520B3B585A156DF0E280AB696092CDF",
+      "path": "frontend/src/lib/__tests__/notesAppIntegration.test.ts"
+    },
+    {
+      "sha256": "900F95A8767F6C937A27CF2A63D8284702D2F24161B158746F59A508FF0C9E48",
+      "path": "frontend/src/lib/handoverPreview.ts"
+    },
+    {
+      "sha256": "4CE59E24D7F90AE1694DA5F85FBCCC668C3AF513DBA42164290725F9DB0963C2",
+      "path": "frontend/src/lib/turnoPatients.ts"
+    },
+    {
+      "sha256": "E14C329A2B8EA2553F0A5AC47D096484CC8E138A7620F34BCA2E3F37E217C6E3",
+      "path": "frontend/src/lib/urgency.ts"
+    },
+    {
+      "sha256": "FE1D8DAEB3DDFDA341AE67ADCB159EAFF637B1D50819CCD4EB9761AC8295F0B2",
+      "path": "tests/ux-turno/app.html"
+    },
+    {
+      "sha256": "D1C6F4AEE2BC3C05BE0B912B725F9902232B4FFC366A238E46235ED6C589AA2B",
+      "path": "tests/ux-turno/fixture.tsx"
+    },
+    {
+      "sha256": "1908E4B80E20B88ECF455EA35C17F4B45D537EC3DAA458CC5061D0433257924B",
+      "path": "tests/ux-turno/index.html"
+    },
+    {
+      "sha256": "CBAE14AF6518DA3DA952DE84CB9618EB1B037DCCF6BF623338B8FE8603D311AB",
+      "path": "tests/ux-turno/run-baseline.mjs"
+    },
+    {
+      "sha256": "5EFEC8F7D79B9091B143BB9ADA8B47301BB9053763D59C32E3C37CEBB675BECA",
+      "path": "tests/ux-turno/run-build.mjs"
+    },
+    {
+      "sha256": "48B3E8970F6CF5AA3A19D2F8C3E23E526B44B78FB8AD9759320DD21AFBC3AE4A",
+      "path": "tests/ux-turno/run-focused.mjs"
+    },
+    {
+      "sha256": "6F841E9624DCF1F12EDD383345553DA067BF6FC06987D9F5A26CA909E3D4D197",
+      "path": "tests/ux-turno/run-unit.mjs"
+    },
+    {
+      "sha256": "9D80877EFFEFFFD5FE9E65D45D5B27879D4270368A4842B0830E3427C575EB59",
+      "path": "tests/ux-turno/run-validation.mjs"
+    }
+  ],
+  "head": "c39e2d103539364cb1d981377e578841f6fb33b3",
+  "capturedAt": "2026-10-03"
+}

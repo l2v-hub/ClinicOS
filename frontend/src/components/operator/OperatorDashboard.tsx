@@ -1,7 +1,5 @@
 import type { UtenteApp, SlotAgenda, ClinicalOverview, ConsegnaOverview } from '../../types';
 import type { NavKey } from '../../types';
-import { useMemo } from 'react';
-import type { TurnoTherapies } from '../../lib/turnoPatients';
 import { PageHeader } from '../shared/PageHeader';
 import { anomalyTherapyId, useAnomalieReparto } from './cartella/useAnomalieReparto';
 import type { PatientLanding } from '../../lib/patientTargetResolver';
@@ -11,7 +9,7 @@ import { DashboardNotificationCenter } from './DashboardNotificationCenter';
 import { OperatorClinicalKpiBand } from './OperatorClinicalKpiBand';
 import { AdessoQueue } from './AdessoQueue';
 import { TurnoAppointments } from './TurnoAppointments';
-import { TurnoPatients } from './TurnoPatients';
+import { TurnoHandovers } from './TurnoHandovers';
 import { buildAdessoQueue } from '../../lib/adessoQueue';
 import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
 import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
@@ -31,6 +29,7 @@ interface OperatorDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
+  onRetryConsegne?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   /** Direct access: lista pazienti già filtrata su ciò che una tessera/segnalazione conta. */
   onOpenPatientList?: (entry: PatientListEntry) => void;
@@ -52,6 +51,7 @@ export function OperatorDashboard({
   onOpenLateTherapy,
   onOpenConsegneAperte,
   onOpenConsegneFeed,
+  onRetryConsegne,
   onSelectPaziente,
   onOpenPatientList,
   clinicalOverview = null,
@@ -78,33 +78,6 @@ export function OperatorDashboard({
       therapyId: anomalyTherapyId(anomalie, p.patientId),
     })),
   });
-
-  const terapieState = somministrazioni.fallito
-    ? 'error'
-    : somministrazioni.inCorso
-      ? 'loading'
-      : 'ready';
-  const turnoTherapies = useMemo(
-    () => ({
-      state: terapieState,
-      scadute: somministrazioni.scadute,
-      prossime: somministrazioni.prossime,
-      senzaOrario: somministrazioni.senzaOrario,
-      domani: somministrazioni.domaniFallito
-        ? 'error'
-        : somministrazioni.domaniInCorso
-          ? 'loading'
-          : 'ready',
-    }),
-    [
-      terapieState,
-      somministrazioni.scadute,
-      somministrazioni.prossime,
-      somministrazioni.senzaOrario,
-      somministrazioni.domaniFallito,
-      somministrazioni.domaniInCorso,
-    ],
-  ) as TurnoTherapies;
 
   // Clinical KPIs from the constant-size server aggregate.
   const critici = clinicalOverview?.critici ?? 0;
@@ -213,7 +186,9 @@ export function OperatorDashboard({
             onOpenAgenda={() => onNavigate('agenda-operatore')}
             onSelectPaziente={onSelectPaziente}
           />
-          <TurnoPatients therapies={turnoTherapies} onSelectPaziente={onSelectPaziente} />
+          <TurnoHandovers overview={consegneOverview} state={consegneOverviewState}
+            onOpen={onOpenConsegneFeed ?? (() => onNavigate('consegne'))}
+            onRetry={onRetryConsegne} onSelectPaziente={onSelectPaziente} />
         </div>
       </div>
     </div>

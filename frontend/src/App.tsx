@@ -95,7 +95,7 @@ import {
   mergeConsegnaPage,
   type ConsegnaFeedQuery,
 } from './lib/consegneFeed';
-import { postUrgencyAck } from './lib/urgency';
+import { postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from './lib/urgency';
 import {
   buildTherapySlotPageUrl,
   mergeTherapySlotPages,
@@ -145,6 +145,8 @@ import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
 import { classicScreenTarget } from './components/assistant/classicScreenTarget';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
+import { HandoverEntryButton } from './components/shared/HandoverEntryButton';
+import { criticalHandoverCount } from './lib/handoverPreview';
 import { TopbarTitleSlot } from './components/shared/topbarTitleSlot';
 import { ShiftClock } from './components/shared/ShiftClock';
 import { UserMenu } from './components/shared/UserMenu';
@@ -2448,6 +2450,22 @@ export default function App() {
       void loadPatientConsegne(scope.patientId);
   }
 
+  // A handover acknowledged through the diary must refresh the same shell badges.
+  useEffect(() => {
+    if (!utente) return;
+    const onDiaryAck = (event: Event) => {
+      const patientId = (event as CustomEvent<{ patientId?: string }>).detail?.patientId;
+      void loadConsegneOverview();
+      void loadClinicalOverview();
+      const scope = consegnaViewScopeRef.current;
+      if (scope.navKey === 'consegne' && scope.mode === 'feed') void loadConsegne(consegneQueryRef.current);
+      if (scope.patientId && patientId === scope.patientId && canRefreshPatientConsegne(scope, patientId))
+        void loadPatientConsegne(patientId);
+    };
+    window.addEventListener(URGENCY_ACKNOWLEDGED_EVENT, onDiaryAck);
+    return () => window.removeEventListener(URGENCY_ACKNOWLEDGED_EVENT, onDiaryAck);
+  }, [utente, loadConsegneOverview, loadClinicalOverview, loadConsegne, loadPatientConsegne]);
+
   async function addConsegna(c: ConsegnaCreateRequest): Promise<ConsegnaCreateResult> {
     const sessionEpoch = sessionEpochRef.current;
     const result = await createConsegna(API_URL, c, { headers: operatorHeaders() });
@@ -3246,7 +3264,7 @@ export default function App() {
           activeKey={navKey}
           utente={utente}
           onNavigate={(k) => navigate(k)}
-          unreadNotes={notesUnreadCount}
+          criticalHandovers={criticalHandoverCount(consegneOverview, consegneOverviewState)}
           assistantOpen={aiVisible}
           capabilities={authz?.capabilities ?? null}
         />
@@ -3308,17 +3326,25 @@ export default function App() {
             <div className="topbar-title" ref={setTopbarTitleSlot} />
             <ShiftClock />
             <div className="topbar-right">
+              {canNavigate(authz?.capabilities ?? null, 'consegne') && (
+                <HandoverEntryButton
+                  count={criticalHandoverCount(consegneOverview, consegneOverviewState)}
+                  state={consegneOverviewState}
+                  onOpen={() => consegneOverviewState === 'ready' && (consegneOverview?.summary.urgentActive ?? 0) > 0
+                    ? openConsegneAperte() : openConsegneFeed()}
+                />
+              )}
               {utente && (
                 <button
                   type="button"
                   className="topbar-search topbar-assistant"
                   onClick={() => setAssistantModeOpen(true)}
-                  title="Assistente AI (schermo intero)"
-                  aria-label="Apri l’Assistente AI a schermo intero"
+                  title="Milo · assistente clinico AI (schermo intero)"
+                  aria-label="Apri Milo, assistente clinico AI, a schermo intero"
                   data-testid="assistant-entry"
                 >
                   <IcoAI />
-                  <span className="topbar-assistant__label">Assistente AI</span>
+                  <span className="topbar-assistant__label">Milo</span>
                   <AssistantEntryBadge refreshKey={`${utente.id}:${assistantModeOpen}`} />
                 </button>
               )}
@@ -3641,6 +3667,7 @@ export default function App() {
                           utente={utente}
                           consegneOverview={consegneOverview}
                           consegneOverviewState={consegneOverviewState}
+                          onRetryConsegne={() => void loadConsegneOverview()}
                           agenda={agendaOggi}
                           agendaState={
                             appointmentLoadError
