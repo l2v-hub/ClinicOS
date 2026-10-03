@@ -46,8 +46,31 @@ for (const t of therapies) {
         administrationUnit: 'compressa',
       })),
       operatoreInseritore: 'Seed demo P10',
+      prescrittore: 'Dr. Medico Uno',
+      ...(t.farmacoNome === 'Metformina' ? { note: 'Dopo il pasto' } : {}),
     }),
   );
+}
+// UX 2026-10-03 (W2): a synthetic PRN («al bisogno») prescription for the in-place PRN flow.
+if (
+  !(await prisma.patientTherapy.findFirst({
+    where: { patientId: patient.id, farmacoNome: 'Paracetamolo', tipo: 'al_bisogno' },
+  }))
+) {
+  await prisma.patientTherapy.create({
+    data: {
+      patientId: patient.id,
+      farmacoNome: 'Paracetamolo',
+      dosaggio: '1000 mg compressa',
+      viaSomministrazione: 'orale',
+      tipo: 'al_bisogno',
+      stato: 'attiva',
+      dataInizio: today,
+      prescrittore: 'Dr. Medico Uno',
+      note: 'Se dolore > 4/10 o febbre > 38 °C; massimo 3 dosi al giorno',
+      operatoreInseritore: 'Seed demo P10',
+    },
+  });
 }
 console.log(JSON.stringify({ nanni: patient.id }));
 await prisma.$disconnect();

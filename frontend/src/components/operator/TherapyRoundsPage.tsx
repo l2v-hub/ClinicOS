@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type {
   TherapyActionInfo,
   TherapySlot,
@@ -16,7 +16,32 @@ import { giroTimeDone, giroTimes, initialGiroTime } from '../../lib/therapyGiro'
 import { weekDays } from '../../lib/therapyWeek';
 import { DateNav } from '../shared/DateNav';
 import { IcoCalendar } from '../../icons';
+import { useCapabilityDecided, useRequiresConfirmation } from '../../lib/capabilities';
+import { useCanAdministerTherapy } from '../../lib/therapyPermissions';
+import {
+  recordAdministration,
+  type AdministrationOutcome,
+} from '../../lib/therapyAdministrationWrite';
+import { lateMinutes } from '../../lib/therapyDoseStatus';
 import './TherapyRoundsPage.css';
+
+/**
+ * Accesso diretto al giro (KPI «Terapie in ritardo», «Altre N in coda → Terapia»…): giorno, ora,
+ * filtro e paziente su cui atterrare. Un nuovo `requestId` riapplica lo stesso bersaglio.
+ */
+export interface TherapyRoundsEntry {
+  requestId: number;
+  /** Giorno YYYY-MM-DD (default: quello caricato). */
+  date?: string;
+  /** Ora reale "HH:MM" oppure fascia del server ("mattina", "pranzo", …). */
+  time?: string;
+  /** Senza `time`: apre la prima ora con dosi in ritardo (oggi). */
+  late?: boolean;
+  /** Filtro di stato iniziale (es. 'pending' per vedere solo le dosi da somministrare). */
+  filter?: FiltroStato;
+  /** Paziente da mettere a fuoco ed evidenziare nell'ora scelta. */
+  patientId?: string;
+}
 
 interface Props {
   slots: TherapySlot[];
@@ -32,6 +57,8 @@ interface Props {
   date?: string;
   onConfirm: (info: TherapyActionInfo) => void;
   onNotAdministered: (info: TherapyActionInfo, reason: MotivoNonErogazione, note: string) => void;
+  /** Accesso diretto: ora / filtro / paziente iniziali (vedi TherapyRoundsEntry). */
+  entry?: TherapyRoundsEntry;
 }
 
 export function TherapyRoundsPage({
@@ -44,11 +71,41 @@ export function TherapyRoundsPage({
   loadMoreError,
   onLoad,
   onLoadMore,
-  readOnly = false,
+  readOnly: readOnlyProp = false,
   onConfirm,
   onNotAdministered,
+  entry,
 }: Props) {
-  const [date, setDate] = useState(() => loadedDate ?? localIsoDate());
+  const [date, setDate] = useState(() => entry?.date ?? loadedDate ?? localIsoDate());
+  // Ruolo «con conferma» (supervisore): dopo il dialogo di conferma la registrazione parte da qui
+  // con `confirmed: true` (il server la rifiuta senza); poi il giro si ricarica dal server.
+  const confirmAdminister = useRequiresConfirmation('administration.confirm');
+  // Con la policy attiva decide la mappa delle capability: il supervisore (shell gestionale)
+  // somministra «con conferma», l'amministratore tecnico resta in sola lettura (capability negata).
+  const capabilityDecided = useCapabilityDecided('administration.confirm');
+  const canAdministerByPolicy = useCanAdministerTherapy();
+  const readOnly = capabilityDecided ? !canAdministerByPolicy : readOnlyProp;
+  const confirmNotGiven = useRequiresConfirmation('administration.record_not_administered');
+  const [confirmedFeedback, setConfirmedFeedback] = useState<{
+    tone: 'ok' | 'error';
+    text: string;
+  } | null>(null);
+  async function recordConfirmed(info: TherapyActionInfo, outcome: AdministrationOutcome) {
+    setConfirmedFeedback(null);
+    const result = await recordAdministration(info, outcome, { confirmed: true });
+    setConfirmedFeedback(
+      result.ok
+        ? {
+            tone: 'ok',
+            text:
+              outcome.kind === 'administered'
+                ? `Somministrazione di ${info.drugName} registrata.`
+                : `Mancata somministrazione di ${info.drugName} registrata.`,
+          }
+        : { tone: 'error', text: result.message },
+    );
+    onLoad(info.date);
+  }
   const [selected, setSelected] = useState<string | null>(null);
   const [filtro, setFiltro] = useState<FiltroStato>('tutte');
   const [showOrder, setShowOrder] = useState(false);
@@ -64,12 +121,55 @@ export function TherapyRoundsPage({
     onLoad(value);
   }
   const ready = !loading && !error;
+  // ── Accesso diretto: applicato una volta per requestId, sui dati del giorno richiesto ──
+  const [appliedEntry, setAppliedEntry] = useState<number | null>(null);
+  const [focusPatientId, setFocusPatientId] = useState<string | null>(null);
+  const entryPending = entry !== undefined && appliedEntry !== entry.requestId;
+  // prima il giorno richiesto: la selezione dell'ora aspetta i dati di quel giorno
+  const [entryDateApplied, setEntryDateApplied] = useState<number | null>(null);
+  if (entry?.date && entryDateApplied !== entry.requestId && isCalendarDate(entry.date)) {
+    setEntryDateApplied(entry.requestId);
+    if (entry.date !== date) {
+      setDate(entry.date);
+      setSelected(null);
+    }
+  }
+  const entryRequestId = entry?.requestId;
+  const entryDate = entry?.date;
+  useEffect(() => {
+    if (entryRequestId === undefined || !entryDate || !isCalendarDate(entryDate)) return;
+    if (entryDate !== loadedDate) onLoad(entryDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- una volta per richiesta
+  }, [entryRequestId]);
   // Fasce del giro = ore reali delle prescrizioni (07:00, 08:00, 12:00, …), non le fasce del server.
   // stessa identità finché le fasce non cambiano: la protezione dal doppio invio la usa
   const times = useMemo(() => giroTimes(slots), [slots]);
   // L'ora si fissa una volta per data, appena arrivano i dati: ricalcolarla a ogni render la farebbe
   // saltare all'ora successiva quando l'ultimo farmaco da fare diventa erogato, e un secondo clic
   // finirebbe su un'altra ora. Si ricalcola solo se l'ora scelta sparisce.
+  if (
+    entryPending &&
+    ready &&
+    (loadedDate ?? date) === date &&
+    (!entry.date || entry.date === date)
+  ) {
+    setAppliedEntry(entry.requestId);
+    setMode('giro');
+    setFiltro(entry.filter ?? 'tutte');
+    setFocusPatientId(entry.patientId ?? null);
+    const byTime = entry.time ? times.find((t) => t.ora === entry.time) : undefined;
+    const byBand = entry.time
+      ? times.find((t) => t.patients.some((g) => g.items.some((i) => i.fascia === entry.time)))
+      : undefined;
+    const byLate = entry.late
+      ? times.find((t) => t.pending > 0 && lateMinutes(date, t.ora) !== null)
+      : undefined;
+    const byPatient = entry.patientId
+      ? times.find((t) => t.patients.some((g) => g.patient.patientId === entry.patientId))
+      : undefined;
+    const target = byTime ?? byBand ?? byLate ?? byPatient;
+    if (target) setSelected(target.ora);
+  }
   if (error && wantedFascia) setWantedFascia(null);
   if (ready && wantedFascia) {
     // dal calendario (per fascia del server): la prima ora reale di quella fascia
@@ -78,7 +178,7 @@ export function TherapyRoundsPage({
     );
     setWantedFascia(null);
     if (wanted) setSelected(wanted.ora);
-  } else if (ready && times.length > 0 && !times.some((t) => t.ora === selected))
+  } else if (!entryPending && ready && times.length > 0 && !times.some((t) => t.ora === selected))
     setSelected(initialGiroTime(times));
   const active = times.find((t) => t.ora === selected);
   const done = active ? giroTimeDone(active) : 0;
@@ -263,6 +363,14 @@ export function TherapyRoundsPage({
           </button>
         </div>
       )}
+      {confirmedFeedback && (
+        <p
+          className={`giro-feedback is-${confirmedFeedback.tone}`}
+          role={confirmedFeedback.tone === 'error' ? 'alert' : 'status'}
+        >
+          {confirmedFeedback.text}
+        </p>
+      )}
       {giro && ready && active && (
         <TherapyGiroRows
           key={`${active.ora}|${filtro}`}
@@ -271,8 +379,23 @@ export function TherapyRoundsPage({
           filtro={filtro}
           readOnly={readOnly}
           detailsPartial={pageInfo.hasMore}
-          onConfirm={readOnly ? undefined : onConfirm}
-          onNotAdministered={readOnly ? undefined : onNotAdministered}
+          focusPatientId={focusPatientId ?? undefined}
+          requiresConfirmation={confirmAdminister}
+          onConfirm={
+            readOnly
+              ? undefined
+              : confirmAdminister
+                ? (info) => void recordConfirmed(info, { kind: 'administered' })
+                : onConfirm
+          }
+          onNotAdministered={
+            readOnly
+              ? undefined
+              : confirmNotGiven
+                ? (info, motivo, note) =>
+                    void recordConfirmed(info, { kind: 'not_administered', motivo, note })
+                : onNotAdministered
+          }
         />
       )}
     </div>

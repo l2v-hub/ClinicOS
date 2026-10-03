@@ -20,7 +20,7 @@ type TherapyEditorProps = SectionProps<TherapyFormValue[]> & {
   therapyCorrection?: TherapyCorrectionTarget | null;
   /** Diario terapia: riga da mettere a fuoco nella cartella (se non c'e', nessun errore). */
   focusTherapyId?: string;
-  /** Direct access: sub-view, drug, day and band to land on (TerapiaFarmacologicaTab, W2). */
+  /** Accesso diretto: sotto-vista, giorno e farmaco da aprire (nuovo requestId = riapplica). */
   therapyTarget?: TherapyTarget & { requestId: number };
 };
 
@@ -35,15 +35,13 @@ export function TherapyEditor({
   therapyTarget,
 }: TherapyEditorProps) {
   if (mode === 'patient-chart' && paziente) {
-    // Pass-through only: the Terapia tab owns sub-view selection and the drug/slot highlight.
-    const target = therapyTarget ? { therapyTarget } : {};
     return (
       <Suspense fallback={<ClinicalSectionLoading />}>
         <TerapiaFarmacologicaTab
           paziente={paziente}
           operatoreNome={operatoreNome ?? ''}
           focusTherapyId={focusTherapyId}
-          {...target}
+          therapyTarget={therapyTarget}
         />
       </Suspense>
     );

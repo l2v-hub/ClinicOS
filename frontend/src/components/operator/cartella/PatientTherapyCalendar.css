@@ -224,3 +224,168 @@
     height: 28px;
   }
 }
+
+/* ── UX 2026-10-03: informazione senza clic (stato, dose, prescrittore, nota sull'evento) ── */
+.ptc-views {
+  display: flex;
+  gap: 6px;
+}
+.patient-therapy-calendar__event-dose {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+.ptc-dose {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.ptc-meta {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.ptc-hour-summary {
+  flex-basis: 100%;
+  order: -1;
+  margin: 6px 8px 0 60px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.ptc-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.ptc-status--due,
+.ptc-status--future {
+  background: #eaf1fe;
+  color: #1d4fc4;
+}
+.ptc-status--late {
+  background: #fdecee;
+  color: #a5202f;
+}
+.ptc-status--done {
+  background: #e6f6ef;
+  color: #0e7a55;
+}
+.ptc-status--missed {
+  background: #fdecee;
+  color: #a5202f;
+}
+.ptc-status--unknown {
+  background: var(--surface-2, #f1f4f9);
+  color: var(--text-muted);
+}
+.patient-therapy-calendar .patient-therapy-calendar__event.is-late {
+  border-left-color: var(--red);
+}
+.patient-therapy-calendar .patient-therapy-calendar__event.is-done {
+  background: #eef8f2;
+  border-color: #c6e6d4;
+  border-left-color: #16a37b;
+}
+.patient-therapy-calendar .patient-therapy-calendar__event.is-missed {
+  border-left-color: var(--red);
+}
+.ptc-prn-panel {
+  flex-basis: 100%;
+}
+/* Settimana: 7 colonne quando c'è spazio, un blocco per giorno su tablet verticale. */
+.ptc-week {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+@media (min-width: 1100px) {
+  .ptc-week {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+  }
+}
+.ptc-week__day {
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface, #fff);
+}
+.ptc-week__day.is-today {
+  border-color: var(--blue);
+  box-shadow: inset 0 3px 0 var(--blue);
+}
+.ptc-week__head {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 650;
+  text-transform: capitalize;
+}
+.ptc-week__none {
+  margin: 4px 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.ptc-week__doses {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.ptc-week__dose {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 8px;
+  border: 1px solid #c9baf2;
+  border-left: 4px solid var(--purple);
+  border-radius: 8px;
+  background: #f6f2ff;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.ptc-week__dose.is-late,
+.ptc-week__dose.is-missed {
+  border-left-color: var(--red);
+}
+.ptc-week__dose.is-done {
+  border-left-color: #16a37b;
+  background: #eef8f2;
+}
+.ptc-week__dose:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.ptc-week__line {
+  overflow-wrap: anywhere;
+}
+.ptc-week__line time {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.patient-therapy-calendar__heading h3.is-week {
+  text-transform: none;
+}

@@ -132,3 +132,59 @@
   z-index: 1;
   background: var(--ds-surface);
 }
+/* UX 2026-10-03: la cella elenca le dosi (paziente · farmaco · dose · stato) e cresce in altezza. */
+.tcal__cell {
+  vertical-align: top;
+  height: auto;
+}
+/* Su tablet verticale e telefono: un blocco per giorno invece della griglia a 7 colonne. */
+.tcal__stack {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 12px;
+}
+@media (max-width: 1099px) {
+  .tcal__scroll {
+    display: none;
+  }
+  .tcal__stack {
+    display: grid;
+  }
+}
+.tcal__stack-day {
+  padding: 12px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-card-radius);
+  background: var(--ds-surface);
+}
+.tcal__stack-day.is-today {
+  border-color: var(--ds-blue);
+}
+.tcal__stack-head {
+  margin: 0 0 8px;
+  font: 600 15px/22px var(--ds-font);
+  text-transform: capitalize;
+}
+.tcal__stack-fascia + .tcal__stack-fascia {
+  margin-top: 10px;
+}
+.tcal__stack-open {
+  min-height: 44px;
+  padding: 4px 10px;
+  border: var(--ds-border-w) solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+  font: 500 14px/20px var(--ds-font);
+  cursor: pointer;
+}
+.tcal__stack-open:focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: 2px;
+}
+.tcal__none-text {
+  margin: 0;
+  color: var(--ds-text-muted);
+}

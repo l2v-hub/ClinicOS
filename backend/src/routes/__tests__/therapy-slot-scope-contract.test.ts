@@ -28,8 +28,16 @@ const schema = readFileSync(new URL('../../../../prisma/schema.prisma', import.m
 
 test('therapy reads and writes apply patient scope before loading clinical data', () => {
   assert.match(route, /registeredById:\s*actor\.id/);
-  assert.match(route, /recordTherapyAdministration\(req\.body, actor, \{ notAdministered: false \}\)/);
-  assert.match(route, /recordTherapyAdministration\(req\.body, actor, \{ notAdministered: true \}\)/);
+  // UX 2026-10-03: the body passes through the explicit-confirmation gate (supervisor) first.
+  assert.match(
+    route,
+    /recordTherapyAdministration\(taken\.body, actor, \{ notAdministered: false \}\)/,
+  );
+  assert.match(
+    route,
+    /recordTherapyAdministration\(taken\.body, actor, \{ notAdministered: true \}\)/,
+  );
+  assert.equal(route.match(/takeConfirmation\(/g)?.length, 4, 'helper + confirm + not-given + PRN');
   assert.equal(
     administrationRecord.match(/resolveAuthoritativeTherapy\(tx, input, actor\)/g)?.length,
     2,

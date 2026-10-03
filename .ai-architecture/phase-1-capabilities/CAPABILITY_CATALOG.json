@@ -15,12 +15,13 @@
       "domain": "administration",
       "type": "write",
       "feature_ui": "frontend/src/App.tsx (conferma slot)",
-      "entry_point": "POST /therapy-slots/confirm (backend/src/routes/therapy.ts:116)",
+      "entry_point": "POST /therapy-slots/confirm (backend/src/routes/therapy.ts:116), POST /therapy-slots/prn (backend/src/routes/therapy.ts — PRN «al bisogno», owner decision 2026-10-03)",
       "services": [
         "backend/src/therapies/administration-record.ts#recordTherapyAdministration",
         "backend/src/therapies/administration-record.ts#confirmTherapyAdministration",
         "backend/src/therapies/therapy-write.ts#parseTherapyAdministrationBody",
-        "backend/src/therapies/therapy-write.ts#resolveAuthoritativeTherapy"
+        "backend/src/therapies/therapy-write.ts#resolveAuthoritativeTherapy",
+        "backend/src/therapies/prn-administration.ts#recordPrnAdministration"
       ],
       "input": "body {patientId, therapyId, date, fascia}",
       "output": "MedicationAdministration row",
@@ -28,9 +29,13 @@
         "parseTherapyAdministrationBody (TherapyWriteInputError 400/413)",
         "resolveAuthoritativeTherapy (TherapyNotFoundError 404 = scope, TherapyNotDueError 409)",
         "TherapyAlreadyAdministeredError 409",
-        "Prisma P2034 409"
+        "Prisma P2034 409",
+        "Supervisor (ALLOWED_WITH_CONFIRMATION): body confirmed:true required, else 428 confirmation_required"
       ],
-      "side_effects": ["MedicationAdministration upsert (Serializable tx)"],
+      "side_effects": [
+        "MedicationAdministration upsert (Serializable tx)",
+        "PrnAdministration insert (append-only, idempotent on operatoreId+requestId)"
+      ],
       "dependencies": ["prisma"],
       "sensitivity": "critical",
       "risk": "Clinical record of drug administration; double administration prevented by already-erogata check + unique (therapyId,date,fascia) + Serializable isolation",
@@ -139,10 +144,11 @@
       "domain": "administration",
       "type": "read",
       "feature_ui": "TerapiaFarmacologicaTab.tsx, useAnomalieReparto.ts, useRiepilogoSomministrazioni.ts, AdminAgenda.tsx, PatientDetail.tsx",
-      "entry_point": "GET /therapy-slots (backend/src/routes/therapy.ts:91)",
+      "entry_point": "GET /therapy-slots (backend/src/routes/therapy.ts:91), GET /therapy-slots/prn (PRN doses of one patient/day)",
       "services": [
         "backend/src/therapies/therapy-slots.ts#buildTherapySlots",
-        "backend/src/routes/therapy.ts#therapySlotPatientAccess"
+        "backend/src/routes/therapy.ts#therapySlotPatientAccess",
+        "backend/src/therapies/prn-administration.ts#listPrnAdministrations"
       ],
       "input": "query.date YYYY-MM-DD",
       "output": "TherapySlot[] (fascia, patients[], administrations)",
@@ -246,7 +252,8 @@
         "parseTherapyAdministrationBody(requireReason=true)",
         "resolveAuthoritativeTherapy",
         "TherapyAlreadyAdministeredError 409",
-        "Prisma P2034 409"
+        "Prisma P2034 409",
+        "Supervisor (ALLOWED_WITH_CONFIRMATION): body confirmed:true required, else 428 confirmation_required"
       ],
       "side_effects": ["MedicationAdministration upsert (Serializable tx)"],
       "dependencies": ["prisma"],

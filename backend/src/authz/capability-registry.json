@@ -17,6 +17,10 @@
         {
           "method": "POST",
           "path": "/therapy-slots/confirm"
+        },
+        {
+          "method": "POST",
+          "path": "/therapy-slots/prn"
         }
       ]
     },
@@ -71,6 +75,10 @@
         {
           "method": "GET",
           "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/prn"
         }
       ]
     },

@@ -1,0 +1,93 @@
+/* Pannello in linea del farmaco (UX 2026-10-03): dosi del giorno e azioni dove si legge il farmaco. */
+.drug-dose-panel {
+  padding: 12px 16px 16px;
+  background: var(--surface-2, #f6f8fc);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  white-space: normal;
+}
+.drug-dose-panel__title {
+  margin: 0 0 4px;
+  font: 600 13px/18px var(--font-ui);
+  color: var(--text);
+}
+.drug-dose-panel__ro,
+.drug-dose-panel__msg,
+.drug-dose-panel__hint {
+  margin: 4px 0;
+  font: 400 13px/18px var(--font-ui);
+  color: var(--text-muted);
+}
+.drug-dose-panel__msg.is-error {
+  color: var(--red);
+}
+.drug-dose-panel__time.is-focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.drug-dose-panel__feedback {
+  margin: 8px 0 0;
+  font: 500 13px/18px var(--font-ui);
+}
+.drug-dose-panel__feedback.is-ok {
+  color: var(--green, #1f7a4d);
+}
+.drug-dose-panel__feedback.is-error {
+  color: var(--red);
+}
+.drug-dose-panel__prn-list {
+  list-style: none;
+  margin: 4px 0 8px;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.drug-dose-panel__prn-list > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  font: 400 13px/18px var(--font-ui);
+  overflow-wrap: anywhere;
+}
+.drug-dose-panel__indication {
+  color: var(--text-muted);
+}
+.drug-dose-panel__prn-form {
+  display: grid;
+  gap: 4px;
+  max-width: 560px;
+}
+.drug-dose-panel__prn-form > button {
+  justify-self: start;
+  margin-top: 4px;
+}
+/* Riga del farmaco espandibile nelle tabelle della terapia. */
+.therapy-row--open > td {
+  background: var(--blue-50, #eef3fd);
+}
+.therapy-expand-row > td {
+  padding: 0 !important;
+}
+.therapy-drug-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.therapy-drug-toggle__hint {
+  font: 500 12px/16px var(--font-ui);
+  color: var(--blue);
+}
+.therapy-drug-toggle:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
