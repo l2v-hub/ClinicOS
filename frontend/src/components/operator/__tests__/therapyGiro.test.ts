@@ -71,8 +71,10 @@ test('rows name patient, identifier and drug on every action; never the stale ro
     html,
     /aria-label="Non erogata: Rossi, Mario · Nato\/a il 15\/06\/1975 · CF da completare · Farmaco sintetico · 1 mg"/,
   );
-  // l'ora è quella della fascia selezionata: il farmaco mostra via (e quantità), non l'ora
-  assert.match(html, /class="giro-drug__cap">orale</);
+  // l'ora è quella della fascia selezionata: il nome sulla prima riga, dose e via una volta sola
+  // sulla seconda (UX 2026-10-03: niente dose duplicata), non l'ora
+  assert.match(html, /class="giro-drug__name">Farmaco sintetico</);
+  assert.match(html, /class="giro-drug__cap">1 mg · orale</);
   assert.doesNotMatch(html, /STALE-ROOM|STALE-BED|MRN-NEVER-RENDER/);
 });
 
@@ -85,7 +87,8 @@ test('read-only rows offer no signing; done rows show time, operator and reason'
       readOnly: true,
     }),
   );
-  assert.match(readonly, /Da erogare/);
+  // giorno passato senza registrazione: lo stato lo dice in parole (UX 2026-10-03)
+  assert.match(readonly, /Non registrata/);
   assert.doesNotMatch(readonly, /aria-label="(?:Erogata|Non erogata|Conferma non erogata):/);
 
   const [first, second] = identityTherapySlot.patients;

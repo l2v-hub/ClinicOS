@@ -320,3 +320,25 @@
     flex: 1;
   }
 }
+/* In ritardo (UX 2026-10-03): rosso solo per il ritardo, sempre con il testo «In ritardo di N min». */
+.giro-badge--late {
+  background: #fdecee;
+  color: #a5202f;
+  font-weight: 600;
+}
+.giro-feedback {
+  margin: 0 0 8px;
+  font: 500 13px/18px var(--font-ui);
+}
+.giro-feedback.is-ok {
+  color: var(--green, #1f7a4d);
+}
+.giro-feedback.is-error {
+  color: var(--red);
+}
+/* Accesso diretto: paziente richiesto evidenziato nel giro. */
+.giro-patient.therapy-list-row--focus {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 12px;
+}

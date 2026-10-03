@@ -122,3 +122,22 @@ export function patientGiroTime(
   }));
   return giroTimes(own).find((t) => t.ora === ora) ?? null;
 }
+
+/** Tutte le dosi del giorno di UN farmaco di UN paziente, per ora reale (pannello del farmaco). */
+export function patientDrugTimes(
+  slots: TherapySlot[],
+  patientId: string,
+  therapyId: string,
+): GiroTime[] {
+  const own = slots.map((slot) => ({
+    ...slot,
+    patients: (slot.patients ?? [])
+      .filter((p) => p.patientId === patientId)
+      .map((p) => ({
+        ...p,
+        administrations: p.administrations.filter((a) => a.therapyId === therapyId),
+      }))
+      .filter((p) => p.administrations.length > 0),
+  }));
+  return giroTimes(own);
+}

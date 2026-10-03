@@ -201,7 +201,7 @@ test('ordinary operators cannot read or mutate another owner patient; managers r
     const operatorRead = await fetch(`${base}/therapy-slots?date=${crossDate}`, {
       headers: operatorHeaders,
     });
-    assert.equal(operatorRead.status, 200, await operatorRead.text());
+    assert.equal(operatorRead.status, 200);
     const operatorSlots = (await operatorRead.json()) as Array<{
       patients: Array<{ patientId: string }>;
     }>;
@@ -237,7 +237,7 @@ test('ordinary operators cannot read or mutate another owner patient; managers r
     const managerRead = await fetch(`${base}/therapy-slots?date=${crossDate}`, {
       headers: managerHeaders,
     });
-    assert.equal(managerRead.status, 200, await managerRead.text());
+    assert.equal(managerRead.status, 200);
     const managerSlots = (await managerRead.json()) as Array<{
       patients: Array<{ patientId: string }>;
     }>;

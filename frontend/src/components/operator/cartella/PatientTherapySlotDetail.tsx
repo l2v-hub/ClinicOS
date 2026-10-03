@@ -6,7 +6,7 @@ import type { MotivoNonErogazione, TherapyActionInfo, TherapySlot } from '../../
 import type { CalendarOccurrence } from '../../../lib/patientTherapyCalendar';
 import { API_URL } from '../../../config';
 import { cachedGetJson } from '../../../lib/cachedFetch';
-import { useCan } from '../../../lib/capabilities';
+import { useCan, useCapabilityDecided, useRequiresConfirmation } from '../../../lib/capabilities';
 import { getCurrentOperator } from '../../../lib/operatorSession';
 import { patientGiroTime, type GiroTime } from '../../../lib/therapyGiro';
 import { recordAdministration } from '../../../lib/therapyAdministrationWrite';
@@ -30,7 +30,12 @@ export function PatientTherapySlotDetail({ patientId, date, time, events, onClos
   // Stessa regola del giro (App): entrambe le capability, mai la vista gestionale dell'admin.
   const canConfirm = useCan('administration.confirm');
   const canRecordNot = useCan('administration.record_not_administered');
-  const canAdminister = canConfirm && canRecordNot && getCurrentOperator()?.role !== 'admin';
+  // Con la policy attiva decide la mappa delle capability (supervisore «con conferma» incluso);
+  // senza mappa resta la regola storica: mai la vista gestionale dell'admin.
+  const decided = useCapabilityDecided('administration.confirm');
+  const canAdminister =
+    canConfirm && canRecordNot && (decided || getCurrentOperator()?.role !== 'admin');
+  const needsConfirmation = useRequiresConfirmation('administration.confirm');
   const [revision, setRevision] = useState(0);
   const requestKey = `${patientId}|${date}|${time}|${revision}`;
   const [loaded, setLoaded] = useState<LoadState | null>(null);
@@ -60,9 +65,10 @@ export function PatientTherapySlotDetail({ patientId, date, time, events, onClos
   async function record(
     info: TherapyActionInfo,
     outcome: Parameters<typeof recordAdministration>[1],
+    confirmed = false,
   ) {
     setFeedback(null);
-    const result = await recordAdministration(info, outcome);
+    const result = await recordAdministration(info, outcome, { confirmed });
     setFeedback(
       result.ok
         ? {
@@ -92,17 +98,6 @@ export function PatientTherapySlotDetail({ patientId, date, time, events, onClos
           Chiudi
         </button>
       </header>
-      <ul className="patient-therapy-slot-detail__list" aria-label={`Terapie delle ${time}`}>
-        {events.map((event) => (
-          <li key={event.id}>
-            <strong>{event.drugName}</strong>
-            <span>
-              {event.dose} · {event.route}
-              {event.oneTime ? ' · Una tantum' : ''}
-            </span>
-          </li>
-        ))}
-      </ul>
       <h5 className="patient-therapy-slot-detail__sub">Somministrazione del {formatDay(date)}</h5>
       {state.status === 'loading' && <p role="status">Caricamento dello stato…</p>}
       {state.status === 'error' && (
@@ -134,13 +129,22 @@ export function PatientTherapySlotDetail({ patientId, date, time, events, onClos
             date={date}
             filtro="tutte"
             readOnly={!canAdminister}
+            hidePatientHead
+            requiresConfirmation={needsConfirmation}
             onConfirm={
-              canAdminister ? (info) => void record(info, { kind: 'administered' }) : undefined
+              canAdminister
+                ? (info, options) =>
+                    void record(info, { kind: 'administered' }, options?.confirmed === true)
+                : undefined
             }
             onNotAdministered={
               canAdminister
-                ? (info, motivo: MotivoNonErogazione, note: string) =>
-                    void record(info, { kind: 'not_administered', motivo, note })
+                ? (info, motivo: MotivoNonErogazione, note: string, options) =>
+                    void record(
+                      info,
+                      { kind: 'not_administered', motivo, note },
+                      options?.confirmed === true,
+                    )
                 : undefined
             }
           />

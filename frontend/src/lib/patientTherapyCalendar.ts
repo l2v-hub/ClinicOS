@@ -1,12 +1,25 @@
-import type { PatientTherapyAPI, TherapyScheduleAPI } from '../types';
-import { formatFraction } from '../components/operator/cartella/therapyDose';
+import type {
+  PatientTherapyAPI,
+  TherapyAdministration,
+  TherapyScheduleAPI,
+  TherapySlot,
+} from '../types';
+import { computeEquivalent, formatFraction } from '../components/operator/cartella/therapyDose';
 import { localIsoDate } from './appointmentRange';
 
 export interface CalendarMedication {
   id: string;
+  /** PatientTherapy id (chiave per lo stato della somministrazione e per il pannello del farmaco). */
+  therapyId: string;
   drugName: string;
   dose: string;
+  /** Equivalente in principio attivo della dose ("500 mg"), quando la prescrizione lo consente. */
+  strength: string | null;
   route: string;
+  prescriber: string | null;
+  note: string | null;
+  /** Ultimo giorno della prescrizione (null = senza fine). */
+  endDate: string | null;
 }
 export interface CalendarOccurrence extends CalendarMedication {
   time: string;
@@ -83,9 +96,14 @@ export function buildPatientTherapyDay(
     if (therapy.patientId !== patientId || therapy.stato !== 'attiva') continue;
     const medication: CalendarMedication = {
       id: therapy.id,
+      therapyId: therapy.id,
       drugName: therapy.farmacoNome,
       dose: therapy.dosaggio.trim() || 'Dose non indicata',
+      strength: null,
       route: therapy.viaSomministrazione.trim() || 'Via non indicata',
+      prescriber: therapy.prescrittore?.trim() || null,
+      note: therapy.note?.trim() || null,
+      endDate: therapy.tipo === 'una_tantum' ? null : therapy.dataFine,
     };
     const warn = (reason: string) =>
       day.unscheduled.push({ ...medication, kind: 'incomplete', reason });
@@ -135,6 +153,12 @@ export function buildPatientTherapyDay(
           id: `${therapy.id}:schedule:${schedule.id}:${index}`,
           time: schedule.time,
           dose: scheduleDose(schedule),
+          strength: computeEquivalent(
+            schedule.quantityNumerator,
+            schedule.quantityDenominator,
+            therapy.commercialStrengthValue,
+            therapy.commercialStrengthUnit,
+          ),
           oneTime: therapy.tipo === 'una_tantum',
         });
       });
@@ -168,4 +192,51 @@ export function buildPatientTherapyDay(
   );
   day.unscheduled.sort((a, b) => a.drugName.localeCompare(b.drugName, 'it'));
   return day;
+}
+
+// ── Stato delle dosi del paziente (join con il giro del giorno, GET /therapy-slots?date=) ──────
+
+export interface CalendarDoseState {
+  administration: TherapyAdministration;
+  fascia: TherapySlot['fascia'];
+}
+
+/**
+ * Indice dello stato delle dosi di un paziente in un giorno: per terapia+ora e, come ripiego per le
+ * prescrizioni senza orari strutturati, per terapia quando ha una sola dose quel giorno.
+ */
+export function calendarDoseStates(slots: TherapySlot[], patientId: string) {
+  const byTime = new Map<string, CalendarDoseState>();
+  const byTherapy = new Map<string, CalendarDoseState[]>();
+  for (const slot of slots) {
+    for (const patient of slot.patients ?? []) {
+      if (patient.patientId !== patientId) continue;
+      for (const administration of patient.administrations) {
+        const state = { administration, fascia: slot.fascia };
+        byTime.set(
+          `${administration.therapyId}|${administration.scheduledTime || slot.ora}`,
+          state,
+        );
+        byTherapy.set(administration.therapyId, [
+          ...(byTherapy.get(administration.therapyId) ?? []),
+          state,
+        ]);
+      }
+    }
+  }
+  return {
+    get(therapyId: string, time: string): CalendarDoseState | null {
+      const exact = byTime.get(`${therapyId}|${time}`);
+      if (exact) return exact;
+      const all = byTherapy.get(therapyId) ?? [];
+      return all.length === 1 ? all[0] : null;
+    },
+  };
+}
+
+/** "fino al 10/10" per la riga dell'evento. */
+export function formatEndDate(date: string | null): string | null {
+  if (!date || !isCalendarDate(date)) return null;
+  const [, month, day] = date.split('-');
+  return `fino al ${day}/${month}`;
 }

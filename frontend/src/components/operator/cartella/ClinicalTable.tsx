@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- legacy generic table accepts heterogeneous clinical DTOs */
 import { SortArrow } from '../../shared/SortArrow';
-import { useState, useMemo } from 'react';
+import { Fragment, useState, useMemo } from 'react';
 import { ClinicalTableSection } from './shared';
 import { TableFilters } from '../../shared/TableFilters';
 import type { TableFilterField } from '../../shared/TableFilters';
@@ -38,6 +38,22 @@ interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>
   disableSorting?: boolean;
   /** Optional controlled filter bar for server-backed or domain-specific table searches. */
   filterBar?: React.ReactNode;
+  /** Tap on the row (outside its buttons/links/inputs): e.g. expand the row in place. */
+  onRowToggle?: (row: T) => void;
+  /** Key (keyField value) of the row whose expansion is open. */
+  expandedRowKey?: string | null;
+  /** Content of the open expansion, rendered as a full-width row right under its row. */
+  renderExpandedRow?: (row: T) => React.ReactNode;
+}
+
+/** A tap that lands on a control inside the row belongs to that control, not to the row. */
+function fromInteractive(target: EventTarget | null, row: HTMLElement): boolean {
+  let node = target instanceof Element ? target : null;
+  while (node && node !== row) {
+    if (node.matches('button, a, input, select, textarea, label, [role="button"]')) return true;
+    node = node.parentElement;
+  }
+  return false;
 }
 
 type SortDir = 'asc' | 'desc' | null;
@@ -104,6 +120,9 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   pageSize,
   disableSorting = false,
   filterBar,
+  onRowToggle,
+  expandedRowKey = null,
+  renderExpandedRow,
 }: ClinicalTableProps<T>) {
   const [sort, setSort] = useState<SortState>({ key: '', dir: null });
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -225,22 +244,44 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
                 </td>
               </tr>
             ) : (
-              pageData.map((row, idx) => (
-                <tr
-                  key={row[keyField] ?? idx}
-                  className={
-                    `${rowClassName ? rowClassName(row) : ''}${onRowClick ? ' row--clickable' : ''}`.trim() ||
-                    undefined
-                  }
-                  onClick={onRowClick ? () => onRowClick(row) : undefined}
-                >
-                  {columns.map((col) => (
-                    <td key={col.key} style={col.align ? { textAlign: col.align } : undefined}>
-                      {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
-                    </td>
-                  ))}
-                </tr>
-              ))
+              pageData.map((row, idx) => {
+                const rowKey = row[keyField] ?? idx;
+                const open =
+                  renderExpandedRow !== undefined &&
+                  expandedRowKey !== null &&
+                  String(rowKey) === expandedRowKey;
+                return (
+                  <Fragment key={rowKey}>
+                    <tr
+                      className={
+                        `${rowClassName ? rowClassName(row) : ''}${onRowClick || onRowToggle ? ' row--clickable' : ''}`.trim() ||
+                        undefined
+                      }
+                      onClick={
+                        onRowClick
+                          ? () => onRowClick(row)
+                          : onRowToggle
+                            ? (event) => {
+                                if (!fromInteractive(event.target, event.currentTarget))
+                                  onRowToggle(row);
+                              }
+                            : undefined
+                      }
+                    >
+                      {columns.map((col) => (
+                        <td key={col.key} style={col.align ? { textAlign: col.align } : undefined}>
+                          {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
+                        </td>
+                      ))}
+                    </tr>
+                    {open && (
+                      <tr className="therapy-expand-row">
+                        <td colSpan={columns.length}>{renderExpandedRow(row)}</td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })
             )}
           </tbody>
         </table>
