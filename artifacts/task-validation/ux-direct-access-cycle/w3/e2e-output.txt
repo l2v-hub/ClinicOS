@@ -1,0 +1,51 @@
+PASS barthel-live barthel: live total on the paper sheet — 65/100
+PASS barthel-portrait barthel: no horizontal page scroll at 820x1180 — overflow 0px
+PASS barthel-final barthel: final sheet total and band — 65/100 · Dipendenza moderata
+PASS barthel-readonly barthel: final sheet is read-only
+PASS barthel-db barthel: stored result — barthel-it-2026-10-03-v1 {"band":"moderate","label":"Dipendenza moderata","total":65,"maximum":100}
+PASS barthel-pdf barthel: PDF archived
+PASS barthel-pdf-ui barthel: «Apri PDF» offered in the final view
+PASS tinetti-live tinetti: live total on the paper sheet — 20/28
+PASS tinetti-portrait tinetti: no horizontal page scroll at 820x1180 — overflow 0px
+PASS tinetti-final tinetti: final sheet total and band — 20/28 · Rischio caduta moderato
+PASS tinetti-readonly tinetti: final sheet is read-only
+PASS tinetti-db tinetti: stored result — tinetti-it-2026-10-03-v2 {"band":"moderate","label":"Rischio caduta moderato","parts":[{"id":"balance","label":"Punteggio Equilibrio:","total":11,"maximum":16},{"id":"gait","label":"Punteggio Andatura:","total":9,"maximum":12}],"total":20,"maximum":28}
+PASS tinetti-pdf tinetti: PDF archived
+PASS tinetti-pdf-ui tinetti: «Apri PDF» offered in the final view
+PASS gds15-live gds15: live total on the paper sheet — 12/15
+PASS gds15-portrait gds15: no horizontal page scroll at 820x1180 — overflow 0px
+PASS gds15-final gds15: final sheet total and band — 12/15 · Depressione grave
+PASS gds15-readonly gds15: final sheet is read-only
+PASS gds15-db gds15: stored result — gds15-it-2026-10-03-v2 {"band":"severe","label":"Depressione grave","total":12,"maximum":15}
+PASS gds15-pdf gds15: PDF archived
+PASS gds15-pdf-ui gds15: «Apri PDF» offered in the final view
+PASS mna-live mna: live total on the paper sheet — 7/14
+PASS mna-f2 MNA-SF: F2 auto-selected from calf circumference when BMI is unavailable — F2 Circonferenza del polpaccio (CC):: Circonferenza polpaccio minore di 31 cm
+PASS mna-portrait mna: no horizontal page scroll at 820x1180 — overflow 0px
+PASS mna-final mna: final sheet total and band — 7/14 · Malnutrito
+PASS mna-readonly mna: final sheet is read-only
+PASS mna-db mna: stored result — mna-sf-it-2026-10-03-v2 {"band":"malnourished","label":"Malnutrito","total":7,"maximum":14}
+PASS mna-pdf mna: PDF archived
+PASS mna-pdf-ui mna: «Apri PDF» offered in the final view
+PASS ucla-live ucla: live total on the paper sheet — 6/12
+PASS ucla-portrait ucla: no horizontal page scroll at 820x1180 — overflow 0px
+PASS ucla-final ucla: final sheet total and band — 6/12 · Disturbo del sonno presente
+PASS ucla-readonly ucla: final sheet is read-only
+PASS ucla-db ucla: stored result — ucla-npi-sleep-it-2026-10-03-v1 {"band":"present","label":"Disturbo del sonno presente","parts":[{"id":"distress","label":"Stress del caregiver","total":3,"maximum":5}],"total":6,"maximum":12}
+PASS ucla-pdf ucla: PDF archived
+PASS ucla-pdf-ui ucla: «Apri PDF» offered in the final view
+PASS painad-live painad: live total on the paper sheet — 5/10
+PASS painad-portrait painad: no horizontal page scroll at 820x1180 — overflow 0px
+PASS painad-final painad: final sheet total and band — 5/10 · Dolore moderato
+PASS painad-readonly painad: final sheet is read-only
+PASS painad-db painad: stored result — painad-it-2026-09-22-v1 {"band":"moderate","label":"Dolore moderato","total":5}
+PASS painad-pdf painad: PDF archived
+PASS painad-pdf-ui painad: «Apri PDF» offered in the final view
+PASS oss-f15 OSS: no «Nuova compilazione» in the catalog, «Apri» still available — create 0 · open 10
+PASS oss-no-new OSS: no «Nuova compilazione»/«Crea rettifica» in the Barthel workspace
+PASS legacy-v1-api Tinetti v1 still created and finalized through the API (old version stays valid) — 201 200
+PASS legacy-v1-ui finalized Tinetti v1 opens with its original wording (no paper re-write)
+PASS console no console errors
+PASS http no HTTP >= 400 (except auth)
+
+49/49 PASS

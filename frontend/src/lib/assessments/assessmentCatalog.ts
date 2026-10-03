@@ -1,7 +1,19 @@
-import { ASSESSMENT_VERSIONS, type AssessmentType } from './assessmentTypes';
+import {
+  ASSESSMENT_VERSIONS,
+  LEGACY_ASSESSMENT_VERSIONS,
+  type AssessmentType,
+} from './assessmentTypes';
 import type { CartellaPaziente } from '../../types';
 
-export const CATALOG_TYPES = ['painad', 'postural_transfers', 'tinetti', 'mna', 'gds15'] as const;
+export const CATALOG_TYPES = [
+  'painad',
+  'postural_transfers',
+  'tinetti',
+  'mna',
+  'gds15',
+  'barthel',
+  'ucla_npi_sleep',
+] as const;
 export const CLINICAL_MODULES = [
   { tab: 'medicazioni', label: 'Medicazioni', group: 'Assistenza e mobilizzazione', type: null },
   { tab: 'contenzioni', label: 'Contenzioni', group: 'Assistenza e mobilizzazione', type: null },
@@ -9,8 +21,10 @@ export const CLINICAL_MODULES = [
   { tab: 'braden', label: 'Braden', group: 'Scale di valutazione', type: null },
   { tab: 'painad', label: 'PAINAD', group: 'Scale di valutazione', type: 'painad' },
   { tab: 'tinetti', label: 'Tinetti', group: 'Scale di valutazione', type: 'tinetti' },
-  { tab: 'mna', label: 'MNA', group: 'Scale di valutazione', type: 'mna' },
+  { tab: 'mna', label: 'MNA®-SF', group: 'Scale di valutazione', type: 'mna' },
   { tab: 'gds', label: 'GDS-15', group: 'Scale di valutazione', type: 'gds15' },
+  { tab: 'barthel', label: 'Indice di Barthel', group: 'Scale di valutazione', type: 'barthel' },
+  { tab: 'ucla_npi_sleep', label: 'UCLA · Sonno-veglia (NPI)', group: 'Scale di valutazione', type: 'ucla_npi_sleep' },
 ] as const;
 export type ClinicalModule = typeof CLINICAL_MODULES[number];
 interface CatalogRecord {
@@ -36,21 +50,23 @@ export function catalogInstant(value: unknown): value is string {
   const date = new Date(value);
   return Number.isFinite(date.getTime()) && date.toISOString() === value;
 }
-function catalogRecord(value: unknown, version: string, last: 'finalizedAt' | 'updatedAt') {
+/** The latest record may be an older form version of the same type (finalized v1 stays readable). */
+function catalogRecord(value: unknown, versions: readonly string[], last: 'finalizedAt' | 'updatedAt') {
   return value === null || (object(value) && exact(value, ['id', 'formVersion', 'assessedAt', 'createdAt', last]) &&
-    typeof value.id === 'string' && value.id.length > 0 && value.formVersion === version &&
+    typeof value.id === 'string' && value.id.length > 0 && versions.includes(value.formVersion as string) &&
     ['assessedAt', 'createdAt', last].every(key => catalogInstant(value[key])));
 }
 export function parseAssessmentCatalog(value: unknown): AssessmentCatalogData {
-  if (!object(value) || !exact(value, ['items']) || !Array.isArray(value.items) || value.items.length !== 5)
+  if (!object(value) || !exact(value, ['items']) || !Array.isArray(value.items) || value.items.length !== CATALOG_TYPES.length)
     throw new Error('Impossibile leggere date e bozze dei moduli.');
   const valid = value.items.every((item, index) => {
     const type = CATALOG_TYPES[index];
     const version = ASSESSMENT_VERSIONS[type];
+    const versions = [version, ...(LEGACY_ASSESSMENT_VERSIONS[type] ? [LEGACY_ASSESSMENT_VERSIONS[type]!] : [])];
     return object(item) && exact(item, ['type', 'formVersion', 'latestFinal', 'ownDraftCount', 'latestOwnDraft']) &&
       item.type === type && item.formVersion === version &&
       Number.isSafeInteger(item.ownDraftCount) && Number(item.ownDraftCount) >= 0 &&
-      catalogRecord(item.latestFinal, version, 'finalizedAt') && catalogRecord(item.latestOwnDraft, version, 'updatedAt') &&
+      catalogRecord(item.latestFinal, versions, 'finalizedAt') && catalogRecord(item.latestOwnDraft, versions, 'updatedAt') &&
       ((item.ownDraftCount === 0) === (item.latestOwnDraft === null));
   });
   if (!valid) throw new Error('Impossibile leggere date e bozze dei moduli.');

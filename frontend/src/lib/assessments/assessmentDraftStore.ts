@@ -45,6 +45,20 @@ export interface AssessmentWriteToken {
   revision: number;
   operation: AssessmentOperation;
 }
+/** Form version a draft is compiled on: its saved record's, else the current one. */
+export const draftFormVersion = (draft: Pick<AssessmentDraft, 'type' | 'record'>) =>
+  draft.record?.formVersion ?? ASSESSMENT_VERSIONS[draft.type];
+/** A correction starts from the previous answers when they fit the current form (MNA v1 → MNA-SF: empty). */
+function correctionAnswers(type: AssessmentType, predecessor?: AssessmentDto) {
+  if (!predecessor) return emptyAssessmentAnswers(type);
+  const copy = copyAssessmentAnswers(predecessor.answers);
+  try {
+    assertAssessmentAnswers(type, copy, ASSESSMENT_VERSIONS[type]);
+    return copy;
+  } catch {
+    return emptyAssessmentAnswers(type);
+  }
+}
 const validation = (message: string): AssessmentFailure => ({
   code: 'assessment_invalid_input',
   uncertain: false,
@@ -111,9 +125,7 @@ export function createAssessmentDraftStore() {
             ? assessmentFields(predecessor).assessedAtLocal
             : facilityLocalMinute(now),
           instantChoice: predecessor?.assessedAt ?? now.toISOString(),
-          answers: predecessor
-            ? copyAssessmentAnswers(predecessor.answers)
-            : emptyAssessmentAnswers(type),
+          answers: correctionAnswers(type, predecessor),
           correctionReason: '',
         },
         record: null,
@@ -211,7 +223,7 @@ export function createAssessmentDraftStore() {
             set(key, { ...draft, failure: { ...validation('Le note devono contenere al massimo 4000 caratteri validi.'), missingPaths: ['notes'] } });
             return null;
           }
-          if (draft.type === 'mna') {
+          if (draft.type === 'mna' && draftFormVersion(draft) !== ASSESSMENT_VERSIONS.mna) {
             const errors = mnaInputErrors(
               draft.fields.answers as MnaAnswers,
               draft.fields.mnaInputs,
@@ -247,7 +259,7 @@ export function createAssessmentDraftStore() {
             };
           } else {
             const fields = assessmentEditable(draft.fields, !!draft.predecessorId, draft.type);
-            assertAssessmentAnswers(draft.type, fields.answers);
+            assertAssessmentAnswers(draft.type, fields.answers, draftFormVersion(draft));
             freezeAssessmentValue(fields.answers);
             operation = draft.record
               ? {
@@ -380,7 +392,7 @@ export function patchMatches(record: AssessmentDto, operation: AssessmentOperati
     record.status === 'draft' &&
     record.version === operation.body.expectedVersion + 1 &&
     record.assessedAt === operation.body.assessedAt &&
-    assessmentAnswersEqual(record.type, record.answers, operation.body.answers) &&
+    assessmentAnswersEqual(record.type, record.answers, operation.body.answers, record.formVersion) &&
     (record.correctionReason ?? '') === (operation.body.correctionReason ?? '')
   );
 }

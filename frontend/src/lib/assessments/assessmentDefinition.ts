@@ -5,10 +5,27 @@ import { assertPainadAnswers } from './assessmentValidation';
 import { TINETTI, assertTinettiAnswers, emptyTinettiAnswers } from './tinettiDefinition';
 import { MNA, assertMnaAnswers, emptyMnaAnswers } from './mnaDefinition';
 import { GDS15, assertGds15Answers, emptyGds15Answers } from './gds15Definition';
-export const assessmentDefinition = (type: AssessmentType) =>
-  ({ painad: PAINAD, postural_transfers: TRANSFERS, tinetti: TINETTI, mna: MNA, gds15: GDS15 })[type];
-export const emptyAssessmentAnswers = (type: AssessmentType): AssessmentAnswers =>
-  type === 'painad'
+import { currentPaperScale, isPaperType, paperScaleFor } from './paper/paperTypes';
+import { emptyPaperAnswers, parsePaperAnswers } from './paper/engine';
+import { ASSESSMENT_VERSIONS } from './assessmentTypes';
+/** Title/description of the module (current version: the paper scale where there is one). */
+export function assessmentDefinition(type: AssessmentType): { title: string; description: string } {
+  if (isPaperType(type)) {
+    const scale = currentPaperScale(type);
+    return { title: scale.appTitle, description: scale.appDescription };
+  }
+  return { painad: PAINAD, postural_transfers: TRANSFERS }[type];
+}
+void TINETTI;
+void MNA;
+void GDS15;
+export const emptyAssessmentAnswers = (
+  type: AssessmentType,
+  formVersion: string = ASSESSMENT_VERSIONS[type],
+): AssessmentAnswers => {
+  const paper = paperScaleFor(type, formVersion);
+  if (paper) return emptyPaperAnswers(paper);
+  return type === 'painad'
     ? emptyPainadAnswers()
     : type === 'tinetti'
       ? emptyTinettiAnswers()
@@ -17,11 +34,15 @@ export const emptyAssessmentAnswers = (type: AssessmentType): AssessmentAnswers 
         : type === 'gds15'
           ? emptyGds15Answers()
           : emptyTransfersAnswers();
+};
 export function assertAssessmentAnswers(
   type: AssessmentType,
   value: unknown,
+  formVersion: string = ASSESSMENT_VERSIONS[type],
 ): asserts value is AssessmentAnswers {
-  if (type === 'painad') assertPainadAnswers(value);
+  const paper = paperScaleFor(type, formVersion);
+  if (paper) parsePaperAnswers(paper, value);
+  else if (type === 'painad') assertPainadAnswers(value);
   else if (type === 'tinetti') assertTinettiAnswers(value);
   else if (type === 'mna') assertMnaAnswers(value);
   else if (type === 'gds15') assertGds15Answers(value);
@@ -30,6 +51,7 @@ export function assertAssessmentAnswers(
 export function savedAssessmentComplete(record: AssessmentDto) {
   return record.type === 'painad' ? !!painadResult(record.answers) : record.completion.complete;
 }
+export { isPaperType };
 /** JSON domain data only. Separate every nested branch before remembering a request or correction. */
 export const copyAssessmentAnswers = (answers: AssessmentAnswers): AssessmentAnswers =>
   structuredClone(answers);
@@ -52,8 +74,9 @@ export function assessmentAnswersEqual(
   type: AssessmentType,
   left: AssessmentAnswers,
   right: AssessmentAnswers,
+  formVersion: string = ASSESSMENT_VERSIONS[type],
 ) {
-  assertAssessmentAnswers(type, left);
-  assertAssessmentAnswers(type, right);
+  assertAssessmentAnswers(type, left, formVersion);
+  assertAssessmentAnswers(type, right, formVersion);
   return canonical(left) === canonical(right);
 }

@@ -6,7 +6,23 @@ import { TransfersSummary } from './TransfersSummary';
 import { TinettiSummary } from './TinettiSummary';
 import { MnaSummary } from './MnaSummary';
 import { GdsSummary } from './GdsSummary';
-export function AssessmentSummary({ record }: { record: AssessmentDto }) {
+import { PaperSummary } from './PaperSummary';
+import { displayPaperScale, paperSummaryRecord } from './paperRecord';
+import { isPaperRecord } from '../../../lib/assessments/paper/paperTypes';
+import type { PatientIdentityData } from '../../../lib/patientIdentity';
+export function AssessmentSummary({
+  record,
+  patient,
+}: {
+  record: AssessmentDto;
+  patient?: PatientIdentityData;
+}) {
+  const paper = displayPaperScale(record);
+  if (paper && (isPaperRecord(record) || record.type === 'painad'))
+    return (
+      <PaperSummary scale={paper} record={paperSummaryRecord(paper, record)} patient={patient} />
+    );
+  if (isPaperRecord(record)) return null;
   if (record.type === 'postural_transfers') return <TransfersSummary record={record} />;
   if (record.type === 'tinetti') return <TinettiSummary record={record} />;
   if (record.type === 'mna') return <MnaSummary record={record} />;

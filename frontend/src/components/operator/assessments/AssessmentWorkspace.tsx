@@ -27,6 +27,10 @@ import { TransfersForm } from './TransfersForm';
 import { TinettiForm } from './TinettiForm';
 import { MnaForm } from './MnaForm';
 import { GdsForm } from './GdsForm';
+import { PaperForm } from './PaperForm';
+import { displayPaperScale } from './paperRecord';
+import { useCan } from '../../../lib/capabilities';
+import { ASSESSMENT_VERSIONS } from '../../../lib/assessments/assessmentTypes';
 import { AssessmentAttestations } from './AssessmentAttestations';
 import { AssessmentSummary } from './AssessmentSummary';
 import { AssessmentFinal } from './AssessmentFinal';
@@ -75,7 +79,9 @@ function AssessmentSession({
   children,
 }: AssessmentWorkspaceProps) {
   const definition = assessmentDefinition(type);
-  const Form =
+  const canCreate = useCan('assessments.create_draft');
+  /** Legacy (v1) drafts keep their original form; new compilations use the paper sheet. */
+  const LegacyForm =
     type === 'painad'
       ? AssessmentForm
       : type === 'tinetti'
@@ -262,9 +268,11 @@ function AssessmentSession({
       <ClinicalTableSection
         title={definition.title}
         actions={
-          <button type="button" className="btn-primary" onClick={() => create()}>
-            {type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'}
-          </button>
+          canCreate && (
+            <button type="button" className="btn-primary" onClick={() => create()}>
+              {type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'}
+            </button>
+          )
         }
       >
         <div className="cts__body--padded">
@@ -312,6 +320,7 @@ function AssessmentSession({
                 <>
                   <AssessmentFinal
                     record={record}
+                    patient={patient}
                     busy={pdfBusy}
                     onPdf={() => void openPdf()}
                     onRefreshPdf={(retry) => void pdfAction(retry)}
@@ -332,7 +341,7 @@ function AssessmentSession({
                 </>
               ) : draft.preview && record ? (
                 <>
-                  <AssessmentSummary record={record} />
+                  <AssessmentSummary record={record} patient={patient} />
                   <p>
                     Dopo la finalizzazione il contenuto resta immutabile. Eventuali correzioni
                     richiederanno una rettifica.
@@ -363,12 +372,30 @@ function AssessmentSession({
                       Bozza salvata · versione {record.version} · {record.author.name}
                     </p>
                   )}
-                  <Form
-                    draft={draft}
-                    store={store}
-                    onSave={() => void save()}
-                    onPreview={() => void save(true)}
-                  />
+                  {(() => {
+                    const paper = displayPaperScale({
+                      type,
+                      formVersion: draft.record?.formVersion ?? ASSESSMENT_VERSIONS[type],
+                    });
+                    return paper ? (
+                      <PaperForm
+                        draft={draft}
+                        store={store}
+                        scale={paper}
+                        patient={patient}
+                        operatorName={draft.record?.author.name ?? operatorName}
+                        onSave={() => void save()}
+                        onPreview={() => void save(true)}
+                      />
+                    ) : (
+                      <LegacyForm
+                        draft={draft}
+                        store={store}
+                        onSave={() => void save()}
+                        onPreview={() => void save(true)}
+                      />
+                    );
+                  })()}
                 </>
               )}
               {draft.failure && (
@@ -405,7 +432,7 @@ function AssessmentSession({
                     Stato: {draft.remote.status === 'final' ? 'finale' : 'bozza'}. I tuoi campi sono
                     ancora conservati.
                   </p>
-                  <AssessmentSummary record={draft.remote} />
+                  <AssessmentSummary record={draft.remote} patient={patient} />
                   <div className="assessment-actions">
                     <button
                       type="button"

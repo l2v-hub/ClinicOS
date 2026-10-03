@@ -5,18 +5,18 @@ import {
   AssessmentError,
   PAINAD_VERSION,
   TRANSFERS_VERSION,
-  TINETTI_VERSION,
-  MNA_VERSION,
-  GDS15_VERSION,
+  PAPER_VERSIONS,
   type AssessmentType,
 } from './types.js';
 
 export const CATALOG_FORMS = [
   { type: 'painad', formVersion: PAINAD_VERSION },
   { type: 'postural_transfers', formVersion: TRANSFERS_VERSION },
-  { type: 'tinetti', formVersion: TINETTI_VERSION },
-  { type: 'mna', formVersion: MNA_VERSION },
-  { type: 'gds15', formVersion: GDS15_VERSION },
+  { type: 'tinetti', formVersion: PAPER_VERSIONS.tinetti },
+  { type: 'mna', formVersion: PAPER_VERSIONS.mna },
+  { type: 'gds15', formVersion: PAPER_VERSIONS.gds15 },
+  { type: 'barthel', formVersion: PAPER_VERSIONS.barthel },
+  { type: 'ucla_npi_sleep', formVersion: PAPER_VERSIONS.ucla_npi_sleep },
 ] as const;
 interface CatalogReference {
   id: string;

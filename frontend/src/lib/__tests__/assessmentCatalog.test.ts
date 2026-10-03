@@ -57,7 +57,7 @@ test('catalog makes one bounded metadata request with patient encoding, abort si
   const request: typeof fetch = async (url, init) => { calls.push({ url: String(url), init }); return new Response(JSON.stringify(empty()), { status: 200 }); };
   const controller = new AbortController();
   const result = await createAssessmentCatalogReader('http://unit.test', 'patient /a', { 'x-operator-id': 'operator-a' }, request)(controller.signal);
-  assert.equal(result.items.length, 5);
+  assert.equal(result.items.length, CATALOG_TYPES.length);
   assert.equal(calls.length, 1);
   assert.equal(calls[0].url, 'http://unit.test/patients/patient%20%2Fa/assessments/catalog');
   assert.equal(calls[0].init?.cache, 'no-store');
@@ -76,8 +76,8 @@ test('legacy metadata uses correct clinical fields, latest valid dates and disti
   assert.equal(legacyModuleCount({ valutazioniBraden: null } as unknown as CartellaPaziente, 'braden'), null);
 });
 
-test('all eight catalog routes and five local new/resume intents preserve existing drafts and typed destinations', () => {
-  assert.equal(CLINICAL_MODULES.length, 8);
+test('all ten catalog routes and seven local new/resume intents preserve existing drafts and typed destinations', () => {
+  assert.equal(CLINICAL_MODULES.length, 10);
   const store = createAssessmentDraftStore();
   for (const module of CLINICAL_MODULES) {
     assert.equal(patientTabGroup(module.tab), 'moduli');

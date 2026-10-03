@@ -21,20 +21,45 @@ import {
   type AssessmentCompletion,
   type TransferSection,
 } from './transfersTypes';
-export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna' | 'gds15';
+import {
+  PAPER_VERSIONS,
+  type PaperAssessmentDto,
+  type PaperHistoryItem,
+  type PaperVersion,
+} from './paper/paperTypes';
+import type { PaperAnswers } from './paper/engine';
+export type AssessmentType =
+  | 'painad'
+  | 'postural_transfers'
+  | 'tinetti'
+  | 'mna'
+  | 'gds15'
+  | 'barthel'
+  | 'ucla_npi_sleep';
 export interface AssessmentTarget {
   id: string;
   type: AssessmentType;
 }
-export type AssessmentAnswers = PainadAnswers | TransfersAnswers | TinettiAnswers | MnaAnswers | Gds15Answers;
+export type AssessmentAnswers =
+  | PainadAnswers
+  | TransfersAnswers
+  | TinettiAnswers
+  | MnaAnswers
+  | Gds15Answers
+  | PaperAnswers;
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
+/** Version used for NEW compilations. Legacy versions stay readable (LEGACY_ASSESSMENT_VERSIONS). */
 export const ASSESSMENT_VERSIONS = {
   painad: PAINAD_VERSION,
   postural_transfers: TRANSFERS_VERSION,
+  ...PAPER_VERSIONS,
+} as const satisfies Record<AssessmentType, string>;
+/** Pre-paper versions: finalized records and old drafts keep their own form and wording. */
+export const LEGACY_ASSESSMENT_VERSIONS: Partial<Record<AssessmentType, string>> = {
   tinetti: TINETTI_VERSION,
   mna: MNA_VERSION,
   gds15: GDS15_VERSION,
-} as const;
+};
 export const PAINAD_KEYS = [
   'respiration',
   'negativeVocalization',
@@ -121,7 +146,12 @@ export type Gds15HistoryItem = AssessmentHistoryBase & {
   result: Gds15Result | null;
 };
 export type AssessmentHistoryItem =
-  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem | Gds15HistoryItem;
+  | PainadHistoryItem
+  | TransfersHistoryItem
+  | TinettiHistoryItem
+  | MnaHistoryItem
+  | Gds15HistoryItem
+  | PaperHistoryItem;
 export interface TinettiSnapshot extends Omit<
   AssessmentSnapshot,
   'form' | 'items' | 'result' | 'interpretation'
@@ -171,7 +201,12 @@ export type Gds15AssessmentDto = Gds15HistoryItem & {
   snapshotSha256: string | null;
 };
 export type AssessmentDto =
-  PainadAssessmentDto | TransfersAssessmentDto | TinettiAssessmentDto | MnaAssessmentDto | Gds15AssessmentDto;
+  | PainadAssessmentDto
+  | TransfersAssessmentDto
+  | TinettiAssessmentDto
+  | MnaAssessmentDto
+  | Gds15AssessmentDto
+  | PaperAssessmentDto;
 export interface AssessmentPage {
   items: AssessmentHistoryItem[];
   pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
@@ -192,7 +227,12 @@ export interface AssessmentCreate extends AssessmentEditable {
   requestId: string;
   type: AssessmentType;
   formVersion:
-    typeof PAINAD_VERSION | typeof TRANSFERS_VERSION | typeof TINETTI_VERSION | typeof MNA_VERSION | typeof GDS15_VERSION;
+    | typeof PAINAD_VERSION
+    | typeof TRANSFERS_VERSION
+    | typeof TINETTI_VERSION
+    | typeof MNA_VERSION
+    | typeof GDS15_VERSION
+    | PaperVersion;
   predecessorId?: string;
 }
 export type AssessmentOperation =

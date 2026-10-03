@@ -13,8 +13,9 @@ import { currentAssessment } from '../../assessments/current.js';
 import { assessmentCatalog } from '../../assessments/catalog.js';
 import { attestAssessment, listAttestations } from '../../assessments/attestations.js';
 import { actorOf, type ToolDefinition } from '../types.js';
+import { ASSESSMENT_TYPES as ALL_ASSESSMENT_TYPES } from '../../assessments/types.js';
 
-const ASSESSMENT_TYPES = ['painad', 'postural_transfers', 'tinetti', 'mna', 'gds15'];
+const ASSESSMENT_TYPES = [...ALL_ASSESSMENT_TYPES];
 const ENTRY = 'backend/src/routes/patient-assessments.ts';
 const patientIdField = { type: 'string', minLength: 1 } as const;
 const idField = { type: 'string', minLength: 1 } as const;
@@ -37,7 +38,7 @@ export const assessmentTools: ToolDefinition[] = [
     kind: 'read',
     auditKind: 'read',
     description:
-      'Catalogo delle scale di valutazione (PAINAD, trasferimenti, Tinetti, MNA, GDS-15) del paziente con ultima finale e bozze proprie.',
+      'Catalogo delle scale di valutazione (PAINAD, trasferimenti, Tinetti, MNA-SF, GDS-15, Barthel, UCLA-NPI sonno) del paziente con ultima finale e bozze proprie.',
     sensitivity: 'medium',
     inputSchema: schema({ patientId: patientIdField, query: queryObject }, ['patientId']),
     entryPoint: `GET /patients/:patientId/assessments/catalog (${ENTRY})`,

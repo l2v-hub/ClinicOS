@@ -2734,7 +2734,9 @@ export function PatientDetail({
           current === 'postural_transfers' ||
           current === 'tinetti' ||
           current === 'mna' ||
-          current === 'gds') && (
+          current === 'gds' ||
+          current === 'barthel' ||
+          current === 'ucla_npi_sleep') && (
           <AssessmentWorkspace
             patient={paziente}
             operatorId={operatoreId}

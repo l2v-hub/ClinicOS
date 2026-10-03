@@ -1,5 +1,11 @@
 import { parsePatientIdentity } from '../patientIdentity';
 import {
+  isPaperRecord,
+  paperScaleFor,
+  type PaperAssessmentDto,
+  type PaperHistoryItem,
+} from './paper/paperTypes';
+import {
   PAINAD_KEYS,
   PAINAD_VERSION,
   type AssessmentDto,
@@ -22,6 +28,7 @@ import { MNA_VERSION } from './mnaTypes';
 import { assertMnaHistory, assertMnaAssessment } from './mnaValidation';
 import { GDS15_VERSION } from './gds15Types';
 import { assertGds15History, assertGds15Assessment } from './gds15Validation';
+import { assertPaperAssessment, assertPaperHistory } from './paper/paperValidation';
 export const validAssessmentId = (value: unknown): value is string =>
   typeof value === 'string' && /^[A-Za-z0-9_-]{1,128}$/.test(value);
 const instant = (value: unknown): value is string =>
@@ -30,7 +37,13 @@ const instant = (value: unknown): value is string =>
   Number.isFinite(Date.parse(value));
 const optionalId = (value: unknown) => value === null || validAssessmentId(value);
 export const validAssessmentType = (value: unknown): value is AssessmentType =>
-  value === 'painad' || value === 'postural_transfers' || value === 'tinetti' || value === 'mna' || value === 'gds15';
+  value === 'painad' ||
+  value === 'postural_transfers' ||
+  value === 'tinetti' ||
+  value === 'mna' ||
+  value === 'gds15' ||
+  value === 'barthel' ||
+  value === 'ucla_npi_sleep';
 function invalid(): never {
   throw new Error('Risposta della valutazione non verificata.');
 }
@@ -74,14 +87,15 @@ export function assertAssessmentHistory(
     !validAssessmentId(row.id) ||
     row.patientId !== patientId ||
     !validAssessmentType(row.type) ||
-    row.formVersion !==
-      {
-        painad: PAINAD_VERSION,
-        postural_transfers: TRANSFERS_VERSION,
-        tinetti: TINETTI_VERSION,
-        mna: MNA_VERSION,
-        gds15: GDS15_VERSION,
-      }[row.type] ||
+    (!paperScaleFor(row.type, row.formVersion) &&
+      row.formVersion !==
+        ({
+          painad: PAINAD_VERSION,
+          postural_transfers: TRANSFERS_VERSION,
+          tinetti: TINETTI_VERSION,
+          mna: MNA_VERSION,
+          gds15: GDS15_VERSION,
+        } as Partial<Record<AssessmentType, string>>)[row.type]) ||
     !['draft', 'final'].includes(row.status) ||
     !Number.isSafeInteger(row.version) ||
     row.version < 1 ||
@@ -96,7 +110,10 @@ export function assertAssessmentHistory(
     !(row.correctionReason === null || typeof row.correctionReason === 'string')
   )
     invalid();
-  if (row.type === 'painad') {
+  const paper = paperScaleFor(row.type, row.formVersion);
+  if (paper) {
+    assertPaperHistory(row as PaperHistoryItem, paper);
+  } else if (row.type === 'painad') {
     if (
       !Number.isInteger(row.answeredCount) ||
       row.answeredCount < 0 ||
@@ -105,13 +122,14 @@ export function assertAssessmentHistory(
       (row.answeredCount < 5 ? row.result !== null : row.result === null)
     )
       invalid();
-  } else if (row.type === 'tinetti') {
+  } else if (row.type === 'tinetti' && !isPaperRecord(row)) {
     assertTinettiHistory(row);
-  } else if (row.type === 'gds15') {
+  } else if (row.type === 'gds15' && !isPaperRecord(row)) {
     assertGds15History(row);
-  } else if (row.type === 'mna') {
+  } else if (row.type === 'mna' && !isPaperRecord(row)) {
     assertMnaHistory(row);
   } else if (
+    isPaperRecord(row) ||
     row.result !== null ||
     !row.completion ||
     typeof row.completion.complete !== 'boolean' ||
@@ -151,6 +169,12 @@ export function assertAssessment(
   const row = value as AssessmentDto;
   if (id && row.id !== id) invalid();
   if (type && row.type !== type) invalid();
+  const paper = paperScaleFor(row.type, row.formVersion);
+  if (paper) {
+    assertPaperAssessment(row as PaperAssessmentDto, patientId, paper);
+    return;
+  }
+  if (isPaperRecord(row)) invalid();
   if (row.type === 'tinetti') {
     assertTinettiAssessment(row, patientId);
     return;
