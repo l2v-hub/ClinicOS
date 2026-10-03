@@ -777,8 +777,10 @@ export interface ParametroGiorno {
   dtx08?: string;
   dtx12?: string;
   dtx18?: string;
+  dtx20?: string;
   evacuazione?: string;
   catetere?: string;
+  /** Storico: la firma ora deriva dal login in somministrazione; non più compilabile. */
   firmaIpM?: string;
   firmaIpP?: string;
   note?: string;

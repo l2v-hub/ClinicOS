@@ -70,26 +70,39 @@ export class ParameterReadingSaveError extends Error {
 /** Evento emesso dopo un salvataggio riuscito (detail.patientId): il chip NEWS2 si aggiorna. */
 export const PARAMETER_READING_SAVED_EVENT = 'clinicos:parameter-reading-saved';
 
-export function parameterValuesError(values: ParameterValues): string | null {
+/** Primo valore non valido con il campo che lo contiene: il form ci porta il fuoco (Prompt 10 §9). */
+export function parameterValuesIssue(
+  values: ParameterValues,
+): { field: keyof ParameterValues | null; message: string } | null {
   if (!PARAMETER_FIELDS.some((field) => values[field.key]?.trim()))
-    return 'Inserisci almeno un parametro.';
+    return { field: null, message: 'Inserisci almeno un parametro.' };
   if (values.pa?.trim() && !/^\d{1,3}\s*\/\s*\d{1,3}$/.test(values.pa.trim()))
-    return 'Pressione: usa il formato 120/80.';
+    return { field: 'pa', message: 'Pressione: usa il formato 120/80.' };
   for (const key of ['spo2', 'fc', 'temperatura', 'dtx'] as const) {
     const text = values[key]?.trim();
     if (text && !/^\d{1,4}(?:[.,]\d{1,2})?$/.test(text))
-      return `${PARAMETER_FIELDS.find((f) => f.key === key)!.label}: inserisci un numero valido.`;
+      return {
+        field: key,
+        message: `${PARAMETER_FIELDS.find((f) => f.key === key)!.label}: inserisci un numero valido.`,
+      };
   }
-  if (Number(values.spo2?.replace(',', '.')) > 100) return 'SpO₂ deve essere compresa tra 0 e 100.';
+  if (Number(values.spo2?.replace(',', '.')) > 100)
+    return { field: 'spo2', message: 'SpO₂ deve essere compresa tra 0 e 100.' };
   const fr = values.fr?.trim();
   if (fr && (!/^\d{1,2}$/.test(fr) || Number(fr) < 1 || Number(fr) > 80))
-    return 'Frequenza respiratoria: numero intero tra 1 e 80.';
+    return { field: 'fr', message: 'Frequenza respiratoria: numero intero tra 1 e 80.' };
   for (const key of ['o2', 'coscienza'] as const) {
     const text = values[key]?.trim();
     if (text && !PARAMETER_OPTIONS[key]!.some((o) => o.value === text))
-      return `${PARAMETER_FIELDS.find((f) => f.key === key)!.label}: scegli un valore dall'elenco.`;
+      return {
+        field: key,
+        message: `${PARAMETER_FIELDS.find((f) => f.key === key)!.label}: scegli un valore dall'elenco.`,
+      };
   }
   return null;
+}
+export function parameterValuesError(values: ParameterValues): string | null {
+  return parameterValuesIssue(values)?.message ?? null;
 }
 export function createParameterReadingRequest(
   values: ParameterValues,
@@ -220,6 +233,7 @@ export function legacyParameterEntries(cartella: CartellaPaziente): LegacyParame
         ['DTX 08', day.dtx08],
         ['DTX 12', day.dtx12],
         ['DTX 18', day.dtx18],
+        ['DTX 20', day.dtx20],
         ['Catetere', day.catetere],
         ['Note', day.note],
       ]

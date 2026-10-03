@@ -10,6 +10,7 @@ import {
 } from '../../../lib/patientTherapyCalendar';
 import { readPatientCalendarTherapies } from '../../../lib/patientTherapyCalendarRead';
 import { LoadErrorState } from './LoadErrorState';
+import { PatientTherapySlotDetail } from './PatientTherapySlotDetail';
 import './PatientTherapyCalendar.css';
 
 type ReadState = {
@@ -23,6 +24,9 @@ const HOURS = Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '
 export function PatientTherapyCalendar({ patientId }: { patientId: string }) {
   const [date, setDate] = useState(() => localIsoDate());
   const [revision, setRevision] = useState(0);
+  // Orario aperto nel dettaglio: legato alla data in cui è stato aperto (cambiare giorno lo chiude).
+  const [open, setOpen] = useState<{ date: string; time: string } | null>(null);
+  const openTime = open?.date === date ? open.time : null;
   const [state, setState] = useState<ReadState>({
     patientId,
     revision,
@@ -115,7 +119,7 @@ export function PatientTherapyCalendar({ patientId }: { patientId: string }) {
       <header className="patient-therapy-calendar__heading">
         <h3>{formattedDate}</h3>
         <p>Programmazione delle terapie attive · giornata completa, 00:00–23:59.</p>
-        <p>Per le registrazioni consulta Somministrazioni giornaliere.</p>
+        <p>Tocca un orario per vederne le terapie e registrare la somministrazione.</p>
       </header>
 
       {status === 'loading' && (
@@ -154,26 +158,45 @@ export function PatientTherapyCalendar({ patientId }: { patientId: string }) {
                     {day.events
                       .filter((event) => event.time.startsWith(`${hour}:`))
                       .map((event) => (
-                        <li
-                          className="agt-therapy-slot patient-therapy-calendar__event"
-                          key={event.id}
-                        >
-                          <span className="agt-therapy-slot__icon" aria-hidden="true">
-                            <IcoPill />
-                          </span>
-                          <div className="patient-therapy-calendar__medication">
-                            <div className="patient-therapy-calendar__event-title">
-                              <time dateTime={`${date}T${event.time}`}>{event.time}</time>
-                              <strong className="agt-therapy-slot__label">{event.drugName}</strong>
-                            </div>
-                            <p>
-                              {event.dose} · {event.route}
-                              {event.oneTime ? ' · Una tantum' : ''}
-                            </p>
-                          </div>
+                        <li key={event.id}>
+                          <button
+                            type="button"
+                            className="agt-therapy-slot patient-therapy-calendar__event"
+                            aria-expanded={openTime === event.time}
+                            aria-label={`${event.time} ${event.drugName}, ${event.dose}, ${event.route}: apri le terapie delle ${event.time}`}
+                            onClick={() =>
+                              setOpen(openTime === event.time ? null : { date, time: event.time })
+                            }
+                          >
+                            <span className="agt-therapy-slot__icon" aria-hidden="true">
+                              <IcoPill />
+                            </span>
+                            <span className="patient-therapy-calendar__medication">
+                              <span className="patient-therapy-calendar__event-title">
+                                <time dateTime={`${date}T${event.time}`}>{event.time}</time>
+                                <strong className="agt-therapy-slot__label">
+                                  {event.drugName}
+                                </strong>
+                              </span>
+                              <span className="patient-therapy-calendar__event-dose">
+                                {event.dose} · {event.route}
+                                {event.oneTime ? ' · Una tantum' : ''}
+                              </span>
+                            </span>
+                          </button>
                         </li>
                       ))}
                   </ol>
+                  {openTime?.startsWith(`${hour}:`) && (
+                    <PatientTherapySlotDetail
+                      key={`${patientId}|${date}|${openTime}`}
+                      patientId={patientId}
+                      date={date}
+                      time={openTime}
+                      events={day.events.filter((event) => event.time === openTime)}
+                      onClose={() => setOpen(null)}
+                    />
+                  )}
                 </div>
               ))}
             </div>

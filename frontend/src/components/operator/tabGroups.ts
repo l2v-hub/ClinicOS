@@ -175,8 +175,38 @@ export const CHART_SECTIONS: ChartSectionDef[] = [
   { id: 'dimissione', label: 'Dimissione', tabs: ['dimissione'] },
 ];
 
+/** Capability di lettura senza la quale una sezione intera risponderebbe solo 403 (es. OSS:
+ *  terapia e documenti negati dalla policy). La GUI la nasconde; l'autorizzazione resta sul server. */
+export const CHART_SECTION_CAPABILITY: Partial<Record<ChartSection, string>> = {
+  terapia: 'therapy.list',
+  documenti: 'documents.list',
+};
+
+export function chartSectionAllowed(section: ChartSection, can: (capability: string) => boolean) {
+  const capability = CHART_SECTION_CAPABILITY[section];
+  return capability ? can(capability) : true;
+}
+
 /** La sezione che contiene un tab (i link diretti aprono questa). */
 export function chartSectionOf(id?: TabId): ChartSection {
   const tab = resolvePatientTab(id);
   return CHART_SECTIONS.find((section) => section.tabs.includes(tab))?.id ?? 'panoramica';
+}
+
+/** Prompt 10 §2: dalla cartella di un ospite, le voci di reparto Terapia / Parametri / Consegne
+ *  aprono la stessa sezione di QUEL paziente (niente riselezione). Fuori dalla cartella restano
+ *  le pagine di reparto. */
+export const PATIENT_SECTION_FOR_WARD_NAV: Readonly<Record<string, TabId>> = {
+  terapie: 'terapia-farmacologica',
+  'parametri-multipaziente': 'parametri',
+  consegne: 'consegne',
+};
+
+export function patientSectionForWardNav(
+  navKey: string,
+  inPatientChart: boolean,
+  can: (capability: string) => boolean,
+): TabId | undefined {
+  const tab = inPatientChart ? PATIENT_SECTION_FOR_WARD_NAV[navKey] : undefined;
+  return tab && chartSectionAllowed(chartSectionOf(tab), can) ? tab : undefined;
 }

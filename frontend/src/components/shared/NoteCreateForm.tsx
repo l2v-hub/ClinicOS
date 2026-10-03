@@ -4,6 +4,7 @@ import type { NewNotaInput, Operatore, Paziente, PrioritaNota } from '../../type
 import { IcoCheck, IcoX } from '../../icons';
 import { PatientCombobox } from './PatientCombobox';
 import './NoteCreateForm.css';
+import { corePriorityOptions } from '../../lib/corePriority';
 
 interface NoteCreateFormProps {
   utenteId: string;
@@ -176,9 +177,11 @@ export function NoteCreateForm({ utenteId, operatori, onAdd, onClose }: NoteCrea
                 }
                 disabled={saving}
               >
-                <option value="normale">Normale</option>
-                <option value="alta">Alta</option>
-                <option value="urgente">Urgente</option>
+                {corePriorityOptions(draft.priorita, 'alta', 'Alta').map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
 

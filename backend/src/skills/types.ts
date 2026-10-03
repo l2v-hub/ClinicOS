@@ -93,6 +93,8 @@ export interface ClassicScreen {
   screen: string;
   label: string;
   needsResident?: boolean;
+  /** Chart section (frontend TabId) to open when the workflow already knows the resident. */
+  patientTab?: string;
 }
 
 export interface PatientRef {
@@ -223,7 +225,11 @@ export interface ConverseRequest {
   /** Required with action 'confirm': the preview being confirmed. */
   previewId?: string;
   /** action 'edit' (after 'modify'): structured changes, no LLM involved. */
-  edit?: { values?: Record<string, string>; text?: string; priority?: 'normale' | 'alta' | 'urgente' };
+  edit?: {
+    values?: Record<string, string>;
+    text?: string;
+    priority?: 'normale' | 'alta' | 'urgente';
+  };
   /** action 'confirm' of a prescription: therapy input built by the UI with the Terapia mapper. */
   payload?: { therapy?: Record<string, unknown> };
   /**

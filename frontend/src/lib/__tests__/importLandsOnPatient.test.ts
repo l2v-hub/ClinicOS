@@ -39,7 +39,9 @@ test('"Nuovo ingresso" opens the start page, then the shared NewPatientFlow, and
   // HMI 1: pagina "Nuovo ingresso" con la scelta, poi il flusso scelto (stesso NewPatientFlow).
   // La pagina è una voce di navigazione (#/nuovo-ingresso): App la apre e la chiude.
   assert.equal(list.match(/onClick=\{onOpenNewIntake\}/g)?.length, 2);
-  assert.match(list, /if \(newIntake\)\s*return \(\s*<NewPatientStart/);
+  // Prompt 10 AT-13: la pagina di ingresso esiste solo per chi può aprire la bozza.
+  assert.match(list, /if \(newIntake && canIntake\)\s*return \(\s*<NewPatientStart/);
+  assert.match(list, /useCan\('intake\.create_draft'\)/);
   assert.match(
     list,
     /<NewPatientStart[\s\S]*?onChoose=\{\(path\) => \{[\s\S]*?setNewPatientPath\(path\);\s*onCloseNewIntake\?\.\(\);/,

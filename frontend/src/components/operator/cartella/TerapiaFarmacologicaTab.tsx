@@ -28,10 +28,15 @@ import { PatientTherapyCalendar } from './PatientTherapyCalendar';
 import { ClinicalTable } from './ClinicalTable';
 import { AdministrationStatus } from './AdministrationStatus';
 import type { ColumnDef } from './ClinicalTable';
-import { formatFraction, computeEquivalent, scheduleLabel, hasDividedPatch } from './therapyDose';
+import { formatFraction, computeEquivalent, scheduleLabel } from './therapyDose';
 import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
 import { schedulesFromTherapy } from './therapyFormRestore';
 import { therapyToForm, formToPayload } from './therapyFormMapping';
+import {
+  therapyFormIssues,
+  therapyIssuesSummary,
+  therapySaveErrorMessage,
+} from './therapySaveFeedback';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { TopNav, type TopNavItem } from '../../navigation/TopNav';
 import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './farmacoRiferimento';
@@ -469,19 +474,32 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
 
   // ── CRUD ──────────────────────────────────────────────────────────────────────
 
+  // Errori per campo: compaiono dopo il primo «Salva» e si aggiornano mentre si corregge.
+  const [saveAttempted, setSaveAttempted] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const formShellRef = useRef<HTMLDivElement>(null);
+  const formIssues = showForm && saveAttempted ? therapyFormIssues(form) : [];
+  const resetSaveFeedback = () => {
+    setSaveAttempted(false);
+    setSaveError('');
+  };
+
   const openAdd = () => {
+    resetSaveFeedback();
     setEditId(null);
     setForm(emptyForm());
     setShowForm(true);
     setSubTab('programmazione');
   };
   const openEdit = (t: PatientTherapyAPI) => {
+    resetSaveFeedback();
     setEditId(t.id);
     setForm(therapyToForm(t));
     setShowForm(true);
     setSubTab('programmazione');
   };
   const closeForm = () => {
+    resetSaveFeedback();
     setShowForm(false);
     setEditId(null);
     setForm(emptyForm());
@@ -489,19 +507,24 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
 
   const [createKey] = useState(createSubmissionKey);
   const handleSave = async () => {
-    if (!form.farmacoNome.trim() || !form.dataInizio) return;
-    if (form.tipo === 'periodica' && hasDividedPatch(form.schedules)) {
-      setError('I cerotti non possono essere divisi: indica una quantità intera.');
-      return;
-    }
-    if (form.tipo === 'periodica' && !form.schedules.some((s) => /^\d{1,2}:\d{2}$/.test(s.time))) {
-      setError('Aggiungi almeno un orario di somministrazione.');
+    // Stesso controllo per campo dell'ingresso (campi obbligatori inclusi): il primo campo da
+    // correggere riceve il fuoco invece di un pulsante disabilitato senza indicazioni sul campo.
+    const issues = therapyFormIssues(form);
+    setSaveAttempted(true);
+    if (issues.length) {
+      setSaveError('');
+      window.requestAnimationFrame(() => {
+        const first = formShellRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+        first?.focus({ preventScroll: true });
+        first?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
       return;
     }
     const payload = formToPayload(form, paziente.id, operatoreNome);
     try {
       setSaving(true);
       setError('');
+      setSaveError('');
       const url = editId
         ? `${API_URL}/patients/${paziente.id}/therapies/${editId}`
         : `${API_URL}/patients/${paziente.id}/therapies`;
@@ -513,14 +536,17 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(body),
       });
-      if (!res.ok) throw new Error(`Errore ${res.status}`);
+      if (!res.ok) {
+        setSaveError(await therapySaveErrorMessage(res));
+        return;
+      }
       createKey.reset();
       closeForm();
       invalidateTherapies();
       await loadTherapies();
       setSubTab('attivi');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Errore salvataggio');
+    } catch {
+      setSaveError('Terapia non salvata: errore di rete. Riprova.');
     } finally {
       setSaving(false);
     }
@@ -540,7 +566,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
         method: 'DELETE',
         headers: operatorHeaders(),
       });
-      if (!res.ok) throw new Error(`Errore ${res.status}`);
+      if (!res.ok) throw new Error(await therapySaveErrorMessage(res, 'Terapia non eliminata'));
       invalidateTherapies();
       await loadTherapies();
       setPendingDeleteId(null);
@@ -566,7 +592,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ stato: 'sospesa' }),
       });
-      if (!res.ok) throw new Error(`Errore ${res.status}`);
+      if (!res.ok) throw new Error(await therapySaveErrorMessage(res, 'Terapia non sospesa'));
       invalidateTherapies();
       await loadTherapies();
       setPendingSospendiId(null);
@@ -585,7 +611,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ stato: 'attiva' }),
       });
-      if (!res.ok) throw new Error(`Errore ${res.status}`);
+      if (!res.ok) throw new Error(await therapySaveErrorMessage(res, 'Terapia non riattivata'));
       invalidateTherapies();
       await loadTherapies();
     } catch (err) {
@@ -1273,6 +1299,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
         count={subTab === 'calendario' ? undefined : (therapySummary?.active ?? attive.length)}
         countLabel={therapyFiltersActive ? 'farmaci attivi nei risultati' : 'farmaci attivi'}
         actions={
+          canCreateTherapy &&
           !(showForm && subTab === 'programmazione') && (
             <button className="btn-sm" onClick={openAdd}>
               + Aggiungi farmaco
@@ -1451,12 +1478,22 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
         {subTab === 'programmazione' && (
           <div className="cts__body--padded">
             {showForm ? (
-              <div className="terapia-sched-form therapy-form-shell">
+              <div className="terapia-sched-form therapy-form-shell" ref={formShellRef}>
                 <header className="therapy-form-shell__heading">
                   <h2>{editId ? 'Modifica terapia' : 'Nuova terapia'}</h2>
                   <p>I campi con * sono obbligatori.</p>
                 </header>
-                <TherapyFormFields value={form} onChange={setForm} operatoreNome={operatoreNome} />
+                <TherapyFormFields
+                  value={form}
+                  onChange={setForm}
+                  operatoreNome={operatoreNome}
+                  issues={formIssues}
+                />
+                {(formIssues.length > 0 || saveError) && (
+                  <p className="therapy-form__error" role="alert" data-testid="therapy-save-error">
+                    {formIssues.length ? therapyIssuesSummary(formIssues) : saveError}
+                  </p>
+                )}
                 <div className="form-actions therapy-form-shell__actions">
                   {campiMancanti && (
                     // Il pulsante disabilitato da solo non dice cosa manca, e il campo mancante
@@ -1466,11 +1503,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                   <button className="btn-secondary btn-sm" onClick={closeForm}>
                     Annulla
                   </button>
-                  <button
-                    className="btn-success btn-sm"
-                    disabled={saving || campiMancanti !== null}
-                    onClick={handleSave}
-                  >
+                  <button className="btn-success btn-sm" disabled={saving} onClick={handleSave}>
                     {saving ? 'Salvataggio...' : editId ? 'Aggiorna' : 'Salva terapia'}
                   </button>
                 </div>
@@ -1525,6 +1558,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                 style={{ width: 160 }}
                 onChange={(e) => setDailyDate(e.target.value)}
               />
+              {/* L'elenco è il registro; la somministrazione si registra dall'orario nel calendario. */}
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                data-testid="daily-open-calendar"
+                onClick={() => setSubTab('calendario')}
+              >
+                Registra dal calendario
+              </button>
             </div>
             {dailyLoading ? (
               <LoadingState />

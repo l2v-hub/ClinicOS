@@ -1,0 +1,10 @@
+✖ a single parameters table is always visible and uses the operational table contract (3.3075ms)
+✖ failing tests:
+✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll (2.9066ms)
+✖ multi-patient parameters uses one bounded page instead of cartella fan-out (12.2071ms)
+✖ multi-patient quick entry exposes every action and field to assistive technology (4.7812ms)
+✖ multi-patient quick entry reuses the ClinicOS form and action design system (2.6868ms)
+✖ multi-patient refresh keeps the previous roster visible and announces progress (3.6466ms)
+✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (11.0424ms)
+✖ src\components\operator\__tests__\assessmentCatalogUi.test.ts (16580.443ms)
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells (32.9399ms)

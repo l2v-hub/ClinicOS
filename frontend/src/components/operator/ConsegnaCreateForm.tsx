@@ -13,6 +13,7 @@ import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
 import { PatientCombobox } from '../shared/PatientCombobox';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import './ConsegnaCreateForm.css';
+import { corePriorityOptions } from '../../lib/corePriority';
 
 interface ConsegnaCreateFormProps {
   operatori: Operatore[];
@@ -202,9 +203,11 @@ export function ConsegnaCreateForm({
                 }
                 disabled={saving}
               >
-                <option value="normale">Normale</option>
-                <option value="alta">Alta</option>
-                <option value="urgente">Urgente</option>
+                {corePriorityOptions(form.priorita, 'alta', 'Alta').map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-field handover-editor__field--third">

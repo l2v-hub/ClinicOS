@@ -1,0 +1,189 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ Doctor 1 → allowed tool (with confirmation) → backend → business logic → success → audit Doctor 1 (1257.1519ms)
+✔ OSS 1 → forbidden capability → DENIED (tool, direct backend route, Agnos read tools) (48.9159ms)
+✔ Dynamic policy: Administrator Save/Apply on Nurse; the open Nurse 1 session follows at its next call (256.7848ms)
+✔ Policy administration is itself protected and validated (35.2603ms)
+✔ baseline is a valid, complete, deny-by-default document (4.8525ms)
+✔ legacy roles reproduce today’s gates exactly (zero-regression migration) (0.9996ms)
+✔ prudent baseline: prescriptions, administrations and policy management are role-bound (0.2694ms)
+✔ derived capabilities follow their functional capability (one rule for GUI, tools and AI) (0.1622ms)
+✔ role resolution: assignment wins, otherwise the server-verified legacy role (0.2389ms)
+✔ validation: unknown capability/effect, last policy manager, legacy fallback roles (7.7129ms)
+✔ route matcher prefers literal segments and covers every catalogued route (0.6419ms)
+✔ every Tool Layer tool is governed by the policy (directly or through its functional capability) (0.3444ms)
+✔ simulator tokens: signed, identity-only, tamper and expiry proof (1.6337ms)
+✔ backend registry is generated from the catalog of record (no drift) (5.2546ms)
+✔ confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict (373.9618ms)
+✖ confirmDraft: persists therapies + vitals/pain into Cartella.data (346.5339ms)
+✔ invalid therapy returns indexed 400 before any patient or therapy write (875.2841ms)
+✔ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (9.1542ms)
+✔ persistence failure rolls back all writes, sanitizes audit, and permits retry (4.7206ms)
+✔ confirmation remains operator-gated and owner-scoped (2.8236ms)
+✔ one imported and three manual therapies persist in order including whole patches (2.8115ms)
+✔ a divided patch in the final row rejects the entire confirmation before writes (2.1759ms)
+▶ link / unlink (AC2)
+  ✔ owner links an open draft; renews the job; second link on the job is 409 (187.9872ms)
+  ✔ ownership: foreign draft and foreign job are both 404 (25.0683ms)
+  ✔ confirmed, cancelled or legacy jobs, stale versions and closed drafts are refused (56.4294ms)
+  ✔ unlink cancels the session and keeps the values; refused after the final merge (126.5388ms)
+✔ link / unlink (AC2) (571.5007ms)
+▶ merge-import (AC3)
+  ✔ per letter: fills blanks, versioned and idempotent; stale version is 409 (225.7935ms)
+  ✔ per letter ignores units of an outdated input hash (44.563ms)
+  ✔ final requires the current, fully resolved review (69.1794ms)
+✔ merge-import (AC3) (340.0008ms)
+▶ field proposals, PATCH and confirm (AC3, AC4)
+  ✔ confirm is blocked while a field proposal is pending; decide is versioned + idempotent (84.9037ms)
+  ✔ PATCH ignores the server keys (200) and renews a linked job (55.0167ms)
+✔ field proposals, PATCH and confirm (AC3, AC4) (140.2137ms)
+▶ QA follow-up (A2, idempotency, expiry, keep)
+  ✔ A2: even an admin cannot link documents and a chart of different operators (22.44ms)
+  ✔ a link on an expired session is refused (10.524ms)
+  ✔ the same requestId with a different payload is 409 idempotency_conflict (32.4108ms)
+  ✔ 'keep' via HTTP leaves the operator value and closes the proposal (46.2579ms)
+✔ QA follow-up (A2, idempotency, expiry, keep) (111.9819ms)
+✔ a manual row that differs from the saved draft names its page number and the field (150.8642ms)
+✔ a saved row missing from the confirmation is named, not a generic mismatch (0.312ms)
+✔ rows still to verify, deferred or left in draft say which row and what to do (5.0353ms)
+✔ a valid import selection is accepted (deferred rows excluded, manual rows after imports) (1.1754ms)
+✔ therapy validation errors use the intake page numbering when provided (2.116ms)
+✔ identity errors name the exact missing field (0.6182ms)
+✔ upload limits say which limit was hit, never the raw multer code (0.2996ms)
+✔ POST /patients lists exactly the missing required fields (62.4994ms)
+✔ diary page defaults to 50 and keeps bounded legacy offset support (1.5889ms)
+✔ diary page rejects ambiguous or abusive bounds and dates (1.3217ms)
+✔ diary cursor is canonical and bound to every active filter (0.5978ms)
+✔ diary cursor rejects malformed, non-canonical and incomplete payloads (0.2281ms)
+✔ diary create normalizes the supported clinical fields and discards spoofed authorship (1.8372ms)
+✔ diary create rejects oversized, invalid-enum and impossible-date payloads (0.7562ms)
+✔ diary patch validates every supplied field and refuses empty or spoof-only writes (0.3091ms)
+✔ diary datetime canonicalizes UI and assistant timestamps to sortable facility-local minutes (0.3555ms)
+✔ Prompt 10 §7: a note written now gets the trusted server time, never a client prompt (0.2435ms)
+✔ authoritative location handles active/history/conflicts/legacy without mixed labels or private data (335.4976ms)
+✔ historical lookup ignores legacy, preserves inclusive intervals and validates calendar dates (14.7086ms)
+✔ batch IDs are deduplicated and both scope restrictions apply to identity (6.3762ms)
+✔ repeated IDs use one minimal batch and database errors never become unassigned (5.5064ms)
+✔ non-string legacy scalars are unavailable and a roomless valid bed remains explicit (40.6112ms)
+✔ parameter room search is authoritative before limit+1 and identity page keeps its cursor (87.1834ms)
+✔ visible handover does not grant patient identity access, including overview previews (182.1903ms)
+✔ therapy detail, location and exact totals intersect requested IDs with patient ownership (60.5104ms)
+✔ DTX 20 is accepted on the monthly sheet (0.9267ms)
+✔ the IP morning/afternoon signature stays server-owned (0.4634ms)
+✔ parameter page filters accents/room before limit and returns a minimal projection (332.609ms)
+✔ parameter page enforces its endpoint-specific maximum of 25 (13.736ms)
+✔ parameter PATCH merges days and preserves historical months and unrelated clinical data (23.9532ms)
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ A — OSS inbox: only allowed event types and only residents in scope (750.1244ms)
+✔ B — cross-resident leakage: an out-of-scope event reaches neither the UI nor the LLM context (87.3271ms)
+✔ C — nurse shift briefing: real events, period = previous shift start → now, links to sources (28.3671ms)
+✔ D — doctor change-since-last-view uses a real watermark (1172.9261ms)
+✔ E — supervisor: facility aggregation within capability, technical signals included (275.5319ms)
+✔ F — administrator: no implicit clinical feed, technical signals only (115.5386ms)
+✔ G — Signal → Skill opens an EXISTING skill, never bypasses preview/confirmation (355.7311ms)
+✔ H — prescription event visible when authorized, zero autonomous action (104.5106ms)
+✔ I — handover prepared by the AI defaults to NORMAL; escalation only by explicit human edit + confirm (220.314ms)
+✔ J — deduplication: a burst of events is one grouped signal, stable across refreshes (106.4301ms)
+✔ K — acknowledgement changes the view only, never the source fact; a new event re-opens it (1309.7163ms)
+✔ L — prompt injection in a note changes neither scope, policy nor the LLM instructions (55.5783ms)
+✔ M — AI unavailable → deterministic fallback, nothing lost, nothing resolved (66.6688ms)
+✔ N — dynamic revocation: capability or scope removed → signals gone at the next refresh (204.0691ms)
+✔ O — overdue administration is a deterministic time rule (no LLM), grouped per slot (32.0292ms)
+✔ P — audit: shown, ack, action opened, briefing are traced with identity and role (42.1443ms)
+✔ Q — acknowledging «in arrivo» never hides the same slot once it is overdue (QA finding 1) (102.668ms)
+✔ R — a handover escalated after the ack is visible again (QA finding 2) (1251.8518ms)
+✔ S — a handover about an out-of-scope resident never discloses that resident (UI or LLM) (QA finding 3) (42.4705ms)
+✔ T — free text typed in a prescription (drug name) never reaches the LLM (QA finding 4) (31.7099ms)
+✔ U — the denied-access summary keeps its ack until a NEW denial happens (QA finding 5) (1143.9855ms)
+✔ V — briefing AI cost guard: same facts reuse the summary, new facts inside the window use the fallback (82.909ms)
+✔ W — a cached AI summary never survives a scope revocation (QA re-verification finding) (38.4989ms)
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ A — OSS: only allowed skills and starters; forbidden actions not executable (503.3447ms)
+✔ B — Doctor read: real read skill end to end with the resident context (78.4127ms)
+✔ C — Doctor sensitive write: preview → no write → explicit confirmation → write → audit (310.2664ms)
+✔ D — Cancel: cancelling the preview writes nothing (57.3926ms)
+✔ E — Modify before confirm: payload change invalidates the previous confirmation (191.9712ms)
+✔ QA H1 — resident named in the text (no page resident): multi-turn and confirm complete (146.0207ms)
+✔ F — Unauthorized resident: out-of-scope resident → backend denial everywhere (53.5456ms)
+✔ G — Change resident during a sensitive workflow → invalidated, no write (61.4227ms)
+✔ H — Dynamic revocation by the Administrator → next action denied without restart (113.3071ms)
+✔ I — Backend error: no false success; administration prepared, then confirmed (228.874ms)
+✔ J — Classic GUI regression: routes and Administrator minimisation (90.6746ms)
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ discovery: GET /skills reflects the policy per role (417.6206ms)
+✔ A — read skill: natural language → skill → authorized read tool → backend → result (140.9792ms)
+✔ B + I — write skill: preview → explicit confirmation → persisted → verified → audit (94.3926ms)
+✔ C — ambiguous or missing target → NEEDS_CLARIFICATION, no write (93.8152ms)
+✔ D — identity without the capability → DENIED, confirmed by the backend (129.7394ms)
+✔ E — multi-turn: structured state across turns, then completion (198.9317ms)
+✔ F — capability revoked during the workflow → policy re-evaluated → DENIED, no write (217.1489ms)
+✔ G — cancellation before confirmation → no write (72.5595ms)
+✔ H — backend failure: no false success; retry does not duplicate the write (240.9565ms)
+✔ J — regression: Phase 1/2 tool surface unchanged for the GUI/Agno path (80.5718ms)
+[ai-gateway] {"requestId":"op-SIM-NURSE-1-skill-65a183b0-9ee8-4167-a9e7-5c32f1a0b655","userId":"SIM-NURSE-1","tenantId":"clinicos","toolName":"get_patient_therapies","patientIds":["cmurj36of0004tclpiazwr8i2"],"resultCount":0,"outcome":"empty","at":"2026-10-02T22:22:09.724Z"}
+✔ per-role coverage: every executable skill completes for an intended role (650.1988ms)
+✔ QA H1 — a slow correction racing a confirmation cannot produce a second write (466.242ms)
+✔ QA M1 — a near-confirmation never replaces the text; «correggi:» does (76.9661ms)
+✔ QA L1 — page context: exactly the verified id, label from server data (91.9909ms)
+✔ catalog: every skill composes REAL Tool Layer tools and has a stable unique id (1.169ms)
+✔ Prompt 3 phrases select the expected skills (deterministic interpreter) (6.0375ms)
+✔ slot extraction: values, patient reference, current patient, text, date (1.1765ms)
+✔ pending question: the message fills the awaited slot (0.2334ms)
+✔ confirmation policy: classes, policy effect upgrade, explicit acts only (0.5776ms)
+✔ availability: required tool revoked → unavailable; optional revoked → partial (0.4072ms)
+✔ Agno route is validated: skills outside the available list and unknown keys are dropped (0.4074ms)
+✔ Agno interpreter falls back to the deterministic one when the runtime is unreachable (22.1369ms)
+✔ bindable therapy: only classic-mapper keys; hidden fields forced or refused (19.8556ms)
+✔ AC1: the user text gets drug, dose and times from the AI, flagged as proposals (13.1364ms)
+✔ AC2: deterministic fields are never overwritten by the AI (16.736ms)
+✔ AC2: invalid AI values are discarded (0.48ms)
+✔ AC3: AI failure or no answer → deterministic preview + ai_non_disponibile (0.5478ms)
+✔ AC4: blocking intents and fully parsed texts do not call the AI (3.3739ms)
+✔ envelope errors still throw before any AI call (0.6157ms)
+✔ fascia conflicts are recomputed on AI-proposed times (0.4692ms)
+✔ prompt asks for JSON, forbids invention and carries the text; kill switch works (0.4244ms)
+✔ therapy scalar input accepts bounded clinical text and nullable optional fields (0.9165ms)
+✔ therapy scalar input rejects oversized, mistyped and unknown enum values (0.5513ms)
+✔ createTherapyInTx: creates therapy with schedules and derives dosaggio + fasceMattina (395.1204ms)
+✔ createTherapyInTx: rejects when farmacoNome is missing (7.512ms)
+✔ P10: missing required therapy fields are named in operator language (0.8028ms)
+✔ therapy write requires authoritative therapy identity and ignores display fields (2.8053ms)
+✔ therapy write rejects missing therapyId, impossible dates, invalid fascia and long text (0.8229ms)
+ℹ tests 137
+ℹ suites 4
+ℹ pass 136
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 136647.0897
+
+✖ failing tests:
+
+test at src\intake\__tests__\confirm-draft-therapy.test.ts:1:1117
+✖ confirmDraft: persists therapies + vitals/pain into Cartella.data (346.5339ms)
+  Error: Lo storico NRS precedente è di sola lettura. Ricarica la cartella; le modifiche non sono state salvate.
+      at confirm (C:\Workspace\ClinicOSHouse-worktrees\phase10-bughunt\backend\src\ai\upload\confirm-service.ts:406:13)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\phase10-bughunt\backend\src\intake\__tests__\confirm-draft-therapy.test.ts:83:20)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    status: 409,
+    code: 'nrs_legacy_read_only',
+    details: {}
+  }

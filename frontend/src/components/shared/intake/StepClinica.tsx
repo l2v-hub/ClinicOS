@@ -54,6 +54,8 @@ interface StepClinicaProps {
   showLegacyPain?: boolean;
   /** Titoli delle sezioni: nascosti quando la card della pagina ha già il titolo. */
   showTitles?: boolean;
+  /** Flusso «da documenti»: ritorno alla revisione per risolvere i conflitti della terapia. */
+  onBackToDocuments?: () => void;
 }
 
 /** Inline compare panel for a single import section. */
@@ -87,6 +89,7 @@ export function StepClinica({
   showTherapyAcceptance = true,
   showLegacyPain = true,
   showTitles = true,
+  onBackToDocuments,
 }: StepClinicaProps) {
   // Keep manual additions next to the imported drugs, before the other clinical sections.
   const sections = intakeSections()
@@ -141,27 +144,32 @@ export function StepClinica({
             sourceResultHash={
               (data._importSource as { resultHash?: string } | undefined)?.resultHash
             }
+            onBackToDocuments={onBackToDocuments}
           />
         </div>
       )}
       {/* #235: explicit therapy acceptance — required before the patient can be created. */}
-      {therapyBlock && showTherapyAcceptance && <div className="step-clinica__section">
-        <label className="step-clinica__accept" data-testid="accept-therapy">
-          <input
-            type="checkbox"
-            checked={therapyAccepted}
-            onChange={(e) =>
-              onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
-            }
-          />
-          <span>
-            {therapyEmpty
-              ? 'Confermo: nessuna terapia da inserire'
-              : 'Confermo di aver revisionato la terapia proposta'}
-          </span>
-        </label>
-      </div>}
-      {showLegacyPain && legacyPainPresent(data) && <NrsLegacyContent value={data.dolore} title="Dati dolore precedenti della bozza" intake />}
+      {therapyBlock && showTherapyAcceptance && (
+        <div className="step-clinica__section">
+          <label className="step-clinica__accept" data-testid="accept-therapy">
+            <input
+              type="checkbox"
+              checked={therapyAccepted}
+              onChange={(e) =>
+                onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
+              }
+            />
+            <span>
+              {therapyEmpty
+                ? 'Confermo: nessuna terapia da inserire'
+                : 'Confermo di aver revisionato la terapia proposta'}
+            </span>
+          </label>
+        </div>
+      )}
+      {showLegacyPain && legacyPainPresent(data) && (
+        <NrsLegacyContent value={data.dolore} title="Dati dolore precedenti della bozza" intake />
+      )}
       {sections.map((def) => {
         const { sectionKey, title, component: Editor } = def;
 
@@ -170,6 +178,7 @@ export function StepClinica({
         const EditorCast = Editor as unknown as ComponentType<
           SectionProps<unknown> & {
             allergie?: AllergiaItem[];
+            showAllergySummary?: boolean;
             status?: AllergyStatus;
             onStatusChange?: (s: AllergyStatus) => void;
             therapyCorrection?: TherapyCorrectionTarget | null;
@@ -177,11 +186,12 @@ export function StepClinica({
         >;
 
         // AnamnesisEditor requires an extra allergie prop (read-only card inside Anamnesi).
+        // The intake has its own Allergie section: no duplicate summary pointing elsewhere.
         // #265: AllergiesEditor needs status/onStatusChange wired to the draft, otherwise the
         // Presenti/Assenti/Paziente nega selection is rendered but never enters allergieStatus.
         const extraProps =
           sectionKey === 'anamnesi'
-            ? { allergie: (data.allergie as AllergiaItem[]) ?? [] }
+            ? { allergie: (data.allergie as AllergiaItem[]) ?? [], showAllergySummary: false }
             : sectionKey === 'allergie'
               ? {
                   status: data.allergieStatus as AllergyStatus | undefined,

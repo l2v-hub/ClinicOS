@@ -10,6 +10,7 @@ import {
   decideImportProposal,
   decideFieldProposal,
   DraftApiError,
+  draftRejectionReason,
   type DraftResponse,
 } from './intakeDraftApi';
 import {
@@ -141,6 +142,8 @@ export function IntakeWorkspace({
   const [submitAttempted, setSubmitAttempted] = useState(false);
   // #234: autosave status for the debounced patchDraft (no longer swallowed silently).
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  // Motivo del rifiuto del server (4xx): il banner dice cosa sistemare invece di «riprova».
+  const [saveErrorReason, setSaveErrorReason] = useState<string | null>(null);
   // #243 AC4: modulo scelto nella griglia dello step 4 (opzionale) — usato solo per navigare
   // al flusso reale del modulo dopo la creazione del paziente; non blocca la conferma.
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
@@ -423,6 +426,7 @@ export function IntakeWorkspace({
     try {
       await persistDraft(() => dataRef.current);
       setSaveState('saved');
+      setSaveErrorReason(null);
       setSavedAt(new Date());
     } catch (e) {
       // Versione superata (un'unione AI o un'altra scheda): ricarica e ripeti una sola volta.
@@ -442,6 +446,7 @@ export function IntakeWorkspace({
       }
       // #234: no longer swallowed — surface an error state (no PHI in the log).
       setSaveState('error');
+      setSaveErrorReason(draftRejectionReason(e));
       console.error('[ClinicOS] autosave bozza intake non riuscito');
     }
   }
@@ -741,9 +746,13 @@ export function IntakeWorkspace({
       await persistDraft(data);
       setSaveState('saved');
       close();
-    } catch {
+    } catch (e) {
       setSaveState('error');
-      setSubmitError('Bozza non salvata. Riprova prima di chiudere.');
+      const reason = draftRejectionReason(e);
+      setSaveErrorReason(reason);
+      setSubmitError(
+        reason ? `Bozza non salvata: ${reason}` : 'Bozza non salvata. Riprova prima di chiudere.',
+      );
     } finally {
       submittingRef.current = false;
       setSubmitting(false);
@@ -808,7 +817,7 @@ export function IntakeWorkspace({
             data-state={saveState}
           >
             {saveState === 'error'
-              ? 'Bozza non salvata: errore di salvataggio, riprova'
+              ? `Bozza non salvata: ${saveErrorReason ?? 'errore di salvataggio, riprova'}`
               : saveState === 'saving'
                 ? 'Salvataggio della bozza…'
                 : savedTime
@@ -1032,6 +1041,9 @@ export function IntakeWorkspace({
                     importedFields={(data._importedFields as string[] | undefined) ?? []}
                     narrative={data._narrative as Record<string, unknown> | undefined}
                     therapyCorrection={therapyCorrection}
+                    onBackToDocuments={
+                      onBackToDocuments ? () => void saveAndClose(onBackToDocuments) : undefined
+                    }
                     only={['terapia']}
                     showTherapyAcceptance={false}
                     showLegacyPain={false}

@@ -4,6 +4,7 @@
 // che dice esattamente cosa si sa.
 import type { Consegna } from '../types';
 import { therapyCalendar, therapyTime, type ScadenzaTerapia } from './dashboardTherapies';
+import type { TabId } from '../components/operator/tabGroups';
 
 export type AdessoKind =
   | 'terapia-ritardo'
@@ -23,6 +24,18 @@ export const ADESSO_RANK: Record<AdessoKind, number> = {
   'terapia-senza-orario': 5,
   'anomalia-farmaci': 6,
   'consegna-urgente': 7,
+};
+
+/** Sezione della cartella in cui si agisce sulla voce (Prompt 10 §2): «Apri» porta lì, non sulla
+ *  Panoramica. Le anomalie farmaci si sanano dalla terapia del paziente. */
+export const ADESSO_KIND_TAB: Record<AdessoKind, TabId> = {
+  'terapia-ritardo': 'terapia-farmacologica',
+  'terapia-imminente': 'terapia-farmacologica',
+  'terapia-senza-orario': 'terapia-farmacologica',
+  'anomalia-farmaci': 'terapia-farmacologica',
+  'consegna-scaduta': 'consegne',
+  'consegna-imminente': 'consegne',
+  'consegna-urgente': 'consegne',
 };
 
 export const ADESSO_KIND_LABEL: Record<AdessoKind, string> = {

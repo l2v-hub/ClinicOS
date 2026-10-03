@@ -1,0 +1,18 @@
+import { chromium } from 'playwright';
+const [NANNI, WAIT] = process.argv.slice(2);
+const b = await chromium.launch();
+const page = await (await b.newContext({ viewport: { width: 1180, height: 820 } })).newPage();
+await page.goto('http://127.0.0.1:5199');
+await page.getByRole('button', { name: /Infermiere 1/ }).first().click();
+await page.waitForSelector('.teams-sidebar');
+await page.waitForTimeout(1200);
+await page.goto(`http://127.0.0.1:5199/#/dettaglio-paziente/${NANNI}`);
+await page.getByText('Nanni, Miriam').first().waitFor();
+await page.waitForTimeout(Number(WAIT));
+const top = () => page.evaluate(() => Math.round(document.querySelector('[data-chart-part="consegne"]')?.getBoundingClientRect().top ?? -1));
+const side = (n) => page.locator('.teams-sidebar').getByRole('button', { name: n }).click();
+await side('Consegne'); await page.waitForTimeout(5000); const first = await top();
+await side('Parametri'); await page.waitForTimeout(2000);
+await side('Consegne'); await page.waitForTimeout(3000); const second = await top();
+console.log(JSON.stringify({ wait: WAIT, firstVisit: first, secondVisit: second, vh: 820 }));
+await b.close();

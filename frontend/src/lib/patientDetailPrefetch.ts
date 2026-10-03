@@ -18,17 +18,21 @@ import {
   type TherapyListSnapshot,
 } from './patientTabSnapshots';
 import { loadTherapyPage } from './therapyPages';
+import { sessionCan } from './capabilities';
 import { createAssessmentCatalogReader } from './assessments/assessmentCatalog';
 
 const inflight = new Set<string>();
 
-type Task = { key: string; read: () => Promise<unknown | undefined> };
+// Phase 10: ogni lettura anticipata dichiara la capability della sua route; senza, il ruolo
+// riceverebbe solo 403 (e riempirebbe il segnale di audit «operazioni negate»).
+type Task = { key: string; capability: string; read: () => Promise<unknown | undefined> };
 
 function tasksFor(patientId: string): Task[] {
   const id = encodeURIComponent(patientId);
   return [
     {
       key: narrativeCacheKey(patientId),
+      capability: 'narrative.list',
       read: async () => {
         const r = await fetch(`${API_URL}/patients/${id}/narrative-sections`, {
           headers: operatorHeaders(),
@@ -40,6 +44,7 @@ function tasksFor(patientId: string): Task[] {
     },
     {
       key: therapyListCacheKey(patientId, {}),
+      capability: 'therapy.list_page',
       read: async () => {
         const page = await loadTherapyPage(patientId, 'tutte', null, {});
         const snapshot: TherapyListSnapshot = {
@@ -52,6 +57,7 @@ function tasksFor(patientId: string): Task[] {
     },
     {
       key: diaryCacheKey(patientId, 'tutti'),
+      capability: 'diary.list',
       read: async () => {
         const r = await fetch(`${API_URL}/patients/${id}/diary?limit=50`, {
           headers: operatorHeaders(),
@@ -71,6 +77,7 @@ function tasksFor(patientId: string): Task[] {
     },
     {
       key: assessmentsCacheKey(patientId),
+      capability: 'assessments.catalog',
       read: () =>
         createAssessmentCatalogReader(
           API_URL,
@@ -90,6 +97,7 @@ const idle = (fn: () => void) =>
 export function prefetchPatientDetailTabs(patientId: string): void {
   idle(() => {
     for (const task of tasksFor(patientId)) {
+      if (!sessionCan(task.capability)) continue;
       if (readSessionCache(task.key) !== undefined || inflight.has(task.key)) continue;
       inflight.add(task.key);
       const read = task.read();

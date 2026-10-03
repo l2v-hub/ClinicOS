@@ -268,7 +268,16 @@ async function confirm(
         const narrative = (draftData._narrative ?? jobData._narrative) as
           DischargeNarrativeDraft | undefined;
         clinicalGuards(jobData, narrative ?? null, payload);
-        validateConfirmTherapies(payload.therapies);
+        // Error row numbers follow the intake page (imported rows first, then manual rows).
+        const importedRows = Array.isArray(draftData.terapiaImport)
+          ? draftData.terapiaImport.length
+          : 0;
+        validateConfirmTherapies(payload.therapies, (index, value) => {
+          const ref = asData(asData(value).intakeSource);
+          return Number.isInteger(ref.index) && (ref.type === 'import' || ref.type === 'manual')
+            ? (ref.type === 'import' ? 0 : importedRows) + (ref.index as number) + 1
+            : index + 1;
+        });
         const selection = draft
           ? validateDraftTherapySelection(draftData, payload.therapies)
           : null;

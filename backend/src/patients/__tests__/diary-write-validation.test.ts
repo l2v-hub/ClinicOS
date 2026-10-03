@@ -77,3 +77,20 @@ test('diary datetime canonicalizes UI and assistant timestamps to sortable facil
   const winterUtc = parseDiaryCreateBody({ content: 'a', entryDateTime: '2026-01-30T09:15:00Z' });
   assert.equal(winterUtc.entryDateTime, '2026-01-30T10:15');
 });
+
+test('Prompt 10 §7: a note written now gets the trusted server time, never a client prompt', () => {
+  const now = new Date('2026-10-02T08:05:00Z');
+  const created = parseDiaryCreateBody({ content: 'Paziente tranquillo' }, now);
+  assert.equal(created.entryDateTime, '2026-10-02T10:05', 'facility-local minute of "now"');
+  assert.equal(created.priority, 'normale', 'default priority NORMAL');
+  assert.equal(
+    parseDiaryCreateBody({ content: 'a', entryDateTime: '' }, now).entryDateTime,
+    '2026-10-02T10:05',
+  );
+  // A supplied clinical moment is still honoured and validated.
+  assert.equal(
+    parseDiaryCreateBody({ content: 'a', entryDateTime: '2026-10-01T22:30' }, now).entryDateTime,
+    '2026-10-01T22:30',
+  );
+  rejects({ content: 'a', entryDateTime: 1700000000 }, /entryDateTime non valida/);
+});

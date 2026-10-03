@@ -102,18 +102,22 @@ function deriveDosaggio(
  *   - validating that the patient exists (route 404 / confirm already created patient)
  *   - wrapping this call in `prisma.$transaction(...)`
  *
- * Throws `Error('Campi obbligatori: farmacoNome, dataInizio')` when either
- * required field is absent so the caller can map it to an HTTP 400 or
- * roll back the surrounding transaction.
+ * Throws a `TherapyInputError` naming the missing required fields in operator language
+ * («Campi obbligatori mancanti: farmaco, data di inizio») so the caller can map it to an
+ * HTTP 400 or roll back the surrounding transaction.
  */
+export function missingTherapyFieldsMessage(farmacoNome: string, dataInizio: string) {
+  const missing = [!farmacoNome && 'farmaco', !dataInizio && 'data di inizio'].filter(Boolean);
+  return missing.length ? `Campi obbligatori mancanti: ${missing.join(', ')}` : null;
+}
+
 export function validateTherapyCreateInput(input: TherapyCreateInput) {
   assertTherapyScalarInput(input as unknown as Record<string, unknown>);
   const farmacoNome = typeof input.farmacoNome === 'string' ? input.farmacoNome.trim() : '';
   const dataInizio = typeof input.dataInizio === 'string' ? input.dataInizio : '';
 
-  if (!farmacoNome || !dataInizio) {
-    throw new TherapyInputError('Campi obbligatori: farmacoNome, dataInizio');
-  }
+  const missing = missingTherapyFieldsMessage(farmacoNome, dataInizio);
+  if (missing) throw new TherapyInputError(missing);
 
   const dates = normalizeTherapyDateRange(dataInizio, input.dataFine);
   if (input.schedules !== undefined) assertValidSchedulesInput(input.schedules);

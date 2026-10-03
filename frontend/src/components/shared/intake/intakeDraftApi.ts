@@ -56,6 +56,17 @@ export class DraftApiError extends Error {
     this.code = code;
   }
 }
+/**
+ * Motivo leggibile di un salvataggio rifiutato dal server (4xx con messaggio italiano), da
+ * mostrare accanto a «Bozza non salvata». null per errori di rete/5xx o messaggi tecnici.
+ */
+export function draftRejectionReason(error: unknown): string | null {
+  if (!(error instanceof DraftApiError) || error.status < 400 || error.status >= 500) return null;
+  const message = error.message.trim();
+  if (!message || /failed: \d+$/.test(message)) return null;
+  return message;
+}
+
 function buildHeaders(op?: OperatorHeaders): Record<string, string> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',

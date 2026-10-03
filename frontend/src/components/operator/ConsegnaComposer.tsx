@@ -6,6 +6,7 @@ import { PatientIdentity } from '../shared/PatientIdentity';
 import { patientIdentityName } from '../../lib/patientIdentity';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useCan } from '../../lib/capabilities';
+import { corePriorityOptions } from '../../lib/corePriority';
 const TYPES = [
   'Monitoraggio',
   'Terapia',
@@ -111,9 +112,11 @@ export function ConsegnaComposer({
               disabled={locked}
               onChange={(event) => field({ priorita: event.target.value as PrioritaConsegna })}
             >
-              <option value="normale">Normale</option>
-              <option value="alta">Alta</option>
-              <option value="urgente">Urgente</option>
+              {corePriorityOptions(draft.fields.priorita, 'alta', 'Alta').map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </label>
           <label htmlFor={`${id}-date`}>
@@ -174,7 +177,7 @@ export function ConsegnaComposer({
           />
         </label>
         <span className="handover-rounds__hint">
-          {draft.fields.note.length}/4000 · La nuova consegna sarà aperta.
+          {draft.fields.note.length}/4000 · Data, ora e autore sono registrati automaticamente.
         </span>
         <div className="handover-rounds__actions">
           {draft.dirty && (

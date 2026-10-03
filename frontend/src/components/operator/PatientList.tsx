@@ -19,6 +19,7 @@ import {
 } from '../../lib/patientListView';
 import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
+import { useCan } from '../../lib/capabilities';
 import { PatientRoster } from './PatientRoster';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
@@ -99,6 +100,8 @@ export function PatientList({
   );
   // AC6/AC11: anomalie di tutto il reparto da UNA richiesta, non una per paziente.
   const anomalie = useAnomalieReparto();
+  // Prompt 10 AT-13: l'ingresso si offre solo a chi può aprirne la bozza (es. non OSS, non admin).
+  const canIntake = useCan('intake.create_draft');
   // Nuovo ingresso: pagina di scelta (HMI 1), poi il flusso scelto nella sua finestra di sempre.
   // Tornando all'elenco il fuoco torna su "Nuovo ingresso" (la card che lo aveva non c'è più).
   const [newPatientPath, setNewPatientPath] = useState<NewPatientPath | null>(null);
@@ -220,7 +223,7 @@ export function PatientList({
     onImported?.(patientId, moduleTabId);
   };
 
-  if (newIntake)
+  if (newIntake && canIntake)
     return (
       <NewPatientStart
         onBack={() => onCloseNewIntake?.()}
@@ -243,35 +246,37 @@ export function PatientList({
       />
 
       {/* HMI 1: card "Nuovo ingresso", come il prototipo */}
-      <section className="plist-card plist-new" aria-labelledby="plist-new-title">
-        <span className="plist-new__ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <path d="M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6" />
-          </svg>
-        </span>
-        <div className="plist-new__text">
-          <h2 id="plist-new-title">Nuovo ingresso</h2>
-          <p>Da lettera di dimissione, foto o a mano: l’AI compila i dati, tu li verifichi.</p>
-        </div>
-        <div className="plist-new__actions">
-          <AIImportStatus
-            onImported={handleImported}
-            operatorId={operatorId}
-            operatorRole={operatorRole}
-          />
-          <button
-            ref={newIntakeButtonRef}
-            type="button"
-            className="ds-btn ds-btn--primary"
-            onClick={onOpenNewIntake}
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
+      {canIntake && (
+        <section className="plist-card plist-new" aria-labelledby="plist-new-title">
+          <span className="plist-new__ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
               <path d="M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6" />
             </svg>
-            Nuovo ingresso
-          </button>
-        </div>
-      </section>
+          </span>
+          <div className="plist-new__text">
+            <h2 id="plist-new-title">Nuovo ingresso</h2>
+            <p>Da lettera di dimissione, foto o a mano: l’AI compila i dati, tu li verifichi.</p>
+          </div>
+          <div className="plist-new__actions">
+            <AIImportStatus
+              onImported={handleImported}
+              operatorId={operatorId}
+              operatorRole={operatorRole}
+            />
+            <button
+              ref={newIntakeButtonRef}
+              type="button"
+              className="ds-btn ds-btn--primary"
+              onClick={onOpenNewIntake}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M19 8v6M16 11h6" />
+              </svg>
+              Nuovo ingresso
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* Errore verifica impostazioni (niente fallimenti silenziosi — FR-018) */}
       {(settingsError || pageError) && (

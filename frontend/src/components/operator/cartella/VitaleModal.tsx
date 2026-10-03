@@ -99,6 +99,7 @@ export function VitaleModal({
       'dtx08',
       'dtx12',
       'dtx18',
+      'dtx20',
     ];
     if (colKey && numericKeys.includes(colKey)) {
       const val = form[colKey] as string | undefined;
@@ -203,9 +204,8 @@ export function VitaleModal({
       dtx08: 'Glicemia / DTX 08 (mg/dL)',
       dtx12: 'Glicemia / DTX 12 (mg/dL)',
       dtx18: 'Glicemia / DTX 18 (mg/dL)',
+      dtx20: 'Glicemia / DTX 20 (mg/dL)',
       catetere: 'Diuresi / Catetere (ml)',
-      firmaIpM: 'Firma IP Mattina',
-      firmaIpP: 'Firma IP Pomeriggio',
     };
 
     const displayLabel = fieldLabels[key] ?? `${label}${sub ? ` (${sub})` : ''}`;
@@ -216,6 +216,7 @@ export function VitaleModal({
       'dtx08',
       'dtx12',
       'dtx18',
+      'dtx20',
       'catetere',
     ];
     const isNumeric = numericKeys.includes(key);
@@ -243,10 +244,9 @@ export function VitaleModal({
     { key: 'dtx08', label: 'DTX 08', sub: 'mg/dl' },
     { key: 'dtx12', label: 'DTX 12', sub: 'mg/dl' },
     { key: 'dtx18', label: 'DTX 18', sub: 'mg/dl' },
+    { key: 'dtx20', label: 'DTX 20', sub: 'mg/dl' },
     { key: 'evacuazione', label: 'EVAC', sub: '' },
     { key: 'catetere', label: 'CATET', sub: '' },
-    { key: 'firmaIpM', label: 'IP M', sub: '' },
-    { key: 'firmaIpP', label: 'IP P', sub: '' },
     { key: 'note', label: 'NOTE', sub: '' },
   ];
 

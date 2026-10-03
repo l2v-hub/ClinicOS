@@ -17,6 +17,8 @@ import type { TherapySlot } from '../../../types';
 export type { RitardoVoce, RitardoPaziente } from '../../../lib/dashboardTherapies';
 
 export interface RiepilogoSomministrazioni extends DashboardTherapySummary {
+  /** false quando il ruolo non legge le somministrazioni: nessun dato, e nemmeno "in caricamento". */
+  disponibile: boolean;
   inCorso: boolean;
   fallito: boolean;
   domaniInCorso: boolean;
@@ -108,11 +110,13 @@ export function useRiepilogoSomministrazioni(attivoRichiesto = true): RiepilogoS
   const next = tomorrow.date === domani && attivo ? tomorrow : emptyDay(domani);
   return {
     ...summarizeDashboardTherapies(current.slots ?? [], next.slots ?? [], now),
-    inCorso: current.slots === null && !current.failed,
+    disponibile: attivo,
+    // Senza capability nessuna richiesta parte: "in caricamento" resterebbe vero per sempre.
+    inCorso: attivo && current.slots === null && !current.failed,
     fallito: current.failed,
-    domaniInCorso: next.slots === null && !next.failed,
+    domaniInCorso: attivo && next.slots === null && !next.failed,
     domaniFallito: next.failed,
-    aggiornamentoInCorso: current.refreshing || next.refreshing,
+    aggiornamentoInCorso: attivo && (current.refreshing || next.refreshing),
     aggiorna,
   };
 }

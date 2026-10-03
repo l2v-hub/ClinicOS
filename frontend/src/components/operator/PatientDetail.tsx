@@ -72,12 +72,15 @@ import {
   TAB_GROUPS,
   CHART_SECTIONS,
   chartSectionOf,
+  chartSectionAllowed,
+  type ChartSection,
   resolvePatientTab,
   assessmentPatientTab,
   patientTabGroup,
   type TabGroup,
   type TabId,
 } from './tabGroups';
+import { useCan } from '../../lib/capabilities';
 import {
   AnamnesisEditor,
   AssessmentWorkspace,
@@ -292,6 +295,16 @@ export function PatientDetail({
   assistantSectionRefresh,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));
+  const canListTherapy = useCan('therapy.list');
+  const canListDocuments = useCan('documents.list');
+  const sectionAllowed = (id: ChartSection) =>
+    chartSectionAllowed(id, (capability) =>
+      capability === 'therapy.list'
+        ? canListTherapy
+        : capability === 'documents.list'
+          ? canListDocuments
+          : true,
+    );
   const [activeGroup, setActiveGroup] = useState<TabGroup>(() => patientTabGroup(initialTab));
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
   const [assessmentFocus, setAssessmentFocus] = useState<{
@@ -2332,22 +2345,57 @@ export function PatientDetail({
   // HMI 1: 8 sezioni come il prototipo; ogni sezione mostra insieme i suoi contenuti.
   const section = chartSectionOf(tab);
   const sectionTabs = CHART_SECTIONS.find((s) => s.id === section)?.tabs ?? [tab];
-  const chartSectionItems: TopNavItem[] = CHART_SECTIONS.map((s) => ({
-    key: s.id,
-    label: s.label,
-    badge:
-      s.tabs.reduce((sum, id) => sum + (TAB_BADGES[id] ?? 0), 0) +
-        (s.id === 'moduli' ? groupBadgeSum('moduli') : 0) || undefined,
-  }));
+  const chartSectionItems: TopNavItem[] = CHART_SECTIONS.filter((s) => sectionAllowed(s.id)).map(
+    (s) => ({
+      key: s.id,
+      label: s.label,
+      badge:
+        s.tabs.reduce((sum, id) => sum + (TAB_BADGES[id] ?? 0), 0) +
+          (s.id === 'moduli' ? groupBadgeSum('moduli') : 0) || undefined,
+    }),
+  );
   const patientPanelLabelledBy = `patient-section-${section}`;
 
   // Un collegamento a un contenuto che non è il primo della sezione (es. Contatti, Note, Consegne)
   // lo porta in vista: la sezione mostra più parti insieme.
   const firstOfSection = sectionTabs[0];
+  // Le parti della sezione arrivano dopo (contenuti lazy): si attende che la parte compaia e la si
+  // tiene in vista mentre le parti sopra finiscono di caricare e la spostano (Phase 10 F1), per
+  // al massimo qualche secondo e solo finché l'operatore non scorre da sé.
   useEffect(() => {
     if (tab === firstOfSection) return;
-    const el = document.querySelector(`[data-chart-part="${tab}"]`);
-    if (el instanceof HTMLElement) el.scrollIntoView({ block: 'start' });
+    const find = () => document.querySelector(`[data-chart-part="${tab}"]`);
+    let target: HTMLElement | null = null;
+    let lastTop: number | null = null;
+    const pin = () => {
+      const el = find();
+      if (!(el instanceof HTMLElement)) return;
+      if (el !== target) {
+        target = el;
+        resizes.observe(el);
+        if (el.parentElement) resizes.observe(el.parentElement);
+      }
+      const top = Math.round(el.getBoundingClientRect().top);
+      if (lastTop !== null && Math.abs(top - lastTop) < 2) return;
+      el.scrollIntoView({ block: 'start' });
+      lastTop = Math.round(el.getBoundingClientRect().top);
+    };
+    const mutations = new MutationObserver(pin);
+    const resizes = new ResizeObserver(pin);
+    const userScroll = () => stop();
+    const timer = window.setTimeout(() => stop(), 5000);
+    function stop() {
+      mutations.disconnect();
+      resizes.disconnect();
+      window.clearTimeout(timer);
+      for (const type of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const)
+        window.removeEventListener(type, userScroll, true);
+    }
+    for (const type of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const)
+      window.addEventListener(type, userScroll, { capture: true, passive: true });
+    mutations.observe(document.body, { childList: true, subtree: true });
+    pin();
+    return stop;
   }, [tab, firstOfSection]);
 
   // Moduli già aperti (Medicazioni, Contenzioni, Braden): restano montati per non perdere le bozze,
@@ -2747,7 +2795,13 @@ export function PatientDetail({
             </button>
           )}
           <Suspense fallback={<ClinicalSectionLoading />}>
-            {section === 'moduli' ? (
+            {!sectionAllowed(section) ? (
+              // Un link diretto a una sezione negata dal ruolo non mostra errori di caricamento.
+              <div className="page-load-error" role="alert" data-testid="chart-section-denied">
+                <strong>Sezione non disponibile</strong>
+                <span>Il tuo ruolo non può consultare questa sezione della cartella.</span>
+              </div>
+            ) : section === 'moduli' ? (
               renderTab(tab)
             ) : section === 'panoramica' ? (
               // Panoramica come il prototipo: tessere dei parametri e NEWS2, poi il diario.

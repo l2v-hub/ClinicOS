@@ -109,6 +109,7 @@ beforeEach(() => {
           ? state.patient
           : null,
       findMany: async () => [],
+      findFirst: async () => null,
       create: async ({ data }: any) => {
         calls.patientWrites++;
         return (state.patient = { id: 'synthetic-created', ...data });
@@ -134,9 +135,13 @@ beforeEach(() => {
       },
     },
     operator: { findMany: async () => [{ id: actor.id }] },
-    cartella: { create: async ({ data }: any) => (state.cartella = data) },
+    cartella: {
+      create: async ({ data }: any) => (state.cartella = data),
+      upsert: async ({ create }: any) => (state.cartella = create),
+    },
     importJob: {
       findUnique: async () => ({ id: 'synthetic-job', createdById: actor.id, resultData: null }),
+      update: async ({ data }: any) => ({ id: 'synthetic-job', ...data }),
     },
     importAudit: {
       create: async ({ data }: any) => {
@@ -145,6 +150,9 @@ beforeEach(() => {
       },
     },
     importDocument: { findMany: async () => [] },
+    patientDocument: { findMany: async () => [] },
+    // Row locks are no-ops against the in-memory stub.
+    $queryRaw: async () => [],
   };
   Object.assign(prisma, delegates, {
     $transaction: async (fn: (tx: unknown) => unknown) => {
@@ -174,7 +182,7 @@ async function confirm(therapies: unknown = [therapy], auth = headers) {
   });
 }
 
-test('invalid therapy returns indexed 400 before any transaction or patient write', async () => {
+test('invalid therapy returns indexed 400 before any patient or therapy write', async () => {
   for (const bad of [
     { ...therapy, farmacoNome: '' },
     { ...therapy, dataInizio: '2026-02-30' },
@@ -191,10 +199,14 @@ test('invalid therapy returns indexed 400 before any transaction or patient writ
     assert.equal(response.status, 400);
     const result: any = await response.json();
     assert.match(result.error, /^Terapia 2:/);
-    assert.match(result.error, /Clinica/);
+    assert.match(result.error, /sezione Terapia/);
     assert.doesNotMatch(result.error, /Farmaco sintetico/);
   }
-  assert.deepEqual(calls, { transactions: 0, patientWrites: 0, therapyWrites: 0 });
+  // Validation runs inside the locked transaction (it needs the locked draft): nothing is written.
+  assert.deepEqual(
+    { ...calls, transactions: 0 },
+    { transactions: 0, patientWrites: 0, therapyWrites: 0 },
+  );
   assert.equal(state.draft.status, 'draft');
 });
 
@@ -289,7 +301,11 @@ test('a divided patch in the final row rejects the entire confirmation before wr
   const response = await confirm([therapy, therapy, therapy, dividedPatch]);
   assert.equal(response.status, 400);
   assert.match(((await response.json()) as { error: string }).error, /^Terapia 4:.*cerotti/);
-  assert.deepEqual(calls, { transactions: 0, patientWrites: 0, therapyWrites: 0 });
+  // Validation runs inside the locked transaction (it needs the locked draft): nothing is written.
+  assert.deepEqual(
+    { ...calls, transactions: 0 },
+    { transactions: 0, patientWrites: 0, therapyWrites: 0 },
+  );
   assert.deepEqual(state.therapies, []);
   assert.equal(state.draft.status, 'draft');
 });

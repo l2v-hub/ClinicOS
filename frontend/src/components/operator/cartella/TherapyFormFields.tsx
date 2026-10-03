@@ -111,6 +111,8 @@ interface TherapyFormFieldsProps {
   issues?: readonly TherapyFieldIssue[];
   /** Il nome del farmaco viene da un testo libero (Diario), non dall'anagrafica. */
   nomeDaTesto?: boolean;
+  /** Prescrittori proposti con un tocco (es. «Dimissione ospedaliera» all'ingresso). */
+  prescriberSuggestions?: readonly string[];
 }
 
 const THERAPY_TYPES = [
@@ -124,6 +126,7 @@ export function TherapyFormFields({
   onChange,
   issues,
   nomeDaTesto,
+  prescriberSuggestions,
 }: TherapyFormFieldsProps) {
   const id = useId();
   const feedback = therapyFieldFeedback(id, issues);
@@ -442,7 +445,14 @@ export function TherapyFormFields({
 
       <details
         className="therapy-form__disclosure therapy-form__notes"
-        open={Boolean(value.note || value.prescrittore || value.tipo === 'al_bisogno') || undefined}
+        open={
+          Boolean(
+            value.note ||
+            value.prescrittore ||
+            value.tipo === 'al_bisogno' ||
+            prescriberSuggestions?.length,
+          ) || undefined
+        }
       >
         <summary>
           Prescrittore e note{' '}
@@ -460,6 +470,26 @@ export function TherapyFormFields({
               placeholder="Dr. ..."
               onChange={(e) => update({ prescrittore: e.target.value })}
             />
+            {!!prescriberSuggestions?.length && (
+              <div
+                className="therapy-form__chips"
+                role="group"
+                aria-label="Prescrittori proposti"
+                data-testid="therapy-prescriber-suggestions"
+              >
+                {prescriberSuggestions.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    className="ds-btn ds-btn--secondary ds-btn--wrap"
+                    aria-pressed={value.prescrittore === s}
+                    onClick={() => update({ prescrittore: s })}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor={`${id}-notes`}>Note e indicazioni</label>

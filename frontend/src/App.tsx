@@ -37,6 +37,7 @@ import {
   cartellaWriteData,
 } from './lib/cartellaWriteQueue';
 import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
+import { administrationErrorMessage } from './lib/therapyAdministrationWrite';
 import { clearSessionCache } from './lib/sessionCache';
 import { prefetchPatientListSnapshot } from './components/operator/usePatientListPage';
 import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
@@ -129,9 +130,14 @@ import { OPERATOR_COLOR_PALETTE } from './types';
 import { createDefaultCartella } from './mockData';
 
 import { Login } from './components/Login';
-import { resolvePatientTab, type TabId } from './components/operator/tabGroups';
+import {
+  patientSectionForWardNav,
+  resolvePatientTab,
+  type TabId,
+} from './components/operator/tabGroups';
 import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
+import { classicScreenTarget } from './components/assistant/classicScreenTarget';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
 import { TopbarTitleSlot } from './components/shared/topbarTitleSlot';
 import { ShiftClock } from './components/shared/ShiftClock';
@@ -735,9 +741,20 @@ export default function App() {
   function navigate(key: NavKey) {
     setMobileNavOpen(false); // chiudi il drawer di navigazione mobile a ogni cambio sezione
     if (key === 'ai-assistant') {
+      if (!can(capabilities, 'agnos.plan_command')) return;
       // la voce "Assistente" alterna apertura e chiusura (dichiara aria-expanded)
       if (aiVisible) closeAiAssistant();
       else openAiAssistant();
+      return;
+    }
+    // Prompt 10 §2: dentro la cartella, Terapia / Parametri / Consegne restano sull'ospite aperto.
+    const patientTab = patientSectionForWardNav(
+      key,
+      navKey === 'dettaglio-paziente' && !!pazienteSelezionato,
+      (capability) => can(capabilities, capability),
+    );
+    if (patientTab && pazienteSelezionato) {
+      selectPaziente(pazienteSelezionato, patientTab);
       return;
     }
     // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
@@ -882,6 +899,10 @@ export default function App() {
     if (state?.prevLabel && historyDepth.current === 0) historyDepth.current = 1;
     if (!state?.navKey) {
       currentNavEntryRef.current = null;
+      // Prompt 10 §2: un link #/dettaglio-paziente/<id> aperto con l'app già avviata (incollato,
+      // condiviso) non porta history.state: apre comunque quel paziente, come al primo caricamento.
+      const linked = /^#\/dettaglio-paziente\/([^/?#]+)$/.exec(window.location.hash)?.[1];
+      if (linked && linked !== pazienteSelezionato?.id) void selectPazienteById(linked);
       return;
     }
     const known =
@@ -2792,9 +2813,9 @@ export default function App() {
 
   // ── Navigate to patient by name ─────────────────────────────────────────────
 
-  async function goToPazienteByNome(nome: string, patientId?: string) {
+  async function goToPazienteByNome(nome: string, patientId?: string, tab?: TabId) {
     if (patientId) {
-      await selectPazienteById(patientId);
+      await selectPazienteById(patientId, tab);
       return;
     }
     if (!nome) return;
@@ -2821,7 +2842,7 @@ export default function App() {
         return q === firstLast || q === lastFirst;
       });
       if (request !== patientNavigationSequenceRef.current) return;
-      if (exact.length === 1 && !page.hasMore) selectPaziente(exact[0]);
+      if (exact.length === 1 && !page.hasMore) selectPaziente(exact[0], tab);
       else if (page.hasMore) showToast('Ricerca non univoca: usa il codice fiscale del paziente');
       else if (exact.length > 1)
         showToast('Più pazienti hanno questo nome: usa la ricerca per codice fiscale');
@@ -2979,18 +3000,9 @@ export default function App() {
         }),
       });
 
-      if (res.status === 409) {
-        showToast('Terapia già erogata');
-        loadTherapySlots(info.date);
-        return;
-      }
-      if (res.ok) {
-        showToast('Somministrazione confermata');
-        loadTherapySlots(info.date);
-      } else {
-        showToast('Errore durante conferma');
-        loadTherapySlots(info.date);
-      }
+      // Il motivo del server distingue «già erogata» da «non prevista per questo slot» (entrambi 409).
+      showToast(res.ok ? 'Somministrazione confermata' : await administrationErrorMessage(res));
+      loadTherapySlots(info.date);
     } catch {
       showToast('Errore di rete');
       loadTherapySlots(info.date);
@@ -3049,13 +3061,8 @@ export default function App() {
         }),
       });
 
-      if (res.ok) {
-        showToast('Non somministrazione registrata');
-        loadTherapySlots(info.date);
-      } else {
-        showToast('Errore durante registrazione');
-        loadTherapySlots(info.date);
-      }
+      showToast(res.ok ? 'Non somministrazione registrata' : await administrationErrorMessage(res));
+      loadTherapySlots(info.date);
     } catch {
       showToast('Errore di rete');
       loadTherapySlots(info.date);
@@ -3544,34 +3551,37 @@ export default function App() {
                       )}
                       {/* Nuovo ingresso è una voce di navigazione: la lista resta montata sotto
                           (ricerca e filtri conservati), freccia e sidebar riportano ai pazienti. */}
-                      {!isAdmin && (navKey === 'pazienti' || navKey === 'nuovo-ingresso') && (
-                        <PatientList
-                          newIntake={navKey === 'nuovo-ingresso'}
-                          onOpenNewIntake={() => navigate('nuovo-ingresso')}
-                          onCloseNewIntake={() => goBack('pazienti')}
-                          totalPatients={clinicalOverview?.totalPatients ?? 0}
-                          ricerca={pazientiRicerca}
-                          onRicercaChange={setPazientiRicerca}
-                          filtroSesso={pazientiFiltroSesso}
-                          onFiltroSessoChange={setPazientiFiltroSesso}
-                          onSelect={selectPaziente}
-                          onPrefetch={prefetchCartella}
-                          operatorId={utente?.id}
-                          operatorRole={utente?.ruolo}
-                          onDeleted={(patientId) => {
-                            setPazienteSelezionato((current) =>
-                              current?.id === patientId ? null : current,
-                            );
-                          }}
-                          onImported={(patientId, moduleTabId) => {
-                            // La lista ricarica gia' la propria pagina. Per navigare a un paziente appena
-                            // creato basta un lookup puntuale: non scaricare di nuovo l'intero roster.
-                            if (!patientId) return;
-                            const tab = intakeLandingTab(moduleTabId);
-                            void selectPazienteById(patientId, tab);
-                          }}
-                        />
-                      )}
+                      {/* Anche la shell di amministrazione (supervisore) arriva qui dalle tessere
+                          «Apri lista pazienti»: decide la capability, non la shell. */}
+                      {(!isAdmin || canNavigate(capabilities, 'pazienti')) &&
+                        (navKey === 'pazienti' || navKey === 'nuovo-ingresso') && (
+                          <PatientList
+                            newIntake={navKey === 'nuovo-ingresso'}
+                            onOpenNewIntake={() => navigate('nuovo-ingresso')}
+                            onCloseNewIntake={() => goBack('pazienti')}
+                            totalPatients={clinicalOverview?.totalPatients ?? 0}
+                            ricerca={pazientiRicerca}
+                            onRicercaChange={setPazientiRicerca}
+                            filtroSesso={pazientiFiltroSesso}
+                            onFiltroSessoChange={setPazientiFiltroSesso}
+                            onSelect={selectPaziente}
+                            onPrefetch={prefetchCartella}
+                            operatorId={utente?.id}
+                            operatorRole={utente?.ruolo}
+                            onDeleted={(patientId) => {
+                              setPazienteSelezionato((current) =>
+                                current?.id === patientId ? null : current,
+                              );
+                            }}
+                            onImported={(patientId, moduleTabId) => {
+                              // La lista ricarica gia' la propria pagina. Per navigare a un paziente appena
+                              // creato basta un lookup puntuale: non scaricare di nuovo l'intero roster.
+                              if (!patientId) return;
+                              const tab = intakeLandingTab(moduleTabId);
+                              void selectPazienteById(patientId, tab);
+                            }}
+                          />
+                        )}
                       {navKey === 'dettaglio-paziente' &&
                         !pazienteSelezionato &&
                         restoringPazienteFromHash && (
@@ -3685,13 +3695,12 @@ export default function App() {
                     : null
                 }
                 onClose={() => setAssistantModeOpen(false)}
-                onOpenClassic={(target) => {
+                onOpenClassic={(screen) => {
                   setAssistantModeOpen(false);
-                  if (target.needsResident && target.patientId) {
-                    void selectPazienteById(target.patientId);
-                  } else {
-                    navigate(target.screen as NavKey);
-                  }
+                  const target = classicScreenTarget(screen);
+                  if (target.kind === 'patient')
+                    void selectPazienteById(target.patientId, target.tab);
+                  else navigate(target.screen);
                 }}
               />
             </Suspense>

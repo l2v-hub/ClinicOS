@@ -1,0 +1,24 @@
+import { chromium } from 'playwright';
+const [NANNI] = process.argv.slice(2);
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } });
+await ctx.addInitScript(() => {
+  window.__log = [];
+  const siv = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function (...a) { window.__log.push('siv ' + (this.getAttribute('data-chart-part') || this.className || this.tagName) + ' ' + performance.now().toFixed(0)); return siv.apply(this, a); };
+  const st = window.scrollTo; window.scrollTo = function (...a) { window.__log.push('scrollTo ' + JSON.stringify(a) + ' ' + performance.now().toFixed(0)); return st.apply(this, a); };
+  const et = Element.prototype.scrollTo; Element.prototype.scrollTo = function (...a) { window.__log.push('el.scrollTo ' + (this.className||this.tagName) + JSON.stringify(a) + ' ' + performance.now().toFixed(0)); return et.apply(this, a); };
+});
+const page = await ctx.newPage();
+await page.goto('http://127.0.0.1:5199');
+await page.getByRole('button', { name: /Infermiere 1/ }).first().click();
+await page.waitForSelector('.teams-sidebar');
+await page.waitForTimeout(1200);
+await page.goto(`http://127.0.0.1:5199/#/dettaglio-paziente/${NANNI}`);
+await page.getByText('Nanni, Miriam').first().waitFor();
+await page.waitForTimeout(2500);
+await page.evaluate(() => { window.__log.push('CLICK ' + performance.now().toFixed(0)); });
+await page.locator('.teams-sidebar').getByRole('button', { name: 'Consegne' }).click();
+await page.waitForTimeout(3000);
+console.log(await page.evaluate(() => ({ log: window.__log.slice(-15), sy: scrollY, scrollers: [...document.querySelectorAll('*')].filter(e => e.scrollTop > 0).map(e => (e.className||e.tagName) + ':' + e.scrollTop), top: document.querySelector('[data-chart-part="consegne"]')?.getBoundingClientRect().top })));
+await b.close();

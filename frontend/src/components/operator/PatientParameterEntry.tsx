@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import { getCurrentOperator, operatorHeaders } from '../../lib/operatorSession';
 import {
@@ -6,7 +6,7 @@ import {
   PARAMETER_OPTIONS,
   ParameterReadingSaveError,
   createParameterReadingRequest,
-  parameterValuesError,
+  parameterValuesIssue,
   readingTime,
   saveParameterReading,
   type ParameterReadingRequest,
@@ -33,7 +33,10 @@ export function PatientParameterEntry({
   const [saving, setSaving] = useState(false);
   const [uncertain, setUncertain] = useState(false);
   const [error, setError] = useState('');
+  const [invalidField, setInvalidField] = useState<keyof ParameterValues | null>(null);
+  const fields = useRef(new Map<string, HTMLInputElement | HTMLSelectElement>());
   const [savedAt, setSavedAt] = useState('');
+  const errorId = useId();
   const pending = useRef<ParameterReadingRequest | null>(null);
   const inFlight = useRef(false);
   const mounted = useRef(true);
@@ -46,6 +49,7 @@ export function PatientParameterEntry({
   function update(key: keyof ParameterValues, value: string) {
     setValues((previous) => ({ ...previous, [key]: value }));
     setError('');
+    setInvalidField(null);
     setSavedAt('');
     pending.current = null;
   }
@@ -55,9 +59,12 @@ export function PatientParameterEntry({
       setError('La sessione operatore è cambiata. Riapri la scheda prima di salvare.');
       return;
     }
-    const invalid = parameterValuesError(values);
+    const invalid = parameterValuesIssue(values);
     if (invalid) {
-      setError(invalid);
+      setError(invalid.message);
+      setInvalidField(invalid.field);
+      // Il fuoco va sul campo da correggere (il primo, se manca ogni valore).
+      fields.current.get(invalid.field ?? PARAMETER_FIELDS[0].key)?.focus();
       return;
     }
     pending.current ??= createParameterReadingRequest(values);
@@ -107,8 +114,13 @@ export function PatientParameterEntry({
               </span>
               {PARAMETER_OPTIONS[field.key] ? (
                 <select
+                  ref={(el) =>
+                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))
+                  }
                   className="form-input"
                   aria-label={`Nuova rilevazione ${field.label}`}
+                  aria-invalid={invalidField === field.key || undefined}
+                  aria-describedby={invalidField === field.key ? errorId : undefined}
                   value={values[field.key] ?? ''}
                   onChange={(event) => update(field.key, event.target.value)}
                 >
@@ -121,8 +133,13 @@ export function PatientParameterEntry({
                 </select>
               ) : (
                 <input
+                  ref={(el) =>
+                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))
+                  }
                   className="form-input"
                   aria-label={`Nuova rilevazione ${field.label}`}
+                  aria-invalid={invalidField === field.key || undefined}
+                  aria-describedby={invalidField === field.key ? errorId : undefined}
                   value={values[field.key] ?? ''}
                   inputMode={
                     ['pa', 'evacuazione'].includes(field.key)
@@ -159,7 +176,7 @@ export function PatientParameterEntry({
         </div>
       </form>
       {error && (
-        <div role="alert" className="parameter-trends-error">
+        <div role="alert" className="parameter-trends-error" id={errorId}>
           <p>{error}</p>
           {uncertain && pending.current && (
             <p>

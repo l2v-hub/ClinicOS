@@ -20,6 +20,8 @@ import {
 } from './diaryTherapyLink';
 import type { DiaryEntryWithTherapy } from './DiaryTherapyPanel';
 import './DiaryTherapyPanel.css';
+import { corePriorityOptions } from '../../../lib/corePriority';
+import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -325,20 +327,16 @@ export function DiarioPazienteTab({
     if (!form.content.trim()) return;
     setSaving(true);
     try {
-      const entryPayload = {
-        title: form.title.trim() || null,
-        content: form.content.trim(),
-        priority: form.priority,
-        status: form.status,
-        entryDateTime: form.entryDateTime,
-      };
+      // Prompt 10 §6–§7: time, author and state come from the server, never from the form.
+      const entryPayload = diaryCreatePayload(form);
       // Phase 6: same content → same requestId on retry (no duplicate entry after a lost response).
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ ...entryPayload, requestId: saveKey.for(entryPayload) }),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok)
+        throw new Error(await diaryWriteErrorMessage(res, 'Errore nel salvataggio della voce.'));
       saveKey.reset();
       const data = (await res.json()) as { entry: DiarioPazienteEntry };
       const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
@@ -354,8 +352,12 @@ export function DiarioPazienteTab({
       setShowAdd(false);
       setTherapyPanel(null);
       setRefreshVersion((version) => version + 1);
-    } catch {
-      setError('Errore nel salvataggio della voce.');
+    } catch (error) {
+      setError(
+        error instanceof Error && error.message
+          ? error.message
+          : 'Errore nel salvataggio della voce.',
+      );
     } finally {
       setSaving(false);
     }
@@ -407,11 +409,13 @@ export function DiarioPazienteTab({
           title: editForm.title.trim() || null,
           content: editForm.content.trim(),
           priority: editForm.priority,
-          status: editForm.status,
           entryDateTime: editForm.entryDateTime,
         }),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok)
+        throw new Error(
+          await diaryWriteErrorMessage(res, 'Errore nel salvataggio della modifica.'),
+        );
       const data = (await res.json()) as { entry: DiarioPazienteEntry };
       // La PUT restituisce la riga senza il riferimento alla terapia: si conserva quello letto.
       setEntries((prev) =>
@@ -426,8 +430,12 @@ export function DiarioPazienteTab({
       );
       setEditEntry(null);
       setRefreshVersion((version) => version + 1);
-    } catch {
-      setError('Errore nel salvataggio della modifica.');
+    } catch (error) {
+      setError(
+        error instanceof Error && error.message
+          ? error.message
+          : 'Errore nel salvataggio della modifica.',
+      );
     } finally {
       setSaving(false);
     }
@@ -500,7 +508,10 @@ export function DiarioPazienteTab({
           <span className={`badge ${PRIORITY_BADGE[row.priority]}`}>
             {PRIORITY_LABELS[row.priority]}
           </span>
-          <span className={`badge ${STATUS_BADGE[row.status]}`}>{STATUS_LABELS[row.status]}</span>
+          {/* Prompt 10 §6.2: «Aperta» is not an operational state; only a recorded outcome shows. */}
+          {row.status !== 'aperta' && STATUS_LABELS[row.status] && (
+            <span className={`badge ${STATUS_BADGE[row.status]}`}>{STATUS_LABELS[row.status]}</span>
+          )}
           <span className="diario-card__time">{fmtDT(row.entryDateTime)}</span>
           {!isLegacy(row) && row.sourceType !== 'consegna' && (
             <div className="diario-card__actions">
@@ -605,6 +616,8 @@ export function DiarioPazienteTab({
     therapy?: { onValidate: () => void; open: boolean },
   ) {
     const locked = Boolean(therapy?.open);
+    // Etichette collegate ai campi (accessibilità e test): un prefisso per form (nuova / modifica).
+    const fid = `diario-${therapy ? 'new' : 'edit'}`;
     return (
       <div className="cr-inline-form" style={{ marginBottom: 16 }}>
         <div
@@ -619,8 +632,11 @@ export function DiarioPazienteTab({
         </div>
         <div className="form-hint">Autore registrato automaticamente dall’account autenticato.</div>
         <div className="form-row">
-          <label className="form-label">Titolo (opzionale)</label>
+          <label className="form-label" htmlFor={`${fid}-title`}>
+            Titolo (opzionale)
+          </label>
           <input
+            id={`${fid}-title`}
             className="form-input"
             type="text"
             value={f.title}
@@ -629,8 +645,11 @@ export function DiarioPazienteTab({
           />
         </div>
         <div className="form-row">
-          <label className="form-label">Contenuto *</label>
+          <label className="form-label" htmlFor={`${fid}-content`}>
+            Contenuto *
+          </label>
           <textarea
+            id={`${fid}-content`}
             className="form-input"
             rows={4}
             value={f.content}
@@ -647,43 +666,42 @@ export function DiarioPazienteTab({
           )}
         </div>
         <div className="form-row">
-          <label className="form-label">Priorità</label>
+          <label className="form-label" htmlFor={`${fid}-priority`}>
+            Priorità
+          </label>
           <select
+            id={`${fid}-priority`}
             className="form-input"
             value={f.priority}
             onChange={(e) =>
               setF((prev) => ({ ...prev, priority: e.target.value as DiarioForm['priority'] }))
             }
           >
-            <option value="normale">Normale</option>
-            <option value="importante">Importante</option>
-            <option value="urgente">Urgente</option>
+            {corePriorityOptions(f.priority, 'importante', 'Importante').map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="form-row">
-          <label className="form-label">Stato</label>
-          <select
-            className="form-input"
-            value={f.status}
-            onChange={(e) =>
-              setF((prev) => ({ ...prev, status: e.target.value as DiarioForm['status'] }))
-            }
-          >
-            <option value="aperta">Aperta</option>
-            <option value="completata">Completata</option>
-            <option value="da_rivedere">Da rivedere</option>
-          </select>
-        </div>
-        <div className="form-row">
-          <label className="form-label">Data e ora</label>
-          <input
-            className="form-input"
-            type="datetime-local"
-            value={f.entryDateTime}
-            onChange={(e) => setF((prev) => ({ ...prev, entryDateTime: e.target.value }))}
-            readOnly={locked}
-          />
-        </div>
+        {therapy ? (
+          <div className="form-hint" data-testid="diary-auto-time">
+            Data e ora registrate automaticamente al salvataggio.
+          </div>
+        ) : (
+          <div className="form-row">
+            <label className="form-label" htmlFor={`${fid}-when`}>
+              Data e ora
+            </label>
+            <input
+              id={`${fid}-when`}
+              className="form-input"
+              type="datetime-local"
+              value={f.entryDateTime}
+              onChange={(e) => setF((prev) => ({ ...prev, entryDateTime: e.target.value }))}
+            />
+          </div>
+        )}
         <div className="cr-inline-form__actions diario-form__actions">
           <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
             Annulla
@@ -820,7 +838,11 @@ export function DiarioPazienteTab({
             'Nuova voce diario',
             {
               open: therapyPanel !== null,
-              onValidate: () => setTherapyPanel((opened) => (opened ?? 0) + 1),
+              onValidate: () => {
+                // The prescription is dated when it is validated, not when the form was opened.
+                setForm((prev) => ({ ...prev, entryDateTime: facilityLocalMinute() }));
+                setTherapyPanel((opened) => (opened ?? 0) + 1);
+              },
             },
           )}
 

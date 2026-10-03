@@ -11,6 +11,7 @@ import {
   object,
   orderPages,
   renumber,
+  REQUEST_LIMIT_MESSAGE,
   type Json,
   type Manifest,
   type Tx,
@@ -129,7 +130,7 @@ export async function addPageFiles(jobId: string, files: IncomingFile[], metadat
   if (!files.length || files.length > LIMITS.maxFilesPerRequest || items.length !== files.length)
     throw new ImportSessionError(400, 'invalid_files', 'File e identificativi non corrispondono');
   if (files.reduce((n, f) => n + f.data.length, 0) > LIMITS.maxTotalBytes)
-    throw new ImportSessionError(413, 'request_limit', 'Carica un gruppo di file più piccolo');
+    throw new ImportSessionError(413, 'request_limit', REQUEST_LIMIT_MESSAGE);
   const prepared: Array<
     Prepared | { error: ImportSessionError; file: IncomingFile; clientFileId: string }
   > = [];
