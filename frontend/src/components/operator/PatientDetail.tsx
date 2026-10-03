@@ -50,7 +50,14 @@ import { IcoEdit, IcoCheck, IcoX, IcoPlus, IcoWarning, IcoClock } from '../../ic
 import { DIARIO_AUTHOR_FILTERS } from './cartella/diarioFilters';
 import { TopNav, type TopNavItem } from '../navigation/TopNav';
 import { AvvisoAnomalieFarmaci } from './cartella/AvvisoAnomalieFarmaci';
-import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
+import {
+  useAnomalieReparto,
+  anomalieDelPaziente,
+  anomalyTherapyId,
+} from './cartella/useAnomalieReparto';
+import type { PatientTargetRequest, TherapyTarget } from '../../lib/patientTarget';
+import { RISK_SCALE_TAB } from '../../lib/patientTargetResolver';
+import './chartFocus.css';
 import { createPortal } from 'react-dom';
 import { TopbarTitleSlot } from '../shared/topbarTitleSlot';
 import { News2Chip } from './News2Chip';
@@ -152,6 +159,9 @@ interface PatientDetailProps {
    * switches while this component stays mounted still reset to the default tab. */
   initialTab?: TabId;
   navigationRequestId?: number;
+  /** Direct access: section + sub-view + item to land on (therapy, handover, diary entry,
+   *  document, assessment). `requestId` changes on every navigation, even to the same target. */
+  navigationTarget?: PatientTargetRequest;
   /** Chiamato quando l'operatore cambia sezione: App ne fa un passo della cronologia. */
   onTabNavigate?: (tab: TabId) => void;
   assistantSectionRefresh?: { actionType: string; version: number };
@@ -291,6 +301,7 @@ export function PatientDetail({
   operatoreRole,
   initialTab,
   navigationRequestId,
+  navigationTarget,
   onTabNavigate,
   assistantSectionRefresh,
 }: PatientDetailProps) {
@@ -328,7 +339,7 @@ export function PatientDetail({
   const [archiveFocus, setArchiveFocus] = useState<{
     patientId: string;
     documentId: string;
-    assessment: AssessmentTarget;
+    assessment?: AssessmentTarget;
   } | null>(null);
   // Diario terapia: "apri" dalla voce del diario mette a fuoco la riga della terapia in Terapia.
   const [therapyFocus, setTherapyFocus] = useState<{
@@ -342,6 +353,45 @@ export function PatientDetail({
     setTab(resolvePatientTab(initialTab));
     setActiveGroup(patientTabGroup(initialTab));
   }, [initialTab, navigationRequestId]);
+  // Direct access: the item inside the section (Terapia sub-view + drug, handover, diary entry,
+  // document, assessment, allergy table). Seeds the existing focus mechanisms; one request per
+  // navigation, so opening the same item twice focuses it again.
+  const [therapyTarget, setTherapyTarget] = useState<
+    (TherapyTarget & { requestId: number }) | null
+  >(null);
+  const [itemFocus, setItemFocus] = useState<{ selector: string; requestId: number } | null>(null);
+  const handledTargetRef = useRef<number | null>(null);
+  useEffect(() => {
+    const target = navigationTarget;
+    if (!target || target.patientId !== paziente.id) return;
+    if (handledTargetRef.current === target.requestId) return;
+    handledTargetRef.current = target.requestId;
+    const requestId = target.requestId;
+    setTherapyTarget(target.therapy ? { ...target.therapy, requestId } : null);
+    const selector = target.consegnaId
+      ? `[data-consegna-id="${CSS.escape(target.consegnaId)}"]`
+      : target.diaryEntryId
+        ? `[data-diary-entry-id="${CSS.escape(target.diaryEntryId)}"]`
+        : target.anchor
+          ? `[data-chart-anchor="${target.anchor}"]`
+          : null;
+    setItemFocus(selector ? { selector, requestId } : null);
+    if (target.documentId)
+      setArchiveFocus({ patientId: paziente.id, documentId: target.documentId });
+    if (target.assessmentId && target.tab) {
+      const type =
+        target.tab === 'gds'
+          ? 'gds15'
+          : (['painad', 'postural_transfers', 'tinetti', 'mna'] as const).find(
+              (t) => t === target.tab,
+            );
+      if (type)
+        setAssessmentFocus({
+          patientId: paziente.id,
+          assessment: { type, id: target.assessmentId },
+        });
+    }
+  }, [navigationTarget, paziente.id]);
   // AC5: anomalie di terapia del paziente. Passa dalla stessa richiesta di reparto che alimenta
   // la lista pazienti, quindi aprire una cartella non aggiunge chiamate.
   const anomalieReparto = useAnomalieReparto();
@@ -364,7 +414,11 @@ export function PatientDetail({
       setLegacyVisits((previous) => new Set([...previous, tabId]));
     const target = resolvePatientTab(tabId);
     const group = patientTabGroup(target);
-    if (target !== 'terapia-farmacologica') setTherapyFocus(null);
+    if (target !== 'terapia-farmacologica') {
+      setTherapyFocus(null);
+      setTherapyTarget(null);
+    }
+    setItemFocus(null);
     // Transition: il tab corrente resta visibile finche' il chunk del nuovo tab non e' pronto
     // (gia' precaricato: un frame), invece del fallback "Caricamento sezione clinica…" che React
     // tratterrebbe comunque per ~300 ms.
@@ -2201,7 +2255,11 @@ export function PatientDetail({
                     </p>
                   )}
                   {mieConsegne.map((c) => (
-                    <div key={c.id} className={`consegna-card consegna-card--${c.priorita}`}>
+                    <div
+                      key={c.id}
+                      className={`consegna-card consegna-card--${c.priorita}`}
+                      data-consegna-id={c.id}
+                    >
                       <div className="consegna-card__top">
                         <span
                           className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
@@ -2344,6 +2402,16 @@ export function PatientDetail({
 
   // HMI 1: 8 sezioni come il prototipo; ogni sezione mostra insieme i suoi contenuti.
   const section = chartSectionOf(tab);
+  // Direct access: a link to a section this role cannot read (e.g. OSS → Terapia) falls back to
+  // the overview instead of a dead end. The server still denies the reads; this only hides them.
+  const sectionDenied = !sectionAllowed(section);
+  useEffect(() => {
+    if (!sectionDenied) return;
+    setTherapyTarget(null);
+    setItemFocus(null);
+    setTab('panoramica');
+    setActiveGroup(patientTabGroup('panoramica'));
+  }, [sectionDenied]);
   const sectionTabs = CHART_SECTIONS.find((s) => s.id === section)?.tabs ?? [tab];
   const chartSectionItems: TopNavItem[] = CHART_SECTIONS.filter((s) => sectionAllowed(s.id)).map(
     (s) => ({
@@ -2362,9 +2430,16 @@ export function PatientDetail({
   // Le parti della sezione arrivano dopo (contenuti lazy): si attende che la parte compaia e la si
   // tiene in vista mentre le parti sopra finiscono di caricare e la spostano (Phase 10 F1), per
   // al massimo qualche secondo e solo finché l'operatore non scorre da sé.
+  // Direct access: an item inside the section (handover, diary entry, allergy table) is pinned in
+  // the middle of the view and highlighted, with the same wait-for-lazy-content logic.
+  const pinItem = itemFocus?.selector ?? null;
+  const pinRequest = itemFocus?.requestId ?? 0;
   useEffect(() => {
-    if (tab === firstOfSection) return;
-    const find = () => document.querySelector(`[data-chart-part="${tab}"]`);
+    if (tab === firstOfSection && !pinItem) return;
+    const selector = pinItem ?? `[data-chart-part="${tab}"]`;
+    const block: ScrollLogicalPosition = pinItem ? 'center' : 'start';
+    const find = () => document.querySelector(selector);
+    const highlighted: HTMLElement[] = [];
     let target: HTMLElement | null = null;
     let lastTop: number | null = null;
     const pin = () => {
@@ -2374,16 +2449,29 @@ export function PatientDetail({
         target = el;
         resizes.observe(el);
         if (el.parentElement) resizes.observe(el.parentElement);
+        if (pinItem) {
+          el.classList.add('chart-focus-item');
+          el.setAttribute('data-chart-focus', 'true');
+          highlighted.push(el);
+        }
       }
       const top = Math.round(el.getBoundingClientRect().top);
       if (lastTop !== null && Math.abs(top - lastTop) < 2) return;
-      el.scrollIntoView({ block: 'start' });
+      el.scrollIntoView({ block });
       lastTop = Math.round(el.getBoundingClientRect().top);
     };
     const mutations = new MutationObserver(pin);
     const resizes = new ResizeObserver(pin);
     const userScroll = () => stop();
-    const timer = window.setTimeout(() => stop(), 5000);
+    const timer = window.setTimeout(() => stop(), pinItem ? 8000 : 5000);
+    // The highlight outlives the pin a little, then fades (the item stays where it is).
+    const clearHighlight = () => {
+      for (const el of highlighted) {
+        el.classList.remove('chart-focus-item');
+        el.removeAttribute('data-chart-focus');
+      }
+    };
+    const highlightTimer = pinItem ? window.setTimeout(clearHighlight, 12000) : 0;
     function stop() {
       mutations.disconnect();
       resizes.disconnect();
@@ -2395,8 +2483,12 @@ export function PatientDetail({
       window.addEventListener(type, userScroll, { capture: true, passive: true });
     mutations.observe(document.body, { childList: true, subtree: true });
     pin();
-    return stop;
-  }, [tab, firstOfSection]);
+    return () => {
+      stop();
+      window.clearTimeout(highlightTimer);
+      clearHighlight();
+    };
+  }, [tab, firstOfSection, pinItem, pinRequest]);
 
   // Moduli già aperti (Medicazioni, Contenzioni, Braden): restano montati per non perdere le bozze,
   // sempre nello stesso punto della pagina qualunque sia la sezione (renderKeepAliveModules).
@@ -2513,6 +2605,7 @@ export function PatientDetail({
             focusTherapyId={
               therapyFocus?.patientId === paziente.id ? therapyFocus.therapyId : undefined
             }
+            therapyTarget={therapyTarget ?? undefined}
           />
         )}
         {current === 'note' && renderNote()}
@@ -2549,10 +2642,10 @@ export function PatientDetail({
               archiveFocus?.patientId === paziente.id ? archiveFocus.documentId : undefined
             }
             expectedAssessmentId={
-              archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.id : undefined
+              archiveFocus?.patientId === paziente.id ? archiveFocus.assessment?.id : undefined
             }
             expectedAssessmentType={
-              archiveFocus?.patientId === paziente.id ? archiveFocus.assessment.type : undefined
+              archiveFocus?.patientId === paziente.id ? archiveFocus.assessment?.type : undefined
             }
             onOpenAssessment={(assessment) => {
               setAssessmentFocus({ patientId: paziente.id, assessment });
@@ -2565,7 +2658,7 @@ export function PatientDetail({
             {/* #278: anamnesi strutturata modificabile — stesso cast Anamnesi ⇄
                   Record<string, unknown> già usato in patientSections.ts */}
             <ClinicalTableSection title="Allergie e intolleranze">
-              <div className="cts__body--padded">
+              <div className="cts__body--padded" data-chart-anchor="allergie">
                 <AllergiesEditor
                   mode="patient-chart"
                   value={cartella.allergie ?? []}
@@ -2746,7 +2839,16 @@ export function PatientDetail({
             </button>
           )}
           {rischioAlto.length > 0 && (
-            <div className="cr-alert-strip cr-alert-strip--rischi">
+            // Direct access: la striscia apre la scala che misura il primo rischio (Braden,
+            // Tinetti, MNA, PAINAD) o il catalogo dei moduli se il rischio non ha una scala.
+            <button
+              type="button"
+              className="cr-alert-strip cr-alert-strip--rischi"
+              data-risk-strip
+              onClick={() =>
+                switchTab(rischioAlto.map((r) => RISK_SCALE_TAB[r.tipo]).find(Boolean) ?? 'moduli')
+              }
+            >
               <span className="cr-alert-strip__ico">
                 <IcoWarning />
               </span>
@@ -2754,7 +2856,8 @@ export function PatientDetail({
                 <strong>Rischi attivi:</strong>{' '}
                 {rischioAlto.map((r) => `${r.tipo.replace('_', ' ')} (${r.livello})`).join(' · ')}
               </span>
-            </div>
+              <span className="cr-alert-strip__link">Apri la scala →</span>
+            </button>
           )}
         </div>
       )}
@@ -2767,7 +2870,14 @@ export function PatientDetail({
         ambito="terapie attive di oggi"
         etichettaAzione="Vai alla terapia"
         onAzione={() => {
+          const therapyId = anomalyTherapyId(anomalieReparto, paziente.id);
           switchTab('terapia-farmacologica');
+          // Direct access: la riga del farmaco da sanare, non solo la sezione.
+          setTherapyTarget({
+            subView: 'attivi',
+            ...(therapyId ? { therapyId } : {}),
+            requestId: Date.now(),
+          });
         }}
       />
 

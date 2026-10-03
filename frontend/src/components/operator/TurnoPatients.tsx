@@ -7,10 +7,11 @@ import {
 } from '../../lib/turnoPatients';
 import { usePatientListPage } from './usePatientListPage';
 import { LazyNews2 } from './LazyNews2';
+import type { PatientLanding } from '../../lib/patientTargetResolver';
 
 interface Props {
   therapies: TurnoTherapies;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
 }
 
 /** Griglia delle card paziente della schermata Turno (HMI 1): roster reale del reparto. Se il
@@ -74,20 +75,59 @@ export function TurnoPatients({ therapies, onSelectPaziente }: Props) {
             </div>
             <div className="turno-pcard__badges">
               <LazyNews2 patientId={c.id} patientName={c.nome} />
-              {c.badges.map((b) => (
-                <span key={b.key} className={`turno-badge turno-badge--${b.tone}`}>
-                  {b.alert && (
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 3.5 2.5 20h19zM12 10v4.5M12 17.5v.01" />
-                    </svg>
-                  )}
-                  {b.label}
-                </span>
-              ))}
+              {c.badges.map((b) => {
+                const content = (
+                  <>
+                    {b.alert && (
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 3.5 2.5 20h19zM12 10v4.5M12 17.5v.01" />
+                      </svg>
+                    )}
+                    {b.label}
+                  </>
+                );
+                // Direct access: ogni segnalazione apre la cartella dove quel dato vive.
+                return b.landing && onSelectPaziente ? (
+                  <button
+                    key={b.key}
+                    type="button"
+                    className={`turno-badge turno-badge--${b.tone} turno-badge--link`}
+                    data-turno-badge={b.key}
+                    aria-label={`${b.label}: apri nella cartella di ${c.nome}`}
+                    onClick={() => onSelectPaziente(c.nome, c.id, b.landing)}
+                  >
+                    {content}
+                  </button>
+                ) : (
+                  <span key={b.key} className={`turno-badge turno-badge--${b.tone}`}>
+                    {content}
+                  </span>
+                );
+              })}
             </div>
-            <span className={`turno-pcard__next${c.prossimaInRitardo ? ' is-late' : ''}`}>
-              {c.prossima}
-            </span>
+            {c.prossimaEtichetta && c.prossimaVoci.length > 0 && onSelectPaziente ? (
+              <p className={`turno-pcard__next${c.prossimaInRitardo ? ' is-late' : ''}`}>
+                <span className="turno-pcard__next-label">{c.prossimaEtichetta}:</span>{' '}
+                {c.prossimaVoci.map((v, index) => (
+                  <span key={v.key}>
+                    {index > 0 && ', '}
+                    <button
+                      type="button"
+                      className="turno-pcard__dose"
+                      data-turno-dose={v.landing.therapy?.therapyId ?? ''}
+                      aria-label={`${c.prossimaEtichetta}: ${v.text}. Apri la terapia di ${c.nome}`}
+                      onClick={() => onSelectPaziente(c.nome, c.id, v.landing)}
+                    >
+                      {v.text}
+                    </button>
+                  </span>
+                ))}
+              </p>
+            ) : (
+              <span className={`turno-pcard__next${c.prossimaInRitardo ? ' is-late' : ''}`}>
+                {c.prossima}
+              </span>
+            )}
           </article>
         ))}
       </section>

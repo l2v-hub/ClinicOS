@@ -1,4 +1,5 @@
 import { useState, useMemo, Fragment, useEffect } from 'react';
+import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type {
   Appuntamento,
   Operatore,
@@ -35,7 +36,7 @@ interface OperatorAgendaProps {
   appointmentLoadError?: string | null;
   onRetryAppointments?: () => void;
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   therapySlots?: TherapySlot[];
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
@@ -475,7 +476,11 @@ export function OperatorAgenda({
                                 className="link-btn agt-apt-card__patient"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  onSelectPaziente(apt.pazienteNome!, apt.pazienteId ?? undefined);
+                                  onSelectPaziente(
+                                    apt.pazienteNome!,
+                                    apt.pazienteId ?? undefined,
+                                    appointmentLanding(apt),
+                                  );
                                 }}
                               >
                                 {apt.pazienteNome}
@@ -585,7 +590,11 @@ export function OperatorAgenda({
                               className="link-btn agt-week-apt__name"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
+                                onSelectPaziente(
+                                  a.pazienteNome!,
+                                  a.pazienteId ?? undefined,
+                                  appointmentLanding(a),
+                                );
                               }}
                             >
                               {a.pazienteNome.split(',')[0]}
@@ -647,7 +656,11 @@ export function OperatorAgenda({
                             className="link-btn agt-month-apt__name"
                             onClick={(e) => {
                               e.stopPropagation();
-                              onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
+                              onSelectPaziente(
+                                a.pazienteNome!,
+                                a.pazienteId ?? undefined,
+                                appointmentLanding(a),
+                              );
                             }}
                           >
                             {a.pazienteNome.split(',')[0]}

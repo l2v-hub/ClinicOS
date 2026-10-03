@@ -1,0 +1,18 @@
+/* Direct access: the item a navigation landed on (handover, diary entry, allergy table) is
+   outlined in medical blue for a few seconds, so the eye finds it without searching. */
+.chart-focus-item {
+  outline: 3px solid var(--blue, #2f6bed);
+  outline-offset: 3px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--blue, #2f6bed) 14%, transparent);
+  transition:
+    outline-color 0.4s ease,
+    box-shadow 0.4s ease;
+  scroll-margin: 96px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-focus-item {
+    transition: none;
+  }
+}

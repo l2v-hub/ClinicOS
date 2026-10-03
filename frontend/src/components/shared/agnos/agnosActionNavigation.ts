@@ -2,6 +2,26 @@ import type { AssistantAnswer, AssistantNav } from '../AIAssistantButton';
 import { navTabId } from './agnosNav';
 import type { TabId } from '../../operator/tabGroups';
 import type { NavKey } from '../../../types';
+import type { PatientTarget } from '../../../lib/patientTarget';
+
+/** Item inside the chart section carried by a NavAction (recordId/documentId/pageNumber). */
+export type AgnosItemTarget = Omit<PatientTarget, 'patientId' | 'tab'>;
+
+/** Direct access: the item the NavAction cites, not just its section. */
+export function agnosItemTarget(nav: AssistantNav): AgnosItemTarget | undefined {
+  const recordId = validId(nav.recordId) ? nav.recordId : undefined;
+  if (nav.type === 'open_therapy' && recordId)
+    return { therapy: { subView: 'attivi', therapyId: recordId } };
+  if (nav.type === 'open_diary' && recordId) return { diaryEntryId: recordId };
+  if (nav.type === 'open_document' && validId(nav.documentId))
+    return {
+      documentId: nav.documentId,
+      ...(Number.isInteger(nav.pageNumber) && (nav.pageNumber ?? 0) > 0
+        ? { pageNumber: nav.pageNumber }
+        : {}),
+    };
+  return undefined;
+}
 
 const WRITE_DESTINATIONS: Record<string, { type: string; label: string }> = {
   create_vital_sign: { type: 'open_parameter', label: 'Parametri Vitali' },
@@ -92,7 +112,12 @@ export async function navigateAgnosTarget(
   handlers: {
     isAdmin: boolean;
     navigate: (key: NavKey) => void;
-    openPatient: (id: string, tab?: TabId, signal?: AbortSignal) => Promise<boolean>;
+    openPatient: (
+      id: string,
+      tab?: TabId,
+      signal?: AbortSignal,
+      item?: AgnosItemTarget,
+    ) => Promise<boolean>;
     openConsegne: (recordId?: string, patientId?: string) => void;
   },
   signal?: AbortSignal,
@@ -116,6 +141,6 @@ export async function navigateAgnosTarget(
     return true;
   }
   if (PATIENT_DESTINATIONS.has(nav.type) && validId(nav.patientId))
-    return await handlers.openPatient(nav.patientId, navTabId(nav), signal);
+    return await handlers.openPatient(nav.patientId, navTabId(nav), signal, agnosItemTarget(nav));
   return false;
 }

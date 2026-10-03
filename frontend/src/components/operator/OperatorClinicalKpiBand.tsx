@@ -4,6 +4,7 @@ import {
   type DashboardKpiItem,
   type DashboardKpiTone,
 } from '../shared/DashboardKpiBand';
+import type { PatientListEntry } from '../../lib/patientListView';
 
 interface Props {
   loading: boolean;
@@ -23,6 +24,8 @@ interface Props {
   onOpenParametri: () => void;
   onOpenPazienti: () => void;
   onOpenTherapy: () => void;
+  /** Direct access: la tessera apre la lista già filtrata su ciò che conta. */
+  onOpenPatientList?: (entry: PatientListEntry) => void;
 }
 
 function clinicalItem(
@@ -62,7 +65,10 @@ export function OperatorClinicalKpiBand({
   onOpenParametri,
   onOpenPazienti,
   onOpenTherapy,
+  onOpenPatientList,
 }: Props) {
+  const openList = (entry: PatientListEntry, fallback: () => void) => () =>
+    onOpenPatientList ? onOpenPatientList(entry) : fallback();
   const administrationValue =
     somministrazioni.inCorso || somministrazioni.fallito ? '—' : somministrazioni.inRitardo;
   const administrationTone: DashboardKpiTone = somministrazioni.fallito
@@ -78,8 +84,8 @@ export function OperatorClinicalKpiBand({
       id: 'parametri',
       label: 'Parametri critici',
       icon: <IcoActivity />,
-      onOpen: onOpenParametri,
-      actionLabel: 'Apri parametri pazienti',
+      onOpen: openList({ signal: 'critici' }, onOpenParametri),
+      actionLabel: 'Apri i pazienti con parametri critici',
       attentionTone: 'critical',
       clearStatus: 'Nella norma',
       attentionStatus: 'Intervento richiesto',
@@ -88,8 +94,8 @@ export function OperatorClinicalKpiBand({
       id: 'rischi',
       label: 'Rischi elevati',
       icon: <IcoShield />,
-      onOpen: onOpenPazienti,
-      actionLabel: 'Apri lista pazienti',
+      onOpen: openList({ signal: 'rischi' }, onOpenPazienti),
+      actionLabel: 'Apri i pazienti con rischio elevato',
       attentionTone: 'attention',
       clearStatus: 'Nessun rischio alto',
       attentionStatus: 'Da valutare',
@@ -98,8 +104,8 @@ export function OperatorClinicalKpiBand({
       id: 'allergie',
       label: 'Allergie gravi',
       icon: <IcoWarning />,
-      onOpen: onOpenPazienti,
-      actionLabel: 'Apri lista pazienti',
+      onOpen: openList({ signal: 'allergie' }, onOpenPazienti),
+      actionLabel: 'Apri i pazienti con allergie gravi',
       attentionTone: 'attention',
       clearStatus: 'Nessuna allergia grave',
       attentionStatus: 'Attenzione clinica',
@@ -115,8 +121,8 @@ export function OperatorClinicalKpiBand({
         : 'Dato non disponibile',
       tone: clinicalReady ? 'info' : 'unknown',
       icon: <IcoBed />,
-      onOpen: onOpenPazienti,
-      actionLabel: 'Apri lista pazienti',
+      onOpen: openList({ view: 'in_carico' }, onOpenPazienti),
+      actionLabel: 'Apri i pazienti ricoverati',
     },
     {
       id: 'somministrazioni',

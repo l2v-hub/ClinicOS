@@ -104,7 +104,12 @@ function handover(identity: Consegna['identity']) {
       operatori: [],
       operatoreId: 'unrelated',
       isAdmin: false,
-      onAdd: async () => ({ kind: 'failed', code: 'synthetic', uncertain: false, message: 'Non salvata' }),
+      onAdd: async () => ({
+        kind: 'failed',
+        code: 'synthetic',
+        uncertain: false,
+        message: 'Non salvata',
+      }),
       onUpdate() {},
       onUpdateStato() {},
       onDelete() {},
@@ -132,7 +137,9 @@ test('handover null, missing, malformed or mismatched identity has no chart-open
     assert.doesNotMatch(html, /Apri cartella|RSSMRA80A01H501U|Camera 201|Anagrafica da completare/);
   }
   const html = handover(identityPatient);
-  assert.match(html, /aria-label="Apri cartella di Rossi, Mario"/);
+  // Direct access: il link apre QUESTA consegna nella cartella, non la prima pagina.
+  assert.match(html, /aria-label="Apri questa consegna nella cartella di Rossi, Mario"/);
+  assert.match(html, /data-consegna-open="synthetic-po06-handover"/);
   assert.match(html, /RSSMRA80A01H501U/);
 });
 

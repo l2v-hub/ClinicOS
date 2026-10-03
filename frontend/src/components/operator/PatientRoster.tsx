@@ -6,8 +6,16 @@ import { parsePatientLocation } from '../../lib/patientIdentity';
 import { patientAge } from '../../lib/patientDemographics';
 import type { ClinicalSummaryEntry, Paziente } from '../../types';
 import { IcoChevronRight, IcoTrash } from '../../icons';
-import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
-import { anomalieDelPaziente, type AnomalieReparto } from './cartella/useAnomalieReparto';
+import {
+  anomalieDelPaziente,
+  anomalyTherapyId,
+  type AnomalieReparto,
+} from './cartella/useAnomalieReparto';
+import {
+  landingOf,
+  type PatientLanding,
+  type PatientSignal,
+} from '../../lib/patientTargetResolver';
 import {
   ADMISSION_LABELS as STATO_RICOVERO_LABEL,
   PATIENT_SORT_LABELS,
@@ -22,12 +30,14 @@ function PatientSignals({
   openHandovers,
   anomalies,
   summaryLoading,
+  onSelect,
 }: {
   patient: Paziente;
   summary?: ClinicalSummaryEntry;
   openHandovers: number;
   anomalies: AnomalieReparto;
   summaryLoading?: boolean;
+  onSelect?: (patient: Paziente, landing?: PatientLanding) => void;
 }) {
   const patientAnomalies = anomalieDelPaziente(anomalies, patient.id);
   const hasSignals =
@@ -55,17 +65,87 @@ function PatientSignals({
       className="patient-signals"
       aria-label={`Segnalazioni per ${patient.firstName} ${patient.lastName}`}
     >
-      {(summary?.hasCriticalVitals || summary?.hasHighRisk) && (
-        <span className="alert-chip alert-chip--red">Critico</span>
+      {summary?.hasCriticalVitals && (
+        <SignalChip
+          className="alert-chip alert-chip--red"
+          signal={{ kind: 'critical-vitals', patientId: patient.id }}
+          label="Parametri critici"
+          patient={patient}
+          onSelect={onSelect}
+        />
+      )}
+      {summary?.hasHighRisk && (
+        <SignalChip
+          className="alert-chip alert-chip--amber"
+          signal={{ kind: 'risk', patientId: patient.id }}
+          label="Rischio alto"
+          patient={patient}
+          onSelect={onSelect}
+        />
       )}
       {Boolean(summary?.allergieCount) && (
-        <span className="alert-chip alert-chip--amber">Allergie {summary?.allergieCount}</span>
+        <SignalChip
+          className="alert-chip alert-chip--amber"
+          signal={{ kind: 'allergy', patientId: patient.id }}
+          label={`Allergie ${summary?.allergieCount}`}
+          patient={patient}
+          onSelect={onSelect}
+        />
       )}
-      <IndicatoreAnomalie esito={patientAnomalies} />
+      {patientAnomalies.totale > 0 && (
+        // Info senza clic: il perché (quali farmaci) è scritto, non solo nel tooltip.
+        <SignalChip
+          className="indicatore-anomalie patient-signal--anomalie"
+          signal={{
+            kind: 'drug-anomaly',
+            patientId: patient.id,
+            therapyId: anomalyTherapyId(anomalies, patient.id),
+          }}
+          label={`${patientAnomalies.totale} da sanare: ${patientAnomalies.anomalie
+            .map((a) => a.farmacoNome)
+            .join(', ')}`}
+          patient={patient}
+          onSelect={onSelect}
+        />
+      )}
       {openHandovers > 0 && (
-        <span className="patient-signal patient-signal--handover">Consegne {openHandovers}</span>
+        <SignalChip
+          className="patient-signal patient-signal--handover"
+          signal={{ kind: 'handover', patientId: patient.id }}
+          label={`Consegne ${openHandovers}`}
+          patient={patient}
+          onSelect={onSelect}
+        />
       )}
     </div>
+  );
+}
+
+/** Direct access: una segnalazione è un link al punto della cartella dove quel dato vive. */
+function SignalChip({
+  className,
+  signal,
+  label,
+  patient,
+  onSelect,
+}: {
+  className: string;
+  signal: PatientSignal;
+  label: string;
+  patient: Paziente;
+  onSelect?: (patient: Paziente, landing?: PatientLanding) => void;
+}) {
+  if (!onSelect) return <span className={className}>{label}</span>;
+  return (
+    <button
+      type="button"
+      className={`${className} patient-signal-link`}
+      data-signal={signal.kind}
+      aria-label={`${label}: apri nella cartella di ${patient.firstName} ${patient.lastName}`}
+      onClick={() => onSelect(patient, landingOf(signal))}
+    >
+      {label}
+    </button>
   );
 }
 
@@ -83,7 +163,7 @@ interface PatientRosterProps {
   anomalie: AnomalieReparto;
   deleteEnabled: boolean;
   deletingId: string | null;
-  onSelect: (patient: Paziente) => void;
+  onSelect: (patient: Paziente, landing?: PatientLanding) => void;
   onPrefetch?: (patient: Paziente) => void;
   onDelete: (patient: Paziente, event: React.MouseEvent) => void;
 }
@@ -106,7 +186,7 @@ const PatientCard = memo(function PatientCard({
   summaryLoading?: boolean;
   deleteEnabled: boolean;
   deleting: boolean;
-  onSelect: (patient: Paziente) => void;
+  onSelect: (patient: Paziente, landing?: PatientLanding) => void;
   onDelete: (patient: Paziente, event: React.MouseEvent) => void;
 }) {
   const state = summary?.statoRicovero;
@@ -148,6 +228,7 @@ const PatientCard = memo(function PatientCard({
           openHandovers={openHandovers}
           anomalies={anomalie}
           summaryLoading={summaryLoading}
+          onSelect={onSelect}
         />
       </div>
       {deleteEnabled && (
@@ -392,6 +473,7 @@ export function PatientRoster({
                         openHandovers={consegneAperteMap.get(patient.id) ?? 0}
                         anomalies={anomalie}
                         summaryLoading={summaryLoading}
+                        onSelect={onSelect}
                       />
                     </td>
                     <td className="patient-roster__actions">

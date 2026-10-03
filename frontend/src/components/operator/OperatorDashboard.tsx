@@ -3,7 +3,9 @@ import type { NavKey } from '../../types';
 import { useMemo } from 'react';
 import type { TurnoTherapies } from '../../lib/turnoPatients';
 import { PageHeader } from '../shared/PageHeader';
-import { useAnomalieReparto } from './cartella/useAnomalieReparto';
+import { anomalyTherapyId, useAnomalieReparto } from './cartella/useAnomalieReparto';
+import type { PatientLanding } from '../../lib/patientTargetResolver';
+import type { PatientListEntry } from '../../lib/patientListView';
 import { useRiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
 import { DashboardNotificationCenter } from './DashboardNotificationCenter';
 import { OperatorClinicalKpiBand } from './OperatorClinicalKpiBand';
@@ -14,7 +16,6 @@ import { buildAdessoQueue } from '../../lib/adessoQueue';
 import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
 import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
 import './OperatorDashboard.css';
-import type { TabId } from './tabGroups';
 
 interface OperatorDashboardProps {
   utente: UtenteApp;
@@ -28,7 +29,9 @@ interface OperatorDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string, tab?: TabId) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
+  /** Direct access: lista pazienti già filtrata su ciò che una tessera/segnalazione conta. */
+  onOpenPatientList?: (entry: PatientListEntry) => void;
   clinicalOverview?: ClinicalOverview | null;
   clinicalOverviewState: 'loading' | 'ready' | 'error';
   onRetryClinicalOverview: () => void;
@@ -47,6 +50,7 @@ export function OperatorDashboard({
   onOpenConsegneAperte,
   onOpenConsegneFeed,
   onSelectPaziente,
+  onOpenPatientList,
   clinicalOverview = null,
   clinicalOverviewState,
   onRetryClinicalOverview,
@@ -65,7 +69,10 @@ export function OperatorDashboard({
     prossime: somministrazioni.prossime,
     senzaOrario: somministrazioni.senzaOrario,
     urgenti,
-    anomalie: anomalie.pazienti,
+    anomalie: anomalie.pazienti.map((p) => ({
+      ...p,
+      therapyId: anomalyTherapyId(anomalie, p.patientId),
+    })),
   });
 
   const terapieState = somministrazioni.fallito
@@ -127,6 +134,7 @@ export function OperatorDashboard({
     onOpenConsegneAperte,
     onSelectPaziente,
     onRetryClinicalOverview,
+    onOpenPatientList,
   });
 
   const subtitle = [
@@ -153,6 +161,7 @@ export function OperatorDashboard({
         onOpenParametri={() => onNavigate('parametri-multipaziente')}
         onOpenPazienti={() => onNavigate('pazienti')}
         onOpenTherapy={() => onNavigate('terapie')}
+        onOpenPatientList={onOpenPatientList}
       />
 
       <div className="turno-grid">

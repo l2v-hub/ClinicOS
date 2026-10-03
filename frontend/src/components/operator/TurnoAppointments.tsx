@@ -2,13 +2,14 @@ import { useId } from 'react';
 import type { SlotAgenda } from '../../types';
 import { IcoArrow } from '../../icons';
 import { prossimiAppuntamenti } from '../../lib/turnoAppointments';
+import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
 
 interface Props {
   agenda: SlotAgenda[];
   state?: 'loading' | 'ready' | 'error';
   onRetry?: () => void;
   onOpenAgenda: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
 }
 
 /** Card "Prossimi appuntamenti" della schermata Turno (HMI 1). */
@@ -61,7 +62,20 @@ export function TurnoAppointments({
                   <button
                     type="button"
                     className="turno-appt__who link-btn"
-                    onClick={() => onSelectPaziente(s.pazienteNome!, s.patientId)}
+                    // Direct access: la parte della cartella che documenta questo appuntamento.
+                    onClick={() =>
+                      onSelectPaziente(
+                        s.pazienteNome!,
+                        s.patientId,
+                        s.patientId
+                          ? landingOf({
+                              kind: 'appointment',
+                              patientId: s.patientId,
+                              tipoIntervento: s.motivo,
+                            })
+                          : undefined,
+                      )
+                    }
                   >
                     {s.pazienteNome}
                   </button>
@@ -76,7 +90,11 @@ export function TurnoAppointments({
         </ul>
       )}
       {state === 'ready' && altri > 0 && (
-        <p className="turno-more">Altri {altri} da vedere in agenda</p>
+        <p className="turno-more">
+          <button type="button" className="ds-link" onClick={onOpenAgenda}>
+            Altri {altri} da vedere in agenda <IcoArrow />
+          </button>
+        </p>
       )}
     </section>
   );

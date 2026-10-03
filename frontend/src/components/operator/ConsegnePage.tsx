@@ -1,4 +1,5 @@
 import { ConsegnaTimestamp } from './ConsegnaTimestamp';
+import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
 import { useEffect, useState } from 'react';
 import type {
   Consegna,
@@ -40,7 +41,7 @@ export interface ConsegnePageProps {
   onQueryChange: (query: ConsegnaFeedQuery) => void;
   onLoadMore: () => void;
   onRetry: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   /** #283: filtro stato con cui aprire la pagina (dalla card "Consegne aperte" in dashboard). */
   initialFiltroStato?: 'tutte' | 'attive' | StatoConsegna;
   /** #283: consegna da evidenziare/scrollare quando la card ne apre una specifica. */
@@ -315,7 +316,7 @@ function ConsegnaCard({
   isAdmin: boolean;
   operatoreId: string;
   operatori: Operatore[];
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   focused?: boolean;
 }) {
   const [editOpen, setEditOpen] = useState(false);
@@ -372,8 +373,16 @@ function ConsegnaCard({
           <button
             className="link-btn consegna-paziente"
             type="button"
-            aria-label={`Apri cartella di ${patientIdentityName(identity)}`}
-            onClick={() => onSelectPaziente(patientIdentityName(identity), identity.id)}
+            aria-label={`Apri questa consegna nella cartella di ${patientIdentityName(identity)}`}
+            data-consegna-open={c.id}
+            // Direct access: la consegna stessa, evidenziata fra le consegne della cartella.
+            onClick={() =>
+              onSelectPaziente(
+                patientIdentityName(identity),
+                identity.id,
+                landingOf({ kind: 'handover', patientId: identity.id, consegnaId: c.id }),
+              )
+            }
           >
             Apri cartella
           </button>
