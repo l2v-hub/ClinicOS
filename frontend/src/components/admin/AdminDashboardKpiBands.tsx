@@ -18,6 +18,8 @@ import type { PatientListEntry } from '../../lib/patientListView';
 import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
 
 interface Props {
+  /** Giro terapia aperto sull'ora con dosi in ritardo, solo da somministrare (accesso diretto). */
+  onOpenLateTherapy?: () => void;
   loadingPazienti: boolean;
   totalePazienti: number;
   activeOperatorTotal: number;
@@ -93,6 +95,7 @@ export function AdminDashboardKpiBands({
   dimessi,
   somministrazioni,
   onNavigate,
+  onOpenLateTherapy,
   onOpenConsegneAperte,
   onOpenPatientList,
   onOpenConsegneFeed,
@@ -223,7 +226,7 @@ export function AdminDashboardKpiBands({
             ? 'critical'
             : 'positive',
       icon: <IcoPill />,
-      onOpen: () => onNavigate('terapie'),
+      onOpen: onOpenLateTherapy ?? (() => onNavigate('terapie')),
       actionLabel: 'Apri terapia',
     },
   ];

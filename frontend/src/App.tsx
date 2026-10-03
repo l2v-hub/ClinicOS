@@ -139,6 +139,7 @@ import {
   resolvePatientTab,
   type TabId,
 } from './components/operator/tabGroups';
+import type { TherapyRoundsEntry } from './components/operator/TherapyRoundsPage';
 import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
 import { classicScreenTarget } from './components/assistant/classicScreenTarget';
@@ -766,6 +767,19 @@ export default function App() {
     });
   }
 
+  // Accesso diretto al Giro terapia: ora con dosi in ritardo, solo quelle da somministrare.
+  const [therapyRoundsEntry, setTherapyRoundsEntry] = useState<TherapyRoundsEntry | undefined>();
+  const therapyRoundsRequestRef = useRef(0); // sempre crescente: ogni ingresso mirato si riapplica
+  function openLateTherapyRounds() {
+    navigate('terapie'); // azzera l'ingresso precedente; quello nuovo si imposta dopo (vince)
+    therapyRoundsRequestRef.current += 1;
+    setTherapyRoundsEntry({
+      requestId: therapyRoundsRequestRef.current,
+      late: true,
+      filter: 'pending',
+    });
+  }
+
   function navigate(key: NavKey) {
     setMobileNavOpen(false); // chiudi il drawer di navigazione mobile a ogni cambio sezione
     if (key === 'ai-assistant') {
@@ -785,6 +799,8 @@ export default function App() {
       selectPaziente(pazienteSelezionato, patientTab);
       return;
     }
+    // Una navigazione generica verso Terapia apre il giro senza l'ingresso mirato precedente.
+    if (key === 'terapie') setTherapyRoundsEntry(undefined);
     // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
     // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
     if (key === 'consegne') {
@@ -3470,6 +3486,7 @@ export default function App() {
                       {/* ── ADMIN ── */}
                       {isAdmin && navKey === 'admin-dashboard' && (
                         <AdminDashboard
+                          onOpenLateTherapy={openLateTherapyRounds}
                           operatori={operatori}
                           operatorSummary={operatorDirectorySummary}
                           consegneOverview={consegneOverview}
@@ -3540,6 +3557,7 @@ export default function App() {
                       {/* ── SHARED ── */}
                       {navKey === 'terapie' && (
                         <TherapyRoundsPage
+                          entry={therapyRoundsEntry}
                           date={therapyDate}
                           slots={therapySlots}
                           loading={loadingTherapySlots}
@@ -3605,6 +3623,7 @@ export default function App() {
                       {/* ── OPERATOR ── */}
                       {!isAdmin && navKey === 'operator-dashboard' && (
                         <OperatorDashboard
+                          onOpenLateTherapy={openLateTherapyRounds}
                           utente={utente}
                           consegneOverview={consegneOverview}
                           consegneOverviewState={consegneOverviewState}

@@ -32,6 +32,8 @@ interface AdminDashboardProps {
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
+  /** Giro terapia aperto sull'ora con dosi in ritardo, solo da somministrare (accesso diretto). */
+  onOpenLateTherapy?: () => void;
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
@@ -66,6 +68,7 @@ export function AdminDashboard({
   totalePazienti,
   loadingPazienti,
   onNavigate,
+  onOpenLateTherapy,
   onOpenConsegneAperte,
   onOpenConsegneFeed,
   onSelectPaziente,
@@ -185,6 +188,7 @@ export function AdminDashboard({
       />
 
       <AdminDashboardKpiBands
+        onOpenLateTherapy={onOpenLateTherapy}
         loadingPazienti={loadingPazienti}
         totalePazienti={totalePazienti}
         activeOperatorTotal={activeOperatorTotal}
@@ -210,7 +214,7 @@ export function AdminDashboard({
       {somministrazioni.disponibile && (
         <DashboardTherapyDeadlines
           summary={somministrazioni}
-          onOpenTherapy={() => onNavigate('terapie')}
+          onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
           onSelectPaziente={onSelectPaziente}
         />
       )}

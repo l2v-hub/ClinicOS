@@ -26,6 +26,8 @@ interface OperatorDashboardProps {
   agendaState?: 'loading' | 'ready' | 'error';
   onRetryAgenda?: () => void;
   onNavigate: (nav: NavKey) => void;
+  /** Giro terapia aperto sull'ora con dosi in ritardo, solo da somministrare (accesso diretto). */
+  onOpenLateTherapy?: () => void;
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
@@ -47,6 +49,7 @@ export function OperatorDashboard({
   agendaState = 'ready',
   onRetryAgenda,
   onNavigate,
+  onOpenLateTherapy,
   onOpenConsegneAperte,
   onOpenConsegneFeed,
   onSelectPaziente,
@@ -160,7 +163,7 @@ export function OperatorDashboard({
         somministrazioni={somministrazioni}
         onOpenParametri={() => onNavigate('parametri-multipaziente')}
         onOpenPazienti={() => onNavigate('pazienti')}
-        onOpenTherapy={() => onNavigate('terapie')}
+        onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
         onOpenPatientList={onOpenPatientList}
       />
 
@@ -173,7 +176,7 @@ export function OperatorDashboard({
           consegne={consegneOverviewState}
           anomalie={anomalie.fallito ? 'error' : anomalie.inCorso ? 'loading' : 'ready'}
           onSelectPaziente={onSelectPaziente}
-          onOpenTherapy={() => onNavigate('terapie')}
+          onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
           onOpenConsegne={() =>
             onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne')
           }
