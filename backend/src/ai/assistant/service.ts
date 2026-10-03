@@ -38,6 +38,7 @@ import { runQueryPlan } from '../gateway/query/engine.js';
 import { boundStaffList, MAX_STAFF_RESULTS } from './staff-window.js';
 import { boundTodayAppointments, todayAppointmentLimit } from './appointments-today-window.js';
 
+import { readsAllConsegne } from '../../consegne/visibility.js';
 export interface AssistantAnswer {
   intent: AssistantIntent;
   scope: QueryPlan['scope'];
@@ -189,7 +190,8 @@ function consegnaPatientSql(ctx: UserContext): Prisma.Sql {
 }
 
 function consegnaActorSql(ctx: UserContext): Prisma.Sql {
-  return privilegedContext(ctx)
+  // Shared handovers (urgency model): facility-reach identities read them all, like the diary.
+  return privilegedContext(ctx) || ctx.roles.some((role) => readsAllConsegne({ role }))
     ? Prisma.sql`TRUE`
     : Prisma.sql`(c."creatoDaId" = ${ctx.userId} OR c."operatoreAssegnatoId" = ${ctx.userId})`;
 }

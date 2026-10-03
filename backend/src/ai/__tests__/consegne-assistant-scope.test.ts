@@ -4,6 +4,10 @@ import { assistantQuery } from '../assistant/service.js';
 import type { UserContext } from '../gateway/types.js';
 import { prisma } from '../../lib/prisma.js';
 
+// #389 + urgency model: by default clinical identities read every handover of reachable residents.
+// This suite exercises the author/assignee rule, which still applies in the restricted scope mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const run = `${Date.now()}${Math.random().toString(36).slice(2)}`;
 const actor = `assistant-op-${run}`;
 const allowedPatient = `assistant-patient-allowed-${run}`;

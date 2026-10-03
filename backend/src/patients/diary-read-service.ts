@@ -9,6 +9,7 @@ import {
 } from './diary-pagination.js';
 import { loadDiaryAckFields } from './diary-ack-service.js';
 
+import { readsAllConsegne } from '../consegne/visibility.js';
 interface DiaryFeedRow {
   id: string;
   patientId: string;
@@ -63,7 +64,7 @@ export async function loadPatientDiary(
   const filters = { authorType: input.authorType, from: input.from, to: input.to };
   const position = input.cursor ? decodeDiaryPageCursor(input.cursor, filters) : undefined;
   // Preserve the handover feed's author/assignee visibility, in addition to patient scope.
-  const handoverVisibility = hasGlobalPatientScope(actor.role)
+  const handoverVisibility = readsAllConsegne(actor)
     ? Prisma.sql`TRUE`
     : Prisma.sql`(c."creatoDaId" = ${actor.id} OR c."operatoreAssegnatoId" = ${actor.id})`;
   const predicates = [

@@ -1,7 +1,8 @@
 import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
-import { patientScopeWhere, hasGlobalPatientScope } from '../patients/patient-scope.js';
+import { patientScopeWhere } from '../patients/patient-scope.js';
+import { readsAllConsegne } from './visibility.js';
 import { ConsegnaInputError, isSafeConsegnaId } from './query.js';
 import { consegnaUrgencyActiveSql } from '../lib/urgency.js';
 
@@ -42,7 +43,7 @@ export async function loadConsegnaPatientSummary(value: unknown, actor: Operator
       SELECT COUNT(*)::int AS total,
         COUNT(*) FILTER (WHERE ${consegnaUrgencyActiveSql})::int AS "urgentActive"
       FROM "Consegna" c WHERE c."pazienteId" = p.id
-        AND ${hasGlobalPatientScope(actor.role) ? Prisma.sql`TRUE` : Prisma.sql`(c."creatoDaId" = ${actor.id} OR c."operatoreAssegnatoId" = ${actor.id})`}
+        AND ${readsAllConsegne(actor) ? Prisma.sql`TRUE` : Prisma.sql`(c."creatoDaId" = ${actor.id} OR c."operatoreAssegnatoId" = ${actor.id})`}
     ) counts ON true
     WHERE p.id IN (${Prisma.join(ids)})
       ${scope.registeredById ? Prisma.sql`AND p."registeredById" = ${scope.registeredById}` : Prisma.empty}

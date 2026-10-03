@@ -9,6 +9,7 @@ import {
 import { buildConsegnaTsQuery, encodeConsegnaCursor, type ConsegnaFeedQuery } from './query.js';
 import { consegnaUrgencyActiveSql, consegnaUrgencyTakenSql } from '../lib/urgency.js';
 import { withConsegnaUrgency } from './ack-service.js';
+import { readsAllConsegne } from './visibility.js';
 
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
 
@@ -52,7 +53,7 @@ function privileged(actor: Operator): boolean {
 }
 
 function visibilitySql(actor: Operator): Prisma.Sql {
-  return privileged(actor)
+  return readsAllConsegne(actor)
     ? Prisma.sql`TRUE`
     : Prisma.sql`(c."creatoDaId" = ${actor.id} OR c."operatoreAssegnatoId" = ${actor.id})`;
 }
@@ -96,7 +97,7 @@ function filterSql(input: ConsegnaFeedQuery, includeFeedFilters: boolean): Prism
 
 function boundedFeedSql(actor: Operator, input: ConsegnaFeedQuery, take: number): Prisma.Sql {
   const filters = filterSql(input, true);
-  if (privileged(actor)) {
+  if (readsAllConsegne(actor)) {
     return Prisma.sql`
       SELECT ${COLUMNS}
       FROM "Consegna" c

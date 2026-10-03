@@ -27,6 +27,7 @@ import {
 import { authoritativeDiaryAuthor } from '../patients/diary-author.js';
 import { patientScopeWhere } from '../patients/patient-scope.js';
 
+import { readsAllConsegne } from './visibility.js';
 export const CONSEGNA_ACK_AUDIT_ACTION = 'consegna:ack';
 
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -82,7 +83,7 @@ export async function withConsegnaUrgency<T extends ConsegnaUrgencySource>(
 }
 
 function readableWhere(id: string, actor: Operator): Prisma.ConsegnaWhereInput {
-  if (PRIVILEGED_ROLES.has(actor.role.toLowerCase())) return { id };
+  if (readsAllConsegne(actor)) return { id };
   return {
     AND: [{ id }, { OR: [{ creatoDaId: actor.id }, { operatoreAssegnatoId: actor.id }] }],
   };
