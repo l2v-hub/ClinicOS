@@ -1,0 +1,9 @@
+✔ QA H1 — a slow correction racing a confirmation cannot produce a second write (643.2517ms)
+ℹ pass 14
+ℹ fail 0
+✔ QA H1 — a slow correction racing a confirmation cannot produce a second write (513.8221ms)
+ℹ pass 14
+ℹ fail 0
+✔ QA H1 — a slow correction racing a confirmation cannot produce a second write (661.511ms)
+ℹ pass 14
+ℹ fail 0

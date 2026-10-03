@@ -1,0 +1,18 @@
+{
+  "oss_therapy_neri": {
+    "status": 200,
+    "results": 0,
+    "refusal": "Dato non consentito al tuo ruolo.",
+    "tools": [
+      "get_patient_therapies"
+    ]
+  },
+  "oss_therapy_nanni": {
+    "status": 200,
+    "results": 0,
+    "refusal": "Dato non consentito al tuo ruolo.",
+    "tools": [
+      "get_patient_therapies"
+    ]
+  }
+}
