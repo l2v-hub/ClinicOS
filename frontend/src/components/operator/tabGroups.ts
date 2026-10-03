@@ -30,6 +30,8 @@ export type TabId =
   | 'tinetti'
   | 'mna'
   | 'gds'
+  | 'barthel'
+  | 'ucla_npi_sleep'
   | 'nrs'
   | 'painad'
   | 'postural_transfers'
@@ -81,6 +83,8 @@ export const TAB_GROUPS: TabGroupDef[] = [
       { id: 'tinetti', label: 'Scala Tinetti' },
       { id: 'mna', label: 'MNA · Nutrizione' },
       { id: 'gds', label: 'GDS-15 · Depressione' },
+      { id: 'barthel', label: 'Indice di Barthel' },
+      { id: 'ucla_npi_sleep', label: 'UCLA · Sonno-veglia' },
       { id: 'nrs', label: 'Storico NRS precedente' },
       { id: 'painad', label: 'Scala PAINAD' },
       { id: 'postural_transfers', label: 'Trasferimenti posturali' },
@@ -155,6 +159,8 @@ const MODULE_TABS: TabId[] = [
   'tinetti',
   'mna',
   'gds',
+  'barthel',
+  'ucla_npi_sleep',
   'nrs',
   'painad',
   'postural_transfers',
