@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { PageHeader } from '../shared/PageHeader';
 import type { Operatore, RuoloOperatore, StatoOperatore } from '../../types';
 import { OPERATOR_COLOR_PALETTE } from '../../types';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoChevronRight } from '../../icons';
@@ -229,24 +230,26 @@ export function OperatorManagement({
   }
 
   return (
-    <div className="op-management">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Gestione Operatori</h2>
-          <p className="view-header__sub">
+    <div className="ds-page op-management">
+      <PageHeader
+        title="Gestione Operatori"
+        subtitle={
+          <>
             {summary?.active ?? operatori.filter((o) => o.stato === 'attivo').length} attivi su{' '}
             {summary?.total ?? operatori.length} totali
-          </p>
-        </div>
-        <button
-          className="btn-success"
-          onClick={apriNuovo}
-          aria-expanded={formAperto}
-          aria-controls="operator-form-panel"
-        >
-          <IcoPlus /> Nuovo Operatore
-        </button>
-      </div>
+          </>
+        }
+        actions={
+          <button
+            className="ds-btn ds-btn--primary"
+            onClick={apriNuovo}
+            aria-expanded={formAperto}
+            aria-controls="operator-form-panel"
+          >
+            <IcoPlus /> Nuovo Operatore
+          </button>
+        }
+      />
 
       <RosterDefaultsPanel />
       {/* Form */}

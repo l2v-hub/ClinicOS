@@ -37,6 +37,23 @@
   --ds-ai-tint: #f1ecfd;
   --ds-ai-border: #8a66e3;
   --ds-font: var(--font-ui, 'Inter', system-ui, sans-serif);
+  /* Layout (UX2 W6): un solo contenitore di pagina e un solo ritmo verticale. */
+  --ds-page-gutter: 24px;
+  --ds-page-gap: 24px;
+  --ds-stack-gap: 16px;
+  --ds-row-gap: 8px;
+  --ds-fab-clearance: 0px;
+}
+@media (max-width: 1023px) {
+  :root {
+    /* il FAB Assistente (≤1023) non copre mai l'ultima riga: spazio riservato una volta sola */
+    --ds-fab-clearance: 84px;
+  }
+}
+@media (max-width: 640px) {
+  :root {
+    --ds-page-gutter: 16px;
+  }
 }
 
 /* ── Chip: filtri, selettori di vista, scelte ─────────────────────────────────────────────── */
@@ -722,5 +739,189 @@ th[aria-sort] .ds-sort:not(#ds) {
   padding-top: 8px;
   padding-bottom: 8px;
   white-space: normal;
+  text-align: center;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════════════════════════
+   LAYOUT (UX2 W6) — un solo contenitore di pagina, un solo ritmo.
+   - Il margine del contenuto lo dà SOLO .page-content (gutter 24, 16 ≤640) + spazio FAB ≤1023.
+   - Ogni radice di pagina è .ds-page: colonna, 24 fra i widget, nessun max-width/margin proprio.
+   - Nella cartella la barra delle sezioni corre a tutta larghezza; tutto il resto sta sullo stesso
+     asse (gutter) delle altre pagine.
+   ═════════════════════════════════════════════════════════════════════════════════════════════ */
+.main-area-clean .page-content:not(#ds) {
+  max-width: none;
+  min-width: 0;
+  padding: var(--ds-page-gutter) var(--ds-page-gutter)
+    calc(var(--ds-page-gutter) + var(--ds-fab-clearance));
+}
+.ds-page:not(#ds) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-page-gap);
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+/* fra i widget di una pagina solo il gap: nessun margine verticale proprio */
+.ds-page > :not(#ds) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.ds-empty > p:not(#ds) {
+  margin: 0;
+}
+/* Cartella: pagina senza margine; barra sezioni a tutta larghezza, il resto sull'asse comune. */
+.main-area-clean .page-content:has(.patient-record-view):not(#ds) {
+  padding: 0;
+}
+.patient-record-view:not(#ds) {
+  padding-bottom: var(--ds-fab-clearance);
+  gap: var(--ds-page-gap);
+}
+/* i blocchi della cartella (barra, anagrafica, allergie, anomalie, contenuto) sono widget della
+   pagina: li separa il gap, mai un margine proprio */
+.patient-record-view > :not(#ds) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.patient-record-view .cr-alert-band:not(#ds) {
+  padding: 0;
+}
+.chart-sections:not(#ds) {
+  padding-left: var(--ds-page-gutter);
+  padding-right: var(--ds-page-gutter);
+}
+.patient-record-view > :not(.chart-sections):not(#ds) {
+  margin-left: var(--ds-page-gutter);
+  margin-right: var(--ds-page-gutter);
+}
+/* Le sezioni della cartella non aggiungono un secondo margine: il contenuto parte dall'asse. */
+.patient-record-view .cr-tab-content:not(#ds) {
+  padding: 0 0 var(--ds-page-gutter);
+  gap: var(--ds-stack-gap);
+}
+/* Intestazione: stesso margine del contenuto a ogni larghezza. */
+.compact-topbar:not(#ds) {
+  padding-left: var(--ds-page-gutter);
+  padding-right: var(--ds-page-gutter);
+}
+
+/* ── Card compatta (righe, tessere, card in griglia) ─────────────────────────────────────── */
+.ds-card.ds-card--compact:not(#ds),
+.ds-card--compact:not(#ds) {
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-card-radius);
+  padding: 16px;
+  min-width: 0;
+}
+.ds-card__head:not(#ds) {
+  min-height: var(--ds-control-h);
+}
+/* Titolo di sezione fuori da una card: stessa tipografia del titolo di card. */
+.ds-section-title:not(#ds) {
+  margin: 0;
+  font: 600 20px/28px var(--ds-font);
+  color: var(--ds-text);
+}
+/* Pila interna di una card / colonna di card sorelle. */
+.ds-stack:not(#ds) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-stack-gap);
+  min-width: 0;
+}
+/* Riga d'azioni (salva/annulla …): a destra, 8 fra i pulsanti, va a capo. */
+.ds-actions:not(#ds) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-row-gap);
+}
+.ds-actions--start:not(#ds) {
+  justify-content: flex-start;
+}
+.ds-actions--center:not(#ds) {
+  justify-content: center;
+}
+/* Barra di strumenti (ricerca, filtri, azioni) */
+.ds-toolbar:not(#ds) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ds-stack-gap);
+  min-width: 0;
+}
+/* Gruppo di caselle di spunta */
+.ds-check-group:not(#ds) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+/* Riga di elenco dentro una card */
+.ds-list-row:not(#ds) {
+  min-height: 64px;
+  padding: 12px 0;
+  border-top: 1px solid var(--ds-border);
+}
+.ds-list-row:first-child:not(#ds) {
+  border-top: 0;
+}
+/* Box del letto (Turno, Pazienti, Terapia, Parametri) */
+.ds-bed:not(#ds) {
+  box-sizing: border-box;
+  min-width: 48px;
+  height: 48px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 6px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface-2);
+  font: 600 18px/24px var(--ds-font);
+  color: var(--ds-text);
+}
+/* Avviso in riquadro (info / attenzione / allarme) */
+.ds-notice:not(#ds) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+  font: 400 14px/20px var(--ds-font);
+}
+.ds-notice--info:not(#ds) {
+  background: var(--ds-blue-tint);
+  border-color: #c6d7fb;
+  color: var(--ds-blue-active);
+}
+.ds-notice--warning:not(#ds) {
+  background: var(--amber-bg, #fdf3e2);
+  border-color: #f1d49c;
+  color: #8a5300;
+}
+.ds-notice--alarm:not(#ds) {
+  background: var(--red-bg, #fdecee);
+  border-color: var(--red-border, #f6c9ce);
+  color: #b3261e;
+}
+/* Stato vuoto: uno solo in tutta l'app */
+.ds-empty:not(#ds) {
+  margin: 0;
+  padding: 24px;
+  border: 1px dashed var(--ds-border-strong);
+  border-radius: var(--ds-card-radius);
+  background: var(--ds-surface);
+  color: var(--ds-text-muted);
+  font: 400 16px/24px var(--ds-font);
+  font-style: normal;
   text-align: center;
 }

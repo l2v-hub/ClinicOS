@@ -164,7 +164,7 @@ export function ConsegnePage({
   );
 
   return (
-    <div className="consegne-page">
+    <div className="ds-page consegne-page">
       {embedded ? (
         <div className="toolbar" aria-label="Riepilogo consegne">
           <p className="page-header__subtitle">{summaryLabel}</p>

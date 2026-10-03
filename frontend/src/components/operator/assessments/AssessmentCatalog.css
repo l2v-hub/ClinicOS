@@ -1,8 +1,5 @@
-.assessment-catalog { display: grid; gap: 18px; }
-/* Keep the catalog on the same left axis as the patient TopNav. */
-@media screen { .assessment-catalog { margin-inline: 24px; } }
-@media screen and (max-width: 900px) { .assessment-catalog { margin-inline: 16px; } }
-@media screen and (max-width: 600px) { .assessment-catalog { margin-inline: 12px; } }
+/* Il catalogo sta sull'asse del contenuto della cartella (nessun margine proprio). */
+.assessment-catalog { display: grid; gap: 24px; }
 .assessment-catalog h2, .assessment-catalog h3, .assessment-catalog h4, .assessment-catalog p { margin: 0; }
 .assessment-catalog h3 { margin-bottom: 10px; }
 .assessment-catalog-list { display: grid; gap: 8px; }
@@ -10,7 +7,7 @@
 .assessment-catalog-row > div:first-child { min-width: 0; display: grid; gap: 5px; overflow-wrap: anywhere; }
 .assessment-catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex-shrink: 0; }
 .assessment-catalog-secondary { font-size: .85rem; color: var(--text-muted, #526170); }
-.patient-module-return { margin-bottom: 12px; }
+.patient-module-return { margin-bottom: 16px; }
 .nrs-legacy { display: grid; gap: 12px; }
 .nrs-legacy details { padding: 12px; border: 1px solid var(--border-color, #d8e0e8); border-radius: 8px; }
 .nrs-legacy summary { cursor: pointer; overflow-wrap: anywhere; }

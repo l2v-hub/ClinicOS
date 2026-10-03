@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PageHeader } from '../shared/PageHeader';
 import type { Operatore, ScheduleOperatore, GiornoSettimana } from '../../types';
 import { GIORNI_SETTIMANA, GIORNO_LABEL } from '../../types';
 import { IcoEdit, IcoCheck, IcoX, IcoClock } from '../../icons';
@@ -88,13 +89,8 @@ export function OperatorSchedule({
   const displaySchedule = editing ? editSchedule : schedule;
 
   return (
-    <div className="schedule-view">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Orari Operatori</h2>
-          <p className="view-header__sub">Gestione turni e disponibilità</p>
-        </div>
-      </div>
+    <div className="ds-page schedule-view">
+      <PageHeader title="Orari Operatori" subtitle="Gestione turni e disponibilità" />
 
       {loadState === 'loading' && schedules.length === 0 && (
         <div className="empty-state-card" role="status" aria-live="polite">

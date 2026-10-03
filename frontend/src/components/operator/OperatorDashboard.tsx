@@ -151,7 +151,7 @@ export function OperatorDashboard({
     .join(' · ');
 
   return (
-    <div className="operator-dashboard turno">
+    <div className="ds-page operator-dashboard turno">
       <PageHeader title="Il mio turno" subtitle={subtitle} />
 
       <OperatorClinicalKpiBand

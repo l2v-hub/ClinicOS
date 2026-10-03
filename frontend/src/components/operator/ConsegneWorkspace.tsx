@@ -47,7 +47,7 @@ function WorkspaceSession({
     onModeChange?.(next);
   };
   return (
-    <div className="handover-workspace">
+    <div className="ds-page handover-workspace">
       <PageHeader title="Consegne" subtitle="Giro pazienti e feed delle consegne" />
       <div className="handover-workspace__tabs" role="group" aria-label="Vista consegne">
         <button

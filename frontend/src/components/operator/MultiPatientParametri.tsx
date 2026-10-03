@@ -278,7 +278,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   const selectedItem = listed ?? selected ?? items[0];
   const selectedOutside = Boolean(selected && !listed);
   return (
-    <div className="par-view">
+    <div className="ds-page par-view">
       <PageHeader title="Parametri vitali" subtitle="Rilevazione rapida con NEWS2" />
       <ParameterEntryClock onDayChange={setDay} hidden />
       <div className="par-grid">

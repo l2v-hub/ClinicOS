@@ -6,9 +6,6 @@
 .app-main {
   padding: 28px 32px 56px;
 }
-.content-panel {
-  padding: 20px 24px 24px;
-}
 
 /* Card cliniche: bordo/raggio/ombra coerenti col refresh */
 .exp-card,

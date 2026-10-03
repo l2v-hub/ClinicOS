@@ -138,11 +138,6 @@
 
 /* ── Pagina dedicata ────────────────────────────────────────────────────────────────────── */
 
-.page-anagrafica-farmaci {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
 .page-anagrafica-farmaci__corpo {
   border: 1px solid var(--border);
   border-radius: var(--card-radius, 14px);

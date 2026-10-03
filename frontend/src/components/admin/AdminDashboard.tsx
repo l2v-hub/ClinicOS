@@ -166,7 +166,7 @@ export function AdminDashboard({
   });
 
   return (
-    <div className="admin-dashboard">
+    <div className="ds-page admin-dashboard">
       <PageHeader
         breadcrumb={[{ label: 'ClinicOS' }, { label: 'Dashboard' }]}
         title="Dashboard"
@@ -218,7 +218,7 @@ export function AdminDashboard({
       )}
 
       {/* Occupancy section */}
-      <div className="section-header" style={{ marginTop: 32 }}>
+      <div className="section-header">
         <h3 className="section-header__title">
           <span className="section-header__ico">
             <IcoBed />
@@ -336,7 +336,7 @@ export function AdminDashboard({
       )}
 
       {/* Carico operatori */}
-      <div className="section-header" style={{ marginTop: 32 }}>
+      <div className="section-header">
         <h3 className="section-header__title">
           <span className="section-header__ico">
             <IcoOperatori />
@@ -399,7 +399,7 @@ export function AdminDashboard({
       </div>
 
       {/* Agenda sommario */}
-      <div className="section-header" style={{ marginTop: 32 }}>
+      <div className="section-header">
         <h3 className="section-header__title">
           <span className="section-header__ico">
             <IcoCalendar />
@@ -446,7 +446,7 @@ export function AdminDashboard({
       {/* Consegne urgenti */}
       {urgenti.length > 0 && (
         <>
-          <div className="section-header" style={{ marginTop: 32 }}>
+          <div className="section-header">
             <h3 className="section-header__title">
               <span className="section-header__ico">
                 <IcoConsegne />

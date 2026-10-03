@@ -3321,10 +3321,6 @@
    ROOMS MANAGEMENT
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.rooms-view {
-  max-width: 1100px;
-}
-
 .rooms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
@@ -3525,10 +3521,6 @@
    OPERATOR SCHEDULE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.schedule-view {
-  max-width: 900px;
-}
-
 .schedule-op-selector {
   display: flex;
   flex-wrap: wrap;
@@ -3639,10 +3631,6 @@
    NOTES / MESSAGES PAGE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-/* REQ-010: full-width page aligned with other operative sections (Consegne, Pazienti…) */
-.notes-page {
-  max-width: none;
-}
 
 .notes-list {
   display: flex;
@@ -5623,11 +5611,6 @@ textarea.form-input {
 
 /* ── Riepilogo card hover (consolidated above) ── */
 
-/* ── Tab content breathing room ── */
-.cr-tab-content {
-  padding: 24px 28px 48px;
-  gap: 20px;
-}
 
 /* ── cr-list items (diagnosi, rischi, visite) ── */
 .cr-list {
@@ -5667,9 +5650,6 @@ textarea.form-input {
      to the shared content axis instead of sitting flush against the sidebar.
      Only the vertical fill behaviour is overridden here; padding-left/right are
      left to inherit the responsive .page-content gutter (24px / 32px). */
-  padding-top: 8px;
-  padding-bottom: 0;
-  max-width: none;
   height: calc(100svh - var(--header-h));
   overflow: hidden;
 }
@@ -8131,13 +8111,6 @@ textarea.form-input {
 }
 /* ── end CDT ──────────────────────────────────────────────────── */
 
-/* === HMI 1: margine del contenuto 24 px su tutti i lati, come il prototipo (da 1024 px) === */
-@media (min-width: 1024px) {
-  .main-area-clean .page-content,
-  .main-area-clean .content-panel {
-    padding: 24px;
-  }
-}
 
 .main-area-clean .page-content > *:first-child {
   margin-top: 0;
@@ -10715,7 +10688,7 @@ textarea.form-input {
   align-items: center;
   gap: 8px;
   margin: 0 0 24px;
-  padding: 8px var(--chart-gutter, 24px);
+  padding: 8px var(--ds-page-gutter);
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   min-width: 0;
@@ -10860,19 +10833,7 @@ textarea.form-input {
 
 /* La barra delle sezioni corre a tutta larghezza sotto l'intestazione (come il prototipo): la
    pagina della cartella non ha margine proprio, lo hanno i contenuti sotto la barra. */
-.main-area-clean .page-content:has(.patient-record-view) {
-  --chart-gutter: 24px;
-  padding: 0;
-}
-.patient-record-view > :not(.chart-sections) {
-  margin-left: var(--chart-gutter, 24px);
-  margin-right: var(--chart-gutter, 24px);
-}
-@media (max-width: 1023px) {
-  .main-area-clean .page-content:has(.patient-record-view) {
-    --chart-gutter: 16px;
-  }
-}
+/* Margini: design-system.css (sezione LAYOUT) — stesso asse --ds-page-gutter di ogni pagina. */
 /* Chip più strette sotto i 1280 px: le 8 sezioni restano tutte visibili. */
 @media (max-width: 1279px) {
   .chart-sections .top-nav--chips .top-nav__items {

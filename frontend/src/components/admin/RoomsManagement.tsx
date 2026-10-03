@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { PageHeader } from '../shared/PageHeader';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
@@ -326,11 +327,10 @@ export function RoomsManagement() {
 
   if (loading) {
     return (
-      <div
-        className="rooms-view"
-        style={{ display: 'flex', justifyContent: 'center', padding: 48 }}
-      >
-        <span>Caricamento...</span>
+      <div className="ds-page rooms-view">
+        <p className="ds-empty" role="status">
+          Caricamento...
+        </p>
       </div>
     );
   }
@@ -338,26 +338,26 @@ export function RoomsManagement() {
   const occ = occupancy;
 
   return (
-    <div className="rooms-view">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Posti Letto</h2>
-          <p className="view-header__sub">
-            {occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`}
-          </p>
-        </div>
-        <button
-          className="btn-success"
+    <div className="ds-page rooms-view">
+      <PageHeader
+        title="Posti Letto"
+        subtitle={
+          occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`
+        }
+        actions={
+          <button
+            className="ds-btn ds-btn--primary"
 
-          onClick={() => {
-            setFormAperto((v) => !v);
-            setEditId(null);
-            setForm(FORM_CAMERA_VUOTO);
-          }}
-        >
-          <IcoPlus /> Nuova camera
-        </button>
-      </div>
+            onClick={() => {
+              setFormAperto((v) => !v);
+              setEditId(null);
+              setForm(FORM_CAMERA_VUOTO);
+            }}
+          >
+            <IcoPlus /> Nuova camera
+          </button>
+        }
+      />
 
       {/* Error alert */}
       {error && (

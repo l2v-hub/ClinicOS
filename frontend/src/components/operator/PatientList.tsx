@@ -257,7 +257,7 @@ export function PatientList({
     );
 
   return (
-    <div className="patient-list-view">
+    <div className="ds-page patient-list-view">
       <PageHeader
         title="Pazienti"
         subtitle={

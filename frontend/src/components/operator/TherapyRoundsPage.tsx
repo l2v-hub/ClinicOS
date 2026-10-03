@@ -210,7 +210,7 @@ export function TherapyRoundsPage({
     return `${f(days[0], { day: 'numeric', month: 'short' })} – ${f(days[6], { day: 'numeric', month: 'short', year: 'numeric' })}`;
   }
   return (
-    <div className="giro-view">
+    <div className="ds-page giro-view">
       <PageHeader
         title="Giro terapia"
         subtitle={

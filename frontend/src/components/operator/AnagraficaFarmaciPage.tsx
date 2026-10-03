@@ -28,7 +28,7 @@ export function AnagraficaFarmaciPage() {
   } | null>(null);
 
   return (
-    <div className="page-anagrafica-farmaci">
+    <div className="ds-page page-anagrafica-farmaci">
       <PageHeader
         breadcrumb={[{ label: 'ClinicOS' }, { label: 'Farmaci' }]}
         title="Farmaci"

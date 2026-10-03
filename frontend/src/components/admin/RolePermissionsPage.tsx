@@ -272,7 +272,7 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
     : 'Identità, ruoli e capability';
 
   return (
-    <div className="rp-page">
+    <div className="ds-page rp-page">
       <PageHeader
         breadcrumb={[
           { label: 'ClinicOS' },

@@ -42,7 +42,7 @@ export function ConsegnaQuickAdd({
     if ((await submitConsegna(store, token, onAdd)) && version === generation.current) onClose();
   }
   return (
-    <div className="handover-workspace">
+    <div className="ds-page handover-workspace">
       <ConsegnaComposer
         patient={patient}
         store={store}

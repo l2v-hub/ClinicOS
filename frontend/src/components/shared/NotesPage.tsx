@@ -101,7 +101,7 @@ export function NotesPage({
   }
 
   return (
-    <div className="notes-page notes-page--hmi">
+    <div className="ds-page notes-page notes-page--hmi">
       <PageHeader
         breadcrumb={[{ label: 'ClinicOS' }, { label: 'Note' }]}
         title="Note e messaggi"

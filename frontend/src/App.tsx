@@ -3282,7 +3282,9 @@ export default function App() {
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </button>
-            {backLabel && (
+            {/* Il posto del pulsante Indietro c'è sempre (invisibile sulla home): il titolo della
+                pagina sta alla stessa x su ogni pagina. */}
+            {backLabel ? (
               <button
                 type="button"
                 className="topbar-back"
@@ -3304,6 +3306,8 @@ export default function App() {
                   <path d="M15 5l-7 7 7 7" />
                 </svg>
               </button>
+            ) : (
+              <span className="topbar-back topbar-back--placeholder" aria-hidden="true" />
             )}
             <div className="topbar-title" ref={setTopbarTitleSlot} />
             <ShiftClock />
@@ -3697,32 +3701,25 @@ export default function App() {
                       {navKey === 'dettaglio-paziente' &&
                         !pazienteSelezionato &&
                         restoringPazienteFromHash && (
-                          <div
-                            style={{
-                              padding: '48px 32px',
-                              textAlign: 'center',
-                              color: 'var(--text-muted)',
-                            }}
-                          >
-                            <p style={{ fontSize: 16 }}>Caricamento scheda paziente…</p>
+                          <div className="ds-page">
+                            <p className="ds-empty">Caricamento scheda paziente…</p>
                           </div>
                         )}
                       {navKey === 'dettaglio-paziente' &&
                         !pazienteSelezionato &&
                         !restoringPazienteFromHash && (
-                          <div
-                            style={{
-                              padding: '48px 32px',
-                              textAlign: 'center',
-                              color: 'var(--text-muted)',
-                            }}
-                          >
-                            <p style={{ fontSize: 16, marginBottom: 16 }}>
-                              Nessun paziente selezionato.
-                            </p>
-                            <button className="btn-primary" onClick={() => goBack('pazienti')}>
-                              Vai alla lista pazienti
-                            </button>
+                          <div className="ds-page">
+                            <div className="ds-empty ds-stack">
+                              <p>Nessun paziente selezionato.</p>
+                              <div className="ds-actions ds-actions--center">
+                                <button
+                                  className="ds-btn ds-btn--primary"
+                                  onClick={() => goBack('pazienti')}
+                                >
+                                  Vai alla lista pazienti
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         )}
                       {navKey === 'dettaglio-paziente' && pazienteSelezionato && (

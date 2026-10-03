@@ -303,7 +303,7 @@ export function OperatorAgenda({
   })();
 
   return (
-    <div className="agt-view agt-view--hmi">
+    <div className="ds-page agt-view agt-view--hmi">
       <PageHeader
         breadcrumb={[{ label: 'ClinicOS' }, { label: 'Agenda' }]}
         title={agendaTitle}
