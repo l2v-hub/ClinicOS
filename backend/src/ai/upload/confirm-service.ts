@@ -23,7 +23,7 @@ import {
   normalizePatientIdentity,
   PatientIdentityInputError,
 } from '../../patients/progressive-identity.js';
-import { patientScopeWhere, hasGlobalPatientScope } from '../../patients/patient-scope.js';
+import { patientScopeWhere, hasFacilityPatientScope } from '../../patients/patient-scope.js';
 import { canAccessOwnedResource } from '../ownership-policy.js';
 import { ImportSessionError } from './pages/model.js';
 import {
@@ -228,7 +228,7 @@ async function confirm(
           if (
             existing.registeredById &&
             existing.registeredById !== operator.id &&
-            !hasGlobalPatientScope(operator.role)
+            !hasFacilityPatientScope(operator.role)
           )
             throw new AiExtractionError('not_found', 'Paziente non trovato');
           await tx.patient.updateMany({

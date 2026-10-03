@@ -4,12 +4,16 @@
 // (WHAT it may do). Every patient-scoped read/write already funnels through
 // patients/patient-scope.ts; that module now delegates here, so this is the single rule.
 //
-// Behaviour preserved (never widened automatically):
-//   legacy roles admin | manager → 'all'; every other identity → 'registered_by_me'
-//   (the historical ownership rule `Patient.registeredById = operator.id`).
-// Future modes are declared (assigned_to_me, ward, team, facility, patient_assignment) but not yet
-// backed by data: a config naming one is IGNORED for that role (the current rule stays), so no
-// path can widen visibility and every call site (Prisma or raw SQL) applies the same rule.
+// Default rule (#389, owner decision 2026-10-03):
+//   legacy roles admin | manager → 'all'; every other identity → 'facility' — every resident of the
+//   facility, for reads AND writes. WHAT each role may read or write stays decided by the
+//   capability policy (route gate); the registrant (`Patient.registeredById`) is kept for audit
+//   and no longer hides a resident. The data model has ONE facility (no facility/tenant column),
+//   so 'facility' and 'all' reach the same residents; 'all' additionally marks the management
+//   roles (see patients/patient-scope.ts#hasGlobalPatientScope).
+// 'registered_by_me' (the pre-#389 ownership rule) stays selectable through the config below.
+// Other declared modes (assigned_to_me, ward, team, patient_assignment) are not backed by data: a
+// config naming one is IGNORED for that role, so no path can widen visibility by mistake.
 //
 // Config (optional): RESIDENT_SCOPE_CONFIG='{"byLegacyRole":{"operatore":"registered_by_me"}}'.
 
@@ -26,6 +30,7 @@ export type ResidentScopeMode =
 
 export const IMPLEMENTED_SCOPE_MODES: ReadonlySet<ResidentScopeMode> = new Set([
   'all',
+  'facility',
   'registered_by_me',
 ]);
 
@@ -34,10 +39,10 @@ export interface ResidentScopeConfig {
   fallback: ResidentScopeMode;
 }
 
-/** Today's behaviour, made explicit. */
+/** Today's behaviour, made explicit (#389: facility-wide reach for every clinical identity). */
 export const DEFAULT_RESIDENT_SCOPE_CONFIG: ResidentScopeConfig = {
   byLegacyRole: { admin: 'all', manager: 'all' },
-  fallback: 'registered_by_me',
+  fallback: 'facility',
 };
 
 let cachedRaw: string | undefined;
@@ -94,13 +99,19 @@ export function residentScopeFor(operator: Pick<Operator, 'role'>): ResidentScop
 /** Sentinel owner id that matches no patient (unsupported mode → nobody reachable). */
 export const NO_RESIDENT = '__resident_scope_unsupported__';
 
-/** Prisma `where` fragment on Patient. Empty only for 'all'. */
+/** true when the identity reaches every resident of the (single) facility: 'all' or 'facility'. */
+export function residentScopeIsFacilityWide(role: string): boolean {
+  const mode = residentScopeModeForRole(role);
+  return mode === 'all' || mode === 'facility';
+}
+
+/** Prisma `where` fragment on Patient. Empty for facility-wide reach ('all' / 'facility'). */
 export function residentScopeWhere(operator: Pick<Operator, 'id' | 'role'>): {
   registeredById?: string;
 } {
   const scope = residentScopeFor(operator);
   if (!scope.supported) return { registeredById: NO_RESIDENT };
-  return scope.mode === 'all' ? {} : { registeredById: operator.id };
+  return residentScopeIsFacilityWide(operator.role) ? {} : { registeredById: operator.id };
 }
 
 export type ResidentOperation = 'select' | 'read' | 'skill' | 'write' | 'tool';

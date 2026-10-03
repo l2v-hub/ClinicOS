@@ -7,6 +7,10 @@ import express from 'express';
 import { prisma } from '../../lib/prisma.js';
 import patientDiaryRouter from '../patient-diary.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const marker = `diary-therapy-${Date.now()}`;
 const drug = (key: string) => `ZZ${marker}-${key}`;
 const failContent = `${marker}-fail-diary-insert`;

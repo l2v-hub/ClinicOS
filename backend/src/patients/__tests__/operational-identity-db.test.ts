@@ -8,6 +8,10 @@ import { loadPatientIdentityPage } from '../identity-page.js';
 import { loadPatientParametersPage } from '../parameters-page.js';
 import { facilityToday } from '../parameter-reading-input.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const marker = `po06-${Date.now()}`;
 const id = (key: string) => `${marker}-${key}`;
 const today = facilityToday();

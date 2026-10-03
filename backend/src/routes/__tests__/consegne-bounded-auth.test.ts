@@ -5,6 +5,10 @@ import type { Server } from 'node:http';
 import { prisma } from '../../lib/prisma.js';
 import consegneRouter from '../consegne.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 let server: Server;
 let base = '';
 const run = `${Date.now()}${Math.random().toString(36).slice(2)}`;

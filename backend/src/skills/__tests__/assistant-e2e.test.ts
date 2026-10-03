@@ -21,6 +21,10 @@ import {
 } from '../../authz/__tests__/harness-support.js';
 import { setSkillInvokeWrapper } from '../index.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 let base = '';
 let close: () => Promise<void>;
 let admin: Session;
@@ -231,7 +235,9 @@ test('C — Doctor sensitive write: preview → no write → explicit confirmati
   const altered = await say(doctor, {
     workflowId: draft.body.workflowId,
     action: 'edit',
-    payload: { therapy: { ...therapy, commercialStrengthValue: '10000', viaSomministrazione: 'endovenosa' } },
+    payload: {
+      therapy: { ...therapy, commercialStrengthValue: '10000', viaSomministrazione: 'endovenosa' },
+    },
     ...ctx(ids.doc),
   });
   assert.equal(altered.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(altered.body));
@@ -389,7 +395,10 @@ test('E — Modify before confirm: payload change invalidates the previous confi
 test('QA H1 — resident named in the text (no page resident): multi-turn and confirm complete', async () => {
   const readings = () => prisma.patientParameterReading.count({ where: { patientId: ids.nurse2 } });
   const before = await readings();
-  const t1 = await say(nurse, { message: `registra i parametri per Nino Conti${Tag}`, ...ctx(null) });
+  const t1 = await say(nurse, {
+    message: `registra i parametri per Nino Conti${Tag}`,
+    ...ctx(null),
+  });
   assert.equal(t1.body.status, 'NEEDS_CLARIFICATION', JSON.stringify(t1.body));
   assert.equal(t1.body.resident.id, ids.nurse2);
   const t2 = await say(nurse, { workflowId: t1.body.workflowId, message: 'fc 76', ...ctx(null) });
@@ -398,7 +407,10 @@ test('QA H1 — resident named in the text (no page resident): multi-turn and co
   assert.equal(done.body.status, 'COMPLETED', JSON.stringify(done.body));
   assert.equal(await readings(), before + 1);
   // Opening the SAME resident's page mid-workflow is not a change of resident.
-  const s1 = await say(nurse, { message: `registra fc 80 per Nino Conti${Tag}`, ...ctx(ids.nurse) });
+  const s1 = await say(nurse, {
+    message: `registra fc 80 per Nino Conti${Tag}`,
+    ...ctx(ids.nurse),
+  });
   assert.equal(s1.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(s1.body));
   const same = await confirm(nurse, s1, ctx(ids.nurse2));
   assert.equal(same.body.status, 'COMPLETED', JSON.stringify(same.body));
@@ -472,7 +484,12 @@ test('H — Dynamic revocation by the Administrator → next action denied witho
     ...ctx(ids.nurse),
   });
   assert.equal(start.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(start.body));
-  await setGrant('supervisor', 'parameters.create_reading', 'DENIED', 'revoca parametri supervisore');
+  await setGrant(
+    'supervisor',
+    'parameters.create_reading',
+    'DENIED',
+    'revoca parametri supervisore',
+  );
   try {
     const session = await call(base, supervisor, 'GET', `/skills/session?residentId=${ids.nurse}`);
     assert.ok(
@@ -493,7 +510,8 @@ test('H — Dynamic revocation by the Administrator → next action denied witho
 });
 
 test('I — Backend error: no false success; administration prepared, then confirmed', async () => {
-  const records = () => prisma.medicationAdministration.count({ where: { patientId: ids.nurse, stato: 'erogata' } });
+  const records = () =>
+    prisma.medicationAdministration.count({ where: { patientId: ids.nurse, stato: 'erogata' } });
   const before = await records();
   const draft = await say(nurse, {
     message: 'Registra una somministrazione per questo ospite',

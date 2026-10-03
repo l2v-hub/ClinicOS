@@ -3,7 +3,7 @@ import type { Operator } from '../ai/auth.js';
 import { AppointmentListInputError, parseIsoCalendarDate } from '../appointments/list-query.js';
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
 import { therapyWhereForDate } from './therapy-query.js';
-import { hasGlobalPatientScope } from '../patients/patient-scope.js';
+import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 
 export class TherapyWriteInputError extends Error {
   constructor(
@@ -152,7 +152,7 @@ export async function resolveAuthoritativeTherapy(
       id: input.therapyId,
       patientId: input.patientId,
       ...therapyWhereForDate(input.date),
-      ...(!hasGlobalPatientScope(actor.role) && { patient: { registeredById: actor.id } }),
+      ...(!hasFacilityPatientScope(actor.role) && { patient: { registeredById: actor.id } }),
     },
     select: {
       farmacoNome: true,
