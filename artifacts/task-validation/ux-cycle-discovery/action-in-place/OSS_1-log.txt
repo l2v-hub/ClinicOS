@@ -1,0 +1,8 @@
+adesso rows: []
+no therapy tab: locator.click: Timeout 5000ms exceeded.
+no table
+attivi rows: 0
+Somministra buttons visible on Farmaci attivi: 0
+cal fail locator.click: Timeout 30000ms exceeded.
+calendar events: 0
+giornaliere Somministra buttons: 0
