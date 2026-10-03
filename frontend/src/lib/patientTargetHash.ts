@@ -7,12 +7,14 @@ import type { PatientTarget, TherapySubView } from './patientTarget';
 const PREFIX = '#/dettaglio-paziente/';
 
 const EXTRA_TABS: TabId[] = ['panoramica', 'moduli', 'riepilogo', 'sezioni-narrative'];
+// New views first; the cycle-1 values stay valid so links already shared keep opening.
 const THERAPY_VIEWS: TherapySubView[] = [
+  'calendario',
+  'storico',
+  'nuova',
   'attivi',
   'programmazione',
-  'calendario',
   'giornaliere',
-  'storico',
   'sospese',
 ];
 
@@ -117,4 +119,25 @@ export function storedTarget(target: PatientTarget): StoredPatientTarget | undef
   void _id;
   void _tab;
   return Object.keys(rest).length ? rest : undefined;
+}
+
+/**
+ * QA F2: the Terapia view chosen by the operator is part of the current history entry (hash and
+ * history.state), so reload and Back reopen it. Replaces the entry (a view switch is not a new
+ * page); a no-op unless the URL is this patient's chart.
+ */
+export function rememberTherapyView(patientId: string, subView: TherapySubView): void {
+  if (typeof window === 'undefined' || !window.history?.replaceState) return;
+  const linked = parsePatientTargetHash(window.location.hash);
+  if (!linked || linked.patientId !== patientId) return;
+  const therapy = { subView };
+  const hash = patientTargetHash({ patientId, tab: 'terapia-farmacologica', therapy });
+  if (hash === window.location.hash) return;
+  const current: unknown = window.history.state;
+  const state = current && typeof current === 'object' ? (current as Record<string, unknown>) : {};
+  window.history.replaceState(
+    { ...state, patientTab: 'terapia-farmacologica', patientTarget: { therapy } },
+    '',
+    hash,
+  );
 }

@@ -311,16 +311,23 @@ test('giro rows: late pending dose shows «In ritardo di N min» next to the act
   assert.doesNotMatch(html, /role="alertdialog"/, 'the confirmation opens only on tap');
 });
 
-test('therapy tab: role-based actions, drug tap panel, direct-access prop (source contract)', async () => {
+test('therapy tab: role-based actions, drug tap detail, direct-access prop (source contract)', async () => {
   const tab = await src('../../components/operator/cartella/TerapiaFarmacologicaTab.tsx');
   assert.match(tab, /therapyTarget\?: TherapyTarget & \{ requestId: number \}/);
   assert.match(tab, /useCan\('therapy\.update'\)/);
   assert.match(tab, /useCan\('therapy\.delete'\)/);
-  assert.match(tab, /\{canUpdateTherapy && \(\s*<button[\s\S]{0,120}title="Modifica"/);
-  assert.match(tab, /\{canDeleteTherapy && \(\s*<button[\s\S]{0,140}title="Elimina"/);
-  assert.match(tab, /canUpdateTherapy && \(\s*<button[\s\S]{0,80}title="Riattiva"/);
-  assert.match(tab, /renderExpandedRow=\{renderDrugPanel\}/);
-  assert.match(tab, /Somministra ora/);
+  assert.match(tab, /canUpdate: canUpdateTherapy/);
+  assert.match(tab, /canDelete: canDeleteTherapy/);
+  assert.match(tab, /renderDetail=\{renderDetail\}/);
+  // W5: «Nuova terapia» only for therapy.create.
+  assert.match(tab, /\.\.\.\(canCreateTherapy \? \[\{ key: 'nuova', label: 'Nuova terapia' \}\] : \[\]\)/);
+  const detail = await src('../../components/operator/cartella/TherapyDrugList.tsx');
+  assert.match(detail, /\{active && actions\.canUpdate && \(\s*<button[\s\S]{0,140}title="Modifica"/);
+  assert.match(detail, /\{actions\.canDelete && \(\s*<button[\s\S]{0,140}title="Elimina"/);
+  assert.match(detail, /\{!active && actions\.canUpdate && \(\s*<button[\s\S]{0,140}title="Riattiva"/);
+  // «Somministra ora» of a dose of today not given now lives in the calendar hour.
+  const slotDetail = await src('../../components/operator/cartella/PatientTherapySlotDetail.tsx');
+  assert.match(slotDetail, /Somministra ora/);
   const panel = await src('../../components/operator/cartella/TherapyDrugDosePanel.tsx');
   assert.match(panel, /Somministra al bisogno/);
   assert.match(panel, /useRequiresConfirmation\('administration\.confirm'\)/);
@@ -335,6 +342,7 @@ test('direct access: therapyTarget selects the sub-view and the day on the first
   const { TerapiaFarmacologicaTab } =
     await import('../../components/operator/cartella/TerapiaFarmacologicaTab');
   const paziente = { id: 'p1', nome: 'Anna', cognome: 'Nanni' } as never;
+  // Cycle-1 «giornaliere» link → the Calendario on that day (W5).
   const daily = renderToStaticMarkup(
     React.createElement(TerapiaFarmacologicaTab, {
       paziente,
@@ -343,7 +351,18 @@ test('direct access: therapyTarget selects the sub-view and the day on the first
     }),
   );
   assert.match(daily, /value="2026-10-01"/);
-  assert.match(daily, /Vai al calendario/);
+  assert.match(daily, /Calendario terapie del paziente/);
+  assert.doesNotMatch(daily, /Somministrazioni giornaliere|Farmaci attivi<\/span><\/button>/);
+  // «sospese» → Storico on the suspended/concluded prescriptions filter.
+  const sospese = renderToStaticMarkup(
+    React.createElement(TerapiaFarmacologicaTab, {
+      paziente,
+      operatoreNome: 'Infermiere 1',
+      therapyTarget: { subView: 'sospese', requestId: 3 },
+    }),
+  );
+  assert.match(sospese, /Storico della terapia/);
+  assert.match(sospese, /aria-pressed="true"[^>]*>Prescrizioni sospese\/concluse/);
   const calendar = renderToStaticMarkup(
     React.createElement(TerapiaFarmacologicaTab, {
       paziente,

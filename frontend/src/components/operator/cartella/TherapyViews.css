@@ -1,0 +1,235 @@
+/* UX ciclo 2 — W5: viste della Terapia del paziente (Calendario con elenco compatto dei farmaci,
+   Storico, Nuova terapia). Solo token del design system; pulsanti e chip sono ds-btn / ds-chip. */
+
+.tf-error {
+  margin: 12px 16px 0;
+}
+.tf-calendar-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.tf-calendar-view > .patient-therapy-calendar {
+  padding: 0;
+}
+
+/* ── Farmaci attivi: una riga per farmaco ─────────────────────────────────── */
+.tf-active__title {
+  margin: 4px 0 8px;
+  font-size: 16px;
+  font-weight: 650;
+}
+.tf-active__title span {
+  color: var(--ds-text-muted, #5a6b80);
+  font-weight: 500;
+}
+.tf-drugs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: var(--ds-border-w, 2px) solid var(--ds-border, #e1e7f0);
+  border-radius: var(--ds-radius, 12px);
+  overflow: hidden;
+}
+.tf-drugs__item + .tf-drugs__item {
+  border-top: 1px solid var(--ds-border, #e1e7f0);
+}
+.tf-drugs__item.is-open,
+.tf-drugs__item.is-focus {
+  background: var(--ds-blue-tint, #eaf1fe);
+}
+.tf-drugs__item.is-focus {
+  box-shadow: inset 4px 0 0 var(--ds-blue, #2f6bed);
+}
+.tf-drugs__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--ds-text, #16202e);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.tf-drugs__line:focus-visible {
+  outline: var(--ds-focus, 3px solid #245bb5);
+  outline-offset: -3px;
+}
+.tf-drugs__name {
+  font-size: 15px;
+  font-weight: 650;
+}
+.tf-drugs__meta {
+  flex: 1 1 260px;
+  min-width: 0;
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.tf-drugs__empty {
+  margin: 4px 0;
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 14px;
+}
+
+/* ── Prescrizione (dettaglio del farmaco) ─────────────────────────────────── */
+.tf-detail {
+  padding: 4px 14px 14px;
+}
+.tf-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px 16px;
+  margin: 0;
+}
+.tf-detail__row {
+  min-width: 0;
+}
+.tf-detail__row dt {
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 12px;
+  font-weight: 600;
+}
+.tf-detail__row dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.tf-detail__schedule {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tf-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tf-farmaco {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.tf-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 13px;
+}
+
+/* ── Storico ──────────────────────────────────────────────────────────────── */
+.tf-history {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.tf-history__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 20px;
+}
+.tf-history__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.tf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tf-history__drug .form-input {
+  min-width: 220px;
+  min-height: 48px;
+}
+.tf-history__note,
+.tf-history__count,
+.tf-history__more {
+  margin: 0;
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 13px;
+}
+.tf-history__more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.tf-history__days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tf-history__day h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 650;
+  text-transform: capitalize;
+}
+.tf-history__day ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: var(--ds-border-w, 2px) solid var(--ds-border, #e1e7f0);
+  border-radius: var(--ds-radius, 12px);
+  overflow: hidden;
+}
+.tf-history__row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 4px 12px;
+  align-items: start;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+.tf-history__row + .tf-history__row {
+  border-top: 1px solid var(--ds-border, #e1e7f0);
+}
+.tf-history__time {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.tf-history__drug-cell,
+.tf-history__outcome {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tf-history__drug-cell span,
+.tf-history__detail {
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 13px;
+}
+@media (max-width: 900px) {
+  .tf-history__row {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  .tf-history__outcome {
+    grid-column: 2;
+  }
+}
+.tf-active__verify {
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 13px;
+  font-weight: 500;
+}

@@ -6,9 +6,16 @@
 
 import type { TabId } from '../components/operator/tabGroups';
 
-/** Sub-views of the patient's Terapia section (TerapiaFarmacologicaTab). */
-export type TherapySubView =
-  'attivi' | 'programmazione' | 'calendario' | 'giornaliere' | 'storico' | 'sospese';
+/** Views of the patient's Terapia section (UX cycle 2, W5): Calendario is the default; Storico
+ *  shows how it went; Nuova terapia registers a prescription (therapy.create only). */
+export type TherapyView = 'calendario' | 'storico' | 'nuova';
+/** Sub-views of the cycle-1 Terapia layout. Still accepted (links already in URLs, history.state,
+ *  Assistant and signal builders) and mapped to the new views by `lib/therapyView.ts`:
+ *  attivi/programmazione → Calendario with the drug opened, giornaliere → Calendario on the dose,
+ *  sospese → Storico filtered on suspended/concluded prescriptions. */
+export type LegacyTherapySubView = 'attivi' | 'programmazione' | 'giornaliere' | 'sospese';
+/** Sub-view carried by a therapy target (new views + backward-compatible legacy values). */
+export type TherapySubView = TherapyView | LegacyTherapySubView;
 
 /** Focus inside the Terapia section: sub-view, drug, day and administration band. */
 export interface TherapyTarget {

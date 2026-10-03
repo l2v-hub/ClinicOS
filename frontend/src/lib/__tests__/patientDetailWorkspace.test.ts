@@ -67,7 +67,7 @@ test('top navigation follows the keyboard tab pattern with one focusable active 
 test('therapy sections reuse the canonical contextual navigation', () => {
   assert.match(therapyTab, /<TopNav[\s\S]*?variant="level3"/);
   assert.match(therapyTab, /ariaLabel="Sezioni della terapia farmacologica"/);
-  assert.match(therapyTab, /activeKey=\{subTab\}/);
+  assert.match(therapyTab, /activeKey=\{activeView\}/);
   assert.doesNotMatch(therapyTab, /className=\{`tf-subtab/);
   assert.match(appStyles, /\.tf-subtabs \.top-nav--level3\s*\{[\s\S]*?background: #fff/);
   assert.match(appStyles, /@media \(max-width: 768px\)[\s\S]*?\.tf-subtabs \.top-nav--level3/);

@@ -129,7 +129,7 @@ test('therapy line follows the prototype: overdue first, then next scheduled, th
     overdue.prossimaVoci.map((v) => v.landing),
     ['a', 'b'].map((id) => ({
       tab: 'terapia-farmacologica',
-      therapy: { subView: 'giornaliere', therapyId: `t-${id}`, date: cal.oggi, fascia: 'mattina' },
+      therapy: { subView: 'calendario', therapyId: `t-${id}`, date: cal.oggi, fascia: 'mattina' },
     })),
   );
 

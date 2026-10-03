@@ -3,6 +3,9 @@
 // N min / somministrata hh:mm da X / non somministrata + motivo), prescrittore, nota, una tantum o
 // data di fine. Il tocco resta per le AZIONI (pannello dell'ora con Somministra / Non somm.).
 // Vista giorno (24 ore) e vista settimana (7 giorni; a 820 px un blocco per giorno).
+// UX ciclo 2 (W5): è la vista predefinita della Terapia. Oggi si apre da sola sull'ora della prima
+// dose da somministrare (azioni visibili senza tocchi in più); un farmaco o una dose richiesti da un
+// collegamento diretto restano evidenziati.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PatientTherapyAPI, TherapySlot } from '../../../types';
 import { IcoPill } from '../../../icons';
@@ -42,6 +45,12 @@ interface Props {
   initialDate?: string;
   /** Ora da aprire all'arrivo (pannello dell'ora con le azioni). */
   initialOpenTime?: string;
+  /** Farmaco da evidenziare nelle dosi (accesso diretto). */
+  focusTherapyId?: string;
+  /** Oggi, senza un'ora richiesta: apri l'ora della prima dose da somministrare. */
+  autoOpenDue?: boolean;
+  /** Cambia quando la scheda modifica le prescrizioni (rilettura del calendario). */
+  refreshKey?: number;
 }
 
 /** Stato di una dose dal giro del giorno; null se il giro non è (ancora) disponibile. */
@@ -71,16 +80,26 @@ function doseText(event: CalendarOccurrence): string {
   return event.strength ? `${event.dose} — ${event.strength}` : event.dose;
 }
 
-export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime }: Props) {
+export function PatientTherapyCalendar({
+  patientId,
+  initialDate,
+  initialOpenTime,
+  focusTherapyId,
+  autoOpenDue = false,
+  refreshKey = 0,
+}: Props) {
   const startDate = initialDate && isCalendarDate(initialDate) ? initialDate : localIsoDate();
   const [date, setDate] = useState(startDate);
   const [view, setView] = useState<'giorno' | 'settimana'>('giorno');
-  const [revision, setRevision] = useState(0);
+  const [localRevision, setRevision] = useState(0);
+  const revision = localRevision + refreshKey * 1000;
+  // Stato delle dosi riletto dopo ogni registrazione nel dettaglio dell'ora.
+  const [slotsRevision, setSlotsRevision] = useState(0);
   // Orario aperto nel dettaglio: legato alla data in cui è stato aperto (cambiare giorno lo chiude).
-  const [open, setOpen] = useState<{ date: string; time: string } | null>(() =>
-    initialOpenTime ? { date: startDate, time: initialOpenTime } : null,
+  // `undefined` = nessuna scelta dell'operatore: oggi si apre l'ora della prima dose da somministrare.
+  const [open, setOpen] = useState<{ date: string; time: string } | null | undefined>(() =>
+    initialOpenTime ? { date: startDate, time: initialOpenTime } : undefined,
   );
-  const openTime = open?.date === date ? open.time : null;
   const [prnOpen, setPrnOpen] = useState<string | null>(null);
   const [state, setState] = useState<ReadState>({
     patientId,
@@ -116,7 +135,7 @@ export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime
 
   // Stato delle dosi: il giro dei giorni visibili, letto una volta per giorno (non al tocco).
   const visibleDays = useMemo(() => (view === 'giorno' ? [date] : weekDays(date)), [view, date]);
-  const slotsKey = `${patientId}|${revision}|${visibleDays.join(',')}`;
+  const slotsKey = `${patientId}|${revision}|${slotsRevision}|${visibleDays.join(',')}`;
   useEffect(() => {
     let active = true;
     for (const day of visibleDays) {
@@ -158,13 +177,30 @@ export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime
     [state.therapies],
   );
 
+  const today = localIsoDate();
+  const daySlots = slots[date];
+  // Prima dose ancora da somministrare oggi (in ritardo per prima, perché viene prima nel giorno).
+  const dueTime = useMemo(() => {
+    if (!autoOpenDue || date !== today || daySlots?.status !== 'ready') return null;
+    const sorted = [...day.events].sort((a, b) => a.time.localeCompare(b.time));
+    const next = sorted.find((event) => {
+      const tone = eventStatus(event, date, daySlots, patientId)?.tone;
+      return tone === 'late' || tone === 'due';
+    });
+    return next?.time ?? null;
+  }, [autoOpenDue, date, today, daySlots, day.events, patientId]);
+  const openTime = open === undefined ? dueTime : open?.date === date ? open.time : null;
+
   useEffect(() => {
     if (view !== 'giorno' || !timeline.current || !day.events.length) return;
-    const target = openTime ?? day.events[0].time;
+    const focused = focusTherapyId
+      ? day.events.find((event) => event.therapyId === focusTherapyId)?.time
+      : undefined;
+    const target = openTime ?? focused ?? day.events[0].time;
     const firstHour = Math.max(0, Number(target.slice(0, 2)) - (openTime ? 0 : 1));
     const row = timeline.current.querySelector<HTMLElement>(`[data-hour="${HOURS[firstHour]}"]`);
     if (row) timeline.current.scrollTop = row.offsetTop;
-  }, [day, view, openTime]);
+  }, [day, view, openTime, focusTherapyId]);
 
   const formattedDate = new Date(`${date}T12:00:00`).toLocaleDateString('it-IT', {
     weekday: 'long',
@@ -176,8 +212,6 @@ export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime
   const incomplete = day.unscheduled.filter((item) => item.kind === 'incomplete');
   const timeCount = new Set(day.events.map((event) => event.time)).size;
   const step = view === 'giorno' ? 1 : 7;
-  const daySlots = slots[date];
-  const today = localIsoDate();
 
   return (
     <section className="patient-therapy-calendar" aria-label="Calendario terapie del paziente">
@@ -234,7 +268,7 @@ export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime
         </h3>
         <p>
           {view === 'giorno'
-            ? 'Ogni dose mostra farmaco, dose, via e stato. Tocca un orario per registrare la somministrazione.'
+            ? 'Ogni dose mostra farmaco, dose, via e stato. Tocca una dose per le azioni della sua ora.'
             : 'Settimana delle terapie attive: tocca una dose per aprire il suo giorno.'}
         </p>
       </header>
@@ -311,11 +345,13 @@ export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime
                           event.oneTime ? 'Una tantum' : end,
                           event.note,
                         ].filter(Boolean);
+                        const focus = focusTherapyId === event.therapyId;
                         return (
                           <li key={event.id}>
                             <button
                               type="button"
-                              className={`agt-therapy-slot patient-therapy-calendar__event${st ? ` is-${st.tone}` : ''}`}
+                              className={`agt-therapy-slot patient-therapy-calendar__event${st ? ` is-${st.tone}` : ''}${focus ? ' is-focus' : ''}`}
+                              data-therapy-id={event.therapyId}
                               aria-expanded={openTime === event.time}
                               aria-label={`${event.time} ${event.drugName}, ${doseText(event)}, ${event.route}, ${st?.text ?? 'stato non disponibile'}: apri le azioni delle ${event.time}`}
                               data-testid="ptc-event"
@@ -354,7 +390,14 @@ export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime
                         date={date}
                         time={openTime}
                         events={day.events.filter((event) => event.time === openTime)}
+                        focusTherapyId={focusTherapyId}
+                        bringIntoView={open === undefined || Boolean(initialOpenTime)}
                         onClose={() => setOpen(null)}
+                        onRecorded={() => {
+                          // L'ora resta aperta (non salta alla prossima dose) e gli stati si rileggono.
+                          setOpen({ date, time: openTime });
+                          setSlotsRevision((value) => value + 1);
+                        }}
                       />
                     )}
                   </div>
@@ -386,12 +429,16 @@ export function PatientTherapyCalendar({ patientId, initialDate, initialOpenTime
                           aria-expanded={expanded}
                           onClick={() => setPrnOpen(expanded ? null : item.therapyId)}
                         >
-                          {expanded ? 'Chiudi' : 'Dosi al bisogno di oggi'}
+                          {expanded ? 'Chiudi' : 'Somministra al bisogno · dosi di oggi'}
                         </button>
                       )}
                       {therapy && expanded && (
                         <div className="ptc-prn-panel">
-                          <TherapyDrugDosePanel patientId={patientId} therapy={therapy} />
+                          <TherapyDrugDosePanel
+                            patientId={patientId}
+                            therapy={therapy}
+                            onRecorded={() => setSlotsRevision((value) => value + 1)}
+                          />
                         </div>
                       )}
                     </li>

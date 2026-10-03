@@ -67,13 +67,15 @@ export function signalTarget(signal: PatientSignal): PatientTarget {
     case 'therapy-late':
     case 'therapy-due':
     case 'therapy-unscheduled':
-      return therapyTarget(patientId, 'giornaliere', {
+      // The dose lives in the Calendario (W5): day + band, with its actions open.
+      return therapyTarget(patientId, 'calendario', {
         therapyId: signal.therapyId,
         date: signal.date,
         fascia: signal.fascia,
       });
     case 'drug-anomaly':
-      return therapyTarget(patientId, 'attivi', { therapyId: signal.therapyId });
+      // The drug to fix: its prescription detail opened above the Calendario.
+      return therapyTarget(patientId, 'calendario', { therapyId: signal.therapyId });
     case 'handover':
       return signal.consegnaId
         ? { patientId, tab: 'consegne', consegnaId: signal.consegnaId }

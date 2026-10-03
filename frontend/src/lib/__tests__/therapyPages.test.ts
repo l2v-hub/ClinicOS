@@ -101,13 +101,9 @@ test('therapy UI loads incrementally while emergency print requires every active
   assert.match(tab, /loadTherapyPage\(requestedPatientId/);
   assert.match(tab, /Carica altre terapie/);
   assert.match(tab, /therapyLoadSequence/);
-  assert.match(tab, /pageSize=\{25\}/);
   assert.match(tab, /therapySummary\?\.active/);
-  assert.match(tab, /verifica parziale/);
-  assert.match(tab, /Applica filtri/);
-  assert.match(tab, /loadTherapyPage\([\s\S]*therapyFilters/);
-  assert.match(tab, /filterable: false/);
-  assert.match(tab, /disableSorting=\{Boolean\(nextTherapyCursor\)\}/);
+  assert.match(tab, /Verifica anagrafica parziale/);
+  assert.match(tab, /loadTherapyPage\(requestedPatientId, 'tutte', nextTherapyCursor\)/);
   assert.match(
     tab,
     /setTherapies\(\[\]\);[\s\S]*setNextTherapyCursor\(null\);[\s\S]*setTherapySummary\(null\);/,
@@ -118,21 +114,24 @@ test('therapy UI loads incrementally while emergency print requires every active
 });
 
 test('therapy failures are announced and never rendered as empty clinical results', async () => {
-  const [tab, loadErrorState] = await Promise.all([
+  const [tab, loadErrorState, history] = await Promise.all([
     readFile(therapyTabUrl, 'utf8'),
     readFile(loadErrorStateUrl, 'utf8'),
+    readFile(
+      new URL('../../components/operator/cartella/TherapyHistoryView.tsx', import.meta.url),
+      'utf8',
+    ),
   ]);
   assert.match(loadErrorState, /export function LoadErrorState/);
   assert.match(loadErrorState, /className="alert alert--error" role="alert"/);
-  assert.match(tab, /therapyLoadError && therapies\.length === 0 \? null/);
-  assert.match(tab, /dailyError \? \([\s\S]*LoadErrorState/);
-  assert.match(tab, /historyError && history\.length === 0 \? \([\s\S]*LoadErrorState/);
-  assert.match(tab, /setDailyError\(/);
-  assert.match(tab, /setHistoryError\(/);
-  assert.match(tab, /dailyLoadSequence/);
-  assert.match(tab, /historyLoadSequence/);
-  assert.match(tab, /lo storico è parziale/);
+  assert.match(tab, /therapyLoadError && therapies\.length === 0 \? \(\s*<LoadErrorState/);
+  assert.match(history, /historyError && history\.length === 0 \? \([\s\S]*LoadErrorState/);
+  assert.match(history, /setHistoryError\(/);
+  assert.match(history, /historyLoadSequence/);
+  assert.match(history, /lo storico è parziale/);
+  assert.match(history, /Dosi al bisogno non disponibili/);
   assert.doesNotMatch(tab, /medication-administrations\?limit=200/);
+  assert.doesNotMatch(history, /medication-administrations\?limit=200/);
 });
 
 test('medication administration history follows the bounded opaque cursor feed', async () => {

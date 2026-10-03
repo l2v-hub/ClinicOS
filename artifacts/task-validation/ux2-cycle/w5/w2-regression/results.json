@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-03T13:59:57.588Z",
+  "today": "2026-10-03",
+  "results": [
+    {
+      "id": "W2-01",
+      "name": "Calendar event shows drug, strength + quantity, route, status in words, prescriber, note — without a click",
+      "result": "PASS",
+      "detail": "08:00 Metformina 1 compressa — 500 mg orale In ritardo di 479 min Prescr. Dr. Medico Uno · Dopo il pasto"
+    },
+    {
+      "id": "W2-02",
+      "name": "Week view lists every dose with dose and status",
+      "result": "PASS",
+      "detail": "8 doses"
+    },
+    {
+      "id": "W2-08a",
+      "name": "Server rejects supervisor administration without explicit confirmation (428)",
+      "result": "PASS",
+      "detail": "428 confirmation_required"
+    },
+    {
+      "id": "W2-08b",
+      "name": "Nothing written by the rejected call",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-10",
+      "name": "Ward week calendar cells list patient · drug · dose · status (no tap)",
+      "result": "PASS",
+      "detail": "Galli, Nora Furosemide · 1 compressa — 25 mg In ritardo di 479 min Nanni, Miriam Metformina · 1 compressa — 500 mg In ritardo di 479 min Nanni, Miriam Ramipril · 1 compressa — 5 mg In ritardo di 479 m"
+    },
+    {
+      "id": "W2-11",
+      "name": "820x1180: ward week readable without horizontal scroll (chart views: W5-22)",
+      "result": "PASS",
+      "detail": "ward=true stacked=true"
+    },
+    {
+      "id": "W2-14",
+      "name": "Giro rows: late pending dose shows «In ritardo di N min» (or every dose already recorded)",
+      "result": "PASS",
+      "detail": "— Galli, Nora Posto letto non assegnato · Nato/a il 05/04/1939 · CF da completare Furosemide 1 compressa — 25 mg · orale In ritardo di 479 min Non somm. Somministra — Nanni, Miriam Posto letto non assegnato · Nato/a il 12/11/1936 · CF da co"
+    },
+    {
+      "id": "W2-12",
+      "name": "No console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W2-13",
+      "name": "No 403/4xx/5xx from the UI",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": []
+}

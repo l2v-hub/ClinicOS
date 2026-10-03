@@ -32,7 +32,7 @@ test('late, due and unscheduled doses land on Terapia → giornaliere on that dr
     {
       patientId: P,
       tab: 'terapia-farmacologica',
-      therapy: { subView: 'giornaliere', therapyId: 't1', date: '2026-10-03', fascia: 'mattina' },
+      therapy: { subView: 'calendario', therapyId: 't1', date: '2026-10-03', fascia: 'mattina' },
     },
   );
   assert.equal(doseSignal({ patientId: P, minuti: -20 }).kind, 'therapy-late');
@@ -40,7 +40,7 @@ test('late, due and unscheduled doses land on Terapia → giornaliere on that dr
   assert.equal(doseSignal({ patientId: P, minuti: null }).kind, 'therapy-unscheduled');
   // Missing pieces are dropped, never invented.
   assert.deepEqual(signalTarget({ kind: 'therapy-due', patientId: P }).therapy, {
-    subView: 'giornaliere',
+    subView: 'calendario',
   });
 });
 
@@ -48,7 +48,7 @@ test('each clinical signal lands on the section and item where it lives', () => 
   assert.deepEqual(signalTarget({ kind: 'drug-anomaly', patientId: P, therapyId: 't9' }), {
     patientId: P,
     tab: 'terapia-farmacologica',
-    therapy: { subView: 'attivi', therapyId: 't9' },
+    therapy: { subView: 'calendario', therapyId: 't9' },
   });
   assert.deepEqual(signalTarget({ kind: 'handover', patientId: P, consegnaId: 'c1' }), {
     patientId: P,
@@ -160,13 +160,13 @@ test('Adesso rows carry their landing: dose, handover, drug to fix (with the dru
   const byKind = Object.fromEntries(items.map((it) => [it.kind, it]));
   assert.deepEqual(byKind['terapia-ritardo'].landing, {
     tab: 'terapia-farmacologica',
-    therapy: { subView: 'giornaliere', therapyId: 't-a', date: '2026-10-03', fascia: 'mattina' },
+    therapy: { subView: 'calendario', therapyId: 't-a', date: '2026-10-03', fascia: 'mattina' },
   });
   const handover = items.find((it) => it.key === 'consegna:c1');
   assert.deepEqual(handover?.landing, { tab: 'consegne', consegnaId: 'c1' });
   assert.deepEqual(byKind['anomalia-farmaci'].landing, {
     tab: 'terapia-farmacologica',
-    therapy: { subView: 'attivi', therapyId: 't-r' },
+    therapy: { subView: 'calendario', therapyId: 't-r' },
   });
   assert.match(
     byKind['anomalia-farmaci'].dettaglio,

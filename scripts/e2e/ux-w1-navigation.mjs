@@ -177,8 +177,10 @@ async function therapyLanding(page, id, name, expectedView, therapyId, inChart =
   }
 }
 const NANNI_OR = (hash) => (hash.includes('dettaglio-paziente/') ? 'dettaglio-paziente/' : NANNI);
-const GIORNALIERE = { key: 'giornaliere', label: 'Somministrazioni' };
-const ATTIVI = { key: 'attivi', label: 'Farmaci attivi' };
+// UX cycle 2 (W5): late doses land on the Calendario (day + band, dose actions open) and drug
+// anomalies on the Calendario with the drug's prescription opened — both the «Calendario» view.
+const GIORNALIERE = { key: 'calendario', label: 'Calendario' };
+const ATTIVI = { key: 'calendario', label: 'Calendario' };
 
 async function consegnaLanding(page, id, name) {
   const section = await activeSection(page);
@@ -349,10 +351,13 @@ try {
     /farmaci da verificare: .*Metformina/.test(anomalyText),
     anomalyText,
   );
-  await anomaly.getByRole('button', { name: /Apri/ }).click();
-  await therapyLanding(page, 'A2', 'Adesso anomaly row', ATTIVI);
-  await shot(page, 'A2-adesso-anomalia');
-  await backToTurno(page);
+  // A missing row is a failed check, not the end of the run (the cases below are independent).
+  if (await anomaly.count()) {
+    await anomaly.getByRole('button', { name: /Apri/ }).click();
+    await therapyLanding(page, 'A2', 'Adesso anomaly row', ATTIVI);
+    await shot(page, 'A2-adesso-anomalia');
+    await backToTurno(page);
+  } else check('A2', 'Adesso anomaly row present', false, 'row missing');
 
   const handoverRow = row(MARK).first();
   if (await handoverRow.count()) {

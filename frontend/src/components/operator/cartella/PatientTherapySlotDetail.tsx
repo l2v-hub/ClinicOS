@@ -1,7 +1,10 @@
 // Dettaglio di un orario del calendario terapie del paziente: le terapie programmate a quell'ora e,
 // per i ruoli che possono registrarla, la somministrazione con le stesse azioni del giro terapia
 // (TherapyGiroRows) e gli stessi endpoint. Nessuna regola nuova: stato e conferme vengono dal server.
-import { useEffect, useState } from 'react';
+// UX ciclo 2 (W5): qui si fa tutto dal calendario, anche «Somministra ora» di una dose di oggi
+// segnata come non somministrata (prima stava nello Storico; il server lo consente, una dose
+// somministrata resta immutabile).
+import { useEffect, useRef, useState } from 'react';
 import type { MotivoNonErogazione, TherapyActionInfo, TherapySlot } from '../../../types';
 import type { CalendarOccurrence } from '../../../lib/patientTherapyCalendar';
 import { API_URL } from '../../../config';
@@ -11,6 +14,8 @@ import { getCurrentOperator } from '../../../lib/operatorSession';
 import { patientGiroTime, type GiroTime } from '../../../lib/therapyGiro';
 import { recordAdministration } from '../../../lib/therapyAdministrationWrite';
 import { TherapyGiroRows } from '../TherapyGiroRows';
+import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import { facilityNow } from '../../../lib/therapyDoseStatus';
 // Le righe del giro portano con sé i loro stili (badge, pulsanti, motivi), anche fuori dal giro.
 import '../TherapyRoundsPage.css';
 
@@ -23,10 +28,25 @@ interface Props {
   date: string;
   time: string;
   events: CalendarOccurrence[];
+  /** Farmaco richiesto da un collegamento diretto (la sua riga è evidenziata). */
+  focusTherapyId?: string;
+  /** Aperto senza un tocco (arrivo o dose di oggi): il pannello entra in vista. */
+  bringIntoView?: boolean;
   onClose: () => void;
+  /** Dopo ogni registrazione riuscita (il calendario rilegge gli stati). */
+  onRecorded?: () => void;
 }
 
-export function PatientTherapySlotDetail({ patientId, date, time, events, onClose }: Props) {
+export function PatientTherapySlotDetail({
+  patientId,
+  date,
+  time,
+  events,
+  focusTherapyId,
+  bringIntoView = false,
+  onClose,
+  onRecorded,
+}: Props) {
   // Stessa regola del giro (App): entrambe le capability, mai la vista gestionale dell'admin.
   const canConfirm = useCan('administration.confirm');
   const canRecordNot = useCan('administration.record_not_administered');
@@ -41,6 +61,17 @@ export function PatientTherapySlotDetail({ patientId, date, time, events, onClos
   const [loaded, setLoaded] = useState<LoadState | null>(null);
   const state = loaded?.key === requestKey ? loaded : { status: 'loading' as const };
   const [feedback, setFeedback] = useState<{ tone: 'ok' | 'error'; text: string } | null>(null);
+  const [retry, setRetry] = useState<TherapyActionInfo | null>(null);
+  const [sendingRetry, setSendingRetry] = useState<string | null>(null);
+  const rootRef = useRef<HTMLElement>(null);
+  const ready = state.status === 'ready';
+  useEffect(() => {
+    if (!bringIntoView || !ready) return;
+    const frame = window.requestAnimationFrame(() =>
+      rootRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }),
+    );
+    return () => window.cancelAnimationFrame(frame);
+  }, [bringIntoView, ready]);
 
   useEffect(() => {
     let active = true;
@@ -81,14 +112,46 @@ export function PatientTherapySlotDetail({ patientId, date, time, events, onClos
         : { tone: 'error', text: result.message },
     );
     setRevision((value) => value + 1);
+    if (result.ok) onRecorded?.();
   }
+
+  async function administerAgain(info: TherapyActionInfo, confirmed: boolean) {
+    const key = `${info.therapyId}|${info.fascia}`;
+    if (sendingRetry) return;
+    setSendingRetry(key);
+    await record(info, { kind: 'administered' }, confirmed);
+    setSendingRetry(null);
+  }
+
+  // Dosi di oggi segnate come non somministrate: si possono ancora somministrare.
+  const missedToday =
+    state.status === 'ready' && state.time && canAdminister && date === facilityNow().date
+      ? state.time.patients.flatMap((group) =>
+          group.items
+            .filter((item) => item.a.status === 'not_administered')
+            .map(
+              (item): TherapyActionInfo => ({
+                patientId: group.patient.patientId,
+                therapyId: item.a.therapyId,
+                drugName: item.a.drugName,
+                dosage: item.a.quantityLabel || item.a.dosage,
+                route: item.a.route,
+                date,
+                fascia: item.fascia,
+                ora: item.a.scheduledTime || time,
+              }),
+            ),
+        )
+      : [];
 
   const headingId = `ptc-detail-${time.replace(':', '')}`;
   return (
     <section
+      ref={rootRef}
       className="patient-therapy-slot-detail"
       aria-labelledby={headingId}
       data-testid="patient-therapy-slot-detail"
+      data-focus-therapy={focusTherapyId}
     >
       <header className="patient-therapy-slot-detail__head">
         <h4 id={headingId}>
@@ -148,8 +211,50 @@ export function PatientTherapySlotDetail({ patientId, date, time, events, onClos
                 : undefined
             }
           />
+          {missedToday.length > 0 && (
+            <ul className="patient-therapy-slot-detail__again" aria-label="Dosi non somministrate">
+              {missedToday.map((info) => {
+                const key = `${info.therapyId}|${info.fascia}`;
+                return (
+                  <li key={key}>
+                    <span>
+                      {info.drugName} {info.dosage}: segnata come non somministrata.
+                    </span>
+                    <button
+                      type="button"
+                      className="ds-btn ds-btn--primary"
+                      disabled={sendingRetry === key}
+                      aria-label={`Somministra ora: ${info.drugName} ${info.dosage}, ore ${info.ora}`}
+                      onClick={() =>
+                        needsConfirmation ? setRetry(info) : void administerAgain(info, false)
+                      }
+                    >
+                      {sendingRetry === key ? 'Invio…' : 'Somministra ora'}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </>
       )}
+      <ConfirmDialog
+        open={retry !== null}
+        title="Confermi la somministrazione?"
+        message={
+          retry
+            ? `${retry.drugName} ${retry.dosage}, ore ${retry.ora} di oggi. Il tuo ruolo registra la somministrazione con conferma esplicita.`
+            : ''
+        }
+        confirmLabel="Conferma somministrazione"
+        tone="primary"
+        onConfirm={() => {
+          const info = retry;
+          setRetry(null);
+          if (info) void administerAgain(info, true);
+        }}
+        onCancel={() => setRetry(null)}
+      />
       {feedback && (
         <p
           className={`patient-therapy-slot-detail__feedback is-${feedback.tone}`}

@@ -1,0 +1,186 @@
+{
+  "date": "2026-10-03T14:08:44.432Z",
+  "today": "2026-10-03",
+  "taps": {
+    "nurseAdministerDueDose": {
+      "before": 3,
+      "after": 2
+    },
+    "doctorSuspendDrug": {
+      "before": 3,
+      "after": 4
+    }
+  },
+  "results": [
+    {
+      "id": "W5-01",
+      "name": "Terapia opens on «Calendario»; views are only Calendario / Storico (nurse: no Nuova terapia)",
+      "result": "PASS",
+      "detail": "active=Calendario views=Calendario|Storico"
+    },
+    {
+      "id": "W5-01b",
+      "name": "Old sub-tabs are gone",
+      "result": "PASS",
+      "detail": "0"
+    },
+    {
+      "id": "W5-02",
+      "name": "Compact active-drug list: one line per drug with strength, schedule, route, prescriber; PRN marked",
+      "result": "PASS",
+      "detail": "▸ Paracetamolo Al bisogno non in anagrafica 1000 mg compressa · al bisogno · orale · Prescr. Dr. Medico Uno || ▸ Pantoprazolo non in anagrafica 20 mg compressa · 12:00 1 compressa · orale · Prescr. Dr. Medico Uno || ▸ Metformina non in anagrafica 500 mg compressa · 08:00 1 compressa · 20:00 1 compre"
+    },
+    {
+      "id": "W5-03",
+      "name": "Landing: the hour of the first due dose is open, «Somministra» visible without extra taps",
+      "result": "PASS",
+      "detail": "inViewport=true"
+    },
+    {
+      "id": "W5-04",
+      "name": "Nurse: open therapy → Somministra (2 taps) → persisted erogata by Infermiere 1",
+      "result": "PASS",
+      "detail": "taps=2 [{\"stato\":\"erogata\",\"motivo\":null,\"note\":null,\"operatoreId\":\"SIM-NURSE-1\",\"ora\":\"08:00\"}]"
+    },
+    {
+      "id": "W5-04b",
+      "name": "After recording the hour stays open and the calendar dose says «Somministrata … da Infermiere 1»",
+      "result": "PASS",
+      "detail": "08:00 Ramipril 1 compressa — 5 mg orale Somministrata 16:08 da Infermiere 1 Prescr. Dr. Medico Uno"
+    },
+    {
+      "id": "W5-05",
+      "name": "Non somm. «Altro» + note persisted; the same hour offers «Somministra ora»",
+      "result": "PASS",
+      "detail": "[{\"stato\":\"non_erogata\",\"motivo\":\"altro\",\"note\":\"Paziente nauseata (sintetico W5)\",\"operatoreId\":\"SIM-NURSE-1\",\"ora\":\"08:00\"}]"
+    },
+    {
+      "id": "W5-05b",
+      "name": "«Somministra ora» in the calendar records the not-given dose of today (erogata)",
+      "result": "PASS",
+      "detail": "{\"stato\":\"erogata\",\"motivo\":null,\"note\":null,\"operatoreId\":\"SIM-NURSE-1\",\"ora\":\"08:00\"}"
+    },
+    {
+      "id": "W5-06",
+      "name": "Drug tap → prescription detail (schedule, start, note); nurse sees no Modifica/Sospendi/Elimina",
+      "result": "PASS",
+      "detail": "buttons=0 Anagrafica AIFA Metformina non in anagrafica Orari e quantità 08:00 · 1 compressa · 500 mg 20:00 · 1 compressa · 500 mg Tipo Periodica Inizio 2026-10-03 Fine — "
+    },
+    {
+      "id": "W5-07",
+      "name": "PRN from the calendar persisted (dose from the prescription, nurse)",
+      "result": "PASS",
+      "detail": "[{\"indicazione\":\"Dolore 6/10 (sintetico W5)\",\"operatoreId\":\"SIM-NURSE-1\"}]"
+    },
+    {
+      "id": "W5-08",
+      "name": "Storico lists given / PRN doses of today with operator (URL sv=storico)",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmusga5eb0000c4lp1aacgakw/terapia-farmacologica?sv=storico | 16:08 Paracetamolo 1000 mg compressa · orale Al bisogno · somministrata da Infermiere 1 Indicazione: Dolore 6/10 (sintetico W5) || 08:00 Metformina 1 compressa — 500 mg · orale Somministrata da Infermiere 1 || 08:00 Ramipril 1 compressa — 5 mg · orale Somministrata da Infermiere 1"
+    },
+    {
+      "id": "W5-09",
+      "name": "Storico filters: drug and status (Al bisogno) narrow the rows",
+      "result": "PASS",
+      "detail": "ramipril=true prnRamipril=0 prnOnly=true"
+    },
+    {
+      "id": "W5-10",
+      "name": "«Sospese/concluse» is a Storico filter (URL sv=sospese)",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmusga5eb0000c4lp1aacgakw/terapia-farmacologica?sv=sospese"
+    },
+    {
+      "id": "W5-11",
+      "name": "Reload keeps Storico › Sospese/concluse (QA F2)",
+      "result": "PASS",
+      "detail": "active=Storico pressed=true"
+    },
+    {
+      "id": "W5-12",
+      "name": "Back from another page reopens Storico (QA F2)",
+      "result": "PASS",
+      "detail": "active=Storico #/dettaglio-paziente/cmusga5eb0000c4lp1aacgakw/terapia-farmacologica?sv=storico"
+    },
+    {
+      "id": "W5-13a",
+      "name": "1180x820: no horizontal scroll, no cut-off button (landing with actions open)",
+      "result": "PASS",
+      "detail": "{\"noScroll\":true,\"cut\":[]}"
+    },
+    {
+      "id": "W5-14",
+      "name": "Supervisor: landing opens 12:00 (next due), Somministra asks confirmation, then persisted",
+      "result": "PASS",
+      "detail": "[{\"stato\":\"erogata\",\"motivo\":null,\"note\":null,\"operatoreId\":\"SIM-SUPERVISOR-1\",\"ora\":\"12:00\"}]"
+    },
+    {
+      "id": "W5-14b",
+      "name": "Supervisor sees no prescriber actions",
+      "result": "PASS",
+      "detail": "0"
+    },
+    {
+      "id": "W5-15",
+      "name": "Legacy sv=giornaliere&f=sera → Calendario, 20:00 open with Metformina actions, dose focused",
+      "result": "PASS",
+      "detail": "head=Ore 20:00 · 1 terapia focus=3 actions=1"
+    },
+    {
+      "id": "W5-16",
+      "name": "Legacy sv=attivi&t=… → Calendario with that drug’s prescription opened",
+      "result": "PASS",
+      "detail": "open=1"
+    },
+    {
+      "id": "W5-17",
+      "name": "Legacy sv=sospese → Storico on the suspended/concluded filter",
+      "result": "PASS",
+      "detail": "pressed=true"
+    },
+    {
+      "id": "W5-18",
+      "name": "Doctor: views include Nuova terapia; drug detail has Modifica / Sospendi / Elimina; no Somministra",
+      "result": "PASS",
+      "detail": "views=Calendario|Storico|Nuova terapia actions=non in anagrafica|Modifica|Sospendi|Elimina administer=0"
+    },
+    {
+      "id": "W5-19",
+      "name": "Sospendi from the detail (confirmation) → DB sospesa",
+      "result": "PASS",
+      "detail": "sospesa taps=4"
+    },
+    {
+      "id": "W5-20",
+      "name": "Storico › Sospese/concluse → Riattiva → DB attiva, back on the Calendario",
+      "result": "PASS",
+      "detail": "attiva view=Calendario"
+    },
+    {
+      "id": "W5-21",
+      "name": "Nuova terapia: registration form with field-level validation (URL sv=nuova)",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmusg9x3k00052olpnx3mt47t/terapia-farmacologica?sv=nuova invalid=1 err=Correggi prima di salvare: Indica il nome del farmaco."
+    },
+    {
+      "id": "W5-22",
+      "name": "820x1180: Calendario, drug detail, week, Storico — no horizontal scroll, no cut-off button (QA F8)",
+      "result": "PASS",
+      "detail": "[{\"noScroll\":true,\"cut\":[]},{\"noScroll\":true,\"cut\":[]},{\"noScroll\":true,\"cut\":[]},{\"noScroll\":true,\"cut\":[]}]"
+    },
+    {
+      "id": "W5-23",
+      "name": "No console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "W5-24",
+      "name": "No 403/4xx/5xx from the UI",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": []
+}

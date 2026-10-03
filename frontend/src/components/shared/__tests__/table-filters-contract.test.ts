@@ -73,8 +73,16 @@ test('responsive filter layout uses touch-sized controls and never requests hori
   assert.doesNotMatch(filterStyles, /overflow-x:\s*(?:auto|scroll)/);
 });
 
-test('server-partial therapy tables remain explicitly filter-free', () => {
-  assert.match(therapy, /filterable: false/);
-  assert.match(therapy, /filterable: true/);
-  assert.match(therapy, /noWrapper/);
+test('therapy views use explicit filters instead of client filters on server-partial tables', () => {
+  // UX ciclo 2 (W5): niente tabelle con filtri di colonna; lo Storico ha i suoi filtri espliciti
+  // (periodo, farmaco, stato) e l'elenco dei farmaci è compatto, una riga per farmaco.
+  assert.doesNotMatch(therapy, /filterable: true/);
+  assert.match(therapy, /<TherapyHistoryView/);
+  assert.match(therapy, /<TherapyDrugList/);
+  const history = readFileSync(
+    new URL('../../operator/cartella/TherapyHistoryView.tsx', import.meta.url),
+    'utf8',
+  );
+  assert.match(history, /aria-label="Filtri dello storico"/);
+  assert.match(history, /filterHistory\(rows, \{ period, drug, status \}, today\)/);
 });
