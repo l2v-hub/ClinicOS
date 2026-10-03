@@ -1,0 +1,33 @@
+/* «Presa visione» per lettore sulle voci urgenti del diario (UX direct-access, 2026-10-03).
+   Rosso solo per l'allerta clinica «Da vedere»; chi ha visto è sempre testo visibile. */
+.diario-card--to-see {
+  box-shadow:
+    0 0 0 2px rgba(217, 58, 74, 0.18),
+    var(--shadow-card);
+}
+.diario-card__ack {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--divider, var(--border));
+}
+.diario-card__seen-by {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.diario-card__ack-btn {
+  min-height: 44px;
+  margin-left: auto;
+}
+.diario-to-see {
+  margin: 0 0 12px;
+  font: 600 14px/20px var(--font-ui);
+  color: var(--red);
+}

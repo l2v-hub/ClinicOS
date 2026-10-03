@@ -22,14 +22,17 @@ import {
 import { createPortal } from 'react-dom';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { news2Tile, vitalTiles } from '../../lib/patientVitalsOverview';
+import { useCan } from '../../lib/capabilities';
 import './News2.css';
 
 interface Props {
   patientId: string;
   patientName: string;
   /** 'overview': tessere dei parametri + tessera NEWS2 della Panoramica (HMI 1), stesso storico. */
-  /** 'compact': solo "NEWS2 n" (colonne strette); ora e stato restano in title e aria-label. */
+  /** 'compact': "NEWS2 n · hh:mm · da aggiornare" in testo che va a capo (niente solo-tooltip). */
   variant?: 'chip' | 'compact' | 'overview';
+  /** 'overview' (F10): «Rileva ora» apre l'inserimento parametri di questo paziente. */
+  onRecordNow?: () => void;
 }
 
 /** Tono NEWS2 → tono del badge canonico (rosso solo per rischio medio/alto). */
@@ -43,7 +46,7 @@ const BADGE_TONE: Record<string, string> = {
 };
 const badgeClass = (tone: string) => `ds-badge ds-badge--${BADGE_TONE[tone] ?? 'stale'}`;
 
-export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
+export function News2Chip({ patientId, patientName, variant = 'chip', onRecordNow }: Props) {
   const [readings, setReadings] = useState<PatientParameterReading[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -138,8 +141,8 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
       : state === 'error'
         ? 'NEWS2 ?'
         : latest
-          ? `NEWS2 ${latest.result.total}`
-          : 'NEWS2 —';
+          ? `NEWS2 ${latest.result.total} · ${news2When(latest.reading.measuredAt)}${staleness.stale ? ' · da aggiornare' : ''}`
+          : 'NEWS2 non calcolabile';
   const title =
     state === 'error'
       ? 'Non è stato possibile caricare le rilevazioni. Tocca per riprovare.'
@@ -183,6 +186,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
           stale={staleness.stale}
           onRetry={retry}
           onOpenHistory={() => setOpen(true)}
+          onRecordNow={onRecordNow}
         />
         {history}
       </>
@@ -192,7 +196,7 @@ export function News2Chip({ patientId, patientName, variant = 'chip' }: Props) {
     <>
       <button
         type="button"
-        className={`news2-chip ${badgeClass(state === 'error' ? 'stale' : tone)}${variant === 'compact' && staleness.stale && tone !== 'stale' ? ' ds-badge--dashed' : ''}`}
+        className={`news2-chip ${badgeClass(state === 'error' ? 'stale' : tone)}${variant === 'compact' ? ' news2-chip--compact' : ''}${variant === 'compact' && staleness.stale && tone !== 'stale' ? ' ds-badge--dashed' : ''}`}
         onClick={() => {
           if (state === 'error') retry();
           setOpen(true);
@@ -222,13 +226,17 @@ function VitalsOverview({
   stale,
   onRetry,
   onOpenHistory,
+  onRecordNow,
 }: {
   state: 'loading' | 'ready' | 'error';
   readings: PatientParameterReading[];
   stale: boolean;
   onRetry: () => void;
   onOpenHistory: () => void;
+  onRecordNow?: () => void;
 }) {
+  // F10: l'azione naturale sulla tessera (rilevare) solo per chi può registrare parametri.
+  const canRecord = useCan('parameters.create_reading');
   if (state === 'error')
     return (
       <p className="vitals-note vitals-note--error" role="alert">
@@ -273,37 +281,49 @@ function VitalsOverview({
           </span>
         </div>
       ))}
-      <button
-        type="button"
-        className={`vt vt--news2 vt--${newsTone}`}
-        onClick={onOpenHistory}
-        aria-label={
-          n.score === null
-            ? `NEWS2 non calcolabile${n.missing.length ? `: mancano ${n.missing.join(', ')}` : ''}. Apri lo storico NEWS2`
-            : `NEWS2 ${n.score} alle ${n.at}: ${n.response}${stale ? '. Da aggiornare' : ''}. Apri lo storico NEWS2`
-        }
-      >
-        <span className="vt__label">NEWS2{n.at ? ` · ${n.at}` : ''}</span>
-        {n.score === null ? (
-          <>
-            <span className="vt__value vt__value--muted">Non calcolabile</span>
-            <span className="vt__trend">
-              {n.missing.length ? `Mancano ${n.missing.join(', ')}` : 'Nessuna rilevazione'}
-            </span>
-          </>
-        ) : (
-          <>
-            <span className="vt__value">
-              {n.score}
-              <small>punti</small>
-            </span>
-            <span className="vt__trend">
-              {stale ? 'Da aggiornare · ' : ''}
-              {n.response}
-            </span>
-          </>
+      <div className={`vt vt--news2 vt--${newsTone}`}>
+        <button
+          type="button"
+          className="vt__open"
+          onClick={onOpenHistory}
+          aria-label={
+            n.score === null
+              ? `NEWS2 non calcolabile${n.missing.length ? `: mancano ${n.missing.join(', ')}` : ''}. Apri lo storico NEWS2`
+              : `NEWS2 ${n.score} alle ${n.at}: ${n.response}${stale ? '. Da aggiornare' : ''}. Apri lo storico NEWS2`
+          }
+        >
+          <span className="vt__label">NEWS2{n.at ? ` · ${n.at}` : ''}</span>
+          {n.score === null ? (
+            <>
+              <span className="vt__value vt__value--muted">Non calcolabile</span>
+              <span className="vt__trend">
+                {n.missing.length ? `Mancano ${n.missing.join(', ')}` : 'Nessuna rilevazione'}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="vt__value">
+                {n.score}
+                <small>punti</small>
+              </span>
+              <span className="vt__trend">
+                {stale ? 'Da aggiornare · ' : ''}
+                {n.response}
+              </span>
+            </>
+          )}
+        </button>
+        {onRecordNow && canRecord && (
+          <button
+            type="button"
+            className="ds-btn ds-btn--secondary vt__record"
+            onClick={onRecordNow}
+            aria-label="Rileva ora i parametri di questo paziente"
+          >
+            Rileva ora
+          </button>
         )}
-      </button>
+      </div>
     </section>
   );
 }

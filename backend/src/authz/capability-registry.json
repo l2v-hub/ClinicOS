@@ -276,10 +276,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -816,10 +813,7 @@
       "sensitivity": "critical",
       "exposure": "GUI_ONLY",
       "technicalState": "READY",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -837,10 +831,7 @@
       "sensitivity": "medium",
       "exposure": "GUI_ONLY",
       "technicalState": "READY",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -1020,10 +1011,7 @@
       "sensitivity": "low",
       "exposure": "DEV_ONLY",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -1041,10 +1029,7 @@
       "sensitivity": "low",
       "exposure": "DEV_ONLY",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -1141,6 +1126,10 @@
         {
           "method": "GET",
           "path": "/patients/:patientId/diary"
+        },
+        {
+          "method": "POST",
+          "path": "/patients/:patientId/diary/:entryId/ack"
         }
       ]
     },
@@ -1296,10 +1285,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "READY",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -1623,10 +1609,7 @@
       "sensitivity": "high",
       "exposure": "NOT_EXPOSED",
       "technicalState": "WRAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -1995,10 +1978,7 @@
       "sensitivity": "high",
       "exposure": "DEPRECATED",
       "technicalState": "READY",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2016,10 +1996,7 @@
       "sensitivity": "high",
       "exposure": "DEPRECATED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2037,10 +2014,7 @@
       "sensitivity": "high",
       "exposure": "DEPRECATED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2058,10 +2032,7 @@
       "sensitivity": "high",
       "exposure": "DEPRECATED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2641,10 +2612,7 @@
       "sensitivity": "high",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2698,10 +2666,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2719,10 +2684,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2740,10 +2702,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2761,10 +2720,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2782,10 +2738,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -2803,10 +2756,7 @@
       "sensitivity": "high",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3076,10 +3026,7 @@
       "sensitivity": "medium",
       "exposure": "GUI_ONLY",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3133,10 +3080,7 @@
       "sensitivity": "low",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3154,10 +3098,7 @@
       "sensitivity": "low",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3175,10 +3116,7 @@
       "sensitivity": "low",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3196,10 +3134,7 @@
       "sensitivity": "low",
       "exposure": "GUI_ONLY",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3217,10 +3152,7 @@
       "sensitivity": "low",
       "exposure": "GUI_ONLY",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3238,10 +3170,7 @@
       "sensitivity": "low",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3259,10 +3188,7 @@
       "sensitivity": "medium",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3280,10 +3206,7 @@
       "sensitivity": "low",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3301,10 +3224,7 @@
       "sensitivity": "low",
       "exposure": "TOOL",
       "technicalState": "READY",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3340,10 +3260,7 @@
       "sensitivity": "low",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3361,10 +3278,7 @@
       "sensitivity": "low",
       "exposure": "NOT_EXPOSED",
       "technicalState": "GAP",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3400,10 +3314,7 @@
       "sensitivity": "low",
       "exposure": "TOOL",
       "technicalState": "READY",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [
@@ -3421,10 +3332,7 @@
       "sensitivity": "low",
       "exposure": "TOOL",
       "technicalState": "READY",
-      "legacyRoles": [
-        "admin",
-        "manager"
-      ],
+      "legacyRoles": ["admin", "manager"],
       "gate": "policy",
       "governedBy": null,
       "routes": [

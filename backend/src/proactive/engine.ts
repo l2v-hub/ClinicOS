@@ -30,6 +30,7 @@ import {
 import { COLLECTORS, type ProactiveEvent } from './sources.js';
 import { romeParts, shiftWindow } from './time.js';
 import { profileFor } from '../copilot/profiles.js';
+import { diaryEntriesAcknowledgedBy } from '../patients/diary-ack-service.js';
 
 export type Priority = 'normale' | 'alta' | 'urgente';
 
@@ -476,6 +477,41 @@ async function viewState(operatorId: string, now: Date) {
   return { acked, watermark: seen?.createdAt ?? null };
 }
 
+const DIARY_EVENT_PREFIX = 'diary.entry_created:';
+
+/**
+ * UX direct-access (2026-10-03): «Presa visione» given IN THE DIARY is the same fact as the diary
+ * signal's ack for that reader. A diary signal (one resident/day group) counts as acknowledged
+ * only when EVERY entry in it was acknowledged in the diary by this operator (a partially seen
+ * group stays «da vedere»). Fail-safe: on any error nothing is hidden.
+ */
+async function diarySignalsAckedInDiary(
+  operatorId: string,
+  signals: { signalId: string; eventType: string; count: number; sourceEventIds: string[] }[],
+): Promise<Set<string>> {
+  const groups = signals
+    .filter((s) => s.eventType === 'diary.entry_created' && s.count === s.sourceEventIds.length)
+    .map((s) => ({
+      signalId: s.signalId,
+      entryIds: s.sourceEventIds
+        .filter((e) => e.startsWith(DIARY_EVENT_PREFIX))
+        .map((e) => e.slice(DIARY_EVENT_PREFIX.length)),
+    }))
+    .filter((g) => g.entryIds.length > 0);
+  if (groups.length === 0) return new Set();
+  try {
+    const acked = await diaryEntriesAcknowledgedBy(
+      operatorId,
+      groups.flatMap((g) => g.entryIds),
+    );
+    return new Set(
+      groups.filter((g) => g.entryIds.every((id) => acked.has(id))).map((g) => g.signalId),
+    );
+  } catch {
+    return new Set();
+  }
+}
+
 // ── Inbox ──────────────────────────────────────────────────────────────────────────────────────
 
 export interface InboxOptions {
@@ -545,10 +581,11 @@ export async function buildInbox(
     ? events
     : events.map((e) => ({ ...e, residentId: null, residentLabel: null }));
   const projected = projectSignals(visible);
+  const ackedInDiary = await diarySignalsAckedInDiary(who.operator.id, projected);
   const watermark = state.watermark;
   const signals: Signal[] = projected.map((s) => {
     const changed = !watermark || Date.parse(s.occurredAt) > watermark.getTime();
-    const acked = state.acked.has(`${s.signalId}@${s.rev}`);
+    const acked = state.acked.has(`${s.signalId}@${s.rev}`) || ackedInDiary.has(s.signalId);
     return {
       ...s,
       changedSinceLastView: changed,

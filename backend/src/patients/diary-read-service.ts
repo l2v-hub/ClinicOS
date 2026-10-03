@@ -7,6 +7,7 @@ import {
   encodeDiaryPageCursor,
   parseDiaryPageQuery,
 } from './diary-pagination.js';
+import { loadDiaryAckFields } from './diary-ack-service.js';
 
 interface DiaryFeedRow {
   id: string;
@@ -100,7 +101,10 @@ export async function loadPatientDiary(
     LIMIT ${input.limit + 1} OFFSET ${input.offset ?? 0}
   `);
   const hasMore = rows.length > input.limit;
-  const entries = rows.slice(0, input.limit).map(withTherapy);
+  const pageEntries = rows.slice(0, input.limit).map(withTherapy);
+  // «Presa visione» per lettore (voci urgenti): acknowledgedByMe + chi ha visto e quando.
+  const ackFields = await loadDiaryAckFields(pageEntries, actor);
+  const entries = pageEntries.map((entry) => ({ ...entry, ...ackFields.get(entry.id)! }));
   const last = entries.at(-1);
   return {
     entries,

@@ -481,6 +481,10 @@ test('patient roster, summaries, detail and cartella never cross ordinary-operat
     hasSevereAllergy: true,
     terapieTotali: 2,
     terapieCompletate: 1,
+    // Malformed / nameless items are never surfaced as names (additive detail lists).
+    allergeni: [],
+    parametriCritici: [],
+    rischiElevati: [],
     consegneAperte: 0,
   });
   assert.equal(overview.totalPatients, 1);
