@@ -283,8 +283,8 @@
     width: 100%;
   }
 
-  .operator-editor__actions .btn-secondary,
-  .operator-editor__actions .btn-success {
+  .operator-editor__actions .ds-btn--secondary,
+  .operator-editor__actions .ds-btn--primary {
     flex: 1;
     justify-content: center;
   }

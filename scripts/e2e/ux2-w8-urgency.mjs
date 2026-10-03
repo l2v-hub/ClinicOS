@@ -83,7 +83,7 @@ async function openDiary(page) {
     location.hash = `#/dettaglio-paziente/${id}/diario`;
   }, NANNI);
   await page
-    .locator('button.btn-success', { hasText: 'Aggiungi voce' })
+    .locator('button.ds-btn--primary', { hasText: 'Aggiungi voce' })
     .first()
     .waitFor({ timeout: 20000 })
     .catch(async (e) => {
@@ -123,7 +123,7 @@ async function apiJson(role, method, path, body) {
 // ── 1. Nurse writes an urgent diary entry and an urgent consegna ────────────────────────────────
 const nurse = await login('Infermiere 1');
 await openDiary(nurse.page);
-await nurse.page.locator('button.btn-success', { hasText: 'Aggiungi voce' }).first().click();
+await nurse.page.locator('button.ds-btn--primary', { hasText: 'Aggiungi voce' }).first().click();
 const form = nurse.page.locator('.cr-inline-form, .diario-form').first();
 await nurse.page
   .locator('textarea[id$="-content"]')

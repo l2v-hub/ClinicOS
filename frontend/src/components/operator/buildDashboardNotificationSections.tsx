@@ -109,7 +109,7 @@ export function buildDashboardNotificationSections({
           )}
           <button
             type="button"
-            className="btn-secondary dashboard-notification-section__action"
+            className="ds-btn ds-btn--secondary dashboard-notification-section__action"
             onClick={() => onNavigate(therapyNav)}
           >
             Apri Terapia <IcoArrow />
@@ -129,7 +129,7 @@ export function buildDashboardNotificationSections({
       content: (
         <button
           type="button"
-          className="btn-secondary dashboard-notification-section__action"
+          className="ds-btn ds-btn--secondary dashboard-notification-section__action"
           onClick={() => (onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne'))}
         >
           Apri le urgenze <IcoArrow />
@@ -190,7 +190,7 @@ export function buildDashboardNotificationSections({
           )}
           <button
             type="button"
-            className="btn-secondary dashboard-notification-section__action"
+            className="ds-btn ds-btn--secondary dashboard-notification-section__action"
             onClick={openAnomalyList}
           >
             Apri lista pazienti con farmaci da sanare <IcoArrow />
@@ -212,7 +212,7 @@ export function buildDashboardNotificationSections({
       content: (
         <button
           type="button"
-          className="btn-secondary dashboard-notification-section__action"
+          className="ds-btn ds-btn--secondary dashboard-notification-section__action"
           onClick={() => onNavigate('consegne')}
         >
           Apri Consegne <IcoArrow />
@@ -231,7 +231,7 @@ export function buildDashboardNotificationSections({
       content: (
         <button
           type="button"
-          className="btn-secondary dashboard-notification-section__action"
+          className="ds-btn ds-btn--secondary dashboard-notification-section__action"
           onClick={onRetryClinicalOverview}
         >
           Riprova <IcoArrow />
@@ -250,7 +250,7 @@ export function buildDashboardNotificationSections({
       content: (
         <button
           type="button"
-          className="btn-secondary dashboard-notification-section__action"
+          className="ds-btn ds-btn--secondary dashboard-notification-section__action"
           onClick={() => onNavigate(therapyNav)}
         >
           Apri Terapia <IcoArrow />
@@ -271,7 +271,7 @@ export function buildDashboardNotificationSections({
       content: (
         <button
           type="button"
-          className="btn-secondary dashboard-notification-section__action"
+          className="ds-btn ds-btn--secondary dashboard-notification-section__action"
           onClick={() => onNavigate('pazienti')}
         >
           Apri lista pazienti <IcoArrow />

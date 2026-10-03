@@ -619,7 +619,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
       {/* ── Modulo view ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-          <button className="btn-secondary btn-sm" onClick={() => setModulo(false)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(false)}>
             ← Vista operativa
           </button>
           <PrintButton label="Stampa modulo" />
@@ -633,7 +633,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
           title="Dimissione Infermieristica"
           actions={
             <>
-              <button className="btn-sm" onClick={() => setModulo(true)}>
+              <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(true)}>
                 Vista modulo
               </button>
             </>
@@ -644,7 +644,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
             <div className="cr-section-header" style={{ marginBottom: 12 }}>
               <span className="cr-section-title">Scheda di Dimissione</span>
               <button
-                className="btn-primary btn-sm"
+                className="ds-btn ds-btn--primary"
                 onClick={() => {
                   setDimForm(dim ?? { ...EMPTY_DIM, operatore: operatoreNome });
                   setEditingDim(true);
@@ -1206,10 +1206,10 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                 </div>
 
                 <div className="cr-inline-form__actions">
-                  <button className="btn-secondary btn-sm" onClick={() => setEditingDim(false)}>
+                  <button className="ds-btn ds-btn--secondary" onClick={() => setEditingDim(false)}>
                     Annulla
                   </button>
-                  <button className="btn-success btn-sm" onClick={saveDim}>
+                  <button className="ds-btn ds-btn--primary" onClick={saveDim}>
                     <IcoCheck /> Salva
                   </button>
                 </div>
@@ -1225,7 +1225,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
               <div className="cr-section-header" style={{ marginBottom: 12 }}>
                 <span className="cr-section-title">Liberatoria di Uscita</span>
                 <button
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => {
                     setLibForm(lib ?? { ...EMPTY_LIB, operatore: operatoreNome });
                     setEditingLib(true);
@@ -1397,10 +1397,13 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                     />
                   </div>
                   <div className="cr-inline-form__actions">
-                    <button className="btn-secondary btn-sm" onClick={() => setEditingLib(false)}>
+                    <button
+                      className="ds-btn ds-btn--secondary"
+                      onClick={() => setEditingLib(false)}
+                    >
                       Annulla
                     </button>
-                    <button className="btn-success btn-sm" onClick={saveLib}>
+                    <button className="ds-btn ds-btn--primary" onClick={saveLib}>
                       <IcoCheck /> Salva liberatoria
                     </button>
                   </div>
@@ -1467,7 +1470,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                     Registro Uscite Temporanee
                   </span>
                   <button
-                    className="btn-secondary btn-sm"
+                    className="ds-btn ds-btn--secondary"
                     onClick={() => setShowAddUscita((v) => !v)}
                   >
                     {showAddUscita ? 'Annulla' : '+ Aggiungi uscita'}
@@ -1540,7 +1543,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                     </div>
                     <div className="cr-inline-form__actions">
                       <button
-                        className="btn-secondary btn-sm"
+                        className="ds-btn ds-btn--secondary"
                         onClick={() => {
                           setShowAddUscita(false);
                           setUscitaForm({});
@@ -1548,7 +1551,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                       >
                         Annulla
                       </button>
-                      <button className="btn-success btn-sm" onClick={addUscita}>
+                      <button className="ds-btn ds-btn--primary" onClick={addUscita}>
                         Registra uscita
                       </button>
                     </div>
@@ -1588,7 +1591,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                       align: 'right',
                       render: (_v, u) => (
                         <button
-                          className="icon-btn icon-btn--sm icon-btn--danger"
+                          className="ds-icon-btn ds-icon-btn--danger"
                           onClick={() => deleteUscita(u.id)}
                           title="Elimina"
                         >

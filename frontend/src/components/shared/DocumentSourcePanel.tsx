@@ -152,7 +152,7 @@ export function DocumentSourcePanel({
       <div className="doc-source-panel">
         <header className="doc-source-panel__head">
           <h3>{title ?? 'Fonte originale'}</h3>
-          <button className="icon-btn" onClick={onClose} aria-label="Chiudi">
+          <button className="ds-icon-btn" onClick={onClose} aria-label="Chiudi">
             ✕
           </button>
         </header>
@@ -162,7 +162,7 @@ export function DocumentSourcePanel({
           ) : status === 'error' ? (
             <div className="cr-empty" role="alert">
               <p>Impossibile caricare i documenti.</p>
-              <button type="button" className="btn-secondary btn-sm" onClick={reload}>
+              <button type="button" className="ds-btn ds-btn--secondary" onClick={reload}>
                 Riprova
               </button>
             </div>
@@ -180,7 +180,7 @@ export function DocumentSourcePanel({
           {loadMoreError && (
             <div className="cr-empty" role="alert">
               <p>{loadMoreError} L’elenco mostrato è parziale.</p>
-              <button type="button" className="btn-secondary btn-sm" onClick={loadMore}>
+              <button type="button" className="ds-btn ds-btn--secondary" onClick={loadMore}>
                 Riprova caricamento
               </button>
             </div>
@@ -188,7 +188,7 @@ export function DocumentSourcePanel({
           {pageInfo.hasMore && !loadMoreError && (
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={loadMore}
               disabled={loadingMore}
             >

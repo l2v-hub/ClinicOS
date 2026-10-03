@@ -102,7 +102,7 @@ export function NoteCreateForm({ utenteId, operatori, onAdd, onClose }: NoteCrea
         </div>
         <button
           type="button"
-          className="icon-btn"
+          className="ds-icon-btn"
           aria-label="Chiudi nuova nota"
           onClick={onClose}
           disabled={saving}
@@ -223,10 +223,15 @@ export function NoteCreateForm({ utenteId, operatori, onAdd, onClose }: NoteCrea
             <span aria-hidden="true">*</span> Campi obbligatori
           </p>
         )}
-        <button type="button" className="btn-secondary" onClick={onClose} disabled={saving}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          onClick={onClose}
+          disabled={saving}
+        >
           Annulla
         </button>
-        <button type="submit" className="btn-success" disabled={!canSubmit}>
+        <button type="submit" className="ds-btn ds-btn--primary" disabled={!canSubmit}>
           <IcoCheck /> {saving ? 'Invio…' : 'Invia nota'}
         </button>
       </footer>

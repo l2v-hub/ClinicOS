@@ -95,7 +95,7 @@ export function AllergiesEditor({
               disabled={disabled}
               title={!check.ok ? check.reason : undefined}
               data-testid={`allergy-status-${o.key}`}
-              className={`btn-sm ${effStatus === o.key ? 'btn-primary' : 'btn-secondary'}`}
+              className={` ${effStatus === o.key ? 'ds-btn ds-btn--primary' : 'ds-btn ds-btn--secondary'}`}
               onClick={() => setStatus(o.key)}
             >
               {o.label}
@@ -155,7 +155,7 @@ export function AllergiesEditor({
               </div>
               {!readOnly && (
                 <button
-                  className="icon-btn icon-btn--sm icon-btn--danger"
+                  className="ds-icon-btn ds-icon-btn--danger"
                   onClick={() => remove(a.id)}
                   title="Elimina"
                 >
@@ -205,7 +205,7 @@ export function AllergiesEditor({
             </div>
             <div className="ec-modal-add-form__actions">
               <button
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => {
                   setShowForm(false);
                   setForm({});
@@ -213,13 +213,13 @@ export function AllergiesEditor({
               >
                 Annulla
               </button>
-              <button className="btn-success btn-sm" onClick={add}>
+              <button className="ds-btn ds-btn--primary" onClick={add}>
                 <IcoCheck /> Salva
               </button>
             </div>
           </div>
         ) : (
-          <button className="btn-secondary btn-sm" onClick={() => setShowForm(true)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => setShowForm(true)}>
             <IcoPlus /> Aggiungi allergia
           </button>
         ))}

@@ -240,7 +240,7 @@ function TrendLane({
             <strong>{definition.label} · dettaglio rilevazione</strong>
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={() => setSelectedPoint(null)}
               aria-label={`Chiudi dettaglio ${definition.label}`}
             >

@@ -74,26 +74,15 @@ test('only design-system.css decides how a canonical control looks', () => {
 
 test('legacy control classes are aliased to the canonical look and cannot be forced back', () => {
   const ds = read('design-system.css');
-  for (const alias of [
-    'filter-chip',
-    'agt-filter-chip',
-    'agt-view-btn',
-    'btn-primary',
-    'btn-success',
-    'btn-secondary',
-    'icon-btn',
-    'btn-ghost',
-    'btn-ghost-outline',
-  ])
+  // UX2 W6: i pulsanti legacy (btn-*/icon-btn) sono migrati a ds-btn/ds-icon-btn; restano alias le chip.
+  for (const alias of ['filter-chip', 'agt-filter-chip', 'agt-view-btn'])
     assert.match(ds, new RegExp(`\\.${alias}[,)]`), alias);
   assert.match(ds, /:not\(#ds\)/);
   const forced: string[] = [];
   for (const file of walk('.', '.css'))
     for (const [selector, body] of blocks(read(file)))
       if (
-        /\.(filter-chip|agt-filter-chip|agt-view-btn|btn-primary|btn-success|btn-secondary|btn-sm|icon-btn|ds-[a-z-]+)\b/.test(
-          selector,
-        ) &&
+        /\.(filter-chip|agt-filter-chip|agt-view-btn|ds-[a-z-]+)\b/.test(selector) &&
         /!important/.test(body)
       )
         forced.push(`${file}: ${selector}`);

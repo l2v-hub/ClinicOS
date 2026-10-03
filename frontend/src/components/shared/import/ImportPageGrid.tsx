@@ -48,7 +48,7 @@ export function ImportPageGrid({
             {page.status === 'failed' && <p role="alert">{page.error || 'Pagina da riprovare'}</p>}
             <div className="import-page__actions">
               <button
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 disabled={disabled || index === 0}
                 aria-label={`Sposta pagina ${index + 1} prima`}
                 onClick={() => move(page.id, page.groupId, index - 1)}
@@ -56,7 +56,7 @@ export function ImportPageGrid({
                 ↑
               </button>
               <button
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 disabled={disabled || index === pages.length - 1}
                 aria-label={`Sposta pagina ${index + 1} dopo`}
                 onClick={() => move(page.id, page.groupId, index + 1)}
@@ -64,14 +64,14 @@ export function ImportPageGrid({
                 ↓
               </button>
               <button
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 disabled={disabled}
                 onClick={() => onRetake(page.id)}
               >
                 Rifai
               </button>
               <button
-                className="btn-danger btn-sm"
+                className="ds-btn ds-btn--danger"
                 disabled={disabled}
                 aria-label={`Rimuovi pagina ${index + 1}`}
                 onClick={() => {

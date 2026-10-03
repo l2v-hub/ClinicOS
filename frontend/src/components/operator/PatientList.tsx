@@ -483,7 +483,7 @@ export function PatientList({
                 : 'Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.'}
             </p>
             {!ricerca && filtroSesso === 'tutti' && (
-              <button className="btn-success" onClick={onOpenNewIntake}>
+              <button className="ds-btn ds-btn--primary" onClick={onOpenNewIntake}>
                 <IcoPlus /> Aggiungi primo paziente
               </button>
             )}
@@ -515,7 +515,7 @@ export function PatientList({
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
                 <button
                   type="button"
-                  className="btn-ghost-outline"
+                  className="ds-btn ds-btn--secondary"
                   disabled={loadingMore}
                   onClick={() => void loadPage(nextCursor, true)}
                 >

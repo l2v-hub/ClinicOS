@@ -170,7 +170,12 @@ export function PatientParameterEntry({
         </details>
         <div className="parameter-single-entry__actions">
           <span>Data e ora vengono registrate quando premi Salva.</span>
-          <button type="submit" className="btn-primary" disabled={saving} aria-busy={saving}>
+          <button
+            type="submit"
+            className="ds-btn ds-btn--primary"
+            disabled={saving}
+            aria-busy={saving}
+          >
             {saving ? 'Salvataggio…' : uncertain ? 'Riprova salvataggio' : 'Salva rilevazione'}
           </button>
         </div>

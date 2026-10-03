@@ -110,7 +110,6 @@ import { ClinicalSectionLoading } from './ClinicalSectionLoading';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { PatientVitalSignsView } from './PatientVitalSignsView';
 import './PatientRecordData.css';
-import './PatientOverview.css';
 import { UrgencyNotice } from '../shared/UrgencyNotice';
 import { consegnaPriorityLabel, isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';
 
@@ -233,10 +232,10 @@ function InlineForm({
     <div className="cr-inline-form">
       {children}
       <div className="cr-inline-form__actions">
-        <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
+        <button className="ds-btn ds-btn--secondary" onClick={onCancel} disabled={saving}>
           Annulla
         </button>
-        <button className="btn-success btn-sm" onClick={onSave} disabled={saving}>
+        <button className="ds-btn ds-btn--primary" onClick={onSave} disabled={saving}>
           <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
         </button>
       </div>
@@ -259,14 +258,10 @@ function ItemRow({
     <div className="cr-item-row">
       <div className="cr-item-row__content">{children}</div>
       <div className="cr-item-row__actions">
-        <button className="icon-btn icon-btn--sm icon-btn--edit" onClick={onEdit} title="Modifica">
+        <button className="ds-icon-btn" onClick={onEdit} title="Modifica">
           <IcoEdit />
         </button>
-        <button
-          className="icon-btn icon-btn--sm icon-btn--danger"
-          onClick={onDelete}
-          title="Elimina"
-        >
+        <button className="ds-icon-btn ds-icon-btn--danger" onClick={onDelete} title="Elimina">
           <IcoX />
         </button>
       </div>
@@ -825,7 +820,7 @@ export function PatientDetail({
           </div>
           <button
             type="button"
-            className="icon-btn icon-btn--sm"
+            className="ds-icon-btn"
             onClick={closeCardModal}
             aria-label="Chiudi"
             data-dialog-initial-focus
@@ -844,7 +839,7 @@ export function PatientDetail({
         <div className="modal-footer">
           <div className="modal-footer__left">
             <button
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               onClick={() => {
                 setCardModal(null);
                 switchTab('diagnosi');
@@ -854,7 +849,7 @@ export function PatientDetail({
             </button>
           </div>
           <div className="modal-footer__right">
-            <button className="btn-primary" onClick={closeCardModal}>
+            <button className="ds-btn ds-btn--primary" onClick={closeCardModal}>
               Chiudi
             </button>
           </div>
@@ -882,7 +877,7 @@ export function PatientDetail({
           </div>
           <button
             type="button"
-            className="icon-btn icon-btn--sm"
+            className="ds-icon-btn"
             onClick={closeCardModal}
             aria-label="Chiudi"
             data-dialog-initial-focus
@@ -911,7 +906,7 @@ export function PatientDetail({
         <div className="modal-footer">
           <div className="modal-footer__left">
             <button
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               onClick={() => {
                 setCardModal(null);
                 switchTab('terapia-farmacologica');
@@ -921,7 +916,7 @@ export function PatientDetail({
             </button>
           </div>
           <div className="modal-footer__right">
-            <button className="btn-primary" onClick={closeCardModal}>
+            <button className="ds-btn ds-btn--primary" onClick={closeCardModal}>
               Chiudi
             </button>
           </div>
@@ -951,7 +946,7 @@ export function PatientDetail({
           </div>
           <button
             type="button"
-            className="icon-btn icon-btn--sm"
+            className="ds-icon-btn"
             onClick={closeCardModal}
             aria-label="Chiudi"
             data-dialog-initial-focus
@@ -1029,7 +1024,7 @@ export function PatientDetail({
               </div>
               <div className="ec-modal-add-form__actions">
                 <button
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => {
                     setModalVitaleShow(false);
                     setVitaleForm({});
@@ -1039,7 +1034,7 @@ export function PatientDetail({
                   Annulla
                 </button>
                 <button
-                  className="btn-success btn-sm"
+                  className="ds-btn ds-btn--primary"
                   onClick={addVitaleFromModal}
                   disabled={saving}
                 >
@@ -1048,7 +1043,7 @@ export function PatientDetail({
               </div>
             </div>
           ) : (
-            <button className="btn-secondary btn-sm" onClick={() => setModalVitaleShow(true)}>
+            <button className="ds-btn ds-btn--secondary" onClick={() => setModalVitaleShow(true)}>
               <IcoPlus /> Aggiungi rilevazione
             </button>
           )}
@@ -1056,7 +1051,7 @@ export function PatientDetail({
         <div className="modal-footer">
           <div className="modal-footer__left">
             <button
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               onClick={() => {
                 setCardModal(null);
                 switchTab('parametri');
@@ -1066,7 +1061,7 @@ export function PatientDetail({
             </button>
           </div>
           <div className="modal-footer__right">
-            <button className="btn-primary" onClick={closeCardModal} disabled={saving}>
+            <button className="ds-btn ds-btn--primary" onClick={closeCardModal} disabled={saving}>
               Chiudi
             </button>
           </div>
@@ -1094,7 +1089,7 @@ export function PatientDetail({
           </div>
           <button
             type="button"
-            className="icon-btn icon-btn--sm"
+            className="ds-icon-btn"
             onClick={closeCardModal}
             aria-label="Chiudi"
             data-dialog-initial-focus
@@ -1133,7 +1128,7 @@ export function PatientDetail({
               onClose={() => setModalConsegnaShow(false)}
             />
           ) : (
-            <button className="btn-secondary btn-sm" onClick={() => setModalConsegnaShow(true)}>
+            <button className="ds-btn ds-btn--secondary" onClick={() => setModalConsegnaShow(true)}>
               <IcoPlus /> Aggiungi consegna
             </button>
           )}
@@ -1141,7 +1136,7 @@ export function PatientDetail({
         <div className="modal-footer">
           <div className="modal-footer__left">
             <button
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               onClick={() => {
                 setCardModal(null);
                 switchTab('consegne');
@@ -1151,7 +1146,7 @@ export function PatientDetail({
             </button>
           </div>
           <div className="modal-footer__right">
-            <button className="btn-primary" onClick={closeCardModal}>
+            <button className="ds-btn ds-btn--primary" onClick={closeCardModal}>
               Chiudi
             </button>
           </div>
@@ -1179,7 +1174,7 @@ export function PatientDetail({
           </div>
           <button
             type="button"
-            className="icon-btn icon-btn--sm"
+            className="ds-icon-btn"
             onClick={closeCardModal}
             aria-label="Chiudi"
             data-dialog-initial-focus
@@ -1199,7 +1194,7 @@ export function PatientDetail({
         </div>
         <div className="modal-footer">
           <div className="modal-footer__right">
-            <button className="btn-primary" onClick={closeCardModal}>
+            <button className="ds-btn ds-btn--primary" onClick={closeCardModal}>
               Chiudi
             </button>
           </div>
@@ -1246,7 +1241,7 @@ export function PatientDetail({
           </div>
           <button
             type="button"
-            className="icon-btn icon-btn--sm"
+            className="ds-icon-btn"
             onClick={closeCardModal}
             aria-label="Chiudi"
             data-dialog-initial-focus
@@ -1286,7 +1281,7 @@ export function PatientDetail({
               </div>
               {canAssignRooms && (
                 <button
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   style={{ marginTop: 4 }}
                   onClick={() => {
                     setCameraModalForm({
@@ -1427,14 +1422,14 @@ export function PatientDetail({
             {cameraEditing ? (
               <>
                 <button
-                  className="btn-secondary"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => setCameraEditing(false)}
                   disabled={saving}
                 >
                   Annulla
                 </button>
                 <button
-                  className="btn-success"
+                  className="ds-btn ds-btn--primary"
                   onClick={saveCameraFromModal}
                   disabled={saving || !roomDataReady || !validSelection}
                 >
@@ -1442,7 +1437,7 @@ export function PatientDetail({
                 </button>
               </>
             ) : (
-              <button className="btn-primary" onClick={closeCardModal}>
+              <button className="ds-btn ds-btn--primary" onClick={closeCardModal}>
                 Chiudi
               </button>
             )}
@@ -1497,7 +1492,7 @@ export function PatientDetail({
               // Salva/Annulla in modifica sono gia' resi dal footer di InlineForm sotto — un
               // secondo paio qui sopra duplicherebbe l'azione (Ciclo 16, backlog Ciclo 12).
               <button
-                className="btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => {
                   openProfileEditor();
                 }}
@@ -1731,7 +1726,7 @@ export function PatientDetail({
           countLabel="indicatori"
           actions={
             <button
-              className="btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={() => {
                 setRiskForm({});
                 setShowAddRisk(true);
@@ -1911,7 +1906,7 @@ export function PatientDetail({
           countLabel="note"
           actions={
             <button
-              className="btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={() => {
                 setNotaForm({});
                 setShowAddNota(true);
@@ -2039,7 +2034,7 @@ export function PatientDetail({
           countLabel="visite"
           actions={
             <button
-              className="btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={() => {
                 setVisitaForm({});
                 setShowAddVisita(true);
@@ -2212,7 +2207,10 @@ export function PatientDetail({
           count={mieConsegne.filter(isConsegnaUrgencyActive).length}
           countLabel="urgenze da prendere in carico"
           actions={
-            <button className="btn-sm" onClick={() => setShowAddConsegna((v) => !v)}>
+            <button
+              className="ds-btn ds-btn--secondary"
+              onClick={() => setShowAddConsegna((v) => !v)}
+            >
               + Aggiungi
             </button>
           }
@@ -2231,7 +2229,11 @@ export function PatientDetail({
               {consegneError && (
                 <div className="cr-empty" role="alert">
                   <p>{consegneError}</p>
-                  <button type="button" className="btn-secondary btn-sm" onClick={onRetryConsegne}>
+                  <button
+                    type="button"
+                    className="ds-btn ds-btn--secondary"
+                    onClick={onRetryConsegne}
+                  >
                     Riprova
                   </button>
                 </div>
@@ -2290,7 +2292,7 @@ export function PatientDetail({
                   {consegneHasMore && (
                     <button
                       type="button"
-                      className="btn-secondary"
+                      className="ds-btn ds-btn--secondary"
                       onClick={onLoadMoreConsegne}
                       disabled={consegneLoading}
                     >
@@ -2894,7 +2896,7 @@ export function PatientDetail({
           {section === 'moduli' && tab !== 'moduli' && (
             <button
               type="button"
-              className="btn-secondary btn-sm patient-module-return"
+              className="ds-btn ds-btn--secondary patient-module-return"
               onClick={() => switchTab('moduli')}
             >
               ← Tutti i moduli

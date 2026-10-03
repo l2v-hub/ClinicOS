@@ -106,15 +106,11 @@ function operatoriColumns(
       width: '72px',
       render: (_v, op) => (
         <div className="table-actions">
-          <button
-            className="icon-btn icon-btn--sm icon-btn--edit"
-            onClick={() => apriModifica(op)}
-            title="Modifica"
-          >
+          <button className="ds-icon-btn" onClick={() => apriModifica(op)} title="Modifica">
             <IcoEdit />
           </button>
           <button
-            className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
+            className={`ds-icon-btn${op.stato === 'attivo' ? ' ds-icon-btn--danger' : ''}`}
             onClick={() => onToggleStato(op.id)}
             title={op.stato === 'attivo' ? 'Disattiva' : 'Riattiva'}
           >
@@ -307,14 +303,11 @@ export function OperatorManagement({
             >
               <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>
               <div className="table-actions">
-                <button
-                  className="icon-btn icon-btn--sm icon-btn--edit"
-                  onClick={() => apriModifica(op)}
-                >
+                <button className="ds-icon-btn" onClick={() => apriModifica(op)}>
                   <IcoEdit />
                 </button>
                 <button
-                  className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
+                  className={`ds-icon-btn${op.stato === 'attivo' ? ' ds-icon-btn--danger' : ''}`}
                   onClick={() => onToggleStato(op.id)}
                 >
                   {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}

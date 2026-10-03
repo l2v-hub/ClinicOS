@@ -338,7 +338,7 @@ export function TherapyRoundsPage({
       {giro && !loading && error && (
         <div role="alert" className="empty-state-card">
           <p>{error}</p>
-          <button type="button" className="btn-secondary" onClick={() => onLoad(date)}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={() => onLoad(date)}>
             Riprova
           </button>
         </div>
@@ -355,7 +355,7 @@ export function TherapyRoundsPage({
           {loadMoreError && <span role="alert">{loadMoreError}</span>}
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             disabled={loadingMore}
             onClick={onLoadMore}
           >

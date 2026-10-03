@@ -564,149 +564,12 @@ body {
    canonical, live L2/L3 nav. See design-system/README.md, Ciclo 18. */
 
 /* === 003 CLEAN NAV: PATIENT COMPACT HEADER === */
-.patient-compact-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px 24px;
-  margin: 12px 24px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  box-shadow: var(--shadow-card);
-  flex-shrink: 0;
-}
-
-.patient-compact-header__back {
-  background: none;
-  padding: 0;
-  font: inherit;
-  color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  min-height: 40px;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  flex-shrink: 0;
-  transition: background 0.1s;
-}
-
-.patient-compact-header__back:hover {
-  background: var(--hover);
-  color: var(--text);
-}
-
-.patient-compact-header__avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 15px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--indigo-bg);
-  color: var(--blue);
-  font-weight: 800;
-  font-size: 18px;
-}
-
-.patient-compact-header__info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-  flex: 1;
-}
-
-.patient-compact-header__title-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.patient-compact-header__name {
-  font-weight: 800;
-  font-size: 24px;
-  letter-spacing: -0.4px;
-  color: var(--text);
-}
-
-.patient-compact-header__meta-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.patient-compact-header__meta {
-  font-size: 13px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-.patient-compact-header__meta:not(:last-child)::after {
-  content: '·';
-  margin-left: 8px;
-  color: var(--text-xmuted);
-}
-
-.patient-compact-header__badge {
-  font-size: 12px;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
 
 /* Allergie = alert clinico → rosso */
-.patient-compact-header__badge--allergy {
-  background: var(--red-bg);
-  color: var(--red);
-  border: 1px solid var(--red-border);
-}
-
-.patient-compact-header__actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
 
 /* Header paziente: su schermi stretti il nome e i bottoni non si sovrappongono — vanno a capo. */
-@media (max-width: 640px) {
-  .patient-compact-header {
-    flex-wrap: wrap;
-    padding: 16px;
-    gap: 12px;
-  }
-  .patient-compact-header__name {
-    font-size: 20px;
-  }
-  .patient-compact-header__actions {
-    margin-left: 0;
-    width: 100%;
-  }
-  .patient-compact-header__actions .btn-sm {
-    flex: 1;
-    justify-content: center;
-  }
-}
 
 /* Restyle: "Invio in PS" is a clinical escalation → clinical red (not brand blue) */
-.patient-compact-header .btn-primary {
-  background: var(--red-bg);
-  color: var(--red);
-  border: 1px solid var(--red-border);
-}
-.patient-compact-header .btn-primary:hover {
-  background: #fbdde1;
-  border-color: var(--red);
-}
 
 /* === 003 CLEAN NAV: MAIN AREA LAYOUT === */
 .main-area-clean {
@@ -1082,30 +945,8 @@ body {
 }
 
 /* Stats */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  margin-bottom: 24px;
-}
 
 /* Dashboard operatore: 3 stat card su una riga */
-.operator-dashboard .stats-grid {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-@media (max-width: 900px) {
-  .stats-grid,
-  .operator-dashboard .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 480px) {
-  .stats-grid,
-  .operator-dashboard .stats-grid {
-    grid-template-columns: 1fr;
-  }
-}
 
 .stat-card {
   background: var(--surface);
@@ -1383,10 +1224,6 @@ body {
 /* ═══════════════════════════════════════════════════════════════════════════
    PATIENTS VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
-
-.patients-view {
-  max-width: 1040px;
-}
 
 .view-header {
   display: flex;
@@ -1977,129 +1814,15 @@ body {
   align-items: start;
 }
 
-.exp-card--primary {
-  grid-column: span 3;
-}
-.exp-card--secondary {
-  grid-column: span 2;
-}
-
 /* Focus mode */
-.exp-card--focused {
-  grid-column: 1 / -1 !important;
-  order: -1;
-}
-
-.workspace--focused .exp-card--dimmed {
-  grid-column: span 2;
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    EXPANDABLE CARD
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.exp-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-  transition:
-    box-shadow 0.18s,
-    border-color 0.18s;
-  border-top: 3px solid var(--card-accent, var(--blue));
-}
-
-.exp-card--focused {
-  box-shadow: var(--shadow-md);
-  border-color: var(--card-accent, var(--blue));
-}
-.exp-card--dimmed {
-  opacity: 0.72;
-}
-
 /* Card header */
-.exp-card__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 0 12px 0 14px;
-  min-height: 52px;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.15s;
-}
-
-.exp-card--focused .exp-card__header {
-  border-bottom-color: var(--divider);
-}
 
 /* Show divider when body is open */
-.exp-card:has(.exp-card__body) .exp-card__header {
-  border-bottom-color: var(--divider);
-}
-
-.exp-card__collapse-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  flex: 1;
-  min-width: 0;
-  text-align: left;
-  min-height: 52px;
-}
-
-.exp-card__collapse-btn:disabled {
-  cursor: default;
-}
-
-.exp-card__icon {
-  width: 17px;
-  height: 17px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-}
-.exp-card__icon svg {
-  width: 17px;
-  height: 17px;
-}
-
-.exp-card__title-block {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.exp-card__title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.exp-card__summary {
-  font-size: 11px;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.exp-card__alert-chip {
-  font-size: 10.5px;
-  font-weight: 700;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
 
 .header-severe-chip {
   padding: 2px 8px;
@@ -2109,71 +1832,9 @@ body {
   border: 1px solid var(--red-border);
 }
 
-.exp-card__chevron {
-  width: 16px;
-  height: 16px;
-  color: var(--text-xmuted);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s;
-}
-.exp-card__chevron svg {
-  width: 16px;
-  height: 16px;
-}
-.exp-card__chevron.open {
-  transform: rotate(180deg);
-}
-
 /* Focus button */
-.exp-card__focus-btn {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-xmuted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition:
-    background 0.12s,
-    color 0.12s,
-    border-color 0.12s;
-  padding: 0;
-}
-
-.exp-card__focus-btn:hover {
-  background: var(--hover);
-  color: var(--text-muted);
-}
-
-.exp-card__focus-btn.active {
-  background: var(--blue-glow);
-  border-color: rgba(26, 86, 219, 0.3);
-  color: var(--blue);
-}
-
-.exp-card__focus-btn svg {
-  width: 13px;
-  height: 13px;
-}
 
 /* Card body — with entrance animation */
-.exp-card__body {
-  padding: 16px;
-  overflow-y: auto;
-  animation: cardBodyReveal 0.16s ease-out;
-}
-
-.exp-card--focused .exp-card__body {
-  max-height: calc(100svh - var(--header-h) - 300px);
-  overflow-y: auto;
-}
 
 @keyframes cardBodyReveal {
   from {
@@ -2734,15 +2395,6 @@ body {
   .clinical-workspace {
     grid-template-columns: repeat(4, 1fr);
   }
-  .exp-card--primary {
-    grid-column: span 4;
-  }
-  .exp-card--secondary {
-    grid-column: span 2;
-  }
-  .workspace--focused .exp-card--dimmed {
-    grid-column: span 2;
-  }
 }
 
 /* ── Tablet switch: hide table, show card list ── */
@@ -2775,16 +2427,6 @@ body {
   .clinical-workspace {
     grid-template-columns: 1fr;
   }
-  .exp-card--primary,
-  .exp-card--secondary {
-    grid-column: span 1;
-  }
-  .exp-card--focused {
-    grid-column: 1 / -1 !important;
-  }
-  .workspace--focused .exp-card--dimmed {
-    grid-column: span 1;
-  }
 
   .pt-header-card {
     flex-wrap: wrap;
@@ -2793,10 +2435,6 @@ body {
     width: 100%;
     flex-direction: row;
     justify-content: flex-start;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 
   .header-search-dropdown {
@@ -3221,206 +2859,12 @@ body {
    COMMON COMPONENTS
 ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Buttons */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: var(--touch-target);
-  padding: 0 18px;
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 13.5px;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(47, 107, 237, 0.28);
-  transition:
-    background 0.12s,
-    box-shadow 0.15s;
-  white-space: nowrap;
-}
-.btn-primary:hover {
-  background: var(--c-primary-hover);
-  box-shadow: 0 8px 20px rgba(47, 107, 237, 0.34);
-}
-.btn-primary svg {
-  width: 15px;
-  height: 15px;
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: var(--touch-target);
-  padding: 0 16px;
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 13.5px;
-  font-family: var(--font-ui);
-  font-weight: 500;
-  cursor: pointer;
-  transition:
-    background 0.12s,
-    border-color 0.12s;
-  white-space: nowrap;
-}
-.btn-secondary:hover {
-  background: var(--hover);
-  border-color: var(--text-xmuted);
-}
-.btn-secondary svg {
-  width: 15px;
-  height: 15px;
-}
-
-/* Destructive confirm button — same shape as .btn-primary, red (reuses --red token). */
-.btn-danger {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: var(--touch-target);
-  padding: 0 18px;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 13.5px;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(217, 58, 74, 0.28);
-  transition:
-    background 0.12s,
-    box-shadow 0.15s;
-  white-space: nowrap;
-}
-.btn-danger:hover {
-  background: #c42f3d;
-  box-shadow: 0 8px 20px rgba(217, 58, 74, 0.34);
-}
-.btn-danger svg {
-  width: 15px;
-  height: 15px;
-}
-.btn-danger:disabled,
-.btn-primary:disabled,
-.btn-secondary:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Create/Save action — green (reuses --emerald; same shape as .btn-primary). */
-.btn-success {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: var(--touch-target);
-  padding: 0 18px;
-  background: var(--emerald);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 13.5px;
-  font-family: var(--font-ui);
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(22, 163, 123, 0.26);
-  transition:
-    background 0.12s,
-    box-shadow 0.15s;
-  white-space: nowrap;
-}
-.btn-success:hover {
-  background: #0f8c68;
-  box-shadow: 0 8px 20px rgba(22, 163, 123, 0.32);
-}
-.btn-success svg {
-  width: 15px;
-  height: 15px;
-}
-.btn-success:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-.btn-success:focus-visible {
-  outline: 2px solid var(--emerald);
-  outline-offset: 2px;
-}
-
-/* Consistent keyboard focus for all CRUD action buttons. */
-.btn-primary:focus-visible,
-.btn-secondary:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-.btn-danger:focus-visible {
-  outline: 2px solid var(--red);
-  outline-offset: 2px;
-}
-
-/* .btn-sm: nessuna regola. Una sola misura di pulsante, decisa da design-system.css. */
-
-.icon-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--touch-target);
-  height: var(--touch-target);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition:
-    background 0.1s,
-    color 0.1s,
-    border-color 0.1s;
-  flex-shrink: 0;
-  padding: 0;
-}
-
-.icon-btn:hover {
-  background: var(--hover);
-  color: var(--text);
-}
-.icon-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-.icon-btn--sm {
-  width: 40px;
-  height: 40px;
-}
-.icon-btn--sm svg {
-  width: 15px;
-  height: 15px;
-}
-
-/* Affordance dentro una cella di testo (es. il documento AIFA accanto al nome del farmaco).
-   `.icon-btn` di base e' `display: flex`, quindi in mezzo a del testo apre una riga nuova e
-   spinge l'icona sotto il nome: qui serve inline, alla stessa altezza della parola. */
-.icon-btn--inline {
-  display: inline-flex;
-  width: 28px;
-  height: 28px;
+/* Pulsanti: aspetto unico in design-system.css (ds-btn / ds-icon-btn / ds-link / ds-chip).
+   Qui solo il layout del pulsante icona dentro una riga di testo. */
+.ds-icon-btn--inline {
   margin-left: 6px;
   vertical-align: middle;
 }
-.icon-btn--inline svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* Edit action — blue accent (icon buttons). */
 
 /* Filter chips */
 .filter-chips {
@@ -4516,10 +3960,6 @@ textarea.form-input {
    PATIENT DETAIL — NEW CLASSES
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-detail-view {
-  max-width: 1100px;
-}
-
 .detail-header {
   margin-bottom: 18px;
 }
@@ -4580,39 +4020,15 @@ textarea.form-input {
   align-items: start;
 }
 
-.clinical-grid .exp-card--primary {
-  grid-column: span 3;
-}
-.clinical-grid .exp-card--secondary {
-  grid-column: span 2;
-}
-.clinical-grid .exp-card--focused {
-  grid-column: 1 / -1 !important;
-  order: -1;
-}
-.clinical-grid.has-focus .exp-card--dimmed {
-  grid-column: span 2;
-}
-
 @media (max-width: 1024px) {
   .clinical-grid {
     grid-template-columns: repeat(4, 1fr);
-  }
-  .clinical-grid .exp-card--primary {
-    grid-column: span 4;
-  }
-  .clinical-grid .exp-card--secondary {
-    grid-column: span 2;
   }
 }
 
 @media (max-width: 640px) {
   .clinical-grid {
     grid-template-columns: 1fr;
-  }
-  .clinical-grid .exp-card--primary,
-  .clinical-grid .exp-card--secondary {
-    grid-column: span 1;
   }
 }
 
@@ -4874,7 +4290,6 @@ textarea.form-input {
    PATIENT LIST VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 
-
 /* === 003 CLEAN NAV: RESPONSIVE === */
 /* HMI 1: la barra resta 96 px anche fra 1024 e 1180 px, come il prototipo (niente banda a 88). */
 @media (max-width: 1023px) {
@@ -5071,128 +4486,10 @@ textarea.form-input {
   width: 100%;
   box-sizing: border-box;
 }
-.qe-row {
-  display: grid;
-  grid-template-columns: var(--qe-patient-col-w) repeat(9, auto) auto auto;
-  gap: var(--qe-row-gap);
-  /* Le colonne auto non si allargano: intestazione e righe restano allineate. */
-  justify-content: start;
-  align-items: center;
-  min-height: var(--operational-table-row-min-h);
-  padding: var(--qe-row-vpad) var(--operational-table-cell-px);
-  border-bottom: 1px solid var(--qe-divider-color);
-  box-sizing: border-box;
-  transition: background 120ms ease-out;
-}
-.qe-row:last-child {
-  border-bottom: 0;
-}
-.qe-row:not(.qe-row--header):hover {
-  background: color-mix(in srgb, var(--blue) 4%, var(--surface));
-}
-.qe-row__patient {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow: hidden;
-  cursor: pointer;
-}
-.qe-row__patient:focus-visible {
-  border-radius: 9px;
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-.qe-row__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  background: var(--indigo-bg);
-  color: var(--blue);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
-  flex: 0 0 40px;
-}
-.qe-row__name {
-  font-weight: 750;
-  font-size: 14px;
-  color: var(--text-strong, currentColor);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.qe-row__room {
-  font-size: 11.5px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-.qe-row__input {
-  width: var(--qe-input-w-narrow);
-  height: var(--qe-input-h);
-  min-height: var(--qe-input-h);
-  padding: 0 10px;
-  font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-align: left;
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface, #fff);
-  box-sizing: border-box;
-  box-shadow: none;
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s,
-    background 0.15s;
-}
-.qe-row__input::placeholder {
-  color: var(--text-xmuted);
-  font-weight: 400;
-  opacity: 1;
-}
-.qe-row__field {
-  display: block;
-  width: var(--qe-input-w-narrow);
-  min-width: 0;
-}
-.qe-row__field--wide {
-  width: var(--qe-input-w-wide);
-}
-.qe-row__field .qe-row__input {
-  width: 100%;
-}
-.qe-row__mobile-label {
-  display: none;
-}
+
 /* Intestazioni di Note e Salva larghe quanto i pulsanti sottostanti. */
-.qe-row__action-head {
-  min-width: 72px;
-}
-.qe-row__input--wide {
-  width: var(--qe-input-w-wide);
-}
-.qe-row__input:focus-visible {
-  outline: none;
-  border-color: var(--primary, var(--blue));
-  box-shadow: var(--shadow-focus);
-}
+
 /* Evidenza automatica soglie cliniche (rosso = alert clinico, ambra = attenzione) */
-.qe-row__input--critico {
-  background: var(--red-bg);
-  border-color: var(--red);
-  color: var(--red);
-  font-weight: 700;
-}
-.qe-row__input--attenzione {
-  background: var(--amber-bg);
-  border-color: var(--amber);
-  color: var(--amber);
-  font-weight: 700;
-}
 
 /* Contatore avanzamento rilevazioni */
 .qe-progress {
@@ -5227,97 +4524,7 @@ textarea.form-input {
   color: var(--text-muted);
   white-space: nowrap;
 }
-.qe-row__note-btn {
-  min-width: 72px;
-  height: var(--qe-input-h);
-  padding: 0 12px;
-  border-radius: var(--radius-sm);
-  justify-content: center;
-  gap: 6px;
-  color: var(--text-muted);
-  box-shadow: none;
-}
-.qe-row__note-btn-ico {
-  display: inline-flex;
-  align-items: center;
-}
-.qe-row__note-btn-ico svg {
-  width: 15px;
-  height: 15px;
-}
-.qe-row__note-btn--has-note {
-  background: var(--indigo-bg);
-  border-color: var(--primary, var(--blue));
-  color: var(--primary, var(--blue));
-}
-.qe-row__save {
-  height: var(--qe-input-h);
-  min-width: 72px;
-  padding: 0 14px;
-  border-radius: var(--radius-sm);
-  justify-content: center;
-  box-shadow: none;
-}
-.qe-row__save:hover {
-  box-shadow: none;
-}
-.qe-row__save[disabled] {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-.qe-row__note-input {
-  grid-column: 1 / -1;
-  padding: 8px 0 0;
-}
-.qe-row__note-textarea {
-  width: 100%;
-  box-sizing: border-box;
-  resize: vertical;
-  min-height: 72px;
-  height: auto;
-  padding: 10px 12px;
-  font-size: 14px;
-  line-height: 1.5;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface, #fff);
-}
-.qe-row--has-note-open {
-  min-height: auto;
-}
-.qe-row__error {
-  grid-column: 1 / -1;
-  margin: 0;
-  padding: 10px var(--operational-table-cell-px);
-  color: #dc2626;
-  font-size: 12px;
-}
-.qe-row--header {
-  min-height: var(--operational-table-header-h);
-  padding: 0 var(--operational-table-cell-px);
-  background: var(--surface-raised);
-  border-bottom: 1px solid var(--qe-divider-color);
-}
-.qe-row--header:hover {
-  background: var(--surface-raised);
-}
-.qe-row__col-label {
-  font-size: var(--operational-table-header-fs);
-  font-weight: 750;
-  text-transform: uppercase;
-  letter-spacing: 0.35px;
-  color: var(--text-muted);
-  width: var(--qe-input-w-narrow);
-  text-align: left;
-}
-.qe-row__col-label--wide {
-  width: var(--qe-input-w-wide);
-}
-.qe-row__note-btn-label {
-  font-size: 11px;
-  font-weight: 500;
-  margin-left: 4px;
-}
+
 .qe-load-more {
   display: flex;
   justify-content: center;
@@ -5333,21 +4540,12 @@ textarea.form-input {
     --qe-input-w-wide: 84px;
     --qe-row-gap: 8px;
   }
-  .qe-row {
-    grid-template-columns: 150px repeat(9, auto) auto auto;
-  }
-  .qe-row__input {
-    padding: 0 6px;
-  }
 }
 @media (max-width: 1100px) {
   /* Tablet da 1024 px: le nove colonne entrano senza scorrimento. */
   :root {
     --qe-input-w-narrow: 50px;
     --qe-row-gap: 6px;
-  }
-  .qe-row {
-    grid-template-columns: 128px repeat(9, auto) auto auto;
   }
 }
 
@@ -5356,75 +4554,9 @@ textarea.form-input {
     overflow-x: hidden;
   }
 
-  .qe-list,
-  .qe-row {
+  .qe-list {
     min-width: 0;
     max-width: 100%;
-  }
-
-  .qe-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    padding: 14px 12px;
-  }
-
-  .qe-row--header {
-    display: none;
-  }
-
-  .qe-row__patient {
-    grid-column: 1 / -1;
-    width: 100%;
-    min-width: 0;
-    padding-bottom: 2px;
-  }
-
-  .qe-row__patient > div:last-child {
-    min-width: 0;
-  }
-
-  .qe-row__name,
-  .qe-row__room {
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-
-  .qe-row__name {
-    overflow: visible;
-    text-overflow: clip;
-  }
-
-  .qe-row__field,
-  .qe-row__field--wide {
-    width: 100%;
-  }
-
-  .qe-row__mobile-label {
-    display: block;
-    margin: 0 0 5px 2px;
-    color: var(--text-muted);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-  }
-
-  .qe-row .qe-row__input {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    text-align: left;
-  }
-
-  .qe-row__note-btn,
-  .qe-row__save {
-    width: 100%;
-    min-width: 0;
-    min-height: 44px;
-  }
-
-  .qe-row__note-btn {
-    height: 44px;
   }
 
   .qe-progress,
@@ -6045,7 +5177,7 @@ textarea.form-input {
   flex-wrap: wrap;
   margin-top: 4px;
 }
-.voice-preview .btn-primary:disabled {
+.voice-preview .ds-btn--primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;

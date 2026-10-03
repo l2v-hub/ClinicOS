@@ -54,7 +54,7 @@ export function ImportPhotoPreview({ name, document, onClose, onRetake }: Props)
         </div>
         <button
           type="button"
-          className="icon-btn"
+          className="ds-icon-btn"
           aria-label="Chiudi anteprima"
           onClick={onClose}
           data-dialog-initial-focus
@@ -108,7 +108,7 @@ export function ImportPhotoPreview({ name, document, onClose, onRetake }: Props)
         {!isPdf && (
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             disabled={!available}
             aria-pressed={zoomed}
             onClick={() => setZoomed((value) => !value)}
@@ -117,14 +117,14 @@ export function ImportPhotoPreview({ name, document, onClose, onRetake }: Props)
           </button>
         )}
         {isPdf && document?.url && (
-          <a className="btn-secondary" href={document.url} download={name}>
+          <a className="ds-btn ds-btn--secondary" href={document.url} download={name}>
             Scarica PDF
           </a>
         )}
-        <button type="button" className="btn-secondary" onClick={onRetake}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={onRetake}>
           {isPdf ? 'Ripeti scansione' : 'Rifai foto'}
         </button>
-        <button type="button" className="btn-primary" onClick={onClose}>
+        <button type="button" className="ds-btn ds-btn--primary" onClick={onClose}>
           Chiudi anteprima
         </button>
       </footer>

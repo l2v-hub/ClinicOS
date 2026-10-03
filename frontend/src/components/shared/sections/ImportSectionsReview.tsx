@@ -377,10 +377,10 @@ export function ImportSectionsReview({
       {error && <p className="import-modal__error">{error}</p>}
 
       <footer className="srev-foot">
-        <button className="btn-ghost" disabled={busy} onClick={onBack}>
+        <button className="ds-btn ds-btn--secondary" disabled={busy} onClick={onBack}>
           Indietro
         </button>
-        <button className="btn-success" disabled={busy} onClick={handleSubmit}>
+        <button className="ds-btn ds-btn--primary" disabled={busy} onClick={handleSubmit}>
           Crea paziente
         </button>
       </footer>

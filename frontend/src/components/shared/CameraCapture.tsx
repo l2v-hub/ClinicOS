@@ -312,7 +312,7 @@ export function CameraCapture({
           <h3 id={titleId}>{scanning ? 'Scansiona documento' : 'Scatta foto'}</h3>
           <button
             type="button"
-            className="icon-btn"
+            className="ds-icon-btn"
             onClick={close}
             disabled={confirming}
             aria-label="Chiudi"
@@ -332,7 +332,7 @@ export function CameraCapture({
         {phase !== 'preview' && (
           <button
             type="button"
-            className="btn-secondary btn-sm"
+            className="ds-btn ds-btn--secondary"
             onClick={() => nativeInputRef.current?.click()}
           >
             Usa fotocamera del dispositivo
@@ -384,7 +384,7 @@ export function CameraCapture({
             {scanning && (
               <button
                 type="button"
-                className="btn-secondary camera-capture__reset"
+                className="ds-btn ds-btn--secondary camera-capture__reset"
                 disabled={!ready || capturing || captureDisabled}
                 onClick={() => setCrop(initialScanCrop(frameSize.width, frameSize.height))}
               >
@@ -393,14 +393,14 @@ export function CameraCapture({
             )}
             <div className="camera-capture__actions">
               <button
-                className="btn-primary"
+                className="ds-btn ds-btn--primary"
                 onClick={capture}
                 data-testid="camera-shoot"
                 disabled={!ready || capturing || captureDisabled}
               >
                 {capturing ? 'Acquisizione…' : scanning ? 'Acquisisci pagina' : 'Scatta'}
               </button>
-              <button type="button" className="btn-secondary" onClick={close}>
+              <button type="button" className="ds-btn ds-btn--secondary" onClick={close}>
                 Annulla
               </button>
             </div>
@@ -429,7 +429,7 @@ export function CameraCapture({
             )}
             <div className="camera-capture__actions">
               <button
-                className="btn-primary"
+                className="ds-btn ds-btn--primary"
                 onClick={() => void confirmPhoto()}
                 data-testid="camera-use"
                 disabled={confirming}
@@ -443,7 +443,7 @@ export function CameraCapture({
                       : 'Usa foto'}
               </button>
               <button
-                className="btn-secondary"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => {
                   onDiscardCapture?.();
                   setRestart((n) => n + 1);
@@ -453,7 +453,12 @@ export function CameraCapture({
               >
                 Ripeti
               </button>
-              <button type="button" className="btn-secondary" onClick={close} disabled={confirming}>
+              <button
+                type="button"
+                className="ds-btn ds-btn--secondary"
+                onClick={close}
+                disabled={confirming}
+              >
                 Annulla
               </button>
             </div>

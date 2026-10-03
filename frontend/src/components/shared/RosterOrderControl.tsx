@@ -52,7 +52,7 @@ export function RosterOrderControl({ onSelect }: { onSelect?: () => void }) {
         </label>
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={!roster.ready || roster.saving}
           onClick={() => {
             onSelect?.();

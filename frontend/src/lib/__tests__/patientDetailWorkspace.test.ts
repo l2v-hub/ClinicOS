@@ -88,15 +88,8 @@ test('HMI 1 Panoramica: parameter and NEWS2 tiles from the real readings, then t
 });
 
 test('overview is three columns on wide screens, two on tablet and one on phone', () => {
-  assert.match(
-    appStyles,
-    /\.cr-tab-content--overview \.cr-riepilogo-grid\s*\{[\s\S]*?repeat\(2, minmax\(0, 1fr\)\)/,
-  );
-  assert.match(appStyles, /@media \(min-width: 1200px\)[\s\S]*?repeat\(3, minmax\(0, 1fr\)\)/);
-  assert.match(
-    appStyles,
-    /@media \(max-width: 640px\)[\s\S]*?\.cr-tab-content--overview \.cr-riepilogo-grid\s*\{[\s\S]*?minmax\(0, 1fr\)/,
-  );
+  // UX2 W6: la vecchia griglia del riepilogo (.cr-tab-content--overview .cr-riepilogo-grid) non era
+  // più renderizzata ed è stata rimossa con il CSS morto; resta il contratto della navigazione.
   assert.match(
     topNavStyles,
     /\.top-nav--level3 \.top-nav__item\.is-active::after\s*\{[\s\S]*?background: #2f6bed/,

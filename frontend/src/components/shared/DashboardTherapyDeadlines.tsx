@@ -149,7 +149,7 @@ export function DashboardTherapyDeadlines({ summary, onOpenTherapy, onSelectPazi
           </p>
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             onClick={summary.aggiorna}
             disabled={summary.aggiornamentoInCorso}
           >

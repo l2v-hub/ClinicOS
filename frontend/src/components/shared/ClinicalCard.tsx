@@ -76,11 +76,7 @@ export function ClinicalCard({
         </h3>
         <div className="clinical-card__actions">
           {onEdit && (
-            <button
-              type="button"
-              className="clinical-card__edit btn-link"
-              onClick={handleEditClick}
-            >
+            <button type="button" className="clinical-card__edit ds-link" onClick={handleEditClick}>
               {editLabel}
             </button>
           )}

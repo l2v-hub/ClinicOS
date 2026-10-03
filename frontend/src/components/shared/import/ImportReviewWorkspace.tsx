@@ -209,7 +209,7 @@ export function ImportReviewWorkspace({
           </select>
         </label>
         <button
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           aria-pressed={showOcr}
           onClick={() => setShowOcr((value) => !value)}
         >
@@ -245,7 +245,7 @@ export function ImportReviewWorkspace({
               recupero.
             </p>
             <button
-              className="btn-primary"
+              className="ds-btn ds-btn--primary"
               disabled={busy || !canProceed}
               onClick={() => void run(() => openDraft())}
             >
@@ -261,7 +261,7 @@ export function ImportReviewWorkspace({
                 : 'Le pagine sono cambiate. La bozza conserva anagrafica e terapie corrette; le fonti cambiate richiedono una nuova verifica.'}
             </p>
             <button
-              className="btn-primary"
+              className="ds-btn ds-btn--primary"
               disabled={busy || !canProceed}
               onClick={() =>
                 void run(async () => {

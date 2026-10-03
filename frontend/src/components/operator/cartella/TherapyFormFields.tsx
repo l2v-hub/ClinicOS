@@ -359,7 +359,7 @@ export function TherapyFormFields({
               <button
                 type="button"
                 aria-pressed={value.giorniSettimana.length === 0}
-                className={`btn-sm ${value.giorniSettimana.length === 0 ? 'btn-primary' : 'btn-secondary'}`}
+                className={` ${value.giorniSettimana.length === 0 ? 'ds-btn ds-btn--primary' : 'ds-btn ds-btn--secondary'}`}
                 onClick={() => update({ giorniSettimana: [] })}
               >
                 Tutti i giorni
@@ -372,7 +372,7 @@ export function TherapyFormFields({
                     key={w.n}
                     aria-pressed={on}
                     data-testid={`weekday-${w.n}`}
-                    className={`btn-sm ${on ? 'btn-primary' : 'btn-secondary'}`}
+                    className={` ${on ? 'ds-btn ds-btn--primary' : 'ds-btn ds-btn--secondary'}`}
                     onClick={() =>
                       update({
                         giorniSettimana: on

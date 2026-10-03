@@ -269,7 +269,7 @@ function AssessmentSession({
         title={definition.title}
         actions={
           canCreate && (
-            <button type="button" className="btn-primary" onClick={() => create()}>
+            <button type="button" className="ds-btn ds-btn--primary" onClick={() => create()}>
               {type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'}
             </button>
           )
@@ -281,7 +281,7 @@ function AssessmentSession({
             <div className="assessment-actions">
               <button
                 type="button"
-                className="btn-secondary"
+                className="ds-btn ds-btn--secondary"
                 disabled={reading}
                 onClick={() => void open()}
               >
@@ -303,7 +303,7 @@ function AssessmentSession({
                 <button
                   key={item.key}
                   type="button"
-                  className="btn-secondary"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => select(item.key)}
                 >
                   {item.predecessorId ? 'Riprendi rettifica' : 'Riprendi compilazione'}
@@ -349,7 +349,7 @@ function AssessmentSession({
                   <div className="assessment-actions">
                     <button
                       type="button"
-                      className="btn-secondary"
+                      className="ds-btn ds-btn--secondary"
                       disabled={draft.busy || !!draft.pending}
                       onClick={() => store.edit(draft.key)}
                     >
@@ -357,7 +357,7 @@ function AssessmentSession({
                     </button>
                     <button
                       type="button"
-                      className="btn-primary"
+                      className="ds-btn ds-btn--primary"
                       disabled={draft.busy || !!draft.pending}
                       onClick={() => void save(false, true)}
                     >
@@ -405,7 +405,7 @@ function AssessmentSession({
                     {draft.pending && draft.failure.uncertain && (
                       <button
                         type="button"
-                        className="btn-secondary"
+                        className="ds-btn ds-btn--secondary"
                         disabled={draft.busy}
                         onClick={() => void save(false, draft.pending?.kind === 'finalize')}
                       >
@@ -415,7 +415,7 @@ function AssessmentSession({
                     {draft.record && (
                       <button
                         type="button"
-                        className="btn-secondary"
+                        className="ds-btn ds-btn--secondary"
                         disabled={reading || draft.busy}
                         onClick={() => void reconcile()}
                       >
@@ -436,7 +436,7 @@ function AssessmentSession({
                   <div className="assessment-actions">
                     <button
                       type="button"
-                      className="btn-secondary"
+                      className="ds-btn ds-btn--secondary"
                       onClick={() => setConfirm('accept')}
                     >
                       Riprendi versione salvata
@@ -444,7 +444,7 @@ function AssessmentSession({
                     {draft.remote.status === 'draft' && (
                       <button
                         type="button"
-                        className="btn-secondary"
+                        className="ds-btn ds-btn--secondary"
                         onClick={() => setConfirm('rebase')}
                       >
                         Mantieni le mie risposte

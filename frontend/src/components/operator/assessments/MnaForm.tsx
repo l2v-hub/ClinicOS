@@ -178,7 +178,11 @@ export function MnaForm({
             {answers.extent === 'screening' && (
               <button
                 type="button"
-                className={result.screening.score <= 11 ? 'btn-primary' : 'btn-secondary'}
+                className={
+                  result.screening.score <= 11
+                    ? 'ds-btn ds-btn--primary'
+                    : 'ds-btn ds-btn--secondary'
+                }
                 onClick={() => update({ ...answers, extent: 'full' })}
               >
                 Prosegui con la valutazione completa
@@ -217,12 +221,16 @@ export function MnaForm({
         trattamenti.
       </p>
       <div className="assessment-actions">
-        <button type="submit" className="btn-secondary" disabled={locked || !draft.dirty}>
+        <button
+          type="submit"
+          className="ds-btn ds-btn--secondary"
+          disabled={locked || !draft.dirty}
+        >
           {draft.busy ? 'Salvataggio…' : 'Salva bozza'}
         </button>
         <button
           type="button"
-          className="btn-primary"
+          className="ds-btn ds-btn--primary"
           disabled={locked || !completion.complete || inputErrors || !!notesError}
           onClick={onPreview}
         >

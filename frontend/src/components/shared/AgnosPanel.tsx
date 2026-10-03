@@ -309,7 +309,7 @@ export function AgnosPanel({
     <>
       {open && minimized && <div className="agnos-workflow-dock" role="status">
         <span>{statusText || 'Assistente in attesa'}</span>
-        <button className="btn-primary" onClick={() => setMinimized(false)}>Torna all’assistente</button>
+        <button className="ds-btn ds-btn--primary" onClick={() => setMinimized(false)}>Torna all’assistente</button>
       </div>}
       {/* AC6: il pannello resta montato anche da chiuso, così la conversazione sopravvive alla
           navigazione. `inert` è ciò che lo toglie dal tab order e dagli screen reader ora che
@@ -401,7 +401,7 @@ export function AgnosPanel({
               </span>
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => setVisibleTurnCount(revealPreviousAgnosTurns)}
               >
                 Mostra i precedenti

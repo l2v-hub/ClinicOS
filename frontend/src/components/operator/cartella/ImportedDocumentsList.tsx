@@ -103,7 +103,7 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
       {status === 'error' && (
         <div className="cr-empty" role="alert">
           <p>Impossibile caricare i documenti importati.</p>
-          <button type="button" className="btn-secondary btn-sm" onClick={reload}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={reload}>
             Riprova
           </button>
         </div>
@@ -138,7 +138,7 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
       {loadMoreError && (
         <div className="cr-empty" role="alert">
           <p>{loadMoreError} L’elenco mostrato è parziale.</p>
-          <button type="button" className="btn-secondary btn-sm" onClick={loadMore}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={loadMore}>
             Riprova caricamento
           </button>
         </div>
@@ -146,7 +146,7 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
       {pageInfo.hasMore && !loadMoreError && (
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           onClick={loadMore}
           disabled={loadingMore}
         >

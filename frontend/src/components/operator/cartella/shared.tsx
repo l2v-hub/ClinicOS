@@ -31,7 +31,7 @@ export function fmtDateTime(iso: string): string {
 export function PrintButton({ label = 'Stampa' }: { label?: string }) {
   return (
     <button
-      className="btn-secondary btn-sm no-print"
+      className="ds-btn ds-btn--secondary no-print"
       onClick={() => window.print()}
       style={{ display: 'flex', alignItems: 'center', gap: 6 }}
     >
@@ -71,7 +71,7 @@ export function SectionHeader({
       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
         {extra}
         {onAdd && (
-          <button className="btn-primary btn-sm" onClick={onAdd}>
+          <button className="ds-btn ds-btn--primary" onClick={onAdd}>
             <svg
               width="14"
               height="14"
@@ -105,10 +105,10 @@ export function InlineForm({
     <div className="cr-inline-form">
       {children}
       <div className="cr-inline-form__actions">
-        <button className="btn-secondary btn-sm" onClick={onCancel}>
+        <button className="ds-btn ds-btn--secondary" onClick={onCancel}>
           Annulla
         </button>
-        <button className="btn-primary btn-sm" onClick={onSave}>
+        <button className="ds-btn ds-btn--primary" onClick={onSave}>
           <svg
             width="14"
             height="14"

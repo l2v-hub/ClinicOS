@@ -336,7 +336,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
               {error}{' '}
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() =>
                   failedMore.current ? void loadMore() : setRevision((value) => value + 1)
                 }
@@ -363,7 +363,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           {nextCursor && (
             <button
               type="button"
-              className="btn-secondary par-more"
+              className="ds-btn ds-btn--secondary par-more"
               disabled={loading || loadingMore || summaryLoading}
               onClick={() => void loadMore()}
             >

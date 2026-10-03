@@ -7,7 +7,12 @@ export function DialogLoading({ onClose }: { onClose: () => void }) {
     <AccessibleDialogSurface labelledBy={titleId} onClose={onClose}>
       <h2 id={titleId}>Apertura modulo…</h2>
       <p role="status">Caricamento in corso.</p>
-      <button type="button" className="btn-secondary" data-dialog-initial-focus onClick={onClose}>
+      <button
+        type="button"
+        className="ds-btn ds-btn--secondary"
+        data-dialog-initial-focus
+        onClick={onClose}
+      >
         Annulla
       </button>
     </AccessibleDialogSurface>

@@ -157,7 +157,7 @@ export function PatientTherapySlotDetail({
         <h4 id={headingId}>
           Ore {time} · {events.length} {events.length === 1 ? 'terapia' : 'terapie'}
         </h4>
-        <button type="button" className="btn-secondary btn-sm" onClick={onClose}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={onClose}>
           Chiudi
         </button>
       </header>
@@ -168,7 +168,7 @@ export function PatientTherapySlotDetail({
           Impossibile caricare lo stato della somministrazione.{' '}
           <button
             type="button"
-            className="btn-secondary btn-sm"
+            className="ds-btn ds-btn--secondary"
             onClick={() => setRevision((v) => v + 1)}
           >
             Riprova

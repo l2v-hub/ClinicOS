@@ -89,25 +89,6 @@
   }
 
   /* State variables also apply on hover/focus; clinical accents never turn blue. */
-  :root
-    :is(
-      .qe-row__input--critico,
-      .npm-input--error,
-      [aria-invalid='true'],
-      .irf-vit--critico input
-    ) {
-    --control-border: var(--field-error);
-    --control-focus: var(--field-error);
-    --control-bg: #fff3f2;
-    --control-text: #912018;
-  }
-
-  :root :is(.qe-row__input--attenzione, .npm-textarea--alert) {
-    --control-border: var(--field-warning);
-    --control-focus: var(--field-warning);
-    --control-bg: #fff8e8;
-    --control-text: #785000;
-  }
 
   :root :is(input, textarea, select):user-invalid {
     --control-border: var(--field-error);

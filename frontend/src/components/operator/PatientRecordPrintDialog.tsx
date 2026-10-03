@@ -115,7 +115,12 @@ export default function PatientRecordPrintDialog({ paziente, cartella, consegne,
               {fullName} · seleziona l’intera scheda oppure solo le informazioni necessarie.
             </p>
           </div>
-          <button type="button" className="icon-btn" onClick={onClose} aria-label="Chiudi stampa">
+          <button
+            type="button"
+            className="ds-icon-btn"
+            onClick={onClose}
+            aria-label="Chiudi stampa"
+          >
             ×
           </button>
         </div>
@@ -168,12 +173,12 @@ export default function PatientRecordPrintDialog({ paziente, cartella, consegne,
                 : `${selected.size} ${selected.size === 1 ? 'sezione selezionata' : 'sezioni selezionate'}`}
           </span>
           <div>
-            <button type="button" className="btn-secondary" onClick={onClose}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={onClose}>
               Annulla
             </button>
             <button
               type="button"
-              className="btn-primary"
+              className="ds-btn ds-btn--primary"
               onClick={handlePrint}
               disabled={selected.size === 0 || printBlocked}
             >

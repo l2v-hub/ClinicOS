@@ -41,13 +41,18 @@ export function AssessmentFinal({
         <div className="assessment-actions">
           {record.pdf?.status === 'ready' && (
             <>
-              <button type="button" className="btn-primary" disabled={busy} onClick={onPdf}>
+              <button
+                type="button"
+                className="ds-btn ds-btn--primary"
+                disabled={busy}
+                onClick={onPdf}
+              >
                 Apri PDF
               </button>
               {onOpenArchive && (
                 <button
                   type="button"
-                  className="btn-secondary"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() =>
                     onOpenArchive(record.pdf!.documentId!, { id: record.id, type: record.type })
                   }
@@ -60,7 +65,7 @@ export function AssessmentFinal({
           {record.pdf?.status !== 'ready' && (
             <button
               type="button"
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               disabled={busy}
               onClick={() => onRefreshPdf(false)}
             >
@@ -70,7 +75,7 @@ export function AssessmentFinal({
           {record.pdf?.retryAvailable && (
             <button
               type="button"
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               disabled={busy}
               onClick={() => onRefreshPdf(true)}
             >
@@ -83,14 +88,14 @@ export function AssessmentFinal({
         {record.correctedById ? (
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             onClick={() => onOpenRecord(record.correctedById!)}
           >
             Apri rettifica finale
           </button>
         ) : (
           canCreate && (
-            <button type="button" className="btn-secondary" onClick={onCorrect}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={onCorrect}>
               Crea rettifica
             </button>
           )

@@ -43,8 +43,8 @@ test('accepted minimal demographics can create patient and missing fields remain
   assert.match(markup, /Anagrafica da completare/);
   for (const field of ['Data di nascita', 'Codice fiscale', 'Telefono'])
     assert.ok(markup.includes(`>${field}</button>`));
-  assert.match(markup, /class="btn-success"[^>]*>/);
-  assert.doesNotMatch(markup, /class="btn-success"[^>]*disabled/);
+  assert.match(markup, /class="ds-btn ds-btn--primary"[^>]*>/);
+  assert.doesNotMatch(markup, /class="ds-btn ds-btn--primary"[^>]*disabled/);
 });
 
 test('unverified imported therapy still blocks confirmation until explicitly excluded', () => {
@@ -53,7 +53,7 @@ test('unverified imported therapy still blocks confirmation until explicitly exc
   assert.ok(rows[0].issues.length > 0);
   assert.match(
     reviewMarkup({ ...base, terapiaImport: [imported] }),
-    /class="btn-success"[^>]*disabled/,
+    /class="ds-btn ds-btn--primary"[^>]*disabled/,
   );
   const deferred = { ...imported, excludedFromConfirm: true };
   const selected = buildIntakeTherapyReview({ terapiaImport: [deferred] }).filter(
@@ -64,7 +64,7 @@ test('unverified imported therapy still blocks confirmation until explicitly exc
   const markup = reviewMarkup({ ...base, terapiaImport: [deferred] });
   assert.match(markup, /Terapie che restano in bozza/);
   assert.match(markup, /non saranno somministrabili/);
-  assert.doesNotMatch(markup, /class="btn-success"[^>]*disabled/);
+  assert.doesNotMatch(markup, /class="ds-btn ds-btn--primary"[^>]*disabled/);
 });
 
 test('source mapping preserves original indexes after an excluded row', () => {

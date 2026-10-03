@@ -33,7 +33,7 @@ export function NrsLegacyContent({ value, patient, title = 'Dati NRS precedenti'
       const severity = record ? nrsSeverity(record.punteggio) : null;
       return <details key={index}>
         <summary>{record ? `${nrsLegacyText(record.data)} · ${nrsLegacyText(record.operatore)} · ${severity ? `${String(record.punteggio)}/10 · ${severity.label}` : 'Punteggio assente o non valido'}` : `Dato originale ${index + 1} · formato non interpretabile come scheda NRS`}</summary>
-        {onPrint && <button type="button" className="btn-secondary btn-sm no-print" onClick={() => onPrint(row)}>Stampa dato precedente</button>}
+        {onPrint && <button type="button" className="ds-btn ds-btn--secondary no-print" onClick={() => onPrint(row)}>Stampa dato precedente</button>}
         <NrsLegacyRecord value={row} patient={patient} />
       </details>;
     })}

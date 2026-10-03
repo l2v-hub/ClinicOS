@@ -95,7 +95,7 @@ export function HistoryView({
               {version.status === 'draft' && (
                 <button
                   type="button"
-                  className="btn-primary"
+                  className="ds-btn ds-btn--primary"
                   disabled={busy || stale}
                   title={
                     stale
@@ -184,7 +184,7 @@ export function HistoryView({
                 {summary && summary.grants.length > limit && (
                   <button
                     type="button"
-                    className="btn-secondary"
+                    className="ds-btn ds-btn--secondary"
                     onClick={() => setLimit((value) => value + PAGE)}
                   >
                     Mostra altre {Math.min(PAGE, summary.grants.length - limit)} modifiche

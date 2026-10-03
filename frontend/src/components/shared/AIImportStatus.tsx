@@ -30,7 +30,7 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
     <>
       <button
         type="button"
-        className={`btn-secondary ai-import-btn${available ? '' : ' ai-import-btn--disabled'}`}
+        className={`ds-btn ds-btn--secondary ai-import-btn${available ? '' : ' ai-import-btn--disabled'}`}
         disabled={!available}
         aria-busy={loading}
         title={title}

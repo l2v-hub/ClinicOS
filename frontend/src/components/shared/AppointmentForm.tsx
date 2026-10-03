@@ -161,7 +161,7 @@ export function AppointmentForm({
           </h3>
           <button
             type="button"
-            className="icon-btn"
+            className="ds-icon-btn"
             onClick={onCancel}
             aria-label="Chiudi"
             data-dialog-initial-focus
@@ -356,11 +356,11 @@ export function AppointmentForm({
               {saveError}
             </p>
           )}
-          <button className="btn-secondary" onClick={onCancel} disabled={saving}>
+          <button className="ds-btn ds-btn--secondary" onClick={onCancel} disabled={saving}>
             Annulla
           </button>
           <button
-            className="btn-success"
+            className="ds-btn ds-btn--primary"
             onClick={() => {
               void salva();
             }}

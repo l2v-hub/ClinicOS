@@ -103,7 +103,7 @@ export function ConsegnaCreateForm({
         </div>
         <button
           type="button"
-          className="icon-btn"
+          className="ds-icon-btn"
           aria-label="Chiudi nuova consegna"
           onClick={onClose}
           disabled={saving}
@@ -283,7 +283,12 @@ export function ConsegnaCreateForm({
             <span aria-hidden="true">*</span> Campi obbligatori
           </p>
         )}
-        <button type="button" className="btn-secondary" onClick={onClose} disabled={saving}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          onClick={onClose}
+          disabled={saving}
+        >
           Chiudi · conserva bozza
         </button>
         {patient && draft.dirty && (
@@ -296,7 +301,7 @@ export function ConsegnaCreateForm({
             Scarta bozza
           </button>
         )}
-        <button type="submit" className="btn-success" disabled={!canSubmit}>
+        <button type="submit" className="ds-btn ds-btn--primary" disabled={!canSubmit}>
           <IcoCheck />{' '}
           {saving ? 'Creazione…' : draft.pending ? 'Riprova salvataggio' : 'Crea consegna'}
         </button>

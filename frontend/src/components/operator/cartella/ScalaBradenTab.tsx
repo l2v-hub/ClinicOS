@@ -458,14 +458,14 @@ function BradenHistoryTable({
       render: (_v, row) => (
         <div style={{ display: 'flex', gap: 4 }}>
           <button
-            className="icon-btn icon-btn--sm"
+            className="ds-icon-btn"
             onClick={() => onOpenModulo(row.id)}
             title="Vista modulo"
           >
             📋
           </button>
           <button
-            className="icon-btn icon-btn--sm icon-btn--danger"
+            className="ds-icon-btn ds-icon-btn--danger"
             onClick={() => onDelete(row.id)}
             title="Elimina"
           >
@@ -569,7 +569,7 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
       {/* ── Modulo view (paper form) ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-          <button className="btn-secondary btn-sm" onClick={() => setModulo(false)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(false)}>
             ← Vista operativa
           </button>
           <PrintButton label="Stampa modulo" />
@@ -586,14 +586,14 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
           actions={
             <>
               <button
-                className="btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => openModulo(null)}
                 title="Vista modulo cartaceo"
               >
                 Vista modulo
               </button>
               <button
-                className="btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => {
                   setForm({ ...EMPTY_FORM });
                   setShowAdd(true);
@@ -665,11 +665,11 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
               )}
 
               <div className="cr-inline-form__actions">
-                <button className="btn-secondary btn-sm" onClick={() => setShowAdd(false)}>
+                <button className="ds-btn ds-btn--secondary" onClick={() => setShowAdd(false)}>
                   Annulla
                 </button>
                 <button
-                  className="btn-primary btn-sm"
+                  className="ds-btn ds-btn--primary"
                   onClick={handleSave}
                   disabled={
                     !form.percezioneSensoriale ||

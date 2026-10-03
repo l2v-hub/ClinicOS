@@ -3374,7 +3374,7 @@ export default function App() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     maxLength={80}
                   />
-                  <button className="icon-btn" onClick={() => setSearchOpen(false)}>
+                  <button className="ds-icon-btn" onClick={() => setSearchOpen(false)}>
                     <IcoX />
                   </button>
                 </div>
@@ -3448,7 +3448,7 @@ export default function App() {
                       <p>{operatorDirectoryLoadError}</p>
                       <button
                         type="button"
-                        className="btn-secondary"
+                        className="ds-btn ds-btn--secondary"
                         onClick={() => void loadOperatorDirectory(true)}
                       >
                         Riprova
@@ -3466,7 +3466,7 @@ export default function App() {
                             </p>
                             <button
                               type="button"
-                              className="btn-secondary"
+                              className="ds-btn ds-btn--secondary"
                               onClick={() =>
                                 void loadOperatorDirectory(
                                   !operatorDirectoryRetryCursor,
@@ -3486,7 +3486,7 @@ export default function App() {
                             <span>{operatori.length} operatori caricati</span>
                             <button
                               type="button"
-                              className="btn-ghost-outline"
+                              className="ds-btn ds-btn--secondary"
                               disabled={operatorDirectoryLoadState === 'loading'}
                               onClick={() =>
                                 void loadOperatorDirectory(

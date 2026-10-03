@@ -9,10 +9,12 @@
    (margini, flex, ordine), mai altezza, raggio, bordo, colori o tipografia di un controllo.
    Una sola misura per tipo di controllo: niente varianti "small".
 
-   Classi legacy allineate (stesso aspetto ovunque, anche nelle pagine non ancora ridisegnate):
-   chip → .filter-chip .agt-filter-chip .agt-view-btn
-   primario → .btn-primary .btn-success   secondario → .btn-secondary .btn-ghost .btn-ghost-outline
-   icona → .icon-btn
+   Pulsanti: SOLO .ds-btn (--primary/--secondary/--danger), .ds-icon-btn, .ds-link, .link-btn (link
+   dentro una frase). Le vecchie classi (.btn-primary/.btn-success/.btn-secondary/.btn-ghost*/
+.btn-sm/
+   .btn-danger/.btn-link/.icon-btn) sono state migrate in UX2 W6 e non esistono più (test di guardia).
+   Chip legacy ancora allineate alla .ds-chip: .filter-chip .agt-filter-chip .agt-view-btn .srev-chip
+   .schedule-op-btn .dashboard-notification-chip.
    Le schede di navigazione (L2/L3) restano il componente unico TopNav.
    ───────────────────────────────────────────────────────────────────────────────────────────── */
 
@@ -175,16 +177,7 @@
 }
 
 /* ── Pulsanti ─────────────────────────────────────────────────────────────────────────────── */
-:is(
-  .ds-btn,
-  .btn-primary,
-  .btn-success,
-  .btn-secondary,
-  .btn-ghost,
-  .btn-ghost-outline,
-  .btn-sm,
-  .btn-danger
-):not(#ds) {
+:is(.ds-btn):not(#ds) {
   box-sizing: border-box;
   height: var(--ds-control-h);
   min-height: var(--ds-control-h);
@@ -200,52 +193,30 @@
   box-shadow: none;
   text-decoration: none;
 }
-:is(.ds-btn--primary, .btn-primary, .btn-success):not(#ds) {
+:is(.ds-btn--primary):not(#ds) {
   background: var(--ds-blue);
   border: var(--ds-border-w) solid var(--ds-blue);
   color: #fff;
 }
-:is(.ds-btn--primary, .btn-primary, .btn-success):not(#ds):hover:not(:disabled) {
+:is(.ds-btn--primary):not(#ds):hover:not(:disabled) {
   background: var(--ds-blue-active);
   border-color: var(--ds-blue-active);
 }
-:is(
-  .ds-btn--secondary,
-  .btn-secondary,
-  .btn-ghost,
-  .btn-ghost-outline,
-  .btn-sm:not(.btn-primary, .btn-success, .btn-danger, .btn-secondary, .btn-ghost)
-):not(#ds) {
+:is(.ds-btn--secondary):not(#ds) {
   background: var(--ds-surface);
   border: var(--ds-border-w) solid var(--ds-border-strong);
   color: var(--ds-blue-active);
 }
-:is(
-    .ds-btn--secondary,
-    .btn-secondary,
-    .btn-ghost,
-    .btn-ghost-outline,
-    .btn-sm:not(.btn-primary, .btn-success, .btn-danger, .btn-secondary, .btn-ghost)
-  ):not(#ds):hover:not(:disabled) {
+:is(.ds-btn--secondary):not(#ds):hover:not(:disabled) {
   background: var(--ds-blue-tint);
 }
-:is(
-    .ds-btn,
-    .btn-primary,
-    .btn-success,
-    .btn-secondary,
-    .btn-ghost,
-    .btn-ghost-outline,
-    .btn-sm,
-    .btn-danger
-  )
-  svg:not(#ds) {
+:is(.ds-btn) svg:not(#ds) {
   width: 20px;
   height: 20px;
   flex: none;
 }
 /* Link d'azione (testo blu, area di tocco 48) */
-:is(.ds-link, .btn-link):not(#ds) {
+:is(.ds-link):not(#ds) {
   min-height: var(--ds-control-h);
   padding: 0 8px;
   border: 0;
@@ -261,7 +232,7 @@
 }
 
 /* ── Pulsante icona ───────────────────────────────────────────────────────────────────────── */
-:is(.ds-icon-btn, .icon-btn):not(#ds) {
+:is(.ds-icon-btn):not(#ds) {
   box-sizing: border-box;
   width: var(--ds-control-h);
   height: var(--ds-control-h);
@@ -277,10 +248,10 @@
   cursor: pointer;
   box-shadow: none;
 }
-:is(.ds-icon-btn, .icon-btn):not(#ds):hover:not(:disabled, [aria-pressed='true']) {
+:is(.ds-icon-btn):not(#ds):hover:not(:disabled, [aria-pressed='true']) {
   background: var(--ds-surface-2);
 }
-:is(.ds-icon-btn, .icon-btn) svg:not(#ds) {
+:is(.ds-icon-btn) svg:not(#ds) {
   width: 20px;
   height: 20px;
 }
@@ -292,21 +263,12 @@
     .agt-filter-chip,
     .agt-view-btn,
     .ds-btn,
-    .btn-primary,
-    .btn-success,
-    .btn-secondary,
-    .btn-ghost,
-    .btn-ghost-outline,
-    .btn-sm,
-    .btn-danger,
     .srev-chip,
     .schedule-op-btn,
     .dashboard-notification-chip,
     .link-btn,
-    .btn-link,
     .ds-link,
-    .ds-icon-btn,
-    .icon-btn
+    .ds-icon-btn
   ):not(#ds):focus-visible {
   outline: var(--ds-focus);
   outline-offset: 2px;
@@ -317,21 +279,12 @@
     .agt-filter-chip,
     .agt-view-btn,
     .ds-btn,
-    .btn-primary,
-    .btn-success,
-    .btn-secondary,
-    .btn-ghost,
-    .btn-ghost-outline,
-    .btn-sm,
-    .btn-danger,
     .srev-chip,
     .schedule-op-btn,
     .dashboard-notification-chip,
     .link-btn,
-    .btn-link,
     .ds-link,
-    .ds-icon-btn,
-    .icon-btn
+    .ds-icon-btn
   ):not(#ds):disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -434,10 +387,10 @@
 
 /* ── Varianti semantiche del pulsante icona ───────────────────────────────────────────────── */
 /* Solo l'azione distruttiva ha un colore proprio (rosso = allarmi, errori, eliminazioni). */
-:is(.ds-icon-btn--danger, .icon-btn--danger):not(#ds) {
+:is(.ds-icon-btn--danger):not(#ds) {
   color: var(--red, #d93a4a);
 }
-:is(.ds-icon-btn--danger, .icon-btn--danger):not(#ds):hover:not(:disabled) {
+:is(.ds-icon-btn--danger):not(#ds):hover:not(:disabled) {
   background: #fdecee;
 }
 
@@ -469,17 +422,17 @@
 }
 
 /* ── Pulsante distruttivo (eliminare, disattivare): il rosso è riservato a questo e agli allarmi ─ */
-:is(.ds-btn--danger, .btn-danger):not(#ds) {
+:is(.ds-btn--danger):not(#ds) {
   background: var(--ds-surface);
   border: var(--ds-border-w) solid #e8a3aa;
   color: #b3261e;
 }
-:is(.ds-btn--danger, .btn-danger):not(#ds):hover:not(:disabled) {
+:is(.ds-btn--danger):not(#ds):hover:not(:disabled) {
   background: #fdecee;
 }
 
 /* ── Icone nei link d'azione ─────────────────────────────────────────────────────────────── */
-:is(.ds-link, .btn-link) svg:not(#ds) {
+:is(.ds-link) svg:not(#ds) {
   width: 20px;
   height: 20px;
   flex: none;
@@ -632,7 +585,7 @@ button.ds-badge:not(#ds):disabled {
 }
 
 /* ── Pulsante icona premuto (interruttore: lettura vocale, dettatura) ─────────────────────── */
-:is(.ds-icon-btn, .icon-btn)[aria-pressed='true']:not(#ds) {
+:is(.ds-icon-btn)[aria-pressed='true']:not(#ds) {
   background: var(--ds-blue-tint);
   border-color: var(--ds-blue);
   color: var(--ds-blue-active);

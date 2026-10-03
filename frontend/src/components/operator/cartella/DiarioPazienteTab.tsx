@@ -570,11 +570,7 @@ export function DiarioPazienteTab({
           {!isLegacy(row) && row.sourceType !== 'consegna' && (showEdit || showDelete) && (
             <div className="diario-card__actions">
               {showEdit && (
-                <button
-                  className="icon-btn icon-btn--sm icon-btn--edit"
-                  title="Modifica"
-                  onClick={() => startEdit(row)}
-                >
+                <button className="ds-icon-btn" title="Modifica" onClick={() => startEdit(row)}>
                   <svg
                     width="13"
                     height="13"
@@ -592,7 +588,7 @@ export function DiarioPazienteTab({
               )}
               {showDelete && (
                 <button
-                  className="icon-btn icon-btn--sm icon-btn--danger"
+                  className="ds-icon-btn ds-icon-btn--danger"
                   title="Elimina"
                   onClick={() => handleDelete(row)}
                 >
@@ -768,7 +764,7 @@ export function DiarioPazienteTab({
           </div>
         )}
         <div className="cr-inline-form__actions diario-form__actions">
-          <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
+          <button className="ds-btn ds-btn--secondary" onClick={onCancel} disabled={saving}>
             Annulla
           </button>
           {therapy && (
@@ -782,7 +778,7 @@ export function DiarioPazienteTab({
             </button>
           )}
           <button
-            className="btn-success btn-sm"
+            className="ds-btn ds-btn--primary"
             onClick={onSave}
             disabled={saving || !f.content.trim()}
           >
@@ -827,7 +823,7 @@ export function DiarioPazienteTab({
   const sectionActions = (
     <button
       ref={addButtonRef}
-      className="btn-success btn-sm"
+      className="ds-btn ds-btn--primary"
       onClick={() => {
         setShowAdd((v) => !v);
         setEditEntry(null);
@@ -869,7 +865,7 @@ export function DiarioPazienteTab({
         >
           {error}
           <button
-            className="btn-secondary btn-sm"
+            className="ds-btn ds-btn--secondary"
             onClick={() => setRefreshVersion((version) => version + 1)}
           >
             Riprova caricamento
@@ -948,7 +944,7 @@ export function DiarioPazienteTab({
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
                 <button
                   type="button"
-                  className="btn-secondary"
+                  className="ds-btn ds-btn--secondary"
                   onClick={handleLoadMore}
                   disabled={loadingMore}
                 >
@@ -964,7 +960,7 @@ export function DiarioPazienteTab({
             {additionalLegacy.slice(0, legacyVisible).map(renderDiarioCard)}
             {additionalLegacy.length > legacyVisible && (
               <button
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => setLegacyVisible((count) => count + 50)}
               >
                 Mostra altre registrazioni precedenti

@@ -261,7 +261,7 @@ export function VitaleModal({
               {paziente.lastName} {paziente.firstName} &middot; {formattedDate} &middot; {colLabel}
             </p>
           </div>
-          <button className="icon-btn npm-close-btn" onClick={onClose} aria-label="Chiudi">
+          <button className="ds-icon-btn npm-close-btn" onClick={onClose} aria-label="Chiudi">
             <IcoX />
           </button>
         </div>
@@ -297,10 +297,10 @@ export function VitaleModal({
         {/* Footer */}
         <div className="npm-footer">
           <div className="npm-footer__actions">
-            <button className="btn-secondary" onClick={onClose}>
+            <button className="ds-btn ds-btn--secondary" onClick={onClose}>
               Annulla
             </button>
-            <button className="btn-primary" onClick={handleSave}>
+            <button className="ds-btn ds-btn--primary" onClick={handleSave}>
               <IcoCheck /> Salva parametro
             </button>
           </div>

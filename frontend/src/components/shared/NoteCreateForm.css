@@ -194,8 +194,8 @@
     width: 100%;
   }
 
-  .note-editor__actions .btn-secondary,
-  .note-editor__actions .btn-success {
+  .note-editor__actions .ds-btn--secondary,
+  .note-editor__actions .ds-btn--primary {
     min-height: 44px;
     flex: 1;
     justify-content: center;

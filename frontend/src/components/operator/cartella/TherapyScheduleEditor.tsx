@@ -189,7 +189,7 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
             </div>
             <button
               type="button"
-              className="btn-secondary therapy-schedules__remove"
+              className="ds-btn ds-btn--secondary therapy-schedules__remove"
               title={`Rimuovi orario ${i + 1}`}
               aria-label={`Rimuovi orario ${i + 1}`}
               onClick={() => removeSchedule(i)}
@@ -219,7 +219,11 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
           </div>
         );
       })}
-      <button type="button" className="btn-secondary therapy-schedules__add" onClick={addSchedule}>
+      <button
+        type="button"
+        className="ds-btn ds-btn--secondary therapy-schedules__add"
+        onClick={addSchedule}
+      >
         + Aggiungi orario
       </button>
       {hasDividedPatch(value.schedules) && (

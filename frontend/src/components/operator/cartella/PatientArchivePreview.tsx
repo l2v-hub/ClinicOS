@@ -81,7 +81,7 @@ export function PatientArchivePreview({
         </div>
         <button
           type="button"
-          className="icon-btn"
+          className="ds-icon-btn"
           aria-label="Chiudi anteprima"
           data-dialog-initial-focus
           onClick={onClose}
@@ -106,7 +106,7 @@ export function PatientArchivePreview({
             <p>Impossibile aprire il documento.</p>
             <button
               type="button"
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               onClick={() => setRevision((value) => value + 1)}
             >
               Riprova anteprima
@@ -131,11 +131,11 @@ export function PatientArchivePreview({
       </div>
       <footer className="patient-archive-preview__footer">
         {state.url && (
-          <a className="btn-secondary btn-sm" href={state.url} download={name}>
+          <a className="ds-btn ds-btn--secondary" href={state.url} download={name}>
             Scarica originale
           </a>
         )}
-        <button type="button" className="btn-primary btn-sm" onClick={onClose}>
+        <button type="button" className="ds-btn ds-btn--primary" onClick={onClose}>
           Chiudi anteprima
         </button>
       </footer>

@@ -311,7 +311,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
             <div className="cdt__pagenav">
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
               >
@@ -322,7 +322,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
               </span>
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 disabled={page >= totalPages}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               >

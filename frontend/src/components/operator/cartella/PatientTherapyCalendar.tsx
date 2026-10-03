@@ -254,7 +254,7 @@ export function PatientTherapyCalendar({
         </label>
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           disabled={status === 'loading'}
           onClick={() => setRevision((value) => value + 1)}
         >

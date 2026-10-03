@@ -890,10 +890,10 @@ export function ImportReviewFull({
 
       {error && <p className="import-modal__error">{error}</p>}
       <footer className="import-modal__foot">
-        <button className="btn-ghost" disabled={busy} onClick={onBack}>
+        <button className="ds-btn ds-btn--secondary" disabled={busy} onClick={onBack}>
           Indietro
         </button>
-        <button className="btn-success" disabled={busy} onClick={submit}>
+        <button className="ds-btn ds-btn--primary" disabled={busy} onClick={submit}>
           Crea paziente
         </button>
       </footer>

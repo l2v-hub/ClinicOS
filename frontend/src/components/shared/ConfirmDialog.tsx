@@ -63,13 +63,18 @@ export function ConfirmDialog({
       </p>
 
       <div className="confirm-dialog__actions">
-        <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          disabled={busy}
+          onClick={onCancel}
+        >
           <IcoX /> {cancelLabel}
         </button>
         <button
           type="button"
           data-dialog-initial-focus
-          className={tone === 'danger' ? 'btn-danger' : 'btn-primary'}
+          className={tone === 'danger' ? 'ds-btn ds-btn--danger' : 'ds-btn ds-btn--primary'}
           disabled={busy}
           onClick={onConfirm}
         >

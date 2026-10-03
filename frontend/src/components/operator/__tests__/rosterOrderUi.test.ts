@@ -5,10 +5,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { RosterOrderContext } from '../../shared/RosterOrderContext';
 import { RosterOrderControl } from '../../shared/RosterOrderControl';
 import { RosterDefaultsPanel } from '../../admin/RosterDefaultsPanel';
-import { ParameterEntryRow } from '../ParameterEntryRow';
 import { PatientRoster } from '../PatientRoster';
 import { TherapySlotModal } from '../TherapySlotModal';
-import { createParameterDraftStore } from '../../../lib/parameterEntryDrafts';
 import { createRosterOrderController } from '../../../lib/rosterOrderController';
 import type { RosterOrderController } from '../../../lib/useRosterOrder';
 import {
@@ -84,36 +82,6 @@ test('personal and department authority are independent and missing profiles exp
   const missing = controls({ ready: true, preference: missingRosterProfile });
   assert.match(missing, /Contesto non disponibile · Ordine temporaneo/);
   assert.doesNotMatch(missing, /Usa predefinito reparto|Ordine predefinito dei reparti/);
-});
-
-test('remounted parameter rows retain the correct patient values, open note, and exact uncertain request', () => {
-  const store = createParameterDraftStore();
-  store.update(identityPatient.id, 'fc', '72');
-  store.update(identityPatient.id, 'note', 'Bozza sintetica A');
-  store.toggleNotes(identityPatient.id);
-  store.update(identityHomonym.id, 'fc', '88');
-  const row = (patient: typeof identityPatient) =>
-    render(
-      React.createElement(ParameterEntryRow, {
-        patient,
-        draftStore: store,
-        onOpenHistory() {},
-        async onSave() {
-          throw new Error('render must not save');
-        },
-      }),
-    );
-  assert.match(row(identityPatient), /value="72"/);
-  const removedAndRemounted = row(identityPatient);
-  assert.match(removedAndRemounted, /Bozza sintetica A/);
-  assert.match(removedAndRemounted, /aria-expanded="true"/);
-  assert.doesNotMatch(row(identityHomonym), /Bozza sintetica A|value="72"/);
-  const token = store.begin(identityPatient.id)!;
-  store.fail(token, 'Esito non verificato', true);
-  const uncertain = row(identityPatient);
-  assert.match(uncertain, /Esito non verificato|Controlla lo storico|Riprova/);
-  assert.match(uncertain, /disabled=""[^>]*value="72"/);
-  assert.equal(store.begin(identityPatient.id)?.request, token.request);
 });
 
 test('legacy columns retain usable controls and explicitly limit temporary ordering to loaded patients', () => {

@@ -5,7 +5,6 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { PatientIdentity } from '../../shared/PatientIdentity';
 import { PatientCombobox } from '../../shared/PatientCombobox';
-import { ParameterEntryRow } from '../ParameterEntryRow';
 import { TherapySlotModal } from '../TherapySlotModal';
 import { ConsegnePage } from '../ConsegnePage';
 import {
@@ -77,23 +76,6 @@ test('loading and unavailable never display retained location labels', () => {
   );
   assert.match(unavailable, /Posto letto non disponibile/);
   assert.doesNotMatch(unavailable, /Camera 201|Letto B|non assegnato/);
-});
-
-test('parameter identity is available while clinical summary counts remain pending', () => {
-  const html = render(
-    React.createElement(ParameterEntryRow, {
-      patient: identityPatient,
-      summaryPending: true,
-      onOpenHistory() {},
-      async onSave() {
-        throw new Error('render must not save');
-      },
-    }),
-  );
-  assert.match(html, /RSSMRA80A01H501U/);
-  assert.match(html, /Camera 201/);
-  assert.match(html, /Verifica note in corso/);
-  assert.doesNotMatch(html, /Caricamento camera|MRN-NEVER-RENDER/);
 });
 
 function handover(identity: Consegna['identity']) {
@@ -190,9 +172,7 @@ test('combobox selected patient uses shared identity without internal record num
 
 test('identity presentation adds no fetch and parameter drafts retain stable patient keys', () => {
   const shared = readFileSync(new URL('../../shared/PatientIdentity.tsx', import.meta.url), 'utf8');
-  const row = readFileSync(new URL('../ParameterEntryRow.tsx', import.meta.url), 'utf8');
   const workspace = readFileSync(new URL('../MultiPatientParametri.tsx', import.meta.url), 'utf8');
   assert.doesNotMatch(shared, /\bfetch\(|useEffect\(|localStorage|sessionStorage/);
-  assert.doesNotMatch(row, /\bfetch\(|useEffect\(|room\?|bed\?|summaryUnavailable/);
   assert.match(workspace, /key=\{item.patient.id\}/);
 });

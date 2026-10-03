@@ -166,7 +166,7 @@ function ScheduledPanel({
           Impossibile caricare le dosi del giorno.{' '}
           <button
             type="button"
-            className="btn-secondary btn-sm"
+            className="ds-btn ds-btn--secondary"
             onClick={() => setRevision((v) => v + 1)}
           >
             Riprova

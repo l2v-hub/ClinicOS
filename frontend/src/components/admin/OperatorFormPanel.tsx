@@ -63,7 +63,7 @@ export function OperatorFormPanel({
         </div>
         <button
           type="button"
-          className="icon-btn operator-editor__close"
+          className="ds-icon-btn operator-editor__close"
           onClick={onCancel}
           aria-label={`Chiudi ${title.toLowerCase()}`}
         >
@@ -270,10 +270,10 @@ export function OperatorFormPanel({
         <span className="operator-editor__required-note">
           <span aria-hidden="true">*</span> Campi obbligatori
         </span>
-        <button type="button" className="btn-secondary" onClick={onCancel}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={onCancel}>
           Annulla
         </button>
-        <button type="submit" className="btn-success">
+        <button type="submit" className="ds-btn ds-btn--primary">
           <IcoCheck /> {editMode ? 'Salva modifiche' : 'Crea operatore'}
         </button>
       </footer>

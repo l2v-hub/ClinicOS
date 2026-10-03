@@ -55,7 +55,7 @@ export function TherapyIntakeEditor({
     <div className="cr-list" data-testid="manual-therapy-editor" ref={rootRef}>
       <div className="ec-modal-add-form__actions">
         <strong>Farmaci aggiunti: {items.length}</strong>
-        <button className="btn-secondary btn-sm" type="button" onClick={addDrug}>
+        <button className="ds-btn ds-btn--secondary" type="button" onClick={addDrug}>
           + Aggiungi farmaco
         </button>
       </div>
@@ -80,7 +80,7 @@ export function TherapyIntakeEditor({
               {review[index].issues.length ? 'da completare' : 'completa'}
             </span>
             <button
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               type="button"
               aria-expanded={editingIndex === index}
               onClick={() => setEditingIndex(editingIndex === index ? null : index)}
@@ -88,7 +88,7 @@ export function TherapyIntakeEditor({
               {editingIndex === index ? 'Chiudi scheda' : 'Modifica'}
             </button>
             <button
-              className="icon-btn icon-btn--sm icon-btn--danger"
+              className="ds-icon-btn ds-icon-btn--danger"
               type="button"
               aria-label={`Rimuovi farmaco ${index + 1}`}
               onClick={() => removeDrug(index)}
@@ -127,13 +127,13 @@ export function TherapyIntakeEditor({
               />
               <div className="ec-modal-add-form__actions">
                 <button
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   type="button"
                   onClick={() => setEditingIndex(null)}
                 >
                   Chiudi scheda
                 </button>
-                <button className="btn-secondary btn-sm" type="button" onClick={addDrug}>
+                <button className="ds-btn ds-btn--secondary" type="button" onClick={addDrug}>
                   + Aggiungi un altro farmaco
                 </button>
               </div>

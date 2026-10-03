@@ -129,10 +129,10 @@ export function AnamnesisEditor({
                       className="cr-form-actions"
                       style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}
                     >
-                      <button className="btn-secondary btn-sm" onClick={cancelCard}>
+                      <button className="ds-btn ds-btn--secondary" onClick={cancelCard}>
                         Annulla
                       </button>
-                      <button className="btn-success btn-sm" onClick={saveCard}>
+                      <button className="ds-btn ds-btn--primary" onClick={saveCard}>
                         <IcoCheck /> Salva
                       </button>
                     </div>
@@ -163,7 +163,7 @@ export function AnamnesisEditor({
                     {!readOnly && (
                       <button
                         type="button"
-                        className="btn-secondary btn-sm"
+                        className="ds-btn ds-btn--secondary"
                         onClick={() => {
                           setDraft({ ...anamnesi, patologicaRemota: historyProposal });
                           setEditingCard('patologicaRemota');

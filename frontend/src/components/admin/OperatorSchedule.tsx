@@ -100,7 +100,7 @@ export function OperatorSchedule({
       {loadError && (
         <div className="empty-state-card" role="alert">
           <p>{loadError}</p>
-          <button type="button" className="btn-secondary btn-sm" onClick={onRetry}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={onRetry}>
             Riprova
           </button>
         </div>
@@ -147,16 +147,16 @@ export function OperatorSchedule({
               </span>
             </div>
             {!editing ? (
-              <button className="btn-secondary btn-sm" onClick={startEdit}>
+              <button className="ds-btn ds-btn--secondary" onClick={startEdit}>
                 <IcoEdit /> Modifica orari
               </button>
             ) : (
               <div className="table-actions">
-                <button className="btn-success btn-sm" onClick={salva}>
+                <button className="ds-btn ds-btn--primary" onClick={salva}>
                   <IcoCheck /> Salva
                 </button>
                 <button
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => {
                     setEditing(false);
                     setEditSchedule(null);

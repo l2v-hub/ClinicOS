@@ -64,7 +64,7 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Caricamento terapie…</span>
             )}
             <button
-              className="btn-primary btn-sm"
+              className="ds-btn ds-btn--primary"
               onClick={() => window.print()}
               disabled={loading || Boolean(fetchError)}
               title={
@@ -90,7 +90,7 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               </svg>
               Stampa / PDF
             </button>
-            <button className="btn-secondary btn-sm" onClick={onClose}>
+            <button className="ds-btn ds-btn--secondary" onClick={onClose}>
               Chiudi
             </button>
           </div>
@@ -106,7 +106,7 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
             >
               {fetchError}. La stampa è bloccata perché i dati di terapia non sono completi.{' '}
               <button
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => setLoadRevision((v) => v + 1)}
               >
                 Riprova

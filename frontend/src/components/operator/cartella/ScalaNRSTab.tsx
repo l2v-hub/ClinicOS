@@ -50,7 +50,7 @@ function NrsSession({ cartella, paziente, intakeReview, onRetryIntake }: Props) 
       {intakeReview.status === 'loading' && <p>Caricamento dei dati conservati nell’ingresso…</p>}
       {(intakeReview.status === 'error' || intakeReview.data?.legacyPainError) && <p role="alert">
         {intakeReview.data?.legacyPainError ? 'I dati dolore dell’ingresso superano il limite di consultazione. I dati originali sono conservati; questa risposta non indica assenza di dati.' : 'Impossibile caricare i dati dolore dell’ingresso.'}
-        {' '}<button type="button" className="btn-secondary btn-sm" onClick={onRetryIntake}>Riprova dati d’ingresso</button>
+        {' '}<button type="button" className="ds-btn ds-btn--secondary" onClick={onRetryIntake}>Riprova dati d’ingresso</button>
       </p>}
       {intakeReview.status === 'ready' && !intakeReview.data?.legacyPainError && intakeReview.data?.legacyPainDrafts?.length === 0 && <p>Nessun dato dolore conservato da ingressi precedenti.</p>}
       {intakeReview.data?.legacyPainDrafts?.map(draft => <section key={draft.draftId}>

@@ -183,7 +183,7 @@ function DocumentArchiveWorkspace({
           <>
             <button
               type="button"
-              className="btn-secondary btn-sm no-print"
+              className="ds-btn ds-btn--secondary no-print"
               disabled={
                 !complete || !selectedDocuments.length || !!form || saving || !!printDocuments
               }
@@ -193,7 +193,7 @@ function DocumentArchiveWorkspace({
             </button>
             <button
               type="button"
-              className="btn-sm"
+              className="ds-btn ds-btn--secondary"
               disabled={!complete || !!form || saving || folder.category === 'valutazioni'}
               onClick={() => openForm(null)}
             >
@@ -252,7 +252,7 @@ function DocumentArchiveWorkspace({
             </label>
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               disabled={archive.status === 'loading' || !!form || saving}
               onClick={archive.reload}
             >
@@ -289,7 +289,7 @@ function DocumentArchiveWorkspace({
             {selected.size > 0 && (
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => setSelected(new Set())}
               >
                 Deseleziona tutti
@@ -346,7 +346,7 @@ function DocumentArchiveWorkspace({
                   </p>
                   <button
                     type="button"
-                    className="btn-secondary btn-sm"
+                    className="ds-btn ds-btn--secondary"
                     disabled={!!form || saving}
                     onClick={archive.reload}
                   >
@@ -450,7 +450,7 @@ function DocumentArchiveWorkspace({
                       <div className="patient-document-archive__actions no-print">
                         <button
                           type="button"
-                          className="btn-secondary btn-sm"
+                          className="ds-btn ds-btn--secondary"
                           onClick={() => setPreview(entry)}
                         >
                           {entry.document ? 'Visualizza' : 'Dettagli'}
@@ -458,7 +458,7 @@ function DocumentArchiveWorkspace({
                         {entry.document?.assessment ? (
                           <button
                             type="button"
-                            className="btn-secondary btn-sm"
+                            className="ds-btn ds-btn--secondary"
                             disabled={!onOpenAssessment}
                             onClick={() =>
                               onOpenAssessment?.({
@@ -472,7 +472,7 @@ function DocumentArchiveWorkspace({
                         ) : (
                           <button
                             type="button"
-                            className="btn-secondary btn-sm"
+                            className="ds-btn ds-btn--secondary"
                             disabled={!complete || !!form || saving}
                             onClick={() => openForm(entry)}
                           >
@@ -497,7 +497,7 @@ function DocumentArchiveWorkspace({
               {filtered.length > visible && (
                 <button
                   type="button"
-                  className="btn-secondary btn-sm no-print"
+                  className="ds-btn ds-btn--secondary no-print"
                   onClick={() => setVisible((value) => value + 25)}
                 >
                   Mostra altri documenti ({visible} di {filtered.length})

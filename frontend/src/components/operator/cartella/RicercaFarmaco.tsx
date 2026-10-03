@@ -218,7 +218,7 @@ export function RicercaFarmacoModal({
               </p>
             )}
           </div>
-          <button type="button" className="icon-btn" onClick={onChiudi} aria-label="Chiudi">
+          <button type="button" className="ds-icon-btn" onClick={onChiudi} aria-label="Chiudi">
             <IcoX />
           </button>
         </header>

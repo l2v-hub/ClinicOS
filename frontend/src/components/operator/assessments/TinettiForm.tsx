@@ -122,12 +122,16 @@ export function TinettiForm({
         )}
       </label>
       <div className="assessment-actions">
-        <button type="submit" className="btn-secondary" disabled={locked || !draft.dirty}>
+        <button
+          type="submit"
+          className="ds-btn ds-btn--secondary"
+          disabled={locked || !draft.dirty}
+        >
           {draft.busy ? 'Salvataggio…' : 'Salva bozza'}
         </button>
         <button
           type="button"
-          className="btn-primary"
+          className="ds-btn ds-btn--primary"
           disabled={locked || count !== 20}
           onClick={onPreview}
         >

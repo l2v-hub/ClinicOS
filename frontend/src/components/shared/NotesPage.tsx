@@ -298,7 +298,7 @@ export function NotesPage({
 
         {hasMore && (
           <div className="nm-more">
-            <button className="btn-secondary" onClick={onLoadMore} disabled={loading}>
+            <button className="ds-btn ds-btn--secondary" onClick={onLoadMore} disabled={loading}>
               {loading ? 'Caricamento…' : 'Carica altri messaggi'}
             </button>
           </div>

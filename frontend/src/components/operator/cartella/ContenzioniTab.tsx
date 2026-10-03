@@ -500,7 +500,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
       {/* ── Modulo view ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-          <button className="btn-secondary btn-sm" onClick={() => setModulo(false)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(false)}>
             ← Vista operativa
           </button>
           <PrintButton label="Stampa modulo" />
@@ -517,7 +517,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
           actions={
             <>
               <button
-                className="btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => {
                   setModuloTarget(null);
                   setModulo(true);
@@ -526,7 +526,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
                 Vista modulo
               </button>
               <button
-                className="btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => applyEntry('discard')}
               >
                 + Aggiungi
@@ -537,8 +537,8 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
           <div className="cts__body--padded">
             {entryBlocked && <div ref={entryGate} role="alert" data-legacy-entry-gate>
               <p>È presente una modifica non salvata. Riprendila oppure annullala prima di iniziare una nuova contenzione.</p>
-              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('resume')}>Riprendi modifica</button>
-              <button type="button" className="btn-secondary btn-sm" onClick={() => applyEntry('discard')}>Annulla modifica e inizia nuova</button>
+              <button type="button" className="ds-btn ds-btn--secondary" onClick={() => applyEntry('resume')}>Riprendi modifica</button>
+              <button type="button" className="ds-btn ds-btn--secondary" onClick={() => applyEntry('discard')}>Annulla modifica e inizia nuova</button>
             </div>}
             {showAdd && (
               <div className="cr-inline-form" ref={entryForm}>
@@ -909,7 +909,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
                 </div>
                 <div className="cr-inline-form__actions">
                   <button
-                    className="btn-secondary btn-sm"
+                    className="ds-btn ds-btn--secondary"
                     onClick={() => {
                       setShowAdd(false);
                       setEditId(null);
@@ -917,7 +917,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
                   >
                     Annulla
                   </button>
-                  <button className="btn-success btn-sm" onClick={handleSave}>
+                  <button className="ds-btn ds-btn--primary" onClick={handleSave}>
                     <IcoCheck /> Salva
                   </button>
                 </div>
@@ -1012,16 +1012,16 @@ function ContenzioneCard({
           </span>
         )}
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
-          <button className="icon-btn icon-btn--sm" onClick={onModulo} title="Vista modulo">
+          <button className="ds-icon-btn" onClick={onModulo} title="Vista modulo">
             📋
           </button>
           {onTermina && c.attiva && (
-            <button className="btn-secondary btn-sm" onClick={onTermina}>
+            <button className="ds-btn ds-btn--secondary" onClick={onTermina}>
               Termina
             </button>
           )}
           <button
-            className="icon-btn icon-btn--sm icon-btn--edit"
+            className="ds-icon-btn"
             onClick={onEdit}
             title="Modifica"
           >
@@ -1039,7 +1039,7 @@ function ContenzioneCard({
             </svg>
           </button>
           <button
-            className="icon-btn icon-btn--sm icon-btn--danger"
+            className="ds-icon-btn ds-icon-btn--danger"
             onClick={onDelete}
             title="Elimina"
           >

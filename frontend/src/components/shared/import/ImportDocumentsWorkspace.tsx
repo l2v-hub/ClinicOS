@@ -209,7 +209,7 @@ export function ImportDocumentsWorkspace({
           )}
           {!processing && retryable && (
             <button
-              className="btn-primary"
+              className="ds-btn ds-btn--primary"
               disabled={disabled || emptyGroups.length > 0}
               onClick={onProcess}
             >
@@ -224,7 +224,7 @@ export function ImportDocumentsWorkspace({
             key={group.id}
             role="tab"
             aria-selected={current?.id === group.id}
-            className={`btn-secondary${current?.id === group.id ? ' is-active' : ''}`}
+            className={`ds-btn ds-btn--secondary${current?.id === group.id ? ' is-active' : ''}`}
             onClick={() => {
               setGroupId(group.id);
               setGroupLabel('');
@@ -234,7 +234,7 @@ export function ImportDocumentsWorkspace({
           </button>
         ))}
         <button
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={disabled || groups.length >= job.limits.maxGroups}
           onClick={() => void addGroup()}
         >
@@ -255,21 +255,21 @@ export function ImportDocumentsWorkspace({
             />
           </label>
           <button
-            className="btn-secondary btn-sm"
+            className="ds-btn ds-btn--secondary"
             disabled={disabled || !groupLabel.trim()}
             onClick={renameGroup}
           >
             Rinomina
           </button>
           <button
-            className="btn-secondary btn-sm"
+            className="ds-btn ds-btn--secondary"
             disabled={disabled || current.id === groups[0]?.id}
             onClick={() => reorderGroup(-1)}
           >
             Lettera precedente
           </button>
           <button
-            className="btn-secondary btn-sm"
+            className="ds-btn ds-btn--secondary"
             disabled={disabled || current.id === groups.at(-1)?.id}
             onClick={() => reorderGroup(1)}
           >
@@ -277,7 +277,7 @@ export function ImportDocumentsWorkspace({
           </button>
           {pages.length === 0 && (
             <button
-              className="btn-danger btn-sm"
+              className="ds-btn ds-btn--danger"
               disabled={disabled || job.manifest.groups.length === 1}
               onClick={() => {
                 const edit = manifestEdit(job.manifest);
@@ -291,7 +291,7 @@ export function ImportDocumentsWorkspace({
             </button>
           )}
           {pages.length > 0 && (
-            <button className="btn-secondary btn-sm" onClick={() => void downloadGroup()}>
+            <button className="ds-btn ds-btn--secondary" onClick={() => void downloadGroup()}>
               Scarica PDF lettera
             </button>
           )}
@@ -300,7 +300,7 @@ export function ImportDocumentsWorkspace({
       {!processing && (
         <div className="import-modal__actions">
           <button
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             disabled={disabled || limit}
             onClick={() => {
               replacing.current = undefined;
@@ -310,7 +310,7 @@ export function ImportDocumentsWorkspace({
             Seleziona file
           </button>
           <button
-            className="btn-primary"
+            className="ds-btn ds-btn--primary"
             data-testid="scatta-foto"
             disabled={disabled || limit}
             onClick={() => setCamera({})}
@@ -364,7 +364,7 @@ export function ImportDocumentsWorkspace({
           {!queue.running && (
             <>
               <button
-                className="btn-primary"
+                className="ds-btn ds-btn--primary"
                 onClick={() =>
                   void queue
                     .run()
@@ -375,7 +375,7 @@ export function ImportDocumentsWorkspace({
                 Riprova caricamento
               </button>
               <button
-                className="btn-secondary"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => {
                   queue.discard();
                   setError('');
@@ -420,7 +420,7 @@ export function ImportDocumentsWorkspace({
             </p>
           )}
           <button
-            className="btn-primary"
+            className="ds-btn ds-btn--primary"
             disabled={disabled || !job.manifest.pages.length || emptyGroups.length > 0}
             onClick={onProcess}
           >

@@ -218,7 +218,7 @@ test('verification renders real manual times and an actionable indexed blocker',
   assert.match(markup, /ore 08:00, 20:00/);
   assert.match(markup, /Terapia 1: Indica il nome del farmaco/);
   assert.match(markup, /Correggi terapie/);
-  assert.match(markup, /class="btn-success" disabled=""/);
+  assert.match(markup, /class="ds-btn ds-btn--primary" disabled=""/);
 });
 
 test('liquid and inhaled quantities keep their explicit unit', () => {

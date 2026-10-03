@@ -256,7 +256,7 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
           </div>
           <button
             type="button"
-            className="icon-btn"
+            className="ds-icon-btn"
             onClick={onChiudi}
             aria-label="Chiudi il documento"
           >
@@ -288,7 +288,7 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
           {stato.fase === 'errore' && (
             <div className="visore-farmaco__stato visore-farmaco__stato--errore" role="alert">
               <p>{stato.messaggio}</p>
-              <button type="button" className="btn-secondary" onClick={() => setTentativo((n) => n + 1)}>
+              <button type="button" className="ds-btn ds-btn--secondary" onClick={() => setTentativo((n) => n + 1)}>
                 Riprova
               </button>
             </div>

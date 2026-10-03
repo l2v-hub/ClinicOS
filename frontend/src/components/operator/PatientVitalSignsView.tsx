@@ -94,7 +94,7 @@ function PatientParameterWorkspace({
       <section className="parameter-workspace-records" aria-label="Consultazione parametri vitali">
         <div className="parameter-workspace-records__heading">
           <h3>Valori e andamento</h3>
-          <button type="button" className="btn-secondary btn-sm" onClick={refresh}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={refresh}>
             Aggiorna
           </button>
         </div>
@@ -122,7 +122,7 @@ function PatientParameterWorkspace({
           </div>
           <button
             type="button"
-            className={`btn-secondary btn-sm${showGraph ? ' parameter-workspace-graph-active' : ''}`}
+            className={`ds-btn ds-btn--secondary${showGraph ? ' parameter-workspace-graph-active' : ''}`}
             aria-expanded={showGraph}
             aria-controls="parameter-inline-graph"
             onClick={() => setShowGraph((value) => !value)}
@@ -138,7 +138,7 @@ function PatientParameterWorkspace({
         {current?.error && (
           <div role="alert" className="parameter-trends-error">
             <p>{current.error}</p>
-            <button type="button" className="btn-secondary btn-sm" onClick={refresh}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={refresh}>
               Riprova
             </button>
           </div>

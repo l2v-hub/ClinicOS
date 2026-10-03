@@ -59,14 +59,7 @@
   color: var(--text);
   padding: 6px 0;
 }
-.parameter-entry-row .qe-row__note-btn svg {
-  width: 15px;
-  height: 15px;
-}
-.parameter-entry-row .qe-row__note-btn {
-  gap: 5px;
-  padding-inline: 8px;
-}
+
 .parameter-note-count {
   display: inline-flex;
   align-items: center;
@@ -288,9 +281,7 @@
   .parameter-entry-progress {
     width: 100%;
   }
-  .parameter-entry-row .qe-row__input {
-    min-height: 44px;
-  }
+
   .parameter-history-reading {
     grid-template-columns: 1fr;
     padding: 14px;

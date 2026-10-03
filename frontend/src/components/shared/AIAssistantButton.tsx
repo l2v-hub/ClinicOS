@@ -152,7 +152,12 @@ export function AIAssistantButton({
                 </span>
                 <span>Assistente ClinicOS</span>
               </div>
-              <button type="button" className="icon-btn" onClick={handleClose} aria-label="Chiudi">
+              <button
+                type="button"
+                className="ds-icon-btn"
+                onClick={handleClose}
+                aria-label="Chiudi"
+              >
                 <IcoX />
               </button>
             </header>
@@ -196,7 +201,7 @@ export function AIAssistantButton({
               />
               <button
                 type="submit"
-                className="btn-primary ai-asst__send"
+                className="ds-btn ds-btn--primary ai-asst__send"
                 disabled={busy || !question.trim()}
               >
                 Invia

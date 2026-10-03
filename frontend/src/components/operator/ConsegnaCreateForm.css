@@ -185,8 +185,8 @@
     width: 100%;
   }
 
-  .handover-editor__actions .btn-secondary,
-  .handover-editor__actions .btn-success {
+  .handover-editor__actions .ds-btn--secondary,
+  .handover-editor__actions .ds-btn--primary {
     min-height: 44px;
     flex: 1;
     justify-content: center;

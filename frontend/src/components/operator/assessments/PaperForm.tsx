@@ -180,14 +180,14 @@ export function PaperForm({
       <div className="assessment-actions">
         <button
           type="submit"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={locked || !draft.dirty || invalidMeasures}
         >
           {draft.busy ? 'Salvataggio…' : 'Salva bozza'}
         </button>
         <button
           type="button"
-          className="btn-primary"
+          className="ds-btn ds-btn--primary"
           disabled={locked || !result || invalidMeasures}
           onClick={onPreview}
         >

@@ -533,7 +533,7 @@ function FollowUpSection({
 
   return (
     <div style={{ borderTop: '1px solid var(--border)', paddingTop: 8, marginTop: 6 }}>
-      <button className="btn-secondary btn-sm" onClick={() => setOpen((o) => !o)}>
+      <button className="ds-btn ds-btn--secondary" onClick={() => setOpen((o) => !o)}>
         {open ? '▲' : '▼'} Follow-up medicazione ({followUps.length})
       </button>
 
@@ -575,7 +575,7 @@ function FollowUpSection({
                   align: 'right',
                   render: (_v, fu) => (
                     <button
-                      className="icon-btn icon-btn--sm icon-btn--danger"
+                      className="ds-icon-btn ds-icon-btn--danger"
                       onClick={() => handleDelete(fu.id)}
                       title="Elimina"
                     >
@@ -662,11 +662,11 @@ function FollowUpSection({
                 />
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
-                <button className="btn-secondary btn-sm" onClick={() => setShowAdd(false)}>
+                <button className="ds-btn ds-btn--secondary" onClick={() => setShowAdd(false)}>
                   Annulla
                 </button>
                 <button
-                  className="btn-success btn-sm"
+                  className="ds-btn ds-btn--primary"
                   onClick={handleSave}
                   disabled={!fuForm.siglaOperatore}
                 >
@@ -675,7 +675,7 @@ function FollowUpSection({
               </div>
             </div>
           ) : (
-            <button className="btn-success btn-sm" onClick={() => setShowAdd(true)}>
+            <button className="ds-btn ds-btn--primary" onClick={() => setShowAdd(true)}>
               + Aggiungi follow-up
             </button>
           )}
@@ -823,7 +823,7 @@ export function MedicazioniTab({
       {/* ── Modulo view ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-          <button className="btn-secondary btn-sm" onClick={() => setModulo(false)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(false)}>
             ← Vista operativa
           </button>
           <PrintButton label="Stampa modulo" />
@@ -839,11 +839,11 @@ export function MedicazioniTab({
           countLabel="attive"
           actions={
             <>
-              <button className="btn-sm" onClick={() => setModulo(true)}>
+              <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(true)}>
                 Vista modulo
               </button>
               <button
-                className="btn-sm"
+                className="ds-btn ds-btn--secondary"
                 disabled={saving}
                 onClick={() => {
                   applyEntry('discard');
@@ -864,14 +864,14 @@ export function MedicazioniTab({
                 </p>
                 <button
                   type="button"
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => applyEntry('resume')}
                 >
                   Riprendi modifica
                 </button>
                 <button
                   type="button"
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => applyEntry('discard')}
                 >
                   Annulla modifica e inizia nuova
@@ -1099,7 +1099,7 @@ export function MedicazioniTab({
 
                 <div className="cr-inline-form__actions">
                   <button
-                    className="btn-secondary btn-sm"
+                    className="ds-btn ds-btn--secondary"
                     disabled={saving}
                     onClick={() => {
                       setShowAdd(false);
@@ -1109,7 +1109,7 @@ export function MedicazioniTab({
                     Annulla
                   </button>
                   <button
-                    className="btn-success btn-sm"
+                    className="ds-btn ds-btn--primary"
                     disabled={saving}
                     onClick={() => void handleSave()}
                   >
@@ -1136,7 +1136,7 @@ export function MedicazioniTab({
                       {m.odore && <span className="badge badge--amber">Odore</span>}
                       <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
                         <button
-                          className="icon-btn icon-btn--sm icon-btn--edit"
+                          className="ds-icon-btn"
                           onClick={() => startEdit(m)}
                           title="Modifica"
                         >
@@ -1154,7 +1154,7 @@ export function MedicazioniTab({
                           </svg>
                         </button>
                         <button
-                          className="icon-btn icon-btn--sm icon-btn--danger"
+                          className="ds-icon-btn ds-icon-btn--danger"
                           onClick={() =>
                             onUpdate({ medicazioniFerite: meds.filter((x) => x.id !== m.id) })
                           }

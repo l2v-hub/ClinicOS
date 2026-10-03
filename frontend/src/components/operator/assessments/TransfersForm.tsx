@@ -311,7 +311,7 @@ export function TransfersForm({
           </p>
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             onClick={() =>
               update((a) => {
                 for (const key of AID_KEYS) {
@@ -383,10 +383,19 @@ export function TransfersForm({
         </section>
       </fieldset>
       <div className="assessment-actions">
-        <button type="submit" className="btn-secondary" disabled={locked || !draft.dirty}>
+        <button
+          type="submit"
+          className="ds-btn ds-btn--secondary"
+          disabled={locked || !draft.dirty}
+        >
           {draft.busy ? 'Salvataggio…' : 'Salva bozza'}
         </button>
-        <button type="button" className="btn-primary" disabled={locked} onClick={onPreview}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--primary"
+          disabled={locked}
+          onClick={onPreview}
+        >
           Salva e verifica anteprima
         </button>
       </div>

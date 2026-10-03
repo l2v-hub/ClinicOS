@@ -4,7 +4,6 @@ import { afterEach, test } from 'node:test';
 import { loadAllDiaryPages } from '../diaryPages';
 
 const originalFetch = globalThis.fetch;
-const headerUrl = new URL('../../components/operator/PatientCompactHeader.tsx', import.meta.url);
 const dialogUrl = new URL(
   '../../components/operator/PatientRecordPrintDialog.tsx',
   import.meta.url,
@@ -25,14 +24,9 @@ afterEach(() => {
 });
 
 test('global patient print always opens the selective dialog instead of printing the active tab', async () => {
-  const [header, detail] = await Promise.all([
-    readFile(headerUrl, 'utf8'),
-    readFile(patientDetailUrl, 'utf8'),
-  ]);
-  // HMI 1: "Stampa" è nella barra delle sezioni della cartella (la vecchia card intestazione resta
-  // per compatibilità ma non è più montata); in entrambi i casi apre la finestra di selezione.
-  assert.match(header, /onPrint\?: \(\) => void/);
-  assert.doesNotMatch(header, /window\.print\(\)/);
+  const detail = await readFile(patientDetailUrl, 'utf8');
+  // HMI 1: "Stampa" è nella barra delle sezioni della cartella e apre la finestra di selezione
+  // (la vecchia card intestazione PatientCompactHeader è stata rimossa in UX2 W6).
   assert.doesNotMatch(detail, /window\.print\(\)/);
   assert.match(
     detail,

@@ -337,7 +337,7 @@ export function PatientRoster({
           </select>
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             aria-label={`Imposta ordine ${sort.direction === 'asc' ? 'decrescente' : 'crescente'}`}
             onClick={() => onSortChange(togglePatientSort(sort, sort.field))}
           >

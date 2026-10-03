@@ -115,7 +115,7 @@ export function DischargeTherapyReview({
             {chips[i] && source.open && (
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 data-testid="discharge-therapy-source"
                 aria-label={chips[i]!.ariaLabel}
                 onClick={(e) => source.open?.(chips[i]!.target, e.currentTarget)}
@@ -126,7 +126,7 @@ export function DischargeTherapyReview({
             {!r.conflictDeferred && (
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 data-testid="discharge-therapy-remove"
                 onClick={() => toggleDeferred(i)}
                 title="Non riportare questo farmaco nella terapia"
@@ -155,7 +155,7 @@ export function DischargeTherapyReview({
               {onBackToDocuments && (
                 <button
                   type="button"
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   data-testid="discharge-therapy-resolve"
                   onClick={onBackToDocuments}
                 >
@@ -203,7 +203,7 @@ export function DischargeTherapyReview({
                   {therapyFieldFeedback(`${id}-${i}`, review[i].diagnostics).error('sourceReview')}
                   <button
                     type="button"
-                    className="btn-secondary"
+                    className="ds-btn ds-btn--secondary"
                     disabled={
                       therapyInputIssues(review[i].input).length > 0 ||
                       (r.sourceOutdated === true && !sourceResultHash)

@@ -157,7 +157,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
           <div className="narrative-edit__actions">
             <button
               type="button"
-              className="btn-success btn-sm"
+              className="ds-btn ds-btn--primary"
               disabled={props.busy}
               onClick={save}
             >
@@ -165,7 +165,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
             </button>
             <button
               type="button"
-              className="btn-ghost btn-sm"
+              className="ds-btn ds-btn--secondary"
               disabled={props.busy}
               onClick={cancel}
             >
@@ -173,7 +173,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
             </button>
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               disabled={props.busy || !originalText.trim()}
               onClick={restoreOriginal}
             >
@@ -185,7 +185,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
         <div className="narrative-empty">
           <p>Nessuna informazione disponibile.</p>
           {editable && (
-            <button type="button" className="btn-secondary btn-sm" onClick={startEdit}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={startEdit}>
               Aggiungi informazioni
             </button>
           )}

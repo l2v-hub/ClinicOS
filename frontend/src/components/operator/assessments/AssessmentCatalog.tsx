@@ -111,7 +111,7 @@ export function AssessmentCatalogView({
       {state.status === 'error' && (
         <p role="alert">
           {state.error}{' '}
-          <button type="button" className="btn-secondary btn-sm" onClick={onRetry}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={onRetry}>
             Riprova
           </button>
         </p>
@@ -138,7 +138,7 @@ export function AssessmentCatalogView({
                   <div className="assessment-catalog-actions">
                     <button
                       type="button"
-                      className="btn-secondary btn-sm"
+                      className="ds-btn ds-btn--secondary"
                       aria-label={`Apri ${module.label}`}
                       onClick={() => onOpen(module, 'open', item)}
                     >
@@ -147,7 +147,7 @@ export function AssessmentCatalogView({
                     {canCreate && (
                       <button
                         type="button"
-                        className="btn-primary btn-sm"
+                        className="ds-btn ds-btn--primary"
                         aria-label={`Nuova compilazione ${module.label}`}
                         onClick={() => onOpen(module, 'new', item)}
                       >
@@ -157,7 +157,7 @@ export function AssessmentCatalogView({
                     {canCreate && (local || !!item?.ownDraftCount) && (
                       <button
                         type="button"
-                        className="btn-secondary btn-sm"
+                        className="ds-btn ds-btn--secondary"
                         aria-label={`Riprendi bozza ${module.label}`}
                         onClick={() => onOpen(module, 'resume', item)}
                       >
@@ -171,7 +171,7 @@ export function AssessmentCatalogView({
           </div>
         </section>
       ))}
-      <button type="button" className="btn-ghost" onClick={onNrs}>
+      <button type="button" className="ds-btn ds-btn--secondary" onClick={onNrs}>
         Storico NRS precedente
       </button>
     </section>

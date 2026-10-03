@@ -77,7 +77,11 @@ export function FilterBar({ value, onChange, shown, total }: FilterBarProps) {
           Solo modificate
         </button>
         {filtersActive(value) && (
-          <button type="button" className="btn-secondary" onClick={() => onChange(EMPTY_FILTERS)}>
+          <button
+            type="button"
+            className="ds-btn ds-btn--secondary"
+            onClick={() => onChange(EMPTY_FILTERS)}
+          >
             Azzera filtri
           </button>
         )}

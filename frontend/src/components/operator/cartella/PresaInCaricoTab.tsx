@@ -342,10 +342,10 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         className="cr-form-actions"
         style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
       >
-        <button className="btn-secondary" onClick={cancelEdit}>
+        <button className="ds-btn ds-btn--secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-success" onClick={handleSave}>
+        <button className="ds-btn ds-btn--primary" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>
@@ -490,10 +490,10 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         className="cr-form-actions"
         style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
       >
-        <button className="btn-secondary" onClick={cancelEdit}>
+        <button className="ds-btn ds-btn--secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-success" onClick={handleSave}>
+        <button className="ds-btn ds-btn--primary" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>
@@ -690,10 +690,10 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         className="cr-form-actions"
         style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
       >
-        <button className="btn-secondary" onClick={cancelEdit}>
+        <button className="ds-btn ds-btn--secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-success" onClick={handleSave}>
+        <button className="ds-btn ds-btn--primary" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>
@@ -866,10 +866,10 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         className="cr-form-actions"
         style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
       >
-        <button className="btn-secondary" onClick={cancelEdit}>
+        <button className="ds-btn ds-btn--secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-success" onClick={handleSave}>
+        <button className="ds-btn ds-btn--primary" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>

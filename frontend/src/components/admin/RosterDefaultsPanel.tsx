@@ -57,7 +57,7 @@ function DefaultRow({
         </label>
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={pending}
           onClick={() => onSave(row, order)}
         >
@@ -187,7 +187,7 @@ export function RosterDefaultsPanel() {
       {nextCursor && (
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={loading || Boolean(pending)}
           onClick={() => void load(nextCursor)}
         >

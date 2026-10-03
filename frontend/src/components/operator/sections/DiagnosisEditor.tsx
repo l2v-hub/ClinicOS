@@ -65,11 +65,11 @@ function ItemRow({
     <div className="cr-item-row diagnosis-item">
       <div className="cr-item-row__content">{children}</div>
       {!readOnly && <div className="cr-item-row__actions">
-        <button className="icon-btn icon-btn--sm icon-btn--edit" onClick={onEdit} title="Modifica">
+        <button className="ds-icon-btn" onClick={onEdit} title="Modifica">
           <IcoEdit />
         </button>
         <button
-          className="icon-btn icon-btn--sm icon-btn--danger"
+          className="ds-icon-btn ds-icon-btn--danger"
           onClick={onDelete}
           title="Elimina"
         >
@@ -136,7 +136,7 @@ export function DiagnosisEditor({
       actions={
         !readOnly ? (
           <button
-            className="btn-sm"
+            className="ds-btn ds-btn--secondary"
             onClick={() => {
               setDiagForm({});
               setInvalidDescription(false);

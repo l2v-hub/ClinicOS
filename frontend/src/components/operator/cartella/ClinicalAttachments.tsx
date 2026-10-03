@@ -147,7 +147,7 @@ function AttachmentSession({
         />
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           disabled={busy || metadataLoading}
           onClick={() => inputRef.current?.click()}
         >
@@ -155,7 +155,7 @@ function AttachmentSession({
         </button>
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           disabled={busy || metadataLoading}
           onClick={() => setCamera(true)}
         >
@@ -169,14 +169,14 @@ function AttachmentSession({
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={() => setPreview('local')}
             >
               Anteprima
             </button>
             <button
               type="button"
-              className="btn-primary btn-sm"
+              className="ds-btn ds-btn--primary"
               disabled={busy}
               onClick={() => void save()}
             >
@@ -184,7 +184,7 @@ function AttachmentSession({
             </button>
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               disabled={busy}
               onClick={() => {
                 setFile(null);
@@ -215,7 +215,7 @@ function AttachmentSession({
             <li key={document.id}>
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => setPreview(document)}
               >
                 {document.originalName}

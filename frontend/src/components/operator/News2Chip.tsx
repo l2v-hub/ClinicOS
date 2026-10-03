@@ -376,7 +376,7 @@ function News2History({
             </h2>
             <p className="news2-dialog__sub">{patientName}</p>
           </div>
-          <button type="button" className="btn-secondary btn-sm" onClick={onClose}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={onClose}>
             Chiudi
           </button>
         </div>
@@ -390,7 +390,7 @@ function News2History({
               Non è stato possibile caricare le rilevazioni: il NEWS2 non è verificabile in questo
               momento. Le rilevazioni registrate non sono andate perse.
             </p>
-            <button type="button" className="btn-primary btn-sm" onClick={onRetry}>
+            <button type="button" className="ds-btn ds-btn--primary" onClick={onRetry}>
               Riprova
             </button>
           </div>
@@ -411,7 +411,7 @@ function News2History({
           </h2>
           <p className="news2-dialog__sub">{patientName}</p>
         </div>
-        <button type="button" className="btn-secondary btn-sm" onClick={onClose}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={onClose}>
           Chiudi
         </button>
       </div>
@@ -497,7 +497,7 @@ function News2History({
       {canLoadMore && (
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           onClick={onLoadMore}
           disabled={loadingMore}
         >

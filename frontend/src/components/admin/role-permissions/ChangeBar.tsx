@@ -44,21 +44,36 @@ export function ChangeBar({
         />
       </label>
       <div className="rp-changebar__actions">
-        <button type="button" className="btn-secondary" disabled={busy} onClick={onDiscard}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          disabled={busy}
+          onClick={onDiscard}
+        >
           Annulla modifiche
         </button>
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={busy || impactLoading}
           onClick={onPreview}
         >
           {impactLoading ? 'Calcolo…' : 'Anteprima impatto'}
         </button>
-        <button type="button" className="btn-secondary" disabled={busy} onClick={onSaveDraft}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          disabled={busy}
+          onClick={onSaveDraft}
+        >
           Salva bozza
         </button>
-        <button type="button" className="btn-primary" disabled={busy} onClick={onSaveApply}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--primary"
+          disabled={busy}
+          onClick={onSaveApply}
+        >
           Salva e applica
         </button>
       </div>

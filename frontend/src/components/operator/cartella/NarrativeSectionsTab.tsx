@@ -149,7 +149,7 @@ export function NarrativeSectionsTab({
         <span className="alert__text">{error}</span>
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           onClick={() => setReloadVersion((v) => v + 1)}
         >
           Riprova

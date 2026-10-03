@@ -71,7 +71,7 @@ export function PatientParameterPeriodFilter({ preset, period, onPreset, onCusto
               />
             </label>
           ))}
-          <button type="submit" className="btn-secondary btn-sm">
+          <button type="submit" className="ds-btn ds-btn--secondary">
             Applica periodo
           </button>
           <span>Fino a 366 giorni</span>

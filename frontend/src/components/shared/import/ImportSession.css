@@ -233,10 +233,7 @@
   .import-letter-tools h3 {
     width: 100%;
   }
-  .import-page__actions .btn-sm {
-    min-height: 44px;
-    min-width: 44px;
-  }
+
   .import-documents {
     padding: 0.6rem;
   }

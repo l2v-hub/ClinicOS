@@ -33,14 +33,14 @@ export function ImportProposalsReview({
           {proposal.status === 'pending' ? (
             <div className="discharge-therapy-review__item-head">
               <button
-                className="btn-secondary"
+                className="ds-btn ds-btn--secondary"
                 disabled={busy}
                 onClick={() => onDecision(proposal.id, 'add')}
               >
                 Aggiungi come proposta da verificare
               </button>
               <button
-                className="btn-secondary"
+                className="ds-btn ds-btn--secondary"
                 disabled={busy}
                 onClick={() => onDecision(proposal.id, 'defer')}
               >

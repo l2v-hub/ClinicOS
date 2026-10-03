@@ -119,7 +119,7 @@ export function DocumentPreview({
       <div className="doc-preview__toolbar">
         <div className="doc-preview__nav">
           <button
-            className="icon-btn"
+            className="ds-icon-btn"
             disabled={idx === 0}
             onClick={prev}
             aria-label="Documento precedente"
@@ -131,7 +131,7 @@ export function DocumentPreview({
             {kind} {idx + 1} di {documents.length}
           </span>
           <button
-            className="icon-btn"
+            className="ds-icon-btn"
             disabled={idx === documents.length - 1}
             onClick={next}
             aria-label="Documento successivo"
@@ -165,7 +165,7 @@ export function DocumentPreview({
             {isPdf && (
               <>
                 <button
-                  className="icon-btn"
+                  className="ds-icon-btn"
                   disabled={page <= 1}
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   aria-label="Pagina precedente"
@@ -175,7 +175,7 @@ export function DocumentPreview({
                 </button>
                 <span className="doc-preview__page">Pag. {page}</span>
                 <button
-                  className="icon-btn"
+                  className="ds-icon-btn"
                   onClick={() => setPage((p) => p + 1)}
                   aria-label="Pagina successiva"
                   title="Pagina successiva"
@@ -184,11 +184,21 @@ export function DocumentPreview({
                 </button>
               </>
             )}
-            <button className="icon-btn" onClick={zoomOut} aria-label="Riduci zoom" title="Zoom −">
+            <button
+              className="ds-icon-btn"
+              onClick={zoomOut}
+              aria-label="Riduci zoom"
+              title="Zoom −"
+            >
               −
             </button>
             <span className="doc-preview__zoomval">{Math.round(zoom * 100)}%</span>
-            <button className="icon-btn" onClick={zoomIn} aria-label="Aumenta zoom" title="Zoom +">
+            <button
+              className="ds-icon-btn"
+              onClick={zoomIn}
+              aria-label="Aumenta zoom"
+              title="Zoom +"
+            >
               +
             </button>
             <button className="ds-btn ds-btn--secondary" onClick={fit} title="Adatta">

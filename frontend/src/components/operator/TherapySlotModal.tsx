@@ -166,7 +166,7 @@ export function TherapySlotModal({
               {loadMoreError && <span role="alert">{loadMoreError}</span>}
               <button
                 type="button"
-                className="btn-secondary btn-sm"
+                className="ds-btn ds-btn--secondary"
                 onClick={onLoadMore}
                 disabled={loadingMore}
               >

@@ -293,7 +293,7 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
             />
             <button
               type="button"
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               disabled={loading || busy}
               onClick={() => {
                 setNotice(null);
@@ -316,7 +316,7 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
             {notice.reload && (
               <button
                 type="button"
-                className="btn-primary"
+                className="ds-btn ds-btn--primary"
                 onClick={() => {
                   setNotice(null);
                   reload();
@@ -325,7 +325,11 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
                 Ricarica policy (scarta modifiche locali)
               </button>
             )}
-            <button type="button" className="btn-secondary" onClick={() => setNotice(null)}>
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              onClick={() => setNotice(null)}
+            >
               Chiudi
             </button>
           </span>
@@ -338,7 +342,7 @@ export function RolePermissionsPage({ onPolicyApplied }: RolePermissionsPageProp
         ) : loadError || !policy || !draft || !diff ? (
           <div className="rp-banner rp-banner--error" role="alert">
             <span>{loadError ?? 'Policy non disponibile.'}</span>
-            <button type="button" className="btn-secondary" onClick={reload}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={reload}>
               Riprova
             </button>
           </div>

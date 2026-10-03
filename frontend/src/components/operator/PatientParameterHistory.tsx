@@ -79,7 +79,7 @@ export function PatientParameterHistory({
       {ordered.length > limit && (
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           onClick={() => setLimit((value) => value + 50)}
         >
           Mostra altre rilevazioni ({ordered.length - limit})
@@ -106,7 +106,7 @@ export function PatientParameterHistory({
           {dated.length > legacyLimit && (
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={() => setLegacyLimit((value) => value + 25)}
             >
               Mostra altri dati precedenti

@@ -114,9 +114,7 @@
   font-size: 13px;
   font-weight: 650;
 }
-.patient-therapy-slot-detail__head .btn-sm {
-  min-height: 44px;
-}
+
 .patient-therapy-slot-detail__sub {
   margin-top: 12px;
   text-transform: none;

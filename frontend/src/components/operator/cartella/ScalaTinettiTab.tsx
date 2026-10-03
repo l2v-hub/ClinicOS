@@ -118,7 +118,7 @@ export function ScalaTinettiTab({
             </summary>
             <button
               type="button"
-              className="btn-secondary no-print"
+              className="ds-btn ds-btn--secondary no-print"
               onClick={() => {
                 setPrintIndex(index);
                 window.setTimeout(() => {

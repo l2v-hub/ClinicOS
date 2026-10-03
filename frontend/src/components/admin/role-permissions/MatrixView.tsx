@@ -73,10 +73,10 @@ export function MatrixView({
   return (
     <div className="rp-matrix">
       <div className="rp-matrix__tools">
-        <button type="button" className="btn-secondary" onClick={() => setAll(true)}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={() => setAll(true)}>
           Espandi tutti
         </button>
-        <button type="button" className="btn-secondary" onClick={() => setAll(false)}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={() => setAll(false)}>
           Comprimi tutti
         </button>
       </div>

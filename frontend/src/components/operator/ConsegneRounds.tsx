@@ -167,7 +167,7 @@ export function ConsegneRounds({
           {roster.nextCursor && (
             <button
               type="button"
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               disabled={roster.loading || roster.loadingMore}
               onClick={() => void roster.loadMore()}
             >

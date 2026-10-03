@@ -109,7 +109,7 @@ export function ImportPageContent({
       <div role="alert">
         <p>{error}</p>
         {retry && (
-          <button className="btn-secondary" onClick={() => setAttempt((n) => n + 1)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => setAttempt((n) => n + 1)}>
             Riprova anteprima
           </button>
         )}
@@ -132,7 +132,7 @@ export function ImportPageContent({
           alt={`Pagina ${page.sourcePageNumber} del documento ${document.filename}`}
         />
       )}
-      <a className="btn-secondary" href={data.url} download={document.filename}>
+      <a className="ds-btn ds-btn--secondary" href={data.url} download={document.filename}>
         Scarica originale
       </a>
     </div>
@@ -162,7 +162,7 @@ export function ImportPagePreview({
       <header className="import-modal__head">
         <h3 id={title}>Anteprima · pagina {page.sortOrder + 1}</h3>
         <button
-          className="icon-btn"
+          className="ds-icon-btn"
           aria-label="Chiudi anteprima"
           onClick={onClose}
           data-dialog-initial-focus
@@ -173,11 +173,11 @@ export function ImportPagePreview({
       <ImportPageContent document={document} page={page} cache={cache} />
       <footer className="import-modal__foot">
         {onRetake && (
-          <button className="btn-secondary" onClick={onRetake}>
+          <button className="ds-btn ds-btn--secondary" onClick={onRetake}>
             Ripeti scansione
           </button>
         )}
-        <button className="btn-primary" onClick={onClose}>
+        <button className="ds-btn ds-btn--primary" onClick={onClose}>
           Chiudi anteprima
         </button>
       </footer>

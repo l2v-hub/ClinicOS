@@ -183,7 +183,7 @@ export function DashboardNotificationCenter({
             </div>
             <button
               type="button"
-              className="icon-btn"
+              className="ds-icon-btn"
               data-dialog-initial-focus
               aria-label="Chiudi centro notifiche"
               onClick={() => setOpen(false)}
@@ -243,7 +243,11 @@ export function DashboardNotificationCenter({
             <span>
               {loading ? 'Aggiornamento dati…' : 'Conteggi distinti per categoria e priorità'}
             </span>
-            <button type="button" className="btn-secondary" onClick={() => setOpen(false)}>
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              onClick={() => setOpen(false)}
+            >
               Chiudi
             </button>
           </div>

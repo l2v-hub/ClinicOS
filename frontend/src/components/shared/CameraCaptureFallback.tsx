@@ -24,13 +24,13 @@ export function CameraCaptureFallback({
       </p>
       {error && <p role="alert">{error}</p>}
       <div className="camera-capture__actions">
-        <button type="button" className="btn-secondary" onClick={onRestart}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={onRestart}>
           Riprova
         </button>
-        <button type="button" className="btn-primary" onClick={onImport}>
+        <button type="button" className="ds-btn ds-btn--primary" onClick={onImport}>
           {denied ? 'Apri importazione' : 'Seleziona un’immagine dal dispositivo'}
         </button>
-        <button type="button" className="btn-secondary" onClick={onClose}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={onClose}>
           Annulla
         </button>
       </div>

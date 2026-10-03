@@ -5,7 +5,7 @@ export function PatientIntakeReview({ state, onRetry }: { state: PatientIntakeRe
   if (state.status === 'loading') return null;
   if (state.status === 'error') return <p className="form-hint">
     Impossibile caricare le terapie rimaste in bozza.{' '}
-    <button type="button" className="btn-ghost" onClick={onRetry}>Riprova</button>
+    <button type="button" className="ds-btn ds-btn--secondary" onClick={onRetry}>Riprova</button>
   </p>;
   const rows = state.data?.deferredTherapies ?? [];
   if (!rows.length) return null;

@@ -140,7 +140,7 @@ export function ConsegnePage({
   const createAction = canCreate && (
     <button
       type="button"
-      className="btn-success"
+      className="ds-btn ds-btn--primary"
       aria-expanded={formAperto}
       aria-controls="nuova-consegna-panel"
       onClick={() => setFormAperto((open) => !open)}
@@ -257,7 +257,7 @@ export function ConsegnePage({
       {loadError && (
         <div className="empty-state-card" role="alert">
           <p>{loadError}</p>
-          <button className="btn-secondary btn-sm" onClick={onRetry}>
+          <button className="ds-btn ds-btn--secondary" onClick={onRetry}>
             Riprova
           </button>
         </div>
@@ -269,7 +269,7 @@ export function ConsegnePage({
       )}
       {hasMore && !loadError && (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-          <button className="btn-secondary" onClick={onLoadMore} disabled={loading}>
+          <button className="ds-btn ds-btn--secondary" onClick={onLoadMore} disabled={loading}>
             {loading ? 'Caricamento…' : 'Carica altre'}
           </button>
         </div>
@@ -339,7 +339,7 @@ function ConsegnaCard({
         )}
         {(canEditContent || isAdmin) && (
           <button
-            className="icon-btn icon-btn--sm consegna-edit-btn icon-btn--edit"
+            className="ds-icon-btn consegna-edit-btn"
             onClick={() => setEditOpen(true)}
             title="Modifica consegna"
             aria-label="Modifica consegna"
@@ -411,7 +411,7 @@ function ConsegnaCard({
         </div>
         {canDelete && (
           <button
-            className="icon-btn icon-btn--sm icon-btn--danger"
+            className="ds-icon-btn ds-icon-btn--danger"
             onClick={() => setConfirmOpen(true)}
             title="Elimina"
             aria-label="Elimina consegna"
@@ -506,7 +506,7 @@ function ConsegnaEditInline({
         }}
       >
         <strong style={{ fontSize: 13 }}>Modifica consegna</strong>
-        <button className="icon-btn icon-btn--sm" onClick={onClose} aria-label="Chiudi">
+        <button className="ds-icon-btn" onClick={onClose} aria-label="Chiudi">
           <IcoX />
         </button>
       </div>
@@ -582,10 +582,10 @@ function ConsegnaEditInline({
         )}
       </div>
       <div className="table-actions" style={{ justifyContent: 'flex-end', marginTop: 10 }}>
-        <button className="btn-secondary btn-sm" onClick={onClose} disabled={saving}>
+        <button className="ds-btn ds-btn--secondary" onClick={onClose} disabled={saving}>
           Annulla
         </button>
-        <button className="btn-success btn-sm" onClick={save} disabled={saving}>
+        <button className="ds-btn ds-btn--primary" onClick={save} disabled={saving}>
           <IcoCheck /> Salva
         </button>
       </div>

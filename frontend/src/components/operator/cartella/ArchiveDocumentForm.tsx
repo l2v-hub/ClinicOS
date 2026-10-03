@@ -273,14 +273,14 @@ export function ArchiveDocumentForm({
               <div className="patient-archive-form__upload-actions">
                 <button
                   type="button"
-                  className="btn-primary btn-sm"
+                  className="ds-btn ds-btn--primary"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   Carica file
                 </button>
                 <button
                   type="button"
-                  className="btn-secondary btn-sm"
+                  className="ds-btn ds-btn--secondary"
                   onClick={() => setCameraOpen(true)}
                 >
                   Scatta foto
@@ -289,7 +289,11 @@ export function ArchiveDocumentForm({
             </div>
           )}
           {(file || stored) && (
-            <button type="button" className="btn-secondary btn-sm" onClick={() => setPreview(true)}>
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              onClick={() => setPreview(true)}
+            >
               Anteprima{file ? ` · ${file.name}` : ''}
             </button>
           )}
@@ -301,12 +305,17 @@ export function ArchiveDocumentForm({
         </p>
       )}
       <div className="cr-inline-form__actions">
-        <button type="button" className="btn-secondary btn-sm" disabled={saving} onClick={onClose}>
+        <button
+          type="button"
+          className="ds-btn ds-btn--secondary"
+          disabled={saving}
+          onClick={onClose}
+        >
           Annulla
         </button>
         <button
           type="button"
-          className="btn-success btn-sm"
+          className="ds-btn ds-btn--primary"
           disabled={saving}
           onClick={() => void save()}
         >

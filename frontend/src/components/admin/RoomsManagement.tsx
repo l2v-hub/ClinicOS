@@ -363,7 +363,7 @@ export function RoomsManagement() {
       {error && (
         <div className="alert alert--error" role="alert">
           <span className="alert__text">{error}</span>
-          <button className="icon-btn" onClick={() => setError(null)} aria-label="Chiudi errore">
+          <button className="ds-icon-btn" onClick={() => setError(null)} aria-label="Chiudi errore">
             <IcoX />
           </button>
         </div>
@@ -372,7 +372,7 @@ export function RoomsManagement() {
       {loadError && (
         <div className="alert alert--error" role="alert">
           <span className="alert__text">{loadError}</span>
-          <button className="btn-secondary" onClick={() => void loadData()}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => void loadData()}>
             Riprova
           </button>
         </div>
@@ -421,7 +421,7 @@ export function RoomsManagement() {
         <div className="op-form-panel">
           <div className="op-form-panel__header">
             <h3 className="op-form-panel__title">{editId ? 'Modifica Camera' : 'Nuova Camera'}</h3>
-            <button className="icon-btn" onClick={() => setFormAperto(false)}>
+            <button className="ds-icon-btn" onClick={() => setFormAperto(false)}>
               <IcoX />
             </button>
           </div>
@@ -493,14 +493,14 @@ export function RoomsManagement() {
           </div>
           <div className="op-form-panel__actions">
             <button
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
 
               onClick={() => setFormAperto(false)}
             >
               Annulla
             </button>
             <button
-              className="btn-success"
+              className="ds-btn ds-btn--primary"
 
               onClick={salvaCamera}
               disabled={saving}
@@ -524,7 +524,7 @@ export function RoomsManagement() {
             </h3>
             <button
               type="button"
-              className="icon-btn"
+              className="ds-icon-btn"
               aria-label="Chiudi modifica letto"
               data-dialog-initial-focus
               disabled={bedSaving}
@@ -568,7 +568,7 @@ export function RoomsManagement() {
           <div className="modal-footer">
             <button
               type="button"
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
 
               disabled={bedSaving}
               onClick={() => setLettoEdit(null)}
@@ -577,7 +577,7 @@ export function RoomsManagement() {
             </button>
             <button
               type="button"
-              className="btn-success"
+              className="ds-btn ds-btn--primary"
 
               disabled={bedSaving}
               onClick={salvaLetto}
@@ -659,7 +659,7 @@ export function RoomsManagement() {
                     </span>
                   </div>
                   <button
-                    className="icon-btn icon-btn--sm icon-btn--edit"
+                    className="ds-icon-btn"
 
                     onClick={() => apriModificaCamera(room)}
                     title="Modifica camera"
@@ -667,7 +667,7 @@ export function RoomsManagement() {
                     <IcoEdit />
                   </button>
                   <button
-                    className="icon-btn icon-btn--danger"
+                    className="ds-icon-btn ds-icon-btn--danger"
 
                     onClick={() => setPendingRoom(room)}
                     title="Elimina camera"
@@ -712,7 +712,7 @@ export function RoomsManagement() {
                         )}
                         {bed.note && <span className="letto-note">{bed.note}</span>}
                         <button
-                          className="icon-btn icon-btn--sm"
+                          className="ds-icon-btn"
 
                           onClick={() => apriLettoEdit(bed)}
                           title="Modifica letto"

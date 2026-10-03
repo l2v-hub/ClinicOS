@@ -66,7 +66,7 @@ export function AssessmentHistory({
         </label>
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           onClick={history.refresh}
           disabled={history.loading}
         >
@@ -111,7 +111,7 @@ export function AssessmentHistory({
                 </span>
               )}
             </div>
-            <button type="button" className="btn-secondary" onClick={() => onOpen(record)}>
+            <button type="button" className="ds-btn ds-btn--secondary" onClick={() => onOpen(record)}>
               {record.status === 'draft' ? 'Riprendi bozza' : 'Apri valutazione'}
             </button>
           </li>
@@ -120,7 +120,7 @@ export function AssessmentHistory({
       {history.hasMore && (
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={history.loading}
           onClick={history.loadMore}
         >

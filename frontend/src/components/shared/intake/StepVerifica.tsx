@@ -223,7 +223,7 @@ export function StepVerifica({
         {review.length > 0 && onReviewTherapies && (
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             disabled={busy}
             onClick={() => onReviewTherapies()}
           >
@@ -302,7 +302,7 @@ export function StepVerifica({
       {error && <p className="import-modal__error">{error}</p>}
 
       {showCreate && <div className="step-verifica__actions">
-        <button className="btn-success" onClick={onConfirm} disabled={busy || !canCreate}>
+        <button className="ds-btn ds-btn--primary" onClick={onConfirm} disabled={busy || !canCreate}>
           <IcoCheck /> {busy ? 'Creazione…' : 'Crea paziente'}
         </button>
       </div>}

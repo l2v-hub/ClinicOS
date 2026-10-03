@@ -281,7 +281,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
       <header className="import-modal__head">
         {(step === 'review' || processing) && (
           <button
-            className="btn-ghost"
+            className="ds-btn ds-btn--secondary"
             disabled={busy || pendingUpload}
             onClick={() => void reopen()}
           >
@@ -292,7 +292,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
           {step === 'review' ? 'Revisione delle lettere' : 'Importa lettere di dimissione'}
         </h2>
         <button
-          className="icon-btn"
+          className="ds-icon-btn"
           disabled={busy || pendingUpload}
           onClick={onClose}
           aria-label="Chiudi e conserva sessione"
@@ -306,7 +306,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
           <p>{error}</p>
           {retryMutation && (
             <button
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               disabled={busy}
               onClick={() => void mutate(retryMutation)}
             >
@@ -317,7 +317,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
             !opening &&
             (terminal ? (
               <button
-                className="btn-primary"
+                className="ds-btn ds-btn--primary"
                 onClick={() => {
                   importSessionMemory.clear(actor);
                   setTerminal(false);
@@ -330,7 +330,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
               </button>
             ) : (
               <button
-                className="btn-secondary"
+                className="ds-btn ds-btn--secondary"
                 onClick={() => {
                   setOpening(true);
                   setError('');
@@ -392,7 +392,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
         )}
         {job && (
           <button
-            className="btn-danger btn-sm"
+            className="ds-btn ds-btn--danger"
             disabled={busy || pendingUpload}
             onClick={() => void discard()}
           >

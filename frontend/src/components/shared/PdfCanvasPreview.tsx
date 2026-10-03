@@ -114,7 +114,7 @@ export function PdfCanvasPreview({
       <div className="document-pdf-preview__toolbar" aria-label="Controlli PDF">
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           aria-label="Pagina precedente"
           disabled={pageNumber !== undefined || !pdf || page <= 1}
           onClick={() => setPage((value) => value - 1)}
@@ -126,7 +126,7 @@ export function PdfCanvasPreview({
         </span>
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           aria-label="Pagina successiva"
           disabled={pageNumber !== undefined || !pdf || page >= pdf.numPages}
           onClick={() => setPage((value) => value + 1)}
@@ -135,7 +135,7 @@ export function PdfCanvasPreview({
         </button>
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           aria-label="Riduci zoom"
           disabled={zoom <= 0.5}
           onClick={() => setZoom((value) => value - 0.25)}
@@ -145,14 +145,14 @@ export function PdfCanvasPreview({
         <span>{Math.round(zoom * 100)}%</span>
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="ds-btn ds-btn--secondary"
           aria-label="Aumenta zoom"
           disabled={zoom >= 2}
           onClick={() => setZoom((value) => value + 0.25)}
         >
           +
         </button>
-        <button type="button" className="btn-secondary btn-sm" onClick={() => setZoom(1)}>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={() => setZoom(1)}>
           Adatta
         </button>
       </div>
@@ -163,7 +163,7 @@ export function PdfCanvasPreview({
             <p>Impossibile mostrare l’anteprima PDF. Puoi scaricare l’originale.</p>
             <button
               type="button"
-              className="btn-secondary btn-sm"
+              className="ds-btn ds-btn--secondary"
               onClick={() => setRevision((value) => value + 1)}
             >
               Riprova PDF

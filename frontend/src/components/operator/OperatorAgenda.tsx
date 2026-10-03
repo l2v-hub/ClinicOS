@@ -370,7 +370,7 @@ export function OperatorAgenda({
       {!loadingAppuntamenti && appointmentLoadError && (
         <div className="empty-state-card" role="alert">
           <strong>{appointmentLoadError}</strong>
-          <button type="button" className="btn-secondary" onClick={onRetryAppointments}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={onRetryAppointments}>
             Riprova
           </button>
         </div>
@@ -379,7 +379,7 @@ export function OperatorAgenda({
       {!loadingTherapySlots && therapyLoadError && (
         <div className="empty-state-card" role="alert">
           <strong>{therapyLoadError}</strong>
-          <button type="button" className="btn-secondary" onClick={onRetryTherapySlots}>
+          <button type="button" className="ds-btn ds-btn--secondary" onClick={onRetryTherapySlots}>
             Riprova terapie
           </button>
         </div>
@@ -393,7 +393,7 @@ export function OperatorAgenda({
           {therapyLoadMoreError && <span role="alert">{therapyLoadMoreError}</span>}
           <button
             type="button"
-            className="btn-secondary"
+            className="ds-btn ds-btn--secondary"
             onClick={onLoadMoreTherapySlots}
             disabled={loadingMoreTherapySlots}
           >

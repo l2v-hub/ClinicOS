@@ -465,7 +465,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
       {/* -- Modulo view -- */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-          <button className="btn-secondary btn-sm" onClick={() => setModulo(false)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(false)}>
             &#8592; Vista operativa
           </button>
           <PrintButton label="Stampa modulo" />
@@ -479,10 +479,13 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
           title="Parametri Vitali Mensili"
           actions={
             <>
-              <button className="btn-sm" onClick={() => setModulo(true)}>
+              <button className="ds-btn ds-btn--secondary" onClick={() => setModulo(true)}>
                 Vista modulo
               </button>
-              <button className="btn-sm" onClick={() => setShowVitalePanel((v) => !v)}>
+              <button
+                className="ds-btn ds-btn--secondary"
+                onClick={() => setShowVitalePanel((v) => !v)}
+              >
                 + Parametro rapido
               </button>
             </>
@@ -558,10 +561,13 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
                 </div>
               </div>
               <div className="cr-inline-form__actions">
-                <button className="btn-secondary btn-sm" onClick={() => setShowVitalePanel(false)}>
+                <button
+                  className="ds-btn ds-btn--secondary"
+                  onClick={() => setShowVitalePanel(false)}
+                >
                   Annulla
                 </button>
-                <button className="btn-success btn-sm" onClick={addVitale}>
+                <button className="ds-btn ds-btn--primary" onClick={addVitale}>
                   <IcoCheck /> Salva
                 </button>
               </div>
@@ -578,13 +584,13 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
               marginBottom: 14,
             }}
           >
-            <button className="btn-secondary btn-sm" onClick={prevMese}>
+            <button className="ds-btn ds-btn--secondary" onClick={prevMese}>
               &#8249;
             </button>
             <span style={{ fontWeight: 700, fontSize: 15, minWidth: 160, textAlign: 'center' }}>
               {MESI[viewMese - 1]} {viewAnno}
             </span>
-            <button className="btn-secondary btn-sm" onClick={nextMese}>
+            <button className="ds-btn ds-btn--secondary" onClick={nextMese}>
               &#8250;
             </button>
             <span className="cr-meta" style={{ marginLeft: 8 }}>

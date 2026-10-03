@@ -149,7 +149,7 @@ export function AdminDashboard({
       content: (
         <button
           type="button"
-          className="btn-secondary dashboard-notification-section__action"
+          className="ds-btn ds-btn--secondary dashboard-notification-section__action"
           onClick={onRetryCamere}
         >
           Riprova <IcoArrow />

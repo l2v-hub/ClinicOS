@@ -67,11 +67,11 @@ export function ArchivePrintDialog({ documents, patientId, operatorId, operatorR
       {status === 'ready' && <p>Completa la stampa nella finestra del browser. Se non si è aperta, premi “Riapri stampa”.</p>}
       <ul>{documents.map((document) => <li key={document.id}>{document.originalName}</li>)}</ul>
       <footer>
-        <button type="button" className="btn-secondary" data-dialog-initial-focus onClick={onClose}>
+        <button type="button" className="ds-btn ds-btn--secondary" data-dialog-initial-focus onClick={onClose}>
           {status === 'loading' ? 'Annulla preparazione' : 'Chiudi'}
         </button>
-        {status === 'error' && <button type="button" className="btn-primary" onClick={() => setRevision((value) => value + 1)}>Riprova stampa</button>}
-        {status === 'ready' && <button type="button" className="btn-primary" onClick={() => {
+        {status === 'error' && <button type="button" className="ds-btn ds-btn--primary" onClick={() => setRevision((value) => value + 1)}>Riprova stampa</button>}
+        {status === 'ready' && <button type="button" className="ds-btn ds-btn--primary" onClick={() => {
           try { job.current?.print(); } catch { setStatus('error'); setError('Impossibile aprire la stampa. Riprova.'); }
         }}>Riapri stampa</button>}
       </footer>

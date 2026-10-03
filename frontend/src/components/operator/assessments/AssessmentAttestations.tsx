@@ -153,7 +153,7 @@ export function AssessmentAttestations({
                 page.me.allowedKinds.includes(kind) && (
                   <button
                     type="button"
-                    className="btn-secondary"
+                    className="ds-btn ds-btn--secondary"
                     disabled={saving || !!pending}
                     key={kind}
                     onClick={() => void attest(kind)}
@@ -181,7 +181,7 @@ export function AssessmentAttestations({
           {page.pageInfo.hasMore && (
             <button
               type="button"
-              className="btn-secondary"
+              className="ds-btn ds-btn--secondary"
               disabled={loading}
               onClick={() => void load(page.pageInfo.nextCursor!)}
             >
@@ -196,7 +196,7 @@ export function AssessmentAttestations({
       <div className="assessment-actions">
         <button
           type="button"
-          className="btn-secondary"
+          className="ds-btn ds-btn--secondary"
           disabled={loading || saving}
           onClick={() => {
             setError('');
@@ -208,7 +208,7 @@ export function AssessmentAttestations({
         {pending && (
           <button
             type="button"
-            className="btn-primary"
+            className="ds-btn ds-btn--primary"
             disabled={saving}
             onClick={() => void attest(pending.kind)}
           >

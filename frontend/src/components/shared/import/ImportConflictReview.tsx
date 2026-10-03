@@ -62,7 +62,7 @@ export function ImportConflictReview({
                       <button
                         key={page.pageId}
                         type="button"
-                        className="btn-secondary btn-sm"
+                        className="ds-btn ds-btn--secondary"
                         onClick={() => onOpenPage(page.pageId)}
                       >
                         Originale p. {page.sourcePageNumber}
@@ -86,7 +86,7 @@ export function ImportConflictReview({
       })}
       {error && <p role="alert">{error}</p>}
       <button
-        className="btn-primary"
+        className="ds-btn ds-btn--primary"
         disabled={busy || !completeConflictDecisions(result, decisions)}
         onClick={() => {
           setError('');

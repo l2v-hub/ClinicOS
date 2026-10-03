@@ -113,16 +113,16 @@ export function TurnView({
             <div className="voice-actions">
               <button
                 type="button"
-                className="btn-primary"
+                className="ds-btn ds-btn--primary"
                 disabled={!turn.preview.canExecute || !navigationReady || busy}
                 onClick={onConfirm}
               >
                 {busy ? 'Attendi…' : 'Conferma e salva'}
               </button>
-              <button type="button" className="btn-secondary" disabled={busy} onClick={onEdit}>
+              <button type="button" className="ds-btn ds-btn--secondary" disabled={busy} onClick={onEdit}>
                 Modifica
               </button>
-              <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
+              <button type="button" className="ds-btn ds-btn--secondary" disabled={busy} onClick={onCancel}>
                 Annulla
               </button>
             </div>
