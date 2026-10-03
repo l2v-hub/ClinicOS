@@ -236,7 +236,7 @@ export function ImportReviewFull({
         </summary>
         <button
           type="button"
-          className="irf-add"
+          className="ds-btn ds-btn--secondary irf-add"
           disabled={busy}
           onClick={() => update(path, [...items, blank()])}
         >
@@ -248,7 +248,7 @@ export function ImportReviewFull({
               <span>#{idx + 1}</span>
               <button
                 type="button"
-                className="irf-del"
+                className="ds-btn ds-btn--danger irf-del"
                 disabled={busy}
                 onClick={() =>
                   update(
@@ -352,7 +352,7 @@ export function ImportReviewFull({
           <h3>Diario medico ({items.length})</h3>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() => update(['cartella', 'diarioMedico'], [...items, blank()])}
           >
@@ -369,7 +369,8 @@ export function ImportReviewFull({
               {rl('tipo', i)}
               <button
                 type="button"
-                className="irf-del"
+                className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
                 disabled={busy}
                 onClick={() => delRow('diarioMedico', i)}
               >
@@ -470,7 +471,7 @@ export function ImportReviewFull({
           <strong>{allergie.length ? '⚠ ALLERGIE RILEVATE' : 'ALLERGIE NON DOCUMENTATE'}</strong>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() => addRow('allergie', { allergene: '', reazione: '', gravita: '' })}
           >
@@ -484,7 +485,8 @@ export function ImportReviewFull({
             {cellInput('allergie', i, 'gravita', 'Gravità')}
             <button
               type="button"
-              className="irf-del"
+              className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
               disabled={busy}
               onClick={() => delRow('allergie', i)}
             >
@@ -508,7 +510,7 @@ export function ImportReviewFull({
           <h3>Diagnosi ({diagnosi.length})</h3>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() =>
               addRow('diagnosi', { codiceICD: '', descrizione: '', tipo: '', stato: '' })
@@ -537,7 +539,8 @@ export function ImportReviewFull({
                 <td>
                   <button
                     type="button"
-                    className="irf-del"
+                    className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
                     disabled={busy}
                     onClick={() => delRow('diagnosi', i)}
                   >
@@ -563,7 +566,7 @@ export function ImportReviewFull({
           <h3>Terapia farmacologica ({farmaci.length})</h3>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() => addRow('farmaci', { nome: '', dose: '', via: '', frequenza: '' })}
           >
@@ -604,7 +607,8 @@ export function ImportReviewFull({
                 <td>
                   <button
                     type="button"
-                    className="irf-del"
+                    className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
                     disabled={busy}
                     onClick={() => delRow('farmaci', i)}
                   >
@@ -634,7 +638,7 @@ export function ImportReviewFull({
           <h3>Parametri vitali ({parametri.length})</h3>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() =>
               addRow('parametriVitali', { etichetta: '', valore: '', unita: '', stato: 'normale' })
@@ -677,7 +681,8 @@ export function ImportReviewFull({
                 <td>
                   <button
                     type="button"
-                    className="irf-del"
+                    className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
                     disabled={busy}
                     onClick={() => delRow('parametriVitali', i)}
                   >
@@ -712,7 +717,7 @@ export function ImportReviewFull({
           <h3>Terapie ({terapie.length})</h3>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() => addRow('terapie', { tipo: '', descrizione: '', stato: '' })}
           >
@@ -737,7 +742,8 @@ export function ImportReviewFull({
                 <td>
                   <button
                     type="button"
-                    className="irf-del"
+                    className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
                     disabled={busy}
                     onClick={() => delRow('terapie', i)}
                   >
@@ -763,7 +769,7 @@ export function ImportReviewFull({
           <h3>Indicatori di rischio ({rischi.length})</h3>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() => addRow('indicatoriRischio', { tipo: '', livello: '', descrizione: '' })}
           >
@@ -788,7 +794,8 @@ export function ImportReviewFull({
                 <td>
                   <button
                     type="button"
-                    className="irf-del"
+                    className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
                     disabled={busy}
                     onClick={() => delRow('indicatoriRischio', i)}
                   >
@@ -814,7 +821,7 @@ export function ImportReviewFull({
           <h3>Note cliniche ({noteCliniche.length})</h3>
           <button
             type="button"
-            className="irf-add"
+            className="ds-btn ds-btn--secondary irf-add"
             disabled={busy}
             onClick={() => addRow('noteClinica', { tipo: '', contenuto: '', operatore: '' })}
           >
@@ -829,7 +836,8 @@ export function ImportReviewFull({
               {cellInput('noteClinica', i, 'operatore', 'Operatore')}
               <button
                 type="button"
-                className="irf-del"
+                className="ds-icon-btn ds-icon-btn--danger irf-del"
+                aria-label="Rimuovi"
                 disabled={busy}
                 onClick={() => delRow('noteClinica', i)}
               >
@@ -857,7 +865,7 @@ export function ImportReviewFull({
         <div className="irf-sec__head">
           <h3>Testo riconosciuto (OCR)</h3>
           {rawText && (
-            <button type="button" className="irf-add" onClick={() => setShowRaw((s) => !s)}>
+            <button type="button" className="ds-btn ds-btn--secondary irf-add" onClick={() => setShowRaw((s) => !s)}>
               {showRaw ? 'Nascondi' : 'Mostra'}
             </button>
           )}

@@ -130,7 +130,7 @@ function SignalCard({
         {signal.status !== 'preso_visione' && (
           <button
             type="button"
-            className="am-link"
+            className="ds-link am-link"
             disabled={busy}
             onClick={onAck}
             data-testid="am-signal-ack"
@@ -231,7 +231,7 @@ export function ProactivePanel({
     <section className="am-card am-proactive" aria-label="Per te" data-testid="am-proactive">
       <div className="am-proactive__head">
         <p className="am-card__title">Per te</p>
-        <button type="button" className="am-link" onClick={() => void refresh()} disabled={busy}>
+        <button type="button" className="ds-link am-link" onClick={() => void refresh()} disabled={busy}>
           Aggiorna
         </button>
       </div>
@@ -304,7 +304,7 @@ export function ProactivePanel({
             {shown.total > list.length && (
               <button
                 type="button"
-                className="am-link"
+                className="ds-link am-link"
                 onClick={() => setShowAll(true)}
                 data-testid="am-signals-more"
               >
@@ -369,7 +369,7 @@ export function ProactivePanel({
                             {fact.action && (
                               <button
                                 type="button"
-                                className="am-link"
+                                className="ds-link am-link"
                                 disabled={busy}
                                 onClick={() => onOpenSignal(fact)}
                               >
@@ -384,7 +384,7 @@ export function ProactivePanel({
                 ))}
                 <button
                   type="button"
-                  className="am-link"
+                  className="ds-link am-link"
                   onClick={() => void prepareBriefing()}
                   disabled={loadingBriefing}
                 >

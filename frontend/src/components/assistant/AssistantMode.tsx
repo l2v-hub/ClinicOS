@@ -501,7 +501,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
                 <li key={r.id}>
                   <button
                     type="button"
-                    className="am-picker__item"
+                    className="ds-btn ds-btn--secondary ds-btn--block am-picker__item"
                     onClick={() => void pickResident(r)}
                   >
                     {r.label}
@@ -526,7 +526,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           <span>{state.notice.text}</span>
           <button
             type="button"
-            className="am-link"
+            className="ds-link am-link"
             onClick={() => dispatch({ type: 'dismiss_notice' })}
           >
             Chiudi
@@ -756,7 +756,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
               <button
                 key={s.skillId}
                 type="button"
-                className="am-starter"
+                className="ds-btn ds-btn--secondary ds-btn--block am-starter"
                 disabled={state.busy}
                 onClick={() => submitText(s.label, 'starter')}
               >

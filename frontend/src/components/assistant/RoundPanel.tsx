@@ -69,7 +69,7 @@ export function RoundPanel({
         <p className="am-card__title">{shortcut.label}</p>
         <button
           type="button"
-          className="am-link"
+          className="ds-link am-link"
           onClick={onClose}
           disabled={busy}
           data-testid="am-round-close"
@@ -148,7 +148,7 @@ export function RoundPanel({
               <li key={r.id}>
                 <button
                   type="button"
-                  className="am-starter"
+                  className="ds-btn ds-btn--secondary ds-btn--block am-starter"
                   disabled={busy}
                   onClick={() => void go(r)}
                 >

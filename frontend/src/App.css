@@ -1311,31 +1311,7 @@ body {
 
 .search-clear-btn {
   position: absolute;
-  right: 10px;
-  width: 26px;
-  height: 26px;
-  border: none;
-  background: var(--divider);
-  border-radius: 50%;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition:
-    background 0.1s,
-    color 0.1s;
-  flex-shrink: 0;
-}
-
-.search-clear-btn:hover {
-  background: var(--border);
-  color: var(--text);
-}
-.search-clear-btn svg {
-  width: 13px;
-  height: 13px;
+  right: 4px;
 }
 
 .search-count {

@@ -78,7 +78,7 @@ export function TableFilters({
               : `${resultCount} ${resultCount === 1 ? 'risultato' : 'risultati'}`}
           </span>
           {activeCount > 0 && (
-            <button type="button" className="table-filters__clear" onClick={onClear}>
+            <button type="button" className="ds-btn ds-btn--secondary table-filters__clear" onClick={onClear}>
               Azzera filtri
             </button>
           )}

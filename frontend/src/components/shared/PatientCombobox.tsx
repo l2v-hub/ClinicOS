@@ -132,7 +132,7 @@ export function PatientCombobox({
         {query && !disabled && (
           <button
             type="button"
-            className="patient-combobox__clear"
+            className="ds-field-clear patient-combobox__clear"
             aria-label={selected ? `Rimuovi ${patientDisplayName(selected)}` : 'Cancella ricerca'}
             onClick={() => {
               setQuery('');

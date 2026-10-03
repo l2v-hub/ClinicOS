@@ -299,7 +299,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
             {query && (
               <button
                 type="button"
-                className="par-search__clear"
+                className="ds-field-clear par-search__clear"
                 onClick={() => setQuery('')}
                 aria-label="Cancella ricerca"
               >

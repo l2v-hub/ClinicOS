@@ -77,7 +77,7 @@ export function CopilotHome({ home, busy, onShortcut, onStarter, onResume }: Pro
             <button
               key={s.skillId}
               type="button"
-              className="am-starter"
+              className="ds-btn ds-btn--secondary ds-btn--block am-starter"
               disabled={busy}
               title={s.reasons.length ? `Suggerito per: ${s.reasons.join(', ')}` : undefined}
               onClick={() => onStarter(s.label)}

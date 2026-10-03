@@ -136,7 +136,7 @@ export function TherapySlotModal({
               {summary.pending > 0 ? ` · ${summary.pending} da erogare` : ''}
             </span>
           </div>
-          <button className="therapy-modal__close" onClick={onClose} aria-label="Chiudi">
+          <button className="ds-icon-btn" onClick={onClose} aria-label="Chiudi">
             &times;
           </button>
         </div>
@@ -211,15 +211,15 @@ export function TherapySlotModal({
                         </div>
                         <div className="therapy-drug-row__actions">
                           {a.status === 'administered' && (
-                            <span style={{ color: '#16A37B', fontWeight: 600, fontSize: 12 }}>
+                            <span className="ds-badge ds-badge--ok">
                               ✓ Erogata{a.administeredBy ? ` (${a.administeredBy})` : ''}
                             </span>
                           )}
                           {a.status === 'not_administered' && (
-                            <span style={{ color: '#DC2626', fontWeight: 600, fontSize: 12 }}>
+                            <span className="ds-badge ds-badge--alarm">
                               Non erogata
                               {a.notAdministeredReason && (
-                                <span style={{ fontWeight: 400 }}>
+                                <span>
                                   {' '}
                                   — {a.notAdministeredReason}
                                 </span>
@@ -227,17 +227,16 @@ export function TherapySlotModal({
                             </span>
                           )}
                           {a.status === 'pending' && readOnly && (
-                            <span style={{ color: '#C77700', fontWeight: 600, fontSize: 12 }}>
+                            <span className="ds-badge ds-badge--warning">
                               Da erogare
                             </span>
                           )}
                           {a.status === 'pending' && !readOnly && (
                             <>
                               <button
-                                className="therapy-action-btn therapy-action-btn--confirm"
+                                className="ds-btn ds-btn--primary"
                                 aria-label={`Erogata: ${actionTarget}`}
                                 disabled={isPending}
-                                style={{ opacity: isPending ? 0.6 : 1 }}
                                 onClick={() => {
                                   setPendingKeys((prev) => new Set(prev).add(key));
                                   onConfirm?.(buildInfo(p, a));
@@ -246,7 +245,7 @@ export function TherapySlotModal({
                                 {isPending ? 'Invio…' : 'Erogata'}
                               </button>
                               <button
-                                className="therapy-action-btn therapy-action-btn--reject"
+                                className="ds-btn ds-btn--secondary"
                                 aria-label={`Non erogata: ${actionTarget}`}
                                 aria-expanded={expandedKey === key}
                                 onClick={() => {
@@ -273,7 +272,8 @@ export function TherapySlotModal({
                             {MOTIVI.map((m) => (
                               <button
                                 key={m.value}
-                                className={`therapy-motivo-btn${selectedMotivo === m.value ? ' selected' : ''}`}
+                                type="button"
+                                className="ds-chip"
                                 aria-label={`${m.label}: ${actionTarget}`}
                                 aria-pressed={selectedMotivo === m.value}
                                 onClick={() => setSelectedMotivo(m.value)}
@@ -292,10 +292,9 @@ export function TherapySlotModal({
                             />
                           )}
                           <button
-                            className="therapy-action-btn therapy-action-btn--confirm"
+                            className="ds-btn ds-btn--primary"
                             aria-label={`Conferma non erogata: ${actionTarget}`}
                             disabled={!selectedMotivo}
-                            style={{ opacity: selectedMotivo ? 1 : 0.5 }}
                             onClick={() => {
                               if (!selectedMotivo) return;
                               onNotAdministered?.(buildInfo(p, a), selectedMotivo, noteText);
@@ -318,7 +317,7 @@ export function TherapySlotModal({
 
         {/* Footer */}
         <div className="therapy-modal__footer">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="therapy-modal__footer-status">
             <span className="therapy-modal__footer-progress">
               {summary.administered}/{summary.total} erogate
             </span>
@@ -326,7 +325,7 @@ export function TherapySlotModal({
               <span className="therapy-modal__footer-fill" style={{ width: `${pctDone}%` }} />
             </span>
           </div>
-          <button className="therapy-action-btn therapy-action-btn--reject" onClick={onClose}>
+          <button className="ds-btn ds-btn--secondary" onClick={onClose}>
             Chiudi
           </button>
         </div>

@@ -150,7 +150,7 @@ export function NotesPage({
             />
             {ricerca && (
               <button
-                className="search-clear-btn"
+                className="ds-field-clear search-clear-btn"
                 aria-label="Cancella ricerca"
                 onClick={() => setRicerca('')}
               >

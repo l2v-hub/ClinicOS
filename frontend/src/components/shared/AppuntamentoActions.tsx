@@ -23,7 +23,7 @@ export function AppuntamentoActions({
         <>
           <span className="agt-apt-confirm">Eliminare l’appuntamento?</span>
           <button
-            className="agt-apt-action agt-apt-action--danger"
+            className="ds-btn ds-btn--danger"
             onClick={() => {
               onAskDelete(null);
               onDelete?.(apt.id);
@@ -31,17 +31,17 @@ export function AppuntamentoActions({
           >
             Sì, elimina
           </button>
-          <button className="agt-apt-action" onClick={() => onAskDelete(null)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => onAskDelete(null)}>
             Annulla
           </button>
         </>
       ) : (
         <>
-          <button className="agt-apt-action" onClick={() => onEdit(apt)}>
+          <button className="ds-btn ds-btn--secondary" onClick={() => onEdit(apt)}>
             Modifica
           </button>
           <button
-            className="agt-apt-action agt-apt-action--danger"
+            className="ds-btn ds-btn--danger"
             onClick={() => onAskDelete(apt.id)}
           >
             Elimina

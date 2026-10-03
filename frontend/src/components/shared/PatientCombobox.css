@@ -19,8 +19,7 @@
   transform: translateY(-50%);
 }
 
-.patient-combobox__search-icon svg,
-.patient-combobox__clear svg {
+.patient-combobox__search-icon svg {
   width: 18px;
   height: 18px;
 }
@@ -36,23 +35,7 @@
   position: absolute;
   top: 50%;
   right: 4px;
-  display: grid;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: 7px;
-  color: var(--text-muted);
-  background: transparent;
-  cursor: pointer;
-  place-items: center;
   transform: translateY(-50%);
-}
-
-.patient-combobox__clear:hover,
-.patient-combobox__clear:focus-visible {
-  color: var(--blue);
-  background: var(--blue-dim);
 }
 
 .patient-combobox__help {

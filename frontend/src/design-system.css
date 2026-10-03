@@ -878,3 +878,34 @@ th[aria-sort] .ds-sort:not(#ds) {
   font-style: normal;
   text-align: center;
 }
+
+/* ── Pulsante «cancella» dentro un campo (ricerca, combobox) ───────────────────────────────
+   L'unico controllo più piccolo di 48: sta DENTRO un campo da 48 (bordo 2), quindi 40×40.
+   La pagina decide solo dove sta (position/right); l'aspetto è questo ovunque. */
+.ds-field-clear:not(#ds) {
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ds-text-muted);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: none;
+}
+.ds-field-clear:not(#ds):hover:not(:disabled) {
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+}
+.ds-field-clear:not(#ds):focus-visible {
+  outline: var(--ds-focus);
+  outline-offset: -2px;
+}
+.ds-field-clear svg:not(#ds) {
+  width: 20px;
+  height: 20px;
+}

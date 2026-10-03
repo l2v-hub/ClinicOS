@@ -203,7 +203,7 @@ export function ConsegnePage({
             onChange={(e) => setRicerca(e.target.value)}
           />
           {ricerca && (
-            <button className="search-clear-btn" onClick={() => setRicerca('')}>
+            <button className="ds-field-clear search-clear-btn" onClick={() => setRicerca('')}>
               <IcoX />
             </button>
           )}
