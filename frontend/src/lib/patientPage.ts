@@ -1,4 +1,5 @@
 import type { ClinicalSummaryEntry, Paziente } from '../types';
+import { sessionCan } from './capabilities';
 import {
   assertRosterPage,
   parseRosterMetadata,
@@ -111,6 +112,8 @@ export async function fetchPatientClinicalSummary(
   ids: string[],
   options: { headers: HeadersInit; signal?: AbortSignal; fetcher?: typeof fetch },
 ): Promise<ClinicalSummaryEntry[]> {
+  // Phase 10: il ruolo senza riepilogo clinico (es. Amministratore) non chiede nulla.
+  if (!sessionCan('patients.clinical_summary')) return [];
   const uniqueIds = [...new Set(ids)];
   const result: ClinicalSummaryEntry[] = [];
   for (let offset = 0; offset < uniqueIds.length; offset += 50) {

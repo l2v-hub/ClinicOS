@@ -98,7 +98,7 @@ export function AnamnesisEditor({
                   </div>
                 ) : (
                   <p className="cr-anamnesi-card__text muted">
-                    Nessuna allergia registrata. Gestisci dal tab Diagnosi.
+                    Nessuna allergia registrata. Le allergie si gestiscono nella sezione Allergie.
                   </p>
                 )}
               </div>

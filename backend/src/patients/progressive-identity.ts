@@ -42,16 +42,22 @@ export function optionalPatientPhone(value: unknown): string | null {
   return result.phone;
 }
 
-export function patientName(value: unknown): string {
-  if (typeof value !== 'string' || !value.trim() || value.trim().length > 150)
-    throw new PatientIdentityInputError('Nome e cognome sono obbligatori (massimo 150 caratteri)');
+const NAME_LABEL = { firstName: 'Nome', lastName: 'Cognome' } as const;
+
+/** The error names the exact field: "Nome" and "Cognome" are fixed separately. */
+export function patientName(value: unknown, field: keyof typeof NAME_LABEL = 'firstName'): string {
+  const label = NAME_LABEL[field];
+  if (typeof value !== 'string' || !value.trim())
+    throw new PatientIdentityInputError(`${label} obbligatorio: compila il campo «${label}»`);
+  if (value.trim().length > 150)
+    throw new PatientIdentityInputError(`${label} troppo lungo (massimo 150 caratteri)`);
   return value.trim();
 }
 
 export function normalizePatientIdentity(input: Record<string, unknown>) {
   return {
-    firstName: patientName(input.firstName),
-    lastName: patientName(input.lastName),
+    firstName: patientName(input.firstName, 'firstName'),
+    lastName: patientName(input.lastName, 'lastName'),
     dateOfBirth: optionalBirthDate(input.dateOfBirth),
     codiceFiscale: optionalFiscalCode(input.codiceFiscale),
     phone: optionalPatientPhone(input.phone),

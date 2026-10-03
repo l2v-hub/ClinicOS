@@ -18,6 +18,7 @@ import { PatientIdentity } from '../shared/PatientIdentity';
 import { parsePatientIdentity, patientIdentityName } from '../../lib/patientIdentity';
 import type { ConsegnaCreate } from '../../lib/consegnaCreation';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
+import { corePriorityOptions } from '../../lib/corePriority';
 
 export interface ConsegnePageProps {
   embedded?: boolean;
@@ -550,9 +551,11 @@ function ConsegnaEditInline({
                 setForm((p) => ({ ...p, priorita: e.target.value as PrioritaConsegna }))
               }
             >
-              <option value="normale">Normale</option>
-              <option value="alta">Alta</option>
-              <option value="urgente">Urgente</option>
+              {corePriorityOptions(form.priorita, 'alta', 'Alta').map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-field">

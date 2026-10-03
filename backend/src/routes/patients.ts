@@ -954,18 +954,20 @@ router.post('/', async (req, res) => {
     emergencyContactPhone?: string;
   };
 
-  if (
-    !body.firstName ||
-    typeof body.firstName !== 'string' ||
-    body.firstName.trim() === '' ||
-    !body.lastName ||
-    typeof body.lastName !== 'string' ||
-    body.lastName.trim() === '' ||
-    !body.dateOfBirth ||
-    typeof body.dateOfBirth !== 'string' ||
-    body.dateOfBirth.trim() === ''
-  ) {
-    res.status(400).json({ error: 'Nome, cognome e data di nascita sono obbligatori' });
+  // Name the exact missing fields instead of a generic "required" error.
+  const missing = (
+    [
+      ['firstName', 'nome'],
+      ['lastName', 'cognome'],
+      ['dateOfBirth', 'data di nascita'],
+    ] as const
+  ).filter(([key]) => typeof body[key] !== 'string' || body[key]!.trim() === '');
+  if (missing.length) {
+    res.status(400).json({
+      error: `Campi obbligatori mancanti: ${missing.map(([, label]) => label).join(', ')}`,
+      code: 'required_fields',
+      fields: missing.map(([key]) => key),
+    });
     return;
   }
 
@@ -1082,7 +1084,7 @@ router.patch('/:id', requirePatientScope, async (req, res) => {
     if (Object.hasOwn(req.body, 'dateOfBirth'))
       updates.dateOfBirth = optionalBirthDate(req.body.dateOfBirth);
     for (const key of ['firstName', 'lastName'] as const)
-      if (Object.hasOwn(req.body, key)) updates[key] = patientName(req.body[key]);
+      if (Object.hasOwn(req.body, key)) updates[key] = patientName(req.body[key], key);
   } catch (error) {
     if (!(error instanceof PatientIdentityInputError)) throw error;
     res.status(400).json({ error: error.message });

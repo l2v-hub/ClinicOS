@@ -155,6 +155,32 @@ export function originChip(
   };
 }
 
+/**
+ * Documento da cui è stata letta una riga di terapia (`importSource`/`importSources`): la prima
+ * lettera ancora presente nel job. Serve a confrontare la terapia con la foto durante l'ingresso.
+ */
+export function therapySourceChip(
+  job: ImportJob | null,
+  row: { importSource?: { groupId?: string }; importSources?: { groupId?: string }[] },
+): { label: string; ariaLabel: string; target: PanelTarget } | null {
+  if (!job) return null;
+  const ids = [
+    ...(Array.isArray(row.importSources) ? row.importSources : []),
+    ...(row.importSource ? [row.importSource] : []),
+  ]
+    .map((s) => s?.groupId)
+    .filter((id): id is string => typeof id === 'string' && letterNumber(job, id) > 0);
+  if (!ids.length) return null;
+  const groupId = ids.sort((a, b) => letterNumber(job, a) - letterNumber(job, b))[0];
+  const n = letterNumber(job, groupId);
+  const first = letterPages(job, groupId)[0];
+  return {
+    label: `Vedi documento L${n}`,
+    ariaLabel: `Apri la lettera ${n} da cui è stata letta questa terapia`,
+    target: first ? { groupId, pageId: first.id } : { groupId },
+  };
+}
+
 // ── Schede del pannello ─────────────────────────────────────────────────────────────────────
 
 export type PageTabState = 'done' | 'reading' | 'waiting' | 'error';

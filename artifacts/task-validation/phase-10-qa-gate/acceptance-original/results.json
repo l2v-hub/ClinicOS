@@ -1,0 +1,148 @@
+{
+  "results": [
+    {
+      "id": "AT-03",
+      "name": "Sidebar Terapia from Nanni chart → Nanni Terapia",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AT-04",
+      "name": "Calendar slot clickable → slot therapies of the same patient",
+      "result": "PASS",
+      "detail": "touch target 59px"
+    },
+    {
+      "id": "AT-15a",
+      "name": "Calendar slot touch target ≥ 44px",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AT-05",
+      "name": "Nurse administers from the patient therapy calendar (persisted)",
+      "result": "PASS",
+      "detail": "0→1"
+    },
+    {
+      "id": "AT-02",
+      "name": "Sidebar Parametri from Nanni chart → Nanni Parametri",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AT-01",
+      "name": "Sidebar Consegne from Nanni chart → Nanni Consegne",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AT-14",
+      "name": "Turno «Apri» on a Nanni therapy keeps patient + Terapia section",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AT-06a",
+      "name": "Diary create form asks no manual date",
+      "result": "PASS",
+      "detail": "date inputs 0"
+    },
+    {
+      "id": "AT-07",
+      "name": "Diary priority only Normale/Urgente",
+      "result": "PASS",
+      "detail": "Normale/Urgente"
+    },
+    {
+      "id": "AT-06",
+      "name": "Diary note saved with automatic timestamp",
+      "result": "PASS",
+      "detail": "entryDateTime 2026-10-03T00:24"
+    },
+    {
+      "id": "AT-06b",
+      "name": "Diary note persists after reload",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AT-13",
+      "name": "Nurse sees no «Aggiungi farmaco» (no prescription capability)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "AT-11",
+      "name": "Invalid therapy form → field marked + focus + message",
+      "result": "PASS",
+      "detail": "invalid fields 1; Correggi prima di salvare: Indica il nome del farmaco."
+    },
+    {
+      "id": "AT-12",
+      "name": "Valid therapy form (doctor) → saved",
+      "result": "PASS",
+      "detail": "0→1 "
+    },
+    {
+      "id": "AT-13",
+      "name": "Sidebar capabilities OSS 1",
+      "result": "PASS",
+      "detail": "Turno,Pazienti,Parametri,Consegne,Agenda,Note,Farmaci,Assistente"
+    },
+    {
+      "id": "AT-13",
+      "name": "OSS chart rail hides Terapia/Documenti",
+      "result": "PASS",
+      "detail": "Panoramica,Dati di ingresso,Clinica,Parametri,Moduli,Dimissione"
+    },
+    {
+      "id": "AT-13",
+      "name": "Sidebar capabilities Infermiere 1",
+      "result": "PASS",
+      "detail": "Turno,Pazienti,Terapia,Parametri,Consegne,Agenda,Note,Farmaci,Assistente"
+    },
+    {
+      "id": "AT-13",
+      "name": "Sidebar capabilities Medico 1",
+      "result": "PASS",
+      "detail": "Turno,Pazienti,Terapia,Parametri,Consegne,Agenda,Note,Farmaci,Assistente"
+    },
+    {
+      "id": "AT-13",
+      "name": "Sidebar capabilities Supervisore 1",
+      "result": "PASS",
+      "detail": "Dashboard,Operatori,Agenda,Terapia,Posti Letto,Orari,Consegne,Note,Ruoli,Assistente"
+    },
+    {
+      "id": "AT-13",
+      "name": "Sidebar capabilities Amministratore",
+      "result": "PASS",
+      "detail": "Dashboard,Operatori,Agenda,Posti Letto,Orari,Note,Ruoli"
+    },
+    {
+      "id": "AT-13",
+      "name": "Admin dashboard has no stuck clinical widgets",
+      "result": "PASS",
+      "detail": "stuck 0"
+    },
+    {
+      "id": "AT-15",
+      "name": "Tablet portrait: no horizontal page scroll on chart",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "id": "AT-15b",
+      "name": "Tablet portrait: chart buttons ≥ 32px tall",
+      "result": "PASS",
+      "detail": "[]"
+    }
+  ],
+  "httpErrors": [
+    "OSS 1 403 GET /patients/cmurj5tfb0008f4lp6ez2kt87/intake-review",
+    "OSS 1 403 GET /patients/cmurj5tfb0008f4lp6ez2kt87/narrative-sections",
+    "OSS 1 403 GET /patients/cmurj5tfb0008f4lp6ez2kt87/therapies/page",
+    "Amministratore 403 GET /patients/clinical-summary"
+  ]
+}

@@ -22,6 +22,10 @@ export const LIMITS = {
   maxRequestBytes: 25 * 1024 * 1024 + 256 * 1024,
   acceptedMimeTypes: ['application/pdf', 'image/jpeg', 'image/png'],
 };
+/** Says which limit was exceeded and how to proceed (all files of one upload count together). */
+export const REQUEST_LIMIT_MESSAGE = `I file caricati insieme superano ${
+  LIMITS.maxTotalBytes / (1024 * 1024)
+} MB: caricane meno per volta.`;
 export class ImportSessionError extends Error {
   constructor(
     public status: number,

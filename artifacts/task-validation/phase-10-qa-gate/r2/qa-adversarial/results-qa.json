@@ -1,0 +1,128 @@
+{
+  "results": [
+    {
+      "id": "QA-DL",
+      "name": "Ward «Parametri» from Nanni chart keeps Nanni + opens section",
+      "result": "PASS",
+      "detail": "active=[Parametri] url=/dettaglio-paziente/cmurjxy8a0000hwlpwa5caywa"
+    },
+    {
+      "id": "QA-DL",
+      "name": "Ward «Consegne» from Nanni chart keeps Nanni + opens section",
+      "result": "PASS",
+      "detail": "active=[Clinica] url=/dettaglio-paziente/cmurjxy8a0000hwlpwa5caywa"
+    },
+    {
+      "id": "QA-DL",
+      "name": "Ward «Terapia» from Nanni chart keeps Nanni + opens section",
+      "result": "PASS",
+      "detail": "active=[Terapia|Farmaci attivi 3] url=/dettaglio-paziente/cmurjxy8a0000hwlpwa5caywa"
+    },
+    {
+      "id": "QA-NS",
+      "name": "Nurse records «Non somministrata» with reason from chart calendar (persisted, reason required)",
+      "result": "PASS",
+      "detail": "confirm disabled w/o reason=true; db={\"stato\":\"non_erogata\",\"motivo\":\"rifiutata_paziente\",\"operatoreId\":\"SIM-NURSE-1\",\"date\":\"2026-10-03\"}; feedback «Mancata somministrazione di Metformina registrata.»"
+    },
+    {
+      "id": "QA-NS-b",
+      "name": "After reload the recorded state is shown; no duplicate action on Metformina 08:00",
+      "result": "PASS",
+      "detail": "Ore 08:00 · 2 terapie Chiudi Metformina 1 compressa · orale Ramipril 1 compressa · orale Somministrazione del sabato 3 ottobre — Nanni, Miriam Posto letto non assegnato · Nato/a il 12/11/1936 · CF da completare Ramipril 1 compressa — 5 mg 1 compressa — 5 mg · "
+    },
+    {
+      "id": "QA-DY-a",
+      "name": "Diary create form: no datetime input, no Stato select (real container)",
+      "result": "PASS",
+      "detail": "datetime=0 stato=0"
+    },
+    {
+      "id": "QA-DY-b",
+      "name": "Diary entryDateTime = server facility time (±2 min)",
+      "result": "PASS",
+      "detail": "{\"id\":\"cmurk2byv005suslpqpzod50t\",\"entryDateTime\":\"2026-10-03T00:49\",\"priority\":\"normale\",\"status\":\"aperta\"} nowRome=2026-10-03T00:49"
+    },
+    {
+      "id": "QA-DY-c",
+      "name": "Edit: date still editable, legacy «Importante» preserved & selected",
+      "result": "PASS",
+      "detail": "when=2026-10-01T09:15 prio=importante opts=Normale/Importante (valore precedente)/Urgente"
+    },
+    {
+      "id": "QA-DY-d",
+      "name": "Edit persists content+date; priority «importante» and status «da_rivedere» untouched",
+      "result": "PASS",
+      "detail": "{\"content\":\"QA nota 1790981368008 modificata\",\"priority\":\"importante\",\"status\":\"da_rivedere\",\"entryDateTime\":\"2026-10-01T10:30\"}"
+    },
+    {
+      "id": "QA-NURSE-console",
+      "name": "Nurse journey: no console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "QA-OSS-a",
+      "name": "OSS: no Terapia in sidebar nor chart rail",
+      "result": "PASS",
+      "detail": "sidebar=Turno,Pazienti,Parametri,Consegne,Agenda,Note,Farmaci,Assistente rail=Panoramica,Dati di ingresso,Clinica,Parametri,Moduli,Dimissione"
+    },
+    {
+      "id": "QA-OSS-b",
+      "name": "OSS: ward Parametri inside chart → Olga Parametri",
+      "result": "PASS",
+      "detail": "Parametri"
+    },
+    {
+      "id": "QA-OSS-c",
+      "name": "OSS: Panoramica shows no therapy load error caused by a denied read",
+      "result": "PASS",
+      "detail": "errors=0; 4xx=401 GET /patients/cmurjxpw900088klpghjzm49i/therapies/page, 401 POST /therapy-slots/confirm"
+    },
+    {
+      "id": "QA-OSS-d",
+      "name": "OSS: server still denies therapy read/administration (raw fetch, no app headers)",
+      "result": "PASS",
+      "detail": "[401,401]"
+    },
+    {
+      "id": "QA-ADMIN-a",
+      "name": "Admin dashboard: no stuck loaders, no therapy widgets",
+      "result": "PASS",
+      "detail": "Dashboard sabato 3 ottobre 2026 Turno notte 00:49 Assistente AI SIMULATORE A Segnalazioni operative Nessuna segnalazione aperta Allarmi 0 Warning 0 Avvisi 0 Dettagli 5 Totale pazienti Anagrafiche caricate 5/5 Operatori attivi Copertura completa 0 Appuntamenti oggi Attività pianificate 0 Consegne ape"
+    },
+    {
+      "id": "QA-ADMIN-b",
+      "name": "Admin dashboard: no 4xx on load",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "QA-ADMIN-c",
+      "name": "Admin Copilot: no «operazioni negate dalla policy» signal caused by the UI",
+      "result": "PASS",
+      "detail": "signal=none; assistant-entry=1; 4xx="
+    },
+    {
+      "id": "QA-ADMIN-console",
+      "name": "Admin: no console errors",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "net": {
+    "Infermiere 1": [],
+    "OSS 1": [
+      "401 GET /patients/cmurjxpw900088klpghjzm49i/therapies/page",
+      "401 POST /therapy-slots/confirm"
+    ],
+    "Amministratore": []
+  },
+  "consoleErrors": {
+    "Infermiere 1": [],
+    "OSS 1": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+    ],
+    "Amministratore": []
+  }
+}

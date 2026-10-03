@@ -10,6 +10,7 @@ import { MAX_ANOMALIE_NEL_RIEPILOGO, messaggioAnomalieCompatto } from './cartell
 import type { AnomalieReparto } from './cartella/useAnomalieReparto';
 import type { RiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
 import './cartella/AvvisoAnomalieFarmaci.css';
+import type { TabId } from './tabGroups';
 
 interface BuildDashboardNotificationSectionsInput {
   somministrazioni: RiepilogoSomministrazioni;
@@ -20,7 +21,7 @@ interface BuildDashboardNotificationSectionsInput {
   overviewAvailable: boolean;
   onNavigate: (nav: NavKey) => void;
   onOpenConsegneAperte?: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, tab?: TabId) => void;
   onRetryClinicalOverview: () => void;
   therapyNav?: NavKey;
 }
@@ -57,7 +58,7 @@ export function buildDashboardNotificationSections({
                 <button
                   type="button"
                   className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
-                  onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
+                  onClick={() => onSelectPaziente?.(p.nome, p.patientId, 'terapia-farmacologica')}
                   aria-label={`Apri ${p.nome}. ${p.voci.length} somministrazioni in ritardo`}
                 >
                   <span className="anomalie-reparto__contenuto">
@@ -138,7 +139,7 @@ export function buildDashboardNotificationSections({
                 <button
                   type="button"
                   className="anomalie-reparto__riga"
-                  onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
+                  onClick={() => onSelectPaziente?.(p.nome, p.patientId, 'terapia-farmacologica')}
                   aria-label={`Apri ${p.nome}. ${messaggioAnomalieCompatto(p.esito)}`}
                 >
                   <span className="anomalie-reparto__contenuto">

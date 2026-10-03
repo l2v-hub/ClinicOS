@@ -13,6 +13,8 @@ interface Props {
   allergieGravi: number;
   pazientiRicoverati: number;
   somministrazioni: {
+    /** false = il ruolo non legge le somministrazioni: la tessera non viene mostrata. */
+    disponibile?: boolean;
     inCorso: boolean;
     fallito: boolean;
     inRitardo: number;
@@ -136,5 +138,9 @@ export function OperatorClinicalKpiBand({
     },
   ];
 
-  return <DashboardKpiBand label="Quadro clinico operativo" items={items} loading={loading} />;
+  const visible =
+    somministrazioni.disponibile === false
+      ? items.filter((item) => item.id !== 'somministrazioni')
+      : items;
+  return <DashboardKpiBand label="Quadro clinico operativo" items={visible} loading={loading} />;
 }

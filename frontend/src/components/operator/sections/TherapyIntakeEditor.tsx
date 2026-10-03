@@ -4,7 +4,10 @@ import {
   emptyTherapyForm,
   type TherapyFormValue,
 } from '../cartella/TherapyFormFields';
-import { buildIntakeTherapyReview } from '../../shared/intake/intakeTherapies';
+import {
+  INTAKE_PRESCRIBER_SUGGESTIONS,
+  buildIntakeTherapyReview,
+} from '../../shared/intake/intakeTherapies';
 import {
   focusTherapyCorrection,
   type TherapyCorrectionTarget,
@@ -120,6 +123,7 @@ export function TherapyIntakeEditor({
                 }
                 operatoreNome={operatoreNome}
                 issues={review[index].diagnostics}
+                prescriberSuggestions={INTAKE_PRESCRIBER_SUGGESTIONS}
               />
               <div className="ec-modal-add-form__actions">
                 <button

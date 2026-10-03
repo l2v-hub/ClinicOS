@@ -57,7 +57,7 @@ export const BASELINE_ROLES: RoleDefinition[] = [
     id: 'oss',
     label: 'OSS',
     description:
-      'Operatore socio-sanitario: assistenza di base, parametri, diario assistenziale, consegne. Nessun accesso a farmaci e documenti clinici.',
+      'Operatore socio-sanitario: assistenza di base, parametri, diario assistenziale, consegne. Nessun accesso a terapie e documenti clinici (l’anagrafica farmaci resta consultabile).',
     legacyRole: 'operatore',
     uiShell: 'operator',
   },

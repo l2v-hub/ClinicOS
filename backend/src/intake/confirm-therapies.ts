@@ -18,13 +18,19 @@ export function isTherapyValidationError(error: unknown): error is Error {
   );
 }
 
-/** Validate all rows before opening a patient-creation transaction. No clinical values in errors. */
-export function validateConfirmTherapies(raw: unknown): void {
+/**
+ * Validate all rows before opening a patient-creation transaction. No clinical values in errors.
+ * `ordinal` maps a payload position to the row number the operator sees (default: position + 1).
+ */
+export function validateConfirmTherapies(
+  raw: unknown,
+  ordinal: (index: number, value: unknown) => number = (index) => index + 1,
+): void {
   if (raw === undefined) return;
   if (!Array.isArray(raw) || raw.length > 200)
     throw new AiExtractionError(
       'config',
-      'Elenco terapie non valido (massimo 200). Correggi le terapie nello step Clinica.',
+      'Elenco terapie non valido (massimo 200). Correggi le terapie nella sezione Terapia.',
     );
   raw.forEach((value, index) => {
     try {
@@ -72,7 +78,7 @@ export function validateConfirmTherapies(raw: unknown): void {
       if (!isTherapyValidationError(error)) throw error;
       throw new AiExtractionError(
         'config',
-        `Terapia ${index + 1}: ${error.message}. Correggi la riga nello step Clinica e riprova.`,
+        `Terapia ${ordinal(index, value)}: ${error.message}. Correggi la riga nella sezione Terapia e riprova.`,
       );
     }
   });

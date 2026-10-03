@@ -14,6 +14,10 @@ const hasText = (v: unknown): v is string => typeof v === 'string' && !!v.trim()
 const validTime = (v: unknown): v is string =>
   typeof v === 'string' && /^([01]?\d|2[0-3]):[0-5]\d$/.test(v);
 
+/** All'ingresso la terapia arriva quasi sempre dalla lettera di dimissione: un tocco la indica
+ * come prescrittore (mai scritto senza il tocco dell'operatore). */
+export const INTAKE_PRESCRIBER_SUGGESTIONS = ['Dimissione ospedaliera'] as const;
+
 /** Bind the final payload to the exact full form persisted in its source draft. */
 export function prepareIntakeConfirmData<T extends Record<string, unknown>>(data: T): T {
   if (!Array.isArray(data.terapiaImport)) return data;

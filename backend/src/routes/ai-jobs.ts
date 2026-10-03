@@ -23,6 +23,7 @@ import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js'
 import { importRateLimit, extractionCostGuard } from '../ai/rate-limit.js';
 import { recordAudit } from '../ai/audit.js';
 import { requireOwnedImportJob } from '../ai/ownership.js';
+import { uploadLimitError } from '../ai/upload/upload-errors.js';
 import importPagesRouter from './import-pages.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -38,6 +39,16 @@ const upload = multer({
     files: cfg.maxFiles,
   },
 });
+
+const uploadLimits = { maxFileBytes: cfg.maxTotalMb * 1024 * 1024, maxFiles: cfg.maxFiles };
+// multer rejects limits through next(err), before the route's try/catch: translate them here,
+// otherwise the generic last-resort handler answers 500 "Errore interno del servizio".
+const receiveFiles: import('express').RequestHandler = (req, res, next) =>
+  upload.array('files')(req, res, (err: unknown) => {
+    const limit = uploadLimitError(err, uploadLimits);
+    if (limit) return void res.status(limit.status).json(limit.body);
+    next(err);
+  });
 
 const aiJobsRouter = Router();
 
@@ -65,15 +76,14 @@ function handleError(res: import('express').Response, err: unknown) {
     const status = err.kind === 'not_found' ? 404 : err.kind === 'config' ? 400 : 503;
     return res.status(status).json({ error: err.message, kind: err.kind });
   }
-  if (err instanceof multer.MulterError) {
-    return res.status(400).json({ error: `Upload non valido: ${err.code}` });
-  }
+  const limit = uploadLimitError(err, uploadLimits);
+  if (limit) return res.status(limit.status).json(limit.body);
   console.error('ai-jobs error:', err instanceof Error ? err.message : err);
   return res.status(500).json({ error: 'Errore interno import' });
 }
 
 // POST /ai/extraction/jobs — create a job, optionally with the first batch of files.
-aiJobsRouter.post('/', upload.array('files'), async (req, res) => {
+aiJobsRouter.post('/', receiveFiles, async (req, res) => {
   try {
     const idempotencyKey = (req.header('Idempotency-Key') ||
       req.body?.idempotencyKey ||
@@ -95,7 +105,7 @@ aiJobsRouter.post('/', upload.array('files'), async (req, res) => {
 });
 
 // POST /ai/extraction/jobs/:id/files — add more files / photos to an existing job.
-aiJobsRouter.post('/:id/files', upload.array('files'), async (req, res) => {
+aiJobsRouter.post('/:id/files', receiveFiles, async (req, res) => {
   try {
     const incoming = toIncoming(req.files as Express.Multer.File[]);
     const result = await addFiles(String(req.params.id), incoming);

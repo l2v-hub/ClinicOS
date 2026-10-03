@@ -1,0 +1,288 @@
+{
+  "schema": "clinicos.phase10.e2e-matrix/v1",
+  "stack": "local synthetic: backend :3099 AUTH_MODE=demo + simulator, vite :5199, embedded Postgres p10e2e (fresh per run)",
+  "viewport": "1180x820 landscape tablet (hasTouch) + 820x1180 portrait",
+  "browser_results": [
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-03",
+      "name": "Sidebar Terapia from Nanni chart → Nanni Terapia (active section)",
+      "result": "PASS",
+      "detail": "Terapia"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-04",
+      "name": "Calendar slot clickable → slot therapies of the same patient",
+      "result": "PASS",
+      "detail": "touch target 59px"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-15a",
+      "name": "Calendar slot touch target ≥ 44px",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-05",
+      "name": "Nurse administers from the patient therapy calendar (persisted)",
+      "result": "PASS",
+      "detail": "0→1"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-02",
+      "name": "Sidebar Parametri from Nanni chart → Nanni Parametri (active section)",
+      "result": "PASS",
+      "detail": "Parametri"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-01",
+      "name": "Sidebar Consegne from Nanni chart → Nanni Consegne part in view",
+      "result": "PASS",
+      "detail": "Clinica"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-14",
+      "name": "Turno «Apri» on a Nanni therapy keeps patient + Terapia section",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-06a",
+      "name": "Diary create form asks no manual date",
+      "result": "PASS",
+      "detail": "form 1, date inputs 0"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-07",
+      "name": "Diary priority only Normale/Urgente",
+      "result": "PASS",
+      "detail": "Normale/Urgente"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-06",
+      "name": "Diary note saved with automatic timestamp (entryDateTime = facility now)",
+      "result": "PASS",
+      "detail": "entryDateTime 2026-10-03T00:54"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-06b",
+      "name": "Diary note persists after reload",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "Nurse sees no «Aggiungi farmaco» (no prescription capability)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-01",
+      "name": "Cold first «Consegne» tap (chart opened from turno) keeps the Consegne part in view",
+      "result": "PASS",
+      "detail": "Clinica"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-01",
+      "name": "Cold first «Consegne» tap (chart opened from pazienti) keeps the Consegne part in view",
+      "result": "PASS",
+      "detail": "Clinica"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-11",
+      "name": "Invalid therapy form → field marked + focus + message",
+      "result": "PASS",
+      "detail": "invalid fields 1; Correggi prima di salvare: Indica il nome del farmaco."
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-12",
+      "name": "Valid therapy form (doctor) → saved",
+      "result": "PASS",
+      "detail": "0→1 "
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "Sidebar capabilities OSS 1",
+      "result": "PASS",
+      "detail": "Turno,Pazienti,Parametri,Consegne,Agenda,Note,Farmaci,Assistente"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "OSS chart rail hides Terapia/Documenti",
+      "result": "PASS",
+      "detail": "Panoramica,Dati di ingresso,Clinica,Parametri,Moduli,Dimissione"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "Sidebar capabilities Infermiere 1",
+      "result": "PASS",
+      "detail": "Turno,Pazienti,Terapia,Parametri,Consegne,Agenda,Note,Farmaci,Assistente"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "Sidebar capabilities Medico 1",
+      "result": "PASS",
+      "detail": "Turno,Pazienti,Terapia,Parametri,Consegne,Agenda,Note,Farmaci,Assistente"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "Sidebar capabilities Supervisore 1",
+      "result": "PASS",
+      "detail": "Dashboard,Operatori,Agenda,Terapia,Posti Letto,Orari,Consegne,Note,Ruoli,Assistente"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "Sidebar capabilities Amministratore",
+      "result": "PASS",
+      "detail": "Dashboard,Operatori,Agenda,Posti Letto,Orari,Note,Ruoli"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "Admin dashboard has no stuck clinical widgets",
+      "result": "PASS",
+      "detail": "stuck 0"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-15",
+      "name": "Tablet portrait: no horizontal page scroll on chart",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-15b",
+      "name": "Tablet portrait: chart buttons ≥ 32px tall",
+      "result": "PASS",
+      "detail": "[]"
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-13",
+      "name": "No 403/5xx requests issued by the UI for any role",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-acceptance.mjs",
+      "id": "AT-15c",
+      "name": "No console errors during the journeys",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-intake-deferred.mjs",
+      "id": "P10-INT-1a",
+      "name": "Conflict-deferred row offers no «Reincludi»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-intake-deferred.mjs",
+      "id": "P10-INT-1b",
+      "name": "Conflict-deferred row explains why it stays in draft",
+      "result": "PASS",
+      "detail": "1. Amlodipina Dati diversi tra le lettere · resta in bozza Le lettere riportano dati diversi per questo farmaco: non può essere prescritto finché non scegli il valore corretto. La riga resta in bozza "
+    },
+    {
+      "source": "scripts/e2e/phase10-intake-deferred.mjs",
+      "id": "P10-INT-1c",
+      "name": "Autosave succeeds with a deferred row (no 409, row still excluded)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-intake-deferred.mjs",
+      "id": "P10-INT-1d",
+      "name": "No «Bozza non salvata» banner",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "source": "scripts/e2e/phase10-intake-deferred.mjs",
+      "id": "P10-INT-1e",
+      "name": "Deferred row is not a blocking step for «Crea paziente»",
+      "result": "PASS",
+      "detail": "Anagrafica : da confermare Ingresso : facoltativa, vuota Allergie : facoltativa, vuota Terapia : da confermare Diagnosi e anamnesi : facoltativa, vuota Parametri iniziali : facoltativa, vuota Moduli da pianificare : facoltativa, vuota 2 Rie"
+    },
+    {
+      "source": "scripts/e2e/phase10-intake-deferred.mjs",
+      "id": "P10-INT-4",
+      "name": "Intake prescriber «Dimissione ospedaliera» filled with one tap (not before)",
+      "result": "PASS",
+      "detail": "value «Dimissione ospedaliera»"
+    },
+    {
+      "source": "scripts/e2e/phase10-intake-deferred.mjs",
+      "id": "P10-INT-5a",
+      "name": "Parametri iniziali: no IP M / IP P columns, DTX 20 present",
+      "result": "PASS",
+      "detail": "G | PA1ª rilev. | FCbpm | SpO₂% | PA2ª rilev. | Evacuaz. | Catet. | DTX08:00 | DTX12:00 | DTX18:00 | DTX20:00 | TC°°C | # | PA mmHg | FC bpm | SpO₂ % | TC °C | DTX 08 mg/dl | DTX 12 mg/dl | DTX 18 mg/dl | DTX 20 mg/dl | EVAC | CATET | NOTE"
+    }
+  ],
+  "api_and_unit_results": [
+    {
+      "id": "AT-08",
+      "name": "Per-user urgent acknowledgement (nurse ack does not mark supervisor)",
+      "source": "backend/src/proactive/__tests__/proactive-e2e.test.ts (test K)",
+      "result": "PASS (backend E2E on fresh DB, 23/23)"
+    },
+    {
+      "id": "AT-09",
+      "name": "Invalid import names row/field/limit",
+      "source": "backend/src/intake/__tests__/import-error-specificity.test.ts",
+      "result": "PASS (API, 8/8)"
+    },
+    {
+      "id": "AT-10",
+      "name": "Valid import completes without false errors",
+      "source": "backend/src/intake/__tests__/import-error-specificity.test.ts + confirm-therapy-validation.test.ts",
+      "result": "PASS (API)"
+    },
+    {
+      "id": "AT-09/10-browser",
+      "name": "Document import in the browser",
+      "source": "needs the AI document runtime (not configured locally)",
+      "result": "MANUAL"
+    },
+    {
+      "id": "P10-INT-3",
+      "name": "«Vedi documento» next to imported therapy",
+      "source": "frontend phase10Intake.test.ts",
+      "result": "PASS (unit) / MANUAL (browser)"
+    },
+    {
+      "id": "AI-SHORTCUTS",
+      "name": "Assistant classic fallback keeps patient + section",
+      "source": "frontend classicScreenTarget.test.ts + patientChartNavigation.test.ts",
+      "result": "PASS (unit)"
+    }
+  ],
+  "http_errors_observed": [],
+  "summary": {
+    "browser_total": 34,
+    "browser_pass": 34
+  }
+}

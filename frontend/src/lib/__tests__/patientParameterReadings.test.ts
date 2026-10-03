@@ -176,13 +176,36 @@ test('monthly fetch keeps the month when loading the next page', async () => {
 });
 
 test('NEWS2 parameters follow the same rules as the backend', async () => {
-  const { parameterValuesError, formatParameterValue } = await import('../patientParameterReadings');
+  const { parameterValuesError, formatParameterValue } =
+    await import('../patientParameterReadings');
   assert.equal(parameterValuesError({ fr: '18', o2: 'no', coscienza: 'A' }), null);
   assert.equal(parameterValuesError({ o2: 'si' }), null, 'oxygen alone is a valid observation');
-  for (const values of [{ fr: '0' }, { fr: '81' }, { fr: '18,5' }, { o2: 'sì' }, { coscienza: 'vigile' }, { coscienza: 'a' }])
+  for (const values of [
+    { fr: '0' },
+    { fr: '81' },
+    { fr: '18,5' },
+    { o2: 'sì' },
+    { coscienza: 'vigile' },
+    { coscienza: 'a' },
+  ])
     assert.notEqual(parameterValuesError(values), null, JSON.stringify(values));
   assert.equal(formatParameterValue('o2', 'si'), 'Sì');
   assert.equal(formatParameterValue('o2', 'no'), 'No');
   assert.equal(formatParameterValue('coscienza', 'V'), 'V · Risponde alla voce');
   assert.equal(formatParameterValue('fc', '72'), '72');
+});
+
+test('Prompt 10 §9: l’errore indica il campo da correggere', async () => {
+  const { parameterValuesIssue, parameterValuesError } =
+    await import('../patientParameterReadings');
+  assert.deepEqual(parameterValuesIssue({}), {
+    field: null,
+    message: 'Inserisci almeno un parametro.',
+  });
+  assert.equal(parameterValuesIssue({ pa: '120-80' })?.field, 'pa');
+  assert.equal(parameterValuesIssue({ spo2: '101' })?.field, 'spo2');
+  assert.equal(parameterValuesIssue({ fr: '0' })?.field, 'fr');
+  assert.equal(parameterValuesIssue({ dtx: 'abc' })?.field, 'dtx');
+  assert.equal(parameterValuesIssue({ pa: '120/80', dtx: '110' }), null);
+  assert.equal(parameterValuesError({ pa: '120-80' }), 'Pressione: usa il formato 120/80.');
 });

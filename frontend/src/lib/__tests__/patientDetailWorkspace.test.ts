@@ -30,7 +30,8 @@ test('patient record exposes ONE labelled section rail and a controlled tab pane
   assert.doesNotMatch(patientDetail, /variant="level3"/);
   // HMI 1: 8 sezioni a chip come il prototipo, nessuna didascalia di gruppo non cliccabile.
   assert.match(patientDetail, /items=\{chartSectionItems\}/);
-  assert.match(patientDetail, /CHART_SECTIONS\.map\(\(s\) =>/);
+  // Prompt 10 AT-13: solo le sezioni che il ruolo può leggere.
+  assert.match(patientDetail, /CHART_SECTIONS\.filter\(\(s\) => sectionAllowed\(s\.id\)\)\.map\(/);
   assert.match(patientDetail, /ariaLabel="Sezioni della cartella"/);
   assert.match(patientDetail, /className="top-nav--chips"/);
   assert.doesNotMatch(patientDetail, /groupLabel/);

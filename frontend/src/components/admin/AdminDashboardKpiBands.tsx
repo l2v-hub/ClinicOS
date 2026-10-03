@@ -32,6 +32,8 @@ interface Props {
   rischiAlti: number;
   dimessi: number;
   somministrazioni: {
+    /** false = il ruolo non legge le somministrazioni: la tessera non viene mostrata. */
+    disponibile?: boolean;
     inCorso: boolean;
     fallito: boolean;
     inRitardo: number;
@@ -234,7 +236,11 @@ export function AdminDashboardKpiBands({
       </div>
       <DashboardKpiBand
         label="Situazione clinica"
-        items={clinicalItems}
+        items={
+          somministrazioni.disponibile === false
+            ? clinicalItems.filter((item) => item.id !== 'somministrazioni')
+            : clinicalItems
+        }
         loading={clinicalOverviewState === 'loading' || somministrazioni.inCorso}
       />
     </>

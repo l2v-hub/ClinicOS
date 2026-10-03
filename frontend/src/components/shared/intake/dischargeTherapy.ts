@@ -25,6 +25,10 @@ export interface DischargeTherapyRow {
   excludedFromConfirm?: boolean;
   reviewedTherapy?: TherapyFormValue;
   importSource?: { groupId: string; inputHash: string };
+  importSources?: { groupId: string; inputHash: string }[];
+  /** Server-owned: the letters disagree on this drug, so the row stays in draft (never prescribed). */
+  conflictDeferred?: boolean;
+  conflictId?: string;
   sourceOutdated?: boolean;
   sourceReviewHash?: string;
 }

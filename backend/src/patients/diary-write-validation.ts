@@ -105,7 +105,7 @@ function facilityLocalMinute(value: Date): string {
 }
 
 function entryDateTime(value: unknown): string {
-  if (typeof value !== 'string') throw new DiaryWriteInputError('entryDateTime obbligatorio');
+  if (typeof value !== 'string') throw new DiaryWriteInputError('entryDateTime non valida');
   const normalized = value.trim();
   const match = ISO_DATE_TIME.exec(normalized);
   if (!match) throw new DiaryWriteInputError('entryDateTime non valida');
@@ -135,7 +135,11 @@ function entryDateTime(value: unknown): string {
     : `${yearRaw}-${monthRaw}-${dayRaw}T${hourRaw}:${minuteRaw}`;
 }
 
-export function parseDiaryCreateBody(value: unknown): DiaryCreateInput {
+/**
+ * Prompt 10 §7: a note written "now" carries the trusted server time. `entryDateTime` stays
+ * accepted for callers that record a different clinical moment (assistant, diary + therapy).
+ */
+export function parseDiaryCreateBody(value: unknown, now: Date = new Date()): DiaryCreateInput {
   const body = bodyObject(value);
   rejectUnknown(body, CREATE_KEYS);
   return {
@@ -143,7 +147,10 @@ export function parseDiaryCreateBody(value: unknown): DiaryCreateInput {
     content: content(body.content),
     priority: priority(body.priority),
     status: status(body.status),
-    entryDateTime: entryDateTime(body.entryDateTime),
+    entryDateTime:
+      body.entryDateTime === undefined || body.entryDateTime === null || body.entryDateTime === ''
+        ? facilityLocalMinute(now)
+        : entryDateTime(body.entryDateTime),
     category: optionalText(body.category, 'category', MAX_DIARY_CATEGORY_LENGTH),
   };
 }

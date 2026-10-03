@@ -185,7 +185,16 @@ test('A — OSS inbox: only allowed event types and only residents in scope', as
   // A note to «tutti» naming a resident outside the OSS scope: the note is delivered (mailbox rule),
   // the resident is NOT disclosed by the signal.
   const note = await prisma.nota.create({
-    data: { autoreId: 'SIM-DOCTOR-1', autoreNome: 'Medico 1', destinatarioId: 'tutti', destinatarioNome: 'Tutti', pazienteId: ids.nA, pazienteNome: `Primo${tag} Nadia`, messaggio: 'visita', priorita: 'normale' },
+    data: {
+      autoreId: 'SIM-DOCTOR-1',
+      autoreNome: 'Medico 1',
+      destinatarioId: 'tutti',
+      destinatarioNome: 'Tutti',
+      pazienteId: ids.nA,
+      pazienteNome: `Primo${tag} Nadia`,
+      messaggio: 'visita',
+      priorita: 'normale',
+    },
   });
   try {
     const sig = (await inbox(oss)).signals.find((s) => s.signalId === `note:${note.id}`);
@@ -286,12 +295,23 @@ test('D — doctor change-since-last-view uses a real watermark', async () => {
 
 test('E — supervisor: facility aggregation within capability, technical signals included', async () => {
   const box = await inbox(supervisor);
-  for (const s of [box, await inbox(nurse), await inbox(oss), await inbox(admin), await inbox(doctor)])
-    for (const [source, m] of Object.entries(s.metrics.perSource as Record<string, { error?: string }>))
+  for (const s of [
+    box,
+    await inbox(nurse),
+    await inbox(oss),
+    await inbox(admin),
+    await inbox(doctor),
+  ])
+    for (const [source, m] of Object.entries(
+      s.metrics.perSource as Record<string, { error?: string }>,
+    ))
       assert.equal(m.error, undefined, `event source ${source} failed silently`);
   for (const s of [box, await inbox(nurse)])
     for (const sig of s.signals)
-      assert.ok(Date.parse(sig.occurredAt) <= Date.now() + 1000, `signal ${sig.signalId} dated in the future`);
+      assert.ok(
+        Date.parse(sig.occurredAt) <= Date.now() + 1000,
+        `signal ${sig.signalId} dated in the future`,
+      );
   const residents = residentsIn(box.signals);
   for (const r of [ids.nA, ids.dX, ids.oO])
     assert.ok(residents.has(r), `supervisor scope «all» includes ${r}`);
@@ -497,6 +517,21 @@ test('K — acknowledgement changes the view only, never the source fact; a new 
     },
   });
   assert.equal(row?.patientId, ids.nB, 'ack audited with the server-side resident');
+  // Prompt 10 AT-08: the acknowledgement is personal — another operator keeps their own state.
+  const supervisorView = (await inbox(supervisor)).signals.find((s) => s.signalId === vit.signalId);
+  assert.ok(supervisorView, 'the supervisor receives the same vital signal');
+  assert.notEqual(supervisorView.status, 'preso_visione', 'nurse ack does not mark the supervisor');
+  assert.equal(
+    await prisma.aiAuditEvent.count({
+      where: {
+        operatorId: 'SIM-SUPERVISOR-1',
+        actionType: 'proactive:ack',
+        fields: { has: `ack:${vit.signalId}@${vit.rev}` },
+      },
+    }),
+    0,
+    'one operator acknowledging never acknowledges for another',
+  );
   await new Promise((r) => setTimeout(r, 1100));
   await reading(ids.nB, 'SIM-OSS-1');
   const reopened = (await inbox(nurse)).signals.find((s) => s.signalId === vit.signalId);
@@ -615,7 +650,9 @@ test('Q — acknowledging «in arrivo» never hides the same slot once it is ove
     const upcoming = (await inbox(nurse)).signals.find((s) => s.eventType === 'administration.due');
     assert.ok(upcoming, 'upcoming slot signal at 07:30');
     assert.equal(upcoming.type, 'PENDING_ACTIVITY');
-    const ack = await call(base, nurse, 'POST', '/skills/proactive/ack', { acks: [{ signalId: upcoming.signalId, rev: upcoming.rev }] });
+    const ack = await call(base, nurse, 'POST', '/skills/proactive/ack', {
+      acks: [{ signalId: upcoming.signalId, rev: upcoming.rev }],
+    });
     assert.deepEqual(ack.body.acknowledged, [upcoming.signalId]);
     setProactiveClock(() => romeInstant(today, '09:30'));
     const overdue = (await inbox(nurse)).signals.find((s) => s.eventType === 'administration.due');
@@ -630,11 +667,28 @@ test('Q — acknowledging «in arrivo» never hides the same slot once it is ove
 
 test('R — a handover escalated after the ack is visible again (QA finding 2)', async () => {
   const c = await prisma.consegna.create({
-    data: { pazienteId: ids.nB, pazienteNome: `Secondo${tag} Nello`, priorita: 'normale', stato: 'aperta', tipo: 'Monitoraggio', note: 'x', scadenza: today, operatoreAssegnato: 'Infermiere 1', operatoreAssegnatoId: 'SIM-NURSE-1', creatoDA: 'Medico 1', creatoDaId: 'SIM-DOCTOR-1' },
+    data: {
+      pazienteId: ids.nB,
+      pazienteNome: `Secondo${tag} Nello`,
+      priorita: 'normale',
+      stato: 'aperta',
+      tipo: 'Monitoraggio',
+      note: 'x',
+      scadenza: today,
+      operatoreAssegnato: 'Infermiere 1',
+      operatoreAssegnatoId: 'SIM-NURSE-1',
+      creatoDA: 'Medico 1',
+      creatoDaId: 'SIM-DOCTOR-1',
+    },
   });
   const sig = (await inbox(nurse)).signals.find((s) => s.signalId === `handover:${c.id}`);
-  await call(base, nurse, 'POST', '/skills/proactive/ack', { acks: [{ signalId: sig.signalId, rev: sig.rev }] });
-  assert.equal((await inbox(nurse)).signals.find((s) => s.signalId === sig.signalId).status, 'preso_visione');
+  await call(base, nurse, 'POST', '/skills/proactive/ack', {
+    acks: [{ signalId: sig.signalId, rev: sig.rev }],
+  });
+  assert.equal(
+    (await inbox(nurse)).signals.find((s) => s.signalId === sig.signalId).status,
+    'preso_visione',
+  );
   await new Promise((r) => setTimeout(r, 1100));
   await prisma.consegna.update({ where: { id: c.id }, data: { priorita: 'urgente' } });
   const again = (await inbox(nurse)).signals.find((s) => s.signalId === sig.signalId);
@@ -644,7 +698,19 @@ test('R — a handover escalated after the ack is visible again (QA finding 2)',
 
 test('S — a handover about an out-of-scope resident never discloses that resident (UI or LLM) (QA finding 3)', async () => {
   const c = await prisma.consegna.create({
-    data: { pazienteId: ids.dX, pazienteNome: `Fuoriscope${tag} Dora`, priorita: 'normale', stato: 'aperta', tipo: 'Monitoraggio', note: 'x', scadenza: today, operatoreAssegnato: 'Infermiere 1', operatoreAssegnatoId: 'SIM-NURSE-1', creatoDA: 'Medico 1', creatoDaId: 'SIM-DOCTOR-1' },
+    data: {
+      pazienteId: ids.dX,
+      pazienteNome: `Fuoriscope${tag} Dora`,
+      priorita: 'normale',
+      stato: 'aperta',
+      tipo: 'Monitoraggio',
+      note: 'x',
+      scadenza: today,
+      operatoreAssegnato: 'Infermiere 1',
+      operatoreAssegnatoId: 'SIM-NURSE-1',
+      creatoDA: 'Medico 1',
+      creatoDaId: 'SIM-DOCTOR-1',
+    },
   });
   let llm = '';
   resetBriefingCache();
@@ -676,7 +742,14 @@ test('T — free text typed in a prescription (drug name) never reaches the LLM 
       pharmaceuticalForm: 'compressa',
       viaSomministrazione: 'orale',
       tipo: 'periodica',
-      schedules: [{ time: '20:00', quantityNumerator: 1, quantityDenominator: 1, administrationUnit: 'compressa' }],
+      schedules: [
+        {
+          time: '20:00',
+          quantityNumerator: 1,
+          quantityDenominator: 1,
+          administrationUnit: 'compressa',
+        },
+      ],
       operatoreInseritore: 'Fixture',
     }),
   );
@@ -697,11 +770,16 @@ test('T — free text typed in a prescription (drug name) never reaches the LLM 
 });
 
 test('U — the denied-access summary keeps its ack until a NEW denial happens (QA finding 5)', async () => {
-  await call(base, oss, 'POST', '/tools/therapy.create/invoke', { input: { patientId: ids.oO, body: {} }, confirmed: true });
+  await call(base, oss, 'POST', '/tools/therapy.create/invoke', {
+    input: { patientId: ids.oO, body: {} },
+    confirmed: true,
+  });
   await waitForAudit({ operatorId: 'SIM-OSS-1', outcome: 'denied' });
   const s1 = (await inbox(admin)).signals.find((s) => s.eventType === 'access.denied_summary');
   assert.ok(s1);
-  await call(base, admin, 'POST', '/skills/proactive/ack', { acks: [{ signalId: s1.signalId, rev: s1.rev }] });
+  await call(base, admin, 'POST', '/skills/proactive/ack', {
+    acks: [{ signalId: s1.signalId, rev: s1.rev }],
+  });
   await new Promise((r) => setTimeout(r, 1100));
   const s2 = (await inbox(admin)).signals.find((s) => s.eventType === 'access.denied_summary');
   assert.equal(s2.signalId, s1.signalId);
@@ -740,19 +818,44 @@ test('W — a cached AI summary never survives a scope revocation (QA re-verific
   resetBriefingCache();
   await patient('wS', 'Walter', `Revocato${tag}`, 'SIM-OSS-1');
   await prisma.consegna.create({
-    data: { pazienteId: ids.wS, pazienteNome: `Revocato${tag} Walter`, priorita: 'normale', stato: 'aperta', tipo: 'Monitoraggio', note: 'x', scadenza: today, operatoreAssegnato: 'OSS 1', operatoreAssegnatoId: 'SIM-OSS-1', creatoDA: 'Medico 1', creatoDaId: 'SIM-DOCTOR-1' },
+    data: {
+      pazienteId: ids.wS,
+      pazienteNome: `Revocato${tag} Walter`,
+      priorita: 'normale',
+      stato: 'aperta',
+      tipo: 'Monitoraggio',
+      note: 'x',
+      scadenza: today,
+      operatoreAssegnato: 'OSS 1',
+      operatoreAssegnatoId: 'SIM-OSS-1',
+      creatoDA: 'Medico 1',
+      creatoDaId: 'SIM-DOCTOR-1',
+    },
   });
   setProactiveComposeRuntime(async (req) => {
     const r = req.results as { id: string; ospite: string }[];
-    return { answerText: r.map((x) => `${x.ospite} (${x.id})`).join('; '), citedSources: r.map((x) => x.id) };
+    return {
+      answerText: r.map((x) => `${x.ospite} (${x.id})`).join('; '),
+      citedSources: r.map((x) => x.id),
+    };
   });
   try {
     const first = (await call(base, oss, 'GET', '/skills/proactive/briefing')).body;
     assert.ok(first.summary.text.includes(`Revocato${tag}`), 'in scope: named by the AI');
-    await prisma.patient.update({ where: { id: ids.wS }, data: { registeredById: 'SIM-DOCTOR-1' } });
+    await prisma.patient.update({
+      where: { id: ids.wS },
+      data: { registeredById: 'SIM-DOCTOR-1' },
+    });
     const second = (await call(base, oss, 'GET', '/skills/proactive/briefing')).body;
-    assert.notEqual(second.metrics.aiSkipped, 'same_facts', 'different disclosed context → no reuse');
-    assert.ok(!JSON.stringify(second).includes(`Revocato${tag}`), 'the revoked resident appears nowhere');
+    assert.notEqual(
+      second.metrics.aiSkipped,
+      'same_facts',
+      'different disclosed context → no reuse',
+    );
+    assert.ok(
+      !JSON.stringify(second).includes(`Revocato${tag}`),
+      'the revoked resident appears nowhere',
+    );
   } finally {
     process.env.PROACTIVE_BRIEFING_COOLDOWN_S = '0';
     setProactiveComposeRuntime(null);

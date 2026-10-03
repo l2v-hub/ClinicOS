@@ -68,16 +68,83 @@
   padding: 4px 8px 4px 0;
   list-style: none;
 }
+.patient-therapy-calendar .agt-slot--hour {
+  flex-wrap: wrap;
+}
+/* Ogni dose è un'azione: apre il dettaglio dell'orario (terapie + somministrazione). */
 .patient-therapy-calendar .patient-therapy-calendar__event {
   grid-template-columns: 32px minmax(0, 1fr);
-  cursor: default;
+  min-height: 44px;
+  cursor: pointer;
 }
-.patient-therapy-calendar .patient-therapy-calendar__event:hover {
-  background: #f0eaff;
-  border-color: #c9baf2;
+.patient-therapy-calendar .patient-therapy-calendar__event:hover,
+.patient-therapy-calendar .patient-therapy-calendar__event[aria-expanded='true'] {
+  background: #e4dbff;
+  border-color: #b3a0ef;
   border-left-color: var(--purple);
-  box-shadow: none;
-  transform: none;
+}
+.patient-therapy-calendar .patient-therapy-calendar__event:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.patient-therapy-calendar__event-dose {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.patient-therapy-slot-detail {
+  flex-basis: 100%;
+  margin: 0 8px 10px 60px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface, #fff);
+  min-width: 0;
+}
+.patient-therapy-slot-detail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.patient-therapy-slot-detail__head h4,
+.patient-therapy-slot-detail__sub {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+}
+.patient-therapy-slot-detail__head .btn-sm {
+  min-height: 44px;
+}
+.patient-therapy-slot-detail__sub {
+  margin-top: 12px;
+  text-transform: none;
+}
+.patient-therapy-slot-detail__list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.patient-therapy-slot-detail__list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 6px 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.patient-therapy-slot-detail__msg,
+.patient-therapy-slot-detail__feedback {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.patient-therapy-slot-detail__feedback.is-ok {
+  color: var(--green, #1f7a4d);
+}
+.patient-therapy-slot-detail__feedback.is-error {
+  color: var(--red);
 }
 .patient-therapy-calendar__medication {
   min-width: 0;
@@ -94,11 +161,6 @@
   font-weight: 650;
   font-variant-numeric: tabular-nums;
   color: #4e2ba7;
-}
-.patient-therapy-calendar__medication p {
-  margin: 4px 0 0;
-  font-size: 12px;
-  line-height: 1.45;
 }
 .patient-therapy-calendar__unscheduled {
   margin-top: 16px;
@@ -153,6 +215,9 @@
     gap: 7px;
     padding: 8px;
     border-left-width: 4px;
+  }
+  .patient-therapy-slot-detail {
+    margin-left: 8px;
   }
   .patient-therapy-calendar__event .agt-therapy-slot__icon {
     width: 24px;

@@ -1,6 +1,6 @@
 import multer from 'multer';
 import type { Request, RequestHandler } from 'express';
-import { ImportSessionError, LIMITS } from './model.js';
+import { ImportSessionError, LIMITS, REQUEST_LIMIT_MESSAGE } from './model.js';
 const totals = new WeakMap<Request, number>();
 const storage: multer.StorageEngine = {
   _handleFile(req, file, done) {
@@ -19,7 +19,7 @@ const storage: multer.StorageEngine = {
       const total = (totals.get(req) ?? 0) + chunk.length;
       totals.set(req, total);
       if (total > LIMITS.maxTotalBytes) {
-        fail(new ImportSessionError(413, 'request_limit', 'Carica un gruppo di file più piccolo'));
+        fail(new ImportSessionError(413, 'request_limit', REQUEST_LIMIT_MESSAGE));
         return;
       }
       size += chunk.length;
@@ -56,10 +56,7 @@ export const pageUpload: RequestHandler = (req, res, next) => {
     total += chunk.length;
     if (!failed && total > LIMITS.maxRequestBytes) {
       failed = true;
-      req.emit(
-        'error',
-        new ImportSessionError(413, 'request_limit', 'Caricamento oltre il limite consentito'),
-      );
+      req.emit('error', new ImportSessionError(413, 'request_limit', REQUEST_LIMIT_MESSAGE));
     }
   };
   upload(req, res, (error) => {

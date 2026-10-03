@@ -5,7 +5,13 @@ import type { AuthedRequest } from '../ai/auth.js';
 import { requireOwnedImportJob } from '../ai/ownership.js';
 import { extractionCostGuard } from '../ai/rate-limit.js';
 import { documentContentDisposition } from '../ai/upload/patient-document-types.js';
-import { ImportSessionError, LIMITS, manifest, object } from '../ai/upload/pages/model.js';
+import {
+  ImportSessionError,
+  LIMITS,
+  REQUEST_LIMIT_MESSAGE,
+  manifest,
+  object,
+} from '../ai/upload/pages/model.js';
 import { getPageJob, isPageSession } from '../ai/upload/pages/repository.js';
 import {
   createPageSession,
@@ -23,7 +29,12 @@ import { pageUpload, uploadMetadata } from '../ai/upload/pages/multipart.js';
 import { groupPdf, verifiedBytes } from '../ai/upload/pages/pdf.js';
 import { saveReview } from '../ai/upload/pages/review.js';
 import { pageTextHandler } from '../ai/upload/pages/page-text.js';
+import { uploadLimitError } from '../ai/upload/upload-errors.js';
 const router = Router();
+const pageUploadLimits = {
+  maxFileBytes: LIMITS.maxFileBytes,
+  maxFiles: LIMITS.maxFilesPerRequest,
+};
 router.param('id', requireOwnedImportJob);
 type Handler = (req: Request, res: Response) => Promise<unknown>;
 const handle = (fn: Handler) => (req: Request, res: Response, next: NextFunction) => {
@@ -33,11 +44,10 @@ const handle = (fn: Handler) => (req: Request, res: Response, next: NextFunction
       if (e.code === 'revision_conflict' && req.params.id)
         details.job = await getPageJob(String(req.params.id)).catch(() => null);
       res.status(e.status).json({ error: e.message, code: e.code, ...details });
-    } else if (e instanceof multer.MulterError)
-      res
-        .status(413)
-        .json({ error: 'Caricamento oltre il limite consentito', code: 'request_limit' });
-    else next(e);
+    } else if (e instanceof multer.MulterError) {
+      const limit = uploadLimitError(e, pageUploadLimits)!;
+      res.status(limit.status).json(limit.body);
+    } else next(e);
   });
 };
 const pageOnly = (req: Request, _res: Response, next: NextFunction) => {
@@ -48,9 +58,7 @@ const pageOnly = (req: Request, _res: Response, next: NextFunction) => {
 const bounded = (req: Request, _res: Response, next: NextFunction) => {
   const length = Number(req.header('content-length'));
   if (Number.isFinite(length) && length > LIMITS.maxRequestBytes)
-    return next(
-      new ImportSessionError(413, 'request_limit', 'Caricamento oltre il limite consentito'),
-    );
+    return next(new ImportSessionError(413, 'request_limit', REQUEST_LIMIT_MESSAGE));
   next();
 };
 const files = (req: Request) =>
@@ -62,15 +70,13 @@ const files = (req: Request) =>
 router.post('/', (req, res, next) => {
   if (req.body?.sessionVersion !== 1) return next();
   handle(async (r, s) =>
-    s
-      .status(201)
-      .json({
-        job: await createPageSession(
-          r.header('Idempotency-Key') ?? r.body?.idempotencyKey,
-          (r as AuthedRequest).operator!.id,
-        ),
-        outcomes: [],
-      }),
+    s.status(201).json({
+      job: await createPageSession(
+        r.header('Idempotency-Key') ?? r.body?.idempotencyKey,
+        (r as AuthedRequest).operator!.id,
+      ),
+      outcomes: [],
+    }),
   )(req, res, next);
 });
 router.get(
@@ -161,12 +167,10 @@ router.post(
   pageOnly,
   extractionCostGuard,
   handle(async (req, res) =>
-    res
-      .status(202)
-      .json({
-        ...(await processPages(String(req.params.id), req.body)),
-        message: 'Elaborazione avviata',
-      }),
+    res.status(202).json({
+      ...(await processPages(String(req.params.id), req.body)),
+      message: 'Elaborazione avviata',
+    }),
   ),
 );
 router.post(
@@ -174,12 +178,10 @@ router.post(
   pageOnly,
   extractionCostGuard,
   handle(async (req, res) =>
-    res
-      .status(202)
-      .json({
-        ...(await processPages(String(req.params.id), req.body, true)),
-        message: 'Nuovo tentativo avviato',
-      }),
+    res.status(202).json({
+      ...(await processPages(String(req.params.id), req.body, true)),
+      message: 'Nuovo tentativo avviato',
+    }),
   ),
 );
 router.post(
@@ -234,10 +236,9 @@ router.delete(
 router.use((e: unknown, _req: Request, res: Response, next: NextFunction) => {
   if (e instanceof ImportSessionError)
     res.status(e.status).json({ error: e.message, code: e.code, ...e.details });
-  else if (e instanceof multer.MulterError)
-    res
-      .status(413)
-      .json({ error: 'Caricamento oltre il limite consentito', code: 'request_limit' });
-  else next(e);
+  else if (e instanceof multer.MulterError) {
+    const limit = uploadLimitError(e, pageUploadLimits)!;
+    res.status(limit.status).json(limit.body);
+  } else next(e);
 });
 export default router;

@@ -128,3 +128,17 @@ test('HMI 1: 8 chart sections as in the prototype; every legacy tab opens the se
   const all = CHART_SECTIONS.flatMap((s) => s.tabs);
   assert.equal(new Set(all).size, all.length);
 });
+
+test('Prompt 10 AT-13: le sezioni negate dalla policy non sono offerte al ruolo', async () => {
+  const { CHART_SECTIONS, chartSectionAllowed } =
+    await import('../../components/operator/tabGroups');
+  // OSS (baseline): therapy.list e documents.list negati.
+  const oss = (capability: string) => !['therapy.list', 'documents.list'].includes(capability);
+  const visible = CHART_SECTIONS.filter((s) => chartSectionAllowed(s.id, oss)).map((s) => s.id);
+  assert.ok(!visible.includes('terapia'));
+  assert.ok(!visible.includes('documenti'));
+  assert.ok(visible.includes('parametri'));
+  assert.ok(visible.includes('clinica'));
+  // Infermiere: tutte le sezioni.
+  assert.equal(CHART_SECTIONS.filter((s) => chartSectionAllowed(s.id, () => true)).length, 8);
+});

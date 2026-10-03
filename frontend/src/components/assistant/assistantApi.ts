@@ -27,6 +27,8 @@ export interface ClassicScreen {
   screen: string;
   label: string;
   needsResident?: boolean;
+  /** Sezione della cartella da aprire quando il workflow conosce già l'ospite. */
+  patientTab?: string;
   patientId?: string;
 }
 
@@ -327,13 +329,25 @@ export interface CopilotHome {
     escalation: string;
     confirmationUx: string;
     sections: Array<'shortcuts' | 'continue' | 'signals' | 'starters' | 'recent'>;
-    signals: { preferredEventTypes: string[]; defaultTab: 'da-vedere' | 'cambiato' | 'briefing'; maxVisible: number };
+    signals: {
+      preferredEventTypes: string[];
+      defaultTab: 'da-vedere' | 'cambiato' | 'briefing';
+      maxVisible: number;
+    };
     briefingFocus: string;
   };
   resident: AssistantResident | null;
   starters: { skillId: string; label: string; reasons: string[] }[];
   shortcuts: CopilotShortcut[];
-  continueWork: { workflowId: string; skillId: string; skillName: string; action: string | null; residentId: string | null; residentLabel: string | null; updatedAt: string }[];
+  continueWork: {
+    workflowId: string;
+    skillId: string;
+    skillName: string;
+    action: string | null;
+    residentId: string | null;
+    residentLabel: string | null;
+    updatedAt: string;
+  }[];
   recent: { skillId: string; skillName: string; at: string; residentLabel: string | null }[];
 }
 
@@ -342,14 +356,22 @@ export function loadCopilotHome(residentId: string | null): Promise<CopilotHome>
   return request<CopilotHome>(`/skills/copilot/home${query}`);
 }
 
-export function loadRoundResidents(): Promise<{ residents: (AssistantResident & { room: string | null; bed: string | null })[]; hasMore: boolean }> {
+export function loadRoundResidents(): Promise<{
+  residents: (AssistantResident & { room: string | null; bed: string | null })[];
+  hasMore: boolean;
+}> {
   return request('/skills/copilot/round');
 }
 
 /** Same matching for typed and dictated text: a shortcut phrase of the CURRENT role profile. */
 export function matchShortcut(text: string, shortcuts: CopilotShortcut[]): CopilotShortcut | null {
-  const t = text.toLowerCase().replace(/[«»"'’.!?,]/g, ' ').replace(/\s+/g, ' ').trim();
+  const t = text
+    .toLowerCase()
+    .replace(/[«»"'’.!?,]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
   if (!t) return null;
-  for (const s of shortcuts) for (const p of s.phrases) if (t === p || t === `${p} per favore`) return s;
+  for (const s of shortcuts)
+    for (const p of s.phrases) if (t === p || t === `${p} per favore`) return s;
   return null;
 }

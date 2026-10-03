@@ -45,7 +45,11 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     audit:
       'request, proposal (preview id, nomi dei campi), confirmation, execute + evento del tool.',
     executable: true,
-    classicScreen: { screen: 'parametri-multipaziente', label: 'Parametri' },
+    classicScreen: {
+      screen: 'parametri-multipaziente',
+      label: 'Parametri',
+      patientTab: 'parametri',
+    },
     starters: {
       withResident: 'Registra i parametri di questo ospite',
       general: 'Registra i parametri di un ospite',
@@ -86,6 +90,7 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
       screen: 'dettaglio-paziente',
       label: 'Cartella → Diario',
       needsResident: true,
+      patientTab: 'diario',
     },
     starters: { withResident: 'Aggiungi un’osservazione nel diario di questo ospite' },
     keywords: [
@@ -161,6 +166,7 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
       screen: 'dettaglio-paziente',
       label: 'Cartella → Terapia',
       needsResident: true,
+      patientTab: 'terapia-farmacologica',
     },
     starters: {
       withResident: 'Prepara una prescrizione per questo ospite',
@@ -226,7 +232,11 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
     failure: 'Errore di lettura → FAILED con il messaggio del backend.',
     audit: 'request + tool:parameters.list_readings.',
     executable: true,
-    classicScreen: { screen: 'parametri-multipaziente', label: 'Parametri' },
+    classicScreen: {
+      screen: 'parametri-multipaziente',
+      label: 'Parametri',
+      patientTab: 'parametri',
+    },
     starters: { withResident: 'Mostrami i parametri recenti di questo ospite' },
     keywords: [/\b(parametr|pressione|saturazion|temperatur|rilevazion|vital)/i],
   },
@@ -252,6 +262,7 @@ export const SKILL_CATALOG: readonly SkillDefinition[] = [
       screen: 'dettaglio-paziente',
       label: 'Cartella → Diario',
       needsResident: true,
+      patientTab: 'diario',
     },
     starters: { withResident: 'Mostrami il diario di questo ospite' },
     keywords: [/\b(diario\b|osservazion|note\b)/i],

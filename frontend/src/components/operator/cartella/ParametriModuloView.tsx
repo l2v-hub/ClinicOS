@@ -1,5 +1,6 @@
 // Parametri Vitali — Template 08
-// Griglia mensile A4 orizzontale: 31 righe × 12 colonne
+// Griglia mensile A4 orizzontale: 31 righe × 11 colonne. Le firme IP mattina/pomeriggio non
+// sono più colonne (Phase 10, richiesta del reparto): l'autore lo registra il server al salvataggio.
 
 import type { CartellaPaziente, Paziente, VitaleItem } from '../../../types';
 
@@ -18,9 +19,8 @@ const COLS = [
   { key: 'DTX8', label: 'DTX', sub: '08:00', width: 44 },
   { key: 'DTX12', label: 'DTX', sub: '12:00', width: 44 },
   { key: 'DTX18', label: 'DTX', sub: '18:00', width: 44 },
+  { key: 'DTX20', label: 'DTX', sub: '20:00', width: 44 },
   { key: 'TEMP', label: 'TC°', sub: '°C', width: 40 },
-  { key: 'FIRMA_M', label: 'Firma IP', sub: 'Mattina', width: 56 },
-  { key: 'FIRMA_P', label: 'Firma IP', sub: 'Pomeriggio', width: 56 },
 ];
 
 function matchCol(colKey: string, etichetta: string): boolean {
@@ -46,6 +46,8 @@ function matchCol(colKey: string, etichetta: string): boolean {
       return (e.includes('glic') || e.includes('dtx') || e.includes('gluc')) && e.includes('12');
     case 'DTX18':
       return (e.includes('glic') || e.includes('dtx') || e.includes('gluc')) && e.includes('18');
+    case 'DTX20':
+      return (e.includes('glic') || e.includes('dtx') || e.includes('gluc')) && e.includes('20');
     case 'EVAC':
       return e.includes('evac') || e.includes('fec') || e.includes('intestin');
     case 'CATET':
@@ -57,7 +59,7 @@ function matchCol(colKey: string, etichetta: string): boolean {
 
 function getVal(items: VitaleItem[], colKey: string): string {
   // For DTX without time tag, fall back to any DTX match
-  if (['DTX8', 'DTX12', 'DTX18'].includes(colKey)) {
+  if (['DTX8', 'DTX12', 'DTX18', 'DTX20'].includes(colKey)) {
     const exact = items.find((v) => matchCol(colKey, v.etichetta));
     if (exact) return exact.valore;
     // fallback: any DTX — split across slots
@@ -68,19 +70,11 @@ function getVal(items: VitaleItem[], colKey: string): string {
     if (colKey === 'DTX8' && dtxAll[0]) return dtxAll[0].valore;
     if (colKey === 'DTX12' && dtxAll[1]) return dtxAll[1].valore;
     if (colKey === 'DTX18' && dtxAll[2]) return dtxAll[2].valore;
+    if (colKey === 'DTX20' && dtxAll[3]) return dtxAll[3].valore;
     return '';
   }
   const match = items.find((v) => matchCol(colKey, v.etichetta));
   return match ? match.valore : '';
-}
-
-function initials(name: string): string {
-  return (
-    name
-      .split(' ')
-      .map((p) => p[0])
-      .join('.') + '.'
-  );
 }
 
 export function ParametriModuloView({ cartella, paziente }: Props) {
@@ -172,21 +166,10 @@ export function ParametriModuloView({ cartella, paziente }: Props) {
           {gridRows.map((day, idx) => {
             const items = day ? (byDay[day] ?? []) : [];
             const hasData = items.length > 0;
-            const firmaM = hasData ? initials(items[0].rilevatoDa) : '';
             return (
               <tr key={day ?? `r${idx}`}>
                 <td className="col-day">{idx + 1}</td>
                 {COLS.map((c) => {
-                  if (c.key === 'FIRMA_M') {
-                    return (
-                      <td key="FIRMA_M" style={{ fontSize: '7.5pt' }}>
-                        {firmaM}
-                      </td>
-                    );
-                  }
-                  if (c.key === 'FIRMA_P') {
-                    return <td key="FIRMA_P"></td>;
-                  }
                   const val = hasData ? getVal(items, c.key) : '';
                   return (
                     <td key={c.key} className={val ? 'has-value' : ''} style={{ fontSize: '8pt' }}>

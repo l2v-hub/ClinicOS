@@ -109,3 +109,16 @@ export function giroTimeDone(time: GiroTime): number {
 export function initialGiroTime(times: GiroTime[]): string | null {
   return (times.find((t) => t.pending > 0) ?? times[0])?.ora ?? null;
 }
+
+/** Le somministrazioni di UN paziente a un'ora reale, dal giro del giorno (calendario in cartella). */
+export function patientGiroTime(
+  slots: TherapySlot[],
+  patientId: string,
+  ora: string,
+): GiroTime | null {
+  const own = slots.map((slot) => ({
+    ...slot,
+    patients: (slot.patients ?? []).filter((p) => p.patientId === patientId),
+  }));
+  return giroTimes(own).find((t) => t.ora === ora) ?? null;
+}

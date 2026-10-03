@@ -14,6 +14,7 @@ import { buildAdessoQueue } from '../../lib/adessoQueue';
 import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
 import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
 import './OperatorDashboard.css';
+import type { TabId } from './tabGroups';
 
 interface OperatorDashboardProps {
   utente: UtenteApp;
@@ -27,7 +28,7 @@ interface OperatorDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, tab?: TabId) => void;
   clinicalOverview?: ClinicalOverview | null;
   clinicalOverviewState: 'loading' | 'ready' | 'error';
   onRetryClinicalOverview: () => void;
@@ -98,7 +99,12 @@ export function OperatorDashboard({
   const critici = clinicalOverview?.critici ?? 0;
   const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
   const allergieGravi = clinicalOverview?.allergieGravi ?? 0;
-  const pazientiRicoverati = clinicalOverview?.ricoverati ?? 0;
+  // In carico = non dimessi, la stessa regola delle card Turno e della lista "Ricoverati": un
+  // paziente senza stato di ricovero esplicito non è un "dimesso" (prima l'intestazione diceva
+  // "0 ricoverati" accanto a cinque card di pazienti).
+  const pazientiRicoverati = clinicalOverview
+    ? Math.max(0, clinicalOverview.totalPatients - clinicalOverview.dimessi)
+    : 0;
   const clinicalOverviewReady = clinicalOverviewState === 'ready' && clinicalOverview !== null;
 
   const notificationCounts = buildDashboardNotificationCounts({
@@ -123,9 +129,14 @@ export function OperatorDashboard({
     onRetryClinicalOverview,
   });
 
-  const subtitle = clinicalOverviewReady
-    ? `${pazientiRicoverati} ${pazientiRicoverati === 1 ? 'ricoverato' : 'ricoverati'} · ${utente.reparto}`
-    : utente.reparto;
+  const subtitle = [
+    clinicalOverviewReady
+      ? `${pazientiRicoverati} ${pazientiRicoverati === 1 ? 'ricoverato' : 'ricoverati'}`
+      : '',
+    utente.reparto?.trim() ?? '',
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
     <div className="operator-dashboard turno">

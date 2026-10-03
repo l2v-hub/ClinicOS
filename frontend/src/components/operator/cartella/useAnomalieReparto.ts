@@ -52,6 +52,8 @@ export interface AnomalieReparto {
   verificaIncompleta: boolean;
   /** true quando le terapie di reparto non sono leggibili: non dichiarare zero anomalie. */
   fallito: boolean;
+  /** false quando il ruolo non legge le terapie di reparto (nessuna verifica, nessun caricamento). */
+  disponibile?: boolean;
 }
 
 const VUOTO: AnomalieReparto = {
@@ -144,6 +146,8 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
   const risoluzioni = useRisoluzioniFarmaco(righe);
 
   return useMemo(() => {
+    // Senza capability la verifica non parte: non presentarla come "in corso" per sempre.
+    if (!attivo) return { ...VUOTO, inCorso: false, disponibile: false };
     if (fallito)
       return {
         perPaziente: new Map(),
@@ -177,7 +181,7 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
       .sort((a, b) => b.esito.totale - a.esito.totale || a.nome.localeCompare(b.nome));
 
     return { perPaziente, pazienti, inCorso, verificaIncompleta, fallito: false };
-  }, [fallito, slots, righe.length, righePerPaziente, risoluzioni, nomi]);
+  }, [attivo, fallito, slots, righe.length, righePerPaziente, risoluzioni, nomi]);
 }
 
 /** Anomalie di un singolo paziente dalla mappa di reparto. */

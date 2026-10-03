@@ -35,10 +35,9 @@ const GRID_COLS: { key: keyof ParametroGiorno; label: string; sub?: string }[] =
   { key: 'dtx08', label: 'DTX 08', sub: 'mg/dl' },
   { key: 'dtx12', label: 'DTX 12', sub: 'mg/dl' },
   { key: 'dtx18', label: 'DTX 18', sub: 'mg/dl' },
+  { key: 'dtx20', label: 'DTX 20', sub: 'mg/dl' },
   { key: 'evacuazione', label: 'EVAC', sub: '' },
   { key: 'catetere', label: 'CATET', sub: '' },
-  { key: 'firmaIpM', label: 'IP M', sub: '' },
-  { key: 'firmaIpP', label: 'IP P', sub: '' },
   { key: 'note', label: 'NOTE', sub: '' },
 ];
 
@@ -51,6 +50,7 @@ const NUMERIC_COLS: Set<keyof ParametroGiorno> = new Set([
   'dtx08',
   'dtx12',
   'dtx18',
+  'dtx20',
   'catetere',
 ]);
 
@@ -64,6 +64,7 @@ const PLAUSIBLE_RANGES: Partial<Record<keyof ParametroGiorno, [number, number]>>
   dtx08: [10, 900],
   dtx12: [10, 900],
   dtx18: [10, 900],
+  dtx20: [10, 900],
 };
 const PA_PATTERN = /^(\d{2,3})\/(\d{2,3})$/;
 
@@ -112,6 +113,7 @@ function giornoHasData(g: ParametroGiorno): boolean {
     g.dtx08 ||
     g.dtx12 ||
     g.dtx18 ||
+    g.dtx20 ||
     g.evacuazione ||
     g.catetere ||
     g.firmaIpM ||

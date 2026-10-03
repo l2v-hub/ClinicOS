@@ -1,5 +1,6 @@
 import { catalogInstant } from './assessments/assessmentCatalog';
 import { useEffect, useState } from 'react';
+import { useCan } from './capabilities';
 import { API_URL } from '../config';
 import { operatorHeaders } from './operatorSession';
 export interface PatientIntakeReviewState {
@@ -7,33 +8,64 @@ export interface PatientIntakeReviewState {
   data: PatientIntakeReviewData | null;
 }
 /** Shared by retained therapies and NRS; a patient/actor change hides previous results immediately. */
-export function usePatientIntakeReview(patientId: string, operatorId: string, operatorRole?: string) {
+export function usePatientIntakeReview(
+  patientId: string,
+  operatorId: string,
+  operatorRole?: string,
+) {
   const scope = JSON.stringify([patientId, operatorId, operatorRole ?? '']);
-  const [result, setResult] = useState<{ scope: string; state: PatientIntakeReviewState } | null>(null);
+  const [result, setResult] = useState<{ scope: string; state: PatientIntakeReviewState } | null>(
+    null,
+  );
   const [retry, setRetry] = useState(0);
+  // Phase 10: senza intake.patient_review (es. OSS) non c'è nulla da mostrare né da chiedere.
+  const allowed = useCan('intake.patient_review');
   useEffect(() => {
+    if (!allowed) return;
     const controller = new AbortController();
     let active = true;
     fetch(`${API_URL}/patients/${encodeURIComponent(patientId)}/intake-review`, {
-      headers: operatorHeaders(), signal: controller.signal, cache: 'no-store',
-    }).then(async response => {
-      if (!response.ok) throw new Error('Revisione ingresso non disponibile');
-      return parsePatientIntakeReview(await response.json());
-    }).then(data => {
-      if (active && !controller.signal.aborted) setResult({ scope, state: { status: 'ready', data } });
-    }).catch(() => {
-      if (active && !controller.signal.aborted) setResult({ scope, state: { status: 'error', data: null } });
-    });
-    return () => { active = false; controller.abort(); };
-  }, [patientId, scope, retry]);
-  const state: PatientIntakeReviewState = result?.scope === scope ? result.state : { status: 'loading', data: null };
+      headers: operatorHeaders(),
+      signal: controller.signal,
+      cache: 'no-store',
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Revisione ingresso non disponibile');
+        return parsePatientIntakeReview(await response.json());
+      })
+      .then((data) => {
+        if (active && !controller.signal.aborted)
+          setResult({ scope, state: { status: 'ready', data } });
+      })
+      .catch(() => {
+        if (active && !controller.signal.aborted)
+          setResult({ scope, state: { status: 'error', data: null } });
+      });
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [patientId, scope, retry, allowed]);
+  const state: PatientIntakeReviewState = !allowed
+    ? { status: 'ready', data: null }
+    : result?.scope === scope
+      ? result.state
+      : { status: 'loading', data: null };
   return {
     state,
-    retry: () => { setResult(null); setRetry(value => value + 1); },
+    retry: () => {
+      setResult(null);
+      setRetry((value) => value + 1);
+    },
   };
 }
-export type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
-export interface LegacyPainDraft { draftId: string; confirmedAt: string | null; pain: JsonValue }
+export type JsonValue =
+  null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
+export interface LegacyPainDraft {
+  draftId: string;
+  confirmedAt: string | null;
+  pain: JsonValue;
+}
 export interface DeferredTherapy {
   name: string;
   dose: string;
@@ -64,20 +96,38 @@ function isJson(value: unknown): value is JsonValue {
   }
   return true;
 }
-function parseLegacyPain(data: Record<string, unknown>): Pick<PatientIntakeReviewData, 'legacyPainDrafts' | 'legacyPainError'> {
+function parseLegacyPain(
+  data: Record<string, unknown>,
+): Pick<PatientIntakeReviewData, 'legacyPainDrafts' | 'legacyPainError'> {
   const present = Object.hasOwn(data, 'legacyPainDrafts');
   const errorPresent = Object.hasOwn(data, 'legacyPainError');
   if (!present && !errorPresent) return { legacyPainDrafts: [], legacyPainError: null };
   if (!present || !errorPresent) throw new Error('Dati dolore dell’ingresso non validi');
-  if (data.legacyPainDrafts === null && data.legacyPainError === 'intake_review_legacy_pain_too_large')
+  if (
+    data.legacyPainDrafts === null &&
+    data.legacyPainError === 'intake_review_legacy_pain_too_large'
+  )
     return { legacyPainDrafts: null, legacyPainError: data.legacyPainError };
-  if (data.legacyPainError !== null || !Array.isArray(data.legacyPainDrafts) || data.legacyPainDrafts.length > 100)
+  if (
+    data.legacyPainError !== null ||
+    !Array.isArray(data.legacyPainDrafts) ||
+    data.legacyPainDrafts.length > 100
+  )
     throw thesePainError();
   const ids = new Set<string>();
   for (const row of data.legacyPainDrafts) {
-    if (!row || typeof row !== 'object' || Array.isArray(row) || Object.keys(row).length !== 3 ||
-      typeof row.draftId !== 'string' || !row.draftId || ids.has(row.draftId) ||
-      !(row.confirmedAt === null || catalogInstant(row.confirmedAt)) || !Object.hasOwn(row, 'pain') || !isJson(row.pain))
+    if (
+      !row ||
+      typeof row !== 'object' ||
+      Array.isArray(row) ||
+      Object.keys(row).length !== 3 ||
+      typeof row.draftId !== 'string' ||
+      !row.draftId ||
+      ids.has(row.draftId) ||
+      !(row.confirmedAt === null || catalogInstant(row.confirmedAt)) ||
+      !Object.hasOwn(row, 'pain') ||
+      !isJson(row.pain)
+    )
       throw thesePainError();
     ids.add(row.draftId);
   }
@@ -103,5 +153,8 @@ export function parsePatientIntakeReview(value: unknown): PatientIntakeReviewDat
     )
   )
     throw new Error('Revisione ingresso non valida');
-  return { ...data, ...parseLegacyPain(value as Record<string, unknown>) } as PatientIntakeReviewData;
+  return {
+    ...data,
+    ...parseLegacyPain(value as Record<string, unknown>),
+  } as PatientIntakeReviewData;
 }

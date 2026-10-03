@@ -193,3 +193,11 @@ test('untimed administrations: only today, "Orario da verificare", after imminen
   assert.equal(noTime.inRitardo, false);
   assert.equal(noTime.luogo, 'Camera 101 · Letto A');
 });
+
+test('Prompt 10 §2: ogni voce della coda apre la sezione in cui si agisce', async () => {
+  const { ADESSO_KIND_TAB, ADESSO_RANK } = await import('../adessoQueue');
+  for (const kind of Object.keys(ADESSO_RANK) as (keyof typeof ADESSO_KIND_TAB)[]) {
+    const tab = ADESSO_KIND_TAB[kind];
+    assert.equal(tab, kind.startsWith('consegna') ? 'consegne' : 'terapia-farmacologica', kind);
+  }
+});

@@ -35,6 +35,7 @@ const DAY_KEYS = new Set([
   'dtx08',
   'dtx12',
   'dtx18',
+  'dtx20',
   'evacuazione',
   'catetere',
   'note',

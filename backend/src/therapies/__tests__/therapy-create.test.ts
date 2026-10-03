@@ -90,3 +90,16 @@ test('createTherapyInTx: rejects when farmacoNome is missing', async () => {
     await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
   }
 });
+
+test('P10: missing required therapy fields are named in operator language', async () => {
+  const { missingTherapyFieldsMessage } = await import('../therapy-create.js');
+  assert.equal(
+    missingTherapyFieldsMessage('', '2026-10-03'),
+    'Campi obbligatori mancanti: farmaco',
+  );
+  assert.equal(
+    missingTherapyFieldsMessage('', ''),
+    'Campi obbligatori mancanti: farmaco, data di inizio',
+  );
+  assert.equal(missingTherapyFieldsMessage('Ramipril', '2026-10-03'), null);
+});

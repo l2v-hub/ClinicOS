@@ -65,6 +65,11 @@ function subscribe(listener: () => void): () => void {
   return () => listeners.delete(listener);
 }
 
+/** Lettura fuori dal render (prefetch, caricamenti): stessa mappa di useCan. */
+export function sessionCan(id: string): boolean {
+  return can(sessionCapabilities, id);
+}
+
 export function useCan(id: string): boolean {
   const snapshot = () => sessionCapabilities;
   const caps = useSyncExternalStore(subscribe, snapshot, snapshot);

@@ -1,5 +1,5 @@
 import type { CapabilityMap, UtenteApp, NavKey } from '../../types';
-import { canNavigate } from '../../lib/capabilities';
+import { can, canNavigate } from '../../lib/capabilities';
 
 // Icone della barra laterale: stessi tracciati del prototipo HMI 1 (24 px, tratto 2).
 const PATHS = {
@@ -132,19 +132,22 @@ export default function TeamsLikeSidebar({
       </div>
 
       <div className="teams-sidebar__footer">
-        <button
-          type="button"
-          className={`teams-sidebar__item teams-sidebar__item--ai${assistantActive ? ' active' : ''}`}
-          onClick={() => onNavigate('ai-assistant')}
-          title="Assistente"
-          aria-expanded={assistantOpen}
-          aria-haspopup="dialog"
-        >
-          <span className="teams-sidebar__item-icon">
-            <RailIcon name="ai" />
-          </span>
-          <span className="teams-sidebar__item-label">Assistente</span>
-        </button>
+        {/* L'Assistente (Agnos) esiste solo per i ruoli a cui la policy concede i comandi. */}
+        {can(capabilities, 'agnos.plan_command') && (
+          <button
+            type="button"
+            className={`teams-sidebar__item teams-sidebar__item--ai${assistantActive ? ' active' : ''}`}
+            onClick={() => onNavigate('ai-assistant')}
+            title="Assistente"
+            aria-expanded={assistantOpen}
+            aria-haspopup="dialog"
+          >
+            <span className="teams-sidebar__item-icon">
+              <RailIcon name="ai" />
+            </span>
+            <span className="teams-sidebar__item-label">Assistente</span>
+          </button>
+        )}
       </div>
     </nav>
   );

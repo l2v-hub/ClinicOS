@@ -196,11 +196,13 @@ export function AdminDashboard({
         onOpenConsegneAperte={onOpenConsegneAperte}
       />
 
-      <DashboardTherapyDeadlines
-        summary={somministrazioni}
-        onOpenTherapy={() => onNavigate('terapie')}
-        onSelectPaziente={onSelectPaziente}
-      />
+      {somministrazioni.disponibile && (
+        <DashboardTherapyDeadlines
+          summary={somministrazioni}
+          onOpenTherapy={() => onNavigate('terapie')}
+          onSelectPaziente={onSelectPaziente}
+        />
+      )}
 
       {/* Occupancy section */}
       <div className="section-header" style={{ marginTop: 32 }}>
@@ -438,7 +440,10 @@ export function AdminDashboard({
               </span>
               Consegne Urgenti
             </h3>
-            <button className="link-btn" onClick={() => onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne')}>
+            <button
+              className="link-btn"
+              onClick={() => (onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne'))}
+            >
               Vedi tutte <IcoArrow />
             </button>
           </div>

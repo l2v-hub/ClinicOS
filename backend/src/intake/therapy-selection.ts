@@ -8,13 +8,40 @@ const object = (value: unknown): Row =>
   value && typeof value === 'object' && !Array.isArray(value) ? (value as Row) : {};
 const rows = (value: unknown): Row[] => (Array.isArray(value) ? value.map(object) : []);
 const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
-const mismatch = () =>
+const FIELD_LABEL: Record<string, string> = {
+  farmacoNome: 'nome del farmaco',
+  dataInizio: 'data di inizio',
+  dataFine: 'data di fine',
+  viaSomministrazione: 'via di somministrazione',
+  tipo: 'tipo di terapia',
+  stato: 'stato',
+  pharmaceuticalForm: 'forma farmaceutica',
+  drugPackageRef: 'confezione',
+  commercialStrengthUnit: 'unità del dosaggio',
+  commercialStrengthValue: 'dosaggio',
+  dataSomministrazione: 'data di somministrazione',
+  orarioSomministrazione: 'orario di somministrazione',
+  giorniSettimana: 'giorni della settimana',
+  schedules: 'orari e quantità',
+};
+const RETRY =
+  'Attendi «Bozza salvata» (o riapri la scheda), verifica la riga nella sezione Terapia e riprova.';
+/**
+ * The confirmation differs from the saved draft (usually an autosave that did not land).
+ * The message names the row as numbered in the intake page and, when known, the field —
+ * never a clinical value.
+ */
+const mismatch = (row?: number, field?: string) =>
   new AiExtractionError(
     'config',
-    'Le terapie non corrispondono alla bozza salvata. Riapri lo step Clinica, verifica le righe e riprova.',
+    row === undefined
+      ? `Le terapie non corrispondono alla bozza salvata. ${RETRY}`
+      : field
+        ? `Terapia ${row}: il campo «${FIELD_LABEL[field] ?? field}» è diverso dalla bozza salvata. ${RETRY}`
+        : `Terapia ${row}: non corrisponde alla bozza salvata. ${RETRY}`,
   );
 
-function checkReviewedForm(source: Row, input: ReviewedInput) {
+function checkReviewedForm(source: Row, input: ReviewedInput, row: number) {
   for (const key of [
     'farmacoNome',
     'dataInizio',
@@ -34,15 +61,15 @@ function checkReviewedForm(source: Row, input: ReviewedInput) {
       source.tipo !== 'una_tantum'
     )
       continue;
-    if (text(source[key]) !== text(input[key])) throw mismatch();
+    if (text(source[key]) !== text(input[key])) throw mismatch(row, key);
   }
   if (Number(source.commercialStrengthValue || 0) !== Number(input.commercialStrengthValue || 0))
-    throw mismatch();
+    throw mismatch(row, 'commercialStrengthValue');
   if (
     (Array.isArray(source.giorniSettimana) ? source.giorniSettimana.join(',') : '') !==
     (input.giorniSettimana ?? '')
   )
-    throw mismatch();
+    throw mismatch(row, 'giorniSettimana');
   const project = (value: unknown) =>
     rows(value).map((s) => ({
       time: text(s.time),
@@ -54,7 +81,7 @@ function checkReviewedForm(source: Row, input: ReviewedInput) {
     source.tipo === 'periodica' &&
     JSON.stringify(project(source.schedules)) !== JSON.stringify(project(input.schedules))
   )
-    throw mismatch();
+    throw mismatch(row, 'schedules');
 }
 
 /** Validate the selection against the persisted review, never trust a client omission. */
@@ -62,6 +89,9 @@ export function validateDraftTherapySelection(data: Row, inputs: TherapyCreateIn
   const imported = rows(data.terapiaImport);
   const manual = rows(data.terapia);
   const selected = new Set<string>();
+  // Same numbering as the intake page: imported rows first, then manual rows.
+  const ordinal = (type: Source['type'], index: number) =>
+    (type === 'import' ? 0 : imported.length) + index + 1;
   for (const raw of inputs) {
     const input = raw as ReviewedInput;
     const ref = input.intakeSource;
@@ -75,33 +105,45 @@ export function validateDraftTherapySelection(data: Row, inputs: TherapyCreateIn
     )
       throw mismatch();
     const key = `${ref.type}:${ref.index}`;
+    const row = ordinal(ref.type, ref.index);
     const source = (ref.type === 'import' ? imported : manual)[ref.index];
-    if (!source || selected.has(key) || source.excludedFromConfirm === true) throw mismatch();
+    if (!source || selected.has(key)) throw mismatch(row);
+    if (source.excludedFromConfirm === true)
+      throw new AiExtractionError(
+        'config',
+        `Terapia ${row}: è lasciata in bozza nella scheda salvata. ${RETRY}`,
+      );
     selected.add(key);
     if (ref.type === 'import') {
       if (source.sourceOutdated === true || source.conflictDeferred === true)
         throw new AiExtractionError(
           'config',
-          'La fonte della terapia è cambiata o è stata rinviata. Verifica la riga oppure lasciala in bozza.',
+          `Terapia ${row}: la fonte della terapia è cambiata o è stata rinviata. Verifica la riga oppure lasciala in bozza.`,
         );
       if (source.stato !== 'ok')
         throw new AiExtractionError(
           'config',
-          'Verifica la terapia importata oppure lasciala esplicitamente in bozza.',
+          `Terapia ${row}: verifica la terapia importata («Ho verificato questa terapia») oppure lasciala esplicitamente in bozza.`,
         );
-      if (source.reviewedTherapy) checkReviewedForm(object(source.reviewedTherapy), input);
+      if (source.reviewedTherapy) checkReviewedForm(object(source.reviewedTherapy), input, row);
       else
         throw new AiExtractionError(
           'config',
-          'Riapri la revisione della terapia importata e salva il riepilogo completo prima di confermare.',
+          `Terapia ${row}: riapri la revisione della terapia importata e salva il riepilogo completo prima di confermare.`,
         );
-    } else checkReviewedForm(source, input);
+    } else checkReviewedForm(source, input, row);
   }
+  const omitted = (index: number, type: Source['type']) =>
+    new AiExtractionError(
+      'config',
+      `Terapia ${ordinal(type, index)}: manca dalla conferma ma è inclusa nella bozza salvata. ${RETRY}`,
+    );
   imported.forEach((row, index) => {
-    if (row.excludedFromConfirm !== true && !selected.has(`import:${index}`)) throw mismatch();
+    if (row.excludedFromConfirm !== true && !selected.has(`import:${index}`))
+      throw omitted(index, 'import');
   });
   manual.forEach((_, index) => {
-    if (!selected.has(`manual:${index}`)) throw mismatch();
+    if (!selected.has(`manual:${index}`)) throw omitted(index, 'manual');
   });
   return {
     version: 1,

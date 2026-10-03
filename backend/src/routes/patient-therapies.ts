@@ -14,6 +14,7 @@ import {
 } from '../lib/therapy-dose.js';
 import {
   createTherapyInTx,
+  missingTherapyFieldsMessage,
   normalizeGiorniSettimana,
   type TherapyCreateInput,
 } from '../therapies/therapy-create.js';
@@ -225,8 +226,9 @@ router.post('/:patientId/therapies', async (req, res) => {
   // Patient existence/scope is verified by middleware before this handler.
   const farmacoNome = typeof body.farmacoNome === 'string' ? body.farmacoNome.trim() : '';
   const dataInizio = typeof body.dataInizio === 'string' ? body.dataInizio : '';
-  if (!farmacoNome || !dataInizio) {
-    res.status(400).json({ error: 'Campi obbligatori: farmacoNome, dataInizio' });
+  const missing = missingTherapyFieldsMessage(farmacoNome, dataInizio);
+  if (missing) {
+    res.status(400).json({ error: missing });
     return;
   }
 

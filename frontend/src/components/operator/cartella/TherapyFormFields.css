@@ -403,3 +403,11 @@
     flex-basis: 100%;
   }
 }
+
+/* Prescrittori proposti: un tocco compila il campo (ingresso). */
+.therapy-form__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
