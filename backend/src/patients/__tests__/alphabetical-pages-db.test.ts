@@ -9,6 +9,10 @@ import { loadPatientParametersPage } from '../parameters-page.js';
 import { encodePatientPageCursor } from '../pagination.js';
 import { RosterError } from '../../roster/order-contract.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const marker = `sortfixture${Date.now()}`;
 const collator = new Intl.Collator('it', { sensitivity: 'base' });
 const surname = [

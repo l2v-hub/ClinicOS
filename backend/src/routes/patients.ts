@@ -26,7 +26,7 @@ import {
 import { requirePatientScope } from '../patients/access.js';
 import { loadScopedPatientClinicalSummaries } from '../patients/clinical-summary-service.js';
 import { CartellaUpdateError, saveCartella } from '../patients/cartella-update.js';
-import { hasGlobalPatientScope } from '../patients/patient-scope.js';
+import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 
 const router = Router();
 
@@ -137,7 +137,7 @@ router.get('/settings', (_req, res) => {
 router.get('/clinical-summary/overview', async (req, res) => {
   try {
     const actor = (req as AuthedRequest).operator!;
-    const scopeSql = hasGlobalPatientScope(actor.role)
+    const scopeSql = hasFacilityPatientScope(actor.role)
       ? Prisma.empty
       : Prisma.sql`WHERE p."registeredById" = ${actor.id}`;
     const rows = await prisma.$queryRaw<

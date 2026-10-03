@@ -7,6 +7,10 @@ import {
   MAX_UPLOAD_BYTES,
 } from '../../routes/patient-documents.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 // #246 remediation: negative-path security coverage for the patient-documents router.
 // Codex QA FAILED finding: "no backend API/security tests cover unauthenticated access,
 // cross-patient access, size rejection, MIME spoofing, or ownership". This file covers the

@@ -1,0 +1,23 @@
+{
+  "apiDetailNeri": 200,
+  "assistantQuery_neri_doctorRegistered": {
+    "status": 200,
+    "body": "{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"plan\":{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"tools\":[{\"tool\":\"get_patient_vital_signs\",\"args\":{\"patientId\":\"cmus84hs90005fslpncyb6vuq\"}}],\"requiresCrossPatientAccess\":false},\"results\":[],\"sources\":[],\"navigation\":[],\"notFound\":false,\"truncated\":false,\"mode\":\"deterministic\",\"composed\":false,\"refusal\":\"Accesso non autorizzato per que"
+  },
+  "assistantQuery_galli_nurseRegistered": {
+    "status": 200,
+    "body": "{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"plan\":{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"tools\":[{\"tool\":\"get_patient_vital_signs\",\"args\":{\"patientId\":\"cmus84hsj0006fslp0a8lnhgu\"}}],\"requiresCrossPatientAccess\":false},\"results\":[],\"sources\":[],\"navigation\":[],\"notFound\":true,\"truncated\":false,\"mode\":\"deterministic\",\"composed\":false}"
+  },
+  "actionsPlan_neri": {
+    "status": 403,
+    "body": "{\"error\":{\"kind\":\"forbidden\",\"message\":\"Patient not accessible\"}}"
+  },
+  "actionsPlan_galli": {
+    "status": 200,
+    "body": "{\"plan\":{\"actionType\":\"unknown\",\"patientId\":\"cmus84hsj0006fslp0a8lnhgu\",\"targetRecordId\":null,\"fields\":{},\"sourceTranscript\":\"parametri di Galli Nora\",\"ambiguities\":[\"Comando non riconosciuto\"],\"requiresConfirmation\":false,\"idempotencyKey\":\"6c2e599a-c788-4fa0-bd62-e56b033bb338\",\"channel\":\"testo\"},\"preview\":null,\"read\":{\"intent\":\"unknown\",\"scope\":\"current_patient\",\"plan\":{\"intent\":\"unknown\",\"scope\":\"current_patient\",\"tools\":[],\"requiresCrossPatientAccess\":false},\"results\":[],\"sources\":[],\"navigation\":[],\"notFound\":true,\"truncated\":false,\"mode\":\"deterministic\",\"composed\":false}}"
+  },
+  "skillsResidents_neri": {
+    "status": 200,
+    "body": "{\"residents\":[{\"id\":\"cmus84hs90005fslpncyb6vuq\",\"label\":\"Neri Dario\"}]}"
+  }
+}

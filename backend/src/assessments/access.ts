@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import type { Operator } from '../ai/auth.js';
-import { hasGlobalPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
+import { hasFacilityPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
 import { assessmentId } from './input.js';
 import {
   AssessmentError,
@@ -45,7 +45,7 @@ export async function lockPatient(
   assessmentId(patientId);
   const rows = await tx.$queryRaw<Array<{ id: string }>>(Prisma.sql`
     SELECT p.id FROM "Patient" p WHERE p.id = ${patientId}
-      ${hasGlobalPatientScope(actor.role) ? Prisma.empty : Prisma.sql`AND p."registeredById" = ${actor.id}`}
+      ${hasFacilityPatientScope(actor.role) ? Prisma.empty : Prisma.sql`AND p."registeredById" = ${actor.id}`}
     FOR SHARE OF p`);
   if (!rows.length) throw assessmentNotFound();
 }

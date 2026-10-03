@@ -21,6 +21,10 @@ import {
   input,
   seed,
 } from './fixture.js';
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 before(seed);
 after(() => prisma.$disconnect());
 const rejects = (promise: Promise<unknown>, code: string) =>

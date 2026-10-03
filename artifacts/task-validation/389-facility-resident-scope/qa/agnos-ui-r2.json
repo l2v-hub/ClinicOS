@@ -1,0 +1,7 @@
+{
+  "calls": [
+    "200 GET /ai/extraction/status",
+    "200 POST /ai/actions/plan",
+    "200 POST /ai/actions/plan"
+  ]
+}

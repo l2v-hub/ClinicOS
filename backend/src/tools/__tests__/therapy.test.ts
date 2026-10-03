@@ -23,6 +23,10 @@ import {
   type TestOperator,
 } from './support.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const registry = createToolRegistry(therapyTools);
 const DAY = '2033-04-05';
 const OTHER_DAY = '2033-04-06';

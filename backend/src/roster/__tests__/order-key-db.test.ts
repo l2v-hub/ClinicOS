@@ -6,6 +6,10 @@ import { loadPatientIdentityPage } from '../../patients/identity-page.js';
 import { loadPatientParametersPage } from '../../patients/parameters-page.js';
 import { buildTherapySlotPage } from '../../therapies/therapy-slots.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const marker = `roster-edge-${Date.now()}`;
 const id = (value: string) => `${marker}-${value}`;
 const actor = { id: id('owner'), role: 'operatore' };

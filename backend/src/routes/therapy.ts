@@ -11,7 +11,7 @@ import {
   TherapyNotFoundError,
   TherapyWriteInputError,
 } from '../therapies/therapy-write.js';
-import { hasGlobalPatientScope } from '../patients/patient-scope.js';
+import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 import {
   parseTherapySlotPageQuery,
   TherapySlotPageInputError,
@@ -36,7 +36,7 @@ router.use(requireOperator);
 /** Therapy-slot patient filter for an operator (exported for the Tool Layer; same derivation). */
 export function therapySlotPatientAccess(actor: Operator) {
   return {
-    ...(!hasGlobalPatientScope(actor.role) && { registeredById: actor.id }),
+    ...(!hasFacilityPatientScope(actor.role) && { registeredById: actor.id }),
   };
 }
 

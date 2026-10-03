@@ -29,6 +29,10 @@ import {
   type Session,
 } from '../authz/__tests__/harness-support.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const TENANT = 'clinicos-p9-tenant';
 const AUDIENCE = 'api://clinicos-p9';
 const ISSUER = `https://login.microsoftonline.com/${TENANT}/v2.0`;
