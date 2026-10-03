@@ -127,7 +127,7 @@ PROVIDERS: dict[str, ProviderEntry] = {
         stt_module="clinicos_ai.voice.providers.mock",
         capabilities=_caps("mock"),
         description="CI: empty, never-inventing outputs",
-        traits={"usage_metadata": False, "cancellation": True, "timeout": True, "model_discovery": False, "realtime": False, "sdk": "none"},
+        traits={"usage_metadata": False, "cancellation": True, "timeout": True, "model_discovery": False, "realtime": False, "sdk": "none", "default_model": "mock"},
     ),
     "test": ProviderEntry(
         "test", "clinicos_ai.models.providers.fake", (),
@@ -135,7 +135,7 @@ PROVIDERS: dict[str, ProviderEntry] = {
         aliases=("fake",),
         capabilities=_caps("mock"),
         description="Deterministic contract/switch-test provider (no network)",
-        traits={"usage_metadata": True, "cancellation": True, "timeout": True, "model_discovery": False, "realtime": False, "sdk": "none"},
+        traits={"usage_metadata": True, "cancellation": True, "timeout": True, "model_discovery": False, "realtime": False, "sdk": "none", "default_model": "test"},
     ),
 }
 

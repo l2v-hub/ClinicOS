@@ -124,6 +124,17 @@ class ConfigurationTests(unittest.TestCase):
 
 
 class ValidationTests(unittest.TestCase):
+    def test_model_less_providers_start_without_model_ids(self):
+        # CI gate regression (PR #398): AI_PROVIDER=mock with only legacy model vars must start.
+        from clinicos_ai.models.validation import validate_ai_config
+        env = {"AI_PROVIDER": "mock", "AI_OCR_MODEL": "mock:mock", "AI_EXTRACTION_MODEL": "mock:mock",
+               "AI_AGENT_MODEL": "mock:mock", "AI_REPAIR_MODEL": "mock:mock"}
+        errors, _ = validate_ai_config(env)
+        self.assertEqual(errors, [])
+        # A real provider still requires explicit model ids (no silent default).
+        errors, _ = validate_ai_config({"AI_PROVIDER": "openai", "OPENAI_API_KEY": "sk-test"})
+        self.assertTrue(any("AI_MODEL_" in e for e in errors))
+
     def test_credentials_capabilities_stt(self):
         env = {k: v for k, v in openai_env("http://x").items() if k != "OPENAI_API_KEY"}
         errors, _ = validate_ai_config(env)

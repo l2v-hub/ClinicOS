@@ -134,6 +134,10 @@ def load_runtime_config(env: Mapping[str, str] | None = None) -> RuntimeConfig:
         fallback: ModelSpec | None = None
         if mode == "new" and role in NEW_STYLE_ROLES:
             raw = _get(e, f"AI_MODEL_{up}", "AI_MODEL_DEFAULT")
+            # Providers without real models (CI mock, contract test) declare their own model id.
+            entry = provider_entry(provider) if provider else None
+            if not raw and entry is not None and entry.traits.get("default_model"):
+                raw = str(entry.traits["default_model"])
             if not raw:
                 errors.append(f"AI_MODEL_{up} (o AI_MODEL_DEFAULT) mancante per AI_PROVIDER={provider_raw}")
                 continue
