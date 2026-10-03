@@ -548,6 +548,7 @@ export function DiarioPazienteTab({
         key={row.id}
         className={`diario-card diario-card--${row.authorType}${toSee ? ' diario-card--to-see' : ''}`}
         data-entry-id={row.id}
+        data-diary-entry-id={row.id}
       >
         <div className="diario-card__head">
           <span className={`badge ${AUTHOR_TYPE_BADGE[row.authorType]}`}>
