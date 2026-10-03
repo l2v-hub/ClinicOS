@@ -72,22 +72,20 @@ test('summary intersects patient scope and handover visibility while preserving 
   assert.deepEqual(items.get(patient), {
     patientId: patient,
     total: 3,
-    open: 2,
-    urgentOpen: 1,
+    // UX2 W8: only the active urgency counts (the legacy-completed urgent one is closed).
+    urgentActive: 1,
     statoRicovero: 'dimesso',
   });
   assert.deepEqual(items.get(zero), {
     patientId: zero,
     total: 0,
-    open: 0,
-    urgentOpen: 0,
+    urgentActive: 0,
     statoRicovero: null,
   });
   assert.deepEqual(items.get(history), {
     patientId: history,
     total: 1,
-    open: 0,
-    urgentOpen: 0,
+    urgentActive: 0,
     statoRicovero: null,
   });
   assert.equal(items.has(foreign), false);
@@ -102,7 +100,7 @@ test('global role sees all requested patient counts; other operator sees only th
   const global = await loadConsegnaPatientSummary(ids, manager);
   assert.equal(global.items.length, 3);
   assert.equal(global.items.find((row) => row.patientId === patient)!.total, 4);
-  assert.equal(global.items.find((row) => row.patientId === patient)!.urgentOpen, 2);
+  assert.equal(global.items.find((row) => row.patientId === patient)!.urgentActive, 2);
   const scoped = await loadConsegnaPatientSummary(ids, other);
   assert.deepEqual(
     scoped.items.map((row) => row.patientId),

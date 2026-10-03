@@ -111,6 +111,8 @@ import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { PatientVitalSignsView } from './PatientVitalSignsView';
 import './PatientRecordData.css';
 import './PatientOverview.css';
+import { UrgencyNotice } from '../shared/UrgencyNotice';
+import { consegnaPriorityLabel, isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -137,7 +139,8 @@ interface PatientDetailProps {
   onAddConsegna: ConsegnaCreate;
   consegnaDraftStore?: ConsegnaDraftStore;
   assessmentDraftStore?: AssessmentDraftStore;
-  onUpdateConsegnaStato: (id: string, stato: Consegna['stato']) => void;
+  /** UX2 W8: «Ho capito» su una consegna urgente. */
+  onAcknowledgeConsegna: (id: string) => void | Promise<boolean>;
   onUpdateCartella: (
     pazienteId: string,
     updates: Partial<CartellaPaziente>,
@@ -292,7 +295,7 @@ export function PatientDetail({
   onAddConsegna,
   consegnaDraftStore,
   assessmentDraftStore,
-  onUpdateConsegnaStato,
+  onAcknowledgeConsegna,
   onUpdateCartella,
   onUpdatePaziente,
   onAssignCamera,
@@ -1106,26 +1109,18 @@ export function PatientDetail({
               <div key={c.id} className="ec-modal-item">
                 <div className="ec-modal-item__main">
                   <span
-                    className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
+                    className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita === 'urgente' && !isConsegnaUrgencyActive(c) ? 'normale' : c.priorita}`}
                   >
-                    {c.priorita}
+                    {consegnaPriorityLabel(c)}
                   </span>
                   <span className="ec-modal-item__title">{c.note}</span>
                   <ConsegnaTimestamp createdAt={c.createdAt} />
-                  <span className={`stato-pill stato-pill--consegna-${c.stato}`}>
-                    {c.stato.replace('_', ' ')}
-                  </span>
                 </div>
-                {c.stato !== 'completata' && (
-                  <button
-                    className="btn-secondary btn-sm"
-                    onClick={() =>
-                      onUpdateConsegnaStato(c.id, c.stato === 'aperta' ? 'in_corso' : 'completata')
-                    }
-                  >
-                    {c.stato === 'aperta' ? 'Prendi' : 'Chiudi'}
-                  </button>
-                )}
+                <UrgencyNotice
+                  urgency={c.urgency}
+                  onAcknowledge={() => void onAcknowledgeConsegna(c.id)}
+                  subject={`della consegna «${c.tipo}»`}
+                />
               </div>
             ))}
           </div>
@@ -2214,8 +2209,8 @@ export function PatientDetail({
       <div className="cr-tab-content">
         <ClinicalTableSection
           title="Consegne"
-          count={mieConsegne.filter((c) => c.stato !== 'completata').length}
-          countLabel="aperte"
+          count={mieConsegne.filter(isConsegnaUrgencyActive).length}
+          countLabel="urgenze da prendere in carico"
           actions={
             <button className="btn-sm" onClick={() => setShowAddConsegna((v) => !v)}>
               + Aggiungi
@@ -2257,14 +2252,15 @@ export function PatientDetail({
                   {mieConsegne.map((c) => (
                     <div
                       key={c.id}
-                      className={`consegna-card consegna-card--${c.priorita}`}
+                      className={`consegna-card consegna-card--${c.priorita === 'urgente' && !isConsegnaUrgencyActive(c) ? 'normale' : c.priorita}`}
                       data-consegna-id={c.id}
+                      data-urgency-state={c.urgency?.state ?? 'none'}
                     >
                       <div className="consegna-card__top">
                         <span
-                          className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
+                          className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita === 'urgente' && !isConsegnaUrgencyActive(c) ? 'normale' : c.priorita}`}
                         >
-                          {c.priorita}
+                          {consegnaPriorityLabel(c)}
                         </span>
                         <span className="consegna-tipo">{c.tipo}</span>
                         {c.oraScadenza && (
@@ -2273,31 +2269,20 @@ export function PatientDetail({
                             {c.oraScadenza}
                           </span>
                         )}
-                        <span className={`stato-pill stato-pill--consegna-${c.stato}`}>
-                          {c.stato.replace('_', ' ')}
-                        </span>
                       </div>
                       <ConsegnaTimestamp createdAt={c.createdAt} />
                       <p className="consegna-note">{c.note}</p>
+                      <UrgencyNotice
+                        urgency={c.urgency}
+                        onAcknowledge={() => void onAcknowledgeConsegna(c.id)}
+                        subject={`della consegna «${c.tipo}»`}
+                      />
                       <div className="consegna-card__footer">
-                        <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
-                        {c.stato !== 'completata' && (
-                          <div className="table-actions">
-                            {c.stato === 'aperta' && (
-                              <button
-                                className="btn-secondary btn-sm"
-                                onClick={() => onUpdateConsegnaStato(c.id, 'in_corso')}
-                              >
-                                Prendi in carico
-                              </button>
-                            )}
-                            <button
-                              className="icon-btn icon-btn--sm icon-btn--success"
-                              onClick={() => onUpdateConsegnaStato(c.id, 'completata')}
-                            >
-                              <IcoCheck />
-                            </button>
-                          </div>
+                        <span className="consegna-assegnato">
+                          → {c.operatoreAssegnato || 'Non assegnata'}
+                        </span>
+                        {c.creatoDA !== c.operatoreAssegnato && (
+                          <span className="consegna-creato"> · da {c.creatoDA}</span>
                         )}
                       </div>
                     </div>
@@ -2336,8 +2321,8 @@ export function PatientDetail({
     contenzioni: (cartella.contenzioni ?? []).filter((c) => c.attiva).length || 0,
     // badge = documents delivered (documentiConsegnati)
     documenti: (cartella.documentiConsegnati ?? []).length || 0,
-    // badge = mie consegne non completate
-    consegne: consegneSummary?.open ?? 0,
+    // badge = urgenze da prendere in carico (UX2 W8)
+    consegne: consegneSummary?.urgentActive ?? 0,
   };
 
   function groupBadgeSum(gId: TabGroup): number {

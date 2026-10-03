@@ -24,7 +24,9 @@ import './DiaryAck.css';
 import { corePriorityOptions } from '../../../lib/corePriority';
 import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload';
 import { useCan } from '../../../lib/capabilities';
-import { countToSee, needsMyAck, postDiaryAck, seenByText } from './diaryAck';
+import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
+import { UrgencyNotice } from '../../shared/UrgencyNotice';
+import { isActiveUrgency, postUrgencyAck } from '../../../lib/urgency';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -71,15 +73,12 @@ const PRIORITY_LABELS: Record<string, string> = {
   urgente: 'Urgente',
 };
 
+// UX2 W8: the stored status is never an open/closed concept in the UX; only «da rivedere» shows.
 const STATUS_BADGE: Record<string, string> = {
-  aperta: 'badge--blue',
-  completata: 'badge--teal',
   da_rivedere: 'badge--amber',
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  aperta: 'Aperta',
-  completata: 'Completata',
   da_rivedere: 'Da rivedere',
 };
 
@@ -194,7 +193,7 @@ export function DiarioPazienteTab({
   // F8: le azioni compaiono solo con la capability che il backend applica (niente 403 dalla GUI).
   const canEditEntry = useCan('diary.update_entry');
   const canDeleteEntry = useCan('diary.delete_entry');
-  // «Presa visione» per lettore: voce in corso di registrazione (blocca il doppio tocco).
+  // «Ho capito» su un'urgenza: voce in corso di registrazione (blocca il doppio tocco).
   const [acking, setAcking] = useState<string | null>(null);
 
   function emptyForm(): DiarioForm {
@@ -478,24 +477,22 @@ export function DiarioPazienteTab({
     }
   }
 
-  // ── «Presa visione» (voci urgenti, per lettore) ──────────────────────────────
+  // ── «Ho capito» (UX2 W8: il primo non-autore prende in carico l'urgenza per tutti) ──────────
 
-  async function handleAck(entry: DiarioPazienteEntry) {
+  async function handleAck(entry: DiaryFeedEntry) {
     if (acking) return;
     setAcking(entry.id);
     try {
-      const result = await postDiaryAck(pazienteId, entry.id);
+      // Una consegna nel diario si prende in carico sulla consegna stessa (stessa regola).
+      const result =
+        entry.sourceType === 'consegna' && entry.sourceId
+          ? await postUrgencyAck(
+              `${API_URL}/consegne/${encodeURIComponent(entry.sourceId)}/ack`,
+              operatorHeaders(),
+            )
+          : await postDiaryAck(pazienteId, entry.id);
       setEntries((prev) =>
-        prev.map((e) =>
-          e.id === entry.id
-            ? {
-                ...e,
-                acknowledgeable: result.acknowledgeable,
-                acknowledgedByMe: result.acknowledgedByMe,
-                acknowledgements: result.acknowledgements,
-              }
-            : e,
-        ),
+        prev.map((e) => (e.id === entry.id ? { ...e, urgency: result.urgency } : e)),
       );
       // Rivalida in background (la pagina in cache resta visibile): stato condiviso con gli altri.
       setRefreshVersion((version) => version + 1);
@@ -503,7 +500,7 @@ export function DiarioPazienteTab({
       setError(
         error instanceof Error && error.message
           ? error.message
-          : 'Presa visione non registrata. Riprova.',
+          : 'Presa in carico non registrata. Riprova.',
       );
     } finally {
       setAcking(null);
@@ -540,7 +537,17 @@ export function DiarioPazienteTab({
 
   function renderDiarioCard(row: DiaryFeedEntry) {
     const toSee = needsMyAck(row);
-    const seenBy = seenByText(row.acknowledgements);
+    // UX2 W8: «Urgente» solo finché l'urgenza è attiva; presa in carico → non più segnalata.
+    const urgentActive =
+      row.priority === 'urgente' && (!row.urgency || isActiveUrgency(row.urgency));
+    const priorityLabel =
+      row.priority === 'urgente' && !urgentActive
+        ? 'Presa in carico'
+        : row.priority === 'importante'
+          ? 'Importante (valore precedente)'
+          : PRIORITY_LABELS[row.priority];
+    const priorityBadge =
+      row.priority === 'urgente' && !urgentActive ? 'badge--gray' : PRIORITY_BADGE[row.priority];
     const showEdit = canEditEntry;
     const showDelete = canDeleteEntry;
     return (
@@ -554,14 +561,11 @@ export function DiarioPazienteTab({
           <span className={`badge ${AUTHOR_TYPE_BADGE[row.authorType]}`}>
             {AUTHOR_TYPE_LABELS[row.authorType]}
           </span>
-          <span className={`badge ${PRIORITY_BADGE[row.priority]}`}>
-            {PRIORITY_LABELS[row.priority]}
-          </span>
-          {/* Prompt 10 §6.2: «Aperta» is not an operational state; only a recorded outcome shows. */}
-          {row.status !== 'aperta' && STATUS_LABELS[row.status] && (
+          <span className={`badge ${priorityBadge}`}>{priorityLabel}</span>
+          {/* UX2 W8: no open/closed concept in the diary; only «da rivedere» stays visible. */}
+          {row.status === 'da_rivedere' && (
             <span className={`badge ${STATUS_BADGE[row.status]}`}>{STATUS_LABELS[row.status]}</span>
           )}
-          {toSee && <span className="badge badge--red diario-card__to-see">Da vedere</span>}
           <span className="diario-card__time">{fmtDT(row.entryDateTime)}</span>
           {!isLegacy(row) && row.sourceType !== 'consegna' && (showEdit || showDelete) && (
             <div className="diario-card__actions">
@@ -616,22 +620,13 @@ export function DiarioPazienteTab({
         {row.title && <div className="diario-card__title">{row.title}</div>}
         <div className="diario-card__content">{row.content}</div>
         {renderTherapyLink(row)}
-        {(toSee || seenBy) && (
-          <div className="diario-card__ack">
-            {seenBy && <span className="diario-card__seen-by">{seenBy}</span>}
-            {toSee && (
-              <button
-                type="button"
-                className="ds-btn ds-btn--primary diario-card__ack-btn"
-                onClick={() => void handleAck(row)}
-                disabled={acking !== null}
-                aria-label={`Presa visione della voce urgente${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
-              >
-                {acking === row.id ? 'Registrazione…' : 'Presa visione'}
-              </button>
-            )}
-          </div>
-        )}
+        <UrgencyNotice
+          urgency={row.urgency}
+          onAcknowledge={() => void handleAck(row)}
+          busy={acking === row.id}
+          disabled={acking !== null}
+          subject={`della voce${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
+        />
         {row.sourceType === 'consegna' && (
           <small className="form-hint">
             Consegna registrata · gestibile dalla sezione Consegne
@@ -929,8 +924,8 @@ export function DiarioPazienteTab({
         {!loading && countToSee(entries) > 0 && (
           <p className="diario-to-see" role="status">
             {countToSee(entries) === 1
-              ? '1 voce urgente da vedere'
-              : `${countToSee(entries)} voci urgenti da vedere`}
+              ? '1 urgenza da prendere in carico'
+              : `${countToSee(entries)} urgenze da prendere in carico`}
           </p>
         )}
 

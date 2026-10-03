@@ -68,7 +68,7 @@ test('card shows room, age, bed and real badges in the prototype order', () => {
   assert.equal(card.sottotitolo, '84 anni · Letto B');
   assert.deepEqual(
     card.badges.map((b) => b.label),
-    ['Allergia', 'Parametri critici', 'Rischio elevato', 'Consegne 2'],
+    ['Allergia', 'Parametri critici', 'Rischio elevato', 'Urgenze 2'],
   );
   assert.equal(card.prossima, 'Nessuna terapia in sospeso');
 });

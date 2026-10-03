@@ -51,14 +51,16 @@ test('management and clinical values use one native shared KPI primitive', () =>
   assert.match(sharedKpis, /aria-label=\{`\$\{item\.label\}/);
   assert.doesNotMatch(adminKpis, /role="button"|tabIndex=|onKeyDown=/);
 
+  // UX2 W8: no aperta / in corso / completata in the KPI labels.
+  assert.doesNotMatch(adminKpis, /Consegne aperte|Consegne in corso|status: 'in_corso'/);
   for (const label of [
     'Totale pazienti',
     'Operatori attivi',
     'Appuntamenti oggi',
-    'Consegne aperte',
+    'Urgenze da prendere in carico',
     'Parametri critici',
     'Rischi alti/critici',
-    'Consegne in corso',
+    'Urgenze prese in carico',
     'Dimessi in archivio',
     'Somministrazioni in ritardo',
   ]) {

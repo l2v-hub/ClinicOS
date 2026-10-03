@@ -57,11 +57,17 @@ function RosterPatient({
                 <span>
                   {summary.value.total === 0
                     ? 'Nessuna consegna'
-                    : summary.value.open === 0
-                      ? `${summary.value.total} nello storico`
-                      : `${summary.value.open} aperte`}
+                    : summary.value.total === 1
+                      ? '1 consegna'
+                      : `${summary.value.total} consegne`}
                 </span>
-                {summary.value.urgentOpen > 0 && <span>{summary.value.urgentOpen} urgenti</span>}
+                {summary.value.urgentActive > 0 && (
+                  <span>
+                    {summary.value.urgentActive === 1
+                      ? '1 urgenza da prendere in carico'
+                      : `${summary.value.urgentActive} urgenze da prendere in carico`}
+                  </span>
+                )}
                 {summary.value.statoRicovero && (
                   <span>Ricovero: {summary.value.statoRicovero.replaceAll('_', ' ')}</span>
                 )}

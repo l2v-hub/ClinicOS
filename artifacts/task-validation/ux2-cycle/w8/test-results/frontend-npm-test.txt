@@ -1,0 +1,22 @@
+✖ src\components\operator\__tests__\assessmentCatalogUi.test.ts (4710.4767ms)
+✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (8.7306ms)
+✖ multi-patient parameters uses one bounded page instead of cartella fan-out (6.0527ms)
+✖ multi-patient quick entry exposes every action and field to assistive technology (1.7671ms)
+✖ multi-patient quick entry reuses the ClinicOS form and action design system (1.9758ms)
+✖ a single parameters table is always visible and uses the operational table contract (1.4062ms)
+✖ multi-patient refresh keeps the previous roster visible and announces progress (1.7679ms)
+✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll (1.2181ms)
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells (8.0435ms)
+ℹ tests 1078
+ℹ pass 1069
+ℹ fail 9
+✖ failing tests:
+✖ src\components\operator\__tests__\assessmentCatalogUi.test.ts (4710.4767ms)
+✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (8.7306ms)
+✖ multi-patient parameters uses one bounded page instead of cartella fan-out (6.0527ms)
+✖ multi-patient quick entry exposes every action and field to assistive technology (1.7671ms)
+✖ multi-patient quick entry reuses the ClinicOS form and action design system (1.9758ms)
+✖ a single parameters table is always visible and uses the operational table contract (1.4062ms)
+✖ multi-patient refresh keeps the previous roster visible and announces progress (1.7679ms)
+✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll (1.2181ms)
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells (8.0435ms)

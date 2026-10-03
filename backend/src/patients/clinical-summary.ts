@@ -40,6 +40,7 @@ export interface PatientClinicalSummary extends PatientClinicalSummaryProjection
   allergeni: SummaryAllergen[];
   parametriCritici: SummaryCriticalParameter[];
   rischiElevati: SummaryHighRisk[];
+  /** UX2 W8: urgent handovers still waiting for a «Ho capito» (name kept for API compatibility). */
   consegneAperte: number;
 }
 

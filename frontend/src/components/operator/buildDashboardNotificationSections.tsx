@@ -124,15 +124,15 @@ export function buildDashboardNotificationSections({
       id: 'consegne-urgenti',
       tone: 'alarm',
       count: urgentCount,
-      title: 'Consegne urgenti in attesa',
-      summary: 'Passaggi di consegna che richiedono presa in carico immediata.',
+      title: 'Urgenze da prendere in carico',
+      summary: 'Consegne urgenti che aspettano il «Ho capito» di un collega.',
       content: (
         <button
           type="button"
           className="btn-secondary dashboard-notification-section__action"
           onClick={() => (onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne'))}
         >
-          Apri Consegne <IcoArrow />
+          Apri le urgenze <IcoArrow />
         </button>
       ),
     });

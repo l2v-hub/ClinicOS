@@ -1,17 +1,11 @@
 import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
 import { useEffect, useState } from 'react';
-import type {
-  Consegna,
-  ConsegnaSummary,
-  Operatore,
-  PrioritaConsegna,
-  StatoConsegna,
-} from '../../types';
+import type { Consegna, ConsegnaSummary, Operatore, PrioritaConsegna } from '../../types';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit, IcoClock } from '../../icons';
 import { InlineEditableField } from '../shared/InlineEditableField';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
-import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
+import type { ConsegnaFeedQuery, ConsegnaUrgencyFilter } from '../../lib/consegneFeed';
 import { PageHeader } from '../shared/PageHeader';
 import { ConsegnaCreateForm } from './ConsegnaCreateForm';
 import { useCan } from '../../lib/capabilities';
@@ -20,6 +14,12 @@ import { parsePatientIdentity, patientIdentityName } from '../../lib/patientIden
 import type { ConsegnaCreate } from '../../lib/consegnaCreation';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 import { corePriorityOptions } from '../../lib/corePriority';
+import { UrgencyNotice } from '../shared/UrgencyNotice';
+import { consegnaPriorityLabel, isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';
+
+// UX2 W8 (owner 2026-10-03): una consegna è una nota normale o urgente. Nessun «aperta / in corso
+// / completata» nella UX: un'urgenza resta segnalata finché il primo operatore diverso
+// dall'autore dice «Ho capito»; poi resta la traccia «Urgenza presa in carico da …».
 
 export interface ConsegnePageProps {
   embedded?: boolean;
@@ -33,7 +33,8 @@ export interface ConsegnePageProps {
   initialPatientId?: string;
   initialQuery?: ConsegnaFeedQuery;
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
-  onUpdateStato: (id: string, stato: Consegna['stato']) => void;
+  /** «Ho capito» su una consegna urgente (prende in carico l'urgenza per tutti). */
+  onAcknowledge: (id: string) => void | Promise<boolean>;
   onDelete: (id: string) => void;
   loading: boolean;
   loadError: string | null;
@@ -42,8 +43,8 @@ export interface ConsegnePageProps {
   onLoadMore: () => void;
   onRetry: () => void;
   onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
-  /** #283: filtro stato con cui aprire la pagina (dalla card "Consegne aperte" in dashboard). */
-  initialFiltroStato?: 'tutte' | 'attive' | StatoConsegna;
+  /** #283: filtro urgenza con cui aprire la pagina (dalla card «Urgenze da prendere in carico»). */
+  initialUrgency?: ConsegnaUrgencyFilter;
   /** #283: consegna da evidenziare/scrollare quando la card ne apre una specifica. */
   focusId?: string | null;
 }
@@ -59,16 +60,17 @@ const TIPO_OPTIONS = [
   'Altro',
 ];
 
-const PRIORITA_LABEL: Record<PrioritaConsegna, string> = {
-  normale: 'Normale',
-  alta: 'Alta',
-  urgente: 'Urgente',
-};
-const STATO_LABEL: Record<StatoConsegna, string> = {
-  aperta: 'Aperta',
-  in_corso: 'In corso',
-  completata: 'Completata',
-};
+type UrgencyChip = 'tutte' | ConsegnaUrgencyFilter;
+const URGENCY_CHIPS: Array<{ value: UrgencyChip; label: string }> = [
+  { value: 'tutte', label: 'Tutte' },
+  { value: 'active', label: 'Urgenze da prendere in carico' },
+  { value: 'taken', label: 'Urgenze prese in carico' },
+];
+const PRIORITY_CHIPS: Array<{ value: 'tutte' | PrioritaConsegna; label: string }> = [
+  { value: 'tutte', label: 'Tutte le priorità' },
+  { value: 'urgente', label: 'Urgente' },
+  { value: 'normale', label: 'Normale' },
+];
 
 export function ConsegnePage({
   embedded = false,
@@ -79,7 +81,7 @@ export function ConsegnePage({
   isAdmin,
   onAdd,
   onUpdate,
-  onUpdateStato,
+  onAcknowledge,
   onDelete,
   loading,
   loadError,
@@ -88,14 +90,14 @@ export function ConsegnePage({
   onLoadMore,
   onRetry,
   onSelectPaziente,
-  initialFiltroStato,
+  initialUrgency,
   focusId,
   draftStore,
   initialPatientId,
   initialQuery,
 }: ConsegnePageProps) {
-  const [filtroStato, setFiltroStato] = useState<'tutte' | 'attive' | Consegna['stato']>(
-    initialFiltroStato ?? 'tutte',
+  const [filtroUrgenza, setFiltroUrgenza] = useState<UrgencyChip>(
+    initialUrgency ?? initialQuery?.urgency ?? 'tutte',
   );
   const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>(
     initialQuery?.priority ?? 'tutte',
@@ -108,7 +110,7 @@ export function ConsegnePage({
     const timer = window.setTimeout(
       () =>
         onQueryChange({
-          ...(filtroStato !== 'tutte' ? { status: filtroStato } : {}),
+          ...(filtroUrgenza !== 'tutte' ? { urgency: filtroUrgenza } : {}),
           ...(filtroPriorita !== 'tutte' ? { priority: filtroPriorita } : {}),
           ...(ricerca.trim() ? { q: ricerca.trim() } : {}),
           ...(initialPatientId ? { patientId: initialPatientId } : {}),
@@ -116,7 +118,7 @@ export function ConsegnePage({
       250,
     );
     return () => window.clearTimeout(timer);
-  }, [filtroStato, filtroPriorita, ricerca, onQueryChange, initialPatientId]);
+  }, [filtroUrgenza, filtroPriorita, ricerca, onQueryChange, initialPatientId]);
 
   // #283: quando la dashboard apre UNA consegna specifica, scrolla alla sua card evidenziata.
   useEffect(() => {
@@ -126,15 +128,14 @@ export function ConsegnePage({
       ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [focusId, consegne]);
 
-  const filtrate = consegne;
-
-  const urgenti = filtrate.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
-  const altre = filtrate.filter((c) => !(c.priorita === 'urgente' && c.stato !== 'completata'));
-  const summaryLabel = `Nel tuo perimetro: ${summary.open} aperte · ${summary.urgentOpen} urgenti${
-    filtroStato !== 'tutte' || filtroPriorita !== 'tutte' || ricerca.trim()
-      ? ' · riepilogo indipendente dai filtri'
-      : ''
-  }`;
+  const urgenti = consegne.filter(isConsegnaUrgencyActive);
+  const altre = consegne.filter((c) => !isConsegnaUrgencyActive(c));
+  const filtered = filtroUrgenza !== 'tutte' || filtroPriorita !== 'tutte' || ricerca.trim();
+  const summaryLabel = `Nel tuo perimetro: ${
+    summary.urgentActive === 1
+      ? '1 urgenza da prendere in carico'
+      : `${summary.urgentActive} urgenze da prendere in carico`
+  }${filtered ? ' · riepilogo indipendente dai filtri' : ''}`;
   // Il ruolo non consente di creare consegne: il pulsante non compare (il backend decide).
   const createAction = canCreate && (
     <button
@@ -146,6 +147,20 @@ export function ConsegnePage({
     >
       <IcoPlus /> Nuova consegna
     </button>
+  );
+  const card = (c: Consegna) => (
+    <ConsegnaCard
+      key={c.id}
+      consegna={c}
+      onUpdate={onUpdate}
+      onAcknowledge={onAcknowledge}
+      onDelete={onDelete}
+      isAdmin={isAdmin}
+      operatoreId={operatoreId}
+      operatori={operatori}
+      onSelectPaziente={onSelectPaziente}
+      focused={c.id === focusId}
+    />
   );
 
   return (
@@ -193,85 +208,50 @@ export function ConsegnePage({
             </button>
           )}
         </div>
-        <div className="ds-chip-group" role="group" aria-label="Filtra per stato">
-          {(['tutte', 'attive', 'aperta', 'in_corso', 'completata'] as const).map((s) => (
+        <div className="ds-chip-group" role="group" aria-label="Filtra per urgenza">
+          {URGENCY_CHIPS.map((chip) => (
             <button
               type="button"
-              key={s}
+              key={chip.value}
               className="ds-chip"
-              aria-pressed={filtroStato === s}
-              onClick={() => setFiltroStato(s)}
+              aria-pressed={filtroUrgenza === chip.value}
+              onClick={() => setFiltroUrgenza(chip.value)}
             >
-              {s === 'tutte'
-                ? 'Tutte'
-                : s === 'attive'
-                  ? 'Attive'
-                  : s === 'aperta'
-                    ? 'Da iniziare'
-                    : s === 'in_corso'
-                      ? 'In corso'
-                      : 'Completate'}
+              {chip.label}
             </button>
           ))}
         </div>
         <div className="ds-chip-group" role="group" aria-label="Filtra per priorità">
-          {(['tutte', 'urgente', 'alta', 'normale'] as const).map((p) => (
+          {PRIORITY_CHIPS.map((chip) => (
             <button
               type="button"
-              key={p}
+              key={chip.value}
               className="ds-chip"
-              aria-pressed={filtroPriorita === p}
-              onClick={() => setFiltroPriorita(p)}
+              aria-pressed={filtroPriorita === chip.value}
+              onClick={() => setFiltroPriorita(chip.value)}
             >
-              {p === 'tutte' ? 'Tutte' : p.charAt(0).toUpperCase() + p.slice(1)}
+              {chip.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Urgenti in cima */}
-      {urgenti.length > 0 &&
-        (filtroStato === 'tutte' || filtroStato === 'attive' || filtroStato === 'aperta') && (
-          <div className="consegne-section">
-            <h3 className="consegne-section__title consegne-section__title--urgente">Urgenti</h3>
-            <div className="consegne-list">
-              {urgenti.map((c) => (
-                <ConsegnaCard
-                  key={c.id}
-                  consegna={c}
-                  onUpdate={onUpdate}
-                  onUpdateStato={onUpdateStato}
-                  onDelete={onDelete}
-                  isAdmin={isAdmin}
-                  operatoreId={operatoreId}
-                  operatori={operatori}
-                  onSelectPaziente={onSelectPaziente}
-                  focused={c.id === focusId}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+      {/* Urgenze da prendere in carico in cima */}
+      {urgenti.length > 0 && (
+        <div className="consegne-section">
+          <h3 className="consegne-section__title consegne-section__title--urgente">
+            Urgenze da prendere in carico
+          </h3>
+          <div className="consegne-list">{urgenti.map(card)}</div>
+        </div>
+      )}
 
       {/* Tutte le altre */}
       <div className="consegne-list" style={{ marginTop: urgenti.length > 0 ? 24 : 0 }}>
         {altre.length === 0 && urgenti.length === 0 && !loading && !loadError ? (
           <div className="empty-state-card">Nessuna consegna trovata.</div>
         ) : (
-          altre.map((c) => (
-            <ConsegnaCard
-              key={c.id}
-              consegna={c}
-              onUpdate={onUpdate}
-              onUpdateStato={onUpdateStato}
-              onDelete={onDelete}
-              isAdmin={isAdmin}
-              operatoreId={operatoreId}
-              operatori={operatori}
-              onSelectPaziente={onSelectPaziente}
-              focused={c.id === focusId}
-            />
-          ))
+          altre.map(card)
         )}
       </div>
       {loadError && (
@@ -301,7 +281,7 @@ export function ConsegnePage({
 function ConsegnaCard({
   consegna: c,
   onUpdate,
-  onUpdateStato,
+  onAcknowledge,
   onDelete,
   isAdmin,
   operatoreId,
@@ -311,7 +291,7 @@ function ConsegnaCard({
 }: {
   consegna: Consegna;
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
-  onUpdateStato: (id: string, stato: Consegna['stato']) => void;
+  onAcknowledge: (id: string) => void | Promise<boolean>;
   onDelete: (id: string) => void;
   isAdmin: boolean;
   operatoreId: string;
@@ -321,21 +301,34 @@ function ConsegnaCard({
 }) {
   const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [acking, setAcking] = useState(false);
   const canEditContent = isAdmin || c.creatoDaId === operatoreId;
-  const canTransition =
-    isAdmin || c.creatoDaId === operatoreId || c.operatoreAssegnatoId === operatoreId;
   const canDelete = isAdmin || c.creatoDaId === operatoreId;
   const candidateIdentity = parsePatientIdentity(c.identity);
   const identity = candidateIdentity?.id === c.pazienteId ? candidateIdentity : null;
+  const urgentActive = isConsegnaUrgencyActive(c);
+  const badgeModifier = c.priorita === 'urgente' && !urgentActive ? 'normale' : c.priorita;
+
+  async function acknowledge() {
+    if (acking) return;
+    setAcking(true);
+    try {
+      await onAcknowledge(c.id);
+    } finally {
+      setAcking(false);
+    }
+  }
 
   return (
     <div
       id={`consegna-${c.id}`}
-      className={`consegna-card consegna-card--${c.priorita}${c.stato === 'completata' ? ' consegna-card--done' : ''}${focused ? ' consegna-card--focus' : ''}`}
+      className={`consegna-card consegna-card--${badgeModifier}${focused ? ' consegna-card--focus' : ''}`}
+      data-consegna-id={c.id}
+      data-urgency-state={c.urgency?.state ?? 'none'}
     >
       <div className="consegna-card__top">
-        <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>
-          {PRIORITA_LABEL[c.priorita]}
+        <span className={`consegna-priorita-badge consegna-priorita-badge--${badgeModifier}`}>
+          {consegnaPriorityLabel(c)}
         </span>
         <span className="consegna-tipo">{c.tipo}</span>
         {c.oraScadenza && (
@@ -344,7 +337,6 @@ function ConsegnaCard({
             {c.oraScadenza}
           </span>
         )}
-        <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{STATO_LABEL[c.stato]}</span>
         {(canEditContent || isAdmin) && (
           <button
             className="icon-btn icon-btn--sm consegna-edit-btn icon-btn--edit"
@@ -404,6 +396,12 @@ function ConsegnaCard({
           <p>{c.note}</p>
         )}
       </div>
+      <UrgencyNotice
+        urgency={c.urgency}
+        onAcknowledge={() => void acknowledge()}
+        busy={acking}
+        subject={`della consegna per ${c.pazienteNome}`}
+      />
       <div className="consegna-card__footer">
         <div>
           <span className="consegna-assegnato">→ {c.operatoreAssegnato || 'Non assegnata'}</span>
@@ -411,47 +409,12 @@ function ConsegnaCard({
             <span className="consegna-creato"> · da {c.creatoDA}</span>
           )}
         </div>
-        {c.stato !== 'completata' && canTransition && (
-          <div className="table-actions">
-            {c.stato === 'aperta' && (
-              <button
-                className="btn-secondary btn-sm"
-                onClick={() => onUpdateStato(c.id, 'in_corso')}
-              >
-                Prendi in carico
-              </button>
-            )}
-            {c.stato === 'in_corso' && (
-              <button
-                className="btn-secondary btn-sm"
-                onClick={() => onUpdateStato(c.id, 'aperta')}
-              >
-                Rilascia
-              </button>
-            )}
-            <button
-              className="icon-btn icon-btn--sm icon-btn--success"
-              onClick={() => onUpdateStato(c.id, 'completata')}
-              title="Completa"
-            >
-              <IcoCheck />
-            </button>
-            {canDelete && (
-              <button
-                className="icon-btn icon-btn--sm icon-btn--danger"
-                onClick={() => setConfirmOpen(true)}
-                title="Elimina"
-              >
-                <IcoX />
-              </button>
-            )}
-          </div>
-        )}
-        {c.stato === 'completata' && canDelete && (
+        {canDelete && (
           <button
             className="icon-btn icon-btn--sm icon-btn--danger"
             onClick={() => setConfirmOpen(true)}
             title="Elimina"
+            aria-label="Elimina consegna"
           >
             <IcoX />
           </button>
@@ -498,7 +461,6 @@ function ConsegnaEditInline({
 }) {
   const [form, setForm] = useState({
     priorita: c.priorita,
-    stato: c.stato,
     tipo: c.tipo,
     oraScadenza: c.oraScadenza ?? '',
     operatoreAssegnatoId: c.operatoreAssegnatoId ?? '',
@@ -510,9 +472,9 @@ function ConsegnaEditInline({
     if (saving) return;
     setSaving(true);
     setError(null);
+    // UX2 W8: the stored legacy stato is never asked nor sent by the UX.
     const ok = await onUpdate(c.id, {
       priorita: form.priorita,
-      stato: form.stato,
       tipo: form.tipo,
       oraScadenza: form.oraScadenza,
       ...(isAdmin ? { operatoreAssegnatoId: form.operatoreAssegnatoId || null } : {}),
@@ -565,19 +527,6 @@ function ConsegnaEditInline({
                   {option.label}
                 </option>
               ))}
-            </select>
-          </div>
-          <div className="form-field">
-            <label className="form-label">Stato</label>
-            <select
-              className="form-select"
-              value={form.stato}
-              disabled={saving}
-              onChange={(e) => setForm((p) => ({ ...p, stato: e.target.value as StatoConsegna }))}
-            >
-              <option value="aperta">Aperta</option>
-              <option value="in_corso">In corso</option>
-              <option value="completata">Completata</option>
             </select>
           </div>
           <div className="form-field">

@@ -242,7 +242,7 @@ export const patientTools: ToolDefinition[] = [
     kind: 'read',
     auditKind: 'read',
     description:
-      'Riepilogo clinico sintetico (stato ricovero, parametri critici, rischi, allergie, terapie, consegne aperte) per max 100 pazienti visibili.',
+      'Riepilogo clinico sintetico (stato ricovero, parametri critici, rischi, allergie, terapie, urgenze da prendere in carico) per max 100 pazienti visibili.',
     sensitivity: 'high',
     inputSchema: {
       type: 'object',

@@ -98,7 +98,8 @@ export const EVENT_CATALOG: EventTypeDef[] = [
   {
     type: 'handover.open',
     domain: 'consegne',
-    source: 'Consegna via consegne/read-service.loadConsegnaFeed (existing visibility rule)',
+    source:
+      'Consegna via consegne/read-service.loadConsegnaFeed (existing visibility rule), urgency=active only (UX2 W8: until the first «Ho capito» by a non-author)',
     capabilities: ['consegne.list'],
     audience: 'care',
     sensitivity: 'medium',
@@ -261,7 +262,7 @@ export const SIGNAL_TYPES: { type: SignalType; meaning: string }[] = [
   {
     type: 'HANDOVER_ITEM',
     meaning:
-      'Consegna aperta che ti riguarda (creata da te o assegnata a te, o di reparto se supervisore).',
+      'Urgenza da prendere in carico: consegna urgente che ti riguarda (assegnata a te, o di reparto se supervisore) non ancora presa in carico da nessuno.',
   },
   {
     type: 'STATE_CHANGE',

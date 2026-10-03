@@ -70,7 +70,6 @@ export function AdminDashboard({
   onNavigate,
   onOpenLateTherapy,
   onOpenConsegneAperte,
-  onOpenConsegneFeed,
   onSelectPaziente,
   onOpenPatientList,
   onOpenConsegneQuery,
@@ -86,7 +85,8 @@ export function AdminDashboard({
     attivi.reduce((sum, operator) => sum + operator.appuntamentiOggi, 0);
   const urgenti = consegneOverview?.urgentPreview ?? [];
   const overviewAvailable = consegneOverview !== null;
-  const urgentCount = consegneOverview?.summary.urgentOpen;
+  // UX2 W8: only urgencies still waiting for a «Ho capito» are counted / flagged.
+  const urgentCount = consegneOverview?.summary.urgentActive;
   const maxPazienti = Math.max(...operatori.map((o) => o.pazientiAssegnati), 1);
   const somministrazioni = useRiepilogoSomministrazioni();
   const anomalie = useAnomalieReparto();
@@ -96,8 +96,7 @@ export function AdminDashboard({
   const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
   const dimessi = clinicalOverview?.dimessi ?? 0;
   const clinicalOverviewReady = clinicalOverviewState === 'ready' && clinicalOverview !== null;
-  const consegneAperte = consegneOverview?.summary.open;
-  const consegneInCorso = consegneOverview?.summary.inProgress;
+  const urgenzePreseInCarico = consegneOverview?.summary.urgentTaken;
 
   // Occupancy
   const totaleLetti = camere.flatMap((c) => c.letti);
@@ -194,8 +193,7 @@ export function AdminDashboard({
         activeOperatorTotal={activeOperatorTotal}
         operatorTotal={operatorTotal}
         appointmentsTodayTotal={appointmentsTodayTotal}
-        consegneAperte={consegneAperte}
-        consegneInCorso={consegneInCorso}
+        urgenzePreseInCarico={urgenzePreseInCarico}
         urgentCount={urgentCount}
         consegneOverviewState={consegneOverviewState}
         overviewAvailable={overviewAvailable}
@@ -453,11 +451,13 @@ export function AdminDashboard({
               <span className="section-header__ico">
                 <IcoConsegne />
               </span>
-              Consegne Urgenti
+              Urgenze da prendere in carico
             </h3>
             <button
               className="link-btn"
-              onClick={() => (onOpenConsegneFeed ? onOpenConsegneFeed() : onNavigate('consegne'))}
+              onClick={() =>
+                onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne')
+              }
             >
               Vedi tutte <IcoArrow />
             </button>

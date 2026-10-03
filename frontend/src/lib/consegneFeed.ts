@@ -1,7 +1,10 @@
-import type { Consegna, ConsegnaFeedResponse, PrioritaConsegna, StatoConsegna } from '../types';
+import type { Consegna, ConsegnaFeedResponse, PrioritaConsegna } from '../types';
+
+/** UX2 W8: 'active' = urgenze da prendere in carico; 'taken' = urgenze prese in carico. */
+export type ConsegnaUrgencyFilter = 'active' | 'taken';
 
 export interface ConsegnaFeedQuery {
-  status?: StatoConsegna | 'attive';
+  urgency?: ConsegnaUrgencyFilter;
   priority?: PrioritaConsegna;
   patientId?: string;
   q?: string;
@@ -14,7 +17,7 @@ export function buildConsegnaFeedUrl(
 ): string {
   // 20 × note massima (4 kB) mantiene anche il caso peggiore sotto il budget HTTP di 100 kB.
   const params = new URLSearchParams({ limit: '20' });
-  if (query.status) params.set('status', query.status);
+  if (query.urgency) params.set('urgency', query.urgency);
   if (query.priority) params.set('priority', query.priority);
   if (query.patientId) params.set('patientId', query.patientId);
   const q = query.q?.trim();
@@ -41,7 +44,7 @@ export function isConsegnaFeedResponse(value: unknown): value is ConsegnaFeedRes
     Array.isArray(page.items) &&
     typeof page.pageInfo?.hasMore === 'boolean' &&
     (page.pageInfo.nextCursor === null || typeof page.pageInfo.nextCursor === 'string') &&
-    typeof page.summary?.open === 'number' &&
-    typeof page.summary?.urgentOpen === 'number'
+    typeof page.summary?.total === 'number' &&
+    typeof page.summary?.urgentActive === 'number'
   );
 }

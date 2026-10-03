@@ -97,6 +97,7 @@ export const prismaVoiceWriter: VoiceWriter = {
         patientId,
         authorType: 'operatore',
         authorName: meta.operatorName,
+        authorId: meta.operatorId,
         ...input,
       },
     });

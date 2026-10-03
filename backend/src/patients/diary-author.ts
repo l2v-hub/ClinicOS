@@ -16,6 +16,8 @@ const DIARY_AUTHOR_TYPES = new Set([
 export async function authoritativeDiaryAuthor(operator: Operator): Promise<{
   authorType: string;
   authorName: string;
+  /** UX2 W8: the author's operator id (the author never takes charge of their own urgency). */
+  authorId: string;
 }> {
   const row = await prisma.operator.findUnique({
     where: { id: operator.id },
@@ -26,5 +28,6 @@ export async function authoritativeDiaryAuthor(operator: Operator): Promise<{
   return {
     authorType: DIARY_AUTHOR_TYPES.has(normalizedRole) ? normalizedRole : 'operatore',
     authorName: row.user.fullName.trim() || operator.name?.trim() || operator.id,
+    authorId: operator.id,
   };
 }

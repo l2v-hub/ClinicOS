@@ -8,6 +8,7 @@ import type { Operator } from '../ai/auth.js';
 import { residentScopeWhere } from '../access-scope/resident-access-scope.js';
 import { loadConsegnaFeed } from '../consegne/read-service.js';
 import { parseConsegnaFeedQuery } from '../consegne/query.js';
+import { diaryEntriesUrgencySettled } from '../patients/diary-ack-service.js';
 import { buildTherapySlots } from '../therapies/therapy-slots.js';
 import { therapySlotPatientAccess } from '../routes/therapy.js';
 import { unreadNotesWhere } from '../routes/note.js';
@@ -99,6 +100,11 @@ const diary: Collector = async ({ operator, since, limit }) => {
       patient: patientSelect,
     },
   });
+  // UX2 W8: an urgent entry already taken in charge (first «Ho capito» by a non-author) is no
+  // longer flagged as urgent for anyone: it stays as information with normal priority.
+  const settled = await diaryEntriesUrgencySettled(
+    rows.filter((r) => r.priority === 'urgente').map((r) => r.id),
+  );
   return rows.map((r) => ({
     eventId: `diary.entry_created:${r.id}`,
     type: 'diary.entry_created' as const,
@@ -108,7 +114,8 @@ const diary: Collector = async ({ operator, since, limit }) => {
     actor: { kind: 'operator' as const, id: null, name: r.authorName },
     payload: {
       authorType: r.authorType,
-      priority: r.priority,
+      priority: settled.has(r.id) ? 'normale' : r.priority,
+      urgencyTaken: settled.has(r.id),
       category: r.category,
       // Author-written title (untrusted text): shown as data, fenced before any LLM use.
       title: short(r.title),
@@ -118,20 +125,27 @@ const diary: Collector = async ({ operator, since, limit }) => {
 
 const handovers: Collector = async ({ operator, limit, now }) => {
   // Existing feed rule (creator / assignee, facility for supervisors), page size ≤ 20 → cursor.
+  // UX2 W8: only ACTIVE urgencies (no «Ho capito» by a non-author yet) become a signal — a
+  // handover is otherwise a plain note. The author is not signalled about their own urgency (it is
+  // for the next operator to take charge of it).
   const items: Array<Record<string, unknown>> = [];
   let cursor: string | null = null;
   for (let page = 0; page < 5 && items.length < limit; page += 1) {
     const feed = (await loadConsegnaFeed(
       operator as Operator,
-      parseConsegnaFeedQuery({ status: 'attive', limit: '20', ...(cursor ? { cursor } : {}) }),
+      parseConsegnaFeedQuery({ urgency: 'active', limit: '20', ...(cursor ? { cursor } : {}) }),
     )) as { items: Array<Record<string, unknown>>; pageInfo: { nextCursor: string | null } };
-    items.push(...feed.items);
+    items.push(...feed.items.filter((c) => c.creatoDaId !== operator.id));
     cursor = feed.pageInfo.nextCursor;
     if (!cursor) break;
   }
   // The feed rule decides who gets the HANDOVER (creator / assignee); the RESIDENT it names is
   // disclosed by the signal (and to the AI) only when it is in the reader's Resident Access Scope.
-  const named = [...new Set(items.map((c) => c.pazienteId).filter((x): x is string => typeof x === 'string' && x !== ''))];
+  const named = [
+    ...new Set(
+      items.map((c) => c.pazienteId).filter((x): x is string => typeof x === 'string' && x !== ''),
+    ),
+  ];
   const inScope = new Set(
     named.length
       ? (
@@ -147,29 +161,28 @@ const handovers: Collector = async ({ operator, limit, now }) => {
     const pid = (c.pazienteId as string) || null;
     const visible = Boolean(pid && inScope.has(pid));
     return {
-    eventId: `handover.open:${String(c.id)}`,
-    type: 'handover.open' as const,
-    // Last change (priority / status edits re-surface an acknowledged handover).
-    occurredAt: new Date(String(c.updatedAt ?? c.createdAt)).toISOString(),
-    residentId: visible ? pid : null,
-    residentLabel: visible ? (c.pazienteNome as string) || null : null,
-    actor: {
-      kind: 'operator' as const,
-      id: (c.creatoDaId as string) ?? null,
-      name: (c.creatoDA as string) ?? null,
-    },
-    payload: {
-      priority: String(c.priorita ?? 'normale'),
-      status: String(c.stato ?? 'aperta'),
-      kind: String(c.tipo ?? ''),
-      dueDate: (c.scadenza as string) ?? null,
-      dueTime: (c.oraScadenza as string) ?? null,
-      assignedTo: (c.operatoreAssegnato as string) ?? null,
-      assignedToMe: c.operatoreAssegnatoId === operator.id,
-      overdue: Boolean(c.scadenza && String(c.scadenza) < today),
-      residentHidden: Boolean(pid) && !visible,
-    },
-  };
+      eventId: `handover.open:${String(c.id)}`,
+      type: 'handover.open' as const,
+      // Last change (priority / status edits re-surface an acknowledged handover).
+      occurredAt: new Date(String(c.updatedAt ?? c.createdAt)).toISOString(),
+      residentId: visible ? pid : null,
+      residentLabel: visible ? (c.pazienteNome as string) || null : null,
+      actor: {
+        kind: 'operator' as const,
+        id: (c.creatoDaId as string) ?? null,
+        name: (c.creatoDA as string) ?? null,
+      },
+      payload: {
+        priority: String(c.priorita ?? 'normale'),
+        kind: String(c.tipo ?? ''),
+        dueDate: (c.scadenza as string) ?? null,
+        dueTime: (c.oraScadenza as string) ?? null,
+        assignedTo: (c.operatoreAssegnato as string) ?? null,
+        assignedToMe: c.operatoreAssegnatoId === operator.id,
+        overdue: Boolean(c.scadenza && String(c.scadenza) < today),
+        residentHidden: Boolean(pid) && !visible,
+      },
+    };
   });
 };
 
@@ -353,7 +366,15 @@ const notes: Collector = async ({ operator, limit }) => {
     where: unreadNotesWhere(operator as Operator),
     orderBy: { createdAt: 'desc' },
     take: limit,
-    select: { id: true, autoreId: true, autoreNome: true, pazienteId: true, pazienteNome: true, priorita: true, createdAt: true },
+    select: {
+      id: true,
+      autoreId: true,
+      autoreNome: true,
+      pazienteId: true,
+      pazienteNome: true,
+      priorita: true,
+      createdAt: true,
+    },
   });
   // The mailbox rule decides who gets the NOTE; the RESIDENT it names is disclosed by the signal
   // only when that resident is in the reader's Resident Access Scope.

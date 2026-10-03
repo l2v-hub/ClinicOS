@@ -3,12 +3,13 @@ import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
 import { patientScopeWhere, hasGlobalPatientScope } from '../patients/patient-scope.js';
 import { ConsegnaInputError, isSafeConsegnaId } from './query.js';
+import { consegnaUrgencyActiveSql } from '../lib/urgency.js';
 
 export interface ConsegnaPatientSummary {
   patientId: string;
   total: number;
-  open: number;
-  urgentOpen: number;
+  /** UX2 W8: urgencies still waiting for a «Ho capito» (no open/closed concept any more). */
+  urgentActive: number;
   statoRicovero: string | null;
 }
 
@@ -33,14 +34,13 @@ export async function loadConsegnaPatientSummary(value: unknown, actor: Operator
   const ids = parseConsegnaSummaryIds(value);
   const scope = patientScopeWhere(actor);
   const items = await prisma.$queryRaw<ConsegnaPatientSummary[]>(Prisma.sql`
-    SELECT p.id AS "patientId", counts.total, counts.open, counts."urgentOpen",
+    SELECT p.id AS "patientId", counts.total, counts."urgentActive",
       CASE WHEN jsonb_typeof(chart.data->'statoRicovero') = 'string'
         THEN LEFT(chart.data->>'statoRicovero', 64) ELSE NULL END AS "statoRicovero"
     FROM "Patient" p LEFT JOIN "Cartella" chart ON chart."patientId" = p.id
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::int AS total,
-        COUNT(*) FILTER (WHERE c.stato <> 'completata')::int AS open,
-        COUNT(*) FILTER (WHERE c.stato <> 'completata' AND c.priorita = 'urgente')::int AS "urgentOpen"
+        COUNT(*) FILTER (WHERE ${consegnaUrgencyActiveSql})::int AS "urgentActive"
       FROM "Consegna" c WHERE c."pazienteId" = p.id
         AND ${hasGlobalPatientScope(actor.role) ? Prisma.sql`TRUE` : Prisma.sql`(c."creatoDaId" = ${actor.id} OR c."operatoreAssegnatoId" = ${actor.id})`}
     ) counts ON true

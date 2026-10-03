@@ -443,7 +443,7 @@ test('I — handover prepared by the AI defaults to NORMAL; escalation only by e
   const edited = await say(nurse, {
     workflowId: draft.body.workflowId,
     action: 'edit',
-    edit: { priority: 'alta' },
+    edit: { priority: 'urgente' },
     context: { currentPatientId: ids.nB },
   });
   assert.equal(edited.body.status, 'NEEDS_CONFIRMATION', JSON.stringify(edited.body));
@@ -465,10 +465,18 @@ test('I — handover prepared by the AI defaults to NORMAL; escalation only by e
   });
   assert.equal(done.body.status, 'COMPLETED', JSON.stringify(done.body));
   const row = await prisma.consegna.findFirst({ where: { note } });
-  assert.equal(row?.priorita, 'alta');
-  const sig = (await inbox(nurse)).signals.find((s) => s.signalId === `handover:${row!.id}`);
+  assert.equal(row?.priorita, 'urgente');
+  // UX2 W8: an urgent handover is signalled to the NEXT operator (not to its author) until
+  // someone other than the author says «Ho capito».
+  const sig = (await inbox(supervisor)).signals.find((s) => s.signalId === `handover:${row!.id}`);
   assert.ok(sig, 'handover signal');
-  assert.equal(sig.priority, 'alta', 'signal priority comes from the stored source field');
+  assert.equal(sig.priority, 'urgente', 'signal priority comes from the stored source field');
+  assert.match(sig.title, /^Urgenza da prendere in carico/);
+  assert.equal(
+    (await inbox(nurse)).signals.find((s) => s.signalId === `handover:${row!.id}`),
+    undefined,
+    'the author is not signalled about their own urgency',
+  );
 });
 
 test('J — deduplication: a burst of events is one grouped signal, stable across refreshes', async () => {
@@ -669,7 +677,7 @@ test('Q — acknowledging «in arrivo» never hides the same slot once it is ove
   }
 });
 
-test('R — a handover escalated after the ack is visible again (QA finding 2)', async () => {
+test('R — a handover escalated to urgent becomes a signal; «Ho capito» removes it (UX2 W8)', async () => {
   const c = await prisma.consegna.create({
     data: {
       pazienteId: ids.nB,
@@ -685,19 +693,24 @@ test('R — a handover escalated after the ack is visible again (QA finding 2)',
       creatoDaId: 'SIM-DOCTOR-1',
     },
   });
-  const sig = (await inbox(nurse)).signals.find((s) => s.signalId === `handover:${c.id}`);
-  await call(base, nurse, 'POST', '/skills/proactive/ack', {
-    acks: [{ signalId: sig.signalId, rev: sig.rev }],
-  });
+  // A normal handover is a note: no signal.
   assert.equal(
-    (await inbox(nurse)).signals.find((s) => s.signalId === sig.signalId).status,
-    'preso_visione',
+    (await inbox(nurse)).signals.find((s) => s.signalId === `handover:${c.id}`),
+    undefined,
   );
-  await new Promise((r) => setTimeout(r, 1100));
   await prisma.consegna.update({ where: { id: c.id }, data: { priorita: 'urgente' } });
-  const again = (await inbox(nurse)).signals.find((s) => s.signalId === sig.signalId);
+  const again = (await inbox(nurse)).signals.find((s) => s.signalId === `handover:${c.id}`);
+  assert.ok(again, 'escalated to urgent: signalled');
   assert.equal(again.priority, 'urgente');
   assert.notEqual(again.status, 'preso_visione');
+  // The assignee (not the author) takes charge of it: the signal is gone for everyone.
+  const ack = await call(base, nurse, 'POST', `/consegne/${c.id}/ack`);
+  assert.equal(ack.status, 201, JSON.stringify(ack.body));
+  for (const s of [nurse, supervisor])
+    assert.equal(
+      (await inbox(s)).signals.find((x) => x.signalId === `handover:${c.id}`),
+      undefined,
+    );
 });
 
 test('S — a handover about an out-of-scope resident never discloses that resident (UI or LLM) (QA finding 3)', async () => {
@@ -705,7 +718,7 @@ test('S — a handover about an out-of-scope resident never discloses that resid
     data: {
       pazienteId: ids.dX,
       pazienteNome: `Fuoriscope${tag} Dora`,
-      priorita: 'normale',
+      priorita: 'urgente',
       stato: 'aperta',
       tipo: 'Monitoraggio',
       note: 'x',
@@ -825,7 +838,7 @@ test('W — a cached AI summary never survives a scope revocation (QA re-verific
     data: {
       pazienteId: ids.wS,
       pazienteNome: `Revocato${tag} Walter`,
-      priorita: 'normale',
+      priorita: 'urgente',
       stato: 'aperta',
       tipo: 'Monitoraggio',
       note: 'x',

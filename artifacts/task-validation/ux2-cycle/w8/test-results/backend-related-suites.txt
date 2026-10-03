@@ -1,0 +1,8 @@
+✖ handover creation resolves the patient inside the authenticated scope (1.5453ms)
+✖ own patient access works and client authorship is ignored (9.822ms)
+ℹ tests 350
+ℹ pass 348
+ℹ fail 2
+✖ failing tests:
+✖ handover creation resolves the patient inside the authenticated scope (1.5453ms)
+✖ own patient access works and client authorship is ignored (9.822ms)

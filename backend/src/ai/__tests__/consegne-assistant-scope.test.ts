@@ -17,6 +17,7 @@ before(async () => {
         pazienteId: allowedPatient,
         pazienteNome: 'Paziente Esterno',
         note: `foreign ${index}`,
+        priorita: 'urgente',
         scadenza: '2026-08-28',
         operatoreAssegnato: 'Altro',
         operatoreAssegnatoId: 'foreign-operator',
@@ -29,6 +30,7 @@ before(async () => {
         pazienteId: allowedPatient,
         pazienteNome: 'Rossi, Ada',
         note: 'controllare pressione',
+        priorita: 'urgente',
         scadenza: '2026-08-28',
         operatoreAssegnato: 'Operatore corrente',
         operatoreAssegnatoId: actor,
@@ -41,6 +43,7 @@ before(async () => {
         pazienteId: allowedPatient,
         pazienteNome: 'Verdi, Bruno',
         note: 'rivedere esami',
+        priorita: 'urgente',
         scadenza: '2026-08-28',
         operatoreAssegnato: '',
         creatoDA: 'Operatore corrente',
@@ -52,6 +55,7 @@ before(async () => {
         pazienteId: deniedPatient,
         pazienteNome: 'Neri, Carla',
         note: 'non autorizzata',
+        priorita: 'urgente',
         scadenza: '2026-08-28',
         operatoreAssegnato: 'Operatore corrente',
         operatoreAssegnatoId: actor,
@@ -59,10 +63,59 @@ before(async () => {
         creatoDaId: actor,
         createdAt: new Date('2026-01-01T00:00:02.000Z'),
       },
+      // UX2 W8: a normal handover is a note, never «to do».
+      {
+        id: `assistant-own-normal-${run}`,
+        pazienteId: allowedPatient,
+        pazienteNome: 'Bianchi, Dora',
+        note: 'nota normale',
+        scadenza: '2026-08-28',
+        operatoreAssegnato: 'Operatore corrente',
+        operatoreAssegnatoId: actor,
+        creatoDA: 'Collega',
+        creatoDaId: 'colleague',
+      },
+      // UX2 W8: an urgency already taken in charge (acknowledged below) leaves the queue.
+      {
+        id: `assistant-own-taken-${run}`,
+        pazienteId: allowedPatient,
+        pazienteNome: 'Gialli, Elio',
+        note: 'urgenza presa in carico',
+        priorita: 'urgente',
+        scadenza: '2026-08-28',
+        operatoreAssegnato: 'Operatore corrente',
+        operatoreAssegnatoId: actor,
+        creatoDA: 'Collega',
+        creatoDaId: 'colleague',
+      },
+      // Legacy: urgent but completed under the old model → closed, not in the queue.
+      {
+        id: `assistant-own-legacy-${run}`,
+        pazienteId: allowedPatient,
+        pazienteNome: 'Rosa, Fabio',
+        note: 'legacy completata',
+        priorita: 'urgente',
+        stato: 'completata',
+        scadenza: '2026-08-28',
+        operatoreAssegnato: 'Operatore corrente',
+        operatoreAssegnatoId: actor,
+        creatoDA: 'Collega',
+        creatoDaId: 'colleague',
+      },
     ],
+  });
+  await prisma.consegnaAcknowledgement.create({
+    data: {
+      consegnaId: `assistant-own-taken-${run}`,
+      patientId: allowedPatient,
+      operatorId: `taker-${run}`,
+      operatorName: 'Chi ha capito',
+      operatorRole: 'medico',
+    },
   });
 });
 after(async () => {
+  // Deleting the handover cascades its acknowledgement (the only DELETE the trigger allows).
   await prisma.consegna.deleteMany({ where: { id: { contains: run } } });
 });
 
@@ -100,6 +153,13 @@ test('assistant applies verified actor and patient scope before bounds with exac
   assert.ok(
     [...queue.myLikelyConsegne, ...queue.otherOpenConsegne].every(
       (row) => !row.id.includes('foreign') && !row.id.includes('denied-patient'),
+    ),
+  );
+  // UX2 W8: never the legacy stored stato in what the assistant reads.
+  assert.ok(
+    [...queue.myLikelyConsegne, ...queue.otherOpenConsegne].every(
+      (row) =>
+        !('stato' in row) && (row as { urgenza?: string }).urgenza === 'da prendere in carico',
     ),
   );
 });

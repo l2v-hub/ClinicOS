@@ -25,8 +25,9 @@ interface Props {
   activeOperatorTotal: number;
   operatorTotal: number;
   appointmentsTodayTotal: number;
-  consegneAperte?: number;
-  consegneInCorso?: number;
+  /** UX2 W8: urgenze già prese in carico (traccia), mai «in corso». */
+  urgenzePreseInCarico?: number;
+  /** Urgenze da prendere in carico (nessun «Ho capito» da un non-autore). */
   urgentCount?: number;
   consegneOverviewState: 'loading' | 'ready' | 'error';
   overviewAvailable: boolean;
@@ -83,8 +84,7 @@ export function AdminDashboardKpiBands({
   activeOperatorTotal,
   operatorTotal,
   appointmentsTodayTotal,
-  consegneAperte,
-  consegneInCorso,
+  urgenzePreseInCarico,
   urgentCount,
   consegneOverviewState,
   overviewAvailable,
@@ -137,20 +137,20 @@ export function AdminDashboardKpiBands({
     },
     {
       id: 'consegne',
-      label: 'Consegne aperte',
-      value: overviewAvailable ? (consegneAperte ?? 0) : '—',
+      label: 'Urgenze da prendere in carico',
+      value: overviewAvailable ? (urgentCount ?? 0) : '—',
       status:
         consegneOverviewState === 'loading'
           ? 'Aggiornamento…'
           : !overviewAvailable
             ? 'Dato non disponibile'
             : (urgentCount ?? 0) > 0
-              ? `${urgentCount} urgenti`
+              ? 'In attesa di «Ho capito»'
               : 'Nessuna urgenza',
       tone: !overviewAvailable ? 'unknown' : (urgentCount ?? 0) > 0 ? 'critical' : 'positive',
       icon: <IcoConsegne />,
       onOpen: () => (onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne')),
-      actionLabel: 'Apri consegne',
+      actionLabel: 'Apri le urgenze da prendere in carico',
     },
   ];
 
@@ -180,18 +180,15 @@ export function AdminDashboardKpiBands({
       attentionStatus: 'Da valutare',
     }),
     {
-      id: 'consegne-in-corso',
-      label: 'Consegne in corso',
-      value: overviewAvailable ? `${consegneInCorso ?? 0}/${consegneAperte ?? 0}` : '—',
-      spokenValue: overviewAvailable
-        ? `${consegneInCorso ?? 0} su ${consegneAperte ?? 0}`
-        : undefined,
-      status: overviewAvailable ? 'Flusso operativo' : 'Dato non disponibile',
+      id: 'urgenze-prese-in-carico',
+      label: 'Urgenze prese in carico',
+      value: overviewAvailable ? (urgenzePreseInCarico ?? 0) : '—',
+      status: overviewAvailable ? 'Traccia di chi ha capito' : 'Dato non disponibile',
       tone: overviewAvailable ? 'info' : 'unknown',
       icon: <IcoConsegne />,
       onOpen: () =>
-        onOpenConsegneFeed ? onOpenConsegneFeed({ status: 'in_corso' }) : onNavigate('consegne'),
-      actionLabel: 'Apri le consegne in corso',
+        onOpenConsegneFeed ? onOpenConsegneFeed({ urgency: 'taken' }) : onNavigate('consegne'),
+      actionLabel: 'Apri le urgenze prese in carico',
     },
     clinicalItem(clinicalOverviewReady, clinicalOverviewState === 'loading', dimessi, {
       id: 'dimessi',

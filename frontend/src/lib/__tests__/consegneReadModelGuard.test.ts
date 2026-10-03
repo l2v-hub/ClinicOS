@@ -47,7 +47,8 @@ test('patient list badges come from visible-id clinical summaries, not a handove
 });
 
 test('patient detail distinguishes an exact total from the loaded page and exposes recovery', () => {
-  assert.match(patientDetail, /consegneSummary\?\.open/);
+  // UX2 W8: the chart badge counts urgencies still to take in charge, never «aperte».
+  assert.match(patientDetail, /consegneSummary\?\.urgentActive/);
   assert.match(patientDetail, /Mostrate \{mieConsegne\.length\} di \{consegneSummary\.total\}/);
   assert.match(patientDetail, /onLoadMoreConsegne/);
   assert.match(patientDetail, /onRetryConsegne/);

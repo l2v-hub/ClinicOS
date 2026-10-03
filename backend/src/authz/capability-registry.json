@@ -954,6 +954,10 @@
         {
           "method": "GET",
           "path": "/consegne"
+        },
+        {
+          "method": "POST",
+          "path": "/consegne/:id/ack"
         }
       ]
     },

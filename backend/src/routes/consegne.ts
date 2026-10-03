@@ -9,6 +9,8 @@ import { prisma } from '../lib/prisma.js';
 import { ConsegnaPatientNotFoundError, createConsegna } from '../services/consegna-service.js';
 import { ConsegnaCreationError } from '../consegne/create-receipt.js';
 import { loadConsegnaPatientSummary } from '../consegne/patient-summary.js';
+import { acknowledgeConsegna, withConsegnaUrgency } from '../consegne/ack-service.js';
+import { UrgencyAckError } from '../lib/urgency.js';
 
 const consegneRouter = Router();
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -89,7 +91,10 @@ consegneRouter.post('/patient-summary', async (req: AuthedRequest, res) => {
 consegneRouter.post('/', async (req: AuthedRequest, res) => {
   try {
     const input = parseConsegnaCreateBody(req.body);
-    res.status(201).json(await createConsegna(input, req.operator!));
+    const created = await createConsegna(input, req.operator!);
+    // UX2 W8: the item carries its urgency view like the feed (replays included).
+    const [withUrgency] = await withConsegnaUrgency([created], req.operator!);
+    res.status(201).json(withUrgency);
   } catch (error) {
     if (error instanceof ConsegnaCreationError) {
       res.status(error.status).json({ error: error.message, code: error.code, ...error.ids });
@@ -102,6 +107,29 @@ consegneRouter.post('/', async (req: AuthedRequest, res) => {
     if (badRequest(res, error)) return;
     console.error('POST /consegne error:', error);
     res.status(500).json({ error: 'Errore durante creazione consegna' });
+  }
+});
+
+// POST /consegne/:id/ack — «Ho capito» su una consegna URGENTE (UX2 W8, consegne/ack-service.ts).
+// Il primo operatore diverso dall'autore prende in carico l'urgenza per tutti (201); se era gia'
+// presa in carico 200 senza scrivere. 409 se non urgente o se chi chiama e' l'autore. Nessun campo
+// della consegna cambia (capability di lettura consegne.list: non allarga alcuna scrittura).
+consegneRouter.post('/:id/ack', async (req: AuthedRequest, res) => {
+  const rawId = req.params.id;
+  if (typeof rawId !== 'string' || !isSafeConsegnaId(rawId)) {
+    notFound(res);
+    return;
+  }
+  try {
+    const result = await acknowledgeConsegna(rawId, req.operator!);
+    res.status(result.created ? 201 : 200).json(result);
+  } catch (error) {
+    if (error instanceof UrgencyAckError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
+    console.error('POST /consegne/:id/ack error:', error instanceof Error ? error.name : 'unknown');
+    res.status(500).json({ error: 'Errore nella presa in carico dell’urgenza' });
   }
 });
 
@@ -177,7 +205,8 @@ consegneRouter.put('/:id', async (req: AuthedRequest, res) => {
       notFound(res);
       return;
     }
-    res.status(200).json(updated);
+    const [withUrgency] = await withConsegnaUrgency([updated], actor);
+    res.status(200).json(withUrgency);
   } catch (error) {
     if (badRequest(res, error)) return;
     console.error('PUT /consegne/:id error:', error);

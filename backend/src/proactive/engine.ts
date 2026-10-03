@@ -30,7 +30,7 @@ import {
 import { COLLECTORS, type ProactiveEvent } from './sources.js';
 import { romeParts, shiftWindow } from './time.js';
 import { profileFor } from '../copilot/profiles.js';
-import { diaryEntriesAcknowledgedBy } from '../patients/diary-ack-service.js';
+import { diaryEntriesUrgencySettled } from '../patients/diary-ack-service.js';
 
 export type Priority = 'normale' | 'alta' | 'urgente';
 
@@ -171,8 +171,8 @@ function reasonFor(type: EventType, event: ProactiveEvent): string {
   const def = eventDef(type);
   if (type === 'handover.open')
     return event.payload.assignedToMe
-      ? 'Consegna assegnata a te'
-      : 'Consegna visibile al tuo ruolo (creata da te o di reparto)';
+      ? 'Consegna urgente assegnata a te, nessuno l’ha ancora presa in carico'
+      : 'Consegna urgente visibile al tuo ruolo, nessuno l’ha ancora presa in carico';
   if (type === 'note.received') return 'Nota indirizzata a te o a tutti, non ancora letta';
   if (type === 'workflow.pending') return 'Anteprima preparata da te, in attesa del tuo «Conferma»';
   if (def.audience === 'technical')
@@ -261,7 +261,7 @@ function groupOf(e: ProactiveEvent): Omit<Group, 'events'> {
         priority: sourcePriority(p.priority),
         priorityRule: 'campo priorità della consegna (umano / regola handover.create)',
         title: () =>
-          `Consegna ${String(p.status).replace('_', ' ')}${overdue ? ' — scadenza superata' : ''}${p.residentHidden ? ' (ospite fuori dal tuo ambito)' : ''}`,
+          `Urgenza da prendere in carico${overdue ? ' — scadenza superata' : ''}${p.residentHidden ? ' (ospite fuori dal tuo ambito)' : ''}`,
         detail: () =>
           [p.kind, p.dueDate ? `scadenza ${p.dueDate}${p.dueTime ? ` ${p.dueTime}` : ''}` : null]
             .filter(Boolean)
@@ -480,13 +480,13 @@ async function viewState(operatorId: string, now: Date) {
 const DIARY_EVENT_PREFIX = 'diary.entry_created:';
 
 /**
- * UX direct-access (2026-10-03): «Presa visione» given IN THE DIARY is the same fact as the diary
- * signal's ack for that reader. A diary signal (one resident/day group) counts as acknowledged
- * only when EVERY entry in it was acknowledged in the diary by this operator (a partially seen
- * group stays «da vedere»). Fail-safe: on any error nothing is hidden.
+ * UX2 W8 (owner 2026-10-03): «Ho capito» given IN THE DIARY by the first operator other than the
+ * author ends the urgency for EVERYONE. A diary signal (one resident/day group) counts as
+ * acknowledged when EVERY entry in it is an urgency already taken in charge (a group that also
+ * holds other entries stays «da vedere»). Fail-safe: on any error nothing is hidden.
  */
 async function diarySignalsAckedInDiary(
-  operatorId: string,
+  _operatorId: string,
   signals: { signalId: string; eventType: string; count: number; sourceEventIds: string[] }[],
 ): Promise<Set<string>> {
   const groups = signals
@@ -500,10 +500,7 @@ async function diarySignalsAckedInDiary(
     .filter((g) => g.entryIds.length > 0);
   if (groups.length === 0) return new Set();
   try {
-    const acked = await diaryEntriesAcknowledgedBy(
-      operatorId,
-      groups.flatMap((g) => g.entryIds),
-    );
+    const acked = await diaryEntriesUrgencySettled(groups.flatMap((g) => g.entryIds));
     return new Set(
       groups.filter((g) => g.entryIds.every((id) => acked.has(id))).map((g) => g.signalId),
     );
@@ -753,7 +750,7 @@ export function briefingTimeoutMs(env: NodeJS.ProcessEnv = process.env): number 
 const AI_FACT: Record<string, string> = {
   'vitals.recorded': 'nuove rilevazioni di parametri vitali',
   'diary.entry_created': 'nuove voci di diario',
-  'handover.open': 'consegna aperta',
+  'handover.open': 'urgenza da prendere in carico',
   'therapy.prescribed': 'nuova prescrizione di terapia',
   'therapy.changed': 'prescrizione di terapia modificata',
   'administration.recorded': 'somministrazioni registrate o non erogate',

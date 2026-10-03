@@ -7,6 +7,7 @@ import { therapyCalendar, therapyTime, type ScadenzaTerapia } from './dashboardT
 import type { TabId } from '../components/operator/tabGroups';
 import type { PatientTarget } from './patientTarget';
 import { doseSignal, landingOf } from './patientTargetResolver';
+import { canTakeCharge } from './urgency';
 
 export type AdessoKind =
   | 'terapia-ritardo'
@@ -238,7 +239,10 @@ export function buildAdessoQueue(input: AdessoInput): AdessoItem[] {
   for (const row of input.senzaOrario ?? []) {
     if (row.data === cal.oggi) items.push(terapiaItem(row, 'terapia-senza-orario'));
   }
-  for (const c of input.urgenti) items.push(consegnaItem(c, cal));
+  // UX2 W8: solo le urgenze che CHI legge può prendere in carico (mai la propria: aspetta un
+  // collega). Il backend manda già solo le urgenze attive (nessun «Ho capito» da un non-autore).
+  for (const c of input.urgenti)
+    if (!c.urgency || canTakeCharge(c.urgency)) items.push(consegnaItem(c, cal));
   for (const p of input.anomalie) {
     if (p.esito.totale <= 0) continue;
     const n = p.esito.totale;
