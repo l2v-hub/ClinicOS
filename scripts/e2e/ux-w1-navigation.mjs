@@ -132,6 +132,14 @@ async function backToTurno(page) {
 
 /** W2 implements the Terapia sub-view + row focus; until merged the sub-view check is pending. */
 async function therapyLanding(page, id, name, expectedView, therapyId, inChart = false) {
+  // The click handler updates the chart asynchronously: wait (≤3 s) for the section to settle.
+  await page
+    .waitForFunction(
+      () => document.querySelector('.top-nav__item.is-active')?.textContent?.trim() === 'Terapia',
+      null,
+      { timeout: 3000 },
+    )
+    .catch(() => {});
   const section = await activeSection(page);
   const hash = decodeURIComponent(await page.evaluate(() => location.hash));
   check(
