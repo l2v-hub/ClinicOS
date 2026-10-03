@@ -38,7 +38,7 @@
       "path": "frontend/src/components/operator/AdessoQueue.tsx"
     },
     {
-      "sha256": "82BF0434DB52BE73403A4E0321C22A2CDDE213707F91E0E89EC099B7B021D3AD",
+      "sha256": "B1477AB9309CEA1478A1B5BD52C8AA22E978C0E5157F549282C32EE6E1D9F960",
       "path": "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts"
     },
     {
@@ -167,6 +167,5 @@
     }
   ],
   "head": "c39e2d103539364cb1d981377e578841f6fb33b3",
-  "capturedAt": "2026-10-04",
-  "validatedCommit": "b0a44892f0e5f358f658670da41d75a555aae96c"
+  "capturedAt": "2026-10-03"
 }

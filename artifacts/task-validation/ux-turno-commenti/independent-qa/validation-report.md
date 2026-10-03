@@ -1,12 +1,24 @@
 # Verifica UX — Turno e cartella paziente
 
-## Rilascio — 4 ottobre 2026
+## Gate indipendente di rilascio — 4 ottobre 2026
 
-Final Decision: **CLOSED — VERIFIED** per i criteri UX della richiesta. QA indipendente completa: [rapporto](independent-qa/validation-report.md), build PASS, 59/59 test PASS, Playwright e sicurezza PASS. Corretto il test diario dipendente dal giorno corrente; nessuna ulteriore modifica applicativa.
+Verdetto: **READY FOR CODEX QA**. Questa sezione aggiorna lo stato della relazione locale riportata sotto. Revisore QA distinto dall'implementatore; checkout isolato `C:/Workspace/ClinicOSHouse/.worktrees/ux-turno-publish-qa`, commit verificato `b0a44892f0e5f358f658670da41d75a555aae96c`.
 
-Push verificato su `l2v-hub/ClinicOS`, ramo `codex/ux-turno-review`, commit applicativo `b0a44892f0e5f358f658670da41d75a555aae96c`. Deploy Vercel manuale riuscito, stato READY, ID `dpl_5xQ7vMRfBB159God9KxFHVj9LMhf`; alias [clinicos-eosin.vercel.app](https://clinicos-eosin.vercel.app) verificato sullo stesso deploy. [Ricevuta del rilascio](release-authorization.md).
+| Fase | Esito | Evidenza indipendente |
+|---|---|---|
+| 0 — Contratto | PASS | AC1–AC6 in task-contract.md e annotazioni UX dell'utente; nessuna issue GitHub associata alla richiesta |
+| 1 — Diff | PASS | Revisione completa del diff `d445bf68^..b0a44892`; solo frontend, test e dati sintetici. Nessuna modifica backend/schema/API/config/dependency |
+| 2 — Build e test | PASS | run-build.mjs: TypeScript e Vite, 660 moduli; run-focused.mjs: 59 test, 59 PASS, 0 FAIL |
+| 3 — Playwright | PASS | run-validation.mjs: flusso completo sintetico, quattro larghezze, App reale e fixture dei componenti. [Risultati](test-results/runtime.json), [rapporto HTML](playwright-report/index.html), [trace](trace/ux-turno.zip), [video](video/ux-turno.webm) |
+| 4 — Sicurezza | PASS | Secret scanner: 0 findings. Nessuna PHI, nuovi endpoint, pacchetti, auth bypass o logging clinico. Role gating conservato; contenuti renderizzati da React; superfici QA fuori dalla build frontend di produzione |
 
-La relazione del 3 ottobre riportata sotto descrive lo stato locale precedente al rilascio. I nove errori della suite generale preesistenti restano documentati. La validazione funzionale resta quella sintetica locale; in produzione è stato verificato l'esito Vercel e l'alias, senza operazioni su dati clinici.
+Build e runtime sono stati eseguiti sul commit `d445bf68087439e5e9cd179941fff4932d1f4fa3`. Il successivo commit `b0a44892` modifica esclusivamente un'asserzione di test che dipendeva dalla data corrente; `git diff --exit-code d445bf68 b0a44892 -- frontend/src` escludendo quel test conferma sorgenti applicativi identici. Il revisore ha rilanciato autonomamente i 59 test sul commit finale, tutti passati. L'errore iniziale del test era la data storica `03/10` nella traccia corretta del diario, dopo il cambio giorno del 4 ottobre; il fix rende l'asserzione valida anche nei giorni successivi.
+
+Provati conteggio esatto 12 con anteprima di 2; errore di conferma mantiene 12 e la nota modificabile; conferma riuscita aggiorna entrambi i contatori a 11; storico dopo reload; impossibilità per l'autore di confermare la propria urgenza; popup con sei parametri, focus iniziale, Escape e ritorno focus; scorrimento a 390×600 e 768×500. Nessun overflow alle larghezze 390/768/1161/1575; terapia in ritardo distinta dalle consegne urgenti nell'App reale. Console senza errori inattesi. Le risposte API sono tutte intercettate: 200/201, eccetto i 503 deliberati nei due scenari di errore, correttamente gestiti. Le schermate desktop e telefono e la cartella sono state ispezionate visivamente dal revisore.
+
+I nove errori della suite generale, già riprodotti sulla baseline, restano documentati nel rapporto originale e non sono stati rieseguiti senza nuova necessità. Il reload prova la risposta persistita simulata, non il database reale. Nessun push, deploy o accesso a dati di produzione è stato eseguito dal revisore; il rilascio resta responsabilità del coordinatore dopo questo gate.
+
+Ricevuta: l'utente ha autorizzato push e visibilità online; questa sessione è autorizzata soltanto a review, build, test sintetici e scrittura di evidenze locali. Nessuna modifica di sorgente da questa sessione. Due script PowerShell della root risultavano già diversi solo per terminatori CRLF/LF e sono stati lasciati intatti. `git diff --check d445bf68^ b0a44892` passa.
 
 ---
 

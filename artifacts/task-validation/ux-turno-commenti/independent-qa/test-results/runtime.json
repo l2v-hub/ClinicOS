@@ -1,0 +1,247 @@
+{
+  "results": [
+    "PASS exact count beyond preview; failed and successful ack; historical persistence; author restriction; expansion focus/Escape",
+    "PASS patient layout 390, tile heights 102/102/102/102/102/102",
+    "PASS patient layout 768, tile heights 102/102/102/102/102/102",
+    "PASS patient layout 1161, tile heights 102/102/102/102/102/102",
+    "PASS patient layout 1575, tile heights 102/102/102/102/102/102",
+    "PASS dashboard layout 390",
+    "PASS dashboard layout 768",
+    "PASS dashboard layout 1161",
+    "PASS dashboard layout 1575",
+    "PASS real App shell, diary acknowledgement event refreshes both badges, four responsive widths",
+    "PASS real App overdue therapy separate from urgency, patient name and action readable at three widths",
+    "PASS availability/retry; no unexpected console errors"
+  ],
+  "consoleErrors": [],
+  "requests": [
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/patient-test/diary",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/critical/ack",
+      "method": "POST"
+    },
+    {
+      "path": "/consegne/critical/ack",
+      "method": "POST"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/patient-test/diary",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/patient-test/diary",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/status",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/status",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/simulator/identities",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/simulator/identities",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/simulator/session",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/me/roster-order",
+      "method": "GET"
+    },
+    {
+      "path": "/appointments",
+      "method": "GET"
+    },
+    {
+      "path": "/appointments",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/notes",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/clinical-summary/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/skills/proactive/inbox",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/clinical-summary/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/page",
+      "method": "GET"
+    },
+    {
+      "path": "/operators/directory/page",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/parameters/page",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/status",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/status",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/simulator/identities",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/simulator/session",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "method": "GET"
+    },
+    {
+      "path": "/me/roster-order",
+      "method": "GET"
+    },
+    {
+      "path": "/appointments",
+      "method": "GET"
+    },
+    {
+      "path": "/appointments",
+      "method": "GET"
+    },
+    {
+      "path": "/consegne/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/notes",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/clinical-summary/overview",
+      "method": "GET"
+    },
+    {
+      "path": "/skills/proactive/inbox",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/therapy-slots",
+      "method": "GET"
+    },
+    {
+      "path": "/farmaci/cerca",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/page",
+      "method": "GET"
+    },
+    {
+      "path": "/operators/directory/page",
+      "method": "GET"
+    },
+    {
+      "path": "/patients/parameters/page",
+      "method": "GET"
+    }
+  ]
+}
