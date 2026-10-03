@@ -252,7 +252,11 @@ router.get('/prn', async (req, res) => {
       res.status(400).json({ error: error.message });
       return;
     }
-    console.error('GET /therapy-slots/prn error:', error);
+    // Never the whole error: a DB validation message could echo the clinical indication.
+    console.error(
+      'GET /therapy-slots/prn error:',
+      (error as { code?: string })?.code ?? (error instanceof Error ? error.name : 'unknown'),
+    );
     res.status(500).json({ error: 'Errore nel recupero delle somministrazioni al bisogno' });
   }
 });
@@ -290,7 +294,11 @@ router.post('/prn', async (req, res) => {
       res.status(409).json({ error: 'Conflitto concorrente: ricaricare e riprovare' });
       return;
     }
-    console.error('POST /therapy-slots/prn error:', error);
+    // Never the whole error: a DB validation message could echo the clinical indication.
+    console.error(
+      'POST /therapy-slots/prn error:',
+      (error as { code?: string })?.code ?? (error instanceof Error ? error.name : 'unknown'),
+    );
     res
       .status(500)
       .json({ error: 'Errore durante la registrazione della somministrazione al bisogno' });

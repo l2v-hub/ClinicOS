@@ -12,7 +12,7 @@ import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
-import { hasGlobalPatientScope } from '../patients/patient-scope.js';
+import { patientScopeWhere } from '../patients/patient-scope.js';
 import { facilityToday } from '../patients/parameter-reading-input.js';
 import {
   TherapyNotDueError,
@@ -114,8 +114,10 @@ export function parsePrnAdministrationBody(value: unknown): PrnAdministrationInp
   return { patientId, therapyId, indicazione, note, requestId };
 }
 
+/** Resident reach (#389): the shared rule — facility-wide for clinical roles by default. */
 function scopeWhere(actor: Operator): Prisma.PatientTherapyWhereInput {
-  return hasGlobalPatientScope(actor.role) ? {} : { patient: { registeredById: actor.id } };
+  const where = patientScopeWhere(actor);
+  return Object.keys(where).length ? { patient: where } : {};
 }
 
 function sameDose(row: PrnRow, input: PrnAdministrationInput): boolean {
@@ -240,7 +242,7 @@ export async function listPrnAdministrations(
     where: {
       patientId,
       date,
-      ...(!hasGlobalPatientScope(actor.role) && { patient: { registeredById: actor.id } }),
+      ...(Object.keys(patientScopeWhere(actor)).length && { patient: patientScopeWhere(actor) }),
     },
     orderBy: [{ administeredAt: 'desc' }, { id: 'desc' }],
     take: 200,

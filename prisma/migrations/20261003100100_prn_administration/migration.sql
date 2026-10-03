@@ -37,3 +37,20 @@ ALTER TABLE "PrnAdministration" ADD CONSTRAINT "PrnAdministration_patientId_fkey
 
 -- AddForeignKey
 ALTER TABLE "PrnAdministration" ADD CONSTRAINT "PrnAdministration_therapyId_fkey" FOREIGN KEY ("therapyId") REFERENCES "PatientTherapy"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- Append-only at DB level: a recorded PRN dose is never edited or truncated. The only UPDATE
+-- allowed is the FK cascade that detaches a deleted prescription (therapyId → NULL, nothing else).
+CREATE FUNCTION clinicos_prn_append_only() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+  IF TG_OP = 'UPDATE'
+     AND NEW."therapyId" IS NULL
+     AND (to_jsonb(NEW) - 'therapyId') = (to_jsonb(OLD) - 'therapyId') THEN
+    RETURN NEW;
+  END IF;
+  RAISE EXCEPTION 'PrnAdministration is append-only (%)', TG_OP;
+END;
+$$;
+CREATE TRIGGER "PrnAdministration_no_update" BEFORE UPDATE ON "PrnAdministration"
+  FOR EACH ROW EXECUTE FUNCTION clinicos_prn_append_only();
+CREATE TRIGGER "PrnAdministration_no_truncate" BEFORE TRUNCATE ON "PrnAdministration"
+  FOR EACH STATEMENT EXECUTE FUNCTION clinicos_prn_append_only();

@@ -51,3 +51,6 @@ Gestione clinica RSA*.zip
 # Agent Team ephemeral runtime state (match whether or not the dirs exist yet)
 agent-team/.runtime
 agent-team/.worktrees
+
+# Tool runtime state (ruflo/claude-flow), never source
+**/.claude-flow/
