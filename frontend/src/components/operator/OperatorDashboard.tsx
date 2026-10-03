@@ -61,7 +61,8 @@ export function OperatorDashboard({
   const consegnaSummary = consegneOverview?.summary;
   const urgenti = consegneOverview?.urgentPreview ?? [];
   const overviewAvailable = consegnaSummary !== undefined;
-  const urgentCount = consegnaSummary?.urgentOpen;
+  // UX2 W8: urgenze da prendere in carico (attive), mai «consegne aperte».
+  const urgentCount = consegnaSummary?.urgentActive;
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
   const somministrazioni = useRiepilogoSomministrazioni();

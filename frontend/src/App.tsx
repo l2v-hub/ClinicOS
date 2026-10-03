@@ -95,6 +95,7 @@ import {
   mergeConsegnaPage,
   type ConsegnaFeedQuery,
 } from './lib/consegneFeed';
+import { postUrgencyAck } from './lib/urgency';
 import {
   buildTherapySlotPageUrl,
   mergeTherapySlotPages,
@@ -637,10 +638,8 @@ export default function App() {
   );
   const [consegneSummary, setConsegneSummary] = useState<ConsegnaSummary>({
     total: 0,
-    open: 0,
-    inProgress: 0,
-    completed: 0,
-    urgentOpen: 0,
+    urgentActive: 0,
+    urgentTaken: 0,
   });
   const [consegnePageInfo, setConsegnePageInfo] = useState<ConsegnaPageInfo>({
     hasMore: false,
@@ -820,12 +819,12 @@ export default function App() {
     pushNav('pazienti');
   }
 
-  // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
-  // aperta è UNA sola, evidenzia e scrolla direttamente quella card.
+  // #283 / UX2 W8: la card «Urgenze da prendere in carico» apre il feed filtrato sulle urgenze
+  // attive; se è UNA sola, evidenzia e scrolla direttamente quella card.
   function openConsegneAperte() {
     const summary = consegneOverview?.summary;
-    const single = summary?.open === 1 ? consegneOverview?.openPreview[0] : undefined;
-    openConsegneFeed({ status: 'attive' }, single?.id);
+    const single = summary?.urgentActive === 1 ? consegneOverview?.urgentPreview[0] : undefined;
+    openConsegneFeed({ urgency: 'active' }, single?.id);
   }
   function openConsegneFeed(query: ConsegnaFeedQuery = {}, focusId?: string) {
     consegneQueryRef.current = query;
@@ -2470,7 +2469,7 @@ export default function App() {
     const sessionEpoch = sessionEpochRef.current;
     const allowedPatch = {
       ...(patch.priorita !== undefined ? { priorita: patch.priorita } : {}),
-      ...(patch.stato !== undefined ? { stato: patch.stato } : {}),
+      // UX2 W8: the legacy stato is never sent by the UX.
       ...(patch.tipo !== undefined ? { tipo: patch.tipo } : {}),
       ...(patch.note !== undefined ? { note: patch.note } : {}),
       ...(patch.scadenza !== undefined ? { scadenza: patch.scadenza } : {}),
@@ -2500,8 +2499,23 @@ export default function App() {
     }
   }
 
-  function updateConsegnaStato(id: string, stato: Consegna['stato']): Promise<boolean> {
-    return updateConsegna(id, { stato });
+  // UX2 W8: «Ho capito» su una consegna urgente — il primo non-autore la prende in carico per
+  // tutti; contatori, Turno e notifiche si riallineano subito.
+  async function acknowledgeConsegna(id: string): Promise<boolean> {
+    const sessionEpoch = sessionEpochRef.current;
+    try {
+      await postUrgencyAck(`${API_URL}/consegne/${encodeURIComponent(id)}/ack`, operatorHeaders());
+      if (sessionEpoch !== sessionEpochRef.current) return false;
+      refreshConsegnaViews();
+      void loadClinicalOverview();
+      showToast('Urgenza presa in carico');
+      return true;
+    } catch (error) {
+      showToast(
+        error instanceof Error && error.message ? error.message : 'Presa in carico non registrata',
+      );
+      return false;
+    }
   }
 
   async function deleteConsegna(id: string): Promise<void> {
@@ -3585,7 +3599,7 @@ export default function App() {
                           isAdmin={isAdmin}
                           onAdd={addConsegna}
                           onUpdate={updateConsegna}
-                          onUpdateStato={updateConsegnaStato}
+                          onAcknowledge={acknowledgeConsegna}
                           onDelete={deleteConsegna}
                           loading={loadingConsegne}
                           loadError={consegneLoadError}
@@ -3594,7 +3608,7 @@ export default function App() {
                           onLoadMore={() => void loadConsegne(consegneQueryRef.current, true)}
                           onRetry={() => void loadConsegne(consegneQueryRef.current)}
                           onSelectPaziente={goToPazienteByNome}
-                          initialFiltroStato={consegneView.query?.status}
+                          initialUrgency={consegneView.query?.urgency}
                           focusId={consegneView.focusId}
                         />
                       )}
@@ -3737,7 +3751,7 @@ export default function App() {
                           onAddConsegna={addConsegna}
                           consegnaDraftStore={consegnaDraftStore}
                           assessmentDraftStore={assessmentDraftStore}
-                          onUpdateConsegnaStato={updateConsegnaStato}
+                          onAcknowledgeConsegna={acknowledgeConsegna}
                           onUpdateCartella={updateCartella}
                           onUpdatePaziente={updatePaziente}
                           onAssignCamera={syncCameraAssignment}

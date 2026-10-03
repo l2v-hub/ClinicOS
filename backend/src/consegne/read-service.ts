@@ -7,6 +7,8 @@ import {
   type PatientIdentityDto,
 } from '../patients/operational-identity.js';
 import { buildConsegnaTsQuery, encodeConsegnaCursor, type ConsegnaFeedQuery } from './query.js';
+import { consegnaUrgencyActiveSql, consegnaUrgencyTakenSql } from '../lib/urgency.js';
+import { withConsegnaUrgency } from './ack-service.js';
 
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
 
@@ -34,12 +36,15 @@ export interface ConsegnaListRow {
   identity: PatientIdentityDto | null;
 }
 
+/**
+ * UX2 W8: a handover is a note (normal / urgent). The summary counts urgencies only: «da prendere
+ * in carico» (active: no «Ho capito» by a non-author yet) and «prese in carico». The legacy
+ * aperta / in corso / completata counts are gone from every reader-facing summary.
+ */
 export interface ConsegnaSummary {
   total: number;
-  open: number;
-  inProgress: number;
-  completed: number;
-  urgentOpen: number;
+  urgentActive: number;
+  urgentTaken: number;
 }
 
 function privileged(actor: Operator): boolean {
@@ -75,6 +80,11 @@ function filterSql(input: ConsegnaFeedQuery, includeFeedFilters: boolean): Prism
           ? Prisma.sql`c."stato" = ${input.status}`
           : Prisma.sql`TRUE`,
       input.priority ? Prisma.sql`c."priorita" = ${input.priority}` : Prisma.sql`TRUE`,
+      input.urgency === 'active'
+        ? consegnaUrgencyActiveSql
+        : input.urgency === 'taken'
+          ? consegnaUrgencyTakenSql
+          : Prisma.sql`TRUE`,
       input.cursor
         ? Prisma.sql`(c."createdAt" < ${input.cursor.createdAt} OR
             (c."createdAt" = ${input.cursor.createdAt} AND c."id" < ${input.cursor.id}))`
@@ -118,16 +128,12 @@ async function exactSummary(actor: Operator, input: ConsegnaFeedQuery): Promise<
   const rows = await prisma.$queryRaw<ConsegnaSummary[]>(Prisma.sql`
     SELECT
       COUNT(*)::int AS "total",
-      COUNT(*) FILTER (WHERE c."stato" <> 'completata')::int AS "open",
-      COUNT(*) FILTER (WHERE c."stato" = 'in_corso')::int AS "inProgress",
-      COUNT(*) FILTER (WHERE c."stato" = 'completata')::int AS "completed",
-      COUNT(*) FILTER (
-        WHERE c."stato" <> 'completata' AND c."priorita" = 'urgente'
-      )::int AS "urgentOpen"
+      COUNT(*) FILTER (WHERE ${consegnaUrgencyActiveSql})::int AS "urgentActive",
+      COUNT(*) FILTER (WHERE ${consegnaUrgencyTakenSql})::int AS "urgentTaken"
     FROM "Consegna" c
     WHERE ${visibilitySql(actor)} AND ${filterSql(input, false)}
   `);
-  return rows[0] ?? { total: 0, open: 0, inProgress: 0, completed: 0, urgentOpen: 0 };
+  return rows[0] ?? { total: 0, urgentActive: 0, urgentTaken: 0 };
 }
 
 export async function loadConsegnaFeed(actor: Operator, input: ConsegnaFeedQuery) {
@@ -141,6 +147,7 @@ export async function loadConsegnaFeed(actor: Operator, input: ConsegnaFeedQuery
   const cursorFilters = {
     ...(input.status ? { status: input.status } : {}),
     ...(input.priority ? { priority: input.priority } : {}),
+    ...(input.urgency ? { urgency: input.urgency } : {}),
     ...(input.patientId ? { patientId: input.patientId } : {}),
     ...(input.q ? { q: input.q } : {}),
   };
@@ -148,8 +155,9 @@ export async function loadConsegnaFeed(actor: Operator, input: ConsegnaFeedQuery
     items.map((row) => row.pazienteId),
     patientScopeWhere(actor),
   );
+  const withUrgency = await withConsegnaUrgency(items, actor);
   return {
-    items: items.map((row) => ({ ...row, identity: identities.get(row.pazienteId) ?? null })),
+    items: withUrgency.map((row) => ({ ...row, identity: identities.get(row.pazienteId) ?? null })),
     pageInfo: {
       hasMore,
       nextCursor:
@@ -163,38 +171,41 @@ export async function loadConsegnaFeed(actor: Operator, input: ConsegnaFeedQuery
 
 export async function loadConsegnaOverview(actor: Operator) {
   const emptyInput: ConsegnaFeedQuery = { limit: 5 };
-  const [summary, urgentPreview, openPreview, byOperatorRows] = await Promise.all([
+  const [summary, urgentRows, recentRows, byOperatorRows] = await Promise.all([
     exactSummary(actor, emptyInput),
+    // Active urgencies only: once a non-author said «Ho capito» the handover leaves this list.
+    prisma.$queryRaw<ConsegnaListRow[]>(Prisma.sql`
+      SELECT ${COLUMNS}
+      FROM "Consegna" c
+      WHERE ${visibilitySql(actor)} AND ${consegnaUrgencyActiveSql}
+      ORDER BY c."createdAt" DESC, c."id" DESC
+      LIMIT 5
+    `),
     prisma.$queryRaw<ConsegnaListRow[]>(Prisma.sql`
       SELECT ${COLUMNS}
       FROM "Consegna" c
       WHERE ${visibilitySql(actor)}
-        AND c."stato" <> 'completata'
-        AND c."priorita" = 'urgente'
-      ORDER BY c."createdAt" DESC, c."id" DESC
-      LIMIT 5
-    `),
-    prisma.$queryRaw<ConsegnaListRow[]>(Prisma.sql`
-      SELECT ${COLUMNS}
-      FROM "Consegna" c
-      WHERE ${visibilitySql(actor)} AND c."stato" <> 'completata'
       ORDER BY c."createdAt" DESC, c."id" DESC
       LIMIT 5
     `),
     privileged(actor)
-      ? prisma.$queryRaw<Array<{ operatorId: string; open: number }>>(Prisma.sql`
-          SELECT c."operatoreAssegnatoId" AS "operatorId", COUNT(*)::int AS "open"
+      ? prisma.$queryRaw<Array<{ operatorId: string; urgentActive: number }>>(Prisma.sql`
+          SELECT c."operatoreAssegnatoId" AS "operatorId", COUNT(*)::int AS "urgentActive"
           FROM "Consegna" c
-          WHERE c."operatoreAssegnatoId" IS NOT NULL AND c."stato" <> 'completata'
+          WHERE c."operatoreAssegnatoId" IS NOT NULL AND ${consegnaUrgencyActiveSql}
           GROUP BY c."operatoreAssegnatoId"
         `)
       : Promise.resolve([]),
   ]);
+  const [urgentPreview, recentPreview] = await Promise.all([
+    withConsegnaUrgency(urgentRows, actor),
+    withConsegnaUrgency(recentRows, actor),
+  ]);
   const identities = await loadOperationalIdentities(
-    [...urgentPreview, ...openPreview].map((row) => row.pazienteId),
+    [...urgentPreview, ...recentPreview].map((row) => row.pazienteId),
     patientScopeWhere(actor),
   );
-  const enrich = (row: ConsegnaListRow) => ({
+  const enrich = <T extends ConsegnaListRow>(row: T) => ({
     ...row,
     identity: identities.get(row.pazienteId) ?? null,
   });
@@ -202,16 +213,20 @@ export async function loadConsegnaOverview(actor: Operator) {
     scope: privileged(actor) ? 'facility' : 'operator',
     summary,
     urgentPreview: urgentPreview.map(enrich),
-    openPreview: openPreview.map(enrich),
-    byOperator: Object.fromEntries(byOperatorRows.map((row) => [row.operatorId, row.open])),
+    recentPreview: recentPreview.map(enrich),
+    /** Active urgencies per assignee (privileged readers only). */
+    byOperator: Object.fromEntries(byOperatorRows.map((row) => [row.operatorId, row.urgentActive])),
   };
 }
 
+/** UX2 W8: per patient, the handovers whose urgency still waits for a «Ho capito». */
 export async function loadPatientConsegnaCounts(patientIds: string[]) {
-  const rows = await prisma.consegna.groupBy({
-    by: ['pazienteId'],
-    where: { pazienteId: { in: patientIds }, stato: { not: 'completata' } },
-    _count: { _all: true },
-  });
-  return new Map(rows.map((row) => [row.pazienteId, row._count._all]));
+  if (!patientIds.length) return new Map<string, number>();
+  const rows = await prisma.$queryRaw<Array<{ pazienteId: string; count: number }>>(Prisma.sql`
+    SELECT c."pazienteId", COUNT(*)::int AS "count"
+    FROM "Consegna" c
+    WHERE c."pazienteId" IN (${Prisma.join(patientIds)}) AND ${consegnaUrgencyActiveSql}
+    GROUP BY c."pazienteId"
+  `);
+  return new Map(rows.map((row) => [row.pazienteId, row.count]));
 }

@@ -24,6 +24,8 @@ interface DiaryFeedRow {
   updatedAt: Date;
   sourceType: 'diary' | 'consegna';
   sourceId: string;
+  /** Author operator id (diary authorId / handover creatoDaId). Used for the urgency rule only. */
+  authorId: string | null;
   therapyId: string | null;
   therapyFarmacoNome: string | null;
   therapyStato: string | null;
@@ -38,6 +40,7 @@ export interface DiaryEntryTherapyRef {
 /** Diario terapia: la voce espone la terapia collegata (o null). Le Consegna hanno sempre null. */
 function withTherapy(row: DiaryFeedRow) {
   const { therapyId, therapyFarmacoNome, therapyStato, ...entry } = row;
+  // authorId stays on the row for the urgency rule; it is stripped before the response.
   const therapy: DiaryEntryTherapyRef | null =
     therapyId && therapyFarmacoNome !== null && therapyStato !== null
       ? { id: therapyId, farmacoNome: therapyFarmacoNome, stato: therapyStato }
@@ -75,7 +78,7 @@ export async function loadPatientDiary(
     SELECT * FROM (
       SELECT d."id", d."patientId", d."authorType", d."authorName", d."title", d."content",
         d."priority", d."status", d."entryDateTime", d."category", d."createdAt", d."updatedAt",
-        'diary'::text AS "sourceType", d."id" AS "sourceId",
+        'diary'::text AS "sourceType", d."id" AS "sourceId", d."authorId" AS "authorId",
         t."id" AS "therapyId", t."farmacoNome" AS "therapyFarmacoNome", t."stato" AS "therapyStato"
       FROM "PatientDiaryEntry" d
       LEFT JOIN "PatientTherapy" t ON t."id" = d."therapyId" AND t."patientId" = d."patientId"
@@ -89,7 +92,7 @@ export async function loadPatientDiary(
         CASE WHEN c."priorita" = 'alta' THEN 'importante' ELSE c."priorita" END,
         CASE WHEN c."stato" = 'completata' THEN 'completata' ELSE 'aperta' END,
         to_char(c."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Rome', 'YYYY-MM-DD"T"HH24:MI'),
-        'Consegna', c."createdAt", c."updatedAt", 'consegna', c."id",
+        'Consegna', c."createdAt", c."updatedAt", 'consegna', c."id", c."creatoDaId",
         NULL::text, NULL::text, NULL::text
       FROM "Consegna" c
       LEFT JOIN "Operator" o ON o."id" = c."creatoDaId"
@@ -102,9 +105,12 @@ export async function loadPatientDiary(
   `);
   const hasMore = rows.length > input.limit;
   const pageEntries = rows.slice(0, input.limit).map(withTherapy);
-  // «Presa visione» per lettore (voci urgenti): acknowledgedByMe + chi ha visto e quando.
+  // UX2 W8: urgency (active until the first «Ho capito» by a non-author; then the trace).
   const ackFields = await loadDiaryAckFields(pageEntries, actor);
-  const entries = pageEntries.map((entry) => ({ ...entry, ...ackFields.get(entry.id)! }));
+  const entries = pageEntries.map(({ authorId: _authorId, ...entry }) => ({
+    ...entry,
+    ...ackFields.get(entry.id)!,
+  }));
   const last = entries.at(-1);
   return {
     entries,

@@ -128,14 +128,23 @@ test('bounded summaries preserve omitted IDs as unavailable and distinguish zero
     headers: {},
     fetcher: response({
       items: [
-        { patientId: 'zero', total: 0, open: 0, urgentOpen: 0, statoRicovero: null },
-        { patientId: 'history', total: 3, open: 0, urgentOpen: 0, statoRicovero: 'dimesso' },
+        { patientId: 'zero', total: 0, urgentActive: 0, statoRicovero: null },
+        { patientId: 'history', total: 3, urgentActive: 0, statoRicovero: 'dimesso' },
       ],
     }),
   });
   assert.deepEqual(
     summaries.map((row) => row.patientId),
     ['zero', 'history'],
+  );
+  // UX2 W8: more active urgencies than handovers is an impossible summary.
+  await assert.rejects(
+    fetchConsegnePatientSummary('/api', ['a'], {
+      headers: {},
+      fetcher: response({
+        items: [{ patientId: 'a', total: 1, urgentActive: 2, statoRicovero: null }],
+      }),
+    }),
   );
   await assert.rejects(
     fetchConsegnePatientSummary(
@@ -148,7 +157,7 @@ test('bounded summaries preserve omitted IDs as unavailable and distinguish zero
     fetchConsegnePatientSummary('/api', ['a'], {
       headers: {},
       fetcher: response({
-        items: [{ patientId: 'other', total: 0, open: 0, urgentOpen: 0, statoRicovero: null }],
+        items: [{ patientId: 'other', total: 0, urgentActive: 0, statoRicovero: null }],
       }),
     }),
   );

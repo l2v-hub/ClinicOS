@@ -18,6 +18,7 @@ import {
 } from '../gateway/sources.js';
 import { findTherapiesDue } from '../../therapies/due-therapy-query.js';
 import { dayKey, type ConsegnaRow, type TherapyDueItem } from './facility-signals.js';
+import { consegnaUrgencyActiveSql } from '../../lib/urgency.js';
 import {
   planQuery,
   extractPatientName,
@@ -201,8 +202,10 @@ const AI_CONSEGNA_COLUMNS = Prisma.raw(`
 async function overdueConsegne(ctx: UserContext, now: Date) {
   const today = dayKey(now);
   const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  // UX2 W8: a handover is a note; only an ACTIVE urgency (no «Ho capito» by a non-author yet)
+  // is something left to do. Legacy aperta / in corso / completata never reach the assistant.
   const where = Prisma.sql`
-    c."stato" <> 'completata'
+    ${consegnaUrgencyActiveSql}
     AND ${consegnaActorSql(ctx)}
     AND ${consegnaPatientSql(ctx)}
     AND (
@@ -230,7 +233,7 @@ async function overdueConsegne(ctx: UserContext, now: Date) {
 
 async function openConsegnaQueue(ctx: UserContext) {
   const base = Prisma.sql`
-    c."stato" <> 'completata'
+    ${consegnaUrgencyActiveSql}
     AND ${consegnaActorSql(ctx)}
     AND ${consegnaPatientSql(ctx)}`;
   const mine = Prisma.sql`${base} AND c."operatoreAssegnatoId" = ${ctx.userId}`;
@@ -321,7 +324,7 @@ async function facilitySnapshot(
         pazienteNome: c.pazienteNome,
         tipo: c.tipo,
         priorita: c.priorita,
-        stato: c.stato,
+        urgenza: 'da prendere in carico',
         note: c.note,
         scadenza: c.scadenza,
         oraScadenza: c.oraScadenza,
@@ -346,8 +349,8 @@ async function facilitySnapshot(
     consegnaSource(
       '',
       'consegne-overdue',
-      'Consegne scadute',
-      `${consegneOverdue.count} consegne aperte oltre il termine`,
+      'Urgenze scadute da prendere in carico',
+      `${consegneOverdue.count} consegne urgenti oltre il termine non ancora prese in carico`,
       generatedAt,
     ),
   );
@@ -385,8 +388,13 @@ async function operatorQueue(
 
   const therapiesOverdue = therapies.overdue;
   const therapiesDueSoon = therapies.dueSoon;
-  const myLikelyConsegne = queue.mineItems;
-  const otherOpenConsegne = queue.otherItems;
+  // Never the legacy stored stato (aperta / in corso / completata): not a concept of the UX.
+  const asUrgency = ({ stato: _stato, ...c }: ConsegnaRow) => ({
+    ...c,
+    urgenza: 'da prendere in carico',
+  });
+  const myLikelyConsegne = queue.mineItems.map(asUrgency);
+  const otherOpenConsegne = queue.otherItems.map(asUrgency);
 
   const data = [
     {
@@ -422,12 +430,12 @@ async function operatorQueue(
     consegnaSource(
       '',
       'consegne-open',
-      'Consegne aperte',
-      `${queue.mineCount + queue.otherCount} consegne aperte`,
+      'Urgenze da prendere in carico',
+      `${queue.mineCount + queue.otherCount} consegne urgenti da prendere in carico`,
       generatedAt,
     ),
-    ...myLikelyConsegne.map(consegnaItemSource),
-    ...otherOpenConsegne.map(consegnaItemSource),
+    ...queue.mineItems.map(consegnaItemSource),
+    ...queue.otherItems.map(consegnaItemSource),
   ];
   return {
     data,

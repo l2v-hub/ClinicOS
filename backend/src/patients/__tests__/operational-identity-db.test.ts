@@ -322,7 +322,7 @@ test('visible handover does not grant patient identity access, including overvie
   assert.equal(foreign.pazienteNome, 'Existing foreign');
   assert.equal(foreign.identity, null);
   const overview = await loadConsegnaOverview(actor);
-  for (const preview of [overview.urgentPreview, overview.openPreview]) {
+  for (const preview of [overview.urgentPreview, overview.recentPreview]) {
     assert.equal(preview.find((row) => row.pazienteId === id('foreign'))!.identity, null);
     assert.equal(
       preview.find((row) => row.pazienteId === id('active'))!.identity!.location.source,

@@ -1,0 +1,27 @@
+/* UX2 W8 — stato dell'urgenza su una nota (diario / consegna). Rosso solo per l'urgenza ATTIVA
+   (allerta clinica); la traccia «presa in carico» è testo muted, sempre visibile. */
+.urgency-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--divider, var(--border));
+}
+.urgency-notice__text {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.urgency-notice--active .urgency-notice__text {
+  font-weight: 600;
+  color: var(--red);
+}
+.urgency-notice__btn {
+  min-height: 44px;
+  margin-left: auto;
+}

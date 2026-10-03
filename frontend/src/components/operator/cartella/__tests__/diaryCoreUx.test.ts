@@ -46,7 +46,9 @@ test('diary form source: no «Stato» select and no manual date on the create fo
   assert.doesNotMatch(src, /<label className="form-label">Stato<\/label>/);
   assert.doesNotMatch(src, /<option value="importante">Importante<\/option>/);
   assert.match(src, /Data e ora registrate automaticamente al salvataggio/);
-  assert.match(src, /row\.status !== 'aperta'/);
+  // UX2 W8: no open/closed concept in the diary; only «da rivedere» is ever shown.
+  assert.match(src, /row\.status === 'da_rivedere'/);
+  assert.doesNotMatch(src, /'Aperta'|'Completata'/);
 });
 
 test('handover composer offers only Normale / Urgente and no «aperta» wording', () => {

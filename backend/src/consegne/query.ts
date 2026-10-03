@@ -1,6 +1,8 @@
 export type ConsegnaStatus = 'aperta' | 'in_corso' | 'completata';
 export type ConsegnaFeedStatus = ConsegnaStatus | 'attive';
 export type ConsegnaPriority = 'normale' | 'alta' | 'urgente';
+/** UX2 W8: 'active' = urgency waiting for a «Ho capito»; 'taken' = urgency already taken in charge. */
+export type ConsegnaUrgencyFilter = 'active' | 'taken';
 
 export interface ConsegnaCursor {
   createdAt: Date;
@@ -11,6 +13,7 @@ export interface ConsegnaFeedQuery {
   limit: number;
   status?: ConsegnaFeedStatus;
   priority?: ConsegnaPriority;
+  urgency?: ConsegnaUrgencyFilter;
   patientId?: string;
   q?: string;
   cursor?: ConsegnaCursor;
@@ -27,7 +30,8 @@ const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
 const CURSOR_TOKEN = /^[A-Za-z0-9_-]{1,1536}$/;
 const STATUSES = new Set<ConsegnaFeedStatus>(['attive', 'aperta', 'in_corso', 'completata']);
 const PRIORITIES = new Set<ConsegnaPriority>(['normale', 'alta', 'urgente']);
-const QUERY_KEYS = new Set(['limit', 'status', 'priority', 'patientId', 'q', 'cursor']);
+const URGENCY_FILTERS = new Set<ConsegnaUrgencyFilter>(['active', 'taken']);
+const QUERY_KEYS = new Set(['limit', 'status', 'priority', 'urgency', 'patientId', 'q', 'cursor']);
 
 function single(value: unknown, field: string): string | undefined {
   if (value === undefined) return undefined;
@@ -39,6 +43,7 @@ function fingerprint(input: Omit<ConsegnaFeedQuery, 'limit' | 'cursor'>): string
   return JSON.stringify({
     status: input.status ?? '',
     priority: input.priority ?? '',
+    ...(input.urgency ? { urgency: input.urgency } : {}),
     patientId: input.patientId ?? '',
     q: input.q ?? '',
   });
@@ -130,6 +135,10 @@ export function parseConsegnaFeedQuery(query: Record<string, unknown>): Consegna
   if (priorityRaw !== undefined && !PRIORITIES.has(priorityRaw as ConsegnaPriority)) {
     throw new ConsegnaInputError('priority non valida');
   }
+  const urgencyRaw = single(query.urgency, 'urgency');
+  if (urgencyRaw !== undefined && !URGENCY_FILTERS.has(urgencyRaw as ConsegnaUrgencyFilter)) {
+    throw new ConsegnaInputError('urgency non valida');
+  }
   const patientIdRaw = single(query.patientId, 'patientId');
   if (patientIdRaw !== undefined && !SAFE_ID.test(patientIdRaw)) {
     throw new ConsegnaInputError('patientId non valido');
@@ -140,6 +149,7 @@ export function parseConsegnaFeedQuery(query: Record<string, unknown>): Consegna
   const filters = {
     ...(statusRaw ? { status: statusRaw as ConsegnaFeedStatus } : {}),
     ...(priorityRaw ? { priority: priorityRaw as ConsegnaPriority } : {}),
+    ...(urgencyRaw ? { urgency: urgencyRaw as ConsegnaUrgencyFilter } : {}),
     ...(patientIdRaw ? { patientId: patientIdRaw } : {}),
     ...(qRaw ? { q: qRaw } : {}),
   };

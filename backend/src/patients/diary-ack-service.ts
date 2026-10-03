@@ -1,10 +1,11 @@
-// «Presa visione» per lettore delle voci URGENTI del diario (UX direct-access, owner 2026-10-03).
+// «Ho capito» on URGENT diary entries (UX2 W8, owner decision 2026-10-03; model in lib/urgency.ts).
 //
-// - One append-only row per (entry, operator) in DiaryEntryAcknowledgement: a second ack by the
-//   same reader is an idempotent no-op (the first time stays the time of record).
-// - Independent per reader: one operator's ack never changes what another operator sees as «da
-//   vedere»; the entry itself (text, status, history) is never modified.
-// - Name and role are server-authoritative snapshots (patients/diary-author.ts), never the client's.
+// - An urgent entry is «urgente attiva» until the FIRST acknowledgement by an operator other than
+//   the author; that row ends the urgency for everyone and is the trace («Urgenza presa in carico
+//   da <nome, ruolo> alle hh:mm»). After it, no further acknowledgement is needed (idempotent 200).
+// - The author cannot acknowledge their own entry (409 author_cannot_acknowledge).
+// - Rows are append-only in DiaryEntryAcknowledgement (DB triggers); the entry itself (text,
+//   status, history) is never modified. Name and role are server-authoritative snapshots.
 // - Audited like the proactive ack: an append-only AiAuditEvent row (ids only, no clinical text).
 // - Scope: the route runs behind requirePatientScope; the service re-checks the resident scope.
 
@@ -13,133 +14,134 @@ import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { recordAuditEvent } from '../ai/audit-store.js';
 import { prisma } from '../lib/prisma.js';
+import {
+  NOT_URGENT_MESSAGE,
+  SELF_ACK_MESSAGE,
+  URGENT_PRIORITY,
+  UrgencyAckError,
+  diaryUrgencyActiveSql,
+  isAuthorOf,
+  urgencyView,
+  type AckRowLike,
+  type UrgencySubject,
+  type UrgencyView,
+} from '../lib/urgency.js';
+import { loadConsegnaAckRows } from '../consegne/ack-service.js';
 import { authoritativeDiaryAuthor } from './diary-author.js';
 import { patientScopeWhere } from './patient-scope.js';
 
-/** Only urgent entries carry a per-reader acknowledgement. */
-export const ACKNOWLEDGEABLE_PRIORITY = 'urgente';
 export const DIARY_ACK_AUDIT_ACTION = 'diary:ack';
 
-export interface DiaryAcknowledgementView {
-  operatorName: string;
-  operatorRole: string;
-  acknowledgedAt: string;
-  /** true for the caller's own acknowledgement. Other readers' operator ids are not disclosed. */
-  byMe: boolean;
+export interface DiaryUrgencyFields {
+  urgency: UrgencyView;
 }
 
-export interface DiaryAckFields {
-  acknowledgeable: boolean;
-  acknowledgedByMe: boolean;
-  acknowledgements: DiaryAcknowledgementView[];
+interface DiaryFeedEntryLike {
+  id: string;
+  priority: string;
+  status: string;
+  authorName: string;
+  authorId: string | null;
+  sourceType?: string;
+  sourceId?: string;
 }
 
-export class DiaryAckError extends Error {
-  constructor(
-    readonly status: 404 | 409,
-    readonly code: 'entry_not_found' | 'not_acknowledgeable',
-    message: string,
-  ) {
-    super(message);
-    this.name = 'DiaryAckError';
-  }
-}
-
-interface AckRow {
-  entryId: string;
-  operatorId: string;
-  operatorName: string;
-  operatorRole: string;
-  acknowledgedAt: Date;
-}
-
-function view(row: AckRow, actorId: string): DiaryAcknowledgementView {
+function subjectOf(entry: DiaryFeedEntryLike): UrgencySubject {
   return {
-    operatorName: row.operatorName,
-    operatorRole: row.operatorRole,
-    acknowledgedAt: row.acknowledgedAt.toISOString(),
-    byMe: row.operatorId === actorId,
+    priority: entry.priority,
+    legacyClosed: entry.status === 'completata',
+    authorId: entry.authorId,
+    authorName: entry.authorName,
   };
 }
 
-/** Per-entry ack fields for a diary page (one query for the whole page). */
-export async function loadDiaryAckFields(
-  entries: ReadonlyArray<{ id: string; priority: string; sourceType?: string }>,
-  actor: Operator,
-): Promise<Map<string, DiaryAckFields>> {
-  const urgentIds = entries
-    .filter((e) => e.sourceType !== 'consegna' && e.priority === ACKNOWLEDGEABLE_PRIORITY)
-    .map((e) => e.id);
-  const rows = urgentIds.length
-    ? await prisma.diaryEntryAcknowledgement.findMany({
-        where: { entryId: { in: urgentIds } },
-        orderBy: [{ acknowledgedAt: 'asc' }, { id: 'asc' }],
-        select: {
-          entryId: true,
-          operatorId: true,
-          operatorName: true,
-          operatorRole: true,
-          acknowledgedAt: true,
-        },
-      })
-    : [];
-  const byEntry = new Map<string, AckRow[]>();
+async function diaryAckRows(entryIds: string[]) {
+  const byEntry = new Map<string, AckRowLike[]>();
+  if (!entryIds.length) return byEntry;
+  const rows = await prisma.diaryEntryAcknowledgement.findMany({
+    where: { entryId: { in: entryIds } },
+    orderBy: [{ acknowledgedAt: 'asc' }, { id: 'asc' }],
+    select: {
+      entryId: true,
+      operatorId: true,
+      operatorName: true,
+      operatorRole: true,
+      acknowledgedAt: true,
+    },
+  });
   for (const row of rows) byEntry.set(row.entryId, [...(byEntry.get(row.entryId) ?? []), row]);
-  const result = new Map<string, DiaryAckFields>();
+  return byEntry;
+}
+
+/** Urgency view for every entry of a diary page (one query per source). */
+export async function loadDiaryAckFields(
+  entries: ReadonlyArray<DiaryFeedEntryLike>,
+  actor: Operator,
+): Promise<Map<string, DiaryUrgencyFields>> {
+  const urgent = entries.filter((e) => e.priority === URGENT_PRIORITY);
+  const diaryIds = urgent.filter((e) => e.sourceType !== 'consegna').map((e) => e.id);
+  const consegnaIds = urgent
+    .filter((e) => e.sourceType === 'consegna' && e.sourceId)
+    .map((e) => e.sourceId!);
+  const [diaryAcks, consegnaAcks] = await Promise.all([
+    diaryAckRows(diaryIds),
+    loadConsegnaAckRows(consegnaIds),
+  ]);
+  const result = new Map<string, DiaryUrgencyFields>();
   for (const entry of entries) {
-    const acknowledgeable =
-      entry.sourceType !== 'consegna' && entry.priority === ACKNOWLEDGEABLE_PRIORITY;
-    const acks = acknowledgeable ? (byEntry.get(entry.id) ?? []) : [];
-    result.set(entry.id, {
-      acknowledgeable,
-      acknowledgedByMe: acks.some((a) => a.operatorId === actor.id),
-      acknowledgements: acks.map((a) => view(a, actor.id)),
-    });
+    const acks =
+      entry.sourceType === 'consegna'
+        ? (consegnaAcks.get(entry.sourceId ?? '') ?? [])
+        : (diaryAcks.get(entry.id) ?? []);
+    result.set(entry.id, { urgency: urgencyView(subjectOf(entry), acks, actor) });
   }
   return result;
 }
 
 /**
- * Records the caller's «Presa visione» of an urgent entry. Idempotent per reader: returns
- * `created: false` (and the original time) when the caller had already acknowledged it.
+ * «Ho capito» on an urgent entry. 201 when this ack takes charge of the urgency; 200 (created:
+ * false) when the urgency had already been taken (by anyone) — nothing is written then.
  */
 export async function acknowledgeDiaryEntry(patientId: string, entryId: string, actor: Operator) {
   const entry = await prisma.patientDiaryEntry.findFirst({
     where: { id: entryId, patientId, patient: patientScopeWhere(actor) },
-    select: { id: true, patientId: true, priority: true },
+    select: {
+      id: true,
+      patientId: true,
+      priority: true,
+      status: true,
+      authorId: true,
+      authorName: true,
+    },
   });
-  if (!entry) throw new DiaryAckError(404, 'entry_not_found', 'Voce non trovata');
-  if (entry.priority !== ACKNOWLEDGEABLE_PRIORITY)
-    throw new DiaryAckError(
-      409,
-      'not_acknowledgeable',
-      'La presa visione si registra solo sulle voci urgenti',
-    );
+  if (!entry) throw new UrgencyAckError(404, 'entry_not_found', 'Voce non trovata');
+  if (entry.priority !== URGENT_PRIORITY)
+    throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
+
+  const me = await authoritativeDiaryAuthor(actor);
+  const subject = subjectOf(entry);
+  const actorRef = { id: actor.id, name: me.authorName };
+  if (isAuthorOf(subject, actorRef))
+    throw new UrgencyAckError(409, 'author_cannot_acknowledge', SELF_ACK_MESSAGE);
 
   let created = false;
-  let row = await prisma.diaryEntryAcknowledgement.findUnique({
-    where: { entryId_operatorId: { entryId, operatorId: actor.id } },
-  });
-  if (!row) {
-    const author = await authoritativeDiaryAuthor(actor);
+  const before = urgencyView(subject, (await diaryAckRows([entryId])).get(entryId) ?? [], actorRef);
+  if (before.state === 'active') {
     try {
-      row = await prisma.diaryEntryAcknowledgement.create({
+      await prisma.diaryEntryAcknowledgement.create({
         data: {
           entryId,
           patientId: entry.patientId,
           operatorId: actor.id,
-          operatorName: author.authorName,
-          operatorRole: author.authorType,
+          operatorName: me.authorName,
+          operatorRole: me.authorType,
         },
       });
       created = true;
     } catch (error) {
-      // Concurrent double tap: the unique (entryId, operatorId) keeps the first one.
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        row = await prisma.diaryEntryAcknowledgement.findUniqueOrThrow({
-          where: { entryId_operatorId: { entryId, operatorId: actor.id } },
-        });
-      } else throw error;
+      // Concurrent double tap by the same reader: the unique (entryId, operatorId) keeps the first.
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002'))
+        throw error;
     }
   }
 
@@ -156,29 +158,26 @@ export async function acknowledgeDiaryEntry(patientId: string, entryId: string, 
     outcome: created ? 'ok' : 'deduped',
   });
 
-  const fields = (await loadDiaryAckFields([{ id: entryId, priority: entry.priority }], actor)).get(
-    entryId,
-  )!;
-  return {
-    created,
-    acknowledgement: view(row, actor.id),
-    ...fields,
-  };
+  const urgency = urgencyView(
+    subject,
+    (await diaryAckRows([entryId])).get(entryId) ?? [],
+    actorRef,
+  );
+  return { created, urgency };
 }
 
 /**
- * Proactive bridge: which of these diary entries has the operator acknowledged? Used by the
- * proactive inbox so that a diary signal whose entries were ALL acknowledged in the diary is
- * shown as «preso visione» for that operator too (same fact, same reader).
+ * Proactive bridge: which of these diary entries are urgencies already settled — taken in charge
+ * (by anyone other than the author) or closed under the old model. Settled for EVERY reader.
  */
-export async function diaryEntriesAcknowledgedBy(
-  operatorId: string,
-  entryIds: string[],
-): Promise<Set<string>> {
+export async function diaryEntriesUrgencySettled(entryIds: string[]): Promise<Set<string>> {
   if (entryIds.length === 0) return new Set();
-  const rows = await prisma.diaryEntryAcknowledgement.findMany({
-    where: { operatorId, entryId: { in: entryIds.slice(0, 1000) } },
-    select: { entryId: true },
-  });
-  return new Set(rows.map((r) => r.entryId));
+  const ids = entryIds.slice(0, 1000);
+  const rows = await prisma.$queryRaw<Array<{ id: string }>>(Prisma.sql`
+    SELECT d."id" FROM "PatientDiaryEntry" d
+    WHERE d."id" IN (${Prisma.join(ids)})
+      AND d."priority" = 'urgente'
+      AND NOT ${diaryUrgencyActiveSql}
+  `);
+  return new Set(rows.map((r) => r.id));
 }

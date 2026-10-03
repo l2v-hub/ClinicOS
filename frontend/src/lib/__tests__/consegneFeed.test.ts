@@ -20,12 +20,12 @@ const row = (id: string): Consegna => ({
 test('consegne feed URL is bounded and encodes server filters plus cursor', () => {
   const url = buildConsegnaFeedUrl(
     '/api',
-    { status: 'aperta', priority: 'urgente', patientId: 'p/1', q: 'Rossi Ada' },
+    { urgency: 'active', priority: 'urgente', patientId: 'p/1', q: 'Rossi Ada' },
     'cursor-token',
   );
   assert.equal(
     url,
-    '/api/consegne?limit=20&status=aperta&priority=urgente&patientId=p%2F1&q=Rossi+Ada&cursor=cursor-token',
+    '/api/consegne?limit=20&urgency=active&priority=urgente&patientId=p%2F1&q=Rossi+Ada&cursor=cursor-token',
   );
 });
 

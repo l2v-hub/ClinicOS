@@ -112,7 +112,11 @@ function PatientSignals({
         <SignalChip
           className="patient-signal patient-signal--handover"
           signal={{ kind: 'handover', patientId: patient.id }}
-          label={`Consegne ${openHandovers}`}
+          label={
+            openHandovers === 1
+              ? '1 urgenza da prendere in carico'
+              : `${openHandovers} urgenze da prendere in carico`
+          }
           patient={patient}
           onSelect={onSelect}
         />

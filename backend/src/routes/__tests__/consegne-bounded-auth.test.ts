@@ -73,6 +73,8 @@ before(async () => {
         pazienteId: patientId,
         pazienteNome: 'Rossi, Carla',
         note: 'segreto esterno',
+        // UX2 W8: byOperator counts ACTIVE urgencies per assignee.
+        priorita: 'urgente',
         scadenza: '2026-08-29',
         operatoreAssegnato: 'Bruno Assegnato',
         operatoreAssegnatoId: actorB,
@@ -140,7 +142,7 @@ test('consegne feed is private, bounded, keyset paged and scoped before limit', 
   const first = JSON.parse(firstPayload) as {
     items: Array<{ id: string }>;
     pageInfo: { hasMore: boolean; nextCursor: string | null };
-    summary: { total: number; open: number };
+    summary: { total: number; urgentActive: number };
   };
   assert.equal(first.items.length, 20);
   assert.equal(first.pageInfo.hasMore, true);
@@ -151,14 +153,16 @@ test('consegne feed is private, bounded, keyset paged and scoped before limit', 
     headers: headers(actorA),
   }).then((response) => response.json())) as {
     scope: string;
-    summary: { total: number; open: number };
+    summary: { total: number; urgentActive: number; urgentTaken: number };
     urgentPreview: unknown[];
-    openPreview: unknown[];
+    recentPreview: unknown[];
   };
   assert.equal(actorOverview.scope, 'operator');
   assert.equal(actorOverview.summary.total, 55);
-  assert.equal(actorOverview.summary.open, 55);
-  assert.ok(actorOverview.openPreview.length <= 5);
+  // UX2 W8: normal handovers are notes, never «open»; no urgency to take in charge here.
+  assert.equal(actorOverview.summary.urgentActive, 0);
+  assert.equal('open' in actorOverview.summary, false);
+  assert.ok(actorOverview.recentPreview.length <= 5);
 
   const second = (await fetch(
     `${base}/consegne?limit=20&cursor=${encodeURIComponent(first.pageInfo.nextCursor!)}`,

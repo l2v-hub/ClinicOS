@@ -187,7 +187,8 @@ export function turnoPatientCard(
     if (summary.consegneAperte > 0)
       badges.push({
         key: 'consegne',
-        label: `Consegne ${summary.consegneAperte}`,
+        // UX2 W8: urgenze di consegna ancora da prendere in carico (mai «consegne aperte»).
+        label: `Urgenze ${summary.consegneAperte}`,
         tone: 'blue',
         landing: badgeLanding(patient.id, 'handover'),
       });

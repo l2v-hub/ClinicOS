@@ -1,0 +1,152 @@
+{
+  "mark": "W8-E2E 1791037546067",
+  "consegnaId": "c06794f3-a935-49ea-95c9-1b065f7794be",
+  "results": [
+    {
+      "id": "N1",
+      "name": "nurse sees her urgent diary entry as «Urgente», never «Ho capito»",
+      "result": "PASS",
+      "detail": "INFERMIERE URGENTE 03/10/2026 16:25 Infermiere 1 W8-E2E 1791037546067 diario W8-E2E 1791037546067 diario: paziente agitato, valutare Urgente · in attesa che un collega la prenda in carico"
+    },
+    {
+      "id": "N2",
+      "name": "consegne feed has no aperta / in corso / completata",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "N3",
+      "name": "create form: priority only Normale / Urgente, no «Stato» field",
+      "result": "PASS",
+      "detail": "Normale|Urgente"
+    },
+    {
+      "id": "N4",
+      "name": "nurse (author) sees her urgent consegna without «Ho capito»",
+      "result": "PASS",
+      "detail": "URGENTE Monitoraggio NM Nanni, Miriam Nato/a il 12/11/1936 · CF da completare Anagrafica da completare Posto letto non assegnato Apri cartella Scritta il 03/10/2026, 16:25 W8-E2E 1791037546067 consegn"
+    },
+    {
+      "id": "N5",
+      "name": "server refuses the author «Ho capito» (409, clear message)",
+      "result": "PASS",
+      "detail": "409 Hai scritto tu questa urgenza: la presa in carico spetta a un altro operatore."
+    },
+    {
+      "id": "D1",
+      "name": "Turno: the urgent consegna is flagged for the doctor (Adesso or «Urgenze 1» on the resident)",
+      "result": "PASS",
+      "detail": "badge «Urgenze 1» on Nanni"
+    },
+    {
+      "id": "D2",
+      "name": "notification centre: «Urgenze da prendere in carico»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D3",
+      "name": "Segnalazioni (proactive): «Urgenza da prendere in carico» for the doctor",
+      "result": "PASS",
+      "detail": "Urgenza da prendere in carico"
+    },
+    {
+      "id": "D4",
+      "name": "diary: the doctor sees «Ho capito» on the nurse urgent entry",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D5",
+      "name": "diary: after «Ho capito» the trace replaces the button",
+      "result": "PASS",
+      "detail": "INFERMIERE PRESA IN CARICO 03/10/2026 16:25 Infermiere 1 W8-E2E 1791037546067 diario W8-E2E 1791037546067 diario: paziente agitato, valutare Urgenza presa in carico da te alle 16:26"
+    },
+    {
+      "id": "D6",
+      "name": "consegne feed: «Ho capito» for the doctor; no legacy states",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D7",
+      "name": "consegne feed: urgency taken, trace shown",
+      "result": "PASS",
+      "detail": "PRESA IN CARICO Monitoraggio NM Nanni, Miriam Nato/a il 12/11/1936 · CF da completare Anagrafica da completare Posto letto non assegnato Apri cartella Scritta il 03/10/2026, 16:25 W8-E2E 1791037546067 consegna: richiamar"
+    },
+    {
+      "id": "D8",
+      "name": "Segnalazioni: the handover signal is gone after «Ho capito»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "D9",
+      "name": "Turno after «Ho capito»: no urgency badge / Adesso row for it any more",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "S1",
+      "name": "supervisor: trace «presa in carico da Medico 1 (medico) hh:mm», no button",
+      "result": "PASS",
+      "detail": "PRESA IN CARICO Monitoraggio NM Nanni, Miriam Nato/a il 12/11/1936 · CF da completare Anagrafica da completare Posto letto non assegnato Apri cartella Scritta il 03/10/2026, 16:25 W8-E2E 1791037546067 consegna: richiamar"
+    },
+    {
+      "id": "S2",
+      "name": "supervisor: the item is not in «Urgenze da prendere in carico»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "S3",
+      "name": "overview: not in urgentPreview; summary has no open/in-progress counts",
+      "result": "PASS",
+      "detail": "{\"total\":3,\"urgentActive\":0,\"urgentTaken\":3}"
+    },
+    {
+      "id": "S4",
+      "name": "supervisor diary: trace by Medico 1, no «Ho capito»",
+      "result": "PASS",
+      "detail": "INFERMIERE PRESA IN CARICO 03/10/2026 16:25 Infermiere 1 W8-E2E 1791037546067 diario W8-E2E 1791037546067 diario: paziente agitato, valutare Urgenza presa in carico da Medico 1 (medico) alle 16:26"
+    },
+    {
+      "id": "P1",
+      "name": "after reload the nurse sees «Urgenza presa in carico da Medico 1» on her entry",
+      "result": "PASS",
+      "detail": "INFERMIERE PRESA IN CARICO 03/10/2026 16:25 Infermiere 1 W8-E2E 1791037546067 diario W8-E2E 1791037546067 diario: paziente agitato, valutare Urgenza presa in carico da Medico 1 (medico) alle 16:26"
+    },
+    {
+      "id": "P2",
+      "name": "diary has no open/closed wording",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "P3",
+      "name": "after reload the nurse sees the consegna trace",
+      "result": "PASS",
+      "detail": "PRESA IN CARICO Monitoraggio NM Nanni, Miriam Nato/a il 12/11/1936 · CF da completare Anagrafica da completare Posto letto non assegnato Apri cartella Scritta il 03/10/2026, 16:25 W8-E2E 1791037546067"
+    },
+    {
+      "id": "DB1",
+      "name": "DB: one ack by SIM-DOCTOR-1; stored stato untouched",
+      "result": "PASS",
+      "detail": "{\"acks\":[{\"operatorId\":\"SIM-DOCTOR-1\"}],\"stato\":\"aperta\"}"
+    },
+    {
+      "id": "C1",
+      "name": "no console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "C2",
+      "name": "no 403 / 5xx from the API",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": []
+}

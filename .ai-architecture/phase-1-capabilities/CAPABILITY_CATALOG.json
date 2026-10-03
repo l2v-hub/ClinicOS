@@ -2246,12 +2246,13 @@
       "domain": "consegne",
       "type": "read",
       "feature_ui": "frontend/src/lib/consegneFeed.ts:23 → components/operator/ConsegnePage.tsx",
-      "entry_point": "GET /consegne (backend/src/routes/consegne.ts:59)",
+      "entry_point": "GET /consegne (backend/src/routes/consegne.ts:59), POST /consegne/:id/ack (UX2 W8 «Ho capito» on an urgent handover: whoever can read it may take charge of the urgency; the first non-author ack ends it for everyone; no handover field changes, never widens a write)",
       "services": [
         "backend/src/consegne/query.ts#parseConsegnaFeedQuery",
-        "backend/src/consegne/read-service.ts#loadConsegnaFeed"
+        "backend/src/consegne/read-service.ts#loadConsegnaFeed",
+        "backend/src/consegne/ack-service.ts#acknowledgeConsegna"
       ],
-      "input": "query {limit,status,priority,patientId,q,cursor}",
+      "input": "query {limit,status,priority,urgency,patientId,q,cursor}",
       "output": "{items, pageInfo, summary}",
       "validations": ["backend/src/consegne/query.ts#parseConsegnaFeedQuery"],
       "side_effects": [],
@@ -2635,7 +2636,7 @@
       "description": "Feed unificato del diario (voci di diario + consegne visibili), paginato keyset con filtri authorType/from/to/limit/cursor.",
       "type": "read",
       "feature_ui": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx, frontend/src/lib/diaryPages.ts, frontend/src/lib/patientDetailPrefetch.ts, PatientRecordPrintDialog.tsx",
-      "entry_point": "GET /patients/:patientId/diary (backend/src/routes/patient-diary.ts:39), POST /patients/:patientId/diary/:entryId/ack (per-reader «Presa visione» of an urgent entry: whoever can read the diary can acknowledge it)",
+      "entry_point": "GET /patients/:patientId/diary (backend/src/routes/patient-diary.ts:39), POST /patients/:patientId/diary/:entryId/ack (UX2 W8 «Ho capito» on an urgent entry: whoever can read the diary may take charge of the urgency; the first non-author ack ends it for everyone; the author gets 409)",
       "services": [
         "backend/src/patients/diary-read-service.ts#loadPatientDiary",
         "backend/src/patients/diary-ack-service.ts#acknowledgeDiaryEntry"

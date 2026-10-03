@@ -177,7 +177,28 @@ export interface Operatore {
 // ── Consegna (Handover) ────────────────────────────────────────────────────────
 
 export type PrioritaConsegna = 'normale' | 'alta' | 'urgente';
+/** Legacy stored value only: the UX never shows nor asks it (UX2 W8 — consegne are notes). */
 export type StatoConsegna = 'aperta' | 'in_corso' | 'completata';
+
+// ── Urgenza (UX2 W8: diario + consegne) ────────────────────────────────────────
+// Urgente attiva finché il primo operatore diverso dall'autore dice «Ho capito»; poi resta la
+// traccia «Urgenza presa in carico da …» e non è più contata né segnalata da nessuna parte.
+export type UrgencyState = 'none' | 'active' | 'taken';
+
+export interface UrgencyTakenBy {
+  operatorName: string;
+  operatorRole: string;
+  acknowledgedAt: string;
+  byMe: boolean;
+}
+
+export interface UrgencyView {
+  state: UrgencyState;
+  /** null se non urgente, ancora attiva, o chiusa col modello precedente (nessuna traccia). */
+  takenBy: UrgencyTakenBy | null;
+  isAuthor: boolean;
+  canAcknowledge: boolean;
+}
 
 export interface Consegna {
   id: string;
@@ -195,6 +216,8 @@ export interface Consegna {
   creatoDA: string;
   creatoDaId?: string | null;
   createdAt: string;
+  /** UX2 W8: urgenza (dal backend: feed, overview, create, update). */
+  urgency?: UrgencyView;
 }
 
 /** Client-authorized create fields. Patient/creator/assignee labels and initial status are derived
@@ -209,12 +232,11 @@ export interface NewConsegnaInput {
   operatoreAssegnatoId?: string | null;
 }
 
+/** UX2 W8: solo urgenze — da prendere in carico (attive) e prese in carico. */
 export interface ConsegnaSummary {
   total: number;
-  open: number;
-  inProgress: number;
-  completed: number;
-  urgentOpen: number;
+  urgentActive: number;
+  urgentTaken: number;
 }
 
 export interface ConsegnaPageInfo {
@@ -231,8 +253,11 @@ export interface ConsegnaFeedResponse {
 export interface ConsegnaOverview {
   scope: 'facility' | 'operator';
   summary: ConsegnaSummary;
+  /** Urgenze ancora da prendere in carico (max 5). */
   urgentPreview: Consegna[];
-  openPreview: Consegna[];
+  /** Ultime consegne (max 5). */
+  recentPreview: Consegna[];
+  /** Urgenze da prendere in carico per operatore assegnato (solo vista di reparto). */
   byOperator: Record<string, number>;
 }
 
@@ -771,18 +796,8 @@ export interface DiarioPazienteEntry {
   category: string | null;
   createdAt: string;
   updatedAt: string;
-  /** «Presa visione» per lettore (solo voci urgenti, GET diary): assente nelle voci legacy. */
-  acknowledgeable?: boolean;
-  acknowledgedByMe?: boolean;
-  acknowledgements?: DiaryAcknowledgement[];
-}
-
-/** Chi ha preso visione di una voce urgente e quando (istantanea server-side). */
-export interface DiaryAcknowledgement {
-  operatorName: string;
-  operatorRole: string;
-  acknowledgedAt: string;
-  byMe: boolean;
+  /** UX2 W8: urgenza (GET diary). Assente nelle voci legacy della Cartella. */
+  urgency?: UrgencyView;
 }
 
 export interface ParametroGiorno {

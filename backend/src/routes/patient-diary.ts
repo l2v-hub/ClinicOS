@@ -4,7 +4,8 @@ import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
 import { DiaryPageInputError } from '../patients/diary-pagination.js';
-import { DiaryAckError, acknowledgeDiaryEntry } from '../patients/diary-ack-service.js';
+import { acknowledgeDiaryEntry } from '../patients/diary-ack-service.js';
+import { UrgencyAckError } from '../lib/urgency.js';
 import { loadPatientDiary } from '../patients/diary-read-service.js';
 import { DiaryWriteInputError, parseDiaryPatchBody } from '../patients/diary-write-validation.js';
 import {
@@ -112,9 +113,10 @@ router.get('/:patientId/diary/:entryId', async (req, res) => {
 });
 
 // POST /patients/:patientId/diary/:entryId/ack
-// «Presa visione» per lettore di una voce URGENTE (patients/diary-ack-service.ts). Idempotente per
-// operatore: 201 alla prima presa visione, 200 se il lettore l'aveva gia' registrata. 409 se la
-// voce non e' urgente. Capability: diary.list (chi puo' leggere il diario puo' prenderne visione).
+// «Ho capito» su una voce URGENTE (UX2 W8, patients/diary-ack-service.ts): il primo operatore
+// diverso dall'autore prende in carico l'urgenza per tutti (201); se era gia' presa in carico 200
+// senza scrivere nulla. 409 se la voce non e' urgente o se chi chiama ne e' l'autore.
+// Capability: diary.list (chi puo' leggere il diario puo' prendere in carico l'urgenza).
 router.post('/:patientId/diary/:entryId/ack', async (req: AuthedRequest, res) => {
   const patientId = String(req.params.patientId ?? '');
   const entryId = String(req.params.entryId ?? '');
@@ -122,7 +124,7 @@ router.post('/:patientId/diary/:entryId/ack', async (req: AuthedRequest, res) =>
     const result = await acknowledgeDiaryEntry(patientId, entryId, req.operator!);
     res.status(result.created ? 201 : 200).json(result);
   } catch (error) {
-    if (error instanceof DiaryAckError) {
+    if (error instanceof UrgencyAckError) {
       res.status(error.status).json({ error: error.message, code: error.code });
       return;
     }
@@ -130,7 +132,7 @@ router.post('/:patientId/diary/:entryId/ack', async (req: AuthedRequest, res) =>
       'POST /diary/:entryId/ack error:',
       error instanceof Error ? error.name : 'unknown',
     );
-    res.status(500).json({ error: 'Errore nella registrazione della presa visione' });
+    res.status(500).json({ error: 'Errore nella presa in carico dell’urgenza' });
   }
 });
 

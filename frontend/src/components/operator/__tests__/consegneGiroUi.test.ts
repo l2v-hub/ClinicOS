@@ -16,13 +16,13 @@ const onAdd: ConsegneWorkspaceProps['onAdd'] = async (request) => saved(request)
 const feed: ConsegneWorkspaceProps = {
   sessionKey: 'synthetic-session',
   consegne: [identityHandover],
-  summary: { total: 1, open: 1, urgentOpen: 0, inProgress: 0, completed: 0 },
+  summary: { total: 1, urgentActive: 0, urgentTaken: 0 },
   operatori: [],
   operatoreId: 'test',
   isAdmin: false,
   onAdd,
   onUpdate() {},
-  onUpdateStato() {},
+  onAcknowledge() {},
   onDelete() {},
   loading: false,
   loadError: null,
@@ -85,8 +85,7 @@ test('roster distinguishes zero, history, missing scope and failed summaries wit
         value: {
           patientId: identityPatient.id,
           total: 0,
-          open: 0,
-          urgentOpen: 0,
+          urgentActive: 0,
           statoRicovero: null,
         },
       },
@@ -98,12 +97,23 @@ test('roster distinguishes zero, history, missing scope and failed summaries wit
         value: {
           patientId: identityPatient.id,
           total: 3,
-          open: 0,
-          urgentOpen: 0,
+          urgentActive: 0,
           statoRicovero: 'dimesso',
         },
       },
-      '3 nello storico',
+      '3 consegne',
+    ],
+    [
+      {
+        status: 'ready',
+        value: {
+          patientId: identityPatient.id,
+          total: 2,
+          urgentActive: 1,
+          statoRicovero: null,
+        },
+      },
+      '1 urgenza da prendere in carico',
     ],
     [{ status: 'error' }, 'Riepilogo non disponibile'],
     [{ status: 'unavailable' }, 'Dati non disponibili'],
@@ -119,7 +129,9 @@ test('roster distinguishes zero, history, missing scope and failed summaries wit
       }),
     );
     assert.ok(html.includes(expected));
-    if (summary.status !== 'ready') assert.doesNotMatch(html, /Nessuna consegna|0 aperte/);
+    if (summary.status !== 'ready') assert.doesNotMatch(html, /Nessuna consegna|\d+ consegn/);
+    // UX2 W8: never the legacy open/closed wording.
+    assert.doesNotMatch(html, /aperte|in corso|completat/i);
   }
 });
 

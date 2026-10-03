@@ -572,6 +572,25 @@ model Consegna {
   @@index([operatoreAssegnatoId, createdAt, id])
   @@index([stato, priorita, createdAt, id])
   @@index([pazienteId, stato, createdAt, id])
+  acknowledgements ConsegnaAcknowledgement[]
+}
+
+// UX2 W8 (owner 2026-10-03): «Ho capito» on an URGENT handover. The first row written by an
+// operator other than the author ends the urgency for everyone; the row is the trace. Append-only
+// (DB triggers), one row per (consegna, operator), cascade only with the handover itself.
+model ConsegnaAcknowledgement {
+  id             String   @id @default(cuid())
+  consegnaId     String
+  patientId      String
+  operatorId     String
+  operatorName   String
+  operatorRole   String
+  acknowledgedAt DateTime @default(now())
+  consegna       Consegna @relation(fields: [consegnaId], references: [id], onDelete: Cascade)
+
+  @@unique([consegnaId, operatorId])
+  @@index([operatorId, acknowledgedAt])
+  @@index([patientId])
 }
 
 // Durable create outcome; no cascading relation to an editable/deletable handover.
@@ -630,6 +649,9 @@ model PatientDiaryEntry {
   patientId     String
   authorType    String   // medico | infermiere | oss | fisioterapista | operatore | altro
   authorName    String
+  // UX2 W8: operator id of the author (server-authoritative). NULL on legacy rows (authorName
+  // fallback). Used only to keep the author from taking charge of their own urgency.
+  authorId      String?
   title         String?
   content       String
   priority      String   @default("normale")  // normale | importante | urgente

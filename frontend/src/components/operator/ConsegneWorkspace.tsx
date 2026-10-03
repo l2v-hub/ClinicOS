@@ -85,7 +85,7 @@ function WorkspaceSession({
           draftStore={store}
           initialQuery={entry?.query}
           initialPatientId={entry?.query?.patientId}
-          initialFiltroStato={entry?.query?.status ?? feed.initialFiltroStato}
+          initialUrgency={entry?.query?.urgency ?? feed.initialUrgency}
           focusId={entry?.focusId ?? feed.focusId}
         />
       )}

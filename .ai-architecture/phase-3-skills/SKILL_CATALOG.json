@@ -12,23 +12,10 @@
       "name": "Registra parametri vitali",
       "description": "Registra una rilevazione di parametri vitali (pressione, SpO2, frequenza cardiaca, temperatura, frequenza respiratoria, glicemia/DTX, ossigeno, coscienza) per un ospite.",
       "category": "clinical",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "patients.search",
-        "parameters.create_reading"
-      ],
-      "optional_capabilities": [
-        "parameters.list_readings"
-      ],
-      "input_context": [
-        "patient",
-        "values"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["patients.search", "parameters.create_reading"],
+      "optional_capabilities": ["parameters.list_readings"],
+      "input_context": ["patient", "values"],
       "output": "Rilevazione salvata (id, orario) e verificata rileggendo le rilevazioni del giorno.",
       "workflow_steps": [
         "identify_patient: patients.search | contesto pagina + resident access scope",
@@ -64,23 +51,10 @@
       "name": "Aggiungi osservazione al diario",
       "description": "Aggiunge un'osservazione (nota di diario clinico-assistenziale) alla cartella di un ospite, attribuita all'operatore corrente.",
       "category": "clinical",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "patients.search",
-        "diary.create"
-      ],
-      "optional_capabilities": [
-        "diary.list"
-      ],
-      "input_context": [
-        "patient",
-        "text"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["patients.search", "diary.create"],
+      "optional_capabilities": ["diary.list"],
+      "input_context": ["patient", "text"],
       "output": "Voce di diario creata (id, autore risolto dal server).",
       "workflow_steps": [
         "identify_patient: patients.search | contesto pagina + resident access scope",
@@ -111,21 +85,10 @@
       "name": "Crea consegna",
       "description": "Crea una consegna (passaggio di informazioni al turno) riferita a un ospite. Priorità normale e tipo «Assistente AI» di default; l’urgenza viene solo segnalata.",
       "category": "operational",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "patients.search",
-        "consegne.create"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["patients.search", "consegne.create"],
       "optional_capabilities": [],
-      "input_context": [
-        "patient",
-        "text"
-      ],
+      "input_context": ["patient", "text"],
       "output": "Consegna creata (id, priorità, tipo Assistente AI).",
       "workflow_steps": [
         "identify_patient + resident access scope",
@@ -157,19 +120,14 @@
       "name": "Prepara prescrizione",
       "description": "Prepara una nuova prescrizione dal testo dettato (stesso interprete del Diario → Terapia): anteprima strutturata, poi SOLO il medico la conferma con il pulsante Conferma. L’assistente non conferma mai.",
       "category": "clinical",
-      "intended_roles": [
-        "doctor"
-      ],
+      "intended_roles": ["doctor"],
       "required_capabilities": [
         "patients.search",
         "diary.therapy_preview",
         "diary.create_with_therapy"
       ],
       "optional_capabilities": [],
-      "input_context": [
-        "patient",
-        "text"
-      ],
+      "input_context": ["patient", "text"],
       "output": "Voce di diario «terapia» + terapia collegata (ids), create dal medico.",
       "workflow_steps": [
         "identify_patient + resident access scope",
@@ -202,21 +160,14 @@
       "name": "Registra somministrazione",
       "description": "Prepara la registrazione di una somministrazione in attesa dell’ospite (giro terapia del giorno): anteprima, poi SOLO l’operatore autorizzato conferma con il pulsante Conferma dopo aver somministrato.",
       "category": "clinical",
-      "intended_roles": [
-        "nurse",
-        "supervisor"
-      ],
+      "intended_roles": ["nurse", "supervisor"],
       "required_capabilities": [
         "patients.search",
         "administration.list_slots",
         "administration.confirm"
       ],
       "optional_capabilities": [],
-      "input_context": [
-        "patient",
-        "administration",
-        "date?"
-      ],
+      "input_context": ["patient", "administration", "date?"],
       "output": "Somministrazione registrata (terapia, fascia, data) dall’operatore autenticato.",
       "workflow_steps": [
         "identify_patient + resident access scope",
@@ -248,26 +199,12 @@
       "name": "Parametri recenti",
       "description": "Mostra le ultime rilevazioni dei parametri vitali di un ospite.",
       "category": "query",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "patients.search",
-        "parameters.list_readings"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["patients.search", "parameters.list_readings"],
       "optional_capabilities": [],
-      "input_context": [
-        "patient"
-      ],
+      "input_context": ["patient"],
       "output": "Ultime rilevazioni (orario, valori).",
-      "workflow_steps": [
-        "identify_patient",
-        "read: parameters.list_readings (limit 5)",
-        "answer"
-      ],
+      "workflow_steps": ["identify_patient", "read: parameters.list_readings (limit 5)", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.",
@@ -289,26 +226,12 @@
       "name": "Diario recente",
       "description": "Mostra le ultime voci del diario di un ospite.",
       "category": "query",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "patients.search",
-        "diary.list"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["patients.search", "diary.list"],
       "optional_capabilities": [],
-      "input_context": [
-        "patient"
-      ],
+      "input_context": ["patient"],
       "output": "Ultime voci di diario (data, autore, testo breve).",
-      "workflow_steps": [
-        "identify_patient",
-        "read: diary.list",
-        "answer"
-      ],
+      "workflow_steps": ["identify_patient", "read: diary.list", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Senza un ospite univoco (nome ambiguo, nessun risultato, nessun contesto) il workflow va in NEEDS_CLARIFICATION e propone i candidati; nessuna azione finché il bersaglio non è certo.",
@@ -326,24 +249,12 @@
     {
       "skill_id": "patient.overview",
       "name": "Informazioni sull’ospite",
-      "description": "Mostra le informazioni disponibili su un ospite: stato ricovero, allergie, terapie, consegne aperte, ultimi parametri.",
+      "description": "Mostra le informazioni disponibili su un ospite: stato ricovero, allergie, terapie, urgenze da prendere in carico, ultimi parametri.",
       "category": "query",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "patients.search",
-        "patients.clinical_summary"
-      ],
-      "optional_capabilities": [
-        "parameters.list_readings"
-      ],
-      "input_context": [
-        "patient"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["patients.search", "patients.clinical_summary"],
+      "optional_capabilities": ["parameters.list_readings"],
+      "input_context": ["patient"],
       "output": "Sintesi clinica + ultima rilevazione (se consentita).",
       "workflow_steps": [
         "identify_patient",
@@ -371,25 +282,12 @@
       "name": "Domanda sulla cartella",
       "description": "Risponde a una domanda puntuale sulla cartella (allergie, terapie in corso, documenti) tramite l’assistente di sola lettura esistente.",
       "category": "query",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "assistant.query"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["assistant.query"],
       "optional_capabilities": [],
-      "input_context": [
-        "query",
-        "patient?"
-      ],
+      "input_context": ["query", "patient?"],
       "output": "Risposta dell’assistente di sola lettura con le fonti.",
-      "workflow_steps": [
-        "read: assistant.query (domanda + ospite corrente)",
-        "answer"
-      ],
+      "workflow_steps": ["read: assistant.query (domanda + ospite corrente)", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "L’assistente di lettura gestisce da sé ospiti ambigui (chiede di specificare).",
@@ -409,23 +307,12 @@
       "name": "Somministrazioni del giorno",
       "description": "Elenca le somministrazioni previste in una giornata (giro terapia).",
       "category": "operational",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "administration.list_slots"
-      ],
+      "intended_roles": ["doctor", "nurse", "supervisor"],
+      "required_capabilities": ["administration.list_slots"],
       "optional_capabilities": [],
-      "input_context": [
-        "date?"
-      ],
+      "input_context": ["date?"],
       "output": "Somministrazioni per fascia e stato.",
-      "workflow_steps": [
-        "read: administration.list_slots (data, default oggi)",
-        "answer"
-      ],
+      "workflow_steps": ["read: administration.list_slots (data, default oggi)", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Data assente → oggi (fuso Europe/Rome).",
@@ -445,24 +332,14 @@
     {
       "skill_id": "handover.overview",
       "name": "Situazione consegne",
-      "description": "Riepilogo delle consegne aperte del reparto.",
+      "description": "Riepilogo delle consegne del reparto e delle urgenze da prendere in carico.",
       "category": "supervisory",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "consegne.overview"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["consegne.overview"],
       "optional_capabilities": [],
       "input_context": [],
-      "output": "Conteggi e consegne aperte.",
-      "workflow_steps": [
-        "read: consegne.overview",
-        "answer"
-      ],
+      "output": "Conteggi delle urgenze (da prendere in carico / prese in carico).",
+      "workflow_steps": ["read: consegne.overview", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Nessuna.",
@@ -473,33 +350,19 @@
       "implementation_status": "TESTED",
       "executable_by_assistant": true,
       "test_status": "TESTED",
-      "test_evidence": [
-        "backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"
-      ]
+      "test_evidence": ["backend/src/skills/__tests__/skills-e2e.test.ts › per-role coverage (oss)"]
     },
     {
       "skill_id": "appointments.day",
       "name": "Appuntamenti del giorno",
       "description": "Elenca gli appuntamenti di una giornata.",
       "category": "operational",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "appointments.list"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor"],
+      "required_capabilities": ["appointments.list"],
       "optional_capabilities": [],
-      "input_context": [
-        "date?"
-      ],
+      "input_context": ["date?"],
       "output": "Appuntamenti (ora, ospite, tipologia).",
-      "workflow_steps": [
-        "read: appointments.list (data, default oggi)",
-        "answer"
-      ],
+      "workflow_steps": ["read: appointments.list (data, default oggi)", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Data assente → oggi.",
@@ -519,20 +382,12 @@
       "name": "Occupazione posti letto",
       "description": "Mostra l’occupazione di camere e posti letto della struttura.",
       "category": "supervisory",
-      "intended_roles": [
-        "supervisor",
-        "administrator"
-      ],
-      "required_capabilities": [
-        "rooms.occupancy"
-      ],
+      "intended_roles": ["supervisor", "administrator"],
+      "required_capabilities": ["rooms.occupancy"],
       "optional_capabilities": [],
       "input_context": [],
       "output": "Posti letto totali, occupati, liberi.",
-      "workflow_steps": [
-        "read: rooms.occupancy",
-        "answer"
-      ],
+      "workflow_steps": ["read: rooms.occupancy", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Nessuna.",
@@ -552,25 +407,12 @@
       "name": "Cerca farmaco",
       "description": "Cerca un farmaco nell’anagrafica farmaci.",
       "category": "query",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor",
-        "administrator"
-      ],
-      "required_capabilities": [
-        "drugs.search"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor", "administrator"],
+      "required_capabilities": ["drugs.search"],
       "optional_capabilities": [],
-      "input_context": [
-        "query"
-      ],
+      "input_context": ["query"],
       "output": "Farmaci corrispondenti (nome, principio attivo).",
-      "workflow_steps": [
-        "read: drugs.search",
-        "answer"
-      ],
+      "workflow_steps": ["read: drugs.search", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Nome assente → NEEDS_CLARIFICATION.",
@@ -590,25 +432,12 @@
       "name": "Cerca ospite",
       "description": "Cerca un ospite per nome, cognome o codice fiscale.",
       "category": "query",
-      "intended_roles": [
-        "doctor",
-        "nurse",
-        "oss",
-        "supervisor",
-        "administrator"
-      ],
-      "required_capabilities": [
-        "patients.search"
-      ],
+      "intended_roles": ["doctor", "nurse", "oss", "supervisor", "administrator"],
+      "required_capabilities": ["patients.search"],
       "optional_capabilities": [],
-      "input_context": [
-        "query"
-      ],
+      "input_context": ["query"],
       "output": "Ospiti trovati (nome).",
-      "workflow_steps": [
-        "read: patients.search",
-        "answer"
-      ],
+      "workflow_steps": ["read: patients.search", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Testo assente → NEEDS_CLARIFICATION.",
@@ -628,20 +457,12 @@
       "name": "Ordinamenti dei reparti",
       "description": "Elenca i contesti di ordinamento degli elenchi ospiti (configurazione).",
       "category": "administrative",
-      "intended_roles": [
-        "administrator",
-        "supervisor"
-      ],
-      "required_capabilities": [
-        "roster.list_contexts"
-      ],
+      "intended_roles": ["administrator", "supervisor"],
+      "required_capabilities": ["roster.list_contexts"],
       "optional_capabilities": [],
       "input_context": [],
       "output": "Contesti e ordinamento predefinito.",
-      "workflow_steps": [
-        "read: roster.list_contexts",
-        "answer"
-      ],
+      "workflow_steps": ["read: roster.list_contexts", "answer"],
       "kind": "read",
       "confirmation": "READ",
       "ambiguity_handling": "Nessuna.",

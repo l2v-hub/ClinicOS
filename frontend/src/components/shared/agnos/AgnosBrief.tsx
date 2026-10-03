@@ -379,7 +379,8 @@ function OperatorQueueBody({
         <>
           <span className="kpi-alert-card__ok">Nessuna attività in scadenza</span>
           <div className="ai-asst__source-meta">
-            Controllate le somministrazioni entro {queue.windowMinutes} minuti e le consegne aperte.
+            Controllate le somministrazioni entro {queue.windowMinutes} minuti e le urgenze da
+            prendere in carico.
           </div>
         </>
       ) : (

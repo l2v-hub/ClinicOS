@@ -1,8 +1,8 @@
 export interface ConsegnePatientSummary {
   patientId: string;
   total: number;
-  open: number;
-  urgentOpen: number;
+  /** UX2 W8: urgenze ancora da prendere in carico. */
+  urgentActive: number;
   statoRicovero: string | null;
 }
 export async function fetchConsegnePatientSummary(
@@ -31,11 +31,10 @@ export async function fetchConsegnePatientSummary(
       !item ||
       !ids.has(item.patientId) ||
       seen.has(item.patientId) ||
-      ![item.total, item.open, item.urgentOpen].every(
+      ![item.total, item.urgentActive].every(
         (count) => Number.isSafeInteger(count) && count >= 0,
       ) ||
-      item.urgentOpen > item.open ||
-      item.open > item.total ||
+      item.urgentActive > item.total ||
       (item.statoRicovero !== null && typeof item.statoRicovero !== 'string')
     )
       throw new Error('Riepilogo consegne non valido.');

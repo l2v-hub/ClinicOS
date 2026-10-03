@@ -595,7 +595,7 @@ export async function executeSkill(
         `Stato ricovero: ${summary.statoRicovero ?? 'non indicato'}`,
         `Allergie registrate: ${summary.allergieCount ?? 0}${summary.hasSevereAllergy ? ' (almeno una grave)' : ''}`,
         `Terapie: ${summary.terapieTotali ?? 0} (completate ${summary.terapieCompletate ?? 0})`,
-        `Consegne aperte: ${summary.consegneAperte ?? 0}`,
+        `Urgenze da prendere in carico: ${summary.consegneAperte ?? 0}`,
       ];
       if (summary.hasCriticalVitals) lines.push('Attenzione: parametri critici registrati.');
       let latest: unknown = null;
@@ -676,15 +676,14 @@ export async function executeSkill(
         data.summary && typeof data.summary === 'object'
           ? (data.summary as Record<string, unknown>)
           : data;
+      // UX2 W8: consegne are notes (normal / urgent); only urgencies are counted.
       const LABELS: Record<string, string> = {
         total: 'totali',
-        open: 'aperte',
-        inProgress: 'in corso',
-        completed: 'completate',
-        urgentOpen: 'urgenti aperte',
+        urgentActive: 'urgenze da prendere in carico',
+        urgentTaken: 'urgenze prese in carico',
       };
       const counts = Object.entries(summary)
-        .filter(([, value]) => typeof value === 'number')
+        .filter(([key, value]) => typeof value === 'number' && key in LABELS)
         .map(([key, value]) => `${LABELS[key] ?? key}: ${value}`)
         .join(', ');
       return {
@@ -693,7 +692,7 @@ export async function executeSkill(
         result: data,
         reply: counts
           ? `Situazione consegne — ${counts}.`
-          : listReply('Consegne', data, 'Nessuna consegna aperta.'),
+          : listReply('Consegne', data, 'Nessuna urgenza da prendere in carico.'),
       };
     }
     case 'appointments.day': {

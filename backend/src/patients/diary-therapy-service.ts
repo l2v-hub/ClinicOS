@@ -278,7 +278,7 @@ function checkedReplay(
 export async function createDiaryEntryWithTherapy(args: {
   patientId: string;
   requestId: string;
-  author: { authorType: string; authorName: string };
+  author: { authorType: string; authorName: string; authorId?: string };
   entry: DiaryCreateInput;
   therapy: TherapyCreateInput;
 }): Promise<DiaryTherapyResult> {
