@@ -15,7 +15,7 @@ const finish = async (id: string) =>
   (await finalizeAssessment(patient, id, { requestId: randomUUID(), expectedVersion: 1 }, actor))
     .assessment;
 
-test('catalog is exactly five empty metadata rows and rejects query/scope without writes', async () => {
+test('catalog is exactly one empty metadata row per catalog form (7) and rejects query/scope without writes', async () => {
   const before = await prisma.patientAssessment.count();
   assert.deepEqual(await assessmentCatalog(patient, {}, actor), {
     items: CATALOG_FORMS.map((form) => ({
@@ -144,7 +144,7 @@ test('exact counts exceed history page size; one metadata query returns no clini
     (prisma as any).$transaction = transaction;
   }
   assert.equal(queries.length, 2, 'patient lock plus exactly one metadata query');
-  assert.equal(queries[1].length, 5);
+  assert.equal(queries[1].length, CATALOG_FORMS.length);
   assert.equal(result.items[0].ownDraftCount, 151);
   assert.equal(result.items[0].latestOwnDraft?.id, newestId);
   assert.equal(result.items[0].latestFinal, null);

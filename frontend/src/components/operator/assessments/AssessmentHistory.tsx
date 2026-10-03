@@ -2,7 +2,12 @@ import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import type { AssessmentHistoryItem } from '../../../lib/assessments/assessmentTypes';
 import type { useAssessmentHistory } from './useAssessmentHistory';
 import { mnaTitle } from '../../../lib/assessments/mnaDefinition';
+import { isPaperRecord } from '../../../lib/assessments/paper/paperTypes';
 function resultLabel(record: AssessmentHistoryItem): string {
+  if (isPaperRecord(record))
+    return record.result
+      ? `${record.result.total}/${record.result.maximum} · ${record.result.label}`
+      : `${record.answeredCount} di ${record.answeredCount + record.completion.missingPaths.length} risposte`;
   if (record.type === 'mna') {
     const result = record.result.total ?? record.result.screening;
     return `${mnaTitle(record.extent)} · ${result ? `${result.score.toLocaleString('it-IT')}/${result.maximum} · ${result.label}` : `Screening ${record.completion.screening.answeredCount}/6`}${record.extent === 'full' && !record.result.total ? ` · Globale ${record.completion.global.answeredCount}/12` : ''}`;

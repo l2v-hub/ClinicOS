@@ -5,6 +5,8 @@ import { PAINAD_VERSION } from './assessments/assessmentTypes';
 import { TRANSFERS_VERSION } from './assessments/transfersTypes';
 import { TINETTI_VERSION } from './assessments/tinettiTypes';
 import { GDS15_VERSION } from './assessments/gds15Types';
+import { paperScaleFor } from './assessments/paper/paperTypes';
+import { validAssessmentType } from './assessments/assessmentValidation';
 import { MNA_VERSION } from './assessments/mnaTypes';
 import { mnaAssessmentDate } from './assessments/mnaTime';
 
@@ -52,15 +54,16 @@ export function assertArchiveDocument(value: unknown): asserts value is PatientD
         row.documentType !== 'patient_assessment' ||
         typeof row.assessment.id !== 'string' ||
         !/^[A-Za-z0-9_-]{1,128}$/.test(row.assessment.id) ||
-        !['painad', 'postural_transfers', 'tinetti', 'mna', 'gds15'].includes(row.assessment.type) ||
-        row.assessment.formVersion !==
-          {
-            painad: PAINAD_VERSION,
-            postural_transfers: TRANSFERS_VERSION,
-            tinetti: TINETTI_VERSION,
-            mna: MNA_VERSION,
-            gds15: GDS15_VERSION,
-          }[row.assessment.type] ||
+        !validAssessmentType(row.assessment.type) ||
+        (!paperScaleFor(row.assessment.type, row.assessment.formVersion) &&
+          row.assessment.formVersion !==
+            ({
+              painad: PAINAD_VERSION,
+              postural_transfers: TRANSFERS_VERSION,
+              tinetti: TINETTI_VERSION,
+              mna: MNA_VERSION,
+              gds15: GDS15_VERSION,
+            } as Record<string, string>)[row.assessment.type]) ||
         typeof row.assessment.assessedAt !== 'string' ||
         !Number.isFinite(Date.parse(row.assessment.assessedAt))))
   )

@@ -1,5 +1,5 @@
 import type { Operator } from '../ai/auth.js';
-import { AssessmentError } from './types.js';
+import { AssessmentError, ASSESSMENT_TYPES } from './types.js';
 import {
   assessmentDto,
   assessmentTransaction,
@@ -14,7 +14,7 @@ export function currentAssessment(
 ) {
   if (
     Object.keys(query).some((key) => key !== 'type') ||
-    !['painad', 'postural_transfers', 'tinetti', 'mna', 'gds15'].includes(query.type as string)
+    !(ASSESSMENT_TYPES as readonly string[]).includes(query.type as string)
   )
     throw new AssessmentError('Tipo di valutazione non valido');
   return assessmentTransaction(async (tx) => {

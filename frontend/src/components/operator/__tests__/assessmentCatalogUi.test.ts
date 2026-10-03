@@ -15,11 +15,11 @@ Object.assign(globalThis, { React });
 const empty = (): AssessmentCatalogData => ({ items: CATALOG_TYPES.map(type => ({ type, formVersion: ASSESSMENT_VERSIONS[type], latestFinal: null, ownDraftCount: 0, latestOwnDraft: null })) });
 const render = (state: AssessmentCatalogState, cartella = {} as CartellaPaziente, localDraftTypes = new Set<string>()) => renderToStaticMarkup(React.createElement(AssessmentCatalogView, { state, cartella, localDraftTypes, onRetry() {}, onOpen() {}, onNrs() {} }));
 
-test('catalog immediately exposes eight routes and new commands with a separate NRS history link', () => {
+test('catalog immediately exposes ten routes and new commands with a separate NRS history link', () => {
   const html = render({ status: 'loading', data: null, error: null });
-  assert.equal((html.match(/<h4>/g) ?? []).length, 8);
-  assert.equal((html.match(/aria-label="Apri /g) ?? []).length, 8);
-  assert.equal((html.match(/aria-label="Nuova compilazione /g) ?? []).length, 8);
+  assert.equal((html.match(/<h4>/g) ?? []).length, 10);
+  assert.equal((html.match(/aria-label="Apri /g) ?? []).length, 10);
+  assert.equal((html.match(/aria-label="Nuova compilazione /g) ?? []).length, 10);
   assert.match(html, /Assistenza e mobilizzazione/);
   assert.match(html, /Scale di valutazione/);
   assert.match(html, /Storico NRS precedente/);

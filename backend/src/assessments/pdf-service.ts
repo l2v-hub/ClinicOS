@@ -1,7 +1,17 @@
 import { createHash, randomUUID } from 'node:crypto';
 import type { Operator } from '../ai/auth.js';
 import { assessmentNotFound, assessmentTransaction, lockAssessment } from './access.js';
-import { AssessmentError, type AssessmentSnapshot } from './types.js';
+import { AssessmentError, type AssessmentSnapshot, type AssessmentType } from './types.js';
+
+const ASSESSMENT_FILE_PREFIX: Record<AssessmentType, string> = {
+  painad: 'PAINAD',
+  gds15: 'GDS15',
+  mna: 'MNA',
+  tinetti: 'Tinetti',
+  postural_transfers: 'Trasferimenti',
+  barthel: 'Barthel',
+  ucla_npi_sleep: 'UCLA_NPI_Sonno',
+};
 import { getAssessment } from './service.js';
 import {
   assessmentRendererVersion,
@@ -83,7 +93,7 @@ export async function completeAssessmentPdf(
         patientId: job.patientId,
         assessmentId: job.id,
         documentType: 'patient_assessment',
-        originalName: `${row.type === 'painad' ? 'PAINAD' : row.type === 'gds15' ? 'GDS15' : row.type === 'mna' ? 'MNA' : row.type === 'tinetti' ? 'Tinetti' : 'Trasferimenti'}_${row.assessedAt.toISOString().slice(0, 10)}_${job.id}.pdf`,
+        originalName: `${ASSESSMENT_FILE_PREFIX[row.type as AssessmentType] ?? 'Valutazione'}_${row.assessedAt.toISOString().slice(0, 10)}_${job.id}.pdf`,
         mimeType: 'application/pdf',
         sizeBytes: bytes.length,
         sha256: createHash('sha256').update(bytes).digest('hex'),

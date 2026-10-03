@@ -8,6 +8,8 @@ import { MNA_VERSION } from './mna-types.js';
 import { parseMnaAnswers, mnaAssessmentDate } from './mna-input.js';
 import { GDS15_VERSION } from './gds15-types.js';
 import { parseGds15Answers } from './gds15.js';
+import { isPaperType, paperScaleOf, parsePaperInput } from './paper/assessment.js';
+import type { PaperVersion } from './paper/types.js';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function assessmentId(value: unknown): string {
@@ -78,7 +80,11 @@ export function parseCreate(value: unknown) {
     ],
     32_768,
   );
+  const paper = isPaperType(input.type)
+    ? paperScaleOf(input.type, String(input.formVersion))
+    : null;
   if (!(
+    paper ||
     (input.type === 'painad' && input.formVersion === PAINAD_VERSION) ||
     (input.type === 'postural_transfers' && input.formVersion === TRANSFERS_VERSION) ||
     (input.type === 'tinetti' && input.formVersion === TINETTI_VERSION) ||
@@ -102,10 +108,12 @@ export function parseCreate(value: unknown) {
       | typeof TRANSFERS_VERSION
       | typeof TINETTI_VERSION
       | typeof MNA_VERSION
-      | typeof GDS15_VERSION,
+      | typeof GDS15_VERSION
+      | PaperVersion,
     assessedAt,
-    answers:
-      input.type === 'gds15'
+    answers: paper
+      ? parsePaperInput(paper, input.answers)
+      : input.type === 'gds15'
         ? parseGds15Answers(input.answers)
         : input.type === 'mna'
           ? parseMnaAnswers(input.answers)
@@ -118,7 +126,12 @@ export function parseCreate(value: unknown) {
     correctionReason: reason,
   };
 }
-export function parsePatch(value: unknown, type: AssessmentType = 'painad') {
+export function parsePatch(
+  value: unknown,
+  type: AssessmentType = 'painad',
+  formVersion: string = type === 'painad' ? PAINAD_VERSION : '',
+) {
+  const paper = paperScaleOf(type, formVersion);
   const input = bodyObject(
     value,
     ['expectedVersion', 'assessedAt', 'answers', 'correctionReason'],
@@ -129,8 +142,9 @@ export function parsePatch(value: unknown, type: AssessmentType = 'painad') {
   return {
     expectedVersion: expectedVersion(input.expectedVersion),
     assessedAt,
-    answers:
-      type === 'gds15'
+    answers: paper
+      ? parsePaperInput(paper, input.answers)
+      : type === 'gds15'
         ? parseGds15Answers(input.answers)
         : type === 'mna'
           ? parseMnaAnswers(input.answers)

@@ -75,13 +75,21 @@ async function invokeOk<T>(name: string, input: unknown, op = owner): Promise<T>
   return (result as { data: T }).data;
 }
 
-test('assessments.catalog lists the five scales for an own patient', async () => {
+test('assessments.catalog lists the seven scales for an own patient', async () => {
   const catalog = await invokeOk<{ items?: unknown[] } | unknown[]>('assessments.catalog', {
     patientId,
   });
   const items = Array.isArray(catalog) ? catalog : (catalog as { items: unknown[] }).items;
   const types = (items as { type: string }[]).map((item) => item.type).sort();
-  assert.deepEqual(types, ['gds15', 'mna', 'painad', 'postural_transfers', 'tinetti']);
+  assert.deepEqual(types, [
+    'barthel',
+    'gds15',
+    'mna',
+    'painad',
+    'postural_transfers',
+    'tinetti',
+    'ucla_npi_sleep',
+  ]);
 });
 
 test('painad create_draft → update_draft → finalize (PDF) → get/list/current, persisted in DB', async () => {

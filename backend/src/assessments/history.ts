@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import type { Operator } from '../ai/auth.js';
 import { parameterDate } from '../patients/parameter-reading-input.js';
-import { AssessmentError, type AssessmentHistoryItem } from './types.js';
+import { AssessmentError, ASSESSMENT_TYPES, type AssessmentHistoryItem } from './types.js';
 import { assessmentId, parseInstant } from './input.js';
 import {
   ASSESSMENT_INCLUDE,
@@ -32,7 +32,7 @@ export async function listAssessments(
   const type = query.type ?? 'painad',
     status = query.status ?? 'all';
   if (
-    !['painad', 'postural_transfers', 'tinetti', 'mna', 'gds15'].includes(type as string) ||
+    !(ASSESSMENT_TYPES as readonly string[]).includes(type as string) ||
     !['all', 'draft', 'final'].includes(status as string)
   )
     throw invalid();

@@ -89,7 +89,7 @@ test('Tinetti summary/history use 28 denominator and frozen notes while PAINAD r
   assert.match(html, /quattro risposte distinte/);
   assert.doesNotMatch(html, /\/10(?!\/)|Dolore lieve/);
   const painad = render(React.createElement(AssessmentSummary, { record: finalAssessment() }));
-  assert.match(painad, /4\/10/);
+  assert.match(painad, /data-testid=\"paper-total\">4<\/span> \/ 10/);
   assert.doesNotMatch(painad, /\/28/);
   const history = render(
     React.createElement(AssessmentHistory, {

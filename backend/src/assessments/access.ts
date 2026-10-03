@@ -24,6 +24,8 @@ import { parseMnaAnswers } from './mna-input.js';
 import { mnaCompletion, mnaResult } from './mna.js';
 import { GDS15_VERSION, type Gds15Snapshot } from './types.js';
 import { parseGds15Answers, gds15Completion, gds15Result } from './gds15.js';
+import { paperDtoFields, paperScaleOf } from './paper/assessment.js';
+import type { PaperSnapshot } from './paper/types.js';
 
 export const assessmentNotFound = () =>
   new AssessmentError('Valutazione non disponibile', 404, 'assessment_not_found');
@@ -118,6 +120,13 @@ export function assessmentDto(row: AssessmentRow, now = new Date()): AssessmentD
         }
       : null,
   };
+  const paper = paperScaleOf(row.type, row.formVersion);
+  if (paper)
+    return {
+      ...common,
+      ...paperDtoFields(paper, row.answers),
+      finalSnapshot: row.finalSnapshot as unknown as PaperSnapshot | null,
+    };
   if (row.type === 'gds15' && row.formVersion === GDS15_VERSION) {
     const answers = parseGds15Answers(row.answers);
     const completion = gds15Completion(answers);

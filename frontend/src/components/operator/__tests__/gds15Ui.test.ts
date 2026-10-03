@@ -97,7 +97,8 @@ test('GDS summary and history use /15 with frozen text, while PAINAD keeps /10',
     assert.ok(html.includes(text));
   assert.match(
     render(React.createElement(AssessmentSummary, { record: finalAssessment() })),
-    /4\/10/,
+    // PAINAD now renders the paper sheet: «PUNTEGGIO TOTALE PAINAD (0 - 10): 4 / 10»
+    /data-testid=\"paper-total\">4<\/span> \/ 10/,
   );
   const history = render(
     React.createElement(AssessmentHistory, {

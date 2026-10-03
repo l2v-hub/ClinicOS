@@ -1,6 +1,8 @@
 import type { AssessmentDto, AssessmentTarget } from '../../../lib/assessments/assessmentTypes';
 import { AssessmentSummary } from './AssessmentSummary';
 import { ASSESSMENT_ARCHIVE_LABELS } from '../../../lib/patientDocumentArchive';
+import { useCan } from '../../../lib/capabilities';
+import type { PatientIdentityData } from '../../../lib/patientIdentity';
 export function AssessmentFinal({
   record,
   busy,
@@ -9,7 +11,9 @@ export function AssessmentFinal({
   onOpenArchive,
   onOpenRecord,
   onCorrect,
+  patient,
 }: {
+  patient?: PatientIdentityData;
   record: AssessmentDto;
   busy: boolean;
   onPdf: () => void;
@@ -18,12 +22,13 @@ export function AssessmentFinal({
   onOpenRecord: (id: string) => void;
   onCorrect: () => void;
 }) {
+  const canCreate = useCan('assessments.create_draft');
   return (
     <>
       <p className="assessment-saved" role="status">
         Valutazione finale salvata.
       </p>
-      <AssessmentSummary record={record} />
+      <AssessmentSummary record={record} patient={patient} />
       <div className="assessment-pdf">
         <h3>PDF e archivio</h3>
         <p>
@@ -84,9 +89,11 @@ export function AssessmentFinal({
             Apri rettifica finale
           </button>
         ) : (
-          <button type="button" className="btn-secondary" onClick={onCorrect}>
-            Crea rettifica
-          </button>
+          canCreate && (
+            <button type="button" className="btn-secondary" onClick={onCorrect}>
+              Crea rettifica
+            </button>
+          )
         )}
         {record.predecessorId && (
           <button

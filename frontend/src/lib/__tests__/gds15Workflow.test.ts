@@ -16,10 +16,13 @@ test('GDS private local drafts separate patient/type; correction retains predece
   const keys = Object.keys(ASSESSMENT_VERSIONS).map((type) =>
     store.create('patient-a', undefined, type as keyof typeof ASSESSMENT_VERSIONS),
   );
-  assert.equal(new Set(keys).size, 5);
+  assert.equal(new Set(keys).size, 7);
   assert.equal(store.list('patient-b', 'gds15').length, 0);
   assert.equal(store.list('patient-a', 'gds15').length, 1);
-  assert.deepEqual(store.get(keys[4])!.fields.answers, emptyGds15Answers());
+  assert.deepEqual(
+    store.get(keys[Object.keys(ASSESSMENT_VERSIONS).indexOf('gds15')])!.fields.answers,
+    emptyGds15Answers(),
+  );
   const predecessor = gds15Assessment({ status: 'final' }),
     before = structuredClone(predecessor);
   const key = store.create('patient-a', predecessor);

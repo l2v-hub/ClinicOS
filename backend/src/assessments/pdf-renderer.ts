@@ -1,8 +1,62 @@
 import { readFile } from 'node:fs/promises';
 import { PDFDocument, rgb, type PDFFont, type PDFPage } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
-import type { AssessmentSnapshot, TinettiSnapshot, MnaSnapshot, Gds15Snapshot } from './types.js';
+import type {
+  AssessmentSnapshot,
+  TinettiSnapshot,
+  MnaSnapshot,
+  Gds15Snapshot,
+  PainadSnapshot,
+} from './types.js';
 import { mnaPdfBlocks } from './mna-pdf-content.js';
+import { drawPaperPdf, PaperPdfError, type PaperPrintData } from './paper/pdf.js';
+import { PAINAD_PAPER } from './paper/definitions.js';
+import { paperScale } from './paper/engine.js';
+import type { PaperSnapshot } from './paper/types.js';
+
+const isPaperSnapshot = (snapshot: AssessmentSnapshot): snapshot is PaperSnapshot =>
+  'layout' in snapshot && snapshot.layout === 'paper';
+/** Paper-layout data for the paper versions and for PAINAD (same text, new layout). */
+export function paperPrintData(snapshot: AssessmentSnapshot): PaperPrintData | null {
+  const correction = snapshot.predecessorId
+    ? {
+        reason: snapshot.correctionReason ?? '',
+        previous: snapshot.predecessor
+          ? `valutazione del ${new Intl.DateTimeFormat('it-IT', { timeZone: 'Europe/Rome', dateStyle: 'short', timeStyle: 'short' }).format(new Date(snapshot.predecessor.assessedAt))} (${snapshot.predecessor.authorName})`
+          : null,
+      }
+    : null;
+  if (isPaperSnapshot(snapshot)) {
+    const scale = paperScale(snapshot.form.type, snapshot.form.version);
+    if (!scale) throw new AssessmentPdfError('assessment_pdf_unsupported_version');
+    return {
+      scale,
+      patient: snapshot.patient,
+      authorName: snapshot.author.name,
+      assessedAt: snapshot.assessedAt,
+      selected: Object.fromEntries(snapshot.items.map((item) => [item.key, item.value])),
+      selectedText: Object.fromEntries(snapshot.items.map((item) => [item.key, item.description])),
+      result: snapshot.result,
+      measurements: snapshot.measurements,
+      notes: snapshot.notes,
+      correction,
+    };
+  }
+  if (snapshot.form.type === 'painad' && 'interpretation' in snapshot)
+    return {
+      scale: PAINAD_PAPER,
+      patient: snapshot.patient,
+      authorName: snapshot.author.name,
+      assessedAt: snapshot.assessedAt,
+      selected: Object.fromEntries(snapshot.items.map((item) => [item.id, item.score])),
+      selectedText: Object.fromEntries(snapshot.items.map((item) => [item.id, item.description])),
+      result: { ...snapshot.result, maximum: 10 },
+      measurements: null,
+      notes: '',
+      correction,
+    };
+  return null;
+}
 
 const isTinettiSnapshot = (snapshot: AssessmentSnapshot): snapshot is TinettiSnapshot =>
   snapshot.form.type === 'tinetti';
@@ -11,9 +65,11 @@ const isMnaSnapshot = (snapshot: AssessmentSnapshot): snapshot is MnaSnapshot =>
 const isGds15Snapshot = (snapshot: AssessmentSnapshot): snapshot is Gds15Snapshot =>
   snapshot.form.type === 'gds15';
 
-export const ASSESSMENT_RENDERER_VERSION = 'painad-a4-v1';
+export const ASSESSMENT_RENDERER_VERSION = 'painad-paper-a4-v2';
 export const assessmentRendererVersion = (snapshot: AssessmentSnapshot) =>
-  snapshot.form.type === 'painad'
+  isPaperSnapshot(snapshot)
+    ? `${snapshot.form.type}-paper-a4-v1`
+    : snapshot.form.type === 'painad'
     ? ASSESSMENT_RENDERER_VERSION
     : snapshot.form.type === 'gds15'
       ? 'gds15-a4-v1'
@@ -99,6 +155,18 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
     }
     return output;
   };
+  const paper = paperPrintData(snapshot);
+  if (paper) {
+    try {
+      await drawPaperPdf(doc, { regular, bold, text }, paper);
+    } catch (error) {
+      if (error instanceof PaperPdfError) throw new AssessmentPdfError(error.code);
+      if (error instanceof Error && error.message === 'assessment_pdf_too_long')
+        throw new AssessmentPdfError('assessment_pdf_too_long');
+      throw error;
+    }
+    return finishAssessmentPdf(doc, snapshot, `${paper.scale.appTitle} - Valutazione finalizzata`);
+  }
   let page: PDFPage,
     y = 0;
   const patientName = `${snapshot.patient.lastName} ${snapshot.patient.firstName}`.trim();
@@ -267,7 +335,7 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
       regular,
       9,
     );
-    block(`Indicazione della fonte: ${snapshot.interpretation}`, regular, 9);
+    block(`Indicazione della fonte: ${(snapshot as PainadSnapshot).interpretation}`, regular, 9);
     block(
       'Le indicazioni della fonte richiedono valutazione clinica. Questa scheda non genera diagnosi o trattamenti automatici.',
       regular,
@@ -285,7 +353,9 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
       color: rgb(0.35, 0.4, 0.45),
     }),
   );
-  doc.setTitle(
+  return finishAssessmentPdf(
+    doc,
+    snapshot,
     gds15
       ? 'GDS-15 - Valutazione finalizzata'
       : mna
@@ -296,6 +366,9 @@ export async function renderAssessmentPdf(snapshot: AssessmentSnapshot): Promise
             ? 'Tinetti - Valutazione finalizzata'
             : 'PAINAD - Valutazione finalizzata',
   );
+}
+async function finishAssessmentPdf(doc: PDFDocument, snapshot: AssessmentSnapshot, title: string) {
+  doc.setTitle(title);
   doc.setProducer(`ClinicOS ${assessmentRendererVersion(snapshot)}`);
   doc.setKeywords([
     snapshot.form.version,

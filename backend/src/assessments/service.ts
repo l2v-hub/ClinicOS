@@ -38,6 +38,9 @@ import { parseGds15Answers, gds15Completion } from './gds15.js';
 import { gds15Snapshot, gds15SnapshotHash } from './gds15-snapshot.js';
 import type { Gds15Snapshot } from './types.js';
 import { TINETTI_PROVENANCE } from './tinetti-definition.js';
+import { paperScaleOf, paperSnapshot, paperSnapshotHash, parsePaperInput } from './paper/assessment.js';
+import { paperCompletion } from './paper/engine.js';
+import type { PaperSnapshot } from './paper/types.js';
 import {
   TINETTI_VERSION,
   TINETTI_SOURCE_SHA256,
@@ -139,7 +142,7 @@ export async function patchAssessment(
 ) {
   return assessmentTransaction(async (tx) => {
     const row = await lockAssessment(tx, patientId, id, actor);
-    const input = parsePatch(value, row.type as AssessmentType);
+    const input = parsePatch(value, row.type as AssessmentType, row.formVersion);
     if (row.authorOperatorId !== actor.id) throw assessmentNotFound();
     if (row.status !== 'draft')
       throw new AssessmentError('La valutazione è già finalizzata', 409, 'assessment_finalized');
@@ -179,6 +182,17 @@ export async function finalizeAssessment(
         throw new AssessmentError('La valutazione è già finalizzata', 409, 'assessment_finalized');
       }
       assertVersion(row.version, input.expectedVersion);
+      const paper = paperScaleOf(row.type, row.formVersion);
+      if (paper) {
+        const completion = paperCompletion(paper, parsePaperInput(paper, row.answers));
+        if (!completion.complete)
+          throw new AssessmentError(
+            'Completa tutte le risposte prima di confermare',
+            422,
+            'assessment_incomplete',
+            { missingPaths: completion.missingPaths },
+          );
+      }
       const answers = row.answers as PainadAnswers;
       const result = row.type === 'painad' ? painadResult(answers) : null;
       if (row.type === 'painad' && !result)
@@ -189,10 +203,11 @@ export async function finalizeAssessment(
           { missingItems: PAINAD_KEYS.filter((key) => answers[key] === null) },
         );
       if (
-        row.type === 'postural_transfers' ||
-        row.type === 'tinetti' ||
-        row.type === 'mna' ||
-        row.type === 'gds15'
+        !paper &&
+        (row.type === 'postural_transfers' ||
+          row.type === 'tinetti' ||
+          row.type === 'mna' ||
+          row.type === 'gds15')
       ) {
         const completion =
           row.type === 'gds15'
@@ -250,8 +265,9 @@ export async function finalizeAssessment(
         predecessorId: row.predecessorId,
         correctionReason: row.correctionReason,
       };
-      const snapshot: AssessmentSnapshot =
-        row.type === 'gds15'
+      const snapshot: AssessmentSnapshot = paper
+        ? paperSnapshot(paper, common, row.answers)
+        : row.type === 'gds15'
           ? gds15Snapshot(common, row.answers)
           : row.type === 'mna'
             ? await mnaSnapshot(tx, common, row.answers)
@@ -307,8 +323,9 @@ export async function finalizeAssessment(
           finalizeRequestId: input.requestId,
           finalizePayloadHash: hash,
           finalSnapshot: snapshot as unknown as Prisma.InputJsonValue,
-          snapshotSha256:
-            row.type === 'gds15'
+          snapshotSha256: paper
+            ? paperSnapshotHash(snapshot as PaperSnapshot)
+            : row.type === 'gds15'
               ? gds15SnapshotHash(snapshot as Gds15Snapshot)
               : row.type === 'mna'
                 ? mnaSnapshotHash(snapshot as MnaSnapshot)
