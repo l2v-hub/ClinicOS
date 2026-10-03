@@ -1,0 +1,34 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ config: current production and demo env shapes start (no errors), tiers derived (1099.3272ms)
+✔ config: dangerous production combinations are errors (fail fast) (0.6913ms)
+✔ simulator: no flag combination enables it (or demo headers) on a real production tier (0.1614ms)
+{"ts":"2026-10-01T21:45:26.536Z","evt":"http","req":"052a1711-62e9-418c-9475-fe95dbfe2667","method":"GET","route":"/auth/simulator/identities","status":404,"ms":1,"code":"simulator_disabled"}
+{"ts":"2026-10-01T21:45:26.539Z","evt":"http","req":"3454f6fb-7b4c-4168-8670-65c621b1222b","method":"POST","route":"/auth/simulator/session","status":404,"ms":1,"code":"simulator_disabled"}
+{"ts":"2026-10-01T21:45:26.541Z","evt":"http","req":"52d9b14a-214f-4722-988f-efa4cc5243b2","method":"GET","route":"/auth/me","status":503,"ms":1,"code":"auth_disabled"}
+{"ts":"2026-10-01T21:45:26.548Z","evt":"http","req":"23c4a0d0-e530-4042-8aaf-758e0ae730f9","method":"GET","route":"/patients/page","status":503,"ms":1,"code":"auth_disabled"}
+{"ts":"2026-10-01T21:45:26.550Z","evt":"http","req":"17aee94f-83e0-4697-b205-e069c6920754","method":"GET","route":"/auth/status","status":200,"ms":0}
+{"ts":"2026-10-01T21:45:26.552Z","evt":"http","req":"120d8f9e-b9a2-41b6-85dd-e3dd0a0cc4d0","method":"GET","route":"/auth/simulator/identities","status":404,"ms":0,"code":"simulator_disabled"}
+✔ simulator: production config → endpoints unreachable, headers/body identity refused (HTTP) (19.5714ms)
+✔ identity: Entra JWT end-to-end; client-declared identity/role ignored; failures fail closed (1564.9035ms)
+✔ session: simulator logout is enforced server-side; expiry enforced (7.0509ms)
+CORS blocked origin: https://clinicos-evil.vercel.app
+✔ session: CORS refuses unknown origins; API responses carry security headers (1.716ms)
+✔ health/readiness: liveness independent; readiness = DB + policy; AI never decides (2026.7286ms)
+✔ observability: X-Request-Id accepted/minted, metrics token-gated, no clinical data (23.5088ms)
+✔ logging: structured events redact sensitive keys and cap values (0.6028ms)
+✔ AI resilience: Agno ok/500/429/malformed/slow/down → same safe answer, no false success (1286.9564ms)
+✔ AI off: interpreter deterministic + no runtime → write workflow still previews and commits once (143.7237ms)
+✔ concurrency: two operators write the same resident simultaneously → both recorded, no lost update (98.442ms)
+✔ recovery: backend restart mid-workflow → pending confirmation expires cleanly, no write (29.9497ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16696.8337

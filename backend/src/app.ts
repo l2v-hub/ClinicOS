@@ -33,6 +33,8 @@ import { simulatorEnabled } from './authz/simulator.js';
 import { defaultToolRegistry } from './tools/index.js';
 import { createSkillRouter } from './skills/http.js';
 import { defaultProactiveDeps, defaultSkillDeps } from './skills/index.js';
+import { metricsHandler, requestObservability } from './lib/observability.js';
+import { readinessHandler } from './lib/readiness.js';
 import {
   operatorAuthMode,
   productionDemoAuthEnabled,
@@ -42,6 +44,9 @@ import {
 
 const app = express();
 app.disable('x-powered-by');
+// Phase 9: correlation id (X-Request-Id) + access log + HTTP metrics, before everything else so
+// rejected origins, parser errors and denials are measured and correlated too.
+app.use(requestObservability);
 
 export function trustedProxyHops(env: NodeJS.ProcessEnv = process.env): number {
   const fallback = env.NODE_ENV === 'production' ? 1 : 0;
@@ -152,9 +157,14 @@ app.use((req, res, next) => {
   standardJsonParser(req, res, next);
 });
 
+// Liveness: the process answers. No DB, no AI — a degraded dependency must not get it restarted.
 app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
+// Readiness: DB + active policy reachable (AI reported, never required, never called).
+app.get('/ready', readinessHandler);
+// Phase 9 metrics (token-gated, see lib/observability.ts).
+app.get('/metrics', metricsHandler);
 
 app.get('/auth/status', (_req, res) => {
   res.setHeader('Cache-Control', 'no-store');

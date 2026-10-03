@@ -1,0 +1,260 @@
+{
+  "schema": "clinicos.provider-capability-matrix/v1",
+  "generatedFrom": "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py",
+  "logicalRoles": {
+    "command_parser": "NL -> skill + slots (structured intent)",
+    "reasoning": "read-only query planning",
+    "summary": "grounded answers, briefing",
+    "fast": "JSON repair, short rewrites",
+    "vision": "documents/photos -> structured extraction",
+    "ocr": "layout OCR (separate scope)",
+    "stt": "speech to text (voice layer)"
+  },
+  "roleRequirements": {
+    "ocr": {
+      "text_input": true,
+      "image_input": true,
+      "pdf_input": true
+    },
+    "vision": {
+      "text_input": true,
+      "image_input": true,
+      "pdf_input": true
+    },
+    "command_parser": {
+      "text_input": true
+    },
+    "reasoning": {
+      "text_input": true
+    },
+    "summary": {
+      "text_input": true
+    },
+    "fast": {
+      "text_input": true
+    }
+  },
+  "currentPrimary": {
+    "llm": "openai (OpenAI API Direct) — configured with AI_PROVIDER=openai",
+    "stt": "openai — STT_PROVIDER=openai (switchable to google/azure/test)",
+    "ocr": "unchanged scope (AI_OCR_PROVIDER, currently mistral)"
+  },
+  "providers": {
+    "openai": {
+      "description": "OpenAI API Direct (Responses API, audio transcriptions)",
+      "aliases": [],
+      "credentialEnv": ["OPENAI_API_KEY"],
+      "requiredEnv": [],
+      "evaluatedModel": "gpt-6.1-sol",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": true,
+        "json_mode": true,
+        "tool_calling": true,
+        "streaming": true,
+        "stt": true,
+        "realtime": false,
+        "usage_metadata": true,
+        "cancellation": true,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "openai-sdk (Responses API)",
+      "rolesSupported": ["ocr", "vision", "command_parser", "reasoning", "summary", "fast"]
+    },
+    "azure": {
+      "description": "Azure OpenAI (deployment name = model id)",
+      "aliases": ["azure-openai", "openai-azure"],
+      "credentialEnv": ["AZURE_OPENAI_API_KEY"],
+      "requiredEnv": ["AZURE_OPENAI_ENDPOINT"],
+      "evaluatedModel": "gpt-6.1-sol",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": true,
+        "json_mode": true,
+        "tool_calling": true,
+        "streaming": true,
+        "stt": true,
+        "realtime": false,
+        "usage_metadata": true,
+        "cancellation": false,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "agno + http (structured)",
+      "rolesSupported": ["ocr", "vision", "command_parser", "reasoning", "summary", "fast"]
+    },
+    "google": {
+      "description": "Google Gemini API",
+      "aliases": ["gemini"],
+      "credentialEnv": ["GOOGLE_API_KEY", "GEMINI_API_KEY"],
+      "requiredEnv": [],
+      "evaluatedModel": "gemini-3.5-flash",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": true,
+        "json_mode": true,
+        "tool_calling": true,
+        "streaming": true,
+        "stt": true,
+        "realtime": false,
+        "usage_metadata": true,
+        "cancellation": false,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "agno + http (stt)",
+      "rolesSupported": ["ocr", "vision", "command_parser", "reasoning", "summary", "fast"]
+    },
+    "anthropic": {
+      "description": "Anthropic Claude (no STT)",
+      "aliases": ["claude"],
+      "credentialEnv": ["ANTHROPIC_API_KEY"],
+      "requiredEnv": [],
+      "evaluatedModel": "claude-model",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": false,
+        "json_mode": true,
+        "tool_calling": true,
+        "streaming": true,
+        "stt": false,
+        "realtime": false,
+        "usage_metadata": true,
+        "cancellation": false,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "agno",
+      "rolesSupported": ["ocr", "vision", "command_parser", "reasoning", "summary", "fast"]
+    },
+    "openai-like": {
+      "description": "Any OpenAI-compatible endpoint (self-hosted/local, OpenRouter): OPENAI_LIKE_BASE_URL",
+      "aliases": ["local"],
+      "credentialEnv": ["OPENAI_LIKE_API_KEY"],
+      "requiredEnv": ["OPENAI_LIKE_BASE_URL"],
+      "evaluatedModel": "local-model",
+      "capabilities": {
+        "text": true,
+        "vision_image": false,
+        "vision_pdf": false,
+        "structured_output": true,
+        "json_mode": true,
+        "tool_calling": true,
+        "streaming": true,
+        "stt": false,
+        "realtime": false,
+        "usage_metadata": true,
+        "cancellation": false,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "agno",
+      "rolesSupported": ["command_parser", "reasoning", "summary", "fast"]
+    },
+    "mistral": {
+      "description": "Mistral Document AI (OCR role only)",
+      "aliases": [],
+      "credentialEnv": ["MISTRAL_API_KEY"],
+      "requiredEnv": [],
+      "evaluatedModel": "mistral-ocr-4-0",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": true,
+        "json_mode": true,
+        "tool_calling": false,
+        "streaming": false,
+        "stt": false,
+        "realtime": false,
+        "usage_metadata": false,
+        "cancellation": false,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "http",
+      "rolesSupported": ["ocr"]
+    },
+    "azure-docintel": {
+      "description": "Azure Document Intelligence (OCR role only)",
+      "aliases": ["azure-document-intelligence", "document-intelligence"],
+      "credentialEnv": ["AZURE_DOCINTEL_API_KEY", "AZURE_OPENAI_API_KEY"],
+      "requiredEnv": [],
+      "evaluatedModel": "prebuilt-layout",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": false,
+        "json_mode": false,
+        "tool_calling": false,
+        "streaming": false,
+        "stt": false,
+        "realtime": false,
+        "usage_metadata": false,
+        "cancellation": false,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "http",
+      "rolesSupported": ["ocr"]
+    },
+    "mock": {
+      "description": "CI: empty, never-inventing outputs",
+      "aliases": [],
+      "credentialEnv": [],
+      "requiredEnv": [],
+      "evaluatedModel": "mock",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": true,
+        "json_mode": true,
+        "tool_calling": true,
+        "streaming": true,
+        "stt": true,
+        "realtime": false,
+        "usage_metadata": false,
+        "cancellation": true,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "none",
+      "rolesSupported": ["ocr", "vision", "command_parser", "reasoning", "summary", "fast"]
+    },
+    "test": {
+      "description": "Deterministic contract/switch-test provider (no network)",
+      "aliases": ["fake"],
+      "credentialEnv": [],
+      "requiredEnv": [],
+      "evaluatedModel": "deterministic",
+      "capabilities": {
+        "text": true,
+        "vision_image": true,
+        "vision_pdf": true,
+        "structured_output": true,
+        "json_mode": true,
+        "tool_calling": true,
+        "streaming": true,
+        "stt": true,
+        "realtime": false,
+        "usage_metadata": true,
+        "cancellation": true,
+        "timeout": true,
+        "model_discovery": false
+      },
+      "sdk": "none",
+      "rolesSupported": ["ocr", "vision", "command_parser", "reasoning", "summary", "fast"]
+    }
+  }
+}

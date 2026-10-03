@@ -1,0 +1,243 @@
+{
+  "at": "2026-10-02T07:47:58.190Z",
+  "passed": 47,
+  "failed": 0,
+  "results": [
+    {
+      "name": "A OSS starters come from real allowed skills",
+      "pass": true,
+      "detail": "Registra i parametri di un ospite | Cerca un ospite | Appuntamenti di oggi | Cerca un farmaco"
+    },
+    {
+      "name": "A OSS: no prescription/administration starters",
+      "pass": true,
+      "detail": "Registra i parametri di un ospite | Cerca un ospite | Appuntamenti di oggi | Cerca un farmaco"
+    },
+    {
+      "name": "A OSS prescription → DENIED",
+      "pass": true,
+      "detail": "{\"workflowId\":\"f03e43b3-074d-4c9c-bbad-340595e3f928\",\"status\":\"DENIED\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Non sei autorizzato a «Prepara prescrizione»: servono diary.therapy_preview, diary.create_"
+    },
+    {
+      "name": "A no Conferma shown when denied",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B doctor read skill COMPLETED",
+      "pass": true,
+      "detail": "COMPLETED"
+    },
+    {
+      "name": "B verified result card shown",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C preview shown (HIGH_RISK)",
+      "pass": true,
+      "detail": "NEEDS_CONFIRMATION"
+    },
+    {
+      "name": "C preview names the resident",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C preview built from the exact payload (bound)",
+      "pass": true,
+      "detail": "{\"Farmaco\":\"PARACETAMOLO\",\"Dosaggio\":\"1000 mg\",\"Forma\":\"—\",\"Frazioni consentite\":\"1\",\"Via\":\"orale\",\"Tipo\":\"periodica\",\"Orari\":\"08:00 (1 compressa), 20:00 (1 compressa)\",\"Inizio\":\"2026-10-02\",\"Fine\":\"—\",\"Testo\":\"Paracetamolo 1000 mg 1 compressa per os alle 8 e alle 20\"}"
+    },
+    {
+      "name": "C nothing written by the preview",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C confirmed → COMPLETED",
+      "pass": true,
+      "detail": "{\"workflowId\":\"3d6df9d4-d4eb-4f74-bd22-3768e8b704e9\",\"status\":\"COMPLETED\",\"skillId\":\"therapy.prescribe\",\"reply\":\"Prescrizione registrata per Neri Dario: PARACETAMOLO (terapia e voce di diario collegate).\",\"pending\":null,\"preview\":{\"previewId\":\"249575a8-4ab5-469e-8c61-d1326fc28a4a\",\"skillId\":\"therapy"
+    },
+    {
+      "name": "C exactly one therapy written (double click safe)",
+      "pass": true,
+      "detail": "0→1"
+    },
+    {
+      "name": "C therapy from the classic mapper (2 schedules)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C audit origin AI_ASSISTANT",
+      "pass": true,
+      "detail": "{\"id\":\"cmuqnu22a000q6klptmmrayia\",\"requestId\":\"skill-3d6df9d4-d4eb-4f74-bd22-3768e8b704e9\",\"operatorId\":\"SIM-DOCTOR-1\",\"operatorRole\":\"doctor\",\"patientId\":\"cmuqntae40005a8lpcf4wiyhp\",\"actionType\":\"skill:therapy.prescribe:execute\",\"kind\":\"action\",\"channel\":\"ai_assistant\",\"fields\":[\"tool:diary.create_"
+    },
+    {
+      "name": "D handover preview (priority normale, type Assistente AI)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D Annulla → CANCELLED",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D no consegna written",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E first preview 120/80",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E Modifica → editable form",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E new preview id after edit",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E new preview shows 130/85",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E confirm → COMPLETED",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E only the modified values written",
+      "pass": true,
+      "detail": "{\"pa\":\"130/85\"}"
+    },
+    {
+      "name": "G diary preview for Galli Nora",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "G change resident → workflow invalidated",
+      "pass": true,
+      "detail": "{\"workflowId\":\"19a55a9f-59d5-4730-be25-99d10db7043d\",\"status\":\"CANCELLED\",\"skillId\":\"diary.add_observation\",\"reply\":\"Hai cambiato ospite: l’operazione preparata per Galli Nora è stata annullata. Nessu"
+    },
+    {
+      "name": "G preview removed from screen",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "G no diary written",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H1 named resident → asks for values",
+      "pass": true,
+      "detail": "{\"workflowId\":\"23150c2e-e37c-4686-a8a6-716c28384020\",\"status\":\"NEEDS_CLARIFICATION\",\"skillId\":\"vitals.record\",\"reply\":\"Quali valori devo registrare? (es. pressione 120/80, SpO2 97, FC 72, temperatura "
+    },
+    {
+      "name": "H1 preview targets the named resident",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H1 operation target shown in the resident bar",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H1 named-resident workflow completes (not cancelled)",
+      "pass": true,
+      "detail": "{\"workflowId\":\"23150c2e-e37c-4686-a8a6-716c28384020\",\"status\":\"COMPLETED\",\"skillId\":\"vitals.record\",\"reply\":\"Parametri registrati per Conti Nino: Frequenza cardiaca 76. Verificato: la rilevazione è pr"
+    },
+    {
+      "name": "H1 one reading written",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "F out-of-scope resident not selectable (backend-filtered)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I administration prepared (HIGH_RISK preview)",
+      "pass": true,
+      "detail": "NEEDS_CONFIRMATION"
+    },
+    {
+      "name": "I outcome stated from the server: nothing recorded",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I network failure → error shown, no success card",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I no administration written",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I retry by the nurse → COMPLETED (explicit confirmation)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "I one administration recorded",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J assistant closed, classic GUI back",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J page resident carried into the assistant (server-verified)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J legacy Agnos panel still opens (classic GUI regression)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H preview before revocation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "H revoked → DENIED without restart",
+      "pass": true,
+      "detail": "{\"workflowId\":\"f5754bae-6a94-43d9-b9c4-f9f823a7dd29\",\"status\":\"DENIED\",\"skillId\":\"vitals.record\",\"reply\":\"Operazione non eseguita: i tuoi permessi non consentono più parameters.create_reading.\",\"pendi"
+    },
+    {
+      "name": "H revoked skill no longer suggested",
+      "pass": true,
+      "detail": "Registra una somministrazione per questo ospite | Mostrami i parametri recenti di questo ospite | Mostrami il diario di questo ospite | Dimmi tutto su questo ospite | Crea una consegna per questo ospite | Aggiungi un’osservazione nel diario di questo ospite"
+    },
+    {
+      "name": "Phone: no horizontal scroll",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "consoleErrors": []
+}

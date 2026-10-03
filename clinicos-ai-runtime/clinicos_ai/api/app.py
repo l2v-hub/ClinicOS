@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import hmac
 import logging
 import os
 import time
@@ -21,12 +22,17 @@ import uuid
 from fastapi import FastAPI, Header, HTTPException, Request, status
 from pydantic import ValidationError
 
+from ..correlation import accept_request_id
+from ..models.contract import BUDGET, ai_enabled
+from ..models.cost import COSTS
+from ..models.errors import ai_error_code
+from ..models.validation import strict_mode, validate_ai_config
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..agents.skill_router import run_skill_route
-from ..voice.stt import SttError, stt_status, transcribe as stt_transcribe
+from ..voice.stt import SttError, stt_model, stt_realtime, stt_status, transcribe as stt_transcribe
 from ..models.errors import RuntimeError_, ErrorKind
-from ..models.env_config import safe_config_summary, llm_health_summary
+from ..models.env_config import safe_config_summary
 from ..models.providers.base import Attachment
 from ..models.providers.completion import completion_text
 from ..models.registry import ModelRegistry
@@ -83,15 +89,37 @@ def _log_model_config() -> None:
     # Log PHI/secret-safe: solo provider+model+source per ambito. Mai chiavi/endpoint.
     for line in safe_config_summary(os.environ):
         _log.info("model-config %s", line)
+    for name, rc in _REGISTRY.config.roles.items():
+        _log.info("ai-role role=%s provider=%s model=%s fallback=%s", name, rc.model.provider,
+                  rc.model.model_id, rc.fallback or "-")
+    # Phase 9: validate provider/credentials/roles/capabilities/STT/fallback (names only).
+    errors, warnings = validate_ai_config(os.environ)
+    for warning in warnings:
+        _log.warning("ai-config %s", warning)
+    for error in errors:
+        _log.error("ai-config ERRORE %s", error)
+    if errors and strict_mode(os.environ):
+        # New single-switch configuration (AI_PROVIDER) or AI_STRICT_CONFIG=true: fail fast.
+        raise RuntimeError("Configurazione AI non valida: avvio rifiutato")
 
 
 def _auth(authorization: str | None) -> None:
     token = (os.environ.get("AI_RUNTIME_SERVICE_TOKEN") or "").strip()
     if not token:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "AI_RUNTIME_SERVICE_TOKEN non configurato")
-    expected = f"Bearer {token}"
-    if authorization != expected:
+    expected = f"Bearer {token}".encode("utf-8")
+    # Phase 9: constant-time comparison (no timing oracle on the service token).
+    if not hmac.compare_digest((authorization or "").encode("utf-8"), expected):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token servizio non valido")
+
+
+# Phase 9: correlation id from the backend (X-Request-Id), echoed on the response.
+@app.middleware("http")
+async def _correlation(request, call_next):
+    rid = accept_request_id(request.headers.get("x-request-id"))
+    response = await call_next(request)
+    response.headers["X-Request-Id"] = rid
+    return response
 
 
 def _public(job: dict) -> dict:
@@ -197,7 +225,25 @@ def _schedule(job: dict) -> None:
 @app.get("/v1/runtime/health")
 def health():
     s = _REGISTRY.public_status()
-    return {"available": s["available"], "errors": s["errors"], "roles": s["roles"]}
+    return {"available": s["available"], "errors": s["errors"], "roles": s["roles"],
+            "mode": s["mode"], "provider": s["provider"]}
+
+
+# Phase 9: AI capability health, separate from liveness. No provider call: configuration,
+# credentials presence, capability compatibility, STT and budget only (names/booleans).
+@app.get("/v1/runtime/ai-health")
+def ai_health():
+    errors, warnings = validate_ai_config(os.environ)
+    stt = stt_model()
+    s = _REGISTRY.public_status()
+    return {"status": "ok" if not errors else "degraded", "mode": s["mode"], "provider": s["provider"],
+            "fallbackEnabled": s["fallbackEnabled"],
+            "roles": {name: {"model": r["model"], "fallback": r["fallback"],
+                             "credentialsPresent": r["credentials_present"]} for name, r in s["roles"].items()},
+            "aiEnabled": ai_enabled(os.environ),
+            "stt": {"provider": stt[0], "model": stt[1], "realtime": stt_realtime()} if stt else None,
+            "budget": BUDGET.snapshot(os.environ), "cost": COSTS.snapshot(os.environ),
+            "errors": errors, "warnings": warnings}
 
 
 @app.get("/v1/runtime/capabilities")
@@ -211,7 +257,20 @@ def capabilities():
 # nessuna auth necessaria (come /v1/runtime/health): non ritorna alcun valore sensibile.
 @app.get("/v1/assistant/llm-health")
 def llm_health():
-    return llm_health_summary(os.environ)
+    # Phase 9B: provider-agnostic — the provider/model of the command-parser role, credentials
+    # presence only (legacy fields kept for existing callers; no Azure assumption).
+    s = _REGISTRY.public_status()
+    role = s["roles"].get("command_parser") or {}
+    provider, _, model = str(role.get("model") or "").partition(":")
+    ocr = (s["roles"].get("ocr") or {}).get("model") or ""
+    ok = bool(role) and role.get("credentials_present", False) and ai_enabled(os.environ)
+    out = {"agnosProvider": provider or None, "deployment": model or None, "model": model or None,
+           "mode": s["mode"], "apiKeyConfigured": bool(role.get("credentials_present")),
+           "endpointConfigured": bool(role.get("credentials_present")),
+           "ocrProvider": ocr.partition(":")[0] or None, "status": "ok" if ok else "error"}
+    if not ok:
+        out["errors"] = s["errors"] or ["AI non disponibile"]
+    return out
 
 
 # 016 F1: read-planner endpoint. Riceve SOLO la domanda (nessun dato clinico), ritorna un
@@ -221,14 +280,14 @@ async def assistant_plan(req: AssistantPlanRequest, authorization: str | None = 
     _auth(authorization)
     try:
         out = await run_assistant_plan(_REGISTRY, req.question, req.toolSchema)
-        return AssistantPlanResponse(plan=out["plan"], model=out["model"], confidence=1.0)
+        return AssistantPlanResponse(plan=out["plan"], model=out["model"], confidence=1.0, ai=out.get("ai"))
     except RuntimeError_ as ex:
         _log.warning("assistant plan runtime error: %s", ex.to_dict().get("message", "planner error"))
-        raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "planner error"))
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"error": "planner error", "code": ai_error_code(ex)})
     except Exception as ex:  # pragma: no cover
-        # sanitizzato: tipo + messaggio dell'eccezione (no prompt/PHI, no dati richiesta)
-        _log.error("assistant plan failed: %s: %s", type(ex).__name__, str(ex)[:300])
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"{type(ex).__name__}: {str(ex)[:200]}")
+        # Phase 9: solo il tipo dell'eccezione — il messaggio può riportare testo del provider.
+        _log.error("assistant plan failed: %s", type(ex).__name__)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "internal error")
 
 
 # 016 F2: compose endpoint. Riceve i RISULTATI (dati clinici) e compone la prosa citando le fonti.
@@ -239,13 +298,14 @@ async def assistant_compose(req: AssistantComposeRequest, authorization: str | N
     _auth(authorization)
     try:
         out = await run_assistant_compose(_REGISTRY, req.question, req.results, req.sources)
-        return AssistantComposeResponse(answerText=out["answerText"], citedSources=out["citedSources"], model=out["model"])
+        return AssistantComposeResponse(answerText=out["answerText"], citedSources=out["citedSources"],
+                                        model=out["model"], ai=out.get("ai"))
     except RuntimeError_ as ex:
         _log.warning("assistant compose runtime error: %s", ex.to_dict().get("message", "compose error"))
-        raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "compose error"))
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"error": "compose error", "code": ai_error_code(ex)})
     except Exception as ex:  # pragma: no cover
-        _log.error("assistant compose failed: %s: %s", type(ex).__name__, str(ex)[:300])
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"{type(ex).__name__}: {str(ex)[:200]}")
+        _log.error("assistant compose failed: %s", type(ex).__name__)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "internal error")
 
 
 # Phase 3: Agno skill router. Riceve il messaggio e le SOLE skill che l'utente può usare (già
@@ -256,13 +316,13 @@ async def assistant_skill_route(req: SkillRouteRequest, authorization: str | Non
     try:
         out = await run_skill_route(_REGISTRY, req.message, req.skills, req.pending, req.today, req.valueKeys,
                                     forbidden=req.forbiddenSkills, role_hint=req.roleHint)
-        return SkillRouteResponse(route=out["route"], model=out["model"])
+        return SkillRouteResponse(route=out["route"], model=out["model"], ai=out.get("ai"))
     except RuntimeError_ as ex:
         _log.warning("skill route runtime error: %s", ex.to_dict().get("message", "router error"))
-        raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "router error"))
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, {"error": "router error", "code": ai_error_code(ex)})
     except Exception as ex:  # pragma: no cover
         _log.error("skill route failed: %s", type(ex).__name__)
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, type(ex).__name__)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, "internal error")
 
 
 # Phase 5: speech-to-text. Receives ONE captured utterance (already VAD-trimmed by the client),

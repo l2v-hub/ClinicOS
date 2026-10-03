@@ -13,6 +13,15 @@ import { PARAMETER_KEYS } from '../patients/parameter-reading-input.js';
 import { SKILL_CATALOG } from './catalog.js';
 import { isExplicitCancellation } from './confirmation.js';
 import type { Interpretation, SkillDefinition, SkillSlot } from './types.js';
+import {
+  classifyAiFailure,
+  correlationHeaders,
+  recordAiCall,
+  recordFallback,
+  aiMetaOf,
+  runtimeErrorMeta,
+} from '../lib/observability.js';
+import { aiEnabled } from '../lib/ai-flags.js';
 
 export interface InterpretInput {
   message: string;
@@ -49,7 +58,10 @@ const VALUE_PATTERNS: ReadonlyArray<[string, RegExp]> = [
     /(?:frequenza\s+respiratoria|\bfr\b|atti\s+respiratori|respiri)\s*(?:di|a|:)?\s*(\d{1,2})(?!\d|[.,]\d)/i,
   ],
   ['spo2', /(?:spo2|sp02|saturazione|\bsat\b)\s*(?:di|a|al|:)?\s*(\d{2,3})(?!\d|[.,]\d)\s*%?/i],
-  ['fc', /(?:frequenza(?:\s+cardiaca)?|\bfc\b|polso|battiti)\s*(?:di|a|:)?\s*(\d{2,3})(?!\d|[.,]\d)/i],
+  [
+    'fc',
+    /(?:frequenza(?:\s+cardiaca)?|\bfc\b|polso|battiti)\s*(?:di|a|:)?\s*(\d{2,3})(?!\d|[.,]\d)/i,
+  ],
   [
     'temperatura',
     /(?:temperatura|\btemp\b|febbre|\btc\b)\s*(?:di|a|:)?\s*(\d{2}(?:[.,]\d{1,2})?)(?!\d|[.,]\d)/i,
@@ -249,12 +261,20 @@ export function sanitizeAgnoRoute(
 }
 
 export function agnoEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  if (!aiEnabled(env)) return false;
   const mode = (env.SKILLS_INTERPRETER || '').trim().toLowerCase();
   if (mode === 'deterministic') return false;
   return Boolean(env.AI_RUNTIME_URL && env.AI_RUNTIME_SERVICE_TOKEN);
 }
 
-const AGNO_TIMEOUT_MS = 20_000;
+// Phase 9 timeout budget: the skill router answers in ~1–3 s; 20 s caps a stuck runtime, after which
+// the deterministic interpreter answers. Configurable (SKILLS_AGNO_TIMEOUT_MS, 1–60 s).
+function agnoTimeoutMs(env: NodeJS.ProcessEnv): number {
+  const configured = Number(env.SKILLS_AGNO_TIMEOUT_MS);
+  return Number.isInteger(configured) && configured >= 1_000 && configured <= 60_000
+    ? configured
+    : 20_000;
+}
 
 export function createAgnoInterpreter(
   fallback: Interpreter = deterministicInterpreter,
@@ -267,7 +287,28 @@ export function createAgnoInterpreter(
     const allowed = new Set(
       [...input.available, ...(input.unavailable ?? [])].map((skill) => skill.id),
     );
+    const started = Date.now();
+    // Each call is recorded once: a throw after the outcome was recorded (e.g. in the fallback)
+    // must not count a second, different outcome.
+    let recorded = false;
     try {
+      const body = JSON.stringify({
+        message: input.message.slice(0, MAX_TEXT),
+        today: input.today,
+        pending: input.pending,
+        skills: input.available.map((skill) => ({
+          id: skill.id,
+          name: skill.name,
+          description: skill.description,
+          slots: [...skill.slots, ...(skill.optionalSlots ?? [])],
+        })),
+        forbiddenSkills: (input.unavailable ?? []).map((skill) => ({
+          id: skill.id,
+          name: skill.name,
+        })),
+        valueKeys: PARAMETER_KEYS.filter((key) => key !== 'note'),
+        ...(input.roleHint ? { roleHint: input.roleHint.slice(0, 200) } : {}),
+      });
       const response = await fetch(
         `${String(env.AI_RUNTIME_URL).replace(/\/$/, '')}/v1/assistant/skill-route`,
         {
@@ -275,31 +316,40 @@ export function createAgnoInterpreter(
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${env.AI_RUNTIME_SERVICE_TOKEN}`,
+            ...correlationHeaders(),
           },
-          body: JSON.stringify({
-            message: input.message.slice(0, MAX_TEXT),
-            today: input.today,
-            pending: input.pending,
-            skills: input.available.map((skill) => ({
-              id: skill.id,
-              name: skill.name,
-              description: skill.description,
-              slots: [...skill.slots, ...(skill.optionalSlots ?? [])],
-            })),
-            forbiddenSkills: (input.unavailable ?? []).map((skill) => ({
-              id: skill.id,
-              name: skill.name,
-            })),
-            valueKeys: PARAMETER_KEYS.filter((key) => key !== 'note'),
-            ...(input.roleHint ? { roleHint: input.roleHint.slice(0, 200) } : {}),
-          }),
-          signal: AbortSignal.timeout(AGNO_TIMEOUT_MS),
+          body,
+          signal: AbortSignal.timeout(agnoTimeoutMs(env)),
         },
       );
-      if (!response.ok) return fallback(input);
-      const body = (await response.json()) as { route?: unknown };
-      const route = sanitizeAgnoRoute(body.route, allowed);
-      if (!route) return fallback(input);
+      if (!response.ok) {
+        recorded = true;
+        recordAiCall(
+          'skill_route',
+          classifyAiFailure(null, response.status),
+          Date.now() - started,
+          body.length,
+          await runtimeErrorMeta(response),
+        );
+        recordFallback('skill_interpreter', `http_${response.status}`);
+        return fallback(input);
+      }
+      const payload = (await response.json()) as { route?: unknown; ai?: unknown } | null;
+      const route = sanitizeAgnoRoute(payload?.route, allowed);
+      // An object route with nothing usable is a valid «no match» answer, not malformed output.
+      const wellFormed = Boolean(payload?.route) && typeof payload?.route === 'object';
+      recorded = true;
+      recordAiCall(
+        'skill_route',
+        wellFormed ? 'ok' : 'malformed',
+        Date.now() - started,
+        body.length,
+        aiMetaOf(payload),
+      );
+      if (!route) {
+        recordFallback('skill_interpreter', wellFormed ? 'no_route' : 'malformed');
+        return fallback(input);
+      }
       // Answering a pending question: keep the workflow's skill.
       if (input.pending) return { ...route, skillId: input.pending.skillId };
       if (!route.skillId) {
@@ -309,7 +359,12 @@ export function createAgnoInterpreter(
         return deterministic.skillId ? deterministic : route;
       }
       return route;
-    } catch {
+    } catch (error) {
+      if (!recorded) {
+        const outcome = classifyAiFailure(error);
+        recordAiCall('skill_route', outcome, Date.now() - started);
+        recordFallback('skill_interpreter', outcome);
+      }
       return fallback(input);
     }
   };

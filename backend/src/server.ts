@@ -1,5 +1,7 @@
 import app from './app.js';
 import { publicStatus } from './ai/config.js';
+import { validateDeploymentConfig } from './lib/deployment.js';
+import { markShuttingDown } from './lib/readiness.js';
 import { sweepExpiredJobs } from './ai/upload/job-service.js';
 import { startWorker } from './ai/upload/worker.js';
 
@@ -29,6 +31,20 @@ process.on('unhandledRejection', (reason) => {
   );
 });
 
+// Phase 9: fail fast on dangerous configuration. Errors stop a NODE_ENV=production (or tier
+// production) process before it
+// accepts traffic (the platform keeps the previous deployment); warnings are logged. Names only —
+// never values.
+const config = validateDeploymentConfig();
+for (const warning of config.warnings) console.warn(`[config] ${config.tier}: ${warning}`);
+if (config.errors.length > 0) {
+  for (const error of config.errors) console.error(`[config] ${config.tier}: ERRORE ${error}`);
+  if (process.env.NODE_ENV === 'production' || config.tier === 'production') {
+    console.error('[config] configurazione di produzione non sicura: avvio rifiutato');
+    process.exit(1);
+  }
+}
+
 const server = app.listen(port, () => {
   console.log(`ClinicOS backend listening on port ${port}`);
   // Controlled AI config validation at startup (secret-free).
@@ -51,6 +67,33 @@ const server = app.listen(port, () => {
     startWorker();
   }
 });
+
+// Phase 9: graceful shutdown. Readiness flips to 503, in-flight requests finish (bounded), then the
+// DB pool is closed. A second signal or the 10 s budget forces the exit.
+const SHUTDOWN_BUDGET_MS = 10_000;
+let stopping = false;
+function shutdown(signal: string): void {
+  if (stopping) process.exit(1);
+  stopping = true;
+  markShuttingDown();
+  console.log(`[shutdown] ${signal}: stop accepting connections`);
+  setTimeout(() => {
+    console.error('[shutdown] budget exceeded: forcing exit');
+    process.exit(1);
+  }, SHUTDOWN_BUDGET_MS).unref();
+  server.close(() => {
+    import('./lib/prisma.js')
+      .then(({ prisma }) => prisma.$disconnect())
+      .catch(() => undefined)
+      .finally(() => {
+        console.log('[shutdown] done');
+        process.exit(0);
+      });
+  });
+  server.closeIdleConnections?.();
+}
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
 
 server.on('error', (error) => {
   console.error('Failed to start ClinicOS backend:', error);

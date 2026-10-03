@@ -33,7 +33,7 @@ class _Registry:
         self.repair = _Runner(repair)
 
     def build(self, role):
-        return SimpleNamespace(runner=self.repair if role == "repair" else self.primary, spec="mock:mock")
+        return SimpleNamespace(runner=self.repair if role == "fast" else self.primary, spec="mock:mock")
 
 
 class CompletionIntegrityTests(unittest.IsolatedAsyncioTestCase):

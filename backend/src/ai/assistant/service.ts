@@ -468,7 +468,7 @@ export async function assistantQuery(
   const cfg = loadAssistantLlmConfig(env);
   let plan: QueryPlan;
   let mode: 'deterministic' | 'llm';
-  if (cfg.planEnabled && cfg.runtimeUrl && cfg.planModel) {
+  if (cfg.planEnabled && cfg.runtimeUrl) {
     const r = await planQueryLLM(question, effectiveCtx, {
       callPlanRuntime: (req) => callPlanRuntime(req, cfg),
       roles: ctx.roles,
@@ -563,7 +563,7 @@ export async function assistantQuery(
   // anti-invenzione scarta prosa non fondata (→ risposta strutturata). Dati clinici → modello EU.
   let answerText: string | undefined;
   let composed = false;
-  if (cfg.composeEnabled && cfg.composeModel && results.length > 0) {
+  if (cfg.composeEnabled && cfg.runtimeUrl && results.length > 0) {
     const c = await composeAnswer(question, results, cappedSources, {
       callComposeRuntime: (req) => callComposeRuntime(req, cfg),
     });

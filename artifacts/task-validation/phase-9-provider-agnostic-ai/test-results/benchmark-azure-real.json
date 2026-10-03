@@ -1,0 +1,418 @@
+{
+  "config": {
+    "mode": "new",
+    "provider": "azure",
+    "roles": {
+      "ocr": "mistral:mistral-ocr-4-0",
+      "vision": "azure:gpt-6.1-sol",
+      "command_parser": "azure:gpt-6.1-sol",
+      "reasoning": "azure:gpt-6.1-sol",
+      "summary": "azure:gpt-6.1-sol",
+      "fast": "azure:gpt-6.1-sol"
+    },
+    "stt": {
+      "available": true,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite"
+    }
+  },
+  "suites": {
+    "command_parser": {
+      "summary": {
+        "cases": 13,
+        "correct": 0,
+        "accuracyPct": 0.0,
+        "validityPct": 0.0,
+        "latencyMsP50": 1917,
+        "latencyMsMax": 3023,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "errors": {
+          "RATE_LIMIT": 13
+        }
+      },
+      "cases": [
+        {
+          "id": "cp-01",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "values": false,
+            "currentPatient": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 3023,
+          "ai": null
+        },
+        {
+          "id": "cp-02",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "values": false,
+            "currentPatient": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1838,
+          "ai": null
+        },
+        {
+          "id": "cp-03",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "values": false,
+            "patientQuery": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1851,
+          "ai": null
+        },
+        {
+          "id": "cp-04",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "values": false,
+            "currentPatient": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1977,
+          "ai": null
+        },
+        {
+          "id": "cp-05",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "currentPatient": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1796,
+          "ai": null
+        },
+        {
+          "id": "cp-06",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "query": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 2207,
+          "ai": null
+        },
+        {
+          "id": "cp-07",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1745,
+          "ai": null
+        },
+        {
+          "id": "cp-08",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1945,
+          "ai": null
+        },
+        {
+          "id": "cp-09",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "text": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1917,
+          "ai": null
+        },
+        {
+          "id": "cp-10",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 2128,
+          "ai": null
+        },
+        {
+          "id": "cp-11",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false,
+            "query": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1856,
+          "ai": null
+        },
+        {
+          "id": "cp-12",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": true
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1946,
+          "ai": null
+        },
+        {
+          "id": "cp-13",
+          "ok": false,
+          "valid": false,
+          "checks": {
+            "skill": false
+          },
+          "error": "RATE_LIMIT",
+          "ms": 1837,
+          "ai": null
+        }
+      ]
+    },
+    "reasoning": {
+      "summary": {
+        "cases": 5,
+        "correct": 5,
+        "accuracyPct": 100.0,
+        "validityPct": 100.0,
+        "latencyMsP50": 46280,
+        "latencyMsMax": 55131,
+        "inputTokens": 4369,
+        "outputTokens": 272,
+        "errors": {}
+      },
+      "cases": [
+        {
+          "id": "rs-01",
+          "ok": true,
+          "valid": true,
+          "intent": "allergies",
+          "error": null,
+          "ms": 2037,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "reasoning",
+            "latencyMs": 2036,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 874,
+              "output_tokens": 36,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        },
+        {
+          "id": "rs-02",
+          "ok": true,
+          "valid": true,
+          "intent": "therapies",
+          "error": null,
+          "ms": 1876,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "reasoning",
+            "latencyMs": 1876,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 874,
+              "output_tokens": 36,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        },
+        {
+          "id": "rs-03",
+          "ok": true,
+          "valid": true,
+          "intent": "vitals_recent",
+          "error": null,
+          "ms": 46280,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "reasoning",
+            "latencyMs": 46280,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 875,
+              "output_tokens": 36,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        },
+        {
+          "id": "rs-04",
+          "ok": true,
+          "valid": true,
+          "intent": "data_query",
+          "error": null,
+          "ms": 55131,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "reasoning",
+            "latencyMs": 55131,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 875,
+              "output_tokens": 141,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        },
+        {
+          "id": "rs-05",
+          "ok": true,
+          "valid": true,
+          "intent": "unknown",
+          "error": null,
+          "ms": 52750,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "reasoning",
+            "latencyMs": 52750,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 871,
+              "output_tokens": 23,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        }
+      ]
+    },
+    "summary": {
+      "summary": {
+        "cases": 3,
+        "correct": 3,
+        "accuracyPct": 100.0,
+        "validityPct": 100.0,
+        "latencyMsP50": 54014,
+        "latencyMsMax": 54308,
+        "inputTokens": 984,
+        "outputTokens": 116,
+        "errors": {}
+      },
+      "cases": [
+        {
+          "id": "sm-01",
+          "ok": true,
+          "valid": true,
+          "grounded": true,
+          "answered": true,
+          "error": null,
+          "ms": 54014,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "summary",
+            "latencyMs": 54014,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 338,
+              "output_tokens": 45,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        },
+        {
+          "id": "sm-02",
+          "ok": true,
+          "valid": true,
+          "grounded": true,
+          "answered": true,
+          "error": null,
+          "ms": 54308,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "summary",
+            "latencyMs": 54307,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 342,
+              "output_tokens": 50,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        },
+        {
+          "id": "sm-03",
+          "ok": true,
+          "valid": true,
+          "grounded": true,
+          "answered": true,
+          "error": null,
+          "ms": 53673,
+          "ai": {
+            "provider": "azure",
+            "model": "gpt-6.1-sol",
+            "role": "summary",
+            "latencyMs": 53672,
+            "fallbackUsed": false,
+            "finishReason": "stop",
+            "usage": {
+              "input_tokens": 304,
+              "output_tokens": 21,
+              "cached_input_tokens": 0,
+              "reasoning_tokens": 0,
+              "provider": "azure",
+              "model": "gpt-6.1-sol"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

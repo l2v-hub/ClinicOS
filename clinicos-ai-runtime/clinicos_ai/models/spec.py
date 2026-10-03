@@ -10,9 +10,10 @@ from dataclasses import dataclass
 
 from .errors import ConfigError
 
-# Providers the runtime knows how to build (SDK adapters live in models/providers/*).
-SUPPORTED_PROVIDERS = {"google", "openai", "anthropic", "azure", "azure-docintel",
-                       "openai-like", "mistral", "mock"}
+# Providers the runtime knows how to build: derived from the single provider registry.
+from .provider_registry import normalize_provider, supported_providers
+
+SUPPORTED_PROVIDERS = supported_providers()
 
 
 @dataclass(frozen=True)
@@ -31,7 +32,7 @@ class ModelSpec:
         if ":" not in raw:
             raise ConfigError(f"Model spec '{raw}' non valido: formato atteso 'provider:model_id'")
         provider, model_id = raw.split(":", 1)
-        provider = provider.strip().lower()
+        provider = normalize_provider(provider)
         model_id = model_id.strip()
         if not provider or not model_id:
             raise ConfigError(f"Model spec '{raw}' non valido: provider e model_id obbligatori")

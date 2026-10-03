@@ -1,0 +1,32 @@
+{
+ "oss": {
+  "status": 200,
+  "calls": 1,
+  "chars": 2641,
+  "approxTokens": 755
+ },
+ "nurse": {
+  "status": 200,
+  "calls": 1,
+  "chars": 2993,
+  "approxTokens": 855
+ },
+ "doctor": {
+  "status": 200,
+  "calls": 1,
+  "chars": 2997,
+  "approxTokens": 856
+ },
+ "supervisor": {
+  "status": 200,
+  "calls": 1,
+  "chars": 3191,
+  "approxTokens": 912
+ },
+ "administrator": {
+  "status": 200,
+  "calls": 1,
+  "chars": 1700,
+  "approxTokens": 486
+ }
+}

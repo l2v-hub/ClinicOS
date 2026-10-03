@@ -13,6 +13,7 @@ import { resolve } from 'path';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+import { isRealProduction } from './lib/deployment.js';
 
 // ── .env loading ───────────────────────────────────────────────────────────────
 // Cerca .env in varie posizioni (root monorepo o backend/).
@@ -41,6 +42,11 @@ async function loadEnv() {
 // ── Prisma setup ───────────────────────────────────────────────────────────────
 
 function buildPrisma(): PrismaClient {
+  // Phase 9: demo identities/patients never enter a real production database.
+  if (isRealProduction()) {
+    console.error('❌  Seed demo rifiutato: deployment di produzione reale (CLINICOS_ENV).');
+    process.exit(1);
+  }
   const url = process.env.DATABASE_URL;
   if (!url) {
     console.error('❌  DATABASE_URL non impostato.');

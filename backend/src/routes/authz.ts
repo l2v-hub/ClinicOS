@@ -2,6 +2,7 @@
 //
 //   /auth/simulator/identities   GET   public only while the Role Simulator is enabled
 //   /auth/simulator/session      POST  { identityId } → server-signed session (no role inside)
+//   /auth/simulator/logout       POST  Bearer session → revoked server-side (Phase 9)
 //   /authz/policy                GET   authz.view_policy   active document + registry + identities
 //   /authz/policy/versions       GET   authz.view_policy   history
 //   /authz/policy/versions/:v    GET   authz.view_policy   one version (document + before/after)
@@ -30,6 +31,7 @@ import {
 import {
   ensureSimulatedIdentity,
   issueSimulatorToken,
+  revokeSimulatorToken,
   SIMULATED_IDENTITIES,
   simulatedIdentity,
   simulatorEnabled,
@@ -92,6 +94,16 @@ simulatorRouter.post('/session', async (req, res) => {
   } catch {
     res.status(503).json({ error: 'Simulatore non disponibile', code: 'simulator_unavailable' });
   }
+});
+
+// Phase 9: server-side logout — the presented session is revoked, so a copied token stops working.
+// Answers 204 even for an unknown/expired token (logout is idempotent and never enumerates).
+simulatorRouter.post('/logout', (req, res) => {
+  if (!simulatorGuard(res)) return;
+  const header = req.header('Authorization') || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
+  if (token) revokeSimulatorToken(token);
+  res.status(204).end();
 });
 
 authzRouter.use(requireOperator, requireAuthorizationContext);

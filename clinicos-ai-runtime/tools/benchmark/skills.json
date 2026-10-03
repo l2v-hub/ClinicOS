@@ -1,0 +1,98 @@
+[
+  {
+    "id": "vitals.record",
+    "name": "Registra parametri vitali",
+    "description": "Registra una rilevazione di parametri vitali (pressione, SpO2, frequenza cardiaca, temperatura, frequenza respiratoria, glicemia/DTX, ossigeno, coscienza) per un ospite.",
+    "slots": ["patient", "values"]
+  },
+  {
+    "id": "diary.add_observation",
+    "name": "Aggiungi osservazione al diario",
+    "description": "Aggiunge un'osservazione (nota di diario clinico-assistenziale) alla cartella di un ospite, attribuita all'operatore corrente.",
+    "slots": ["patient", "text"]
+  },
+  {
+    "id": "handover.create",
+    "name": "Crea consegna",
+    "description": "Crea una consegna (passaggio di informazioni al turno) riferita a un ospite. Priorità normale e tipo «Assistente AI» di default; l’urgenza viene solo segnalata.",
+    "slots": ["patient", "text"]
+  },
+  {
+    "id": "therapy.prescribe",
+    "name": "Prepara prescrizione",
+    "description": "Prepara una nuova prescrizione dal testo dettato (stesso interprete del Diario → Terapia): anteprima strutturata, poi SOLO il medico la conferma con il pulsante Conferma. L’assistente non conferma mai.",
+    "slots": ["patient", "text"]
+  },
+  {
+    "id": "administration.record",
+    "name": "Registra somministrazione",
+    "description": "Prepara la registrazione di una somministrazione in attesa dell’ospite (giro terapia del giorno): anteprima, poi SOLO l’operatore autorizzato conferma con il pulsante Conferma dopo aver somministrato.",
+    "slots": ["patient", "administration", "date"]
+  },
+  {
+    "id": "vitals.recent",
+    "name": "Parametri recenti",
+    "description": "Mostra le ultime rilevazioni dei parametri vitali di un ospite.",
+    "slots": ["patient"]
+  },
+  {
+    "id": "diary.recent",
+    "name": "Diario recente",
+    "description": "Mostra le ultime voci del diario di un ospite.",
+    "slots": ["patient"]
+  },
+  {
+    "id": "patient.overview",
+    "name": "Informazioni sull’ospite",
+    "description": "Mostra le informazioni disponibili su un ospite: stato ricovero, allergie, terapie, consegne aperte, ultimi parametri.",
+    "slots": ["patient"]
+  },
+  {
+    "id": "clinical.question",
+    "name": "Domanda sulla cartella",
+    "description": "Risponde a una domanda puntuale sulla cartella (allergie, terapie in corso, documenti) tramite l’assistente di sola lettura esistente.",
+    "slots": ["query", "patient"]
+  },
+  {
+    "id": "therapy.due_administrations",
+    "name": "Somministrazioni del giorno",
+    "description": "Elenca le somministrazioni previste in una giornata (giro terapia).",
+    "slots": ["date"]
+  },
+  {
+    "id": "handover.overview",
+    "name": "Situazione consegne",
+    "description": "Riepilogo delle consegne aperte del reparto.",
+    "slots": []
+  },
+  {
+    "id": "appointments.day",
+    "name": "Appuntamenti del giorno",
+    "description": "Elenca gli appuntamenti di una giornata.",
+    "slots": ["date"]
+  },
+  {
+    "id": "facility.occupancy",
+    "name": "Occupazione posti letto",
+    "description": "Mostra l’occupazione di camere e posti letto della struttura.",
+    "slots": []
+  },
+  {
+    "id": "drug.lookup",
+    "name": "Cerca farmaco",
+    "description": "Cerca un farmaco nell’anagrafica farmaci.",
+    "slots": ["query"]
+  },
+  {
+    "id": "patient.find",
+    "name": "Cerca ospite",
+    "description": "Cerca un ospite per nome, cognome o codice fiscale.",
+    "slots": ["query"]
+  },
+  {
+    "id": "admin.roster_contexts",
+    "name": "Ordinamenti dei reparti",
+    "description": "Elenca i contesti di ordinamento degli elenchi ospiti (configurazione).",
+    "slots": []
+  }
+]

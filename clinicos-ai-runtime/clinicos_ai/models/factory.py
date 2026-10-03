@@ -15,20 +15,8 @@ from .capabilities import CapabilityRequirement
 from .errors import ProviderUnavailableError, ConfigError
 from .profiles import capabilities_for
 from .providers.base import BuiltModel
+from .provider_registry import provider_entry
 from .spec import ModelSpec
-
-# provider -> module under models/providers exposing build(spec, role, temperature, timeout)
-_PROVIDER_MODULES: dict[str, str] = {
-    "mock": "clinicos_ai.models.providers.mock",
-    "google": "clinicos_ai.models.providers.google",
-    "openai": "clinicos_ai.models.providers.openai",
-    "anthropic": "clinicos_ai.models.providers.anthropic",
-    "azure": "clinicos_ai.models.providers.azure",
-    "azure-docintel": "clinicos_ai.models.providers.azure_docintel",
-    "openai-like": "clinicos_ai.models.providers.openai_like",
-    "mistral": "clinicos_ai.models.providers.mistral",
-}
-
 
 class ModelFactory:
     def __init__(self, env: Mapping[str, str] | None = None) -> None:
@@ -40,7 +28,8 @@ class ModelFactory:
         requirement.check(capabilities_for(spec), role=role, model_spec=str(spec))
 
         # 2. Dispatch to the provider adapter (SDK isolation).
-        mod_name = _PROVIDER_MODULES.get(spec.provider)
+        entry = provider_entry(spec.provider)
+        mod_name = entry.module if entry is not None else None
         if mod_name is None:
             raise ConfigError(f"Provider '{spec.provider}' senza adapter")
         try:

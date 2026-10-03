@@ -13,6 +13,7 @@ import {
   verifySimulatorToken,
 } from '../authz/simulator.js';
 import type { ResolvedIdentity } from '../authz/types.js';
+import { isRealProduction } from '../lib/deployment.js';
 
 export interface Operator {
   id: string;
@@ -64,6 +65,7 @@ export function productionDemoAuthEnabled(env: NodeJS.ProcessEnv = process.env):
   const expiresAt = Date.parse(env.DEMO_AUTH_EXPIRES_AT || '');
   return (
     env.NODE_ENV === 'production' &&
+    !isRealProduction(env) &&
     (env.AUTH_MODE || '').trim().toLowerCase() === 'demo' &&
     explicitTrue(env.ALLOW_PRODUCTION_DEMO_AUTH) &&
     env.DEMO_DATASET_ID === 'synthetic-v1' &&
@@ -85,6 +87,8 @@ export function operatorAuthMode(env: NodeJS.ProcessEnv = process.env): Operator
   const configured = (env.AUTH_MODE || '').trim().toLowerCase();
   if (configured === 'entra') return 'entra';
   if (configured === 'demo') {
+    // Phase 9: demo identities never exist on a real production deployment (fail closed).
+    if (isRealProduction(env)) return 'disabled';
     return env.NODE_ENV === 'development' ||
       env.NODE_ENV === 'test' ||
       productionDemoAuthEnabled(env)

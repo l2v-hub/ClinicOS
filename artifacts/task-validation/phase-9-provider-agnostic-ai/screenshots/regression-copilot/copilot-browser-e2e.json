@@ -1,0 +1,151 @@
+{
+  "at": "2026-10-02T07:43:12.966Z",
+  "passed": 28,
+  "failed": 0,
+  "results": [
+    {
+      "name": "fixtures present",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A OSS home is the OSS copilot",
+      "pass": true,
+      "detail": "Copilota OSS\n\nCosa devo fare adesso\nInizia il turno\nInizia giro parametri\nLe consegne\nRegistra i parametri di un ospite\n"
+    },
+    {
+      "name": "A OSS shortcuts: turno + giro parametri",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "A OSS starters ≤ 4 and no therapy / prescription",
+      "pass": true,
+      "detail": "Registra i parametri di un ospite | Cerca un ospite | Appuntamenti di oggi | Cerca un farmaco"
+    },
+    {
+      "name": "usability: OSS large action targets (≥ 52 px)",
+      "pass": true,
+      "detail": "{\"x\":297.765625,\"y\":224,\"width\":205.71875,\"height\":56}"
+    },
+    {
+      "name": "round: only residents in the OSS scope",
+      "pass": true,
+      "detail": "Verdi Olga"
+    },
+    {
+      "name": "round: resident context evident",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "round step → preview, nothing written yet",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "round step → one write after «Conferma»",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "round closed, resident context cleared",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "typed «inizia il turno» → shift briefing (same Phase 7 engine)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "voice transcript shown for review",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J dictated «iniziamo il giro» → the same round shortcut as text",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "J mic usable again after the voice shortcut",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "F after switch: doctor copilot",
+      "pass": true,
+      "detail": "Copilota Medico\n\nCosa è cambiato e cosa preparare\nPrepara visita\nCosa è cambiato\nAppuntamenti di oggi\nPrepara una prescrizione\nCerca un ospite\nCome sono le cons"
+    },
+    {
+      "name": "F no OSS resident / round left over",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C doctor overview answered (read, no confirmation)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "C no therapy written by the copilot",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "F then supervisor copilot",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "D supervisor briefing aggregates the facility",
+      "pass": true,
+      "detail": "Periodo: dal turno «notte» (01/10 21:00) a ora\n\nSintesi AI non disponibile: elenco dei fatti\n\n• Galli Nora: Somministrazioni non ancora registrate — fascia mattina (08:00): 1 per 1 ospite [alta]\n• Gal"
+    },
+    {
+      "name": "B nurse copilot: therapy round + due administrations",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B round steps are existing skills of the nurse",
+      "pass": true,
+      "detail": "Registra una somministrazione per questo ospite | Registra i parametri di questo ospite | Aggiungi un’osservazione nel diario di questo ospite"
+    },
+    {
+      "name": "B one write after the human confirmation",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "B audited (execute ok, nurse role)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "continue work reopens the preview, still needing «Conferma»",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "E administrator copilot: configuration, no clinical starters",
+      "pass": true,
+      "detail": "Copilota Amministratore\n\nConfigurazione e governo\nControlla configurazione ruoli\nGestione operatori\nOrdinamenti dei reparti\nQuanti posti letto sono occupati?"
+    },
+    {
+      "name": "E classic screen shortcut opens «Ruoli e permessi» (GUI still available)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "timings": {
+    "ossHomeMs": 7054
+  },
+  "consoleErrors": []
+}

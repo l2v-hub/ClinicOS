@@ -1,102 +1,120 @@
 {
   "schema": "clinicos.ai-architecture.current-state/v1",
-  "version": 8,
-  "phase": 8,
-  "phase_name": "Role-Specific Copilots & Workflow Specialization",
-  "phase_status": "COMPLETED",
-  "timestamp": "2026-10-01T19:50:53.668838Z",
+  "version": 9,
+  "phase": 9,
+  "phase_name": "Production Hardening, Provider Abstraction & Operational Readiness",
+  "phase_status": "CONDITIONALLY READY",
+  "timestamp": "2026-10-02T10:04:18.014Z",
+  "branch": "feat/phase9-hardening (from origin/main f7b32b6d; not merged, not deployed)",
   "artifacts": {
-    "current_state_md": ".ai-architecture/phase-8-copilots/CURRENT_STATE.md",
-    "copilot_architecture": ".ai-architecture/phase-8-copilots/COPILOT_ARCHITECTURE.md",
-    "role_experience_matrix": ".ai-architecture/phase-8-copilots/ROLE_EXPERIENCE_MATRIX.json",
-    "role_workflow_catalog": ".ai-architecture/phase-8-copilots/ROLE_WORKFLOW_CATALOG.json",
-    "role_home_contract": ".ai-architecture/phase-8-copilots/ROLE_HOME_CONTRACT.md",
-    "copilot_prompting_contract": ".ai-architecture/phase-8-copilots/COPILOT_PROMPTING_CONTRACT.md",
-    "e2e_test_report": ".ai-architecture/phase-8-copilots/E2E_TEST_REPORT.md",
-    "prompt9_handoff": ".ai-architecture/phase-8-copilots/PROMPT9_HANDOFF.md",
-    "evidence": "artifacts/task-validation/phase-8-role-specific-copilots/evidence/",
-    "quality_gate": "artifacts/task-validation/phase-8-role-specific-copilots/",
-    "phase7": {
-      "current_state_md": ".ai-architecture/phase-7-proactive/CURRENT_STATE.md",
-      "event_catalog": ".ai-architecture/phase-7-proactive/EVENT_CATALOG.json",
-      "proactive_architecture": ".ai-architecture/phase-7-proactive/PROACTIVE_ARCHITECTURE.md",
-      "signal_catalog": ".ai-architecture/phase-7-proactive/SIGNAL_CATALOG.json",
-      "role_signal_matrix": ".ai-architecture/phase-7-proactive/ROLE_SIGNAL_MATRIX.json",
-      "attention_policy": ".ai-architecture/phase-7-proactive/ATTENTION_POLICY.md",
-      "shift_briefing_contract": ".ai-architecture/phase-7-proactive/SHIFT_BRIEFING_CONTRACT.md",
-      "proactive_audit": ".ai-architecture/phase-7-proactive/PROACTIVE_AUDIT.md",
-      "e2e_test_report": ".ai-architecture/phase-7-proactive/E2E_TEST_REPORT.md",
-      "prompt8_handoff": ".ai-architecture/phase-7-proactive/PROMPT8_HANDOFF.md",
-      "evidence": "artifacts/task-validation/phase-7-proactive-intelligence/evidence/",
-      "quality_gate": "artifacts/task-validation/phase-7-proactive-intelligence/",
-      "phase6": {
-        "current_state_md": ".ai-architecture/phase-6-safety/CURRENT_STATE.md",
-        "threat_model": ".ai-architecture/phase-6-safety/THREAT_MODEL.md",
-        "clinical_safety_rules": ".ai-architecture/phase-6-safety/CLINICAL_SAFETY_RULES.md",
-        "adversarial_test_matrix": ".ai-architecture/phase-6-safety/ADVERSARIAL_TEST_MATRIX.json",
-        "failure_mode_matrix": ".ai-architecture/phase-6-safety/FAILURE_MODE_MATRIX.md",
-        "prompt_injection_defenses": ".ai-architecture/phase-6-safety/PROMPT_INJECTION_DEFENSES.md",
-        "audit_integrity": ".ai-architecture/phase-6-safety/AUDIT_INTEGRITY.md",
-        "security_test_report": ".ai-architecture/phase-6-safety/SECURITY_TEST_REPORT.md",
-        "prompt7_handoff": ".ai-architecture/phase-6-safety/PROMPT7_HANDOFF.md",
-        "evidence": "artifacts/task-validation/phase-6-clinical-safety-guardrails/evidence/",
-        "quality_gate": "artifacts/task-validation/phase-6-clinical-safety-guardrails/",
-        "adversarial_suite": "backend/src/safety/__tests__/adversarial.test.ts",
-        "safety_browser_e2e": "scripts/safety/safety-browser-e2e.mjs",
-        "phase5": {
-          "current_state_md": ".ai-architecture/phase-5-voice/CURRENT_STATE.md",
-          "voice_architecture": ".ai-architecture/phase-5-voice/VOICE_ARCHITECTURE.md",
-          "audio_session_state": ".ai-architecture/phase-5-voice/AUDIO_SESSION_STATE.md",
-          "transcript_contract": ".ai-architecture/phase-5-voice/TRANSCRIPT_CONTRACT.md",
-          "voice_confirmation_rules": ".ai-architecture/phase-5-voice/VOICE_CONFIRMATION_RULES.md",
-          "privacy_and_data_flow": ".ai-architecture/phase-5-voice/PRIVACY_AND_DATA_FLOW.md",
-          "performance_and_cost": ".ai-architecture/phase-5-voice/PERFORMANCE_AND_COST.md",
-          "e2e_test_report": ".ai-architecture/phase-5-voice/E2E_TEST_REPORT.md",
-          "evidence": ".ai-architecture/phase-5-voice/evidence/",
-          "prompt6_handoff": ".ai-architecture/phase-5-voice/PROMPT6_HANDOFF.md",
-          "quality_gate": "artifacts/task-validation/phase-5-voice-realtime/",
-          "phase4": {
-            "current_state_md": ".ai-architecture/phase-4-assistant/CURRENT_STATE.md",
-            "ux_architecture": ".ai-architecture/phase-4-assistant/ASSISTANT_UX_ARCHITECTURE.md",
-            "state_model": ".ai-architecture/phase-4-assistant/ASSISTANT_STATE_MODEL.md",
-            "action_preview_contract": ".ai-architecture/phase-4-assistant/ACTION_PREVIEW_CONTRACT.md",
-            "resident_access_scope": ".ai-architecture/phase-4-assistant/RESIDENT_ACCESS_SCOPE.md",
-            "safety_and_confirmation": ".ai-architecture/phase-4-assistant/SAFETY_AND_CONFIRMATION_RULES.md",
-            "e2e_test_report": ".ai-architecture/phase-4-assistant/E2E_TEST_REPORT.md",
-            "evidence": ".ai-architecture/phase-4-assistant/evidence/",
-            "prompt5_handoff": ".ai-architecture/phase-4-assistant/PROMPT5_HANDOFF.md",
-            "quality_gate": "artifacts/task-validation/phase-4-ai-assistant-experience/",
-            "phase3": {
-              "current_state_md": ".ai-architecture/phase-3-skills/CURRENT_STATE.md",
-              "skill_catalog_json": ".ai-architecture/phase-3-skills/SKILL_CATALOG.json",
-              "skill_catalog_md": ".ai-architecture/phase-3-skills/SKILL_CATALOG.md",
-              "workflow_architecture": ".ai-architecture/phase-3-skills/WORKFLOW_ARCHITECTURE.md",
-              "role_skill_matrix": ".ai-architecture/phase-3-skills/ROLE_SKILL_MATRIX.json",
-              "confirmation_policy": ".ai-architecture/phase-3-skills/CONFIRMATION_POLICY.md",
-              "agno_orchestration": ".ai-architecture/phase-3-skills/AGNO_ORCHESTRATION.md",
-              "e2e_test_report": ".ai-architecture/phase-3-skills/E2E_TEST_REPORT.md",
-              "evidence": ".ai-architecture/phase-3-skills/evidence/",
-              "prompt4_handoff": ".ai-architecture/phase-3-skills/PROMPT4_HANDOFF.md",
-              "quality_gate": "artifacts/task-validation/phase-3-skills-workflows-agno/",
-              "phase2": {
-                "current_state_md": ".ai-architecture/phase-2-authorization/CURRENT_STATE.md",
-                "role_capability_matrix": ".ai-architecture/phase-2-authorization/ROLE_CAPABILITY_MATRIX.json",
-                "authorization_architecture": ".ai-architecture/phase-2-authorization/AUTHORIZATION_ARCHITECTURE.md",
-                "policy_contract": ".ai-architecture/phase-2-authorization/POLICY_CONTRACT.md",
-                "agno_readiness": ".ai-architecture/phase-2-authorization/AGNO_READINESS.md",
-                "test_report": ".ai-architecture/phase-2-authorization/TEST_REPORT.md",
-                "prompt3_handoff": ".ai-architecture/phase-2-authorization/PROMPT3_HANDOFF.md",
-                "quality_gate": "artifacts/task-validation/phase-2-roles-authorization-and-capability-policy/",
-                "phase1": {
-                  "current_state_md": ".ai-architecture/phase-1-capabilities/CURRENT_STATE.md",
-                  "capability_catalog_json": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.json",
-                  "capability_catalog_md": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.md",
-                  "tool_layer_assessment": ".ai-architecture/phase-1-capabilities/TOOL_LAYER_ASSESSMENT.md",
-                  "target_tool_architecture": ".ai-architecture/phase-1-capabilities/TARGET_TOOL_ARCHITECTURE.md",
-                  "regression_baseline": ".ai-architecture/phase-1-capabilities/REGRESSION_BASELINE.md",
-                  "migration_plan": ".ai-architecture/phase-1-capabilities/MIGRATION_PLAN.md",
-                  "prompt2_handoff": ".ai-architecture/phase-1-capabilities/PROMPT2_HANDOFF.md",
-                  "quality_gate": "artifacts/task-validation/phase-1-capability-catalog-and-tool-layer/"
+    "current_state_md": ".ai-architecture/phase-9-production/CURRENT_STATE.md",
+    "production_architecture": ".ai-architecture/phase-9-production/PRODUCTION_ARCHITECTURE.md",
+    "identity_and_session": ".ai-architecture/phase-9-production/IDENTITY_AND_SESSION.md",
+    "secrets_and_configuration": ".ai-architecture/phase-9-production/SECRETS_AND_CONFIGURATION.md",
+    "observability": ".ai-architecture/phase-9-production/OBSERVABILITY.md",
+    "ai_resilience": ".ai-architecture/phase-9-production/AI_RESILIENCE.md",
+    "privacy_and_retention": ".ai-architecture/phase-9-production/PRIVACY_AND_RETENTION.md",
+    "performance_and_cost_budget": ".ai-architecture/phase-9-production/PERFORMANCE_AND_COST_BUDGET.md",
+    "deployment_and_migrations": ".ai-architecture/phase-9-production/DEPLOYMENT_AND_MIGRATIONS.md",
+    "load_test_report": ".ai-architecture/phase-9-production/LOAD_TEST_REPORT.md",
+    "production_runbook": ".ai-architecture/phase-9-production/PRODUCTION_RUNBOOK.md",
+    "e2e_test_report": ".ai-architecture/phase-9-production/E2E_TEST_REPORT.md",
+    "prompt10_handoff": ".ai-architecture/phase-9-production/PROMPT10_HANDOFF.md",
+    "evidence": "artifacts/task-validation/phase-9-production-hardening/",
+    "quality_gate": "artifacts/task-validation/phase-9-production-hardening/",
+    "phase8": {
+      "current_state_md": ".ai-architecture/phase-8-copilots/CURRENT_STATE.md",
+      "copilot_architecture": ".ai-architecture/phase-8-copilots/COPILOT_ARCHITECTURE.md",
+      "role_experience_matrix": ".ai-architecture/phase-8-copilots/ROLE_EXPERIENCE_MATRIX.json",
+      "role_workflow_catalog": ".ai-architecture/phase-8-copilots/ROLE_WORKFLOW_CATALOG.json",
+      "role_home_contract": ".ai-architecture/phase-8-copilots/ROLE_HOME_CONTRACT.md",
+      "copilot_prompting_contract": ".ai-architecture/phase-8-copilots/COPILOT_PROMPTING_CONTRACT.md",
+      "e2e_test_report": ".ai-architecture/phase-8-copilots/E2E_TEST_REPORT.md",
+      "prompt9_handoff": ".ai-architecture/phase-8-copilots/PROMPT9_HANDOFF.md",
+      "evidence": "artifacts/task-validation/phase-8-role-specific-copilots/evidence/",
+      "quality_gate": "artifacts/task-validation/phase-8-role-specific-copilots/",
+      "phase7": {
+        "current_state_md": ".ai-architecture/phase-7-proactive/CURRENT_STATE.md",
+        "event_catalog": ".ai-architecture/phase-7-proactive/EVENT_CATALOG.json",
+        "proactive_architecture": ".ai-architecture/phase-7-proactive/PROACTIVE_ARCHITECTURE.md",
+        "signal_catalog": ".ai-architecture/phase-7-proactive/SIGNAL_CATALOG.json",
+        "role_signal_matrix": ".ai-architecture/phase-7-proactive/ROLE_SIGNAL_MATRIX.json",
+        "attention_policy": ".ai-architecture/phase-7-proactive/ATTENTION_POLICY.md",
+        "shift_briefing_contract": ".ai-architecture/phase-7-proactive/SHIFT_BRIEFING_CONTRACT.md",
+        "proactive_audit": ".ai-architecture/phase-7-proactive/PROACTIVE_AUDIT.md",
+        "e2e_test_report": ".ai-architecture/phase-7-proactive/E2E_TEST_REPORT.md",
+        "prompt8_handoff": ".ai-architecture/phase-7-proactive/PROMPT8_HANDOFF.md",
+        "evidence": "artifacts/task-validation/phase-7-proactive-intelligence/evidence/",
+        "quality_gate": "artifacts/task-validation/phase-7-proactive-intelligence/",
+        "phase6": {
+          "current_state_md": ".ai-architecture/phase-6-safety/CURRENT_STATE.md",
+          "threat_model": ".ai-architecture/phase-6-safety/THREAT_MODEL.md",
+          "clinical_safety_rules": ".ai-architecture/phase-6-safety/CLINICAL_SAFETY_RULES.md",
+          "adversarial_test_matrix": ".ai-architecture/phase-6-safety/ADVERSARIAL_TEST_MATRIX.json",
+          "failure_mode_matrix": ".ai-architecture/phase-6-safety/FAILURE_MODE_MATRIX.md",
+          "prompt_injection_defenses": ".ai-architecture/phase-6-safety/PROMPT_INJECTION_DEFENSES.md",
+          "audit_integrity": ".ai-architecture/phase-6-safety/AUDIT_INTEGRITY.md",
+          "security_test_report": ".ai-architecture/phase-6-safety/SECURITY_TEST_REPORT.md",
+          "prompt7_handoff": ".ai-architecture/phase-6-safety/PROMPT7_HANDOFF.md",
+          "evidence": "artifacts/task-validation/phase-6-clinical-safety-guardrails/evidence/",
+          "quality_gate": "artifacts/task-validation/phase-6-clinical-safety-guardrails/",
+          "adversarial_suite": "backend/src/safety/__tests__/adversarial.test.ts",
+          "safety_browser_e2e": "scripts/safety/safety-browser-e2e.mjs",
+          "phase5": {
+            "current_state_md": ".ai-architecture/phase-5-voice/CURRENT_STATE.md",
+            "voice_architecture": ".ai-architecture/phase-5-voice/VOICE_ARCHITECTURE.md",
+            "audio_session_state": ".ai-architecture/phase-5-voice/AUDIO_SESSION_STATE.md",
+            "transcript_contract": ".ai-architecture/phase-5-voice/TRANSCRIPT_CONTRACT.md",
+            "voice_confirmation_rules": ".ai-architecture/phase-5-voice/VOICE_CONFIRMATION_RULES.md",
+            "privacy_and_data_flow": ".ai-architecture/phase-5-voice/PRIVACY_AND_DATA_FLOW.md",
+            "performance_and_cost": ".ai-architecture/phase-5-voice/PERFORMANCE_AND_COST.md",
+            "e2e_test_report": ".ai-architecture/phase-5-voice/E2E_TEST_REPORT.md",
+            "evidence": ".ai-architecture/phase-5-voice/evidence/",
+            "prompt6_handoff": ".ai-architecture/phase-5-voice/PROMPT6_HANDOFF.md",
+            "quality_gate": "artifacts/task-validation/phase-5-voice-realtime/",
+            "phase4": {
+              "current_state_md": ".ai-architecture/phase-4-assistant/CURRENT_STATE.md",
+              "ux_architecture": ".ai-architecture/phase-4-assistant/ASSISTANT_UX_ARCHITECTURE.md",
+              "state_model": ".ai-architecture/phase-4-assistant/ASSISTANT_STATE_MODEL.md",
+              "action_preview_contract": ".ai-architecture/phase-4-assistant/ACTION_PREVIEW_CONTRACT.md",
+              "resident_access_scope": ".ai-architecture/phase-4-assistant/RESIDENT_ACCESS_SCOPE.md",
+              "safety_and_confirmation": ".ai-architecture/phase-4-assistant/SAFETY_AND_CONFIRMATION_RULES.md",
+              "e2e_test_report": ".ai-architecture/phase-4-assistant/E2E_TEST_REPORT.md",
+              "evidence": ".ai-architecture/phase-4-assistant/evidence/",
+              "prompt5_handoff": ".ai-architecture/phase-4-assistant/PROMPT5_HANDOFF.md",
+              "quality_gate": "artifacts/task-validation/phase-4-ai-assistant-experience/",
+              "phase3": {
+                "current_state_md": ".ai-architecture/phase-3-skills/CURRENT_STATE.md",
+                "skill_catalog_json": ".ai-architecture/phase-3-skills/SKILL_CATALOG.json",
+                "skill_catalog_md": ".ai-architecture/phase-3-skills/SKILL_CATALOG.md",
+                "workflow_architecture": ".ai-architecture/phase-3-skills/WORKFLOW_ARCHITECTURE.md",
+                "role_skill_matrix": ".ai-architecture/phase-3-skills/ROLE_SKILL_MATRIX.json",
+                "confirmation_policy": ".ai-architecture/phase-3-skills/CONFIRMATION_POLICY.md",
+                "agno_orchestration": ".ai-architecture/phase-3-skills/AGNO_ORCHESTRATION.md",
+                "e2e_test_report": ".ai-architecture/phase-3-skills/E2E_TEST_REPORT.md",
+                "evidence": ".ai-architecture/phase-3-skills/evidence/",
+                "prompt4_handoff": ".ai-architecture/phase-3-skills/PROMPT4_HANDOFF.md",
+                "quality_gate": "artifacts/task-validation/phase-3-skills-workflows-agno/",
+                "phase2": {
+                  "current_state_md": ".ai-architecture/phase-2-authorization/CURRENT_STATE.md",
+                  "role_capability_matrix": ".ai-architecture/phase-2-authorization/ROLE_CAPABILITY_MATRIX.json",
+                  "authorization_architecture": ".ai-architecture/phase-2-authorization/AUTHORIZATION_ARCHITECTURE.md",
+                  "policy_contract": ".ai-architecture/phase-2-authorization/POLICY_CONTRACT.md",
+                  "agno_readiness": ".ai-architecture/phase-2-authorization/AGNO_READINESS.md",
+                  "test_report": ".ai-architecture/phase-2-authorization/TEST_REPORT.md",
+                  "prompt3_handoff": ".ai-architecture/phase-2-authorization/PROMPT3_HANDOFF.md",
+                  "quality_gate": "artifacts/task-validation/phase-2-roles-authorization-and-capability-policy/",
+                  "phase1": {
+                    "current_state_md": ".ai-architecture/phase-1-capabilities/CURRENT_STATE.md",
+                    "capability_catalog_json": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.json",
+                    "capability_catalog_md": ".ai-architecture/phase-1-capabilities/CAPABILITY_CATALOG.md",
+                    "tool_layer_assessment": ".ai-architecture/phase-1-capabilities/TOOL_LAYER_ASSESSMENT.md",
+                    "target_tool_architecture": ".ai-architecture/phase-1-capabilities/TARGET_TOOL_ARCHITECTURE.md",
+                    "regression_baseline": ".ai-architecture/phase-1-capabilities/REGRESSION_BASELINE.md",
+                    "migration_plan": ".ai-architecture/phase-1-capabilities/MIGRATION_PLAN.md",
+                    "prompt2_handoff": ".ai-architecture/phase-1-capabilities/PROMPT2_HANDOFF.md",
+                    "quality_gate": "artifacts/task-validation/phase-1-capability-catalog-and-tool-layer/"
+                  }
                 }
               }
             }
@@ -105,85 +123,66 @@
       }
     }
   },
-  "role_profiles_implemented": [
-    "oss",
-    "nurse",
-    "doctor",
-    "supervisor",
-    "administrator",
-    "default"
-  ],
-  "role_experience_matrix_version": "92121436d347",
-  "role_home": "done (GET /skills/copilot/home + CopilotHome; policy/scope/availability/signals derived)",
-  "composite_workflows": [
-    "start_shift",
-    "resident_round (giro parametri, giro terapia, prepara visita)"
-  ],
-  "proactive_integration": "done (role tab/order/density; briefing focus + priority-first ordering)",
-  "voice_integration": "done (same submitText path; profile phrases; mic handed back)",
-  "role_switch_test": {
+  "authentication": {
+    "status": "BLOCKED (external)",
+    "implemented": "Entra JWT (RS256/JWKS, oid mapping) is the only identity source on tier production; per-request policy/scope unchanged",
+    "verified": "end-to-end with a local JWKS (backend E2E identity test)",
+    "production": "AUTH_MODE unset, no ENTRA_* / VITE_ENTRA_* configured → clinical API 503 (fail closed)"
+  },
+  "simulator_production_status": "PASS — unreachable on tier production (code + startup refusal); demo tier keeps it",
+  "session_hardening": "PASS — Entra silent renewal, MSAL cache cleared on logout, simulator server-side revocation, CORS/CSRF posture tested",
+  "secrets_config": "PASS — no committed/client/log secrets; fail-fast validation checked against real prod/demo variable names",
+  "azure_resilience": "PASS — timeout/429/5xx/malformed/down degrade to deterministic; runtime constant-time token + generic errors",
+  "observability": "PASS — X-Request-Id backend→runtime→audit link, JSON logs, token-gated /metrics (external scraper/alerting not provisioned)",
+  "privacy": "PASS — data map + structural redaction; legal decisions listed (not invented)",
+  "token_cost_baseline": {
+    "skill_route_chars_per_turn": {
+      "oss": 2641,
+      "nurse": 2993,
+      "doctor": 2997,
+      "supervisor": 3191,
+      "administrator": 1700
+    },
+    "ai_calls_per_text_turn": 1,
+    "ai_calls_from_polling": 0,
+    "briefing_calls_max": 1,
+    "real_skill_route_latency_ms_sample": 3764
+  },
+  "migrations": "PASS — 51/51 clean ×6 fresh DBs; pre-existing Consegna DESC index drift documented (fix needs schema approval)",
+  "deployment_readiness": "CONDITIONALLY READY — clean start verified locally with the real demo env; prod deploy + IdP pending",
+  "concurrency": "PASS",
+  "load": {
     "status": "PASS",
-    "ids": [
-      "F (backend)",
-      "browser OSS→Doctor→Supervisor"
-    ]
+    "rps_mixed": 90,
+    "error_rate_pct": 0,
+    "gui_p95_ms_c40": 273,
+    "assistant_p95_ms_c40": 1978
   },
-  "context_invalidation_test": {
+  "recovery": {
     "status": "PASS",
-    "ids": [
-      "F",
-      "G",
-      "H",
-      "L",
-      "COP-02",
-      "COP-03"
-    ]
+    "checks": 19,
+    "pass": 19
   },
-  "usability_tests": {
+  "ai_off_classic_gui": {
     "status": "PASS",
-    "report": "E2E_TEST_REPORT.md §3"
+    "checks": 15,
+    "pass": 15
   },
-  "e2e": {
-    "backend_copilot": {
-      "tests": 14,
-      "pass": 14
-    },
-    "copilot_browser": {
-      "checks": 28,
-      "pass": 28
-    },
-    "adversarial": {
-      "tests": 50,
-      "pass": 50
-    },
-    "adversarial_matrix": {
-      "scenarios": 57,
-      "pass": 57
-    },
-    "status": "PASS"
-  },
-  "regression": {
+  "production_smoke": "NOT EXECUTED (authenticated steps) — public endpoints probed read-only; no IdP in production",
+  "full_regression": {
     "backend_full_fresh_db_serial": {
-      "tests": 1694,
-      "pass": 1672,
+      "tests": 1710,
+      "pass": 1688,
       "fail": 21,
       "new_failures": 0
     },
-    "proactive_browser": {
-      "checks": 29,
-      "pass": 29
+    "phase9_backend": {
+      "tests": 16,
+      "pass": 16
     },
-    "safety_browser": {
-      "checks": 18,
-      "pass": 18
-    },
-    "assistant_browser": {
-      "checks": 47,
-      "pass": 47
-    },
-    "voice_browser": {
-      "checks": 78,
-      "pass": 78
+    "runtime": {
+      "tests": 218,
+      "pass": 218
     },
     "frontend": {
       "tests": 1001,
@@ -191,129 +190,100 @@
       "fail": 9,
       "new_failures": 0
     },
-    "runtime": {
-      "tests": 189,
-      "pass": 189
+    "browser": {
+      "copilot": "28/28",
+      "proactive": "29/29",
+      "safety": "18/18",
+      "assistant": "47/47",
+      "voice": "78/78"
     },
-    "provider_filter_check": "all OK (azure:gpt-6.1-sol)",
-    "status": "PASS"
-  },
-  "prompt_context_baseline": {
-    "role_hint_max_chars": 200,
-    "router_skill_context_chars": {
-      "oss": 2117,
-      "nurse": 2609,
-      "doctor": 2604,
-      "supervisor": 2934,
-      "administrator": 908,
-      "full_catalog": 3099
-    },
-    "home_p50_ms": "12–31",
-    "home_llm_calls": 0
+    "npm_audit": "0 vulnerabilities",
+    "status": "PASS",
+    "browser_new_runtime_real_azure": {
+      "copilot": "28/28",
+      "proactive": "29/29",
+      "safety": "18/18",
+      "assistant": "47/47",
+      "voice": "76/78 (2 checks: Azure RATE_LIMIT 16/16 + transient STT, external)"
+    }
   },
   "independent_qa": {
     "verdict": "READY FOR QA",
-    "rounds": 2
+    "findings": "2 medium + 8 low, all fixed or documented"
   },
+  "external_blockers": [
+    "Entra ID app registration / tenant / audience / user oid mapping not provisioned",
+    "Phase 9 branch not deployed; authenticated production smoke pending",
+    "Metrics scraper / alerting backend not chosen",
+    "Legal: DPIA, data residency, audit/log retention decisions",
+    "OPENAI_API_KEY not set (OpenAI Direct real smoke pending)",
+    "Azure deployment quota limits real-LLM regression"
+  ],
   "blockers": [],
-  "next_phase": 9,
-  "next_handoff_path": ".ai-architecture/phase-8-copilots/PROMPT9_HANDOFF.md",
-  "phase7_state": {
-    "event_types": {
-      "discovered": 13,
-      "integrated": 13,
-      "ids": [
-        "vitals.recorded",
-        "diary.entry_created",
-        "handover.open",
-        "therapy.prescribed",
-        "therapy.changed",
-        "administration.recorded",
-        "administration.due",
-        "document.added",
-        "room.changed",
-        "note.received",
-        "workflow.pending",
-        "policy.applied",
-        "access.denied_summary"
-      ]
-    },
-    "signal_types": [
-      "NEW_INFORMATION",
-      "PENDING_ACTIVITY",
-      "OVERDUE_ACTIVITY",
-      "HANDOVER_ITEM",
-      "STATE_CHANGE",
-      "FOLLOW_UP",
-      "DOCUMENT_AVAILABLE",
-      "ATTENTION_REQUIRED"
+  "next_phase": 10,
+  "next_handoff_path": ".ai-architecture/phase-9-production/PROMPT10_HANDOFF.md",
+  "phase8_state": {
+    "phase": 8,
+    "phase_name": "Role-Specific Copilots & Workflow Specialization",
+    "phase_status": "COMPLETED",
+    "timestamp": "2026-10-01T19:50:53.668838Z",
+    "role_profiles_implemented": [
+      "oss",
+      "nurse",
+      "doctor",
+      "supervisor",
+      "administrator",
+      "default"
     ],
-    "role_signal_matrix_version": "f2b159ec8050",
-    "attention_inbox": "done (Per te: Da vedere / Cosa è cambiato / Briefing turno; badge new-only)",
-    "briefing": "done (facts from real events, previous shift → now, ≤1 LLM call on fixed templates, deterministic fallback, cost guard)",
-    "change_since_last_view": "done (append-only proactive:seen watermark)",
-    "dedup_ack": "done (grouping keys, revision = time.count.priority.type, ack per revision, recomputed resolution)",
-    "scope_leakage_tests": {
+    "role_experience_matrix_version": "92121436d347",
+    "role_home": "done (GET /skills/copilot/home + CopilotHome; policy/scope/availability/signals derived)",
+    "composite_workflows": [
+      "start_shift",
+      "resident_round (giro parametri, giro terapia, prepara visita)"
+    ],
+    "proactive_integration": "done (role tab/order/density; briefing focus + priority-first ordering)",
+    "voice_integration": "done (same submitText path; profile phrases; mic handed back)",
+    "role_switch_test": {
       "status": "PASS",
-      "ids": [
-        "A",
-        "B",
-        "F",
-        "N",
-        "S",
-        "W",
-        "browser A/B/E/F"
-      ]
+      "ids": ["F (backend)", "browser OSS→Doctor→Supervisor"]
     },
-    "proactive_action_safety_tests": {
+    "context_invalidation_test": {
       "status": "PASS",
-      "ids": [
-        "G",
-        "H",
-        "I",
-        "P",
-        "browser G + resume"
-      ]
+      "ids": ["F", "G", "H", "L", "COP-02", "COP-03"]
     },
-    "prompt_injection_tests": {
+    "usability_tests": {
       "status": "PASS",
-      "ids": [
-        "L",
-        "T",
-        "runtime test_untrusted",
-        "provider filter check"
-      ]
-    },
-    "ai_fallback_tests": {
-      "status": "PASS",
-      "ids": [
-        "L",
-        "M",
-        "V"
-      ]
+      "report": "E2E_TEST_REPORT.md §3"
     },
     "e2e": {
-      "backend_proactive": {
-        "tests": 29,
-        "pass": 29
+      "backend_copilot": {
+        "tests": 14,
+        "pass": 14
       },
-      "proactive_browser": {
-        "checks": 29,
-        "pass": 29,
-        "real_ai_briefing_composed": true
+      "copilot_browser": {
+        "checks": 28,
+        "pass": 28
+      },
+      "adversarial": {
+        "tests": 50,
+        "pass": 50
+      },
+      "adversarial_matrix": {
+        "scenarios": 57,
+        "pass": 57
       },
       "status": "PASS"
     },
     "regression": {
       "backend_full_fresh_db_serial": {
-        "tests": 1673,
-        "pass": 1651,
+        "tests": 1694,
+        "pass": 1672,
         "fail": 21,
         "new_failures": 0
       },
-      "phase6_adversarial": {
-        "tests": 44,
-        "pass": 44
+      "proactive_browser": {
+        "checks": 29,
+        "pass": 29
       },
       "safety_browser": {
         "checks": 18,
@@ -328,174 +298,123 @@
         "pass": 78
       },
       "frontend": {
-        "tests": 999,
-        "pass": 990,
+        "tests": 1001,
+        "pass": 992,
         "fail": 9,
         "new_failures": 0
       },
       "runtime": {
-        "tests": 188,
-        "pass": 188
+        "tests": 189,
+        "pass": 189
       },
-      "builds_typecheck": "pass",
+      "provider_filter_check": "all OK (azure:gpt-6.1-sol)",
       "status": "PASS"
     },
-    "performance_cost": {
-      "inbox_p50_ms": "5–34",
-      "inbox_llm_calls": 0,
-      "briefing_llm_calls_max": 1,
-      "briefing_context_chars": "~1.9–2.2k",
-      "briefing_latency_s": "~7–8 (azure:gpt-6.1-sol)",
-      "briefing_reused_ms": 29,
-      "dedup_burst": "20 events → 1 signal"
+    "prompt_context_baseline": {
+      "role_hint_max_chars": 200,
+      "router_skill_context_chars": {
+        "oss": 2117,
+        "nurse": 2609,
+        "doctor": 2604,
+        "supervisor": 2934,
+        "administrator": 908,
+        "full_catalog": 3099
+      },
+      "home_p50_ms": "12–31",
+      "home_llm_calls": 0
     },
     "independent_qa": {
       "verdict": "READY FOR QA",
-      "rounds": 3,
-      "findings_fixed": [
-        "HIGH upcoming→overdue hidden by ack",
-        "MEDIUM escalation after ack",
-        "MEDIUM out-of-scope resident in handover",
-        "LOW drug free text to LLM",
-        "LOW denied summary ack",
-        "LOW badge/poll/degraded/cost guard",
-        "HIGH cached summary after scope revocation"
-      ]
+      "rounds": 2
     },
-    "phase6_regression_fixed": "UNTRUSTED_RULE reworded (Azure Prompt Shields jailbreak false positive)",
     "blockers": [],
-    "pending_decisions": [
-      "Classic Note/Consegne screens still show residents outside the reader scope (R7-2)",
-      "Phase 6 pending decisions unchanged"
-    ],
-    "phase6_state": {
-      "threat_scenarios": {
-        "total": 51,
-        "passed": 51,
-        "failed": 0
-      },
-      "critical_failures": 0,
-      "wrong_patient_tests": {
-        "total": 5,
-        "passed": 5,
+    "next_phase": 9,
+    "next_handoff_path": ".ai-architecture/phase-8-copilots/PROMPT9_HANDOFF.md",
+    "phase7_state": {
+      "event_types": {
+        "discovered": 13,
+        "integrated": 13,
         "ids": [
-          "RES-01",
-          "RES-02",
-          "RES-03",
-          "RES-04",
-          "RES-07"
-        ],
-        "status": "PASS"
+          "vitals.recorded",
+          "diary.entry_created",
+          "handover.open",
+          "therapy.prescribed",
+          "therapy.changed",
+          "administration.recorded",
+          "administration.due",
+          "document.added",
+          "room.changed",
+          "note.received",
+          "workflow.pending",
+          "policy.applied",
+          "access.denied_summary"
+        ]
       },
-      "authorization_bypass_tests": {
-        "total": 9,
-        "passed": 9,
-        "ids": [
-          "AUTH-01",
-          "AUTH-02",
-          "AUTH-03",
-          "AUTH-04",
-          "AUTH-05",
-          "AUTH-06",
-          "FC-01",
-          "FC-03",
-          "FC-04"
-        ],
-        "status": "PASS"
+      "signal_types": [
+        "NEW_INFORMATION",
+        "PENDING_ACTIVITY",
+        "OVERDUE_ACTIVITY",
+        "HANDOVER_ITEM",
+        "STATE_CHANGE",
+        "FOLLOW_UP",
+        "DOCUMENT_AVAILABLE",
+        "ATTENTION_REQUIRED"
+      ],
+      "role_signal_matrix_version": "f2b159ec8050",
+      "attention_inbox": "done (Per te: Da vedere / Cosa è cambiato / Briefing turno; badge new-only)",
+      "briefing": "done (facts from real events, previous shift → now, ≤1 LLM call on fixed templates, deterministic fallback, cost guard)",
+      "change_since_last_view": "done (append-only proactive:seen watermark)",
+      "dedup_ack": "done (grouping keys, revision = time.count.priority.type, ack per revision, recomputed resolution)",
+      "scope_leakage_tests": {
+        "status": "PASS",
+        "ids": ["A", "B", "F", "N", "S", "W", "browser A/B/E/F"]
+      },
+      "proactive_action_safety_tests": {
+        "status": "PASS",
+        "ids": ["G", "H", "I", "P", "browser G + resume"]
       },
       "prompt_injection_tests": {
-        "total": 7,
-        "passed": 7,
-        "ids": [
-          "INJ-01",
-          "INJ-02",
-          "INJ-03",
-          "INJ-04",
-          "INJ-05",
-          "RT-INJ-01",
-          "RT-INJ-02"
-        ],
+        "status": "PASS",
+        "ids": ["L", "T", "runtime test_untrusted", "provider filter check"]
+      },
+      "ai_fallback_tests": {
+        "status": "PASS",
+        "ids": ["L", "M", "V"]
+      },
+      "e2e": {
+        "backend_proactive": {
+          "tests": 29,
+          "pass": 29
+        },
+        "proactive_browser": {
+          "checks": 29,
+          "pass": 29,
+          "real_ai_briefing_composed": true
+        },
         "status": "PASS"
       },
-      "voice_safety_tests": {
-        "total": 7,
-        "passed": 7,
-        "ids": [
-          "VOI-01",
-          "VOI-02",
-          "VOI-03",
-          "VOI-04",
-          "VOI-05",
-          "VOI-06",
-          "VOI-07"
-        ],
-        "status": "PASS"
-      },
-      "idempotency_tests": {
-        "total": 6,
-        "passed": 6,
-        "ids": [
-          "TX-01",
-          "TX-02",
-          "TX-03",
-          "TX-04",
-          "TX-06",
-          "UI-D1"
-        ],
-        "status": "PASS"
-      },
-      "audit_integrity_tests": {
-        "total": 5,
-        "passed": 5,
-        "ids": [
-          "AUD-01",
-          "AUD-02",
-          "AUD-03",
-          "AUD-04",
-          "AUD-05"
-        ],
-        "status": "PASS"
-      },
-      "result_integrity_tests": {
-        "total": 4,
-        "passed": 4,
-        "ids": [
-          "TX-05",
-          "UI-R1",
-          "UI-R2",
-          "UI-R3"
-        ],
-        "status": "PASS"
-      },
-      "data_leakage_tests": {
-        "total": 5,
-        "passed": 5,
-        "ids": [
-          "RES-05",
-          "RES-06",
-          "LEAK-01",
-          "LEAK-02",
-          "UI-S1"
-        ],
-        "status": "PASS"
-      },
-      "provider_failure_tests": {
-        "total": 3,
-        "passed": 3,
-        "ids": [
-          "FC-02",
-          "PROV-01",
-          "PROV-02"
-        ],
-        "status": "PASS"
-      },
-      "gaps_fixed": "G-01…G-18 (CURRENT_STATE.md §2)",
       "regression": {
         "backend_full_fresh_db_serial": {
-          "tests": 1642,
-          "pass": 1620,
+          "tests": 1673,
+          "pass": 1651,
           "fail": 21,
           "new_failures": 0
+        },
+        "phase6_adversarial": {
+          "tests": 44,
+          "pass": 44
+        },
+        "safety_browser": {
+          "checks": 18,
+          "pass": 18
+        },
+        "assistant_browser": {
+          "checks": 47,
+          "pass": 47
+        },
+        "voice_browser": {
+          "checks": 78,
+          "pass": 78
         },
         "frontend": {
           "tests": 999,
@@ -504,332 +423,516 @@
           "new_failures": 0
         },
         "runtime": {
-          "tests": 187,
-          "pass": 187
-        },
-        "assistant_text_browser_e2e": {
-          "checks": 47,
-          "pass": 47
-        },
-        "voice_browser_e2e": {
-          "checks": 78,
-          "pass": 78
-        },
-        "safety_browser_e2e": {
-          "checks": 18,
-          "pass": 18
+          "tests": 188,
+          "pass": 188
         },
         "builds_typecheck": "pass",
-        "classic_gui": "pass (voice E2E step M)",
         "status": "PASS"
+      },
+      "performance_cost": {
+        "inbox_p50_ms": "5–34",
+        "inbox_llm_calls": 0,
+        "briefing_llm_calls_max": 1,
+        "briefing_context_chars": "~1.9–2.2k",
+        "briefing_latency_s": "~7–8 (azure:gpt-6.1-sol)",
+        "briefing_reused_ms": 29,
+        "dedup_burst": "20 events → 1 signal"
       },
       "independent_qa": {
         "verdict": "READY FOR QA",
-        "critical": 0,
-        "high": 0,
-        "followups_applied": [
-          "G-17",
-          "G-18",
-          "4xx handler",
-          "browser step I scoping"
+        "rounds": 3,
+        "findings_fixed": [
+          "HIGH upcoming→overdue hidden by ack",
+          "MEDIUM escalation after ack",
+          "MEDIUM out-of-scope resident in handover",
+          "LOW drug free text to LLM",
+          "LOW denied summary ack",
+          "LOW badge/poll/degraded/cost guard",
+          "HIGH cached summary after scope revocation"
         ]
       },
+      "phase6_regression_fixed": "UNTRUSTED_RULE reworded (Azure Prompt Shields jailbreak false positive)",
       "blockers": [],
       "pending_decisions": [
-        "Owner confirmation: Entra documents follow the Resident Access Scope (supersedes PO #260 «struttura» exception)",
-        "Production AUTH_MODE (R-16)",
-        "Azure gpt-live-transcribe deployment for PR #393 (R-20)"
+        "Classic Note/Consegne screens still show residents outside the reader scope (R7-2)",
+        "Phase 6 pending decisions unchanged"
       ],
-      "residual_risks": "PROMPT7_HANDOFF.md §11 (R-01…R-20)",
-      "phase5_state": {
-        "voice_entry_point": "AI Assistant composer mic «Parla» (VoiceMicButton, data-testid am-mic) → frontend/src/components/assistant/voice/useVoiceChannel.ts → submitText(text, 'voice')",
-        "push_to_talk": {
-          "status": "implemented",
-          "mode": "tap to talk, VAD end of turn, «Fine», «Annulla»",
-          "states": [
-            "IDLE",
-            "LISTENING",
-            "SPEECH_ACTIVE",
-            "TRANSCRIBING",
-            "TRANSCRIPT_READY",
-            "PROCESSING",
-            "AWAITING_CONFIRMATION",
-            "COMPLETED",
-            "ERROR",
-            "CANCELLED"
-          ]
+      "phase6_state": {
+        "threat_scenarios": {
+          "total": 51,
+          "passed": 51,
+          "failed": 0
         },
-        "vad": {
-          "status": "implemented (client-side energy VAD, no LLM)",
-          "config_env": "VOICE_VAD_*",
-          "defaults": {
-            "speechMarginDb": 12,
-            "minSpeechDb": -50,
-            "minSpeechMs": 300,
-            "endSilenceMs": 900,
-            "maxUtteranceMs": 15000,
-            "noSpeechTimeoutMs": 6000
-          }
+        "critical_failures": 0,
+        "wrong_patient_tests": {
+          "total": 5,
+          "passed": 5,
+          "ids": ["RES-01", "RES-02", "RES-03", "RES-04", "RES-07"],
+          "status": "PASS"
         },
-        "stt": {
-          "contract": "SpeechToTextProvider.transcribe(audio, locale, context?) → TranscriptResult (backend/src/voice/stt.ts)",
-          "adapter": "clinicos-ai-runtime/clinicos_ai/voice/stt.py via AI_STT_MODEL=provider:model",
-          "providers": {
-            "google": "verified (gemini-3.5-flash-lite, real audio fixtures, 22/22 + 21/22)",
-            "azure": "implemented, NOT provider-tested (no transcription deployment in the resource)",
-            "mock": "CI"
-          },
-          "locale": "it-IT",
-          "enabled_in": [],
-          "enable_switches": [
-            "runtime AI_STT_MODEL",
-            "backend VOICE_CHANNEL_ENABLED=true"
-          ]
+        "authorization_bypass_tests": {
+          "total": 9,
+          "passed": 9,
+          "ids": [
+            "AUTH-01",
+            "AUTH-02",
+            "AUTH-03",
+            "AUTH-04",
+            "AUTH-05",
+            "AUTH-06",
+            "FC-01",
+            "FC-03",
+            "FC-04"
+          ],
+          "status": "PASS"
         },
-        "tts": {
-          "status": "optional, implemented, off by default",
-          "content": "fixed status phrases only (no clinical data)",
-          "controls": [
-            "mute",
-            "stop"
-          ]
+        "prompt_injection_tests": {
+          "total": 7,
+          "passed": 7,
+          "ids": ["INJ-01", "INJ-02", "INJ-03", "INJ-04", "INJ-05", "RT-INJ-01", "RT-INJ-02"],
+          "status": "PASS"
         },
-        "session_mode": {
-          "status": "not implemented (optional; deferred)"
+        "voice_safety_tests": {
+          "total": 7,
+          "passed": 7,
+          "ids": ["VOI-01", "VOI-02", "VOI-03", "VOI-04", "VOI-05", "VOI-06", "VOI-07"],
+          "status": "PASS"
         },
-        "e2e": {
-          "browser_voice_real_stt_agno": {
-            "checks": 78,
-            "pass": 78,
-            "fail": 0,
-            "scenarios": "Prompt 5 §16 A–M"
-          },
-          "backend_integration": {
-            "tests": 10,
-            "pass": 10
-          },
-          "frontend_unit_voice": {
-            "tests": 20,
-            "pass": 20
-          },
-          "runtime_unit_voice": {
-            "tests": 6,
-            "pass": 6
-          },
-          "provider_dependent": {
-            "runs": 2,
-            "results": [
-              "22/22",
-              "21/22 (1 provider timeout, typed)"
-            ]
-          }
+        "idempotency_tests": {
+          "total": 6,
+          "passed": 6,
+          "ids": ["TX-01", "TX-02", "TX-03", "TX-04", "TX-06", "UI-D1"],
+          "status": "PASS"
         },
+        "audit_integrity_tests": {
+          "total": 5,
+          "passed": 5,
+          "ids": ["AUD-01", "AUD-02", "AUD-03", "AUD-04", "AUD-05"],
+          "status": "PASS"
+        },
+        "result_integrity_tests": {
+          "total": 4,
+          "passed": 4,
+          "ids": ["TX-05", "UI-R1", "UI-R2", "UI-R3"],
+          "status": "PASS"
+        },
+        "data_leakage_tests": {
+          "total": 5,
+          "passed": 5,
+          "ids": ["RES-05", "RES-06", "LEAK-01", "LEAK-02", "UI-S1"],
+          "status": "PASS"
+        },
+        "provider_failure_tests": {
+          "total": 3,
+          "passed": 3,
+          "ids": ["FC-02", "PROV-01", "PROV-02"],
+          "status": "PASS"
+        },
+        "gaps_fixed": "G-01…G-18 (CURRENT_STATE.md §2)",
         "regression": {
-          "assistant_text_browser_e2e": {
-            "checks": 46,
-            "pass": 46
-          },
           "backend_full_fresh_db_serial": {
-            "tests": 1596,
-            "pass": 1574,
+            "tests": 1642,
+            "pass": 1620,
             "fail": 21,
-            "new_failure_files": 0
+            "new_failures": 0
           },
           "frontend": {
-            "tests": 998,
+            "tests": 999,
+            "pass": 990,
             "fail": 9,
             "new_failures": 0
           },
           "runtime": {
-            "tests": 182,
-            "pass": 182
+            "tests": 187,
+            "pass": 187
+          },
+          "assistant_text_browser_e2e": {
+            "checks": 47,
+            "pass": 47
+          },
+          "voice_browser_e2e": {
+            "checks": 78,
+            "pass": 78
+          },
+          "safety_browser_e2e": {
+            "checks": 18,
+            "pass": 18
           },
           "builds_typecheck": "pass",
-          "classic_gui": "browser E2E M: 8 operator sections render, no console errors"
+          "classic_gui": "pass (voice E2E step M)",
+          "status": "PASS"
         },
-        "latency_baseline_ms": {
-          "capture_end_to_transcript": "1204–1853 (median ≈ 1300)",
-          "end_of_turn_silence": 900,
-          "transcript_to_agno_ui_state": "1956–2444; prescription 4984",
-          "confirmation_to_backend_result": "251–277",
-          "stt_provider_p50": "1145–1204",
-          "stt_provider_tail": "up to 20172 (timeout)"
+        "independent_qa": {
+          "verdict": "READY FOR QA",
+          "critical": 0,
+          "high": 0,
+          "followups_applied": ["G-17", "G-18", "4xx handler", "browser step I scoping"]
         },
-        "cost_observations": {
-          "stt_calls_per_utterance": 1,
-          "stt_calls_for_silence_or_steady_noise": 0,
-          "tokens_short_command": {
-            "input": 296,
-            "output": 16
-          },
-          "tokens_per_audio_second": "≈ 43 input",
-          "provider_quota": "Gemini 429 on bursts (~15–20 calls/min unpaced)",
-          "rate_limit": "VOICE_STT_RATE_LIMIT_PER_MIN default 20 per operator"
-        },
-        "external_blockers": [],
+        "blockers": [],
         "pending_decisions": [
-          "Enable voice in demo/production: sends utterances to the STT provider (Google Gemini API) — DPA/privacy decision of the owner",
-          "Azure transcription deployment (optional alternative provider)"
+          "Owner confirmation: Entra documents follow the Resident Access Scope (supersedes PO #260 «struttura» exception)",
+          "Production AUTH_MODE (R-16)",
+          "Azure gpt-live-transcribe deployment for PR #393 (R-20)"
         ],
-        "manual_tests_missing": [
-          "tablet checklist (E2E_TEST_REPORT.md)",
-          "real voices/accents",
-          "hosted latency on Railway"
-        ],
-        "independent_qa": "READY FOR QA (2 rounds: round 1 FAILED VALIDATION H1, M2-M4, L5-L9 → all fixed; round 2 residual LOWs fixed or documented)",
-        "gaps": [
-          "P5-G1 voice disabled by default everywhere (decision pending)",
-          "P5-G2 Azure STT untested (no deployment)",
-          "P5-G3 session (hands-free) mode not implemented",
-          "P5-G4 tablet/hardware tests manual only",
-          "P5-G5 ScriptProcessorNode on main thread (AudioWorklet later)",
-          "P5-G6 rate limit/workflow store in-memory per instance",
-          "P5-G7 deterministic fallback does not recognise lowercase surnames from STT (Agno does); preview + Conferma mitigate"
-        ],
-        "decisions": [
-          "Voice is a channel: transcript reviewed by the user, then the Phase 4 submitText path",
-          "Confirmation stays a UI button; spoken «conferma» refused",
-          "Per-environment VOICE_CHANNEL_ENABLED (default off) because the runtime is shared",
-          "STT via the AI runtime (credentials server-side), Gemini system instruction, literal transcription"
-        ],
-        "phase4_state": {
-          "phase": 4,
-          "phase_status": "COMPLETED",
-          "assistant_entry_point": "frontend/src/App.tsx topbar «Assistente AI» (data-testid assistant-entry) → components/assistant/AssistantMode.tsx",
-          "implemented_role_experiences": [
-            "oss",
-            "nurse",
-            "doctor",
-            "supervisor",
-            "administrator"
-          ],
-          "tested_skills_through_assistant_ui": [
-            "patient.overview",
-            "therapy.prescribe",
-            "handover.create",
-            "vitals.record",
-            "diary.add_observation",
-            "administration.record",
-            "vitals.recent"
-          ],
-          "resident_access_scope": {
-            "status": "implemented, enforced backend-side (services via patient-scope delegation, Tool Layer, /skills)",
-            "modes_implemented": [
-              "all",
-              "registered_by_me"
-            ],
-            "modes_declared": [
-              "assigned_to_me",
-              "ward",
-              "team",
-              "facility",
-              "patient_assignment"
-            ],
-            "config": "RESIDENT_SCOPE_CONFIG (implemented modes only)"
+        "residual_risks": "PROMPT7_HANDOFF.md §11 (R-01…R-20)",
+        "phase5_state": {
+          "voice_entry_point": "AI Assistant composer mic «Parla» (VoiceMicButton, data-testid am-mic) → frontend/src/components/assistant/voice/useVoiceChannel.ts → submitText(text, 'voice')",
+          "push_to_talk": {
+            "status": "implemented",
+            "mode": "tap to talk, VAD end of turn, «Fine», «Annulla»",
+            "states": [
+              "IDLE",
+              "LISTENING",
+              "SPEECH_ACTIVE",
+              "TRANSCRIBING",
+              "TRANSCRIPT_READY",
+              "PROCESSING",
+              "AWAITING_CONFIRMATION",
+              "COMPLETED",
+              "ERROR",
+              "CANCELLED"
+            ]
           },
-          "confirmation_policy": {
-            "version": 2,
-            "rule": "explicit UI event bound to previewId; payload change → new previewId; prescriptions bound to the exact payload; typed confirmation refused"
+          "vad": {
+            "status": "implemented (client-side energy VAD, no LLM)",
+            "config_env": "VOICE_VAD_*",
+            "defaults": {
+              "speechMarginDb": 12,
+              "minSpeechDb": -50,
+              "minSpeechMs": 300,
+              "endSilenceMs": 900,
+              "maxUtteranceMs": 15000,
+              "noSpeechTimeoutMs": 6000
+            }
           },
-          "skills": {
-            "total": 16,
-            "TESTED": 16,
-            "EXECUTABLE": 16,
-            "DESIGNED": 0,
-            "BLOCKED": 0
+          "stt": {
+            "contract": "SpeechToTextProvider.transcribe(audio, locale, context?) → TranscriptResult (backend/src/voice/stt.ts)",
+            "adapter": "clinicos-ai-runtime/clinicos_ai/voice/stt.py via AI_STT_MODEL=provider:model",
+            "providers": {
+              "google": "verified (gemini-3.5-flash-lite, real audio fixtures, 22/22 + 21/22)",
+              "azure": "implemented, NOT provider-tested (no transcription deployment in the resource)",
+              "mock": "CI"
+            },
+            "locale": "it-IT",
+            "enabled_in": [],
+            "enable_switches": ["runtime AI_STT_MODEL", "backend VOICE_CHANNEL_ENABLED=true"]
+          },
+          "tts": {
+            "status": "optional, implemented, off by default",
+            "content": "fixed status phrases only (no clinical data)",
+            "controls": ["mute", "stop"]
+          },
+          "session_mode": {
+            "status": "not implemented (optional; deferred)"
           },
           "e2e": {
-            "api": {
-              "tests": 38,
-              "pass": 38,
+            "browser_voice_real_stt_agno": {
+              "checks": 78,
+              "pass": 78,
               "fail": 0,
-              "scenarios": "Prompt 4 A–J + QA H1 + Phase 3 A–J + scope"
+              "scenarios": "Prompt 5 §16 A–M"
             },
-            "browser_deterministic": {
-              "checks": 46,
-              "pass": 46,
-              "fail": 0
+            "backend_integration": {
+              "tests": 10,
+              "pass": 10
             },
-            "browser_agno_live": {
-              "checks": 46,
-              "pass": 46,
-              "fail": 0,
-              "agno_interpreted_requests": 9
+            "frontend_unit_voice": {
+              "tests": 20,
+              "pass": 20
+            },
+            "runtime_unit_voice": {
+              "tests": 6,
+              "pass": 6
+            },
+            "provider_dependent": {
+              "runs": 2,
+              "results": ["22/22", "21/22 (1 provider timeout, typed)"]
             }
           },
           "regression": {
-            "backend_full_fresh_db": {
-              "tests": 1584,
+            "assistant_text_browser_e2e": {
+              "checks": 46,
+              "pass": 46
+            },
+            "backend_full_fresh_db_serial": {
+              "tests": 1596,
+              "pass": 1574,
+              "fail": 21,
               "new_failure_files": 0
             },
             "frontend": {
-              "tests": 977,
+              "tests": 998,
               "fail": 9,
               "new_failures": 0
             },
-            "builds_typecheck_lint": "pass",
-            "runtime": "unchanged (176/176)"
+            "runtime": {
+              "tests": 182,
+              "pass": 182
+            },
+            "builds_typecheck": "pass",
+            "classic_gui": "browser E2E M: 8 operator sections render, no console errors"
           },
-          "independent_qa": "READY FOR QA (3 rounds; H1, M1 + residual hidden-field finding fixed)",
+          "latency_baseline_ms": {
+            "capture_end_to_transcript": "1204–1853 (median ≈ 1300)",
+            "end_of_turn_silence": 900,
+            "transcript_to_agno_ui_state": "1956–2444; prescription 4984",
+            "confirmation_to_backend_result": "251–277",
+            "stt_provider_p50": "1145–1204",
+            "stt_provider_tail": "up to 20172 (timeout)"
+          },
+          "cost_observations": {
+            "stt_calls_per_utterance": 1,
+            "stt_calls_for_silence_or_steady_noise": 0,
+            "tokens_short_command": {
+              "input": 296,
+              "output": 16
+            },
+            "tokens_per_audio_second": "≈ 43 input",
+            "provider_quota": "Gemini 429 on bursts (~15–20 calls/min unpaced)",
+            "rate_limit": "VOICE_STT_RATE_LIMIT_PER_MIN default 20 per operator"
+          },
+          "external_blockers": [],
+          "pending_decisions": [
+            "Enable voice in demo/production: sends utterances to the STT provider (Google Gemini API) — DPA/privacy decision of the owner",
+            "Azure transcription deployment (optional alternative provider)"
+          ],
+          "manual_tests_missing": [
+            "tablet checklist (E2E_TEST_REPORT.md)",
+            "real voices/accents",
+            "hosted latency on Railway"
+          ],
+          "independent_qa": "READY FOR QA (2 rounds: round 1 FAILED VALIDATION H1, M2-M4, L5-L9 → all fixed; round 2 residual LOWs fixed or documented)",
           "gaps": [
-            "P4-G1 scope modes need data",
-            "P4-G2 prescription binding compares drug/times/start; other fields bound by display + whitelist",
-            "P4-G3 in-process workflow store",
-            "P4-G4 legacy Agnos panel coexists",
-            "P4-G5 browser E2E local only",
-            "P4-G6 prod AUTH_MODE unset (user decision)"
+            "P5-G1 voice disabled by default everywhere (decision pending)",
+            "P5-G2 Azure STT untested (no deployment)",
+            "P5-G3 session (hands-free) mode not implemented",
+            "P5-G4 tablet/hardware tests manual only",
+            "P5-G5 ScriptProcessorNode on main thread (AudioWorklet later)",
+            "P5-G6 rate limit/workflow store in-memory per instance",
+            "P5-G7 deterministic fallback does not recognise lowercase surnames from STT (Agno does); preview + Conferma mitigate"
           ],
           "decisions": [
-            "Prescriptions/administrations: assistant prepares, professional confirms via UI bound to the exact payload",
-            "Handover default normale + type Assistente AI, urgency suggested only",
-            "Administrator: per-resident clinical reads removed from baseline, aggregates kept",
-            "Resident Access Scope service, behaviour preserved, configurable, never widened"
+            "Voice is a channel: transcript reviewed by the user, then the Phase 4 submitText path",
+            "Confirmation stays a UI button; spoken «conferma» refused",
+            "Per-environment VOICE_CHANNEL_ENABLED (default off) because the runtime is shared",
+            "STT via the AI runtime (credentials server-side), Gemini system instruction, literal transcription"
           ],
-          "phase3_state": {
-            "phase": 3,
+          "phase4_state": {
+            "phase": 4,
             "phase_status": "COMPLETED",
+            "assistant_entry_point": "frontend/src/App.tsx topbar «Assistente AI» (data-testid assistant-entry) → components/assistant/AssistantMode.tsx",
+            "implemented_role_experiences": [
+              "oss",
+              "nurse",
+              "doctor",
+              "supervisor",
+              "administrator"
+            ],
+            "tested_skills_through_assistant_ui": [
+              "patient.overview",
+              "therapy.prescribe",
+              "handover.create",
+              "vitals.record",
+              "diary.add_observation",
+              "administration.record",
+              "vitals.recent"
+            ],
+            "resident_access_scope": {
+              "status": "implemented, enforced backend-side (services via patient-scope delegation, Tool Layer, /skills)",
+              "modes_implemented": ["all", "registered_by_me"],
+              "modes_declared": [
+                "assigned_to_me",
+                "ward",
+                "team",
+                "facility",
+                "patient_assignment"
+              ],
+              "config": "RESIDENT_SCOPE_CONFIG (implemented modes only)"
+            },
+            "confirmation_policy": {
+              "version": 2,
+              "rule": "explicit UI event bound to previewId; payload change → new previewId; prescriptions bound to the exact payload; typed confirmation refused"
+            },
             "skills": {
               "total": 16,
-              "DESIGNED": 2,
-              "IMPLEMENTED": 0,
-              "EXECUTABLE": 14,
-              "TESTED": 14,
-              "BLOCKED": 0,
-              "live_agno_tested": 5
+              "TESTED": 16,
+              "EXECUTABLE": 16,
+              "DESIGNED": 0,
+              "BLOCKED": 0
             },
             "e2e": {
-              "automated": {
-                "tests": 22,
-                "pass": 22,
+              "api": {
+                "tests": 38,
+                "pass": 38,
                 "fail": 0,
-                "scenarios": "A,B,C,D,E,F,G,H,I,J + per-role + QA H1/M1/L1"
+                "scenarios": "Prompt 4 A–J + QA H1 + Phase 3 A–J + scope"
               },
-              "live_agno": {
-                "runs": 2,
-                "checks_per_run": 9,
-                "pass": 9,
+              "browser_deterministic": {
+                "checks": 46,
+                "pass": 46,
+                "fail": 0
+              },
+              "browser_agno_live": {
+                "checks": 46,
+                "pass": 46,
                 "fail": 0,
-                "model": "azure:gpt-6.1-sol (Agno Agent, role agent)"
+                "agno_interpreted_requests": 9
               }
             },
             "regression": {
               "backend_full_fresh_db": {
-                "tests": 1567,
-                "pass": 1533,
-                "fail": 33,
+                "tests": 1584,
+                "new_failure_files": 0
+              },
+              "frontend": {
+                "tests": 977,
+                "fail": 9,
                 "new_failures": 0
               },
-              "ci_gate": "19 failures identical to main (pre-existing)",
-              "runtime": {
-                "tests": 176,
-                "pass": 176
+              "builds_typecheck_lint": "pass",
+              "runtime": "unchanged (176/176)"
+            },
+            "independent_qa": "READY FOR QA (3 rounds; H1, M1 + residual hidden-field finding fixed)",
+            "gaps": [
+              "P4-G1 scope modes need data",
+              "P4-G2 prescription binding compares drug/times/start; other fields bound by display + whitelist",
+              "P4-G3 in-process workflow store",
+              "P4-G4 legacy Agnos panel coexists",
+              "P4-G5 browser E2E local only",
+              "P4-G6 prod AUTH_MODE unset (user decision)"
+            ],
+            "decisions": [
+              "Prescriptions/administrations: assistant prepares, professional confirms via UI bound to the exact payload",
+              "Handover default normale + type Assistente AI, urgency suggested only",
+              "Administrator: per-resident clinical reads removed from baseline, aggregates kept",
+              "Resident Access Scope service, behaviour preserved, configurable, never widened"
+            ],
+            "phase3_state": {
+              "phase": 3,
+              "phase_status": "COMPLETED",
+              "skills": {
+                "total": 16,
+                "DESIGNED": 2,
+                "IMPLEMENTED": 0,
+                "EXECUTABLE": 14,
+                "TESTED": 14,
+                "BLOCKED": 0,
+                "live_agno_tested": 5
               },
-              "typecheck": "pass",
-              "backend_build": "pass"
+              "e2e": {
+                "automated": {
+                  "tests": 22,
+                  "pass": 22,
+                  "fail": 0,
+                  "scenarios": "A,B,C,D,E,F,G,H,I,J + per-role + QA H1/M1/L1"
+                },
+                "live_agno": {
+                  "runs": 2,
+                  "checks_per_run": 9,
+                  "pass": 9,
+                  "fail": 0,
+                  "model": "azure:gpt-6.1-sol (Agno Agent, role agent)"
+                }
+              },
+              "regression": {
+                "backend_full_fresh_db": {
+                  "tests": 1567,
+                  "pass": 1533,
+                  "fail": 33,
+                  "new_failures": 0
+                },
+                "ci_gate": "19 failures identical to main (pre-existing)",
+                "runtime": {
+                  "tests": 176,
+                  "pass": 176
+                },
+                "typecheck": "pass",
+                "backend_build": "pass"
+              }
             }
           }
         }
       }
     }
-  }
+  },
+  "provider_abstraction": {
+    "status": "CONDITIONALLY READY",
+    "doc": ".ai-architecture/phase-9-production/PROVIDER_ABSTRACTION.md",
+    "capability_matrix": ".ai-architecture/phase-9-production/PROVIDER_CAPABILITY_MATRIX.json",
+    "ai_contract": "clinicos-ai-runtime/clinicos_ai/models/contract.py",
+    "stt_contract": "clinicos-ai-runtime/clinicos_ai/voice/stt.py",
+    "registry": "clinicos-ai-runtime/clinicos_ai/models/provider_registry.py",
+    "openai_adapter": "clinicos-ai-runtime/clinicos_ai/models/providers/openai.py (+ voice/providers/openai.py)",
+    "switch": "AI_PROVIDER + AI_MODEL_<ROLE>; STT_PROVIDER + STT_MODEL (legacy per-scope variables still valid)",
+    "logical_roles": ["command_parser", "reasoning", "summary", "fast", "vision", "ocr", "stt"],
+    "providers_registered": [
+      "openai",
+      "azure",
+      "google",
+      "anthropic",
+      "openai-like (local)",
+      "mistral",
+      "azure-docintel",
+      "mock",
+      "test"
+    ],
+    "primary_current": "openai (configured target) — real calls pending OPENAI_API_KEY; production still on legacy Azure until switch",
+    "provider_switch_test": {
+      "status": "PASS",
+      "in_process": "20/20 contract tests",
+      "process_level": "13/13"
+    },
+    "error_normalization": "PASS (10 codes)",
+    "usage_normalization": "PASS",
+    "benchmark_harness": "clinicos-ai-runtime/tools/benchmark (PASS; real Azure + test provider runs)",
+    "vendor_coupling_remaining": 3,
+    "ai_disabled_gui": "PASS (AI_ENABLED=false, 15/15)",
+    "production_runtime_config_check": "legacy mode, 6 roles, 0 errors",
+    "external_blockers": [
+      "OPENAI_API_KEY not set on clinicos-ai-runtime",
+      "Azure deployment token-rate quota (429 under sustained use)",
+      "OpenAI DPA/residency decision"
+    ]
+  },
+  "phase9b": {
+    "status": "CONDITIONALLY READY",
+    "reason": "OPENAI_API_KEY not set on Railway: configuration contract implemented and verified (stub, real adapter), real OpenAI calls and Railway cutover pending the owner key",
+    "runtime_platform": "railway",
+    "primary_ai_provider": "openai (target; production still legacy Azure until cutover)",
+    "fast_model": "gpt-5.6-luna",
+    "command_parser_model": "gpt-5.6-luna",
+    "summary_model": "gpt-5.6-luna",
+    "vision_model": "gpt-5.6-luna (AI_MODEL_DEFAULT)",
+    "reasoning_model": "gpt-5.6-sol",
+    "primary_stt_provider": "openai",
+    "primary_stt_model": "gpt-transcribe",
+    "realtime_stt_model": "gpt-live-transcribe",
+    "realtime_stt_enabled": false,
+    "railway_config_doc": ".ai-architecture/phase-9-production/RAILWAY_OPENAI_CONFIGURATION.md",
+    "azure_runtime_dependency_remaining": 1,
+    "azure_dependency_note": "OCR role only (Mistral on the Azure resource, owner decision: OCR unchanged)",
+    "tests": {
+      "runtime": "228/228",
+      "openai_cutover_contract": "10/10",
+      "process_e2e_target_config": "32/32",
+      "openai_smoke_vs_stub": "16/16 (1 skipped: loopback timeout)",
+      "backend_phase9": "16/16",
+      "backend_full": {
+        "tests": 1710,
+        "pass": 1688,
+        "fail": 21,
+        "new_failures": 0
+      }
+    },
+    "real_text_e2e": "BLOCKED (external: OPENAI_API_KEY)",
+    "real_voice_e2e": "BLOCKED (external: OPENAI_API_KEY)",
+    "external_blockers": [
+      "OPENAI_API_KEY missing on clinicos-ai-runtime",
+      "model ids gpt-5.6-luna / gpt-5.6-sol / gpt-transcribe to be confirmed with the key",
+      "OpenAI DPA/residency decision",
+      "branch not merged/deployed"
+    ]
+  },
+  "primary_ai_provider": "openai",
+  "runtime_platform": "railway"
 }

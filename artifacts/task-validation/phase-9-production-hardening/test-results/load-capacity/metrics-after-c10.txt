@@ -1,0 +1,78 @@
+# HELP clinicos_http_requests_total HTTP requests
+# TYPE clinicos_http_requests_total counter
+clinicos_http_requests_total{area="auth",method="POST",status="2xx"} 4
+clinicos_http_requests_total{area="patients",method="GET",status="2xx"} 2848
+clinicos_http_requests_total{area="skills",method="GET",status="2xx"} 1428
+clinicos_http_requests_total{area="auth",method="GET",status="2xx"} 599
+clinicos_http_requests_total{area="skills",method="POST",status="2xx"} 867
+# HELP clinicos_ai_calls_total AI runtime/provider calls
+# TYPE clinicos_ai_calls_total counter
+clinicos_ai_calls_total{kind="skill_route",outcome="ok"} 867
+# HELP clinicos_ai_request_chars_total Characters sent to the AI runtime (context size proxy for tokens)
+# TYPE clinicos_ai_request_chars_total counter
+clinicos_ai_request_chars_total{kind="skill_route"} 2555358
+# HELP clinicos_ai_fallback_total AI degraded to a deterministic/classic path
+# TYPE clinicos_ai_fallback_total counter
+clinicos_ai_fallback_total{component="skill_interpreter",reason="no_route"} 867
+# HELP clinicos_http_request_duration_ms HTTP latency (ms)
+# TYPE clinicos_http_request_duration_ms histogram
+clinicos_http_request_duration_ms_bucket{area="auth",le="25"} 601
+clinicos_http_request_duration_ms_bucket{area="auth",le="50"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="100"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="250"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="500"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="1000"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="2500"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="5000"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="10000"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="30000"} 603
+clinicos_http_request_duration_ms_bucket{area="auth",le="+Inf"} 603
+clinicos_http_request_duration_ms_sum{area="auth"} 2628
+clinicos_http_request_duration_ms_count{area="auth"} 603
+clinicos_http_request_duration_ms_bucket{area="patients",le="25"} 1804
+clinicos_http_request_duration_ms_bucket{area="patients",le="50"} 2519
+clinicos_http_request_duration_ms_bucket{area="patients",le="100"} 2832
+clinicos_http_request_duration_ms_bucket{area="patients",le="250"} 2848
+clinicos_http_request_duration_ms_bucket{area="patients",le="500"} 2848
+clinicos_http_request_duration_ms_bucket{area="patients",le="1000"} 2848
+clinicos_http_request_duration_ms_bucket{area="patients",le="2500"} 2848
+clinicos_http_request_duration_ms_bucket{area="patients",le="5000"} 2848
+clinicos_http_request_duration_ms_bucket{area="patients",le="10000"} 2848
+clinicos_http_request_duration_ms_bucket{area="patients",le="30000"} 2848
+clinicos_http_request_duration_ms_bucket{area="patients",le="+Inf"} 2848
+clinicos_http_request_duration_ms_sum{area="patients"} 69260
+clinicos_http_request_duration_ms_count{area="patients"} 2848
+clinicos_http_request_duration_ms_bucket{area="skills",le="25"} 331
+clinicos_http_request_duration_ms_bucket{area="skills",le="50"} 807
+clinicos_http_request_duration_ms_bucket{area="skills",le="100"} 1209
+clinicos_http_request_duration_ms_bucket{area="skills",le="250"} 1424
+clinicos_http_request_duration_ms_bucket{area="skills",le="500"} 1952
+clinicos_http_request_duration_ms_bucket{area="skills",le="1000"} 2295
+clinicos_http_request_duration_ms_bucket{area="skills",le="2500"} 2295
+clinicos_http_request_duration_ms_bucket{area="skills",le="5000"} 2295
+clinicos_http_request_duration_ms_bucket{area="skills",le="10000"} 2295
+clinicos_http_request_duration_ms_bucket{area="skills",le="30000"} 2295
+clinicos_http_request_duration_ms_bucket{area="skills",le="+Inf"} 2295
+clinicos_http_request_duration_ms_sum{area="skills"} 512001
+clinicos_http_request_duration_ms_count{area="skills"} 2295
+# HELP clinicos_ai_call_duration_ms AI call latency (ms)
+# TYPE clinicos_ai_call_duration_ms histogram
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="25"} 0
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="50"} 0
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="100"} 0
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="250"} 0
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="500"} 867
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="1000"} 867
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="2500"} 867
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="5000"} 867
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="10000"} 867
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="30000"} 867
+clinicos_ai_call_duration_ms_bucket{kind="skill_route",le="+Inf"} 867
+clinicos_ai_call_duration_ms_sum{kind="skill_route"} 357482
+clinicos_ai_call_duration_ms_count{kind="skill_route"} 867
+# HELP process_uptime_seconds Process uptime
+# TYPE process_uptime_seconds gauge
+process_uptime_seconds 64
+# HELP process_resident_memory_bytes Resident memory
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 349413376

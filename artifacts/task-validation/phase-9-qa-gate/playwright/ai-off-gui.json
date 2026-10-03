@@ -1,0 +1,80 @@
+{
+  "at": "2026-10-02T16:53:55.645Z",
+  "results": [
+    {
+      "id": "G0.ai_disabled",
+      "ok": true,
+      "detail": "{\"enabled\":false,\"runtime\":\"disabled\",\"interpreter\":\"deterministic\",\"voice\":\"disabled\"}"
+    },
+    {
+      "id": "G1.Pazienti",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.Terapia",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.Parametri",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.Consegne",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.Agenda",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.Note",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.Farmaci",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.Turno",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G1.no_5xx",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "id": "G2.assistant_answers",
+      "ok": true,
+      "detail": "200 deterministic NEEDS_CLARIFICATION"
+    },
+    {
+      "id": "G2.no_false_write",
+      "ok": true,
+      "detail": "NEEDS_CLARIFICATION"
+    },
+    {
+      "id": "G2.voice_disabled_explained",
+      "ok": true,
+      "detail": "{\"state\":\"UNAVAILABLE\",\"disabled\":true,\"label\":\"Microfono: Voce non attiva in questo ambiente\"}"
+    },
+    {
+      "id": "G3.server_side_logout",
+      "ok": true,
+      "detail": "before=200 after=401"
+    },
+    {
+      "id": "G4.no_console_errors",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

@@ -115,6 +115,8 @@ class AssistantPlanResponse(BaseModel):
     plan: dict[str, Any]
     model: str
     confidence: float = 0.0
+    # Phase 9: provider-agnostic call metadata (provider, model, role, latency, usage) — never content.
+    ai: dict[str, Any] | None = None
 
 
 # 016 F2: assistant composer (results → discursive answer). Dati clinici solo verso host EU.
@@ -142,9 +144,13 @@ class SkillRouteRequest(BaseModel):
 class SkillRouteResponse(BaseModel):
     route: dict[str, Any]
     model: str
+    # Phase 9: provider-agnostic call metadata (provider, model, role, latency, usage) — never content.
+    ai: dict[str, Any] | None = None
 
 
 class AssistantComposeResponse(BaseModel):
     answerText: str = ""
     citedSources: list[str] = Field(default_factory=list)
     model: str = ""
+    # Phase 9: provider-agnostic call metadata (provider, model, role, latency, usage) — never content.
+    ai: dict[str, Any] | None = None

@@ -1,0 +1,95 @@
+{
+  "at": "2026-10-01T22:48:35.047Z",
+  "results": [
+    {
+      "id": "R1.prepared",
+      "ok": true,
+      "detail": "NEEDS_CONFIRMATION"
+    },
+    {
+      "id": "R1.no_false_success",
+      "ok": true,
+      "detail": "200 FAILED"
+    },
+    {
+      "id": "R1.no_write",
+      "ok": true,
+      "detail": "row count unchanged"
+    },
+    {
+      "id": "R1.new_workflow_ok",
+      "ok": true,
+      "detail": "COMPLETED"
+    },
+    {
+      "id": "R1.one_write",
+      "ok": true
+    },
+    {
+      "id": "R2.retry_safe",
+      "ok": true,
+      "detail": "200 COMPLETED"
+    },
+    {
+      "id": "R2.exactly_one",
+      "ok": true
+    },
+    {
+      "id": "R3.down.assistant_answers",
+      "ok": true,
+      "detail": "200 deterministic"
+    },
+    {
+      "id": "R3.down.classic_gui",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "id": "R3.down.no_write",
+      "ok": true
+    },
+    {
+      "id": "R3.500.assistant_answers",
+      "ok": true,
+      "detail": "200 deterministic"
+    },
+    {
+      "id": "R3.500.classic_gui",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "id": "R3.500.no_write",
+      "ok": true
+    },
+    {
+      "id": "R4.liveness_up",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "id": "R4.not_ready",
+      "ok": true,
+      "detail": "{\"database\":\"fail\",\"policy\":\"fail\"}"
+    },
+    {
+      "id": "R4.fails_closed",
+      "ok": true,
+      "detail": "503 {\"error\":\"Autorizzazione non disponibile\",\"code\":\"authz_unavailable\"}"
+    },
+    {
+      "id": "R4.assistant_no_false_success",
+      "ok": true,
+      "detail": "503 "
+    },
+    {
+      "id": "R4.ready_again",
+      "ok": true
+    },
+    {
+      "id": "R4.api_recovered",
+      "ok": true,
+      "detail": "200"
+    }
+  ]
+}

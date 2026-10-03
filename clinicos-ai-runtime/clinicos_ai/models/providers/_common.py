@@ -6,19 +6,35 @@ from __future__ import annotations
 import asyncio
 from typing import Callable
 
-from ..errors import RuntimeError_, ErrorKind
+from ..errors import RuntimeError_, ErrorKind, classify_exception
 from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
 from .completion import agent_completion
 
 
-def classify_provider_exception(msg: str) -> ErrorKind:
-    """RATE_LIMIT se il messaggio d'errore del provider menziona 429/quota, altrimenti
-    PROVIDER_ERROR. I runner multimodali (google.py, azure.py `run()`) non possono usare
-    _GenericRunner (serve passare images/files ad Agno) ma condividono questa stessa
-    euristica di classificazione: prima duplicata identica in 4 punti, ora unica qui."""
-    return ErrorKind.RATE_LIMIT if "429" in msg or "quota" in msg.lower() else ErrorKind.PROVIDER_ERROR
+def classify_provider_exception(error: "BaseException | str") -> ErrorKind:
+    """Provider/SDK error -> ErrorKind via the shared provider-agnostic classifier
+    (errors.classify_exception: HTTP status, exception type, message). Accepts the exception
+    (preferred) or, for older call sites, its message."""
+    if isinstance(error, str):
+        return classify_exception(Exception(error))
+    return classify_exception(error)
+
+
+def sdk_retry_kwargs(model_cls: type) -> dict:
+    """No hidden SDK/Agno retries (Phase 9 retry policy): interactive calls must fail fast so the
+    backend falls back instead of waiting while the SDK backs off (observed: ~60 s on Azure 429).
+    AI_PROVIDER_SDK_RETRIES (default 0) is the single knob; applied only to fields the class has."""
+    import dataclasses
+    import os
+
+    try:
+        retries = max(0, min(5, int((os.environ.get("AI_PROVIDER_SDK_RETRIES") or "0").strip())))
+    except ValueError:
+        retries = 0
+    names = {f.name for f in dataclasses.fields(model_cls)} if dataclasses.is_dataclass(model_cls) else set()
+    return {name: retries for name in ("max_retries", "retries") if name in names}
 
 
 class _GenericRunner:
@@ -38,9 +54,8 @@ class _GenericRunner:
         except asyncio.TimeoutError as ex:
             raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except Exception as ex:
-            msg = str(ex)
-            kind = classify_provider_exception(msg)
-            raise RuntimeError_(kind, f"{self._label}: {msg[:200]}") from ex
+            kind = classify_provider_exception(ex)
+            raise RuntimeError_(kind, f"{self._label}: {str(ex)[:200]}") from ex
 
         return agent_completion(resp, self._label)
 

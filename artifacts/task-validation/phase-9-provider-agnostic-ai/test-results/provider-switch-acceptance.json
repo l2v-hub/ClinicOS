@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-02T07:29:03.359Z",
+  "results": [
+    {
+      "run": "openai",
+      "id": "read_skill",
+      "ok": true,
+      "detail": "200 vitals.recent COMPLETED agno"
+    },
+    {
+      "run": "openai",
+      "id": "structured_command",
+      "ok": true,
+      "detail": "NEEDS_CONFIRMATION agno"
+    },
+    {
+      "run": "openai",
+      "id": "skill_commit_once",
+      "ok": true,
+      "detail": "COMPLETED"
+    },
+    {
+      "run": "openai",
+      "id": "assistant_query",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "run": "openai",
+      "id": "voice_transcribe",
+      "ok": true,
+      "detail": "200 {\"text\":\"pressione 120 su 80\",\"locale\":\"it-IT\",\"confidence\":null,\"timestamps\":[]"
+    },
+    {
+      "run": "openai",
+      "id": "metrics_provider",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "run": "test",
+      "id": "read_skill",
+      "ok": true,
+      "detail": "200 vitals.recent COMPLETED agno"
+    },
+    {
+      "run": "test",
+      "id": "structured_command",
+      "ok": true,
+      "detail": "NEEDS_CONFIRMATION agno"
+    },
+    {
+      "run": "test",
+      "id": "skill_commit_once",
+      "ok": true,
+      "detail": "COMPLETED"
+    },
+    {
+      "run": "test",
+      "id": "assistant_query",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "run": "test",
+      "id": "voice_transcribe",
+      "ok": true,
+      "detail": "200 {\"text\":\"pressione 120 su 80\",\"locale\":\"it-IT\",\"confidence\":null,\"timestamps\":[]"
+    },
+    {
+      "run": "test",
+      "id": "metrics_provider",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "run": "switch",
+      "id": "only_provider_config_changed",
+      "ok": true,
+      "detail": "AI_MODEL_DEFAULT,AI_PROVIDER,OPENAI_API_KEY,OPENAI_BASE_URL,STT_MODEL,STT_PROVIDER"
+    }
+  ]
+}

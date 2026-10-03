@@ -67,9 +67,11 @@ class CapabilityRequirement:
 DEFAULT_ROLE_REQUIREMENTS: dict[str, CapabilityRequirement] = {
     # OCR/extraction read scanned documents/photos -> need image + pdf input.
     "ocr": CapabilityRequirement(image_input=True, pdf_input=True),
-    "extraction": CapabilityRequirement(image_input=True, pdf_input=True),
-    # The agent orchestrates with tools (when tool-calling is enabled by config).
-    "agent": CapabilityRequirement(text_input=True),
+    "vision": CapabilityRequirement(image_input=True, pdf_input=True),
+    # Text roles (tool calling is added for command_parser when enabled by config).
+    "command_parser": CapabilityRequirement(text_input=True),
+    "reasoning": CapabilityRequirement(text_input=True),
+    "summary": CapabilityRequirement(text_input=True),
     # Repair only fixes JSON text.
-    "repair": CapabilityRequirement(text_input=True),
+    "fast": CapabilityRequirement(text_input=True),
 }

@@ -92,13 +92,14 @@ class ProviderInvocationLogTests(unittest.IsolatedAsyncioTestCase):
     async def test_plan_logs_sanitized_provider_line(self):
         reg = ModelRegistry()
         secret_question = "allergie del paziente Mario Rossi CF RSSMRA80"
-        with self.assertLogs("clinicos_ai.assistant", level="INFO") as cm:
+        # Phase 9: the single provider-agnostic gateway (contract.generate) logs every call.
+        with self.assertLogs("clinicos_ai.ai", level="INFO") as cm:
             await run_assistant_plan(reg, secret_question, [], correlation_id="corr-test-123")
-        line = next((m for m in cm.output if "agnos provider call" in m), None)
+        line = next((m for m in cm.output if "ai call" in m), None)
         self.assertIsNotNone(line, "manca la riga di log sanitizzata dell'invocazione provider")
-        # campi obbligatori richiesti dall'issue
-        for field in ("provider=", "deployment=", "correlationId=corr-test-123",
-                      "durationMs=", "status=success", "stage=plan"):
+        # campi obbligatori (issue #239 + Phase 9: ruolo logico e modello effettivo)
+        for field in ("provider=", "model=", "role=reasoning", "correlationId=corr-test-123",
+                      "latencyMs=", "status=ok", "purpose=plan"):
             self.assertIn(field, line, f"campo '{field}' mancante nel log sanitizzato")
         # MAI la domanda/PHI nel log
         self.assertNotIn("Mario Rossi", line)

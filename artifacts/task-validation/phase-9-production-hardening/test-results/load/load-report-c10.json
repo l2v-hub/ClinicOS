@@ -1,0 +1,81 @@
+{
+  "base": "http://127.0.0.1:3199",
+  "durationS": 60.027,
+  "concurrency": 10,
+  "scenarios": {
+    "gui.patients_page": {
+      "requests": 8041,
+      "rps": 134,
+      "p50": 44.9,
+      "p95": 59.6,
+      "p99": 68.6,
+      "max": 134.3,
+      "errorRatePct": 0
+    },
+    "gui.patient_detail": {
+      "requests": 5202,
+      "rps": 86.7,
+      "p50": 15.8,
+      "p95": 21.9,
+      "p99": 27.8,
+      "max": 124.3,
+      "errorRatePct": 0
+    },
+    "gui.auth_me": {
+      "requests": 2734,
+      "rps": 45.5,
+      "p50": 8.4,
+      "p95": 11.9,
+      "p99": 14.9,
+      "max": 40.2,
+      "errorRatePct": 0
+    },
+    "proactive.inbox": {
+      "requests": 3565,
+      "rps": 59.4,
+      "p50": 8.1,
+      "p95": 12.3,
+      "p99": 33.7,
+      "max": 196.3,
+      "errorRatePct": 97.6
+    },
+    "copilot.home": {
+      "requests": 3173,
+      "rps": 52.9,
+      "p50": 8.1,
+      "p95": 12.5,
+      "p99": 83.3,
+      "max": 240.4,
+      "errorRatePct": 97.9
+    },
+    "assistant.read_turn": {
+      "requests": 4041,
+      "rps": 67.3,
+      "p50": 8.3,
+      "p95": 12.6,
+      "p99": 485.7,
+      "max": 750.1,
+      "errorRatePct": 97.8
+    }
+  },
+  "statuses": {
+    "gui.patients_page 200": 8041,
+    "gui.patient_detail 200": 5202,
+    "gui.auth_me 200": 2734,
+    "proactive.inbox 200": 86,
+    "copilot.home 200": 66,
+    "assistant.read_turn 200": 89,
+    "proactive.inbox 429": 3479,
+    "assistant.read_turn 429": 3952,
+    "copilot.home 429": 3107
+  },
+  "total": {
+    "requests": 26756,
+    "rps": 445.7,
+    "p50": 11.3,
+    "p95": 53.4,
+    "p99": 65.6,
+    "errorRatePct": 39.4
+  },
+  "metrics": "# HELP clinicos_http_requests_total HTTP requests\n# TYPE clinicos_http_requests_total counter\nclinicos_http_requests_total{area=\"auth\",method=\"GET\",status=\"2xx\"} 2735\nclinicos_http_requests_total{area=\"auth\",method=\"POST\",status=\"2xx\"} 4\nclinicos_http_requests_total{area=\"patients\",method=\"GET\",status=\"2xx\"} 13247\nclinicos_http_requests_total{area=\"skills\",method=\"GET\",status=\"2xx\"} 152\nclinicos_http_requests_total{area=\"skills\",method=\"POST\",status=\"2xx\"} 89\nclinicos_http_requests_total{area=\"skills\",method=\"GET\",status=\"4xx\"} 6586\nclinicos_http_requests_total{area=\"skills\",method=\"POST\",status=\"4xx\"} 3952\n# HELP clinicos_ai_calls_total AI runtime/provider calls\n# TYPE clinicos_ai_calls_total counter\nclinicos_ai_calls_total{kind=\"skill_route\",outcome=\"ok\"} 89\n# HELP clinicos_ai_request_chars_total Characters sent to the AI runtime (context size proxy for tokens)\n# TYPE clinicos_ai_request_chars_total counter\nclinicos_ai_request_chars_total{kind=\"skill_route\"} 266086\n# HELP clinicos_ai_fallback_total AI degraded to a deterministic/classic path\n# TYPE clinicos_ai_fallback_total counter\nclinicos_ai_fallback_total{component=\"skill_interpreter\",reason=\"no_route\"} 89\n# HELP clinicos_http_request_duration_ms HTTP latency (ms)\n# TYPE clinicos_http_request_duration_ms histogram\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"25\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"50\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"100\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"250\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"500\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"1000\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"2500\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"5000\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"10000\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"30000\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"auth\",le=\"+Inf\"} 2739\nclinicos_http_request_duration_ms_sum{area=\"auth\"} 12493\nclinicos_http_request_duration_ms_count{area=\"auth\"} 2739\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"25\"} 5438\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"50\"} 12199\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"100\"} 13243\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"250\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"500\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"1000\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"2500\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"5000\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"10000\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"30000\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"patients\",le=\"+Inf\"} 13247\nclinicos_http_request_duration_ms_sum{area=\"patients\"} 390824\nclinicos_http_request_duration_ms_count{area=\"patients\"} 13247\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"25\"} 10581\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"50\"} 10637\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"100\"} 10663\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"250\"} 10690\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"500\"} 10748\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"1000\"} 10779\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"2500\"} 10779\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"5000\"} 10779\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"10000\"} 10779\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"30000\"} 10779\nclinicos_http_request_duration_ms_bucket{area=\"skills\",le=\"+Inf\"} 10779\nclinicos_http_request_duration_ms_sum{area=\"skills\"} 98393\nclinicos_http_request_duration_ms_count{area=\"skills\"} 10779\n# HELP clinicos_ai_call_duration_ms AI call latency (ms)\n# TYPE clinicos_ai_call_duration_ms histogram\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"25\"} 0\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"50\"} 0\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"100\"} 0\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"250\"} 0\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"500\"} 89\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"1000\"} 89\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"2500\"} 89\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"5000\"} 89\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"10000\"} 89\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"30000\"} 89\nclinicos_ai_call_duration_ms_bucket{kind=\"skill_route\",le=\"+Inf\"} 89\nclinicos_ai_call_duration_ms_sum{kind=\"skill_route\"} 36867\nclinicos_ai_call_duration_ms_count{kind=\"skill_route\"} 89\n# HELP process_uptime_seconds Process uptime\n# TYPE process_uptime_seconds gauge\nprocess_uptime_seconds 69\n# HELP process_resident_memory_bytes Resident memory\n# TYPE process_resident_memory_bytes gauge\nprocess_resident_memory_bytes 390213632\n"
+}

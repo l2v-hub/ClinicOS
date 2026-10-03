@@ -309,7 +309,7 @@ class TestModoOcr(unittest.TestCase):
         reg = mock.Mock()
         reg.build.return_value = built
         out = asyncio.run(run_extraction(reg, "prompt", {}, []))
-        reg.build.assert_called_once_with("extraction")
+        reg.build.assert_called_once_with("vision")
         self.assertEqual(out.data, {"cartella": {}})
 
 

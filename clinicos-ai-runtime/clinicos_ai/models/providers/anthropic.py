@@ -3,7 +3,7 @@ from __future__ import annotations
 from ..errors import ProviderUnavailableError
 from ..spec import ModelSpec
 from .base import BuiltModel
-from ._common import make_built
+from ._common import make_built, sdk_retry_kwargs
 from .completion import CompletionMetadataMixin
 
 
@@ -17,5 +17,6 @@ def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) 
         class CompletionClaude(CompletionMetadataMixin, Claude):
             pass
 
-        return Agent(model=CompletionClaude(id=spec.model_id, temperature=temperature), markdown=False, telemetry=False)
+        return Agent(model=CompletionClaude(id=spec.model_id, temperature=temperature, **sdk_retry_kwargs(Claude)),
+                     markdown=False, telemetry=False)
     return make_built(spec, build_agent, timeout_seconds, "Anthropic")

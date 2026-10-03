@@ -9,7 +9,7 @@ from ..errors import ProviderUnavailableError, RuntimeError_, ErrorKind
 from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
-from ._common import classify_provider_exception
+from ._common import classify_provider_exception, sdk_retry_kwargs
 from .completion import CompletionMetadataMixin, agent_completion
 
 
@@ -28,7 +28,8 @@ class _GoogleRunner:
         class CompletionGemini(CompletionMetadataMixin, Gemini):
             pass
 
-        model = CompletionGemini(id=self._spec.model_id, temperature=self._temperature)
+        model = CompletionGemini(id=self._spec.model_id, temperature=self._temperature,
+                                 **sdk_retry_kwargs(Gemini))
         return Agent(model=model, markdown=False, telemetry=False)
 
     async def run(self, prompt: str, attachments: list[Attachment]) -> str:
@@ -62,7 +63,7 @@ class _GoogleRunner:
             raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except Exception as ex:  # normalize provider/SDK errors
             msg = str(ex)
-            kind = classify_provider_exception(msg)
+            kind = classify_provider_exception(ex)
             raise RuntimeError_(kind, f"Google: {msg[:200]}") from ex
 
 

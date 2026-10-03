@@ -6,10 +6,12 @@
 // arrives, only this identity source is replaced (requireOperator keeps resolving roles the same way).
 //
 // Enabled only with ROLE_SIMULATOR_ENABLED=true in AUTH_MODE=demo, never in production unless
-// ROLE_SIMULATOR_ALLOW_PRODUCTION=true is set explicitly. While enabled, self-declared
+// ROLE_SIMULATOR_ALLOW_PRODUCTION=true is set explicitly — and NEVER on a real production deployment
+// (lib/deployment.ts tier 'production'), whatever the flags say. While enabled, self-declared
 // X-Operator-* headers are refused.
 
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { isRealProduction } from '../lib/deployment.js';
 
 export interface SimulatedIdentity {
   id: string;
@@ -77,6 +79,8 @@ export function simulatedIdentity(id: string): SimulatedIdentity | undefined {
 export function simulatorEnabled(authMode: string, env: NodeJS.ProcessEnv = process.env): boolean {
   if ((env.ROLE_SIMULATOR_ENABLED || '').trim().toLowerCase() !== 'true') return false;
   if (authMode !== 'demo') return false;
+  // Phase 9: no flag combination re-enables the simulator on a real production deployment.
+  if (isRealProduction(env)) return false;
   if (env.NODE_ENV === 'production') {
     return (env.ROLE_SIMULATOR_ALLOW_PRODUCTION || '').trim().toLowerCase() === 'true';
   }
@@ -118,8 +122,14 @@ export function issueSimulatorToken(
   };
 }
 
-/** Returns the identity id of a valid, unexpired token; null otherwise (never throws). */
-export function verifySimulatorToken(token: string, now = Date.now()): string | null {
+// Phase 9: server-side logout. Revoked session ids are kept until their own expiry (bounded by the
+// token TTL), so a copied token stops working at logout instead of living 12 h. In-memory: a
+// backend restart already invalidates every session signed with the per-process secret; with a
+// configured ROLE_SIMULATOR_SECRET a restart forgets revocations (demo only, synthetic data).
+const revokedSessions = new Map<string, number>();
+const MAX_REVOKED = 10_000;
+
+function tokenClaims(token: string): { sub: string; sid: string; exp: number } | null {
   if (!token.startsWith(SIMULATOR_TOKEN_PREFIX) || token.length > 512) return null;
   const [payload, signature] = token.slice(SIMULATOR_TOKEN_PREFIX.length).split('.');
   if (!payload || !signature) return null;
@@ -130,15 +140,40 @@ export function verifySimulatorToken(token: string, now = Date.now()): string | 
     const claims = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as {
       v?: number;
       sub?: string;
+      sid?: string;
       exp?: number;
     };
     if (claims.v !== 1 || typeof claims.sub !== 'string' || typeof claims.exp !== 'number')
       return null;
-    if (claims.exp <= now || !BY_ID.has(claims.sub)) return null;
-    return claims.sub;
+    return { sub: claims.sub, sid: String(claims.sid ?? ''), exp: claims.exp };
   } catch {
     return null;
   }
+}
+
+/** Revoke a valid simulator session (logout). Returns false for an invalid/unknown token. */
+export function revokeSimulatorToken(token: string, now = Date.now()): boolean {
+  const claims = tokenClaims(token);
+  if (!claims || !claims.sid || claims.exp <= now) return false;
+  if (revokedSessions.size >= MAX_REVOKED) {
+    for (const [sid, exp] of revokedSessions) if (exp <= now) revokedSessions.delete(sid);
+    // Still full (demo flood): drop the oldest revocation — bounded memory beats a perfect list.
+    if (revokedSessions.size >= MAX_REVOKED) {
+      const oldest = revokedSessions.keys().next().value;
+      if (oldest !== undefined) revokedSessions.delete(oldest);
+    }
+  }
+  revokedSessions.set(claims.sid, claims.exp);
+  return true;
+}
+
+/** Returns the identity id of a valid, unexpired token; null otherwise (never throws). */
+export function verifySimulatorToken(token: string, now = Date.now()): string | null {
+  const claims = tokenClaims(token);
+  if (!claims) return null;
+  if (claims.exp <= now || !BY_ID.has(claims.sub)) return null;
+  if (claims.sid && revokedSessions.has(claims.sid)) return null;
+  return claims.sub;
 }
 
 /** Idempotently provisions the User + Operator rows of a simulated identity (simulator only). */

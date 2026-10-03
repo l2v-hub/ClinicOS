@@ -81,3 +81,32 @@ export async function documentAuthHeaders(
   if (token) h['Authorization'] = `Bearer ${token}`;
   return h;
 }
+
+/**
+ * Phase 9 — rinnovo silenzioso del token API (mai redirect): MSAL usa il refresh token in cache e
+ * restituisce un access token valido (nuovo se quello in cache sta per scadere). null se Entra non
+ * è configurato o se serve interazione: la richiesta successiva riceverà 401 e il login ripartirà.
+ */
+export async function renewApiTokenSilently(): Promise<string | null> {
+  if (!entraEnabled()) return null;
+  try {
+    const app = await msalApp();
+    const account = app.getActiveAccount() ?? app.getAllAccounts()[0] ?? null;
+    if (!account) return null;
+    const r = await app.acquireTokenSilent({ scopes: [API_SCOPE!], account });
+    return r.accessToken;
+  } catch {
+    return null;
+  }
+}
+
+/** Phase 9 — logout: rimuove account e token dalla cache locale di MSAL (sessionStorage). */
+export async function clearEntraSession(): Promise<void> {
+  if (!entraEnabled() || !appPromise) return;
+  try {
+    const app = await msalApp();
+    await app.clearCache();
+  } catch {
+    /* cache già vuota o MSAL non inizializzato */
+  }
+}

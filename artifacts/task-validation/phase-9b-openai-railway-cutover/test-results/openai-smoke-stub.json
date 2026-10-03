@@ -1,0 +1,85 @@
+{
+  "results": [
+    {
+      "check": "provider_is_openai",
+      "ok": true,
+      "detail": "AI_PROVIDER=openai"
+    },
+    {
+      "check": "openai_key_present",
+      "ok": true,
+      "detail": "length=31"
+    },
+    {
+      "check": "config_valid",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "fast_model",
+      "ok": true,
+      "detail": "openai:gpt-5.6-luna"
+    },
+    {
+      "check": "command_parser_model",
+      "ok": true,
+      "detail": "openai:gpt-5.6-luna"
+    },
+    {
+      "check": "reasoning_model",
+      "ok": true,
+      "detail": "openai:gpt-5.6-sol"
+    },
+    {
+      "check": "registry_returns_openai_adapter",
+      "ok": true,
+      "detail": "clinicos_ai.models.providers.openai"
+    },
+    {
+      "check": "responses_call",
+      "ok": true,
+      "detail": "latencyMs=700 answeredOK=False"
+    },
+    {
+      "check": "usage_collected",
+      "ok": true,
+      "detail": "{\"input_tokens\": 120, \"output_tokens\": 15, \"cached_input_tokens\": 40, \"reasoning_tokens\": 5, \"provider\": \"openai\", \"model\": \"gpt-5.6-luna\"}"
+    },
+    {
+      "check": "stt_config",
+      "ok": true,
+      "detail": "{\"available\": true, \"provider\": \"openai\", \"model\": \"gpt-transcribe\", \"realtime\": {\"enabled\": false, \"model\": null}}"
+    },
+    {
+      "check": "stt_italian_numbers",
+      "ok": true,
+      "detail": "transcript_words=4"
+    },
+    {
+      "check": "stt_usage",
+      "ok": true,
+      "detail": "{\"audioSeconds\": 2.0}"
+    },
+    {
+      "check": "stt_empty_audio",
+      "ok": true,
+      "detail": "invalid_audio"
+    },
+    {
+      "check": "stt_invalid_format",
+      "ok": true,
+      "detail": "invalid_audio"
+    },
+    {
+      "check": "stt_timeout",
+      "ok": true,
+      "detail": "skipped: loopback stub answers within 1 ms"
+    },
+    {
+      "check": "key_not_in_logs",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "warnings": []
+}

@@ -44,7 +44,10 @@ class ConfigTests(unittest.TestCase):
     def test_all_roles_available(self):
         cfg = load_runtime_config(BASE_ENV)
         self.assertTrue(cfg.available, cfg.errors)
-        self.assertEqual(set(cfg.roles), {"ocr", "extraction", "agent", "repair"})
+        self.assertEqual(set(cfg.roles), {"ocr", "vision", "command_parser", "reasoning", "summary", "fast"})
+        # Legacy role names stay accepted as aliases of the logical roles.
+        self.assertEqual(cfg.role("agent"), cfg.role("command_parser"))
+        self.assertEqual(cfg.role("extraction"), cfg.role("vision"))
         self.assertEqual(str(cfg.role("agent").model), "google:gemini-2.0-flash")
 
     def test_missing_role_model_is_error(self):
@@ -109,7 +112,7 @@ class RegistryTests(unittest.TestCase):
         status = ModelRegistry(env=env).public_status()
         self.assertNotIn(fake_key, str(status))
         self.assertTrue(status["roles"]["ocr"]["credentials_present"])
-        self.assertEqual(status["roles"]["agent"]["model"], "google:gemini-2.0-flash")
+        self.assertEqual(status["roles"]["command_parser"]["model"], "google:gemini-2.0-flash")
 
 
 class CapabilityTests(unittest.TestCase):

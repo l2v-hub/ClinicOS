@@ -9,6 +9,12 @@ for _r in ("OCR", "EXTRACTION", "AGENT", "REPAIR"):
 from clinicos_ai.models.registry import ModelRegistry
 from clinicos_ai.agents.skill_router import run_skill_route, sanitize_route, SKILL_ROUTE_MARKER
 
+
+def _response(text):
+    from clinicos_ai.models.contract import AIResponse, Usage
+    return AIResponse(text=text, role="command_parser", provider="test", model="t", usage=Usage())
+
+
 SKILLS = [
     {"id": "vitals.record", "name": "Registra parametri vitali", "description": "...", "slots": ["patient", "values"]},
     {"id": "vitals.recent", "name": "Parametri recenti", "description": "...", "slots": ["patient"]},
@@ -45,11 +51,11 @@ class RoleHintTests(unittest.IsolatedAsyncioTestCase):
         from clinicos_ai.agents import skill_router
         seen = {}
 
-        async def fake(_built, prompt, _stage, _cid):
+        async def fake(_registry, _role, prompt, _stage, _cid):
             seen["p"] = prompt
-            return '{"skillId": null}'
+            return _response('{"skillId": null}')
 
-        with mock.patch.object(skill_router, "_run_with_provider_log", fake):
+        with mock.patch.object(skill_router, "_ask", fake):
             await run_skill_route(ModelRegistry(), "ciao", SKILLS, None, "2026-10-01", ["pa"], role_hint=hint)
         return seen["p"]
 
