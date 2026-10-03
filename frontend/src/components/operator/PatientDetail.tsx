@@ -2559,6 +2559,7 @@ export function PatientDetail({
             variant="overview"
             patientId={paziente.id}
             patientName={`${paziente.lastName}, ${paziente.firstName}`}
+            onRecordNow={() => switchTab('parametri')}
           />
         )}
         {current === 'moduli' && (
@@ -2774,6 +2775,14 @@ export function PatientDetail({
   return (
     <div className="patient-record-view">
       {topbarSlot ? createPortal(patientTitle, topbarSlot) : patientTitle}
+      {(cartella.allergie?.length ?? 0) > 0 && (
+        <p className="patient-allergy-strip" role="note" data-testid="patient-allergy-strip">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3.5 2.5 20h19zM12 10v4.5M12 17.5v.01" />
+          </svg>
+          <span>Allergia: {(cartella.allergie ?? []).map((a) => a.allergene).join(', ')}</span>
+        </p>
+      )}
 
       <div className="chart-sections no-print">
         <TopNav

@@ -615,6 +615,7 @@ model PatientDiaryEntry {
   updatedAt     DateTime @updatedAt
   patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
   therapy       PatientTherapy? @relation(fields: [therapyId], references: [id], onDelete: SetNull)
+  acknowledgements DiaryEntryAcknowledgement[]
 
   @@unique([patientId, therapyRequestId])
   @@index([patientId])
@@ -623,6 +624,25 @@ model PatientDiaryEntry {
   @@index([patientId, entryDateTime, id])
   @@index([patientId, authorType, entryDateTime, id])
   @@index([therapyId])
+}
+
+// «Presa visione» per lettore di una voce URGENTE del diario (UX direct-access, 2026-10-03).
+// Append-only: una riga per (voce, operatore), mai aggiornata; DELETE rifiutato dal trigger salvo
+// la cascata dalla cancellazione della voce stessa. Nome e ruolo sono istantanee server-side
+// dell'operatore (lo storico sopravvive a rinomine). patientId duplicato per scope/audit.
+model DiaryEntryAcknowledgement {
+  id             String            @id @default(cuid())
+  entryId        String
+  patientId      String
+  operatorId     String
+  operatorName   String
+  operatorRole   String
+  acknowledgedAt DateTime          @default(now())
+  entry          PatientDiaryEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@unique([entryId, operatorId])
+  @@index([operatorId, acknowledgedAt])
+  @@index([patientId])
 }
 
 // ── Patient intake draft (F3 EPIC #120 / Issue #125) ─────────────────────────

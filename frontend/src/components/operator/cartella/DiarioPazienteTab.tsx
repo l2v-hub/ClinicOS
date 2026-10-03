@@ -20,8 +20,11 @@ import {
 } from './diaryTherapyLink';
 import type { DiaryEntryWithTherapy } from './DiaryTherapyPanel';
 import './DiaryTherapyPanel.css';
+import './DiaryAck.css';
 import { corePriorityOptions } from '../../../lib/corePriority';
 import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload';
+import { useCan } from '../../../lib/capabilities';
+import { countToSee, needsMyAck, postDiaryAck, seenByText } from './diaryAck';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -188,6 +191,11 @@ export function DiarioPazienteTab({
   const [therapyPanel, setTherapyPanel] = useState<number | null>(null);
   const readSequenceRef = useRef(0);
   const loadMoreControllerRef = useRef<AbortController | null>(null);
+  // F8: le azioni compaiono solo con la capability che il backend applica (niente 403 dalla GUI).
+  const canEditEntry = useCan('diary.update_entry');
+  const canDeleteEntry = useCan('diary.delete_entry');
+  // «Presa visione» per lettore: voce in corso di registrazione (blocca il doppio tocco).
+  const [acking, setAcking] = useState<string | null>(null);
 
   function emptyForm(): DiarioForm {
     return {
@@ -470,6 +478,38 @@ export function DiarioPazienteTab({
     }
   }
 
+  // ── «Presa visione» (voci urgenti, per lettore) ──────────────────────────────
+
+  async function handleAck(entry: DiarioPazienteEntry) {
+    if (acking) return;
+    setAcking(entry.id);
+    try {
+      const result = await postDiaryAck(pazienteId, entry.id);
+      setEntries((prev) =>
+        prev.map((e) =>
+          e.id === entry.id
+            ? {
+                ...e,
+                acknowledgeable: result.acknowledgeable,
+                acknowledgedByMe: result.acknowledgedByMe,
+                acknowledgements: result.acknowledgements,
+              }
+            : e,
+        ),
+      );
+      // Rivalida in background (la pagina in cache resta visibile): stato condiviso con gli altri.
+      setRefreshVersion((version) => version + 1);
+    } catch (error) {
+      setError(
+        error instanceof Error && error.message
+          ? error.message
+          : 'Presa visione non registrata. Riprova.',
+      );
+    } finally {
+      setAcking(null);
+    }
+  }
+
   function startEdit(entry: DiarioPazienteEntry) {
     setEditEntry(entry);
     setEditForm({
@@ -499,8 +539,17 @@ export function DiarioPazienteTab({
   // ── Diario a card: render helper per una voce ────────────────────────────────
 
   function renderDiarioCard(row: DiaryFeedEntry) {
+    const toSee = needsMyAck(row);
+    const seenBy = seenByText(row.acknowledgements);
+    const showEdit = canEditEntry;
+    const showDelete = canDeleteEntry;
     return (
-      <div key={row.id} className={`diario-card diario-card--${row.authorType}`}>
+      <div
+        key={row.id}
+        className={`diario-card diario-card--${row.authorType}${toSee ? ' diario-card--to-see' : ''}`}
+        data-entry-id={row.id}
+        data-diary-entry-id={row.id}
+      >
         <div className="diario-card__head">
           <span className={`badge ${AUTHOR_TYPE_BADGE[row.authorType]}`}>
             {AUTHOR_TYPE_LABELS[row.authorType]}
@@ -512,49 +561,54 @@ export function DiarioPazienteTab({
           {row.status !== 'aperta' && STATUS_LABELS[row.status] && (
             <span className={`badge ${STATUS_BADGE[row.status]}`}>{STATUS_LABELS[row.status]}</span>
           )}
+          {toSee && <span className="badge badge--red diario-card__to-see">Da vedere</span>}
           <span className="diario-card__time">{fmtDT(row.entryDateTime)}</span>
-          {!isLegacy(row) && row.sourceType !== 'consegna' && (
+          {!isLegacy(row) && row.sourceType !== 'consegna' && (showEdit || showDelete) && (
             <div className="diario-card__actions">
-              <button
-                className="icon-btn icon-btn--sm icon-btn--edit"
-                title="Modifica"
-                onClick={() => startEdit(row)}
-              >
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              {showEdit && (
+                <button
+                  className="icon-btn icon-btn--sm icon-btn--edit"
+                  title="Modifica"
+                  onClick={() => startEdit(row)}
                 >
-                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                </svg>
-              </button>
-              <button
-                className="icon-btn icon-btn--sm icon-btn--danger"
-                title="Elimina"
-                onClick={() => handleDelete(row)}
-              >
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                </button>
+              )}
+              {showDelete && (
+                <button
+                  className="icon-btn icon-btn--sm icon-btn--danger"
+                  title="Elimina"
+                  onClick={() => handleDelete(row)}
                 >
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
-                  <path d="M10 11v6M14 11v6" />
-                  <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
-                </svg>
-              </button>
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                  </svg>
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -562,6 +616,22 @@ export function DiarioPazienteTab({
         {row.title && <div className="diario-card__title">{row.title}</div>}
         <div className="diario-card__content">{row.content}</div>
         {renderTherapyLink(row)}
+        {(toSee || seenBy) && (
+          <div className="diario-card__ack">
+            {seenBy && <span className="diario-card__seen-by">{seenBy}</span>}
+            {toSee && (
+              <button
+                type="button"
+                className="ds-btn ds-btn--primary diario-card__ack-btn"
+                onClick={() => void handleAck(row)}
+                disabled={acking !== null}
+                aria-label={`Presa visione della voce urgente${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
+              >
+                {acking === row.id ? 'Registrazione…' : 'Presa visione'}
+              </button>
+            )}
+          </div>
+        )}
         {row.sourceType === 'consegna' && (
           <small className="form-hint">
             Consegna registrata · gestibile dalla sezione Consegne
@@ -855,6 +925,14 @@ export function DiarioPazienteTab({
             () => setEditEntry(null),
             `Modifica voce — ${fmtDT(editEntry.entryDateTime)}`,
           )}
+
+        {!loading && countToSee(entries) > 0 && (
+          <p className="diario-to-see" role="status">
+            {countToSee(entries) === 1
+              ? '1 voce urgente da vedere'
+              : `${countToSee(entries)} voci urgenti da vedere`}
+          </p>
+        )}
 
         {/* Diario a card (una card per voce, border-left colore ruolo) */}
         {loading ? (

@@ -4,6 +4,7 @@ import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
 import { DiaryPageInputError } from '../patients/diary-pagination.js';
+import { DiaryAckError, acknowledgeDiaryEntry } from '../patients/diary-ack-service.js';
 import { loadPatientDiary } from '../patients/diary-read-service.js';
 import { DiaryWriteInputError, parseDiaryPatchBody } from '../patients/diary-write-validation.js';
 import {
@@ -107,6 +108,29 @@ router.get('/:patientId/diary/:entryId', async (req, res) => {
   } catch (error) {
     console.error('GET /diary/:entryId error:', error);
     res.status(500).json({ error: 'Errore nel recupero della voce' });
+  }
+});
+
+// POST /patients/:patientId/diary/:entryId/ack
+// «Presa visione» per lettore di una voce URGENTE (patients/diary-ack-service.ts). Idempotente per
+// operatore: 201 alla prima presa visione, 200 se il lettore l'aveva gia' registrata. 409 se la
+// voce non e' urgente. Capability: diary.list (chi puo' leggere il diario puo' prenderne visione).
+router.post('/:patientId/diary/:entryId/ack', async (req: AuthedRequest, res) => {
+  const patientId = String(req.params.patientId ?? '');
+  const entryId = String(req.params.entryId ?? '');
+  try {
+    const result = await acknowledgeDiaryEntry(patientId, entryId, req.operator!);
+    res.status(result.created ? 201 : 200).json(result);
+  } catch (error) {
+    if (error instanceof DiaryAckError) {
+      res.status(error.status).json({ error: error.message, code: error.code });
+      return;
+    }
+    console.error(
+      'POST /diary/:entryId/ack error:',
+      error instanceof Error ? error.name : 'unknown',
+    );
+    res.status(500).json({ error: 'Errore nella registrazione della presa visione' });
   }
 });
 

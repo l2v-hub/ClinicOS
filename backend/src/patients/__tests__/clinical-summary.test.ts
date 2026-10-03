@@ -63,9 +63,12 @@ test('summary assembly preserves requested order and fills missing charts safely
       hasSevereAllergy: false,
       terapieTotali: 0,
       terapieCompletate: 0,
+      allergeni: [],
+      parametriCritici: [],
+      rischiElevati: [],
       consegneAperte: 1,
     },
-    { ...projection, consegneAperte: 2 },
+    { ...projection, allergeni: [], parametriCritici: [], rischiElevati: [], consegneAperte: 2 },
   ]);
 });
 
@@ -90,4 +93,31 @@ test('patients route no longer selects Cartella.data for the page summary', () =
       service.indexOf('loadPatientClinicalSummaryRows(scopedPatientIds)'),
     'ownership must be resolved before clinical rows are loaded',
   );
+});
+
+test('clinical summary names WHICH allergen / critical parameter / risk (bounded, additive)', () => {
+  const sql = buildPatientClinicalSummaryQuery(['patient-a']).strings.join('?');
+  assert.match(sql, /AS "allergeni"/);
+  assert.match(sql, /AS "parametriCritici"/);
+  assert.match(sql, /AS "rischiElevati"/);
+  // Bounded lists: every detail list has a LIMIT and short strings (LEFT), never the chart blob.
+  assert.equal(sql.match(/LIMIT \?/g)?.length, 3);
+  assert.doesNotMatch(sql, /SELECT\s+chart\."data"/);
+  const projection: PatientClinicalSummaryProjection = {
+    patientId: 'p',
+    statoRicovero: null,
+    hasCriticalVitals: true,
+    hasHighRisk: true,
+    allergieCount: 1,
+    hasSevereAllergy: true,
+    terapieTotali: 0,
+    terapieCompletate: 0,
+    allergeni: [{ allergene: 'Penicillina', gravita: 'grave' }],
+    parametriCritici: [{ etichetta: 'PA', valore: '85/50', unita: 'mmHg' }],
+    rischiElevati: [{ tipo: 'caduta', livello: 'alto', descrizione: null }],
+  };
+  const [summary] = assemblePatientClinicalSummaries(['p'], [projection], new Map());
+  assert.deepEqual(summary.allergeni, [{ allergene: 'Penicillina', gravita: 'grave' }]);
+  assert.deepEqual(summary.parametriCritici, [{ etichetta: 'PA', valore: '85/50', unita: 'mmHg' }]);
+  assert.deepEqual(summary.rischiElevati, [{ tipo: 'caduta', livello: 'alto', descrizione: null }]);
 });

@@ -12,6 +12,13 @@ import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
 import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
 import { TherapySlotModal } from '../operator/TherapySlotModal';
 import { useCan } from '../../lib/capabilities';
+import '../shared/AgendaInline.css';
+
+/** Nome dell'operatore accanto al pallino colore (il colore da solo non dice chi è). */
+function operatorShortName(op: Operatore | undefined): string {
+  if (!op) return 'Operatore non disponibile';
+  return `${op.nome ?? ''} ${op.cognome ?? ''}`.trim() || 'Operatore non disponibile';
+}
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
@@ -512,6 +519,9 @@ export function AdminAgenda({
                                 <span className="agt-meta-sep">·</span>
                                 <span>{apt.durata ?? 30} min</span>
                               </div>
+                              {apt.note && (
+                                <p className="agt-apt-card__note agt-note-inline">{apt.note}</p>
+                              )}
                               {isSelected && (
                                 <AppuntamentoActions
                                   apt={apt}
@@ -593,7 +603,7 @@ export function AdminAgenda({
                         return (
                           <div
                             key={a.id}
-                            className={`agt-week-apt agt-apt-card--${a.stato}`}
+                            className={`agt-week-apt agt-inline-apt agt-apt-card--${a.stato}`}
                             style={{ borderLeftColor: op?.colore ?? '#888' }}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -626,6 +636,12 @@ export function AdminAgenda({
                                 style={{ background: op.colore }}
                               />
                             )}
+                            {/* Chi (nome, non solo colore), cosa e stato in parole. */}
+                            <span className="agt-inline-meta">
+                              {operatorShortName(op)} ·{' '}
+                              {TIPO_LABEL[a.tipoIntervento] ?? a.tipoIntervento} ·{' '}
+                              <strong>{STATO_LABEL[a.stato]}</strong>
+                            </span>
                           </div>
                         );
                       })}
@@ -670,12 +686,13 @@ export function AdminAgenda({
                 >
                   <span className="agt-month-day__num">{d.getDate()}</span>
                   <div className="agt-month-day__apts">
-                    {apts.slice(0, 3).map((a) => {
+                    {/* Tutti gli appuntamenti: la cella cresce invece di «+N». */}
+                    {apts.map((a) => {
                       const op = operatori.find((o) => o.id === a.operatoreId);
                       return (
                         <div
                           key={a.id}
-                          className={`agt-month-apt agt-apt-card--${a.stato}`}
+                          className={`agt-month-apt agt-inline-apt agt-apt-card--${a.stato}`}
                           style={{ borderLeftColor: op?.colore ?? '#888' }}
                         >
                           <span className="agt-month-apt__time">{a.ora}</span>
@@ -698,10 +715,12 @@ export function AdminAgenda({
                               {a.pazienteNome?.split(',')[0] ?? '—'}
                             </span>
                           )}
+                          <span className="agt-inline-meta">
+                            {operatorShortName(op)} · {STATO_LABEL[a.stato]}
+                          </span>
                         </div>
                       );
                     })}
-                    {apts.length > 3 && <span className="agt-month-more">+{apts.length - 3}</span>}
                   </div>
                 </div>
               );

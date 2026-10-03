@@ -617,6 +617,11 @@ export interface ClinicalSummaryEntry {
   terapieTotali: number;
   terapieCompletate: number;
   consegneAperte: number;
+  /** UX direct-access (additivo): QUALE allergene / parametro critico / rischio, per nominarli
+   *  sulle card invece di un'etichetta generica. Max 10 per lista; assenti nei dati vecchi. */
+  allergeni?: { allergene: string; gravita: string | null }[];
+  parametriCritici?: { etichetta: string; valore: string | null; unita: string | null }[];
+  rischiElevati?: { tipo: string; livello: string; descrizione: string | null }[];
 }
 
 /** GET /patients/clinical-summary/overview — constant-size dashboard aggregate. */
@@ -766,6 +771,18 @@ export interface DiarioPazienteEntry {
   category: string | null;
   createdAt: string;
   updatedAt: string;
+  /** «Presa visione» per lettore (solo voci urgenti, GET diary): assente nelle voci legacy. */
+  acknowledgeable?: boolean;
+  acknowledgedByMe?: boolean;
+  acknowledgements?: DiaryAcknowledgement[];
+}
+
+/** Chi ha preso visione di una voce urgente e quando (istantanea server-side). */
+export interface DiaryAcknowledgement {
+  operatorName: string;
+  operatorRole: string;
+  acknowledgedAt: string;
+  byMe: boolean;
 }
 
 export interface ParametroGiorno {
