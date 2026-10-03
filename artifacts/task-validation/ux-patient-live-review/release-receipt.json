@@ -1,0 +1,39 @@
+{
+  "dateRome": "2026-10-04",
+  "decision": "publish-verified-frontend-only",
+  "authorization": "User requested push and online visibility; explicitly confirmed l2v-hub/ClinicOS as destination",
+  "repository": "https://github.com/l2v-hub/ClinicOS",
+  "branch": "codex/ux-turno-review",
+  "sourceCommit": "f4a31fe02d96158bdcc6a7cdcd83c12629d79b73",
+  "qaVerdict": "READY FOR CODEX QA",
+  "qaInputHash": "09536f45905d68004d9269311b0b972164ba164a3606bc28329611dcf38ed86a",
+  "qaInputFiles": 771,
+  "qaInputMismatches": 0,
+  "focusedTests": { "pass": 65, "fail": 0 },
+  "deployment": {
+    "provider": "Vercel",
+    "project": "clinicos__",
+    "id": "dpl_CDB8UgFUeAYoMD4FL1wDJNL92kvg",
+    "state": "READY",
+    "immutableUrl": "https://clinicos-7fkh3e1y2-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "modules": 661
+  },
+  "liveBrowser": {
+    "script": "/assets/index-CiijlMnZ.js",
+    "viewportWidth": 1074,
+    "vitalsHeights": [102, 102, 102, 102, 102, 102],
+    "allergyGap": 24,
+    "completedBadges": 0,
+    "moduleErrorElements": 0,
+    "expansionOpenedAndClosed": true,
+    "newConsoleErrors": 0,
+    "clinicalWrites": 0
+  },
+  "backend": {
+    "published": false,
+    "databaseMigrated": false,
+    "sharedAcknowledgementOnline": "unavailable-on-legacy-backend",
+    "pending": "Explicit backend/database authorization and fresh independent backend validation"
+  }
+}

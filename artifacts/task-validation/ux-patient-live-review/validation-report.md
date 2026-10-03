@@ -55,5 +55,30 @@ See backend-release-plan.md for the concrete dependency and unverified release r
 
 ## Final decision
 
-IMPLEMENTED — LOCAL UI VERIFIED; INDEPENDENT FRONTEND QA AND ONLINE VERIFICATION PENDING.
+VERIFIED AND PUBLISHED — FRONTEND ONLY. Shared persistence online remains pending.
+
+Independent verdict READY FOR CODEX QA for f4a31fe02d96158bdcc6a7cdcd83c12629d79b73;
+65/65 tests, build and browser pass. 771 candidate input hashes match before/after,
+aggregate 09536f45905d68004d9269311b0b972164ba164a3606bc28329611dcf38ed86a.
+See independent-qa/validation-report.md and independent-qa/playwright-report/index.html.
 Shared Ho capito persistence online remains dependent on the backend release.
+
+## Online verification
+
+Vercel production dpl_CDB8UgFUeAYoMD4FL1wDJNL92kvg is READY and aliased to
+https://clinicos-eosin.vercel.app. Build: 661 modules, TypeScript/Vite success.
+The existing browser was reloaded and visibly loaded /assets/index-CiijlMnZ.js.
+Turno renders without the previous module failure; the incompatible legacy overview is
+shown as unavailable with an unknown counter rather than a fabricated value.
+
+Using the original nurse simulator profile, the user's annotated cartella was opened
+through the visible patient list. At the actual 1074px viewport: six tiles are 102px high,
+allergy-to-content gap is 24px, zero COMPLETATA badges, zero module-error elements.
+The expansion dialog opens and closes successfully. No new console errors after reload.
+No clinical values or acknowledgements were written. Live patient screenshots/data were
+not copied into GitHub evidence; the committed screenshots use synthetic QA fixtures.
+
+An active-page same-document hash navigation did not switch the visible section; the
+check used the application's patient-list button instead. This is not represented as a
+verified direct-hash navigation fix. The earlier doctor simulator did not list the nurse's
+annotated patient, reflecting the older server scope; the original nurse profile was restored.

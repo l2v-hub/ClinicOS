@@ -1,0 +1,87 @@
+[
+  {
+    "status": 503,
+    "url": "http://localhost:3001/consegne/critical/ack"
+  },
+  {
+    "status": 503,
+    "url": "http://localhost:3001/consegne/overview"
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/auth/status",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/auth/simulator/identities",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://127.0.0.1:5187/frontend/src/components/operator/cartella/PresaInCaricoTab.tsx",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/auth/status",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/auth/simulator/identities",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://127.0.0.1:5187/frontend/src/components/operator/cartella/MedicazioniTab.tsx",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/auth/status",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/auth/simulator/identities",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/consegne?limit=20&patientId=patient-test",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/patients/patient-test/intake-review",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  },
+  {
+    "status": 0,
+    "url": "http://localhost:3001/patients/patient-test/parameter-readings?limit=50",
+    "failure": {
+      "errorText": "net::ERR_ABORTED"
+    }
+  }
+]

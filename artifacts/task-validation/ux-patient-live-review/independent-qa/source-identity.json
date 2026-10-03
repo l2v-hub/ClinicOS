@@ -1,0 +1,4641 @@
+{
+  "candidate": "f4a31fe02d96158bdcc6a7cdcd83c12629d79b73",
+  "tree": "75fbc3f016749f9cad9ae3db2a644ae588f67cd6",
+  "baseline": "a3ab80f796ec390c09435fddf2c77c2cfb0b7443",
+  "beforeSourceHash": "09536f45905d68004d9269311b0b972164ba164a3606bc28329611dcf38ed86a",
+  "afterSourceHash": "09536f45905d68004d9269311b0b972164ba164a3606bc28329611dcf38ed86a",
+  "method": "Candidate Git blob inventory bound to initial HEAD/status; after tests every build/frontend/QA input rehashed with Git normalization. No application writer operated in this checkout.",
+  "mismatches": [],
+  "excludedUnrelatedDirtyPaths": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1"
+  ],
+  "entries": [
+    {
+      "path": "frontend/.env.example",
+      "beforeCandidateBlob": "e0099a3fc82830adb9f6393f5acf1d14e3d0c708",
+      "afterWorktreeBlob": "e0099a3fc82830adb9f6393f5acf1d14e3d0c708",
+      "matches": true
+    },
+    {
+      "path": "frontend/.gitignore",
+      "beforeCandidateBlob": "7a9d1bcab2765f6e540992c8c510847a67074bac",
+      "afterWorktreeBlob": "7a9d1bcab2765f6e540992c8c510847a67074bac",
+      "matches": true
+    },
+    {
+      "path": "frontend/README.md",
+      "beforeCandidateBlob": "66770dfd093e2db17cbf77daa2886394066498dc",
+      "afterWorktreeBlob": "66770dfd093e2db17cbf77daa2886394066498dc",
+      "matches": true
+    },
+    {
+      "path": "frontend/design-mockup.html",
+      "beforeCandidateBlob": "465612594603a09d682c4da4832cbeb50483f02d",
+      "afterWorktreeBlob": "465612594603a09d682c4da4832cbeb50483f02d",
+      "matches": true
+    },
+    {
+      "path": "frontend/eslint.config.js",
+      "beforeCandidateBlob": "973e2735707d8ea00586bd38df761afab85965fb",
+      "afterWorktreeBlob": "973e2735707d8ea00586bd38df761afab85965fb",
+      "matches": true
+    },
+    {
+      "path": "frontend/index.html",
+      "beforeCandidateBlob": "15aab67d30a79e3e6125f238bec6c501d6e2d1a5",
+      "afterWorktreeBlob": "15aab67d30a79e3e6125f238bec6c501d6e2d1a5",
+      "matches": true
+    },
+    {
+      "path": "frontend/package.json",
+      "beforeCandidateBlob": "19c77a79c84dd7a3f911f673c071c6bec73a6636",
+      "afterWorktreeBlob": "19c77a79c84dd7a3f911f673c071c6bec73a6636",
+      "matches": true
+    },
+    {
+      "path": "frontend/public/favicon.svg",
+      "beforeCandidateBlob": "6893eb13237060adc0c968a690149a49faa2d7d3",
+      "afterWorktreeBlob": "6893eb13237060adc0c968a690149a49faa2d7d3",
+      "matches": true
+    },
+    {
+      "path": "frontend/public/icons.svg",
+      "beforeCandidateBlob": "e9522193d9f796a9748e9ad8c952a5df73c87db9",
+      "afterWorktreeBlob": "e9522193d9f796a9748e9ad8c952a5df73c87db9",
+      "matches": true
+    },
+    {
+      "path": "frontend/public/staticwebapp.config.json",
+      "beforeCandidateBlob": "3d6c222f7d2d3a57759b55d2f30b31bcdefb3132",
+      "afterWorktreeBlob": "3d6c222f7d2d3a57759b55d2f30b31bcdefb3132",
+      "matches": true
+    },
+    {
+      "path": "frontend/scripts/req038-evidence.mts",
+      "beforeCandidateBlob": "ea5deb07e8ee300236bdee0a823accb60e344856",
+      "afterWorktreeBlob": "ea5deb07e8ee300236bdee0a823accb60e344856",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/App.css",
+      "beforeCandidateBlob": "7c1a41d9b683431bd929ffaa1e9bf54a1bdbef07",
+      "afterWorktreeBlob": "7c1a41d9b683431bd929ffaa1e9bf54a1bdbef07",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "beforeCandidateBlob": "3e67b2fb2fd3435b1352ae3ee8b7c2c05e7fcbd2",
+      "afterWorktreeBlob": "3e67b2fb2fd3435b1352ae3ee8b7c2c05e7fcbd2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/app-additions.css",
+      "beforeCandidateBlob": "5918e9b369747f773fb152c347fc8cf4e2662bb8",
+      "afterWorktreeBlob": "5918e9b369747f773fb152c347fc8cf4e2662bb8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/assets/hero.png",
+      "beforeCandidateBlob": "02251f4b956c55af2d76fd0788124d7eee2b45eb",
+      "afterWorktreeBlob": "02251f4b956c55af2d76fd0788124d7eee2b45eb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/assets/react.svg",
+      "beforeCandidateBlob": "6c87de9bb3358469122cc991d5cf578927246184",
+      "afterWorktreeBlob": "6c87de9bb3358469122cc991d5cf578927246184",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/assets/vite.svg",
+      "beforeCandidateBlob": "5101b674df391399da71c767aa5c976426c9dc7a",
+      "afterWorktreeBlob": "5101b674df391399da71c767aa5c976426c9dc7a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/clinicos-restyle.css",
+      "beforeCandidateBlob": "1b146470c1c14cfd5cc85d8228be2f8457f64749",
+      "afterWorktreeBlob": "1b146470c1c14cfd5cc85d8228be2f8457f64749",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/ExpCard.tsx",
+      "beforeCandidateBlob": "3577fe185f1f04d838a9acce65b4f0eece176565",
+      "afterWorktreeBlob": "3577fe185f1f04d838a9acce65b4f0eece176565",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/Login.css",
+      "beforeCandidateBlob": "b9d3785e9b22e6a5f3d2b4ae7cc5c44cc73624d6",
+      "afterWorktreeBlob": "b9d3785e9b22e6a5f3d2b4ae7cc5c44cc73624d6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/Login.tsx",
+      "beforeCandidateBlob": "6fc0c3d7c82a71a24d768e300bf4f3dda7636087",
+      "afterWorktreeBlob": "6fc0c3d7c82a71a24d768e300bf4f3dda7636087",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/AdminAgenda.tsx",
+      "beforeCandidateBlob": "504aeb5d199763cd9cf906e61313437ae88c6a54",
+      "afterWorktreeBlob": "504aeb5d199763cd9cf906e61313437ae88c6a54",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/AdminDashboard.tsx",
+      "beforeCandidateBlob": "95625d718eb4b8d496a67c86ddf743d52018c9e6",
+      "afterWorktreeBlob": "95625d718eb4b8d496a67c86ddf743d52018c9e6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/AdminDashboardKpiBands.tsx",
+      "beforeCandidateBlob": "3cf3fb10c366ed8493fc755f3b3cc95e864b53f6",
+      "afterWorktreeBlob": "3cf3fb10c366ed8493fc755f3b3cc95e864b53f6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorFormPanel.tsx",
+      "beforeCandidateBlob": "4e6cd07f645d8e55ab71ab881040713ce2f4aa9a",
+      "afterWorktreeBlob": "4e6cd07f645d8e55ab71ab881040713ce2f4aa9a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorManagement.css",
+      "beforeCandidateBlob": "b958b448214c0996387b075bb1fcdc41c44e304c",
+      "afterWorktreeBlob": "b958b448214c0996387b075bb1fcdc41c44e304c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorManagement.tsx",
+      "beforeCandidateBlob": "a3fa6143125b94da52246ab648c6a4ad86248736",
+      "afterWorktreeBlob": "a3fa6143125b94da52246ab648c6a4ad86248736",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorSchedule.tsx",
+      "beforeCandidateBlob": "49aecd4560b452455e31c9f4c90ca1e815ce9a66",
+      "afterWorktreeBlob": "49aecd4560b452455e31c9f4c90ca1e815ce9a66",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/RolePermissionsPage.css",
+      "beforeCandidateBlob": "76e53294f8c1af63b3fc436d22edac9eb9af8c5d",
+      "afterWorktreeBlob": "76e53294f8c1af63b3fc436d22edac9eb9af8c5d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/RolePermissionsPage.tsx",
+      "beforeCandidateBlob": "ac9df9cd4d69d9f9011e6047899d0604a3b32479",
+      "afterWorktreeBlob": "ac9df9cd4d69d9f9011e6047899d0604a3b32479",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/RoomsManagement.tsx",
+      "beforeCandidateBlob": "c15ffe1f95b026fadba2a72c52ed8a7b2351c0a2",
+      "afterWorktreeBlob": "c15ffe1f95b026fadba2a72c52ed8a7b2351c0a2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/RosterDefaultsPanel.tsx",
+      "beforeCandidateBlob": "1312a4a80d070dc879a638f8b0fca1236ee3c311",
+      "afterWorktreeBlob": "1312a4a80d070dc879a638f8b0fca1236ee3c311",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "beforeCandidateBlob": "d3becdd16cdc0210108b57a39e0c8dad06e103d4",
+      "afterWorktreeBlob": "d3becdd16cdc0210108b57a39e0c8dad06e103d4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/operator-management-form-contract.test.ts",
+      "beforeCandidateBlob": "1d60bba7b269b47ad2788cde2fa8547b6c3ab07e",
+      "afterWorktreeBlob": "1d60bba7b269b47ad2788cde2fa8547b6c3ab07e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/operator-schedule-contract.test.ts",
+      "beforeCandidateBlob": "f16a580971e0c66bf2b3c9855d46228d948501d6",
+      "afterWorktreeBlob": "f16a580971e0c66bf2b3c9855d46228d948501d6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/operatorFormModel.ts",
+      "beforeCandidateBlob": "04a1c007bd76da047340b14dfd46ebd744e93f67",
+      "afterWorktreeBlob": "04a1c007bd76da047340b14dfd46ebd744e93f67",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/CapabilityTags.tsx",
+      "beforeCandidateBlob": "cc504476dc290414c876967a39f0d9981a3de5fa",
+      "afterWorktreeBlob": "cc504476dc290414c876967a39f0d9981a3de5fa",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/CapabilityView.tsx",
+      "beforeCandidateBlob": "1c1eb674c50cf431828c9931978fe7860925be82",
+      "afterWorktreeBlob": "1c1eb674c50cf431828c9931978fe7860925be82",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/ChangeBar.tsx",
+      "beforeCandidateBlob": "ca51f378c6ad5fc853f1853b105b62a43bd72414",
+      "afterWorktreeBlob": "ca51f378c6ad5fc853f1853b105b62a43bd72414",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/EffectSelect.tsx",
+      "beforeCandidateBlob": "976123ea82b97f49bdac13b158f787c9943fe054",
+      "afterWorktreeBlob": "976123ea82b97f49bdac13b158f787c9943fe054",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/FilterBar.tsx",
+      "beforeCandidateBlob": "3b52e4618c0f3cf48ce7d0f1d1693e0224a44c0c",
+      "afterWorktreeBlob": "3b52e4618c0f3cf48ce7d0f1d1693e0224a44c0c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/HistoryView.tsx",
+      "beforeCandidateBlob": "45b9a5fb7386673323d3367772a7d25cc4d2a304",
+      "afterWorktreeBlob": "45b9a5fb7386673323d3367772a7d25cc4d2a304",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/IdentitiesView.tsx",
+      "beforeCandidateBlob": "c8c4397ff8ccff3802f2f07a51d9f877c922da64",
+      "afterWorktreeBlob": "c8c4397ff8ccff3802f2f07a51d9f877c922da64",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/ImpactPanel.tsx",
+      "beforeCandidateBlob": "75f9b4b8fc08bfc66cc1a1bf7572aded3e5dfcc8",
+      "afterWorktreeBlob": "75f9b4b8fc08bfc66cc1a1bf7572aded3e5dfcc8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/MatrixView.tsx",
+      "beforeCandidateBlob": "2b3745d4c2f8c76a99797244d778f4fd383a33f8",
+      "afterWorktreeBlob": "2b3745d4c2f8c76a99797244d778f4fd383a33f8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/RoleView.tsx",
+      "beforeCandidateBlob": "28f3313588a1f9fd4df9c2253973d74dc37f5ee3",
+      "afterWorktreeBlob": "28f3313588a1f9fd4df9c2253973d74dc37f5ee3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/__tests__/rolePermissionsModel.test.ts",
+      "beforeCandidateBlob": "5d9b9f489c4f4773d8d3396e68bba8c61aa4d5ec",
+      "afterWorktreeBlob": "5d9b9f489c4f4773d8d3396e68bba8c61aa4d5ec",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/admin/role-permissions/rolePermissionsModel.ts",
+      "beforeCandidateBlob": "b7d4f4efcb9d2aada55d5f5f3afb12fbab78c511",
+      "afterWorktreeBlob": "b7d4f4efcb9d2aada55d5f5f3afb12fbab78c511",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/AssistantEntryBadge.tsx",
+      "beforeCandidateBlob": "b10aa33ff1edb9c637557910c1f389c52e27913b",
+      "afterWorktreeBlob": "b10aa33ff1edb9c637557910c1f389c52e27913b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/AssistantMode.css",
+      "beforeCandidateBlob": "8ff0ed655bf9c93ee58577a4a500ab6c66f1d58e",
+      "afterWorktreeBlob": "8ff0ed655bf9c93ee58577a4a500ab6c66f1d58e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/AssistantMode.tsx",
+      "beforeCandidateBlob": "e9214e90597ee0132ec1357c39ecc7bdc9837f0f",
+      "afterWorktreeBlob": "e9214e90597ee0132ec1357c39ecc7bdc9837f0f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/CopilotHome.tsx",
+      "beforeCandidateBlob": "325152a8d3a46aab07fc18e42dc951c6c7fcb227",
+      "afterWorktreeBlob": "325152a8d3a46aab07fc18e42dc951c6c7fcb227",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/ProactivePanel.tsx",
+      "beforeCandidateBlob": "5b8f6d91c35e70fd6d37ddfea8aa84fb64c8f2a9",
+      "afterWorktreeBlob": "5b8f6d91c35e70fd6d37ddfea8aa84fb64c8f2a9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/RoundPanel.tsx",
+      "beforeCandidateBlob": "1af30801cc6338ec76b5bb8f9172442fcd7c1703",
+      "afterWorktreeBlob": "1af30801cc6338ec76b5bb8f9172442fcd7c1703",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/__tests__/assistantState.test.ts",
+      "beforeCandidateBlob": "1b4ecb8534f60d14f9bf449fbeec87a93e353fd7",
+      "afterWorktreeBlob": "1b4ecb8534f60d14f9bf449fbeec87a93e353fd7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/__tests__/classicScreenTarget.test.ts",
+      "beforeCandidateBlob": "692635727137530be71816f23d3b90303037648f",
+      "afterWorktreeBlob": "692635727137530be71816f23d3b90303037648f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/__tests__/copilotShortcut.test.ts",
+      "beforeCandidateBlob": "c988e3cabaf4dfc4298b0122af5a2f0f21e8b11f",
+      "afterWorktreeBlob": "c988e3cabaf4dfc4298b0122af5a2f0f21e8b11f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/assistantApi.ts",
+      "beforeCandidateBlob": "24488fe88485d5ab3bb25cd619c98b1c3d34054f",
+      "afterWorktreeBlob": "24488fe88485d5ab3bb25cd619c98b1c3d34054f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/assistantState.ts",
+      "beforeCandidateBlob": "0f249f13179923596bfdad3aa0e1f9508769d1b2",
+      "afterWorktreeBlob": "0f249f13179923596bfdad3aa0e1f9508769d1b2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/classicScreenTarget.ts",
+      "beforeCandidateBlob": "4a6a9e9dbd6ea6b9a20e4f4f8489f370c95a27b9",
+      "afterWorktreeBlob": "4a6a9e9dbd6ea6b9a20e4f4f8489f370c95a27b9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/VoicePanel.tsx",
+      "beforeCandidateBlob": "1b93f524769e35bc13fae75c1f061412a2435e23",
+      "afterWorktreeBlob": "1b93f524769e35bc13fae75c1f061412a2435e23",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/__tests__/voice.test.ts",
+      "beforeCandidateBlob": "3bf6b990d9c97c16ad512f99e70434116396a65f",
+      "afterWorktreeBlob": "3bf6b990d9c97c16ad512f99e70434116396a65f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/audioSession.ts",
+      "beforeCandidateBlob": "9408bcd8bd6d1f4fb86cbdc128b372274b0d6db0",
+      "afterWorktreeBlob": "9408bcd8bd6d1f4fb86cbdc128b372274b0d6db0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/spokenStatus.ts",
+      "beforeCandidateBlob": "f101518ece2da9f4083217fcda4f249c269799bc",
+      "afterWorktreeBlob": "f101518ece2da9f4083217fcda4f249c269799bc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/useVoiceCapture.ts",
+      "beforeCandidateBlob": "4d0ddae9ffbd47c12495bc3a3943eab8bf9f8978",
+      "afterWorktreeBlob": "4d0ddae9ffbd47c12495bc3a3943eab8bf9f8978",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/useVoiceChannel.ts",
+      "beforeCandidateBlob": "97db0f2f4df41a8f0bbacd05225fe1c4b36678ca",
+      "afterWorktreeBlob": "97db0f2f4df41a8f0bbacd05225fe1c4b36678ca",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/vad.ts",
+      "beforeCandidateBlob": "035eb53f32c5e07809fd84f076e5f7d58723906d",
+      "afterWorktreeBlob": "035eb53f32c5e07809fd84f076e5f7d58723906d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/voiceApi.ts",
+      "beforeCandidateBlob": "fc5a507d8e1fa22e9409f4684c9b323bb4b64915",
+      "afterWorktreeBlob": "fc5a507d8e1fa22e9409f4684c9b323bb4b64915",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/assistant/voice/wav.ts",
+      "beforeCandidateBlob": "d3eaa7a25332f7caadc63a365edca5ad6cdba619",
+      "afterWorktreeBlob": "d3eaa7a25332f7caadc63a365edca5ad6cdba619",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/navigation/AppSidebar.tsx",
+      "beforeCandidateBlob": "0e1d2a229415d419b40d176831204e917f7daaae",
+      "afterWorktreeBlob": "0e1d2a229415d419b40d176831204e917f7daaae",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/navigation/PageSecondaryNavigation.tsx",
+      "beforeCandidateBlob": "28c56f590157c5c0073f263e7e547f89c01f9754",
+      "afterWorktreeBlob": "28c56f590157c5c0073f263e7e547f89c01f9754",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/navigation/PageTopNavigation.tsx",
+      "beforeCandidateBlob": "8c3ccc340fd040e15e0aabcb1ca1e37c2444438b",
+      "afterWorktreeBlob": "8c3ccc340fd040e15e0aabcb1ca1e37c2444438b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/navigation/TopNav.css",
+      "beforeCandidateBlob": "3d2297619ba19965decd0d61bd725dba77ed7bad",
+      "afterWorktreeBlob": "3d2297619ba19965decd0d61bd725dba77ed7bad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/navigation/TopNav.tsx",
+      "beforeCandidateBlob": "b1156fb79996ddd70d57ea72cd8ba1d872316d55",
+      "afterWorktreeBlob": "b1156fb79996ddd70d57ea72cd8ba1d872316d55",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/AdessoQueue.css",
+      "beforeCandidateBlob": "3d6172e265c158570247a0a95ee632bc76f6e21d",
+      "afterWorktreeBlob": "3d6172e265c158570247a0a95ee632bc76f6e21d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/AdessoQueue.tsx",
+      "beforeCandidateBlob": "f18ad3436a77b88536599c621c7a9073caf679d3",
+      "afterWorktreeBlob": "f18ad3436a77b88536599c621c7a9073caf679d3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/AnagraficaFarmaciPage.css",
+      "beforeCandidateBlob": "7f55620f6b6f816e2c1fcb86d39a60970f8b53cc",
+      "afterWorktreeBlob": "7f55620f6b6f816e2c1fcb86d39a60970f8b53cc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/AnagraficaFarmaciPage.tsx",
+      "beforeCandidateBlob": "f9fca7fbdf593e8059de47822f6d17ca45f24851",
+      "afterWorktreeBlob": "f9fca7fbdf593e8059de47822f6d17ca45f24851",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ClinicalSectionLoading.tsx",
+      "beforeCandidateBlob": "c20c2adfdc2b8d7437709ada883cb6d02ce8153b",
+      "afterWorktreeBlob": "c20c2adfdc2b8d7437709ada883cb6d02ce8153b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaComposer.tsx",
+      "beforeCandidateBlob": "6f71a6886be923a32212bfdb1a0414ec75bf23f2",
+      "afterWorktreeBlob": "6f71a6886be923a32212bfdb1a0414ec75bf23f2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.css",
+      "beforeCandidateBlob": "be5e5ab43d395800c4a4e4f871f5433b57ba1ada",
+      "afterWorktreeBlob": "be5e5ab43d395800c4a4e4f871f5433b57ba1ada",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "beforeCandidateBlob": "471b24e7f3409564b8dfd9188ad546cd0016f79c",
+      "afterWorktreeBlob": "471b24e7f3409564b8dfd9188ad546cd0016f79c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaQuickAdd.tsx",
+      "beforeCandidateBlob": "b8b5807df306ffcc8b5c0ef0c209b70aa999b6af",
+      "afterWorktreeBlob": "b8b5807df306ffcc8b5c0ef0c209b70aa999b6af",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaTimestamp.tsx",
+      "beforeCandidateBlob": "d0e3a9c3c6dcf1c16c31056c50289ea5f6527268",
+      "afterWorktreeBlob": "d0e3a9c3c6dcf1c16c31056c50289ea5f6527268",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "beforeCandidateBlob": "0a7229dceac3704cc1ca0b0ea8286ce7e973eb46",
+      "afterWorktreeBlob": "0a7229dceac3704cc1ca0b0ea8286ce7e973eb46",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePatientRoster.tsx",
+      "beforeCandidateBlob": "10787af91623c4283c32c014a34c336eb0492ee9",
+      "afterWorktreeBlob": "10787af91623c4283c32c014a34c336eb0492ee9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneRounds.css",
+      "beforeCandidateBlob": "1ce33cc9b539689e97b777fc63688a6b7b72c81e",
+      "afterWorktreeBlob": "1ce33cc9b539689e97b777fc63688a6b7b72c81e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneRounds.tsx",
+      "beforeCandidateBlob": "d8d756d713509eaa61be3d6afca63ab0693bbf0a",
+      "afterWorktreeBlob": "d8d756d713509eaa61be3d6afca63ab0693bbf0a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegneWorkspace.tsx",
+      "beforeCandidateBlob": "615eced8e0f0c8be939c60bad2b7672b6da6bec3",
+      "afterWorktreeBlob": "615eced8e0f0c8be939c60bad2b7672b6da6bec3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/DashboardNotificationCenter.css",
+      "beforeCandidateBlob": "c4d32dc6413b1334c4030e2a6968a2b3ee978043",
+      "afterWorktreeBlob": "c4d32dc6413b1334c4030e2a6968a2b3ee978043",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/DashboardNotificationCenter.tsx",
+      "beforeCandidateBlob": "24d56a01742c1023287589d8f2af1c0aebf4e006",
+      "afterWorktreeBlob": "24d56a01742c1023287589d8f2af1c0aebf4e006",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/InvioPSModal.tsx",
+      "beforeCandidateBlob": "b504e3cea816a67d8684252805281c26ba128dad",
+      "afterWorktreeBlob": "b504e3cea816a67d8684252805281c26ba128dad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/LazyNews2.tsx",
+      "beforeCandidateBlob": "533a44a17b20bfda5467812c13b3fbfe15346707",
+      "afterWorktreeBlob": "533a44a17b20bfda5467812c13b3fbfe15346707",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "beforeCandidateBlob": "9fdf771a03186435887bd8553469fad0f1e25ea2",
+      "afterWorktreeBlob": "9fdf771a03186435887bd8553469fad0f1e25ea2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/NewPatientChooser.css",
+      "beforeCandidateBlob": "3f3218e9ab4a660b0418717fb75c02612ed97f6e",
+      "afterWorktreeBlob": "3f3218e9ab4a660b0418717fb75c02612ed97f6e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/NewPatientChooser.tsx",
+      "beforeCandidateBlob": "29e32598400b18423f7afd435d9f10405dea6468",
+      "afterWorktreeBlob": "29e32598400b18423f7afd435d9f10405dea6468",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/NewPatientFlow.tsx",
+      "beforeCandidateBlob": "34c8beeebda8a185b2f54283c09261dbd342445e",
+      "afterWorktreeBlob": "34c8beeebda8a185b2f54283c09261dbd342445e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/NewPatientStart.css",
+      "beforeCandidateBlob": "2bdc72fa6869262f1ae53f0f50d98a8a3c37e55c",
+      "afterWorktreeBlob": "2bdc72fa6869262f1ae53f0f50d98a8a3c37e55c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/NewPatientStart.tsx",
+      "beforeCandidateBlob": "463e4bc00f7686122a5ede756f88eb4a59431ef5",
+      "afterWorktreeBlob": "463e4bc00f7686122a5ede756f88eb4a59431ef5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/News2.css",
+      "beforeCandidateBlob": "694e7cbf810f89e93a99a68464cf05a0f57552df",
+      "afterWorktreeBlob": "694e7cbf810f89e93a99a68464cf05a0f57552df",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/News2Chip.tsx",
+      "beforeCandidateBlob": "a259eb05a80aadd9bcb935cb7698eb9320e3e67c",
+      "afterWorktreeBlob": "a259eb05a80aadd9bcb935cb7698eb9320e3e67c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorAgenda.tsx",
+      "beforeCandidateBlob": "abd969fab5c77735b5da0db4fca6b599a99c1b2d",
+      "afterWorktreeBlob": "abd969fab5c77735b5da0db4fca6b599a99c1b2d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorAgendaHmi.css",
+      "beforeCandidateBlob": "706d82d9e03060287a415a81f245310f954f6d7d",
+      "afterWorktreeBlob": "706d82d9e03060287a415a81f245310f954f6d7d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorClinicalKpiBand.tsx",
+      "beforeCandidateBlob": "650f95a23f651e7bc43af195a8b90e5c403e1c1e",
+      "afterWorktreeBlob": "650f95a23f651e7bc43af195a8b90e5c403e1c1e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorDashboard.css",
+      "beforeCandidateBlob": "62a1b7f107bf74862b8cdd4b01149fa63923733a",
+      "afterWorktreeBlob": "62a1b7f107bf74862b8cdd4b01149fa63923733a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorDashboard.tsx",
+      "beforeCandidateBlob": "3bc44298d80ae086186b22d9e2fcd487f6c9c011",
+      "afterWorktreeBlob": "3bc44298d80ae086186b22d9e2fcd487f6c9c011",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryClock.tsx",
+      "beforeCandidateBlob": "a12581f0406f2f0a96479a654d6dc9953df20618",
+      "afterWorktreeBlob": "a12581f0406f2f0a96479a654d6dc9953df20618",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryPanel.tsx",
+      "beforeCandidateBlob": "c34d95d01b312284bf5f8d3b535320aa25336a01",
+      "afterWorktreeBlob": "c34d95d01b312284bf5f8d3b535320aa25336a01",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "beforeCandidateBlob": "469878f92362f0ed7d77c318e6e94553ca3c1b63",
+      "afterWorktreeBlob": "469878f92362f0ed7d77c318e6e94553ca3c1b63",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterPatientPick.tsx",
+      "beforeCandidateBlob": "a5214a1bc75e96c362d55e39de8f9ed1b51efa24",
+      "afterWorktreeBlob": "a5214a1bc75e96c362d55e39de8f9ed1b51efa24",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/ParametriVitali.css",
+      "beforeCandidateBlob": "d59ccb1dafb2c90612d0a7fe46b84b79fab2241d",
+      "afterWorktreeBlob": "d59ccb1dafb2c90612d0a7fe46b84b79fab2241d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientCompactHeader.tsx",
+      "beforeCandidateBlob": "17b8e2bba542dbec3ece82a9fa78be60fec723d8",
+      "afterWorktreeBlob": "17b8e2bba542dbec3ece82a9fa78be60fec723d8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "beforeCandidateBlob": "ca42f85637548ead7c2a48db8cdec6136279fd14",
+      "afterWorktreeBlob": "ca42f85637548ead7c2a48db8cdec6136279fd14",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetailLazyTabs.tsx",
+      "beforeCandidateBlob": "43f20dcc9fcdea481faa1cb9c10f3126dde7eb22",
+      "afterWorktreeBlob": "43f20dcc9fcdea481faa1cb9c10f3126dde7eb22",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientIntakeReview.tsx",
+      "beforeCandidateBlob": "689d41d51867216973717705f391299dd6cb045c",
+      "afterWorktreeBlob": "689d41d51867216973717705f391299dd6cb045c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.css",
+      "beforeCandidateBlob": "99312f1573d5db0b64c1e04ddd458fec0ef96e67",
+      "afterWorktreeBlob": "99312f1573d5db0b64c1e04ddd458fec0ef96e67",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.tsx",
+      "beforeCandidateBlob": "0c9073ca93d9a8632810f8b24b3d75e5d9435664",
+      "afterWorktreeBlob": "0c9073ca93d9a8632810f8b24b3d75e5d9435664",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientOverview.css",
+      "beforeCandidateBlob": "22c380c137f1ae3552f6af3ad818634310bb8fad",
+      "afterWorktreeBlob": "22c380c137f1ae3552f6af3ad818634310bb8fad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterEntry.tsx",
+      "beforeCandidateBlob": "12593eb9b2cd6bfcde2e7ddb36793e6daba681a5",
+      "afterWorktreeBlob": "12593eb9b2cd6bfcde2e7ddb36793e6daba681a5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterHistory.tsx",
+      "beforeCandidateBlob": "20da0a9f04985bcce540fe9e5419d3704f98d82d",
+      "afterWorktreeBlob": "20da0a9f04985bcce540fe9e5419d3704f98d82d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterMonthTable.tsx",
+      "beforeCandidateBlob": "03e9ec961b6838a013612ae9252f4c610dba316b",
+      "afterWorktreeBlob": "03e9ec961b6838a013612ae9252f4c610dba316b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterPeriodFilter.tsx",
+      "beforeCandidateBlob": "13ba62f828bdbad228f01c1c5b66f473f00b5640",
+      "afterWorktreeBlob": "13ba62f828bdbad228f01c1c5b66f473f00b5640",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterTrendChart.tsx",
+      "beforeCandidateBlob": "4926684b3f5701572a2e3684c731246d38a026a8",
+      "afterWorktreeBlob": "4926684b3f5701572a2e3684c731246d38a026a8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterTrends.css",
+      "beforeCandidateBlob": "e6fd7e87444842f936e5c83f746654e6191ebb3b",
+      "afterWorktreeBlob": "e6fd7e87444842f936e5c83f746654e6191ebb3b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterTrends.tsx",
+      "beforeCandidateBlob": "b7042b8d23adb735cf391509a8a266fe617c43e8",
+      "afterWorktreeBlob": "b7042b8d23adb735cf391509a8a266fe617c43e8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterWorkspace.css",
+      "beforeCandidateBlob": "d281aceae41586663586e0855233dd31e80002e1",
+      "afterWorktreeBlob": "d281aceae41586663586e0855233dd31e80002e1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameters.css",
+      "beforeCandidateBlob": "7d648f0828ba511533123b4d5f462a3e34427f1b",
+      "afterWorktreeBlob": "7d648f0828ba511533123b4d5f462a3e34427f1b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordData.css",
+      "beforeCandidateBlob": "c47b123e534e444403e4b52c68b602e69ac7971f",
+      "afterWorktreeBlob": "c47b123e534e444403e4b52c68b602e69ac7971f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordPrintDialog.tsx",
+      "beforeCandidateBlob": "b91f124cdc719af23024eec2fd2cf27f34677e54",
+      "afterWorktreeBlob": "b91f124cdc719af23024eec2fd2cf27f34677e54",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordPrintDocument.tsx",
+      "beforeCandidateBlob": "5791fd13351a9f84cf52d6e536845b3bce159e56",
+      "afterWorktreeBlob": "5791fd13351a9f84cf52d6e536845b3bce159e56",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "beforeCandidateBlob": "0b6dadf90fc6117519d13a2c0d08f2e21fb1a2c6",
+      "afterWorktreeBlob": "0b6dadf90fc6117519d13a2c0d08f2e21fb1a2c6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/PatientVitalSignsView.tsx",
+      "beforeCandidateBlob": "d242a0a1d6926665014ac9e79c05a020621fdaff",
+      "afterWorktreeBlob": "d242a0a1d6926665014ac9e79c05a020621fdaff",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyGiroRows.tsx",
+      "beforeCandidateBlob": "522424de14faa764f7683c0b0a9bef165ad60318",
+      "afterWorktreeBlob": "522424de14faa764f7683c0b0a9bef165ad60318",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyRoundsPage.css",
+      "beforeCandidateBlob": "f5d5ca1cd9458315c892cb0b810283d7a24fb48b",
+      "afterWorktreeBlob": "f5d5ca1cd9458315c892cb0b810283d7a24fb48b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyRoundsPage.tsx",
+      "beforeCandidateBlob": "26b73f55423d81f697e80eb06cf9d92c11df8b3d",
+      "afterWorktreeBlob": "26b73f55423d81f697e80eb06cf9d92c11df8b3d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.css",
+      "beforeCandidateBlob": "832a742774b244fce785b965a211d3373ce628e8",
+      "afterWorktreeBlob": "832a742774b244fce785b965a211d3373ce628e8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "beforeCandidateBlob": "905058b9b82cb958c1615b3e9d46b2c076035883",
+      "afterWorktreeBlob": "905058b9b82cb958c1615b3e9d46b2c076035883",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyWeekCalendar.css",
+      "beforeCandidateBlob": "0d5bc6be32e403c3f9bd38bbd3fa9df79778ea63",
+      "afterWorktreeBlob": "0d5bc6be32e403c3f9bd38bbd3fa9df79778ea63",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyWeekCalendar.tsx",
+      "beforeCandidateBlob": "1f641ba9ad8f4b549b6f25e16f4776aabdc41141",
+      "afterWorktreeBlob": "1f641ba9ad8f4b549b6f25e16f4776aabdc41141",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TurnoAppointments.tsx",
+      "beforeCandidateBlob": "664b8c191ed0d9195d36e34735501d04c0b1aede",
+      "afterWorktreeBlob": "664b8c191ed0d9195d36e34735501d04c0b1aede",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TurnoHandovers.css",
+      "beforeCandidateBlob": "08a66b6d393be3a6af4cea456e207f8c9ab07f54",
+      "afterWorktreeBlob": "08a66b6d393be3a6af4cea456e207f8c9ab07f54",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TurnoHandovers.tsx",
+      "beforeCandidateBlob": "c261cb85816b5763801650c0cc6ceac68b5767f7",
+      "afterWorktreeBlob": "c261cb85816b5763801650c0cc6ceac68b5767f7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/TurnoPatients.tsx",
+      "beforeCandidateBlob": "ccd7b6206bcf31a66f7920a9306034684ff51dc6",
+      "afterWorktreeBlob": "ccd7b6206bcf31a66f7920a9306034684ff51dc6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/VitalsOverview.tsx",
+      "beforeCandidateBlob": "69a0e673b8a550bd2251e6a1f39664b46d560e5a",
+      "afterWorktreeBlob": "69a0e673b8a550bd2251e6a1f39664b46d560e5a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts",
+      "beforeCandidateBlob": "6c1494bc2161bec983c409d9e348084e4ac0aef5",
+      "afterWorktreeBlob": "6c1494bc2161bec983c409d9e348084e4ac0aef5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/assessmentsUi.test.ts",
+      "beforeCandidateBlob": "193a9cd14a63e5f7ae175e008bbd4806e6d66148",
+      "afterWorktreeBlob": "193a9cd14a63e5f7ae175e008bbd4806e6d66148",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/consegneGiroUi.test.ts",
+      "beforeCandidateBlob": "0f094ab08c25cc65fe6ee76d4001a37d1f3430de",
+      "afterWorktreeBlob": "0f094ab08c25cc65fe6ee76d4001a37d1f3430de",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/dashboard-notification-model.test.ts",
+      "beforeCandidateBlob": "252f31e9f5ab22efe6cea6fc56d747fb35cf7bbc",
+      "afterWorktreeBlob": "252f31e9f5ab22efe6cea6fc56d747fb35cf7bbc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/gds15Ui.test.ts",
+      "beforeCandidateBlob": "93325757550ec5267af9656a89b599c565225c66",
+      "afterWorktreeBlob": "93325757550ec5267af9656a89b599c565225c66",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/invioPS.test.ts",
+      "beforeCandidateBlob": "b69aeddd8d391bc9568c209e66f9b0ddd5ea7afd",
+      "afterWorktreeBlob": "b69aeddd8d391bc9568c209e66f9b0ddd5ea7afd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/mnaUi.test.ts",
+      "beforeCandidateBlob": "6645798ccecb0900d893efc65dad44e102bba235",
+      "afterWorktreeBlob": "6645798ccecb0900d893efc65dad44e102bba235",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/newPatientChooser.test.ts",
+      "beforeCandidateBlob": "d77c8a3eef3da2e1a07f3701345f8091d4dc537e",
+      "afterWorktreeBlob": "d77c8a3eef3da2e1a07f3701345f8091d4dc537e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/nrsLegacyUi.test.ts",
+      "beforeCandidateBlob": "625fa268127e918f1bd9bb69bfd1adad3a405937",
+      "afterWorktreeBlob": "625fa268127e918f1bd9bb69bfd1adad3a405937",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operationalIdentity.fixtures.ts",
+      "beforeCandidateBlob": "8f1e73939f7fbd17e094762857571f0833e0faf5",
+      "afterWorktreeBlob": "8f1e73939f7fbd17e094762857571f0833e0faf5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operationalIdentity.test.ts",
+      "beforeCandidateBlob": "1c8f6a5b81db15a92a1b9dd52dadd9385ba16e2d",
+      "afterWorktreeBlob": "1c8f6a5b81db15a92a1b9dd52dadd9385ba16e2d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
+      "beforeCandidateBlob": "eb87151175ea97aee158e442b6f6fdad41df57d3",
+      "afterWorktreeBlob": "eb87151175ea97aee158e442b6f6fdad41df57d3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operator-dashboard-first-view.test.ts",
+      "beforeCandidateBlob": "c336a4a1b1b6633c901f7ce4d070ae526110d461",
+      "afterWorktreeBlob": "c336a4a1b1b6633c901f7ce4d070ae526110d461",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/paperScalesUi.test.ts",
+      "beforeCandidateBlob": "ea55e7ba3bd4bb26a390040431c21adeab5cad25",
+      "afterWorktreeBlob": "ea55e7ba3bd4bb26a390040431c21adeab5cad25",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/parameterNotes.test.ts",
+      "beforeCandidateBlob": "ce99bb1d2e220e0d7e88c7435653538dbe6e236c",
+      "afterWorktreeBlob": "ce99bb1d2e220e0d7e88c7435653538dbe6e236c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/patientLoading.test.ts",
+      "beforeCandidateBlob": "c6cdc930de5e39c92862d9831e0b2a54b6dddd95",
+      "afterWorktreeBlob": "c6cdc930de5e39c92862d9831e0b2a54b6dddd95",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/patientTherapySlotAndForm.test.ts",
+      "beforeCandidateBlob": "338b1e92d328c5695a2688dde861039f69a7b7f8",
+      "afterWorktreeBlob": "338b1e92d328c5695a2688dde861039f69a7b7f8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+      "beforeCandidateBlob": "33e7d411793b0d959c1864ec6a954a5a9aef76b0",
+      "afterWorktreeBlob": "33e7d411793b0d959c1864ec6a954a5a9aef76b0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/therapyGiro.test.ts",
+      "beforeCandidateBlob": "43299fcbed6bd93118cb7a26aea80f50bcbea96d",
+      "afterWorktreeBlob": "43299fcbed6bd93118cb7a26aea80f50bcbea96d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/tinettiUi.test.ts",
+      "beforeCandidateBlob": "a84240666c2419d1961ad675d20cd82997bb112f",
+      "afterWorktreeBlob": "a84240666c2419d1961ad675d20cd82997bb112f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/transfersUi.test.ts",
+      "beforeCandidateBlob": "44ba8cf1e6f73743e15d1bfbce0523706b1e6295",
+      "afterWorktreeBlob": "44ba8cf1e6f73743e15d1bfbce0523706b1e6295",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/turno-review-ui.test.ts",
+      "beforeCandidateBlob": "361a9638051838c77b6f056e179f1d35bebc5108",
+      "afterWorktreeBlob": "361a9638051838c77b6f056e179f1d35bebc5108",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentAttestations.tsx",
+      "beforeCandidateBlob": "902569c613a97c31517a7d470cf654d91b5a5890",
+      "afterWorktreeBlob": "902569c613a97c31517a7d470cf654d91b5a5890",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+      "beforeCandidateBlob": "52e1dd82d49d7c96f85b7a3993ca3169ec5d3252",
+      "afterWorktreeBlob": "52e1dd82d49d7c96f85b7a3993ca3169ec5d3252",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentCatalog.tsx",
+      "beforeCandidateBlob": "b43dda82e664580190cb81cae9c5ab24598a6818",
+      "afterWorktreeBlob": "b43dda82e664580190cb81cae9c5ab24598a6818",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentDateFields.tsx",
+      "beforeCandidateBlob": "39881a4c04b4f11d23b9027f2cd9c5e1822bb33a",
+      "afterWorktreeBlob": "39881a4c04b4f11d23b9027f2cd9c5e1822bb33a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentFinal.tsx",
+      "beforeCandidateBlob": "a015aee6a4b5b83c2b07eb92c3e6f1cea0a599f0",
+      "afterWorktreeBlob": "a015aee6a4b5b83c2b07eb92c3e6f1cea0a599f0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentForm.tsx",
+      "beforeCandidateBlob": "2a24665861b38fdae0921e9d6c0fbfde77a7e2d8",
+      "afterWorktreeBlob": "2a24665861b38fdae0921e9d6c0fbfde77a7e2d8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentHistory.tsx",
+      "beforeCandidateBlob": "7a2719abfc87e45c5fc49df07adc6f7ec21c130c",
+      "afterWorktreeBlob": "7a2719abfc87e45c5fc49df07adc6f7ec21c130c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentSummary.tsx",
+      "beforeCandidateBlob": "87e42479381e874459c840b2d630f9e817323ffa",
+      "afterWorktreeBlob": "87e42479381e874459c840b2d630f9e817323ffa",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.css",
+      "beforeCandidateBlob": "028b055ffff766e9cdeed3216712c0ddbd4c0683",
+      "afterWorktreeBlob": "028b055ffff766e9cdeed3216712c0ddbd4c0683",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+      "beforeCandidateBlob": "20f028045a67490990a2a266474e7afddad7b9f2",
+      "afterWorktreeBlob": "20f028045a67490990a2a266474e7afddad7b9f2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Gds.css",
+      "beforeCandidateBlob": "f2a1ccb21cec710b5fd7d67f193202d27e196f09",
+      "afterWorktreeBlob": "f2a1ccb21cec710b5fd7d67f193202d27e196f09",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/GdsForm.tsx",
+      "beforeCandidateBlob": "33fa85aa3ddd1717f4647091251e71f121f2ae14",
+      "afterWorktreeBlob": "33fa85aa3ddd1717f4647091251e71f121f2ae14",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/GdsSummary.tsx",
+      "beforeCandidateBlob": "ce9f205d9cf1cffe3dab0159518b1d3ab2e67cad",
+      "afterWorktreeBlob": "ce9f205d9cf1cffe3dab0159518b1d3ab2e67cad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Mna.css",
+      "beforeCandidateBlob": "9d8a0c725bab0b40820b2de248dc1c3f7a79f5d9",
+      "afterWorktreeBlob": "9d8a0c725bab0b40820b2de248dc1c3f7a79f5d9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaAnthropometry.tsx",
+      "beforeCandidateBlob": "97e6f61acc88b2778223348b1258483c0523f7ac",
+      "afterWorktreeBlob": "97e6f61acc88b2778223348b1258483c0523f7ac",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaContent.tsx",
+      "beforeCandidateBlob": "acc2a4115f92e041ecb411816d89acc995dfd4d7",
+      "afterWorktreeBlob": "acc2a4115f92e041ecb411816d89acc995dfd4d7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaForm.tsx",
+      "beforeCandidateBlob": "aebccba13807e7330f897b623eb9db54573fe58a",
+      "afterWorktreeBlob": "aebccba13807e7330f897b623eb9db54573fe58a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/MnaSummary.tsx",
+      "beforeCandidateBlob": "6d8ae01bfa4cbf342759e98a371fc07faaa95dde",
+      "afterWorktreeBlob": "6d8ae01bfa4cbf342759e98a371fc07faaa95dde",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/NrsLegacyContent.tsx",
+      "beforeCandidateBlob": "98d7ca3efd41274eb1d92f0b8f36a4be64f4d9ec",
+      "afterWorktreeBlob": "98d7ca3efd41274eb1d92f0b8f36a4be64f4d9ec",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Paper.css",
+      "beforeCandidateBlob": "d22f603e9370121200ad62dd30f5b255d2960325",
+      "afterWorktreeBlob": "d22f603e9370121200ad62dd30f5b255d2960325",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/PaperForm.tsx",
+      "beforeCandidateBlob": "9da779036745b805e86cadae02dc8e1c2a7a0060",
+      "afterWorktreeBlob": "9da779036745b805e86cadae02dc8e1c2a7a0060",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/PaperSheet.tsx",
+      "beforeCandidateBlob": "43931b5f576b712f78d0ffbe13d6ce8a793f9492",
+      "afterWorktreeBlob": "43931b5f576b712f78d0ffbe13d6ce8a793f9492",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/PaperSummary.tsx",
+      "beforeCandidateBlob": "ab73c534b12ed88970c81fbfe94f0b7cc286a49a",
+      "afterWorktreeBlob": "ab73c534b12ed88970c81fbfe94f0b7cc286a49a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Tinetti.css",
+      "beforeCandidateBlob": "f615a6c32d061476fd902cc452616f00d0247b54",
+      "afterWorktreeBlob": "f615a6c32d061476fd902cc452616f00d0247b54",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TinettiForm.tsx",
+      "beforeCandidateBlob": "ea65ec8bbfbf8834705a2ab5f7cff04f7c97179f",
+      "afterWorktreeBlob": "ea65ec8bbfbf8834705a2ab5f7cff04f7c97179f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TinettiSummary.tsx",
+      "beforeCandidateBlob": "9b9b7868fdd33ea5e2c0ff5686ad8113cc40fd98",
+      "afterWorktreeBlob": "9b9b7868fdd33ea5e2c0ff5686ad8113cc40fd98",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/Transfers.css",
+      "beforeCandidateBlob": "bbf983d0b4f660cd64f0754494e301f415728904",
+      "afterWorktreeBlob": "bbf983d0b4f660cd64f0754494e301f415728904",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TransfersChoice.tsx",
+      "beforeCandidateBlob": "e9f63f7d3fcd82392032786b4b9284bfcc1c5f78",
+      "afterWorktreeBlob": "e9f63f7d3fcd82392032786b4b9284bfcc1c5f78",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TransfersForm.tsx",
+      "beforeCandidateBlob": "8c940de1fa28c5640700d83d318590f7c0482b1b",
+      "afterWorktreeBlob": "8c940de1fa28c5640700d83d318590f7c0482b1b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/TransfersSummary.tsx",
+      "beforeCandidateBlob": "9d3ace7b5f8ea33f31ab0bacaa4ae55654c9ebb1",
+      "afterWorktreeBlob": "9d3ace7b5f8ea33f31ab0bacaa4ae55654c9ebb1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/paperFields.tsx",
+      "beforeCandidateBlob": "adf6fdc95dce27b85cc3ed64cacc2f094659a086",
+      "afterWorktreeBlob": "adf6fdc95dce27b85cc3ed64cacc2f094659a086",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/paperRecord.ts",
+      "beforeCandidateBlob": "dbdb5b848d1a61c56c4ccda521f277f45922da9f",
+      "afterWorktreeBlob": "dbdb5b848d1a61c56c4ccda521f277f45922da9f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/useAssessmentHistory.ts",
+      "beforeCandidateBlob": "1b731f33722b513c95982e8a3f4831f913020983",
+      "afterWorktreeBlob": "1b731f33722b513c95982e8a3f4831f913020983",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/assessments/useAssessmentPdf.ts",
+      "beforeCandidateBlob": "b9c726f3d1cb7320ddecb3cc37553a17c5cf637f",
+      "afterWorktreeBlob": "b9c726f3d1cb7320ddecb3cc37553a17c5cf637f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/buildDashboardNotificationSections.tsx",
+      "beforeCandidateBlob": "da7aa659e9e7688407294b67ada2b5881c946829",
+      "afterWorktreeBlob": "da7aa659e9e7688407294b67ada2b5881c946829",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AdministrationStatus.css",
+      "beforeCandidateBlob": "0ec0ecdd4f6ada3be1164661d54e4a30dfbfa3cc",
+      "afterWorktreeBlob": "0ec0ecdd4f6ada3be1164661d54e4a30dfbfa3cc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AdministrationStatus.tsx",
+      "beforeCandidateBlob": "8b6c06076db58afedd7384f0c0f4c1ee00177464",
+      "afterWorktreeBlob": "8b6c06076db58afedd7384f0c0f4c1ee00177464",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+      "beforeCandidateBlob": "76c244d4a0821ddee4a740cffa57fa00e2656c5a",
+      "afterWorktreeBlob": "76c244d4a0821ddee4a740cffa57fa00e2656c5a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchivePdfPreview.tsx",
+      "beforeCandidateBlob": "7861d040ba15ec2cb3b2d41ccf45d728644d1f57",
+      "afterWorktreeBlob": "7861d040ba15ec2cb3b2d41ccf45d728644d1f57",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchivePrintDialog.tsx",
+      "beforeCandidateBlob": "7e3fc8f2067473573277ceddbaef5425f9212332",
+      "afterWorktreeBlob": "7e3fc8f2067473573277ceddbaef5425f9212332",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.css",
+      "beforeCandidateBlob": "ff15efc5a004696433bbada19cc5b4255c4a4943",
+      "afterWorktreeBlob": "ff15efc5a004696433bbada19cc5b4255c4a4943",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+      "beforeCandidateBlob": "c08ba6cd281c1c5ca14d9a7d8b73e29645acf0c6",
+      "afterWorktreeBlob": "c08ba6cd281c1c5ca14d9a7d8b73e29645acf0c6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/CampoFarmaco.css",
+      "beforeCandidateBlob": "9d8798cce1298f4b9c2c98855d2ccb21de72d730",
+      "afterWorktreeBlob": "9d8798cce1298f4b9c2c98855d2ccb21de72d730",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/CampoFarmaco.tsx",
+      "beforeCandidateBlob": "138f568a49a9f576c9cac76a7c9cf2dded6440c4",
+      "afterWorktreeBlob": "138f568a49a9f576c9cac76a7c9cf2dded6440c4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ClinicalAttachments.tsx",
+      "beforeCandidateBlob": "7878b9e210d288fba9500f3794453ea4fa9ce084",
+      "afterWorktreeBlob": "7878b9e210d288fba9500f3794453ea4fa9ce084",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ClinicalTable.tsx",
+      "beforeCandidateBlob": "321c314a9c673c1df047232597264244752900e9",
+      "afterWorktreeBlob": "321c314a9c673c1df047232597264244752900e9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ContenzioniTab.tsx",
+      "beforeCandidateBlob": "898c2566f68034b1d6726965f1015001f4958c1c",
+      "afterWorktreeBlob": "898c2566f68034b1d6726965f1015001f4958c1c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+      "beforeCandidateBlob": "b1ad76cc635a5ae18eb3ea7e5cd3ccd02fc56900",
+      "afterWorktreeBlob": "b1ad76cc635a5ae18eb3ea7e5cd3ccd02fc56900",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiaryAck.css",
+      "beforeCandidateBlob": "2fa4fdc680ddaa18b2b113dd68b6ab169ceb14d9",
+      "afterWorktreeBlob": "2fa4fdc680ddaa18b2b113dd68b6ab169ceb14d9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiaryTherapyPanel.css",
+      "beforeCandidateBlob": "66ff6a6c9b13554944985df9f5d40c406af469a7",
+      "afterWorktreeBlob": "66ff6a6c9b13554944985df9f5d40c406af469a7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiaryTherapyPanel.tsx",
+      "beforeCandidateBlob": "76afcd0b67f698b11eda0c610586dcd36bc53dc7",
+      "afterWorktreeBlob": "76afcd0b67f698b11eda0c610586dcd36bc53dc7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+      "beforeCandidateBlob": "9e1a525237abef460451de3f6b607b1c8428a236",
+      "afterWorktreeBlob": "9e1a525237abef460451de3f6b607b1c8428a236",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+      "beforeCandidateBlob": "d1278660f2e8b80e5c467de358335d5c8a0d1909",
+      "afterWorktreeBlob": "d1278660f2e8b80e5c467de358335d5c8a0d1909",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/EsamiConsulenzeTab.tsx",
+      "beforeCandidateBlob": "3f11fdbd423fd3d3fcb787172cffbc14aa92beb2",
+      "afterWorktreeBlob": "3f11fdbd423fd3d3fcb787172cffbc14aa92beb2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ImportedDocumentsList.tsx",
+      "beforeCandidateBlob": "36bbd15aeab6fe16552ae57fac1fb488b947ea0b",
+      "afterWorktreeBlob": "36bbd15aeab6fe16552ae57fac1fb488b947ea0b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/LoadErrorState.tsx",
+      "beforeCandidateBlob": "164a116a065c23054ef63280232b15b7a545f297",
+      "afterWorktreeBlob": "164a116a065c23054ef63280232b15b7a545f297",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/MedicazioniTab.tsx",
+      "beforeCandidateBlob": "1949c666fea102947aa0187e804765c6ad151ba2",
+      "afterWorktreeBlob": "1949c666fea102947aa0187e804765c6ad151ba2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+      "beforeCandidateBlob": "20f4785d4ae379a220608110de2ca6eb5d403224",
+      "afterWorktreeBlob": "20f4785d4ae379a220608110de2ca6eb5d403224",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ParametriModuloView.tsx",
+      "beforeCandidateBlob": "11da04396bf358c377baf71a888482391ed7c86d",
+      "afterWorktreeBlob": "11da04396bf358c377baf71a888482391ed7c86d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ParametriTab.tsx",
+      "beforeCandidateBlob": "014b10e7864d421c0406616f35f7555ad7b72df8",
+      "afterWorktreeBlob": "014b10e7864d421c0406616f35f7555ad7b72df8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientArchivePreview.tsx",
+      "beforeCandidateBlob": "88d97ac8ae55bc3d9b4450ba935e8d202e34a856",
+      "afterWorktreeBlob": "88d97ac8ae55bc3d9b4450ba935e8d202e34a856",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientArchiveTree.css",
+      "beforeCandidateBlob": "3adec5e67c437e6297a05150cd686bcd2ad8fd46",
+      "afterWorktreeBlob": "3adec5e67c437e6297a05150cd686bcd2ad8fd46",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientArchiveTree.tsx",
+      "beforeCandidateBlob": "9a172250924049092a4e282c6e8e98bbd16fba28",
+      "afterWorktreeBlob": "9a172250924049092a4e282c6e8e98bbd16fba28",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientDocumentArchive.css",
+      "beforeCandidateBlob": "999c5feedc5dd2c7834363a130745145e579cbc0",
+      "afterWorktreeBlob": "999c5feedc5dd2c7834363a130745145e579cbc0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.css",
+      "beforeCandidateBlob": "e67ec1d154a35771529076fd96129a1472e62a79",
+      "afterWorktreeBlob": "e67ec1d154a35771529076fd96129a1472e62a79",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+      "beforeCandidateBlob": "5b16ed6ec556baf0d02d9cea83129352b36044dc",
+      "afterWorktreeBlob": "5b16ed6ec556baf0d02d9cea83129352b36044dc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapySlotDetail.tsx",
+      "beforeCandidateBlob": "ea76097bae012b196620417915e82c8b32808248",
+      "afterWorktreeBlob": "ea76097bae012b196620417915e82c8b32808248",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PresaInCaricoTab.tsx",
+      "beforeCandidateBlob": "44015a6e4f7162a9416eb19703ef228a14c517f2",
+      "afterWorktreeBlob": "44015a6e4f7162a9416eb19703ef228a14c517f2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/RicercaFarmaco.css",
+      "beforeCandidateBlob": "096c1e8138cc8d85f442d1340a757d791a58d885",
+      "afterWorktreeBlob": "096c1e8138cc8d85f442d1340a757d791a58d885",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/RicercaFarmaco.tsx",
+      "beforeCandidateBlob": "2400cf1fd2a486d3a1a0b64b41fa7f2041e95c2d",
+      "afterWorktreeBlob": "2400cf1fd2a486d3a1a0b64b41fa7f2041e95c2d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaBradenTab.tsx",
+      "beforeCandidateBlob": "19f17abfcaf6b857fe8ce595f34ca465aac92c5b",
+      "afterWorktreeBlob": "19f17abfcaf6b857fe8ce595f34ca465aac92c5b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaNRSTab.tsx",
+      "beforeCandidateBlob": "a7a9b5858a2e3611b43a7ab1fc68a1fdb1671616",
+      "afterWorktreeBlob": "a7a9b5858a2e3611b43a7ab1fc68a1fdb1671616",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaTinettiTab.tsx",
+      "beforeCandidateBlob": "3b2d7dd66d7e42f3ee9806250e6f60af529a4ac3",
+      "afterWorktreeBlob": "3b2d7dd66d7e42f3ee9806250e6f60af529a4ac3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/SelectedDrugPackage.tsx",
+      "beforeCandidateBlob": "82e5e56fcbea7d1dc57ed8f844719be35f6f1250",
+      "afterWorktreeBlob": "82e5e56fcbea7d1dc57ed8f844719be35f6f1250",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "beforeCandidateBlob": "b721b9b9da21586ae8df966fb978305350a066a2",
+      "afterWorktreeBlob": "b721b9b9da21586ae8df966fb978305350a066a2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyDrugDosePanel.css",
+      "beforeCandidateBlob": "13a68d2f38919fd5d6199537a53e715c6e748f13",
+      "afterWorktreeBlob": "13a68d2f38919fd5d6199537a53e715c6e748f13",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyDrugDosePanel.tsx",
+      "beforeCandidateBlob": "8138ad67dbd4f714f0b5864bc5a229022e5bd81e",
+      "afterWorktreeBlob": "8138ad67dbd4f714f0b5864bc5a229022e5bd81e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyDrugList.tsx",
+      "beforeCandidateBlob": "e3a3b32620f7ddf72988edb22b61ccdc82aac7b9",
+      "afterWorktreeBlob": "e3a3b32620f7ddf72988edb22b61ccdc82aac7b9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormFields.css",
+      "beforeCandidateBlob": "91c6b571c6308830f80230d4a5d7aa4c0e15cbfd",
+      "afterWorktreeBlob": "91c6b571c6308830f80230d4a5d7aa4c0e15cbfd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "beforeCandidateBlob": "b8b30630ef7f2e251582f684570981d8cd3c49ea",
+      "afterWorktreeBlob": "b8b30630ef7f2e251582f684570981d8cd3c49ea",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+      "beforeCandidateBlob": "32dcb6c2cb693c4d3772a8df87fc0d79eba3b569",
+      "afterWorktreeBlob": "32dcb6c2cb693c4d3772a8df87fc0d79eba3b569",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyHistoryView.tsx",
+      "beforeCandidateBlob": "74659c44150dea91117eb5d015c976387208a565",
+      "afterWorktreeBlob": "74659c44150dea91117eb5d015c976387208a565",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyRowFocus.css",
+      "beforeCandidateBlob": "752c4af8f132380d60fb087f13e24892667f8433",
+      "afterWorktreeBlob": "752c4af8f132380d60fb087f13e24892667f8433",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyScheduleEditor.tsx",
+      "beforeCandidateBlob": "1cbf4722d589df858012bb5740da5feb8a7b4ff6",
+      "afterWorktreeBlob": "1cbf4722d589df858012bb5740da5feb8a7b4ff6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyViews.css",
+      "beforeCandidateBlob": "53b62a1d5a63e8e84576834bb4ea7b9be814c4e8",
+      "afterWorktreeBlob": "53b62a1d5a63e8e84576834bb4ea7b9be814c4e8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/VisoreDocumentoFarmaco.css",
+      "beforeCandidateBlob": "c2a3ff4380a9606fc6aba3368e24298662c778f7",
+      "afterWorktreeBlob": "c2a3ff4380a9606fc6aba3368e24298662c778f7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/VisoreDocumentoFarmaco.tsx",
+      "beforeCandidateBlob": "f336f7d487ad9ad224fb77dea1abb5e48d710483",
+      "afterWorktreeBlob": "f336f7d487ad9ad224fb77dea1abb5e48d710483",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/VitaleModal.tsx",
+      "beforeCandidateBlob": "9e9dc1f5a9b28192351cc853fc13116717aefd40",
+      "afterWorktreeBlob": "9e9dc1f5a9b28192351cc853fc13116717aefd40",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/anomalieFarmaco.test.ts",
+      "beforeCandidateBlob": "cf4df7c5b951585ccbb18f573d5de36e2722af33",
+      "afterWorktreeBlob": "cf4df7c5b951585ccbb18f573d5de36e2722af33",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/anomalieFarmacoCompatto.test.ts",
+      "beforeCandidateBlob": "2719ae6dec2589eb4b3768d9d40f998fa0c666ea",
+      "afterWorktreeBlob": "2719ae6dec2589eb4b3768d9d40f998fa0c666ea",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/caricaDocumentoFarmaco.test.ts",
+      "beforeCandidateBlob": "e8595f9cab9630757229b6e0605965fc0e3442af",
+      "afterWorktreeBlob": "e8595f9cab9630757229b6e0605965fc0e3442af",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/diaryCoreUx.test.ts",
+      "beforeCandidateBlob": "808975a506b7317f74966ba698654699b7a8693a",
+      "afterWorktreeBlob": "808975a506b7317f74966ba698654699b7a8693a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/diaryTherapy.test.ts",
+      "beforeCandidateBlob": "15b27a6a207b0f258f32896cf4efbe851acdf3a2",
+      "afterWorktreeBlob": "15b27a6a207b0f258f32896cf4efbe851acdf3a2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/drugPackageSelection.test.ts",
+      "beforeCandidateBlob": "7e9ae331d616209083e5d8f5806fe4d6b9985324",
+      "afterWorktreeBlob": "7e9ae331d616209083e5d8f5806fe4d6b9985324",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/esamiSort.test.ts",
+      "beforeCandidateBlob": "f2a07b5b6f760fec965810e721d9ad6ee8980588",
+      "afterWorktreeBlob": "f2a07b5b6f760fec965810e721d9ad6ee8980588",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/farmacoDocumento.test.ts",
+      "beforeCandidateBlob": "592d733cae4d3dadbb5f49064f0331b4f7fdbea2",
+      "afterWorktreeBlob": "592d733cae4d3dadbb5f49064f0331b4f7fdbea2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/farmacoRiferimento.test.ts",
+      "beforeCandidateBlob": "4deb8ec76d3049cf3b9053c1bc9f9ff485918b7b",
+      "afterWorktreeBlob": "4deb8ec76d3049cf3b9053c1bc9f9ff485918b7b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/inhalerTherapy.test.ts",
+      "beforeCandidateBlob": "06b6834414041a973309bad739ad4f4a512589a8",
+      "afterWorktreeBlob": "06b6834414041a973309bad739ad4f4a512589a8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/medicationSearch.test.ts",
+      "beforeCandidateBlob": "e62d3e751da6e502334f9a1036e98ffb3f848a12",
+      "afterWorktreeBlob": "e62d3e751da6e502334f9a1036e98ffb3f848a12",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/parametriModuloNoIpSignature.test.ts",
+      "beforeCandidateBlob": "934f9fc7ebb6458f683b90b2aa39bf78d9ae33fe",
+      "afterWorktreeBlob": "934f9fc7ebb6458f683b90b2aa39bf78d9ae33fe",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/rcpStruttura.test.ts",
+      "beforeCandidateBlob": "f3cb8a61b99f90177ba44685833eb9830411f2cf",
+      "afterWorktreeBlob": "f3cb8a61b99f90177ba44685833eb9830411f2cf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/scaleScoring.test.ts",
+      "beforeCandidateBlob": "6c558a6d01c4d8c673657a623b99943da0323665",
+      "afterWorktreeBlob": "6c558a6d01c4d8c673657a623b99943da0323665",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/therapyFormPresentation.test.ts",
+      "beforeCandidateBlob": "5b5f27ad72b10691082c97d49964c318d63546e4",
+      "afterWorktreeBlob": "5b5f27ad72b10691082c97d49964c318d63546e4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/uxW4Misc.test.ts",
+      "beforeCandidateBlob": "b02b5f9ebca800a88b6b2756039d554fe25b4f32",
+      "afterWorktreeBlob": "b02b5f9ebca800a88b6b2756039d554fe25b4f32",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/anomalieFarmaco.ts",
+      "beforeCandidateBlob": "98e90a10e062f9f3845f847cac9ef7cd02cdf178",
+      "afterWorktreeBlob": "98e90a10e062f9f3845f847cac9ef7cd02cdf178",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/caricaDocumentoFarmaco.ts",
+      "beforeCandidateBlob": "a79cf1d92f5072c9b0cd0b0d695f4c2cb0b5d84b",
+      "afterWorktreeBlob": "a79cf1d92f5072c9b0cd0b0d695f4c2cb0b5d84b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/diarioFilters.ts",
+      "beforeCandidateBlob": "d393e7e940f0b89534f013ff1fa45b334d7db6ae",
+      "afterWorktreeBlob": "d393e7e940f0b89534f013ff1fa45b334d7db6ae",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/diaryAck.ts",
+      "beforeCandidateBlob": "621c23af62cbd345489e9889aae12dd743a30b20",
+      "afterWorktreeBlob": "621c23af62cbd345489e9889aae12dd743a30b20",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/diaryEntryPayload.ts",
+      "beforeCandidateBlob": "bf6a96401e40763a2cc031a1e71dac1c28f2581e",
+      "afterWorktreeBlob": "bf6a96401e40763a2cc031a1e71dac1c28f2581e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/diaryTherapy.ts",
+      "beforeCandidateBlob": "0c6d155783d76b78854685d1e0f9181859a06f78",
+      "afterWorktreeBlob": "0c6d155783d76b78854685d1e0f9181859a06f78",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/diaryTherapyLink.ts",
+      "beforeCandidateBlob": "5e9b9040629074c8f1a9dc8ba936c5a9f03a30cc",
+      "afterWorktreeBlob": "5e9b9040629074c8f1a9dc8ba936c5a9f03a30cc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+      "beforeCandidateBlob": "21983cb8ac8811f9e549585ec145d8eb94c2a96c",
+      "afterWorktreeBlob": "21983cb8ac8811f9e549585ec145d8eb94c2a96c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/farmacoCorrispondenza.ts",
+      "beforeCandidateBlob": "36e457fd845f6ec89d79346c52c6e89263325bdb",
+      "afterWorktreeBlob": "36e457fd845f6ec89d79346c52c6e89263325bdb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/farmacoDocumento.ts",
+      "beforeCandidateBlob": "c50b221d5dcc905cc62fb26a6fdd9ba6dfcc295e",
+      "afterWorktreeBlob": "c50b221d5dcc905cc62fb26a6fdd9ba6dfcc295e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/farmacoRiferimento.ts",
+      "beforeCandidateBlob": "4d891aaa3d851b960b57db8fc970fb26c11cea6a",
+      "afterWorktreeBlob": "4d891aaa3d851b960b57db8fc970fb26c11cea6a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/medicationSearch.ts",
+      "beforeCandidateBlob": "58dbd9a5f4170ece5318409d8ab7acba9af5c222",
+      "afterWorktreeBlob": "58dbd9a5f4170ece5318409d8ab7acba9af5c222",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/rcpStruttura.ts",
+      "beforeCandidateBlob": "a073c36ef12cb5c4f18b6339bb074bfe63c11a03",
+      "afterWorktreeBlob": "a073c36ef12cb5c4f18b6339bb074bfe63c11a03",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/shared.tsx",
+      "beforeCandidateBlob": "12eaa64f8f9bfdc0474d96bda256b128f28d1551",
+      "afterWorktreeBlob": "12eaa64f8f9bfdc0474d96bda256b128f28d1551",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyDose.ts",
+      "beforeCandidateBlob": "5b6504772f51929ed62ba77b3240bc030742edb2",
+      "afterWorktreeBlob": "5b6504772f51929ed62ba77b3240bc030742edb2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFieldFeedback.tsx",
+      "beforeCandidateBlob": "7658e93b552997a23c2a8dac450e95fec3d01180",
+      "afterWorktreeBlob": "7658e93b552997a23c2a8dac450e95fec3d01180",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFormChange.ts",
+      "beforeCandidateBlob": "bbc262640ac2f91f778ee1b243b87f6b7b4092da",
+      "afterWorktreeBlob": "bbc262640ac2f91f778ee1b243b87f6b7b4092da",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFormMapping.ts",
+      "beforeCandidateBlob": "2634430332250c0c563783201ef80c362cbf3378",
+      "afterWorktreeBlob": "2634430332250c0c563783201ef80c362cbf3378",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFormRestore.ts",
+      "beforeCandidateBlob": "8df8ce7d1809d62ee936990aa7314518e8d2591a",
+      "afterWorktreeBlob": "8df8ce7d1809d62ee936990aa7314518e8d2591a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapySaveFeedback.ts",
+      "beforeCandidateBlob": "5ea9b10f8224fae5854c4008a2cdf6c3769f9dc4",
+      "afterWorktreeBlob": "5ea9b10f8224fae5854c4008a2cdf6c3769f9dc4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/useAnomalieReparto.ts",
+      "beforeCandidateBlob": "0ebf252f06c4076e83287d5c21ef6f803ebb4a5b",
+      "afterWorktreeBlob": "0ebf252f06c4076e83287d5c21ef6f803ebb4a5b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/useMedicationSearch.ts",
+      "beforeCandidateBlob": "12630c7774da5b75e8f4f57bd54c1bf12d57a2bd",
+      "afterWorktreeBlob": "12630c7774da5b75e8f4f57bd54c1bf12d57a2bd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/useRiepilogoSomministrazioni.ts",
+      "beforeCandidateBlob": "b35c996107cf944e0aa35515a585c5f1280b8fa3",
+      "afterWorktreeBlob": "b35c996107cf944e0aa35515a585c5f1280b8fa3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/chartFocus.css",
+      "beforeCandidateBlob": "2a52097d28bc3387368e391f73bf4d7ba885eaad",
+      "afterWorktreeBlob": "2a52097d28bc3387368e391f73bf4d7ba885eaad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/dashboardNotificationModel.ts",
+      "beforeCandidateBlob": "53a6941b31e36c1953dce105fe463bb3703a5cf1",
+      "afterWorktreeBlob": "53a6941b31e36c1953dce105fe463bb3703a5cf1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/invioPSModel.ts",
+      "beforeCandidateBlob": "a4e405434bbfe14b5b48e8e0ede633554c40268b",
+      "afterWorktreeBlob": "a4e405434bbfe14b5b48e8e0ede633554c40268b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/patientRecordPrintSections.ts",
+      "beforeCandidateBlob": "b9d18c87604a06eda00f8c6532307e51b4caccff",
+      "afterWorktreeBlob": "b9d18c87604a06eda00f8c6532307e51b4caccff",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/AllergiesEditor.tsx",
+      "beforeCandidateBlob": "bc082c0eb959602cdd3972609ca441fbbd4f5333",
+      "afterWorktreeBlob": "bc082c0eb959602cdd3972609ca441fbbd4f5333",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/AnamnesisEditor.tsx",
+      "beforeCandidateBlob": "8dd01107190f6b10d099bd430a92d545dd3cb57d",
+      "afterWorktreeBlob": "8dd01107190f6b10d099bd430a92d545dd3cb57d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/DiagnosisEditor.css",
+      "beforeCandidateBlob": "4751318066f56ad523a6870e485cba61fdd648ad",
+      "afterWorktreeBlob": "4751318066f56ad523a6870e485cba61fdd648ad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/DiagnosisEditor.tsx",
+      "beforeCandidateBlob": "b867ba70ae95d1b380911b011e517f5dad364a18",
+      "afterWorktreeBlob": "b867ba70ae95d1b380911b011e517f5dad364a18",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/DiagnosisText.tsx",
+      "beforeCandidateBlob": "f5471debb842355413d56d07c52f44464e53efd1",
+      "afterWorktreeBlob": "f5471debb842355413d56d07c52f44464e53efd1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/LegacyAnamnesisView.tsx",
+      "beforeCandidateBlob": "7e638a825cf172388175c760c213a7b485e4db2a",
+      "afterWorktreeBlob": "7e638a825cf172388175c760c213a7b485e4db2a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/PainAssessmentEditor.tsx",
+      "beforeCandidateBlob": "14c6e81979b5d6eaa2afc0a48560d60c4ac5c3d1",
+      "afterWorktreeBlob": "14c6e81979b5d6eaa2afc0a48560d60c4ac5c3d1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/PatientSection.tsx",
+      "beforeCandidateBlob": "5d62fffbbbcf51a98ebdc0fff22a1fbb69bcb023",
+      "afterWorktreeBlob": "5d62fffbbbcf51a98ebdc0fff22a1fbb69bcb023",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+      "beforeCandidateBlob": "592389f04811dde43bebd189e93c1fdd1601bf5d",
+      "afterWorktreeBlob": "592389f04811dde43bebd189e93c1fdd1601bf5d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+      "beforeCandidateBlob": "252d20db284ba12af02aa8fb36c4397c552b773a",
+      "afterWorktreeBlob": "252d20db284ba12af02aa8fb36c4397c552b773a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/VitalSignsEditor.tsx",
+      "beforeCandidateBlob": "069c79d24939e2944663501f7c387517cfae2943",
+      "afterWorktreeBlob": "069c79d24939e2944663501f7c387517cfae2943",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/DiagnosisText.test.ts",
+      "beforeCandidateBlob": "fefc9e6be3c81bc0a56c2dad926fa2c34359f65b",
+      "afterWorktreeBlob": "fefc9e6be3c81bc0a56c2dad926fa2c34359f65b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/patientSections.test.ts",
+      "beforeCandidateBlob": "c6197d2bb5ab45b524c8b4b250a13c3366516dae",
+      "afterWorktreeBlob": "c6197d2bb5ab45b524c8b4b250a13c3366516dae",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/sectionResolve.test.ts",
+      "beforeCandidateBlob": "5e8cf21f1a53aee4f9421373b9697897936557ae",
+      "afterWorktreeBlob": "5e8cf21f1a53aee4f9421373b9697897936557ae",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/patientSections.ts",
+      "beforeCandidateBlob": "46e6b2cbad1b1602f71355d7183a9e87a958b555",
+      "afterWorktreeBlob": "46e6b2cbad1b1602f71355d7183a9e87a958b555",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/sections/types.ts",
+      "beforeCandidateBlob": "3f4800b59c2aea437350048810c376e6bc1d6f61",
+      "afterWorktreeBlob": "3f4800b59c2aea437350048810c376e6bc1d6f61",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "beforeCandidateBlob": "9a98134e6bd5c2a16ac11d33724c4993b79f3c10",
+      "afterWorktreeBlob": "9a98134e6bd5c2a16ac11d33724c4993b79f3c10",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/useConsegneRoster.ts",
+      "beforeCandidateBlob": "ffc3318b28a31bb335a9b7e155b58be33faf60c3",
+      "afterWorktreeBlob": "ffc3318b28a31bb335a9b7e155b58be33faf60c3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/operator/usePatientListPage.ts",
+      "beforeCandidateBlob": "f73d62e42d0554979ab344fb72660e37d49cfa58",
+      "afterWorktreeBlob": "f73d62e42d0554979ab344fb72660e37d49cfa58",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AIAssistantButton.tsx",
+      "beforeCandidateBlob": "5a12cfadb7c69f98cc06cf49af31cbd3d2ea2bc3",
+      "afterWorktreeBlob": "5a12cfadb7c69f98cc06cf49af31cbd3d2ea2bc3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AIImportStatus.tsx",
+      "beforeCandidateBlob": "41be12b0500ae5d377f6b7b70b879a60a6f70e29",
+      "afterWorktreeBlob": "41be12b0500ae5d377f6b7b70b879a60a6f70e29",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+      "beforeCandidateBlob": "cf7a8532f03871b3063844cf607ce4074af79e5e",
+      "afterWorktreeBlob": "cf7a8532f03871b3063844cf607ce4074af79e5e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AgendaInline.css",
+      "beforeCandidateBlob": "6025b00d96784414ac990ea6b371add87f14c73b",
+      "afterWorktreeBlob": "6025b00d96784414ac990ea6b371add87f14c73b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AgendaLegend.tsx",
+      "beforeCandidateBlob": "7ef29d6a32f3ea0dae396d285dc0c81084e0dedc",
+      "afterWorktreeBlob": "7ef29d6a32f3ea0dae396d285dc0c81084e0dedc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "beforeCandidateBlob": "b52c9c35e0a0f7b1ea175b4d6ff1ced34f0a70b6",
+      "afterWorktreeBlob": "b52c9c35e0a0f7b1ea175b4d6ff1ced34f0a70b6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AgnosPanel.tsx",
+      "beforeCandidateBlob": "3b3f7a3d252be6475151b4a35fbe7e8276ce3bf0",
+      "afterWorktreeBlob": "3b3f7a3d252be6475151b4a35fbe7e8276ce3bf0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AppointmentForm.tsx",
+      "beforeCandidateBlob": "874948c101ad88f62970710c26739fd38f47308f",
+      "afterWorktreeBlob": "874948c101ad88f62970710c26739fd38f47308f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/AppuntamentoActions.tsx",
+      "beforeCandidateBlob": "9078d7ebb10c7447eb5855cbcefe6cc39c9aab4a",
+      "afterWorktreeBlob": "9078d7ebb10c7447eb5855cbcefe6cc39c9aab4a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCapture.css",
+      "beforeCandidateBlob": "4d25836de36021fc5a3761eb26600a40fe1c982e",
+      "afterWorktreeBlob": "4d25836de36021fc5a3761eb26600a40fe1c982e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCapture.tsx",
+      "beforeCandidateBlob": "bb7b90c6e0c751a3b7baf413228c75ddf3510770",
+      "afterWorktreeBlob": "bb7b90c6e0c751a3b7baf413228c75ddf3510770",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCaptureFallback.tsx",
+      "beforeCandidateBlob": "5faae4597679089447269fc76db06c604c573ec6",
+      "afterWorktreeBlob": "5faae4597679089447269fc76db06c604c573ec6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/ClinicalCard.tsx",
+      "beforeCandidateBlob": "55ef18ae4a0a6be1f0dacbd00a7b65ff1fa1c074",
+      "afterWorktreeBlob": "55ef18ae4a0a6be1f0dacbd00a7b65ff1fa1c074",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/ConfirmDialog.tsx",
+      "beforeCandidateBlob": "bc42ccb349975d13f70d475b22914576fd13bdb4",
+      "afterWorktreeBlob": "bc42ccb349975d13f70d475b22914576fd13bdb4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardKpiBand.css",
+      "beforeCandidateBlob": "940244aa70ad7ae06a3a407504f30eb662917e18",
+      "afterWorktreeBlob": "940244aa70ad7ae06a3a407504f30eb662917e18",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardKpiBand.tsx",
+      "beforeCandidateBlob": "4377fec95ae669a95300eccc5e6dfa72659f82bf",
+      "afterWorktreeBlob": "4377fec95ae669a95300eccc5e6dfa72659f82bf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardTherapyDeadlines.css",
+      "beforeCandidateBlob": "789e9bd7a51e80a368a1a72d987865ba68cf6922",
+      "afterWorktreeBlob": "789e9bd7a51e80a368a1a72d987865ba68cf6922",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardTherapyDeadlines.tsx",
+      "beforeCandidateBlob": "b06842121451374245a2e857c59e701a17250df0",
+      "afterWorktreeBlob": "b06842121451374245a2e857c59e701a17250df0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DateNav.tsx",
+      "beforeCandidateBlob": "03db5a494cbc285bd8d1e1211bc1d58bef4cd4d3",
+      "afterWorktreeBlob": "03db5a494cbc285bd8d1e1211bc1d58bef4cd4d3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DemographicsStatus.css",
+      "beforeCandidateBlob": "9daa8ea2fbeda8b5b4d03c76b1d95bbf74ee01b5",
+      "afterWorktreeBlob": "9daa8ea2fbeda8b5b4d03c76b1d95bbf74ee01b5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DemographicsStatus.tsx",
+      "beforeCandidateBlob": "e4943efecb0a1dd44ca18ae131614dc537a9ccc6",
+      "afterWorktreeBlob": "e4943efecb0a1dd44ca18ae131614dc537a9ccc6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DialogLoading.tsx",
+      "beforeCandidateBlob": "f5103b4ccea33d01071843076c8a2321bcd7f908",
+      "afterWorktreeBlob": "f5103b4ccea33d01071843076c8a2321bcd7f908",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DischargeImportModal.tsx",
+      "beforeCandidateBlob": "f9c518631175fd87472ebbca7e580c70a915cd52",
+      "afterWorktreeBlob": "f9c518631175fd87472ebbca7e580c70a915cd52",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DocumentPreview.tsx",
+      "beforeCandidateBlob": "9d79df16cb454de24383bde82115cf95499dddfb",
+      "afterWorktreeBlob": "9d79df16cb454de24383bde82115cf95499dddfb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DocumentScanFrame.tsx",
+      "beforeCandidateBlob": "1610f50bcbb3713b5deba3f615817cddf883ca34",
+      "afterWorktreeBlob": "1610f50bcbb3713b5deba3f615817cddf883ca34",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/DocumentSourcePanel.tsx",
+      "beforeCandidateBlob": "a1599f5b06fe3e1a492c611bdb8f157a3fba47b8",
+      "afterWorktreeBlob": "a1599f5b06fe3e1a492c611bdb8f157a3fba47b8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/HandoverEntryButton.css",
+      "beforeCandidateBlob": "6b6606e94d94e9b3caab8766d488f795f730a1b2",
+      "afterWorktreeBlob": "6b6606e94d94e9b3caab8766d488f795f730a1b2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/HandoverEntryButton.tsx",
+      "beforeCandidateBlob": "4ecebe3e97b79587cbe463cc3a8a281a03aae822",
+      "afterWorktreeBlob": "4ecebe3e97b79587cbe463cc3a8a281a03aae822",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/ImportPhotoPreview.css",
+      "beforeCandidateBlob": "4f4a6bf254e2db19bb87e923d94083c3f7f9827a",
+      "afterWorktreeBlob": "4f4a6bf254e2db19bb87e923d94083c3f7f9827a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/ImportPhotoPreview.tsx",
+      "beforeCandidateBlob": "a868367f8e63f86b5d4281d3083d94c499f075c5",
+      "afterWorktreeBlob": "a868367f8e63f86b5d4281d3083d94c499f075c5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/ImportReviewFull.tsx",
+      "beforeCandidateBlob": "31543bde4fe955ca25bd99bff5ce8f98354e1bbb",
+      "afterWorktreeBlob": "31543bde4fe955ca25bd99bff5ce8f98354e1bbb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/InlineEditableField.tsx",
+      "beforeCandidateBlob": "9c04c84609c2d1f2863c305b3e8e9deff6c4569c",
+      "afterWorktreeBlob": "9c04c84609c2d1f2863c305b3e8e9deff6c4569c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/NoteCreateForm.css",
+      "beforeCandidateBlob": "4cf8dc51d5b7000ae7118bbce8d86ea684c0248e",
+      "afterWorktreeBlob": "4cf8dc51d5b7000ae7118bbce8d86ea684c0248e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/NoteCreateForm.tsx",
+      "beforeCandidateBlob": "e62eed9e8489558db4d852acd90a94d25a923e0a",
+      "afterWorktreeBlob": "e62eed9e8489558db4d852acd90a94d25a923e0a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/NotesPage.css",
+      "beforeCandidateBlob": "4540989f0a8c8054707afef94ae4ac552ea2edab",
+      "afterWorktreeBlob": "4540989f0a8c8054707afef94ae4ac552ea2edab",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/NotesPage.tsx",
+      "beforeCandidateBlob": "0716aaba8bea062ab20635bd3719235b64eaa0a7",
+      "afterWorktreeBlob": "0716aaba8bea062ab20635bd3719235b64eaa0a7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PageHeader.tsx",
+      "beforeCandidateBlob": "7b5f96d24c25e54cb412e9ff74a319e6a7dfee30",
+      "afterWorktreeBlob": "7b5f96d24c25e54cb412e9ff74a319e6a7dfee30",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PageShell.tsx",
+      "beforeCandidateBlob": "c3f28ea3872edcd40107c849d80e6305b008c6cd",
+      "afterWorktreeBlob": "c3f28ea3872edcd40107c849d80e6305b008c6cd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.css",
+      "beforeCandidateBlob": "58463b58230ce95c5c9e527283f5e661c2803797",
+      "afterWorktreeBlob": "58463b58230ce95c5c9e527283f5e661c2803797",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.tsx",
+      "beforeCandidateBlob": "a9ec99532c3897a5e23af1511fff1c8a537aa5bb",
+      "afterWorktreeBlob": "a9ec99532c3897a5e23af1511fff1c8a537aa5bb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PatientIdentity.css",
+      "beforeCandidateBlob": "466f5b48d6e9716848473024c309f258d418fb0d",
+      "afterWorktreeBlob": "466f5b48d6e9716848473024c309f258d418fb0d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PatientIdentity.tsx",
+      "beforeCandidateBlob": "52836efc259b43395e3bba199c8d2870f2174d57",
+      "afterWorktreeBlob": "52836efc259b43395e3bba199c8d2870f2174d57",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PdfCanvasPreview.css",
+      "beforeCandidateBlob": "7a4cd085f0999241cc53f9da908c6517e4c6501c",
+      "afterWorktreeBlob": "7a4cd085f0999241cc53f9da908c6517e4c6501c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/PdfCanvasPreview.tsx",
+      "beforeCandidateBlob": "7b53b420ecb1c6114432ac4671bb37bbce9e5fce",
+      "afterWorktreeBlob": "7b53b420ecb1c6114432ac4671bb37bbce9e5fce",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderContext.tsx",
+      "beforeCandidateBlob": "6fd2a8fced729cd7d3d07d2e8fb3ee2478bbc9ac",
+      "afterWorktreeBlob": "6fd2a8fced729cd7d3d07d2e8fb3ee2478bbc9ac",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderControl.css",
+      "beforeCandidateBlob": "29067c8399a00f33d45a1366a53227dc8d98db29",
+      "afterWorktreeBlob": "29067c8399a00f33d45a1366a53227dc8d98db29",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/RosterOrderControl.tsx",
+      "beforeCandidateBlob": "c3ce6e9df4440dbfda9ac652430d75bf4504b44a",
+      "afterWorktreeBlob": "c3ce6e9df4440dbfda9ac652430d75bf4504b44a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/ShiftClock.tsx",
+      "beforeCandidateBlob": "93777b7ddcba3329b626a7107220a82ac0625142",
+      "afterWorktreeBlob": "93777b7ddcba3329b626a7107220a82ac0625142",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/SortArrow.tsx",
+      "beforeCandidateBlob": "5cdc39be4fed42b56c8fd23b4c58295827e11cfe",
+      "afterWorktreeBlob": "5cdc39be4fed42b56c8fd23b4c58295827e11cfe",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/StatusBadge.tsx",
+      "beforeCandidateBlob": "d64ed12ebce8fb782f3c99be1a5c5bf105598a01",
+      "afterWorktreeBlob": "d64ed12ebce8fb782f3c99be1a5c5bf105598a01",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/TableFilters.css",
+      "beforeCandidateBlob": "cc71a977500f02400202d232524ca6f231e2ea52",
+      "afterWorktreeBlob": "cc71a977500f02400202d232524ca6f231e2ea52",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/TableFilters.tsx",
+      "beforeCandidateBlob": "13e0ce27e7f561cad2e7e97631fb75a760e15957",
+      "afterWorktreeBlob": "13e0ce27e7f561cad2e7e97631fb75a760e15957",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/TeamsLikeSidebar.tsx",
+      "beforeCandidateBlob": "4c3dd04887c4145a227e5aa0bbd0758ea97d5c2a",
+      "afterWorktreeBlob": "4c3dd04887c4145a227e5aa0bbd0758ea97d5c2a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/TherapyDoseList.css",
+      "beforeCandidateBlob": "dd948de4005d9b64f2d6bcda5cc65b4fbb43362e",
+      "afterWorktreeBlob": "dd948de4005d9b64f2d6bcda5cc65b4fbb43362e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/TherapyDoseList.tsx",
+      "beforeCandidateBlob": "9b41a4500dd161c2520da779b071b3964a666a3b",
+      "afterWorktreeBlob": "9b41a4500dd161c2520da779b071b3964a666a3b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/TherapySlotOverlay.tsx",
+      "beforeCandidateBlob": "50295e2a9769abf9cb6f896523a2a70f8d92be67",
+      "afterWorktreeBlob": "50295e2a9769abf9cb6f896523a2a70f8d92be67",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/UrgencyNotice.css",
+      "beforeCandidateBlob": "6b6b1e79e19434e05e79216534f13f5ebaaad51e",
+      "afterWorktreeBlob": "6b6b1e79e19434e05e79216534f13f5ebaaad51e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/UrgencyNotice.tsx",
+      "beforeCandidateBlob": "3d4ed168d1112cbdae6d3e12025ab4f0dd1b9cdd",
+      "afterWorktreeBlob": "3d4ed168d1112cbdae6d3e12025ab4f0dd1b9cdd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/UserMenu.tsx",
+      "beforeCandidateBlob": "e02e9d7428d8e3048c446987ae4b73701f555edc",
+      "afterWorktreeBlob": "e02e9d7428d8e3048c446987ae4b73701f555edc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/__tests__/hmiShell.test.ts",
+      "beforeCandidateBlob": "f10f9bc65067e24eb4df0f9bfb7db639c40cde6f",
+      "afterWorktreeBlob": "f10f9bc65067e24eb4df0f9bfb7db639c40cde6f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/__tests__/table-filters-contract.test.ts",
+      "beforeCandidateBlob": "6b4d106eb4f7e1e12e54e9ea4c5e28c8ff8b2665",
+      "afterWorktreeBlob": "6b4d106eb4f7e1e12e54e9ea4c5e28c8ff8b2665",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agendaStato.ts",
+      "beforeCandidateBlob": "ef09d4a9a658472f9cc9e6fe6a063744224b2fd1",
+      "afterWorktreeBlob": "ef09d4a9a658472f9cc9e6fe6a063744224b2fd1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosBrief.tsx",
+      "beforeCandidateBlob": "f7dbaa66c369973406fa97c1798fdbdf232a3e2b",
+      "afterWorktreeBlob": "f7dbaa66c369973406fa97c1798fdbdf232a3e2b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosComposer.tsx",
+      "beforeCandidateBlob": "837bbb715e21e1559576d2de0e6358dcbc8c460d",
+      "afterWorktreeBlob": "837bbb715e21e1559576d2de0e6358dcbc8c460d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosSuggestedPrompts.tsx",
+      "beforeCandidateBlob": "bead4413e8b40381835167a22ef5818e6be5034c",
+      "afterWorktreeBlob": "bead4413e8b40381835167a22ef5818e6be5034c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosTurnView.tsx",
+      "beforeCandidateBlob": "cebdfdd49c879aef2d652dfafd63dd020dfc0657",
+      "afterWorktreeBlob": "cebdfdd49c879aef2d652dfafd63dd020dfc0657",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosVoiceIcons.tsx",
+      "beforeCandidateBlob": "06f6ab4f3c797af98ebc43d7dafc5ffd886d275b",
+      "afterWorktreeBlob": "06f6ab4f3c797af98ebc43d7dafc5ffd886d275b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosWorkflow.css",
+      "beforeCandidateBlob": "6a6ab198f9d63eb754e7ec83612377703d8d9a8d",
+      "afterWorktreeBlob": "6a6ab198f9d63eb754e7ec83612377703d8d9a8d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/NavChips.tsx",
+      "beforeCandidateBlob": "7b7e517fb6bde8af85f2d47949699f80e365f9ba",
+      "afterWorktreeBlob": "7b7e517fb6bde8af85f2d47949699f80e365f9ba",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosActionNavigation.ts",
+      "beforeCandidateBlob": "78a29dbc94296658d52c03c5c79803ea456adbcf",
+      "afterWorktreeBlob": "78a29dbc94296658d52c03c5c79803ea456adbcf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosHeaders.test.ts",
+      "beforeCandidateBlob": "1ddbecefad92ee62e3a26289c98a853c6948be21",
+      "afterWorktreeBlob": "1ddbecefad92ee62e3a26289c98a853c6948be21",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosHistory.test.ts",
+      "beforeCandidateBlob": "5391d136a7abcc71df1ab2a739d5fc0e8d2f59d6",
+      "afterWorktreeBlob": "5391d136a7abcc71df1ab2a739d5fc0e8d2f59d6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosHistory.ts",
+      "beforeCandidateBlob": "4b944f5d71431b8024428199b0a944c43887e935",
+      "afterWorktreeBlob": "4b944f5d71431b8024428199b0a944c43887e935",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosNav.test.ts",
+      "beforeCandidateBlob": "896b0c39b9d28bfaff450cf02ad428e62d38819b",
+      "afterWorktreeBlob": "896b0c39b9d28bfaff450cf02ad428e62d38819b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosNav.ts",
+      "beforeCandidateBlob": "8d211fd1dd73170f5c1ec0c5eefb7b153fc6ce3f",
+      "afterWorktreeBlob": "8d211fd1dd73170f5c1ec0c5eefb7b153fc6ce3f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosRequestGate.ts",
+      "beforeCandidateBlob": "83b0b4c89c6a785c4594186d1870a030e5565d72",
+      "afterWorktreeBlob": "83b0b4c89c6a785c4594186d1870a030e5565d72",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosSuggestedPrompts.test.ts",
+      "beforeCandidateBlob": "9a9b3d7c5c755aad7cd8de07e6aa239abbe0cf64",
+      "afterWorktreeBlob": "9a9b3d7c5c755aad7cd8de07e6aa239abbe0cf64",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosSuggestionModel.ts",
+      "beforeCandidateBlob": "e6265cfc2d4108640c9ce2aa39e4c0e855dd0aa3",
+      "afterWorktreeBlob": "e6265cfc2d4108640c9ce2aa39e4c0e855dd0aa3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosWorkflow.test.ts",
+      "beforeCandidateBlob": "39284c6140912981c910d78b11dfdd6575576a3a",
+      "afterWorktreeBlob": "39284c6140912981c910d78b11dfdd6575576a3a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/assistantFeedback.test.ts",
+      "beforeCandidateBlob": "1743822e7824a7a7d05cda1ea9e737f45b95d82c",
+      "afterWorktreeBlob": "1743822e7824a7a7d05cda1ea9e737f45b95d82c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/assistantFeedback.ts",
+      "beforeCandidateBlob": "650db5769cc96a248179494c202f851d05d0e85d",
+      "afterWorktreeBlob": "650db5769cc96a248179494c202f851d05d0e85d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/useAgnosChat.ts",
+      "beforeCandidateBlob": "531a1da1cd00283de0cbe68cd7aa9b384ec554e7",
+      "afterWorktreeBlob": "531a1da1cd00283de0cbe68cd7aa9b384ec554e7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/useSpeechOutput.ts",
+      "beforeCandidateBlob": "db6c5f6b641a87a8730ae9c19b75459dd8546b2e",
+      "afterWorktreeBlob": "db6c5f6b641a87a8730ae9c19b75459dd8546b2e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/useVoiceInput.ts",
+      "beforeCandidateBlob": "fad9b65f8855b8ee989a4a24b34bf721fdb86d59",
+      "afterWorktreeBlob": "fad9b65f8855b8ee989a4a24b34bf721fdb86d59",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/voiceStartGate.test.ts",
+      "beforeCandidateBlob": "2e5ca9de65335f8bfb186ec2192115c467d48e84",
+      "afterWorktreeBlob": "2e5ca9de65335f8bfb186ec2192115c467d48e84",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/voiceStartGate.ts",
+      "beforeCandidateBlob": "85361a362f25ec71f5580dbb3d3fa739e8a64b3d",
+      "afterWorktreeBlob": "85361a362f25ec71f5580dbb3d3fa739e8a64b3d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/dashboardAlertLimits.ts",
+      "beforeCandidateBlob": "82344cb5ef42e989e379bbc203c2f65fab06eabc",
+      "afterWorktreeBlob": "82344cb5ef42e989e379bbc203c2f65fab06eabc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportConflictReview.tsx",
+      "beforeCandidateBlob": "bac83376f61f776181abbcdd50e8d03ae2209c5a",
+      "afterWorktreeBlob": "bac83376f61f776181abbcdd50e8d03ae2209c5a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportDocumentsWorkspace.tsx",
+      "beforeCandidateBlob": "18d58d3b7b130eb10f606e1207de0b5ad539e8b2",
+      "afterWorktreeBlob": "18d58d3b7b130eb10f606e1207de0b5ad539e8b2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportPageGrid.tsx",
+      "beforeCandidateBlob": "f3f4c4c623291b554797767546a13c3e8cdcb899",
+      "afterWorktreeBlob": "f3f4c4c623291b554797767546a13c3e8cdcb899",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportPageView.tsx",
+      "beforeCandidateBlob": "194716171eabe8afe9800d286270193a9bb09b11",
+      "afterWorktreeBlob": "194716171eabe8afe9800d286270193a9bb09b11",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+      "beforeCandidateBlob": "f6161a93604e97b36d916024727c0102e6f9e685",
+      "afterWorktreeBlob": "f6161a93604e97b36d916024727c0102e6f9e685",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportSession.css",
+      "beforeCandidateBlob": "28eaa1336481e23954f43c8bf2e2bd697a394a64",
+      "afterWorktreeBlob": "28eaa1336481e23954f43c8bf2e2bd697a394a64",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/fixtures.ts",
+      "beforeCandidateBlob": "d1a29daae34d33442c0b1deed0a9592abb15d1ab",
+      "afterWorktreeBlob": "d1a29daae34d33442c0b1deed0a9592abb15d1ab",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importHandoff.test.ts",
+      "beforeCandidateBlob": "92c02aa79145f85e5addbf91868b8e22866449ac",
+      "afterWorktreeBlob": "92c02aa79145f85e5addbf91868b8e22866449ac",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importReview.test.ts",
+      "beforeCandidateBlob": "d16cbf798b4a874dbb288b10c8467585b245c647",
+      "afterWorktreeBlob": "d16cbf798b4a874dbb288b10c8467585b245c647",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importSession.test.ts",
+      "beforeCandidateBlob": "0f0bd18ccd1be2c0da950e75fded3e04bb2bd3eb",
+      "afterWorktreeBlob": "0f0bd18ccd1be2c0da950e75fded3e04bb2bd3eb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importUpload.test.ts",
+      "beforeCandidateBlob": "c5463c2d71d5a7640c86c22e3caa908f5bc945d6",
+      "afterWorktreeBlob": "c5463c2d71d5a7640c86c22e3caa908f5bc945d6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/importReviewHandoff.ts",
+      "beforeCandidateBlob": "4eccca2dc420bfb98409da4c85fe3850b60e36dd",
+      "afterWorktreeBlob": "4eccca2dc420bfb98409da4c85fe3850b60e36dd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/importReviewModel.ts",
+      "beforeCandidateBlob": "cf54b1866a4dff6e16329795264b9e2fcbfeef20",
+      "afterWorktreeBlob": "cf54b1866a4dff6e16329795264b9e2fcbfeef20",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionApi.ts",
+      "beforeCandidateBlob": "632988771b5ba0c9fa9b5665ade787108f37b99b",
+      "afterWorktreeBlob": "632988771b5ba0c9fa9b5665ade787108f37b99b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionMemory.ts",
+      "beforeCandidateBlob": "95110876dc716901274d2dcb81d134536c985914",
+      "afterWorktreeBlob": "95110876dc716901274d2dcb81d134536c985914",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionTypes.ts",
+      "beforeCandidateBlob": "92ae949bbf789a4709a645966f256ce3072ce76e",
+      "afterWorktreeBlob": "92ae949bbf789a4709a645966f256ce3072ce76e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSourceCache.ts",
+      "beforeCandidateBlob": "f3e289815ef6cb6b0fe02ce530640f85984f7775",
+      "afterWorktreeBlob": "f3e289815ef6cb6b0fe02ce530640f85984f7775",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/importUploadQueue.ts",
+      "beforeCandidateBlob": "3d52df08ca88a4440bf5058bbceecad1303f63fd",
+      "afterWorktreeBlob": "3d52df08ca88a4440bf5058bbceecad1303f63fd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/import/operatorImportApi.ts",
+      "beforeCandidateBlob": "54f6016c224387c23656d7c5426db2ca47e7982c",
+      "afterWorktreeBlob": "54f6016c224387c23656d7c5426db2ca47e7982c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx",
+      "beforeCandidateBlob": "2b4c19858eb9f2d41d7a59411c661322d9f7270d",
+      "afterWorktreeBlob": "2b4c19858eb9f2d41d7a59411c661322d9f7270d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/ImportProposalsReview.tsx",
+      "beforeCandidateBlob": "dda84c12cd87accc798a5b7e7c0add27ec098fa9",
+      "afterWorktreeBlob": "dda84c12cd87accc798a5b7e7c0add27ec098fa9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeAiBadge.tsx",
+      "beforeCandidateBlob": "ee73ae3fa5e42ed2c87facf3557b9fab0af22fa1",
+      "afterWorktreeBlob": "ee73ae3fa5e42ed2c87facf3557b9fab0af22fa1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeDocumentPanel.tsx",
+      "beforeCandidateBlob": "882c182f1c084592291277194beaf27803850dfd",
+      "afterWorktreeBlob": "882c182f1c084592291277194beaf27803850dfd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeDocumentsCard.tsx",
+      "beforeCandidateBlob": "73a1b9d9b8b21472f378f405e15e530da9817a31",
+      "afterWorktreeBlob": "73a1b9d9b8b21472f378f405e15e530da9817a31",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeFieldProposals.tsx",
+      "beforeCandidateBlob": "2b499e6b644d495b98c80b2a2fc78a6b5b3c322f",
+      "afterWorktreeBlob": "2b499e6b644d495b98c80b2a2fc78a6b5b3c322f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeIndex.tsx",
+      "beforeCandidateBlob": "404a4dcd134b5f5633aefe91094f18f9a61d6f5a",
+      "afterWorktreeBlob": "404a4dcd134b5f5633aefe91094f18f9a61d6f5a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakePage.css",
+      "beforeCandidateBlob": "c5da90cd98e9fc1a09f418810bff0dfa8e370709",
+      "afterWorktreeBlob": "c5da90cd98e9fc1a09f418810bff0dfa8e370709",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "beforeCandidateBlob": "b1a90fdad885220085a5a2046e40027e95c9e2d2",
+      "afterWorktreeBlob": "b1a90fdad885220085a5a2046e40027e95c9e2d2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+      "beforeCandidateBlob": "5390b9927a2629808551e5e3b893e04fd15ae85b",
+      "afterWorktreeBlob": "5390b9927a2629808551e5e3b893e04fd15ae85b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "beforeCandidateBlob": "3c26191dab6098a5536c7728c3e221ad7dd83bd4",
+      "afterWorktreeBlob": "3c26191dab6098a5536c7728c3e221ad7dd83bd4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepIngresso.tsx",
+      "beforeCandidateBlob": "b880a65219f295c341b6f64db18d361b0769c3af",
+      "afterWorktreeBlob": "b880a65219f295c341b6f64db18d361b0769c3af",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepVerifica.tsx",
+      "beforeCandidateBlob": "7283ae43040d8c7a6cbc40009b1f1ffd906e5044",
+      "afterWorktreeBlob": "7283ae43040d8c7a6cbc40009b1f1ffd906e5044",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/confirmCartella.test.ts",
+      "beforeCandidateBlob": "400c68efb10d5ab6b5f05b8bb73654dd5e8cc55f",
+      "afterWorktreeBlob": "400c68efb10d5ab6b5f05b8bb73654dd5e8cc55f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/importSessionDraft.test.ts",
+      "beforeCandidateBlob": "938d128038eea70f5d2458afe22b8f6a3d46dc11",
+      "afterWorktreeBlob": "938d128038eea70f5d2458afe22b8f6a3d46dc11",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDocumentPages.test.ts",
+      "beforeCandidateBlob": "4a5299f62ff041bb789fbe9b09d230cd95dd5126",
+      "afterWorktreeBlob": "4a5299f62ff041bb789fbe9b09d230cd95dd5126",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDocuments.test.ts",
+      "beforeCandidateBlob": "246e067fca2b696ad9739489dd02ae5a4d9eb964",
+      "afterWorktreeBlob": "246e067fca2b696ad9739489dd02ae5a4d9eb964",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDraftApi.test.ts",
+      "beforeCandidateBlob": "d198505226fcaf4bd6b70ce8b66f04d2f74cd77c",
+      "afterWorktreeBlob": "d198505226fcaf4bd6b70ce8b66f04d2f74cd77c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDraftSession.test.ts",
+      "beforeCandidateBlob": "5bf64deabd04b5079a955874dcdd6fda85526dcd",
+      "afterWorktreeBlob": "5bf64deabd04b5079a955874dcdd6fda85526dcd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/intakeProgress.test.ts",
+      "beforeCandidateBlob": "9b4fd37bb3ac9cad628efd48fb44c6093ce2c366",
+      "afterWorktreeBlob": "9b4fd37bb3ac9cad628efd48fb44c6093ce2c366",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/legacyPainDraft.test.ts",
+      "beforeCandidateBlob": "b14d4bdd922148e87e84444052dda8d2cd80df5e",
+      "afterWorktreeBlob": "b14d4bdd922148e87e84444052dda8d2cd80df5e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/phase10Intake.test.ts",
+      "beforeCandidateBlob": "828ef4a6adf7090094cf7dfbf8ac88a1b0ef1b6f",
+      "afterWorktreeBlob": "828ef4a6adf7090094cf7dfbf8ac88a1b0ef1b6f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/progressiveIntake.test.ts",
+      "beforeCandidateBlob": "cf586b032eee4452e9ab57bedbf2c77508b4c3d0",
+      "afterWorktreeBlob": "cf586b032eee4452e9ab57bedbf2c77508b4c3d0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts",
+      "beforeCandidateBlob": "61663de8e786ba7acf36f278afe966d87a19b461",
+      "afterWorktreeBlob": "61663de8e786ba7acf36f278afe966d87a19b461",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/therapyFieldFeedback.test.ts",
+      "beforeCandidateBlob": "36a56e59147040e81c2eafa4769ccbaaf6789fd3",
+      "afterWorktreeBlob": "36a56e59147040e81c2eafa4769ccbaaf6789fd3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/confirmCartella.ts",
+      "beforeCandidateBlob": "ce89c07e2095d4f301733057f90911df59820440",
+      "afterWorktreeBlob": "ce89c07e2095d4f301733057f90911df59820440",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/dischargeTherapy.ts",
+      "beforeCandidateBlob": "bee6a806a8dfafc3d4960867f107f3509a4ff817",
+      "afterWorktreeBlob": "bee6a806a8dfafc3d4960867f107f3509a4ff817",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeAiOrigin.ts",
+      "beforeCandidateBlob": "37417e82ebd10e9ed26254e8b7997e97c49f6220",
+      "afterWorktreeBlob": "37417e82ebd10e9ed26254e8b7997e97c49f6220",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDocumentPages.ts",
+      "beforeCandidateBlob": "eecf859dca75efb5d7bef9f07f315f32af540179",
+      "afterWorktreeBlob": "eecf859dca75efb5d7bef9f07f315f32af540179",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDocuments.ts",
+      "beforeCandidateBlob": "b07a1ad488be751fe3a6a329bd6087319b684a25",
+      "afterWorktreeBlob": "b07a1ad488be751fe3a6a329bd6087319b684a25",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDraftApi.ts",
+      "beforeCandidateBlob": "dc750308e16fa740a5d3c928d01cfd5903c98e39",
+      "afterWorktreeBlob": "dc750308e16fa740a5d3c928d01cfd5903c98e39",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDraftSession.ts",
+      "beforeCandidateBlob": "67a7fb64b47cca54994be080c371182992da634d",
+      "afterWorktreeBlob": "67a7fb64b47cca54994be080c371182992da634d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeProgress.ts",
+      "beforeCandidateBlob": "70d70e00c14e7058b48212d81e6b8d5dbad183cd",
+      "afterWorktreeBlob": "70d70e00c14e7058b48212d81e6b8d5dbad183cd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeTherapies.ts",
+      "beforeCandidateBlob": "8fb9a425f8c6dd72573fbbe5ca126993f3353fe0",
+      "afterWorktreeBlob": "8fb9a425f8c6dd72573fbbe5ca126993f3353fe0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeTherapyNavigation.ts",
+      "beforeCandidateBlob": "a1b21be8d8dc9e4f1a74d0ab91153e5ba97869fd",
+      "afterWorktreeBlob": "a1b21be8d8dc9e4f1a74d0ab91153e5ba97869fd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/therapyFormPayload.ts",
+      "beforeCandidateBlob": "921241cd6b4df9bbc8b1397f32c43486a674a836",
+      "afterWorktreeBlob": "921241cd6b4df9bbc8b1397f32c43486a674a836",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/intake/useIntakeDocuments.ts",
+      "beforeCandidateBlob": "43f47ab8e4a371102cff7eb91bba5da63fe7d0e4",
+      "afterWorktreeBlob": "43f47ab8e4a371102cff7eb91bba5da63fe7d0e4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/FormattedSectionText.css",
+      "beforeCandidateBlob": "050d29490a793181e48a32ca799072ee5901d0da",
+      "afterWorktreeBlob": "050d29490a793181e48a32ca799072ee5901d0da",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/FormattedSectionText.tsx",
+      "beforeCandidateBlob": "4e9255a714625ebf9627f463bdfe1ff81dc6c1af",
+      "afterWorktreeBlob": "4e9255a714625ebf9627f463bdfe1ff81dc6c1af",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+      "beforeCandidateBlob": "293c016858467b9fa59fc1eb78fb343c9f9bb8c2",
+      "afterWorktreeBlob": "293c016858467b9fa59fc1eb78fb343c9f9bb8c2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/NarrativeClinicalSection.tsx",
+      "beforeCandidateBlob": "c22641d61c9e5e4df27e234b5a8781bef939fc4a",
+      "afterWorktreeBlob": "c22641d61c9e5e4df27e234b5a8781bef939fc4a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/SemanticTaggedText.tsx",
+      "beforeCandidateBlob": "b9f3437b71bf3c784ec66e78bb7718343197ba5b",
+      "afterWorktreeBlob": "b9f3437b71bf3c784ec66e78bb7718343197ba5b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/datePrefix.test.ts",
+      "beforeCandidateBlob": "68057eeb60c8f4342fc5cd8b64a66f19cab4a193",
+      "afterWorktreeBlob": "68057eeb60c8f4342fc5cd8b64a66f19cab4a193",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/import-contract.test.ts",
+      "beforeCandidateBlob": "b6e3a0d049ca1b0b8cb20847ca0aef9af31a447c",
+      "afterWorktreeBlob": "b6e3a0d049ca1b0b8cb20847ca0aef9af31a447c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+      "beforeCandidateBlob": "56a605b5b66a49284268b5e566fc41bc24097171",
+      "afterWorktreeBlob": "56a605b5b66a49284268b5e566fc41bc24097171",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/sectionMarkdown.test.ts",
+      "beforeCandidateBlob": "c939876a89994b8e03034dc94632cead946e200f",
+      "afterWorktreeBlob": "c939876a89994b8e03034dc94632cead946e200f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/segments.test.ts",
+      "beforeCandidateBlob": "84e3ed174d5df231bd4b6cd58e5fba0002f0022d",
+      "afterWorktreeBlob": "84e3ed174d5df231bd4b6cd58e5fba0002f0022d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/datePrefix.ts",
+      "beforeCandidateBlob": "064e811f34566fa9c75ea70d163e079b0a10eb76",
+      "afterWorktreeBlob": "064e811f34566fa9c75ea70d163e079b0a10eb76",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/deriveSections.ts",
+      "beforeCandidateBlob": "a977dcc6dc2b6d490ba6d8f9803c34744045d723",
+      "afterWorktreeBlob": "a977dcc6dc2b6d490ba6d8f9803c34744045d723",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/sectionMapping.ts",
+      "beforeCandidateBlob": "00525dc08922d89f136bb030de3b848272c083cf",
+      "afterWorktreeBlob": "00525dc08922d89f136bb030de3b848272c083cf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/sectionMarkdown.ts",
+      "beforeCandidateBlob": "ccf50e17248c1612f5ab5ef60d61d23b4bc28c88",
+      "afterWorktreeBlob": "ccf50e17248c1612f5ab5ef60d61d23b4bc28c88",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/segments.ts",
+      "beforeCandidateBlob": "c9fa5b3defd7dcdafeb6e7668f274046bea51f95",
+      "afterWorktreeBlob": "c9fa5b3defd7dcdafeb6e7668f274046bea51f95",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/tagStyles.ts",
+      "beforeCandidateBlob": "c6ab51d673e3a5a93c5198407cb6e8e187cef359",
+      "afterWorktreeBlob": "c6ab51d673e3a5a93c5198407cb6e8e187cef359",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/sections/types.ts",
+      "beforeCandidateBlob": "8f03620d656f863dad56e158b4db1ded67ad1f97",
+      "afterWorktreeBlob": "8f03620d656f863dad56e158b4db1ded67ad1f97",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/topbarTitleSlot.ts",
+      "beforeCandidateBlob": "88e33a0cfcf1a7d43886f6470e627978ec92332c",
+      "afterWorktreeBlob": "88e33a0cfcf1a7d43886f6470e627978ec92332c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/components/shared/useAiImportStatus.ts",
+      "beforeCandidateBlob": "9d0711f5841f777ce93f9bc9f4078e9986211d3c",
+      "afterWorktreeBlob": "9d0711f5841f777ce93f9bc9f4078e9986211d3c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/config.ts",
+      "beforeCandidateBlob": "38c755b271f1fa78302d4e6ca5e54ac224014f94",
+      "afterWorktreeBlob": "38c755b271f1fa78302d4e6ca5e54ac224014f94",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/design-system.css",
+      "beforeCandidateBlob": "cd8ac2aabffaa7540a0fe96a3586cc056469faeb",
+      "afterWorktreeBlob": "cd8ac2aabffaa7540a0fe96a3586cc056469faeb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/design-system/README.md",
+      "beforeCandidateBlob": "e49e65788104f58e085a64b5205c6a9f5bbc5c8c",
+      "afterWorktreeBlob": "e49e65788104f58e085a64b5205c6a9f5bbc5c8c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/form-controls.css",
+      "beforeCandidateBlob": "722fcf507b615027ffcef32a6f43dbf1d52960d8",
+      "afterWorktreeBlob": "722fcf507b615027ffcef32a6f43dbf1d52960d8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/icons.tsx",
+      "beforeCandidateBlob": "5820cf256f63c80237147198adc5b882d69a47f7",
+      "afterWorktreeBlob": "5820cf256f63c80237147198adc5b882d69a47f7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/index.css",
+      "beforeCandidateBlob": "067cdac0661b6016c72540fe1c02dd30c4ddc8ca",
+      "afterWorktreeBlob": "067cdac0661b6016c72540fe1c02dd30c4ddc8ca",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/accessibleClinicalDialogs.test.ts",
+      "beforeCandidateBlob": "37b51683bedec50f4020287db0c78142011e2802",
+      "afterWorktreeBlob": "37b51683bedec50f4020287db0c78142011e2802",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/adessoQueue.test.ts",
+      "beforeCandidateBlob": "8d87eb5a6c30a8afc16282748c92df531dc0d5dc",
+      "afterWorktreeBlob": "8d87eb5a6c30a8afc16282748c92df531dc0d5dc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/agendaAccessibility.test.ts",
+      "beforeCandidateBlob": "036841901409d61087d2509617f0774f4577819f",
+      "afterWorktreeBlob": "036841901409d61087d2509617f0774f4577819f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/allergyStatusModel.test.ts",
+      "beforeCandidateBlob": "8b50a2ad86125857a58969cb30db0f91c85900ae",
+      "afterWorktreeBlob": "8b50a2ad86125857a58969cb30db0f91c85900ae",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/appointmentDialogAccessibility.test.ts",
+      "beforeCandidateBlob": "01305b9ef2b943934c8fae6f818e0957ea12ffad",
+      "afterWorktreeBlob": "01305b9ef2b943934c8fae6f818e0957ea12ffad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/appointmentRange.test.ts",
+      "beforeCandidateBlob": "a9dcf8e19ecbfa357b167fb328ba118c8919f880",
+      "afterWorktreeBlob": "a9dcf8e19ecbfa357b167fb328ba118c8919f880",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/archivePrint.test.ts",
+      "beforeCandidateBlob": "560120d682264a95fd579436e16a2c470ece9d90",
+      "afterWorktreeBlob": "560120d682264a95fd579436e16a2c470ece9d90",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentArchive.test.ts",
+      "beforeCandidateBlob": "d782fb3538fb92328323cc7dcad4b3d5b85000fa",
+      "afterWorktreeBlob": "d782fb3538fb92328323cc7dcad4b3d5b85000fa",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentCatalog.test.ts",
+      "beforeCandidateBlob": "bc86bc9d1334eb444f80094cca50525cba5da228",
+      "afterWorktreeBlob": "bc86bc9d1334eb444f80094cca50525cba5da228",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentCatalogWorkflow.test.ts",
+      "beforeCandidateBlob": "d4a7361dcf5429cbee7dc0fcd7e1355766f6b9fc",
+      "afterWorktreeBlob": "d4a7361dcf5429cbee7dc0fcd7e1355766f6b9fc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentClient.test.ts",
+      "beforeCandidateBlob": "2c00bc9ee3b675c7d8ac25a03f7f3cdcef4101d6",
+      "afterWorktreeBlob": "2c00bc9ee3b675c7d8ac25a03f7f3cdcef4101d6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessmentDraftStore.test.ts",
+      "beforeCandidateBlob": "d43a4a8646f875f472cf54dc382e84d1f00c8d1e",
+      "afterWorktreeBlob": "d43a4a8646f875f472cf54dc382e84d1f00c8d1e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/assessments.fixtures.ts",
+      "beforeCandidateBlob": "62a2d5461b9eebc3566a5befccd1ecfa39437a19",
+      "afterWorktreeBlob": "62a2d5461b9eebc3566a5befccd1ecfa39437a19",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/cachedFetch.test.ts",
+      "beforeCandidateBlob": "44270804323d7b4b6ea3345b3b55373a26b5be70",
+      "afterWorktreeBlob": "44270804323d7b4b6ea3345b3b55373a26b5be70",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/cameraAcquisition.test.ts",
+      "beforeCandidateBlob": "78ffcc4a6018af377bae3775cf5408f557c09a0a",
+      "afterWorktreeBlob": "78ffcc4a6018af377bae3775cf5408f557c09a0a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/capabilities.test.ts",
+      "beforeCandidateBlob": "768b8ac4ad44b3cd0afca06aa97f4391a6e99e8c",
+      "afterWorktreeBlob": "768b8ac4ad44b3cd0afca06aa97f4391a6e99e8c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts",
+      "beforeCandidateBlob": "c98abf5566a69de88bb7929215b3f9502bbe5655",
+      "afterWorktreeBlob": "c98abf5566a69de88bb7929215b3f9502bbe5655",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/clinicalAttachments.test.ts",
+      "beforeCandidateBlob": "80839960248d75baf12c9a216afe70ce85dcd621",
+      "afterWorktreeBlob": "80839960248d75baf12c9a216afe70ce85dcd621",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+      "beforeCandidateBlob": "28c294ea635fcfb8acc34d67bf9f287673b48063",
+      "afterWorktreeBlob": "28c294ea635fcfb8acc34d67bf9f287673b48063",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
+      "beforeCandidateBlob": "7c74dcec4961542c39ec72b84d0b607846ea66a8",
+      "afterWorktreeBlob": "7c74dcec4961542c39ec72b84d0b607846ea66a8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/codiceFiscale.test.ts",
+      "beforeCandidateBlob": "19702bfe8aee7561111c24b78f96140d609b66dd",
+      "afterWorktreeBlob": "19702bfe8aee7561111c24b78f96140d609b66dd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/confirmDialogAccessibility.test.ts",
+      "beforeCandidateBlob": "d8fa25c54702540c0c44aeed7720b514b8b0f51b",
+      "afterWorktreeBlob": "d8fa25c54702540c0c44aeed7720b514b8b0f51b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaCreation.test.ts",
+      "beforeCandidateBlob": "52df22c912d3dfc7400b15536ca1326c32d61e37",
+      "afterWorktreeBlob": "52df22c912d3dfc7400b15536ca1326c32d61e37",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaDrafts.test.ts",
+      "beforeCandidateBlob": "87a6f55e5073403112bdd14bfb943a4a4231faaa",
+      "afterWorktreeBlob": "87a6f55e5073403112bdd14bfb943a4a4231faaa",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaFormUxContract.test.ts",
+      "beforeCandidateBlob": "fd5a1e9acd385517bca91b6f3473250dbc23738e",
+      "afterWorktreeBlob": "fd5a1e9acd385517bca91b6f3473250dbc23738e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaGiro.fixtures.ts",
+      "beforeCandidateBlob": "495dceb299c2b6a8e6fc8dde35788693c2f8fd29",
+      "afterWorktreeBlob": "495dceb299c2b6a8e6fc8dde35788693c2f8fd29",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaTimestamp.test.ts",
+      "beforeCandidateBlob": "ad78e7197e012665c9ef98b0b131173beb7f5d0c",
+      "afterWorktreeBlob": "ad78e7197e012665c9ef98b0b131173beb7f5d0c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegneFeed.test.ts",
+      "beforeCandidateBlob": "882db69e5a6e2fb17111fe01455bce445024b61f",
+      "afterWorktreeBlob": "882db69e5a6e2fb17111fe01455bce445024b61f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegneNavigation.test.ts",
+      "beforeCandidateBlob": "12cf9628d07f34b461f2ae47225d4165a3fbfcdf",
+      "afterWorktreeBlob": "12cf9628d07f34b461f2ae47225d4165a3fbfcdf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
+      "beforeCandidateBlob": "173a6807c27bddfe39fd9046bf3d3951a4d7fdff",
+      "afterWorktreeBlob": "173a6807c27bddfe39fd9046bf3d3951a4d7fdff",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/dashboardTherapies.test.ts",
+      "beforeCandidateBlob": "5a1e8c3dde632cb55127c19c36d4bb9b4b10cb8e",
+      "afterWorktreeBlob": "5a1e8c3dde632cb55127c19c36d4bb9b4b10cb8e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/dashboardTherapyRead.test.ts",
+      "beforeCandidateBlob": "9bcb5b461e566dfb0e6e6fd59e250e51555220a5",
+      "afterWorktreeBlob": "9bcb5b461e566dfb0e6e6fd59e250e51555220a5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/designSystem.test.ts",
+      "beforeCandidateBlob": "4f63ea628ff067b79acf6929b7f2863d4013b44e",
+      "afterWorktreeBlob": "4f63ea628ff067b79acf6929b7f2863d4013b44e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/designTokens.test.ts",
+      "beforeCandidateBlob": "c18789247089b7d0e8dfc5baba362ec7d362df4c",
+      "afterWorktreeBlob": "c18789247089b7d0e8dfc5baba362ec7d362df4c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/diaryPaginationGuard.test.ts",
+      "beforeCandidateBlob": "4f1240f70bf2c52be351f949ab33369048d63a4f",
+      "afterWorktreeBlob": "4f1240f70bf2c52be351f949ab33369048d63a4f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/documentPreviewLazyLoading.test.ts",
+      "beforeCandidateBlob": "90c12124a4c98accf360e9e7239a51be7f9c8be2",
+      "afterWorktreeBlob": "90c12124a4c98accf360e9e7239a51be7f9c8be2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/documentScan.test.ts",
+      "beforeCandidateBlob": "a330add9be4d8324df20f0b4e2519a77bc48d661",
+      "afterWorktreeBlob": "a330add9be4d8324df20f0b4e2519a77bc48d661",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/examDocumentsLoadState.test.ts",
+      "beforeCandidateBlob": "028c9bbafad8bd9d76a02ae92bee1d2551cda073",
+      "afterWorktreeBlob": "028c9bbafad8bd9d76a02ae92bee1d2551cda073",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/examDocumentsSingleFetch.test.ts",
+      "beforeCandidateBlob": "d35d16c38dadba836744616fccd12793d3805007",
+      "afterWorktreeBlob": "d35d16c38dadba836744616fccd12793d3805007",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/facilityTime.test.ts",
+      "beforeCandidateBlob": "90d3e837e2d040dceba285d8de51f86b3b395fc1",
+      "afterWorktreeBlob": "90d3e837e2d040dceba285d8de51f86b3b395fc1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15.fixtures.ts",
+      "beforeCandidateBlob": "ca0901896657c646d241db3a26710a39aa0fa9e2",
+      "afterWorktreeBlob": "ca0901896657c646d241db3a26710a39aa0fa9e2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15Definition.test.ts",
+      "beforeCandidateBlob": "d08e4c7a78e031b38d032127b67522093489d014",
+      "afterWorktreeBlob": "d08e4c7a78e031b38d032127b67522093489d014",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/gds15Workflow.test.ts",
+      "beforeCandidateBlob": "472b5a3198a50ebb39d187ae806efb823d18da76",
+      "afterWorktreeBlob": "472b5a3198a50ebb39d187ae806efb823d18da76",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/handoverOverviewResponse.test.ts",
+      "beforeCandidateBlob": "64086f6e6d74e71f99b0ab6210f7c2280900b605",
+      "afterWorktreeBlob": "64086f6e6d74e71f99b0ab6210f7c2280900b605",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/handoverPreview.test.ts",
+      "beforeCandidateBlob": "2b47a157f81b3821c4bd4c61f15557aeb84836e1",
+      "afterWorktreeBlob": "2b47a157f81b3821c4bd4c61f15557aeb84836e1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/importFailure.test.ts",
+      "beforeCandidateBlob": "78140f00bfd023998524713e281556d51ccb4707",
+      "afterWorktreeBlob": "78140f00bfd023998524713e281556d51ccb4707",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/importLandsOnPatient.test.ts",
+      "beforeCandidateBlob": "e386fea855e46474c97d23a3a2282ee7d2051ea3",
+      "afterWorktreeBlob": "e386fea855e46474c97d23a3a2282ee7d2051ea3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/importPhotoPreviews.test.ts",
+      "beforeCandidateBlob": "cf48595fd7f0cc09eaa77bd4373bd82e07d021ac",
+      "afterWorktreeBlob": "cf48595fd7f0cc09eaa77bd4373bd82e07d021ac",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/intakeContacts.test.ts",
+      "beforeCandidateBlob": "a802ce3345916c0ca463efa4c8a44b0e081c173a",
+      "afterWorktreeBlob": "a802ce3345916c0ca463efa4c8a44b0e081c173a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/intakeLandingTabs.test.ts",
+      "beforeCandidateBlob": "f378642477b2f00f4bc1753be162bee998dc5a2f",
+      "afterWorktreeBlob": "f378642477b2f00f4bc1753be162bee998dc5a2f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+      "beforeCandidateBlob": "f90cd5ddaaa273f2c813486d853cd19bf44fe8a1",
+      "afterWorktreeBlob": "f90cd5ddaaa273f2c813486d853cd19bf44fe8a1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/legacyAnamnesis.test.ts",
+      "beforeCandidateBlob": "cb5f2629d1a90bfaacf1971cd2ce2bcf1d4a8aee",
+      "afterWorktreeBlob": "cb5f2629d1a90bfaacf1971cd2ce2bcf1d4a8aee",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/medicazioniConcurrency.test.ts",
+      "beforeCandidateBlob": "afac9862856ff5c3c13df6136d65db852268d887",
+      "afterWorktreeBlob": "afac9862856ff5c3c13df6136d65db852268d887",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/mna.fixtures.ts",
+      "beforeCandidateBlob": "1eb19e6a00e16b6cef8e1154dd6005eb0700037f",
+      "afterWorktreeBlob": "1eb19e6a00e16b6cef8e1154dd6005eb0700037f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/mnaDefinition.test.ts",
+      "beforeCandidateBlob": "c3c4a23cd426e8bf0213d0abf89c85f2f89b9e1c",
+      "afterWorktreeBlob": "c3c4a23cd426e8bf0213d0abf89c85f2f89b9e1c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/mnaWorkflow.test.ts",
+      "beforeCandidateBlob": "96c33b4fad04324be66882e5a76f0c651f56039f",
+      "afterWorktreeBlob": "96c33b4fad04324be66882e5a76f0c651f56039f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/narrativeResilienceGuard.test.ts",
+      "beforeCandidateBlob": "2220d844f58ee9a4bf9cf7d39d89ed2c657d9c92",
+      "afterWorktreeBlob": "2220d844f58ee9a4bf9cf7d39d89ed2c657d9c92",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/navHistory.test.ts",
+      "beforeCandidateBlob": "e800ffc89e14f2136d555854133e4ac7865ad613",
+      "afterWorktreeBlob": "e800ffc89e14f2136d555854133e4ac7865ad613",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/navigationStaleWhileRevalidate.test.ts",
+      "beforeCandidateBlob": "497fe9451434d2e2b58779351dd4b3f8815b90b0",
+      "afterWorktreeBlob": "497fe9451434d2e2b58779351dd4b3f8815b90b0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/nestedDialogFocus.test.ts",
+      "beforeCandidateBlob": "07cdd47e4cdaa5e491c352c316292ad101592712",
+      "afterWorktreeBlob": "07cdd47e4cdaa5e491c352c316292ad101592712",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/news2.test.ts",
+      "beforeCandidateBlob": "e9146042a0d309e9665656dcbdd9bea0f08115c2",
+      "afterWorktreeBlob": "e9146042a0d309e9665656dcbdd9bea0f08115c2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/news2History.test.ts",
+      "beforeCandidateBlob": "99d806ba6ccd350dbebb86423e2bd8df94920b5a",
+      "afterWorktreeBlob": "99d806ba6ccd350dbebb86423e2bd8df94920b5a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/noteFormUxContract.test.ts",
+      "beforeCandidateBlob": "b911e2a9e1801a14dc82379363dc97f9bac9d1ea",
+      "afterWorktreeBlob": "b911e2a9e1801a14dc82379363dc97f9bac9d1ea",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/notesAppIntegration.test.ts",
+      "beforeCandidateBlob": "8e057616a023ad5a7bcd1cb5d5e66f26f856f89f",
+      "afterWorktreeBlob": "8e057616a023ad5a7bcd1cb5d5e66f26f856f89f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/notesMailbox.test.ts",
+      "beforeCandidateBlob": "4543e07f0b9b52ded09e40c2dec13df728a51dbe",
+      "afterWorktreeBlob": "4543e07f0b9b52ded09e40c2dec13df728a51dbe",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/nrsLegacy.test.ts",
+      "beforeCandidateBlob": "7b93c57474c91decefd2160b1875def2bfdc78e7",
+      "afterWorktreeBlob": "7b93c57474c91decefd2160b1875def2bfdc78e7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operationalIdentityPages.test.ts",
+      "beforeCandidateBlob": "a47cc8fbdc65483e428e8ca448b623a1c3907d8d",
+      "afterWorktreeBlob": "a47cc8fbdc65483e428e8ca448b623a1c3907d8d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorDirectoryLazyLoad.test.ts",
+      "beforeCandidateBlob": "207a0704f9b40e69a27032c59e9b7d43a708107e",
+      "afterWorktreeBlob": "207a0704f9b40e69a27032c59e9b7d43a708107e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorDirectoryPage.test.ts",
+      "beforeCandidateBlob": "86e5c760d2a4f22b0fd8dddbfa1e61f56514fc65",
+      "afterWorktreeBlob": "86e5c760d2a4f22b0fd8dddbfa1e61f56514fc65",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorSchedulesLazyLoad.test.ts",
+      "beforeCandidateBlob": "fd63449e2273dfa86befd281731062f8a6390b18",
+      "afterWorktreeBlob": "fd63449e2273dfa86befd281731062f8a6390b18",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorSession.test.ts",
+      "beforeCandidateBlob": "4f5b634f0efe146b10719fb3b8a9d878797131e8",
+      "afterWorktreeBlob": "4f5b634f0efe146b10719fb3b8a9d878797131e8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/pageHeaderAdoption.test.ts",
+      "beforeCandidateBlob": "db4d91db940754b7e838c1b61a4925576688c6a1",
+      "afterWorktreeBlob": "db4d91db940754b7e838c1b61a4925576688c6a1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/painadDefinition.test.ts",
+      "beforeCandidateBlob": "efe211197cb1dbb9ed9b542f32ee8b056995df15",
+      "afterWorktreeBlob": "efe211197cb1dbb9ed9b542f32ee8b056995df15",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterEntryDrafts.test.ts",
+      "beforeCandidateBlob": "1f49c46caa136526407810c3055e337be22a54f1",
+      "afterWorktreeBlob": "1f49c46caa136526407810c3055e337be22a54f1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterEntrySummary.test.ts",
+      "beforeCandidateBlob": "a21f05715c15dc8f1ae370ad7e88d8597c2897ac",
+      "afterWorktreeBlob": "a21f05715c15dc8f1ae370ad7e88d8597c2897ac",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterPad.test.ts",
+      "beforeCandidateBlob": "6dff54ebe330478209641af97db32baa771645fd",
+      "afterWorktreeBlob": "6dff54ebe330478209641af97db32baa771645fd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientArchiveFolders.test.ts",
+      "beforeCandidateBlob": "864bbabb380b73bd75ecedd96e6a6d7040cd64b9",
+      "afterWorktreeBlob": "864bbabb380b73bd75ecedd96e6a6d7040cd64b9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+      "beforeCandidateBlob": "14a2d1c2f31c0f4582139aa188e95148b0d01814",
+      "afterWorktreeBlob": "14a2d1c2f31c0f4582139aa188e95148b0d01814",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientComboboxModel.test.ts",
+      "beforeCandidateBlob": "7807be489f7f027d86984c77b8f47a51bbedfa12",
+      "afterWorktreeBlob": "7807be489f7f027d86984c77b8f47a51bbedfa12",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDemographics.test.ts",
+      "beforeCandidateBlob": "ca995855dc61af43986959be4d273a7f7918e0f8",
+      "afterWorktreeBlob": "ca995855dc61af43986959be4d273a7f7918e0f8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDetailLazyGuard.test.ts",
+      "beforeCandidateBlob": "c5e8de132ab9d6193098093ac543ecab27907aae",
+      "afterWorktreeBlob": "c5e8de132ab9d6193098093ac543ecab27907aae",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts",
+      "beforeCandidateBlob": "601b737bd29e503489eb422932a00ddd2f84c4c2",
+      "afterWorktreeBlob": "601b737bd29e503489eb422932a00ddd2f84c4c2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDocumentArchive.test.ts",
+      "beforeCandidateBlob": "c5a49723c60357101a7253681568ac6d75807771",
+      "afterWorktreeBlob": "c5a49723c60357101a7253681568ac6d75807771",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDocumentContentScope.test.ts",
+      "beforeCandidateBlob": "0e7cf7ddc664dfa857d5fca9955733526d9fb452",
+      "afterWorktreeBlob": "0e7cf7ddc664dfa857d5fca9955733526d9fb452",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDocumentsPage.test.ts",
+      "beforeCandidateBlob": "b267f3c25147dcb33db4438ae5d410d900e9bc79",
+      "afterWorktreeBlob": "b267f3c25147dcb33db4438ae5d410d900e9bc79",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientIdentity.test.ts",
+      "beforeCandidateBlob": "aacbe054388d02ae3fe2c2fe3f14419530961763",
+      "afterWorktreeBlob": "aacbe054388d02ae3fe2c2fe3f14419530961763",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientInlineEditing.test.ts",
+      "beforeCandidateBlob": "c9e5b6d7a4c8e95e9e065dca4cadb9dd3f925b12",
+      "afterWorktreeBlob": "c9e5b6d7a4c8e95e9e065dca4cadb9dd3f925b12",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientIntakeReview.test.ts",
+      "beforeCandidateBlob": "82453f445ae1192f33d2499b5da6b4c241bc8cd3",
+      "afterWorktreeBlob": "82453f445ae1192f33d2499b5da6b4c241bc8cd3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "beforeCandidateBlob": "9b22de5e24e27d2358aa0aa87ded51444de283a9",
+      "afterWorktreeBlob": "9b22de5e24e27d2358aa0aa87ded51444de283a9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientListView.test.ts",
+      "beforeCandidateBlob": "6bdddfcf1052d7b462be671badcd7331d6a6142f",
+      "afterWorktreeBlob": "6bdddfcf1052d7b462be671badcd7331d6a6142f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientPage.test.ts",
+      "beforeCandidateBlob": "6afc43005133f0efd5eae6c877a4792c6deeb113",
+      "afterWorktreeBlob": "6afc43005133f0efd5eae6c877a4792c6deeb113",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterMonthTable.test.ts",
+      "beforeCandidateBlob": "fea55c983ea87257ad1c1531e54b999617721c89",
+      "afterWorktreeBlob": "fea55c983ea87257ad1c1531e54b999617721c89",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterReadings.test.ts",
+      "beforeCandidateBlob": "936e2e3c82cccebf1a19408a8e5139699c998a16",
+      "afterWorktreeBlob": "936e2e3c82cccebf1a19408a8e5139699c998a16",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterTrends.test.ts",
+      "beforeCandidateBlob": "253d2db60d9f1be51018bfc230863c7cb92809c5",
+      "afterWorktreeBlob": "253d2db60d9f1be51018bfc230863c7cb92809c5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterWorkspace.test.ts",
+      "beforeCandidateBlob": "f83fc069e9c88025157b6ba0c2f6acf628763f8e",
+      "afterWorktreeBlob": "f83fc069e9c88025157b6ba0c2f6acf628763f8e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParametersPage.test.ts",
+      "beforeCandidateBlob": "f1f6cad28688842f717ec380704527c1352bd64c",
+      "afterWorktreeBlob": "f1f6cad28688842f717ec380704527c1352bd64c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientPhone.test.ts",
+      "beforeCandidateBlob": "5eb31ba4a48b0e814a875e0a8dc4a39b2b0c5bf1",
+      "afterWorktreeBlob": "5eb31ba4a48b0e814a875e0a8dc4a39b2b0c5bf1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientRecordPrint.test.ts",
+      "beforeCandidateBlob": "46ae31af5cc24ec5204181c09182c9dc0fbcb7e9",
+      "afterWorktreeBlob": "46ae31af5cc24ec5204181c09182c9dc0fbcb7e9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientRosterGuard.test.ts",
+      "beforeCandidateBlob": "5efa6768995d93ddb2c9c02d1f3bb01b098176b0",
+      "afterWorktreeBlob": "5efa6768995d93ddb2c9c02d1f3bb01b098176b0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientRosterSort.test.ts",
+      "beforeCandidateBlob": "502792235a89aad5f6372afcc0e9ff925b4854e8",
+      "afterWorktreeBlob": "502792235a89aad5f6372afcc0e9ff925b4854e8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientTargetHash.test.ts",
+      "beforeCandidateBlob": "1fd9914f8aa8d635e00ade78e53b394c49d2942c",
+      "afterWorktreeBlob": "1fd9914f8aa8d635e00ade78e53b394c49d2942c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientTargetResolver.test.ts",
+      "beforeCandidateBlob": "d0b2d34f4e1a2ca9d7e5b0ac19042e7f2fc3184c",
+      "afterWorktreeBlob": "d0b2d34f4e1a2ca9d7e5b0ac19042e7f2fc3184c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientTherapyCalendar.test.ts",
+      "beforeCandidateBlob": "5b1b5f7e0b1736af4ce61691274b16ebe6e3fe18",
+      "afterWorktreeBlob": "5b1b5f7e0b1736af4ce61691274b16ebe6e3fe18",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientVitalsOverview.test.ts",
+      "beforeCandidateBlob": "993a4aed8fb33771564225d763a96cf0261d42de",
+      "afterWorktreeBlob": "993a4aed8fb33771564225d763a96cf0261d42de",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/presaInCarico.test.ts",
+      "beforeCandidateBlob": "aac30b10e6b492cf8bd88dbfe997f8f76e89af18",
+      "afterWorktreeBlob": "aac30b10e6b492cf8bd88dbfe997f8f76e89af18",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomAssignmentModel.test.ts",
+      "beforeCandidateBlob": "3997fda06521da3bcc0d0a169f4e5fd3c1947b21",
+      "afterWorktreeBlob": "3997fda06521da3bcc0d0a169f4e5fd3c1947b21",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+      "beforeCandidateBlob": "89e8fbf538488122c27d9a01cd72766d87947d5d",
+      "afterWorktreeBlob": "89e8fbf538488122c27d9a01cd72766d87947d5d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts",
+      "beforeCandidateBlob": "5ec6b4eead26708deab7984620274057aa81f99b",
+      "afterWorktreeBlob": "5ec6b4eead26708deab7984620274057aa81f99b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrder.fixtures.ts",
+      "beforeCandidateBlob": "954af91259cc80e523144798c1f955e470d83424",
+      "afterWorktreeBlob": "954af91259cc80e523144798c1f955e470d83424",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrderController.test.ts",
+      "beforeCandidateBlob": "9b153340041bb2d8df80b69bdd927a3ba9b0cbef",
+      "afterWorktreeBlob": "9b153340041bb2d8df80b69bdd927a3ba9b0cbef",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/rosterOrderPages.test.ts",
+      "beforeCandidateBlob": "9ff1c1258acc4cb1fa3a0839bc844367f0d04f2f",
+      "afterWorktreeBlob": "9ff1c1258acc4cb1fa3a0839bc844367f0d04f2f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/sessionCache.test.ts",
+      "beforeCandidateBlob": "f815126cccb8dc9743853d200ca26dcee2cc9d6c",
+      "afterWorktreeBlob": "f815126cccb8dc9743853d200ca26dcee2cc9d6c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/submissionKey.test.ts",
+      "beforeCandidateBlob": "cd990635abb00a4d8c91872337679e2eeb51dec2",
+      "afterWorktreeBlob": "cd990635abb00a4d8c91872337679e2eeb51dec2",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tabletScale.test.ts",
+      "beforeCandidateBlob": "91e722c4520d8da4f615dc87c30190a12f081bb8",
+      "afterWorktreeBlob": "91e722c4520d8da4f615dc87c30190a12f081bb8",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+      "beforeCandidateBlob": "5044b7394457e5cf6859087501c8b797537c9a9f",
+      "afterWorktreeBlob": "5044b7394457e5cf6859087501c8b797537c9a9f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+      "beforeCandidateBlob": "29fb82953509ed4d8c79c571bc252dbaf890d6fc",
+      "afterWorktreeBlob": "29fb82953509ed4d8c79c571bc252dbaf890d6fc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "beforeCandidateBlob": "61b0a74c3ac486fb0236053fb0351bbadd58f9f7",
+      "afterWorktreeBlob": "61b0a74c3ac486fb0236053fb0351bbadd58f9f7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+      "beforeCandidateBlob": "d818c377e165b38258f0fb22a37506d237316fe5",
+      "afterWorktreeBlob": "d818c377e165b38258f0fb22a37506d237316fe5",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyView.test.ts",
+      "beforeCandidateBlob": "68b2a15827c8ea8fac78af968bedfa22ff556cb9",
+      "afterWorktreeBlob": "68b2a15827c8ea8fac78af968bedfa22ff556cb9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyW2InPlace.test.ts",
+      "beforeCandidateBlob": "31a5c83c762b1c4e3d03e7d7df7392a0db05003d",
+      "afterWorktreeBlob": "31a5c83c762b1c4e3d03e7d7df7392a0db05003d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyWeek.test.ts",
+      "beforeCandidateBlob": "e5dfadf49e295eb353237b81a9bfa58f8ad0ff5f",
+      "afterWorktreeBlob": "e5dfadf49e295eb353237b81a9bfa58f8ad0ff5f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinetti.fixtures.ts",
+      "beforeCandidateBlob": "c1eda6590935db02f5a8f4a5f20cb97c4b9878bf",
+      "afterWorktreeBlob": "c1eda6590935db02f5a8f4a5f20cb97c4b9878bf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinettiDefinition.test.ts",
+      "beforeCandidateBlob": "de5672d6aa484f2e06aba416b422b15429962a49",
+      "afterWorktreeBlob": "de5672d6aa484f2e06aba416b422b15429962a49",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/tinettiWorkflow.test.ts",
+      "beforeCandidateBlob": "afe00570be150e17d4b819f3c170ba1945a55338",
+      "afterWorktreeBlob": "afe00570be150e17d4b819f3c170ba1945a55338",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/transfers.fixtures.ts",
+      "beforeCandidateBlob": "3d1fad4a871fbe338bb22c7ee71a75d2e218497b",
+      "afterWorktreeBlob": "3d1fad4a871fbe338bb22c7ee71a75d2e218497b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/transfersClient.test.ts",
+      "beforeCandidateBlob": "e8b13fdf3755b0024d8095b81da01daf38fba8a3",
+      "afterWorktreeBlob": "e8b13fdf3755b0024d8095b81da01daf38fba8a3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/transfersDefinition.test.ts",
+      "beforeCandidateBlob": "d0c4ace173446e3cf35c5284ae082ee3d355eb15",
+      "afterWorktreeBlob": "d0c4ace173446e3cf35c5284ae082ee3d355eb15",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/transfersDraftStore.test.ts",
+      "beforeCandidateBlob": "9a3d3378c3200da9928b5caeba55f8b1dd1d239f",
+      "afterWorktreeBlob": "9a3d3378c3200da9928b5caeba55f8b1dd1d239f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/turnoPatients.test.ts",
+      "beforeCandidateBlob": "7865af1255ebc022bb9ac332bdd5e64b494be1f7",
+      "afterWorktreeBlob": "7865af1255ebc022bb9ac332bdd5e64b494be1f7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/urgencyModel.test.ts",
+      "beforeCandidateBlob": "255170f17aac1e9aa6f77b605c291fa1c395b3be",
+      "afterWorktreeBlob": "255170f17aac1e9aa6f77b605c291fa1c395b3be",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/wardNavPatientSection.test.ts",
+      "beforeCandidateBlob": "0b48600a94846e6c940ed63df5ef5b2360bc492d",
+      "afterWorktreeBlob": "0b48600a94846e6c940ed63df5ef5b2360bc492d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/adessoQueue.ts",
+      "beforeCandidateBlob": "231bd8b11d6b71d5a1449a4296bff26b8ae5852d",
+      "afterWorktreeBlob": "231bd8b11d6b71d5a1449a4296bff26b8ae5852d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/allergyStatusModel.ts",
+      "beforeCandidateBlob": "8786e05008641260f41ab983a592b7f6f46cc093",
+      "afterWorktreeBlob": "8786e05008641260f41ab983a592b7f6f46cc093",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/appointmentRange.ts",
+      "beforeCandidateBlob": "599e19cfeabae2a6a1c13a78777702a115a78288",
+      "afterWorktreeBlob": "599e19cfeabae2a6a1c13a78777702a115a78288",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/archivePrint.ts",
+      "beforeCandidateBlob": "325b92641e49cef92962e144ece4e163980378d6",
+      "afterWorktreeBlob": "325b92641e49cef92962e144ece4e163980378d6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/archivePrintFrame.ts",
+      "beforeCandidateBlob": "3a637addc0235ff938087459cd174a22690d1c6c",
+      "afterWorktreeBlob": "3a637addc0235ff938087459cd174a22690d1c6c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentAttestations.ts",
+      "beforeCandidateBlob": "686cf5e7bbe7c0936c3e5500401650833a7d3a9a",
+      "afterWorktreeBlob": "686cf5e7bbe7c0936c3e5500401650833a7d3a9a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentCatalog.ts",
+      "beforeCandidateBlob": "7ae3fbe47df0ef114f60528c090a8346b64f8d66",
+      "afterWorktreeBlob": "7ae3fbe47df0ef114f60528c090a8346b64f8d66",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentCatalogState.ts",
+      "beforeCandidateBlob": "24f23a64a575fc2ef157182c8977444c4b201e19",
+      "afterWorktreeBlob": "24f23a64a575fc2ef157182c8977444c4b201e19",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentClient.ts",
+      "beforeCandidateBlob": "b3eeddbb3cd03af06fc377760d8ab298aa040491",
+      "afterWorktreeBlob": "b3eeddbb3cd03af06fc377760d8ab298aa040491",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDefinition.ts",
+      "beforeCandidateBlob": "10e5c014a4151ad73f0b1c642d89a453248bd905",
+      "afterWorktreeBlob": "10e5c014a4151ad73f0b1c642d89a453248bd905",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentDraftStore.ts",
+      "beforeCandidateBlob": "75cfaa2b91a7471926d105193ca73644bf81b243",
+      "afterWorktreeBlob": "75cfaa2b91a7471926d105193ca73644bf81b243",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentEntry.ts",
+      "beforeCandidateBlob": "acbaa51482397a4c68c6b141386ad68e33aad170",
+      "afterWorktreeBlob": "acbaa51482397a4c68c6b141386ad68e33aad170",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTime.ts",
+      "beforeCandidateBlob": "0c9fc6a4f31c38ce9ffdff9b8a788a326fd97506",
+      "afterWorktreeBlob": "0c9fc6a4f31c38ce9ffdff9b8a788a326fd97506",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentTypes.ts",
+      "beforeCandidateBlob": "7a146deeeae9eb41c76cdfe45ebf7ede990b8742",
+      "afterWorktreeBlob": "7a146deeeae9eb41c76cdfe45ebf7ede990b8742",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/assessmentValidation.ts",
+      "beforeCandidateBlob": "05f045d2faf9969d0a990a65885e88249d4fced3",
+      "afterWorktreeBlob": "05f045d2faf9969d0a990a65885e88249d4fced3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Definition.ts",
+      "beforeCandidateBlob": "f93d37f835ead7558cb49482ff66db9d016ca4ae",
+      "afterWorktreeBlob": "f93d37f835ead7558cb49482ff66db9d016ca4ae",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Types.ts",
+      "beforeCandidateBlob": "28a2bef519d80aee04d465f5d82d0cac2dca1239",
+      "afterWorktreeBlob": "28a2bef519d80aee04d465f5d82d0cac2dca1239",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/gds15Validation.ts",
+      "beforeCandidateBlob": "9523a34e511cd1bda95df4f613a3c818bbabbe08",
+      "afterWorktreeBlob": "9523a34e511cd1bda95df4f613a3c818bbabbe08",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaDefinition.ts",
+      "beforeCandidateBlob": "7d46a723dc818a9f3ab144e3097938d70b5104d7",
+      "afterWorktreeBlob": "7d46a723dc818a9f3ab144e3097938d70b5104d7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaInputValidation.ts",
+      "beforeCandidateBlob": "9ccde12660865c8f12013fa2918740d0c518df24",
+      "afterWorktreeBlob": "9ccde12660865c8f12013fa2918740d0c518df24",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaItems.ts",
+      "beforeCandidateBlob": "c4556f1fd068ffb1ccd8d656262a7f4e49d6439c",
+      "afterWorktreeBlob": "c4556f1fd068ffb1ccd8d656262a7f4e49d6439c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaLocalInputs.ts",
+      "beforeCandidateBlob": "f50c01f1869203707ada31e22cc2cb373cfa6fb3",
+      "afterWorktreeBlob": "f50c01f1869203707ada31e22cc2cb373cfa6fb3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaTime.ts",
+      "beforeCandidateBlob": "4cd638b10568a73948e676c2825e6e2ac4bb3461",
+      "afterWorktreeBlob": "4cd638b10568a73948e676c2825e6e2ac4bb3461",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaTypes.ts",
+      "beforeCandidateBlob": "82188e4d2373e62b9e87ea4335f06563ab298aaa",
+      "afterWorktreeBlob": "82188e4d2373e62b9e87ea4335f06563ab298aaa",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/mnaValidation.ts",
+      "beforeCandidateBlob": "9fd55c4f250e8693b6ee8c5bfc331cd0e574ed3f",
+      "afterWorktreeBlob": "9fd55c4f250e8693b6ee8c5bfc331cd0e574ed3f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/nrsLegacy.ts",
+      "beforeCandidateBlob": "eea8eb7df4cef362e4ba3dfbe93d4965667859b9",
+      "afterWorktreeBlob": "eea8eb7df4cef362e4ba3dfbe93d4965667859b9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/painadDefinition.ts",
+      "beforeCandidateBlob": "32b0688e6e1c7ca879774212d423dac32e79e706",
+      "afterWorktreeBlob": "32b0688e6e1c7ca879774212d423dac32e79e706",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/paper/definitions.ts",
+      "beforeCandidateBlob": "4d43f70caf4076e99b2cd99bcb2fddbdc16544bc",
+      "afterWorktreeBlob": "4d43f70caf4076e99b2cd99bcb2fddbdc16544bc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/paper/engine.ts",
+      "beforeCandidateBlob": "e11cb545e8c91621359afbfb92569fb487844d03",
+      "afterWorktreeBlob": "e11cb545e8c91621359afbfb92569fb487844d03",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/paper/paperLayout.ts",
+      "beforeCandidateBlob": "d5a14e612b8ecdb3c5847188ce224bf40108e067",
+      "afterWorktreeBlob": "d5a14e612b8ecdb3c5847188ce224bf40108e067",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/paper/paperTypes.ts",
+      "beforeCandidateBlob": "9d0c5c48a4b25f9066995978b76ae025ed79c936",
+      "afterWorktreeBlob": "9d0c5c48a4b25f9066995978b76ae025ed79c936",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/paper/paperValidation.ts",
+      "beforeCandidateBlob": "b867269d091be89a682aba56944f035679afc35b",
+      "afterWorktreeBlob": "b867269d091be89a682aba56944f035679afc35b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiDefinition.ts",
+      "beforeCandidateBlob": "05f4fcf130ea08847eb0c1d104d5240c471a5c3d",
+      "afterWorktreeBlob": "05f4fcf130ea08847eb0c1d104d5240c471a5c3d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiItems.ts",
+      "beforeCandidateBlob": "594228ef1b593756feb82fa6365b9d30daf34f18",
+      "afterWorktreeBlob": "594228ef1b593756feb82fa6365b9d30daf34f18",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiLegacy.ts",
+      "beforeCandidateBlob": "62c49712777a9c06177487b89d513789e36c1bd1",
+      "afterWorktreeBlob": "62c49712777a9c06177487b89d513789e36c1bd1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiTypes.ts",
+      "beforeCandidateBlob": "2b947e2917c25121d3b1eb8721db494ecaa6047c",
+      "afterWorktreeBlob": "2b947e2917c25121d3b1eb8721db494ecaa6047c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/tinettiValidation.ts",
+      "beforeCandidateBlob": "81c59f1d510f1f5066097010a188296ef9addcc0",
+      "afterWorktreeBlob": "81c59f1d510f1f5066097010a188296ef9addcc0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/transfersDefinition.ts",
+      "beforeCandidateBlob": "4cb450fb9650e762841ac4f8885e040dcc1e9e47",
+      "afterWorktreeBlob": "4cb450fb9650e762841ac4f8885e040dcc1e9e47",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/transfersTypes.ts",
+      "beforeCandidateBlob": "e954ef06f5858d1388b53ae14b9e054e82edcf3e",
+      "afterWorktreeBlob": "e954ef06f5858d1388b53ae14b9e054e82edcf3e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/assessments/useAssessmentExitGuard.ts",
+      "beforeCandidateBlob": "35d10e960f33b25e4464e9a489b596ea5354d859",
+      "afterWorktreeBlob": "35d10e960f33b25e4464e9a489b596ea5354d859",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/authzPolicyApi.ts",
+      "beforeCandidateBlob": "f396f865514a03cc39e58ff146eae938205f23da",
+      "afterWorktreeBlob": "f396f865514a03cc39e58ff146eae938205f23da",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/cachedFetch.ts",
+      "beforeCandidateBlob": "b8787e35c6a2ae155f5d54c374247e86395e4ca3",
+      "afterWorktreeBlob": "b8787e35c6a2ae155f5d54c374247e86395e4ca3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/cameraAcquisition.ts",
+      "beforeCandidateBlob": "ace4a22ed2abba2603ed113800d5ad9b6619f81d",
+      "afterWorktreeBlob": "ace4a22ed2abba2603ed113800d5ad9b6619f81d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/capabilities.ts",
+      "beforeCandidateBlob": "29e48b8ee34fa5e715cfe5db8711cfa6c273d274",
+      "afterWorktreeBlob": "29e48b8ee34fa5e715cfe5db8711cfa6c273d274",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/cartellaWriteQueue.ts",
+      "beforeCandidateBlob": "ef5cf2cbc2ed181a29270168ff44a1e153854983",
+      "afterWorktreeBlob": "ef5cf2cbc2ed181a29270168ff44a1e153854983",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/clinicalAttachments.ts",
+      "beforeCandidateBlob": "931f644d387ed6c3b2e4bdc1a1fed115c029051a",
+      "afterWorktreeBlob": "931f644d387ed6c3b2e4bdc1a1fed115c029051a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/clinicalHistory.ts",
+      "beforeCandidateBlob": "bef0b0e2daff4a1fe8cb3e917007b33d3e709608",
+      "afterWorktreeBlob": "bef0b0e2daff4a1fe8cb3e917007b33d3e709608",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/codiceFiscale.ts",
+      "beforeCandidateBlob": "93c9fa19a388c160ddcf26d371f8a65fe443409c",
+      "afterWorktreeBlob": "93c9fa19a388c160ddcf26d371f8a65fe443409c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/consegnaAdvance.ts",
+      "beforeCandidateBlob": "5a196802b22294e22067ccf8661dd205c5dbad5f",
+      "afterWorktreeBlob": "5a196802b22294e22067ccf8661dd205c5dbad5f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/consegnaCreation.ts",
+      "beforeCandidateBlob": "77be6d4cf38a40720a0b1402a27469c110c1ba7f",
+      "afterWorktreeBlob": "77be6d4cf38a40720a0b1402a27469c110c1ba7f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/consegnaDrafts.ts",
+      "beforeCandidateBlob": "39dbe41ead820e83de91b76b2a30ba451d6ebecb",
+      "afterWorktreeBlob": "39dbe41ead820e83de91b76b2a30ba451d6ebecb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/consegnaUrgency.ts",
+      "beforeCandidateBlob": "49fb43860d07657a59cab02b8dcc2d1732734e6a",
+      "afterWorktreeBlob": "49fb43860d07657a59cab02b8dcc2d1732734e6a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/consegneFeed.ts",
+      "beforeCandidateBlob": "96b0f33b42682cc8a0b94bafb46966a9c8bd1c61",
+      "afterWorktreeBlob": "96b0f33b42682cc8a0b94bafb46966a9c8bd1c61",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/consegneNavigation.ts",
+      "beforeCandidateBlob": "ce103c3970547052f7a2e467897ebece94a2f498",
+      "afterWorktreeBlob": "ce103c3970547052f7a2e467897ebece94a2f498",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/consegnePatientSummary.ts",
+      "beforeCandidateBlob": "95bca1ffe7eeeeddc626d92016911ef296c40eda",
+      "afterWorktreeBlob": "95bca1ffe7eeeeddc626d92016911ef296c40eda",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/corePriority.ts",
+      "beforeCandidateBlob": "2903d6c9cb0982f0be5b97fe7e2d4128f47d948e",
+      "afterWorktreeBlob": "2903d6c9cb0982f0be5b97fe7e2d4128f47d948e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/dashboardTherapies.ts",
+      "beforeCandidateBlob": "ec37b01aab29e80af6bbf6e5bdb9eacc634be7a4",
+      "afterWorktreeBlob": "ec37b01aab29e80af6bbf6e5bdb9eacc634be7a4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/dashboardTherapyRead.ts",
+      "beforeCandidateBlob": "93568e0a2886c6ede6e6d98a255dbab1e2b73d1c",
+      "afterWorktreeBlob": "93568e0a2886c6ede6e6d98a255dbab1e2b73d1c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/diaryPages.ts",
+      "beforeCandidateBlob": "64d26a898cc9451d58ec808175867067eeee9249",
+      "afterWorktreeBlob": "64d26a898cc9451d58ec808175867067eeee9249",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/documentScan.ts",
+      "beforeCandidateBlob": "057298de6d45d6baa73ce993d2bb3584d62702c3",
+      "afterWorktreeBlob": "057298de6d45d6baa73ce993d2bb3584d62702c3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/entraAuth.ts",
+      "beforeCandidateBlob": "5f0193467274df9b9e911bb0095b4469cac64756",
+      "afterWorktreeBlob": "5f0193467274df9b9e911bb0095b4469cac64756",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/facilityTime.ts",
+      "beforeCandidateBlob": "8e01055979e2451679dc86a572e7e5bc375c4b3d",
+      "afterWorktreeBlob": "8e01055979e2451679dc86a572e7e5bc375c4b3d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/handoverOverviewResponse.ts",
+      "beforeCandidateBlob": "5bdbfd399de6c4f40a0306ef364729774c51767f",
+      "afterWorktreeBlob": "5bdbfd399de6c4f40a0306ef364729774c51767f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/handoverPreview.ts",
+      "beforeCandidateBlob": "8b56bde16e739babb205f63ba68c970f49140b8c",
+      "afterWorktreeBlob": "8b56bde16e739babb205f63ba68c970f49140b8c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/importFailure.ts",
+      "beforeCandidateBlob": "58ff1a80dd4dc7720eabde12310c30669514fdf0",
+      "afterWorktreeBlob": "58ff1a80dd4dc7720eabde12310c30669514fdf0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/importPhotoPreviews.ts",
+      "beforeCandidateBlob": "1d33bb9f02a864d9b6567a92226d97d4512f3122",
+      "afterWorktreeBlob": "1d33bb9f02a864d9b6567a92226d97d4512f3122",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/intakeContacts.ts",
+      "beforeCandidateBlob": "057968bbd48087ba2d3852878fc5a83b044aac08",
+      "afterWorktreeBlob": "057968bbd48087ba2d3852878fc5a83b044aac08",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/intakeDemographics.ts",
+      "beforeCandidateBlob": "6b6f3c3a78b47865b13c40a1bdba5a0e11ed9b64",
+      "afterWorktreeBlob": "6b6f3c3a78b47865b13c40a1bdba5a0e11ed9b64",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/intakeLandingTabs.ts",
+      "beforeCandidateBlob": "6e5d7725159327a1bbc7783f57f84b21567b8e87",
+      "afterWorktreeBlob": "6e5d7725159327a1bbc7783f57f84b21567b8e87",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/legacyAnamnesis.ts",
+      "beforeCandidateBlob": "38b5e0fe60f16500d9ca7b439699814bfa04cb60",
+      "afterWorktreeBlob": "38b5e0fe60f16500d9ca7b439699814bfa04cb60",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/loadPatientParameterTrends.ts",
+      "beforeCandidateBlob": "2ab8609abafa59ed6c58548623b345a9323fe5ea",
+      "afterWorktreeBlob": "2ab8609abafa59ed6c58548623b345a9323fe5ea",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/medicationAdministrationPages.ts",
+      "beforeCandidateBlob": "d26d035bfeca78b3a6c448e88d6dd88fc948827f",
+      "afterWorktreeBlob": "d26d035bfeca78b3a6c448e88d6dd88fc948827f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/mergeMedicazioni.ts",
+      "beforeCandidateBlob": "3f457330e627386755088682c0e56c10d541e958",
+      "afterWorktreeBlob": "3f457330e627386755088682c0e56c10d541e958",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/navHistory.ts",
+      "beforeCandidateBlob": "27a3fa41c2554caabf2a25deb06345fe4f726040",
+      "afterWorktreeBlob": "27a3fa41c2554caabf2a25deb06345fe4f726040",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/news2.ts",
+      "beforeCandidateBlob": "19909fc9c4726a13cce0671e0be2d7b10fb3ba37",
+      "afterWorktreeBlob": "19909fc9c4726a13cce0671e0be2d7b10fb3ba37",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/news2History.ts",
+      "beforeCandidateBlob": "264b8841b27f7af219254bb3d25c64a0b56118e0",
+      "afterWorktreeBlob": "264b8841b27f7af219254bb3d25c64a0b56118e0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/notesMailbox.ts",
+      "beforeCandidateBlob": "cf8c889b33d2ffe74fec083c1c419e0672c352df",
+      "afterWorktreeBlob": "cf8c889b33d2ffe74fec083c1c419e0672c352df",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/operatorDirectoryPage.ts",
+      "beforeCandidateBlob": "ac0a9c4aa4c604549c41c9cc43a6a819512fd127",
+      "afterWorktreeBlob": "ac0a9c4aa4c604549c41c9cc43a6a819512fd127",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/operatorSession.ts",
+      "beforeCandidateBlob": "fedb70af5810406f0f1337eaca3ad1519a275f38",
+      "afterWorktreeBlob": "fedb70af5810406f0f1337eaca3ad1519a275f38",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/parameterEntryDrafts.ts",
+      "beforeCandidateBlob": "963805beee5b145e79521b5b9e78319b20c2f560",
+      "afterWorktreeBlob": "963805beee5b145e79521b5b9e78319b20c2f560",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/parameterEntrySummary.ts",
+      "beforeCandidateBlob": "ae631fcf9854a355810c5f2218d552b1530cfa81",
+      "afterWorktreeBlob": "ae631fcf9854a355810c5f2218d552b1530cfa81",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/parameterPad.ts",
+      "beforeCandidateBlob": "6aea42e987adf2e4e390bca04817c45152ac8fe4",
+      "afterWorktreeBlob": "6aea42e987adf2e4e390bca04817c45152ac8fe4",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientComboboxModel.ts",
+      "beforeCandidateBlob": "e7433942ccedfd192ca37513c01e71076ac4a011",
+      "afterWorktreeBlob": "e7433942ccedfd192ca37513c01e71076ac4a011",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientDemographics.ts",
+      "beforeCandidateBlob": "eb43087ef78b07c58dd74839519bfbeca327807f",
+      "afterWorktreeBlob": "eb43087ef78b07c58dd74839519bfbeca327807f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientDetailPrefetch.ts",
+      "beforeCandidateBlob": "8948d91a67d8d907c761aaac770ee32bdc7fdfb7",
+      "afterWorktreeBlob": "8948d91a67d8d907c761aaac770ee32bdc7fdfb7",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "beforeCandidateBlob": "6eb164674870189606e7f897aa1159bcf22231cf",
+      "afterWorktreeBlob": "6eb164674870189606e7f897aa1159bcf22231cf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "beforeCandidateBlob": "adaf8ffc9ae1762bc1db67657ea7ee3c25aade56",
+      "afterWorktreeBlob": "adaf8ffc9ae1762bc1db67657ea7ee3c25aade56",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentContent.ts",
+      "beforeCandidateBlob": "ef44cce4327dc83dd6a4e81a75615c5936dd5d3a",
+      "afterWorktreeBlob": "ef44cce4327dc83dd6a4e81a75615c5936dd5d3a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentsPage.ts",
+      "beforeCandidateBlob": "6f107ff6dc4855784f6e89d69c650516d3769ae3",
+      "afterWorktreeBlob": "6f107ff6dc4855784f6e89d69c650516d3769ae3",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientIdentity.ts",
+      "beforeCandidateBlob": "bbc90f70cb0067c2ad6ebe86bf43d76c34a6080e",
+      "afterWorktreeBlob": "bbc90f70cb0067c2ad6ebe86bf43d76c34a6080e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientIntakeReview.ts",
+      "beforeCandidateBlob": "38c2bb93305b871cf0c5251b5fc949813ead2c73",
+      "afterWorktreeBlob": "38c2bb93305b871cf0c5251b5fc949813ead2c73",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientListView.ts",
+      "beforeCandidateBlob": "ee01e70b283ec2e268f02c342932975261dd008c",
+      "afterWorktreeBlob": "ee01e70b283ec2e268f02c342932975261dd008c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientPage.ts",
+      "beforeCandidateBlob": "d86d103b161c1d880023f8954e61f23231508fc1",
+      "afterWorktreeBlob": "d86d103b161c1d880023f8954e61f23231508fc1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientParameterReadings.ts",
+      "beforeCandidateBlob": "20382c49e9953e4243f00ad436e5add285f5d2f0",
+      "afterWorktreeBlob": "20382c49e9953e4243f00ad436e5add285f5d2f0",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientParameterTrends.ts",
+      "beforeCandidateBlob": "0839ca1829342e5c7beec40bc181b88cc2dde6d6",
+      "afterWorktreeBlob": "0839ca1829342e5c7beec40bc181b88cc2dde6d6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientParameterWorkspace.ts",
+      "beforeCandidateBlob": "426341ea2daf8be4be22d67f02dc003930b6085a",
+      "afterWorktreeBlob": "426341ea2daf8be4be22d67f02dc003930b6085a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPage.ts",
+      "beforeCandidateBlob": "fefcb66af52bc84d18bb76c1f5333ed6f3b5efdd",
+      "afterWorktreeBlob": "fefcb66af52bc84d18bb76c1f5333ed6f3b5efdd",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPrefetch.ts",
+      "beforeCandidateBlob": "a8360651bfe7312cd74f2eb6462dde3f69d60200",
+      "afterWorktreeBlob": "a8360651bfe7312cd74f2eb6462dde3f69d60200",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientPhone.ts",
+      "beforeCandidateBlob": "3067d8ccb84ab252a45b6d2731eecd4a9643a0e1",
+      "afterWorktreeBlob": "3067d8ccb84ab252a45b6d2731eecd4a9643a0e1",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientRosterSort.ts",
+      "beforeCandidateBlob": "12a682b50f3cc70648f8f193129c94225d998d4e",
+      "afterWorktreeBlob": "12a682b50f3cc70648f8f193129c94225d998d4e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientSort.ts",
+      "beforeCandidateBlob": "606fa53c098a4309da75da292cae913b5e529a2c",
+      "afterWorktreeBlob": "606fa53c098a4309da75da292cae913b5e529a2c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientTabSnapshots.ts",
+      "beforeCandidateBlob": "580301f285f637f551f8d9715bb5325b44a8f4a6",
+      "afterWorktreeBlob": "580301f285f637f551f8d9715bb5325b44a8f4a6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientTarget.ts",
+      "beforeCandidateBlob": "7ca84129e97f8e4e1673ebbc2db1eb31d999f050",
+      "afterWorktreeBlob": "7ca84129e97f8e4e1673ebbc2db1eb31d999f050",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientTargetHash.ts",
+      "beforeCandidateBlob": "51a470f19861a7c171bc1d2965ffda60a6726ebf",
+      "afterWorktreeBlob": "51a470f19861a7c171bc1d2965ffda60a6726ebf",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientTargetResolver.ts",
+      "beforeCandidateBlob": "b5b3d850c68f01bfa9fd5e6817993968443c01cc",
+      "afterWorktreeBlob": "b5b3d850c68f01bfa9fd5e6817993968443c01cc",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientTherapyCalendar.ts",
+      "beforeCandidateBlob": "f8fe826da0538ba69c82c5847ddaf8f343284a3c",
+      "afterWorktreeBlob": "f8fe826da0538ba69c82c5847ddaf8f343284a3c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientTherapyCalendarRead.ts",
+      "beforeCandidateBlob": "0b96b43fc7e394395c9669d01806cb1c3e7e1a29",
+      "afterWorktreeBlob": "0b96b43fc7e394395c9669d01806cb1c3e7e1a29",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/patientVitalsOverview.ts",
+      "beforeCandidateBlob": "9f1cbbebecb3c5df04b82f0ea743dbd24bffaa67",
+      "afterWorktreeBlob": "9f1cbbebecb3c5df04b82f0ea743dbd24bffaa67",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/presaInCarico.ts",
+      "beforeCandidateBlob": "40fe50df46900791874a71c56beccf886b155f8e",
+      "afterWorktreeBlob": "40fe50df46900791874a71c56beccf886b155f8e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/renderArchivePrint.ts",
+      "beforeCandidateBlob": "594afbd44cb8031c80f2a169391b683d450f65d9",
+      "afterWorktreeBlob": "594afbd44cb8031c80f2a169391b683d450f65d9",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/roomAssignmentModel.ts",
+      "beforeCandidateBlob": "2e320fa8017be44f0df75746f56e605613158eda",
+      "afterWorktreeBlob": "2e320fa8017be44f0df75746f56e605613158eda",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/rosterOrder.ts",
+      "beforeCandidateBlob": "d6e0a102f643230a39850225ac5ea70c7d0c4290",
+      "afterWorktreeBlob": "d6e0a102f643230a39850225ac5ea70c7d0c4290",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/rosterOrderController.ts",
+      "beforeCandidateBlob": "9f63e8f50a1ce1af5bd9ce743ea799a2af7ec625",
+      "afterWorktreeBlob": "9f63e8f50a1ce1af5bd9ce743ea799a2af7ec625",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/sessionCache.ts",
+      "beforeCandidateBlob": "12fa6ea4438b14148da3c38b03d7473c7da50939",
+      "afterWorktreeBlob": "12fa6ea4438b14148da3c38b03d7473c7da50939",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/submissionKey.ts",
+      "beforeCandidateBlob": "9fd01519282d2b293ca6c1b309f436ae6f5c0493",
+      "afterWorktreeBlob": "9fd01519282d2b293ca6c1b309f436ae6f5c0493",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/tabletScale.ts",
+      "beforeCandidateBlob": "01dee2f5db2be469b192b23265fd3ded450c483c",
+      "afterWorktreeBlob": "01dee2f5db2be469b192b23265fd3ded450c483c",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapyAdministrationWrite.ts",
+      "beforeCandidateBlob": "c958b6f91f04e7c16e6c731792c459dfe4be2310",
+      "afterWorktreeBlob": "c958b6f91f04e7c16e6c731792c459dfe4be2310",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapyDoseStatus.ts",
+      "beforeCandidateBlob": "7fb71bc4d0950c6d8a21a8caf9dc3827c319f004",
+      "afterWorktreeBlob": "7fb71bc4d0950c6d8a21a8caf9dc3827c319f004",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapyGiro.ts",
+      "beforeCandidateBlob": "f6eca75f7778c4e4fefe500f1e4c2c9764457331",
+      "afterWorktreeBlob": "f6eca75f7778c4e4fefe500f1e4c2c9764457331",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapyPages.ts",
+      "beforeCandidateBlob": "9a8e5f989f2328d5fd843a3674f2f15c554091ce",
+      "afterWorktreeBlob": "9a8e5f989f2328d5fd843a3674f2f15c554091ce",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapyPermissions.ts",
+      "beforeCandidateBlob": "f9b9ab2cc8316aae56c99d7615a3e711fc11929d",
+      "afterWorktreeBlob": "f9b9ab2cc8316aae56c99d7615a3e711fc11929d",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "beforeCandidateBlob": "7d0ef08dbf2e6931c878ef0b2b73d5ca85b7ec2a",
+      "afterWorktreeBlob": "7d0ef08dbf2e6931c878ef0b2b73d5ca85b7ec2a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapyView.ts",
+      "beforeCandidateBlob": "caef57b8dcf5d3ae0227a526846b229822e7b729",
+      "afterWorktreeBlob": "caef57b8dcf5d3ae0227a526846b229822e7b729",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/therapyWeek.ts",
+      "beforeCandidateBlob": "e49b733bb46ab8cbbcb81a66bec41ceafca3945e",
+      "afterWorktreeBlob": "e49b733bb46ab8cbbcb81a66bec41ceafca3945e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/turno.ts",
+      "beforeCandidateBlob": "b3ba89522c2f01f16a0d736d75d0acda9d65f35f",
+      "afterWorktreeBlob": "b3ba89522c2f01f16a0d736d75d0acda9d65f35f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/turnoAppointments.ts",
+      "beforeCandidateBlob": "84963022b3dacfc3ca93fc3b1f62d613603d1cb6",
+      "afterWorktreeBlob": "84963022b3dacfc3ca93fc3b1f62d613603d1cb6",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/turnoPatients.ts",
+      "beforeCandidateBlob": "c9c4f6df5ef16e6c69c6cbe5f05a9c8056e2a003",
+      "afterWorktreeBlob": "c9c4f6df5ef16e6c69c6cbe5f05a9c8056e2a003",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/urgency.ts",
+      "beforeCandidateBlob": "cbaeebc9dc8cf1199643ef5f85ce19fe2848d05a",
+      "afterWorktreeBlob": "cbaeebc9dc8cf1199643ef5f85ce19fe2848d05a",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/useConsegnaDraft.ts",
+      "beforeCandidateBlob": "1f12f664618efeec26086fadbbabbf4dadaa1054",
+      "afterWorktreeBlob": "1f12f664618efeec26086fadbbabbf4dadaa1054",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/useConsegneExitGuard.ts",
+      "beforeCandidateBlob": "9f7e03a0d87b360dc17d83c56aa14ff096b3e996",
+      "afterWorktreeBlob": "9f7e03a0d87b360dc17d83c56aa14ff096b3e996",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/useDocumentArchive.ts",
+      "beforeCandidateBlob": "48605a7f401ccafe8df36f3af322a9656518447e",
+      "afterWorktreeBlob": "48605a7f401ccafe8df36f3af322a9656518447e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/useParameterEntryDraft.ts",
+      "beforeCandidateBlob": "5886f50785c23604a49d23a203b07f1fd9df703b",
+      "afterWorktreeBlob": "5886f50785c23604a49d23a203b07f1fd9df703b",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/usePatientDirectorySearch.ts",
+      "beforeCandidateBlob": "727737d67fa7851df302593b696856a0f5bdfaad",
+      "afterWorktreeBlob": "727737d67fa7851df302593b696856a0f5bdfaad",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/usePatientDocuments.ts",
+      "beforeCandidateBlob": "59d8dedaa9ad2635048b141668715282069b661e",
+      "afterWorktreeBlob": "59d8dedaa9ad2635048b141668715282069b661e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/lib/useRosterOrder.ts",
+      "beforeCandidateBlob": "9f501ac9c83c50fd56b2b5d922de653859acdc5f",
+      "afterWorktreeBlob": "9f501ac9c83c50fd56b2b5d922de653859acdc5f",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "beforeCandidateBlob": "5b186e605f7881a90f74d50412e117cbb4bc74fb",
+      "afterWorktreeBlob": "5b186e605f7881a90f74d50412e117cbb4bc74fb",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/mockData.ts",
+      "beforeCandidateBlob": "16809be4a4474fb9bcde548a9ce27e46ff5cbe2e",
+      "afterWorktreeBlob": "16809be4a4474fb9bcde548a9ce27e46ff5cbe2e",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/print-forms.css",
+      "beforeCandidateBlob": "5927034cea11a88e78f6078d8bb854e1b16bec92",
+      "afterWorktreeBlob": "5927034cea11a88e78f6078d8bb854e1b16bec92",
+      "matches": true
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "beforeCandidateBlob": "805799a8b66cf05bf9235c72df63ace3085f0f72",
+      "afterWorktreeBlob": "805799a8b66cf05bf9235c72df63ace3085f0f72",
+      "matches": true
+    },
+    {
+      "path": "frontend/tsconfig.app.json",
+      "beforeCandidateBlob": "fd0e76daeb73b9928d9e45ee6f378a4af8655cb2",
+      "afterWorktreeBlob": "fd0e76daeb73b9928d9e45ee6f378a4af8655cb2",
+      "matches": true
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "beforeCandidateBlob": "d32ff682003e0ff5d8a6e6bb3663d4c35a45b116",
+      "afterWorktreeBlob": "d32ff682003e0ff5d8a6e6bb3663d4c35a45b116",
+      "matches": true
+    },
+    {
+      "path": "frontend/tsconfig.node.json",
+      "beforeCandidateBlob": "d3c52ea64c6cd6bad118474410f5322f48e257a6",
+      "afterWorktreeBlob": "d3c52ea64c6cd6bad118474410f5322f48e257a6",
+      "matches": true
+    },
+    {
+      "path": "frontend/vercel.json",
+      "beforeCandidateBlob": "100b3c8ade6fbbde813c3ec4b7fea01b1e95ff73",
+      "afterWorktreeBlob": "100b3c8ade6fbbde813c3ec4b7fea01b1e95ff73",
+      "matches": true
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "beforeCandidateBlob": "51444b8e8cae44d1ad1331d472d80d2e2098c6a4",
+      "afterWorktreeBlob": "51444b8e8cae44d1ad1331d472d80d2e2098c6a4",
+      "matches": true
+    },
+    {
+      "path": "package-lock.json",
+      "beforeCandidateBlob": "3f9cbd93ae2b38d42ca257660d70815bedcc8b3a",
+      "afterWorktreeBlob": "3f9cbd93ae2b38d42ca257660d70815bedcc8b3a",
+      "matches": true
+    },
+    {
+      "path": "package.json",
+      "beforeCandidateBlob": "059755f142b9f0b859cb714a3338cb5203fd59f2",
+      "afterWorktreeBlob": "059755f142b9f0b859cb714a3338cb5203fd59f2",
+      "matches": true
+    },
+    {
+      "path": "scripts/stub-css-loader.mjs",
+      "beforeCandidateBlob": "e43d64c88f9a1084abe19fa532c659a778209f47",
+      "afterWorktreeBlob": "e43d64c88f9a1084abe19fa532c659a778209f47",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/app.html",
+      "beforeCandidateBlob": "42c08698ca5e508cff1bc50dc55ff3cb6d36ce85",
+      "afterWorktreeBlob": "42c08698ca5e508cff1bc50dc55ff3cb6d36ce85",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/fixture.tsx",
+      "beforeCandidateBlob": "3d2410ce2e8625bca35300bea341226f3cacccb1",
+      "afterWorktreeBlob": "3d2410ce2e8625bca35300bea341226f3cacccb1",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/index.html",
+      "beforeCandidateBlob": "62c87a36dc967fac1adef6ca48a304117de1dd73",
+      "afterWorktreeBlob": "62c87a36dc967fac1adef6ca48a304117de1dd73",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/run-baseline.mjs",
+      "beforeCandidateBlob": "55253105d87eb9052e6816940c72ffdf2c51fec8",
+      "afterWorktreeBlob": "55253105d87eb9052e6816940c72ffdf2c51fec8",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/run-build.mjs",
+      "beforeCandidateBlob": "4b9ef84ab169576c6f907d2b9707bad4660f8d4f",
+      "afterWorktreeBlob": "4b9ef84ab169576c6f907d2b9707bad4660f8d4f",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/run-focused.mjs",
+      "beforeCandidateBlob": "6e5f82cf214a5a3686bb426c8d80f2139af7ed0c",
+      "afterWorktreeBlob": "6e5f82cf214a5a3686bb426c8d80f2139af7ed0c",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/run-preview.mjs",
+      "beforeCandidateBlob": "8b796f95b5d52ee03332d7f0108377e748218a8a",
+      "afterWorktreeBlob": "8b796f95b5d52ee03332d7f0108377e748218a8a",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/run-unit.mjs",
+      "beforeCandidateBlob": "4edddc047a30e7a6e6207fd29744554d19cf2b78",
+      "afterWorktreeBlob": "4edddc047a30e7a6e6207fd29744554d19cf2b78",
+      "matches": true
+    },
+    {
+      "path": "tests/ux-turno/run-validation.mjs",
+      "beforeCandidateBlob": "9fe9337700c2de350d043110888e58ff2d0a493b",
+      "afterWorktreeBlob": "9fe9337700c2de350d043110888e58ff2d0a493b",
+      "matches": true
+    }
+  ]
+}

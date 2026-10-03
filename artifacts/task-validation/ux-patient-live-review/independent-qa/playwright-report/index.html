@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Independent patient UX evidence</title>
+<style>body{font:16px system-ui;max-width:1100px;margin:40px auto;padding:20px;background:#eef1f6;color:#16202e}article{background:white;padding:24px;border-radius:12px;margin:20px 0}img{max-width:100%;border:1px solid #e6ebf2}a{color:#1d4fc4}code{overflow-wrap:anywhere}</style>
+<h1>Independent patient UX QA</h1>
+<p><strong>READY FOR CODEX QA — frontend scope only.</strong></p>
+<p>Candidate <code>f4a31fe02d96158bdcc6a7cdcd83c12629d79b73</code>. Synthetic fixtures only; no production record writes.</p>
+<article><h2>Validation</h2><p>TypeScript/Vite build passed. Focused tests: 65 passed, 0 failed. Actual patient tiles: 102px. Allergy separation: 24px. Current and legacy APIs cannot crash the module. Shared confirmation includes the actual reader and original priority; personal legacy reads remain distinct.</p>
+<p><a href="../validation-report.md">Full QA report</a> · <a href="../source-identity.json">Source inventory</a> · <a href="../test-results/runtime.json">Browser assertions</a> · <a href="../test-results/http.json">HTTP classifications</a> · <a href="../test-results/build.txt">Build</a> · <a href="../test-results/focused.txt">65 tests</a> · <a href="../trace/ux-turno.zip">Playwright trace</a> · <a href="../video/ux-turno.webm">Video</a></p></article>
+<article><h2>Actual patient at reported 1074px width</h2><img src="../screenshots/actual-patient-1074.png" alt="Synthetic actual patient chart with compact vitals and separated allergy banner"></article>
+<article><h2>Actual diary reader trace</h2><img src="../screenshots/actual-diary-1074.png" alt="Letta e compresa, reader, role, timestamp and original priority"></article>
+<article><h2>Responsive evidence</h2><p><a href="../screenshots/actual-patient-768.png">768px actual chart</a> · <a href="../screenshots/actual-patient-1395.png">1395px actual chart</a> · <a href="../screenshots/real-app-390.png">390px actual App</a> · <a href="../screenshots/real-app-overdue-1161.png">Overdue therapy separate from urgent handovers</a></p></article>
+</html>
