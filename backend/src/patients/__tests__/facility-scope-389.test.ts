@@ -104,3 +104,11 @@ test('#389 a missing resident stays 404 and management privileges are not widene
   assert.equal(hasGlobalPatientScope('operatore'), false);
   assert.equal(hasGlobalPatientScope('manager'), true);
 });
+
+test('#389 the AI assistant context (Agnos, /ai/actions, Tool Layer assistant.query) shares the facility reach', async () => {
+  const { ctxFromOperator } = await import('../../routes/ai-assistant-public.js');
+  const req = { operator: { id: 'SIM-NURSE-1', role: 'operatore' }, header: () => undefined };
+  const ctx = await ctxFromOperator(req as never);
+  assert.ok(Array.isArray(ctx.permittedPatientIds), 'explicit list, never the management null');
+  for (const id of ids) assert.ok(ctx.permittedPatientIds!.includes(id), `AI reaches ${id}`);
+});
