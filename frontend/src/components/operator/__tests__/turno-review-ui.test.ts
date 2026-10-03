@@ -119,7 +119,7 @@ test('historical acknowledgement always shows colleague name, role and time even
       },
       new Date('2026-10-03T10:00:00Z'),
     ),
-    'Urgenza presa in carico da Medico Test (medico) alle 10:15',
+    'Letta e compresa da Medico Test (medico) alle 10:15 · priorità originale: urgente',
   );
 });
 test('mixed notifications label and count represent the same severity', () => {

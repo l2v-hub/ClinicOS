@@ -64,13 +64,13 @@ test('rules: active vs take-charge (never the author), counts', () => {
   assert.equal(urgencyTraceText(NONE), null);
   assert.equal(
     urgencyTraceText(TAKEN, NOW),
-    'Urgenza presa in carico da Medico 1 (medico) alle 10:15',
+    'Letta e compresa da Medico 1 (medico) alle 10:15 · priorità originale: urgente',
   );
 });
 
 test('consegna labels: Urgente only while active; legacy alta shown as «(valore precedente)»', () => {
   assert.equal(consegnaPriorityLabel(handover({ urgency: ACTIVE })), 'Urgente');
-  assert.equal(consegnaPriorityLabel(handover({ urgency: TAKEN })), 'Presa in carico');
+  assert.equal(consegnaPriorityLabel(handover({ urgency: TAKEN })), 'Letta e compresa');
   assert.equal(consegnaPriorityLabel(handover({ priorita: 'alta' })), 'Alta (valore precedente)');
   assert.equal(consegnaPriorityLabel(handover({ priorita: 'normale' })), 'Normale');
   // Without the backend view (local / legacy data) the same rule applies on the stored fields.
@@ -84,9 +84,9 @@ test('UrgencyNotice: button only for a non-author on an active urgency, trace af
     renderToStaticMarkup(React.createElement(UrgencyNotice, { urgency, onAcknowledge() {} }));
   assert.match(render(ACTIVE), />Ho capito</);
   assert.doesNotMatch(render(MINE), /Ho capito/);
-  assert.match(render(MINE), /in attesa che un collega la prenda in carico/);
+  assert.match(render(MINE), /in attesa che un collega confermi la lettura/);
   assert.doesNotMatch(render(TAKEN), /Ho capito/);
-  assert.match(render(TAKEN), /Urgenza presa in carico da Medico 1 \(medico\)/);
+  assert.match(render(TAKEN), /Letta e compresa da Medico 1 \(medico\)/);
   assert.equal(render(NONE), '');
 });
 
@@ -140,7 +140,7 @@ test('Consegne feed: no aperta / in corso / completata anywhere; urgent section 
   assert.match(html, /1 urgenza da prendere in carico/);
   assert.match(html, /Urgenze da prendere in carico/);
   assert.equal(html.match(/>Ho capito</g)?.length, 1);
-  assert.match(html, /Urgenza presa in carico da Medico 1/);
+  assert.match(html, /Letta e compresa da Medico 1/);
   assert.doesNotMatch(html, /Aperta|In corso|Completat|Da iniziare|Prendi in carico|Rilascia/);
   assert.doesNotMatch(html, />Alta</, 'priority filter offers only Normale / Urgente');
 });

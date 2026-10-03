@@ -147,6 +147,7 @@ import { classicScreenTarget } from './components/assistant/classicScreenTarget'
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
 import { HandoverEntryButton } from './components/shared/HandoverEntryButton';
 import { criticalHandoverCount } from './lib/handoverPreview';
+import { parseHandoverOverview } from './lib/handoverOverviewResponse';
 import { TopbarTitleSlot } from './components/shared/topbarTitleSlot';
 import { ShiftClock } from './components/shared/ShiftClock';
 import { UserMenu } from './components/shared/UserMenu';
@@ -1369,7 +1370,7 @@ export default function App() {
         signal: controller.signal,
       });
       if (!response.ok) throw new Error('consegne_overview');
-      const overview = (await response.json()) as ConsegnaOverview;
+      const overview = parseHandoverOverview(await response.json());
       if (
         sessionEpoch === sessionEpochRef.current &&
         request === consegneOverviewRequestRef.current
@@ -2526,11 +2527,11 @@ export default function App() {
       if (sessionEpoch !== sessionEpochRef.current) return false;
       refreshConsegnaViews();
       void loadClinicalOverview();
-      showToast('Urgenza presa in carico');
+      showToast('Lettura confermata');
       return true;
     } catch (error) {
       showToast(
-        error instanceof Error && error.message ? error.message : 'Presa in carico non registrata',
+        error instanceof Error && error.message ? error.message : 'Conferma di lettura non registrata',
       );
       return false;
     }

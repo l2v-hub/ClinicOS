@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-const out = path.resolve('artifacts/task-validation/ux-turno-commenti');
+const out = path.resolve(process.env.UX_EVIDENCE_DIR || 'artifacts/task-validation/ux-turno-commenti');
 mkdirSync(path.join(out, 'screenshots'), { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1161, height: 1004 },
@@ -12,7 +12,8 @@ await context.tracing.start({ screenshots: true, snapshots: true });
 let taken = false,
   failAck = true,
   failOverview = false,
-  withLateTherapy = false;
+  withLateTherapy = false,
+  legacyOverview = false;
 const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const clock = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Rome', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
 const [hours, minutes] = clock.split(':').map(Number);
@@ -113,9 +114,37 @@ await context.route('http://localhost:3001/**', async (route) => {
   if (url.pathname.includes('/brief')) return send({ items: [], count: 0 });
   if (url.pathname === '/patients')
     return send({ patients: [], pageInfo: { hasMore: false, nextCursor: null } });
+  if (url.pathname === '/operators/directory/page') return send({
+    items: [], pageInfo: { hasMore: false, nextCursor: null }, summary: null,
+  });
+  if (url.pathname === '/patients/page' || url.pathname === '/patients/parameters/page')
+    return send({ items: [], hasMore: false, nextCursor: null });
+  if (url.pathname === '/patients/clinical-summary') return send([]);
+  if (url.pathname === '/patients/patient-test') return send({
+    id: 'patient-test', firstName: 'Paziente Test', lastName: 'Cognome Lungo',
+    dateOfBirth: '1955-12-15', sex: null, email: null, phone: null, codiceFiscale: null,
+  });
+  if (url.pathname.endsWith('/cartella')) return send({ patientId: 'patient-test', data: {
+    allergie: [{ id: 'allergy-test', allergene: 'Allergene sintetico', gravita: 'grave', tipo: 'altro' }],
+  } });
+  if (url.pathname.endsWith('/intake-review')) return send({
+    draftId: null, deferredTherapies: [], sourceDocumentIds: [], legacyPainDrafts: [], legacyPainError: null,
+  });
+  if (url.pathname.endsWith('/parameter-readings')) return send({
+    readings: [{ id: 'reading-test', requestId: 'reading-test', patientId: 'patient-test',
+      measuredAt: '2026-10-03T16:04:00Z', createdAt: '2026-10-03T16:04:00Z',
+      values: { fr: '16', spo2: '98', o2: 'no', pa: '120/80', fc: '78', temperatura: '36', coscienza: 'A' },
+      authorOperatorId: 'writer', authorName: 'Infermiere Autore',
+    }], hasMore: false, nextCursor: null,
+  });
+  if (url.pathname.endsWith('/room-options') || url.pathname === '/operators') return send([]);
   if (url.pathname === '/consegne/overview') {
     if (failOverview) return send({ error: 'Unavailable' }, 503);
     const urgent = handover('critical', 'urgente', '2026-10-03T15:00:00Z');
+    if (legacyOverview) return send({
+      scope: 'operator', summary: { total: 20, open: 20, urgentOpen: 12 },
+      openPreview: [urgent], urgentPreview: [urgent], byOperator: {},
+    });
     return send({
       scope: 'operator',
       summary: { total: 20, urgentActive: taken ? 11 : 12, urgentTaken: taken ? 1 : 0 },
@@ -150,6 +179,10 @@ await context.route('http://localhost:3001/**', async (route) => {
           urgency: { ...active, isAuthor: true, canAcknowledge: false },
         }),
         diaryRow('completed-legacy'),
+        diaryRow('no-shared-trace', { priority: 'urgente',
+          acknowledgements: [{ operatorName: 'Collega Legacy Test', operatorRole: 'oss',
+            acknowledgedAt: '2026-10-03T16:35:00Z' }],
+        }),
       ],
       hasMore: false,
       nextCursor: null,
@@ -205,7 +238,7 @@ try {
   );
   failAck = false;
   await page.getByRole('button', { name: /^Ho capito:/ }).click();
-  await page.getByText(/Urgenza presa in carico da Infermiere Test/).waitFor();
+  await page.getByText(/Letta e compresa da Infermiere Test/).waitFor();
   await page
     .getByRole('button', { name: 'Apri consegne: 11 consegne critiche da prendere in carico' })
     .waitFor();
@@ -213,7 +246,7 @@ try {
   assert.equal(await page.getByRole('button', { name: /^Ho capito:/ }).count(), 0);
   await page.reload();
   await page.getByRole('button', { name: /Apri consegne: 11 consegne critiche/ }).click();
-  await page.getByText(/Urgenza presa in carico da Infermiere Test/).waitFor();
+  await page.getByText(/Letta e compresa da Infermiere Test/).waitFor();
   assert.match(await page.locator('.cr-alert-band').textContent(), /Attenzione permanente/);
   await page.getByRole('button', { name: 'Espandi ultimi parametri e NEWS2' }).click();
   await page.getByRole('dialog', { name: 'Ultimi parametri e NEWS2' }).waitFor();
@@ -351,6 +384,48 @@ try {
     await page.screenshot({ path: path.join(out, 'screenshots', 'real-app-overdue-' + width + '.png'), fullPage: true });
   }
   results.push('PASS real App overdue therapy separate from urgency, patient name and action readable at three widths');
+  legacyOverview = true;
+  await page.reload();
+  await page.getByRole('button', { name: /Infermiere Test/ }).click();
+  await page.locator('.turno-handovers [role="alert"]').waitFor();
+  assert.equal(await page.getByText('Il modulo non è stato caricato', { exact: false }).count(), 0);
+  assert.equal(await page.locator('.topbar-handovers__badge').textContent(), '?');
+  results.push('PASS actual App with legacy overview: retryable unavailable, unknown count, no module crash');
+  await page.goto('http://127.0.0.1:5187/tests/ux-turno/app.html#/dettaglio-paziente/patient-test');
+  await page.getByRole('button', { name: /Infermiere Test/ }).click();
+  await page.locator('.patient-record-view .vitals-summary').waitFor();
+  await page.locator('.patient-record-view .cr-alert-strip--allergie').waitFor();
+  await page.locator('.vitals-summary h2').click();
+  for (const width of [768, 1074, 1395]) {
+    await page.setViewportSize({ width, height: 1004 });
+    const heights = await page.locator('.vitals-summary .vt').evaluateAll(nodes =>
+      nodes.map(node => Math.round(node.getBoundingClientRect().height)));
+    assert.ok(Math.max(...heights) < 160, 'actual patient compact tiles ' + width);
+    const gap = await page.locator('.cr-alert-band').evaluate(node => {
+      const next = document.querySelector('.cr-detail-layout');
+      return Math.round(next.getBoundingClientRect().top - node.getBoundingClientRect().bottom);
+    });
+    assert.ok(gap >= 24, 'actual allergy gap ' + width + ': ' + gap);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await page.screenshot({ path: path.join(out, 'screenshots', 'actual-patient-' + width + '.png'), fullPage: true });
+    results.push('PASS actual patient ' + width + ': heights ' + heights.join('/') + ', allergy gap ' + gap);
+  }
+  const historical = page.locator('[data-entry-id="no-shared-trace"]');
+  await historical.waitFor();
+  assert.match(await historical.textContent(), /Urgenza storica.*Conferma di lettura condivisa non disponibile/s);
+  assert.equal(await historical.getByRole('button', { name: /^Ho capito:/ }).count(), 0);
+  assert.match(await historical.textContent(), /Letta da Collega Legacy Test \(OSS\).*registrazione personale/s);
+  assert.equal(await page.getByText('Completata', { exact: true }).count(), 0);
+  await page.setViewportSize({ width: 1074, height: 1004 });
+  const shared = page.locator('[data-entry-id="handover-critical"]');
+  await shared.scrollIntoViewIfNeeded();
+  assert.match(await shared.textContent(), /Letta e compresa da Infermiere Test.*priorità originale: urgente/s);
+  await page.screenshot({ path: path.join(out, 'screenshots', 'actual-diary-1074.png'), fullPage: true });
+  await page.locator('.vitals-summary h2').scrollIntoViewIfNeeded();
+  await page.getByRole('button', { name: 'Espandi ultimi parametri e NEWS2' }).click();
+  await page.getByRole('dialog', { name: 'Ultimi parametri e NEWS2' }).waitFor();
+  await page.keyboard.press('Escape');
+  results.push('PASS actual patient diary historical urgency without fabricated confirmation; expansion/Escape');
   assert.deepEqual(consoleErrors, []);
   results.push('PASS availability/retry; no unexpected console errors');
 } catch (error) {

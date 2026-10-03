@@ -99,20 +99,20 @@ test('UX2 W8 needsMyAck / countToSee: only ACTIVE urgencies that this reader (no
 test('UX2 W8 trace: «Urgenza presa in carico da X (ruolo) alle hh:mm», older days carry the date', () => {
   assert.equal(
     urgencyTraceText(taken(), NOW),
-    'Urgenza presa in carico da Medico 1 (medico) alle 08:12',
+    'Letta e compresa da Medico 1 (medico) alle 08:12 · priorità originale: urgente',
   );
   assert.equal(
     urgencyTraceText(taken({ byMe: true }), NOW),
-    'Urgenza presa in carico da Medico 1 (medico) alle 08:12',
+    'Letta e compresa da Medico 1 (medico) alle 08:12 · priorità originale: urgente',
   );
   assert.equal(
     urgencyTraceText({ state: 'taken', takenBy: null, isAuthor: false, canAcknowledge: false }),
-    'Urgenza chiusa',
+    'Urgenza storica · conferma di lettura non disponibile',
   );
   assert.equal(urgencyTraceText(active(), NOW), 'Urgente');
   assert.match(
     urgencyTraceText(active({ isAuthor: true, canAcknowledge: false }), NOW) ?? '',
-    /in attesa che un collega la prenda in carico/,
+    /in attesa che un collega confermi la lettura/,
   );
   assert.equal(urgencyTime('2026-10-02T19:05:00.000Z', NOW), '02/10 21:05');
 });
@@ -135,8 +135,8 @@ test('UX2 W8 diary card: «Ho capito» only for a non-author on an active urgenc
   assert.equal(html.match(/>Ho capito</g)?.length, 1, 'one button: the non-author active urgency');
   assert.match(html, /1 urgenza da prendere in carico/);
   // Lo storico mostra anche il giorno quando la fixture non è più di oggi.
-  assert.match(html, /Urgenza presa in carico da Medico 1 \(medico\) alle (?:\d{2}\/\d{2} )?\d{2}:\d{2}/);
-  assert.match(html, /in attesa che un collega la prenda in carico/);
+  assert.match(html, /Letta e compresa da Medico 1 \(medico\) alle (?:\d{2}\/\d{2} )?\d{2}:\d{2}/);
+  assert.match(html, /in attesa che un collega confermi la lettura/);
   // No open/closed concept and no per-reader «Visto da» list.
   assert.doesNotMatch(html, /Presa visione|Visto da|Da vedere|>Aperta<|>Completata</);
   assert.match(html, /class="[^"]*diario-card--to-see[^"]*"[^>]*data-entry-id="u1"/);

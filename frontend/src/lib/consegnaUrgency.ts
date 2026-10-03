@@ -9,7 +9,8 @@ export function isConsegnaUrgencyActive(c: Pick<Consegna, 'priorita' | 'stato' |
 
 /** Etichetta della priorità: mai «aperta / in corso / completata». */
 export function consegnaPriorityLabel(c: Pick<Consegna, 'priorita' | 'stato' | 'urgency'>) {
-  if (c.priorita === 'urgente') return isConsegnaUrgencyActive(c) ? 'Urgente' : 'Presa in carico';
+  if (c.priorita === 'urgente') return isConsegnaUrgencyActive(c) ? 'Urgente' :
+    c.urgency?.takenBy ? 'Letta e compresa' : 'Urgenza storica';
   if (c.priorita === 'alta') return 'Alta (valore precedente)';
   return 'Normale';
 }

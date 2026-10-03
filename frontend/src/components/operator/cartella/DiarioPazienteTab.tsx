@@ -26,7 +26,7 @@ import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload'
 import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
 import { UrgencyNotice } from '../../shared/UrgencyNotice';
-import { isActiveUrgency, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
+import { isActiveUrgency, legacyReadTraces, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -36,6 +36,8 @@ const DiaryTherapyPanel = lazy(() =>
 type DiaryFeedEntry = DiarioPazienteEntry & {
   sourceType?: 'diary' | 'consegna';
   sourceId?: string;
+  /** Compatibility history from the older personal-read protocol. */
+  acknowledgements?: unknown;
   /** Diario terapia: terapia collegata (null se cancellata o assente). */
   therapy?: DiaryEntryTherapyRef | null;
   therapyId?: string | null;
@@ -503,7 +505,7 @@ export function DiarioPazienteTab({
       setAckError(
         error instanceof Error && error.message
           ? error.message
-          : 'Presa in carico non registrata. Riprova.',
+          : 'Conferma di lettura non registrata. Riprova.',
       );
     } finally {
       setAcking(null);
@@ -542,10 +544,10 @@ export function DiarioPazienteTab({
     const toSee = needsMyAck(row);
     // UX2 W8: «Urgente» solo finché l'urgenza è attiva; presa in carico → non più segnalata.
     const urgentActive =
-      row.priority === 'urgente' && (!row.urgency || isActiveUrgency(row.urgency));
+      row.priority === 'urgente' && isActiveUrgency(row.urgency);
     const priorityLabel =
       row.priority === 'urgente' && !urgentActive
-        ? 'Presa in carico'
+        ? row.urgency?.takenBy ? 'Letta e compresa' : 'Urgenza storica'
         : row.priority === 'importante'
           ? 'Importante (valore precedente)'
           : PRIORITY_LABELS[row.priority];
@@ -630,6 +632,12 @@ export function DiarioPazienteTab({
           disabled={acking !== null}
           subject={`della voce${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
         />
+        {row.priority === 'urgente' && !row.urgency && (
+          <small className="form-hint">Conferma di lettura condivisa non disponibile per questa voce.</small>
+        )}
+        {!row.urgency && legacyReadTraces(row.acknowledgements).map((trace, index) => (
+          <p className="form-hint" key={index}>{trace}</p>
+        ))}
         {row.sourceType === 'consegna' && (
           <small className="form-hint">
             Consegna registrata · gestibile dalla sezione Consegne

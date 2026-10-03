@@ -35,10 +35,13 @@ export function UrgencyNotice({
           className="ds-btn ds-btn--primary urgency-notice__btn"
           onClick={onAcknowledge}
           disabled={busy || disabled}
-          aria-label={`Ho capito: prendi in carico l’urgenza${subject ? ` ${subject}` : ''}`}
+          aria-label={`Ho capito: conferma di aver letto e compreso${subject ? ` ${subject}` : ''}`}
         >
           {busy ? 'Registrazione…' : 'Ho capito'}
         </button>
+      )}
+      {showButton && (
+        <small>La conferma rimuove l’avviso attivo e conserva la priorità originale nello storico.</small>
       )}
     </div>
   );

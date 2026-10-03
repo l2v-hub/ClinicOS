@@ -7,7 +7,7 @@ export const HANDOVER_PREVIEW_LIMIT = 5;
 export function handoverPreview(overview: ConsegnaOverview | null): Consegna[] {
   if (!overview) return [];
   const unique = new Map<string, Consegna>();
-  for (const item of [...overview.recentPreview, ...overview.urgentPreview])
+  for (const item of [...(overview.recentPreview ?? []), ...(overview.urgentPreview ?? [])])
     unique.set(item.id, item);
   const rank = (item: Consegna) =>
     isConsegnaUrgencyActive(item) ? 0 : item.priorita === 'alta' ? 1 : 2;
@@ -25,7 +25,7 @@ export function criticalHandoverCount(
   overview: ConsegnaOverview | null,
   state: 'loading' | 'ready' | 'error',
 ): number | null {
-  const value = overview?.summary.urgentActive;
+  const value = overview?.summary?.urgentActive;
   return state === 'ready' && typeof value === 'number' && Number.isFinite(value)
     ? Math.max(0, Math.trunc(value))
     : null;

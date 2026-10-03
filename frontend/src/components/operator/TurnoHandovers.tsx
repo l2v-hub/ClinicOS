@@ -63,7 +63,7 @@ export function TurnoHandovers({ overview, state, onOpen, onRetry, onSelectPazie
             const label = urgent
               ? 'Urgente'
               : item.urgency?.state === 'taken'
-                ? 'Presa in carico'
+                ? item.urgency.takenBy ? 'Letta e compresa' : 'Urgenza storica'
                 : item.priorita === 'alta'
                   ? 'Attenzione'
                   : 'Normale';

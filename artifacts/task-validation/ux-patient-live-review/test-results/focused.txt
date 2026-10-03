@@ -1,0 +1,121 @@
+(node:20212) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ dashboard anomaly worklist is bounded by patients and lists every drug of a row (1.9239ms)
+✔ operator and admin reuse the same bounded notification details (0.5772ms)
+✔ patient, drug chips and compact count have explicit visual hierarchy (0.5718ms)
+✔ anomaly row exposes an intentional accessible name and keyboard focus (0.3284ms)
+✔ notification bar keeps all severity labels visible and responsive (0.2566ms)
+(node:20212) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:5476) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator first view (HMI 1 Turno): indicators, then Adesso with the compact notification center (2.2628ms)
+✔ management-only props are removed from the operator dashboard contract (0.8088ms)
+✔ HMI 1 Turno: title in the app header, no duplicate Pazienti button (it is in the rail) (0.2725ms)
+✔ clinical snapshot uses five native compact value cards (0.3932ms)
+✔ compact clinical cards stay scoped and responsive without horizontal scrolling (0.6614ms)
+(node:5476) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19752) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ overdue therapy is not labelled urgent, patient identity and details are distinct (6.4733ms)
+✔ both shell entries expose exact count; zero hidden; Note absent for both roles (5.1295ms)
+✔ handover and vital missing states disclose availability without a misleading empty result (3.3898ms)
+✔ historical acknowledgement always shows colleague name, role and time even to acknowledger (0.5869ms)
+✔ mixed notifications label and count represent the same severity (1.0481ms)
+(node:19752) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19888) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-07: core priority UX is Normale / Urgente; a stored intermediate value is kept, not converted (2.628ms)
+✔ AT-06: a new diary note sends no date, no state and no author (0.4398ms)
+✔ diary save errors surface the backend validation reason (22.2198ms)
+✔ diary form source: no «Stato» select and no manual date on the create form (0.8018ms)
+✔ handover composer offers only Normale / Urgente and no «aperta» wording (9.2339ms)
+(node:19888) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:6772) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ UX2 W8 needsMyAck / countToSee: only ACTIVE urgencies that this reader (not the author) can take (0.9113ms)
+✔ UX2 W8 trace: «Urgenza presa in carico da X (ruolo) alle hh:mm», older days carry the date (0.3606ms)
+✔ UX2 W8 diary card: «Ho capito» only for a non-author on an active urgency; then only the trace (9.6271ms)
+✔ F8: Modifica / Elimina appear only with the capability the backend enforces (2.4039ms)
+✔ NEWS2: compact label carries time and «da aggiornare»; tile offers «Rileva ora» and wraps (0.6488ms)
+✔ agenda: note inline, status in words, operator name, month without «+N» (0.4478ms)
+✔ topbar subtitle wraps (no single-line ellipsis); allergy names never collapse to a bare ⚠ (1.5978ms)
+(node:6772) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23496) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ groups come in the fixed urgency order and each group is sorted by urgency (3.3131ms)
+✔ time labels say exactly what is known (0.7302ms)
+✔ therapy rows without a verifiable time are not queued (0.1682ms)
+✔ an urgent consegna due within the hour but after midnight says "Domani" (0.1792ms)
+✔ untimed administrations: only today, "Orario da verificare", after imminent therapies (0.2426ms)
+✔ Prompt 10 §2: ogni voce della coda apre la sezione in cui si agisce (1.7228ms)
+(node:23496) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23020) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ boundary accepts current exact aggregates; empty preview does not imply zero (1.898ms)
+✔ legacy open/status counters cannot become shared unread critical counts (1.1658ms)
+✔ malformed summary, arrays, rows and counts are rejected at the API boundary (0.6767ms)
+✔ personal legacy acknowledgement cannot be reported as shared success (37.7903ms)
+✔ successful shared acknowledgement requires actual reader and a valid timestamp (1.1163ms)
+✔ older personal reading history keeps the actual reader without claiming shared understanding (1.5627ms)
+(node:23020) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:12676) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ preview merges latest and urgent, deduplicates and sorts severity before time (12.8313ms)
+✔ newest first within a severity; bounded selection and invalid dates deterministic (1.0937ms)
+✔ critical badge uses exact aggregate beyond preview and never treats unavailable as zero (0.437ms)
+(node:12676) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23736) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ mailbox remains available while shell badges use exact critical handover aggregate (1.4734ms)
+✔ failed note mutation never restores a snapshot after the mailbox query changed (0.4115ms)
+✔ a pending note mutation cannot restore PHI after logout changes the session epoch (0.2726ms)
+(node:23736) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:5156) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ tiles show the latest value, the unit and the trend against the previous value (4.3861ms)
+✔ a parameter never measured says so; a single value has no trend (0.6933ms)
+✔ NEWS2 tile: score of the latest complete reading (prototype example = 6) (1.1909ms)
+✔ NEWS2 tile: not computable says which parameters are missing (1.8931ms)
+(node:5156) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:5068) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ card shows room, age, bed and real badges in the prototype order (4.0394ms)
+✔ missing data is stated, never invented (0.6999ms)
+✔ without the clinical summary the card says it, instead of looking allergy-free (0.9132ms)
+✔ therapy line: unavailable or loading is said, never "nothing to do" (0.6107ms)
+✔ therapy line follows the prototype: overdue first, then next scheduled, then time to verify (1.9091ms)
+✔ tomorrow unreadable: "nothing" is only verified for today (0.386ms)
+✔ discharged patients are not in the shift (0.3354ms)
+✔ next appointments: in progress, then not started past their time, then upcoming (facility clock) (2.2438ms)
+✔ UX: Turno badges name the allergen, critical parameter and risk (2.2719ms)
+(node:5068) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:2892) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ rules: active vs take-charge (never the author), counts (0.8299ms)
+✔ consegna labels: Urgente only while active; legacy alta shown as «(valore precedente)» (0.1829ms)
+✔ UrgencyNotice: button only for a non-author on an active urgency, trace afterwards (5.5022ms)
+✔ Turno «Adesso»: the author never gets their own urgency to do; taken ones never appear (1.0867ms)
+✔ Consegne feed: no aperta / in corso / completata anywhere; urgent section + «Ho capito» + trace (5.5426ms)
+✔ source guards: forms and edit never ask «Stato»; no transition handlers remain (1.0255ms)
+✔ postUrgencyAck: server message (e.g. author 409) is shown as is (12.729ms)
+(node:2892) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 65
+ℹ suites 0
+ℹ pass 65
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 975.8277
