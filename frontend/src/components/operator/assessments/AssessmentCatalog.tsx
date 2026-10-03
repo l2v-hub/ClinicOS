@@ -17,6 +17,7 @@ import {
   createAssessmentCatalogState,
   type AssessmentCatalogState,
 } from '../../../lib/assessments/assessmentCatalogState';
+import { useCan } from '../../../lib/capabilities';
 import './AssessmentCatalog.css';
 
 type Action = 'open' | 'new' | 'resume';
@@ -27,6 +28,8 @@ interface ViewProps {
   onRetry: () => void;
   onOpen: (module: ClinicalModule, action: Action, item?: AssessmentCatalogItem) => void;
   onNrs: () => void;
+  /** F15: «Nuova compilazione» only with the create capability (OSS read-only). */
+  canCreate?: boolean;
 }
 const time = (value: string) =>
   new Intl.DateTimeFormat('it-IT', {
@@ -99,6 +102,7 @@ export function AssessmentCatalogView({
   onRetry,
   onOpen,
   onNrs,
+  canCreate = true,
 }: ViewProps) {
   return (
     <section className="assessment-catalog" aria-labelledby="assessment-catalog-title">
@@ -140,15 +144,17 @@ export function AssessmentCatalogView({
                     >
                       Apri
                     </button>
-                    <button
-                      type="button"
-                      className="btn-primary btn-sm"
-                      aria-label={`Nuova compilazione ${module.label}`}
-                      onClick={() => onOpen(module, 'new', item)}
-                    >
-                      Nuova compilazione
-                    </button>
-                    {(local || !!item?.ownDraftCount) && (
+                    {canCreate && (
+                      <button
+                        type="button"
+                        className="btn-primary btn-sm"
+                        aria-label={`Nuova compilazione ${module.label}`}
+                        onClick={() => onOpen(module, 'new', item)}
+                      >
+                        Nuova compilazione
+                      </button>
+                    )}
+                    {canCreate && (local || !!item?.ownDraftCount) && (
                       <button
                         type="button"
                         className="btn-secondary btn-sm"
@@ -219,6 +225,7 @@ function CatalogSession({
     ),
   );
   const state = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
+  const canCreate = useCan('assessments.create_draft');
   useSyncExternalStore(draftStore.subscribe, draftStore.getVersion, draftStore.getVersion);
   useEffect(() => {
     void store.load();
@@ -234,7 +241,7 @@ function CatalogSession({
   );
   return (
     <AssessmentCatalogView
-      {...{ cartella, state, localDraftTypes, onOpen, onNrs }}
+      {...{ cartella, state, localDraftTypes, onOpen, onNrs, canCreate }}
       onRetry={() => void store.load()}
     />
   );

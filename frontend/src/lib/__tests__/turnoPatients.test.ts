@@ -35,6 +35,8 @@ const summary = (over: Partial<ClinicalSummaryEntry> = {}): ClinicalSummaryEntry
 const row = (id: string, patientId: string, data: string, ora: string | null): ScadenzaTerapia => ({
   id,
   patientId,
+  therapyId: `t-${id}`,
+  fascia: 'mattina',
   nome: 'Rossi Anna',
   camera: '104',
   letto: 'B',
@@ -119,8 +121,17 @@ test('therapy line follows the prototype: overdue first, then next scheduled, th
     }),
     today,
   );
-  assert.equal(overdue.prossima, 'In ritardo: Farmaco a 1 cp · 07:00 (+1)');
+  // Direct access: TUTTE le dosi in ritardo (niente "(+1)"), ognuna col proprio link alla terapia.
+  assert.equal(overdue.prossima, 'In ritardo: Farmaco a 1 cp · 07:00, Farmaco b 1 cp · 07:30');
   assert.equal(overdue.prossimaInRitardo, true);
+  assert.equal(overdue.prossimaEtichetta, 'In ritardo');
+  assert.deepEqual(
+    overdue.prossimaVoci.map((v) => v.landing),
+    ['a', 'b'].map((id) => ({
+      tab: 'terapia-farmacologica',
+      therapy: { subView: 'giornaliere', therapyId: `t-${id}`, date: cal.oggi, fascia: 'mattina' },
+    })),
+  );
 
   const next = turnoPatientCard(
     patient(),
@@ -191,4 +202,14 @@ test('next appointments: in progress, then not started past their time, then upc
     onlyLate.items.map((x) => x.daIniziare),
     [true],
   );
+});
+
+test('UX: Turno badges name the allergen, critical parameter and risk', async () => {
+  const { badgeLabel } = await import('../turnoPatients');
+  assert.equal(
+    badgeLabel('Allergia', ['Penicillina', ' Lattice ']),
+    'Allergia: Penicillina, Lattice',
+  );
+  assert.equal(badgeLabel('Allergia', []), 'Allergia');
+  assert.equal(badgeLabel('Rischio elevato', undefined), 'Rischio elevato');
 });

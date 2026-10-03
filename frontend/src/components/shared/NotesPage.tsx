@@ -22,6 +22,8 @@ interface NotesPageProps {
   onQueryChange: (query: NotesMailboxQuery) => void | Promise<void>;
   onLoadMore: () => void;
   onRetry: () => void;
+  /** Direct access: il paziente citato nel messaggio apre la sua cartella (Note e visite). */
+  onOpenPatient?: (nome: string, patientId: string) => void;
 }
 
 type UiFilter = 'tutte' | 'ricevute' | 'inviate' | 'non_lette';
@@ -60,6 +62,7 @@ export function NotesPage({
   onQueryChange,
   onLoadMore,
   onRetry,
+  onOpenPatient,
 }: NotesPageProps) {
   const [filtro, setFiltro] = useState<UiFilter>('tutte');
   const [ricerca, setRicerca] = useState('');
@@ -219,7 +222,22 @@ export function NotesPage({
                       )}
                       <span className="nm-author">{item.autoreNome}</span>
                       <span className="nm-dest">→ {item.destinatarioNome}</span>
-                      {item.pazienteNome && <span className="nm-dest">· {item.pazienteNome}</span>}
+                      {item.pazienteNome &&
+                        (item.pazienteId && onOpenPatient ? (
+                          <span className="nm-dest">
+                            ·{' '}
+                            <button
+                              type="button"
+                              className="link-btn nm-patient"
+                              aria-label={`Apri la cartella di ${item.pazienteNome}`}
+                              onClick={() => onOpenPatient(item.pazienteNome!, item.pazienteId!)}
+                            >
+                              {item.pazienteNome}
+                            </button>
+                          </span>
+                        ) : (
+                          <span className="nm-dest">· {item.pazienteNome}</span>
+                        ))}
                       {item.priorita !== 'normale' && (
                         <span className={`nm-prio nm-prio--${item.priorita}`}>
                           {PRIORITA_LABEL[item.priorita]}

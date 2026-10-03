@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Response } from 'express';
 import { requireOperator, type AuthedRequest, type Operator } from '../ai/auth.js';
 import {
   buildTherapySlotPage,
@@ -22,6 +22,13 @@ import {
   recordTherapyAdministration,
   TherapyAlreadyAdministeredError,
 } from '../therapies/administration-record.js';
+import {
+  listPrnAdministrations,
+  PrnIdempotencyConflictError,
+  recordPrnAdministration,
+} from '../therapies/prn-administration.js';
+import { authzOf } from '../authz/request-context.js';
+import { facilityToday } from '../patients/parameter-reading-input.js';
 
 const router = Router();
 
@@ -109,6 +116,39 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Owner decision 2026-10-03: a role whose policy effect is ALLOWED_WITH_CONFIRMATION (supervisor
+// on the administration capabilities) must confirm explicitly. The app shows a ConfirmDialog and
+// then sends `confirmed: true`; without it the server refuses (428). Roles with plain ALLOWED
+// (nurse) are unchanged: the flag is accepted and ignored. Returns the body without the flag.
+export const CONFIRMATION_REQUIRED_CODE = 'confirmation_required';
+function takeConfirmation(
+  req: AuthedRequest,
+  res: Response,
+  capabilityId: string,
+): { ok: true; body: unknown } | { ok: false } {
+  const raw = req.body;
+  let confirmed = false;
+  let body: unknown = raw;
+  if (raw && typeof raw === 'object' && !Array.isArray(raw) && 'confirmed' in raw) {
+    const { confirmed: flag, ...rest } = raw as Record<string, unknown>;
+    if (flag !== undefined && typeof flag !== 'boolean') {
+      res.status(400).json({ error: 'confirmed non valido' });
+      return { ok: false };
+    }
+    confirmed = flag === true;
+    body = rest;
+  }
+  if (authzOf(req)?.can(capabilityId).requiresConfirmation && !confirmed) {
+    res.status(428).json({
+      error: 'Il tuo ruolo richiede una conferma esplicita prima di registrare la somministrazione',
+      code: CONFIRMATION_REQUIRED_CODE,
+      capability: capabilityId,
+    });
+    return { ok: false };
+  }
+  return { ok: true, body };
+}
+
 // POST /therapy-slots/confirm
 // Actor identity always comes from req.operator; client-supplied actor fields are ignored.
 // `therapyId` is mandatory; drug/dose/route/time are resolved from the prescription server-side.
@@ -116,7 +156,9 @@ router.get('/', async (req, res) => {
 router.post('/confirm', async (req, res) => {
   try {
     const actor = (req as AuthedRequest).operator!;
-    const record = await recordTherapyAdministration(req.body, actor, { notAdministered: false });
+    const taken = takeConfirmation(req as AuthedRequest, res, 'administration.confirm');
+    if (!taken.ok) return;
+    const record = await recordTherapyAdministration(taken.body, actor, { notAdministered: false });
 
     res.status(200).json(record);
   } catch (error) {
@@ -153,7 +195,13 @@ router.post('/confirm', async (req, res) => {
 router.post('/not-administered', async (req, res) => {
   try {
     const actor = (req as AuthedRequest).operator!;
-    const record = await recordTherapyAdministration(req.body, actor, { notAdministered: true });
+    const taken = takeConfirmation(
+      req as AuthedRequest,
+      res,
+      'administration.record_not_administered',
+    );
+    if (!taken.ok) return;
+    const record = await recordTherapyAdministration(taken.body, actor, { notAdministered: true });
 
     res.status(200).json(record);
   } catch (error) {
@@ -181,6 +229,79 @@ router.post('/not-administered', async (req, res) => {
     }
     console.error('POST /therapy-slots/not-administered error:', error);
     res.status(500).json({ error: 'Errore durante registrazione non somministrazione' });
+  }
+});
+
+// GET /therapy-slots/prn?patientId=…&date=YYYY-MM-DD — PRN («al bisogno») doses of one patient
+// on one facility day (default: today). Same patient scope as the slot reads.
+router.get('/prn', async (req, res) => {
+  try {
+    const actor = (req as AuthedRequest).operator!;
+    const patientId = typeof req.query.patientId === 'string' ? req.query.patientId : '';
+    if (!/^[A-Za-z0-9_-]{1,128}$/.test(patientId)) {
+      res.status(400).json({ error: 'patientId obbligatorio' });
+      return;
+    }
+    const date =
+      typeof req.query.date === 'string' && req.query.date
+        ? parseIsoCalendarDate(req.query.date, 'date')
+        : facilityToday();
+    res.status(200).json({ date, items: await listPrnAdministrations(patientId, date, actor) });
+  } catch (error) {
+    if (error instanceof AppointmentListInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    // Never the whole error: a DB validation message could echo the clinical indication.
+    console.error(
+      'GET /therapy-slots/prn error:',
+      (error as { code?: string })?.code ?? (error instanceof Error ? error.name : 'unknown'),
+    );
+    res.status(500).json({ error: 'Errore nel recupero delle somministrazioni al bisogno' });
+  }
+});
+
+// POST /therapy-slots/prn — records one PRN dose now (capability administration.confirm).
+// Body: {patientId, therapyId, indicazione, note?, requestId, confirmed?}. Drug, dose, route and
+// time come from the prescription and the server clock; actor from the session. A retry with the
+// same requestId replays the first record (200 + Idempotent-Replayed) instead of a second dose.
+router.post('/prn', async (req, res) => {
+  try {
+    const actor = (req as AuthedRequest).operator!;
+    const taken = takeConfirmation(req as AuthedRequest, res, 'administration.confirm');
+    if (!taken.ok) return;
+    const { record, replayed } = await recordPrnAdministration(taken.body, actor);
+    if (replayed) res.setHeader('Idempotent-Replayed', 'true');
+    res.status(replayed ? 200 : 201).json(record);
+  } catch (error) {
+    if (error instanceof TherapyWriteInputError) {
+      res.status(error.status).json({ error: error.message });
+      return;
+    }
+    if (error instanceof PrnIdempotencyConflictError) {
+      res.status(409).json({ error: error.message, code: 'idempotency_conflict' });
+      return;
+    }
+    if (error instanceof TherapyNotDueError) {
+      res.status(409).json({ error: error.message });
+      return;
+    }
+    if (error instanceof TherapyNotFoundError) {
+      res.status(404).json({ error: error.message });
+      return;
+    }
+    if (isConcurrentWriteConflict(error)) {
+      res.status(409).json({ error: 'Conflitto concorrente: ricaricare e riprovare' });
+      return;
+    }
+    // Never the whole error: a DB validation message could echo the clinical indication.
+    console.error(
+      'POST /therapy-slots/prn error:',
+      (error as { code?: string })?.code ?? (error instanceof Error ? error.name : 'unknown'),
+    );
+    res
+      .status(500)
+      .json({ error: 'Errore durante la registrazione della somministrazione al bisogno' });
   }
 });
 

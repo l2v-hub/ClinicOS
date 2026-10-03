@@ -338,7 +338,12 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
       return;
     }
     if (action.kind === 'classic') {
-      onOpenClassic({ screen: action.screen, label: action.label });
+      // Direct access: il segnale riguarda un ospite → la sua sezione, non la pagina di reparto.
+      onOpenClassic({
+        screen: action.screen,
+        label: action.label,
+        ...(signal.residentId ? { patientId: signal.residentId } : {}),
+      });
       return;
     }
     let contextId = residentId;

@@ -639,3 +639,29 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Direct access: ogni segnalazione della riga è un link alla parte della cartella che la spiega. */
+.patient-signal-link {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: normal;
+  text-align: left;
+}
+.patient-signal-link:hover,
+.patient-signal-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.patient-signal-link:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+.patient-signals .indicatore-anomalie.patient-signal--anomalie {
+  white-space: normal;
+  border-style: solid;
+}
+.plist-list .patient-signals .patient-signal--anomalie {
+  height: auto;
+  min-height: 32px;
+}

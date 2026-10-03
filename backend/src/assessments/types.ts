@@ -29,7 +29,25 @@ import {
   type Gds15SnapshotItem,
 } from './gds15-types.js';
 export * from './gds15-types.js';
-export type AssessmentType = 'painad' | 'postural_transfers' | 'tinetti' | 'mna' | 'gds15';
+import type { PaperSnapshot, PaperHistoryItem, PaperAssessmentDto } from './paper/types.js';
+export * from './paper/types.js';
+export type AssessmentType =
+  | 'painad'
+  | 'postural_transfers'
+  | 'tinetti'
+  | 'mna'
+  | 'gds15'
+  | 'barthel'
+  | 'ucla_npi_sleep';
+export const ASSESSMENT_TYPES: readonly AssessmentType[] = [
+  'painad',
+  'postural_transfers',
+  'tinetti',
+  'mna',
+  'gds15',
+  'barthel',
+  'ucla_npi_sleep',
+];
 
 export const PAINAD_VERSION = 'painad-it-2026-09-22-v1' as const;
 export const PAINAD_SOURCE_SHA256 =
@@ -102,7 +120,12 @@ export interface Gds15Snapshot extends Omit<
   reference: string;
 }
 export type AssessmentSnapshot =
-  PainadSnapshot | TransfersSnapshot | TinettiSnapshot | MnaSnapshot | Gds15Snapshot;
+  | PainadSnapshot
+  | TransfersSnapshot
+  | TinettiSnapshot
+  | MnaSnapshot
+  | Gds15Snapshot
+  | PaperSnapshot;
 export interface AssessmentPdfDto {
   status: 'pending' | 'ready' | 'failed';
   documentId: string | null;
@@ -188,13 +211,19 @@ export interface Gds15AssessmentDto extends Gds15HistoryItem {
   snapshotSha256: string | null;
 }
 export type AssessmentHistoryItem =
-  PainadHistoryItem | TransfersHistoryItem | TinettiHistoryItem | MnaHistoryItem | Gds15HistoryItem;
+  | PainadHistoryItem
+  | TransfersHistoryItem
+  | TinettiHistoryItem
+  | MnaHistoryItem
+  | Gds15HistoryItem
+  | PaperHistoryItem;
 export type AssessmentDto =
   | PainadAssessmentDto
   | TransfersAssessmentDto
   | TinettiAssessmentDto
   | MnaAssessmentDto
-  | Gds15AssessmentDto;
+  | Gds15AssessmentDto
+  | PaperAssessmentDto;
 export interface AssessmentDocumentMeta {
   id: string;
   type: AssessmentType;

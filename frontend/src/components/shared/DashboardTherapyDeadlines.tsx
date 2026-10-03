@@ -1,13 +1,14 @@
 import { useId } from 'react';
 import { IcoArrow, IcoClock, IcoPill } from '../../icons';
 import type { ScadenzaTerapia } from '../../lib/dashboardTherapies';
+import { doseSignal, landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
 import type { RiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
 import './DashboardTherapyDeadlines.css';
 
 interface Props {
   summary: RiepilogoSomministrazioni;
   onOpenTherapy: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
 }
 
 function timing(row: ScadenzaTerapia, today: string) {
@@ -45,11 +46,15 @@ function DeadlineList({
           </div>
           <div className="therapy-deadlines__patient">
             {onSelectPaziente ? (
+              // Direct access: la somministrazione stessa (Terapia → giornaliere, sul farmaco).
               <button
                 type="button"
                 className="link-btn"
-                aria-label={`Apri la cartella di ${row.nome}`}
-                onClick={() => onSelectPaziente(row.nome, row.patientId)}
+                data-deadline-patient={row.patientId}
+                aria-label={`${row.nome}: apri ${row.farmaco} delle ${row.ora ?? 'orario da verificare'} nella terapia`}
+                onClick={() =>
+                  onSelectPaziente(row.nome, row.patientId, landingOf(doseSignal(row)))
+                }
               >
                 {row.nome}
               </button>
@@ -61,7 +66,20 @@ function DeadlineList({
             </span>
           </div>
           <div className="therapy-deadlines__prescription">
-            <strong>{row.farmaco}</strong>
+            {onSelectPaziente ? (
+              <button
+                type="button"
+                className="link-btn therapy-deadlines__drug"
+                aria-label={`Apri ${row.farmaco} di ${row.nome} nella terapia`}
+                onClick={() =>
+                  onSelectPaziente(row.nome, row.patientId, landingOf(doseSignal(row)))
+                }
+              >
+                <strong>{row.farmaco}</strong>
+              </button>
+            ) : (
+              <strong>{row.farmaco}</strong>
+            )}
             <span>
               {row.dose} · {row.via}
             </span>

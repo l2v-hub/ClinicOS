@@ -43,6 +43,10 @@ import { prefetchPatientListSnapshot } from './components/operator/usePatientLis
 import { prefetchPatientParametersSnapshot } from './lib/patientParametersPrefetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { intakeLandingTab } from './lib/intakeLandingTabs';
+import type { PatientTarget, PatientTargetRequest } from './lib/patientTarget';
+import { landingTarget, permittedTarget, type PatientLanding } from './lib/patientTargetResolver';
+import { parsePatientTargetHash, patientTargetHash, storedTarget } from './lib/patientTargetHash';
+import type { PatientListEntry } from './lib/patientListView';
 import {
   navHistoryState,
   patientDisplayName,
@@ -135,6 +139,7 @@ import {
   resolvePatientTab,
   type TabId,
 } from './components/operator/tabGroups';
+import type { TherapyRoundsEntry } from './components/operator/TherapyRoundsPage';
 import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
 import { classicScreenTarget } from './components/assistant/classicScreenTarget';
@@ -577,10 +582,26 @@ export default function App() {
   const [pazientiRicerca, setPazientiRicerca] = useState('');
   const [pazientiFiltroSesso, setPazientiFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [pazienteSelezionato, setPazienteSelezionato] = useState<Paziente | null>(null);
+  // Direct access: vista e filtro con cui aprire la lista (tessere KPI, segnalazioni).
+  const [patientListEntry, setPatientListEntry] = useState<PatientListEntry & { key: number }>({
+    key: 0,
+  });
   // #243: "Moduli" tab to land on when opening pazienteSelezionato (set only right after a
   // patient is created from the intake wizard with a module card selected in step 4).
   const [pendingModuleTab, setPendingModuleTab] = useState<TabId | undefined>(undefined);
   const [patientTabRequest, setPatientTabRequest] = useState(0);
+  // Direct access: section + sub-view + item the chart must land on (one request per navigation).
+  const [patientTargetRequest, setPatientTargetRequest] = useState<PatientTargetRequest | null>(
+    null,
+  );
+  const patientTargetSequenceRef = useRef(0);
+  function requestPatientLanding(target: PatientTarget | null) {
+    setPendingModuleTab(target?.tab);
+    setPatientTabRequest((value) => value + 1);
+    setPatientTargetRequest(
+      target ? { ...target, requestId: ++patientTargetSequenceRef.current } : null,
+    );
+  }
   const [assistantSectionRefresh, setAssistantSectionRefresh] = useState({
     actionType: '',
     version: 0,
@@ -707,7 +728,8 @@ export default function App() {
 
   // ── History API navigation ─────────────────────────────────────────────────
 
-  function pushNav(key: NavKey, paziente?: Paziente, patientTab?: TabId) {
+  function pushNav(key: NavKey, paziente?: Paziente, target?: PatientTarget) {
+    const patientTab = target?.tab;
     if (key === 'orari-operatori' && navKey !== 'orari-operatori') {
       setSchedulesLoadState('idle');
       setSchedulesLoadError(null);
@@ -716,11 +738,18 @@ export default function App() {
     historyDepth.current += 1;
     // #<loop-cycle-1>: encode the patient id in the hash (dettaglio-paziente only) so a page
     // refresh/reopen can restore the chart by re-fetching that id — see the mount effect below.
-    const hash = key === 'dettaglio-paziente' && paziente ? `#/${key}/${paziente.id}` : `#/${key}`;
+    // Direct access: the hash also carries section and item (#/dettaglio-paziente/<id>/<tab>?…),
+    // so reload and shared links land on the same place.
+    const hash =
+      key === 'dettaglio-paziente' && paziente
+        ? patientTargetHash({ ...target, patientId: paziente.id })
+        : `#/${key}`;
+    const item = target ? storedTarget(target) : undefined;
     const next: NavEntry = {
       navKey: key,
       ...(paziente ? { pazienteId: paziente.id, pazienteNome: patientDisplayName(paziente) } : {}),
       ...(patientTab ? { patientTab } : {}),
+      ...(item ? { patientTarget: item } : {}),
     };
     const state = navHistoryState(next, currentNavEntryRef.current ?? { navKey }, NAV_LABELS);
     window.history.pushState(state, '', hash);
@@ -735,6 +764,19 @@ export default function App() {
       } else if (key !== 'dettaglio-paziente') {
         setPazienteSelezionato(null);
       }
+    });
+  }
+
+  // Accesso diretto al Giro terapia: ora con dosi in ritardo, solo quelle da somministrare.
+  const [therapyRoundsEntry, setTherapyRoundsEntry] = useState<TherapyRoundsEntry | undefined>();
+  const therapyRoundsRequestRef = useRef(0); // sempre crescente: ogni ingresso mirato si riapplica
+  function openLateTherapyRounds() {
+    navigate('terapie'); // azzera l'ingresso precedente; quello nuovo si imposta dopo (vince)
+    therapyRoundsRequestRef.current += 1;
+    setTherapyRoundsEntry({
+      requestId: therapyRoundsRequestRef.current,
+      late: true,
+      filter: 'pending',
     });
   }
 
@@ -757,6 +799,8 @@ export default function App() {
       selectPaziente(pazienteSelezionato, patientTab);
       return;
     }
+    // Una navigazione generica verso Terapia apre il giro senza l'ingresso mirato precedente.
+    if (key === 'terapie') setTherapyRoundsEntry(undefined);
     // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
     // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
     if (key === 'consegne') {
@@ -764,7 +808,16 @@ export default function App() {
       setConsegneMode('rounds');
       consegneQueryRef.current = {};
     }
+    // La voce generica «Pazienti» riapre la lista sulla vista predefinita, senza filtri.
+    if (key === 'pazienti') setPatientListEntry((value) => ({ key: value.key + 1 }));
     pushNav(key);
+  }
+
+  // Direct access: una tessera che conta qualcosa apre la lista già filtrata su quel qualcosa.
+  function openPatientList(entry: PatientListEntry) {
+    setPatientListEntry((value) => ({ ...entry, key: value.key + 1 }));
+    setMobileNavOpen(false);
+    pushNav('pazienti');
   }
 
   // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
@@ -787,10 +840,28 @@ export default function App() {
     pushNav('consegne');
   }
 
-  function selectPaziente(p: Paziente, moduleTabId?: TabId) {
+  // Direct access: the single way into a patient's chart. Every entry point (Turno, dashboards,
+  // lists, notifications, Assistant, Agnos) describes WHERE to land; a section the role cannot read
+  // falls back to the overview instead of a "section not available" dead end.
+  function openPatientAt(target: PatientTarget, signal?: AbortSignal): Promise<boolean> {
+    if (pazienteSelezionato?.id === target.patientId && !signal) {
+      showPatientAt(pazienteSelezionato, target);
+      return Promise.resolve(true);
+    }
+    return selectPazienteById(target.patientId, target, signal);
+  }
+
+  function selectPaziente(p: Paziente, landing?: PatientLanding) {
+    showPatientAt(p, landingTarget(p.id, landing));
+  }
+
+  function showPatientAt(p: Paziente, requested: PatientTarget) {
+    const target = permittedTarget({ ...requested, patientId: p.id }, (capability) =>
+      can(capabilities, capability),
+    );
     patientNavigationSequenceRef.current += 1;
     setRestoringPazienteFromHash(false);
-    pushNav('dettaglio-paziente', p, moduleTabId);
+    pushNav('dettaglio-paziente', p, target);
     loadCartella(p.id);
     // Il riepilogo della lista non porta indirizzo e referente, che vivono solo nelle colonne del
     // paziente: una lettura mirata completa la scheda senza bloccarne l'apertura.
@@ -807,11 +878,14 @@ export default function App() {
     }
     // Reset on every selection (not just when a module is passed) so a stale target from a
     // previous intake-created patient never leaks into an unrelated navigation.
-    setPendingModuleTab(moduleTabId);
-    setPatientTabRequest((value) => value + 1);
+    requestPatientLanding(target);
   }
 
-  async function selectPazienteById(patientId: string, moduleTabId?: TabId, signal?: AbortSignal) {
+  async function selectPazienteById(
+    patientId: string,
+    moduleTabId?: PatientLanding,
+    signal?: AbortSignal,
+  ) {
     const request = ++patientNavigationSequenceRef.current;
     try {
       const patient = await fetchPatientById(API_URL, patientId, {
@@ -839,7 +913,8 @@ export default function App() {
       {
         isAdmin,
         navigate,
-        openPatient: selectPazienteById,
+        openPatient: (patientId, tab, navSignal, item) =>
+          openPatientAt({ ...item, patientId, ...(tab ? { tab } : {}) }, navSignal),
         openConsegne: (recordId, patientId) =>
           openConsegneFeed(patientId ? { patientId } : {}, recordId),
       },
@@ -875,10 +950,16 @@ export default function App() {
       (current.patientTab ?? resolvePatientTab()) === tab
     )
       return;
-    const next: NavEntry = { ...current, patientTab: tab };
+    const next: NavEntry = { ...current, patientTab: tab, patientTarget: undefined };
     const state = navHistoryState(next, current, NAV_LABELS);
     historyDepth.current += 1;
-    window.history.pushState(state, '', window.location.hash);
+    window.history.pushState(
+      state,
+      '',
+      current.pazienteId
+        ? patientTargetHash({ patientId: current.pazienteId, tab })
+        : window.location.hash,
+    );
     currentNavEntryRef.current = next;
     setBackLabel(state.prevLabel ?? null);
   }
@@ -901,8 +982,8 @@ export default function App() {
       currentNavEntryRef.current = null;
       // Prompt 10 §2: un link #/dettaglio-paziente/<id> aperto con l'app già avviata (incollato,
       // condiviso) non porta history.state: apre comunque quel paziente, come al primo caricamento.
-      const linked = /^#\/dettaglio-paziente\/([^/?#]+)$/.exec(window.location.hash)?.[1];
-      if (linked && linked !== pazienteSelezionato?.id) void selectPazienteById(linked);
+      const linked = parsePatientTargetHash(window.location.hash);
+      if (linked) void openPatientAt(linked);
       return;
     }
     const known =
@@ -914,15 +995,16 @@ export default function App() {
       ...(state.pazienteId ? { pazienteId: state.pazienteId } : {}),
       ...(known ? { pazienteNome: patientDisplayName(known) } : {}),
       ...(state.patientTab ? { patientTab: state.patientTab } : {}),
+      ...(state.patientTarget ? { patientTarget: state.patientTarget } : {}),
     };
     if (state.navKey !== 'dettaglio-paziente' || !state.pazienteId) return;
     const tab: TabId = state.patientTab ?? resolvePatientTab();
+    const landing: PatientTarget = { ...state.patientTarget, patientId: state.pazienteId, tab };
     if (known) {
       // La cartella di questo paziente potrebbe non essere ancora arrivata: senza, la scheda
       // mostrerebbe una cartella vuota come se fosse reale.
       if (!cartelle.some((c) => c.pazienteId === known.id)) void loadCartella(known.id);
-      setPendingModuleTab(tab);
-      setPatientTabRequest((value) => value + 1);
+      requestPatientLanding(landing);
       return;
     }
     void fetchPatientById(API_URL, state.pazienteId, { headers: operatorHeaders() })
@@ -937,8 +1019,7 @@ export default function App() {
           currentNavEntryRef.current.pazienteNome = patientDisplayName(patient);
         setPazienteSelezionato(patient);
         void loadCartella(patient.id);
-        setPendingModuleTab(tab);
-        setPatientTabRequest((value) => value + 1);
+        requestPatientLanding(landing);
       })
       .catch(() => showToast('Paziente non disponibile o non autorizzato'));
   };
@@ -966,20 +1047,27 @@ export default function App() {
         navKey: saved.navKey,
         ...(saved.pazienteId ? { pazienteId: saved.pazienteId } : {}),
         ...(saved.patientTab ? { patientTab: saved.patientTab } : {}),
+        ...(saved.patientTarget ? { patientTarget: saved.patientTarget } : {}),
       };
       if (saved.prevLabel) {
         setBackLabel(saved.prevLabel);
         historyDepth.current = 1;
       }
-      if (saved.navKey === 'dettaglio-paziente' && saved.patientTab) {
-        setPendingModuleTab(saved.patientTab);
-        setPatientTabRequest((value) => value + 1);
-      }
     }
     const hash = window.location.hash.replace('#/', '');
-    // dettaglio-paziente/<id>: restore the chart with a single lookup after authentication.
-    if (hash.startsWith('dettaglio-paziente/')) {
-      const id = hash.slice('dettaglio-paziente/'.length);
+    // dettaglio-paziente/<id>[/<tab>][?item]: restore the chart (section and item included) with a
+    // single lookup after authentication. history.state wins over the hash when both exist.
+    const linked = parsePatientTargetHash(window.location.hash);
+    if (linked) {
+      const fromState =
+        saved?.navKey === 'dettaglio-paziente' && saved.pazienteId === linked.patientId
+          ? { ...saved.patientTarget, tab: saved.patientTab }
+          : null;
+      const landing: PatientTarget = fromState
+        ? { ...fromState, patientId: linked.patientId }
+        : linked;
+      if (landing.tab || storedTarget(landing)) requestPatientLanding(landing);
+      const id = linked.patientId;
       if (id) {
         pendingPazienteRestoreIdRef.current = id;
         setRestoringPazienteFromHash(true);
@@ -2813,7 +2901,7 @@ export default function App() {
 
   // ── Navigate to patient by name ─────────────────────────────────────────────
 
-  async function goToPazienteByNome(nome: string, patientId?: string, tab?: TabId) {
+  async function goToPazienteByNome(nome: string, patientId?: string, tab?: PatientLanding) {
     if (patientId) {
       await selectPazienteById(patientId, tab);
       return;
@@ -3398,6 +3486,7 @@ export default function App() {
                       {/* ── ADMIN ── */}
                       {isAdmin && navKey === 'admin-dashboard' && (
                         <AdminDashboard
+                          onOpenLateTherapy={openLateTherapyRounds}
                           operatori={operatori}
                           operatorSummary={operatorDirectorySummary}
                           consegneOverview={consegneOverview}
@@ -3411,7 +3500,9 @@ export default function App() {
                           onNavigate={navigate}
                           onOpenConsegneAperte={openConsegneAperte}
                           onOpenConsegneFeed={() => openConsegneFeed()}
+                          onOpenConsegneQuery={(query) => openConsegneFeed(query)}
                           onSelectPaziente={goToPazienteByNome}
+                          onOpenPatientList={openPatientList}
                           clinicalOverview={clinicalOverview}
                           clinicalOverviewState={clinicalOverviewState}
                           onRetryClinicalOverview={() => void loadClinicalOverview()}
@@ -3466,6 +3557,7 @@ export default function App() {
                       {/* ── SHARED ── */}
                       {navKey === 'terapie' && (
                         <TherapyRoundsPage
+                          entry={therapyRoundsEntry}
                           date={therapyDate}
                           slots={therapySlots}
                           loading={loadingTherapySlots}
@@ -3522,12 +3614,16 @@ export default function App() {
                           onQueryChange={loadNotes}
                           onLoadMore={() => void loadNotes(notesQueryRef.current, true)}
                           onRetry={() => void loadNotes(notesQueryRef.current)}
+                          onOpenPatient={(nome, patientId) =>
+                            void goToPazienteByNome(nome, patientId, 'note')
+                          }
                         />
                       )}
 
                       {/* ── OPERATOR ── */}
                       {!isAdmin && navKey === 'operator-dashboard' && (
                         <OperatorDashboard
+                          onOpenLateTherapy={openLateTherapyRounds}
                           utente={utente}
                           consegneOverview={consegneOverview}
                           consegneOverviewState={consegneOverviewState}
@@ -3544,6 +3640,7 @@ export default function App() {
                           onOpenConsegneAperte={openConsegneAperte}
                           onOpenConsegneFeed={() => openConsegneFeed()}
                           onSelectPaziente={goToPazienteByNome}
+                          onOpenPatientList={openPatientList}
                           clinicalOverview={clinicalOverview}
                           clinicalOverviewState={clinicalOverviewState}
                           onRetryClinicalOverview={() => void loadClinicalOverview()}
@@ -3557,6 +3654,7 @@ export default function App() {
                         (navKey === 'pazienti' || navKey === 'nuovo-ingresso') && (
                           <PatientList
                             newIntake={navKey === 'nuovo-ingresso'}
+                            entry={patientListEntry}
                             onOpenNewIntake={() => navigate('nuovo-ingresso')}
                             onCloseNewIntake={() => goBack('pazienti')}
                             totalPatients={clinicalOverview?.totalPatients ?? 0}
@@ -3647,6 +3745,11 @@ export default function App() {
                           operatoreId={utenteId}
                           initialTab={pendingModuleTab}
                           navigationRequestId={patientTabRequest}
+                          navigationTarget={
+                            patientTargetRequest?.patientId === pazienteSelezionato.id
+                              ? patientTargetRequest
+                              : undefined
+                          }
                           assistantSectionRefresh={assistantSectionRefresh}
                           operatoreRole={utente?.ruolo}
                         />
@@ -3699,7 +3802,11 @@ export default function App() {
                   setAssistantModeOpen(false);
                   const target = classicScreenTarget(screen);
                   if (target.kind === 'patient')
-                    void selectPazienteById(target.patientId, target.tab);
+                    void openPatientAt({
+                      patientId: target.patientId,
+                      ...(target.tab ? { tab: target.tab } : {}),
+                      ...(target.therapy ? { therapy: target.therapy } : {}),
+                    });
                   else navigate(target.screen);
                 }}
               />

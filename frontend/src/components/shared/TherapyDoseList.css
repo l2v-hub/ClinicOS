@@ -1,0 +1,50 @@
+.tdose-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+}
+.tdose {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 3px 6px;
+  border-left: 3px solid var(--blue);
+  border-radius: 4px;
+  background: var(--surface, #fff);
+  font-size: 11.5px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.tdose__who {
+  font-weight: 650;
+  color: var(--text);
+}
+.tdose__what {
+  color: var(--text);
+}
+.tdose__status {
+  font-weight: 600;
+  color: #1d4fc4;
+}
+.tdose--late,
+.tdose--missed {
+  border-left-color: var(--red);
+}
+.tdose--late .tdose__status,
+.tdose--missed .tdose__status {
+  color: #a5202f;
+}
+.tdose--done {
+  border-left-color: #16a37b;
+}
+.tdose--done .tdose__status {
+  color: #0e7a55;
+}
+.tdose-list__partial {
+  margin: 4px 0 0;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}

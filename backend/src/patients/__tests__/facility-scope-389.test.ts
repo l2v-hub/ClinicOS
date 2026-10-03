@@ -112,3 +112,51 @@ test('#389 the AI assistant context (Agnos, /ai/actions, Tool Layer assistant.qu
   assert.ok(Array.isArray(ctx.permittedPatientIds), 'explicit list, never the management null');
   for (const id of ids) assert.ok(ctx.permittedPatientIds!.includes(id), `AI reaches ${id}`);
 });
+
+test('#389 PRN («al bisogno») follows the facility reach: nurse records it on a doctor-registered resident', async () => {
+  const { createTherapyInTx } = await import('../../therapies/therapy-create.js');
+  const doctorResident = ids[0];
+  const therapy = await prisma.$transaction((tx) =>
+    createTherapyInTx(tx, doctorResident, {
+      farmacoNome: 'Paracetamolo 389',
+      dataInizio: new Date().toISOString().slice(0, 10),
+      commercialStrengthValue: 500,
+      commercialStrengthUnit: 'mg',
+      pharmaceuticalForm: 'compressa',
+      viaSomministrazione: 'orale',
+      tipo: 'al_bisogno',
+      operatoreInseritore: 'Test 389',
+    }),
+  );
+  const nurse = sessions['SIM-NURSE-1'];
+  const prn = await call(base, nurse, 'POST', '/therapy-slots/prn', {
+    patientId: doctorResident,
+    therapyId: therapy.id,
+    indicazione: 'Febbre 38,2',
+    requestId: randomUUID(),
+  });
+  assert.ok([200, 201].includes(prn.status), JSON.stringify(prn.body));
+  const date = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Rome' }).format(new Date());
+  const list = await call(
+    base,
+    nurse,
+    'GET',
+    `/therapy-slots/prn?patientId=${doctorResident}&date=${date}`,
+  );
+  assert.equal(list.status, 200, JSON.stringify(list.body));
+  const items = (list.body.items ?? list.body) as unknown[];
+  assert.equal(items.length, 1);
+  // Append-only: the dose cannot be edited; deleting the prescription only detaches it.
+  await assert.rejects(() =>
+    prisma.prnAdministration.updateMany({
+      where: { patientId: doctorResident },
+      data: { indicazione: 'modificata' },
+    }),
+  );
+  await prisma.patientTherapy.delete({ where: { id: therapy.id } });
+  const detached = await prisma.prnAdministration.findFirst({
+    where: { patientId: doctorResident },
+  });
+  assert.equal(detached?.therapyId, null);
+  assert.equal(detached?.indicazione, 'Febbre 38,2');
+});

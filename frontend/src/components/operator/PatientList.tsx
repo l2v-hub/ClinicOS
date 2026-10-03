@@ -11,12 +11,17 @@ import { NewPatientFlow } from './NewPatientFlow';
 import { NewPatientStart } from './NewPatientStart';
 import type { NewPatientPath } from './NewPatientChooser';
 import {
+  LIST_SIGNAL_LABEL,
   LIST_VIEW_LABEL,
   countListViews,
+  matchesListSignal,
   matchesListView,
   unknownStateCount,
   type ListView,
+  type PatientListEntry,
+  type PatientListSignal,
 } from '../../lib/patientListView';
+import type { PatientLanding } from '../../lib/patientTargetResolver';
 import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { useCan } from '../../lib/capabilities';
@@ -35,7 +40,7 @@ interface PatientListProps {
   onRicercaChange: (v: string) => void;
   filtroSesso: 'tutti' | 'M' | 'F';
   onFiltroSessoChange: (v: 'tutti' | 'M' | 'F') => void;
-  onSelect: (p: Paziente) => void;
+  onSelect: (p: Paziente, landing?: PatientLanding) => void;
   /** Richiesta anticipata della cartella al passaggio del mouse/focus su una riga. */
   onPrefetch?: (p: Paziente) => void;
   /** REQ-018: refresh the list after an imported patient is created.
@@ -50,6 +55,9 @@ interface PatientListProps {
   newIntake?: boolean;
   onOpenNewIntake?: () => void;
   onCloseNewIntake?: () => void;
+  /** Direct access: aperta da una tessera/segnalazione, la lista parte già sulla vista e sul
+   *  filtro di ciò che quella tessera conta (es. «Dimessi in archivio» → vista Dimessi). */
+  entry?: PatientListEntry & { key: number };
 }
 
 export function PatientList({
@@ -67,6 +75,7 @@ export function PatientList({
   newIntake = false,
   onOpenNewIntake,
   onCloseNewIntake,
+  entry,
 }: PatientListProps) {
   const {
     patients: pazienti,
@@ -115,7 +124,15 @@ export function PatientList({
     newIntakeButtonRef.current?.focus();
   });
   // Vista come il prototipo: "Ricoverati" (in carico) predefinita, "Dimessi e archivio", "Tutti".
-  const [vista, setVista] = useState<ListView>('in_carico');
+  const [vista, setVista] = useState<ListView>(entry?.view ?? 'in_carico');
+  const [segnale, setSegnale] = useState<PatientListSignal | null>(entry?.signal ?? null);
+  const appliedEntryRef = useRef(entry?.key);
+  useEffect(() => {
+    if (!entry || appliedEntryRef.current === entry.key) return;
+    appliedEntryRef.current = entry.key;
+    setVista(entry.view ?? 'in_carico');
+    setSegnale(entry.signal ?? null);
+  }, [entry]);
   const [showFilters, setShowFilters] = useState(false);
   // Vista scelta prima di iniziare una ricerca: cancellata la ricerca, si torna lì.
   const [vistaPrimaDellaRicerca, setVistaPrimaDellaRicerca] = useState<ListView | null>(null);
@@ -201,8 +218,13 @@ export function PatientList({
     [filtratiBase, summaryMap],
   );
   const filtrati = useMemo(
-    () => filtratiBase.filter((p) => matchesListView(summaryMap.get(p.id)?.statoRicovero, vista)),
-    [filtratiBase, vista, summaryMap],
+    () =>
+      filtratiBase.filter(
+        (p) =>
+          matchesListView(summaryMap.get(p.id)?.statoRicovero, vista) &&
+          matchesListSignal(summaryMap.get(p.id), anomalie.perPaziente.has(p.id), segnale),
+      ),
+    [filtratiBase, vista, summaryMap, segnale, anomalie.perPaziente],
   );
   const ordinati = useMemo(
     () =>
@@ -397,6 +419,15 @@ export function PatientList({
               : statiNonNoti === 1
                 ? 'resta fra i ricoverati finché il dato non arriva.'
                 : 'restano fra i ricoverati finché il dato non arriva.'}
+          </p>
+        )}
+        {segnale && (
+          <p className="plist-note plist-note--signal" role="status" data-list-signal={segnale}>
+            Filtro attivo: <strong>{LIST_SIGNAL_LABEL[segnale]}</strong> ({filtrati.length} fra i
+            pazienti caricati).{' '}
+            <button type="button" className="link-btn" onClick={() => setSegnale(null)}>
+              Mostra tutti
+            </button>
           </p>
         )}
         {filtroSesso !== 'tutti' && !showFilters && (

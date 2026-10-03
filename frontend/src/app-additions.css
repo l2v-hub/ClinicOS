@@ -10779,17 +10779,41 @@ textarea.form-input {
     display: none;
   }
 }
-@media (max-width: 900px) {
-  /* tablet stretto e telefono: il badge diventa la sola icona di allerta (il testo resta letto) */
+@media (max-width: 1279px) {
+  /* tablet (1180 e 820) e telefono: nell'intestazione i nomi verrebbero tagliati («Acido acetils…»),
+     quindi il badge lascia il posto alla fascia allergie a tutta larghezza sotto l'intestazione
+     (.patient-allergy-strip): nomi sempre leggibili, mai un ⚠ da solo o un tooltip. */
   .patient-topbar-title__allergy {
-    width: 32px;
-    padding: 0;
-    justify-content: center;
-    font-size: 0;
+    display: none;
   }
-  .patient-topbar-title__allergy svg {
+}
+/* Fascia allergie (≤ 1279 px): testo a capo, nomi completi, rosso = allerta clinica. */
+.patient-allergy-strip {
+  display: none;
+}
+@media (max-width: 1279px) {
+  .patient-allergy-strip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #fdecee;
+    color: #b42335;
+    font: 600 14px/20px var(--font-ui);
+    overflow-wrap: anywhere;
+  }
+  .patient-allergy-strip svg {
     width: 18px;
     height: 18px;
+    flex: none;
+    margin-top: 1px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 }
 .patient-topbar-title__allergy svg {
@@ -10880,11 +10904,4 @@ textarea.form-input {
 .patient-topbar-title__allergy-mini {
   display: none;
 }
-@media (max-width: 420px) {
-  .patient-topbar-title__allergy-mini {
-    display: inline;
-    margin-right: 4px;
-    color: #b42335;
-    font-weight: 700;
-  }
-}
+/* (telefono: i nomi sono nella fascia allergie; il solo ⚠ con tooltip non si usa più) */

@@ -1,4 +1,5 @@
 import { useState, useMemo, Fragment, useEffect } from 'react';
+import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type {
   Appuntamento,
   Operatore,
@@ -18,6 +19,7 @@ import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
 import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
 import { PageHeader } from '../shared/PageHeader';
 import './OperatorAgendaHmi.css';
+import '../shared/AgendaInline.css';
 import { TherapySlotModal } from './TherapySlotModal';
 import { useCan } from '../../lib/capabilities';
 
@@ -35,7 +37,7 @@ interface OperatorAgendaProps {
   appointmentLoadError?: string | null;
   onRetryAppointments?: () => void;
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   therapySlots?: TherapySlot[];
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
@@ -475,7 +477,11 @@ export function OperatorAgenda({
                                 className="link-btn agt-apt-card__patient"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  onSelectPaziente(apt.pazienteNome!, apt.pazienteId ?? undefined);
+                                  onSelectPaziente(
+                                    apt.pazienteNome!,
+                                    apt.pazienteId ?? undefined,
+                                    appointmentLanding(apt),
+                                  );
                                 }}
                               >
                                 {apt.pazienteNome}
@@ -497,7 +503,10 @@ export function OperatorAgenda({
                             </span>
                           </div>
                         </div>
-                        {apt.note && isSelected && <p className="agt-apt-card__note">{apt.note}</p>}
+                        {/* Nota sempre visibile (tablet: niente tocco per leggerla). */}
+                        {apt.note && (
+                          <p className="agt-apt-card__note agt-note-inline">{apt.note}</p>
+                        )}
                         {isSelected && (
                           <AppuntamentoActions
                             apt={apt}
@@ -573,7 +582,7 @@ export function OperatorAgenda({
                       {apts.map((a) => (
                         <div
                           key={a.id}
-                          className={`agt-week-apt agt-apt-card--${a.stato}`}
+                          className={`agt-week-apt agt-inline-apt agt-apt-card--${a.stato}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             setEditingApt(a);
@@ -585,7 +594,11 @@ export function OperatorAgenda({
                               className="link-btn agt-week-apt__name"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
+                                onSelectPaziente(
+                                  a.pazienteNome!,
+                                  a.pazienteId ?? undefined,
+                                  appointmentLanding(a),
+                                );
                               }}
                             >
                               {a.pazienteNome.split(',')[0]}
@@ -596,6 +609,11 @@ export function OperatorAgenda({
                             </span>
                           )}
                           <span className={`agt-status-dot agt-status-dot--${a.stato}`} />
+                          {/* Stato in parole, non solo colore; tipo di intervento in chiaro. */}
+                          <span className="agt-inline-meta">
+                            {TIPO_LABEL[a.tipoIntervento] ?? a.tipoIntervento} ·{' '}
+                            <strong>{STATO_LABEL[a.stato]}</strong>
+                          </span>
                         </div>
                       ))}
                       {cellApts.length === 0 && (
@@ -639,15 +657,23 @@ export function OperatorAgenda({
                 >
                   <span className="agt-month-day__num">{d.getDate()}</span>
                   <div className="agt-month-day__apts">
-                    {apts.slice(0, 2).map((a) => (
-                      <div key={a.id} className={`agt-month-apt agt-apt-card--${a.stato}`}>
+                    {/* Tutti gli appuntamenti: la cella cresce invece di «+N». */}
+                    {apts.map((a) => (
+                      <div
+                        key={a.id}
+                        className={`agt-month-apt agt-inline-apt agt-apt-card--${a.stato}`}
+                      >
                         <span className="agt-month-apt__time">{a.ora}</span>
                         {onSelectPaziente && a.pazienteNome ? (
                           <button
                             className="link-btn agt-month-apt__name"
                             onClick={(e) => {
                               e.stopPropagation();
-                              onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
+                              onSelectPaziente(
+                                a.pazienteNome!,
+                                a.pazienteId ?? undefined,
+                                appointmentLanding(a),
+                              );
                             }}
                           >
                             {a.pazienteNome.split(',')[0]}
@@ -657,9 +683,9 @@ export function OperatorAgenda({
                             {a.pazienteNome?.split(',')[0] ?? '—'}
                           </span>
                         )}
+                        <span className="agt-inline-meta">{STATO_LABEL[a.stato]}</span>
                       </div>
                     ))}
-                    {apts.length > 2 && <span className="agt-month-more">+{apts.length - 2}</span>}
                   </div>
                 </div>
               );

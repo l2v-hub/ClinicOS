@@ -13,6 +13,8 @@ export const ASSESSMENT_ARCHIVE_LABELS: Record<AssessmentType, string> = {
   tinetti: 'Scala di Tinetti',
   mna: 'MNA · Nutrizione',
   gds15: 'GDS-15 · Depressione',
+  barthel: 'Indice di Barthel',
+  ucla_npi_sleep: 'UCLA · Ritmo sonno-veglia (NPI)',
 };
 
 export const DOCUMENT_TYPE_LABELS: Record<TipoDocumento, string> = {

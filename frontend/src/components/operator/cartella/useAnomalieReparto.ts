@@ -28,6 +28,7 @@ const TTL_MS = 60 * 1000;
 interface SommministrazioneSlot {
   drugName: string;
   dosage: string | null;
+  therapyId?: string;
 }
 
 interface PazienteSlot {
@@ -54,6 +55,21 @@ export interface AnomalieReparto {
   fallito: boolean;
   /** false quando il ruolo non legge le terapie di reparto (nessuna verifica, nessun caricamento). */
   disponibile?: boolean;
+  /** Direct access: terapia (id) di ogni farmaco del paziente, chiave `patientId|farmacoNome`. */
+  therapyIds?: Map<string, string>;
+}
+
+const therapyKey = (patientId: string, farmacoNome: string) => `${patientId}|${farmacoNome}`;
+
+/** Direct access: la terapia da mettere a fuoco per un'anomalia (la prima del paziente, o quella
+ *  del farmaco indicato). undefined se lo slot non porta l'id: si apre la sezione senza fuoco. */
+export function anomalyTherapyId(
+  reparto: AnomalieReparto,
+  patientId: string,
+  farmacoNome?: string,
+): string | undefined {
+  const nome = farmacoNome ?? reparto.perPaziente.get(patientId)?.anomalie[0]?.farmacoNome;
+  return nome ? reparto.therapyIds?.get(therapyKey(patientId, nome)) : undefined;
 }
 
 const VUOTO: AnomalieReparto = {
@@ -115,10 +131,12 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
     righe,
     perPaziente: righePerPaziente,
     nomi,
+    therapyIds,
   } = useMemo(() => {
     const righe: RigaDaRisolvere[] = [];
     const perPaziente = new Map<string, RigaDaRisolvere[]>();
     const nomi = new Map<string, string>();
+    const therapyIds = new Map<string, string>();
 
     for (const slot of slots ?? []) {
       for (const paziente of slot.patients ?? []) {
@@ -126,6 +144,9 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
         const proprie = perPaziente.get(paziente.patientId) ?? [];
         for (const somministrazione of paziente.administrations ?? []) {
           if (!somministrazione.drugName) continue;
+          const key = therapyKey(paziente.patientId, somministrazione.drugName);
+          if (somministrazione.therapyId && !therapyIds.has(key))
+            therapyIds.set(key, somministrazione.therapyId);
           const riga: RigaDaRisolvere = {
             farmacoNome: somministrazione.drugName,
             dosaggio: somministrazione.dosage,
@@ -140,7 +161,7 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
         perPaziente.set(paziente.patientId, proprie);
       }
     }
-    return { righe, perPaziente, nomi };
+    return { righe, perPaziente, nomi, therapyIds };
   }, [slots]);
 
   const risoluzioni = useRisoluzioniFarmaco(righe);
@@ -180,8 +201,8 @@ export function useAnomalieReparto(attivoRichiesto = true): AnomalieReparto {
       // Prima chi ha piu' farmaci da sanare: e' l'ordine in cui conviene lavorarli.
       .sort((a, b) => b.esito.totale - a.esito.totale || a.nome.localeCompare(b.nome));
 
-    return { perPaziente, pazienti, inCorso, verificaIncompleta, fallito: false };
-  }, [attivo, fallito, slots, righe.length, righePerPaziente, risoluzioni, nomi]);
+    return { perPaziente, pazienti, inCorso, verificaIncompleta, fallito: false, therapyIds };
+  }, [attivo, fallito, slots, righe.length, righePerPaziente, risoluzioni, nomi, therapyIds]);
 }
 
 /** Anomalie di un singolo paziente dalla mappa di reparto. */

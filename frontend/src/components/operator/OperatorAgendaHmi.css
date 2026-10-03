@@ -167,20 +167,17 @@
   background: transparent;
   border-left: 0;
 }
-/* Sottotitolo nell'intestazione: una riga sola, il titolo resta sempre visibile. */
+/* Sottotitolo nell'intestazione: va a capo (settimana/data sempre leggibili, niente «…»). */
 .topbar-title .agt-page-subtitle {
-  flex-wrap: nowrap;
-  overflow: hidden;
-  white-space: nowrap;
+  flex-wrap: wrap;
+  row-gap: 0;
+  column-gap: 6px;
+  white-space: normal;
 }
 .topbar-title .agt-page-subtitle > * {
-  flex: none;
-}
-.topbar-title .agt-page-subtitle > :last-child {
   flex: 0 1 auto;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 .agt-view--hmi .agt-day-card__heading {
   display: flex;
@@ -193,7 +190,7 @@
   color: var(--text-muted);
 }
 @media (max-width: 600px) {
-  /* Sul telefono l'intestazione mostra solo la data (con i puntini se non entra); l'operatore
+  /* Sul telefono l'intestazione mostra solo la data (a capo se non entra); l'operatore
      passa nella card del giorno. */
   .topbar-title .agt-page-subtitle .agt-op-chip,
   .topbar-title .agt-page-subtitle .agt-page-subtitle__separator,
@@ -203,8 +200,6 @@
   .topbar-title .agt-page-subtitle .agt-header__date {
     flex: 0 1 auto;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .agt-view--hmi .agt-day-card__op {
     display: block;

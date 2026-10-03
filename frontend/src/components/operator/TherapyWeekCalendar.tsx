@@ -5,6 +5,8 @@ import { operatorHeaders } from '../../lib/operatorSession';
 import { buildTherapySlotPageUrl, parseTherapySlotPage } from '../../lib/therapySlotPage';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { cellLabel, cellTone, weekDays, weekFasce } from '../../lib/therapyWeek';
+import { slotDoses } from '../../lib/therapyDoseStatus';
+import { TherapyDoseList } from '../shared/TherapyDoseList';
 import './TherapyWeekCalendar.css';
 
 type DayState =
@@ -31,7 +33,11 @@ const LONG = new Intl.DateTimeFormat('it-IT', {
 });
 const at = (d: string) => new Date(`${d}T12:00:00`);
 
-/** Settimana del giro terapia: per ogni giorno e fascia, i totali reali del servizio delle fasce. */
+/**
+ * Settimana del giro terapia: per ogni giorno e fascia i totali reali del servizio delle fasce e,
+ * senza tocchi, l'elenco delle dosi (paziente · farmaco · dose · stato, in ritardo per prime).
+ * Su tablet verticale la griglia a 7 colonne diventa un elenco per giorno (nomi mai troncati).
+ */
 export function TherapyWeekCalendar({ date, onOpen }: Props) {
   const days = weekDays(date);
   const key = days[0];
@@ -193,6 +199,10 @@ export function TherapyWeekCalendar({ date, onOpen }: Props) {
                             <span className="tcal__hint">{slot.summary.pending} da fare</span>
                           )}
                         </button>
+                        <TherapyDoseList
+                          doses={slotDoses(slot, d)}
+                          partial={!s.exact || loadedCount(slot) < slot.summary.total}
+                        />
                       </td>
                     );
                   })}
@@ -202,6 +212,50 @@ export function TherapyWeekCalendar({ date, onOpen }: Props) {
           </table>
         </div>
       )}
+      {fasce.length > 0 && (
+        <ol className="tcal__stack" aria-label="Dosi della settimana per giorno">
+          {days.map((d) => {
+            const s = byDay[d];
+            return (
+              <li key={d} className={`tcal__stack-day${d === today ? ' is-today' : ''}`}>
+                <h3 className="tcal__stack-head">{LONG.format(at(d))}</h3>
+                {(!s || s.status === 'loading') && <p role="status">Caricamento…</p>}
+                {s?.status === 'error' && <p>Giorno non caricato.</p>}
+                {s?.status === 'ready' &&
+                  (s.slots.length === 0 ? (
+                    <p className="tcal__none-text">Nessuna somministrazione.</p>
+                  ) : (
+                    s.slots
+                      .filter((slot) => slot.summary.total > 0)
+                      .sort((a, b) => a.ora.localeCompare(b.ora))
+                      .map((slot) => (
+                        <section key={slot.fascia} className="tcal__stack-fascia">
+                          <button
+                            type="button"
+                            className="tcal__stack-open"
+                            onClick={() => onOpen(d, slot.fascia)}
+                            aria-label={`${LONG.format(at(d))}, ore ${slot.ora}: ${cellLabel(slot, cellTone(slot, d, today, nowHm))}. Apri il giro`}
+                          >
+                            <strong>{slot.ora}</strong>{' '}
+                            {slot.summary.administered + slot.summary.notAdministered}/
+                            {slot.summary.total} registrate · Apri il giro
+                          </button>
+                          <TherapyDoseList
+                            doses={slotDoses(slot, d)}
+                            partial={!s.exact || loadedCount(slot) < slot.summary.total}
+                          />
+                        </section>
+                      ))
+                  ))}
+              </li>
+            );
+          })}
+        </ol>
+      )}
     </section>
   );
+}
+
+function loadedCount(slot: TherapySlot): number {
+  return (slot.patients ?? []).reduce((n, p) => n + p.administrations.length, 0);
 }

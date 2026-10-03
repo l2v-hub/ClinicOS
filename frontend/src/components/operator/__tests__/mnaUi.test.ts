@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { emptyMnaAnswers } from '../../../lib/assessments/mnaDefinition';
 import { MnaForm } from '../assessments/MnaForm';
 import { MnaAnthropometry } from '../assessments/MnaAnthropometry';
 import { AssessmentSummary } from '../assessments/AssessmentSummary';
@@ -70,6 +71,8 @@ test('MNA presentation uses singular points and Italian decimals without changin
 test('MNA starts in progressive screening with no clinical selection and opens full without losing G–R', () => {
   const store = createAssessmentDraftStore();
   const key = store.create('patient-a', undefined, 'mna');
+  // New compilations are MNA-SF (paper form); this exercises the legacy v1 form kept for v1 drafts.
+  store.update(key, { answers: emptyMnaAnswers() });
   const editor = () =>
     render(
       React.createElement(MnaForm, {

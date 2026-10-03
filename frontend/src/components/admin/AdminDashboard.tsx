@@ -16,6 +16,9 @@ import { useAnomalieReparto } from '../operator/cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
 import { AdminDashboardKpiBands } from './AdminDashboardKpiBands';
 import { DashboardTherapyDeadlines } from '../shared/DashboardTherapyDeadlines';
+import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
+import type { PatientListEntry } from '../../lib/patientListView';
+import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -29,10 +32,15 @@ interface AdminDashboardProps {
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
+  /** Giro terapia aperto sull'ora con dosi in ritardo, solo da somministrare (accesso diretto). */
+  onOpenLateTherapy?: () => void;
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
+  /** Direct access: lista pazienti / consegne già filtrate su ciò che una tessera conta. */
+  onOpenPatientList?: (entry: PatientListEntry) => void;
+  onOpenConsegneQuery?: (query: ConsegnaFeedQuery) => void;
   clinicalOverview?: ClinicalOverview | null;
   clinicalOverviewState: 'loading' | 'ready' | 'error';
   onRetryClinicalOverview: () => void;
@@ -60,9 +68,12 @@ export function AdminDashboard({
   totalePazienti,
   loadingPazienti,
   onNavigate,
+  onOpenLateTherapy,
   onOpenConsegneAperte,
   onOpenConsegneFeed,
   onSelectPaziente,
+  onOpenPatientList,
+  onOpenConsegneQuery,
   clinicalOverview = null,
   clinicalOverviewState,
   onRetryClinicalOverview,
@@ -124,6 +135,7 @@ export function AdminDashboard({
     onSelectPaziente,
     onRetryClinicalOverview,
     therapyNav: 'terapie',
+    onOpenPatientList,
   });
 
   if (camereLoadState === 'error') {
@@ -176,6 +188,7 @@ export function AdminDashboard({
       />
 
       <AdminDashboardKpiBands
+        onOpenLateTherapy={onOpenLateTherapy}
         loadingPazienti={loadingPazienti}
         totalePazienti={totalePazienti}
         activeOperatorTotal={activeOperatorTotal}
@@ -194,12 +207,14 @@ export function AdminDashboard({
         somministrazioni={somministrazioni}
         onNavigate={onNavigate}
         onOpenConsegneAperte={onOpenConsegneAperte}
+        onOpenPatientList={onOpenPatientList}
+        onOpenConsegneFeed={onOpenConsegneQuery}
       />
 
       {somministrazioni.disponibile && (
         <DashboardTherapyDeadlines
           summary={somministrazioni}
-          onOpenTherapy={() => onNavigate('terapie')}
+          onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
           onSelectPaziente={onSelectPaziente}
         />
       )}
@@ -463,9 +478,22 @@ export function AdminDashboard({
                   )}
                 </div>
                 {onSelectPaziente && c.pazienteNome ? (
+                  // Direct access: la consegna stessa, evidenziata nella cartella del paziente.
                   <button
                     className="link-btn consegna-paziente"
-                    onClick={() => onSelectPaziente(c.pazienteNome!, c.pazienteId)}
+                    data-consegna-link={c.id}
+                    aria-label={`${c.pazienteNome}: apri questa consegna nella cartella`}
+                    onClick={() =>
+                      onSelectPaziente(
+                        c.pazienteNome!,
+                        c.pazienteId,
+                        landingOf({
+                          kind: 'handover',
+                          patientId: c.pazienteId,
+                          consegnaId: c.id,
+                        }),
+                      )
+                    }
                     style={{ fontWeight: 600 }}
                   >
                     {c.pazienteNome}

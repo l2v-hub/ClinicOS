@@ -1,16 +1,14 @@
 import { IcoArrow } from '../../icons';
 import type { NavKey } from '../../types';
-import {
-  MAX_DASHBOARD_DELAY_ITEMS,
-  MAX_DASHBOARD_NOTIFICATION_PATIENTS,
-} from '../shared/dashboardAlertLimits';
+import { MAX_DASHBOARD_NOTIFICATION_PATIENTS } from '../shared/dashboardAlertLimits';
 import type { DashboardNotificationSection } from './DashboardNotificationCenter';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
-import { MAX_ANOMALIE_NEL_RIEPILOGO, messaggioAnomalieCompatto } from './cartella/anomalieFarmaco';
-import type { AnomalieReparto } from './cartella/useAnomalieReparto';
+import { messaggioAnomalieCompatto } from './cartella/anomalieFarmaco';
+import { anomalyTherapyId, type AnomalieReparto } from './cartella/useAnomalieReparto';
 import type { RiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
 import './cartella/AvvisoAnomalieFarmaci.css';
-import type { TabId } from './tabGroups';
+import { doseSignal, landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
+import type { PatientListEntry } from '../../lib/patientListView';
 
 interface BuildDashboardNotificationSectionsInput {
   somministrazioni: RiepilogoSomministrazioni;
@@ -21,9 +19,11 @@ interface BuildDashboardNotificationSectionsInput {
   overviewAvailable: boolean;
   onNavigate: (nav: NavKey) => void;
   onOpenConsegneAperte?: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string, tab?: TabId) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   onRetryClinicalOverview: () => void;
   therapyNav?: NavKey;
+  /** Direct access: apre la lista pazienti già filtrata su ciò che la sezione conta. */
+  onOpenPatientList?: (entry: PatientListEntry) => void;
 }
 
 export function buildDashboardNotificationSections({
@@ -38,7 +38,10 @@ export function buildDashboardNotificationSections({
   onSelectPaziente,
   onRetryClinicalOverview,
   therapyNav = 'terapie',
+  onOpenPatientList,
 }: BuildDashboardNotificationSectionsInput): DashboardNotificationSection[] {
+  const openAnomalyList = () =>
+    onOpenPatientList ? onOpenPatientList({ signal: 'anomalie' }) : onNavigate('pazienti');
   const sections: DashboardNotificationSection[] = [];
   const ritardiVisibili = somministrazioni.ritardi.slice(0, MAX_DASHBOARD_NOTIFICATION_PATIENTS);
   const anomalieVisibili = anomalie.pazienti.slice(0, MAX_DASHBOARD_NOTIFICATION_PATIENTS);
@@ -58,28 +61,39 @@ export function buildDashboardNotificationSections({
                 <button
                   type="button"
                   className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
-                  onClick={() => onSelectPaziente?.(p.nome, p.patientId, 'terapia-farmacologica')}
+                  // Direct access: la prima dose in ritardo, nelle somministrazioni di oggi.
+                  onClick={() =>
+                    onSelectPaziente?.(
+                      p.nome,
+                      p.patientId,
+                      landingOf(
+                        doseSignal({
+                          patientId: p.patientId,
+                          therapyId: p.voci[0].therapyId,
+                          data: p.voci[0].data,
+                          fascia: p.voci[0].fascia,
+                          minuti: -p.voci[0].minutiRitardo,
+                        }),
+                      ),
+                    )
+                  }
                   aria-label={`Apri ${p.nome}. ${p.voci.length} somministrazioni in ritardo`}
                 >
                   <span className="anomalie-reparto__contenuto">
                     <span className="anomalie-reparto__nome">{p.nome}</span>
+                    {/* Info senza clic: ogni farmaco in ritardo con dose e via. */}
                     <span className="anomalie-reparto__farmaci-lista" aria-hidden="true">
-                      {p.voci.slice(0, MAX_DASHBOARD_DELAY_ITEMS).map((v, index) => (
+                      {p.voci.map((v, index) => (
                         <span
                           className="anomalie-reparto__farmaco"
                           key={`${v.farmacoNome}-${index}`}
                         >
                           <strong>{v.farmacoNome}</strong>
                           <span>
-                            {v.scheduledTime} · +{v.minutiRitardo} min
+                            {v.dose} · {v.via} · {v.scheduledTime} · +{v.minutiRitardo} min
                           </span>
                         </span>
                       ))}
-                      {p.voci.length > MAX_DASHBOARD_DELAY_ITEMS && (
-                        <span className="anomalie-reparto__altre-voci">
-                          +{p.voci.length - MAX_DASHBOARD_DELAY_ITEMS} altri farmaci
-                        </span>
-                      )}
                     </span>
                   </span>
                   <span className="badge badge--red">+{p.voci[0].minutiRitardo} min</span>
@@ -90,7 +104,7 @@ export function buildDashboardNotificationSections({
           {somministrazioni.ritardi.length > MAX_DASHBOARD_NOTIFICATION_PATIENTS && (
             <p className="dashboard-notification-section__message">
               Altri {somministrazioni.ritardi.length - MAX_DASHBOARD_NOTIFICATION_PATIENTS} pazienti
-              sono disponibili in Agenda.
+              sono nel giro di Terapia.
             </p>
           )}
           <button
@@ -139,22 +153,28 @@ export function buildDashboardNotificationSections({
                 <button
                   type="button"
                   className="anomalie-reparto__riga"
-                  onClick={() => onSelectPaziente?.(p.nome, p.patientId, 'terapia-farmacologica')}
+                  // Direct access: Farmaci attivi, sulla riga del farmaco da sanare.
+                  onClick={() =>
+                    onSelectPaziente?.(
+                      p.nome,
+                      p.patientId,
+                      landingOf({
+                        kind: 'drug-anomaly',
+                        patientId: p.patientId,
+                        therapyId: anomalyTherapyId(anomalie, p.patientId),
+                      }),
+                    )
+                  }
                   aria-label={`Apri ${p.nome}. ${messaggioAnomalieCompatto(p.esito)}`}
                 >
                   <span className="anomalie-reparto__contenuto">
                     <span className="anomalie-reparto__nome">{p.nome}</span>
                     <span className="anomalie-reparto__farmaci-lista" aria-hidden="true">
-                      {p.esito.anomalie.slice(0, MAX_ANOMALIE_NEL_RIEPILOGO).map((a) => (
+                      {p.esito.anomalie.map((a) => (
                         <span className="anomalie-reparto__farmaco" key={a.farmacoNome}>
                           <strong>{a.farmacoNome}</strong>
                         </span>
                       ))}
-                      {p.esito.anomalie.length > MAX_ANOMALIE_NEL_RIEPILOGO && (
-                        <span className="anomalie-reparto__altre-voci">
-                          +{p.esito.anomalie.length - MAX_ANOMALIE_NEL_RIEPILOGO} altri farmaci
-                        </span>
-                      )}
                     </span>
                   </span>
                   <IndicatoreAnomalie esito={p.esito} />
@@ -165,15 +185,15 @@ export function buildDashboardNotificationSections({
           {anomalie.pazienti.length > MAX_DASHBOARD_NOTIFICATION_PATIENTS && (
             <p className="dashboard-notification-section__message">
               Altri {anomalie.pazienti.length - MAX_DASHBOARD_NOTIFICATION_PATIENTS} pazienti sono
-              disponibili nella lista completa.
+              nella lista filtrata.
             </p>
           )}
           <button
             type="button"
             className="btn-secondary dashboard-notification-section__action"
-            onClick={() => onNavigate('pazienti')}
+            onClick={openAnomalyList}
           >
-            Apri lista pazienti <IcoArrow />
+            Apri lista pazienti con farmaci da sanare <IcoArrow />
           </button>
         </>
       ),

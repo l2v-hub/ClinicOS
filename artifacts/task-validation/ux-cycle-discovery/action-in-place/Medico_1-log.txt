@@ -1,0 +1,8 @@
+adesso rows: ["08:00\nCamera Non assegnato · Letto Non assegnato · Galli Nora\nFurosemide · 1 compressa — 25 mg · orale · in ritardo di 150 min\nApri","08:00\nCamera Non assegnato · Letto Non assegnato · Nanni Miriam\nRamipril · 1 compressa — 5 mg · orale · in ritardo di 150 min\nApri","08:00\nCamera Non assegnato · Letto Non assegnato · Nanni Miriam\nMetformina · 1 compressa — 500 mg · orale · in ritardo di 150 min\nApri","—\nNanni Miriam\n3 farmaci da verificare · da verificare\nApri","—\nGalli Nora\n1 farmaco da verificare · da verificare\nApri"]
+attivi rows: 3
+row click: url same=true domDelta=0 clickableClass=null
+row buttons: ["«Pantoprazolo» non risulta in anagrafica AIFA: cerca il farmaco o il principio attivo","Modifica","Sospendi","Elimina"]
+Somministra buttons visible on Farmaci attivi: 0
+calendar events: 4
+slot detail text: Ore 08:00 · 2 terapie Chiudi Metformina 1 compressa · orale Ramipril 1 compressa · orale Somministrazione del sabato 3 ottobre Il tuo ruolo consulta lo stato ma non registra la somministrazione. — Nanni, Miriam Posto letto non assegnato · Nato/a il 12/11/1936 · CF da completare Ramipril 1 compressa — 5 mg 1 compressa — 5 mg · orale Da erogare Metformina 1 compressa — 500 mg 1 compressa — 500 mg · 
+giornaliere Somministra buttons: 0

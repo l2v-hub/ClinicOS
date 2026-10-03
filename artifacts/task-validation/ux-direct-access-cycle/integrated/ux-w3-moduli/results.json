@@ -1,0 +1,300 @@
+{
+  "results": [
+    {
+      "id": "barthel-live",
+      "name": "barthel: live total on the paper sheet",
+      "result": "PASS",
+      "detail": "65/100"
+    },
+    {
+      "id": "barthel-portrait",
+      "name": "barthel: no horizontal page scroll at 820x1180",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "id": "barthel-final",
+      "name": "barthel: final sheet total and band",
+      "result": "PASS",
+      "detail": "65/100 · Dipendenza moderata"
+    },
+    {
+      "id": "barthel-readonly",
+      "name": "barthel: final sheet is read-only",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "barthel-db",
+      "name": "barthel: stored result",
+      "result": "PASS",
+      "detail": "barthel-it-2026-10-03-v1 {\"band\":\"moderate\",\"label\":\"Dipendenza moderata\",\"total\":65,\"maximum\":100}"
+    },
+    {
+      "id": "barthel-pdf",
+      "name": "barthel: PDF archived",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "barthel-pdf-ui",
+      "name": "barthel: «Apri PDF» offered in the final view",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "tinetti-live",
+      "name": "tinetti: live total on the paper sheet",
+      "result": "PASS",
+      "detail": "20/28"
+    },
+    {
+      "id": "tinetti-portrait",
+      "name": "tinetti: no horizontal page scroll at 820x1180",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "id": "tinetti-final",
+      "name": "tinetti: final sheet total and band",
+      "result": "PASS",
+      "detail": "20/28 · Rischio caduta moderato"
+    },
+    {
+      "id": "tinetti-readonly",
+      "name": "tinetti: final sheet is read-only",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "tinetti-db",
+      "name": "tinetti: stored result",
+      "result": "PASS",
+      "detail": "tinetti-it-2026-10-03-v2 {\"band\":\"moderate\",\"label\":\"Rischio caduta moderato\",\"parts\":[{\"id\":\"balance\",\"label\":\"Punteggio Equilibrio:\",\"total\":11,\"maximum\":16},{\"id\":\"gait\",\"label\":\"Punteggio Andatura:\",\"total\":9,\"maximum\":12}],\"total\":20,\"maximum\":28}"
+    },
+    {
+      "id": "tinetti-pdf",
+      "name": "tinetti: PDF archived",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "tinetti-pdf-ui",
+      "name": "tinetti: «Apri PDF» offered in the final view",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "gds15-live",
+      "name": "gds15: live total on the paper sheet",
+      "result": "PASS",
+      "detail": "12/15"
+    },
+    {
+      "id": "gds15-portrait",
+      "name": "gds15: no horizontal page scroll at 820x1180",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "id": "gds15-final",
+      "name": "gds15: final sheet total and band",
+      "result": "PASS",
+      "detail": "12/15 · Depressione grave"
+    },
+    {
+      "id": "gds15-readonly",
+      "name": "gds15: final sheet is read-only",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "gds15-db",
+      "name": "gds15: stored result",
+      "result": "PASS",
+      "detail": "gds15-it-2026-10-03-v2 {\"band\":\"severe\",\"label\":\"Depressione grave\",\"total\":12,\"maximum\":15}"
+    },
+    {
+      "id": "gds15-pdf",
+      "name": "gds15: PDF archived",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "gds15-pdf-ui",
+      "name": "gds15: «Apri PDF» offered in the final view",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "mna-live",
+      "name": "mna: live total on the paper sheet",
+      "result": "PASS",
+      "detail": "7/14"
+    },
+    {
+      "id": "mna-f2",
+      "name": "MNA-SF: F2 auto-selected from calf circumference when BMI is unavailable",
+      "result": "PASS",
+      "detail": "F2 Circonferenza del polpaccio (CC):: Circonferenza polpaccio minore di 31 cm"
+    },
+    {
+      "id": "mna-portrait",
+      "name": "mna: no horizontal page scroll at 820x1180",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "id": "mna-final",
+      "name": "mna: final sheet total and band",
+      "result": "PASS",
+      "detail": "7/14 · Malnutrito"
+    },
+    {
+      "id": "mna-readonly",
+      "name": "mna: final sheet is read-only",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "mna-db",
+      "name": "mna: stored result",
+      "result": "PASS",
+      "detail": "mna-sf-it-2026-10-03-v2 {\"band\":\"malnourished\",\"label\":\"Malnutrito\",\"total\":7,\"maximum\":14}"
+    },
+    {
+      "id": "mna-pdf",
+      "name": "mna: PDF archived",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "mna-pdf-ui",
+      "name": "mna: «Apri PDF» offered in the final view",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "ucla-live",
+      "name": "ucla: live total on the paper sheet",
+      "result": "PASS",
+      "detail": "6/12"
+    },
+    {
+      "id": "ucla-portrait",
+      "name": "ucla: no horizontal page scroll at 820x1180",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "id": "ucla-final",
+      "name": "ucla: final sheet total and band",
+      "result": "PASS",
+      "detail": "6/12 · Disturbo del sonno presente"
+    },
+    {
+      "id": "ucla-readonly",
+      "name": "ucla: final sheet is read-only",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "ucla-db",
+      "name": "ucla: stored result",
+      "result": "PASS",
+      "detail": "ucla-npi-sleep-it-2026-10-03-v1 {\"band\":\"present\",\"label\":\"Disturbo del sonno presente\",\"parts\":[{\"id\":\"distress\",\"label\":\"Stress del caregiver\",\"total\":3,\"maximum\":5}],\"total\":6,\"maximum\":12}"
+    },
+    {
+      "id": "ucla-pdf",
+      "name": "ucla: PDF archived",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "ucla-pdf-ui",
+      "name": "ucla: «Apri PDF» offered in the final view",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "painad-live",
+      "name": "painad: live total on the paper sheet",
+      "result": "PASS",
+      "detail": "5/10"
+    },
+    {
+      "id": "painad-portrait",
+      "name": "painad: no horizontal page scroll at 820x1180",
+      "result": "PASS",
+      "detail": "overflow 0px"
+    },
+    {
+      "id": "painad-final",
+      "name": "painad: final sheet total and band",
+      "result": "PASS",
+      "detail": "5/10 · Dolore moderato"
+    },
+    {
+      "id": "painad-readonly",
+      "name": "painad: final sheet is read-only",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "painad-db",
+      "name": "painad: stored result",
+      "result": "PASS",
+      "detail": "painad-it-2026-09-22-v1 {\"band\":\"moderate\",\"label\":\"Dolore moderato\",\"total\":5}"
+    },
+    {
+      "id": "painad-pdf",
+      "name": "painad: PDF archived",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "painad-pdf-ui",
+      "name": "painad: «Apri PDF» offered in the final view",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "oss-f15",
+      "name": "OSS: no «Nuova compilazione» in the catalog, «Apri» still available",
+      "result": "PASS",
+      "detail": "create 0 · open 10"
+    },
+    {
+      "id": "oss-no-new",
+      "name": "OSS: no «Nuova compilazione»/«Crea rettifica» in the Barthel workspace",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "legacy-v1-api",
+      "name": "Tinetti v1 still created and finalized through the API (old version stays valid)",
+      "result": "PASS",
+      "detail": "201 200"
+    },
+    {
+      "id": "legacy-v1-ui",
+      "name": "finalized Tinetti v1 opens with its original wording (no paper re-write)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "console",
+      "name": "no console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "http",
+      "name": "no HTTP >= 400 (except auth)",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": []
+}

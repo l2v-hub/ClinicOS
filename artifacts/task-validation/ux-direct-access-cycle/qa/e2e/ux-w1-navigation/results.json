@@ -1,0 +1,277 @@
+{
+  "at": "2026-10-03T12:55:06.208Z",
+  "summary": {
+    "pass": 44,
+    "fail": 0,
+    "pendingW2": 0,
+    "blocked": 0
+  },
+  "results": [
+    {
+      "id": "T1",
+      "name": "Turno card lists ALL late drugs as links, no \"(+N)\", no ellipsis (1180)",
+      "result": "PASS",
+      "detail": "doses=[\"Ramipril 1 compressa — 5 mg · 08:00\",\"Metformina 1 compressa — 500 mg · 08:00\",\"Pantoprazolo 1 compressa — 20 mg · 12:00\"] clipped=0"
+    },
+    {
+      "id": "T2",
+      "name": "Turno late dose: section",
+      "result": "PASS",
+      "detail": "active=\"Terapia\" hash=#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=giornaliere&t=cmuse8dw90003rklpen0rf8ci&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "T2.target",
+      "name": "Turno late dose: target carries sub-view + drug",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=giornaliere&t=cmuse8dw90003rklpen0rf8ci&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "T2.subview",
+      "name": "Turno late dose: Terapia sub-view \"Somministrazioni\"",
+      "result": "PASS",
+      "detail": "active sub-view=\"Somministrazioni giornaliere\""
+    },
+    {
+      "id": "T2.item",
+      "name": "Turno late dose: drug row highlighted in view",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "T2.back",
+      "name": "Back from the chart returns to Turno",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "T3",
+      "name": "Turno badge «Consegne N» → Clinica / Consegne part in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\""
+    },
+    {
+      "id": "T4",
+      "name": "Turno badge «Allergia» → Clinica, allergy table highlighted in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\""
+    },
+    {
+      "id": "A1",
+      "name": "Adesso late therapy row: section",
+      "result": "PASS",
+      "detail": "active=\"Terapia\" hash=#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=giornaliere&t=cmuse8dwh0006rklpyx43f5gd&d=2026-10-03&f=pranzo"
+    },
+    {
+      "id": "A1.target",
+      "name": "Adesso late therapy row: target carries sub-view + drug",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=giornaliere&t=cmuse8dwh0006rklpyx43f5gd&d=2026-10-03&f=pranzo"
+    },
+    {
+      "id": "A1.subview",
+      "name": "Adesso late therapy row: Terapia sub-view \"Somministrazioni\"",
+      "result": "PASS",
+      "detail": "active sub-view=\"Somministrazioni giornaliere\""
+    },
+    {
+      "id": "A2.info",
+      "name": "Adesso anomaly row names the drugs (not just the count)",
+      "result": "PASS",
+      "detail": "— Nanni Miriam 3 farmaci da verificare: Metformina, Pantoprazolo, Ramipril · da verificare Apri"
+    },
+    {
+      "id": "A2",
+      "name": "Adesso anomaly row: section",
+      "result": "PASS",
+      "detail": "active=\"Terapia\" hash=#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=attivi&t=cmuse8dw90003rklpen0rf8ci"
+    },
+    {
+      "id": "A2.target",
+      "name": "Adesso anomaly row: target carries sub-view + drug",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=attivi&t=cmuse8dw90003rklpen0rf8ci"
+    },
+    {
+      "id": "A2.subview",
+      "name": "Adesso anomaly row: Terapia sub-view \"Farmaci attivi\"",
+      "result": "PASS",
+      "detail": "active sub-view=\"Farmaci attivi\n4\""
+    },
+    {
+      "id": "A3",
+      "name": "Adesso handover row: Clinica → the handover highlighted in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\" focused=true"
+    },
+    {
+      "id": "A3.hash",
+      "name": "Chart hash carries section + handover",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/consegne?c=95be5a33-7a36-4af1-ae38-dc4901a88dff"
+    },
+    {
+      "id": "A3.reload",
+      "name": "Reload of a handover link: Clinica → the handover highlighted in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\" focused=true"
+    },
+    {
+      "id": "A3.reload.hash",
+      "name": "Hash survives reload",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/consegne?c=95be5a33-7a36-4af1-ae38-dc4901a88dff"
+    },
+    {
+      "id": "N1",
+      "name": "Segnalazioni late-dose row: section",
+      "result": "PASS",
+      "detail": "active=\"Terapia\" hash=#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=giornaliere&t=cmuse8dvy0001rklpyga5tflv&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "N1.target",
+      "name": "Segnalazioni late-dose row: target carries sub-view + drug",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=giornaliere&t=cmuse8dvy0001rklpyga5tflv&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "N1.subview",
+      "name": "Segnalazioni late-dose row: Terapia sub-view \"Somministrazioni\"",
+      "result": "PASS",
+      "detail": "active sub-view=\"Somministrazioni giornaliere\""
+    },
+    {
+      "id": "P1",
+      "name": "Turno appointment (consulto) → Clinica / Esami e consulenze in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\""
+    },
+    {
+      "id": "L1.info",
+      "name": "Patient list anomaly chip shows the drug names inline",
+      "result": "PASS",
+      "detail": "3 da sanare: Metformina, Pantoprazolo, Ramipril"
+    },
+    {
+      "id": "L1",
+      "name": "Patient list anomaly chip: section",
+      "result": "PASS",
+      "detail": "active=\"Terapia\" hash=#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=attivi&t=cmuse8dw90003rklpen0rf8ci"
+    },
+    {
+      "id": "L1.target",
+      "name": "Patient list anomaly chip: target carries sub-view + drug",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica?sv=attivi&t=cmuse8dw90003rklpen0rf8ci"
+    },
+    {
+      "id": "L1.subview",
+      "name": "Patient list anomaly chip: Terapia sub-view \"Farmaci attivi\"",
+      "result": "PASS",
+      "detail": "active sub-view=\"Farmaci attivi\n4\""
+    },
+    {
+      "id": "L2",
+      "name": "Patient list «Consegne N» chip → Clinica / Consegne part in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\""
+    },
+    {
+      "id": "L3",
+      "name": "Patient list «Allergie» chip → allergy table highlighted",
+      "result": "PASS",
+      "detail": "active=\"Clinica\""
+    },
+    {
+      "id": "C1",
+      "name": "Consegne feed «Apri cartella»: Clinica → the handover highlighted in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\" focused=true"
+    },
+    {
+      "id": "M1",
+      "name": "Note patient name → Clinica / Note e visite in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\""
+    },
+    {
+      "id": "B1",
+      "name": "Anomaly banner «Vai alla terapia»: section",
+      "result": "PASS",
+      "detail": "active=\"Terapia\" hash=#/dettaglio-paziente/cmuse8duj0000rklpg3g7k4zk/terapia-farmacologica"
+    },
+    {
+      "id": "B1.subview",
+      "name": "Anomaly banner «Vai alla terapia»: Terapia sub-view \"Farmaci attivi\"",
+      "result": "PASS",
+      "detail": "active sub-view=\"Farmaci attivi\n4\""
+    },
+    {
+      "id": "T1.portrait",
+      "name": "Turno late doses wrap at 820x1180 (no ellipsis)",
+      "result": "PASS",
+      "detail": "clipped=0 doses=3"
+    },
+    {
+      "id": "S1",
+      "name": "Supervisor deadline row name: section",
+      "result": "PASS",
+      "detail": "active=\"Terapia\" hash=#/dettaglio-paziente/cmuse85lj0006cklpeh3n3aug/terapia-farmacologica?sv=giornaliere&t=cmuse85mp0009cklp6nx0n57x&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "S1.target",
+      "name": "Supervisor deadline row name: target carries sub-view + drug",
+      "result": "PASS",
+      "detail": "#/dettaglio-paziente/cmuse85lj0006cklpeh3n3aug/terapia-farmacologica?sv=giornaliere&t=cmuse85mp0009cklp6nx0n57x&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "S1.subview",
+      "name": "Supervisor deadline row name: Terapia sub-view \"Somministrazioni\"",
+      "result": "PASS",
+      "detail": "active sub-view=\"Somministrazioni giornaliere\""
+    },
+    {
+      "id": "S2",
+      "name": "Admin «Consegne urgenti» card: Clinica → the handover highlighted in view",
+      "result": "PASS",
+      "detail": "active=\"Clinica\" focused=true"
+    },
+    {
+      "id": "S3",
+      "name": "KPI «Dimessi in archivio» → list on the Dimessi view",
+      "result": "PASS",
+      "detail": "pressed=\"Dimessi e archivio\""
+    },
+    {
+      "id": "S4",
+      "name": "KPI «Parametri critici» → list filtered on critical vitals",
+      "result": "PASS",
+      "detail": "Filtro attivo: Parametri critici (0 fra i pazienti caricati). Mostra tutti"
+    },
+    {
+      "id": "S5",
+      "name": "KPI «Consegne in corso» → feed filtered In corso",
+      "result": "PASS",
+      "detail": "pressed=\"In corso\""
+    },
+    {
+      "id": "O1",
+      "name": "OSS Terapia link → Panoramica, no «Sezione non disponibile»",
+      "result": "PASS",
+      "detail": "active=\"Panoramica\" denied=0"
+    },
+    {
+      "id": "NET",
+      "name": "No 5xx / 403 responses (OSS 403s listed separately)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "CONSOLE",
+      "name": "No console errors",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "httpErrors": [],
+  "consoleErrors": []
+}

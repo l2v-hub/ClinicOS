@@ -1,6 +1,14 @@
 import { lazy, Suspense, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { createSubmissionKey } from '../../../lib/submissionKey';
-import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
+import type {
+  MotivoNonErogazione,
+  Paziente,
+  PatientTherapyAPI,
+  TherapySlot,
+  TherapySlotPatient,
+  TherapyAdministration,
+} from '../../../types';
+import type { TherapyTarget } from '../../../lib/patientTarget';
 import { API_URL } from '../../../config';
 import { IcoCheck } from '../../../icons';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
@@ -20,7 +28,14 @@ import {
   type TherapyListType,
 } from '../../../lib/therapyPages';
 import { operatorHeaders } from '../../../lib/operatorSession';
-import { useCan } from '../../../lib/capabilities';
+import { useCan, useRequiresConfirmation } from '../../../lib/capabilities';
+import { recordAdministration } from '../../../lib/therapyAdministrationWrite';
+import { facilityNow } from '../../../lib/therapyDoseStatus';
+import { localIsoDate } from '../../../lib/appointmentRange';
+import type { GiroTime } from '../../../lib/therapyGiro';
+import { TherapyGiroRows } from '../TherapyGiroRows';
+import { TherapyDrugDosePanel } from './TherapyDrugDosePanel';
+import { useCanAdministerTherapy } from '../../../lib/therapyPermissions';
 import { loadMedicationAdministrationPage } from '../../../lib/medicationAdministrationPages';
 import { ClinicalTableSection, LoadingState } from './shared';
 import { LoadErrorState } from './LoadErrorState';
@@ -94,6 +109,8 @@ type SubTab = 'attivi' | 'programmazione' | 'calendario' | 'giornaliere' | 'stor
 
 interface MedAdmin {
   id: string;
+  therapyId?: string | null;
+  patientId?: string;
   farmacoNome: string;
   farmacoDose: string;
   farmacoVia: string;
@@ -113,6 +130,11 @@ interface Props {
   /** Diario terapia: riga da mettere a fuoco ed evidenziare. Se non e' fra le terapie caricate,
    *  la scheda si apre normalmente, senza errori. */
   focusTherapyId?: string;
+  /**
+   * Accesso diretto (UX 2026-10-03): sotto-vista, giorno e farmaco su cui atterrare. Il farmaco
+   * si apre con il pannello di somministrazione; un nuovo `requestId` riapplica lo stesso bersaglio.
+   */
+  therapyTarget?: TherapyTarget & { requestId: number };
 }
 
 // ── Form helpers ──────────────────────────────────────────────────────────────
@@ -121,8 +143,18 @@ interface Props {
 type TherapyForm = TherapyFormValue;
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  // Giorno locale (non UTC): a mezzanotte l'ISO in UTC darebbe il giorno sbagliato.
+  return localIsoDate();
 }
+
+/** "08:00" o una fascia ("mattina"): la chiave che il pannello del farmaco evidenzia. */
+const FASCIA_TIME: Record<string, string> = {
+  mattina: '08:00',
+  pranzo: '12:00',
+  pomeriggio: '16:00',
+  sera: '20:00',
+  notte: '22:00',
+};
 
 const emptyForm = emptyTherapyForm;
 
@@ -146,6 +178,9 @@ type DailyAdminRow = {
   administeredAt?: string | null;
   notAdministeredReason?: string | null;
   slotLabel?: string;
+  /** Riga del giro di quel paziente (azioni in linea). */
+  slotPatient?: TherapySlotPatient;
+  administration?: TherapyAdministration;
   [key: string]: unknown;
 };
 
@@ -203,10 +238,34 @@ function ScheduleSummary({ t }: { t: PatientTherapyAPI }) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyId }: Props) {
-  const [subTab, setSubTab] = useState<SubTab>('attivi');
-  // La GUI nasconde la prescrizione se il ruolo non la consente (il backend la rifiuta comunque).
+export function TerapiaFarmacologicaTab({
+  paziente,
+  operatoreNome,
+  focusTherapyId,
+  therapyTarget,
+}: Props) {
+  const [subTab, setSubTab] = useState<SubTab>(() => therapyTarget?.subView ?? 'attivi');
+  // La GUI nasconde la prescrizione se il ruolo non la consente (il backend la rifiuta comunque):
+  // l'infermiere vede «somministra», il medico «modifica / sospendi» (F5).
   const canCreateTherapy = useCan('therapy.create');
+  const canUpdateTherapy = useCan('therapy.update');
+  const canDeleteTherapy = useCan('therapy.delete');
+  const canAdminister = useCanAdministerTherapy();
+  const needsConfirmation = useRequiresConfirmation('administration.confirm');
+  // Farmaco aperto in linea (un solo pannello aperto per volta) e ora da evidenziare.
+  const [expandedTherapyId, setExpandedTherapyId] = useState<string | null>(null);
+  const [expandFocusTime, setExpandFocusTime] = useState<string | undefined>(undefined);
+  // Calendario: giorno/ora di arrivo da un collegamento diretto.
+  const [calendarFocus, setCalendarFocus] = useState<{
+    requestId: number;
+    date?: string;
+    time?: string;
+  } | null>(null);
+  const toggleDrug = useCallback((id: string) => {
+    setExpandFocusTime(undefined);
+    setTargetFocusId(null);
+    setExpandedTherapyId((current) => (current === id ? null : id));
+  }, []);
   // Ultimo elenco gia' mostrato per questo paziente in sessione: il tab si disegna subito con
   // quello e lo rivalida in background invece di ripartire da "Caricamento…".
   const initialSnapshot = readSessionCache<TherapyListSnapshot>(therapyCacheKey(paziente.id, {}));
@@ -233,7 +292,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
   const [saving, setSaving] = useState(false);
 
   // Daily view state
-  const [dailyDate, setDailyDate] = useState(todayStr());
+  const [dailyDate, setDailyDate] = useState(() =>
+    therapyTarget?.subView === 'giornaliere' && therapyTarget.date
+      ? therapyTarget.date
+      : todayStr(),
+  );
   const [dailySlots, setDailySlots] = useState<TherapySlot[]>([]);
   const [dailyLoading, setDailyLoading] = useState(false);
   const [dailyError, setDailyError] = useState('');
@@ -631,26 +694,88 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
   // Stato derivato durante il render (non in un effetto): appena la terapia compare fra quelle
   // caricate si apre la sua sotto-scheda. Non ancora (o mai) caricata: nessun errore.
   const focusTarget =
-    focusTherapyId && !focusHandled ? therapies.find((t) => t.id === focusTherapyId) : undefined;
+    // Il bersaglio dell'accesso diretto (therapyTarget) vince sul fuoco legacy del diario.
+    focusTherapyId && !focusHandled && !therapyTarget
+      ? therapies.find((t) => t.id === focusTherapyId)
+      : undefined;
   if (focusTarget) {
     setFocusHandled(true);
     setSubTab(focusTarget.stato === 'attiva' ? 'attivi' : 'sospese');
     setFocusedTherapyId(focusTarget.id);
   }
+  // Farmaco dell'accesso diretto: resta evidenziato finché l'operatore non apre altro.
+  const [targetFocusId, setTargetFocusId] = useState<string | null>(null);
   useEffect(() => {
     if (!focusedTherapyId) return;
-    const frame = window.requestAnimationFrame(() => {
-      const row = tabRootRef.current?.querySelector('tr.therapy-list-row--focus');
-      row?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-    });
     const timer = window.setTimeout(() => setFocusedTherapyId(null), 6000);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(timer);
-    };
+    return () => window.clearTimeout(timer);
   }, [focusedTherapyId]);
+  // La riga evidenziata entra in vista anche quando i suoi dati arrivano dopo (giornaliere, pagine).
+  const focusRowsReady = `${subTab}|${therapies.length}|${dailySlots.length}|${dailyLoading}`;
+  useEffect(() => {
+    if (!focusedTherapyId && !targetFocusId) return;
+    const frame = window.requestAnimationFrame(() => {
+      const row = tabRootRef.current?.querySelector('.therapy-list-row--focus');
+      row?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [focusedTherapyId, targetFocusId, focusRowsReady]);
+  const isFocused = (id: string) => id === focusedTherapyId || id === targetFocusId;
   const focusRowClass = (t: PatientTherapyAPI) =>
-    t.id === focusedTherapyId ? 'therapy-list-row--focus' : '';
+    [
+      isFocused(t.id) ? 'therapy-list-row--focus' : '',
+      t.id === expandedTherapyId ? 'therapy-row--open' : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+  // ── Accesso diretto: sotto-vista, giorno e farmaco aperto (riapplicato a ogni requestId) ──
+  const [handledTargetId, setHandledTargetId] = useState<number | null>(null);
+  const [targetViewApplied, setTargetViewApplied] = useState<number | null>(null);
+  // 1) La sotto-vista e il giorno valgono subito (non servono le terapie caricate).
+  if (therapyTarget && targetViewApplied !== therapyTarget.requestId) {
+    setTargetViewApplied(therapyTarget.requestId);
+    if (therapyTarget.subView) setSubTab(therapyTarget.subView);
+    if (therapyTarget.subView === 'giornaliere' && therapyTarget.date)
+      setDailyDate(therapyTarget.date);
+    if (therapyTarget.subView === 'calendario')
+      setCalendarFocus({
+        requestId: therapyTarget.requestId,
+        date: therapyTarget.date,
+        time: therapyTarget.fascia
+          ? (FASCIA_TIME[therapyTarget.fascia] ?? therapyTarget.fascia)
+          : undefined,
+      });
+  }
+  // 2) Il farmaco si apre appena compare fra le terapie caricate (se non c'e', nessun errore).
+  const targetTherapy =
+    therapyTarget?.therapyId && handledTargetId !== therapyTarget.requestId
+      ? therapies.find((t) => t.id === therapyTarget.therapyId)
+      : undefined;
+  if (therapyTarget && targetTherapy) {
+    setHandledTargetId(therapyTarget.requestId);
+    const view = therapyTarget.subView;
+    setTargetFocusId(targetTherapy.id);
+    if (targetTherapy.stato !== 'attiva') {
+      setSubTab('sospese');
+    } else if (!view || view === 'attivi' || view === 'programmazione') {
+      if (!view) setSubTab('attivi');
+      // pannello di somministrazione aperto sul farmaco, con l'ora/fascia evidenziata
+      setExpandedTherapyId(targetTherapy.id);
+      setExpandFocusTime(therapyTarget.fascia);
+    } else if (view === 'calendario' && therapyTarget.fascia) {
+      // fascia del server → ora reale della prescrizione (07:00 resta 07:00, non 08:00)
+      const scheduled = targetTherapy.schedules?.find(
+        (schedule) => schedule.fascia === therapyTarget.fascia,
+      )?.time;
+      if (scheduled)
+        setCalendarFocus({
+          requestId: therapyTarget.requestId,
+          date: therapyTarget.date,
+          time: scheduled,
+        });
+    }
+  }
 
   // Gli stessi campi che `handleSave` pretende, elencati per nome: prima il salvataggio usciva
   // in silenzio e il clic sembrava non aver fatto nulla.
@@ -670,9 +795,116 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
           slotLabel: slot.label,
           fascia: slot.fascia,
           ora: slot.ora,
+          slotPatient: p,
+          administration: a,
         })),
       ),
   );
+
+  // ── Azioni in linea: Somministrazioni giornaliere (F2) e Storico (F7) ─────────────
+  const [dailyFeedback, setDailyFeedback] = useState<{ tone: 'ok' | 'error'; text: string } | null>(
+    null,
+  );
+  async function recordDaily(
+    info: { patientId: string; therapyId: string; date: string; fascia: string; drugName: string },
+    outcome: Parameters<typeof recordAdministration>[1],
+    confirmed: boolean,
+  ) {
+    setDailyFeedback(null);
+    const result = await recordAdministration(info, outcome, { confirmed });
+    setDailyFeedback(
+      result.ok
+        ? {
+            tone: 'ok',
+            text:
+              outcome.kind === 'administered'
+                ? `Somministrazione di ${info.drugName} registrata.`
+                : `Mancata somministrazione di ${info.drugName} registrata.`,
+          }
+        : { tone: 'error', text: result.message },
+    );
+    await loadDaily(dailyDate);
+  }
+  const renderDailyActions = (row: DailyAdminRow) => {
+    if (!row.slotPatient || !row.administration) return null;
+    // Le dosi future restano in sola lettura; oggi e i giorni passati si possono registrare.
+    const actionable = canAdminister && dailyDate <= facilityNow().date;
+    const single: GiroTime = {
+      ora: row.scheduledTime,
+      patients: [
+        {
+          patient: row.slotPatient,
+          items: [
+            {
+              a: row.administration,
+              fascia: row.fascia as TherapySlot['fascia'],
+            },
+          ],
+        },
+      ],
+      total: 1,
+      administered: row.status === 'administered' ? 1 : 0,
+      notAdministered: row.status === 'not_administered' ? 1 : 0,
+      pending: row.status === 'pending' ? 1 : 0,
+    };
+    if (row.status !== 'pending') return null;
+    return (
+      <TherapyGiroRows
+        time={single}
+        date={dailyDate}
+        filtro="tutte"
+        readOnly={!actionable}
+        hidePatientHead
+        hideDrugInfo
+        requiresConfirmation={needsConfirmation}
+        onConfirm={
+          actionable
+            ? (info, options) =>
+                void recordDaily(info, { kind: 'administered' }, options?.confirmed === true)
+            : undefined
+        }
+        onNotAdministered={
+          actionable
+            ? (info, motivo: MotivoNonErogazione, note: string, options) =>
+                void recordDaily(
+                  info,
+                  { kind: 'not_administered', motivo, note },
+                  options?.confirmed === true,
+                )
+            : undefined
+        }
+      />
+    );
+  };
+
+  const [storicoSending, setStoricoSending] = useState<string | null>(null);
+  const [storicoConfirm, setStoricoConfirm] = useState<MedAdmin | null>(null);
+  const [storicoFeedback, setStoricoFeedback] = useState<{
+    tone: 'ok' | 'error';
+    text: string;
+  } | null>(null);
+  function startStoricoAdminister(row: MedAdmin) {
+    if (storicoSending) return;
+    if (needsConfirmation) setStoricoConfirm(row);
+    else void storicoAdminister(row, false);
+  }
+  async function storicoAdminister(row: MedAdmin, confirmed: boolean) {
+    if (!row.therapyId || storicoSending) return;
+    setStoricoSending(row.id);
+    setStoricoFeedback(null);
+    const result = await recordAdministration(
+      { patientId: paziente.id, therapyId: row.therapyId, date: row.date, fascia: row.fascia },
+      { kind: 'administered' },
+      { confirmed },
+    );
+    setStoricoSending(null);
+    setStoricoFeedback(
+      result.ok
+        ? { tone: 'ok', text: `Somministrazione di ${row.farmacoNome} registrata.` }
+        : { tone: 'error', text: result.message },
+    );
+    await loadHistory();
+  }
 
   // ── Sub-tab nav ────────────────────────────────────────────────────────────────
 
@@ -775,12 +1007,37 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
    * nessuna icona — lasciando l'operatore senza sapere se il farmaco fosse assente o se fosse
    * la ricerca a non aver funzionato.
    */
-  const renderFarmaco = (v: string, row?: unknown) => {
+  const renderFarmaco = (
+    v: string,
+    row?: unknown,
+    toggle?: { expanded: boolean; onToggle: () => void; hint: string },
+  ) => {
     const dosaggio = dosaggioDellaRiga(row);
     const risoluzione = trovaRisoluzione(risoluzioni, v, dosaggio);
     return (
       <span style={{ fontWeight: 600 }}>
-        {v}
+        {toggle ? (
+          // Tocca il farmaco → pannello in linea con le dosi del giorno e le azioni del ruolo.
+          <button
+            type="button"
+            className="therapy-drug-toggle"
+            aria-expanded={toggle.expanded}
+            aria-label={`${v}${dosaggio ? ` ${dosaggio}` : ''}: ${toggle.hint}`}
+            data-testid="therapy-drug-toggle"
+            onClick={toggle.onToggle}
+          >
+            <span aria-hidden="true">{toggle.expanded ? '▾' : '▸'}</span>
+            <span>
+              {v}
+              <span className="therapy-drug-toggle__hint">
+                {' '}
+                {toggle.expanded ? 'Chiudi' : toggle.hint}
+              </span>
+            </span>
+          </button>
+        ) : (
+          v
+        )}
         {risoluzione?.stato === 'trovato' && risoluzione.documento && (
           <button
             type="button"
@@ -854,16 +1111,39 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
     );
   };
 
+  const drugToggleHint = (t: PatientTherapyAPI) =>
+    canAdminister
+      ? t.tipo === 'al_bisogno'
+        ? 'Somministra al bisogno'
+        : 'Somministra'
+      : 'Stato di oggi';
+  const renderFarmacoToggle = (v: string, t: PatientTherapyAPI) =>
+    renderFarmaco(v, t, {
+      expanded: expandedTherapyId === t.id,
+      onToggle: () => toggleDrug(t.id),
+      hint: drugToggleHint(t),
+    });
+  const renderDrugPanel = (t: PatientTherapyAPI) => (
+    <TherapyDrugDosePanel
+      key={`${t.id}|${expandFocusTime ?? ''}`}
+      patientId={paziente.id}
+      therapy={t}
+      focusTime={expandFocusTime}
+      onRecorded={() => invalidateCachedGet(`${API_URL}/therapy-slots`)}
+    />
+  );
+  const prescriberActionsVisible = canUpdateTherapy || canDeleteTherapy;
+
   // ── Column definitions ────────────────────────────────────────────────────────
 
-  const attiviColumns: ColumnDef<PatientTherapyAPI>[] = [
+  const attiviColumnsAll: ColumnDef<PatientTherapyAPI>[] = [
     {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
       filterable: false,
       filterType: 'text',
-      render: renderFarmaco,
+      render: renderFarmacoToggle,
     },
     { key: 'dosaggio', label: 'Dosaggio', sortable: true },
     { key: 'viaSomministrazione', label: 'Via', sortable: true },
@@ -916,73 +1196,86 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
       width: '90px',
       render: (_: unknown, t: PatientTherapyAPI) => (
         <div style={{ display: 'flex', gap: 4 }}>
-          <button
-            className="icon-btn icon-btn--sm icon-btn--edit"
-            title="Modifica"
-            onClick={() => openEdit(t)}
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+          {canUpdateTherapy && (
+            <button
+              className="icon-btn icon-btn--sm icon-btn--edit"
+              title="Modifica"
+              aria-label={`Modifica ${t.farmacoNome}`}
+              onClick={() => openEdit(t)}
             >
-              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-            </svg>
-          </button>
-          <button
-            className="icon-btn icon-btn--sm"
-            title="Sospendi"
-            onClick={() => setPendingSospendiId(t.id)}
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
+          )}
+          {canUpdateTherapy && (
+            <button
+              className="icon-btn icon-btn--sm"
+              title="Sospendi"
+              aria-label={`Sospendi ${t.farmacoNome}`}
+              onClick={() => setPendingSospendiId(t.id)}
             >
-              <rect x="6" y="4" width="4" height="16" />
-              <rect x="14" y="4" width="4" height="16" />
-            </svg>
-          </button>
-          <button
-            className="icon-btn icon-btn--sm icon-btn--danger"
-            title="Elimina"
-            onClick={() => handleDelete(t.id)}
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <rect x="6" y="4" width="4" height="16" />
+                <rect x="14" y="4" width="4" height="16" />
+              </svg>
+            </button>
+          )}
+          {canDeleteTherapy && (
+            <button
+              className="icon-btn icon-btn--sm icon-btn--danger"
+              title="Elimina"
+              aria-label={`Elimina ${t.farmacoNome}`}
+              onClick={() => handleDelete(t.id)}
             >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
         </div>
       ),
     },
   ];
+  const attiviColumns = attiviColumnsAll.filter(
+    (column) => column.key !== 'id' || prescriberActionsVisible,
+  );
 
-  const programmazioneColumns: ColumnDef<PatientTherapyAPI>[] = [
+  const programmazioneColumnsAll: ColumnDef<PatientTherapyAPI>[] = [
     {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
       filterable: false,
       filterType: 'text',
-      render: renderFarmaco,
+      render: (v: string, t: PatientTherapyAPI) =>
+        t.stato === 'attiva' ? renderFarmacoToggle(v, t) : renderFarmaco(v, t),
     },
     { key: 'dosaggio', label: 'Dosaggio', sortable: true },
     { key: 'viaSomministrazione', label: 'Via', sortable: true },
@@ -1038,46 +1331,55 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
       width: '64px',
       render: (_: unknown, t: PatientTherapyAPI) => (
         <div style={{ display: 'flex', gap: 4 }}>
-          <button
-            className="icon-btn icon-btn--sm icon-btn--edit"
-            title="Modifica"
-            onClick={() => openEdit(t)}
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+          {canUpdateTherapy && (
+            <button
+              className="icon-btn icon-btn--sm icon-btn--edit"
+              title="Modifica"
+              aria-label={`Modifica ${t.farmacoNome}`}
+              onClick={() => openEdit(t)}
             >
-              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-            </svg>
-          </button>
-          <button
-            className="icon-btn icon-btn--sm icon-btn--danger"
-            title="Elimina"
-            onClick={() => handleDelete(t.id)}
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
+          )}
+          {canDeleteTherapy && (
+            <button
+              className="icon-btn icon-btn--sm icon-btn--danger"
+              title="Elimina"
+              aria-label={`Elimina ${t.farmacoNome}`}
+              onClick={() => handleDelete(t.id)}
             >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
         </div>
       ),
     },
   ];
+  const programmazioneColumns = programmazioneColumnsAll.filter(
+    (column) => column.key !== 'id' || prescriberActionsVisible,
+  );
 
   const giornaliereColumns: ColumnDef<DailyAdminRow>[] = [
     {
@@ -1148,6 +1450,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
       label: 'Motivo',
       render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span>,
     },
+    {
+      key: 'rowKey',
+      label: 'Azioni',
+      render: (_: unknown, row: DailyAdminRow) => renderDailyActions(row),
+    },
   ];
 
   const storicoColumns: ColumnDef<MedAdmin>[] = [
@@ -1205,6 +1512,27 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
       key: 'motivo',
       label: 'Motivo',
       render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span>,
+    },
+    {
+      key: 'ora',
+      label: '',
+      render: (_: unknown, row: MedAdmin) =>
+        // F7: la dose di oggi «non erogata» si può ancora somministrare (il server lo consente;
+        // una dose erogata resta immutabile).
+        canAdminister &&
+        row.stato === 'non_erogata' &&
+        row.date === facilityNow().date &&
+        row.therapyId ? (
+          <button
+            type="button"
+            className="ds-btn ds-btn--primary"
+            disabled={storicoSending === row.id}
+            aria-label={`Somministra ora: ${row.farmacoNome} ${row.farmacoDose}, ${row.fascia}`}
+            onClick={() => startStoricoAdminister(row)}
+          >
+            {storicoSending === row.id ? 'Invio…' : 'Somministra ora'}
+          </button>
+        ) : null,
     },
   ];
 
@@ -1267,26 +1595,28 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
       key: 'id',
       label: '',
       width: '44px',
-      render: (_: unknown, t: PatientTherapyAPI) => (
-        <button
-          className="icon-btn icon-btn--sm"
-          title="Riattiva"
-          onClick={() => handleRiattiva(t)}
-        >
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
+      render: (_: unknown, t: PatientTherapyAPI) =>
+        canUpdateTherapy && (
+          <button
+            className="icon-btn icon-btn--sm"
+            title="Riattiva"
+            aria-label={`Riattiva ${t.farmacoNome}`}
+            onClick={() => handleRiattiva(t)}
           >
-            <polyline points="23 4 23 10 17 10" />
-            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-          </svg>
-        </button>
-      ),
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <polyline points="23 4 23 10 17 10" />
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+            </svg>
+          </button>
+        ),
     },
   ];
 
@@ -1450,9 +1780,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                 {nextTherapyCursor
                   ? 'Nessun farmaco attivo tra le terapie caricate. '
                   : 'Nessun farmaco attivo. '}
-                <button className="link-btn" onClick={openAdd}>
-                  + Aggiungi
-                </button>
+                {canCreateTherapy && (
+                  <button className="link-btn" onClick={openAdd}>
+                    + Aggiungi
+                  </button>
+                )}
               </p>
               {therapyPager}
             </div>
@@ -1469,6 +1801,9 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                 emptyMessage="Nessun farmaco attivo."
                 columns={attiviColumns}
                 rowClassName={focusRowClass}
+                onRowToggle={(t) => toggleDrug(t.id)}
+                expandedRowKey={expandedTherapyId}
+                renderExpandedRow={renderDrugPanel}
               />
               {therapyPager}
             </>
@@ -1533,6 +1868,12 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                       data={therapies}
                       emptyMessage="Nessuna terapia programmata."
                       columns={programmazioneColumns}
+                      rowClassName={focusRowClass}
+                      onRowToggle={(t) => {
+                        if (t.stato === 'attiva') toggleDrug(t.id);
+                      }}
+                      expandedRowKey={expandedTherapyId}
+                      renderExpandedRow={(t) => (t.stato === 'attiva' ? renderDrugPanel(t) : null)}
                     />
                     {therapyPager}
                   </>
@@ -1543,7 +1884,12 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
         )}
 
         {subTab === 'calendario' && (
-          <PatientTherapyCalendar key={paziente.id} patientId={paziente.id} />
+          <PatientTherapyCalendar
+            key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}
+            patientId={paziente.id}
+            initialDate={calendarFocus?.date}
+            initialOpenTime={calendarFocus?.time}
+          />
         )}
 
         {/* ── Sub-tab: Somministrazioni giornaliere ── */}
@@ -1558,14 +1904,14 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                 style={{ width: 160 }}
                 onChange={(e) => setDailyDate(e.target.value)}
               />
-              {/* L'elenco è il registro; la somministrazione si registra dall'orario nel calendario. */}
+              {/* Le dosi da somministrare si registrano sulla riga; il calendario resta un collegamento. */}
               <button
                 type="button"
                 className="btn-secondary btn-sm"
                 data-testid="daily-open-calendar"
                 onClick={() => setSubTab('calendario')}
               >
-                Registra dal calendario
+                Vai al calendario
               </button>
             </div>
             {dailyLoading ? (
@@ -1581,7 +1927,21 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                 data={patientDailyAdmins}
                 emptyMessage="Nessuna somministrazione prevista per questa data."
                 columns={giornaliereColumns}
+                rowClassName={(row) =>
+                  isFocused(row.therapyId) &&
+                  (!therapyTarget?.fascia || therapyTarget.fascia === row.fascia)
+                    ? 'therapy-list-row--focus'
+                    : ''
+                }
               />
+            )}
+            {dailyFeedback && (
+              <p
+                className={`drug-dose-panel__feedback is-${dailyFeedback.tone}`}
+                role={dailyFeedback.tone === 'error' ? 'alert' : 'status'}
+              >
+                {dailyFeedback.text}
+              </p>
             )}
           </div>
         )}
@@ -1604,6 +1964,14 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
                     retryLabel="Riprova caricamento"
                   />
                 </div>
+              )}
+              {storicoFeedback && (
+                <p
+                  className={`drug-dose-panel__feedback is-${storicoFeedback.tone} cts__body--padded`}
+                  role={storicoFeedback.tone === 'error' ? 'alert' : 'status'}
+                >
+                  {storicoFeedback.text}
+                </p>
               )}
               <ClinicalTable<MedAdmin>
                 key={`history-${nextHistoryCursor ? 'partial' : 'complete'}`}
@@ -1660,6 +2028,24 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome, focusTherapyI
             </>
           ))}
       </ClinicalTableSection>
+
+      <ConfirmDialog
+        open={storicoConfirm !== null}
+        title="Confermi la somministrazione?"
+        message={
+          storicoConfirm
+            ? `${storicoConfirm.farmacoNome} ${storicoConfirm.farmacoDose}, ${storicoConfirm.fascia} di oggi. Il tuo ruolo registra la somministrazione con conferma esplicita.`
+            : ''
+        }
+        confirmLabel="Conferma somministrazione"
+        tone="primary"
+        onConfirm={() => {
+          const row = storicoConfirm;
+          setStoricoConfirm(null);
+          if (row) void storicoAdminister(row, true);
+        }}
+        onCancel={() => setStoricoConfirm(null)}
+      />
 
       <ConfirmDialog
         open={pendingDeleteId !== null}

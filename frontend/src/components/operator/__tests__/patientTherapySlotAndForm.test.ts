@@ -76,7 +76,7 @@ test('AT-04: every calendar dose is a button that opens the detail of its time',
   const calendar = await src('../cartella/PatientTherapyCalendar.tsx');
   assert.match(
     calendar,
-    /<button\s+type="button"\s+className="agt-therapy-slot patient-therapy-calendar__event"/,
+    /<button\s+type="button"\s+className=\{`agt-therapy-slot patient-therapy-calendar__event/,
   );
   assert.match(calendar, /aria-expanded=\{openTime === event\.time\}/);
   assert.match(calendar, /<PatientTherapySlotDetail/);

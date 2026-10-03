@@ -75,3 +75,25 @@ export function useCan(id: string): boolean {
   const caps = useSyncExternalStore(subscribe, snapshot, snapshot);
   return can(caps, id);
 }
+
+/**
+ * true se la capability è consentita «con conferma» (ALLOWED_WITH_CONFIRMATION, es. il
+ * supervisore che somministra): la GUI chiede una conferma esplicita prima dell'azione e la
+ * segnala al server, che senza conferma la rifiuta.
+ */
+export function requiresConfirmation(caps: CapabilityMap | null | undefined, id: string): boolean {
+  return caps?.[id]?.requiresConfirmation === true;
+}
+
+export function useRequiresConfirmation(id: string): boolean {
+  const snapshot = () => sessionCapabilities;
+  const caps = useSyncExternalStore(subscribe, snapshot, snapshot);
+  return requiresConfirmation(caps, id);
+}
+
+/** true se la mappa della sessione contiene una decisione per la capability (policy attiva). */
+export function useCapabilityDecided(id: string): boolean {
+  const snapshot = () => sessionCapabilities;
+  const caps = useSyncExternalStore(subscribe, snapshot, snapshot);
+  return caps?.[id] !== undefined;
+}

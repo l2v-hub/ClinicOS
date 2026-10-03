@@ -313,3 +313,65 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* ── UX direct-access (2026-10-03) ──────────────────────────────────────────────────────────────
+   Tessera NEWS2: la parte superiore apre lo storico, «Rileva ora» (F10) apre l'inserimento dei
+   parametri; «Non calcolabile» va a capo invece di essere tagliato. */
+.vt--news2 {
+  cursor: default;
+}
+.vt--news2:hover {
+  border-color: var(--border);
+}
+.vt--news2.vt--warn:hover,
+.vt--news2.vt--crit:hover {
+  border-color: transparent;
+}
+.vt__open {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.vt__open:hover .vt__label {
+  color: var(--blue);
+}
+.vt__open:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+.vt--news2 .vt__value--muted {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.vt--news2 .vt__trend {
+  flex-wrap: wrap;
+}
+.vt__record {
+  margin-top: 8px;
+  min-height: 44px;
+  align-self: stretch;
+  justify-content: center;
+}
+/* Chip compatto (colonne strette): ora e «da aggiornare» in chiaro, il testo va a capo. */
+.news2-chip--compact {
+  white-space: normal;
+  height: auto;
+  min-height: 28px;
+  text-align: left;
+}
+.news2-chip--compact .ds-badge__text {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}

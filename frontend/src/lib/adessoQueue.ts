@@ -5,6 +5,8 @@
 import type { Consegna } from '../types';
 import { therapyCalendar, therapyTime, type ScadenzaTerapia } from './dashboardTherapies';
 import type { TabId } from '../components/operator/tabGroups';
+import type { PatientTarget } from './patientTarget';
+import { doseSignal, landingOf } from './patientTargetResolver';
 
 export type AdessoKind =
   | 'terapia-ritardo'
@@ -67,12 +69,21 @@ export interface AdessoItem {
   inRitardo: boolean;
   /** Dentro il gruppo: valore più alto = più urgente. */
   urgenza: number;
+  /** Direct access: dove «Apri» atterra (dose, consegna o farmaco da sanare), non solo la sezione. */
+  landing: Omit<PatientTarget, 'patientId'>;
 }
 
 export interface AnomaliaPazienteRiga {
   patientId: string;
   nome: string;
-  esito: { totale: number; verificaIncompleta: boolean };
+  esito: {
+    totale: number;
+    verificaIncompleta: boolean;
+    /** Nomi dei farmaci da sanare: la riga li mostra invece del solo conteggio. */
+    anomalie?: { farmacoNome: string }[];
+  };
+  /** Terapia del primo farmaco da sanare (se lo slot la porta): la riga apre quella. */
+  therapyId?: string;
 }
 
 export interface AdessoInput {
@@ -112,6 +123,7 @@ function consegnaItem(c: Consegna, cal: { oggi: string; minuto: number }): Adess
     dettaglio,
     ora: ora !== null ? (c.oraScadenza ?? null) : null,
     luogo: null,
+    landing: landingOf({ kind: 'handover', patientId: c.pazienteId, consegnaId: c.id }),
   };
 
   if (giorni === null) {
@@ -206,6 +218,7 @@ function terapiaItem(row: ScadenzaTerapia, kind: AdessoKind): AdessoItem {
     luogo: luogoTerapia(row),
     inRitardo: kind === 'terapia-ritardo',
     urgenza: kind === 'terapia-senza-orario' ? 0 : -minuti,
+    landing: landingOf(doseSignal(row)),
   };
 }
 
@@ -229,12 +242,19 @@ export function buildAdessoQueue(input: AdessoInput): AdessoItem[] {
   for (const p of input.anomalie) {
     if (p.esito.totale <= 0) continue;
     const n = p.esito.totale;
+    const nomi = (p.esito.anomalie ?? []).map((a) => a.farmacoNome).filter(Boolean);
     items.push({
       key: `anomalia:${p.patientId}`,
       kind: 'anomalia-farmaci',
       patientId: p.patientId,
       nome: p.nome,
-      dettaglio: `${n} ${n === 1 ? 'farmaco' : 'farmaci'} da verificare${p.esito.verificaIncompleta ? ' · verifica incompleta' : ''}`,
+      // Info senza clic: QUALI farmaci, non solo quanti.
+      dettaglio: `${n} ${n === 1 ? 'farmaco' : 'farmaci'} da verificare${nomi.length ? `: ${nomi.join(', ')}` : ''}${p.esito.verificaIncompleta ? ' · verifica incompleta' : ''}`,
+      landing: landingOf({
+        kind: 'drug-anomaly',
+        patientId: p.patientId,
+        therapyId: p.therapyId,
+      }),
       tempo: 'Da verificare',
       ora: null,
       luogo: null,

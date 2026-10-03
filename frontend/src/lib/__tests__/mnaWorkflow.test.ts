@@ -14,6 +14,8 @@ import {
 } from '../assessments/mnaLocalInputs';
 import type { MnaAnswers, MnaInputPath } from '../assessments/mnaTypes';
 import { mnaAssessment, completeMna } from './mna.fixtures';
+import { MNA_SF_PAPER } from '../assessments/paper/definitions';
+import { emptyPaperAnswers } from '../assessments/paper/engine';
 import { assertAssessment } from '../assessments/assessmentValidation';
 import { finalAssessment } from './assessments.fixtures';
 import { mnaAssessmentDate, mnaAssessmentInstants, mnaLocalMinute } from '../assessments/mnaTime';
@@ -124,12 +126,15 @@ test('screening finalization keeps partial global responses; full requires all K
   const full = store.load(mnaAssessment({ id: 'full', answers: { ...answers, extent: 'full' } }));
   assert.equal(store.preview(full), false);
   assert.deepEqual(store.get(full)!.failure?.missingPaths, ['K.eggsOrLegumesWeekly']);
+  // A correction of a v1 MNA is compiled on MNA-SF (v2): the G–R answers do not carry over.
   const correction = store.create('patient-a', final);
+  assert.deepEqual(store.get(correction)!.fields.answers, emptyPaperAnswers(MNA_SF_PAPER));
   store.update(correction, {
     correctionReason: 'Rettifica sintetica',
-    answers: { ...answers, extent: 'full' },
+    answers: { ...emptyPaperAnswers(MNA_SF_PAPER), a: 2, b: 3, c: 2, d: 2, e: 2, f1: 3 },
   });
   const create = store.begin(correction, 'save')!;
+  assert.equal(create.operation.kind === 'create' && create.operation.body.formVersion, MNA_SF_PAPER.version);
   store.finish(create, {
     kind: 'failed',
     failure: { code: 'network', message: 'Incerto', uncertain: true },

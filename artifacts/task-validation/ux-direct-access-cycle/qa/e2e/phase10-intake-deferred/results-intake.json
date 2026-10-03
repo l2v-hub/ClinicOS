@@ -1,0 +1,47 @@
+{
+  "results": [
+    {
+      "id": "P10-INT-1a",
+      "name": "Conflict-deferred row offers no «Reincludi»",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "P10-INT-1b",
+      "name": "Conflict-deferred row explains why it stays in draft",
+      "result": "PASS",
+      "detail": "1. Amlodipina Dati diversi tra le lettere · resta in bozza Le lettere riportano dati diversi per questo farmaco: non può essere prescritto finché non scegli il valore corretto. La riga resta in bozza "
+    },
+    {
+      "id": "P10-INT-1c",
+      "name": "Autosave succeeds with a deferred row (no 409, row still excluded)",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "P10-INT-1d",
+      "name": "No «Bozza non salvata» banner",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "P10-INT-1e",
+      "name": "Deferred row is not a blocking step for «Crea paziente»",
+      "result": "PASS",
+      "detail": "Anagrafica : da confermare Ingresso : facoltativa, vuota Allergie : facoltativa, vuota Terapia : da confermare Diagnosi e anamnesi : facoltativa, vuota Parametri iniziali : facoltativa, vuota Moduli da pianificare : facoltativa, vuota 2 Rie"
+    },
+    {
+      "id": "P10-INT-4",
+      "name": "Intake prescriber «Dimissione ospedaliera» filled with one tap (not before)",
+      "result": "PASS",
+      "detail": "value «Dimissione ospedaliera»"
+    },
+    {
+      "id": "P10-INT-5a",
+      "name": "Parametri iniziali: no IP M / IP P columns, DTX 20 present",
+      "result": "PASS",
+      "detail": "G | PA1ª rilev. | FCbpm | SpO₂% | PA2ª rilev. | Evacuaz. | Catet. | DTX08:00 | DTX12:00 | DTX18:00 | DTX20:00 | TC°°C | # | PA mmHg | FC bpm | SpO₂ % | TC °C | DTX 08 mg/dl | DTX 12 mg/dl | DTX 18 mg/dl | DTX 20 mg/dl | EVAC | CATET | NOTE"
+    }
+  ],
+  "http": []
+}

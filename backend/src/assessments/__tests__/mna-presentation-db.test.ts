@@ -69,7 +69,7 @@ test('MNA presentation matches UI BMI precision at every threshold without chang
     assert(mnaPdfBlocks(candidate).some((row) => row.text.endsWith(' — ' + expected)));
   }
   for (const [type, expected] of [
-    ['painad', 'painad-a4-v1'],
+    ['painad', 'painad-paper-a4-v2'],
     ['postural_transfers', 'transfers-a4-v1'],
     ['tinetti', 'tinetti-a4-v1'],
     ['gds15', 'gds15-a4-v1'],

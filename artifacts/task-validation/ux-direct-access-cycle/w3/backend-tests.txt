@@ -1,0 +1,136 @@
+[ai-gateway] {"requestId":"75d87b42-d03b-4e91-8e6d-e20a2f664447","userId":"po10-02a01e94-author","tenantId":"clinicos","toolName":"get_patient_documents","patientIds":["po10-02a01e94-foreign"],"resultCount":1,"outcome":"ok","at":"2026-10-03T11:29:17.900Z"}
+[ai-gateway] {"requestId":"75d87b42-d03b-4e91-8e6d-e20a2f664447","userId":"po10-02a01e94-author","tenantId":"clinicos","toolName":"search_documents","patientIds":["po10-02a01e94-foreign"],"resultCount":1,"outcome":"ok","at":"2026-10-03T11:29:17.910Z"}
+[ai-gateway] {"requestId":"75d87b42-d03b-4e91-8e6d-e20a2f664447","userId":"po10-02a01e94-other","tenantId":"clinicos","toolName":"search_documents","patientIds":["po10-02a01e94-foreign","po10-02a01e94-foreign","po10-02a01e94-foreign","po10-02a01e94-foreign"],"resultCount":4,"outcome":"ok","at":"2026-10-03T11:29:17.929Z"}
+[ai-gateway] {"requestId":"75d87b42-d03b-4e91-8e6d-e20a2f664447","userId":"po10-02a01e94-author","tenantId":"clinicos","toolName":"get_patient_documents","patientIds":["po10-02a01e94-foreign"],"resultCount":4,"outcome":"ok","at":"2026-10-03T11:29:17.941Z"}
+[ai-gateway] {"requestId":"75d87b42-d03b-4e91-8e6d-e20a2f664447","userId":"po10-02a01e94-author","tenantId":"clinicos","toolName":"search_documents","patientIds":["po10-02a01e94-foreign","po10-02a01e94-foreign","po10-02a01e94-foreign","po10-02a01e94-foreign"],"resultCount":4,"outcome":"ok","at":"2026-10-03T11:29:17.947Z"}
+✔ all archive/AI readers intersect generated documents with live patient scope before bounds; legacy stays accessible (747.8782ms)
+✔ HTTP draft/final/PDF metadata flow preserves status codes, identity, bounds and current scope (608.0539ms)
+✔ personal confirmations use exact DB qualification and frozen server identity, with durable replay (1200.8342ms)
+✔ revoked qualification is re-read after the real operator lock before a new confirmation (103.6125ms)
+✔ attestations are append-only and never rewrite the PDF or transfer to a correction (658.6246ms)
+✔ attestation counts, personal state and pages are bounded and current-scope protected (440.7173ms)
+✔ HTTP current and attestations expose the agreed status and identity-bound response (225.7193ms)
+✔ catalog is exactly one empty metadata row per catalog form (7) and rejects query/scope without writes (295.5517ms)
+✔ all five forms use terminal clinical order and hide colleague drafts (637.3245ms)
+✔ exact counts exceed history page size; one metadata query returns no clinical JSON (136.7817ms)
+✔ GDS15 final freezes fifteen answers, clinical identity and source; correction/current/history preserve the original (743.3986ms)
+✔ GDS15 replay binds each answer and notes; incomplete final is atomic and concurrent patches/finalization retain CAS (202.3169ms)
+✔ GDS15 PDF renders frozen questions/source and a long corrected assessment with supported Unicode notes (1765.7528ms)
+✔ GDS15 PDF failure/concurrent retry creates one typed document and unsupported free-text glyphs preserve the final snapshot (807.8785ms)
+✔ GDS15 PostgreSQL independently enforces all fifteen boolean/null domains, complete finals and note boundaries (536.6898ms)
+✔ GDS15 final snapshot SQL rejects missing, reordered, coerced or inconsistent answers/scores/source without altering old types (192.9745ms)
+✔ GDS15 exhaustively scores 32768 answer combinations against the source reverse-key mask and every band boundary (234.317ms)
+✔ GDS15 partial answers never receive a result, and strict boundaries reject every non-boolean domain or missing key (3.6224ms)
+✔ GDS15 notes preserve 4000 Unicode codepoints, whitespace and canonical payload hashes without coercion (1.0108ms)
+✔ MNA screening final preserves partial G–R, authoritative demographics and immutable source-bound snapshot (558.0899ms)
+✔ MNA create replay binds all answers/dates/methods/extent, CAS serializes patches and incomplete finalization is atomic (135.3433ms)
+✔ MNA full PDFs retain measured units, source/copyright, all K questions and long Unicode notes (1125.1089ms)
+✔ MNA screening PDF preserves partial G–R and frozen K sublabels; failed/concurrent retry archives one typed document (415.3075ms)
+✔ MNA editorial typography preserves free text and reports unsupported glyphs without changing the snapshot (343.3507ms)
+✔ MNA presentation matches UI BMI precision at every threshold without changing snapshot values (263.3405ms)
+✔ real archived PO15 MNA v1 ready retry invokes no renderer and preserves every persisted value (153.5257ms)
+✔ new MNA v2 archives readable 1 punto, 27,5 and 25 while retaining raw BMI and snapshot digest (443.5318ms)
+✔ MNA PostgreSQL validates every option, three K booleans, selected-extent completeness and canonical object shape (329.4666ms)
+✔ MNA PostgreSQL matches finite numeric/date/note boundaries and rejects direct malformed clinical writes (468.8668ms)
+✔ MNA strict canonical answers reject unknown/missing values and retain null/false/notes in payload hashes (7.9138ms)
+✔ MNA K evaluates all eight boolean combinations and every missing subanswer stays incomplete (3.0592ms)
+✔ MNA uses exact half points and independent 14/16/30 section boundaries (0.6246ms)
+✔ MNA anthropometry derives unrounded threshold scores and rejects concurrent categories or unusable numbers (1.8435ms)
+✔ MNA calendar/notes validation preserves Unicode and rejects date rollover or invalid clinical Rome boundaries (19.2529ms)
+✔ all 243 complete and 781 partial PAINAD combinations preserve zero, sums and bands (7.24ms)
+✔ boundary rejects missing/extra/coerced values, spoofed author, invalid dates and version (6.0822ms)
+✔ barthel paper version: draft → patch → finalize → replay → correction → current/history → PDF (2620.859ms)
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+✔ tinetti paper version: draft → patch → finalize → replay → correction → current/history → PDF (1008.1289ms)
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+✔ gds15 paper version: draft → patch → finalize → replay → correction → current/history → PDF (871.4582ms)
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+✔ mna paper version: draft → patch → finalize → replay → correction → current/history → PDF (895.3499ms)
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+Warning: UnknownErrorException: Ensure that the `standardFontDataUrl` API parameter is provided.
+✔ ucla_npi_sleep paper version: draft → patch → finalize → replay → correction → current/history → PDF (893.5615ms)
+✔ SQL validators reject malformed answers for the new versions and keep v1 shapes valid (236.6627ms)
+✔ v1 Tinetti, GDS-15, MNA and PAINAD records still finalize, keep their wording and render with the legacy/PAINAD renderer (1599.522ms)
+✔ shared definition and engine files are byte-identical to the frontend copies (6.9497ms)
+✔ every scale: each option scores exactly its printed points; maxima and band coverage match the paper (7.157ms)
+✔ Barthel: 10 items, max 100, five bands with the paper thresholds (0.5299ms)
+✔ Tinetti v2 keeps the 20 v1 answer keys and ranges (16+12=28) under paper numbering 1–16 (0.3831ms)
+✔ GDS-15 v2: paper wording, same scoring key as v1, bands Normalità / lieve-moderata / grave (0.2736ms)
+✔ MNA-SF: A–F max 14, F1 from BMI, F2 only when BMI is unavailable, bands 12–14 / 8–11 / 0–7 (0.9641ms)
+✔ UCLA NPI sleep: absent = 0, frequency × severity 1–12, caregiver distress 0–5 outside the total (0.9129ms)
+✔ PAINAD paper layout prints the same text as the stored v1 definition (consolare corrected) (0.2352ms)
+✔ answer parsing rejects unknown keys, missing keys, values outside the printed options (0.5919ms)
+✔ PDF failure preserves the final and concurrent retries archive exactly one immutable document (595.7074ms)
+✔ expired lease is recoverable and late success/failure tokens cannot overwrite the new attempt (115.5196ms)
+✔ PDF claim and callbacks read the clock after database lock waits (164.9739ms)
+✔ renderer preserves Unicode and long text, emits readable PDF metadata and rejects unsupported glyphs (708.1926ms)
+✔ concurrent create uses one immutable initial receipt and replays the edited current draft (714.5331ms)
+✔ draft privacy and patient scope apply to reads, writes, create replay and revocation (34.3071ms)
+✔ CAS permits one writer and incomplete finalization remains a draft (42.051ms)
+✔ finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella (268.5589ms)
+✔ only one concurrent final correction may reference a predecessor of the same patient (77.7313ms)
+✔ history is bounded, scoped, stable across draft edits and excludes snapshots and answers (299.3214ms)
+✔ concurrent ownership change fences creation before a stale patient permission can write (40.7021ms)
+✖ a new process replays the persisted creation and finalization after response loss (146.6307ms)
+✔ one Tinetti lifecycle retains CAS/replay, immutable snapshot, typed current/history and legacy JSON (851.9734ms)
+✔ SQL validates all 48 domains, null completeness and note bounds and blocks direct malformed writes (272.1442ms)
+✔ Tinetti PDF renders all frozen items and Unicode notes, and archives under its own type (1318.1601ms)
+✔ all 48 approved options produce exact balance/gait totals and preserve the 16/12/28 model (5.7008ms)
+✔ twenty missing answers never gain a risk class; malformed values cannot become scores (2.2371ms)
+✔ optional notes preserve Unicode, whitespace and newlines with a 4000-codepoint boundary (0.8513ms)
+✔ Transfers CAS, replay and immutable final preserve answers, source and Cartella independence (929.4951ms)
+✔ current resolves terminal chains by clinical time and never picks late old corrections or drafts (318.943ms)
+✔ typed history is bounded and draft-private, with cursor type binding before pagination (471.2235ms)
+✔ DB validation rejects malformed and incomplete Transfers without weakening PAINAD (48.2992ms)
+✔ Transfers PDF freezes all groups, source signature spaces and long Unicode paragraphs without scores (2216.3494ms)
+✔ Transfers document metadata keeps its type and existing archive scope and retries remain intact (486.4446ms)
+✔ Transfers has no defaults or score and covers all 384 independent transfer choices (13.2392ms)
+✔ Transfers preserves explicit no, dependencies and every aid ownership boundary (2.6108ms)
+✔ Transfers rejects unknown/coerced options and enforces dates, text and Unicode bounds (3.4933ms)
+✔ admission civil date accepts historical years and validates Gregorian leap days (0.4771ms)
+✔ assessments.catalog lists the seven scales for an own patient (281.9331ms)
+✔ painad create_draft → update_draft → finalize (PDF) → get/list/current, persisted in DB (630.7637ms)
+✔ postural_transfers finalize → attest → list_attestations persists the attestation (354.6462ms)
+✔ scope: another owner’s patient is not reachable (service 404), nothing written (13.4943ms)
+✔ validation comes from the existing parsers (invalid_input with domain code) (3.1278ms)
+✔ GUI == Tool: create_draft + finalize via HTTP route and via tool store the same state (610.6238ms)
+ℹ tests 86
+ℹ suites 0
+ℹ pass 85
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 228505.4524
+
+✖ failing tests:
+
+test at src\assessments\__tests__\service-db.test.ts:5:4193
+✖ a new process replays the persisted creation and finalization after response loss (146.6307ms)
+  Error: node:internal/modules/esm/resolve:271
+      throw new ERR_MODULE_NOT_FOUND(
+            ^
+  
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\Workspace\ClinicOSHouse-worktrees\ux-w3-moduli\backend\backend\src\assessments\service.ts' imported from C:\Workspace\ClinicOSHouse-worktrees\ux-w3-moduli\backend\[eval1]
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at resolveBaseSync (file:///C:/Workspace/ClinicOSHouse/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:9102)
+      at resolveDirectorySync (file:///C:/Workspace/ClinicOSHouse/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:10315)
+      at resolveTsPathsSync (file:///C:/Workspace/ClinicOSHouse/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:11547)
+      at resolve (file:///C:/Workspace/ClinicOSHouse/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:13365) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///C:/Workspace/ClinicOSHouse-worktrees/ux-w3-moduli/backend/backend/src/assessments/service.ts'
+  }
+  
+  Node.js v26.3.0
+  
+      at ChildProcess.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\ux-w3-moduli\backend\src\assessments\__tests__\service-db.test.ts:258:32)
+      at ChildProcess.emit (node:events:509:20)
+      at ChildProcess._handle.onexit (node:internal/child_process:294:12)

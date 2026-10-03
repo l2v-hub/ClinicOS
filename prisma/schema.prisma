@@ -132,6 +132,7 @@ model Patient {
   appointments          Appointment[]
   cartella              Cartella?
   medicationAdministrations MedicationAdministration[]
+  prnAdministrations        PrnAdministration[]
   intakeDocuments           PatientIntakeDocument[]
   therapies                 PatientTherapy[]
   roomAssignments           PatientRoomAssignment[]
@@ -373,6 +374,34 @@ model MedicationAdministration {
   @@index([patientId, date, createdAt, id], map: "MedicationAdministration_patient_history_idx")
 }
 
+// PRN («al bisogno») administrations (UX cycle 2026-10-03, owner-approved). Separate append-only
+// table: a PRN drug can be given several times a day, so it cannot live under the scheduled
+// one-dose-per-band key of MedicationAdministration (@@unique therapyId/date/fascia), which stays
+// untouched. Drug, dose and route are resolved from the prescription and the time is the server
+// time; the client sends only therapy, indication and an idempotency key (unique per operator).
+model PrnAdministration {
+  id               String          @id @default(cuid())
+  therapyId        String?
+  patientId        String
+  farmacoNome      String
+  farmacoDose      String
+  farmacoVia       String
+  date             String // facility-local day YYYY-MM-DD (Europe/Rome) of administeredAt
+  administeredAt   DateTime        @default(now())
+  indicazione      String
+  note             String?
+  operatoreId      String
+  operatoreNome    String
+  requestId        String
+  createdAt        DateTime        @default(now())
+  patient          Patient         @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  therapy          PatientTherapy? @relation(fields: [therapyId], references: [id], onDelete: SetNull)
+
+  @@unique([operatoreId, requestId])
+  @@index([patientId, date])
+  @@index([therapyId, date])
+}
+
 model PatientIntakeDocument {
   id            String   @id @default(cuid())
   fileName      String
@@ -424,6 +453,7 @@ model PatientTherapy {
   giorniSettimana         String?
   schedules               TherapySchedule[]
   administrations         MedicationAdministration[]
+  prnAdministrations      PrnAdministration[]
   diaryEntries            PatientDiaryEntry[]
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
@@ -615,6 +645,7 @@ model PatientDiaryEntry {
   updatedAt     DateTime @updatedAt
   patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
   therapy       PatientTherapy? @relation(fields: [therapyId], references: [id], onDelete: SetNull)
+  acknowledgements DiaryEntryAcknowledgement[]
 
   @@unique([patientId, therapyRequestId])
   @@index([patientId])
@@ -623,6 +654,25 @@ model PatientDiaryEntry {
   @@index([patientId, entryDateTime, id])
   @@index([patientId, authorType, entryDateTime, id])
   @@index([therapyId])
+}
+
+// «Presa visione» per lettore di una voce URGENTE del diario (UX direct-access, 2026-10-03).
+// Append-only: una riga per (voce, operatore), mai aggiornata; DELETE rifiutato dal trigger salvo
+// la cascata dalla cancellazione della voce stessa. Nome e ruolo sono istantanee server-side
+// dell'operatore (lo storico sopravvive a rinomine). patientId duplicato per scope/audit.
+model DiaryEntryAcknowledgement {
+  id             String            @id @default(cuid())
+  entryId        String
+  patientId      String
+  operatorId     String
+  operatorName   String
+  operatorRole   String
+  acknowledgedAt DateTime          @default(now())
+  entry          PatientDiaryEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@unique([entryId, operatorId])
+  @@index([operatorId, acknowledgedAt])
+  @@index([patientId])
 }
 
 // ── Patient intake draft (F3 EPIC #120 / Issue #125) ─────────────────────────

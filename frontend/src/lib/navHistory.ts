@@ -3,6 +3,7 @@
 // L'etichetta può contenere il nome del paziente: vive solo in history.state (sessione del
 // browser), mai nell'URL, che continua a portare solo l'id opaco.
 import { tabLabel, type TabId } from '../components/operator/tabGroups';
+import type { StoredPatientTarget } from './patientTargetHash';
 
 export interface NavEntry {
   navKey: string;
@@ -10,12 +11,15 @@ export interface NavEntry {
   /** "Cognome, Nome" come nella testata della cartella; solo per l'etichetta. */
   pazienteNome?: string;
   patientTab?: TabId;
+  /** Direct access: item inside the section (therapy, handover, diary entry…). */
+  patientTarget?: StoredPatientTarget;
 }
 
 export interface NavHistoryState {
   navKey: string;
   pazienteId?: string;
   patientTab?: TabId;
+  patientTarget?: StoredPatientTarget;
   prevNavKey?: string;
   prevLabel?: string;
 }
@@ -37,6 +41,7 @@ export function navHistoryState(
     navKey: next.navKey,
     ...(next.pazienteId ? { pazienteId: next.pazienteId } : {}),
     ...(next.patientTab ? { patientTab: next.patientTab } : {}),
+    ...(next.patientTarget ? { patientTarget: next.patientTarget } : {}),
     ...(previous
       ? { prevNavKey: previous.navKey, prevLabel: navEntryLabel(previous, navLabels) }
       : {}),

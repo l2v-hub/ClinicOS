@@ -16,14 +16,14 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## administration
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `administration.confirm` | write | READY | TOOL | TESTED | POST /therapy-slots/confirm (backend/src/routes/therapy.ts:116) | backend/src/therapies/administration-record.ts#recordTherapyAdministration<br>backend/src/therapies/administration-record.ts#confirmTherapyAdministration<br>backend/src/therapies/therapy-write.ts#parseTherapyAdministrationBody<br>backend/src/therapies/therapy-write.ts#resolveAuthoritativeTherapy | pass · GUI parity |
-| `administration.history` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:patientId/medication-administrations (backend/src/routes/patient-therapies.ts:430) | backend/src/therapies/administration-query.ts#parseMedicationAdministrationQuery | — |
-| `administration.history_page` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:patientId/medication-administrations/page (backend/src/routes/patient-therapies.ts:377) | backend/src/therapies/administration-query.ts#parseMedicationAdministrationPageQuery<br>backend/src/therapies/administration-query.ts#encodeMedicationAdministrationCursor | — |
-| `administration.list_slots` | read | READY | TOOL | TESTED | GET /therapy-slots (backend/src/routes/therapy.ts:91) | backend/src/therapies/therapy-slots.ts#buildTherapySlots<br>backend/src/routes/therapy.ts#therapySlotPatientAccess | pass · GUI parity |
-| `administration.list_slots_page` | read | WRAP | TOOL | TESTED | GET /therapy-slots/page (backend/src/routes/therapy.ts:49) | backend/src/therapies/therapy-slots.ts#buildTherapySlotPage<br>backend/src/therapies/slot-page-query.ts#parseTherapySlotPageQuery<br>backend/src/routes/therapy.ts#therapySlotPatientAccess | pass · GUI parity |
-| `administration.record_not_administered` | write | READY | TOOL | TESTED | POST /therapy-slots/not-administered (backend/src/routes/therapy.ts:153) | backend/src/therapies/administration-record.ts#recordTherapyAdministration<br>backend/src/therapies/administration-record.ts#recordTherapyNotAdministered<br>backend/src/therapies/therapy-write.ts#parseTherapyAdministrationBody<br>backend/src/therapies/therapy-write.ts#resolveAuthoritativeTherapy | pass |
+| capability_id                            | type  | state | exposure    | invocability | entry point                                                                                                                                                            | service(s)                                                                                                                                                                                                                                                                                                                                                                      | test              |
+| ---------------------------------------- | ----- | ----- | ----------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `administration.confirm`                 | write | READY | TOOL        | TESTED       | POST /therapy-slots/confirm (backend/src/routes/therapy.ts:116), POST /therapy-slots/prn (backend/src/routes/therapy.ts — PRN «al bisogno», owner decision 2026-10-03) | backend/src/therapies/administration-record.ts#recordTherapyAdministration<br>backend/src/therapies/administration-record.ts#confirmTherapyAdministration<br>backend/src/therapies/therapy-write.ts#parseTherapyAdministrationBody<br>backend/src/therapies/therapy-write.ts#resolveAuthoritativeTherapy<br>backend/src/therapies/prn-administration.ts#recordPrnAdministration | pass · GUI parity |
+| `administration.history`                 | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:patientId/medication-administrations (backend/src/routes/patient-therapies.ts:430)                                                                      | backend/src/therapies/administration-query.ts#parseMedicationAdministrationQuery                                                                                                                                                                                                                                                                                                | —                 |
+| `administration.history_page`            | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:patientId/medication-administrations/page (backend/src/routes/patient-therapies.ts:377)                                                                 | backend/src/therapies/administration-query.ts#parseMedicationAdministrationPageQuery<br>backend/src/therapies/administration-query.ts#encodeMedicationAdministrationCursor                                                                                                                                                                                                      | —                 |
+| `administration.list_slots`              | read  | READY | TOOL        | TESTED       | GET /therapy-slots (backend/src/routes/therapy.ts:91), GET /therapy-slots/prn (PRN doses of one patient/day)                                                           | backend/src/therapies/therapy-slots.ts#buildTherapySlots<br>backend/src/routes/therapy.ts#therapySlotPatientAccess<br>backend/src/therapies/prn-administration.ts#listPrnAdministrations                                                                                                                                                                                        | pass · GUI parity |
+| `administration.list_slots_page`         | read  | WRAP  | TOOL        | TESTED       | GET /therapy-slots/page (backend/src/routes/therapy.ts:49)                                                                                                             | backend/src/therapies/therapy-slots.ts#buildTherapySlotPage<br>backend/src/therapies/slot-page-query.ts#parseTherapySlotPageQuery<br>backend/src/routes/therapy.ts#therapySlotPatientAccess                                                                                                                                                                                     | pass · GUI parity |
+| `administration.record_not_administered` | write | READY | TOOL        | TESTED       | POST /therapy-slots/not-administered (backend/src/routes/therapy.ts:153)                                                                                               | backend/src/therapies/administration-record.ts#recordTherapyAdministration<br>backend/src/therapies/administration-record.ts#recordTherapyNotAdministered<br>backend/src/therapies/therapy-write.ts#parseTherapyAdministrationBody<br>backend/src/therapies/therapy-write.ts#resolveAuthoritativeTherapy                                                                        | pass              |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -35,25 +35,25 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## agnos
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `agnos.action.add_diary_note` | write | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#addDiaryNote (L87-105) | — |
-| `agnos.action.create_appointment` | write | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#createAppointment (L108) → backend/src/services/appointment-service.ts#createAppointment | — |
-| `agnos.action.create_consegna` | write | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#createConsegna (L143) → backend/src/services/consegna-service.ts#createConsegna | — |
-| `agnos.action.create_vital_sign` | write | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#createVitalSign (L38-59) | — |
-| `agnos.action.read` | read | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/plan (backend/src/routes/ai-actions.ts:99) | backend/src/ai/assistant/service.ts#assistantQuery | — |
-| `agnos.action.update_appointment` | write | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#updateAppointment (L125) → backend/src/services/appointment-service.ts#updateAppointment | — |
-| `agnos.action.update_narrative_section` | write | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#appendNarrative (L73-85) → backend/src/ai/sections/patient-narrative.ts#upsertNarrativeSection | — |
-| `agnos.action.update_patient_demographics` | write | READY | AGNOS_INTERNAL | EXPOSED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#updateDemographics (L61-71) | — |
-| `agnos.catalog` | read | READY | NOT_EXPOSED | DISCOVERED | GET /ai/actions/catalog (backend/src/routes/ai-actions.ts:94) | backend/src/ai/actions/catalog.ts#listCatalog | — |
-| `agnos.execute_command` | action | READY | NOT_EXPOSED | DISCOVERED | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/actions/orchestrate.ts#executeCommand<br>backend/src/ai/voice/execute.ts#executeAction<br>backend/src/ai/voice/write-services.ts#prismaVoiceWriter | — |
-| `agnos.plan_command` | action | READY | NOT_EXPOSED | DISCOVERED | POST /ai/actions/plan (backend/src/routes/ai-actions.ts:99) | backend/src/ai/actions/orchestrate.ts#planCommand | — |
+| capability_id                              | type   | state | exposure       | invocability | entry point                                                     | service(s)                                                                                                                                                        | test |
+| ------------------------------------------ | ------ | ----- | -------------- | ------------ | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| `agnos.action.add_diary_note`              | write  | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#addDiaryNote (L87-105)                                                                                                     | —    |
+| `agnos.action.create_appointment`          | write  | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#createAppointment (L108) → backend/src/services/appointment-service.ts#createAppointment                                   | —    |
+| `agnos.action.create_consegna`             | write  | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#createConsegna (L143) → backend/src/services/consegna-service.ts#createConsegna                                            | —    |
+| `agnos.action.create_vital_sign`           | write  | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#createVitalSign (L38-59)                                                                                                   | —    |
+| `agnos.action.read`                        | read   | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/plan (backend/src/routes/ai-actions.ts:99)     | backend/src/ai/assistant/service.ts#assistantQuery                                                                                                                | —    |
+| `agnos.action.update_appointment`          | write  | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#updateAppointment (L125) → backend/src/services/appointment-service.ts#updateAppointment                                   | —    |
+| `agnos.action.update_narrative_section`    | write  | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#appendNarrative (L73-85) → backend/src/ai/sections/patient-narrative.ts#upsertNarrativeSection                             | —    |
+| `agnos.action.update_patient_demographics` | write  | READY | AGNOS_INTERNAL | EXPOSED      | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/voice/write-services.ts#updateDemographics (L61-71)                                                                                                | —    |
+| `agnos.catalog`                            | read   | READY | NOT_EXPOSED    | DISCOVERED   | GET /ai/actions/catalog (backend/src/routes/ai-actions.ts:94)   | backend/src/ai/actions/catalog.ts#listCatalog                                                                                                                     | —    |
+| `agnos.execute_command`                    | action | READY | NOT_EXPOSED    | DISCOVERED   | POST /ai/actions/execute (backend/src/routes/ai-actions.ts:128) | backend/src/ai/actions/orchestrate.ts#executeCommand<br>backend/src/ai/voice/execute.ts#executeAction<br>backend/src/ai/voice/write-services.ts#prismaVoiceWriter | —    |
+| `agnos.plan_command`                       | action | READY | NOT_EXPOSED    | DISCOVERED   | POST /ai/actions/plan (backend/src/routes/ai-actions.ts:99)     | backend/src/ai/actions/orchestrate.ts#planCommand                                                                                                                 | —    |
 
 ## ai_audit
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `ai.audit.list` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /ai/audit (backend/src/routes/ai-audit.ts:29) |  | — |
+| capability_id   | type | state | exposure    | invocability | entry point                                       | service(s) | test |
+| --------------- | ---- | ----- | ----------- | ------------ | ------------------------------------------------- | ---------- | ---- |
+| `ai.audit.list` | read | GAP   | NOT_EXPOSED | DISCOVERED   | GET /ai/audit (backend/src/routes/ai-audit.ts:29) |            | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -63,11 +63,11 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## ai_extraction
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `ai_extraction.capabilities` | read | WRAP | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/capabilities (backend/src/routes/ai-extraction.ts:19) | backend/src/ai/config.ts#loadAiConfig<br>backend/src/ai/provider-factory.ts#createExtractionProvider | — |
-| `ai_extraction.schema` | read | READY | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/schema (backend/src/routes/ai-extraction.ts:40) | backend/src/ai/config.ts#loadExtractionSchema | — |
-| `ai_extraction.status` | read | READY | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/status (backend/src/routes/ai-extraction.ts:14) | backend/src/ai/config.ts#publicStatus | — |
+| capability_id                | type | state | exposure    | invocability | entry point                                                              | service(s)                                                                                           | test |
+| ---------------------------- | ---- | ----- | ----------- | ------------ | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ---- |
+| `ai_extraction.capabilities` | read | WRAP  | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/capabilities (backend/src/routes/ai-extraction.ts:19) | backend/src/ai/config.ts#loadAiConfig<br>backend/src/ai/provider-factory.ts#createExtractionProvider | —    |
+| `ai_extraction.schema`       | read | READY | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/schema (backend/src/routes/ai-extraction.ts:40)       | backend/src/ai/config.ts#loadExtractionSchema                                                        | —    |
+| `ai_extraction.status`       | read | READY | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/status (backend/src/routes/ai-extraction.ts:14)       | backend/src/ai/config.ts#publicStatus                                                                | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -77,47 +77,47 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## ai_read
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `ai.read.correlate_structured_data` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('correlate_structured_data') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#correlate | pass |
-| `ai.read.get_facility_snapshot` | read | READY | AGNOS_INTERNAL | EXPOSED | ai/assistant/service.ts dispatch('get_facility_snapshot') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/assistant/service.ts#facilitySnapshot (non esportata) | — |
-| `ai.read.get_operator_queue` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('get_operator_queue') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/assistant/service.ts#operatorQueue (non esportata) | pass |
-| `ai.read.get_patient_allergies` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('get_patient_allergies') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#getPatientAllergies | pass · GUI parity |
-| `ai.read.get_patient_appointments` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('get_patient_appointments') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#getPatientAppointments | pass · GUI parity |
-| `ai.read.get_patient_therapies` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('get_patient_therapies') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#getPatientTherapies | pass · GUI parity |
-| `ai.read.get_patient_timeline` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('get_patient_timeline') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#getPatientTimeline | pass · GUI parity |
-| `ai.read.get_patient_vital_signs` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('get_patient_vital_signs') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#getPatientVitalSigns | pass · GUI parity |
-| `ai.read.query_appointments_today` | read | READY | AGNOS_INTERNAL | EXPOSED | ai/assistant/service.ts dispatch('query_appointments_today') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/assistant/service.ts#appointmentsToday (non esportata) | — |
-| `ai.read.query_data` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('query_data') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/assistant/service.ts#dispatchQueryData → backend/src/ai/gateway/query/engine.ts#runQueryPlan | pass |
-| `ai.read.query_staff_list` | read | READY | AGNOS_INTERNAL | EXPOSED | ai/assistant/service.ts dispatch('query_staff_list') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/assistant/service.ts#staffList (non esportata) | — |
-| `ai.read.search_across_patients` | read | READY | AGNOS_INTERNAL | EXPOSED | ai/assistant/service.ts dispatch('search_across_patients') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#searchAcrossPatients \| backend/src/ai/gateway/services.ts#getCrossPatientVitalSigns | pass |
-| `ai.read.search_clinical_sections` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('search_clinical_sections') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#searchClinicalSections | pass |
-| `ai.read.search_documents` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('search_documents') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#searchDocuments | pass |
-| `ai.read.search_patients` | read | READY | AGNOS_INTERNAL | TESTED | ai/assistant/service.ts dispatch('search_patients') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#searchPatients | pass |
+| capability_id                       | type | state | exposure       | invocability | entry point                                                                                                     | service(s)                                                                                                              | test              |
+| ----------------------------------- | ---- | ----- | -------------- | ------------ | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `ai.read.correlate_structured_data` | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('correlate_structured_data') ← POST /ai/assistant/query, POST /ai/actions/plan | backend/src/ai/gateway/services.ts#correlate                                                                            | pass              |
+| `ai.read.get_facility_snapshot`     | read | READY | AGNOS_INTERNAL | EXPOSED      | ai/assistant/service.ts dispatch('get_facility_snapshot') ← POST /ai/assistant/query, POST /ai/actions/plan     | backend/src/ai/assistant/service.ts#facilitySnapshot (non esportata)                                                    | —                 |
+| `ai.read.get_operator_queue`        | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('get_operator_queue') ← POST /ai/assistant/query, POST /ai/actions/plan        | backend/src/ai/assistant/service.ts#operatorQueue (non esportata)                                                       | pass              |
+| `ai.read.get_patient_allergies`     | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('get_patient_allergies') ← POST /ai/assistant/query, POST /ai/actions/plan     | backend/src/ai/gateway/services.ts#getPatientAllergies                                                                  | pass · GUI parity |
+| `ai.read.get_patient_appointments`  | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('get_patient_appointments') ← POST /ai/assistant/query, POST /ai/actions/plan  | backend/src/ai/gateway/services.ts#getPatientAppointments                                                               | pass · GUI parity |
+| `ai.read.get_patient_therapies`     | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('get_patient_therapies') ← POST /ai/assistant/query, POST /ai/actions/plan     | backend/src/ai/gateway/services.ts#getPatientTherapies                                                                  | pass · GUI parity |
+| `ai.read.get_patient_timeline`      | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('get_patient_timeline') ← POST /ai/assistant/query, POST /ai/actions/plan      | backend/src/ai/gateway/services.ts#getPatientTimeline                                                                   | pass · GUI parity |
+| `ai.read.get_patient_vital_signs`   | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('get_patient_vital_signs') ← POST /ai/assistant/query, POST /ai/actions/plan   | backend/src/ai/gateway/services.ts#getPatientVitalSigns                                                                 | pass · GUI parity |
+| `ai.read.query_appointments_today`  | read | READY | AGNOS_INTERNAL | EXPOSED      | ai/assistant/service.ts dispatch('query_appointments_today') ← POST /ai/assistant/query, POST /ai/actions/plan  | backend/src/ai/assistant/service.ts#appointmentsToday (non esportata)                                                   | —                 |
+| `ai.read.query_data`                | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('query_data') ← POST /ai/assistant/query, POST /ai/actions/plan                | backend/src/ai/assistant/service.ts#dispatchQueryData → backend/src/ai/gateway/query/engine.ts#runQueryPlan             | pass              |
+| `ai.read.query_staff_list`          | read | READY | AGNOS_INTERNAL | EXPOSED      | ai/assistant/service.ts dispatch('query_staff_list') ← POST /ai/assistant/query, POST /ai/actions/plan          | backend/src/ai/assistant/service.ts#staffList (non esportata)                                                           | —                 |
+| `ai.read.search_across_patients`    | read | READY | AGNOS_INTERNAL | EXPOSED      | ai/assistant/service.ts dispatch('search_across_patients') ← POST /ai/assistant/query, POST /ai/actions/plan    | backend/src/ai/gateway/services.ts#searchAcrossPatients \| backend/src/ai/gateway/services.ts#getCrossPatientVitalSigns | pass              |
+| `ai.read.search_clinical_sections`  | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('search_clinical_sections') ← POST /ai/assistant/query, POST /ai/actions/plan  | backend/src/ai/gateway/services.ts#searchClinicalSections                                                               | pass              |
+| `ai.read.search_documents`          | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('search_documents') ← POST /ai/assistant/query, POST /ai/actions/plan          | backend/src/ai/gateway/services.ts#searchDocuments                                                                      | pass              |
+| `ai.read.search_patients`           | read | READY | AGNOS_INTERNAL | TESTED       | ai/assistant/service.ts dispatch('search_patients') ← POST /ai/assistant/query, POST /ai/actions/plan           | backend/src/ai/gateway/services.ts#searchPatients                                                                       | pass              |
 
 ## appointments
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `appointments.create` | write | READY | TOOL | TESTED | POST /appointments (backend/src/routes/appointments.ts:70) | backend/src/appointments/write-validation.ts#parseAppointmentCreateBody<br>backend/src/services/appointment-service.ts#createAppointment | pass · GUI parity |
-| `appointments.delete` | write | READY | GUI_ONLY | DISCOVERED | DELETE /appointments/:id (backend/src/routes/appointments.ts:146) | backend/src/services/appointment-service.ts#uiOnlyDeleteAppointment | — |
-| `appointments.list` | read | READY | TOOL | TESTED | GET /appointments (backend/src/routes/appointments.ts:48) | backend/src/appointments/list-query.ts#parseAppointmentListQuery<br>backend/src/services/appointment-service.ts#listAppointments | pass · GUI parity |
-| `appointments.update` | write | READY | TOOL | TESTED | PATCH /appointments/:id (backend/src/routes/appointments.ts:109) | backend/src/appointments/write-validation.ts#parseAppointmentId/parseAppointmentPatchBody<br>backend/src/services/appointment-service.ts#updateAppointment | pass · GUI parity |
+| capability_id         | type  | state | exposure | invocability | entry point                                                       | service(s)                                                                                                                                                 | test              |
+| --------------------- | ----- | ----- | -------- | ------------ | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `appointments.create` | write | READY | TOOL     | TESTED       | POST /appointments (backend/src/routes/appointments.ts:70)        | backend/src/appointments/write-validation.ts#parseAppointmentCreateBody<br>backend/src/services/appointment-service.ts#createAppointment                   | pass · GUI parity |
+| `appointments.delete` | write | READY | GUI_ONLY | DISCOVERED   | DELETE /appointments/:id (backend/src/routes/appointments.ts:146) | backend/src/services/appointment-service.ts#uiOnlyDeleteAppointment                                                                                        | —                 |
+| `appointments.list`   | read  | READY | TOOL     | TESTED       | GET /appointments (backend/src/routes/appointments.ts:48)         | backend/src/appointments/list-query.ts#parseAppointmentListQuery<br>backend/src/services/appointment-service.ts#listAppointments                           | pass · GUI parity |
+| `appointments.update` | write | READY | TOOL     | TESTED       | PATCH /appointments/:id (backend/src/routes/appointments.ts:109)  | backend/src/appointments/write-validation.ts#parseAppointmentId/parseAppointmentPatchBody<br>backend/src/services/appointment-service.ts#updateAppointment | pass · GUI parity |
 
 ## assessments
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `assessments.attest` | write | READY | TOOL | TESTED | POST /patients/:patientId/assessments/:id/attestations (backend/src/routes/patient-assessments.ts:56) | backend/src/assessments/attestations.ts#attestAssessment | pass |
-| `assessments.catalog` | read | READY | TOOL | TESTED | GET /patients/:patientId/assessments/catalog (backend/src/routes/patient-assessments.ts:35) | backend/src/assessments/catalog.ts#assessmentCatalog | pass |
-| `assessments.create_draft` | write | READY | TOOL | TESTED | POST /patients/:patientId/assessments (backend/src/routes/patient-assessments.ts:64) | backend/src/assessments/service.ts#createAssessment | pass · GUI parity |
-| `assessments.current` | read | READY | TOOL | TESTED | GET /patients/:patientId/assessments/current (backend/src/routes/patient-assessments.ts:42) | backend/src/assessments/current.ts#currentAssessment | pass |
-| `assessments.finalize` | action | WRAP | TOOL | TESTED | POST /patients/:patientId/assessments/:id/finalize (backend/src/routes/patient-assessments.ts:93) | backend/src/assessments/finalize.ts#finalizeAssessmentWithPdf<br>backend/src/assessments/service.ts#finalizeAssessment<br>backend/src/assessments/pdf-service.ts#retryAssessmentPdf | pass · GUI parity |
-| `assessments.get` | read | READY | TOOL | TESTED | GET /patients/:patientId/assessments/:id (backend/src/routes/patient-assessments.ts:79) | backend/src/assessments/service.ts#getAssessment | pass |
-| `assessments.list` | read | READY | TOOL | TESTED | GET /patients/:patientId/assessments (backend/src/routes/patient-assessments.ts:72) | backend/src/assessments/history.ts#listAssessments | pass |
-| `assessments.list_attestations` | read | READY | TOOL | TESTED | GET /patients/:patientId/assessments/:id/attestations (backend/src/routes/patient-assessments.ts:49) | backend/src/assessments/attestations.ts#listAttestations | pass |
-| `assessments.retry_pdf` | action | READY | TOOL | TESTED | POST /patients/:patientId/assessments/:id/pdf/retry (backend/src/routes/patient-assessments.ts:103) | backend/src/assessments/input.ts#bodyObject<br>backend/src/assessments/pdf-service.ts#retryAssessmentPdf | pass |
-| `assessments.update_draft` | write | READY | TOOL | TESTED | PATCH /patients/:patientId/assessments/:id (backend/src/routes/patient-assessments.ts:86) | backend/src/assessments/service.ts#patchAssessment | pass |
+| capability_id                   | type   | state | exposure | invocability | entry point                                                                                           | service(s)                                                                                                                                                                          | test              |
+| ------------------------------- | ------ | ----- | -------- | ------------ | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `assessments.attest`            | write  | READY | TOOL     | TESTED       | POST /patients/:patientId/assessments/:id/attestations (backend/src/routes/patient-assessments.ts:56) | backend/src/assessments/attestations.ts#attestAssessment                                                                                                                            | pass              |
+| `assessments.catalog`           | read   | READY | TOOL     | TESTED       | GET /patients/:patientId/assessments/catalog (backend/src/routes/patient-assessments.ts:35)           | backend/src/assessments/catalog.ts#assessmentCatalog                                                                                                                                | pass              |
+| `assessments.create_draft`      | write  | READY | TOOL     | TESTED       | POST /patients/:patientId/assessments (backend/src/routes/patient-assessments.ts:64)                  | backend/src/assessments/service.ts#createAssessment                                                                                                                                 | pass · GUI parity |
+| `assessments.current`           | read   | READY | TOOL     | TESTED       | GET /patients/:patientId/assessments/current (backend/src/routes/patient-assessments.ts:42)           | backend/src/assessments/current.ts#currentAssessment                                                                                                                                | pass              |
+| `assessments.finalize`          | action | WRAP  | TOOL     | TESTED       | POST /patients/:patientId/assessments/:id/finalize (backend/src/routes/patient-assessments.ts:93)     | backend/src/assessments/finalize.ts#finalizeAssessmentWithPdf<br>backend/src/assessments/service.ts#finalizeAssessment<br>backend/src/assessments/pdf-service.ts#retryAssessmentPdf | pass · GUI parity |
+| `assessments.get`               | read   | READY | TOOL     | TESTED       | GET /patients/:patientId/assessments/:id (backend/src/routes/patient-assessments.ts:79)               | backend/src/assessments/service.ts#getAssessment                                                                                                                                    | pass              |
+| `assessments.list`              | read   | READY | TOOL     | TESTED       | GET /patients/:patientId/assessments (backend/src/routes/patient-assessments.ts:72)                   | backend/src/assessments/history.ts#listAssessments                                                                                                                                  | pass              |
+| `assessments.list_attestations` | read   | READY | TOOL     | TESTED       | GET /patients/:patientId/assessments/:id/attestations (backend/src/routes/patient-assessments.ts:49)  | backend/src/assessments/attestations.ts#listAttestations                                                                                                                            | pass              |
+| `assessments.retry_pdf`         | action | READY | TOOL     | TESTED       | POST /patients/:patientId/assessments/:id/pdf/retry (backend/src/routes/patient-assessments.ts:103)   | backend/src/assessments/input.ts#bodyObject<br>backend/src/assessments/pdf-service.ts#retryAssessmentPdf                                                                            | pass              |
+| `assessments.update_draft`      | write  | READY | TOOL     | TESTED       | PATCH /patients/:patientId/assessments/:id (backend/src/routes/patient-assessments.ts:86)             | backend/src/assessments/service.ts#patchAssessment                                                                                                                                  | pass              |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -127,23 +127,23 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## assistant
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `assistant.query` | read | READY | TOOL | TESTED | POST /ai/assistant/query (backend/src/routes/ai-assistant-public.ts:80) | backend/src/routes/ai-assistant-public.ts#ctxFromOperator<br>backend/src/ai/assistant/service.ts#assistantQuery | pass · GUI parity |
+| capability_id     | type | state | exposure | invocability | entry point                                                             | service(s)                                                                                                      | test              |
+| ----------------- | ---- | ----- | -------- | ------------ | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `assistant.query` | read | READY | TOOL     | TESTED       | POST /ai/assistant/query (backend/src/routes/ai-assistant-public.ts:80) | backend/src/routes/ai-assistant-public.ts#ctxFromOperator<br>backend/src/ai/assistant/service.ts#assistantQuery | pass · GUI parity |
 
 ## authz
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `authz.manage_policy` | write | READY | GUI_ONLY | TESTED | POST /authz/policy/versions (backend/src/routes/authz.ts) | backend/src/authz/policy-store.ts#savePolicyVersion<br>backend/src/authz/policy-store.ts#applyPolicyVersion<br>backend/src/authz/impact.ts#policyImpact | pass |
-| `authz.view_policy` | read | READY | GUI_ONLY | TESTED | GET /authz/policy (backend/src/routes/authz.ts) | backend/src/authz/policy-store.ts#loadActivePolicy<br>backend/src/authz/policy-store.ts#listPolicyVersions | pass |
+| capability_id         | type  | state | exposure | invocability | entry point                                               | service(s)                                                                                                                                              | test |
+| --------------------- | ----- | ----- | -------- | ------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| `authz.manage_policy` | write | READY | GUI_ONLY | TESTED       | POST /authz/policy/versions (backend/src/routes/authz.ts) | backend/src/authz/policy-store.ts#savePolicyVersion<br>backend/src/authz/policy-store.ts#applyPolicyVersion<br>backend/src/authz/impact.ts#policyImpact | pass |
+| `authz.view_policy`   | read  | READY | GUI_ONLY | TESTED       | GET /authz/policy (backend/src/routes/authz.ts)           | backend/src/authz/policy-store.ts#loadActivePolicy<br>backend/src/authz/policy-store.ts#listPolicyVersions                                              | pass |
 
 ## clinical_record
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `clinical_record.get` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:id/cartella (backend/src/routes/patients.ts:1217) |  | — |
-| `clinical_record.save` | write | READY | TOOL | TESTED | PUT /patients/:id/cartella (backend/src/routes/patients.ts:1238) | backend/src/patients/cartella-update.ts#saveCartella | pass · GUI parity |
+| capability_id          | type  | state | exposure    | invocability | entry point                                                      | service(s)                                           | test              |
+| ---------------------- | ----- | ----- | ----------- | ------------ | ---------------------------------------------------------------- | ---------------------------------------------------- | ----------------- |
+| `clinical_record.get`  | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:id/cartella (backend/src/routes/patients.ts:1217) |                                                      | —                 |
+| `clinical_record.save` | write | READY | TOOL        | TESTED       | PUT /patients/:id/cartella (backend/src/routes/patients.ts:1238) | backend/src/patients/cartella-update.ts#saveCartella | pass · GUI parity |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -153,9 +153,9 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## config
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `patients.settings` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/settings (backend/src/routes/patients.ts:133) |  | — |
+| capability_id       | type | state | exposure    | invocability | entry point                                                 | service(s) | test |
+| ------------------- | ---- | ----- | ----------- | ------------ | ----------------------------------------------------------- | ---------- | ---- |
+| `patients.settings` | read | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/settings (backend/src/routes/patients.ts:133) |            | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -165,14 +165,14 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## consegne
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `consegne.create` | write | READY | TOOL | TESTED | POST /consegne (backend/src/routes/consegne.ts:89) | backend/src/consegne/write-validation.ts#parseConsegnaCreateBody<br>backend/src/services/consegna-service.ts#createConsegna | pass · GUI parity |
-| `consegne.delete` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /consegne/:id (backend/src/routes/consegne.ts:188) |  | — |
-| `consegne.list` | read | READY | TOOL | TESTED | GET /consegne (backend/src/routes/consegne.ts:59) | backend/src/consegne/query.ts#parseConsegnaFeedQuery<br>backend/src/consegne/read-service.ts#loadConsegnaFeed | pass · GUI parity |
-| `consegne.overview` | read | READY | TOOL | TESTED | GET /consegne/overview (backend/src/routes/consegne.ts:70) | backend/src/consegne/read-service.ts#loadConsegnaOverview | pass · GUI parity |
-| `consegne.patient_summary` | read | READY | TOOL | TESTED | POST /consegne/patient-summary (backend/src/routes/consegne.ts:79) | backend/src/consegne/patient-summary.ts#loadConsegnaPatientSummary | pass · GUI parity |
-| `consegne.update` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /consegne/:id (backend/src/routes/consegne.ts:108) | backend/src/routes/consegne.ts#atomicConsegnaUpdateWhere (helper) | — |
+| capability_id              | type  | state | exposure    | invocability | entry point                                                        | service(s)                                                                                                                  | test              |
+| -------------------------- | ----- | ----- | ----------- | ------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `consegne.create`          | write | READY | TOOL        | TESTED       | POST /consegne (backend/src/routes/consegne.ts:89)                 | backend/src/consegne/write-validation.ts#parseConsegnaCreateBody<br>backend/src/services/consegna-service.ts#createConsegna | pass · GUI parity |
+| `consegne.delete`          | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /consegne/:id (backend/src/routes/consegne.ts:188)          |                                                                                                                             | —                 |
+| `consegne.list`            | read  | READY | TOOL        | TESTED       | GET /consegne (backend/src/routes/consegne.ts:59)                  | backend/src/consegne/query.ts#parseConsegnaFeedQuery<br>backend/src/consegne/read-service.ts#loadConsegnaFeed               | pass · GUI parity |
+| `consegne.overview`        | read  | READY | TOOL        | TESTED       | GET /consegne/overview (backend/src/routes/consegne.ts:70)         | backend/src/consegne/read-service.ts#loadConsegnaOverview                                                                   | pass · GUI parity |
+| `consegne.patient_summary` | read  | READY | TOOL        | TESTED       | POST /consegne/patient-summary (backend/src/routes/consegne.ts:79) | backend/src/consegne/patient-summary.ts#loadConsegnaPatientSummary                                                          | pass · GUI parity |
+| `consegne.update`          | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /consegne/:id (backend/src/routes/consegne.ts:108)             | backend/src/routes/consegne.ts#atomicConsegnaUpdateWhere (helper)                                                           | —                 |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -183,10 +183,10 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## dev
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `patients.demo_setup` | action | GAP | DEV_ONLY | DISCOVERED | POST /patients/demo-setup (backend/src/routes/patients.ts:313) |  | — |
-| `patients.seed` | action | GAP | DEV_ONLY | DISCOVERED | POST /patients/seed (backend/src/routes/patients.ts:277) |  | — |
+| capability_id         | type   | state | exposure | invocability | entry point                                                    | service(s) | test |
+| --------------------- | ------ | ----- | -------- | ------------ | -------------------------------------------------------------- | ---------- | ---- |
+| `patients.demo_setup` | action | GAP   | DEV_ONLY | DISCOVERED   | POST /patients/demo-setup (backend/src/routes/patients.ts:313) |            | —    |
+| `patients.seed`       | action | GAP   | DEV_ONLY | DISCOVERED   | POST /patients/seed (backend/src/routes/patients.ts:277)       |            | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -197,15 +197,15 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## diary
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `diary.create` | write | READY | TOOL | TESTED | POST /patients/:patientId/diary (backend/src/routes/patient-diary.ts:66) | backend/src/patients/diary-write-service.ts#createPatientDiaryEntry<br>backend/src/patients/diary-write-validation.ts#parseDiaryCreateBody<br>backend/src/patients/diary-author.ts#authoritativeDiaryAuthor | pass · GUI parity |
-| `diary.create_with_therapy` | write | READY | TOOL | TESTED | POST /patients/:patientId/diary/with-therapy (backend/src/routes/patient-diary.ts:230) | backend/src/patients/diary-write-service.ts#createPatientDiaryEntryWithTherapy<br>backend/src/patients/diary-therapy-service.ts#createDiaryEntryWithTherapy<br>backend/src/patients/diary-author.ts#authoritativeDiaryAuthor<br>backend/src/ai/audit-store.ts#recordOperationalAudit | pass · GUI parity |
-| `diary.delete_entry` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /patients/:patientId/diary/:entryId (backend/src/routes/patient-diary.ts:135) |  | — |
-| `diary.get_entry` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:patientId/diary/:entryId (backend/src/routes/patient-diary.ts:83) |  | — |
-| `diary.list` | read | READY | TOOL | TESTED | GET /patients/:patientId/diary (backend/src/routes/patient-diary.ts:39) | backend/src/patients/diary-read-service.ts#loadPatientDiary | pass · GUI parity |
-| `diary.therapy_preview` | read | WRAP | TOOL | TESTED | POST /patients/:patientId/diary/therapy-preview (backend/src/routes/patient-diary.ts:191) | backend/src/patients/diary-write-service.ts#previewDiaryTherapy<br>backend/src/therapies/diary-therapy-parse.ts#parseDiaryTherapyText | pass · GUI parity |
-| `diary.update_entry` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /patients/:patientId/diary/:entryId (backend/src/routes/patient-diary.ts:101) |  | — |
+| capability_id               | type  | state | exposure    | invocability | entry point                                                                                                                                                                                                          | service(s)                                                                                                                                                                                                                                                                           | test              |
+| --------------------------- | ----- | ----- | ----------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `diary.create`              | write | READY | TOOL        | TESTED       | POST /patients/:patientId/diary (backend/src/routes/patient-diary.ts:66)                                                                                                                                             | backend/src/patients/diary-write-service.ts#createPatientDiaryEntry<br>backend/src/patients/diary-write-validation.ts#parseDiaryCreateBody<br>backend/src/patients/diary-author.ts#authoritativeDiaryAuthor                                                                          | pass · GUI parity |
+| `diary.create_with_therapy` | write | READY | TOOL        | TESTED       | POST /patients/:patientId/diary/with-therapy (backend/src/routes/patient-diary.ts:230)                                                                                                                               | backend/src/patients/diary-write-service.ts#createPatientDiaryEntryWithTherapy<br>backend/src/patients/diary-therapy-service.ts#createDiaryEntryWithTherapy<br>backend/src/patients/diary-author.ts#authoritativeDiaryAuthor<br>backend/src/ai/audit-store.ts#recordOperationalAudit | pass · GUI parity |
+| `diary.delete_entry`        | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /patients/:patientId/diary/:entryId (backend/src/routes/patient-diary.ts:135)                                                                                                                                 |                                                                                                                                                                                                                                                                                      | —                 |
+| `diary.get_entry`           | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:patientId/diary/:entryId (backend/src/routes/patient-diary.ts:83)                                                                                                                                     |                                                                                                                                                                                                                                                                                      | —                 |
+| `diary.list`                | read  | READY | TOOL        | TESTED       | GET /patients/:patientId/diary (backend/src/routes/patient-diary.ts:39), POST /patients/:patientId/diary/:entryId/ack (per-reader «Presa visione» of an urgent entry: whoever can read the diary can acknowledge it) | backend/src/patients/diary-read-service.ts#loadPatientDiary<br>backend/src/patients/diary-ack-service.ts#acknowledgeDiaryEntry                                                                                                                                                       | pass · GUI parity |
+| `diary.therapy_preview`     | read  | WRAP  | TOOL        | TESTED       | POST /patients/:patientId/diary/therapy-preview (backend/src/routes/patient-diary.ts:191)                                                                                                                            | backend/src/patients/diary-write-service.ts#previewDiaryTherapy<br>backend/src/therapies/diary-therapy-parse.ts#parseDiaryTherapyText                                                                                                                                                | pass · GUI parity |
+| `diary.update_entry`        | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /patients/:patientId/diary/:entryId (backend/src/routes/patient-diary.ts:101)                                                                                                                                    |                                                                                                                                                                                                                                                                                      | —                 |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -218,13 +218,13 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## documents
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `documents.get_content` | read | READY | TOOL | TESTED | GET /patients/:patientId/documents/:documentId/content (backend/src/routes/patient-documents.ts:303) | backend/src/ai/upload/patient-documents.ts#getPatientDocumentContent | pass · GUI parity |
-| `documents.get_metadata` | read | READY | TOOL | TESTED | GET /patients/:patientId/documents/:documentId (backend/src/routes/patient-documents.ts:285) | backend/src/ai/upload/patient-documents.ts#getPatientDocumentMetadata | pass |
-| `documents.list` | read | WRAP | TOOL | TESTED | GET /patients/:patientId/documents (backend/src/routes/patient-documents.ts:248) | backend/src/ai/upload/patient-document-list-query.ts#parsePatientDocumentListQuery<br>backend/src/ai/upload/patient-documents.ts#listPatientDocuments | pass · GUI parity |
-| `documents.update_type` | write | READY | TOOL | TESTED | PATCH /patients/:patientId/documents/:documentId (backend/src/routes/patient-documents.ts:207) | backend/src/ai/upload/patient-document-types.ts#parsePatientDocumentType<br>backend/src/ai/upload/patient-documents.ts#updatePatientDocumentType | pass |
-| `documents.upload` | write | WRAP | TOOL | TESTED | POST /patients/:patientId/documents (multipart, backend/src/routes/patient-documents.ts:162) | backend/src/routes/patient-documents.ts#MAX_UPLOAD_BYTES<br>backend/src/routes/patient-documents.ts#ALLOWED_MIME<br>backend/src/routes/patient-documents.ts#mimeFamily<br>backend/src/routes/patient-documents.ts#sniffAllowedMime<br>backend/src/ai/upload/patient-document-types.ts#parsePatientDocumentType<br>backend/src/ai/upload/patient-documents.ts#createPatientDocument | pass · GUI parity |
+| capability_id            | type  | state | exposure | invocability | entry point                                                                                          | service(s)                                                                                                                                                                                                                                                                                                                                                                         | test              |
+| ------------------------ | ----- | ----- | -------- | ------------ | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `documents.get_content`  | read  | READY | TOOL     | TESTED       | GET /patients/:patientId/documents/:documentId/content (backend/src/routes/patient-documents.ts:303) | backend/src/ai/upload/patient-documents.ts#getPatientDocumentContent                                                                                                                                                                                                                                                                                                               | pass · GUI parity |
+| `documents.get_metadata` | read  | READY | TOOL     | TESTED       | GET /patients/:patientId/documents/:documentId (backend/src/routes/patient-documents.ts:285)         | backend/src/ai/upload/patient-documents.ts#getPatientDocumentMetadata                                                                                                                                                                                                                                                                                                              | pass              |
+| `documents.list`         | read  | WRAP  | TOOL     | TESTED       | GET /patients/:patientId/documents (backend/src/routes/patient-documents.ts:248)                     | backend/src/ai/upload/patient-document-list-query.ts#parsePatientDocumentListQuery<br>backend/src/ai/upload/patient-documents.ts#listPatientDocuments                                                                                                                                                                                                                              | pass · GUI parity |
+| `documents.update_type`  | write | READY | TOOL     | TESTED       | PATCH /patients/:patientId/documents/:documentId (backend/src/routes/patient-documents.ts:207)       | backend/src/ai/upload/patient-document-types.ts#parsePatientDocumentType<br>backend/src/ai/upload/patient-documents.ts#updatePatientDocumentType                                                                                                                                                                                                                                   | pass              |
+| `documents.upload`       | write | WRAP  | TOOL     | TESTED       | POST /patients/:patientId/documents (multipart, backend/src/routes/patient-documents.ts:162)         | backend/src/routes/patient-documents.ts#MAX_UPLOAD_BYTES<br>backend/src/routes/patient-documents.ts#ALLOWED_MIME<br>backend/src/routes/patient-documents.ts#mimeFamily<br>backend/src/routes/patient-documents.ts#sniffAllowedMime<br>backend/src/ai/upload/patient-document-types.ts#parsePatientDocumentType<br>backend/src/ai/upload/patient-documents.ts#createPatientDocument | pass · GUI parity |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -235,13 +235,13 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## drugs
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `drugs.document` | read | READY | NOT_EXPOSED | DISCOVERED | GET /farmaci/documento (backend/src/routes/farmaci-documento.ts:10) | backend/src/services/farmaci/documento.ts#riferimentoDocumentoAifa<br>backend/src/services/farmaci/documento.ts#creaLettoreDocumentoAifa | — |
-| `drugs.reload` | action | READY | NOT_EXPOSED | DISCOVERED | POST /farmaci/ricarica (backend/src/routes/farmaci.ts:128) | backend/src/services/farmaci/import.ts#importaAnagraficaFarmaci<br>backend/src/services/farmaci/ricerca.ts#invalidaIndice | — |
-| `drugs.search` | read | WRAP | TOOL | TESTED | GET /farmaci/cerca (backend/src/routes/farmaci.ts:75) | backend/src/services/farmaci/search-page.ts#cercaPaginaFarmaci<br>backend/src/services/farmaci/query.ts#parseSearchInput | pass · GUI parity |
-| `drugs.status` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /farmaci/stato (backend/src/routes/farmaci.ts:45) |  | — |
-| `drugs.strengths` | read | WRAP | TOOL | TESTED | GET /farmaci/dosaggi (backend/src/routes/farmaci.ts:107) | backend/src/services/farmaci/ricerca.ts#dosaggiInCommercio | pass · GUI parity |
+| capability_id     | type   | state | exposure    | invocability | entry point                                                         | service(s)                                                                                                                               | test              |
+| ----------------- | ------ | ----- | ----------- | ------------ | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `drugs.document`  | read   | READY | NOT_EXPOSED | DISCOVERED   | GET /farmaci/documento (backend/src/routes/farmaci-documento.ts:10) | backend/src/services/farmaci/documento.ts#riferimentoDocumentoAifa<br>backend/src/services/farmaci/documento.ts#creaLettoreDocumentoAifa | —                 |
+| `drugs.reload`    | action | READY | NOT_EXPOSED | DISCOVERED   | POST /farmaci/ricarica (backend/src/routes/farmaci.ts:128)          | backend/src/services/farmaci/import.ts#importaAnagraficaFarmaci<br>backend/src/services/farmaci/ricerca.ts#invalidaIndice                | —                 |
+| `drugs.search`    | read   | WRAP  | TOOL        | TESTED       | GET /farmaci/cerca (backend/src/routes/farmaci.ts:75)               | backend/src/services/farmaci/search-page.ts#cercaPaginaFarmaci<br>backend/src/services/farmaci/query.ts#parseSearchInput                 | pass · GUI parity |
+| `drugs.status`    | read   | GAP   | NOT_EXPOSED | DISCOVERED   | GET /farmaci/stato (backend/src/routes/farmaci.ts:45)               |                                                                                                                                          | —                 |
+| `drugs.strengths` | read   | WRAP  | TOOL        | TESTED       | GET /farmaci/dosaggi (backend/src/routes/farmaci.ts:107)            | backend/src/services/farmaci/ricerca.ts#dosaggiInCommercio                                                                               | pass · GUI parity |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -253,28 +253,28 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## identity
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `identity.auth_status` | read | READY | NOT_EXPOSED | DISCOVERED | GET /auth/status (backend/src/app.ts:146) | backend/src/ai/auth.ts#operatorAuthMode<br>backend/src/ai/auth.ts#productionDemoAuthEnabled | — |
-| `identity.me` | read | READY | NOT_EXPOSED | DISCOVERED | GET /auth/me (backend/src/app.ts:156) | backend/src/ai/auth.ts#requireOperator<br>backend/src/lib/entra-auth.ts#requireEntraOperator | — |
+| capability_id          | type | state | exposure    | invocability | entry point                               | service(s)                                                                                   | test |
+| ---------------------- | ---- | ----- | ----------- | ------------ | ----------------------------------------- | -------------------------------------------------------------------------------------------- | ---- |
+| `identity.auth_status` | read | READY | NOT_EXPOSED | DISCOVERED   | GET /auth/status (backend/src/app.ts:146) | backend/src/ai/auth.ts#operatorAuthMode<br>backend/src/ai/auth.ts#productionDemoAuthEnabled  | —    |
+| `identity.me`          | read | READY | NOT_EXPOSED | DISCOVERED   | GET /auth/me (backend/src/app.ts:156)     | backend/src/ai/auth.ts#requireOperator<br>backend/src/lib/entra-auth.ts#requireEntraOperator | —    |
 
 ## import_jobs
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `import_jobs.add_files` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/files (backend/src/routes/ai-jobs.ts:98) | backend/src/ai/upload/job-service.ts#addFiles | — |
-| `import_jobs.cancel` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/cancel (backend/src/routes/ai-jobs.ts:156) | backend/src/ai/upload/job-service.ts#cancelJob | — |
-| `import_jobs.confirm` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/confirm (backend/src/routes/ai-jobs.ts:215) | backend/src/ai/upload/confirm-service.ts#confirmJob | — |
-| `import_jobs.create` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs (backend/src/routes/ai-jobs.ts:76) | backend/src/ai/upload/job-service.ts#createJob<br>backend/src/ai/upload/job-service.ts#addFiles | — |
-| `import_jobs.get` | read | WRAP | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/jobs/:id (backend/src/routes/ai-jobs.ts:113) | backend/src/ai/upload/job-service.ts#getJob | — |
-| `import_jobs.process` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/process (backend/src/routes/ai-jobs.ts:170) | backend/src/ai/upload/job-service.ts#enqueueJob | — |
-| `import_jobs.remove_file` | write | WRAP | NOT_EXPOSED | DISCOVERED | DELETE /ai/extraction/jobs/:id/files/:docId (backend/src/routes/ai-jobs.ts:124) | backend/src/ai/upload/job-service.ts#removeDocument | — |
-| `import_jobs.reopen` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/reopen (backend/src/routes/ai-jobs.ts:184) | backend/src/ai/upload/job-service.ts#reopenJob | — |
-| `import_jobs.reorder` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/reorder (backend/src/routes/ai-jobs.ts:134) | backend/src/ai/upload/job-service.ts#reorder | — |
-| `import_jobs.result` | read | WRAP | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/jobs/:id/result (backend/src/routes/ai-jobs.ts:234) | backend/src/ai/upload/job-service.ts#getJobResult | — |
-| `import_jobs.retry` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/retry (backend/src/routes/ai-jobs.ts:199) | backend/src/ai/upload/job-service.ts#retryJob | — |
-| `import_jobs.set_logical_doc` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/files/:docId/logical (backend/src/routes/ai-jobs.ts:145) | backend/src/ai/upload/job-service.ts#setLogicalDoc | — |
-| `import_jobs.sweep` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/sweep (backend/src/routes/ai-jobs.ts:245) | backend/src/ai/upload/job-service.ts#sweepExpiredJobs | — |
+| capability_id                 | type   | state | exposure    | invocability | entry point                                                                           | service(s)                                                                                      | test |
+| ----------------------------- | ------ | ----- | ----------- | ------------ | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---- |
+| `import_jobs.add_files`       | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/files (backend/src/routes/ai-jobs.ts:98)                 | backend/src/ai/upload/job-service.ts#addFiles                                                   | —    |
+| `import_jobs.cancel`          | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/cancel (backend/src/routes/ai-jobs.ts:156)               | backend/src/ai/upload/job-service.ts#cancelJob                                                  | —    |
+| `import_jobs.confirm`         | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/confirm (backend/src/routes/ai-jobs.ts:215)              | backend/src/ai/upload/confirm-service.ts#confirmJob                                             | —    |
+| `import_jobs.create`          | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs (backend/src/routes/ai-jobs.ts:76)                           | backend/src/ai/upload/job-service.ts#createJob<br>backend/src/ai/upload/job-service.ts#addFiles | —    |
+| `import_jobs.get`             | read   | WRAP  | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/jobs/:id (backend/src/routes/ai-jobs.ts:113)                       | backend/src/ai/upload/job-service.ts#getJob                                                     | —    |
+| `import_jobs.process`         | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/process (backend/src/routes/ai-jobs.ts:170)              | backend/src/ai/upload/job-service.ts#enqueueJob                                                 | —    |
+| `import_jobs.remove_file`     | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | DELETE /ai/extraction/jobs/:id/files/:docId (backend/src/routes/ai-jobs.ts:124)       | backend/src/ai/upload/job-service.ts#removeDocument                                             | —    |
+| `import_jobs.reopen`          | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/reopen (backend/src/routes/ai-jobs.ts:184)               | backend/src/ai/upload/job-service.ts#reopenJob                                                  | —    |
+| `import_jobs.reorder`         | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/reorder (backend/src/routes/ai-jobs.ts:134)              | backend/src/ai/upload/job-service.ts#reorder                                                    | —    |
+| `import_jobs.result`          | read   | WRAP  | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/jobs/:id/result (backend/src/routes/ai-jobs.ts:234)                | backend/src/ai/upload/job-service.ts#getJobResult                                               | —    |
+| `import_jobs.retry`           | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/retry (backend/src/routes/ai-jobs.ts:199)                | backend/src/ai/upload/job-service.ts#retryJob                                                   | —    |
+| `import_jobs.set_logical_doc` | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/files/:docId/logical (backend/src/routes/ai-jobs.ts:145) | backend/src/ai/upload/job-service.ts#setLogicalDoc                                              | —    |
+| `import_jobs.sweep`           | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/sweep (backend/src/routes/ai-jobs.ts:245)                    | backend/src/ai/upload/job-service.ts#sweepExpiredJobs                                           | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -296,24 +296,24 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## import_pages
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `import_pages.add_files` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/files (backend/src/routes/import-pages.ts:80) | backend/src/ai/upload/pages/uploads.ts#addPageFiles<br>backend/src/ai/upload/pages/multipart.ts#pageUpload | — |
-| `import_pages.cancel` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/cancel (backend/src/routes/import-pages.ts:185) | backend/src/ai/upload/pages/lifecycle.ts#cancelPages | — |
-| `import_pages.create_session` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs {sessionVersion:1} (backend/src/routes/import-pages.ts:61) | backend/src/ai/upload/pages/uploads.ts#createPageSession | — |
-| `import_pages.edit_manifest` | write | WRAP | NOT_EXPOSED | DISCOVERED | PUT /ai/extraction/jobs/:id/manifest (backend/src/routes/import-pages.ts:91) | backend/src/ai/upload/pages/lifecycle.ts#editManifest | — |
-| `import_pages.file_content` | read | WRAP | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/jobs/:id/files/:docId/content (backend/src/routes/import-pages.ts:119) | backend/src/ai/upload/pages/pdf.ts#verifiedBytes | — |
-| `import_pages.get` | read | WRAP | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/jobs/:id (backend/src/routes/import-pages.ts:75) | backend/src/ai/upload/pages/repository.ts#getPageJob | — |
-| `import_pages.group_pdf` | read | WRAP | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/jobs/:id/groups/:groupId/pdf (backend/src/routes/import-pages.ts:133) | backend/src/ai/upload/pages/pdf.ts#groupPdf | — |
-| `import_pages.legacy_mutation_block` | action | GAP | NOT_EXPOSED | DISCOVERED | POST /:id/reorder, POST /:id/files/:docId/logical, DELETE /:id/files/:docId on page sessions (backend/src/routes/import-pages.ts:207-218) | INLINE throw ImportSessionError(409 page_api_required) | — |
-| `import_pages.page_text` | read | READY | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/jobs/:id/pages/:pageId/text (backend/src/routes/import-pages.ts) | backend/src/ai/upload/pages/page-text.ts | — |
-| `import_pages.process` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/process (backend/src/routes/import-pages.ts:154) | backend/src/ai/upload/pages/lifecycle.ts#processPages | — |
-| `import_pages.remove_page` | write | WRAP | NOT_EXPOSED | DISCOVERED | DELETE /ai/extraction/jobs/:id/pages/:pageId (backend/src/routes/import-pages.ts:96) | backend/src/ai/upload/pages/uploads.ts#removePage | — |
-| `import_pages.reopen` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/reopen (backend/src/routes/import-pages.ts:180) | backend/src/ai/upload/pages/lifecycle.ts#reopenPages | — |
-| `import_pages.replace_page` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/pages/:pageId/replace (backend/src/routes/import-pages.ts:103) | backend/src/ai/upload/pages/uploads.ts#replacePage | — |
-| `import_pages.result` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /ai/extraction/jobs/:id/result (backend/src/routes/import-pages.ts:190) | INLINE prisma.importJob.findUniqueOrThrow (status, model, resultData) | — |
-| `import_pages.retry` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /ai/extraction/jobs/:id/retry (backend/src/routes/import-pages.ts:167) | backend/src/ai/upload/pages/lifecycle.ts#processPages | — |
-| `import_pages.save_review` | write | WRAP | NOT_EXPOSED | DISCOVERED | PUT /ai/extraction/jobs/:id/review (backend/src/routes/import-pages.ts:201) | backend/src/ai/upload/pages/review.ts#saveReview | — |
+| capability_id                        | type   | state | exposure    | invocability | entry point                                                                                                                               | service(s)                                                                                                 | test |
+| ------------------------------------ | ------ | ----- | ----------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---- |
+| `import_pages.add_files`             | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/files (backend/src/routes/import-pages.ts:80)                                                                | backend/src/ai/upload/pages/uploads.ts#addPageFiles<br>backend/src/ai/upload/pages/multipart.ts#pageUpload | —    |
+| `import_pages.cancel`                | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/cancel (backend/src/routes/import-pages.ts:185)                                                              | backend/src/ai/upload/pages/lifecycle.ts#cancelPages                                                       | —    |
+| `import_pages.create_session`        | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs {sessionVersion:1} (backend/src/routes/import-pages.ts:61)                                                       | backend/src/ai/upload/pages/uploads.ts#createPageSession                                                   | —    |
+| `import_pages.edit_manifest`         | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | PUT /ai/extraction/jobs/:id/manifest (backend/src/routes/import-pages.ts:91)                                                              | backend/src/ai/upload/pages/lifecycle.ts#editManifest                                                      | —    |
+| `import_pages.file_content`          | read   | WRAP  | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/jobs/:id/files/:docId/content (backend/src/routes/import-pages.ts:119)                                                 | backend/src/ai/upload/pages/pdf.ts#verifiedBytes                                                           | —    |
+| `import_pages.get`                   | read   | WRAP  | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/jobs/:id (backend/src/routes/import-pages.ts:75)                                                                       | backend/src/ai/upload/pages/repository.ts#getPageJob                                                       | —    |
+| `import_pages.group_pdf`             | read   | WRAP  | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/jobs/:id/groups/:groupId/pdf (backend/src/routes/import-pages.ts:133)                                                  | backend/src/ai/upload/pages/pdf.ts#groupPdf                                                                | —    |
+| `import_pages.legacy_mutation_block` | action | GAP   | NOT_EXPOSED | DISCOVERED   | POST /:id/reorder, POST /:id/files/:docId/logical, DELETE /:id/files/:docId on page sessions (backend/src/routes/import-pages.ts:207-218) | INLINE throw ImportSessionError(409 page_api_required)                                                     | —    |
+| `import_pages.page_text`             | read   | READY | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/jobs/:id/pages/:pageId/text (backend/src/routes/import-pages.ts)                                                       | backend/src/ai/upload/pages/page-text.ts                                                                   | —    |
+| `import_pages.process`               | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/process (backend/src/routes/import-pages.ts:154)                                                             | backend/src/ai/upload/pages/lifecycle.ts#processPages                                                      | —    |
+| `import_pages.remove_page`           | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | DELETE /ai/extraction/jobs/:id/pages/:pageId (backend/src/routes/import-pages.ts:96)                                                      | backend/src/ai/upload/pages/uploads.ts#removePage                                                          | —    |
+| `import_pages.reopen`                | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/reopen (backend/src/routes/import-pages.ts:180)                                                              | backend/src/ai/upload/pages/lifecycle.ts#reopenPages                                                       | —    |
+| `import_pages.replace_page`          | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/pages/:pageId/replace (backend/src/routes/import-pages.ts:103)                                               | backend/src/ai/upload/pages/uploads.ts#replacePage                                                         | —    |
+| `import_pages.result`                | read   | GAP   | NOT_EXPOSED | DISCOVERED   | GET /ai/extraction/jobs/:id/result (backend/src/routes/import-pages.ts:190)                                                               | INLINE prisma.importJob.findUniqueOrThrow (status, model, resultData)                                      | —    |
+| `import_pages.retry`                 | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /ai/extraction/jobs/:id/retry (backend/src/routes/import-pages.ts:167)                                                               | backend/src/ai/upload/pages/lifecycle.ts#processPages                                                      | —    |
+| `import_pages.save_review`           | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | PUT /ai/extraction/jobs/:id/review (backend/src/routes/import-pages.ts:201)                                                               | backend/src/ai/upload/pages/review.ts#saveReview                                                           | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -338,31 +338,31 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## infra
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `infra.health` | read | READY | NOT_EXPOSED | DISCOVERED | GET /health (backend/src/app.ts:142) |  | — |
+| capability_id  | type | state | exposure    | invocability | entry point                          | service(s) | test |
+| -------------- | ---- | ----- | ----------- | ------------ | ------------------------------------ | ---------- | ---- |
+| `infra.health` | read | READY | NOT_EXPOSED | DISCOVERED   | GET /health (backend/src/app.ts:142) |            | —    |
 
 ## intake
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `intake.confirm_draft` | action | READY | TOOL | TESTED | POST /intake/drafts/:id/confirm (backend/src/routes/intake-drafts.ts:191) | backend/src/ai/ownership.ts#loadIntakeDraftOwner<br>backend/src/ai/upload/confirm-service.ts#confirmDraft | pass · GUI parity |
-| `intake.create_draft` | write | WRAP | TOOL | TESTED | POST /intake/drafts (backend/src/routes/intake-drafts.ts:77) | backend/src/ai/ownership.ts#importJobIsAccessible<br>backend/src/intake/draft-service.ts#createDraft | pass · GUI parity |
-| `intake.decide_field_proposal` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /intake/drafts/:id/field-proposals/:proposalId/decide (backend/src/routes/intake-drafts.ts:174) | backend/src/ai/upload/pages/draft-link.ts#decideDraftFieldProposal | — |
-| `intake.decide_import_proposal` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /intake/drafts/:id/import-proposals/:proposalId/decide (backend/src/routes/intake-drafts.ts:136) | backend/src/ai/upload/pages/draft-mutations.ts#decideImportProposal | — |
-| `intake.get_draft` | read | WRAP | TOOL | TESTED | GET /intake/drafts/:id (backend/src/routes/intake-drafts.ts:108) | backend/src/ai/ownership.ts#loadIntakeDraftOwner<br>backend/src/intake/draft-service.ts#getDraft | pass · GUI parity |
-| `intake.legacy_apply_letter` | write | READY | DEPRECATED | DISCOVERED | POST /patient-intake/discharge-letter/apply (backend/src/routes/patient-intake.ts:152) | backend/src/intake/legacy-apply.ts#parseLegacyIntakeApplyInput<br>backend/src/intake/legacy-apply.ts#applyLegacyIntakeDocument | — |
-| `intake.legacy_extract_letter` | action | GAP | DEPRECATED | DISCOVERED | POST /patient-intake/discharge-letter/extract (backend/src/routes/patient-intake.ts:108) | INLINE + local extractDischargeLetterData (patient-intake.ts:230) | — |
-| `intake.legacy_list_documents` | read | GAP | DEPRECATED | DISCOVERED | GET /patient-intake/documents/:patientId (backend/src/routes/patient-intake.ts:194) | INLINE with legacyIntakeDocumentsQuery/boundLegacyIntakeDocuments (same file) | — |
-| `intake.legacy_upload_letter` | write | GAP | DEPRECATED | DISCOVERED | POST /patient-intake/discharge-letter/upload (backend/src/routes/patient-intake.ts:67) | INLINE prisma.patientIntakeDocument.create | — |
-| `intake.link_import_job` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /intake/drafts/:id/import-job (backend/src/routes/intake-drafts.ts:148) | backend/src/ai/upload/pages/draft-link.ts#linkImportJob | — |
-| `intake.list_drafts` | read | READY | TOOL | TESTED | GET /intake/drafts (backend/src/routes/intake-drafts.ts:97) | backend/src/intake/draft-service.ts#listDrafts | pass · GUI parity |
-| `intake.merge_import` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /intake/drafts/:id/merge-import (backend/src/routes/intake-drafts.ts:166) | backend/src/ai/upload/pages/draft-link.ts#mergeImportIntoDraft | — |
-| `intake.patient_review` | read | READY | TOOL | TESTED | GET /patients/:id/intake-review (backend/src/routes/patient-intake-review.ts:8) | backend/src/intake/patient-review.ts#patientIntakeReview | pass · GUI parity |
-| `intake.refresh_import` | action | WRAP | NOT_EXPOSED | DISCOVERED | POST /intake/drafts/:id/refresh-import (backend/src/routes/intake-drafts.ts:129) | backend/src/ai/upload/pages/draft-mutations.ts#refreshImportDraft | — |
-| `intake.seed_from_import` | write | WRAP | NOT_EXPOSED | DISCOVERED | POST /intake/drafts/from-import (backend/src/routes/intake-drafts.ts:51) | backend/src/ai/ownership.ts#importJobIsAccessible<br>backend/src/intake/draft-service.ts#seedDraftFromImport | — |
-| `intake.unlink_import_job` | write | WRAP | NOT_EXPOSED | DISCOVERED | DELETE /intake/drafts/:id/import-job (backend/src/routes/intake-drafts.ts:157) | backend/src/ai/upload/pages/draft-link.ts#unlinkImportJob | — |
-| `intake.update_draft` | write | WRAP | TOOL | TESTED | PATCH /intake/drafts/:id (backend/src/routes/intake-drafts.ts:119) | backend/src/ai/ownership.ts#loadIntakeDraftOwner<br>backend/src/intake/draft-service.ts#patchDraft | pass · GUI parity |
+| capability_id                   | type   | state | exposure    | invocability | entry point                                                                                           | service(s)                                                                                                                     | test              |
+| ------------------------------- | ------ | ----- | ----------- | ------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `intake.confirm_draft`          | action | READY | TOOL        | TESTED       | POST /intake/drafts/:id/confirm (backend/src/routes/intake-drafts.ts:191)                             | backend/src/ai/ownership.ts#loadIntakeDraftOwner<br>backend/src/ai/upload/confirm-service.ts#confirmDraft                      | pass · GUI parity |
+| `intake.create_draft`           | write  | WRAP  | TOOL        | TESTED       | POST /intake/drafts (backend/src/routes/intake-drafts.ts:77)                                          | backend/src/ai/ownership.ts#importJobIsAccessible<br>backend/src/intake/draft-service.ts#createDraft                           | pass · GUI parity |
+| `intake.decide_field_proposal`  | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /intake/drafts/:id/field-proposals/:proposalId/decide (backend/src/routes/intake-drafts.ts:174)  | backend/src/ai/upload/pages/draft-link.ts#decideDraftFieldProposal                                                             | —                 |
+| `intake.decide_import_proposal` | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /intake/drafts/:id/import-proposals/:proposalId/decide (backend/src/routes/intake-drafts.ts:136) | backend/src/ai/upload/pages/draft-mutations.ts#decideImportProposal                                                            | —                 |
+| `intake.get_draft`              | read   | WRAP  | TOOL        | TESTED       | GET /intake/drafts/:id (backend/src/routes/intake-drafts.ts:108)                                      | backend/src/ai/ownership.ts#loadIntakeDraftOwner<br>backend/src/intake/draft-service.ts#getDraft                               | pass · GUI parity |
+| `intake.legacy_apply_letter`    | write  | READY | DEPRECATED  | DISCOVERED   | POST /patient-intake/discharge-letter/apply (backend/src/routes/patient-intake.ts:152)                | backend/src/intake/legacy-apply.ts#parseLegacyIntakeApplyInput<br>backend/src/intake/legacy-apply.ts#applyLegacyIntakeDocument | —                 |
+| `intake.legacy_extract_letter`  | action | GAP   | DEPRECATED  | DISCOVERED   | POST /patient-intake/discharge-letter/extract (backend/src/routes/patient-intake.ts:108)              | INLINE + local extractDischargeLetterData (patient-intake.ts:230)                                                              | —                 |
+| `intake.legacy_list_documents`  | read   | GAP   | DEPRECATED  | DISCOVERED   | GET /patient-intake/documents/:patientId (backend/src/routes/patient-intake.ts:194)                   | INLINE with legacyIntakeDocumentsQuery/boundLegacyIntakeDocuments (same file)                                                  | —                 |
+| `intake.legacy_upload_letter`   | write  | GAP   | DEPRECATED  | DISCOVERED   | POST /patient-intake/discharge-letter/upload (backend/src/routes/patient-intake.ts:67)                | INLINE prisma.patientIntakeDocument.create                                                                                     | —                 |
+| `intake.link_import_job`        | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /intake/drafts/:id/import-job (backend/src/routes/intake-drafts.ts:148)                          | backend/src/ai/upload/pages/draft-link.ts#linkImportJob                                                                        | —                 |
+| `intake.list_drafts`            | read   | READY | TOOL        | TESTED       | GET /intake/drafts (backend/src/routes/intake-drafts.ts:97)                                           | backend/src/intake/draft-service.ts#listDrafts                                                                                 | pass · GUI parity |
+| `intake.merge_import`           | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /intake/drafts/:id/merge-import (backend/src/routes/intake-drafts.ts:166)                        | backend/src/ai/upload/pages/draft-link.ts#mergeImportIntoDraft                                                                 | —                 |
+| `intake.patient_review`         | read   | READY | TOOL        | TESTED       | GET /patients/:id/intake-review (backend/src/routes/patient-intake-review.ts:8)                       | backend/src/intake/patient-review.ts#patientIntakeReview                                                                       | pass · GUI parity |
+| `intake.refresh_import`         | action | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /intake/drafts/:id/refresh-import (backend/src/routes/intake-drafts.ts:129)                      | backend/src/ai/upload/pages/draft-mutations.ts#refreshImportDraft                                                              | —                 |
+| `intake.seed_from_import`       | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | POST /intake/drafts/from-import (backend/src/routes/intake-drafts.ts:51)                              | backend/src/ai/ownership.ts#importJobIsAccessible<br>backend/src/intake/draft-service.ts#seedDraftFromImport                   | —                 |
+| `intake.unlink_import_job`      | write  | WRAP  | NOT_EXPOSED | DISCOVERED   | DELETE /intake/drafts/:id/import-job (backend/src/routes/intake-drafts.ts:157)                        | backend/src/ai/upload/pages/draft-link.ts#unlinkImportJob                                                                      | —                 |
+| `intake.update_draft`           | write  | WRAP  | TOOL        | TESTED       | PATCH /intake/drafts/:id (backend/src/routes/intake-drafts.ts:119)                                    | backend/src/ai/ownership.ts#loadIntakeDraftOwner<br>backend/src/intake/draft-service.ts#patchDraft                             | pass · GUI parity |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -384,32 +384,32 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## internal_ai
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `internal_ai.assistant_query` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/assistant/query (backend/src/routes/internal-ai.ts:123) | backend/src/ai/assistant/service.ts#assistantQuery<br>backend/src/ai/gateway/context.ts#parseUserContext | — |
-| `internal_ai.patient_allergies` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/patient/allergies (backend/src/routes/internal-ai.ts:95) | backend/src/ai/gateway/services.ts#getPatientAllergies<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.patient_demographics` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/patient/demographics (backend/src/routes/internal-ai.ts:91) | backend/src/ai/gateway/services.ts#getPatientDemographics<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.patient_diary` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/patient/diary (backend/src/routes/internal-ai.ts:107) | backend/src/ai/gateway/services.ts#getPatientDiary<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.patient_documents` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/patient/documents (backend/src/routes/internal-ai.ts:117) | backend/src/ai/gateway/services.ts#getPatientDocumentsG<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.patient_narrative_sections` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/patient/narrative-sections (backend/src/routes/internal-ai.ts:99) | backend/src/ai/gateway/services.ts#getPatientNarrativeSectionsG<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.patient_therapies` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/patient/therapies (backend/src/routes/internal-ai.ts:103) | backend/src/ai/gateway/services.ts#getPatientTherapies<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.query_appointments` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/query/appointments (backend/src/routes/internal-ai.ts:72) | backend/src/ai/gateway/services.ts#getPatientAppointments<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.query_correlate` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/query/correlate (backend/src/routes/internal-ai.ts:85) | backend/src/ai/gateway/services.ts#correlate<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.query_timeline` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/query/timeline (backend/src/routes/internal-ai.ts:81) | backend/src/ai/gateway/services.ts#getPatientTimeline<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.query_vital_signs` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/query/vital-signs (backend/src/routes/internal-ai.ts:68) | backend/src/ai/gateway/services.ts#getPatientVitalSigns<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.search_across_patients` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/search/across-patients (backend/src/routes/internal-ai.ts:62) | backend/src/ai/gateway/services.ts#searchAcrossPatients<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.search_clinical_sections` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/search/clinical-sections (backend/src/routes/internal-ai.ts:54) | backend/src/ai/gateway/services.ts#searchClinicalSections<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.search_documents` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/search/documents (backend/src/routes/internal-ai.ts:58) | backend/src/ai/gateway/services.ts#searchDocuments<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.search_patients` | read | READY | NOT_EXPOSED | DISCOVERED | POST /internal/ai/search/patients (backend/src/routes/internal-ai.ts:50) | backend/src/ai/gateway/services.ts#searchPatients<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | — |
-| `internal_ai.source_get` | read | READY | NOT_EXPOSED | DISCOVERED | GET /internal/ai/sources/:sourceType/:recordId (backend/src/routes/internal-ai.ts:133) | backend/src/ai/gateway/services.ts#resolveNarrativeSource | — |
+| capability_id                            | type | state | exposure    | invocability | entry point                                                                            | service(s)                                                                                                                              | test |
+| ---------------------------------------- | ---- | ----- | ----------- | ------------ | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| `internal_ai.assistant_query`            | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/assistant/query (backend/src/routes/internal-ai.ts:123)              | backend/src/ai/assistant/service.ts#assistantQuery<br>backend/src/ai/gateway/context.ts#parseUserContext                                | —    |
+| `internal_ai.patient_allergies`          | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/allergies (backend/src/routes/internal-ai.ts:95)             | backend/src/ai/gateway/services.ts#getPatientAllergies<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext          | —    |
+| `internal_ai.patient_demographics`       | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/demographics (backend/src/routes/internal-ai.ts:91)          | backend/src/ai/gateway/services.ts#getPatientDemographics<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext       | —    |
+| `internal_ai.patient_diary`              | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/diary (backend/src/routes/internal-ai.ts:107)                | backend/src/ai/gateway/services.ts#getPatientDiary<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext              | —    |
+| `internal_ai.patient_documents`          | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/documents (backend/src/routes/internal-ai.ts:117)            | backend/src/ai/gateway/services.ts#getPatientDocumentsG<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext         | —    |
+| `internal_ai.patient_narrative_sections` | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/narrative-sections (backend/src/routes/internal-ai.ts:99)    | backend/src/ai/gateway/services.ts#getPatientNarrativeSectionsG<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext | —    |
+| `internal_ai.patient_therapies`          | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/patient/therapies (backend/src/routes/internal-ai.ts:103)            | backend/src/ai/gateway/services.ts#getPatientTherapies<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext          | —    |
+| `internal_ai.query_appointments`         | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/query/appointments (backend/src/routes/internal-ai.ts:72)            | backend/src/ai/gateway/services.ts#getPatientAppointments<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext       | —    |
+| `internal_ai.query_correlate`            | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/query/correlate (backend/src/routes/internal-ai.ts:85)               | backend/src/ai/gateway/services.ts#correlate<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext                    | —    |
+| `internal_ai.query_timeline`             | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/query/timeline (backend/src/routes/internal-ai.ts:81)                | backend/src/ai/gateway/services.ts#getPatientTimeline<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext           | —    |
+| `internal_ai.query_vital_signs`          | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/query/vital-signs (backend/src/routes/internal-ai.ts:68)             | backend/src/ai/gateway/services.ts#getPatientVitalSigns<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext         | —    |
+| `internal_ai.search_across_patients`     | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/search/across-patients (backend/src/routes/internal-ai.ts:62)        | backend/src/ai/gateway/services.ts#searchAcrossPatients<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext         | —    |
+| `internal_ai.search_clinical_sections`   | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/search/clinical-sections (backend/src/routes/internal-ai.ts:54)      | backend/src/ai/gateway/services.ts#searchClinicalSections<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext       | —    |
+| `internal_ai.search_documents`           | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/search/documents (backend/src/routes/internal-ai.ts:58)              | backend/src/ai/gateway/services.ts#searchDocuments<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext              | —    |
+| `internal_ai.search_patients`            | read | READY | NOT_EXPOSED | DISCOVERED   | POST /internal/ai/search/patients (backend/src/routes/internal-ai.ts:50)               | backend/src/ai/gateway/services.ts#searchPatients<br>backend/src/ai/gateway/context.ts#checkServiceToken/parseUserContext               | —    |
+| `internal_ai.source_get`                 | read | READY | NOT_EXPOSED | DISCOVERED   | GET /internal/ai/sources/:sourceType/:recordId (backend/src/routes/internal-ai.ts:133) | backend/src/ai/gateway/services.ts#resolveNarrativeSource                                                                               | —    |
 
 ## narrative
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `narrative.get` | read | WRAP | TOOL | TESTED | GET /patients/:patientId/narrative-sections/:sectionKey (backend/src/routes/narrative-sections.ts:42) | backend/src/ai/sections/patient-narrative.ts#getNarrativeSection | pass · GUI parity |
-| `narrative.list` | read | WRAP | TOOL | TESTED | GET /patients/:patientId/narrative-sections (backend/src/routes/narrative-sections.ts:32) | backend/src/ai/sections/patient-narrative.ts#getNarrativeSections | pass · GUI parity |
-| `narrative.save` | write | WRAP | TOOL | TESTED | PUT /patients/:patientId/narrative-sections/:sectionKey (backend/src/routes/narrative-sections.ts:82) and PATCH same path (backend/src/routes/narrative-sections.ts:83), shared handler save (backend/src/routes/narrative-sections.ts:57) | backend/src/ai/sections/narrative-input.ts#parseNarrativeSaveInput<br>backend/src/ai/sections/patient-narrative.ts#upsertNarrativeSection | pass · GUI parity |
+| capability_id    | type  | state | exposure | invocability | entry point                                                                                                                                                                                                                                | service(s)                                                                                                                                | test              |
+| ---------------- | ----- | ----- | -------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `narrative.get`  | read  | WRAP  | TOOL     | TESTED       | GET /patients/:patientId/narrative-sections/:sectionKey (backend/src/routes/narrative-sections.ts:42)                                                                                                                                      | backend/src/ai/sections/patient-narrative.ts#getNarrativeSection                                                                          | pass · GUI parity |
+| `narrative.list` | read  | WRAP  | TOOL     | TESTED       | GET /patients/:patientId/narrative-sections (backend/src/routes/narrative-sections.ts:32)                                                                                                                                                  | backend/src/ai/sections/patient-narrative.ts#getNarrativeSections                                                                         | pass · GUI parity |
+| `narrative.save` | write | WRAP  | TOOL     | TESTED       | PUT /patients/:patientId/narrative-sections/:sectionKey (backend/src/routes/narrative-sections.ts:82) and PATCH same path (backend/src/routes/narrative-sections.ts:83), shared handler save (backend/src/routes/narrative-sections.ts:57) | backend/src/ai/sections/narrative-input.ts#parseNarrativeSaveInput<br>backend/src/ai/sections/patient-narrative.ts#upsertNarrativeSection | pass · GUI parity |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -421,12 +421,12 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## notes
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `notes.create` | write | GAP | NOT_EXPOSED | DISCOVERED | POST /notes (backend/src/routes/note.ts:315) |  | — |
-| `notes.delete` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /notes/:id (backend/src/routes/note.ts:429) |  | — |
-| `notes.list` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /notes (backend/src/routes/note.ts:210) |  | — |
-| `notes.update` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /notes/:id (backend/src/routes/note.ts:351) |  | — |
+| capability_id  | type  | state | exposure    | invocability | entry point                                        | service(s) | test |
+| -------------- | ----- | ----- | ----------- | ------------ | -------------------------------------------------- | ---------- | ---- |
+| `notes.create` | write | GAP   | NOT_EXPOSED | DISCOVERED   | POST /notes (backend/src/routes/note.ts:315)       |            | —    |
+| `notes.delete` | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /notes/:id (backend/src/routes/note.ts:429) |            | —    |
+| `notes.list`   | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /notes (backend/src/routes/note.ts:210)        |            | —    |
+| `notes.update` | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /notes/:id (backend/src/routes/note.ts:351)    |            | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -439,17 +439,17 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## operators
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `operators.create` | write | GAP | NOT_EXPOSED | DISCOVERED | POST /operators (backend/src/routes/operators.ts:419) |  | — |
-| `operators.directory` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /operators/directory (backend/src/routes/operators.ts:209) |  | — |
-| `operators.directory_page` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /operators/directory/page (backend/src/routes/operators.ts:166) |  | — |
-| `operators.directory_schedules` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /operators/directory/schedules (backend/src/routes/operators.ts:238) |  | — |
-| `operators.list` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /operators (backend/src/routes/operators.ts:328) |  | — |
-| `operators.page` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /operators/page (backend/src/routes/operators.ts:256) |  | — |
-| `operators.schedules` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /operators/schedules (backend/src/routes/operators.ts:359) |  | — |
-| `operators.set_schedule` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /operators/:operatorId/schedule (backend/src/routes/operators.ts:377) |  | — |
-| `operators.update` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /operators/:operatorId (backend/src/routes/operators.ts:484) |  | — |
+| capability_id                   | type  | state | exposure    | invocability | entry point                                                               | service(s) | test |
+| ------------------------------- | ----- | ----- | ----------- | ------------ | ------------------------------------------------------------------------- | ---------- | ---- |
+| `operators.create`              | write | GAP   | NOT_EXPOSED | DISCOVERED   | POST /operators (backend/src/routes/operators.ts:419)                     |            | —    |
+| `operators.directory`           | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /operators/directory (backend/src/routes/operators.ts:209)            |            | —    |
+| `operators.directory_page`      | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /operators/directory/page (backend/src/routes/operators.ts:166)       |            | —    |
+| `operators.directory_schedules` | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /operators/directory/schedules (backend/src/routes/operators.ts:238)  |            | —    |
+| `operators.list`                | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /operators (backend/src/routes/operators.ts:328)                      |            | —    |
+| `operators.page`                | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /operators/page (backend/src/routes/operators.ts:256)                 |            | —    |
+| `operators.schedules`           | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /operators/schedules (backend/src/routes/operators.ts:359)            |            | —    |
+| `operators.set_schedule`        | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /operators/:operatorId/schedule (backend/src/routes/operators.ts:377) |            | —    |
+| `operators.update`              | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /operators/:operatorId (backend/src/routes/operators.ts:484)          |            | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -467,26 +467,26 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## parameters
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `parameters.create_reading` | write | READY | TOOL | TESTED | POST /patients/:id/parameter-readings (backend/src/routes/patient-parameter-readings.ts:33) | backend/src/patients/parameter-reading-input.ts#parseParameterReading<br>backend/src/patients/parameter-readings.ts#createParameterReading | pass · GUI parity |
-| `parameters.list_page` | read | READY | TOOL | TESTED | GET /patients/parameters/page (backend/src/routes/patients.ts:103) | backend/src/patients/parameters-page.ts#loadPatientParametersPage | pass · GUI parity |
-| `parameters.list_readings` | read | READY | TOOL | TESTED | GET /patients/:id/parameter-readings (backend/src/routes/patient-parameter-readings.ts:18) | backend/src/patients/parameter-readings.ts#listParameterReadings | pass |
-| `parameters.save_month` | write | READY | TOOL | TESTED | PATCH /patients/:id/parameters (backend/src/routes/patients.ts:243) | backend/src/patients/parameters-update.ts#savePatientParameterMonth | pass |
+| capability_id               | type  | state | exposure | invocability | entry point                                                                                 | service(s)                                                                                                                                 | test              |
+| --------------------------- | ----- | ----- | -------- | ------------ | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `parameters.create_reading` | write | READY | TOOL     | TESTED       | POST /patients/:id/parameter-readings (backend/src/routes/patient-parameter-readings.ts:33) | backend/src/patients/parameter-reading-input.ts#parseParameterReading<br>backend/src/patients/parameter-readings.ts#createParameterReading | pass · GUI parity |
+| `parameters.list_page`      | read  | READY | TOOL     | TESTED       | GET /patients/parameters/page (backend/src/routes/patients.ts:103)                          | backend/src/patients/parameters-page.ts#loadPatientParametersPage                                                                          | pass · GUI parity |
+| `parameters.list_readings`  | read  | READY | TOOL     | TESTED       | GET /patients/:id/parameter-readings (backend/src/routes/patient-parameter-readings.ts:18)  | backend/src/patients/parameter-readings.ts#listParameterReadings                                                                           | pass              |
+| `parameters.save_month`     | write | READY | TOOL     | TESTED       | PATCH /patients/:id/parameters (backend/src/routes/patients.ts:243)                         | backend/src/patients/parameters-update.ts#savePatientParameterMonth                                                                        | pass              |
 
 ## patients
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `patients.clinical_overview` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/clinical-summary/overview (backend/src/routes/patients.ts:141) |  | — |
-| `patients.clinical_summary` | read | WRAP | TOOL | TESTED | GET /patients/clinical-summary (backend/src/routes/patients.ts:213) | backend/src/patients/clinical-summary-service.ts#loadScopedPatientClinicalSummaries | pass · GUI parity |
-| `patients.create` | write | GAP | NOT_EXPOSED | DISCOVERED | POST /patients (backend/src/routes/patients.ts:960) | backend/src/lib/codice-fiscale.ts#isValidCodiceFiscale<br>backend/src/lib/patient-phone.ts#validatePatientPhone<br>backend/src/patients/progressive-identity.ts#optionalBirthDate | — |
-| `patients.delete` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /patients/:id (backend/src/routes/patients.ts:1181) |  | — |
-| `patients.get` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:id (backend/src/routes/patients.ts:262) |  | — |
-| `patients.list_legacy` | read | GAP | DEPRECATED | DISCOVERED | GET /patients (backend/src/routes/patients.ts:125) |  | — |
-| `patients.list_page` | read | READY | TOOL | TESTED | GET /patients/page (backend/src/routes/patients.ts:74) | backend/src/patients/identity-page.ts#loadPatientIdentityPage | pass · GUI parity |
-| `patients.search` | read | READY | TOOL | TESTED | POST /patients/page/search (backend/src/routes/patients.ts:87) | backend/src/patients/identity-page.ts#loadPatientIdentityPage | pass |
-| `patients.update_demographics` | write | GAP | NOT_EXPOSED | DISCOVERED | PATCH /patients/:id (backend/src/routes/patients.ts:1077) | backend/src/patients/progressive-identity.ts#optionalPatientPhone<br>backend/src/patients/progressive-identity.ts#optionalBirthDate<br>backend/src/patients/progressive-identity.ts#patientName<br>backend/src/patients/progressive-identity.ts#optionalFiscalCode | — |
+| capability_id                  | type  | state | exposure    | invocability | entry point                                                                  | service(s)                                                                                                                                                                                                                                                         | test              |
+| ------------------------------ | ----- | ----- | ----------- | ------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `patients.clinical_overview`   | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/clinical-summary/overview (backend/src/routes/patients.ts:141) |                                                                                                                                                                                                                                                                    | —                 |
+| `patients.clinical_summary`    | read  | WRAP  | TOOL        | TESTED       | GET /patients/clinical-summary (backend/src/routes/patients.ts:213)          | backend/src/patients/clinical-summary-service.ts#loadScopedPatientClinicalSummaries                                                                                                                                                                                | pass · GUI parity |
+| `patients.create`              | write | GAP   | NOT_EXPOSED | DISCOVERED   | POST /patients (backend/src/routes/patients.ts:960)                          | backend/src/lib/codice-fiscale.ts#isValidCodiceFiscale<br>backend/src/lib/patient-phone.ts#validatePatientPhone<br>backend/src/patients/progressive-identity.ts#optionalBirthDate                                                                                  | —                 |
+| `patients.delete`              | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /patients/:id (backend/src/routes/patients.ts:1181)                   |                                                                                                                                                                                                                                                                    | —                 |
+| `patients.get`                 | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:id (backend/src/routes/patients.ts:262)                       |                                                                                                                                                                                                                                                                    | —                 |
+| `patients.list_legacy`         | read  | GAP   | DEPRECATED  | DISCOVERED   | GET /patients (backend/src/routes/patients.ts:125)                           |                                                                                                                                                                                                                                                                    | —                 |
+| `patients.list_page`           | read  | READY | TOOL        | TESTED       | GET /patients/page (backend/src/routes/patients.ts:74)                       | backend/src/patients/identity-page.ts#loadPatientIdentityPage                                                                                                                                                                                                      | pass · GUI parity |
+| `patients.search`              | read  | READY | TOOL        | TESTED       | POST /patients/page/search (backend/src/routes/patients.ts:87)               | backend/src/patients/identity-page.ts#loadPatientIdentityPage                                                                                                                                                                                                      | pass              |
+| `patients.update_demographics` | write | GAP   | NOT_EXPOSED | DISCOVERED   | PATCH /patients/:id (backend/src/routes/patients.ts:1077)                    | backend/src/patients/progressive-identity.ts#optionalPatientPhone<br>backend/src/patients/progressive-identity.ts#optionalBirthDate<br>backend/src/patients/progressive-identity.ts#patientName<br>backend/src/patients/progressive-identity.ts#optionalFiscalCode | —                 |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -502,12 +502,12 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## room_assignments
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `room_assignments.create` | write | GAP | NOT_EXPOSED | DISCOVERED | POST /patients/:patientId/room-assignments (backend/src/routes/admin-rooms.ts:622) |  | — |
-| `room_assignments.delete` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /patients/:patientId/room-assignments/:assignmentId (backend/src/routes/admin-rooms.ts:910) |  | — |
-| `room_assignments.list` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:patientId/room-assignments (backend/src/routes/admin-rooms.ts:587) |  | — |
-| `room_assignments.update` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /patients/:patientId/room-assignments/:assignmentId (backend/src/routes/admin-rooms.ts:752) |  | — |
+| capability_id             | type  | state | exposure    | invocability | entry point                                                                                        | service(s) | test |
+| ------------------------- | ----- | ----- | ----------- | ------------ | -------------------------------------------------------------------------------------------------- | ---------- | ---- |
+| `room_assignments.create` | write | GAP   | NOT_EXPOSED | DISCOVERED   | POST /patients/:patientId/room-assignments (backend/src/routes/admin-rooms.ts:622)                 |            | —    |
+| `room_assignments.delete` | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /patients/:patientId/room-assignments/:assignmentId (backend/src/routes/admin-rooms.ts:910) |            | —    |
+| `room_assignments.list`   | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:patientId/room-assignments (backend/src/routes/admin-rooms.ts:587)                  |            | —    |
+| `room_assignments.update` | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /patients/:patientId/room-assignments/:assignmentId (backend/src/routes/admin-rooms.ts:752)    |            | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -520,20 +520,20 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## rooms
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `rooms.add_bed` | write | GAP | NOT_EXPOSED | DISCOVERED | POST /admin/rooms/:roomId/beds (backend/src/routes/admin-rooms.ts:405) |  | — |
-| `rooms.available_beds` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /admin/beds/available (backend/src/routes/admin-rooms.ts:127) |  | — |
-| `rooms.create` | write | GAP | NOT_EXPOSED | DISCOVERED | POST /admin/rooms (backend/src/routes/admin-rooms.ts:172) |  | — |
-| `rooms.delete` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /admin/rooms/:roomId (backend/src/routes/admin-rooms.ts:321) |  | — |
-| `rooms.delete_bed` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /admin/beds/:bedId (backend/src/routes/admin-rooms.ts:531) |  | — |
-| `rooms.get` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /admin/rooms/:roomId (backend/src/routes/admin-rooms.ts:218) |  | — |
-| `rooms.list` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /admin/rooms (backend/src/routes/admin-rooms.ts:158) |  | — |
-| `rooms.list_beds` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /admin/rooms/:roomId/beds (backend/src/routes/admin-rooms.ts:383) |  | — |
-| `rooms.occupancy` | read | READY | TOOL | TESTED | GET /admin/rooms/occupancy (backend/src/routes/admin-rooms.ts:117) | backend/src/rooms/occupancy-service.ts#getFacilityOccupancy | pass |
-| `rooms.patient_room_options` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:patientId/room-options (backend/src/routes/patient-room-options.ts:26) | backend/src/routes/patient-room-option-model.ts#toPatientRoomOptions | — |
-| `rooms.update` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /admin/rooms/:roomId (backend/src/routes/admin-rooms.ts:237) |  | — |
-| `rooms.update_bed` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /admin/beds/:bedId (backend/src/routes/admin-rooms.ts:463) |  | — |
+| capability_id                | type  | state | exposure    | invocability | entry point                                                                           | service(s)                                                           | test |
+| ---------------------------- | ----- | ----- | ----------- | ------------ | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---- |
+| `rooms.add_bed`              | write | GAP   | NOT_EXPOSED | DISCOVERED   | POST /admin/rooms/:roomId/beds (backend/src/routes/admin-rooms.ts:405)                |                                                                      | —    |
+| `rooms.available_beds`       | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /admin/beds/available (backend/src/routes/admin-rooms.ts:127)                     |                                                                      | —    |
+| `rooms.create`               | write | GAP   | NOT_EXPOSED | DISCOVERED   | POST /admin/rooms (backend/src/routes/admin-rooms.ts:172)                             |                                                                      | —    |
+| `rooms.delete`               | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /admin/rooms/:roomId (backend/src/routes/admin-rooms.ts:321)                   |                                                                      | —    |
+| `rooms.delete_bed`           | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /admin/beds/:bedId (backend/src/routes/admin-rooms.ts:531)                     |                                                                      | —    |
+| `rooms.get`                  | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /admin/rooms/:roomId (backend/src/routes/admin-rooms.ts:218)                      |                                                                      | —    |
+| `rooms.list`                 | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /admin/rooms (backend/src/routes/admin-rooms.ts:158)                              |                                                                      | —    |
+| `rooms.list_beds`            | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /admin/rooms/:roomId/beds (backend/src/routes/admin-rooms.ts:383)                 |                                                                      | —    |
+| `rooms.occupancy`            | read  | READY | TOOL        | TESTED       | GET /admin/rooms/occupancy (backend/src/routes/admin-rooms.ts:117)                    | backend/src/rooms/occupancy-service.ts#getFacilityOccupancy          | pass |
+| `rooms.patient_room_options` | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:patientId/room-options (backend/src/routes/patient-room-options.ts:26) | backend/src/routes/patient-room-option-model.ts#toPatientRoomOptions | —    |
+| `rooms.update`               | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /admin/rooms/:roomId (backend/src/routes/admin-rooms.ts:237)                      |                                                                      | —    |
+| `rooms.update_bed`           | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /admin/beds/:bedId (backend/src/routes/admin-rooms.ts:463)                        |                                                                      | —    |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -553,22 +553,22 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## roster
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `roster.get_my_order` | read | READY | TOOL | TESTED | GET /me/roster-order (backend/src/routes/roster-order.ts:42) | backend/src/roster/preferences.ts#readRosterPreference | pass · GUI parity |
-| `roster.list_contexts` | read | READY | TOOL | TESTED | GET /admin/roster-contexts (backend/src/routes/roster-order.ts:54) | backend/src/roster/preferences.ts#listRosterContexts | pass · GUI parity |
-| `roster.set_context_default` | write | READY | TOOL | TESTED | PATCH /admin/roster-contexts/:id (backend/src/routes/roster-order.ts:58) | backend/src/roster/order-contract.ts#rosterId<br>backend/src/roster/preferences.ts#patchRosterDefault | pass |
-| `roster.set_my_order` | write | READY | TOOL | TESTED | PATCH /me/roster-order (backend/src/routes/roster-order.ts:50) | backend/src/roster/preferences.ts#patchRosterPreference | pass · GUI parity |
+| capability_id                | type  | state | exposure | invocability | entry point                                                              | service(s)                                                                                            | test              |
+| ---------------------------- | ----- | ----- | -------- | ------------ | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------- |
+| `roster.get_my_order`        | read  | READY | TOOL     | TESTED       | GET /me/roster-order (backend/src/routes/roster-order.ts:42)             | backend/src/roster/preferences.ts#readRosterPreference                                                | pass · GUI parity |
+| `roster.list_contexts`       | read  | READY | TOOL     | TESTED       | GET /admin/roster-contexts (backend/src/routes/roster-order.ts:54)       | backend/src/roster/preferences.ts#listRosterContexts                                                  | pass · GUI parity |
+| `roster.set_context_default` | write | READY | TOOL     | TESTED       | PATCH /admin/roster-contexts/:id (backend/src/routes/roster-order.ts:58) | backend/src/roster/order-contract.ts#rosterId<br>backend/src/roster/preferences.ts#patchRosterDefault | pass              |
+| `roster.set_my_order`        | write | READY | TOOL     | TESTED       | PATCH /me/roster-order (backend/src/routes/roster-order.ts:50)           | backend/src/roster/preferences.ts#patchRosterPreference                                               | pass · GUI parity |
 
 ## therapy
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `therapy.create` | write | WRAP | TOOL | TESTED | POST /patients/:patientId/therapies (backend/src/routes/patient-therapies.ts:205) | backend/src/therapies/therapy-create.ts#createTherapyInTx<br>backend/src/therapies/therapy-create.ts#validateTherapyCreateInput | pass · GUI parity |
-| `therapy.delete` | write | GAP | GUI_ONLY | DISCOVERED | DELETE /patients/:patientId/therapies/:therapyId (backend/src/routes/patient-therapies.ts:355) |  | — |
-| `therapy.list` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:patientId/therapies (backend/src/routes/patient-therapies.ts:178) |  | — |
-| `therapy.list_page` | read | GAP | NOT_EXPOSED | DISCOVERED | GET /patients/:patientId/therapies/page (backend/src/routes/patient-therapies.ts:98) | backend/src/therapies/list-query.ts#parseTherapyListQuery<br>backend/src/therapies/list-query.ts#encodeTherapyListCursor | — |
-| `therapy.update` | write | GAP | NOT_EXPOSED | DISCOVERED | PUT /patients/:patientId/therapies/:therapyId (backend/src/routes/patient-therapies.ts:245) | backend/src/therapies/input-validation.ts#assertTherapyScalarInput<br>backend/src/lib/therapy-dose.ts (normalize/derive helpers)<br>backend/src/therapies/therapy-create.ts#normalizeGiorniSettimana | — |
+| capability_id       | type  | state | exposure    | invocability | entry point                                                                                    | service(s)                                                                                                                                                                                           | test              |
+| ------------------- | ----- | ----- | ----------- | ------------ | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `therapy.create`    | write | WRAP  | TOOL        | TESTED       | POST /patients/:patientId/therapies (backend/src/routes/patient-therapies.ts:205)              | backend/src/therapies/therapy-create.ts#createTherapyInTx<br>backend/src/therapies/therapy-create.ts#validateTherapyCreateInput                                                                      | pass · GUI parity |
+| `therapy.delete`    | write | GAP   | GUI_ONLY    | DISCOVERED   | DELETE /patients/:patientId/therapies/:therapyId (backend/src/routes/patient-therapies.ts:355) |                                                                                                                                                                                                      | —                 |
+| `therapy.list`      | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:patientId/therapies (backend/src/routes/patient-therapies.ts:178)               |                                                                                                                                                                                                      | —                 |
+| `therapy.list_page` | read  | GAP   | NOT_EXPOSED | DISCOVERED   | GET /patients/:patientId/therapies/page (backend/src/routes/patient-therapies.ts:98)           | backend/src/therapies/list-query.ts#parseTherapyListQuery<br>backend/src/therapies/list-query.ts#encodeTherapyListCursor                                                                             | —                 |
+| `therapy.update`    | write | GAP   | NOT_EXPOSED | DISCOVERED   | PUT /patients/:patientId/therapies/:therapyId (backend/src/routes/patient-therapies.ts:245)    | backend/src/therapies/input-validation.ts#assertTherapyScalarInput<br>backend/src/lib/therapy-dose.ts (normalize/derive helpers)<br>backend/src/therapies/therapy-create.ts#normalizeGiorniSettimana | —                 |
 
 <details><summary>WRAP adapters / GAP analysis</summary>
 
@@ -582,8 +582,8 @@ GAP (no reusable application boundary). Invocability: DISCOVERED → EXPOSED →
 
 ## voice
 
-| capability_id | type | state | exposure | invocability | entry point | service(s) | test |
-|---|---|---|---|---|---|---|---|
-| `voice.execute` | action | READY | NOT_EXPOSED | DISCOVERED | POST /ai/voice/execute (backend/src/routes/ai-voice.ts:100) | backend/src/ai/actions/orchestrate.ts#executeCommand | — |
-| `voice.plan` | action | READY | NOT_EXPOSED | DISCOVERED | POST /ai/voice/plan (backend/src/routes/ai-voice.ts:73) | backend/src/ai/actions/orchestrate.ts#planCommand | — |
-| `voice.stt_status` | read | READY | NOT_EXPOSED | DISCOVERED | GET /ai/voice/stt (backend/src/routes/ai-voice.ts:66) | backend/src/ai/voice/config.ts#sttStatus | — |
+| capability_id      | type   | state | exposure    | invocability | entry point                                                 | service(s)                                           | test |
+| ------------------ | ------ | ----- | ----------- | ------------ | ----------------------------------------------------------- | ---------------------------------------------------- | ---- |
+| `voice.execute`    | action | READY | NOT_EXPOSED | DISCOVERED   | POST /ai/voice/execute (backend/src/routes/ai-voice.ts:100) | backend/src/ai/actions/orchestrate.ts#executeCommand | —    |
+| `voice.plan`       | action | READY | NOT_EXPOSED | DISCOVERED   | POST /ai/voice/plan (backend/src/routes/ai-voice.ts:73)     | backend/src/ai/actions/orchestrate.ts#planCommand    | —    |
+| `voice.stt_status` | read   | READY | NOT_EXPOSED | DISCOVERED   | GET /ai/voice/stt (backend/src/routes/ai-voice.ts:66)       | backend/src/ai/voice/config.ts#sttStatus             | —    |

@@ -376,9 +376,21 @@ body {
   margin: 0;
   font: 500 14px/20px var(--font-ui);
   color: var(--text-muted);
-  white-space: nowrap;
+  /* UX direct-access: il sottotitolo (settimana, data, fasce) va a capo invece di finire in «…»;
+     due righe entrano nell'intestazione da 72 px insieme al titolo. */
+  white-space: normal;
+  overflow-wrap: anywhere;
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+@media (max-width: 1279px) {
+  .topbar-title .page-header__subtitle {
+    font-size: 13px;
+    line-height: 18px;
+  }
 }
 
 .topbar-clock {

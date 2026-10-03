@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-03T12:52:59.832Z",
+  "today": "2026-10-03",
+  "results": [
+    {
+      "id": "QA-API-01",
+      "name": "Supervisor without confirmed → 428 on confirm / not-administered / prn; confirmed:false → 428; non-boolean → 400; nothing written",
+      "result": "PASS",
+      "detail": "confirm=428 str=400 notadm=428 prn=428 false=428 rows=0"
+    },
+    {
+      "id": "QA-API-02",
+      "name": "PRN refuses client dose / time fields and blank indication (400)",
+      "result": "PASS",
+      "detail": "400 400 400"
+    },
+    {
+      "id": "QA-API-03",
+      "name": "PRN: 201, replay same requestId → 200 + Idempotent-Replayed, reuse with other body → 409, second dose 201; 2 rows; raw clinical text kept",
+      "result": "PASS",
+      "detail": "201 200 409 201 rows=[{\"indicazione\":\"  Dolore 7/10  (sintetico, testo grezzo) \",\"farmacoDose\":\"1000 mg compressa\",\"operatoreId\":\"SIM-NURSE-1\",\"date\":\"2026-10-03\"},{\"indicazione\":\"Febbre (sintetico)\",\"farmacoDose\":\"1000 mg compressa\",\"operatoreId\":\"SIM-NURSE-1\",\"date\":\"2026-10-03\"}]"
+    },
+    {
+      "id": "QA-API-04",
+      "name": "PRN on a scheduled therapy is refused (409)",
+      "result": "PASS",
+      "detail": "409"
+    },
+    {
+      "id": "QA-API-05",
+      "name": "Doctor cannot administer (403 confirm/prn); OSS and Admin cannot read/write PRN (403)",
+      "result": "PASS",
+      "detail": "doc=403/403 oss=403/403 admin=403"
+    },
+    {
+      "id": "QA-API-06",
+      "name": "PRN scope after #389: nurse can record PRN for a resident registered by SIM-DOCTOR-1 (facility scope) — same reach as the scheduled slots",
+      "result": "FAIL",
+      "detail": "therapyCreate=201 nurseSeesOtherInSlots=false prnPost=404 {\"error\":\"Terapia non trovata\"} prnGet=200 items=0"
+    },
+    {
+      "id": "QA-API-07",
+      "name": "Ack: 201 then 200 (idempotent), non-urgent 409, admin 403, unknown 404; supervisor sees nurse ack as name+role, byMe=false, acknowledgedByMe=false, no operator id",
+      "result": "PASS",
+      "detail": "201 200 n/a 403 404 sup=[{\"operatorName\":\"Infermiere 1\",\"operatorRole\":\"infermiere\",\"acknowledgedAt\":\"2026-10-03T12:51:28.873Z\",\"byMe\":false}]"
+    },
+    {
+      "id": "QA-DB-01",
+      "name": "DiaryEntryAcknowledgement is append-only (UPDATE/DELETE/TRUNCATE refused)",
+      "result": "PASS",
+      "detail": "23514 23514 23514"
+    },
+    {
+      "id": "QA-DB-02",
+      "name": "PrnAdministration UPDATE at DB level (info: migration comment says append-only)",
+      "result": "PASS",
+      "detail": "update=allowed (rolled back)"
+    },
+    {
+      "id": "QA-UI-01",
+      "name": "Turno late dose «Ramipril» → therapy with «Erogata» for that drug visible in viewport without extra clicks",
+      "result": "PASS",
+      "detail": "doses=[\"Ramipril 1 compressa — 5 mg · 08:00\",\"Metformina 1 compressa — 500 mg · 08:00\",\"Pantoprazolo 1 compressa — 20 mg · 12:00\"] hash=#/dettaglio-paziente/cmuse4pmb000064lpp6icfxgz/terapia-farmacologica?sv=giornaliere&t=cmuse4pni000164lpjroeykxt&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "QA-UI-03",
+      "name": "Back from the landing returns to Turno; Forward returns to the exact drug landing",
+      "result": "PASS",
+      "detail": "back=#/operator-dashboard fwd=#/dettaglio-paziente/cmuse4pmb000064lpp6icfxgz/terapia-farmacologica?sv=giornaliere&t=cmuse4pni000164lpjroeykxt&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "QA-UI-02",
+      "name": "Administered dose persisted (DB) and reload keeps the same place + shows it administered",
+      "result": "PASS",
+      "detail": "rows=[{\"stato\":\"erogata\",\"operatoreId\":\"SIM-NURSE-1\"}] hash #/dettaglio-paziente/cmuse4pmb000064lpp6icfxgz/terapia-farmacologica?sv=giornaliere&t=cmuse4pni000164lpjroeykxt&d=2026-10-03&f=mattina → #/dettaglio-paziente/cmuse4pmb000064lpp6icfxgz/terapia-farmacologica?sv=giornaliere&t=cmuse4pni000164lpjroeykxt&d=2026-10-03&f=mattina"
+    },
+    {
+      "id": "QA-UI-04",
+      "name": "Calendar: every event shows strength + status in words without a tap",
+      "result": "PASS",
+      "detail": "08:00 Metformina 1 compressa — 500 mg orale In ritardo di 411 min Prescr. Dr. Medico Uno · Dopo il pasto | 08:00 Ramipril 1 compressa — 5 mg orale Somministrata 14:51 da Infermiere 1 Prescr. Dr. Medico Uno | 12:00 Pantoprazolo 1 compressa — 20 mg orale In ritardo di 171 min Prescr. Dr. Medico Uno | 20:00 Metformina 1 compressa — 500 mg orale Da somministrare Prescr. Dr. Medico Uno · Dopo il pasto"
+    },
+    {
+      "id": "QA-UI-05",
+      "name": "Supervisor: cancel in the confirmation dialog writes nothing",
+      "result": "PASS",
+      "detail": "rows=0"
+    },
+    {
+      "id": "QA-UI-06",
+      "name": "Doctor: no administration buttons on a facility resident",
+      "result": "PASS",
+      "detail": "0"
+    },
+    {
+      "id": "QA-UI-07",
+      "name": "OSS: no Terapia in sidebar nor chart, no «Nuova compilazione» in Moduli",
+      "result": "PASS",
+      "detail": "sidebar=0 tabs=[\"Panoramica\",\"Dati di ingresso\",\"Clinica\",\"Parametri\",\"Moduli\",\"Dimissione\"] creates=0"
+    },
+    {
+      "id": "QA-UI-08",
+      "name": "Supervisor still had «Presa visione» although the nurse acked (per reader); after ack + reload the button is gone and both readers are recorded",
+      "result": "PASS",
+      "detail": "before=1 after=0 db=[{\"operatorId\":\"SIM-NURSE-1\",\"operatorRole\":\"infermiere\"},{\"operatorId\":\"SIM-SUPERVISOR-1\",\"operatorRole\":\"operatore\"}] nurseNameShownBefore=true"
+    },
+    {
+      "id": "QA-UI-09",
+      "name": "Nurse (who acked via API) sees no «Presa visione» button for that entry",
+      "result": "PASS",
+      "detail": "0"
+    },
+    {
+      "id": "QA-UI-10",
+      "name": "820x1180: no horizontal scroll on main pages and chart sections",
+      "result": "PASS",
+      "detail": "{\"turno\":true,\"pazienti\":true,\"terapie\":true,\"agenda\":true,\"consegne\":true,\"note\":true,\"chart-Panoramica\":true,\"chart-Dati di ingresso\":true,\"chart-Clinica\":true,\"chart-Terapia\":true,\"chart-Parametri\":true,\"chart-Moduli\":true,\"chart-Documenti\":true,\"chart-Dimissione\":true}"
+    },
+    {
+      "id": "QA-UI-11",
+      "name": "Reload and Back restore Terapia › Calendario",
+      "result": "FAIL",
+      "detail": "h1=#/dettaglio-paziente/cmuse4pmb000064lpp6icfxgz/terapia-farmacologica h2=#/dettaglio-paziente/cmuse4pmb000064lpp6icfxgz/terapia-farmacologica h3=#/dettaglio-paziente/cmuse4pmb000064lpp6icfxgz/terapia-farmacologica cal=false/false"
+    },
+    {
+      "id": "QA-UI-CONSOLE",
+      "name": "No console errors",
+      "result": "PASS",
+      "detail": ""
+    },
+    {
+      "id": "QA-UI-HTTP",
+      "name": "No 4xx/5xx from the UI",
+      "result": "PASS",
+      "detail": ""
+    }
+  ],
+  "consoleErrors": [],
+  "httpErrors": []
+}

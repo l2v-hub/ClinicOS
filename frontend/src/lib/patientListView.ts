@@ -49,3 +49,36 @@ export function unknownStateCount(
 ): number {
   return ids.filter((id) => statoOf(id) === undefined || statoOf(id) === null).length;
 }
+
+// ── Direct access: the list opened already filtered on what a KPI tile / notification counts ──
+
+/** Signal a dashboard counter refers to. */
+export type PatientListSignal = 'critici' | 'rischi' | 'allergie' | 'anomalie';
+
+export const LIST_SIGNAL_LABEL: Record<PatientListSignal, string> = {
+  critici: 'Parametri critici',
+  rischi: 'Rischi alti',
+  allergie: 'Allergie gravi',
+  anomalie: 'Farmaci da sanare',
+};
+
+/** How to open the patient list: view and optional signal filter. */
+export interface PatientListEntry {
+  view?: ListView;
+  signal?: PatientListSignal;
+}
+
+/** true when the patient has the signal. Unknown summary → not shown under a signal filter
+ *  (the filter says what it counts; the chip tells the user how to remove it). */
+export function matchesListSignal(
+  summary: ClinicalSummaryEntry | undefined,
+  hasAnomalies: boolean,
+  signal: PatientListSignal | null | undefined,
+): boolean {
+  if (!signal) return true;
+  if (signal === 'anomalie') return hasAnomalies;
+  if (!summary) return false;
+  if (signal === 'critici') return summary.hasCriticalVitals;
+  if (signal === 'rischi') return summary.hasHighRisk;
+  return summary.hasSevereAllergy;
+}
