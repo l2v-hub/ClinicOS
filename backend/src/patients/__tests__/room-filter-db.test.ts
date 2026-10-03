@@ -17,6 +17,10 @@ import {
   expectedIds,
 } from '../../roster/__tests__/roster-fixture.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 let server: Server;
 let base = '';
 const headers = {

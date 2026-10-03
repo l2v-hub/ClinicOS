@@ -7,6 +7,10 @@ import { attestAssessment, listAttestations } from '../attestations.js';
 import { retryAssessmentPdf } from '../pdf-service.js';
 import { actor, other, manager, patient, foreign, seed, server, headers } from './fixture.js';
 import { transfersInput } from './transfers-fixture.js';
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 before(seed);
 after(() => prisma.$disconnect());
 async function final(extra: Record<string, unknown> = {}) {

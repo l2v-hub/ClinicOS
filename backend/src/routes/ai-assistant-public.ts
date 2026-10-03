@@ -12,7 +12,7 @@ import { importRateLimit } from '../ai/rate-limit.js';
 import { defaultTenant } from '../ai/gateway/context.js';
 import { GatewayError, type UserContext } from '../ai/gateway/types.js';
 import { assistantQuery } from '../ai/assistant/service.js';
-import { hasGlobalPatientScope } from '../patients/patient-scope.js';
+import { hasGlobalPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
 
 const assistantPublicRouter = Router();
 assistantPublicRouter.use(requireOperator);
@@ -25,16 +25,19 @@ assistantPublicRouter.use(importRateLimit);
 // canCrossPatientSearch() can never be unlocked from here. The real role stays on req.operator for
 // audit; restore it to the context only once operator identity is cryptographically verified.
 const NON_PRIVILEGED_ROLE = 'operatore';
-const MAX_ASSISTANT_PATIENT_SCOPE = 100;
+// #389: clinical identities reach the whole facility, so the explicit id list is the facility roster.
+const MAX_ASSISTANT_PATIENT_SCOPE = 2000;
 /** Questions are truncated to this length (route and Tool Layer `assistant.query`). */
 export const MAX_ASSISTANT_QUESTION_LENGTH = 500;
 
-export type AssistantPatientScopeLoader = (operatorId: string) => Promise<string[]>;
+export type AssistantPatientScopeLoader = (operatorId: string, role: string) => Promise<string[]>;
 
-async function loadAssistantPatientScope(operatorId: string): Promise<string[]> {
+/** Residents the operator reaches: the SAME rule as the chart and Tool Layer (#389), as an explicit
+ *  id list so the AI context never gains the management-level `null` (all) marker. */
+async function loadAssistantPatientScope(operatorId: string, role: string): Promise<string[]> {
   const { prisma } = await import('../lib/prisma.js');
   const patients = await prisma.patient.findMany({
-    where: { registeredById: operatorId },
+    where: patientScopeWhere({ id: operatorId, role }),
     select: { id: true },
     orderBy: { id: 'asc' },
     take: MAX_ASSISTANT_PATIENT_SCOPE + 1,
@@ -72,7 +75,9 @@ export async function ctxFromOperator(
     userId: op.id,
     tenantId: defaultTenant(),
     roles: [NON_PRIVILEGED_ROLE], // privilege never derives from a public header (see note above)
-    permittedPatientIds: hasVerifiedGlobalScope ? null : await loadScope(op.id),
+    // The role on this route may be a self-asserted header: the reach is computed for the clamped
+    // non-privileged role (facility-wide by default, #389), never for the declared one.
+    permittedPatientIds: hasVerifiedGlobalScope ? null : await loadScope(op.id, NON_PRIVILEGED_ROLE),
     requestId: `op-${op.id}-${req.header('X-Request-Id') ?? 'web'}`,
     ...(await readToolPolicy(req)),
   };

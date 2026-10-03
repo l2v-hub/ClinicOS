@@ -9,6 +9,10 @@ import { transfersInput } from './transfers-fixture.js';
 import { tinettiInput } from './tinetti-fixture.js';
 import { mnaInput } from './mna-fixture.js';
 import { gds15Input } from './gds15-fixture.js';
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 before(seed);
 after(() => prisma.$disconnect());
 const finish = async (id: string) =>

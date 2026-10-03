@@ -1,7 +1,11 @@
 import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import type { UserContext } from '../ai/gateway/types.js';
-import { hasGlobalPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
+import {
+  hasFacilityPatientScope,
+  hasGlobalPatientScope,
+  patientScopeWhere,
+} from '../patients/patient-scope.js';
 
 export interface AssessmentDocumentAccess {
   actor: Operator;
@@ -46,7 +50,7 @@ export function assessmentDocumentWhere(
 }
 /** Fixed document alias, shared with the bounded AI search query. */
 export function assessmentDocumentSql(access: AssessmentDocumentAccess): Prisma.Sql {
-  const patientScope = hasGlobalPatientScope(access.actor.role)
+  const patientScope = hasFacilityPatientScope(access.actor.role)
     ? Prisma.empty
     : Prisma.sql`AND p."registeredById" = ${access.actor.id}`;
   const ids =

@@ -1,0 +1,23 @@
+{
+  "apiDetailNeri": 200,
+  "assistantQuery_neri_doctorRegistered": {
+    "status": 200,
+    "body": "{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"plan\":{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"tools\":[{\"tool\":\"get_patient_vital_signs\",\"args\":{\"patientId\":\"cmus84hs90005fslpncyb6vuq\"}}],\"requiresCrossPatientAccess\":false},\"results\":[],\"sources\":[],\"navigation\":[],\"notFound\":true,\"truncated\":false,\"mode\":\"deterministic\",\"composed\":false}"
+  },
+  "assistantQuery_galli_nurseRegistered": {
+    "status": 200,
+    "body": "{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"plan\":{\"intent\":\"vitals_recent\",\"scope\":\"current_patient\",\"tools\":[{\"tool\":\"get_patient_vital_signs\",\"args\":{\"patientId\":\"cmus84hsj0006fslp0a8lnhgu\"}}],\"requiresCrossPatientAccess\":false},\"results\":[],\"sources\":[],\"navigation\":[],\"notFound\":true,\"truncated\":false,\"mode\":\"deterministic\",\"composed\":false}"
+  },
+  "actionsPlan_neri": {
+    "status": 200,
+    "body": "{\"plan\":{\"actionType\":\"unknown\",\"patientId\":\"cmus84hs90005fslpncyb6vuq\",\"targetRecordId\":null,\"fields\":{},\"sourceTranscript\":\"parametri di Neri Dario\",\"ambiguities\":[\"Comando non riconosciuto\"],\"requiresConfirmation\":false,\"idempotencyKey\":\"442dddb5-152f-423e-8ede-51c9a5a3a54d\",\"channel\":\"testo\"},\"preview\":null,\"read\":{\"intent\":\"unknown\",\"scope\":\"current_patient\",\"plan\":{\"intent\":\"unknown\",\"scope\":\"current_patient\",\"tools\":[],\"requiresCrossPatientAccess\":false},\"results\":[],\"sources\":[],\"navigation\":[],\"notFound\":true,\"truncated\":false,\"mode\":\"deterministic\",\"composed\":false}}"
+  },
+  "actionsPlan_galli": {
+    "status": 200,
+    "body": "{\"plan\":{\"actionType\":\"unknown\",\"patientId\":\"cmus84hsj0006fslp0a8lnhgu\",\"targetRecordId\":null,\"fields\":{},\"sourceTranscript\":\"parametri di Galli Nora\",\"ambiguities\":[\"Comando non riconosciuto\"],\"requiresConfirmation\":false,\"idempotencyKey\":\"8d82593d-581c-4d58-b182-fe68dce01088\",\"channel\":\"testo\"},\"preview\":null,\"read\":{\"intent\":\"unknown\",\"scope\":\"current_patient\",\"plan\":{\"intent\":\"unknown\",\"scope\":\"current_patient\",\"tools\":[],\"requiresCrossPatientAccess\":false},\"results\":[],\"sources\":[],\"navigation\":[],\"notFound\":true,\"truncated\":false,\"mode\":\"deterministic\",\"composed\":false}}"
+  },
+  "skillsResidents_neri": {
+    "status": 200,
+    "body": "{\"residents\":[{\"id\":\"cmus84hs90005fslpncyb6vuq\",\"label\":\"Neri Dario\"}]}"
+  }
+}

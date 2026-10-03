@@ -14,6 +14,10 @@ import { attestAssessment } from '../attestations.js';
 import { TINETTI_KEYS, TINETTI_MAX_SCORE } from '../tinetti-types.js';
 import { actor, other, manager, patient, foreign, seed } from './fixture.js';
 import { tinettiAnswers, tinettiInput } from './tinetti-fixture.js';
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 before(seed);
 after(() => prisma.$disconnect());
 

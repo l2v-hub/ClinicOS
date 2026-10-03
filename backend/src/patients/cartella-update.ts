@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import type { Operator } from '../ai/auth.js';
-import { hasGlobalPatientScope } from './patient-scope.js';
+import { hasFacilityPatientScope } from './patient-scope.js';
 
 export class CartellaUpdateError extends Error {
   constructor(
@@ -85,7 +85,7 @@ export async function saveCartella(patientId: string, value: unknown, actor: Ope
     // Parent lock also serializes creation when the Cartella row does not exist yet.
     const patients = await tx.$queryRaw<Array<{ id: string }>>(Prisma.sql`
       SELECT p.id FROM "Patient" p WHERE p.id = ${patientId}
-        ${hasGlobalPatientScope(actor.role) ? Prisma.empty : Prisma.sql`AND p."registeredById" = ${actor.id}`}
+        ${hasFacilityPatientScope(actor.role) ? Prisma.empty : Prisma.sql`AND p."registeredById" = ${actor.id}`}
       FOR UPDATE OF p`);
     if (!patients.length)
       throw new CartellaUpdateError('Paziente non trovato', 404, 'patient_not_found');

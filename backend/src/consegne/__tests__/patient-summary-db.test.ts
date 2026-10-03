@@ -17,6 +17,10 @@ import {
   httpServer,
 } from './po08-fixture.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 let http: Awaited<ReturnType<typeof httpServer>>;
 before(async () => {
   await seed();

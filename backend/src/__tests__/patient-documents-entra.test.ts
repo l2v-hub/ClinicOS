@@ -10,6 +10,10 @@ import { resetJwksCache } from '../lib/entra-auth.js';
 import { prisma } from '../lib/prisma.js';
 import type { AuthedRequest } from '../ai/auth.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 const TENANT = 'clinicos-gate-tenant';
 const AUDIENCE = 'api://clinicos-gate';
 const ISSUER = `https://login.microsoftonline.com/${TENANT}/v2.0`;

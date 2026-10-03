@@ -24,6 +24,10 @@ import { resetBriefingCache } from '../../proactive/engine.js';
 import { normalizeProfile, profileFor, loadProfiles } from '../profiles.js';
 import { SKILL_CATALOG } from '../../skills/catalog.js';
 
+// #389: the default resident scope is facility-wide. This suite exercises the scope-enforcement
+// plumbing (out-of-scope residents denied), so it pins the restricted, still-supported mode.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
+
 let base = '';
 let close: () => Promise<void>;
 let admin: Session;
