@@ -69,6 +69,12 @@ function locationParts(value: unknown): { camera: string; letto: string } {
 }
 
 /** Pazienti del turno: tutti tranne i dimessi. Va chiamata solo con il riepilogo disponibile. */
+/** «Allergia: Penicillina, Lattice» — the generic label only when the details are unknown. */
+export function badgeLabel(base: string, details: string[] | undefined): string {
+  const list = (details ?? []).map((d) => d.trim()).filter(Boolean);
+  return list.length ? `${base}: ${list.join(', ')}` : base;
+}
+
 export function inCaricoNelTurno(summary: ClinicalSummaryEntry | undefined): boolean {
   return summary?.statoRicovero !== 'dimesso';
 }
@@ -147,7 +153,11 @@ export function turnoPatientCard(
     if (summary.allergieCount > 0)
       badges.push({
         key: 'allergia',
-        label: 'Allergia',
+        // Il badge dice QUALE allergene (UX: informazione senza click), non solo «Allergia».
+        label: badgeLabel(
+          'Allergia',
+          summary.allergeni?.map((a) => a.allergene),
+        ),
         tone: 'crit',
         alert: true,
         landing: badgeLanding(patient.id, 'allergy'),
@@ -155,14 +165,22 @@ export function turnoPatientCard(
     if (summary.hasCriticalVitals)
       badges.push({
         key: 'critici',
-        label: 'Parametri critici',
+        label: badgeLabel(
+          'Parametri critici',
+          summary.parametriCritici?.map((p) =>
+            [p.etichetta, p.valore, p.unita].filter(Boolean).join(' '),
+          ),
+        ),
         tone: 'crit',
         landing: badgeLanding(patient.id, 'critical-vitals'),
       });
     if (summary.hasHighRisk)
       badges.push({
         key: 'rischio',
-        label: 'Rischio elevato',
+        label: badgeLabel(
+          'Rischio elevato',
+          summary.rischiElevati?.map((r) => `${r.tipo} ${r.livello}`.trim()),
+        ),
         tone: 'warn',
         landing: badgeLanding(patient.id, 'risk'),
       });

@@ -203,3 +203,13 @@ test('next appointments: in progress, then not started past their time, then upc
     [true],
   );
 });
+
+test('UX: Turno badges name the allergen, critical parameter and risk', async () => {
+  const { badgeLabel } = await import('../turnoPatients');
+  assert.equal(
+    badgeLabel('Allergia', ['Penicillina', ' Lattice ']),
+    'Allergia: Penicillina, Lattice',
+  );
+  assert.equal(badgeLabel('Allergia', []), 'Allergia');
+  assert.equal(badgeLabel('Rischio elevato', undefined), 'Rischio elevato');
+});

@@ -119,11 +119,13 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 32px;
-  padding: 0 8px;
+  /* I badge portano i nomi (allergene, parametro, rischio): vanno a capo, mai troncati. */
+  min-height: 32px;
+  padding: 6px 8px;
   border-radius: 8px;
   font: 500 14px/20px var(--font-ui);
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   background: #f5f7fb;
   color: var(--text-muted);
 }
