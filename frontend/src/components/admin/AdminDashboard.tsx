@@ -16,6 +16,9 @@ import { useAnomalieReparto } from '../operator/cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
 import { AdminDashboardKpiBands } from './AdminDashboardKpiBands';
 import { DashboardTherapyDeadlines } from '../shared/DashboardTherapyDeadlines';
+import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
+import type { PatientListEntry } from '../../lib/patientListView';
+import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -32,7 +35,10 @@ interface AdminDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onOpenConsegneFeed?: () => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
+  /** Direct access: lista pazienti / consegne già filtrate su ciò che una tessera conta. */
+  onOpenPatientList?: (entry: PatientListEntry) => void;
+  onOpenConsegneQuery?: (query: ConsegnaFeedQuery) => void;
   clinicalOverview?: ClinicalOverview | null;
   clinicalOverviewState: 'loading' | 'ready' | 'error';
   onRetryClinicalOverview: () => void;
@@ -63,6 +69,8 @@ export function AdminDashboard({
   onOpenConsegneAperte,
   onOpenConsegneFeed,
   onSelectPaziente,
+  onOpenPatientList,
+  onOpenConsegneQuery,
   clinicalOverview = null,
   clinicalOverviewState,
   onRetryClinicalOverview,
@@ -124,6 +132,7 @@ export function AdminDashboard({
     onSelectPaziente,
     onRetryClinicalOverview,
     therapyNav: 'terapie',
+    onOpenPatientList,
   });
 
   if (camereLoadState === 'error') {
@@ -194,6 +203,8 @@ export function AdminDashboard({
         somministrazioni={somministrazioni}
         onNavigate={onNavigate}
         onOpenConsegneAperte={onOpenConsegneAperte}
+        onOpenPatientList={onOpenPatientList}
+        onOpenConsegneFeed={onOpenConsegneQuery}
       />
 
       {somministrazioni.disponibile && (
@@ -463,9 +474,22 @@ export function AdminDashboard({
                   )}
                 </div>
                 {onSelectPaziente && c.pazienteNome ? (
+                  // Direct access: la consegna stessa, evidenziata nella cartella del paziente.
                   <button
                     className="link-btn consegna-paziente"
-                    onClick={() => onSelectPaziente(c.pazienteNome!, c.pazienteId)}
+                    data-consegna-link={c.id}
+                    aria-label={`${c.pazienteNome}: apri questa consegna nella cartella`}
+                    onClick={() =>
+                      onSelectPaziente(
+                        c.pazienteNome!,
+                        c.pazienteId,
+                        landingOf({
+                          kind: 'handover',
+                          patientId: c.pazienteId,
+                          consegnaId: c.id,
+                        }),
+                      )
+                    }
                     style={{ fontWeight: 600 }}
                   >
                     {c.pazienteNome}

@@ -79,5 +79,5 @@ test('no signals requires both clinical summary and completed medication verific
   } as ClinicalSummaryEntry;
   assert.doesNotMatch(roster(false, summary, true), /Nessuna segnalazione/);
   assert.match(roster(false, summary), /Nessuna segnalazione/);
-  assert.match(roster(false, { ...summary, hasCriticalVitals: true }), /Critico/);
+  assert.match(roster(false, { ...summary, hasCriticalVitals: true }), /Parametri critici/);
 });

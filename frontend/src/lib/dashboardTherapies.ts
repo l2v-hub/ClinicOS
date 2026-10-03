@@ -5,6 +5,12 @@ export interface RitardoVoce {
   farmacoNome: string;
   scheduledTime: string;
   minutiRitardo: number;
+  /** Direct access: la dose da mettere a fuoco nella terapia del paziente. */
+  therapyId: string;
+  fascia: string;
+  data: string;
+  dose: string;
+  via: string;
 }
 
 export interface RitardoPaziente {
@@ -16,6 +22,9 @@ export interface RitardoPaziente {
 export interface ScadenzaTerapia {
   id: string;
   patientId: string;
+  /** Direct access: terapia e fascia della somministrazione (atterraggio sulla dose esatta). */
+  therapyId: string;
+  fascia: string;
   nome: string;
   camera: string;
   letto: string;
@@ -95,6 +104,8 @@ export function summarizeDashboardTherapies(
           const row: ScadenzaTerapia = {
             id,
             patientId: patient.patientId,
+            therapyId: administration.therapyId,
+            fascia: slot.fascia,
             nome: `${patient.lastName} ${patient.firstName}`.trim(),
             camera: patient.room,
             letto: patient.bed,
@@ -135,6 +146,11 @@ export function summarizeDashboardTherapies(
       farmacoNome: row.farmaco,
       scheduledTime: row.ora!,
       minutiRitardo: -row.minuti!,
+      therapyId: row.therapyId,
+      fascia: row.fascia,
+      data: row.data,
+      dose: row.dose,
+      via: row.via,
     });
     byPatient.set(row.patientId, patient);
   }

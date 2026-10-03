@@ -273,13 +273,58 @@ button.turno-appt__who:hover {
   inset: 0;
   border-radius: 16px;
 }
-.turno-pcard__sub,
-.turno-pcard__next {
+.turno-pcard__sub {
   font: 500 14px/20px var(--font-ui);
   color: var(--text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+/* Direct access: la riga terapia va a capo (niente ellissi) e ogni dose è un link. */
+.turno-pcard__next {
+  margin: 0;
+  font: 500 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.turno-pcard__next-label {
+  font-weight: 600;
+}
+.turno-pcard__dose {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.turno-pcard__dose:hover,
+.turno-pcard__dose:focus-visible {
+  text-decoration-thickness: 2px;
+}
+/* I link interni stanno sopra il link «apri cartella» esteso a tutta la card (::after). */
+.turno-pcard__badges > *,
+.turno-pcard__dose {
+  position: relative;
+  z-index: 1;
+}
+.turno-badge--link {
+  border: 0;
+  font: 500 14px/20px var(--font-ui);
+  cursor: pointer;
+}
+.turno-badge--link:hover,
+.turno-badge--link:focus-visible {
+  filter: brightness(0.95);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .turno-pcard__badges {
   display: flex;

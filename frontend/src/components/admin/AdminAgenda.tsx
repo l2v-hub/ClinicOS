@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';
 import type { Appuntamento, Operatore, TherapySlot, TherapySlotPageInfo } from '../../types';
 import { IcoPlus } from '../../icons';
 import { DateNav } from '../shared/DateNav';
@@ -24,7 +25,7 @@ interface AdminAgendaProps {
   appointmentLoadError?: string | null;
   onRetryAppointments?: () => void;
   onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
-  onSelectPaziente?: (nome: string, patientId?: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   /** Fasce terapia di reparto (GET /therapy-slots). In agenda admin sono di sola lettura:
    *  la firma di somministrazione resta un atto clinico dell'operatore erogante. */
   therapySlots?: TherapySlot[];
@@ -491,6 +492,7 @@ export function AdminAgenda({
                                       onSelectPaziente(
                                         apt.pazienteNome!,
                                         apt.pazienteId ?? undefined,
+                                        appointmentLanding(apt),
                                       );
                                     }}
                                   >
@@ -604,7 +606,11 @@ export function AdminAgenda({
                                 className="link-btn agt-week-apt__name"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
+                                  onSelectPaziente(
+                                    a.pazienteNome!,
+                                    a.pazienteId ?? undefined,
+                                    appointmentLanding(a),
+                                  );
                                 }}
                               >
                                 {a.pazienteNome.split(',')[0]}
@@ -678,7 +684,11 @@ export function AdminAgenda({
                               className="link-btn agt-month-apt__name"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
+                                onSelectPaziente(
+                                  a.pazienteNome!,
+                                  a.pazienteId ?? undefined,
+                                  appointmentLanding(a),
+                                );
                               }}
                             >
                               {a.pazienteNome.split(',')[0]}

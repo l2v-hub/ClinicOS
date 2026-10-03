@@ -28,9 +28,10 @@ const styles = readFileSync(
   'utf8',
 );
 
-test('dashboard anomaly worklist is bounded in both dimensions', () => {
+// UX direct access (2026-10-03): the patient list stays bounded, but every row now lists ALL its
+// drugs (info without clicks: no "+N altri farmaci" hiding a late dose or a drug to fix).
+test('dashboard anomaly worklist is bounded by patients and lists every drug of a row', () => {
   assert.match(alertLimits, /MAX_DASHBOARD_NOTIFICATION_PATIENTS = 10/);
-  assert.match(notificationDetails, /MAX_ANOMALIE_NEL_RIEPILOGO/);
   assert.match(
     notificationDetails,
     /anomalie\.pazienti\.slice\(0, MAX_DASHBOARD_NOTIFICATION_PATIENTS\)/,
@@ -39,18 +40,14 @@ test('dashboard anomaly worklist is bounded in both dimensions', () => {
     notificationDetails,
     /somministrazioni\.ritardi\.slice\(0, MAX_DASHBOARD_NOTIFICATION_PATIENTS\)/,
   );
-  assert.match(notificationDetails, /p\.esito\.anomalie\.slice\(0, MAX_ANOMALIE_NEL_RIEPILOGO\)/);
+  assert.match(notificationDetails, /p\.esito\.anomalie\.map\(/);
   assert.match(notificationDetails, /Apri lista pazienti/);
-  assert.match(
-    notificationDetails,
-    /\+\{p\.esito\.anomalie\.length - MAX_ANOMALIE_NEL_RIEPILOGO\}/,
-  );
+  assert.doesNotMatch(notificationDetails, /altri farmaci/);
 });
 
 test('operator and admin reuse the same bounded notification details', () => {
-  assert.match(alertLimits, /MAX_DASHBOARD_DELAY_ITEMS = 3/);
-  assert.match(notificationDetails, /p\.voci\.slice\(0, MAX_DASHBOARD_DELAY_ITEMS\)/);
-  assert.match(notificationDetails, /p\.voci\.length - MAX_DASHBOARD_DELAY_ITEMS/);
+  assert.match(notificationDetails, /p\.voci\.map\(/);
+  assert.match(notificationDetails, /\{v\.dose\} · \{v\.via\}/);
   assert.match(notificationDetails, /className="anomalie-reparto__farmaci-lista"/);
   assert.match(adminDashboard, /<DashboardNotificationCenter/);
   assert.match(adminDashboard, /buildDashboardNotificationSections/);

@@ -14,6 +14,8 @@ import {
   type DashboardKpiItem,
   type DashboardKpiTone,
 } from '../shared/DashboardKpiBand';
+import type { PatientListEntry } from '../../lib/patientListView';
+import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
 
 interface Props {
   loadingPazienti: boolean;
@@ -41,6 +43,9 @@ interface Props {
   };
   onNavigate: (nav: NavKey) => void;
   onOpenConsegneAperte?: () => void;
+  /** Direct access: ogni tessera apre la pagina già filtrata su ciò che conta. */
+  onOpenPatientList?: (entry: PatientListEntry) => void;
+  onOpenConsegneFeed?: (query: ConsegnaFeedQuery) => void;
 }
 
 function clinicalItem(
@@ -89,7 +94,11 @@ export function AdminDashboardKpiBands({
   somministrazioni,
   onNavigate,
   onOpenConsegneAperte,
+  onOpenPatientList,
+  onOpenConsegneFeed,
 }: Props) {
+  const openList = (entry: PatientListEntry) => () =>
+    onOpenPatientList ? onOpenPatientList(entry) : onNavigate('pazienti');
   const managementLoading = loadingPazienti || consegneOverviewState === 'loading';
   const managementItems: DashboardKpiItem[] = [
     {
@@ -151,8 +160,8 @@ export function AdminDashboardKpiBands({
       id: 'parametri',
       label: 'Parametri critici',
       icon: <IcoActivity />,
-      onOpen: () => onNavigate('pazienti'),
-      actionLabel: 'Apri lista pazienti',
+      onOpen: openList({ signal: 'critici' }),
+      actionLabel: 'Apri i pazienti con parametri critici',
       attentionTone: 'critical',
       clearStatus: 'Nella norma',
       attentionStatus: 'Intervento richiesto',
@@ -161,8 +170,8 @@ export function AdminDashboardKpiBands({
       id: 'rischi',
       label: 'Rischi alti/critici',
       icon: <IcoShield />,
-      onOpen: () => onNavigate('pazienti'),
-      actionLabel: 'Apri lista pazienti',
+      onOpen: openList({ signal: 'rischi' }),
+      actionLabel: 'Apri i pazienti con rischio alto',
       attentionTone: 'attention',
       clearStatus: 'Nessun rischio alto',
       attentionStatus: 'Da valutare',
@@ -177,15 +186,16 @@ export function AdminDashboardKpiBands({
       status: overviewAvailable ? 'Flusso operativo' : 'Dato non disponibile',
       tone: overviewAvailable ? 'info' : 'unknown',
       icon: <IcoConsegne />,
-      onOpen: () => onNavigate('consegne'),
-      actionLabel: 'Apri consegne',
+      onOpen: () =>
+        onOpenConsegneFeed ? onOpenConsegneFeed({ status: 'in_corso' }) : onNavigate('consegne'),
+      actionLabel: 'Apri le consegne in corso',
     },
     clinicalItem(clinicalOverviewReady, clinicalOverviewState === 'loading', dimessi, {
       id: 'dimessi',
       label: 'Dimessi in archivio',
       icon: <IcoCartelle />,
-      onOpen: () => onNavigate('pazienti'),
-      actionLabel: 'Apri lista pazienti',
+      onOpen: openList({ view: 'dimessi' }),
+      actionLabel: 'Apri i pazienti dimessi',
       attentionTone: 'info',
       clearStatus: 'Nessun dimesso',
       attentionStatus: 'Archivio aggiornato',

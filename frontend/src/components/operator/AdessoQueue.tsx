@@ -1,7 +1,7 @@
 import { useId, type ReactNode } from 'react';
 import { IcoArrow } from '../../icons';
-import { ADESSO_KIND_TAB, type AdessoItem } from '../../lib/adessoQueue';
-import type { TabId } from './tabGroups';
+import type { AdessoItem } from '../../lib/adessoQueue';
+import type { PatientLanding } from '../../lib/patientTargetResolver';
 import './AdessoQueue.css';
 
 export const ADESSO_QUEUE_LIMIT = 6;
@@ -13,7 +13,7 @@ interface Props {
   terapie: SourceState;
   consegne: SourceState;
   anomalie: SourceState;
-  onSelectPaziente?: (nome: string, patientId?: string, tab?: TabId) => void;
+  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;
   onOpenTherapy: () => void;
   onOpenConsegne: () => void;
   onRetryTherapy?: () => void;
@@ -137,7 +137,8 @@ export function AdessoQueue({
                 <button
                   type="button"
                   className={`ds-btn ${it.inRitardo ? 'ds-btn--primary' : 'ds-btn--secondary'}`}
-                  onClick={() => onSelectPaziente(it.nome, it.patientId, ADESSO_KIND_TAB[it.kind])}
+                  data-adesso-kind={it.kind}
+                  onClick={() => onSelectPaziente(it.nome, it.patientId, it.landing)}
                   aria-label={`Apri ${it.nome}: ${it.dettaglio}, ${it.tempo}`}
                 >
                   Apri

@@ -35,6 +35,8 @@ export interface PatientTarget {
   pageNumber?: number;
   /** Assessment record id (scales). */
   assessmentId?: string;
+  /** Named block inside the section (`[data-chart-anchor]`), e.g. the allergy table in Clinica. */
+  anchor?: 'allergie';
 }
 
 /** Request object handed to the chart; `requestId` changes on every navigation (same target twice). */
