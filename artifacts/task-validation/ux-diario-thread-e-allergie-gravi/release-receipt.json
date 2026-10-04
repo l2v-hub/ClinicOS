@@ -1,0 +1,23 @@
+{
+  "candidate": "203bb256d9ba913be84345be2259bd2c7652cafc",
+  "remoteBranch": "codex/ux-discovery-loop",
+  "inputFingerprint": "53c4305f51c7a5da9e2ce50065a4209ed3a8c8a7deab34b6c0af1071f27600b8",
+  "matchedInputs": 821,
+  "deploymentId": "dpl_3jiBMCz5QtAf3Q9sHiY9hNan4qD4",
+  "readyState": "READY",
+  "url": "https://clinicos-qi0ql7wyn-lucalavia-2482s-projects.vercel.app",
+  "alias": "https://clinicos-eosin.vercel.app",
+  "bundle": "/assets/index-sVkLVvIH.js",
+  "liveReadOnly": {
+    "width": 1150,
+    "allergyBands": 1,
+    "duplicateStrips": 0,
+    "severeColour": "rgb(180, 35, 53)",
+    "obsoleteChips": 0,
+    "overflow": false,
+    "sharedProtocol": "unavailable on legacy backend",
+    "clinicalWrites": 0,
+    "originalFormPreserved": true,
+    "viewportRestored": true
+  }
+}
