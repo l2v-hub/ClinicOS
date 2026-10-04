@@ -1,0 +1,53 @@
+{
+  "dateRome": "2026-10-04",
+  "decision": "publish-verified-frontend-only",
+  "authorization": "User requested push and online visibility; explicitly confirmed l2v-hub/ClinicOS",
+  "repository": "https://github.com/l2v-hub/ClinicOS",
+  "branch": "codex/ux-discovery-loop",
+  "sourceCommit": "347b490128564e194dbe907cbee8e4e2fd30e295",
+  "frontendTree": "bcb83db530fe862ccb221c999bce9bc4ca1dca40",
+  "sourceTree": "57a00291ad7cab3fb6295ba665a05b8f7c29fb97",
+  "testsTree": "3b33f7544d74e4f29a6a978b4d508ab0062bc56f",
+  "qaVerdict": "READY FOR CODEX QA",
+  "qaInputFingerprint": "63af8a5d5fc3dabedd16e1648da4a32bf38384877660c5f93ac3178c9d28cee7",
+  "qaInputFiles": 816,
+  "qaInputMismatches": 0,
+  "eolOnlyAlignedFiles": 68,
+  "cycles": 10,
+  "focusedTests": { "pass": 130, "fail": 0 },
+  "browserGroups": { "discovery": 11, "regression": 17, "dashboardWidths": 5 },
+  "deployment": {
+    "provider": "Vercel",
+    "project": "clinicos__",
+    "id": "dpl_98hFoo21QnMbG713b3GV22CVZmGH",
+    "state": "READY",
+    "immutableUrl": "https://clinicos-1ef5orbsg-lucalavia-2482s-projects.vercel.app",
+    "alias": "https://clinicos-eosin.vercel.app",
+    "modules": 662
+  },
+  "liveBrowser": {
+    "script": "/assets/index-B4GWTG3B.js",
+    "viewportWidth": 1150,
+    "kpiHeights": [64, 64, 64, 64, 64],
+    "therapyRowHeights": [126, 126, 146],
+    "actionHeights": [48, 48, 48],
+    "documentOverflow": false,
+    "oneTherapyPlanTab": true,
+    "doseSelectedAndPanelOpened": true,
+    "allergyBands": 1,
+    "duplicateAllergyOutputs": 0,
+    "moduleError": false,
+    "newConsoleErrors": 0,
+    "clinicalWrites": 0,
+    "viewportRestored": true,
+    "originalFormPreserved": true,
+    "separateDashboardTabRetained": true
+  },
+  "backend": {
+    "published": false,
+    "databaseMigrated": false,
+    "sharedAcknowledgementOnline": "unavailable-on-legacy-backend",
+    "exactHandoverCountsOnline": "unknown-on-legacy-backend",
+    "pending": "Separately authorized backend/database release and independent server validation"
+  }
+}
