@@ -32,7 +32,13 @@ export async function mockApi(context, state) {
     if (p.endsWith('/therapies/page')) {
       const active = url.searchParams.get('status') === 'attiva';
       if (state.failMore && url.searchParams.has('cursor') && !active) return send({ error: 'Synthetic outage' }, 503);
-      return send({ items: drugs, summary: { total: 2, active: 2, inactive: 0 },
+      const pageDrugs = state.dashboardDensity ? [0, 1, 2].map(index => therapy('density-' + index, {
+        farmacoNome: 'Farmaco sintetico ' + index,
+        schedules: [{ id: 'density-schedule-' + index, therapyId: 'density-' + index,
+          time: index === 0 ? '07:00' : '08:00', fascia: 'mattina', quantityNumerator: 1,
+          quantityDenominator: 1, administrationUnit: 'compressa' }],
+      })) : drugs;
+      return send({ items: pageDrugs, summary: { total: pageDrugs.length, active: pageDrugs.length, inactive: 0 },
         pageInfo: { hasMore: state.failMore && !active, nextCursor: state.failMore && !active ? 'test-more' : null } });
     }
     if (p === '/therapy-slots/prn') return send({ items: [] });
@@ -43,7 +49,7 @@ export async function mockApi(context, state) {
         summary: { total: 1, administered: 0, pending: 1, notAdministered: 0 },
         patients: [{ patientId: 'patient-test', firstName: 'Paziente', lastName: 'Test',
           location: { status: 'unassigned', source: null, room: null, bed: null, asOf: today() }, room: null, bed: null, administrations: [{
-            administrationId: null, therapyId: 't' + index, drugName: 'Farmaco sintetico ' + index,
+            administrationId: null, therapyId: 'density-' + index, drugName: 'Farmaco sintetico ' + index,
             dosage: '1 compressa — 10 mg', quantityLabel: '1 compressa — 10 mg', route: 'orale',
             scheduledTime: ora, status: 'pending', administeredAt: null, administeredBy: null,
             notAdministeredReason: null,

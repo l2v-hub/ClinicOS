@@ -11,7 +11,7 @@ const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1150, height: 1004 },
   recordVideo: { dir: path.join(out, 'video'), size: { width: 1150, height: 1004 } } });
 await context.tracing.start({ screenshots: true, snapshots: true });
-const state = { dashboardDensity: true, requests: [], slotReads: 0, clinicalWrites: 0 };
+const state = { dashboardDensity: true, done: false, failMore: false, badFeed: false, requests: [], slotReads: 0, clinicalWrites: 0 };
 await mockApi(context, state);
 const page = await context.newPage();
 const errors = [], httpErrors = [], measurements = [];
@@ -64,6 +64,9 @@ try {
     await page.locator('.adesso-queue__row--terapia-ritardo').first().getByRole('button', { name: /Apri/ }).click();
     await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).waitFor();
     assert.match(page.url(), /terapia-farmacologica/);
+    await page.getByTestId('therapy-prescription-detail').waitFor();
+    assert.match(await page.getByTestId('therapy-prescription-detail').textContent(), /Farmaco sintetico 0.*07:00.*1 compressa.*10 mg/s);
+    assert.equal(await page.getByRole('button', { name: /Prescrizioni e programmazione/ }).getAttribute('aria-expanded'), 'true');
   }
   assert.equal(state.clinicalWrites, 0);
   assert.deepEqual(errors, []);
