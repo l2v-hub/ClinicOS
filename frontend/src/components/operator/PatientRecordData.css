@@ -454,5 +454,12 @@
 .patient-record-view .cr-alert-strip { min-height: 48px; padding: 12px 16px; gap: 12px; border-radius: 12px; line-height: 1.5; }
 .patient-record-view .cr-alert-strip--allergie { color: #8f5500; background: #fdf3e2; border: 1px solid #ead0a7; border-left: 4px solid #8f5500; }
 .patient-record-view .cr-alert-strip--allergie:hover { background: #fae9cc; }
+.patient-record-view .cr-alert-strip--allergie.cr-alert-strip--severe {
+  color: #b42335;
+  background: #fdecee;
+  border-color: #efc3cb;
+  border-left-color: #b42335;
+}
+.patient-record-view .cr-alert-strip--allergie.cr-alert-strip--severe:hover { background: #fbe0e5; }
 .patient-record-view .cr-alert-strip > span { overflow-wrap: anywhere; }
 .patient-record-view .patient-allergy-strip { margin-bottom: 20px; padding: 12px 16px; background: #fdf3e2; border-color: #ead0a7; color: #8f5500; }

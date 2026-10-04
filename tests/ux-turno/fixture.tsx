@@ -143,7 +143,7 @@ function Fixture() {
             ) : (
               <div className="patient-record-view">
                 <div className="cr-alert-band">
-                  <button className="cr-alert-strip cr-alert-strip--allergie">
+                  <button className="cr-alert-strip cr-alert-strip--allergie cr-alert-strip--severe">
                     <span>⚠</span>
                     <span>
                       <strong>Attenzione permanente · allergie gravi:</strong> Lattice

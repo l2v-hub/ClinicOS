@@ -2788,7 +2788,7 @@ export function PatientDetail({
         <div className="cr-alert-band">
           {(cartella.allergie?.length ?? 0) > 0 && (
             <button
-              className="cr-alert-strip cr-alert-strip--allergie"
+              className={`cr-alert-strip cr-alert-strip--allergie${hasAllergie ? ' cr-alert-strip--severe' : ''}`}
               type="button"
               onClick={() => setCardModal('allergie')}
             >

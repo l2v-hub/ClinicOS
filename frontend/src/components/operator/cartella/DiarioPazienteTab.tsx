@@ -25,8 +25,8 @@ import { corePriorityOptions } from '../../../lib/corePriority';
 import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload';
 import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
-import { UrgencyNotice } from '../../shared/UrgencyNotice';
-import { isActiveUrgency, legacyReadTraces, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
+import { DiaryThreadReceipt } from './DiaryThreadReceipt';
+import { isActiveUrgency, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -547,9 +547,9 @@ export function DiarioPazienteTab({
       row.priority === 'urgente' && isActiveUrgency(row.urgency);
     const priorityLabel =
       row.priority === 'urgente' && !urgentActive
-        ? row.urgency?.takenBy ? 'Letta e compresa' : row.urgency ? 'Urgenza storica' : 'Priorità originale: urgente'
+        ? 'Priorità originale: urgente'
         : row.priority === 'importante'
-          ? 'Importante (valore precedente)'
+          ? 'Importante'
           : PRIORITY_LABELS[row.priority];
     const priorityBadge =
       row.priority === 'urgente' && !urgentActive ? 'badge--gray' : PRIORITY_BADGE[row.priority];
@@ -621,28 +621,19 @@ export function DiarioPazienteTab({
             </div>
           )}
         </div>
-        <div className="diario-card__author">{row.authorName}</div>
+        <div className="diario-card__author">Segnalata da <strong>{row.authorName}</strong></div>
         {row.title && <div className="diario-card__title">{row.title}</div>}
         <div className="diario-card__content">{row.content}</div>
         {renderTherapyLink(row)}
-        <UrgencyNotice
+        <DiaryThreadReceipt
           urgency={row.urgency}
+          acknowledgements={row.acknowledgements}
+          priority={PRIORITY_LABELS[row.priority].toLowerCase()}
           onAcknowledge={() => void handleAck(row)}
           busy={acking === row.id}
           disabled={acking !== null}
           subject={`della voce${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
         />
-        {row.priority === 'urgente' && !row.urgency && (
-          <small className="form-hint">Conferma di lettura condivisa non disponibile per questa voce.</small>
-        )}
-        {!row.urgency && legacyReadTraces(row.acknowledgements).map((trace, index) => (
-          <p className="form-hint" key={index}>{trace}</p>
-        ))}
-        {row.sourceType === 'consegna' && (
-          <small className="form-hint">
-            Consegna registrata · gestibile dalla sezione Consegne
-          </small>
-        )}
       </div>
     );
   }

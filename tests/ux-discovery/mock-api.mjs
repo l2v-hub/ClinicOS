@@ -72,7 +72,7 @@ export async function mockApi(context, state) {
     if (p === '/patients/patient-test') return send({ id: 'patient-test', firstName: 'Paziente', lastName: 'Test',
       dateOfBirth: '1960-01-01', sex: null, email: null, phone: null, codiceFiscale: null });
     if (p.endsWith('/cartella')) return send({ patientId: 'patient-test', data: {
-      allergie: [{ id: 'a1', allergene: 'Allergene sintetico', gravita: 'grave', tipo: 'altro' },
+      allergie: [{ id: 'a1', allergene: 'Allergene sintetico', gravita: state.mildAllergy ? 'lieve' : 'grave', tipo: 'altro' },
         { id: 'a2', allergene: 'Secondo allergene', gravita: 'lieve', tipo: 'altro' }],
       medicazioniFerite: [{ id: 'm1', dataFine: null }], contenzioni: [{ id: 'c1', attiva: true }],
     } });

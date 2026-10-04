@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { mockApi, today } from './mock-api.mjs';
+import { assertAllergyBand } from '../ux-diary/assert-allergies.mjs';
 const out = path.resolve(process.env.UX_EVIDENCE_DIR || 'artifacts/task-validation/ux-discovery-loop');
 for (const dir of ['screenshots', 'trace', 'video', 'test-results', 'playwright-report']) mkdirSync(path.join(out, dir), { recursive: true });
 const browser = await chromium.launch({ headless: true });
@@ -117,12 +118,13 @@ try {
   assert.equal(await page.locator('.cr-alert-strip--allergie').count(), 1);
   assert.equal(await page.locator('.patient-allergy-strip, .patient-topbar-title__allergy').count(), 0);
   assert.match(await page.locator('.cr-alert-strip--allergie').textContent(), /Allergene sintetico.*Secondo allergene \(lieve\)/);
+  await assertAllergyBand(page, true, out);
   assert.equal(await page.getByRole('tab', { name: 'Moduli 2', exact: true }).count(), 1);
   const legacy = page.locator('[data-entry-id="legacy-urgent"]');
   await wait(legacy);
   assert.match(await legacy.textContent(), /Priorità originale: urgente/);
   assert.doesNotMatch(await legacy.textContent(), /Urgenza storica|Letta e compresa/);
-  results.push('PASS cycle5/6: one allergy band, distinct severities, modules count2, honest legacy priority');
+  results.push('PASS one red severe allergy band with management action, 24px gap and no overflow at 390/1150; modules count2, honest legacy priority');
 
   await page.getByRole('tab', { name: 'Clinica 12', exact: true }).click();
   const consegneSection = page.locator('.cts').filter({ has: page.locator('.cts__title').filter({ hasText: /^Consegne$/ }) });
@@ -167,6 +169,12 @@ try {
   await wait(page.getByRole('heading', { name: 'Il mio turno', exact: true }));
   assert.match(page.url(), /#\/operator-dashboard$/);
   results.push('PASS shell-incompatible hash falls back to the authorized dashboard');
+  state.mildAllergy = true;
+  await page.goto(app + '#/dettaglio-paziente/patient-test');
+  await page.reload();
+  await page.getByRole('button', { name: /Medico Test/ }).click();
+  await assertAllergyBand(page, false, out);
+  results.push('PASS nonsevere allergy remains amber; single actionable band at 390/1150px');
   assert.equal(state.clinicalWrites, 0);
   assert.deepEqual(errors, []);
   assert.deepEqual(unexpectedHttp, []);

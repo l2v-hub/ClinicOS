@@ -134,8 +134,9 @@ test('UX2 W8 diary card: «Ho capito» only for a non-author on an active urgenc
   );
   assert.equal(html.match(/>Ho capito</g)?.length, 1, 'one button: the non-author active urgency');
   assert.match(html, /1 urgenza da prendere in carico/);
-  // Lo storico mostra anche il giorno quando la fixture non è più di oggi.
-  assert.match(html, /Letta e compresa da Medico 1 \(medico\) alle (?:\d{2}\/\d{2} )?\d{2}:\d{2}/);
+  // La risposta nominativa mantiene la data completa nel fuso della struttura.
+  assert.match(html, /Letta e compresa da Medico 1 \(Medico\)/);
+  assert.match(html, /dateTime="2026-10-03T06:12:00.000Z">03\/10\/2026 08:12/);
   assert.match(html, /in attesa che un collega confermi la lettura/);
   // No open/closed concept and no per-reader «Visto da» list.
   assert.doesNotMatch(html, /Presa visione|Visto da|Da vedere|>Aperta<|>Completata</);

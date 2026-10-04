@@ -2,6 +2,7 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { assertPendingThread, assertTakenThread, assertThreadFallbacks } from '../ux-diary/assert-threads.mjs';
 const out = path.resolve(process.env.UX_EVIDENCE_DIR || 'artifacts/task-validation/ux-turno-commenti');
 mkdirSync(path.join(out, 'screenshots'), { recursive: true });
 const browser = await chromium.launch({ headless: true });
@@ -179,6 +180,8 @@ await context.route('http://localhost:3001/**', async (route) => {
           urgency: { ...active, isAuthor: true, canAcknowledge: false },
         }),
         diaryRow('completed-legacy'),
+        diaryRow('taken-no-reader', { priority: 'urgente', urgency: { state: 'taken', takenBy: null, isAuthor: false, canAcknowledge: false } }),
+        diaryRow('important-none', { priority: 'importante', urgency: { state: 'none', takenBy: null, isAuthor: false, canAcknowledge: false } }),
         diaryRow('no-shared-trace', { priority: 'urgente',
           acknowledgements: [{ operatorName: 'Collega Legacy Test', operatorRole: 'oss',
             acknowledgedAt: '2026-10-03T16:35:00Z' }],
@@ -219,6 +222,7 @@ try {
     .first()
     .click();
   await page.locator('.diario-card').first().waitFor();
+  await assertPendingThread(page);
   assert.match(await page.getByTestId('target').textContent(), /critical/);
   assert.equal(
     await page.locator('.diario-card__head').getByText('Completata', { exact: true }).count(),
@@ -231,6 +235,7 @@ try {
   );
   await page.getByRole('button', { name: /^Ho capito:/ }).click();
   await page.getByText('Presa in carico non registrata. Riprova.', { exact: true }).waitFor();
+  await assertPendingThread(page);
   assert.equal(
     await page.locator('.topbar-handovers__badge').textContent(),
     '12',
@@ -239,6 +244,7 @@ try {
   failAck = false;
   await page.getByRole('button', { name: /^Ho capito:/ }).click();
   await page.getByText(/Letta e compresa da Infermiere Test/).waitFor();
+  await assertTakenThread(page, out);
   await page
     .getByRole('button', { name: 'Apri consegne: 11 consegne critiche da prendere in carico' })
     .waitFor();
@@ -247,6 +253,9 @@ try {
   await page.reload();
   await page.getByRole('button', { name: /Apri consegne: 11 consegne critiche/ }).click();
   await page.getByText(/Letta e compresa da Infermiere Test/).waitFor();
+  await assertTakenThread(page, out);
+  await assertThreadFallbacks(page);
+  results.push('PASS thread signal/response identity, exact facility timestamp, author/pending/error restrictions, missing/legacy/nonurgent states and reload at 390/1150px');
   assert.match(await page.locator('.cr-alert-band').textContent(), /Attenzione permanente/);
   await page.getByRole('button', { name: 'Espandi ultimi parametri e NEWS2' }).click();
   await page.getByRole('dialog', { name: 'Ultimi parametri e NEWS2' }).waitFor();
@@ -412,14 +421,14 @@ try {
   }
   const historical = page.locator('[data-entry-id="no-shared-trace"]');
   await historical.waitFor();
-  assert.match(await historical.textContent(), /Priorità originale: urgente.*Conferma di lettura condivisa non disponibile/s);
+  assert.match(await historical.textContent(), /Priorità originale: urgente.*Conferma condivisa non disponibile/s);
   assert.equal(await historical.getByRole('button', { name: /^Ho capito:/ }).count(), 0);
   assert.match(await historical.textContent(), /Letta da Collega Legacy Test \(OSS\).*registrazione personale/s);
   assert.equal(await page.getByText('Completata', { exact: true }).count(), 0);
   await page.setViewportSize({ width: 1074, height: 1004 });
   const shared = page.locator('[data-entry-id="handover-critical"]');
   await shared.scrollIntoViewIfNeeded();
-  assert.match(await shared.textContent(), /Letta e compresa da Infermiere Test.*priorità originale: urgente/s);
+  assert.match(await shared.textContent(), /Priorità originale: urgente.*Letta e compresa da Infermiere Test/s);
   await page.screenshot({ path: path.join(out, 'screenshots', 'actual-diary-1074.png'), fullPage: true });
   await page.locator('.vitals-summary h2').scrollIntoViewIfNeeded();
   await page.getByRole('button', { name: 'Espandi ultimi parametri e NEWS2' }).click();

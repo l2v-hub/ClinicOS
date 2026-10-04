@@ -12,6 +12,7 @@ const tests = [
   'src/components/operator/__tests__/operator-dashboard-first-view.test.ts',
   'src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts',
   'src/components/operator/cartella/__tests__/diaryCoreUx.test.ts',
+  'src/components/operator/cartella/__tests__/diaryThreadReceipt.test.ts',
   'src/components/operator/cartella/__tests__/uxW4Misc.test.ts',
   'src/lib/__tests__/notesAppIntegration.test.ts',
 ];
