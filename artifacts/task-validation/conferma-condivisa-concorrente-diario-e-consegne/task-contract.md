@@ -32,6 +32,7 @@ La prima conferma su una voce è atomica tra tutti i lettori: una sola creazione
 
 - AC1: Due o più non-autori simultanei sulla stessa urgenza di diario/consegna producono una sola riga e una sola risposta created true; tutte le risposte identificano lo stesso confermatore.
 - AC2: Doppio invio dello stesso lettore è idempotente; voci distinte restano indipendenti e nessun payload clinico viene mutato.
+- AC2b: Dieci conferme simultanee non esauriscono il pool: anche la lettura dell'identità usa il client transazionale, senza richiedere una connessione globale aggiuntiva.
 - AC3: Test reali HTTP/Postgres su cluster nuovo sintetico, identità server-autorevoli, autore/scope/normal/historical/audit/append-only e lettura nel diario preservati.
 - AC4: Build backend e QA indipendente; nessuna credenziale/PHI reale, niente database online o nuova migrazione. Push del fix al branch già autorizzato, nessuna merge a main automatica.
 
@@ -65,6 +66,8 @@ Required evidence:
 ## Risks
 
 Una transazione per subject, lock advisory parametrizzato e rilettura all'interno; audit solo dopo commit. Test paralleli su stesso subject e lettori differenti. Nessun test usa DATABASE_URL ereditata: harness crea un cluster 127.0.0.1 dedicato e lo chiude. Root unico writer; nuova QA isolata prima di giudizio finale. PostgreSQL locale incompleto iniziale sostituito da copia completa già installata; AUTH_MODE demo esplicito solo nel subprocess test.
+
+Copertura estesa del rilascio: suite pertinenti del backend già pendente su main. Fixture standalone-router richiedono ROLE_SIMULATOR_ENABLED=false nel subprocess (i test reali app lo impostano true nel proprio harness). Correggere la sola lettura diagnostica del body nelle asserzioni di paginazione con response.clone(), così json() resta verificabile; nessuna asserzione di risultato rimossa.
 
 ## Gate Status
 

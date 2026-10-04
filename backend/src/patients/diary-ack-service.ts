@@ -124,7 +124,7 @@ export async function acknowledgeDiaryEntry(patientId: string, entryId: string, 
     if (entry.priority !== URGENT_PRIORITY)
       throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
 
-    const me = await authoritativeDiaryAuthor(actor);
+    const me = await authoritativeDiaryAuthor(actor, tx);
     const subject = subjectOf(entry);
     const actorRef = { id: actor.id, name: me.authorName };
     if (isAuthorOf(subject, actorRef))

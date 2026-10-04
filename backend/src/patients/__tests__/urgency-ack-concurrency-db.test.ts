@@ -111,7 +111,10 @@ async function simultaneous(subject: Awaited<ReturnType<typeof fixture>>, actors
   }
   const responses = await Promise.all(pending);
   assert.equal(waiters, actors.length, 'both requests must wait on the same subject lock');
-  assert.deepEqual(responses.map((row) => row.status).sort(), [200, 201]);
+  assert.deepEqual(responses.map((row) => row.status).sort(), [
+    ...actors.slice(1).map(() => 200),
+    201,
+  ]);
   assert.equal(responses.filter((row) => row.body.created === true).length, 1);
   const winner = responses.find((row) => row.body.created === true)!.body.urgency.takenBy;
   for (const row of responses) {
@@ -126,7 +129,11 @@ async function simultaneous(subject: Awaited<ReturnType<typeof fixture>>, actors
 
 for (const kind of ['diary', 'consegna'] as const) {
   test(`${kind}: different colleagues and same-reader double tap each create exactly one receipt`, async () => {
-    for (const actors of [readers, [nurse, nurse]]) {
+    for (const actors of [
+      readers,
+      [nurse, nurse],
+      Array.from({ length: 10 }, (_, index) => readers[index % readers.length]),
+    ]) {
       const subject = await fixture(kind);
       const winner = await simultaneous(subject, actors);
       const rows =
@@ -149,8 +156,13 @@ for (const kind of ['diary', 'consegna'] as const) {
       assert.equal(entry.urgency.takenBy.acknowledgedAt, winner.acknowledgedAt);
       proof.push({
         kind,
-        readers: actors[0] === actors[1] ? 'same reader' : 'different colleagues',
-        blockedRequests: 2,
+        readers:
+          actors.length === 10
+            ? 'pool-sized concurrent group'
+            : actors[0] === actors[1]
+              ? 'same reader'
+              : 'different colleagues',
+        blockedRequests: actors.length,
         createdReceipts: 1,
         databaseRows: rows.length,
         operatorName: winner.operatorName,

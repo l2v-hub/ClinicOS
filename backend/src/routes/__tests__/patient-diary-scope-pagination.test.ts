@@ -136,7 +136,7 @@ test('manager sees an existing patient while missing and unauthorized patients s
   const managerRead = await fetch(`${base}/patients/${patientBId}/diary`, {
     headers: headers(managerId, 'manager'),
   });
-  assert.equal(managerRead.status, 200, await managerRead.text());
+  assert.equal(managerRead.status, 200, await managerRead.clone().text());
   const missing = await fetch(`${base}/patients/missing-${suffix}/diary`, {
     headers: headers(managerId, 'manager'),
   });
@@ -147,7 +147,7 @@ test('diary keyset pages are bounded, stable and exact at the final page', async
   const first = await fetch(`${base}/patients/${patientAId}/diary?limit=2`, {
     headers: headers(operatorAId),
   });
-  assert.equal(first.status, 200, await first.text());
+  assert.equal(first.status, 200, await first.clone().text());
   const firstPage = (await first.json()) as {
     entries: Array<{ id: string }>;
     hasMore: boolean;
@@ -163,7 +163,7 @@ test('diary keyset pages are bounded, stable and exact at the final page', async
     `${base}/patients/${patientAId}/diary?limit=2&cursor=${encodeURIComponent(firstPage.nextCursor)}`,
     { headers: headers(operatorAId) },
   );
-  assert.equal(second.status, 200, await second.text());
+  assert.equal(second.status, 200, await second.clone().text());
   const secondPage = (await second.json()) as {
     entries: Array<{ id: string }>;
     hasMore: boolean;
@@ -188,7 +188,7 @@ test('diary create and update ignore spoofed authorship', async () => {
       entryDateTime: '2026-08-29T12:00',
     }),
   });
-  assert.equal(createdResponse.status, 201, await createdResponse.text());
+  assert.equal(createdResponse.status, 201, await createdResponse.clone().text());
   const created = (await createdResponse.json()) as {
     entry: { id: string; authorType: string; authorName: string };
   };
@@ -200,7 +200,7 @@ test('diary create and update ignore spoofed authorship', async () => {
     headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
     body: JSON.stringify({ authorType: 'medico', authorName: 'Autore Falso', content: 'Modifica' }),
   });
-  assert.equal(updatedResponse.status, 200, await updatedResponse.text());
+  assert.equal(updatedResponse.status, 200, await updatedResponse.clone().text());
   const updated = (await updatedResponse.json()) as {
     entry: { authorType: string; authorName: string };
   };

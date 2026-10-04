@@ -123,7 +123,7 @@ export async function acknowledgeConsegna(id: string, actor: Operator) {
     if (c.priorita !== URGENT_PRIORITY)
       throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
 
-    const me = await authoritativeDiaryAuthor(actor);
+    const me = await authoritativeDiaryAuthor(actor, tx);
     const actorRef = { id: actor.id, name: me.authorName };
     const subject = consegnaUrgencySubject(c);
     if (isAuthorOf(subject, actorRef))
