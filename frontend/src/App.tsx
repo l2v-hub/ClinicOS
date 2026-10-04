@@ -49,6 +49,8 @@ import { parsePatientTargetHash, patientTargetHash, storedTarget } from './lib/p
 import type { PatientListEntry } from './lib/patientListView';
 import {
   navHistoryState,
+  navStateFromHash,
+  routeMatchesShell,
   patientDisplayName,
   type NavEntry,
   type NavHistoryState,
@@ -973,6 +975,14 @@ export default function App() {
   // precedente senza toccare patientNavigationSequenceRef, che protegge anche il caricamento
   // della cartella (azzerarlo durante un caricamento lasciava la cartella vuota).
   const restoreSequenceRef = useRef(0);
+  const normalizeLocationRef = useRef<(state: NavHistoryState | null) => NavHistoryState | null>((state) => state);
+  normalizeLocationRef.current = (state) => {
+    if (!state || !authz) return state;
+    if (routeMatchesShell(state.navKey, authz.uiShell) && canNavigate(capabilities, state.navKey as NavKey)) return state;
+    const fallback = { navKey: authz.uiShell === 'admin' ? 'admin-dashboard' : 'operator-dashboard' };
+    window.history.replaceState(fallback, '', `#/${fallback.navKey}`);
+    return fallback;
+  };
   restoreNavEntryRef.current = (state) => {
     // Due "indietro" rapidi: la risposta del primo non deve atterrare sopra il paziente del secondo.
     const restore = ++restoreSequenceRef.current;
@@ -1075,31 +1085,50 @@ export default function App() {
         setRestoringPazienteFromHash(true);
         setNavKey('dettaglio-paziente');
       }
-    } else if (hash && hash !== 'dettaglio-paziente' && hash !== 'login') {
+    } else if (hash && hash !== 'dettaglio-paziente' && hash !== 'login' && Object.hasOwn(NAV_LABELS, hash)) {
       const k = hash as NavKey;
       setNavKey(k);
     }
 
-    function onPopState(e: PopStateEvent) {
-      if (historyDepth.current > 0) historyDepth.current -= 1;
-      restoreNavEntryRef.current((e.state as NavHistoryState | null) ?? null);
-      if (e.state?.navKey) {
-        prevNavKeyRef.current = e.state.prevNavKey ?? null;
-        if (e.state.navKey === 'orari-operatori' && e.state.prevNavKey !== 'orari-operatori') {
+    function restoreLocation(state: NavHistoryState | null) {
+      state = normalizeLocationRef.current(state);
+      if (!state) return;
+      setMobileNavOpen(false);
+      restoreNavEntryRef.current(state);
+      if (state.navKey) {
+        prevNavKeyRef.current = state.prevNavKey as NavKey ?? null;
+        if (state.navKey === 'orari-operatori' && state.prevNavKey !== 'orari-operatori') {
           setSchedulesLoadState('idle');
           setSchedulesLoadError(null);
         }
         startTransition(() => {
-          setNavKey(e.state.navKey as NavKey);
-          if (e.state.navKey !== 'dettaglio-paziente') {
+          setNavKey(state.navKey as NavKey);
+          if (state.navKey !== 'dettaglio-paziente') {
             setPazienteSelezionato(null);
           }
         });
       }
     }
 
+    // Il browser emette anche hashchange dopo popstate: ripristina la stessa voce una sola volta.
+    let restoredHash: string | null = null;
+    function onPopState(e: PopStateEvent) {
+      if (historyDepth.current > 0) historyDepth.current -= 1;
+      restoredHash = window.location.hash;
+      restoreLocation((e.state as NavHistoryState | null) ?? navStateFromHash(restoredHash, NAV_LABELS));
+    }
+    function onHashChange() {
+      if (window.location.hash === restoredHash) return;
+      restoredHash = window.location.hash;
+      restoreLocation(navStateFromHash(restoredHash, NAV_LABELS));
+    }
+
     window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
+    window.addEventListener('hashchange', onHashChange);
+    return () => {
+      window.removeEventListener('popstate', onPopState);
+      window.removeEventListener('hashchange', onHashChange);
+    };
   }, []);
 
   // ── Load therapy slots (clinical API; never substitute mock data on failure) ──
@@ -2180,8 +2209,14 @@ export default function App() {
       // pendingPazienteRestoreIdRef set for the resolve effect below to pick up once the patients
       // list loads. Read window.location.hash directly here (rather than that ref) so this check
       // never depends on React's effect/commit timing relative to the login click.
-      const currentHash = window.location.hash.replace('#/', '');
-      if (currentHash.startsWith('dettaglio-paziente/')) return;
+      const linkedNavigation = navStateFromHash(window.location.hash, NAV_LABELS);
+      if (linkedNavigation?.navKey === 'dettaglio-paziente') return;
+      if (linkedNavigation && linkedNavigation.navKey !== 'login' &&
+          routeMatchesShell(linkedNavigation.navKey, nextAuthz.uiShell) &&
+          canNavigate(nextAuthz.capabilities, linkedNavigation.navKey as NavKey)) {
+        setNavKey(linkedNavigation.navKey as NavKey);
+        return;
+      }
       const key: NavKey = resolvedUser.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard';
       window.history.replaceState({ navKey: key }, '', `#/${key}`);
       setNavKey(key);

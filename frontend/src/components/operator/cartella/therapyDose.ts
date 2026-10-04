@@ -106,16 +106,20 @@ export function parseQuantity(text: string): { num: number; den: number } | null
   if (frac) {
     const n = parseInt(frac[1], 10);
     const d = parseInt(frac[2], 10);
-    if (d === 0) return null;
+    if (!Number.isSafeInteger(n) || !Number.isSafeInteger(d) || n <= 0 || d <= 0) return null;
     return normalizeFraction(n, d);
   }
+  // Solo interi/decimali espliciti: esponenti e prefissi numerici non sono dosi supportate.
+  if (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(t)) return null;
   const num = Number(t);
   if (!Number.isFinite(num) || num <= 0) return null;
   // Convert a decimal to an exact fraction over a power of ten, then reduce.
-  if (Number.isInteger(num)) return { num, den: 1 };
+  if (Number.isInteger(num)) return Number.isSafeInteger(num) ? { num, den: 1 } : null;
   const decimals = (t.split('.')[1] || '').length;
   const den = Math.pow(10, decimals);
-  return normalizeFraction(Math.round(num * den), den);
+  const numerator = Math.round(num * den);
+  if (!Number.isSafeInteger(numerator) || !Number.isSafeInteger(den) || numerator <= 0) return null;
+  return normalizeFraction(numerator, den);
 }
 
 /** mg (or strength-unit) equivalent for a fraction of the commercial strength. */

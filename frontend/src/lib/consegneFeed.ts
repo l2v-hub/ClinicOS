@@ -1,4 +1,5 @@
 import type { Consegna, ConsegnaFeedResponse, PrioritaConsegna } from '../types';
+import { isConsegnaRow, isConsegnaSummary } from './consegnaResponse';
 
 /** UX2 W8: 'active' = urgenze da prendere in carico; 'taken' = urgenze prese in carico. */
 export type ConsegnaUrgencyFilter = 'active' | 'taken';
@@ -42,9 +43,11 @@ export function isConsegnaFeedResponse(value: unknown): value is ConsegnaFeedRes
   const page = value as Partial<ConsegnaFeedResponse>;
   return (
     Array.isArray(page.items) &&
+    page.items.every(isConsegnaRow) &&
     typeof page.pageInfo?.hasMore === 'boolean' &&
-    (page.pageInfo.nextCursor === null || typeof page.pageInfo.nextCursor === 'string') &&
-    typeof page.summary?.total === 'number' &&
-    typeof page.summary?.urgentActive === 'number'
+    (page.pageInfo.hasMore
+      ? typeof page.pageInfo.nextCursor === 'string' && page.pageInfo.nextCursor.trim().length > 0
+      : page.pageInfo.nextCursor === null) &&
+    isConsegnaSummary(page.summary) && page.items.length <= page.summary.total
   );
 }

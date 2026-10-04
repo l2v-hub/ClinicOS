@@ -412,7 +412,7 @@ try {
   }
   const historical = page.locator('[data-entry-id="no-shared-trace"]');
   await historical.waitFor();
-  assert.match(await historical.textContent(), /Urgenza storica.*Conferma di lettura condivisa non disponibile/s);
+  assert.match(await historical.textContent(), /Priorità originale: urgente.*Conferma di lettura condivisa non disponibile/s);
   assert.equal(await historical.getByRole('button', { name: /^Ho capito:/ }).count(), 0);
   assert.match(await historical.textContent(), /Letta da Collega Legacy Test \(OSS\).*registrazione personale/s);
   assert.equal(await page.getByText('Completata', { exact: true }).count(), 0);

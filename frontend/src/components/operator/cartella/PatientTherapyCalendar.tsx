@@ -11,8 +11,8 @@ import type { PatientTherapyAPI, TherapySlot } from '../../../types';
 import { IcoPill } from '../../../icons';
 import { DateNav } from '../../shared/DateNav';
 import { API_URL } from '../../../config';
-import { cachedGetJson } from '../../../lib/cachedFetch';
-import { localIsoDate } from '../../../lib/appointmentRange';
+import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
+import { facilityLocalDate } from '../../../lib/facilityTime';
 import {
   buildPatientTherapyDay,
   calendarDoseStates,
@@ -88,7 +88,7 @@ export function PatientTherapyCalendar({
   autoOpenDue = false,
   refreshKey = 0,
 }: Props) {
-  const startDate = initialDate && isCalendarDate(initialDate) ? initialDate : localIsoDate();
+  const startDate = initialDate && isCalendarDate(initialDate) ? initialDate : facilityLocalDate();
   const [date, setDate] = useState(startDate);
   const [view, setView] = useState<'giorno' | 'settimana'>('giorno');
   const [localRevision, setRevision] = useState(0);
@@ -101,6 +101,11 @@ export function PatientTherapyCalendar({
     initialOpenTime ? { date: startDate, time: initialOpenTime } : undefined,
   );
   const [prnOpen, setPrnOpen] = useState<string | null>(null);
+  useEffect(() => { setPrnOpen(null); }, [date, patientId]);
+  const refreshCalendar = () => {
+    invalidateCachedGet(`${API_URL}/therapy-slots`);
+    setRevision((value) => value + 1);
+  };
   const [state, setState] = useState<ReadState>({
     patientId,
     revision,
@@ -177,7 +182,7 @@ export function PatientTherapyCalendar({
     [state.therapies],
   );
 
-  const today = localIsoDate();
+  const today = facilityLocalDate();
   const daySlots = slots[date];
   // Prima dose ancora da somministrare oggi (in ritardo per prima, perché viene prima nel giorno).
   const dueTime = useMemo(() => {
@@ -256,7 +261,7 @@ export function PatientTherapyCalendar({
           type="button"
           className="btn-secondary btn-sm"
           disabled={status === 'loading'}
-          onClick={() => setRevision((value) => value + 1)}
+          onClick={refreshCalendar}
         >
           Aggiorna
         </button>
@@ -281,7 +286,7 @@ export function PatientTherapyCalendar({
       {status === 'error' && (
         <LoadErrorState
           message="Impossibile caricare il calendario completo. Riprova per visualizzare tutti gli orari."
-          onRetry={() => setRevision((value) => value + 1)}
+          onRetry={refreshCalendar}
         />
       )}
       {status === 'ready' && view === 'settimana' && (
@@ -432,7 +437,7 @@ export function PatientTherapyCalendar({
                           {expanded ? 'Chiudi' : 'Somministra al bisogno · dosi di oggi'}
                         </button>
                       )}
-                      {therapy && expanded && (
+                      {therapy && expanded && date === today && (
                         <div className="ptc-prn-panel">
                           <TherapyDrugDosePanel
                             patientId={patientId}
@@ -501,7 +506,7 @@ function WeekView({
   slots: SlotsState;
   onOpen: (day: string, time: string) => void;
 }) {
-  const today = localIsoDate();
+  const today = facilityLocalDate();
   return (
     <ol className="ptc-week" aria-label="Terapie della settimana">
       {weekDays(date).map((day) => {

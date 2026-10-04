@@ -19,6 +19,11 @@ export function facilityLocalMinute(value: Date = new Date()): string {
   return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
 }
 
+/** Giorno clinico della struttura, indipendente dal fuso del dispositivo. */
+export function facilityLocalDate(value: Date = new Date()): string {
+  return facilityLocalMinute(value).slice(0, 10);
+}
+
 export function formatFacilityLocalMinute(value: string): string {
   if (!value) return '—';
   const canonical = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);

@@ -98,6 +98,7 @@ export function TerapiaFarmacologicaTab({
   );
   // Prescrizione aperta (una per volta) e farmaco evidenziato da un collegamento diretto.
   const [openDrugId, setOpenDrugId] = useState<string | null>(null);
+  const [programmingOpen, setProgrammingOpen] = useState(false);
   const [focusDrugId, setFocusDrugId] = useState<string | null>(null);
   const [scrollToDrug, setScrollToDrug] = useState(0);
   // Calendario: giorno/ora di arrivo da un collegamento diretto (rimonta il calendario).
@@ -265,6 +266,11 @@ export function TerapiaFarmacologicaTab({
     setOpenDrugId((current) => (current === id ? null : id));
   };
 
+  // I collegamenti a una prescrizione devono rivelare il pannello secondario.
+  useEffect(() => {
+    if (openDrugId || focusDrugId || therapyLoadError) setProgrammingOpen(true);
+  }, [openDrugId, focusDrugId, therapyLoadError]);
+
   // ── Form ─────────────────────────────────────────────────────────────────────
 
   // Errori per campo: compaiono dopo il primo «Salva» e si aggiornano mentre si corregge.
@@ -299,9 +305,15 @@ export function TerapiaFarmacologicaTab({
     setEditId(null);
     setForm(emptyTherapyForm());
   }
+  useEffect(() => {
+    if (showForm && (editId ? !canUpdateTherapy : !canCreateTherapy)) closeForm();
+    if (!canUpdateTherapy) setPendingSospendiId(null);
+    if (!canDeleteTherapy) setPendingDeleteId(null);
+  }, [canCreateTherapy, canUpdateTherapy, canDeleteTherapy, showForm, editId]);
 
   const [createKey] = useState(createSubmissionKey);
   const handleSave = async () => {
+    if (saving || (editId ? !canUpdateTherapy : !canCreateTherapy)) return;
     // Stesso controllo per campo dell'ingresso (campi obbligatori inclusi): il primo campo da
     // correggere riceve il fuoco invece di un pulsante disabilitato senza indicazioni sul campo.
     const issues = therapyFormIssues(form);
@@ -361,7 +373,7 @@ export function TerapiaFarmacologicaTab({
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const confirmDelete = async () => {
-    if (!pendingDeleteId) return;
+    if (!pendingDeleteId || !canDeleteTherapy || deleting) return;
     setDeleting(true);
     try {
       setError('');
@@ -385,7 +397,7 @@ export function TerapiaFarmacologicaTab({
   const [pendingSospendiId, setPendingSospendiId] = useState<string | null>(null);
   const [sospendendo, setSospendendo] = useState(false);
   const confirmSospendi = async () => {
-    if (!pendingSospendiId) return;
+    if (!pendingSospendiId || !canUpdateTherapy || sospendendo) return;
     setSospendendo(true);
     try {
       setError('');
@@ -406,6 +418,7 @@ export function TerapiaFarmacologicaTab({
   };
 
   const handleRiattiva = async (t: PatientTherapyAPI) => {
+    if (!canUpdateTherapy) return;
     try {
       setError('');
       const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${t.id}`, {
@@ -655,6 +668,9 @@ export function TerapiaFarmacologicaTab({
 
   const therapyPager = nextTherapyCursor ? (
     <div className="tf-pager">
+      {therapyLoadError && therapies.length > 0 && (
+        <p className="tf-pager__error" role="alert">{therapyLoadError}</p>
+      )}
       <span>
         {therapies.length} di {therapySummary?.total ?? '—'} terapie caricate
       </span>
@@ -682,12 +698,12 @@ export function TerapiaFarmacologicaTab({
   // ── Sub-nav ───────────────────────────────────────────────────────────────────
 
   const VIEWS: TopNavItem[] = [
-    { key: 'calendario', label: 'Calendario' },
+    { key: 'calendario', label: 'Piano terapeutico' },
     { key: 'storico', label: 'Storico' },
     ...(canCreateTherapy ? [{ key: 'nuova', label: 'Nuova terapia' }] : []),
   ];
   const activeView: TherapyView = view === 'nuova' && !canCreateTherapy ? 'calendario' : view;
-  const editing = showForm && editId !== null;
+  const editing = showForm && editId !== null && canUpdateTherapy;
 
   const formShell = (
     <div className="terapia-sched-form therapy-form-shell" ref={formShellRef}>
@@ -768,16 +784,25 @@ export function TerapiaFarmacologicaTab({
                   completo il controllo delle anomalie.
                 </div>
               )}
-              <section className="tf-active" aria-labelledby="tf-active-title">
-                <h3 id="tf-active-title" className="tf-active__title">
-                  Farmaci attivi <span>({therapySummary?.active ?? attive.length})</span>
+              <section className="tf-active" aria-label="Prescrizioni e programmazione">
+                <button
+                  type="button"
+                  className="tf-programming-toggle"
+                  aria-expanded={programmingOpen}
+                  aria-controls="therapy-programming-panel"
+                  onClick={() => setProgrammingOpen((value) => !value)}
+                >
+                  <span aria-hidden="true">{programmingOpen ? '▾' : '▸'}</span>
+                  <strong>Prescrizioni e programmazione</strong>
+                  <span>{therapySummary?.active ?? attive.length} farmaci attivi</span>
                   {toVerify > 0 && (
                     <span className="tf-active__verify">
                       {' '}
                       · {toVerify} da verificare in anagrafica AIFA
                     </span>
                   )}
-                </h3>
+                </button>
+                <div id="therapy-programming-panel" hidden={!programmingOpen}>
                 {listState ?? (
                   <>
                     <TherapyDrugList
@@ -797,6 +822,7 @@ export function TerapiaFarmacologicaTab({
                     {therapyPager}
                   </>
                 )}
+                </div>
               </section>
               <PatientTherapyCalendar
                 key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}

@@ -189,7 +189,7 @@ test('agenda: note inline, status in words, operator name, month without «+N»'
   assert.match(admin, /agt-note-inline/);
 });
 
-test('topbar subtitle wraps (no single-line ellipsis); allergy names never collapse to a bare ⚠', () => {
+test('topbar subtitle wraps; the single actionable allergy band retains full names', () => {
   const app = readFileSync(new URL('../../../../App.css', import.meta.url), 'utf8');
   const rule = app.split('.topbar-title .page-header__subtitle {')[1]?.split('}')[0] ?? '';
   assert.match(rule, /white-space: normal/);
@@ -198,5 +198,7 @@ test('topbar subtitle wraps (no single-line ellipsis); allergy names never colla
   assert.doesNotMatch(css, /\.patient-topbar-title__allergy \{\s*width: 32px;[^}]*font-size: 0/);
   assert.match(css, /\.patient-allergy-strip \{\s*display: flex;/);
   const detail = readFileSync(new URL('../../PatientDetail.tsx', import.meta.url), 'utf8');
-  assert.match(detail, /className="patient-allergy-strip"/);
+  assert.match(detail, /cr-alert-strip cr-alert-strip--allergie/);
+  assert.match(detail, /a\.allergene/);
+  assert.doesNotMatch(detail, /className="patient-allergy-strip"|className="patient-topbar-title__allergy"/);
 });

@@ -547,7 +547,7 @@ export function DiarioPazienteTab({
       row.priority === 'urgente' && isActiveUrgency(row.urgency);
     const priorityLabel =
       row.priority === 'urgente' && !urgentActive
-        ? row.urgency?.takenBy ? 'Letta e compresa' : 'Urgenza storica'
+        ? row.urgency?.takenBy ? 'Letta e compresa' : row.urgency ? 'Urgenza storica' : 'Priorità originale: urgente'
         : row.priority === 'importante'
           ? 'Importante (valore precedente)'
           : PRIORITY_LABELS[row.priority];

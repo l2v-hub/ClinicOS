@@ -1,4 +1,5 @@
 import { useId, useState } from 'react';
+import { facilityLocalDate } from '../../../lib/facilityTime';
 import { CampoFarmaco } from './CampoFarmaco';
 import { needsCommercialStrengthReview } from './drugPackageSelection';
 import {
@@ -61,7 +62,7 @@ export interface TherapyFormValue {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  return facilityLocalDate();
 }
 
 // #241: ISO weekdays (1=Lun … 7=Dom) for the intermittent-posology selector.

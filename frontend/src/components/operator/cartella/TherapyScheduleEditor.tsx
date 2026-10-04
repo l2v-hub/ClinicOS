@@ -33,6 +33,8 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
       ...value,
       schedules: value.schedules.map((s, i) => (i === idx ? { ...s, ...patch } : s)),
     });
+  const clearDraft = (idx: number) => setCustomQty((current) =>
+    Object.fromEntries(Object.entries(current).filter(([key]) => Number(key) !== idx)));
   const addSchedule = () =>
     onChange({
       ...value,
@@ -116,7 +118,7 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                               quantityNumerator: p.num,
                               quantityDenominator: p.den,
                             });
-                            setCustomQty((c) => ({ ...c, [i]: '' }));
+                            clearDraft(i);
                           }}
                         >
                           {p.label}
@@ -129,14 +131,13 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                       className="form-input qty-chip__other"
                       placeholder="Altro: es. 1/3"
                       value={customQty[i] ?? ''}
-                      onChange={(e) => setCustomQty((c) => ({ ...c, [i]: e.target.value }))}
-                      onBlur={(e) => {
+                      onChange={(e) => {
+                        setCustomQty((c) => ({ ...c, [i]: e.target.value }));
                         const parsed = parseQuantity(e.target.value);
-                        if (parsed)
-                          updateSchedule(i, {
-                            quantityNumerator: parsed.num,
-                            quantityDenominator: parsed.den,
-                          });
+                        updateSchedule(i, {
+                          quantityNumerator: parsed?.num ?? 0,
+                          quantityDenominator: parsed?.den ?? 1,
+                        });
                       }}
                     />
                   </>
@@ -150,17 +151,17 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                     step={isPatchUnit(s.administrationUnit) ? '1' : 'any'}
                     placeholder="Quantità"
                     value={
-                      s.quantityDenominator === 1
+                      customQty[i] ?? (s.quantityDenominator === 1
                         ? String(s.quantityNumerator)
-                        : s.quantityNumerator / s.quantityDenominator
+                        : s.quantityNumerator / s.quantityDenominator)
                     }
                     onChange={(e) => {
+                      setCustomQty((c) => ({ ...c, [i]: e.target.value }));
                       const parsed = parseQuantity(e.target.value);
-                      if (parsed)
-                        updateSchedule(i, {
-                          quantityNumerator: parsed.num,
-                          quantityDenominator: parsed.den,
-                        });
+                      updateSchedule(i, {
+                        quantityNumerator: parsed?.num ?? 0,
+                        quantityDenominator: parsed?.den ?? 1,
+                      });
                     }}
                   />
                 )}
@@ -176,7 +177,10 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                 {...feedback.attributes('administrationUnit', i)}
                 className="form-select"
                 value={s.administrationUnit}
-                onChange={(e) => updateSchedule(i, { administrationUnit: e.target.value })}
+                onChange={(e) => {
+                  clearDraft(i);
+                  updateSchedule(i, { administrationUnit: e.target.value });
+                }}
               >
                 <option value="">Seleziona unità</option>
                 {ADMIN_UNITS.map((u) => (
@@ -207,9 +211,9 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
               </svg>
             </button>
             <div className="sched-row__resolved">
-              {s.time} — {formatFraction(s.quantityNumerator, s.quantityDenominator)}{' '}
+              {s.time} — {s.quantityNumerator > 0 ? formatFraction(s.quantityNumerator, s.quantityDenominator) : 'Quantità da correggere'}{' '}
               {s.administrationUnit}
-              {eq && (
+              {s.quantityNumerator > 0 && eq && (
                 <>
                   {' '}
                   — <strong>equivalente a {eq}</strong>

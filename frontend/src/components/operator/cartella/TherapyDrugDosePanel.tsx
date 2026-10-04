@@ -18,7 +18,7 @@ import {
   type AdministrationOutcome,
   type PrnAdministration,
 } from '../../../lib/therapyAdministrationWrite';
-import { localIsoDate } from '../../../lib/appointmentRange';
+import { facilityLocalDate } from '../../../lib/facilityTime';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { TherapyGiroRows } from '../TherapyGiroRows';
 import '../TherapyRoundsPage.css';
@@ -38,7 +38,7 @@ interface Props {
 type Feedback = { tone: 'ok' | 'error'; text: string } | null;
 
 export function TherapyDrugDosePanel({ patientId, therapy, date, focusTime, onRecorded }: Props) {
-  const day = date ?? localIsoDate();
+  const day = date ?? facilityLocalDate();
   const canAdminister = useCanAdministerTherapy();
   const needsConfirmation = useRequiresConfirmation('administration.confirm');
   const prn = therapy.tipo === 'al_bisogno';

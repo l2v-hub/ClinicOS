@@ -76,7 +76,6 @@ import {
 } from '../../lib/roomAssignmentModel';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import {
-  TAB_GROUPS,
   CHART_SECTIONS,
   chartSectionOf,
   chartSectionAllowed,
@@ -2209,8 +2208,8 @@ export function PatientDetail({
       <div className="cr-tab-content">
         <ClinicalTableSection
           title="Consegne"
-          count={mieConsegne.filter(isConsegnaUrgencyActive).length}
-          countLabel="urgenze da prendere in carico"
+          count={consegneSummary?.urgentActive}
+          countLabel="consegne urgenti da leggere"
           actions={
             <button className="btn-sm" onClick={() => setShowAddConsegna((v) => !v)}>
               + Aggiungi
@@ -2325,12 +2324,6 @@ export function PatientDetail({
     consegne: consegneSummary?.urgentActive ?? 0,
   };
 
-  function groupBadgeSum(gId: TabGroup): number {
-    const g = TAB_GROUPS.find((x) => x.id === gId);
-    if (!g) return 0;
-    return g.tabs.reduce((sum, t) => sum + (TAB_BADGES[t.id] ?? 0), 0);
-  }
-
   // ── Render ─────────────────────────────────────────────────────────────────
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -2360,26 +2353,8 @@ export function PatientDetail({
         <h1 className="page-header__title">
           {`${paziente.lastName}, ${paziente.firstName}`.trim().replace(/^,\s*/, '')}
         </h1>
-        {(cartella.allergie?.length ?? 0) > 0 && (
-          <span className="patient-topbar-title__allergy">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3.5 2.5 20h19zM12 10v4.5M12 17.5v.01" />
-            </svg>
-            Allergia: {(cartella.allergie ?? []).map((a) => a.allergene).join(', ')}
-          </span>
-        )}
       </div>
       <p className="page-header__subtitle">
-        {(cartella.allergie?.length ?? 0) > 0 && (
-          <span
-            className="patient-topbar-title__allergy-mini"
-            role="img"
-            aria-label={`Allergia: ${(cartella.allergie ?? []).map((a) => a.allergene).join(', ')}`}
-            title={`Allergia: ${(cartella.allergie ?? []).map((a) => a.allergene).join(', ')}`}
-          >
-            ⚠
-          </span>
-        )}
         {patientSubtitle}
       </p>
     </div>
@@ -2403,8 +2378,7 @@ export function PatientDetail({
       key: s.id,
       label: s.label,
       badge:
-        s.tabs.reduce((sum, id) => sum + (TAB_BADGES[id] ?? 0), 0) +
-          (s.id === 'moduli' ? groupBadgeSum('moduli') : 0) || undefined,
+        s.tabs.reduce((sum, id) => sum + (TAB_BADGES[id] ?? 0), 0) || undefined,
     }),
   );
   const patientPanelLabelledBy = `patient-section-${section}`;
@@ -2762,14 +2736,6 @@ export function PatientDetail({
   return (
     <div className="patient-record-view">
       {topbarSlot ? createPortal(patientTitle, topbarSlot) : patientTitle}
-      {(cartella.allergie?.length ?? 0) > 0 && (
-        <p className="patient-allergy-strip" role="note" data-testid="patient-allergy-strip">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3.5 2.5 20h19zM12 10v4.5M12 17.5v.01" />
-          </svg>
-          <span>Allergia: {(cartella.allergie ?? []).map((a) => a.allergene).join(', ')}</span>
-        </p>
-      )}
 
       <div className="chart-sections no-print">
         <TopNav
@@ -2818,9 +2784,9 @@ export function PatientDetail({
       <PatientIntakeReview state={intakeReview.state} onRetry={intakeReview.retry} />
 
       {/* Banda allergie/rischi — sempre visibile sotto l'header, su tutti i tab */}
-      {(hasAllergie || rischioAlto.length > 0) && (
+      {((cartella.allergie?.length ?? 0) > 0 || rischioAlto.length > 0) && (
         <div className="cr-alert-band">
-          {hasAllergie && (
+          {(cartella.allergie?.length ?? 0) > 0 && (
             <button
               className="cr-alert-strip cr-alert-strip--allergie"
               type="button"
@@ -2830,7 +2796,8 @@ export function PatientDetail({
                 <IcoWarning />
               </span>
               <span>
-                <strong>Attenzione permanente · allergie gravi:</strong> {allergieGravi.map((a) => a.allergene).join(', ')}
+                <strong>Attenzione permanente · allergie{hasAllergie ? ' gravi' : ''}:</strong>{' '}
+                {(cartella.allergie ?? []).map((a) => `${a.allergene}${hasAllergie && a.gravita !== 'grave' ? ` (${a.gravita})` : ''}`).join(', ')}
               </span>
               <span className="cr-alert-strip__link">Gestisci →</span>
             </button>

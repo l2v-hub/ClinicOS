@@ -13,6 +13,36 @@
 .tf-calendar-view > .patient-therapy-calendar {
   padding: 0;
 }
+.tf-programming-toggle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--ds-border, #e1e7f0);
+  border-radius: var(--ds-radius, 12px);
+  background: var(--ds-surface, #fff);
+  color: var(--ds-text, #16202e);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.tf-programming-toggle:focus-visible {
+  outline: var(--ds-focus, 3px solid #245bb5);
+  outline-offset: 2px;
+}
+.tf-programming-toggle > span:last-child {
+  color: var(--ds-text-muted, #5a6b80);
+  font-size: 13px;
+}
+#therapy-programming-panel:not([hidden]) { margin-top: 8px; }
+.tf-pager__error {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--ds-danger, #b42335);
+}
 
 /* ── Farmaci attivi: una riga per farmaco ─────────────────────────────────── */
 .tf-active__title {

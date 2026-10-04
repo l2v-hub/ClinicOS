@@ -27,7 +27,7 @@ test('route chunks are preloaded after login and navigation runs in a transition
   );
   assert.match(
     app,
-    /function onPopState[\s\S]*?startTransition\(\(\) => \{\s*setNavKey\(e\.state\.navKey as NavKey\);/,
+    /function restoreLocation[\s\S]*?startTransition\(\(\) => \{\s*setNavKey\(state\.navKey as NavKey\);/,
   );
 });
 
