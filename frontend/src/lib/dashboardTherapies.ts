@@ -1,5 +1,6 @@
 import type { TherapySlot } from '../types';
 import { facilityLocalMinute } from './facilityTime';
+import type { PatientLocationData } from './patientIdentity';
 
 export interface RitardoVoce {
   farmacoNome: string;
@@ -28,6 +29,7 @@ export interface ScadenzaTerapia {
   nome: string;
   camera: string;
   letto: string;
+  location?: PatientLocationData | null;
   farmaco: string;
   dose: string;
   via: string;
@@ -109,6 +111,7 @@ export function summarizeDashboardTherapies(
             nome: `${patient.lastName} ${patient.firstName}`.trim(),
             camera: patient.room,
             letto: patient.bed,
+            location: patient.location,
             farmaco: text(administration.drugName, 'Farmaco non indicato'),
             dose: text(
               administration.quantityLabel,

@@ -1,0 +1,7 @@
+{
+  "source": "9ca67e361186157e3c087d08bb3ec154635c361f",
+  "fixture": "Real App, Medico Test, three pending oral synthetic drugs, 1 compressa — 10 mg, room/bed null, unassigned projection. Baseline ignores projection and renders both compatibility labels.",
+  "measurements": [{ "width": 1150, "kpis": [{ "height": 118 }], "rows": [{ "height": 234 }] }],
+  "errors": [],
+  "clinicalWrites": 0
+}

@@ -8,6 +8,7 @@ import type { TabId } from '../components/operator/tabGroups';
 import type { PatientTarget } from './patientTarget';
 import { doseSignal, landingOf } from './patientTargetResolver';
 import { canTakeCharge } from './urgency';
+import { patientLocationLabel } from './patientIdentity';
 
 export type AdessoKind =
   | 'terapia-ritardo'
@@ -194,6 +195,7 @@ function consegnaItem(c: Consegna, cal: { oggi: string; minuto: number }): Adess
 }
 
 const luogoTerapia = (row: ScadenzaTerapia) =>
+  row.location !== undefined ? patientLocationLabel(row.location) :
   [row.camera ? `Camera ${row.camera}` : '', row.letto ? `Letto ${row.letto}` : '']
     .filter(Boolean)
     .join(' · ') || null;

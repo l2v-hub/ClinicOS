@@ -7,6 +7,9 @@ import { facilityLocalDate } from '../facilityTime';
 import { isConsegnaFeedResponse } from '../consegneFeed';
 import { parseHandoverOverview } from '../handoverOverviewResponse';
 import { navStateFromHash, routeMatchesShell } from '../navHistory';
+import { buildAdessoQueue } from '../adessoQueue';
+import { summarizeDashboardTherapies } from '../dashboardTherapies';
+import type { TherapySlot } from '../../types';
 
 test('quantity parser rejects exponent/hex/zero/unsafe values rather than changing their dose', () => {
   for (const text of ['1e-7', '0x10', '1/0', '0/2', '0', 'abc', '', '9007199254740992', '1/9007199254740992'])
@@ -70,4 +73,18 @@ test('hash restoration respects the pages actually rendered by each shell', () =
   assert.equal(routeMatchesShell('agenda-operatore', 'admin'), false);
   assert.equal(routeMatchesShell('consegne', 'operator'), true);
   assert.equal(routeMatchesShell('terapie', 'admin'), true);
+});
+test('dashboard location uses one validated projection without conflating unavailable and unassigned', () => {
+  const now = new Date('2026-10-04T08:00:00Z');
+  for (const [status, expected] of [['unassigned', 'Posto letto non assegnato'], ['unavailable', 'Posto letto non disponibile']] as const) {
+    const slots = [{ id: 'slot-test', fascia: 'mattina', label: 'Mattina', ora: '08:00',
+      patients: [{ patientId: 'patient-test', firstName: 'Paziente', lastName: 'Test',
+        room: 'Non assegnato', bed: 'Non assegnato',
+        location: { status, source: null, room: null, bed: null, asOf: '2026-10-04' },
+        administrations: [{ therapyId: 't1', drugName: 'Farmaco sintetico', status: 'pending', scheduledTime: '08:00',
+          quantityLabel: '1 compressa', dosage: '10 mg', route: 'orale' }] }] }] as TherapySlot[];
+    const summary = summarizeDashboardTherapies(slots, [], now);
+    const queue = buildAdessoQueue({ now, scadute: summary.scadute, prossime: [], senzaOrario: [], urgenti: [], anomalie: [] });
+    assert.equal(queue[0].luogo, expected);
+  }
 });

@@ -38,6 +38,17 @@ export async function mockApi(context, state) {
     if (p === '/therapy-slots/prn') return send({ items: [] });
     if (p === '/therapy-slots') {
       state.slotReads++;
+      if (state.dashboardDensity) return send(['07:00', '08:00', '08:00'].map((ora, index) => ({
+        id: 'density-' + index, fascia: 'mattina', label: 'Mattina', ora,
+        summary: { total: 1, administered: 0, pending: 1, notAdministered: 0 },
+        patients: [{ patientId: 'patient-test', firstName: 'Paziente', lastName: 'Test',
+          location: { status: 'unassigned', source: null, room: null, bed: null, asOf: today() }, room: null, bed: null, administrations: [{
+            administrationId: null, therapyId: 't' + index, drugName: 'Farmaco sintetico ' + index,
+            dosage: '1 compressa — 10 mg', quantityLabel: '1 compressa — 10 mg', route: 'orale',
+            scheduledTime: ora, status: 'pending', administeredAt: null, administeredBy: null,
+            notAdministeredReason: null,
+          }] }],
+      })));
       return send([{ id: 'slot-test', fascia: 'mattina', label: 'Mattina', ora: '08:00',
         summary: { total: 1, administered: state.done ? 1 : 0, pending: state.done ? 0 : 1, notAdministered: 0 },
         patients: [{ patientId: 'patient-test', firstName: 'Paziente', lastName: 'Test', codiceFiscale: null, dateOfBirth: null,

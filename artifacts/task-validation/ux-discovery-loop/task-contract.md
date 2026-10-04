@@ -56,3 +56,6 @@ Keep due-dose actions visible/full prescription details/old links/authorization.
 
 ## Gate Status
 READY FOR IMPLEMENTATION
+
+## Additional Acceptance Criteria — user steering 2026-10-04
+- AC7: Dashboard KPI tiles and Adesso rows are compact at 1150px, preserve patient/drug/dose/route/status/actions, and remain usable at 390/768/1074/1395. Record before/after heights on synthetic real App; no text clipping.
