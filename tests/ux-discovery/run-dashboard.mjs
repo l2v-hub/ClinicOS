@@ -64,8 +64,15 @@ try {
     await page.locator('.adesso-queue__row--terapia-ritardo').first().getByRole('button', { name: /Apri/ }).click();
     await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).waitFor();
     assert.match(page.url(), /terapia-farmacologica/);
-    await page.getByTestId('therapy-prescription-detail').waitFor();
-    assert.match(await page.getByTestId('therapy-prescription-detail').textContent(), /Farmaco sintetico 0.*07:00.*1 compressa.*10 mg/s);
+    const dose = page.getByTestId('ptc-event').filter({ hasText: 'Farmaco sintetico 0' });
+    await dose.waitFor();
+    assert.equal(await dose.getAttribute('data-therapy-id'), 'density-0');
+    assert.equal(await dose.getAttribute('aria-expanded'), 'true');
+    assert.match(await dose.textContent(), /07:00.*Farmaco sintetico 0.*1 compressa.*10 mg.*orale/s);
+    const slotDetail = page.getByTestId('patient-therapy-slot-detail');
+    await slotDetail.getByRole('button', { name: /^Somministra/ }).waitFor();
+    assert.match(await slotDetail.textContent(), /Ore 07:00.*Farmaco sintetico 0.*1 compressa.*10 mg.*orale/s);
+    assert.equal(await slotDetail.getByRole('button', { name: /^Somministra/ }).count(), 1);
     assert.equal(await page.getByRole('button', { name: /Prescrizioni e programmazione/ }).getAttribute('aria-expanded'), 'true');
   }
   assert.equal(state.clinicalWrites, 0);
