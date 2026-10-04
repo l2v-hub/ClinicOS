@@ -55,10 +55,13 @@ function subjectOf(entry: DiaryFeedEntryLike): UrgencySubject {
   };
 }
 
-async function diaryAckRows(entryIds: string[]) {
+async function diaryAckRows(
+  entryIds: string[],
+  db: Pick<Prisma.TransactionClient, 'diaryEntryAcknowledgement'> = prisma,
+) {
   const byEntry = new Map<string, AckRowLike[]>();
   if (!entryIds.length) return byEntry;
-  const rows = await prisma.diaryEntryAcknowledgement.findMany({
+  const rows = await db.diaryEntryAcknowledgement.findMany({
     where: { entryId: { in: entryIds } },
     orderBy: [{ acknowledgedAt: 'asc' }, { id: 'asc' }],
     select: {
@@ -103,32 +106,38 @@ export async function loadDiaryAckFields(
  * false) when the urgency had already been taken (by anyone) — nothing is written then.
  */
 export async function acknowledgeDiaryEntry(patientId: string, entryId: string, actor: Operator) {
-  const entry = await prisma.patientDiaryEntry.findFirst({
-    where: { id: entryId, patientId, patient: patientScopeWhere(actor) },
-    select: {
-      id: true,
-      patientId: true,
-      priority: true,
-      status: true,
-      authorId: true,
-      authorName: true,
-    },
-  });
-  if (!entry) throw new UrgencyAckError(404, 'entry_not_found', 'Voce non trovata');
-  if (entry.priority !== URGENT_PRIORITY)
-    throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
+  const result = await prisma.$transaction(async (tx) => {
+    // All readers of this subject serialize, then re-read committed state inside the transaction.
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`diary-ack:${entryId}`}))`;
+    const entry = await tx.patientDiaryEntry.findFirst({
+      where: { id: entryId, patientId, patient: patientScopeWhere(actor) },
+      select: {
+        id: true,
+        patientId: true,
+        priority: true,
+        status: true,
+        authorId: true,
+        authorName: true,
+      },
+    });
+    if (!entry) throw new UrgencyAckError(404, 'entry_not_found', 'Voce non trovata');
+    if (entry.priority !== URGENT_PRIORITY)
+      throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
 
-  const me = await authoritativeDiaryAuthor(actor);
-  const subject = subjectOf(entry);
-  const actorRef = { id: actor.id, name: me.authorName };
-  if (isAuthorOf(subject, actorRef))
-    throw new UrgencyAckError(409, 'author_cannot_acknowledge', SELF_ACK_MESSAGE);
+    const me = await authoritativeDiaryAuthor(actor);
+    const subject = subjectOf(entry);
+    const actorRef = { id: actor.id, name: me.authorName };
+    if (isAuthorOf(subject, actorRef))
+      throw new UrgencyAckError(409, 'author_cannot_acknowledge', SELF_ACK_MESSAGE);
 
-  let created = false;
-  const before = urgencyView(subject, (await diaryAckRows([entryId])).get(entryId) ?? [], actorRef);
-  if (before.state === 'active') {
-    try {
-      await prisma.diaryEntryAcknowledgement.create({
+    let created = false;
+    const before = urgencyView(
+      subject,
+      (await diaryAckRows([entryId], tx)).get(entryId) ?? [],
+      actorRef,
+    );
+    if (before.state === 'active') {
+      await tx.diaryEntryAcknowledgement.create({
         data: {
           entryId,
           patientId: entry.patientId,
@@ -138,32 +147,30 @@ export async function acknowledgeDiaryEntry(patientId: string, entryId: string, 
         },
       });
       created = true;
-    } catch (error) {
-      // Concurrent double tap by the same reader: the unique (entryId, operatorId) keeps the first.
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002'))
-        throw error;
     }
-  }
+
+    const urgency = urgencyView(
+      subject,
+      (await diaryAckRows([entryId], tx)).get(entryId) ?? [],
+      actorRef,
+    );
+    return { created, urgency, patientId: entry.patientId };
+  });
 
   recordAuditEvent({
     requestId: `diary-ack-${randomUUID()}`,
     operatorId: actor.id,
     operatorRole: actor.appRole ?? actor.role,
-    patientId: entry.patientId,
+    patientId: result.patientId,
     actionType: DIARY_ACK_AUDIT_ACTION,
-    kind: created ? 'create' : 'read',
+    kind: result.created ? 'create' : 'read',
     channel: 'gui',
     // Ids only: never the entry text.
-    fields: [`entry:${entryId}`, `ack:${created ? 'new' : 'existing'}`],
-    outcome: created ? 'ok' : 'deduped',
+    fields: [`entry:${entryId}`, `ack:${result.created ? 'new' : 'existing'}`],
+    outcome: result.created ? 'ok' : 'deduped',
   });
 
-  const urgency = urgencyView(
-    subject,
-    (await diaryAckRows([entryId])).get(entryId) ?? [],
-    actorRef,
-  );
-  return { created, urgency };
+  return { created: result.created, urgency: result.urgency };
 }
 
 /**

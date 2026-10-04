@@ -50,10 +50,13 @@ export function consegnaUrgencySubject(c: ConsegnaUrgencySource): UrgencySubject
 }
 
 /** Ack rows by handover id, sorted by time (first non-author ack ends the urgency). */
-export async function loadConsegnaAckRows(consegnaIds: string[]) {
+export async function loadConsegnaAckRows(
+  consegnaIds: string[],
+  db: Pick<Prisma.TransactionClient, 'consegnaAcknowledgement'> = prisma,
+) {
   const byId = new Map<string, AckRowLike[]>();
   if (!consegnaIds.length) return byId;
-  const rows = await prisma.consegnaAcknowledgement.findMany({
+  const rows = await db.consegnaAcknowledgement.findMany({
     where: { consegnaId: { in: [...new Set(consegnaIds)] } },
     orderBy: [{ acknowledgedAt: 'asc' }, { id: 'asc' }],
     select: {
@@ -94,41 +97,46 @@ function readableWhere(id: string, actor: Operator): Prisma.ConsegnaWhereInput {
  * false) when it had already been taken (by anyone) — nothing is written then.
  */
 export async function acknowledgeConsegna(id: string, actor: Operator) {
-  const c = await prisma.consegna.findFirst({
-    where: readableWhere(id, actor),
-    select: {
-      id: true,
-      pazienteId: true,
-      priorita: true,
-      stato: true,
-      creatoDaId: true,
-      creatoDA: true,
-    },
-  });
-  if (!c) throw new UrgencyAckError(404, 'not_found', 'Consegna non trovata');
-  // Resident Access Scope: a handover naming a resident outside the reader's reach is not theirs
-  // to acknowledge (404, no disclosure).
-  if (c.pazienteId) {
-    const inScope = await prisma.patient.findFirst({
-      where: { id: c.pazienteId, ...patientScopeWhere(actor) },
-      select: { id: true },
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`consegna-ack:${id}`}))`;
+    const c = await tx.consegna.findFirst({
+      where: readableWhere(id, actor),
+      select: {
+        id: true,
+        pazienteId: true,
+        priorita: true,
+        stato: true,
+        creatoDaId: true,
+        creatoDA: true,
+      },
     });
-    if (!inScope) throw new UrgencyAckError(404, 'not_found', 'Consegna non trovata');
-  }
-  if (c.priorita !== URGENT_PRIORITY)
-    throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
+    if (!c) throw new UrgencyAckError(404, 'not_found', 'Consegna non trovata');
+    // Resident Access Scope: a handover naming a resident outside the reader's reach is not theirs
+    // to acknowledge (404, no disclosure).
+    if (c.pazienteId) {
+      const inScope = await tx.patient.findFirst({
+        where: { id: c.pazienteId, ...patientScopeWhere(actor) },
+        select: { id: true },
+      });
+      if (!inScope) throw new UrgencyAckError(404, 'not_found', 'Consegna non trovata');
+    }
+    if (c.priorita !== URGENT_PRIORITY)
+      throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
 
-  const me = await authoritativeDiaryAuthor(actor);
-  const actorRef = { id: actor.id, name: me.authorName };
-  const subject = consegnaUrgencySubject(c);
-  if (isAuthorOf(subject, actorRef))
-    throw new UrgencyAckError(409, 'author_cannot_acknowledge', SELF_ACK_MESSAGE);
+    const me = await authoritativeDiaryAuthor(actor);
+    const actorRef = { id: actor.id, name: me.authorName };
+    const subject = consegnaUrgencySubject(c);
+    if (isAuthorOf(subject, actorRef))
+      throw new UrgencyAckError(409, 'author_cannot_acknowledge', SELF_ACK_MESSAGE);
 
-  let created = false;
-  const before = urgencyView(subject, (await loadConsegnaAckRows([id])).get(id) ?? [], actorRef);
-  if (before.state === 'active') {
-    try {
-      await prisma.consegnaAcknowledgement.create({
+    let created = false;
+    const before = urgencyView(
+      subject,
+      (await loadConsegnaAckRows([id], tx)).get(id) ?? [],
+      actorRef,
+    );
+    if (before.state === 'active') {
+      await tx.consegnaAcknowledgement.create({
         data: {
           consegnaId: id,
           patientId: c.pazienteId,
@@ -138,25 +146,28 @@ export async function acknowledgeConsegna(id: string, actor: Operator) {
         },
       });
       created = true;
-    } catch (error) {
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002'))
-        throw error;
     }
-  }
+
+    const urgency = urgencyView(
+      subject,
+      (await loadConsegnaAckRows([id], tx)).get(id) ?? [],
+      actorRef,
+    );
+    return { created, urgency, patientId: c.pazienteId };
+  });
 
   recordAuditEvent({
     requestId: `consegna-ack-${randomUUID()}`,
     operatorId: actor.id,
     operatorRole: actor.appRole ?? actor.role,
-    patientId: c.pazienteId || null,
+    patientId: result.patientId || null,
     actionType: CONSEGNA_ACK_AUDIT_ACTION,
-    kind: created ? 'create' : 'read',
+    kind: result.created ? 'create' : 'read',
     channel: 'gui',
     // Ids only: never the handover text.
-    fields: [`consegna:${id}`, `ack:${created ? 'new' : 'existing'}`],
-    outcome: created ? 'ok' : 'deduped',
+    fields: [`consegna:${id}`, `ack:${result.created ? 'new' : 'existing'}`],
+    outcome: result.created ? 'ok' : 'deduped',
   });
 
-  const urgency = urgencyView(subject, (await loadConsegnaAckRows([id])).get(id) ?? [], actorRef);
-  return { created, urgency };
+  return { created: result.created, urgency: result.urgency };
 }
