@@ -70,9 +70,9 @@ try {
     assert.equal(await dose.getAttribute('aria-expanded'), 'true');
     assert.match(await dose.textContent(), /07:00.*Farmaco sintetico 0.*1 compressa.*10 mg.*orale/s);
     const slotDetail = page.getByTestId('patient-therapy-slot-detail');
-    await slotDetail.getByRole('button', { name: /^Somministra/ }).waitFor();
+    await slotDetail.getByRole('button', { name: /^Erogata:/ }).waitFor();
     assert.match(await slotDetail.textContent(), /Ore 07:00.*Farmaco sintetico 0.*1 compressa.*10 mg.*orale/s);
-    assert.equal(await slotDetail.getByRole('button', { name: /^Somministra/ }).count(), 1);
+    assert.equal(await slotDetail.getByRole('button', { name: /^Erogata:/ }).count(), 1);
     assert.equal(await page.getByRole('button', { name: /Prescrizioni e programmazione/ }).getAttribute('aria-expanded'), 'true');
   }
   assert.equal(state.clinicalWrites, 0);
