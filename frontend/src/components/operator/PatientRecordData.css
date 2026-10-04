@@ -453,7 +453,7 @@
 .patient-record-view .cr-alert-band { margin: 16px 0 24px; gap: 12px; }
 @media screen {
   .patient-record-view .cr-detail-content { display:flex; flex-direction:column; gap:16px; padding:0; }
-  .patient-record-view .chart-part { margin:0; padding:0; }
+  .patient-record-view .chart-part { display:flex; flex-direction:column; gap:16px; margin:0; padding:0; }
   .patient-record-view .cr-tab-content { display:flex; flex-direction:column; gap:16px; padding:0; margin:0; }
   .patient-record-view .cr-tab-content > .cts { margin:0; }
   .patient-record-view .assessment-catalog { margin-inline:0; }
@@ -468,6 +468,7 @@
 .patient-contacts dd { margin:3px 0; overflow-wrap:anywhere; }
 .clinical-card__content[hidden] { display:none !important; }
 .patient-record-view .narrative-sections { display:flex; flex-direction:column; gap:16px; margin:0; padding:0; }
+.patient-record-view .narrative-sections:empty { display:none; }
 @media print { .clinical-card__content[hidden] { display:block !important; height:auto !important; } }
 .patient-record-view .cr-alert-strip { min-height: 48px; padding: 12px 16px; gap: 12px; border-radius: 12px; line-height: 1.5; }
 .patient-record-view .cr-alert-strip--allergie { color: #8f5500; background: #fdf3e2; border: 1px solid #ead0a7; border-left: 4px solid #8f5500; }

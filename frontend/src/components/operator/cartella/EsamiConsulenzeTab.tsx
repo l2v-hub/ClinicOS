@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 import { ClinicalAttachments as SectionPhotos } from './ClinicalAttachments';
 import type { CartellaPaziente, EsameClinicoRecord, Paziente } from '../../../types';
 import {
@@ -192,12 +193,14 @@ function EsameSection({
   list,
   operatoreNome,
   onChange,
+  attachments,
 }: {
   title: string;
   emptyMsg: string;
   list: EsameClinicoRecord[];
   operatoreNome: string;
   onChange: (updated: EsameClinicoRecord[]) => void;
+  attachments?: ReactNode;
 }) {
   const [showAdd, setShowAdd] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -289,6 +292,7 @@ function EsameSection({
             ),
           )}
         </div>
+        {attachments}
       </div>
     </ClinicalTableSection>
   );
@@ -335,15 +339,6 @@ export function EsamiConsulenzeTab({
 
   return (
     <div className="cr-tab-content">
-      <div style={{ marginBottom: 8 }}>
-        <h3 className="cr-tab-title" style={{ margin: 0 }}>
-          Esami &amp; Consulenze
-        </h3>
-        <p style={{ margin: '4px 0 16px', fontSize: 13, color: '#667085' }}>
-          Le tre sezioni sono indipendenti — i dati non sono mescolati.
-        </p>
-      </div>
-
       {documentStatus === 'loading' && (
         <p role="status" style={{ margin: '0 0 12px', color: 'var(--c-muted, #667085)' }}>
           Caricamento allegati…
@@ -370,37 +365,41 @@ export function EsamiConsulenzeTab({
         list={cartella.esamiEmatici ?? []}
         operatoreNome={operatoreNome}
         onChange={(updated) => onUpdate({ esamiEmatici: updated })}
-      />
-      <SectionPhotos
-        patientId={paziente.id}
-        documentType="esame"
-        operatorId={operatoreId}
-        operatorRole={operatoreRole}
-        documents={documentsByType.esame}
-        metadataLoading={documentStatus === 'loading'}
-        onDocumentCreated={(document) => (document ? upsertDocument(document) : reloadDocuments())}
+        attachments={
+          <SectionPhotos
+            patientId={paziente.id}
+            documentType="esame"
+            operatorId={operatoreId}
+            operatorRole={operatoreRole}
+            documents={documentsByType.esame}
+            metadataLoading={documentStatus === 'loading'}
+            onDocumentCreated={(document) =>
+              document ? upsertDocument(document) : reloadDocuments()
+            }
+          />
+        }
       />
 
-      <div style={{ marginTop: 16 }}>
-        <EsameSection
-          title="RX / Diagnostica per immagini"
-          emptyMsg="Nessun esame strumentale / RX registrato."
-          list={cartella.esamiStrumentali ?? []}
-          operatoreNome={operatoreNome}
-          onChange={(updated) => onUpdate({ esamiStrumentali: updated })}
-        />
-        <SectionPhotos
-          patientId={paziente.id}
-          documentType="rx"
-          operatorId={operatoreId}
-          operatorRole={operatoreRole}
-          documents={documentsByType.rx}
-          metadataLoading={documentStatus === 'loading'}
-          onDocumentCreated={(document) =>
-            document ? upsertDocument(document) : reloadDocuments()
-          }
-        />
-      </div>
+      <EsameSection
+        title="RX / Diagnostica per immagini"
+        emptyMsg="Nessun esame strumentale / RX registrato."
+        list={cartella.esamiStrumentali ?? []}
+        operatoreNome={operatoreNome}
+        onChange={(updated) => onUpdate({ esamiStrumentali: updated })}
+        attachments={
+          <SectionPhotos
+            patientId={paziente.id}
+            documentType="rx"
+            operatorId={operatoreId}
+            operatorRole={operatoreRole}
+            documents={documentsByType.rx}
+            metadataLoading={documentStatus === 'loading'}
+            onDocumentCreated={(document) =>
+              document ? upsertDocument(document) : reloadDocuments()
+            }
+          />
+        }
+      />
       {pageInfo.hasMore && !loadMoreError && (
         <div className="empty-state-card" role="status" aria-live="polite">
           <p>Sono mostrati i primi {documents.length} allegati.</p>
@@ -415,26 +414,26 @@ export function EsamiConsulenzeTab({
         </div>
       )}
 
-      <div style={{ marginTop: 16 }}>
-        <EsameSection
-          title="Consulenze specialistiche"
-          emptyMsg="Nessuna consulenza specialistica registrata."
-          list={cartella.consulenze ?? []}
-          operatoreNome={operatoreNome}
-          onChange={(updated) => onUpdate({ consulenze: updated })}
-        />
-        <SectionPhotos
-          patientId={paziente.id}
-          documentType="consulenza"
-          operatorId={operatoreId}
-          operatorRole={operatoreRole}
-          documents={documentsByType.consulenza}
-          metadataLoading={documentStatus === 'loading'}
-          onDocumentCreated={(document) =>
-            document ? upsertDocument(document) : reloadDocuments()
-          }
-        />
-      </div>
+      <EsameSection
+        title="Consulenze specialistiche"
+        emptyMsg="Nessuna consulenza specialistica registrata."
+        list={cartella.consulenze ?? []}
+        operatoreNome={operatoreNome}
+        onChange={(updated) => onUpdate({ consulenze: updated })}
+        attachments={
+          <SectionPhotos
+            patientId={paziente.id}
+            documentType="consulenza"
+            operatorId={operatoreId}
+            operatorRole={operatoreRole}
+            documents={documentsByType.consulenza}
+            metadataLoading={documentStatus === 'loading'}
+            onDocumentCreated={(document) =>
+              document ? upsertDocument(document) : reloadDocuments()
+            }
+          />
+        }
+      />
     </div>
   );
 }
