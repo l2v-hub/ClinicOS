@@ -105,4 +105,3 @@ try {
   assert.equal(state.clinicalWrites,0); assert.deepEqual(errors,[]);
 } catch(error) {results.push('FAIL '+error.stack); await shot('failure'); process.exitCode=1;}
 finally {writeFileSync(path.join(out,'test-results/calendar-runtime.json'),JSON.stringify({results,errors,clinicalWrites:state.clinicalWrites},null,2)); console.log(results.join('\n'));await context.tracing.stop({path:path.join(out,'trace/calendar-runtime.zip')});await browser.close();}
-
