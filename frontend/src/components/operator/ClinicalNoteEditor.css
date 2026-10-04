@@ -1,0 +1,8 @@
+.clinical-note-editor { display: grid; gap: 10px; margin-top: 12px; }
+.clinical-note-editor label { display: grid; gap: 4px; color: var(--text-secondary); font-size: .85rem; }
+.clinical-note-editor .form-hint { margin: 0; }
+.clinical-note-editor textarea { resize: vertical; min-height: 96px; }
+.diario-history-filters { display: flex; align-items: end; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.diario-history-filters label { display: grid; gap: 4px; font-size: .85rem; }
+.diario-history-filters input { max-width: 170px; }
+.am-support-note { margin: 0; padding: 8px 20px; font-size: .8rem; background: var(--info-light, #edf3ff); color: var(--text-secondary); }

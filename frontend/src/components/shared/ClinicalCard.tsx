@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useId, type ReactNode } from 'react';
+import { useWidgetOpen } from './WidgetGroup';
 
 export interface ClinicalCardProps {
   title: string;
@@ -24,9 +25,7 @@ export function ClinicalCard({
   const reactId = useId();
   const titleId = `cc-${reactId}`;
   const contentId = `cc-content-${reactId}`;
-  const [internalExpanded, setInternalExpanded] = useState<boolean>(defaultExpanded);
-  const isControlled = expanded !== undefined;
-  const isExpanded = isControlled ? !!expanded : internalExpanded;
+  const { open: isExpanded, setOpen } = useWidgetOpen(defaultExpanded, expanded, onToggle);
   const collapsed = !isExpanded;
 
   const innerRef = useRef<HTMLDivElement>(null);
@@ -47,8 +46,7 @@ export function ClinicalCard({
 
   function handleToggle() {
     const next = !isExpanded;
-    if (!isControlled) setInternalExpanded(next);
-    onToggle?.(next);
+    setOpen(next);
   }
 
   function handleEditClick(e: React.MouseEvent) {
@@ -108,7 +106,7 @@ export function ClinicalCard({
           </button>
         </div>
       </div>
-      <div id={contentId} className="clinical-card__content" style={contentStyle}>
+      <div id={contentId} className="clinical-card__content" style={contentStyle} hidden={collapsed}>
         <div ref={innerRef} className="clinical-card__content-inner">
           {children}
         </div>

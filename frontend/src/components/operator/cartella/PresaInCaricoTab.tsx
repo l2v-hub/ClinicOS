@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, PresaInCarico, Paziente } from '../../../types';
-import { PrintButton, todayStr, nowTime, nowISO } from './shared';
+import { todayStr, nowTime, nowISO } from './shared';
+import type { ReactNode } from 'react';
 import { ClinicalCard } from '../../shared/ClinicalCard';
 import { InlineEditableField, type InlineOption } from '../../shared/InlineEditableField';
 import { resolvePresaInCarico, TIPO_INGRESSO_LABEL } from '../../../lib/presaInCarico';
@@ -13,6 +14,7 @@ interface Props {
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
+  contacts?: ReactNode;
 }
 
 // Base di vista e modifica: un campo mai valutato resta vuoto ("—" in vista, "— Seleziona —" nei
@@ -165,7 +167,7 @@ function RowAlways({
   );
 }
 
-export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome, contacts }: Props) {
   // Presa in carico salvata, oppure derivata dai campi di ingresso delle cartelle confermate
   // prima del fix (vedi lib/presaInCarico).
   const pic = resolvePresaInCarico(cartella as CartellaPaziente & Record<string, unknown>);
@@ -946,20 +948,13 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         </div>
       </div>
 
-      {/* Niente sezione collassabile: le card sono separate e sempre visibili. */}
-      <div
-        className="no-print"
-        style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}
-      >
-        <PrintButton />
-      </div>
-
       <ClinicalCard
         title="Dati di ingresso"
         defaultExpanded={true}
         onEdit={() => startEdit('dati')}
       >
         {editingId === 'dati' ? datiEdit : datiView}
+        {contacts}
       </ClinicalCard>
 
       <ClinicalCard

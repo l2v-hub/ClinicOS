@@ -48,9 +48,9 @@ export function therapyLanding(
       return { view: 'calendario', openDrug: false, openDose: true };
     case 'attivi':
     case 'programmazione':
+      return { view: 'attivi', openDrug: Boolean(options.hasDrug), openDose: false };
     default:
-      // No sub-view (diary «apri», bare drug link) behaves like «attivi»: the drug opened.
-      return { view: 'calendario', openDrug: Boolean(options.hasDrug), openDose: false };
+      return { view: options.hasDrug ? 'attivi' : 'calendario', openDrug: Boolean(options.hasDrug), openDose: false };
   }
 }
 

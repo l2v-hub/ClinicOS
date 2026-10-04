@@ -32,6 +32,8 @@ interface Props {
   focusTherapyId?: string;
   /** Aperto senza un tocco (arrivo o dose di oggi): il pannello entra in vista. */
   bringIntoView?: boolean;
+  /** Modal already supplies its own title and close action. */
+  embedded?: boolean;
   onClose: () => void;
   /** Dopo ogni registrazione riuscita (il calendario rilegge gli stati). */
   onRecorded?: () => void;
@@ -44,6 +46,7 @@ export function PatientTherapySlotDetail({
   events,
   focusTherapyId,
   bringIntoView = false,
+  embedded = false,
   onClose,
   onRecorded,
 }: Props) {
@@ -153,14 +156,14 @@ export function PatientTherapySlotDetail({
       data-testid="patient-therapy-slot-detail"
       data-focus-therapy={focusTherapyId}
     >
-      <header className="patient-therapy-slot-detail__head">
+      {!embedded ? <header className="patient-therapy-slot-detail__head">
         <h4 id={headingId}>
           Ore {time} · {events.length} {events.length === 1 ? 'terapia' : 'terapie'}
         </h4>
         <button type="button" className="btn-secondary btn-sm" onClick={onClose}>
           Chiudi
         </button>
-      </header>
+      </header> : <h4 id={headingId} className="ds-sr-only">Somministrazioni delle {time}</h4>}
       <h5 className="patient-therapy-slot-detail__sub">Somministrazione del {formatDay(date)}</h5>
       {state.status === 'loading' && <p role="status">Caricamento dello stato…</p>}
       {state.status === 'error' && (

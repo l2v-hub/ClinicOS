@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useId, useRef, useState } from 'react';
 import type { Operatore, Paziente, PrioritaConsegna } from '../../types';
 import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
@@ -6,17 +6,9 @@ import { PatientIdentity } from '../shared/PatientIdentity';
 import { patientIdentityName } from '../../lib/patientIdentity';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useCan } from '../../lib/capabilities';
-import { corePriorityOptions } from '../../lib/corePriority';
-const TYPES = [
-  'Monitoraggio',
-  'Terapia',
-  'Esami',
-  'Dimissione',
-  'Medicazione',
-  'Consultazione',
-  'Rivalutazione',
-  'Altro',
-];
+import { ClinicalNoteEditor } from './ClinicalNoteEditor';
+import { facilityLocalMinute } from '../../lib/facilityTime';
+const DiaryTherapyPanel = lazy(() => import('./cartella/DiaryTherapyPanel').then(m => ({ default: m.DiaryTherapyPanel })));
 export function ConsegnaComposer({
   patient,
   store,
@@ -25,6 +17,7 @@ export function ConsegnaComposer({
   nextAvailable = false,
   message = '',
   focusRequest = 0,
+  onTherapyCreated,
 }: {
   patient: Paziente;
   store: ConsegnaDraftStore;
@@ -33,14 +26,17 @@ export function ConsegnaComposer({
   nextAvailable?: boolean;
   message?: string;
   focusRequest?: number;
+  onTherapyCreated?: () => void;
 }) {
   const draft = useConsegnaDraft(store, patient.id);
   const canCreate = useCan('consegne.create');
+  const canPrescribe = useCan('diary.create_with_therapy');
+  const [therapyStamp, setTherapyStamp] = useState<string | null>(null);
+  const [therapySaved, setTherapySaved] = useState(false);
   const id = useId();
   const [discard, setDiscard] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const identityRef = useRef<HTMLDivElement>(null);
-  const noteRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     const form = formRef.current;
     const identity = identityRef.current;
@@ -55,11 +51,10 @@ export function ConsegnaComposer({
   }, [patient.id]);
   useEffect(() => {
     if (focusRequest) {
-      noteRef.current?.focus({ preventScroll: true });
-      noteRef.current?.scrollIntoView({ block: 'nearest' });
+      formRef.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: true });
     }
   }, [focusRequest]);
-  const locked = draft.saving || Boolean(draft.pending);
+  const locked = draft.saving || Boolean(draft.pending) || Boolean(therapyStamp);
   const blocked =
     draft.outcome?.kind === 'failed' && !draft.outcome.uncertain && Boolean(draft.pending);
   const field = (change: Parameters<ConsegnaDraftStore['update']>[1]) =>
@@ -89,59 +84,6 @@ export function ConsegnaComposer({
           <PatientIdentity patient={patient} />
         </div>
         <div className="handover-rounds__fields">
-          <label htmlFor={`${id}-type`}>
-            Tipo
-            <select
-              id={`${id}-type`}
-              className="form-select"
-              value={draft.fields.tipo}
-              disabled={locked}
-              onChange={(event) => field({ tipo: event.target.value })}
-            >
-              {TYPES.map((value) => (
-                <option key={value}>{value}</option>
-              ))}
-            </select>
-          </label>
-          <label htmlFor={`${id}-priority`}>
-            Priorità
-            <select
-              id={`${id}-priority`}
-              className="form-select"
-              value={draft.fields.priorita}
-              disabled={locked}
-              onChange={(event) => field({ priorita: event.target.value as PrioritaConsegna })}
-            >
-              {corePriorityOptions(draft.fields.priorita, 'alta', 'Alta').map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label htmlFor={`${id}-date`}>
-            Data scadenza
-            <input
-              id={`${id}-date`}
-              type="date"
-              className="form-input"
-              value={draft.fields.scadenza}
-              disabled={locked}
-              required
-              onChange={(event) => field({ scadenza: event.target.value })}
-            />
-          </label>
-          <label htmlFor={`${id}-time`}>
-            Ora scadenza (opzionale)
-            <input
-              id={`${id}-time`}
-              type="time"
-              className="form-input"
-              value={draft.fields.oraScadenza ?? ''}
-              disabled={locked}
-              onChange={(event) => field({ oraScadenza: event.target.value })}
-            />
-          </label>
           <label htmlFor={`${id}-assignee`}>
             Assegna a
             <select
@@ -162,29 +104,26 @@ export function ConsegnaComposer({
             </select>
           </label>
         </div>
-        <label className="handover-rounds__note" htmlFor={`${id}-note`}>
-          Cosa deve essere fatto?
-          <textarea
-            ref={noteRef}
-            id={`${id}-note`}
-            className="form-input"
-            rows={5}
-            maxLength={4000}
-            required
-            value={draft.fields.note}
-            disabled={locked}
-            onChange={(event) => field({ note: event.target.value })}
-          />
-        </label>
-        <span className="handover-rounds__hint">
-          {draft.fields.note.length}/4000 · Data, ora e autore sono registrati automaticamente.
-        </span>
+        <ClinicalNoteEditor content={draft.fields.note} priority={draft.fields.priorita} disabled={locked}
+          onChange={change => field({ ...(change.content !== undefined ? { note: change.content } : {}),
+            ...(change.priority ? { priorita: change.priority as PrioritaConsegna } : {}) })} />
+        {store.persistenceFailed() && <p role="alert">Bozza disponibile in questa pagina. Il browser non consente di conservarla dopo il ricaricamento.</p>}
+        {canPrescribe && <button type="button" className="ds-btn ds-btn--secondary" disabled={locked || !draft.fields.note.trim()}
+          onClick={() => setTherapyStamp(facilityLocalMinute())}>Anteprima terapia dal testo</button>}
+        {therapyStamp && <Suspense fallback={<p role="status">Apertura anteprima…</p>}>
+          <DiaryTherapyPanel pazienteId={patient.id} entry={{ title: null, content: draft.fields.note.trim(),
+            priority: draft.fields.priorita === 'alta' ? 'importante' : draft.fields.priorita,
+            status: 'aperta', entryDateTime: therapyStamp }}
+            onCreated={() => { store.discard(patient.id); setTherapyStamp(null); setTherapySaved(true); onTherapyCreated?.(); }}
+            onClose={() => setTherapyStamp(null)} />
+        </Suspense>}
+        {therapySaved && <p role="status">Segnalazione e terapia salvate nel diario paziente.</p>}
         <div className="handover-rounds__actions">
           {draft.dirty && (
             <button
               type="button"
               className="link-btn"
-              disabled={draft.saving}
+              disabled={locked}
               onClick={() => setDiscard(true)}
             >
               Scarta bozza
@@ -193,7 +132,7 @@ export function ConsegnaComposer({
           <button
             type="submit"
             className="ds-btn ds-btn--secondary"
-            disabled={draft.saving || blocked || !draft.fields.note.trim()}
+            disabled={draft.saving || Boolean(therapyStamp) || blocked || !draft.fields.note.trim()}
           >
             {draft.saving ? 'Salvataggio…' : draft.pending ? 'Riprova salvataggio' : 'Salva'}
           </button>
@@ -201,7 +140,7 @@ export function ConsegnaComposer({
             type="button"
             className="ds-btn ds-btn--primary"
             disabled={
-              draft.saving ||
+              locked ||
               blocked ||
               Boolean(draft.pending) ||
               !draft.fields.note.trim() ||
@@ -225,7 +164,7 @@ export function ConsegnaComposer({
         title="Scartare la bozza?"
         message={
           draft.pending
-            ? 'Il salvataggio potrebbe essere già avvenuto. Scartare la bozza non annulla una consegna salvata: verifica prima il Feed.'
+            ? 'Il salvataggio potrebbe essere già avvenuto. Scartare la bozza non annulla una consegna salvata: verifica prima il Diario paziente.'
             : 'I campi non salvati di questo paziente saranno eliminati.'
         }
         confirmLabel="Scarta bozza"

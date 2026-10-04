@@ -21,7 +21,7 @@ import {
 import type { DiaryEntryWithTherapy } from './DiaryTherapyPanel';
 import './DiaryTherapyPanel.css';
 import './DiaryAck.css';
-import { corePriorityOptions } from '../../../lib/corePriority';
+import { ClinicalNoteEditor } from '../ClinicalNoteEditor';
 import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload';
 import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
@@ -194,6 +194,7 @@ export function DiarioPazienteTab({
   const loadMoreControllerRef = useRef<AbortController | null>(null);
   // F8: le azioni compaiono solo con la capability che il backend applica (niente 403 dalla GUI).
   const canEditEntry = useCan('diary.update_entry');
+  const canPrescribe = useCan('diary.create_with_therapy');
   const canDeleteEntry = useCan('diary.delete_entry');
   // «Ho capito» su un'urgenza: voce in corso di registrazione (blocca il doppio tocco).
   const [acking, setAcking] = useState<string | null>(null);
@@ -212,14 +213,19 @@ export function DiarioPazienteTab({
   const [form, setForm] = useState<DiarioForm>(emptyForm);
   const [editForm, setEditForm] = useState<DiarioForm>(emptyForm);
 
+  const [dateRange, setDateRange] = useState({ from: '', to: '' });
+  const [dateDraft, setDateDraft] = useState({ from: '', to: '' });
+  const [historyDepth, setHistoryDepth] = useState(0);
+  const historyCursors = useRef<Array<string | undefined>>([]);
+  const currentCursor = useRef<string | undefined>(undefined);
   const fetchEntries = useCallback(
     async (
       signal: AbortSignal,
       request: number,
-      options: { cursor?: string; append?: boolean; silent?: boolean } = {},
+      options: { cursor?: string; append?: boolean; silent?: boolean; direction?: 'next' | 'previous' } = {},
     ) => {
       const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
-      const cacheKey = diaryCacheKey(pazienteId, resolvedFilter);
+      const cacheKey = diaryCacheKey(pazienteId, `${resolvedFilter}:${dateRange.from}:${dateRange.to}`);
       if (options.append) setLoadingMore(true);
       else {
         setLoadingMore(false);
@@ -245,6 +251,8 @@ export function DiarioPazienteTab({
         const params = new URLSearchParams();
         if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
         params.set('limit', String(DIARY_PAGE_SIZE));
+        if (dateRange.from) params.set('from', dateRange.from);
+        if (dateRange.to) params.set('to', dateRange.to);
         if (options.cursor) params.set('cursor', options.cursor);
         const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`, {
           headers: operatorHeaders(),
@@ -262,7 +270,7 @@ export function DiarioPazienteTab({
         let legacyPageTruncated = false;
 
         // Backward compat: use legacy data only for an empty first page with no active filter.
-        if (!options.append && allEntries.length === 0 && resolvedFilter === 'tutti') {
+        if (!options.append && allEntries.length === 0 && resolvedFilter === 'tutti' && !dateRange.from && !dateRange.to) {
           const legacyEntries = convertLegacyEntries(legacyInfermieristico, legacyMedico);
           allEntries = legacyEntries.slice(0, DIARY_PAGE_SIZE);
           pageHasMore = false;
@@ -271,11 +279,12 @@ export function DiarioPazienteTab({
         }
 
         if (!signal.aborted && request === readSequenceRef.current) {
-          setEntries((previous) => {
-            if (!options.append) return allEntries;
-            const seen = new Set(previous.map((entry) => entry.id));
-            return [...previous, ...allEntries.filter((entry) => !seen.has(entry.id))];
-          });
+          setEntries(allEntries);
+          if (options.direction === 'next') historyCursors.current.push(currentCursor.current);
+          else if (options.direction === 'previous') historyCursors.current.pop();
+          else historyCursors.current = [];
+          currentCursor.current = options.cursor;
+          setHistoryDepth(historyCursors.current.length);
           setHasMore(pageHasMore);
           setNextCursor(pageNextCursor);
           if (!options.append) {
@@ -287,7 +296,7 @@ export function DiarioPazienteTab({
           }
           if (!options.append && legacyPageTruncated) {
             setNotice(
-              'Sono visibili le 50 voci legacy più recenti. Contatta l’amministratore per completare la migrazione dello storico.',
+              'Sono visibili le 50 voci precedenti più recenti. Apri “Registrazioni precedenti” per consultare lo storico restante.',
             );
           }
         }
@@ -307,7 +316,7 @@ export function DiarioPazienteTab({
         }
       }
     },
-    [pazienteId, filterBy, legacyInfermieristico, legacyMedico],
+    [pazienteId, filterBy, legacyInfermieristico, legacyMedico, dateRange],
   );
 
   useEffect(() => {
@@ -327,7 +336,17 @@ export function DiarioPazienteTab({
     const controller = new AbortController();
     loadMoreControllerRef.current = controller;
     const request = ++readSequenceRef.current;
-    void fetchEntries(controller.signal, request, { cursor: nextCursor, append: true });
+    void fetchEntries(controller.signal, request, { cursor: nextCursor, append: true, direction: 'next' });
+  }
+
+  function handlePreviousPage() {
+    if (!historyCursors.current.length || loadingMore) return;
+    loadMoreControllerRef.current?.abort();
+    const controller = new AbortController();
+    loadMoreControllerRef.current = controller;
+    void fetchEntries(controller.signal, ++readSequenceRef.current, {
+      cursor: historyCursors.current.at(-1), append: true, direction: 'previous',
+    });
   }
 
   // ── Save new entry ───────────────────────────────────────────────────────────
@@ -529,13 +548,13 @@ export function DiarioPazienteTab({
     return entry.patientId === '';
   }
   // A newly visible handover must not hide the older Cartella diary records.
-  const additionalLegacy = entries.some((entry) => !isLegacy(entry))
-    ? convertLegacyEntries(legacyInfermieristico, legacyMedico).filter(
+  const additionalLegacy = convertLegacyEntries(legacyInfermieristico, legacyMedico).filter(
         (entry) =>
           (!filterBy || filterBy === 'tutti' || entry.authorType === filterBy) &&
+          (!dateRange.from || entry.entryDateTime.slice(0, 10) >= dateRange.from) &&
+          (!dateRange.to || entry.entryDateTime.slice(0, 10) <= dateRange.to) &&
           !entries.some((current) => current.id === entry.id),
-      )
-    : [];
+      );
   const [legacyVisible, setLegacyVisible] = useState(50);
 
   // ── Diario a card: render helper per una voce ────────────────────────────────
@@ -684,7 +703,6 @@ export function DiarioPazienteTab({
   ) {
     const locked = Boolean(therapy?.open);
     // Etichette collegate ai campi (accessibilità e test): un prefisso per form (nuova / modifica).
-    const fid = `diario-${therapy ? 'new' : 'edit'}`;
     return (
       <div className="cr-inline-form" style={{ marginBottom: 16 }}>
         <div
@@ -697,90 +715,21 @@ export function DiarioPazienteTab({
         >
           {title}
         </div>
-        <div className="form-hint">Autore registrato automaticamente dall’account autenticato.</div>
-        <div className="form-row">
-          <label className="form-label" htmlFor={`${fid}-title`}>
-            Titolo (opzionale)
-          </label>
-          <input
-            id={`${fid}-title`}
-            className="form-input"
-            type="text"
-            value={f.title}
-            onChange={(e) => setF((prev) => ({ ...prev, title: e.target.value }))}
-            placeholder="Titolo voce…"
-          />
-        </div>
-        <div className="form-row">
-          <label className="form-label" htmlFor={`${fid}-content`}>
-            Contenuto *
-          </label>
-          <textarea
-            id={`${fid}-content`}
-            className="form-input"
-            rows={4}
-            value={f.content}
-            onChange={(e) => setF((prev) => ({ ...prev, content: e.target.value }))}
-            placeholder="Descrizione, note cliniche…"
-            style={{ resize: 'vertical' }}
-            readOnly={locked}
-            aria-describedby={locked ? 'diario-therapy-locked' : undefined}
-          />
-          {locked && (
-            <small id="diario-therapy-locked" className="form-hint">
-              Testo bloccato durante l’anteprima della terapia: chiudi l’anteprima per modificarlo.
-            </small>
-          )}
-        </div>
-        <div className="form-row">
-          <label className="form-label" htmlFor={`${fid}-priority`}>
-            Priorità
-          </label>
-          <select
-            id={`${fid}-priority`}
-            className="form-input"
-            value={f.priority}
-            onChange={(e) =>
-              setF((prev) => ({ ...prev, priority: e.target.value as DiarioForm['priority'] }))
-            }
-          >
-            {corePriorityOptions(f.priority, 'importante', 'Importante').map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        {therapy ? (
-          <div className="form-hint" data-testid="diary-auto-time">
-            Data e ora registrate automaticamente al salvataggio.
-          </div>
-        ) : (
-          <div className="form-row">
-            <label className="form-label" htmlFor={`${fid}-when`}>
-              Data e ora
-            </label>
-            <input
-              id={`${fid}-when`}
-              className="form-input"
-              type="datetime-local"
-              value={f.entryDateTime}
-              onChange={(e) => setF((prev) => ({ ...prev, entryDateTime: e.target.value }))}
-            />
-          </div>
-        )}
+        <ClinicalNoteEditor content={f.content} title={f.title} priority={f.priority} disabled={saving || locked}
+          onChange={change => setF(prev => ({ ...prev, ...change, priority: (change.priority ?? prev.priority) as DiarioForm['priority'] }))} />
+        {locked && <p className="form-hint">Chiudi l’anteprima prima di modificare la segnalazione.</p>}
         <div className="cr-inline-form__actions diario-form__actions">
           <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
             Annulla
           </button>
-          {therapy && (
+          {therapy && canPrescribe && (
             <button
               type="button"
               className="ds-btn ds-btn--secondary"
               onClick={therapy.onValidate}
               disabled={saving || therapy.open || !f.content.trim()}
             >
-              Valida terapia
+              Anteprima terapia dal testo
             </button>
           )}
           <button
@@ -892,6 +841,20 @@ export function DiarioPazienteTab({
         defaultOpen
         actions={sectionActions}
       >
+        <form className="diario-history-filters" onSubmit={event => { event.preventDefault();
+          if (dateDraft.from && dateDraft.to && dateDraft.from > dateDraft.to) return;
+          setLegacyVisible(50); setDateRange({ ...dateDraft }); }}>
+          <label>Dal <input className="form-input" type="date" value={dateDraft.from}
+            max={dateDraft.to || undefined} onChange={e => setDateDraft(prev => ({ ...prev, from: e.target.value }))} /></label>
+          <label>Al <input className="form-input" type="date" value={dateDraft.to}
+            min={dateDraft.from || undefined} onChange={e => setDateDraft(prev => ({ ...prev, to: e.target.value }))} /></label>
+          <button className="ds-btn ds-btn--secondary" type="submit">Filtra storico</button>
+          {(dateRange.from || dateRange.to) && <button className="ds-link" type="button"
+            onClick={() => { setDateDraft({ from: '', to: '' }); setDateRange({ from: '', to: '' }); }}>Tutte le date</button>}
+        </form>
+        <p className="form-hint">Pagina {historyDepth + 1} · fino a 50 segnalazioni, dalla più recente.</p>
+        {historyDepth > 0 && <button type="button" className="ds-btn ds-btn--secondary" disabled={loadingMore}
+          onClick={handlePreviousPage}>← Segnalazioni più recenti</button>}
         {/* Add form */}
         {showAdd &&
           renderForm(
@@ -935,7 +898,7 @@ export function DiarioPazienteTab({
         {/* Diario a card (una card per voce, border-left colore ruolo) */}
         {loading ? (
           <LoadingState />
-        ) : error ? null : entries.length === 0 ? (
+        ) : error && entries.length === 0 ? null : entries.length === 0 ? (
           <EmptyState msg="Nessuna voce nel diario." />
         ) : (
           <>
@@ -955,7 +918,7 @@ export function DiarioPazienteTab({
                   onClick={handleLoadMore}
                   disabled={loadingMore}
                 >
-                  {loadingMore ? 'Caricamento…' : 'Carica altre voci'}
+                  {loadingMore ? 'Caricamento…' : 'Segnalazioni precedenti →'}
                 </button>
               </div>
             )}
@@ -964,7 +927,9 @@ export function DiarioPazienteTab({
         {!loading && additionalLegacy.length > 0 && (
           <details>
             <summary>Registrazioni precedenti ({additionalLegacy.length})</summary>
-            {additionalLegacy.slice(0, legacyVisible).map(renderDiarioCard)}
+            {additionalLegacy.slice(Math.max(0, legacyVisible - 50), legacyVisible).map(renderDiarioCard)}
+            {legacyVisible > 50 && <button className="btn-secondary btn-sm"
+              onClick={() => setLegacyVisible(value => Math.max(50, value - 50))}>← Registrazioni precedenti più recenti</button>}
             {additionalLegacy.length > legacyVisible && (
               <button
                 className="btn-secondary btn-sm"

@@ -9,7 +9,6 @@ import { PageHeader } from '../shared/PageHeader';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { TherapyGiroRows, type FiltroStato } from './TherapyGiroRows';
 import { TherapyWeekCalendar } from './TherapyWeekCalendar';
-import type { FasciaOrariaTerapia } from '../../types';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { isCalendarDate, shiftCalendarDate } from '../../lib/patientTherapyCalendar';
 import { giroTimeDone, giroTimes, initialGiroTime } from '../../lib/therapyGiro';
@@ -24,6 +23,7 @@ import {
 } from '../../lib/therapyAdministrationWrite';
 import { lateMinutes } from '../../lib/therapyDoseStatus';
 import './TherapyRoundsPage.css';
+import { rememberTherapyCalendarState, type TherapyCalendarState } from '../../lib/therapyCalendarState';
 
 /**
  * Accesso diretto al giro (KPI «Terapie in ritardo», «Altre N in coda → Terapia»…): giorno, ora,
@@ -59,6 +59,8 @@ interface Props {
   onNotAdministered: (info: TherapyActionInfo, reason: MotivoNonErogazione, note: string) => void;
   /** Accesso diretto: ora / filtro / paziente iniziali (vedi TherapyRoundsEntry). */
   entry?: TherapyRoundsEntry;
+  calendarState?: TherapyCalendarState;
+  onOpenPatient?: (patientId: string, date: string, time: string) => void;
 }
 
 export function TherapyRoundsPage({
@@ -75,8 +77,10 @@ export function TherapyRoundsPage({
   onConfirm,
   onNotAdministered,
   entry,
+  calendarState,
+  onOpenPatient,
 }: Props) {
-  const [date, setDate] = useState(() => entry?.date ?? loadedDate ?? localIsoDate());
+  const [date, setDate] = useState(() => calendarState?.date ?? entry?.date ?? loadedDate ?? localIsoDate());
   // Ruolo «con conferma» (supervisore): dopo il dialogo di conferma la registrazione parte da qui
   // con `confirmed: true` (il server la rifiuta senza); poi il giro si ricarica dal server.
   const confirmAdminister = useRequiresConfirmation('administration.confirm');
@@ -109,11 +113,12 @@ export function TherapyRoundsPage({
   const [selected, setSelected] = useState<string | null>(null);
   const [filtro, setFiltro] = useState<FiltroStato>('tutte');
   const [showOrder, setShowOrder] = useState(false);
-  const [mode, setMode] = useState<'giro' | 'calendario'>('giro');
+  const [mode, setMode] = useState<'giro' | 'calendario'>(calendarState?.mode ?? 'giro');
   // Settimana del calendario: separata dalla data del giro, che resta quella caricata.
-  const [weekOf, setWeekOf] = useState(date);
-  // Fascia chiesta dal calendario: scelta appena il giro di quel giorno è caricato.
-  const [wantedFascia, setWantedFascia] = useState<FasciaOrariaTerapia | null>(null);
+  const [weekOf, setWeekOf] = useState(calendarState?.weekOf ?? date);
+  const [calendarOpen, setCalendarOpen] = useState(calendarState?.open ?? null);
+  const [calendarScroll, setCalendarScroll] = useState(calendarState?.scrollTop ?? 0);
+  useEffect(() => { rememberTherapyCalendarState({ mode, date, weekOf, open: calendarOpen, scrollTop: calendarScroll }); }, [mode, date, weekOf, calendarOpen, calendarScroll]);
   function changeDate(value: string) {
     if (!isCalendarDate(value)) return;
     setSelected(null);
@@ -122,11 +127,11 @@ export function TherapyRoundsPage({
   }
   const ready = !loading && !error;
   // ── Accesso diretto: applicato una volta per requestId, sui dati del giorno richiesto ──
-  const [appliedEntry, setAppliedEntry] = useState<number | null>(null);
+  const [appliedEntry, setAppliedEntry] = useState<number | null>(calendarState ? entry?.requestId ?? null : null);
   const [focusPatientId, setFocusPatientId] = useState<string | null>(null);
   const entryPending = entry !== undefined && appliedEntry !== entry.requestId;
   // prima il giorno richiesto: la selezione dell'ora aspetta i dati di quel giorno
-  const [entryDateApplied, setEntryDateApplied] = useState<number | null>(null);
+  const [entryDateApplied, setEntryDateApplied] = useState<number | null>(calendarState ? entry?.requestId ?? null : null);
   if (entry?.date && entryDateApplied !== entry.requestId && isCalendarDate(entry.date)) {
     setEntryDateApplied(entry.requestId);
     if (entry.date !== date) {
@@ -170,15 +175,7 @@ export function TherapyRoundsPage({
     const target = byTime ?? byBand ?? byLate ?? byPatient;
     if (target) setSelected(target.ora);
   }
-  if (error && wantedFascia) setWantedFascia(null);
-  if (ready && wantedFascia) {
-    // dal calendario (per fascia del server): la prima ora reale di quella fascia
-    const wanted = times.find((t) =>
-      t.patients.some((g) => g.items.some((item) => item.fascia === wantedFascia)),
-    );
-    setWantedFascia(null);
-    if (wanted) setSelected(wanted.ora);
-  } else if (!entryPending && ready && times.length > 0 && !times.some((t) => t.ora === selected))
+  if (!entryPending && ready && times.length > 0 && !times.some((t) => t.ora === selected))
     setSelected(initialGiroTime(times));
   const active = times.find((t) => t.ora === selected);
   const done = active ? giroTimeDone(active) : 0;
@@ -196,12 +193,6 @@ export function TherapyRoundsPage({
     month: 'long',
     year: 'numeric',
   });
-  function openFromCalendar(day: string, fascia: FasciaOrariaTerapia) {
-    setMode('giro');
-    setFiltro('tutte');
-    setWantedFascia(fascia);
-    changeDate(day);
-  }
   const giro = mode === 'giro';
   function weekLabel(day: string) {
     const days = weekDays(day);
@@ -268,6 +259,7 @@ export function TherapyRoundsPage({
             aria-pressed={!giro}
             onClick={() => {
               setWeekOf(date);
+              setCalendarOpen(null);
               setMode('calendario');
             }}
           >
@@ -306,9 +298,9 @@ export function TherapyRoundsPage({
           ) : (
             <DateNav
               isToday={weekDays(weekOf).includes(localIsoDate())}
-              onPrev={() => setWeekOf(shiftCalendarDate(weekOf, -7))}
-              onToday={() => setWeekOf(localIsoDate())}
-              onNext={() => setWeekOf(shiftCalendarDate(weekOf, 7))}
+              onPrev={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, -7)))}
+              onToday={() => { setCalendarOpen(null); setWeekOf(localIsoDate()); }}
+              onNext={() => (setCalendarOpen(null), setWeekOf(shiftCalendarDate(weekOf, 7)))}
               prevLabel="Settimana precedente"
               nextLabel="Settimana successiva"
               todayLabel="Oggi"
@@ -333,7 +325,13 @@ export function TherapyRoundsPage({
           <RosterOrderControl />
         </div>
       )}
-      {!giro && <TherapyWeekCalendar date={weekOf} onOpen={openFromCalendar} />}
+      {!giro && <TherapyWeekCalendar date={weekOf} open={calendarOpen}
+        onOpen={(day, time) => setCalendarOpen({ date: day, time })}
+        onClose={() => setCalendarOpen(null)} scrollTop={calendarScroll} onScroll={setCalendarScroll}
+        onOpenPatient={(patientId, day, time) => {
+          rememberTherapyCalendarState({ mode, date, weekOf, open: { date: day, time }, scrollTop: calendarScroll });
+          onOpenPatient?.(patientId, day, time);
+        }} /> }
       {giro && loading && <p role="status">Caricamento terapie…</p>}
       {giro && !loading && error && (
         <div role="alert" className="empty-state-card">

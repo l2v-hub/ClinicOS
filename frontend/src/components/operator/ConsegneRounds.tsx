@@ -8,16 +8,19 @@ import { TURNO_LABEL, turnoDaOra } from '../../lib/turno';
 import { useConsegneRoster } from './useConsegneRoster';
 import { ConsegnePatientRoster } from './ConsegnePatientRoster';
 import { ConsegnaComposer } from './ConsegnaComposer';
+import { DiarioPazienteTab } from './cartella/DiarioPazienteTab';
 export function ConsegneRounds({
   store,
   operatori,
   onAdd,
   active,
+  initialPatientId,
 }: {
   store: ConsegnaDraftStore;
   operatori: Operatore[];
   onAdd: ConsegnaCreate;
   active: boolean;
+  initialPatientId?: string;
 }) {
   const [query, setQuery] = useState('');
   const [room, setRoom] = useState('');
@@ -26,6 +29,7 @@ export function ConsegneRounds({
   const [lastSaved, setLastSaved] = useState('');
   const [focusRequest, setFocusRequest] = useState(0);
   const [showOrder, setShowOrder] = useState(false);
+  const [historyVersion, setHistoryVersion] = useState(0);
   const selection = useRef({ id: '', generation: 0 });
   const lifecycle = useRef(0);
   useEffect(() => {
@@ -48,7 +52,7 @@ export function ConsegneRounds({
     setMessage('');
     setFocusRequest((value) => value + 1);
   }
-  const first = roster.items[0];
+  const first = roster.items.find(item => item.id === initialPatientId) ?? roster.items[0];
   useEffect(() => {
     if (selected || !first) return;
     const timer = window.setTimeout(() => {
@@ -84,7 +88,7 @@ export function ConsegneRounds({
     const saved = await submitConsegna(store, token, onAdd);
     if (!saved || version !== lifecycle.current) return;
     setLastSaved(`Consegna salvata per ${patient.lastName}, ${patient.firstName}.`);
-    void latestRoster.current.refreshSummary([patient.id]);
+    setHistoryVersion(value => value + 1);
     if (!advance) return;
     const nextPage = await continuation;
     if (version !== lifecycle.current) return;
@@ -195,7 +199,7 @@ export function ConsegneRounds({
             </p>
           )}
           {patient ? (
-            <ConsegnaComposer
+            <><ConsegnaComposer
               key={patient.id}
               patient={patient}
               store={store}
@@ -206,7 +210,8 @@ export function ConsegneRounds({
               }
               message={message}
               focusRequest={focusRequest}
-            />
+              onTherapyCreated={() => setHistoryVersion(value => value + 1)}
+            /><DiarioPazienteTab key={`history:${patient.id}:${historyVersion}`} pazienteId={patient.id} operatoreNome="" /></>
           ) : (
             <p>Seleziona un paziente per scrivere una consegna.</p>
           )}

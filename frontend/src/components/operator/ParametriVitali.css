@@ -392,6 +392,13 @@
 .par-pick__main {
   align-items: flex-start;
 }
+.par-pick { display:grid; grid-template-columns:minmax(0,1fr); padding:8px; gap:4px; }
+.par-pick__main { width:100%; padding:0; gap:10px; }
+.par-pick__text { flex:1; min-width:0; }
+.par-pick__bed { width:32px; height:32px; border-radius:8px; font-size:14px; }
+.par-pick__name { font-size:14px; line-height:20px; overflow-wrap:normal; word-break:normal; }
+.par-pick .par-cap { font-size:12px; line-height:18px; overflow-wrap:normal; }
+.par-pick .turno-pcard__news2 { justify-self:start; max-width:100%; margin-left:42px; font-size:12px; line-height:18px; }
 @media (max-width: 1099px) {
   .par-grid {
     grid-template-columns: 300px minmax(0, 1fr);

@@ -25,7 +25,7 @@ afterEach(() => {
 
 test('cycle-1 sub-views land on the new views (backward-compatible links)', () => {
   assert.deepEqual(therapyLanding('attivi', { hasDrug: true }), {
-    view: 'calendario',
+    view: 'attivi',
     openDrug: true,
     openDose: false,
   });

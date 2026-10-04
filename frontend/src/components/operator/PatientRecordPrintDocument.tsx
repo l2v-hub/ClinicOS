@@ -1,4 +1,5 @@
 import { formatBirthDate } from '../../lib/patientDemographics';
+import { PatientAdmissionPrint } from './PatientAdmissionPrint';
 import type { ReactNode } from 'react';
 import type {
   CartellaPaziente,
@@ -75,7 +76,7 @@ export default function PatientRecordPrintDocument({
       </header>
 
       {selected.has('profilo') && (
-        <PrintSection title="Profilo e degenza">
+        <PrintSection title="Dati di ingresso e contatti">
           <dl className="patient-record-print__facts">
             <div>
               <dt>Sesso</dt>
@@ -111,6 +112,7 @@ export default function PatientRecordPrintDocument({
               <dd>{display(cartella.lettoNumero)}</dd>
             </div>
           </dl>
+          <PatientAdmissionPrint patient={paziente} chart={cartella} />
         </PrintSection>
       )}
 

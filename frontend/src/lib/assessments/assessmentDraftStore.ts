@@ -1,4 +1,5 @@
 import { facilityLocalMinute } from '../facilityTime';
+import { assessmentDraftPersistence, type DraftStorage } from './assessmentDraftPersistence';
 import {
   ASSESSMENT_VERSIONS,
   type AssessmentType,
@@ -69,7 +70,11 @@ export function createAssessmentDraftStore() {
   const listeners = new Set<() => void>();
   let generation = 0;
   let version = 0;
+  let persistence: ReturnType<typeof assessmentDraftPersistence> | null = null;
+  let persistenceScope: string | null = null;
+  let persistenceError = false;
   const notify = () => {
+    if (persistence) persistenceError = !persistence.write([...drafts.values()]);
     version++;
     listeners.forEach((listener) => listener());
   };
@@ -80,6 +85,17 @@ export function createAssessmentDraftStore() {
   const current = (token: AssessmentWriteToken) =>
     generation === token.generation && drafts.get(token.key)?.pending === token.operation;
   const store = {
+    persistenceFailed: () => persistenceError,
+    bindStorage(scope: string, storage?: DraftStorage) {
+      if (persistenceScope === scope) return;
+      generation++;
+      drafts.clear();
+      persistenceScope = scope;
+      try { persistence = assessmentDraftPersistence(storage ?? window.sessionStorage, scope); }
+      catch { persistence = null; persistenceError = true; }
+      for (const draft of persistence?.read() ?? []) drafts.set(draft.key, draft);
+      notify();
+    },
     get: (key: string) => drafts.get(key),
     getVersion: () => version,
     subscribe: (listener: () => void) => {
@@ -370,7 +386,7 @@ export function createAssessmentDraftStore() {
     },
     discard(key: string) {
       const draft = drafts.get(key);
-      if (draft && !draft.busy) {
+      if (draft && !draft.busy && !draft.pending) {
         drafts.delete(key);
         notify();
       }
@@ -378,6 +394,7 @@ export function createAssessmentDraftStore() {
     clear() {
       generation++;
       drafts.clear();
+      persistence?.clear();
       notify();
     },
     current,

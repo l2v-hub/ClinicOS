@@ -14,7 +14,7 @@ export function assessmentCatalogEntry(
 ): AssessmentEntry {
   if (item && item.type !== type) throw new Error('Tipo di modulo non corrispondente.');
   if (action === 'new') return { type, localKey: store.create(patientId, undefined, type) };
-  const local = store.list(patientId, type).find(draft => draft.dirty || draft.pending);
+  const local = store.list(patientId, type).find(draft => draft.dirty || draft.pending || draft.record?.status === 'draft');
   if (action === 'resume') {
     if (local) return { type, localKey: local.key };
     if (item?.latestOwnDraft) return { type, id: item.latestOwnDraft.id };

@@ -8,7 +8,7 @@ import type { TabId } from '../components/operator/tabGroups';
 
 /** Views of the patient's Terapia section (UX cycle 2, W5): Calendario is the default; Storico
  *  shows how it went; Nuova terapia registers a prescription (therapy.create only). */
-export type TherapyView = 'calendario' | 'storico' | 'nuova';
+export type TherapyView = 'calendario' | 'attivi' | 'storico' | 'nuova';
 /** Sub-views of the cycle-1 Terapia layout. Still accepted (links already in URLs, history.state,
  *  Assistant and signal builders) and mapped to the new views by `lib/therapyView.ts`:
  *  attivi/programmazione → Calendario with the drug opened, giornaliere → Calendario on the dose,

@@ -12,6 +12,8 @@ import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } fro
 import { ClinicalTable } from './ClinicalTable';
 import { ClinicalAttachments } from './ClinicalAttachments';
 import { attachDressingDocument } from '../../../lib/clinicalAttachments';
+import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
+import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -699,9 +701,8 @@ export function MedicazioniTab({
   const meds = cartella.medicazioniFerite ?? [];
   const medsRef = useRef(meds);
   medsRef.current = meds;
-  const [showAdd, setShowAdd] = useState(!!createRequest);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState({ ...EMPTY_FORM });
+  const localDraft = useLegacyModuleDraft(paziente.id,'medicazioni',EMPTY_FORM,!!createRequest);
+  const { show:showAdd,setShow:setShowAdd,editId,setEditId,form,setForm } = localDraft;
   const [modulo, setModulo] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -784,6 +785,7 @@ export function MedicazioniTab({
       setShowAdd(false);
       setEditId(null);
       setForm({ ...EMPTY_FORM, data: todayStr() });
+      localDraft.remove();
     } catch {
       setSaveError('Salvataggio non riuscito. Le modifiche sono conservate: riprova.');
     } finally {
@@ -820,6 +822,7 @@ export function MedicazioniTab({
 
   return (
     <div className={`cr-tab-content${modulo ? ' mode-modulo' : ''}`}>
+      <LegacyDraftTools dirty={localDraft.dirty} error={localDraft.error} onDelete={localDraft.remove} />
       {/* ── Modulo view ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">

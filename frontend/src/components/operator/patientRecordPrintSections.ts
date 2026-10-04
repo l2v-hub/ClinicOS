@@ -1,5 +1,5 @@
 export const PATIENT_RECORD_PRINT_SECTIONS = [
-  { id: 'profilo', label: 'Profilo e degenza', description: 'Anagrafica, contatti e collocazione' },
+  { id: 'profilo', label: 'Dati di ingresso e contatti', description: 'Anagrafica, contatti, ingresso, condizioni e valutazione funzionale' },
   { id: 'clinica', label: 'Quadro clinico', description: 'Diagnosi, rischi e piano di cura' },
   { id: 'terapie', label: 'Terapie e allergie', description: 'Farmaci, terapie e sicurezza' },
   { id: 'parametri', label: 'Parametri vitali', description: 'Rilevazioni cliniche disponibili' },

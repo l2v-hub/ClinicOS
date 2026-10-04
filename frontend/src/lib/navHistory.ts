@@ -2,6 +2,7 @@
 // cartella, più l'etichetta della voce precedente, così la freccia "indietro" dice dove porta.
 // L'etichetta può contenere il nome del paziente: vive solo in history.state (sessione del
 // browser), mai nell'URL, che continua a portare solo l'id opaco.
+import type { TherapyCalendarState } from './therapyCalendarState';
 import { tabLabel, type TabId } from '../components/operator/tabGroups';
 import { parsePatientTargetHash, storedTarget, type StoredPatientTarget } from './patientTargetHash';
 
@@ -16,6 +17,7 @@ export interface NavEntry {
 }
 
 export interface NavHistoryState {
+  therapyCalendar?: TherapyCalendarState;
   navKey: string;
   pazienteId?: string;
   patientTab?: TabId;

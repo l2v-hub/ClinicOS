@@ -3,7 +3,7 @@ import { createConsegnaDraftStore, type ConsegnaDraftStore } from '../../lib/con
 import type { ConsegneEntry } from '../../lib/consegneNavigation';
 import { useConsegneExitGuard } from '../../lib/useConsegneExitGuard';
 import { PageHeader } from '../shared/PageHeader';
-import { ConsegnePage, type ConsegnePageProps } from './ConsegnePage';
+import { type ConsegnePageProps } from './ConsegnePage';
 import { ConsegneRounds } from './ConsegneRounds';
 import './ConsegneRounds.css';
 export interface ConsegneWorkspaceProps extends ConsegnePageProps {
@@ -18,7 +18,7 @@ export function ConsegneWorkspace(props: ConsegneWorkspaceProps) {
 function WorkspaceSession({
   entry,
   draftStore: provided,
-  onModeChange,
+  onModeChange: _onModeChange,
   ...feed
 }: ConsegneWorkspaceProps) {
   const [store] = useState(() => provided ?? createConsegnaDraftStore());
@@ -29,69 +29,13 @@ function WorkspaceSession({
     },
     [store, provided],
   );
-  const [mode, setMode] = useState(entry?.mode ?? 'rounds');
-  const [visited, setVisited] = useState(mode === 'rounds');
-  const entryMode = entry?.mode;
-  const entryKey = entry?.key;
-  useEffect(() => {
-    if (!entryMode) return;
-    const timer = window.setTimeout(() => {
-      setMode(entryMode);
-      if (entryMode === 'rounds') setVisited(true);
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, [entryKey, entryMode]);
-  const change = (next: typeof mode) => {
-    setMode(next);
-    if (next === 'rounds') setVisited(true);
-    onModeChange?.(next);
-  };
   return (
     <div className="handover-workspace">
-      <PageHeader title="Consegne" subtitle="Giro pazienti e feed delle consegne" />
-      <div className="handover-workspace__tabs" role="group" aria-label="Vista consegne">
-        <button
-          type="button"
-          className="ds-chip"
-          aria-pressed={mode === 'rounds'}
-          onClick={() => change('rounds')}
-        >
-          Giro pazienti
-        </button>
-        <button
-          type="button"
-          className="ds-chip"
-          aria-pressed={mode === 'feed'}
-          onClick={() => change('feed')}
-        >
-          Feed consegne
-        </button>
-      </div>
-      {visited && (
-        <div hidden={mode !== 'rounds'}>
-          <ConsegneRounds
-            store={store}
-            operatori={feed.operatori}
-            onAdd={feed.onAdd}
-            active={mode === 'rounds'}
-          />
-        </div>
-      )}
-      {mode === 'feed' && (
-        <ConsegnePage
-          key={entry?.key ?? 0}
-          {...feed}
-          embedded
-          draftStore={store}
-          initialQuery={entry?.query}
-          initialPatientId={entry?.query?.patientId}
-          initialUrgency={entry?.query?.urgency ?? feed.initialUrgency}
-          focusId={entry?.focusId ?? feed.focusId}
-        />
-      )}
+      <PageHeader title="Consegne" subtitle="Giro pazienti e diario delle segnalazioni" />
+      <ConsegneRounds store={store} operatori={feed.operatori} onAdd={feed.onAdd} active
+        initialPatientId={entry?.query?.patientId} />
       <p className="handover-workspace__memory">
-        Le bozze restano disponibili durante questa sessione. Ricaricando la pagina o uscendo dalla
-        sessione vengono perse.
+        Le bozze personali restano disponibili dopo il ricaricamento in questa scheda e vengono rimosse all’uscita dall’account.
       </p>
     </div>
   );

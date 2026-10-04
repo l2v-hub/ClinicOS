@@ -98,7 +98,6 @@ export function TerapiaFarmacologicaTab({
   );
   // Prescrizione aperta (una per volta) e farmaco evidenziato da un collegamento diretto.
   const [openDrugId, setOpenDrugId] = useState<string | null>(null);
-  const [programmingOpen, setProgrammingOpen] = useState(false);
   const [focusDrugId, setFocusDrugId] = useState<string | null>(null);
   const [scrollToDrug, setScrollToDrug] = useState(0);
   // Calendario: giorno/ora di arrivo da un collegamento diretto (rimonta il calendario).
@@ -253,7 +252,7 @@ export function TerapiaFarmacologicaTab({
     // L'errore appartiene alla schermata che l'ha prodotto.
     setError('');
     setView(next);
-    if (next !== 'calendario' && editId) closeForm();
+    if (next !== 'attivi' && editId) closeForm();
     if (next === 'nuova' && (!showForm || editId)) openAdd();
     rememberTherapyView(paziente.id, therapySubViewOf(next, status));
   };
@@ -265,11 +264,6 @@ export function TerapiaFarmacologicaTab({
     setFocusDrugId(null);
     setOpenDrugId((current) => (current === id ? null : id));
   };
-
-  // I collegamenti a una prescrizione devono rivelare il pannello secondario.
-  useEffect(() => {
-    if (openDrugId || focusDrugId || therapyLoadError) setProgrammingOpen(true);
-  }, [openDrugId, focusDrugId, therapyLoadError]);
 
   // ── Form ─────────────────────────────────────────────────────────────────────
 
@@ -294,7 +288,7 @@ export function TerapiaFarmacologicaTab({
     setEditId(t.id);
     setForm(therapyToForm(t));
     setShowForm(true);
-    setView('calendario');
+    setView('attivi');
     window.requestAnimationFrame(() =>
       formShellRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }),
     );
@@ -545,7 +539,6 @@ export function TerapiaFarmacologicaTab({
     const stato = trovaRisoluzione(risoluzioni, t.farmacoNome, t.dosaggio?.trim() || null)?.stato;
     return stato === 'non-trovato' || stato === 'senza-documento' ? stato : null;
   };
-  const toVerify = therapies.filter((t) => t.stato === 'attiva' && registryState(t) !== null).length;
   const lineBadge = (t: PatientTherapyAPI) => {
     const stato = registryState(t);
     return stato ? (
@@ -698,7 +691,8 @@ export function TerapiaFarmacologicaTab({
   // ── Sub-nav ───────────────────────────────────────────────────────────────────
 
   const VIEWS: TopNavItem[] = [
-    { key: 'calendario', label: 'Piano terapeutico' },
+    { key: 'calendario', label: 'Calendario' },
+    { key: 'attivi', label: 'Farmaci attivi' },
     { key: 'storico', label: 'Storico' },
     ...(canCreateTherapy ? [{ key: 'nuova', label: 'Nuova terapia' }] : []),
   ];
@@ -773,68 +767,26 @@ export function TerapiaFarmacologicaTab({
           </div>
         )}
 
-        {activeView === 'calendario' &&
-          (editing ? (
-            <div className="cts__body--padded">{formShell}</div>
-          ) : (
-            <div className="cts__body--padded tf-calendar-view">
-              {nextTherapyCursor && (
-                <div className="alert alert--info" role="status">
-                  Verifica anagrafica parziale: carica le altre terapie prima di considerare
-                  completo il controllo delle anomalie.
-                </div>
-              )}
-              <section className="tf-active" aria-label="Prescrizioni e programmazione">
-                <button
-                  type="button"
-                  className="tf-programming-toggle"
-                  aria-expanded={programmingOpen}
-                  aria-controls="therapy-programming-panel"
-                  onClick={() => setProgrammingOpen((value) => !value)}
-                >
-                  <span aria-hidden="true">{programmingOpen ? '▾' : '▸'}</span>
-                  <strong>Prescrizioni e programmazione</strong>
-                  <span>{therapySummary?.active ?? attive.length} farmaci attivi</span>
-                  {toVerify > 0 && (
-                    <span className="tf-active__verify">
-                      {' '}
-                      · {toVerify} da verificare in anagrafica AIFA
-                    </span>
-                  )}
-                </button>
-                <div id="therapy-programming-panel" hidden={!programmingOpen}>
-                {listState ?? (
-                  <>
-                    <TherapyDrugList
-                      therapies={attive}
-                      openId={openDrugId}
-                      focusId={focusDrugId}
-                      onToggle={toggleDrug}
-                      renderDetail={renderDetail}
-                      label="Farmaci attivi"
-                      lineBadge={lineBadge}
-                      emptyText={
-                        nextTherapyCursor
-                          ? 'Nessun farmaco attivo tra le terapie caricate.'
-                          : 'Nessun farmaco attivo.'
-                      }
-                    />
-                    {therapyPager}
-                  </>
-                )}
-                </div>
-              </section>
-              <PatientTherapyCalendar
-                key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}
-                patientId={paziente.id}
-                initialDate={calendarFocus?.date}
-                initialOpenTime={calendarFocus?.time}
-                focusTherapyId={focusDrugId ?? undefined}
-                autoOpenDue={!calendarFocus?.time}
-                refreshKey={calendarRefresh}
-              />
-            </div>
-          ))}
+        {activeView === 'attivi' && (
+          <div className="cts__body--padded tf-active">
+            {nextTherapyCursor && <p role="status">Verifica anagrafica parziale: carica le altre terapie per consultare tutti i farmaci.</p>}
+            {editing ? formShell : listState ?? <>
+              <TherapyDrugList therapies={attive} openId={openDrugId} focusId={focusDrugId}
+                onToggle={toggleDrug} renderDetail={renderDetail} label="Farmaci attivi"
+                lineBadge={lineBadge} emptyText={nextTherapyCursor ? 'Nessun farmaco attivo tra le terapie caricate.' : 'Nessun farmaco attivo.'} />
+              {therapyPager}
+            </>}
+          </div>
+        )}
+        {activeView === 'calendario' && (
+          <div className="cts__body--padded tf-calendar-view">
+            <PatientTherapyCalendar
+              key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}
+              patientId={paziente.id} initialDate={calendarFocus?.date}
+              initialOpenTime={calendarFocus?.time} focusTherapyId={focusDrugId ?? undefined}
+              refreshKey={calendarRefresh} />
+          </div>
+        )}
 
         {activeView === 'storico' && (
           <div className="cts__body--padded">

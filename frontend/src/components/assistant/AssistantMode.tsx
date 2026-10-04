@@ -225,6 +225,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
   }
 
   const voice = useVoiceChannel({
+    preview: workflow?.status === 'NEEDS_CONFIRMATION' ? workflow.preview : null,
     residentId,
     busy: state.busy,
     onSubmit: (text) => submitText(text, 'voice'),
@@ -370,6 +371,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
   }
 
   function confirmPreview(preview: AssistantPreview) {
+    voice.stopSpeaking();
     if (!canConfirm(state)) return;
     // The payload is already bound to this preview on the server: confirm = preview id only.
     void send({
@@ -440,7 +442,7 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
         <button type="button" className="ds-btn ds-btn--secondary am-back" onClick={onClose}>
           ← Torna all’applicazione
         </button>
-        <h1 className="am-title">Milo <small>Assistente clinico AI</small></h1>
+        <h1 className="am-title">Milo <small>Supporto agentico AI</small></h1>
         <div className="am-identity" data-testid="am-identity">
           {session ? (
             <>
@@ -452,6 +454,8 @@ export function AssistantMode({ pageResident, onClose, onOpenClassic }: Props) {
           )}
         </div>
       </header>
+
+      <p className="am-support-note">Milo è un’intelligenza artificiale di supporto agentico: recupera informazioni e prepara proposte. Verifica sempre dati e azioni prima di confermare.</p>
 
       <section className="am-resident" aria-label="Ospite attivo" data-testid="am-resident">
         <div className="am-resident__current">

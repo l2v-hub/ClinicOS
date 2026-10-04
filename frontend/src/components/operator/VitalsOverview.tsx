@@ -3,6 +3,7 @@ import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { news2Tile, vitalTiles } from '../../lib/patientVitalsOverview';
 import type { PatientParameterReading } from '../../lib/patientParameterReadings';
 import { useCan } from '../../lib/capabilities';
+import { useWidgetOpen } from '../shared/WidgetGroup';
 
 interface Props {
   state: 'loading' | 'ready' | 'error';
@@ -22,6 +23,7 @@ export function VitalsOverview({
   onRecordNow,
 }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const { open, setOpen, bodyId } = useWidgetOpen();
   const titleId = useId();
   const canRecord = useCan('parameters.create_reading');
   if (state === 'error')
@@ -85,6 +87,7 @@ export function VitalsOverview({
   return (
     <section className="vitals-summary" aria-label="Ultimi parametri e NEWS2">
       <div className="vitals-summary__head">
+        <button type="button" className="ds-icon-btn" aria-expanded={open} aria-controls={bodyId} aria-label={`${open ? 'Comprimi' : 'Espandi'} ultimi parametri`} onClick={()=>setOpen(!open)}>{open ? '▾' : '▸'}</button>
         <h2>Ultimi parametri</h2>
         <div className="vitals-summary__actions">
           {onRecordNow && canRecord && (
@@ -119,10 +122,12 @@ export function VitalsOverview({
           </button>
         </div>
       </div>
+      <div id={bodyId} hidden={!open}>
       {grid(false)}
       <p className={`vitals-summary__status vitals-summary__status--${tone}`}>
         <strong>NEWS2:</strong> {detail}
       </p>
+      </div>
       {expanded && (
         <AccessibleDialogSurface
           labelledBy={titleId}

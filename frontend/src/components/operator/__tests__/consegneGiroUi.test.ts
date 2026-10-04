@@ -9,7 +9,6 @@ import { ConsegnePatientRoster } from '../ConsegnePatientRoster';
 import { ConsegneWorkspace, type ConsegneWorkspaceProps } from '../ConsegneWorkspace';
 import { identityPatient, identityHomonym, identityHandover } from './operationalIdentity.fixtures';
 import { saved } from '../../../lib/__tests__/consegnaGiro.fixtures';
-import type { SummaryState } from '../useConsegneRoster';
 Object.assign(globalThis, { React });
 const render = (element: React.ReactElement) => renderToStaticMarkup(element);
 const onAdd: ConsegneWorkspaceProps['onAdd'] = async (request) => saved(request);
@@ -32,7 +31,7 @@ const feed: ConsegneWorkspaceProps = {
   onRetry() {},
 };
 
-test('general handover workspace opens the patient round, explicit feed entry retains existing handovers', () => {
+test('handover workspace has one patient round and legacy feed entry returns to that workspace', () => {
   const general = render(React.createElement(ConsegneWorkspace, feed));
   assert.match(general, /Giro pazienti|Feed consegne|Caricamento pazienti/);
   assert.doesNotMatch(general, /Solo dati sintetici/);
@@ -42,8 +41,8 @@ test('general handover workspace opens the patient round, explicit feed entry re
       entry: { mode: 'feed', key: 1, query: { status: 'attive' }, focusId: identityHandover.id },
     }),
   );
-  assert.match(explicit, /Solo dati sintetici/);
-  assert.doesNotMatch(explicit, /Caricamento pazienti/);
+  assert.doesNotMatch(explicit, /Feed consegne|Solo dati sintetici/);
+  assert.match(explicit, /Caricamento pazienti/);
 });
 
 test('composer retains patient-specific draft and identity after remount; permitted assignment is visible', () => {
@@ -76,63 +75,14 @@ test('composer retains patient-specific draft and identity after remount; permit
   assert.match(other, /15\/06\/1975/);
 });
 
-test('roster distinguishes zero, history, missing scope and failed summaries without inventing counts', () => {
-  const store = createConsegnaDraftStore();
-  for (const [summary, expected] of [
-    [
-      {
-        status: 'ready',
-        value: {
-          patientId: identityPatient.id,
-          total: 0,
-          urgentActive: 0,
-          statoRicovero: null,
-        },
-      },
-      'Nessuna consegna',
-    ],
-    [
-      {
-        status: 'ready',
-        value: {
-          patientId: identityPatient.id,
-          total: 3,
-          urgentActive: 0,
-          statoRicovero: 'dimesso',
-        },
-      },
-      '3 consegne',
-    ],
-    [
-      {
-        status: 'ready',
-        value: {
-          patientId: identityPatient.id,
-          total: 2,
-          urgentActive: 1,
-          statoRicovero: null,
-        },
-      },
-      '1 urgenza da prendere in carico',
-    ],
-    [{ status: 'error' }, 'Riepilogo non disponibile'],
-    [{ status: 'unavailable' }, 'Dati non disponibili'],
-    [{ status: 'loading' }, 'Verifica consegne'],
-  ] as [SummaryState, string][]) {
-    const html = render(
-      React.createElement(ConsegnePatientRoster, {
-        patients: [identityPatient],
-        summaries: { [identityPatient.id]: summary },
-        store,
-        onSelect() {},
-        onRetry() {},
-      }),
-    );
-    assert.ok(html.includes(expected));
-    if (summary.status !== 'ready') assert.doesNotMatch(html, /Nessuna consegna|\d+ consegn/);
-    // UX2 W8: never the legacy open/closed wording.
-    assert.doesNotMatch(html, /aperte|in corso|completat/i);
-  }
+test('roster always opens the patient diary instead of duplicating summaries', () => {
+  const html = render(React.createElement(ConsegnePatientRoster, {
+    patients: [identityPatient], summaries: { [identityPatient.id]: { status: 'error' } },
+    store: createConsegnaDraftStore(), onSelect() {}, onRetry() {},
+  }));
+  assert.match(html, /Diario paziente/);
+  assert.ok(html.includes(`#/dettaglio-paziente/${identityPatient.id}`));
+  assert.doesNotMatch(html, /Riprova riepilogo|Riepilogo non disponibile/);
 });
 
 test('uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance', () => {

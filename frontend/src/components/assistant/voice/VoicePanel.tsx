@@ -86,7 +86,7 @@ export function VoicePanel({ voice, busy }: { voice: VoiceChannel; busy: boolean
             title={
               voice.spoken
                 ? 'Disattiva conferme vocali'
-                : 'Attiva conferme vocali (solo stato, mai dati clinici)'
+                : 'Leggi ad alta voce trascrizione e anteprima del comando'
             }
             data-testid="am-voice-tts"
           >

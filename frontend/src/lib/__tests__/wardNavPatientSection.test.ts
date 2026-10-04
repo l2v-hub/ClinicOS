@@ -5,7 +5,7 @@ import { patientSectionForWardNav } from '../../components/operator/tabGroups';
 const all = () => true;
 
 test('P10: inside a chart, ward Terapia/Parametri/Consegne open that patient section', () => {
-  assert.equal(patientSectionForWardNav('terapie', true, all), 'terapia-farmacologica');
+  assert.equal(patientSectionForWardNav('terapie', true, all), undefined);
   assert.equal(patientSectionForWardNav('parametri-multipaziente', true, all), 'parametri');
   assert.equal(patientSectionForWardNav('consegne', true, all), 'consegne');
 });

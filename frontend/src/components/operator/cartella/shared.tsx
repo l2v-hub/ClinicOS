@@ -1,5 +1,5 @@
 // Shared utilities for cartella clinica sub-tabs
-import { useState } from 'react';
+import { useWidgetOpen } from '../../shared/WidgetGroup';
 
 export function uid(): string {
   return crypto.randomUUID();
@@ -172,7 +172,7 @@ export function ClinicalTableSection({
   actions?: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
+  const { open, setOpen, bodyId } = useWidgetOpen(defaultOpen);
   const badge =
     count !== undefined
       ? `${count} ${countLabel ?? (count === 1 ? 'elemento' : 'elementi')}`
@@ -187,6 +187,7 @@ export function ClinicalTableSection({
         role="button"
         tabIndex={0}
         aria-expanded={open}
+        aria-controls={bodyId}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={(e) => {
           if (e.target !== e.currentTarget) return;
@@ -205,7 +206,7 @@ export function ClinicalTableSection({
           {actions}
         </div>
       </div>
-      {open && <div className="cts__body">{children}</div>}
+      <div id={bodyId} className="cts__body" hidden={!open}>{children}</div>
     </div>
   );
 }

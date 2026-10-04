@@ -7,6 +7,8 @@ import { isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';
 import { urgencyTime, urgencyTraceText } from '../../lib/urgency';
 import { IcoArrow, IcoConsegne } from '../../icons';
 import './TurnoHandovers.css';
+import { useWidgetOpen } from '../shared/WidgetGroup';
+import { WidgetToggle } from '../shared/WidgetToggle';
 
 interface Props {
   overview: ConsegnaOverview | null;
@@ -18,6 +20,7 @@ interface Props {
 
 export function TurnoHandovers({ overview, state, onOpen, onRetry, onSelectPaziente }: Props) {
   const titleId = useId();
+  const { open, setOpen, bodyId } = useWidgetOpen();
   const items = handoverPreview(overview);
   return (
     <section
@@ -35,7 +38,9 @@ export function TurnoHandovers({ overview, state, onOpen, onRetry, onSelectPazie
         <button type="button" className="ds-link" onClick={onOpen}>
           Tutte <IcoArrow />
         </button>
+        <WidgetToggle title="Ultime consegne" open={open} bodyId={bodyId} onToggle={() => setOpen(!open)} />
       </div>
+      <div id={bodyId} hidden={!open}>
       <p className="turno-handovers__hint">
         Selezione delle ultime consegne · prima le urgenze attive
       </p>
@@ -111,6 +116,7 @@ export function TurnoHandovers({ overview, state, onOpen, onRetry, onSelectPazie
           })}
         </ol>
       )}
+      </div>
     </section>
   );
 }

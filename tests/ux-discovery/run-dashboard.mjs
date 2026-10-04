@@ -62,18 +62,18 @@ try {
     assert.ok(after.kpis[0].height <= before.kpis[0].height * 0.75, 'KPI height reduced by at least 25% at 1150');
     await page.setViewportSize({ width: 1150, height: 1004 });
     await page.locator('.adesso-queue__row--terapia-ritardo').first().getByRole('button', { name: /Apri/ }).click();
-    await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).waitFor();
+    await page.getByRole('tab', { name: 'Calendario', exact: true }).waitFor();
     assert.match(page.url(), /terapia-farmacologica/);
-    const dose = page.getByTestId('ptc-event').filter({ hasText: 'Farmaco sintetico 0' });
+    const dose = page.getByTestId('therapy-calendar-cell').filter({ hasText: 'Farmaco sintetico 0' });
     await dose.waitFor();
-    assert.equal(await dose.getAttribute('data-therapy-id'), 'density-0');
+    assert.equal(await dose.getAttribute('data-time'), '07:00');
     assert.equal(await dose.getAttribute('aria-expanded'), 'true');
-    assert.match(await dose.textContent(), /07:00.*Farmaco sintetico 0.*1 compressa.*10 mg.*orale/s);
+    assert.match(await dose.textContent(), /Farmaco sintetico 0.*1 dose/s);
     const slotDetail = page.getByTestId('patient-therapy-slot-detail');
     await slotDetail.getByRole('button', { name: /^Erogata:/ }).waitFor();
-    assert.match(await slotDetail.textContent(), /Ore 07:00.*Farmaco sintetico 0.*1 compressa.*10 mg.*orale/s);
+    assert.match(await slotDetail.textContent(), /Somministrazioni delle 07:00.*Farmaco sintetico 0.*1 compressa.*10 mg.*orale/s);
     assert.equal(await slotDetail.getByRole('button', { name: /^Erogata:/ }).count(), 1);
-    assert.equal(await page.getByRole('button', { name: /Prescrizioni e programmazione/ }).getAttribute('aria-expanded'), 'true');
+    assert.equal(await page.getByRole('dialog', { name: 'Terapie delle 07:00', exact: true }).count(), 1);
   }
   assert.equal(state.clinicalWrites, 0);
   assert.deepEqual(errors, []);

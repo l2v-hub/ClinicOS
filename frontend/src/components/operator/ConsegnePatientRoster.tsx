@@ -13,10 +13,10 @@ function roomOf(patient: Paziente): string {
 function RosterPatient({
   patient,
   selected,
-  summary,
+  summary: _summary,
   store,
   onSelect,
-  onRetry,
+  onRetry: _onRetry,
 }: {
   patient: Paziente;
   selected: boolean;
@@ -46,41 +46,12 @@ function RosterPatient({
           <span className="handover-rounds__badges">
             {draft.dirty && <span>Bozza</span>}
             {draft.receipt && <span>Appena salvata</span>}
-            {!summary || summary.status === 'loading' ? (
-              <span>Verifica consegne…</span>
-            ) : summary.status === 'error' ? (
-              <span>Riepilogo non disponibile</span>
-            ) : summary.status === 'unavailable' ? (
-              <span>Dati non disponibili</span>
-            ) : (
-              <>
-                <span>
-                  {summary.value.total === 0
-                    ? 'Nessuna consegna'
-                    : summary.value.total === 1
-                      ? '1 consegna'
-                      : `${summary.value.total} consegne`}
-                </span>
-                {summary.value.urgentActive > 0 && (
-                  <span>
-                    {summary.value.urgentActive === 1
-                      ? '1 urgenza da prendere in carico'
-                      : `${summary.value.urgentActive} urgenze da prendere in carico`}
-                  </span>
-                )}
-                {summary.value.statoRicovero && (
-                  <span>Ricovero: {summary.value.statoRicovero.replaceAll('_', ' ')}</span>
-                )}
-              </>
-            )}
           </span>
         </span>
       </button>
-      {summary?.status === 'error' && (
-        <button type="button" className="link-btn" onClick={onRetry}>
-          Riprova riepilogo
-        </button>
-      )}
+      <a className="ds-link" href={`#/dettaglio-paziente/${encodeURIComponent(patient.id)}`} aria-label={`Diario di ${patient.lastName}, ${patient.firstName}`}>
+        Diario paziente →
+      </a>
     </li>
   );
 }
@@ -90,7 +61,7 @@ export function ConsegnePatientRoster({
   summaries,
   store,
   onSelect,
-  onRetry,
+  onRetry: _onRetry,
 }: {
   patients: Paziente[];
   selectedId?: string;
@@ -109,7 +80,7 @@ export function ConsegnePatientRoster({
           summary={summaries[patient.id]}
           store={store}
           onSelect={() => onSelect(patient)}
-          onRetry={() => onRetry(patient.id)}
+          onRetry={() => _onRetry(patient.id)}
         />
       ))}
     </ul>

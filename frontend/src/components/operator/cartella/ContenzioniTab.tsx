@@ -1,5 +1,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { legacyEntryTransition } from '../../../lib/assessments/assessmentEntry';
+import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
+import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
 import { IcoCheck } from '../../../icons';
 import type {
   CartellaPaziente,
@@ -21,7 +23,7 @@ import {
 interface Props {
   cartella: CartellaPaziente;
   paziente: Paziente;
-  onUpdate: (updates: Partial<CartellaPaziente>) => void;
+  onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
   createRequest?: string;
 }
@@ -363,9 +365,10 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
 
 export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
   const list = cartella.contenzioni ?? [];
-  const [showAdd, setShowAdd] = useState(!!createRequest);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState({ ...EMPTY_FORM });
+  const localDraft = useLegacyModuleDraft(paziente.id,'contenzioni',EMPTY_FORM,!!createRequest);
+  const { show:showAdd,setShow:setShowAdd,editId,setEditId,form,setForm } = localDraft;
+  const [saving,setSaving]=useState(false);
+  const [saveError,setSaveError]=useState('');
   const [modulo, setModulo] = useState(false);
   const [moduloTarget, setModuloTarget] = useState<string | null>(null);
   const entryForm = useRef<HTMLDivElement>(null);
@@ -391,8 +394,9 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
     setForm((p) => ({ ...p, ...f }));
   }
 
-  function handleSave() {
-    if (!form.motivoClinico) return;
+  async function handleSave() {
+    if (!form.motivoClinico || saving) return;
+    setSaving(true);setSaveError('');
     const c: Contenzione = {
       id: editId ?? uid(),
       dataInizio: form.dataInizio,
@@ -433,10 +437,14 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
       firmaPazienteReferente: form.firmaPazienteReferente,
       firmaParente: form.firmaParente,
     };
-    onUpdate({ contenzioni: editId ? list.map((x) => (x.id === editId ? c : x)) : [c, ...list] });
+    try {
+    const ok=await onUpdate({ contenzioni: editId ? list.map((x) => (x.id === editId ? c : x)) : [c, ...list] });
+    if(ok===false)throw new Error();
     setShowAdd(false);
     setEditId(null);
     setForm({ ...EMPTY_FORM });
+    localDraft.remove();
+    } catch { setSaveError('Salvataggio non riuscito. La bozza è conservata.'); } finally {setSaving(false);}
   }
 
   function startEdit(c: Contenzione) {
@@ -497,6 +505,8 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
 
   return (
     <div className={`cr-tab-content${modulo ? ' mode-modulo' : ''}`}>
+      <LegacyDraftTools dirty={localDraft.dirty} error={localDraft.error} onDelete={localDraft.remove} />
+      {saveError && <p role="alert">{saveError}</p>}
       {/* ── Modulo view ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">

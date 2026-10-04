@@ -1,3 +1,4 @@
+import { parseTherapyCalendarState, type TherapyCalendarState } from './lib/therapyCalendarState';
 import {
   Component,
   lazy,
@@ -22,6 +23,8 @@ import {
 } from './lib/consegnaCreation';
 import { createConsegnaDraftStore } from './lib/consegnaDrafts';
 import { createAssessmentDraftStore } from './lib/assessments/assessmentDraftStore';
+import { WidgetGroup } from './components/shared/WidgetGroup';
+import { clearLegacyModuleDrafts } from './lib/useLegacyModuleDraft';
 import { useAssessmentExitGuard } from './lib/assessments/useAssessmentExitGuard';
 import { useConsegneExitGuard } from './lib/useConsegneExitGuard';
 import {
@@ -147,7 +150,6 @@ import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
 import { classicScreenTarget } from './components/assistant/classicScreenTarget';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
-import { HandoverEntryButton } from './components/shared/HandoverEntryButton';
 import { criticalHandoverCount } from './lib/handoverPreview';
 import { parseHandoverOverview } from './lib/handoverOverviewResponse';
 import { TopbarTitleSlot } from './components/shared/topbarTitleSlot';
@@ -421,6 +423,12 @@ export default function App() {
   const [utente, setUtente] = useState<UtenteApp | null>(null);
   const [consegnaDraftStore] = useState(createConsegnaDraftStore);
   const [assessmentDraftStore] = useState(createAssessmentDraftStore);
+  useEffect(() => {
+    if (utente) {
+      assessmentDraftStore.bindStorage(`${utente.id}:${utente.ruolo}`);
+      consegnaDraftStore.bindStorage(`${utente.id}:${utente.ruolo}`);
+    }
+  }, [utente?.id, utente?.ruolo, assessmentDraftStore, consegnaDraftStore]);
   const confirmAssessmentExit = useAssessmentExitGuard(assessmentDraftStore);
   const confirmConsegneExit = useConsegneExitGuard(consegnaDraftStore);
   const rosterOrder = useRosterOrder(utente ? `${utente.id}:${utente.ruolo}` : null);
@@ -522,7 +530,6 @@ export default function App() {
       sessionEpochRef.current++;
       if (tokenRenewalRef.current !== null) window.clearInterval(tokenRenewalRef.current);
       consegnaDraftStore.clear();
-      assessmentDraftStore.clear();
     },
     [consegnaDraftStore, assessmentDraftStore],
   );
@@ -772,6 +779,7 @@ export default function App() {
   }
 
   // Accesso diretto al Giro terapia: ora con dosi in ritardo, solo quelle da somministrare.
+  const [therapyCalendarReturn, setTherapyCalendarReturn] = useState<TherapyCalendarState | undefined>(() => parseTherapyCalendarState(window.history.state?.therapyCalendar));
   const [therapyRoundsEntry, setTherapyRoundsEntry] = useState<TherapyRoundsEntry | undefined>();
   const therapyRoundsRequestRef = useRef(0); // sempre crescente: ogni ingresso mirato si riapplica
   function openLateTherapyRounds() {
@@ -804,7 +812,7 @@ export default function App() {
       return;
     }
     // Una navigazione generica verso Terapia apre il giro senza l'ingresso mirato precedente.
-    if (key === 'terapie') setTherapyRoundsEntry(undefined);
+    if (key === 'terapie') { setTherapyRoundsEntry(undefined); setTherapyCalendarReturn(undefined); }
     // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
     // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
     if (key === 'consegne') {
@@ -988,6 +996,7 @@ export default function App() {
     const restore = ++restoreSequenceRef.current;
     const navigation = patientNavigationSequenceRef.current;
     setBackLabel(state?.prevLabel ?? null);
+    setTherapyCalendarReturn(state?.navKey === 'terapie' ? parseTherapyCalendarState(state.therapyCalendar) : undefined);
     // Dopo una ricarica la profondità di sessione è 0 ma il browser ha ancora voci precedenti.
     if (state?.prevLabel && historyDepth.current === 0) historyDepth.current = 1;
     if (!state?.navKey) {
@@ -2306,6 +2315,7 @@ export default function App() {
       completeness: 'complete',
       summaryExact: true,
     });
+    clearLegacyModuleDrafts();
     setCurrentOperator(null);
     setAuthz(null);
     clearCachedGet();
@@ -3362,14 +3372,6 @@ export default function App() {
             <div className="topbar-title" ref={setTopbarTitleSlot} />
             <ShiftClock />
             <div className="topbar-right">
-              {canNavigate(authz?.capabilities ?? null, 'consegne') && (
-                <HandoverEntryButton
-                  count={criticalHandoverCount(consegneOverview, consegneOverviewState)}
-                  state={consegneOverviewState}
-                  onOpen={() => consegneOverviewState === 'ready' && (consegneOverview?.summary.urgentActive ?? 0) > 0
-                    ? openConsegneAperte() : openConsegneFeed()}
-                />
-              )}
               {utente && (
                 <button
                   type="button"
@@ -3491,6 +3493,7 @@ export default function App() {
 
           {/* Page content */}
           <main className="page-content content-panel">
+            <WidgetGroup key={`${navKey}:${pazienteSelezionato?.id ?? ''}`}>
             <TopbarTitleSlot.Provider value={topbarTitleSlot}>
               <LazyLoadBoundary>
                 <Suspense fallback={<PageLoading />}>
@@ -3634,6 +3637,8 @@ export default function App() {
                       {navKey === 'terapie' && (
                         <TherapyRoundsPage
                           entry={therapyRoundsEntry}
+                          calendarState={therapyCalendarReturn}
+                          onOpenPatient={(patientId, date, time) => void openPatientAt({ patientId, tab: 'terapia-farmacologica', therapy: { subView: 'calendario', date, fascia: time } })}
                           date={therapyDate}
                           slots={therapySlots}
                           loading={loadingTherapySlots}
@@ -3862,6 +3867,7 @@ export default function App() {
                 </Suspense>
               </LazyLoadBoundary>
             </TopbarTitleSlot.Provider>
+            </WidgetGroup>
           </main>
         </div>
 

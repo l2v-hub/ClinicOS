@@ -203,7 +203,6 @@ export function chartSectionOf(id?: TabId): ChartSection {
  *  aprono la stessa sezione di QUEL paziente (niente riselezione). Fuori dalla cartella restano
  *  le pagine di reparto. */
 export const PATIENT_SECTION_FOR_WARD_NAV: Readonly<Record<string, TabId>> = {
-  terapie: 'terapia-farmacologica',
   'parametri-multipaziente': 'parametri',
   consegne: 'consegne',
 };

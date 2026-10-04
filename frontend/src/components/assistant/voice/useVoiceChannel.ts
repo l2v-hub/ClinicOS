@@ -6,7 +6,7 @@
 // Voice never confirms: the confirmation stays the preview button.
 
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import { AssistantHttpError } from '../assistantApi';
+import { AssistantHttpError, type AssistantPreview } from '../assistantApi';
 import {
   audioReducer,
   canStartCapture,
@@ -18,6 +18,8 @@ import {
   loadSpokenFeedback,
   saveSpokenFeedback,
   speakStatus,
+  speakFeedback,
+  interpretedPreviewSpeech,
   stopSpeaking,
   spokenFeedbackSupported,
 } from './spokenStatus';
@@ -36,6 +38,7 @@ const STT_ERROR_TEXT: Record<string, string> = {
 };
 
 interface Options {
+  preview?: AssistantPreview | null;
   residentId: string | null;
   busy: boolean;
   /** The Assistant entry point: submitText(text, 'voice'). */
@@ -44,7 +47,7 @@ interface Options {
   onSwitchToText: (text: string) => void;
 }
 
-export function useVoiceChannel({ residentId, busy, onSubmit, onSwitchToText }: Options) {
+export function useVoiceChannel({ residentId, busy, onSubmit, onSwitchToText, preview }: Options) {
   const [audio, dispatch] = useReducer(audioReducer, initialAudioSession);
   const [status, setStatus] = useState<VoiceStatus | null>(null);
   const [statusError, setStatusError] = useState(false);
@@ -141,7 +144,7 @@ export function useVoiceChannel({ residentId, busy, onSubmit, onSwitchToText }: 
   }, [abortCapture]);
 
   // Assistant closed: nothing keeps running (mic released by useVoiceCapture, STT request aborted).
-  useEffect(() => () => stopAll(), [stopAll]);
+  useEffect(() => () => { stopAll(); stopSpeaking(); }, [stopAll]);
 
   // Resident changed while a capture / transcript is pending → stop the mic, drop the audio and
   // the transcript (never re-target).
@@ -150,13 +153,25 @@ export function useVoiceChannel({ residentId, busy, onSubmit, onSwitchToText }: 
     if (lastResident.current === residentId) return;
     lastResident.current = residentId;
     stopAll();
+    stopSpeaking();
     dispatch({ type: 'resident_changed', residentId });
   }, [residentId, stopAll]);
 
-  // Optional spoken status (off by default; fixed phrases only).
+  const spokenKey = useRef('');
   useEffect(() => {
-    if (spoken) speakStatus(audio.state);
-  }, [audio.state, spoken]);
+    if (!spoken) return;
+    if (audio.state === 'TRANSCRIPT_READY') {
+      const key = `transcript:${audio.captureId}`;
+      if (spokenKey.current === key) return;
+      spokenKey.current = key;
+      speakFeedback(`Ho capito: ${audio.transcript}. Controlla la trascrizione e premi Invia per preparare l’azione.`);
+    } else if (audio.state === 'AWAITING_CONFIRMATION' && preview) {
+      const key = `preview:${preview.previewId}`;
+      if (spokenKey.current === key) return;
+      spokenKey.current = key;
+      speakFeedback(interpretedPreviewSpeech(preview));
+    } else if (audio.state !== 'AWAITING_CONFIRMATION') speakStatus(audio.state);
+  }, [audio.state, audio.captureId, audio.transcript, spoken, preview]);
 
   const available = Boolean(status?.voiceAllowed && status.sttConfigured);
 
@@ -185,6 +200,7 @@ export function useVoiceChannel({ residentId, busy, onSubmit, onSwitchToText }: 
     const text = audio.transcript.trim();
     if (audio.state !== 'TRANSCRIPT_READY' || !text || busy || submitted.current) return;
     submitted.current = true; // one transcript → at most one Assistant request
+    stopSpeaking();
     dispatch({ type: 'submit' });
     onSubmit(text);
   }, [audio.state, audio.transcript, busy, onSubmit]);
@@ -192,6 +208,7 @@ export function useVoiceChannel({ residentId, busy, onSubmit, onSwitchToText }: 
   const switchToText = useCallback(() => {
     const text = audio.transcript;
     stopAll();
+    stopSpeaking();
     dispatch({ type: 'reset' });
     onSwitchToText(text);
   }, [audio.transcript, onSwitchToText, stopAll]);

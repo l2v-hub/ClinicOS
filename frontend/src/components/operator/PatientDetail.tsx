@@ -9,6 +9,8 @@ import {
 import { patientLocationLabel } from '../../lib/patientIdentity';
 import { DemographicsStatus } from '../shared/DemographicsStatus';
 import { PatientIntakeReview } from './PatientIntakeReview';
+import { PatientContacts } from './PatientContacts';
+import { WidgetGroup } from '../shared/WidgetGroup';
 import { usePatientIntakeReview } from '../../lib/patientIntakeReview';
 import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { ConsegnaQuickAdd } from './ConsegnaQuickAdd';
@@ -2395,7 +2397,7 @@ export function PatientDetail({
   const pinRequest = itemFocus?.requestId ?? 0;
   useEffect(() => {
     if (tab === firstOfSection && !pinItem) return;
-    const selector = pinItem ?? `[data-chart-part="${tab}"]`;
+    const selector = pinItem ?? `[data-chart-part="${tab === 'contatti' ? 'presa-in-carico' : tab}"]`;
     const block: ScrollLogicalPosition = pinItem ? 'center' : 'start';
     const find = () => document.querySelector(selector);
     const highlighted: HTMLElement[] = [];
@@ -2456,6 +2458,7 @@ export function PatientDetail({
       <>
         {((section === 'moduli' && tab === 'medicazioni') || legacyVisits.has('medicazioni')) && (
           <div hidden={!(section === 'moduli' && tab === 'medicazioni')}>
+            <WidgetGroup>
             <MedicazioniTab
               key={paziente.id}
               createRequest={
@@ -2472,10 +2475,12 @@ export function PatientDetail({
               operatoreId={operatoreId}
               operatoreRole={operatoreRole}
             />
+            </WidgetGroup>
           </div>
         )}
         {((section === 'moduli' && tab === 'contenzioni') || legacyVisits.has('contenzioni')) && (
           <div hidden={!(section === 'moduli' && tab === 'contenzioni')}>
+            <WidgetGroup>
             <ContenzioniTab
               key={paziente.id}
               createRequest={
@@ -2488,10 +2493,12 @@ export function PatientDetail({
               onUpdate={upd}
               operatoreNome={operatoreNome}
             />
+            </WidgetGroup>
           </div>
         )}
         {((section === 'moduli' && tab === 'braden') || legacyVisits.has('braden')) && (
           <div hidden={!(section === 'moduli' && tab === 'braden')}>
+            <WidgetGroup>
             <ScalaBradenTab
               key={paziente.id}
               createRequest={
@@ -2504,6 +2511,7 @@ export function PatientDetail({
               onUpdate={upd}
               operatoreNome={operatoreNome}
             />
+            </WidgetGroup>
           </div>
         )}
       </>
@@ -2586,6 +2594,7 @@ export function PatientDetail({
             paziente={paziente}
             onUpdate={upd}
             operatoreNome={operatoreNome}
+            contacts={<PatientContacts patient={paziente} chart={cartella} onEdit={() => { openProfileEditor(); setTab('profilo'); }} />}
           />
         )}
         {current === 'documenti' && (
@@ -2907,7 +2916,7 @@ export function PatientDetail({
                 </div>
               </>
             ) : (
-              sectionTabs.map((id) => (
+              sectionTabs.filter((id) => id !== 'contatti').map((id) => (
                 <div key={id} className="chart-part" data-chart-part={id}>
                   <Suspense fallback={<ClinicalSectionLoading />}>{renderTab(id)}</Suspense>
                 </div>

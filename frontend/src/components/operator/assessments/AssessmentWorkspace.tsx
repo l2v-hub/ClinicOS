@@ -136,7 +136,7 @@ function AssessmentSession({
     refresh: history.refresh,
     setError,
   });
-  const localDrafts = store.list(patient.id, type).filter((item) => item.dirty || item.pending);
+  const localDrafts = store.list(patient.id, type).filter((item) => item.dirty || item.pending || item.record?.status === 'draft');
   useEffect(() => {
     const version = ++life.current;
     const active = requests.current;
@@ -269,8 +269,8 @@ function AssessmentSession({
         title={definition.title}
         actions={
           canCreate && (
-            <button type="button" className="btn-primary" onClick={() => create()}>
-              {type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'}
+            <button type="button" className="btn-primary assessment-catalog-icon" aria-label={type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'} title="Nuova compilazione" onClick={() => create()}>
+              <span aria-hidden="true">＋</span>
             </button>
           )
         }
@@ -293,12 +293,12 @@ function AssessmentSession({
             <p>Nessuna scheda finale corrente. Avvia una nuova compilazione.</p>
           )}
           <p className="assessment-hint">
-            Compilatore: {operatorName}. Le bozze locali restano in questa sessione; salva la bozza
-            per ritrovarla dopo l’accesso successivo.
+            Compilatore: {operatorName}. La bozza resta disponibile dopo il ricaricamento in questa scheda. Salvala sul server per ritrovarla dopo l’accesso successivo.
           </p>
+          {store.persistenceFailed() && <p role="alert">Bozza disponibile in questa pagina. Il browser non consente di conservarla dopo il ricaricamento.</p>}
           {localDrafts.length > 0 && (
             <div className="assessment-local">
-              <span>Compilazioni da completare in questa sessione</span>
+              <span>Draft · compilazioni da completare</span>
               {localDrafts.map((item) => (
                 <button
                   key={item.key}
@@ -466,10 +466,10 @@ function AssessmentSession({
                   <button
                     type="button"
                     className="link-btn"
-                    disabled={draft.busy}
+                    disabled={draft.busy || !!draft.pending}
                     onClick={() => setConfirm('discard')}
                   >
-                    Scarta modifiche locali
+                    Elimina bozza locale
                   </button>
                 </div>
               )}

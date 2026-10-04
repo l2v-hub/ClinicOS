@@ -1,0 +1,27 @@
+.widget-group-controls {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 0;
+  gap: 8px;
+}
+.widget-group-controls button {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+.cts__body[hidden] {
+  display: none !important;
+}
+.widget-toggle {
+  min-width: 36px;
+  min-height: 36px;
+  flex-shrink: 0;
+}
+.patient-record-view .widget-group-controls {
+  margin-inline: var(--chart-gutter, 24px);
+}
+@media print {
+  .cts__body[hidden] {
+    display: block !important;
+  }
+}

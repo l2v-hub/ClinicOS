@@ -3,6 +3,8 @@ import { IcoArrow } from '../../icons';
 import type { AdessoItem } from '../../lib/adessoQueue';
 import type { PatientLanding } from '../../lib/patientTargetResolver';
 import './AdessoQueue.css';
+import { useWidgetOpen } from '../shared/WidgetGroup';
+import { WidgetToggle } from '../shared/WidgetToggle';
 
 export const ADESSO_QUEUE_LIMIT = 6;
 
@@ -43,6 +45,7 @@ export function AdessoQueue({
   headerAction,
 }: Props) {
   const titleId = useId();
+  const { open, setOpen, bodyId } = useWidgetOpen();
   const visible = items.slice(0, ADESSO_QUEUE_LIMIT);
   const rest = items.length - visible.length;
   const urgenti = items.filter((it) => it.inRitardo).length;
@@ -64,8 +67,9 @@ export function AdessoQueue({
           {consegneUrgenti > 0 && <span className="turno-badge turno-badge--crit">{consegneUrgenti} {consegneUrgenti === 1 ? 'consegna urgente' : 'consegne urgenti'}</span>}
         </div>
         {headerAction}
+        <WidgetToggle title="Adesso" open={open} bodyId={bodyId} onToggle={() => setOpen(!open)} />
       </div>
-
+      <div id={bodyId} hidden={!open}>
       {terapie === 'loading' && (
         <p className="adesso-queue__notice" role="status">
           Scadenze terapia in verifica: la coda le aggiunge appena pronte.
@@ -169,6 +173,7 @@ export function AdessoQueue({
           </button>
         )}
       </p>
+      </div>
     </section>
   );
 }

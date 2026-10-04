@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
+import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
 import type { CartellaPaziente, ScalaBradenValutazione, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
@@ -7,7 +9,7 @@ import type { ColumnDef } from './ClinicalTable';
 interface Props {
   cartella: CartellaPaziente;
   paziente: Paziente;
-  onUpdate: (updates: Partial<CartellaPaziente>) => void;
+  onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
   createRequest?: string;
 }
@@ -501,8 +503,10 @@ function BradenHistoryTable({
 
 export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
   const list = cartella.valutazioniBraden ?? [];
-  const [showAdd, setShowAdd] = useState(!!createRequest);
-  const [form, setForm] = useState<BradenFormState>({ ...EMPTY_FORM });
+  const localDraft = useLegacyModuleDraft<BradenFormState>(paziente.id,'braden',EMPTY_FORM,!!createRequest);
+  const { show:showAdd,setShow:setShowAdd,form,setForm } = localDraft;
+  const [saving,setSaving]=useState(false);
+  const [saveError,setSaveError]=useState('');
   const [modulo, setModulo] = useState(false);
   const [moduloTarget, setModuloTarget] = useState<string | null>(null); // id valutazione
   const entryForm = useRef<HTMLDivElement>(null);
@@ -523,7 +527,8 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
   const score = calcScore(form);
   const r = rischio(score);
 
-  function handleSave() {
+  async function handleSave() {
+    if(saving)return;
     if (
       !form.percezioneSensoriale ||
       !form.umidita ||
@@ -533,6 +538,7 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
       !form.frizione
     )
       return;
+    setSaving(true);setSaveError('');
     const v: ScalaBradenValutazione = {
       id: uid(),
       data: form.data,
@@ -546,9 +552,13 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
       note: form.note,
       createdAt: nowISO(),
     };
-    onUpdate({ valutazioniBraden: [v, ...list] });
+    try {
+    const ok=await onUpdate({ valutazioniBraden: [v, ...list] });
+    if(ok===false)throw new Error();
     setShowAdd(false);
     setForm({ ...EMPTY_FORM });
+    localDraft.remove();
+    } catch {setSaveError('Salvataggio non riuscito. La bozza è conservata.');} finally {setSaving(false);}
   }
 
   function handleDelete(id: string) {
@@ -566,6 +576,8 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
 
   return (
     <div className={`cr-tab-content${modulo ? ' mode-modulo' : ''}`}>
+      <LegacyDraftTools dirty={localDraft.dirty} error={localDraft.error} onDelete={localDraft.remove} />
+      {saveError && <p role="alert">{saveError}</p>}
       {/* ── Modulo view (paper form) ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">

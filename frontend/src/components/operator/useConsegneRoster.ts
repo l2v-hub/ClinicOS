@@ -93,7 +93,6 @@ export function useConsegneRoster(query: string, room: string, active: boolean) 
         cursor.current = page.nextCursor;
         setItems(rows.current);
         setNextCursor(page.nextCursor);
-        void refreshSummary(page.items.map((patient) => patient.id));
         return page.items;
       } catch (cause) {
         if (!controller.signal.aborted && version === generation.current) {

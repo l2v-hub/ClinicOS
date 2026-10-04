@@ -6,9 +6,10 @@
 // UX ciclo 2 (W5): è la vista predefinita della Terapia. Oggi si apre da sola sull'ora della prima
 // dose da somministrare (azioni visibili senza tocchi in più); un farmaco o una dose richiesti da un
 // collegamento diretto restano evidenziati.
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import type { PatientTherapyAPI, TherapySlot } from '../../../types';
-import { IcoPill } from '../../../icons';
+import { AccessibleDialogSurface } from '../../shared/AccessibleDialogSurface';
+import { TherapyCalendarGrid, type TherapyCalendarCell } from '../../shared/TherapyCalendarGrid';
 import { DateNav } from '../../shared/DateNav';
 import { API_URL } from '../../../config';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
@@ -16,7 +17,6 @@ import { facilityLocalDate } from '../../../lib/facilityTime';
 import {
   buildPatientTherapyDay,
   calendarDoseStates,
-  formatEndDate,
   isCalendarDate,
   shiftCalendarDate,
   type CalendarOccurrence,
@@ -37,7 +37,6 @@ type ReadState = {
 };
 type DaySlots = { status: 'ready'; slots: TherapySlot[] } | { status: 'error' };
 type SlotsState = Record<string, DaySlots>;
-const HOURS = Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, '0'));
 
 interface Props {
   patientId: string;
@@ -52,7 +51,6 @@ interface Props {
   /** Cambia quando la scheda modifica le prescrizioni (rilettura del calendario). */
   refreshKey?: number;
 }
-
 /** Stato di una dose dal giro del giorno; null se il giro non è (ancora) disponibile. */
 function eventStatus(
   event: CalendarOccurrence,
@@ -66,26 +64,11 @@ function eventStatus(
   return doseStatus({ ...state.administration, scheduledTime: event.time }, date);
 }
 
-function StatusChip({ status, pending }: { status: DoseStatus | null; pending: boolean }) {
-  if (!status)
-    return (
-      <span className="ptc-status ptc-status--unknown">
-        {pending ? 'Stato in caricamento' : 'Stato non disponibile'}
-      </span>
-    );
-  return <span className={`ptc-status ptc-status--${status.tone}`}>{status.text}</span>;
-}
-
-function doseText(event: CalendarOccurrence): string {
-  return event.strength ? `${event.dose} — ${event.strength}` : event.dose;
-}
-
 export function PatientTherapyCalendar({
   patientId,
   initialDate,
   initialOpenTime,
   focusTherapyId,
-  autoOpenDue = false,
   refreshKey = 0,
 }: Props) {
   const startDate = initialDate && isCalendarDate(initialDate) ? initialDate : facilityLocalDate();
@@ -116,7 +99,7 @@ export function PatientTherapyCalendar({
     key: '',
     days: {},
   });
-  const timeline = useRef<HTMLDivElement>(null);
+  const dialogTitle = useId();
   const current = state.patientId === patientId && state.revision === revision;
   const status = current ? state.status : 'loading';
 
@@ -184,28 +167,23 @@ export function PatientTherapyCalendar({
 
   const today = facilityLocalDate();
   const daySlots = slots[date];
-  // Prima dose ancora da somministrare oggi (in ritardo per prima, perché viene prima nel giorno).
-  const dueTime = useMemo(() => {
-    if (!autoOpenDue || date !== today || daySlots?.status !== 'ready') return null;
-    const sorted = [...day.events].sort((a, b) => a.time.localeCompare(b.time));
-    const next = sorted.find((event) => {
-      const tone = eventStatus(event, date, daySlots, patientId)?.tone;
-      return tone === 'late' || tone === 'due';
+  const openTime = open?.date === date ? open.time : null;
+  const cells: TherapyCalendarCell[] = visibleDays.flatMap((dayDate) => {
+    const events = status === 'ready' ? buildPatientTherapyDay(state.therapies, patientId, dayDate).events : [];
+    return [...new Set(events.map((event) => event.time))].map((time) => {
+      const group = events.filter((event) => event.time === time);
+      const statuses = group.map((event) => eventStatus(event, dayDate, slots[dayDate], patientId));
+      const late = statuses.filter((item) => item?.tone === 'late').length;
+      const done = statuses.filter((item) => item?.tone === 'done' || item?.tone === 'missed').length;
+      const unknown = statuses.some((item) => !item);
+      return { date: dayDate, time, count: group.length,
+        title: group.length === 1 ? group[0].drugName : group.map((event) => event.drugName).join(' · '),
+        detail: unknown ? 'Stato non disponibile' : late ? `${late} in ritardo` : `${done}/${group.length} registrate`,
+        tone: late ? 'late' : done === group.length ? 'done' : 'due',
+        focused: group.some((event) => event.therapyId === focusTherapyId),
+      };
     });
-    return next?.time ?? null;
-  }, [autoOpenDue, date, today, daySlots, day.events, patientId]);
-  const openTime = open === undefined ? dueTime : open?.date === date ? open.time : null;
-
-  useEffect(() => {
-    if (view !== 'giorno' || !timeline.current || !day.events.length) return;
-    const focused = focusTherapyId
-      ? day.events.find((event) => event.therapyId === focusTherapyId)?.time
-      : undefined;
-    const target = openTime ?? focused ?? day.events[0].time;
-    const firstHour = Math.max(0, Number(target.slice(0, 2)) - (openTime ? 0 : 1));
-    const row = timeline.current.querySelector<HTMLElement>(`[data-hour="${HOURS[firstHour]}"]`);
-    if (row) timeline.current.scrollTop = row.offsetTop;
-  }, [day, view, openTime, focusTherapyId]);
+  });
 
   const formattedDate = new Date(`${date}T12:00:00`).toLocaleDateString('it-IT', {
     weekday: 'long',
@@ -269,12 +247,12 @@ export function PatientTherapyCalendar({
 
       <header className="patient-therapy-calendar__heading">
         <h3 className={view === 'giorno' ? undefined : 'is-week'}>
-          {view === 'giorno' ? formattedDate : weekHeading(date)}
+          {view === 'giorno' ? formattedDate : `Settimana ${weekDays(date)[0]} – ${weekDays(date)[6]}`}
         </h3>
         <p>
           {view === 'giorno'
-            ? 'Ogni dose mostra farmaco, dose, via e stato. Tocca una dose per le azioni della sua ora.'
-            : 'Settimana delle terapie attive: tocca una dose per aprire il suo giorno.'}
+            ? 'Apri uno slot per dettagli e somministrazione.'
+            : 'Apri uno slot per le terapie di quel giorno.'}
         </p>
       </header>
 
@@ -289,127 +267,28 @@ export function PatientTherapyCalendar({
           onRetry={refreshCalendar}
         />
       )}
-      {status === 'ready' && view === 'settimana' && (
-        <WeekView
-          therapies={state.therapies}
-          patientId={patientId}
-          date={date}
-          slots={slots}
-          onOpen={(target, time) => {
-            setDate(target);
-            setView('giorno');
-            setOpen({ date: target, time });
-          }}
-        />
-      )}
-      {status === 'ready' && view === 'giorno' && (
-        <>
-          <p className="patient-therapy-calendar__count" role="status">
-            {day.events.length > 0
-              ? `${day.events.length} ${day.events.length === 1 ? 'dose programmata' : 'dosi programmate'} · ${timeCount} ${timeCount === 1 ? 'orario' : 'orari'}`
-              : 'Nessuna dose con orario programmato per questa data.'}
-          </p>
-          {daySlots?.status === 'error' && (
-            <p className="patient-therapy-calendar__message" role="alert">
-              Stato delle somministrazioni non disponibile: il calendario mostra solo la
-              programmazione.
-            </p>
-          )}
-          {day.events.length > 0 && (
-            <div
-              ref={timeline}
-              className="agt-day-wrap patient-therapy-calendar__timeline"
-              role="region"
-              aria-label="Orari delle terapie nelle 24 ore"
-              tabIndex={0}
-            >
-              {HOURS.map((hour) => {
-                const hourEvents = day.events.filter((event) => event.time.startsWith(`${hour}:`));
-                const statuses = hourEvents.map((event) =>
-                  eventStatus(event, date, daySlots, patientId),
-                );
-                const late = statuses.filter((s) => s?.tone === 'late').length;
-                return (
-                  <div key={hour} className="agt-slot agt-slot--hour" data-hour={hour}>
-                    <span className="agt-slot__time">{hour}:00</span>
-                    {hourEvents.length > 1 && (
-                      <p className="ptc-hour-summary">
-                        {hour}:00 · {hourEvents.length} dosi
-                        {late > 0 ? ` · ${late} in ritardo` : ''}
-                      </p>
-                    )}
-                    <ol
-                      className="patient-therapy-calendar__events"
-                      aria-label={`Terapie dalle ${hour}:00`}
-                    >
-                      {hourEvents.map((event, index) => {
-                        const st = statuses[index];
-                        const end = formatEndDate(event.endDate);
-                        const meta = [
-                          event.prescriber ? `Prescr. ${event.prescriber}` : null,
-                          event.oneTime ? 'Una tantum' : end,
-                          event.note,
-                        ].filter(Boolean);
-                        const focus = focusTherapyId === event.therapyId;
-                        return (
-                          <li key={event.id}>
-                            <button
-                              type="button"
-                              className={`agt-therapy-slot patient-therapy-calendar__event${st ? ` is-${st.tone}` : ''}${focus ? ' is-focus' : ''}`}
-                              data-therapy-id={event.therapyId}
-                              aria-expanded={openTime === event.time}
-                              aria-label={`${event.time} ${event.drugName}, ${doseText(event)}, ${event.route}, ${st?.text ?? 'stato non disponibile'}: apri le azioni delle ${event.time}`}
-                              data-testid="ptc-event"
-                              onClick={() =>
-                                setOpen(openTime === event.time ? null : { date, time: event.time })
-                              }
-                            >
-                              <span className="agt-therapy-slot__icon" aria-hidden="true">
-                                <IcoPill />
-                              </span>
-                              <span className="patient-therapy-calendar__medication">
-                                <span className="patient-therapy-calendar__event-title">
-                                  <time dateTime={`${date}T${event.time}`}>{event.time}</time>
-                                  <strong className="agt-therapy-slot__label">
-                                    {event.drugName}
-                                  </strong>
-                                  <span className="ptc-dose">{doseText(event)}</span>
-                                </span>
-                                <span className="patient-therapy-calendar__event-dose">
-                                  <span>{event.route}</span>
-                                  <StatusChip status={st} pending={!daySlots} />
-                                </span>
-                                {meta.length > 0 && (
-                                  <span className="ptc-meta">{meta.join(' · ')}</span>
-                                )}
-                              </span>
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ol>
-                    {openTime?.startsWith(`${hour}:`) && (
-                      <PatientTherapySlotDetail
-                        key={`${patientId}|${date}|${openTime}`}
-                        patientId={patientId}
-                        date={date}
-                        time={openTime}
-                        events={day.events.filter((event) => event.time === openTime)}
-                        focusTherapyId={focusTherapyId}
-                        bringIntoView={open === undefined || Boolean(initialOpenTime)}
-                        onClose={() => setOpen(null)}
-                        onRecorded={() => {
-                          // L'ora resta aperta (non salta alla prossima dose) e gli stati si rileggono.
-                          setOpen({ date, time: openTime });
-                          setSlotsRevision((value) => value + 1);
-                        }}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+      {status === 'ready' && <>
+        <p className="patient-therapy-calendar__count" role="status">{day.events.length} dosi · {timeCount} orari</p>
+        {daySlots?.status === 'error' && <p role="alert">Stato delle somministrazioni non disponibile: è mostrata solo la programmazione.</p>}
+        <TherapyCalendarGrid days={visibleDays} cells={cells} selected={open}
+          onOpen={(target, time) => { setDate(target); setView('giorno'); setOpen({ date: target, time }); }} />
+        {openTime && <AccessibleDialogSurface labelledBy={dialogTitle} onClose={() => setOpen(null)} className="therapy-calendar-dialog">
+          <header className="therapy-calendar-dialog__head"><h3 id={dialogTitle}>Terapie delle {openTime}</h3>
+            <button type="button" className="btn-secondary btn-sm" data-dialog-initial-focus onClick={() => setOpen(null)}>Chiudi</button></header>
+          {day.events.filter((event) => event.time === openTime).map((event) => <section className="therapy-calendar-dialog__patient" key={event.id}>
+            <strong>{event.drugName}</strong><dl>
+              <div><dt>Dose</dt><dd>{event.dose}{event.strength ? ` — ${event.strength}` : ''}</dd></div>
+              <div><dt>Via</dt><dd>{event.route}</dd></div>
+              {event.prescriber && <div><dt>Prescrittore</dt><dd>{event.prescriber}</dd></div>}
+              {event.endDate && <div><dt>Fine</dt><dd>{event.endDate}</dd></div>}
+              {event.oneTime && <div><dt>Frequenza</dt><dd>Una tantum</dd></div>}
+            </dl>{event.note && <p>{event.note}</p>}
+          </section>)}
+          <PatientTherapySlotDetail embedded key={`${patientId}|${date}|${openTime}`} patientId={patientId} date={date} time={openTime}
+            events={day.events.filter((event) => event.time === openTime)} focusTherapyId={focusTherapyId}
+            onClose={() => setOpen(null)} onRecorded={() => setSlotsRevision((value) => value + 1)} />
+        </AccessibleDialogSurface>}
+        {view === 'giorno' && <>
           {asNeeded.length > 0 && (
             <section className="patient-therapy-calendar__unscheduled" aria-label="Al bisogno">
               <h4>
@@ -473,86 +352,8 @@ export function PatientTherapyCalendar({
               </ul>
             </section>
           )}
-        </>
-      )}
+        </>}
+      </>}
     </section>
-  );
-}
-
-const WEEKDAY = new Intl.DateTimeFormat('it-IT', {
-  weekday: 'short',
-  day: 'numeric',
-  month: 'short',
-});
-
-function weekHeading(date: string): string {
-  const days = weekDays(date);
-  const fmt = (d: string) =>
-    new Date(`${d}T12:00:00`).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
-  return `Settimana dal ${fmt(days[0])} al ${fmt(days[6])}`;
-}
-
-/** Sette giorni: ogni giorno elenca TUTTE le sue dosi (niente «+N»), con dose e stato in parole. */
-function WeekView({
-  therapies,
-  patientId,
-  date,
-  slots,
-  onOpen,
-}: {
-  therapies: PatientTherapyAPI[];
-  patientId: string;
-  date: string;
-  slots: SlotsState;
-  onOpen: (day: string, time: string) => void;
-}) {
-  const today = facilityLocalDate();
-  return (
-    <ol className="ptc-week" aria-label="Terapie della settimana">
-      {weekDays(date).map((day) => {
-        const built = buildPatientTherapyDay(therapies, patientId, day);
-        const daySlots = slots[day];
-        const prn = built.unscheduled.filter((item) => item.kind === 'as_needed');
-        return (
-          <li
-            key={day}
-            className={`ptc-week__day${day === today ? ' is-today' : ''}`}
-            aria-current={day === today ? 'date' : undefined}
-          >
-            <h4 className="ptc-week__head">{WEEKDAY.format(new Date(`${day}T12:00:00`))}</h4>
-            {built.events.length === 0 ? (
-              <p className="ptc-week__none">Nessuna dose</p>
-            ) : (
-              <ul className="ptc-week__doses">
-                {built.events.map((event) => {
-                  const st = eventStatus(event, day, daySlots, patientId);
-                  return (
-                    <li key={event.id}>
-                      <button
-                        type="button"
-                        className={`ptc-week__dose${st ? ` is-${st.tone}` : ''}`}
-                        data-testid="ptc-week-dose"
-                        onClick={() => onOpen(day, event.time)}
-                      >
-                        <span className="ptc-week__line">
-                          <time>{event.time}</time> <strong>{event.drugName}</strong>
-                        </span>
-                        <span className="ptc-week__line">{doseText(event)}</span>
-                        <StatusChip status={st} pending={!daySlots} />
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-            {prn.length > 0 && (
-              <p className="ptc-week__none">
-                Al bisogno: {prn.map((item) => item.drugName).join(', ')}
-              </p>
-            )}
-          </li>
-        );
-      })}
-    </ol>
   );
 }

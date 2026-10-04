@@ -19,6 +19,8 @@ import {
 } from '../../../lib/assessments/assessmentCatalogState';
 import { useCan } from '../../../lib/capabilities';
 import './AssessmentCatalog.css';
+import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import { hasLegacyDraft, deleteLegacyDraft, LEGACY_DRAFT_CHANGED } from '../../../lib/useLegacyModuleDraft';
 
 type Action = 'open' | 'new' | 'resume';
 interface ViewProps {
@@ -30,6 +32,7 @@ interface ViewProps {
   onNrs: () => void;
   /** F15: «Nuova compilazione» only with the create capability (OSS read-only). */
   canCreate?: boolean;
+  onDeleteLocal?: (module: ClinicalModule) => void;
 }
 const time = (value: string) =>
   new Intl.DateTimeFormat('it-IT', {
@@ -53,6 +56,7 @@ function Latest({
   if (!module.type) {
     const date = legacyModuleDate(cartella, module.tab);
     const count = legacyModuleCount(cartella, module.tab);
+    if (local) return <><span className="assessment-draft-chip">Draft · bozza sul dispositivo</span><p>{count === 0 ? 'Nessuna compilazione salvata' : `${count ?? '—'} compilazioni salvate`}</p></>;
     if (count === 0) return <p>Nessuna compilazione</p>;
     if (count === null) return <p>Dati del modulo non disponibili</p>;
     return (
@@ -91,7 +95,7 @@ function Latest({
           {item.latestOwnDraft ? ` · aggiornata ${time(item.latestOwnDraft.updatedAt)}` : ''}
         </p>
       )}
-      {local && <p>Bozza locale da salvare</p>}
+      {local && <span className="assessment-draft-chip">Draft · bozza sul dispositivo</span>}
     </>
   );
 }
@@ -103,11 +107,10 @@ export function AssessmentCatalogView({
   onOpen,
   onNrs,
   canCreate = true,
+  onDeleteLocal,
 }: ViewProps) {
   return (
-    <section className="assessment-catalog" aria-labelledby="assessment-catalog-title">
-      <h2 id="assessment-catalog-title">Moduli</h2>
-      <p>Apri un modulo o riprendi una bozza personale.</p>
+    <section className="assessment-catalog" aria-label="Moduli clinici">
       {state.status === 'error' && (
         <p role="alert">
           {state.error}{' '}
@@ -122,7 +125,7 @@ export function AssessmentCatalogView({
           <div className="assessment-catalog-list">
             {CLINICAL_MODULES.filter((module) => module.group === group).map((module) => {
               const item = state.data?.items.find((row) => row.type === module.type);
-              const local = !!module.type && localDraftTypes.has(module.type);
+              const local = localDraftTypes.has(module.type ?? module.tab);
               return (
                 <article key={module.tab} className="assessment-catalog-row">
                   <div>
@@ -138,32 +141,36 @@ export function AssessmentCatalogView({
                   <div className="assessment-catalog-actions">
                     <button
                       type="button"
-                      className="btn-secondary btn-sm"
+                      className="btn-secondary assessment-catalog-icon"
                       aria-label={`Apri ${module.label}`}
+                      title={`Apri ${module.label}`}
                       onClick={() => onOpen(module, 'open', item)}
                     >
-                      Apri
+                      <span aria-hidden="true">›</span>
                     </button>
                     {canCreate && (
                       <button
                         type="button"
-                        className="btn-primary btn-sm"
+                        className="btn-primary assessment-catalog-icon"
                         aria-label={`Nuova compilazione ${module.label}`}
+                        title={`Nuova compilazione ${module.label}`}
                         onClick={() => onOpen(module, 'new', item)}
                       >
-                        Nuova compilazione
+                        <span aria-hidden="true">＋</span>
                       </button>
                     )}
                     {canCreate && (local || !!item?.ownDraftCount) && (
                       <button
                         type="button"
-                        className="btn-secondary btn-sm"
+                        className="btn-secondary assessment-catalog-icon"
                         aria-label={`Riprendi bozza ${module.label}`}
+                        title={`Riprendi bozza ${module.label}`}
                         onClick={() => onOpen(module, 'resume', item)}
                       >
-                        Riprendi bozza
+                        <span aria-hidden="true">✎</span>
                       </button>
                     )}
+                    {canCreate && local && onDeleteLocal && <button type="button" className="btn-secondary assessment-catalog-icon" aria-label={`Elimina bozza locale ${module.label}`} title={`Elimina bozza locale ${module.label}`} onClick={() => onDeleteLocal(module)}><span aria-hidden="true">×</span></button>}
                   </div>
                 </article>
               );
@@ -226,6 +233,9 @@ function CatalogSession({
   );
   const state = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
   const canCreate = useCan('assessments.create_draft');
+  const [deleting, setDeleting] = useState<ClinicalModule | null>(null);
+  const [, setLegacyRevision] = useState(0);
+  useEffect(() => { const refresh=()=>setLegacyRevision(v=>v+1); window.addEventListener(LEGACY_DRAFT_CHANGED,refresh); return ()=>window.removeEventListener(LEGACY_DRAFT_CHANGED,refresh); },[]);
   useSyncExternalStore(draftStore.subscribe, draftStore.getVersion, draftStore.getVersion);
   useEffect(() => {
     void store.load();
@@ -234,15 +244,26 @@ function CatalogSession({
   const localDraftTypes = new Set(
     CLINICAL_MODULES.flatMap((module) =>
       module.type &&
-      draftStore.list(patientId, module.type).some((draft) => draft.dirty || draft.pending)
+      draftStore.list(patientId, module.type).some((draft) => draft.dirty || draft.pending || draft.record?.status === 'draft')
         ? [module.type]
-        : [],
+        : !module.type && hasLegacyDraft(patientId,module.tab) ? [module.tab] : [],
     ),
   );
   return (
+    <>
+    {draftStore.persistenceFailed() && <p role="alert">Non è possibile conservare la bozza dopo il ricaricamento. Salvala sul server prima di uscire.</p>}
     <AssessmentCatalogView
       {...{ cartella, state, localDraftTypes, onOpen, onNrs, canCreate }}
       onRetry={() => void store.load()}
+      onDeleteLocal={setDeleting}
     />
+    <ConfirmDialog open={!!deleting} title="Eliminare la bozza locale?" message="Rimuove la compilazione conservata su questo dispositivo. Una bozza già salvata sul server resta nello storico. Un invio dall’esito incerto deve essere verificato prima di eliminarlo." confirmLabel="Elimina bozza" onCancel={() => setDeleting(null)} onConfirm={() => {
+      if (deleting?.type) for (const draft of draftStore.list(patientId, deleting.type)) {
+        if (!draft.busy && !draft.pending) draftStore.discard(draft.key);
+      }
+      else if (deleting) deleteLegacyDraft(patientId,deleting.tab);
+      setDeleting(null);
+    }} />
+    </>
   );
 }

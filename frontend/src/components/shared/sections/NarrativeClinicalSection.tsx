@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useWidgetOpen } from '../WidgetGroup';
 import { SemanticTaggedText } from './SemanticTaggedText';
 import type { SemanticAnnotation, SemanticTag } from './types';
 
@@ -83,6 +84,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
   const [showSource, setShowSource] = useState(false);
+  const { open, setOpen, bodyId } = useWidgetOpen();
 
   const displayText = reviewedText.trim() ? reviewedText : originalText;
   const isEmpty = !displayText.trim();
@@ -115,6 +117,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
       data-testid={`narr-${sectionKey}`}
     >
       <header className="narrative-section__head">
+        <button type="button" className="ds-icon-btn" aria-label={`${open ? 'Comprimi' : 'Espandi'} ${title}`} aria-expanded={open} aria-controls={bodyId} onClick={() => setOpen(!open)}>{open ? '▾' : '▸'}</button>
         <h3>{title}</h3>
         {reviewStatus && (
           <span className={`narrative-status narrative-status--${reviewStatus}`}>
@@ -145,6 +148,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
         </span>
       </header>
 
+      <div id={bodyId} hidden={!open}>
       {editing ? (
         <div className="narrative-edit">
           <textarea
@@ -201,6 +205,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
           {showSource && src && <p className="srev-source">{src}</p>}
         </>
       )}
+      </div>
     </section>
   );
 }

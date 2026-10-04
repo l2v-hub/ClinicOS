@@ -1,6 +1,8 @@
 import { useId } from 'react';
 import type { SlotAgenda } from '../../types';
 import { IcoArrow } from '../../icons';
+import { useWidgetOpen } from '../shared/WidgetGroup';
+import { WidgetToggle } from '../shared/WidgetToggle';
 import { prossimiAppuntamenti } from '../../lib/turnoAppointments';
 import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
 
@@ -21,6 +23,7 @@ export function TurnoAppointments({
   onSelectPaziente,
 }: Props) {
   const titleId = useId();
+  const { open, setOpen, bodyId } = useWidgetOpen();
   const { items: next, altri } = prossimiAppuntamenti(agenda, new Date());
   return (
     <section className="turno-card" aria-labelledby={titleId}>
@@ -31,7 +34,9 @@ export function TurnoAppointments({
         <button type="button" className="ds-link" onClick={onOpenAgenda}>
           Agenda <IcoArrow />
         </button>
+        <WidgetToggle title="Prossimi appuntamenti" open={open} bodyId={bodyId} onToggle={() => setOpen(!open)} />
       </div>
+      <div id={bodyId} hidden={!open}>
       {state === 'error' ? (
         <p className="turno-empty turno-empty--error" role="alert">
           Appuntamenti non disponibili.{' '}
@@ -96,6 +101,7 @@ export function TurnoAppointments({
           </button>
         </p>
       )}
+      </div>
     </section>
   );
 }

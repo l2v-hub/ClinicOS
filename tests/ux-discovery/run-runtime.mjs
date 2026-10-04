@@ -29,11 +29,10 @@ const wait = async locator => locator.waitFor({ timeout: 15000 });
 const shot = name => page.screenshot({ path: path.join(out, 'screenshots', name + '.png'), fullPage: true });
 try {
   await page.goto(preview + '/tests/ux-discovery/index.html');
-  await wait(page.getByTestId('ptc-event'));
-  const programming = page.getByRole('button', { name: /Prescrizioni e programmazione/ });
-  assert.equal(await programming.getAttribute('aria-expanded'), 'false');
-  assert.equal(await page.getByTestId('therapy-drug-line').first().isVisible(), false);
-  assert.equal(await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).count(), 1);
+  await wait(page.getByTestId('therapy-calendar-cell'));
+  const programming = page.getByRole('tab', { name: 'Farmaci attivi', exact: true });
+  assert.equal(await page.getByTestId('therapy-drug-line').count(), 0);
+  assert.equal(await page.getByRole('tab', { name: 'Calendario', exact: true }).count(), 1);
   assert.equal(await page.getByRole('tab', { name: 'Programmazione', exact: true }).count(), 0);
   await programming.click();
   await page.getByTestId('therapy-drug-line').first().click();
@@ -42,7 +41,7 @@ try {
   for (const field of ['Tipo', 'Inizio', 'Fine', 'Stato', 'Note']) assert.match(await detail.textContent(), new RegExp(field));
   assert.equal(await detail.getByRole('button', { name: /Modifica/ }).count(), 1);
   await shot('therapy-programming');
-  results.push('PASS cycle1: one plan, collapsible programming, prescription fields and actions');
+  results.push('PASS separate active-drug tab retains prescription fields and actions without occupying calendar');
 
   await detail.getByRole('button', { name: /Modifica/ }).click();
   const qty = page.getByPlaceholder('Altro: es. 1/3').first();
@@ -63,8 +62,7 @@ try {
   await page.getByLabel('Unità orario 1', { exact: true }).selectOption('ml');
   assert.equal(await numberQty.inputValue(), '1', 'preset remains visible after unit change');
   await page.getByRole('button', { name: 'Ruolo: prescrittore', exact: true }).click();
-  await wait(page.getByTestId('ptc-event'));
-  assert.equal(await page.getByRole('button', { name: 'Aggiorna', exact: true }).count(), 1, 'only calendar refresh remains after edit permission revocation');
+  assert.equal(await page.getByRole('button', { name: 'Aggiorna', exact: true }).count(), 0, 'prescription editor removed after edit permission revocation');
   assert.equal(await page.getByPlaceholder('Altro: es. 1/3').count(), 0);
   assert.equal(state.clinicalWrites, 0);
   await page.getByRole('button', { name: 'Ruolo: sola lettura', exact: true }).click();
@@ -72,27 +70,30 @@ try {
     await page.getByTestId('therapy-drug-line').first().click();
   await page.getByTestId('therapy-prescription-detail').getByRole('button', { name: /Modifica/ }).click();
   await page.getByRole('button', { name: 'Annulla', exact: true }).click();
-  await wait(page.getByTestId('ptc-event'));
+  await page.getByRole('tab', { name: 'Calendario', exact: true }).click();
+  await wait(page.getByTestId('therapy-calendar-cell'));
   results.push('PASS cycle2: invalid quantity blocks save/HTTP write; correction clears feedback');
 
   const readCount = state.slotReads;
   state.done = true;
   await page.getByRole('region', { name: 'Calendario terapie del paziente', exact: true }).getByRole('button', { name: 'Aggiorna', exact: true }).click();
-  await wait(page.getByTestId('ptc-event'));
-  await wait(page.getByTestId('ptc-event').filter({ hasText: 'Somministrata' }));
+  await wait(page.getByTestId('therapy-calendar-cell'));
+  await page.getByTestId('therapy-calendar-cell').click();
+  await wait(page.getByTestId('patient-therapy-slot-detail').getByText(/Collega Test/).first());
+  await page.getByRole('dialog').getByRole('button', { name: 'Chiudi', exact: true }).click();
   assert.ok(state.slotReads > readCount, 'refresh reads server again within cache TTL');
   await page.getByRole('button', { name: /Somministra al bisogno · dosi di oggi/ }).click();
   await wait(page.getByTestId('drug-dose-panel'));
   await page.getByRole('button', { name: 'Giorno precedente', exact: true }).click();
-  await wait(page.getByTestId('ptc-event'));
+  await wait(page.getByTestId('therapy-calendar-cell'));
   assert.equal(await page.getByTestId('drug-dose-panel').count(), 0);
   await page.getByRole('button', { name: 'Oggi', exact: true }).click();
   assert.equal(await page.getByTestId('drug-dose-panel').count(), 0);
   await page.getByRole('button', { name: 'Settimana', exact: true }).click();
-  await wait(page.getByTestId('ptc-week-dose').first());
-  assert.equal(await page.locator('.ptc-week__day').count(), 7);
-  await page.getByTestId('ptc-week-dose').first().click();
-  await wait(page.getByTestId('ptc-event'));
+  await page.waitForFunction(() => document.querySelectorAll('.therapy-calendar-grid thead th').length === 8);
+  await page.getByTestId('therapy-calendar-cell').first().click();
+  await wait(page.getByRole('dialog'));
+  await page.getByRole('dialog').getByRole('button', { name: 'Chiudi', exact: true }).click();
   results.push('PASS cycle3: fresh refresh, PRN date isolation and week/day interactions');
 
   await page.getByRole('button', { name: 'Ruolo: prescrittore', exact: true }).click();
@@ -102,8 +103,8 @@ try {
 
   state.failMore = true;
   await page.reload();
-  await wait(page.getByTestId('ptc-event'));
-  await page.getByRole('button', { name: /Prescrizioni e programmazione/ }).click();
+  await wait(page.getByTestId('therapy-calendar-cell'));
+  await page.getByRole('tab', { name: 'Farmaci attivi', exact: true }).click();
   await page.getByRole('button', { name: 'Carica altre terapie', exact: true }).click();
   await wait(page.locator('.tf-pager__error'));
   assert.equal(await page.getByTestId('therapy-drug-line').count(), 2);
@@ -135,9 +136,9 @@ try {
 
   // Same-document URLs reproduce external pasted/hash navigation; no page reload to hide the bug.
   await page.goto(app + '#/dettaglio-paziente/patient-test/terapia-farmacologica?sv=programmazione&t=t1&d=' + today());
-  await wait(page.getByRole('tab', { name: 'Piano terapeutico', exact: true }));
+  await wait(page.getByRole('tab', { name: 'Farmaci attivi', exact: true }));
   await wait(page.getByTestId('therapy-prescription-detail'));
-  assert.equal(await page.getByRole('button', { name: /Prescrizioni e programmazione/ }).getAttribute('aria-expanded'), 'true');
+  assert.equal(await page.getByRole('tab', { name: 'Farmaci attivi', exact: true }).getAttribute('aria-selected'), 'true');
   for (const width of [390, 768, 1074, 1395]) {
     await page.setViewportSize({ width, height: 1004 });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'document overflow ' + width);
@@ -149,7 +150,7 @@ try {
   await page.goto(app + '#/consegne');
   await wait(page.getByRole('heading', { name: 'Consegne', exact: true }));
   await page.goBack();
-  await wait(page.getByRole('tab', { name: 'Piano terapeutico', exact: true }));
+  await wait(page.getByRole('tab', { name: 'Calendario', exact: true }));
   await page.goForward();
   await wait(page.getByRole('heading', { name: 'Consegne', exact: true }));
   await page.reload();
@@ -160,10 +161,10 @@ try {
   state.badFeed = true;
   await page.reload();
   await page.getByRole('button', { name: /Medico Test/ }).click();
-  await page.getByRole('button', { name: 'Feed consegne', exact: true }).click();
-  await wait(page.locator('[role="alert"]').filter({ hasText: /consegne|Consegne/ }).first());
+  assert.equal(await page.getByRole('button', { name: 'Feed consegne', exact: true }).count(), 0);
+  assert.equal(await page.locator('.topbar-handovers').count(), 0);
   assert.equal(await page.getByText('Il modulo non è stato caricato', { exact: false }).count(), 0);
-  results.push('PASS malformed feed fails visibly without module crash or false empty success');
+  results.push('PASS redundant feed and topbar handover shortcuts are absent; removed feed cannot crash workspace');
   state.badFeed = false;
   await page.goto(app + '#/admin-dashboard');
   await wait(page.getByRole('heading', { name: 'Il mio turno', exact: true }));
