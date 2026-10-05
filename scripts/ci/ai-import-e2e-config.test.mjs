@@ -77,3 +77,15 @@ test('browser-e2e failures are not masked by continue-on-error', () => {
     'browser-e2e must be a blocking job (no continue-on-error)',
   );
 });
+
+test('browser-e2e creates synthetic identities after build and fails on seed errors', () => {
+  const build = job.indexOf('run: npm run build');
+  const seed = job.indexOf('run: node backend/dist/seed.js');
+  const browser = job.indexOf('name: Browser happy-path screenshots');
+  assert.ok(build >= 0 && seed > build && browser > seed,
+    'compiled synthetic seed must run after build and before the browser journey');
+  assert.ok(!/db seed/.test(job.replace(/^\s*#.*$/gm, '')),
+    'an unconfigured Prisma seed must not replace the repository fixture setup');
+  assert.ok(!/run: node backend\/dist\/seed\.js[^\n]*\|\|/.test(job),
+    'seed failures must stop the browser job');
+});

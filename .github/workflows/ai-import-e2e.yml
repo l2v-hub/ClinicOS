@@ -143,8 +143,11 @@ jobs:
           python-version: '3.11'
       - run: npm ci || npm install
       - run: node node_modules/prisma/build/index.js migrate deploy --schema=prisma/schema.prisma
-      - run: node node_modules/prisma/build/index.js db seed --schema=prisma/schema.prisma || npm --prefix backend run db:seed || true
       - run: npm run build
+      - name: Seed synthetic browser fixtures
+        # Prisma's unconfigured db seed exits successfully without creating identities.
+        # Run the repository seed after compilation and fail if setup is incomplete.
+        run: node backend/dist/seed.js
       - name: Install Playwright Chromium
         # #267: playwright is a root devDependency installed by `npm ci` from the lockfile —
         # single deterministic invocation, no MODULE_NOT_FOUND, no dynamic fallback install.
