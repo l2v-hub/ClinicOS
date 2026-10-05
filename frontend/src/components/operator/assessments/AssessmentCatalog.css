@@ -10,7 +10,7 @@
 .assessment-catalog-row > div:first-child { min-width: 0; display: grid; gap: 5px; overflow-wrap: anywhere; }
 .assessment-catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex-shrink: 0; }
 .assessment-catalog-secondary { font-size: .85rem; color: var(--text-muted, #526170); }
-.patient-module-return { margin-bottom: 12px; }
+.patient-module-return { align-self: flex-start; width: fit-content; max-width: 100%; margin-bottom: 12px; }
 .nrs-legacy { display: grid; gap: 12px; }
 .nrs-legacy details { padding: 12px; border: 1px solid var(--border-color, #d8e0e8); border-radius: 8px; }
 .nrs-legacy summary { cursor: pointer; overflow-wrap: anywhere; }
