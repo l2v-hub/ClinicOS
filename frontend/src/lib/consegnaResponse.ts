@@ -21,7 +21,7 @@ export function isConsegnaRow(value: unknown): value is Consegna {
   if (!(value.id as string).trim() || !(value.pazienteId as string).trim()) return false;
   if (!['normale', 'alta', 'urgente'].includes(String(value.priorita)) ||
       !['aperta', 'in_corso', 'completata'].includes(String(value.stato))) return false;
-  if (value.oraScadenza !== undefined && typeof value.oraScadenza !== 'string') return false;
+  if (value.oraScadenza != null && typeof value.oraScadenza !== 'string') return false;
   if (value.urgency !== undefined && !isUrgencyView(value.urgency)) return false;
   return true;
 }

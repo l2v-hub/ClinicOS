@@ -210,7 +210,7 @@ export interface Consegna {
   tipo: string;
   note: string;
   scadenza: string;
-  oraScadenza?: string;
+  oraScadenza?: string | null;
   operatoreAssegnato: string;
   operatoreAssegnatoId?: string | null;
   creatoDA: string;

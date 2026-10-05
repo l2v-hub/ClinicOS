@@ -15,7 +15,7 @@ export const therapy = (id, patch = {}) => ({
 export const drugs = [therapy('t1'), therapy('prn', { tipo: 'al_bisogno', schedules: [], note: 'Indicazione sintetica' })];
 export const handover = { id: 'handover-test', pazienteId: 'patient-test', pazienteNome: 'Paziente Test',
   priorita: 'urgente', stato: 'aperta', tipo: 'Monitoraggio', note: 'Nota sintetica', scadenza: today(),
-  operatoreAssegnato: 'Medico Test', creatoDA: 'Autore Test', createdAt: '2026-10-04T00:00:00Z',
+  oraScadenza: null, operatoreAssegnato: 'Medico Test', creatoDA: 'Autore Test', createdAt: '2026-10-04T00:00:00Z',
   urgency: { state: 'active', takenBy: null, isAuthor: false, canAcknowledge: true } };
 export async function mockApi(context, state) {
   await context.route('http://localhost:3001/**', async route => {
