@@ -8,8 +8,10 @@ import app from '../backend/src/app.js';
 import { prisma } from '../backend/src/lib/prisma.js';
 import { runJob } from '../backend/src/ai/upload/job-service.js';
 import { FIXTURES } from './fixtures.mjs';
+import { createTestOperator } from '../backend/src/test-support/operator-fixture.js';
 
 const OP = { 'X-Operator-Id': 'op-e2e', 'X-Operator-Role': 'operatore' };
+const cleanupOperator = await createTestOperator(OP['X-Operator-Id'], 'import-e2e@clinicos.test');
 const server = app.listen(0);
 await new Promise((r) => server.once('listening', r));
 const { port } = server.address();
@@ -69,7 +71,7 @@ try {
     lastName: 'Sintetico',
     dateOfBirth: '1955-09-09',
     sex: 'M',
-    phone: '000',
+    phone: '+39 333 000 0000',
     // #294: CF sintetico valido — chiave univoca obbligatoria alla creazione.
     codiceFiscale: 'SNTZTS55P09H501C',
   };
@@ -118,5 +120,6 @@ try {
     await prisma.importJob.delete({ where: { id } }).catch(() => {});
   }
   server.close();
+  await cleanupOperator();
   await prisma.$disconnect();
 }

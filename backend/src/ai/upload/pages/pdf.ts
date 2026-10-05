@@ -46,7 +46,8 @@ export async function pageCount(bytes: Buffer, mime: string): Promise<number> {
       if (n > 0) return n;
     } else if (mime === 'image/jpeg' || mime === 'image/png') {
       const pdf = await PDFDocument.create();
-      if (mime === 'image/jpeg') await pdf.embedJpg(bytes);
+      // pdf-lib reads JPEG headers from the backing ArrayBuffer, ignoring Buffer offsets.
+      if (mime === 'image/jpeg') await pdf.embedJpg(Uint8Array.from(bytes));
       else await pdf.embedPng(bytes);
       return 1;
     }
@@ -68,7 +69,10 @@ async function appendPage(target: PDFDocument, bytes: Buffer, mime: string, numb
     target.addPage(page);
   } else {
     if (number !== 1) throw new Error('page');
-    const img = mime === 'image/jpeg' ? await target.embedJpg(bytes) : await target.embedPng(bytes);
+    const img =
+      mime === 'image/jpeg'
+        ? await target.embedJpg(Uint8Array.from(bytes))
+        : await target.embedPng(bytes);
     const page = target.addPage([img.width, img.height]);
     page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
   }

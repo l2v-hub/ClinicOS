@@ -5,8 +5,10 @@
 import assert from 'node:assert/strict';
 import app from '../backend/src/app.js';
 import { prisma } from '../backend/src/lib/prisma.js';
+import { createTestOperator } from '../backend/src/test-support/operator-fixture.js';
 
 const OP = { 'X-Operator-Id': 'op-e2e-ther', 'X-Operator-Role': 'operatore' };
+const cleanupOperator = await createTestOperator(OP['X-Operator-Id'], 'therapy-e2e@clinicos.test');
 const server = app.listen(0);
 await new Promise((r) => server.once('listening', r));
 const { port } = server.address();
@@ -62,6 +64,7 @@ try {
       maxTotalBytes: 10 * 1024 * 1024,
       expiresAt: new Date(Date.now() + 864e5),
       status: 'review_ready',
+      createdById: OP['X-Operator-Id'],
       resultData: { _narrative: narrative, _sections: null },
     },
   });
@@ -100,21 +103,24 @@ try {
   );
   assert.equal(data.terapia, undefined, 'terapiaImport must NOT collide with manual data.terapia');
 
-  // 3. Map detected rows -> TherapyCreateInput and confirm -> patient + PatientTherapy persisted.
+  // 3. Review complete rows and explicitly leave the incomplete source in the draft.
   const therapies = rows
-    .filter((r) => r.farmacoNome)
+    .map((r, index) => ({ ...r, index }))
+    .filter((r) => r.farmacoNome !== 'PEVARYL')
     .map((r) => ({
+      intakeSource: { type: 'import', index: r.index },
       farmacoNome: r.farmacoNome,
       dataInizio: r.dataInizio || '2026-07-03',
       viaSomministrazione: 'orale',
       tipo: 'periodica',
       stato: 'attiva',
       allowedFractions: '1',
+      giorniSettimana: r.giorni?.length ? '2,4,6,7' : '',
       schedules: (r.orari || []).map((t) => ({
         time: t,
         quantityNumerator: 1,
         quantityDenominator: 1,
-        administrationUnit: '',
+        administrationUnit: r.farmacoNome === 'KEPPRA' ? 'compressa' : 'dose',
       })),
       note: [
         r.classe ? `Classe ${r.classe}` : '',
@@ -124,21 +130,40 @@ try {
         .filter(Boolean)
         .join(' — '),
     }));
+  const reviewedRows = rows.map((r, index) => {
+    const therapy = therapies.find((t) => t.intakeSource.index === index);
+    return therapy
+      ? {
+          ...r,
+          stato: 'ok',
+          reviewedTherapy: {
+            ...therapy,
+            giorniSettimana: therapy.giorniSettimana ? [2, 4, 6, 7] : [],
+          },
+        }
+      : { ...r, excludedFromConfirm: true };
+  });
+  res = await af(`${base}/intake/drafts/${draftId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ terapiaImport: reviewedRows }),
+  });
+  assert.equal(res.status, 200, 'review is saved before confirmation');
+  const confirmationPayload = {
+    patient: {
+      firstName: 'E2ETher',
+      lastName: 'Sintetico',
+      dateOfBirth: '1955-09-09',
+      sex: 'M',
+      codiceFiscale: 'SNTTHR55P09H501Y',
+    },
+    cartella: { statoRicovero: 'ricoverato' },
+    therapies,
+  };
   res = await af(`${base}/intake/drafts/${draftId}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      patient: {
-        firstName: 'E2ETher',
-        lastName: 'Sintetico',
-        dateOfBirth: '1955-09-09',
-        sex: 'M',
-        // #294: CF sintetico valido — chiave univoca obbligatoria alla creazione.
-        codiceFiscale: 'SNTTHR55P09H501Y',
-      },
-      cartella: { statoRicovero: 'ricoverato' },
-      therapies,
-    }),
+    body: JSON.stringify(confirmationPayload),
   });
   assert.equal(res.status, 201, 'AC8: confirm creates patient (201)');
   const confirmed = await res.json();
@@ -148,7 +173,23 @@ try {
 
   // 4. AC9: therapies persisted — fresh DB read (= after refresh).
   const persisted = await prisma.patientTherapy.findMany({ where: { patientId } });
-  assert.ok(persisted.length >= 3, `AC9: therapies persisted (got ${persisted.length})`);
+  assert.equal(persisted.length, 2, 'only reviewed therapies are prescribed');
+  assert.equal(
+    persisted.some((t) => t.farmacoNome === 'PEVARYL'),
+    false,
+  );
+  const savedDraft = await prisma.patientIntakeDraft.findUnique({ where: { id: draftId } });
+  assert.deepEqual(savedDraft.data._confirmation.deferredImportIndexes, [2]);
+  assert.deepEqual(savedDraft.data._confirmation.selectedSources, ['import:0', 'import:1']);
+  assert.equal(savedDraft.data.terapiaImport[2].originalText, rows[2].originalText);
+  res = await af(`${base}/intake/drafts/${draftId}/confirm`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(confirmationPayload),
+  });
+  assert.equal(res.status, 200, 'confirmation replay succeeds');
+  assert.equal((await res.json()).status, 'idempotent');
+  assert.equal(await prisma.patientTherapy.count({ where: { patientId } }), 2);
   assert.ok(
     persisted.some((t) => t.farmacoNome === 'KEPPRA'),
     'KEPPRA persisted',
@@ -171,6 +212,7 @@ try {
     await prisma.importJob.delete({ where: { id } }).catch(() => {});
   }
   await new Promise((r) => server.close(r));
+  await cleanupOperator();
   await prisma.$disconnect();
 }
 process.exit(failed ? 1 : 0);

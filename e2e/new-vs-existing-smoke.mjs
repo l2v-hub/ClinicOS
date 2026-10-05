@@ -14,8 +14,13 @@ import assert from 'node:assert/strict';
 import app from '../backend/src/app.js';
 import { prisma } from '../backend/src/lib/prisma.js';
 import { runJob } from '../backend/src/ai/upload/job-service.js';
+import { createTestOperator } from '../backend/src/test-support/operator-fixture.js';
 
 const OP = { 'X-Operator-Id': 'op-targeting', 'X-Operator-Role': 'operatore' };
+const cleanupOperator = await createTestOperator(
+  OP['X-Operator-Id'],
+  'targeting-e2e@clinicos.test',
+);
 const server = app.listen(0);
 await new Promise((r) => server.once('listening', r));
 const { port } = server.address();
@@ -122,5 +127,6 @@ try {
     await prisma.patient.delete({ where: { id: createdId } }).catch(() => {});
   }
   server.close();
+  await cleanupOperator();
   await prisma.$disconnect();
 }

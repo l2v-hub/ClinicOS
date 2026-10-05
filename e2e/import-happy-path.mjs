@@ -17,7 +17,7 @@ const FRONTEND = process.env.E2E_FRONTEND_URL ?? 'http://localhost:5173';
 const BACKEND = process.env.E2E_BACKEND_URL ?? 'http://localhost:3001';
 // Clinical routes require an operator identity (requireOperator middleware); this script
 // calls the API directly (outside the SPA, which attaches these itself) for setup/verification.
-const OPERATOR_HEADERS = { 'X-Operator-Id': 'e2e-script', 'X-Operator-Role': 'operatore' };
+const OPERATOR_HEADERS = { 'X-Operator-Id': 'SEED-OP-001', 'X-Operator-Role': 'operatore' };
 const outDir = process.argv[2] ?? '.';
 const fx = writeFixtures(resolve(tmpdir(), 'clinicos-e2e-fixtures'));
 // #265: each viewport exercises a different explicit allergy status; both must persist.
@@ -43,14 +43,22 @@ const VIEWPORTS = [
 
 // #294: local re-runs against a persistent DB — free the unique CFs first via the
 // test-only delete route (CI DBs are fresh, this is a no-op there).
+async function searchPatients(q) {
+  const res = await fetch(`${BACKEND}/patients/page/search`, {
+    method: 'POST',
+    headers: { ...OPERATOR_HEADERS, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ q, limit: '20' }),
+  });
+  if (!res.ok) throw new Error(`Patient search failed (${res.status})`);
+  const page = await res.json();
+  if (!Array.isArray(page.items)) throw new Error('Patient search returned an invalid page');
+  return page.items;
+}
 async function freeCfs() {
   try {
-    const res = await fetch(`${BACKEND}/patients`, { headers: OPERATOR_HEADERS });
-    const patients = await res.json();
-    if (!Array.isArray(patients)) return;
-    const cfs = new Set(VIEWPORTS.map((v) => v.cf));
-    for (const p of patients) {
-      if (p.codiceFiscale && cfs.has(p.codiceFiscale)) {
+    for (const vp of VIEWPORTS) {
+      for (const p of await searchPatients(vp.cf)) {
+        if (p.codiceFiscale !== vp.cf) continue;
         await fetch(`${BACKEND}/patients/${p.id}`, {
           method: 'DELETE',
           headers: OPERATOR_HEADERS,
@@ -76,7 +84,10 @@ await freeCfs();
 const browser = await chromium.launch();
 let failures = 0;
 try {
-  for (const vp of VIEWPORTS) {
+  for (const [index, vp] of VIEWPORTS.entries()) {
+    // Each complete login/reload verifies the seeded medication catalogue. Keep two
+    // independent journeys outside the same public-search rate-limit window.
+    if (index > 0) await new Promise((done) => setTimeout(done, 61_000));
     const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
     await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
     const page = await context.newPage();
@@ -213,12 +224,8 @@ try {
       await page.screenshot({ path: resolve(outDir, `${tag}-7-created.png`) });
 
       // ── API persistence (AC2/AC5): the patient exists and the cartella carries the status ──
-      const patients = await (
-        await fetch(`${BACKEND}/patients`, { headers: OPERATOR_HEADERS })
-      ).json();
-      const created = (Array.isArray(patients) ? patients : []).find(
-        (p) => p.firstName === 'E2E' && p.lastName === lastName,
-      );
+      const patients = await searchPatients(vp.cf);
+      const created = patients.find((p) => p.firstName === 'E2E' && p.lastName === lastName);
       if (!created)
         throw new Error(`API check failed: patient E2E ${lastName} not found in /patients`);
       const cartellaRes = await fetch(`${BACKEND}/patients/${created.id}/cartella`, {
@@ -250,7 +257,16 @@ try {
       await gotoPatientList(page);
       await page.getByText(lastName).first().waitFor({ state: 'visible', timeout: 15000 });
       await page.getByText(lastName).first().click();
-      await page.getByText(vp.allergyLabel).first().waitFor({ state: 'visible', timeout: 15000 });
+      await page.getByRole('tab', { name: /^Clinica/ }).click();
+      const savedStatus = page.locator(`[data-testid="allergy-status-${vp.allergyStatus}"]`);
+      await savedStatus.waitFor({ state: 'visible', timeout: 15000 });
+      if ((await savedStatus.getAttribute('aria-checked')) !== 'true')
+        throw new Error('Saved allergy status is not selected after reload');
+      await page
+        .locator(
+          `[data-testid="${vp.allergyStatus === 'assenti' ? 'allergy-none' : 'allergy-denied'}"]`,
+        )
+        .waitFor({ state: 'visible', timeout: 15000 });
       await page.screenshot({ path: resolve(outDir, `${tag}-8-reload-detail.png`) });
       console.log(`${tag}: UI-after-reload OK — detail shows '${vp.allergyLabel}'`);
 
