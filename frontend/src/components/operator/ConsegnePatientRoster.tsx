@@ -28,7 +28,15 @@ function RosterPatient({
   const draft = useConsegnaDraft(store, patient.id);
   const row = useRef<HTMLLIElement>(null);
   useEffect(() => {
-    if (selected) row.current?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    if (!selected || !row.current) return;
+    // Reveal the selection inside the roster without moving the patient's diary.
+    const list = row.current.parentElement;
+    if (!list || list.scrollHeight <= list.clientHeight) return;
+    const itemBounds = row.current.getBoundingClientRect();
+    const listBounds = list.getBoundingClientRect();
+    if (itemBounds.top < listBounds.top) list.scrollTop += itemBounds.top - listBounds.top;
+    else if (itemBounds.bottom > listBounds.bottom)
+      list.scrollTop += itemBounds.bottom - listBounds.bottom;
   }, [selected]);
   return (
     <li ref={row} className={`handover-rounds__patient${selected ? ' is-selected' : ''}`}>
@@ -49,7 +57,11 @@ function RosterPatient({
           </span>
         </span>
       </button>
-      <a className="ds-link" href={`#/dettaglio-paziente/${encodeURIComponent(patient.id)}`} aria-label={`Diario di ${patient.lastName}, ${patient.firstName}`}>
+      <a
+        className="ds-link"
+        href={`#/dettaglio-paziente/${encodeURIComponent(patient.id)}`}
+        aria-label={`Diario di ${patient.lastName}, ${patient.firstName}`}
+      >
         Diario paziente →
       </a>
     </li>

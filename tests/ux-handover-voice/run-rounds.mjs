@@ -21,6 +21,7 @@ const patients = [
     dateOfBirth: '1934-10-27',
   },
 ];
+let longRoster = false;
 let long = false,
   fail = false,
   saved = [],
@@ -45,7 +46,22 @@ await context.route('http://localhost:3001/**', async (route) => {
   const request = route.request(),
     url = new URL(request.url());
   if (url.pathname === '/patients/page')
-    return route.fulfill({ json: { items: patients, hasMore: false, nextCursor: null } });
+    return route.fulfill({
+      json: {
+        items: longRoster
+          ? [
+              ...patients,
+              ...Array.from({ length: 30 }, (_, i) => ({
+                ...patients[0],
+                id: i === 29 ? 'patient-last' : `other-${i}`,
+                lastName: `Paziente ${i}`,
+              })),
+            ]
+          : patients,
+        hasMore: false,
+        nextCursor: null,
+      },
+    });
   if (url.pathname.endsWith('/diary')) {
     const patientId = url.pathname.split('/')[2];
     const count = long ? 50 : patientId === 'patient-a' ? 3 : 1;
@@ -189,6 +205,21 @@ try {
   await diary().click();
   await page.getByText('Pagina 2 ·', { exact: false }).waitFor();
   assert.equal(ackPosts, 0);
+  longRoster = true;
+  await page.setViewportSize({ width: 1150, height: 1004 });
+  await page.goto(
+    'http://127.0.0.1:5190/tests/ux-handover-voice/index.html?rounds=1&patient=patient-last',
+  );
+  await page
+    .locator('.handover-rounds__patient-heading')
+    .filter({ hasText: 'Paziente 29' })
+    .waitFor();
+  assert.equal(
+    await page.locator('.page-content').evaluate((el) => el.scrollTop),
+    0,
+    'revealing the selected patient only scrolls the roster, never the diary',
+  );
+  assert.ok((await page.locator('.handover-rounds__roster').evaluate((el) => el.scrollTop)) > 0);
   assert.deepEqual(errors, []);
   console.log(
     'PASS Consegne: readable responsive layout, persistent drafts, focus/tabs, failed-save retry, save-next, bounded history; no implicit reading confirmation.',

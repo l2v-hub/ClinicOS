@@ -74,6 +74,7 @@ function Fixture() {
                 store={store}
                 operatori={[]}
                 active
+                initialPatientId={new URLSearchParams(location.search).get('patient') ?? undefined}
                 onAdd={(request) =>
                   createConsegna('http://localhost:3001', request, { headers: {} })
                 }
