@@ -1,0 +1,21 @@
+{
+  "decision": "ALLOW",
+  "sourceCommit": "e4edd2bf29b6e31199c85509e5cfd68f31ee29e2",
+  "baseline": "19f1e36d8cd049a83cee4282f2ee1d4593d6f549",
+  "destination": "https://github.com/l2v-hub/ClinicOS.git",
+  "branches": ["codex/ux-discovery-loop", "main"],
+  "authorization": "User requested push for online viewing and explicitly confirmed l2v-hub/ClinicOS as destination; authorization persists across resumed turns.",
+  "conditions": [
+    "Independent QA verdict READY FOR CODEX QA bound to frozen candidate",
+    "Source receipt matches local source files",
+    "Ordinary fast-forward push only; no force push",
+    "Vercel frontend deployment uses existing project and existing API destination",
+    "Do not claim backend demo migrated unless independently verified"
+  ],
+  "sourceComparison": {"initialFiles": 1411, "initialSha256Mismatches": 0, "correctedFiles": 1413, "correctedSha256Mismatches": 0, "correctedFingerprint": "1b7f06bdb6586068627f2f653c0a53e06ffc1b4de504cabbc07a09ecd0628fee"},
+  "protectedUnrelatedState": "Main checkout and preexisting dirty evidence are not staged, reset or changed.",
+  "backendDemo": "No new credential or active workflow mutation authorized by this receipt; separate dedicated-credential question is pending.",
+  "qaVerdict": "READY FOR CODEX QA",
+  "releaseStatus": "FRONTEND_PUBLISHED_AND_VERIFIED",
+  "receipt": "publication-receipt.json"
+}

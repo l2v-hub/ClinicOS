@@ -1,0 +1,47 @@
+{
+  "decision": "ALLOW",
+  "result": "FRONTEND_PUBLISHED_AND_READ_ONLY_SMOKE_VERIFIED",
+  "date": "2026-10-05",
+  "sourceCommit": "e4edd2bf29b6e31199c85509e5cfd68f31ee29e2",
+  "sourceFingerprint": "1b7f06bdb6586068627f2f653c0a53e06ffc1b4de504cabbc07a09ecd0628fee",
+  "hashedSourceFiles": 1413,
+  "sha256Mismatches": 0,
+  "frontendTree": "7877484b3f7315c3d64e1e2a9cc877af8782f726",
+  "qaVerdict": "READY FOR CODEX QA",
+  "git": {
+    "repository": "https://github.com/l2v-hub/ClinicOS",
+    "push": "ordinary fast-forward, no force",
+    "branches": ["main", "codex/ux-discovery-loop"]
+  },
+  "vercel": {
+    "projectId": "prj_6eDFTx8o4IoZhCXr4Sd7LX6dteo6",
+    "deploymentId": "dpl_DavvHWE4K6XRPAZgXhD9Hw9EYCPL",
+    "url": "https://clinicos-eyeborwsx-lucalavia-2482s-projects.vercel.app",
+    "productionUrl": "https://clinicos-eosin.vercel.app",
+    "status": "READY",
+    "build": "TypeScript and Vite succeeded; 677 transformed modules",
+    "deploymentInputs": "vercel-dry-inputs.json; 1184 files; artifacts, backend, dependency folders and other worktrees excluded",
+    "buildApiDestination": "unchanged existing demo API"
+  },
+  "onlineSmoke": {
+    "method": "CUA on root control tab only; existing synthetic nurse simulator; read-only clinical checks",
+    "oldBundle": "/assets/index-DAmuz6e8.js",
+    "newBundle": "/assets/index-BStwhW-K.js",
+    "checks": [
+      "global collapse command and bounded diary filters visible",
+      "calendar, history, therapeutic plan tabs in required order",
+      "single occupied summary for two drugs opens one dialog with both details and administration controls",
+      "therapeutic plan lists active drugs separately",
+      "sidebar Therapy exits patient context to /#/terapie",
+      "global weekly calendar uses the shared grid",
+      "missing shared reading protocol is displayed truthfully"
+    ],
+    "clinicalWrites": 0,
+    "userTabsAndDrafts": "preserved"
+  },
+  "ciAtReceipt": {
+    "frontendSecretScan": {"runId": 37276811014, "conclusion": "success"},
+    "aiImportE2E": {"runId": 37276810988, "status": "in_progress", "build": "success"}
+  },
+  "backendDemo": "NOT_UPDATED; dedicated demo credential authorization remains pending. Production backend success is not demo completion."
+}
