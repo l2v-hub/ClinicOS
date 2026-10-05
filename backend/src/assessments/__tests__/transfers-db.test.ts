@@ -183,6 +183,9 @@ test('typed history is bounded and draft-private, with cursor type binding befor
   );
 });
 test('DB validation rejects malformed and incomplete Transfers without weakening PAINAD', async () => {
+  const [originalZone] = await prisma.$queryRaw<
+    Array<{ zone: string }>
+  >`SELECT current_setting('TimeZone') AS zone`;
   const empty = emptyTransfers(),
     complete = completeTransfers();
   for (const [answers, valid, ready] of [
@@ -224,7 +227,7 @@ test('DB validation rejects malformed and incomplete Transfers without weakening
   const [zone] = await prisma.$queryRaw<
     Array<{ zone: string }>
   >`SELECT current_setting('TimeZone') AS zone`;
-  assert.equal(zone.zone, 'Europe/Rome');
+  assert.equal(zone.zone, originalZone.zone);
   await prisma.patient.update({ where: { id: second }, data: { registeredById: other.id } });
   await assert.rejects(
     currentAssessment(second, { type: 'postural_transfers' }, actor),

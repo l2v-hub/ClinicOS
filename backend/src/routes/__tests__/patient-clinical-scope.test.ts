@@ -190,6 +190,13 @@ test('patient search matches names and partial fiscal codes without escaping ope
   );
   assert.equal(ownByPartialFiscalCode.items[0]?.codiceFiscale, 'TSTPZA70A01H501A');
 
+  assert.deepEqual(
+    (await search('TSTPZA70A01H501A', operatorAId)).items.map((p) => p.id),
+    [patientAId],
+  );
+  assert.deepEqual((await search('TSTPZB70A01H501B', operatorAId)).items, []);
+  assert.deepEqual((await search(`${suffix}-mrn-a`, operatorAId)).items, []);
+
   const foreignByName = await search('Paziente B', operatorAId);
   const foreignByFiscalCode = await search('TSTPZB70', operatorAId);
   assert.deepEqual(foreignByName.items, []);
@@ -244,7 +251,7 @@ test('own patient access works and client authorship is ignored', async () => {
       schedules: [{ time: '8:00', administrationUnit: 'compressa' }],
     }),
   });
-  assert.equal(create.status, 201, await create.text());
+  assert.equal(create.status, 201, await create.clone().text());
   const createdTherapy = (await create.json()) as {
     id: string;
     operatoreInseritore: string;
@@ -298,7 +305,7 @@ test('own patient access works and client authorship is ignored', async () => {
       schedules: [],
     }),
   });
-  assert.equal(createWithoutSchedules.status, 201, await createWithoutSchedules.text());
+  assert.equal(createWithoutSchedules.status, 201, await createWithoutSchedules.clone().text());
   const emptyScheduleTherapy = (await createWithoutSchedules.json()) as {
     fasceMattina: boolean;
     orarioSpecifico: string | null;

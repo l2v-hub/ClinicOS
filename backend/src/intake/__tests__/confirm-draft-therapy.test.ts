@@ -44,7 +44,7 @@ const PARAMETRI_MENSILI = [
   },
 ];
 
-const VALUTAZIONI_NRS = [
+const LEGACY_NRS = [
   {
     id: 'n1',
     data: '2026-06-29',
@@ -80,18 +80,37 @@ test('confirmDraft: persists therapies + vitals/pain into Cartella.data', async 
   const draft = await createDraft({ source: 'manual', createdById: TEST_OPERATOR_ID });
 
   try {
-    const result = await confirmDraft(
-      draft.id,
-      {
-        patient: PATIENT,
-        cartella: {
-          parametriMensili: PARAMETRI_MENSILI,
-          valutazioniNRS: VALUTAZIONI_NRS,
-        },
-        therapies: THERAPIES,
+    // Legacy NRS cannot be injected even through a reviewed import. Each failure is atomic.
+    for (const legacy of [null, [], LEGACY_NRS]) {
+      const before = await prisma.patientIntakeDraft.findUniqueOrThrow({ where: { id: draft.id } });
+      await assert.rejects(
+        confirmDraft(
+          draft.id,
+          { patient: PATIENT, cartella: { valutazioniNRS: legacy }, therapies: THERAPIES },
+          { id: TEST_OPERATOR_ID },
+        ),
+        (error: any) => error.status === 409 && error.code === 'nrs_legacy_read_only',
+      );
+      const after = await prisma.patientIntakeDraft.findUniqueOrThrow({ where: { id: draft.id } });
+      assert.deepEqual(after, before);
+      assert.equal(await prisma.patient.count({ where: { registeredById: TEST_OPERATOR_ID } }), 0);
+      assert.equal(
+        await prisma.patientTherapy.count({ where: { operatoreInseritore: TEST_OPERATOR_ID } }),
+        0,
+      );
+    }
+    const payload = {
+      patient: PATIENT,
+      cartella: {
+        parametriMensili: PARAMETRI_MENSILI,
+        parametriVitali: [{ id: 'pain-vital', etichetta: 'NRS', valore: '4' }],
       },
-      { id: TEST_OPERATOR_ID, name: 'Operatore Test' },
-    );
+      therapies: THERAPIES,
+    };
+    const result = await confirmDraft(draft.id, payload, {
+      id: TEST_OPERATOR_ID,
+      name: 'Operatore Test',
+    });
 
     // 1. Status must be 'created'.
     assert.equal(result.status, 'created', `Expected status 'created', got '${result.status}'`);
@@ -110,7 +129,9 @@ test('confirmDraft: persists therapies + vitals/pain into Cartella.data', async 
       `Expected at least 1 schedule, got ${therapyRows[0].schedules.length}`,
     );
 
-    // 3. Cartella.data must contain parametriMensili (len 1) and valutazioniNRS (len 1).
+    assert.equal(therapyRows[0].operatoreInseritore, 'Operatore Test');
+
+    // Supported vital readings persist without creating legacy NRS history.
     const cartella = await prisma.cartella.findUnique({ where: { patientId } });
     assert.ok(cartella, 'Cartella row must exist');
     const data = cartella!.data as Record<string, unknown>;
@@ -121,11 +142,12 @@ test('confirmDraft: persists therapies + vitals/pain into Cartella.data', async 
       `Expected parametriMensili length 1, got ${pm?.length}`,
     );
 
-    const nrs = data.valutazioniNRS as unknown[];
-    assert.ok(
-      Array.isArray(nrs) && nrs.length === 1,
-      `Expected valutazioniNRS length 1, got ${nrs?.length}`,
-    );
+    assert.deepEqual(data.parametriVitali, payload.cartella.parametriVitali);
+    assert.equal(Object.hasOwn(data, 'valutazioniNRS'), false);
+    const replay = await confirmDraft(draft.id, payload, { id: TEST_OPERATOR_ID });
+    assert.equal(replay.status, 'idempotent');
+    assert.equal(replay.patient!.id, patientId);
+    assert.equal(await prisma.patientTherapy.count({ where: { patientId } }), 1);
   } finally {
     // Cleanup: find the patient (if created) and cascade-delete everything.
     // Re-fetch the draft to find the confirmedPatientId.

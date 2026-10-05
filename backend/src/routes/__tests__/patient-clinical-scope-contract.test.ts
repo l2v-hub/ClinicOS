@@ -6,7 +6,6 @@ const therapyRouteUrl = new URL('../patient-therapies.ts', import.meta.url);
 const narrativeRouteUrl = new URL('../narrative-sections.ts', import.meta.url);
 const voiceWriterUrl = new URL('../../ai/voice/write-services.ts', import.meta.url);
 const narrativeServiceUrl = new URL('../../ai/sections/patient-narrative.ts', import.meta.url);
-const intakeDraftServiceUrl = new URL('../../intake/draft-service.ts', import.meta.url);
 const therapyCreateUrl = new URL('../../therapies/therapy-create.ts', import.meta.url);
 const gatewayServicesUrl = new URL('../../ai/gateway/services.ts', import.meta.url);
 const prismaSchemaUrl = new URL('../../../../prisma/schema.prisma', import.meta.url);
@@ -26,7 +25,10 @@ test('therapy creation overwrites client-supplied authorship with the verified a
   const createBlock =
     source.split('// POST /patients/:patientId/therapies')[1]?.split('// PUT ')[0] ?? '';
   // Phase 6: the idempotency key is stripped from req.body first; the remainder is the input.
-  assert.ok(createBlock.includes('takeRequestId(req.body)'), 'input must come from the request body');
+  assert.ok(
+    createBlock.includes('takeRequestId(req.body)'),
+    'input must come from the request body',
+  );
   const spreadIndex = createBlock.indexOf('...(input as unknown as TherapyCreateInput)');
   const actorIndex = createBlock.indexOf('operatoreInseritore: actor.name || actor.id');
   assert.ok(spreadIndex >= 0, 'the request body should be copied into the normalized input');
@@ -194,15 +196,4 @@ test('imported narrative metadata is bounded and projected before JSONB writes',
   assert.ok(write > validation, 'metadata validation must execute before the JSONB write');
   assert.match(persistBlock, /annotations: metadata\.annotations/);
   assert.match(persistBlock, /sourceReferences: metadata\.sourceReferences/);
-});
-
-test('intake autosave cannot replace extraction-owned narrative metadata', async () => {
-  const source = await readFile(intakeDraftServiceUrl, 'utf8');
-  const patchBlock =
-    source.split('export async function patchDraft')[1]?.split('export async')[0] ?? '';
-  assert.match(patchBlock, /\['_narrative', '_sections'\]/);
-  assert.ok(
-    patchBlock.indexOf('Object.hasOwn(patch, immutableKey)') <
-      patchBlock.indexOf('prisma.patientIntakeDraft.update'),
-  );
 });

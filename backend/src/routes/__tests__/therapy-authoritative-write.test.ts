@@ -1,3 +1,5 @@
+// Ownership-denial cases pin the supported restricted scope.
+process.env.RESIDENT_SCOPE_CONFIG ??= JSON.stringify({ fallback: 'registered_by_me' });
 import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import express from 'express';

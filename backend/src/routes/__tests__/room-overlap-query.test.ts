@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
-const source = readFileSync(new URL('../admin-rooms.ts', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../admin-rooms.ts', import.meta.url), 'utf8').replaceAll(
+  '\r\n',
+  '\n',
+);
 
 test('available beds exclude exact overlaps in PostgreSQL without loading assignment rows', () => {
   const block = source

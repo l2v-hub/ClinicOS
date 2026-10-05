@@ -3,7 +3,10 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 
-const source = readFileSync(fileURLToPath(new URL('../admin-rooms.ts', import.meta.url)), 'utf8');
+const source = readFileSync(
+  fileURLToPath(new URL('../admin-rooms.ts', import.meta.url)),
+  'utf8',
+).replaceAll('\r\n', '\n');
 
 test('facility room read models are admin/manager-only', () => {
   const adminGate = source

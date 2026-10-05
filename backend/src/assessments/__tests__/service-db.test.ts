@@ -91,6 +91,9 @@ test('CAS permits one writer and incomplete finalization remains a draft', async
   assert.equal((await getAssessment(patient, row.id, actor)).version, 2);
 });
 test('finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella', async () => {
+  const [originalZone] = await prisma.$queryRaw<
+    Array<{ zone: string }>
+  >`SELECT current_setting('TimeZone') AS zone`;
   const row = (await createAssessment(patient, input(), actor)).assessment;
   const request = { requestId: randomUUID(), expectedVersion: 1 };
   const finalized = await Promise.all(
@@ -113,7 +116,7 @@ test('finalize replay persists once with Rome-date identity and immutable clinic
   const [zone] = await prisma.$queryRaw<
     Array<{ zone: string }>
   >`SELECT current_setting('TimeZone') AS zone`;
-  assert.equal(zone.zone, 'Europe/Rome');
+  assert.equal(zone.zone, originalZone.zone);
   assert.equal(final.finalSnapshot!.patient.location.asOf, '2026-03-29');
   assert.equal(final.finalSnapshot!.patient.location.bed, 'A');
   assert(!JSON.stringify(final.finalSnapshot).includes('privateNarrative'));
@@ -232,10 +235,16 @@ test('concurrent ownership change fences creation before a stale patient permiss
 test('a new process replays the persisted creation and finalization after response loss', async () => {
   const body = input(),
     finalKey = randomUUID();
-  const code =
-    "const {createAssessment,finalizeAssessment}=await import('./backend/src/assessments/service.ts');const {prisma}=await import('./backend/src/lib/prisma.ts');const v=JSON.parse(process.env.PO10_PROCESS_INPUT);const c=await createAssessment(v.patient,v.body,v.actor);const f=await finalizeAssessment(v.patient,c.assessment.id,{requestId:v.finalKey,expectedVersion:1},v.actor);process.stdout.write(JSON.stringify({id:f.assessment.id,createdReplay:c.replayed,finalReplay:f.replayed}));await prisma.$disconnect();";
+  const serviceUrl = new URL('../service.ts', import.meta.url).href;
+  const prismaUrl = new URL('../../lib/prisma.ts', import.meta.url).href;
+  const code = `const {createAssessment,finalizeAssessment}=await import(${JSON.stringify(serviceUrl)});const {prisma}=await import(${JSON.stringify(prismaUrl)});const v=JSON.parse(process.env.PO10_PROCESS_INPUT);const c=await createAssessment(v.patient,v.body,v.actor);const f=await finalizeAssessment(v.patient,c.assessment.id,{requestId:v.finalKey,expectedVersion:1},v.actor);process.stdout.write(JSON.stringify({id:f.assessment.id,createdReplay:c.replayed,finalReplay:f.replayed,assessment:f.assessment}));await prisma.$disconnect();`;
   const run = () =>
-    new Promise<{ id: string; createdReplay: boolean; finalReplay: boolean }>((ok, fail) => {
+    new Promise<{
+      id: string;
+      createdReplay: boolean;
+      finalReplay: boolean;
+      assessment: Awaited<ReturnType<typeof getAssessment>>;
+    }>((ok, fail) => {
       let out = '',
         err = '';
       const child = spawn(
@@ -258,7 +267,7 @@ test('a new process replays the persisted creation and finalization after respon
         err += data;
       });
       child.on('error', fail);
-      child.on('exit', (status) => {
+      child.on('close', (status) => {
         if (status !== 0) fail(new Error(err));
         else {
           try {
@@ -274,5 +283,14 @@ test('a new process replays the persisted creation and finalization after respon
   assert.equal(first.id, secondRun.id);
   assert.equal(first.createdReplay, false);
   assert.equal(secondRun.createdReplay, true);
+  assert.equal(first.finalReplay, false);
   assert.equal(secondRun.finalReplay, true);
+  assert.deepEqual(first.assessment, secondRun.assessment);
+  assert.match(first.assessment.snapshotSha256!, /^[a-f0-9]{64}$/);
+  assert.equal(first.assessment.status, 'final');
+  assert.equal(first.assessment.version, 2);
+  assert.equal(
+    await prisma.patientAssessment.count({ where: { patientId: patient, id: first.id } }),
+    1,
+  );
 });
