@@ -77,3 +77,5 @@ Synthetic fixtures only. Preserve original user browser drafts and unrelated mai
 READY FOR IMPLEMENTATION
 
 2026-10-05 resumed steering: repeated admission/collapse/catalog-intro requests are already in the candidate; new empty-slot creation, tab name/order and legacy module history/action details are included in consolidated cycle 9. Existing backend authorization remains authoritative.
+
+2026-10-05 follow-up AC4: patient hour popup shows each drug once in a compact full-width row with dose, route, prescriber, notes and its existing administration actions. Remove nested duplicate cards/left insets; reduce status chips and buttons; preserve readable long text, read-only/loading/error views, non-administration reasons and explicit confirmation at 1150/1024/390 widths. Only frontend rendering/styles change; synthetic browser evidence and independent QA required.

@@ -35,7 +35,19 @@ try {
   assert.match(await eight.textContent(),/2 dosi/);
   await eight.click();
   const dialog=page.getByRole('dialog'); await wait(dialog);
-  assert.equal(await dialog.locator('.therapy-calendar-dialog__patient').count(),2);
+  assert.equal(await dialog.locator('.therapy-calendar-dialog__patient').count(),0);
+  assert.equal(await dialog.locator('.giro-drug').count(),2);
+  assert.equal(await dialog.locator('.giro-drug__name').count(),2);
+  for (const row of await dialog.locator('.giro-drug').all()) {
+    assert.match(await row.textContent(),/1 compressa — 10 mg.*orale.*Prescrittore: Medico Test.*Nota sintetica/s);
+    assert.equal(await row.getByRole('button',{name:/^Erogata:/}).count(),1);
+    assert.equal(await row.getByRole('button',{name:/^Non erogata:/}).count(),1);
+  }
+  const fullWidth = await dialog.locator('.patient-therapy-slot-detail').evaluate(el=>({width:el.clientWidth,parent:el.parentElement.clientWidth,margin:getComputedStyle(el).marginLeft}));
+  assert.equal(fullWidth.margin,'0px');
+  assert.ok(fullWidth.width >= fullWidth.parent-34);
+  for (const action of await dialog.locator('.giro-row__act .ds-btn').all()) assert.ok((await action.boundingBox()).height<=36);
+  for (const badge of await dialog.locator('.giro-badge').all()) assert.ok((await badge.boundingBox()).height<=24);
   assert.match(await dialog.textContent(),/Farmaco sintetico 1.*Farmaco sintetico 2/s);
   assert.equal(await dialog.getByRole('button',{name:/^Erogata:/}).count(),2);
   await shot('patient-two-drugs-popup');

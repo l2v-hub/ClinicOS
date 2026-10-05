@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type {
   MotivoNonErogazione,
   TherapyActionInfo,
@@ -35,6 +35,10 @@ interface Props {
   hidePatientHead?: boolean;
   /** Solo stato e azioni (la riga che ospita il componente mostra già farmaco e dose). */
   hideDrugInfo?: boolean;
+  /** Dettagli della prescrizione accanto alla stessa riga di somministrazione. */
+  renderDrugDetails?: (therapyId: string) => ReactNode;
+  /** Azioni aggiuntive per la stessa dose, senza ripetere la riga del farmaco. */
+  renderDrugActions?: (therapyId: string) => ReactNode;
   /** Paziente da evidenziare e portare in vista (accesso diretto). */
   focusPatientId?: string;
   /** Il secondo argomento dice se l'operatore ha confermato esplicitamente nel dialogo. */
@@ -71,6 +75,8 @@ export function TherapyGiroRows({
   requiresConfirmation = false,
   hidePatientHead = false,
   hideDrugInfo = false,
+  renderDrugDetails,
+  renderDrugActions,
   focusPatientId,
   onConfirm,
   onNotAdministered,
@@ -227,6 +233,7 @@ export function TherapyGiroRows({
                               hidePatientHead ? ` · ore ${a.scheduledTime || time.ora}` : ''
                             }`}
                           </span>
+                          {renderDrugDetails?.(a.therapyId)}
                         </div>
                       )}
                       <div className="giro-row__act">
@@ -291,6 +298,7 @@ export function TherapyGiroRows({
                             </button>
                           </>
                         )}
+                        {renderDrugActions?.(a.therapyId)}
                       </div>
                       {expanded && (
                         <div

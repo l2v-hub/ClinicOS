@@ -3,6 +3,9 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { afterEach, test } from 'node:test';
+import React, { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { TherapyCalendarGrid } from '../../shared/TherapyCalendarGrid';
 import type { TherapySlot } from '../../../types';
 import { patientGiroTime } from '../../../lib/therapyGiro';
 import { recordAdministration } from '../../../lib/therapyAdministrationWrite';
@@ -14,6 +17,7 @@ import {
 import { emptyTherapyForm } from '../cartella/TherapyFormFields';
 
 const originalFetch = globalThis.fetch;
+Object.assign(globalThis, { React });
 afterEach(() => {
   globalThis.fetch = originalFetch;
 });
@@ -72,18 +76,18 @@ test('AT-04: the slot detail shows only the current patient at that exact time',
   assert.equal(patientGiroTime(slots, 'missing', '08:00'), null);
 });
 
-test('AT-04: every calendar dose is a button that opens the detail of its time', async () => {
-  const calendar = await src('../cartella/PatientTherapyCalendar.tsx');
-  assert.match(
-    calendar,
-    /<button\s+type="button"\s+className=\{`agt-therapy-slot patient-therapy-calendar__event/,
-  );
-  assert.match(calendar, /aria-expanded=\{openTime === event\.time\}/);
-  assert.match(calendar, /<PatientTherapySlotDetail/);
-  assert.doesNotMatch(calendar, /Per le registrazioni consulta Somministrazioni giornaliere/);
-  const css = await src('../cartella/PatientTherapyCalendar.css');
-  assert.doesNotMatch(css, /patient-therapy-calendar__event \{[^}]*cursor: default/);
-  assert.match(css, /patient-therapy-calendar__event \{[^}]*min-height: 44px/);
+test('AT-04: simultaneous doses share one named button for their hour dialog', () => {
+  const html = renderToStaticMarkup(createElement(TherapyCalendarGrid, {
+    days: ['2026-10-05'],
+    cells: [{ date: '2026-10-05', time: '08:00', title: 'Farmaco t1 · Farmaco t2',
+      detail: '2 in ritardo', count: 2, tone: 'late' }],
+    selected: { date: '2026-10-05', time: '08:00' },
+    onOpen() {},
+  }));
+  assert.equal((html.match(/<button /g) ?? []).length, 1);
+  assert.match(html, /aria-haspopup="dialog" aria-expanded="true"/);
+  assert.match(html, /aria-label="2026-10-05, ore 08:00: Farmaco t1 · Farmaco t2, 2 dosi, 2 in ritardo\. Apri dettagli"/);
+  assert.match(html, /data-time="08:00"/);
 });
 
 test('AT-05: administration from the chart is capability-gated and reuses the giro rows', async () => {

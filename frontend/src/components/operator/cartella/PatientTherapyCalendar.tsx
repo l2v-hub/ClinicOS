@@ -273,18 +273,9 @@ export function PatientTherapyCalendar({
         <TherapyCalendarGrid days={visibleDays} cells={cells} selected={open}
           onCreate={onCreate ? (target, time) => { setOpen(null); onCreate(target, time); } : undefined}
           onOpen={(target, time) => { setDate(target); setView('giorno'); setOpen({ date: target, time }); }} />
-        {openTime && <AccessibleDialogSurface labelledBy={dialogTitle} onClose={() => setOpen(null)} className="therapy-calendar-dialog">
+        {openTime && <AccessibleDialogSurface labelledBy={dialogTitle} onClose={() => setOpen(null)} className="therapy-calendar-dialog therapy-calendar-dialog--patient">
           <header className="therapy-calendar-dialog__head"><h3 id={dialogTitle}>Terapie delle {openTime}</h3>
-            <button type="button" className="btn-secondary btn-sm" data-dialog-initial-focus onClick={() => setOpen(null)}>Chiudi</button></header>
-          {day.events.filter((event) => event.time === openTime).map((event) => <section className="therapy-calendar-dialog__patient" key={event.id}>
-            <strong>{event.drugName}</strong><dl>
-              <div><dt>Dose</dt><dd>{event.dose}{event.strength ? ` — ${event.strength}` : ''}</dd></div>
-              <div><dt>Via</dt><dd>{event.route}</dd></div>
-              {event.prescriber && <div><dt>Prescrittore</dt><dd>{event.prescriber}</dd></div>}
-              {event.endDate && <div><dt>Fine</dt><dd>{event.endDate}</dd></div>}
-              {event.oneTime && <div><dt>Frequenza</dt><dd>Una tantum</dd></div>}
-            </dl>{event.note && <p>{event.note}</p>}
-          </section>)}
+            <button type="button" className="btn-secondary btn-sm" aria-label="Chiudi" data-dialog-initial-focus onClick={() => setOpen(null)}>×</button></header>
           <PatientTherapySlotDetail embedded key={`${patientId}|${date}|${openTime}`} patientId={patientId} date={date} time={openTime}
             events={day.events.filter((event) => event.time === openTime)} focusTherapyId={focusTherapyId}
             onClose={() => setOpen(null)} onRecorded={() => setSlotsRevision((value) => value + 1)} />

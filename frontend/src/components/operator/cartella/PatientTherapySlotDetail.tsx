@@ -18,6 +18,7 @@ import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { facilityNow } from '../../../lib/therapyDoseStatus';
 // Le righe del giro portano con sé i loro stili (badge, pulsanti, motivi), anche fuori dal giro.
 import '../TherapyRoundsPage.css';
+import './PatientTherapySlotDetail.css';
 
 // Lo stato vale solo per la richiesta da cui è nato (paziente, data, ora, ricarica).
 type LoadState =
@@ -148,10 +149,20 @@ export function PatientTherapySlotDetail({
       : [];
 
   const headingId = `ptc-detail-${time.replace(':', '')}`;
+  function retryButton(info: TherapyActionInfo) {
+    const key = `${info.therapyId}|${info.fascia}`;
+    return <button
+      type="button"
+      className="ds-btn ds-btn--primary patient-therapy-slot-detail__retry"
+      disabled={sendingRetry === key}
+      aria-label={`Somministra ora: ${info.drugName} ${info.dosage}, ore ${info.ora}`}
+      onClick={() => needsConfirmation ? setRetry(info) : void administerAgain(info, false)}
+    >{sendingRetry === key ? 'Invio…' : 'Somministra ora'}</button>;
+  }
   return (
     <section
       ref={rootRef}
-      className="patient-therapy-slot-detail"
+      className={`patient-therapy-slot-detail${embedded ? ' patient-therapy-slot-detail--embedded' : ''}`}
       aria-labelledby={headingId}
       data-testid="patient-therapy-slot-detail"
       data-focus-therapy={focusTherapyId}
@@ -165,6 +176,15 @@ export function PatientTherapySlotDetail({
         </button>
       </header> : <h4 id={headingId} className="ds-sr-only">Somministrazioni delle {time}</h4>}
       <h5 className="patient-therapy-slot-detail__sub">Somministrazione del {formatDay(date)}</h5>
+      {embedded && (state.status !== 'ready' || !state.time) && (
+        <ul className="patient-therapy-slot-detail__prescriptions" aria-label="Prescrizioni dell’orario">
+          {events.map((event) => <li key={event.id} className="giro-drug__info">
+            <strong className="giro-drug__name">{event.drugName}</strong>
+            <span className="giro-drug__cap">{event.dose}{event.strength ? ` — ${event.strength}` : ''} · {event.route}</span>
+            <PrescriptionDetails event={event} />
+          </li>)}
+        </ul>
+      )}
       {state.status === 'loading' && <p role="status">Caricamento dello stato…</p>}
       {state.status === 'error' && (
         <div role="alert" className="patient-therapy-slot-detail__msg">
@@ -196,6 +216,14 @@ export function PatientTherapySlotDetail({
             filtro="tutte"
             readOnly={!canAdminister}
             hidePatientHead
+            renderDrugDetails={embedded ? (therapyId) => {
+              const event = events.find((item) => item.therapyId === therapyId);
+              return event ? <PrescriptionDetails event={event} /> : null;
+            } : undefined}
+            renderDrugActions={embedded ? (therapyId) => {
+              const info = missedToday.find((item) => item.therapyId === therapyId);
+              return info ? retryButton(info) : null;
+            } : undefined}
             requiresConfirmation={needsConfirmation}
             onConfirm={
               canAdminister
@@ -214,7 +242,7 @@ export function PatientTherapySlotDetail({
                 : undefined
             }
           />
-          {missedToday.length > 0 && (
+          {!embedded && missedToday.length > 0 && (
             <ul className="patient-therapy-slot-detail__again" aria-label="Dosi non somministrate">
               {missedToday.map((info) => {
                 const key = `${info.therapyId}|${info.fascia}`;
@@ -223,17 +251,7 @@ export function PatientTherapySlotDetail({
                     <span>
                       {info.drugName} {info.dosage}: segnata come non somministrata.
                     </span>
-                    <button
-                      type="button"
-                      className="ds-btn ds-btn--primary"
-                      disabled={sendingRetry === key}
-                      aria-label={`Somministra ora: ${info.drugName} ${info.dosage}, ore ${info.ora}`}
-                      onClick={() =>
-                        needsConfirmation ? setRetry(info) : void administerAgain(info, false)
-                      }
-                    >
-                      {sendingRetry === key ? 'Invio…' : 'Somministra ora'}
-                    </button>
+                    {retryButton(info)}
                   </li>
                 );
               })}
@@ -276,4 +294,16 @@ function formatDay(date: string) {
     day: 'numeric',
     month: 'long',
   });
+}
+
+function PrescriptionDetails({ event }: { event: CalendarOccurrence }) {
+  const details = [
+    event.prescriber && `Prescrittore: ${event.prescriber}`,
+    event.endDate && `Fine: ${event.endDate}`,
+    event.oneTime && 'Una tantum',
+  ].filter(Boolean).join(' · ');
+  return <>
+    {details && <span className="patient-therapy-slot-detail__prescription">{details}</span>}
+    {event.note && <span className="patient-therapy-slot-detail__note">{event.note}</span>}
+  </>;
 }
