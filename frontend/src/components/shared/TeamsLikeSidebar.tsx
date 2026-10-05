@@ -43,6 +43,7 @@ interface TeamsLikeSidebarProps {
   utente: UtenteApp;
   onNavigate: (key: NavKey) => void;
   criticalHandovers?: number | null;
+  unreadDiaryNotes?: number | null;
   /** Pannello dell'assistente aperto: la voce lo dichiara (aria-expanded) e resta evidenziata. */
   assistantOpen?: boolean;
   /** Capability della sessione: le voci delle pagine non consentite non compaiono. */
@@ -89,9 +90,10 @@ export default function TeamsLikeSidebar({
   onNavigate,
   assistantOpen = false,
   criticalHandovers = 0,
+  unreadDiaryNotes = criticalHandovers,
   capabilities = null,
 }: TeamsLikeSidebarProps) {
-  const items = getNavItems(utente, criticalHandovers).filter((item) =>
+  const items = getNavItems(utente, unreadDiaryNotes).filter((item) =>
     canNavigate(capabilities, item.key),
   );
 
@@ -117,7 +119,7 @@ export default function TeamsLikeSidebar({
             onClick={() => onNavigate(item.key)}
             title={item.title ?? item.label}
             aria-label={item.key === 'consegne'
-              ? `Consegne, ${criticalHandovers === null ? 'conteggio non disponibile' : `${criticalHandovers} critiche da prendere in carico`}`
+              ? `Consegne, ${unreadDiaryNotes === null ? 'conteggio delle note da leggere non disponibile' : `${unreadDiaryNotes} note senza conferma di lettura`}`
               : undefined}
             aria-current={resolvedActiveKey === item.key ? 'page' : undefined}
           >
@@ -128,7 +130,6 @@ export default function TeamsLikeSidebar({
             {item.badge != null && item.badge > 0 && (
               <span className="teams-sidebar__badge">{item.badge > 99 ? '99+' : item.badge}</span>
             )}
-            {item.key === 'consegne' && criticalHandovers === null && <span className="teams-sidebar__badge" aria-hidden="true">…</span>}
           </button>
         ))}
       </div>

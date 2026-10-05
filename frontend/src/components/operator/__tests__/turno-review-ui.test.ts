@@ -61,7 +61,7 @@ test('both shell entries expose exact count; zero hidden; Note absent for both r
         criticalHandovers: 12,
       }),
     );
-    assert.match(html, /Consegne, 12 critiche da prendere in carico/);
+    assert.match(html, /Consegne, 12 note senza conferma di lettura/);
     assert.match(html, /teams-sidebar__badge">12/);
     assert.doesNotMatch(html, />Note</);
   }

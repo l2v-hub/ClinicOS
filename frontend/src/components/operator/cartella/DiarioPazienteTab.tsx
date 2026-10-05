@@ -27,6 +27,7 @@ import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
 import { DiaryThreadReceipt } from './DiaryThreadReceipt';
 import { isActiveUrgency, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
+import { isDiaryReadReceipt, postDiaryRead, type DiaryReadReceipt } from '../../../lib/diaryReading';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -34,6 +35,7 @@ const DiaryTherapyPanel = lazy(() =>
 );
 
 type DiaryFeedEntry = DiarioPazienteEntry & {
+  readReceipt?: DiaryReadReceipt;
   sourceType?: 'diary' | 'consegna';
   sourceId?: string;
   /** Compatibility history from the older personal-read protocol. */
@@ -194,6 +196,8 @@ export function DiarioPazienteTab({
   const loadMoreControllerRef = useRef<AbortController | null>(null);
   // F8: le azioni compaiono solo con la capability che il backend applica (niente 403 dalla GUI).
   const canEditEntry = useCan('diary.update_entry');
+  const canReadDiary = useCan('diary.list');
+  const canReadHandovers = useCan('consegne.list');
   const canPrescribe = useCan('diary.create_with_therapy');
   const canDeleteEntry = useCan('diary.delete_entry');
   // «Ho capito» su un'urgenza: voce in corso di registrazione (blocca il doppio tocco).
@@ -391,6 +395,7 @@ export function DiarioPazienteTab({
       setForm(emptyForm());
       setShowAdd(false);
       setTherapyPanel(null);
+      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
       setRefreshVersion((version) => version + 1);
     } catch (error) {
       setError(
@@ -433,6 +438,7 @@ export function DiarioPazienteTab({
     setTherapyPanel(null);
     setForm(emptyForm());
     setShowAdd(false);
+    window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
     setRefreshVersion((version) => version + 1);
   }
 
@@ -469,6 +475,7 @@ export function DiarioPazienteTab({
         ),
       );
       setEditEntry(null);
+      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
       setRefreshVersion((version) => version + 1);
     } catch (error) {
       setError(
@@ -502,6 +509,7 @@ export function DiarioPazienteTab({
       if (!res.ok) throw new Error();
       setEntries((prev) => prev.filter((e) => e.id !== entry.id));
       setPendingDelete(null);
+      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
       setRefreshVersion((version) => version + 1);
     } catch {
       setError('Errore nella eliminazione della voce.');
@@ -513,20 +521,23 @@ export function DiarioPazienteTab({
   // ── «Ho capito» (UX2 W8: il primo non-autore prende in carico l'urgenza per tutti) ──────────
 
   async function handleAck(entry: DiaryFeedEntry) {
-    if (acking) return;
+    if (acking || !canReadDiary || (entry.sourceType === 'consegna' && !canReadHandovers)) return;
     setAckError('');
     setAcking(entry.id);
     try {
       // Una consegna nel diario si prende in carico sulla consegna stessa (stessa regola).
-      const result =
-        entry.sourceType === 'consegna' && entry.sourceId
+      const result = isDiaryReadReceipt(entry.readReceipt)
+        ? await postDiaryRead(entry.sourceType === 'consegna' && entry.sourceId
+          ? `${API_URL}/consegne/${encodeURIComponent(entry.sourceId)}/ack`
+          : `${API_URL}/patients/${encodeURIComponent(pazienteId)}/diary/${encodeURIComponent(entry.id)}/ack`, operatorHeaders())
+        : entry.sourceType === 'consegna' && entry.sourceId
           ? await postUrgencyAck(
               `${API_URL}/consegne/${encodeURIComponent(entry.sourceId)}/ack`,
               operatorHeaders(),
             )
           : await postDiaryAck(pazienteId, entry.id);
       setEntries((prev) =>
-        prev.map((e) => (e.id === entry.id ? { ...e, urgency: result.urgency } : e)),
+        prev.map((e) => (e.id === entry.id ? { ...e, urgency: result.urgency, ...('readReceipt' in result ? { readReceipt: result.readReceipt } : {}) } : e)),
       );
       window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
       // Rivalida in background (la pagina in cache resta visibile): stato condiviso con gli altri.
@@ -684,12 +695,13 @@ export function DiarioPazienteTab({
         )}
         {renderTherapyLink(row)}
         <DiaryThreadReceipt
+          readReceipt={row.readReceipt}
           urgency={row.urgency}
           acknowledgements={row.acknowledgements}
           priority={PRIORITY_LABELS[row.priority].toLowerCase()}
           onAcknowledge={() => void handleAck(row)}
           busy={acking === row.id}
-          disabled={acking !== null}
+          disabled={acking !== null || !canReadDiary || (row.sourceType === 'consegna' && !canReadHandovers)}
           subject={`della voce${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
         />
       </div>

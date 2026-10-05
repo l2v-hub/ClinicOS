@@ -28,6 +28,7 @@ import { authoritativeDiaryAuthor } from '../patients/diary-author.js';
 import { patientScopeWhere } from '../patients/patient-scope.js';
 
 import { readsAllConsegne } from './visibility.js';
+import { diaryReadReceipt } from '../patients/diary-reading.js';
 export const CONSEGNA_ACK_AUDIT_ACTION = 'consegna:ack';
 
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -96,7 +97,11 @@ function readableWhere(id: string, actor: Operator): Prisma.ConsegnaWhereInput {
  * «Ho capito» on an urgent handover. 201 when this ack takes charge of the urgency; 200 (created:
  * false) when it had already been taken (by anyone) — nothing is written then.
  */
-export async function acknowledgeConsegna(id: string, actor: Operator) {
+export async function acknowledgeConsegna(
+  id: string,
+  actor: Operator,
+  purpose: 'urgency' | 'read' = 'urgency',
+) {
   const result = await prisma.$transaction(async (tx) => {
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`consegna-ack:${id}`}))`;
     const c = await tx.consegna.findFirst({
@@ -120,7 +125,7 @@ export async function acknowledgeConsegna(id: string, actor: Operator) {
       });
       if (!inScope) throw new UrgencyAckError(404, 'not_found', 'Consegna non trovata');
     }
-    if (c.priorita !== URGENT_PRIORITY)
+    if (purpose !== 'read' && c.priorita !== URGENT_PRIORITY)
       throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
 
     const me = await authoritativeDiaryAuthor(actor, tx);
@@ -130,12 +135,13 @@ export async function acknowledgeConsegna(id: string, actor: Operator) {
       throw new UrgencyAckError(409, 'author_cannot_acknowledge', SELF_ACK_MESSAGE);
 
     let created = false;
-    const before = urgencyView(
-      subject,
-      (await loadConsegnaAckRows([id], tx)).get(id) ?? [],
-      actorRef,
-    );
-    if (before.state === 'active') {
+    const existingAcks = (await loadConsegnaAckRows([id], tx)).get(id) ?? [];
+    const before = urgencyView(subject, existingAcks, actorRef);
+    if (
+      purpose === 'read'
+        ? diaryReadReceipt(subject, existingAcks, actorRef).state === 'unread'
+        : before.state === 'active'
+    ) {
       await tx.consegnaAcknowledgement.create({
         data: {
           consegnaId: id,
@@ -148,12 +154,10 @@ export async function acknowledgeConsegna(id: string, actor: Operator) {
       created = true;
     }
 
-    const urgency = urgencyView(
-      subject,
-      (await loadConsegnaAckRows([id], tx)).get(id) ?? [],
-      actorRef,
-    );
-    return { created, urgency, patientId: c.pazienteId };
+    const committedAcks = (await loadConsegnaAckRows([id], tx)).get(id) ?? [];
+    const urgency = urgencyView(subject, committedAcks, actorRef);
+    const readReceipt = diaryReadReceipt(subject, committedAcks, actorRef);
+    return { created, urgency, readReceipt, patientId: c.pazienteId };
   });
 
   recordAuditEvent({
@@ -169,5 +173,5 @@ export async function acknowledgeConsegna(id: string, actor: Operator) {
     outcome: result.created ? 'ok' : 'deduped',
   });
 
-  return { created: result.created, urgency: result.urgency };
+  return { created: result.created, urgency: result.urgency, readReceipt: result.readReceipt };
 }

@@ -7,6 +7,7 @@ import { DiaryPageInputError } from '../patients/diary-pagination.js';
 import { acknowledgeDiaryEntry } from '../patients/diary-ack-service.js';
 import { UrgencyAckError } from '../lib/urgency.js';
 import { loadPatientDiary } from '../patients/diary-read-service.js';
+import { countUnreadDiary } from '../patients/diary-reading.js';
 import { DiaryWriteInputError, parseDiaryPatchBody } from '../patients/diary-write-validation.js';
 import {
   DiaryTherapyInputError,
@@ -29,6 +30,14 @@ router.use((_req, res, next) => {
 });
 router.use(requireOperator);
 router.use('/:patientId/diary', requirePatientScope);
+
+router.get('/diary-unread-count', async (req: AuthedRequest, res) => {
+  try {
+    res.status(200).json({ unreadCount: await countUnreadDiary(req.operator!) });
+  } catch {
+    res.status(503).json({ error: 'Conteggio delle note da leggere non disponibile' });
+  }
+});
 
 // Authorship: patients/diary-author.ts#authoritativeDiaryAuthor (server-authoritative).
 
@@ -118,10 +127,14 @@ router.get('/:patientId/diary/:entryId', async (req, res) => {
 // senza scrivere nulla. 409 se la voce non e' urgente o se chi chiama ne e' l'autore.
 // Capability: diary.list (chi puo' leggere il diario puo' prendere in carico l'urgenza).
 router.post('/:patientId/diary/:entryId/ack', async (req: AuthedRequest, res) => {
+  if (req.body?.purpose !== undefined && !['read', 'urgency'].includes(req.body.purpose)) {
+    res.status(400).json({ error: 'Conferma di lettura non valida' });
+    return;
+  }
   const patientId = String(req.params.patientId ?? '');
   const entryId = String(req.params.entryId ?? '');
   try {
-    const result = await acknowledgeDiaryEntry(patientId, entryId, req.operator!);
+    const result = await acknowledgeDiaryEntry(patientId, entryId, req.operator!, req.body?.purpose === 'read' ? 'read' : 'urgency');
     res.status(result.created ? 201 : 200).json(result);
   } catch (error) {
     if (error instanceof UrgencyAckError) {

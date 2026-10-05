@@ -16,6 +16,8 @@ import { DiarioPazienteTab } from '../../frontend/src/components/operator/cartel
 import { TopbarTitleSlot } from '../../frontend/src/components/shared/topbarTitleSlot';
 import { criticalHandoverCount } from '../../frontend/src/lib/handoverPreview';
 import { URGENCY_ACKNOWLEDGED_EVENT } from '../../frontend/src/lib/urgency';
+import { useDiaryUnreadCount } from '../../frontend/src/lib/useDiaryUnreadCount';
+import { setCurrentOperator } from '../../frontend/src/lib/operatorSession';
 import type { ConsegnaOverview } from '../../frontend/src/types';
 import { setSessionCapabilities } from '../../frontend/src/lib/capabilities';
 setSessionCapabilities({
@@ -23,6 +25,7 @@ setSessionCapabilities({
   'consegne.list': { allowed: true },
   'parameters.create_reading': { allowed: true },
   'diary.create_entry': { allowed: true },
+  'diary.list': { allowed: true },
   'diary.update_entry': { allowed: false },
   'diary.delete_entry': { allowed: false },
 } as never);
@@ -54,6 +57,9 @@ const readings = [
   },
 ];
 function Fixture() {
+  const readingMode = new URLSearchParams(location.search).has('reading');
+  useEffect(() => { if (readingMode) setCurrentOperator({ id: 'reader', role: 'infermiere' }); }, [readingMode]);
+  const diaryUnreadCount = useDiaryUnreadCount(readingMode ? 'reader:infermiere' : null, readingMode);
   const [overview, setOverview] = useState<ConsegnaOverview | null>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [page, setPage] = useState('operator-dashboard');
@@ -92,7 +98,7 @@ function Fixture() {
           activeKey={page as never}
           utente={user}
           onNavigate={nav}
-          criticalHandovers={count}
+          unreadDiaryNotes={readingMode ? diaryUnreadCount : count}
         />
         <div className="main-area-clean">
           <div className="compact-topbar">

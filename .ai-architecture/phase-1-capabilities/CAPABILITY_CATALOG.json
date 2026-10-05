@@ -2636,7 +2636,7 @@
       "description": "Feed unificato del diario (voci di diario + consegne visibili), paginato keyset con filtri authorType/from/to/limit/cursor.",
       "type": "read",
       "feature_ui": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx, frontend/src/lib/diaryPages.ts, frontend/src/lib/patientDetailPrefetch.ts, PatientRecordPrintDialog.tsx",
-      "entry_point": "GET /patients/:patientId/diary (backend/src/routes/patient-diary.ts:39), POST /patients/:patientId/diary/:entryId/ack (UX2 W8 «Ho capito» on an urgent entry: whoever can read the diary may take charge of the urgency; the first non-author ack ends it for everyone; the author gets 409)",
+      "entry_point": "GET /patients/diary-unread-count, GET /patients/:patientId/diary, POST /patients/:patientId/diary/:entryId/ack (explicit purpose read confirms any diary note; default takes charge of an urgent entry; first non-author receipt is shared; author gets 409)",
       "services": [
         "backend/src/patients/diary-read-service.ts#loadPatientDiary",
         "backend/src/patients/diary-ack-service.ts#acknowledgeDiaryEntry"

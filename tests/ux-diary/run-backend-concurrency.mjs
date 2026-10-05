@@ -31,6 +31,7 @@ try {
     'src/patients/__tests__/diary-ack-db.test.ts',
     'src/consegne/__tests__/consegna-ack-db.test.ts',
     'src/patients/__tests__/urgency-ack-concurrency-db.test.ts',
+    'src/patients/__tests__/diary-reading-db.test.ts',
   ];
   if (process.argv.includes('--concurrency-only')) suites.splice(0, 2);
   const child = spawn(

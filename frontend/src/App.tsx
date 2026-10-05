@@ -101,6 +101,8 @@ import {
   type ConsegnaFeedQuery,
 } from './lib/consegneFeed';
 import { postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from './lib/urgency';
+import { useDiaryUnreadCount } from './lib/useDiaryUnreadCount';
+import { DIARY_READING_CHANGED_EVENT } from './lib/diaryReading';
 import {
   buildTherapySlotPageUrl,
   mergeTherapySlotPages,
@@ -150,7 +152,6 @@ import type { AssistantNav } from './components/shared/AIAssistantButton';
 import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
 import { classicScreenTarget } from './components/assistant/classicScreenTarget';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
-import { criticalHandoverCount } from './lib/handoverPreview';
 import { parseHandoverOverview } from './lib/handoverOverviewResponse';
 import { TopbarTitleSlot } from './components/shared/topbarTitleSlot';
 import { ShiftClock } from './components/shared/ShiftClock';
@@ -452,6 +453,7 @@ export default function App() {
   const [authz, setAuthz] = useState<AuthzContext | null>(null);
   // I componenti profondi (es. "+ Nuova terapia") leggono le capability con useCan.
   useEffect(() => setSessionCapabilities(authz?.capabilities ?? null), [authz]);
+  const unreadDiaryNotes = useDiaryUnreadCount(utente ? `${utente.id}:${authz?.appRole ?? utente.ruolo}:${authz?.policyVersion ?? 'legacy'}` : null, Boolean(utente) && can(authz?.capabilities ?? null, 'diary.list'));
   const [loginPending, setLoginPending] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
@@ -2488,6 +2490,7 @@ export default function App() {
   // ── Consegne CRUD (API-persisted) ─────────────────────────────────────────
 
   function refreshConsegnaViews(savedPatientId?: string) {
+    window.dispatchEvent(new Event(DIARY_READING_CHANGED_EVENT));
     const scope = consegnaViewScopeRef.current;
     void loadConsegneOverview();
     if (scope.navKey === 'consegne' && scope.mode === 'feed')
@@ -3310,7 +3313,7 @@ export default function App() {
           activeKey={navKey}
           utente={utente}
           onNavigate={(k) => navigate(k)}
-          criticalHandovers={criticalHandoverCount(consegneOverview, consegneOverviewState)}
+          unreadDiaryNotes={unreadDiaryNotes}
           assistantOpen={aiVisible}
           capabilities={authz?.capabilities ?? null}
         />

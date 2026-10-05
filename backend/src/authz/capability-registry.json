@@ -1137,6 +1137,10 @@
       "routes": [
         {
           "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
           "path": "/patients/:patientId/diary"
         },
         {

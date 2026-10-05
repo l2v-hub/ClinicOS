@@ -29,11 +29,13 @@ import {
 import { loadConsegnaAckRows } from '../consegne/ack-service.js';
 import { authoritativeDiaryAuthor } from './diary-author.js';
 import { patientScopeWhere } from './patient-scope.js';
+import { diaryReadReceipt, type DiaryReadReceipt } from './diary-reading.js';
 
 export const DIARY_ACK_AUDIT_ACTION = 'diary:ack';
 
 export interface DiaryUrgencyFields {
   urgency: UrgencyView;
+  readReceipt: DiaryReadReceipt;
 }
 
 interface DiaryFeedEntryLike {
@@ -81,9 +83,8 @@ export async function loadDiaryAckFields(
   entries: ReadonlyArray<DiaryFeedEntryLike>,
   actor: Operator,
 ): Promise<Map<string, DiaryUrgencyFields>> {
-  const urgent = entries.filter((e) => e.priority === URGENT_PRIORITY);
-  const diaryIds = urgent.filter((e) => e.sourceType !== 'consegna').map((e) => e.id);
-  const consegnaIds = urgent
+  const diaryIds = entries.filter((e) => e.sourceType !== 'consegna').map((e) => e.id);
+  const consegnaIds = entries
     .filter((e) => e.sourceType === 'consegna' && e.sourceId)
     .map((e) => e.sourceId!);
   const [diaryAcks, consegnaAcks] = await Promise.all([
@@ -96,7 +97,10 @@ export async function loadDiaryAckFields(
       entry.sourceType === 'consegna'
         ? (consegnaAcks.get(entry.sourceId ?? '') ?? [])
         : (diaryAcks.get(entry.id) ?? []);
-    result.set(entry.id, { urgency: urgencyView(subjectOf(entry), acks, actor) });
+    result.set(entry.id, {
+      urgency: urgencyView(subjectOf(entry), acks, actor),
+      readReceipt: diaryReadReceipt(subjectOf(entry), acks, actor),
+    });
   }
   return result;
 }
@@ -105,7 +109,12 @@ export async function loadDiaryAckFields(
  * «Ho capito» on an urgent entry. 201 when this ack takes charge of the urgency; 200 (created:
  * false) when the urgency had already been taken (by anyone) — nothing is written then.
  */
-export async function acknowledgeDiaryEntry(patientId: string, entryId: string, actor: Operator) {
+export async function acknowledgeDiaryEntry(
+  patientId: string,
+  entryId: string,
+  actor: Operator,
+  purpose: 'urgency' | 'read' = 'urgency',
+) {
   const result = await prisma.$transaction(async (tx) => {
     // All readers of this subject serialize, then re-read committed state inside the transaction.
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`diary-ack:${entryId}`}))`;
@@ -121,7 +130,7 @@ export async function acknowledgeDiaryEntry(patientId: string, entryId: string, 
       },
     });
     if (!entry) throw new UrgencyAckError(404, 'entry_not_found', 'Voce non trovata');
-    if (entry.priority !== URGENT_PRIORITY)
+    if (purpose !== 'read' && entry.priority !== URGENT_PRIORITY)
       throw new UrgencyAckError(409, 'not_acknowledgeable', NOT_URGENT_MESSAGE);
 
     const me = await authoritativeDiaryAuthor(actor, tx);
@@ -131,12 +140,13 @@ export async function acknowledgeDiaryEntry(patientId: string, entryId: string, 
       throw new UrgencyAckError(409, 'author_cannot_acknowledge', SELF_ACK_MESSAGE);
 
     let created = false;
-    const before = urgencyView(
-      subject,
-      (await diaryAckRows([entryId], tx)).get(entryId) ?? [],
-      actorRef,
-    );
-    if (before.state === 'active') {
+    const existingAcks = (await diaryAckRows([entryId], tx)).get(entryId) ?? [];
+    const before = urgencyView(subject, existingAcks, actorRef);
+    if (
+      purpose === 'read'
+        ? diaryReadReceipt(subject, existingAcks, actorRef).state === 'unread'
+        : before.state === 'active'
+    ) {
       await tx.diaryEntryAcknowledgement.create({
         data: {
           entryId,
@@ -149,12 +159,10 @@ export async function acknowledgeDiaryEntry(patientId: string, entryId: string, 
       created = true;
     }
 
-    const urgency = urgencyView(
-      subject,
-      (await diaryAckRows([entryId], tx)).get(entryId) ?? [],
-      actorRef,
-    );
-    return { created, urgency, patientId: entry.patientId };
+    const committedAcks = (await diaryAckRows([entryId], tx)).get(entryId) ?? [];
+    const urgency = urgencyView(subject, committedAcks, actorRef);
+    const readReceipt = diaryReadReceipt(subject, committedAcks, actorRef);
+    return { created, urgency, readReceipt, patientId: entry.patientId };
   });
 
   recordAuditEvent({
@@ -170,7 +178,7 @@ export async function acknowledgeDiaryEntry(patientId: string, entryId: string, 
     outcome: result.created ? 'ok' : 'deduped',
   });
 
-  return { created: result.created, urgency: result.urgency };
+  return { created: result.created, urgency: result.urgency, readReceipt: result.readReceipt };
 }
 
 /**

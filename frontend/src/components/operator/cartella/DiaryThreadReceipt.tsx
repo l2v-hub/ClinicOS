@@ -3,6 +3,7 @@ import { formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import { isUrgencyView, legacyReadTraces } from '../../../lib/urgency';
 import { UrgencyNotice } from '../../shared/UrgencyNotice';
 import './DiaryThreadReceipt.css';
+import { isDiaryReadReceipt, type DiaryReadReceipt } from '../../../lib/diaryReading';
 
 const ROLE_LABELS: Record<string, string> = {
   medico: 'Medico',
@@ -16,6 +17,7 @@ const ROLE_LABELS: Record<string, string> = {
 /** A response belongs to its original diary message. Only server receipts name a reader. */
 export function DiaryThreadReceipt({
   urgency,
+  readReceipt,
   acknowledgements,
   priority,
   onAcknowledge,
@@ -24,6 +26,7 @@ export function DiaryThreadReceipt({
   subject,
 }: {
   urgency?: UrgencyView | null;
+  readReceipt?: DiaryReadReceipt;
   acknowledgements?: unknown;
   priority: string;
   onAcknowledge: () => void;
@@ -31,6 +34,53 @@ export function DiaryThreadReceipt({
   disabled: boolean;
   subject: string;
 }) {
+  if (isDiaryReadReceipt(readReceipt)) {
+    const reader = readReceipt.readBy;
+    return (
+      <div
+        className={`diary-thread diary-thread--${reader ? 'taken' : 'unread'}`}
+        data-diary-reading-state={readReceipt.state}
+      >
+        <div className="diary-thread__reply">
+          {reader ? (
+            <>
+              <div className="diary-thread__head">
+                <strong>
+                  Letta da {reader.operatorName} (
+                  {ROLE_LABELS[reader.operatorRole] ?? reader.operatorRole})
+                </strong>
+                <time dateTime={reader.acknowledgedAt}>
+                  {formatFacilityLocalMinute(reader.acknowledgedAt)}
+                </time>
+              </div>
+              <small>
+                Lettura confermata esplicitamente. L’intervento clinico non è dichiarato concluso.
+              </small>
+            </>
+          ) : (
+            <>
+              <strong>Nessuno ha ancora confermato la lettura</strong>
+              <p className="diary-thread__message">
+                Aprire la nota non la segna come letta.
+                {readReceipt.isAuthor ? ' La conferma spetta a un altro operatore.' : ''}
+              </p>
+              {readReceipt.canAcknowledge && (
+                <button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  aria-label={`Segna come letto: ${subject}`}
+                  disabled={disabled || busy}
+                  onClick={onAcknowledge}
+                >
+                  {busy ? 'Registrazione…' : 'Letto'}
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
   const verified = isUrgencyView(urgency) ? urgency : null;
   const reader = verified?.state === 'taken' ? verified.takenBy : null;
   const personalReads =

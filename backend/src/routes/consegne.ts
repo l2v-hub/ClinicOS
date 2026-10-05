@@ -115,13 +115,17 @@ consegneRouter.post('/', async (req: AuthedRequest, res) => {
 // presa in carico 200 senza scrivere. 409 se non urgente o se chi chiama e' l'autore. Nessun campo
 // della consegna cambia (capability di lettura consegne.list: non allarga alcuna scrittura).
 consegneRouter.post('/:id/ack', async (req: AuthedRequest, res) => {
+  if (req.body?.purpose !== undefined && !['read', 'urgency'].includes(req.body.purpose)) {
+    res.status(400).json({ error: 'Conferma di lettura non valida' });
+    return;
+  }
   const rawId = req.params.id;
   if (typeof rawId !== 'string' || !isSafeConsegnaId(rawId)) {
     notFound(res);
     return;
   }
   try {
-    const result = await acknowledgeConsegna(rawId, req.operator!);
+    const result = await acknowledgeConsegna(rawId, req.operator!, req.body?.purpose === 'read' ? 'read' : 'urgency');
     res.status(result.created ? 201 : 200).json(result);
   } catch (error) {
     if (error instanceof UrgencyAckError) {

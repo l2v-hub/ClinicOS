@@ -4,9 +4,10 @@ import { test } from 'node:test';
 
 const appSource = readFileSync(new URL('../../App.tsx', import.meta.url), 'utf8');
 
-test('mailbox remains available while shell badges use exact critical handover aggregate', () => {
+test('mailbox remains available while shell badge uses the separate exact diary unread aggregate', () => {
   assert.match(appSource, /unreadCount=\{notesUnreadCount\}/);
-  assert.match(appSource, /criticalHandovers=\{criticalHandoverCount\(consegneOverview, consegneOverviewState\)\}/);
+  assert.match(appSource, /unreadDiaryNotes=\{unreadDiaryNotes\}/);
+  assert.match(appSource, /useDiaryUnreadCount\(/);
   assert.doesNotMatch(appSource, /const unreadNotes = note\.filter/);
 });
 
