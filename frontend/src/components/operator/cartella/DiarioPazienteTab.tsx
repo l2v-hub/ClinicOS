@@ -212,6 +212,17 @@ export function DiarioPazienteTab({
 
   const [form, setForm] = useState<DiarioForm>(emptyForm);
   const [editForm, setEditForm] = useState<DiarioForm>(emptyForm);
+  const editRegionRef = useRef<HTMLDivElement>(null);
+  const editButtonRef = useRef<HTMLButtonElement | null>(null);
+  const editingId = editEntry?.id;
+  useEffect(() => {
+    if (editingId) {
+      editRegionRef.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+    } else {
+      editButtonRef.current?.focus();
+      editButtonRef.current = null;
+    }
+  }, [editingId]);
 
   const [dateRange, setDateRange] = useState({ from: '', to: '' });
   const [dateDraft, setDateDraft] = useState({ from: '', to: '' });
@@ -428,7 +439,8 @@ export function DiarioPazienteTab({
   // ── Save edited entry ────────────────────────────────────────────────────────
 
   async function handleEditSave() {
-    if (!editEntry || !editForm.content.trim()) return;
+    if (saving || !canEditEntry || !editEntry || !editForm.content.trim()) return;
+    setError('');
     setSaving(true);
     try {
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary/${editEntry.id}`, {
@@ -438,7 +450,6 @@ export function DiarioPazienteTab({
           title: editForm.title.trim() || null,
           content: editForm.content.trim(),
           priority: editForm.priority,
-          entryDateTime: editForm.entryDateTime,
         }),
       });
       if (!res.ok)
@@ -532,6 +543,12 @@ export function DiarioPazienteTab({
   }
 
   function startEdit(entry: DiarioPazienteEntry) {
+    if (editingId === entry.id) {
+      editRegionRef.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+      return;
+    }
+    setError('');
+    setTherapyPanel(null);
     setEditEntry(entry);
     setEditForm({
       title: entry.title ?? '',
@@ -595,9 +612,16 @@ export function DiarioPazienteTab({
             <div className="diario-card__actions">
               {showEdit && (
                 <button
+                  type="button"
                   className="icon-btn icon-btn--sm icon-btn--edit"
                   title="Modifica"
-                  onClick={() => startEdit(row)}
+                  aria-expanded={editingId === row.id}
+                  aria-controls={editingId === row.id ? `diary-edit-${row.id}` : undefined}
+                  disabled={saving}
+                  onClick={event => {
+                    editButtonRef.current = event.currentTarget;
+                    startEdit(row);
+                  }}
                 >
                   <svg
                     width="13"
@@ -641,8 +665,23 @@ export function DiarioPazienteTab({
           )}
         </div>
         <div className="diario-card__author">Segnalata da <strong>{row.authorName}</strong></div>
-        {row.title && <div className="diario-card__title">{row.title}</div>}
-        <div className="diario-card__content">{row.content}</div>
+        {editingId === row.id && canEditEntry ? (
+          <div ref={editRegionRef} id={`diary-edit-${row.id}`} role="group" aria-label="Modifica voce del diario">
+            {error && <p className="diario-ack-error" role="alert">{error}</p>}
+            {renderForm(
+              editForm,
+              setEditForm,
+              handleEditSave,
+              () => setEditEntry(null),
+              `Modifica voce — ${fmtDT(row.entryDateTime)}`,
+            )}
+          </div>
+        ) : (
+          <>
+            {row.title && <div className="diario-card__title">{row.title}</div>}
+            <div className="diario-card__content">{row.content}</div>
+          </>
+        )}
         {renderTherapyLink(row)}
         <DiaryThreadReceipt
           urgency={row.urgency}
@@ -779,6 +818,7 @@ export function DiarioPazienteTab({
     <button
       ref={addButtonRef}
       className="btn-success btn-sm"
+      disabled={saving}
       onClick={() => {
         setShowAdd((v) => !v);
         setEditEntry(null);
@@ -875,16 +915,6 @@ export function DiarioPazienteTab({
                 setTherapyPanel((opened) => (opened ?? 0) + 1);
               },
             },
-          )}
-
-        {/* Edit form */}
-        {editEntry &&
-          renderForm(
-            editForm,
-            setEditForm as (fn: (prev: DiarioForm) => DiarioForm) => void,
-            handleEditSave,
-            () => setEditEntry(null),
-            `Modifica voce — ${fmtDT(editEntry.entryDateTime)}`,
           )}
 
         {!loading && countToSee(entries) > 0 && (
