@@ -1,13 +1,12 @@
-// Terapia del paziente — UX ciclo 2 (W5, decisione del proprietario 2026-10-03): tre viste e
-// nessuna ripetizione.
-// • Calendario (predefinita): elenco compatto dei farmaci attivi (tocca → prescrizione con le azioni
-//   del prescrittore) e calendario giorno/settimana, dove si somministra (dose del giorno, non
-//   somministrata con motivo, al bisogno, conferma del supervisore).
+// Calendario: slot compatti e popup per le somministrazioni; gli slot vuoti aprono il form
+// di prescrizione solo con therapy.create. Piano terapeutico contiene tutti i farmaci attivi.
 // • Storico: com'è andata — somministrazioni nel tempo con filtri; «sospese/concluse» è un filtro.
-// • Nuova terapia: la maschera di registrazione (solo con therapy.create).
+// • Nuova terapia: la stessa maschera di registrazione usata dalla popup dello slot.
 // I vecchi collegamenti (attivi, programmazione, giornaliere, sospese) atterrano sulle nuove viste;
 // la vista scelta resta nell'URL (ricarica e Indietro la riaprono).
-import { lazy, Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useCallback, useRef, useId } from 'react';
+import { AccessibleDialogSurface } from '../../shared/AccessibleDialogSurface';
+import { therapyFormAtCalendarSlot } from '../../../lib/therapyCalendarCreate';
 import { createSubmissionKey } from '../../../lib/submissionKey';
 import type { Paziente, PatientTherapyAPI } from '../../../types';
 import type { TherapyTarget, TherapyView } from '../../../lib/patientTarget';
@@ -123,6 +122,8 @@ export function TerapiaFarmacologicaTab({
   const [error, setError] = useState('');
   const [therapyLoadError, setTherapyLoadError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [createSlot, setCreateSlot] = useState<{ patientId: string; date: string; time: string } | null>(null);
+  const createDialogTitle = useId();
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<TherapyForm>(emptyTherapyForm());
   const [saving, setSaving] = useState(false);
@@ -252,8 +253,9 @@ export function TerapiaFarmacologicaTab({
     // L'errore appartiene alla schermata che l'ha prodotto.
     setError('');
     setView(next);
+    if (createSlot) closeForm();
     if (next !== 'attivi' && editId) closeForm();
-    if (next === 'nuova' && (!showForm || editId)) openAdd();
+    if (next === 'nuova' && (!showForm || editId || createSlot)) openAdd();
     rememberTherapyView(paziente.id, therapySubViewOf(next, status));
   };
   const changeHistoryStatus = (status: HistoryStatus) => {
@@ -283,6 +285,16 @@ export function TerapiaFarmacologicaTab({
     setForm(emptyTherapyForm());
     setShowForm(true);
   }
+  function openCalendarCreate(date: string, time: string) {
+    if (!canCreateTherapy || saving) return;
+    const initialized = therapyFormAtCalendarSlot(emptyTherapyForm(), date, time);
+    if (!initialized) return;
+    resetSaveFeedback();
+    setEditId(null);
+    setForm(initialized);
+    setShowForm(true);
+    setCreateSlot({ patientId: paziente.id, date, time });
+  }
   const openEdit = (t: PatientTherapyAPI) => {
     resetSaveFeedback();
     setEditId(t.id);
@@ -296,6 +308,7 @@ export function TerapiaFarmacologicaTab({
   function closeForm() {
     resetSaveFeedback();
     setShowForm(false);
+    setCreateSlot(null);
     setEditId(null);
     setForm(emptyTherapyForm());
   }
@@ -304,10 +317,14 @@ export function TerapiaFarmacologicaTab({
     if (!canUpdateTherapy) setPendingSospendiId(null);
     if (!canDeleteTherapy) setPendingDeleteId(null);
   }, [canCreateTherapy, canUpdateTherapy, canDeleteTherapy, showForm, editId]);
+  useEffect(() => {
+    if (createSlot && createSlot.patientId !== paziente.id) closeForm();
+  }, [paziente.id, createSlot]);
 
   const [createKey] = useState(createSubmissionKey);
   const handleSave = async () => {
     if (saving || (editId ? !canUpdateTherapy : !canCreateTherapy)) return;
+    if (createSlot && createSlot.patientId !== paziente.id) return;
     // Stesso controllo per campo dell'ingresso (campi obbligatori inclusi): il primo campo da
     // correggere riceve il fuoco invece di un pulsante disabilitato senza indicazioni sul campo.
     const issues = therapyFormIssues(form);
@@ -692,8 +709,8 @@ export function TerapiaFarmacologicaTab({
 
   const VIEWS: TopNavItem[] = [
     { key: 'calendario', label: 'Calendario' },
-    { key: 'attivi', label: 'Farmaci attivi' },
     { key: 'storico', label: 'Storico' },
+    { key: 'attivi', label: 'Piano terapeutico' },
     ...(canCreateTherapy ? [{ key: 'nuova', label: 'Nuova terapia' }] : []),
   ];
   const activeView: TherapyView = view === 'nuova' && !canCreateTherapy ? 'calendario' : view;
@@ -702,7 +719,8 @@ export function TerapiaFarmacologicaTab({
   const formShell = (
     <div className="terapia-sched-form therapy-form-shell" ref={formShellRef}>
       <header className="therapy-form-shell__heading">
-        <h2>{editId ? 'Modifica terapia' : 'Nuova terapia'}</h2>
+        <h2 id={createDialogTitle}>{editId ? 'Modifica terapia' : 'Nuova terapia'}</h2>
+        {createSlot && <p>{createSlot.date} · ore {createSlot.time}</p>}
         <p>I campi con * sono obbligatori.</p>
       </header>
       <TherapyFormFields
@@ -721,6 +739,7 @@ export function TerapiaFarmacologicaTab({
         <button
           type="button"
           className="ds-btn ds-btn--secondary"
+          disabled={saving}
           onClick={() => {
             closeForm();
             if (!editId) showView('calendario');
@@ -784,6 +803,7 @@ export function TerapiaFarmacologicaTab({
               key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}
               patientId={paziente.id} initialDate={calendarFocus?.date}
               initialOpenTime={calendarFocus?.time} focusTherapyId={focusDrugId ?? undefined}
+              onCreate={canCreateTherapy ? openCalendarCreate : undefined}
               refreshKey={calendarRefresh} />
           </div>
         )}
@@ -828,6 +848,13 @@ export function TerapiaFarmacologicaTab({
 
         {activeView === 'nuova' && <div className="cts__body--padded">{formShell}</div>}
       </ClinicalTableSection>
+
+      {createSlot && createSlot.patientId === paziente.id && canCreateTherapy && <AccessibleDialogSurface
+        labelledBy={createDialogTitle} className="therapy-calendar-dialog"
+        dismissible={!saving} closeOnOverlay={!saving} onClose={closeForm}>
+        <button type="button" className="ds-icon-btn" aria-label="Chiudi nuova terapia" title="Chiudi nuova terapia" data-dialog-initial-focus disabled={saving} onClick={closeForm}>×</button>
+        {formShell}
+      </AccessibleDialogSurface>}
 
       <ConfirmDialog
         open={pendingDeleteId !== null}

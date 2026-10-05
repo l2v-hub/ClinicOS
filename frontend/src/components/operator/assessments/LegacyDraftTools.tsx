@@ -14,12 +14,12 @@ export function LegacyDraftTools({
     <>
       {error && (
         <p role="alert">
-          La bozza non può essere conservata dopo il ricaricamento. Salva prima di uscire.
+          La bozza locale non è disponibile. Le modifiche attuali restano in questa scheda: salva prima di uscire.
         </p>
       )}
       {dirty && (
         <div className="assessment-local">
-          <span className="assessment-draft-chip">Draft · bozza sul dispositivo</span>
+          <span className="assessment-draft-chip">{error ? 'Draft · conservazione locale non disponibile' : 'Draft · bozza sul dispositivo'}</span>
           <button type="button" className="btn-secondary btn-sm" onClick={() => setConfirm(true)}>
             Elimina bozza
           </button>

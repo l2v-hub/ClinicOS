@@ -14,10 +14,14 @@ export function readLegacyDraft<T extends object>(
   module: string,
   defaults: T,
 ): Saved<T> | null {
+  return readLegacyDraftState(patientId, module, defaults).saved;
+}
+export function readLegacyDraftState<T extends object>(patientId: string, module: string, defaults: T): { saved: Saved<T> | null; readFailed: boolean } {
   try {
     const k = key(patientId, module);
     const raw = k ? sessionStorage.getItem(k) : null;
-    if (!raw || raw.length > 100_000) return null;
+    if (!raw) return { saved: null, readFailed: false };
+    if (raw.length > 100_000) return { saved: null, readFailed: true };
     const v = JSON.parse(raw);
     if (
       !v?.form ||
@@ -26,13 +30,13 @@ export function readLegacyDraft<T extends object>(
       typeof v.show !== 'boolean' ||
       (v.editId !== null && typeof v.editId !== 'string')
     )
-      return null;
+      return { saved: null, readFailed: true };
     for (const [field, expected] of Object.entries(defaults)) {
-      if (typeof v.form[field] !== typeof expected) return null;
+      if (typeof v.form[field] !== typeof expected) return { saved: null, readFailed: true };
     }
-    return { form: v.form, editId: v.editId, show: v.show };
+    return { saved: { form: v.form, editId: v.editId, show: v.show }, readFailed: false };
   } catch {
-    return null;
+    return { saved: null, readFailed: true };
   }
 }
 export function hasLegacyDraft(patientId: string, module: string) {
@@ -72,17 +76,20 @@ export function useLegacyModuleDraft<T extends object>(
   defaults: T,
   initialShow = false,
 ) {
-  const [saved] = useState(() => readLegacyDraft(patientId, module, defaults));
+  const [restoration] = useState(() => readLegacyDraftState(patientId, module, defaults));
+  const saved = restoration.saved;
+  const [readFailed, setReadFailed] = useState(restoration.readFailed);
   const [form, setForm] = useState<T>(() => saved?.form ?? { ...defaults });
   const [show, setShow] = useState(saved?.show ?? initialShow);
   const [editId, setEditId] = useState<string | null>(saved?.editId ?? null);
   const [dirty, setDirty] = useState(!!saved);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(restoration.readFailed);
   const update: Dispatch<SetStateAction<T>> = useCallback((value) => {
     setForm(value);
     setDirty(true);
   }, []);
   const remove = useCallback(() => {
+    if (readFailed) { setError(true); return; }
     if (!deleteLegacyDraft(patientId, module)) {
       setError(true);
       return;
@@ -91,10 +98,12 @@ export function useLegacyModuleDraft<T extends object>(
     setForm({ ...defaults });
     setEditId(null);
     setShow(false);
-  }, [patientId, module]);
+  }, [patientId, module, readFailed]);
   useEffect(() => {
     const deleted = (event: Event) => {
       if ((event as CustomEvent).detail?.deleted === key(patientId, module)) {
+        setReadFailed(false);
+        setError(false);
         setDirty(false);
         setForm({ ...defaults });
         setEditId(null);
@@ -105,7 +114,7 @@ export function useLegacyModuleDraft<T extends object>(
     return () => window.removeEventListener(LEGACY_DRAFT_CHANGED, deleted);
   }, [patientId, module]);
   useEffect(() => {
-    if (!dirty) return;
+    if (!dirty || readFailed) return;
     try {
       const k = key(patientId, module);
       if (k) {
@@ -118,6 +127,6 @@ export function useLegacyModuleDraft<T extends object>(
     } catch {
       setError(true);
     }
-  }, [form, editId, show, dirty, patientId, module]);
+  }, [form, editId, show, dirty, readFailed, patientId, module]);
   return { form, setForm: update, show, setShow, editId, setEditId, dirty, error, remove };
 }

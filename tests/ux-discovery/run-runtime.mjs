@@ -30,7 +30,7 @@ const shot = name => page.screenshot({ path: path.join(out, 'screenshots', name 
 try {
   await page.goto(preview + '/tests/ux-discovery/index.html');
   await wait(page.getByTestId('therapy-calendar-cell'));
-  const programming = page.getByRole('tab', { name: 'Farmaci attivi', exact: true });
+  const programming = page.getByRole('tab', { name: 'Piano terapeutico', exact: true });
   assert.equal(await page.getByTestId('therapy-drug-line').count(), 0);
   assert.equal(await page.getByRole('tab', { name: 'Calendario', exact: true }).count(), 1);
   assert.equal(await page.getByRole('tab', { name: 'Programmazione', exact: true }).count(), 0);
@@ -104,7 +104,7 @@ try {
   state.failMore = true;
   await page.reload();
   await wait(page.getByTestId('therapy-calendar-cell'));
-  await page.getByRole('tab', { name: 'Farmaci attivi', exact: true }).click();
+  await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).click();
   await page.getByRole('button', { name: 'Carica altre terapie', exact: true }).click();
   await wait(page.locator('.tf-pager__error'));
   assert.equal(await page.getByTestId('therapy-drug-line').count(), 2);
@@ -136,9 +136,9 @@ try {
 
   // Same-document URLs reproduce external pasted/hash navigation; no page reload to hide the bug.
   await page.goto(app + '#/dettaglio-paziente/patient-test/terapia-farmacologica?sv=programmazione&t=t1&d=' + today());
-  await wait(page.getByRole('tab', { name: 'Farmaci attivi', exact: true }));
+  await wait(page.getByRole('tab', { name: 'Piano terapeutico', exact: true }));
   await wait(page.getByTestId('therapy-prescription-detail'));
-  assert.equal(await page.getByRole('tab', { name: 'Farmaci attivi', exact: true }).getAttribute('aria-selected'), 'true');
+  assert.equal(await page.getByRole('tab', { name: 'Piano terapeutico', exact: true }).getAttribute('aria-selected'), 'true');
   for (const width of [390, 768, 1074, 1395]) {
     await page.setViewportSize({ width, height: 1004 });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'document overflow ' + width);

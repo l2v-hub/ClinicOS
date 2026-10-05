@@ -527,19 +527,25 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
           actions={
             <>
               <button
-                className="btn-sm"
+                type="button"
+                className="ds-icon-btn"
+                aria-label="Apri storico e modulo contenzioni"
+                title="Apri storico e modulo contenzioni"
                 onClick={() => {
                   setModuloTarget(null);
                   setModulo(true);
                 }}
               >
-                Vista modulo
+                <span aria-hidden="true">›</span>
               </button>
               <button
-                className="btn-sm"
+                type="button"
+                className="ds-icon-btn"
+                aria-label="Nuova contenzione"
+                title="Nuova contenzione"
                 onClick={() => applyEntry('discard')}
               >
-                + Aggiungi
+                <span aria-hidden="true">＋</span>
               </button>
             </>
           }

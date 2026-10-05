@@ -8,7 +8,7 @@ import type {
   Paziente,
   FollowUpMedicazione,
 } from '../../../types';
-import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
+import { uid, todayStr, nowISO, fmtDate, fmtDateTime, PrintButton, ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import { ClinicalAttachments } from './ClinicalAttachments';
 import { attachDressingDocument } from '../../../lib/clinicalAttachments';
@@ -242,6 +242,9 @@ function MedicazioneModulo({ meds, paziente }: { meds: MedicazioneRecord[]; pazi
             <div style={{ fontWeight: 700, fontSize: '9pt', marginBottom: 4 }}>
               LESIONE #{idx + 1} — {m.sede}
             </div>
+            <p className="cr-meta">
+              Creata: {m.createdAt ? fmtDateTime(m.createdAt) : 'Data non registrata'} · {m.operatore || 'Autore non registrato'}
+            </p>
 
             <table className="med-modulo-table">
               <thead>
@@ -842,18 +845,21 @@ export function MedicazioniTab({
           countLabel="attive"
           actions={
             <>
-              <button className="btn-sm" onClick={() => setModulo(true)}>
-                Vista modulo
+              <button type="button" className="ds-icon-btn" aria-label="Apri storico e modulo medicazioni" title="Apri storico e modulo medicazioni" onClick={() => setModulo(true)}>
+                <span aria-hidden="true">›</span>
               </button>
               <button
-                className="btn-sm"
+                type="button"
+                className="ds-icon-btn"
+                aria-label="Nuova medicazione"
+                title="Nuova medicazione"
                 disabled={saving}
                 onClick={() => {
                   applyEntry('discard');
                   setSaveError('');
                 }}
               >
-                + Nuova medicazione
+                <span aria-hidden="true">＋</span>
               </button>
             </>
           }
@@ -1226,7 +1232,7 @@ export function MedicazioniTab({
                       )}
                     </div>
                     <div className="med-card__footer">
-                      <span className="cr-meta">Operatore: {m.operatore}</span>
+                      <span className="cr-meta">Creata: {m.createdAt ? fmtDateTime(m.createdAt) : 'Data non registrata'} · {m.operatore || 'Autore non registrato'}</span>
                       {m.sigla && <span className="cr-meta"> — Sigla: {m.sigla}</span>}
                     </div>
                     <ClinicalAttachments

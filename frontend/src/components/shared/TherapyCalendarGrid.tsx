@@ -14,10 +14,11 @@ export interface TherapyCalendarCell {
 }
 
 /** Same occupied-slot surface in patient and ward calendars. Details belong in the dialog. */
-export function TherapyCalendarGrid({ days, cells, onOpen, selected, loadingDays = [], errorDays = [] }: {
+export function TherapyCalendarGrid({ days, cells, onOpen, onCreate, selected, loadingDays = [], errorDays = [] }: {
   days: string[];
   cells: TherapyCalendarCell[];
   onOpen: (date: string, time: string) => void;
+  onCreate?: (date: string, time: string) => void;
   selected?: { date: string; time: string } | null;
   loadingDays?: string[];
   errorDays?: string[];
@@ -32,7 +33,7 @@ export function TherapyCalendarGrid({ days, cells, onOpen, selected, loadingDays
     const row = grid?.querySelector<HTMLElement>(`tr[data-time="${firstTime}"]`);
     if (grid && row) { grid.scrollTop = Math.max(0, row.offsetTop - 40); scrolledDay.current = days[0]; }
   }, [days, firstTime]);
-  const rows = days.length === 1
+  const rows = days.length === 1 || onCreate
     ? [...new Set([...Array.from({ length: 24 }, (_, hour) => `${String(hour).padStart(2, '0')}:00`), ...times])].sort()
     : times;
   return (
@@ -55,7 +56,7 @@ export function TherapyCalendarGrid({ days, cells, onOpen, selected, loadingDays
                     <span>{cell.count} {cell.count === 1 ? 'dose' : 'dosi'} · {cell.detail}</span>
                     {cell.partial && <small>Elenco parziale</small>}</span><IcoChevronRight />
                 </button>
-              ) : <span className="therapy-calendar-grid__empty" aria-label="Nessuna dose caricata">·</span>}</td>;
+              ) : onCreate ? <button type="button" className="ds-icon-btn therapy-calendar-grid__add" aria-label={`Nuova terapia ${day} ore ${time}`} title="Aggiungi terapia" aria-haspopup="dialog" onClick={() => onCreate(day, time)}><span aria-hidden="true">＋</span></button> : <span className="therapy-calendar-grid__empty" aria-label="Nessuna dose caricata">·</span>}</td>;
           })}</tr>
         ))}</tbody>
       </table>

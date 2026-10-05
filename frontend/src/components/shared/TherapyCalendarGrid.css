@@ -5,6 +5,8 @@
 .therapy-calendar-grid thead th{position:sticky;top:0;background:var(--surface,#fff);z-index:1;font-size:12px}
 .therapy-calendar-grid.is-week table{min-width:760px}
 .therapy-calendar-grid__empty{display:block;min-height:24px;color:var(--text-secondary,#55708b)}
+.therapy-calendar-grid__add{width:32px;min-width:32px;height:32px;min-height:32px;color:#3269ed;background:transparent;border:1px dashed #b9cafa;border-radius:8px}
+.therapy-calendar-grid__add:focus-visible{outline:3px solid #3269ed;outline-offset:2px}
 .therapy-calendar-cell{display:flex;align-items:center;gap:6px;width:100%;min-height:60px;padding:8px;border:1px solid #b9cafa;border-left:4px solid #3269ed;border-radius:8px;background:#eef3ff;color:#173355;text-align:left;font:inherit;cursor:pointer}
 .therapy-calendar-cell>svg{width:16px;min-width:16px;height:16px}.therapy-calendar-cell>svg:last-child{margin-left:auto}
 .therapy-calendar-cell__text{display:flex;flex-direction:column;gap:3px;min-width:0;overflow-wrap:anywhere;font-size:12px}.therapy-calendar-cell__text strong{font-size:13px}

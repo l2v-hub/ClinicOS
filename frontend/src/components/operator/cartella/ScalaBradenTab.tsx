@@ -598,20 +598,25 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
           actions={
             <>
               <button
-                className="btn-sm"
+                type="button"
+                className="ds-icon-btn"
+                aria-label="Apri storico e modulo Braden"
                 onClick={() => openModulo(null)}
                 title="Vista modulo cartaceo"
               >
-                Vista modulo
+                <span aria-hidden="true">›</span>
               </button>
               <button
-                className="btn-sm"
+                type="button"
+                className="ds-icon-btn"
+                aria-label="Nuova valutazione Braden"
+                title="Nuova valutazione Braden"
                 onClick={() => {
                   setForm({ ...EMPTY_FORM });
                   setShowAdd(true);
                 }}
               >
-                + Nuova valutazione
+                <span aria-hidden="true">＋</span>
               </button>
             </>
           }

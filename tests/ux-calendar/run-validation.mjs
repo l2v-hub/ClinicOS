@@ -29,7 +29,7 @@ try {
   await page.goto('http://127.0.0.1:5189/tests/ux-discovery/index.html');
   await wait(page.getByTestId('therapy-calendar-cell').first());
   assert.equal(await page.getByTestId('therapy-drug-line').count(),0);
-  assert.equal(await page.getByRole('tab',{name:'Farmaci attivi',exact:true}).count(),1);
+  assert.equal(await page.getByRole('tab',{name:'Piano terapeutico',exact:true}).count(),1);
   assert.equal(await page.getByTestId('therapy-calendar-cell').count(),2);
   const eight=page.getByTestId('therapy-calendar-cell').filter({hasText:'Farmaco sintetico 1'});
   assert.match(await eight.textContent(),/2 dosi/);
@@ -46,7 +46,7 @@ try {
   assert.equal(await dialog.getByRole('button',{name:/^Erogata:/}).count(),0);
   assert.match(await dialog.textContent(),/Il tuo ruolo consulta/);
   await page.keyboard.press('Escape');
-  await page.getByRole('tab',{name:'Farmaci attivi',exact:true}).click();
+  await page.getByRole('tab',{name:'Piano terapeutico',exact:true}).click();
   await wait(page.getByTestId('therapy-drug-line').first());
   assert.equal(await page.getByTestId('therapy-calendar-cell').count(),0);
   results.push('PASS patient exact-time grouping, full modal details, administration permission gate, keyboard close/focus and separate active tab');

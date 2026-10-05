@@ -1,7 +1,5 @@
-// Calendario terapie del paziente (UX 2026-10-03, «informazione senza clic»): ogni dose mostra già
-// ora, farmaco, dose ed equivalente, via, stato in parole + colore (da somministrare / in ritardo
-// N min / somministrata hh:mm da X / non somministrata + motivo), prescrittore, nota, una tantum o
-// data di fine. Il tocco resta per le AZIONI (pannello dell'ora con Somministra / Non somm.).
+// Il calendario raggruppa le dosi nello slot; dettagli e azioni sono nella popup dell'ora.
+// Il proprietario inoltra onCreate solo ai profili autorizzati a prescrivere.
 // Vista giorno (24 ore) e vista settimana (7 giorni; a 820 px un blocco per giorno).
 // UX ciclo 2 (W5): è la vista predefinita della Terapia. Oggi si apre da sola sull'ora della prima
 // dose da somministrare (azioni visibili senza tocchi in più); un farmaco o una dose richiesti da un
@@ -50,6 +48,7 @@ interface Props {
   autoOpenDue?: boolean;
   /** Cambia quando la scheda modifica le prescrizioni (rilettura del calendario). */
   refreshKey?: number;
+  onCreate?: (date: string, time: string) => void;
 }
 /** Stato di una dose dal giro del giorno; null se il giro non è (ancora) disponibile. */
 function eventStatus(
@@ -70,6 +69,7 @@ export function PatientTherapyCalendar({
   initialOpenTime,
   focusTherapyId,
   refreshKey = 0,
+  onCreate,
 }: Props) {
   const startDate = initialDate && isCalendarDate(initialDate) ? initialDate : facilityLocalDate();
   const [date, setDate] = useState(startDate);
@@ -271,6 +271,7 @@ export function PatientTherapyCalendar({
         <p className="patient-therapy-calendar__count" role="status">{day.events.length} dosi · {timeCount} orari</p>
         {daySlots?.status === 'error' && <p role="alert">Stato delle somministrazioni non disponibile: è mostrata solo la programmazione.</p>}
         <TherapyCalendarGrid days={visibleDays} cells={cells} selected={open}
+          onCreate={onCreate ? (target, time) => { setOpen(null); onCreate(target, time); } : undefined}
           onOpen={(target, time) => { setDate(target); setView('giorno'); setOpen({ date: target, time }); }} />
         {openTime && <AccessibleDialogSurface labelledBy={dialogTitle} onClose={() => setOpen(null)} className="therapy-calendar-dialog">
           <header className="therapy-calendar-dialog__head"><h3 id={dialogTitle}>Terapie delle {openTime}</h3>
