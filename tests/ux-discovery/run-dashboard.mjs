@@ -14,6 +14,9 @@ await context.tracing.start({ screenshots: true, snapshots: true });
 const state = { dashboardDensity: true, done: false, failMore: false, badFeed: false, requests: [], slotReads: 0, clinicalWrites: 0 };
 await mockApi(context, state);
 const page = await context.newPage();
+const afternoon = new Date();
+afternoon.setUTCHours(14, 0, 0, 0);
+await page.clock.setFixedTime(afternoon);
 const errors = [], httpErrors = [], measurements = [];
 page.on('pageerror', e => errors.push(e.message));
 page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
@@ -45,7 +48,7 @@ try {
       assert.ok(measured.kpis.every(k => k.height <= 84), 'compact KPI height at ' + width);
       const rowLimit = width === 390 ? 210 : width === 1150 ? 164 : 190;
       assert.ok(measured.rows.every(r => r.height <= rowLimit), 'compact row height at ' + width);
-      assert.ok(measured.actions.every(a => a.height >= 48 && a.width >= 48), 'touch targets preserved');
+      assert.ok(measured.actions.every(a => a.height === 36 && a.width >= 36), 'shared desktop control height');
     }
     for (const row of await page.locator('.adesso-queue__row--terapia-ritardo').all()) {
       assert.match(await row.textContent(), /Paziente Test|Test Paziente/);

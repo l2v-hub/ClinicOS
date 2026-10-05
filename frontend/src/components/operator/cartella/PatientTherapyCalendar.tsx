@@ -4,7 +4,7 @@
 // UX ciclo 2 (W5): è la vista predefinita della Terapia. Oggi si apre da sola sull'ora della prima
 // dose da somministrare (azioni visibili senza tocchi in più); un farmaco o una dose richiesti da un
 // collegamento diretto restano evidenziati.
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { PatientTherapyAPI, TherapySlot } from '../../../types';
 import { AccessibleDialogSurface } from '../../shared/AccessibleDialogSurface';
 import { TherapyCalendarGrid, type TherapyCalendarCell } from '../../shared/TherapyCalendarGrid';
@@ -100,6 +100,7 @@ export function PatientTherapyCalendar({
     days: {},
   });
   const dialogTitle = useId();
+  const calendarRef = useRef<HTMLElement | null>(null);
   const current = state.patientId === patientId && state.revision === revision;
   const status = current ? state.status : 'loading';
 
@@ -197,7 +198,7 @@ export function PatientTherapyCalendar({
   const step = view === 'giorno' ? 1 : 7;
 
   return (
-    <section className="patient-therapy-calendar" aria-label="Calendario terapie del paziente">
+    <section ref={calendarRef} className="patient-therapy-calendar" aria-label="Calendario terapie del paziente">
       <div className="patient-therapy-calendar__toolbar">
         <DateNav
           isToday={view === 'giorno' ? date === today : weekDays(date).includes(today)}
@@ -273,7 +274,9 @@ export function PatientTherapyCalendar({
         <TherapyCalendarGrid days={visibleDays} cells={cells} selected={open}
           onCreate={onCreate ? (target, time) => { setOpen(null); onCreate(target, time); } : undefined}
           onOpen={(target, time) => { setDate(target); setView('giorno'); setOpen({ date: target, time }); }} />
-        {openTime && <AccessibleDialogSurface labelledBy={dialogTitle} onClose={() => setOpen(null)} className="therapy-calendar-dialog therapy-calendar-dialog--patient">
+        {openTime && <AccessibleDialogSurface labelledBy={dialogTitle} onClose={() => setOpen(null)}
+          returnFocus={() => calendarRef.current?.querySelector<HTMLElement>(`[data-testid="therapy-calendar-cell"][data-time="${openTime}"]`) ?? null}
+          className="therapy-calendar-dialog therapy-calendar-dialog--patient">
           <header className="therapy-calendar-dialog__head"><h3 id={dialogTitle}>Terapie delle {openTime}</h3>
             <button type="button" className="btn-secondary btn-sm" aria-label="Chiudi" data-dialog-initial-focus onClick={() => setOpen(null)}>×</button></header>
           <PatientTherapySlotDetail embedded key={`${patientId}|${date}|${openTime}`} patientId={patientId} date={date} time={openTime}

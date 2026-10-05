@@ -1,0 +1,139 @@
+/* Shared screen density. Content controls (calendar cells, dose lists, numeric
+   keypads, textareas) retain their own height; printed forms remain unchanged. */
+@media screen {
+  .app-shell {
+    font-size: var(--ds-body-font);
+    line-height: 1.45;
+  }
+  .app-shell :is(h1, h2):not(#ds) {
+    font-size: var(--ds-title-font);
+    line-height: 24px;
+  }
+  :is(.compact-topbar, .topbar-right):not(#ds) {
+    gap: 12px;
+  }
+  .compact-topbar:not(#ds) {
+    padding-inline: var(--ds-card-padding);
+  }
+  .topbar-title .page-header__title:not(#ds) {
+    font-size: var(--ds-title-font);
+    line-height: 24px;
+  }
+  :is(.topbar-back, .topbar-search, .topbar-avatar, .topbar-hamburger):not(#ds) {
+    width: var(--ds-control-h);
+    height: var(--ds-control-h);
+    min-height: var(--ds-control-h);
+    border-radius: var(--ds-radius);
+    font-size: var(--ds-control-font);
+  }
+  .topbar-search.topbar-assistant:not(#ds) {
+    width: auto;
+    padding-inline: var(--ds-control-px);
+  }
+  :is(.topbar-back, .topbar-search, .topbar-hamburger):not(#ds) svg {
+    width: var(--ds-icon-size);
+    height: var(--ds-icon-size);
+  }
+  :is(.top-nav--chips, .top-nav--level2, .top-nav--level3) .top-nav__item:not(#ds) {
+    min-height: var(--ds-control-h);
+    padding: 4px var(--ds-control-px);
+    font-size: var(--ds-control-font);
+    line-height: 20px;
+  }
+  .top-nav--chips .top-nav__item:not(#ds) {
+    height: var(--ds-control-h);
+    border-radius: var(--ds-radius);
+  }
+  .top-nav--level2:not(#ds) {
+    min-height: calc(var(--ds-control-h) + 12px);
+  }
+  .top-nav--level3:not(#ds) {
+    min-height: calc(var(--ds-control-h) + 8px);
+  }
+  :is(.modal-header, .modal-footer):not(#ds) {
+    padding: 12px var(--ds-card-padding);
+  }
+  .modal-body:not(#ds) {
+    padding: var(--ds-card-padding);
+  }
+  :is(.modal-title, .therapy-calendar-dialog__head h3, .ds-card__title):not(#ds) {
+    font-size: var(--ds-title-font);
+    line-height: 24px;
+  }
+  .cts__header:not(#ds) {
+    min-height: calc(var(--ds-control-h) + 16px);
+    padding: 8px 12px;
+  }
+  .cts__body--padded:not(#ds) {
+    padding: var(--ds-card-padding);
+  }
+  /* Search and entry controls share a height even when legacy pages omit form-input. */
+  .app-shell
+    :is(input, select):not(#ds):not(
+      [type='hidden'],
+      [type='checkbox'],
+      [type='radio'],
+      [type='range'],
+      [type='color'],
+      [type='file'],
+      [type='button'],
+      [type='submit'],
+      [type='reset'],
+      [type='image'],
+      .qe-row__input,
+      .npm-input,
+      .search-input,
+      .campo-farmaco__input
+    ) {
+    box-sizing: border-box;
+    height: var(--ds-control-h);
+    min-height: var(--ds-control-h);
+    padding-block: 4px;
+    font-size: var(--ds-field-font);
+    line-height: 20px;
+  }
+  .patient-combobox__clear:not(#ds) {
+    width: var(--ds-control-h);
+    height: var(--ds-control-h);
+    min-height: var(--ds-control-h);
+  }
+  .search-wrap:not(#ds) input {
+    font-size: var(--ds-field-font);
+  }
+  .search-wrap:not(#ds) .search-input {
+    height: 100%;
+    min-height: 0;
+    padding-block: 0;
+  }
+  .npm-input:not(#ds) {
+    font-size: var(--ds-field-font);
+  }
+  .dashboard-notification-compact:not(#ds) {
+    height: var(--ds-control-h);
+    min-height: var(--ds-control-h);
+    padding: 0 var(--ds-control-px);
+    border-radius: var(--ds-radius);
+    font: 600 var(--ds-control-font)/20px var(--ds-font);
+  }
+  .dashboard-notification-compact:not(#ds) svg {
+    width: var(--ds-icon-size);
+    height: var(--ds-icon-size);
+  }
+  .handover-workspace :is(.ds-btn, .ds-chip, .btn-primary, .btn-secondary):not(#ds) {
+    height: var(--ds-control-h);
+    min-height: var(--ds-control-h);
+    padding: 0 var(--ds-control-px);
+    font-size: var(--ds-control-font);
+    line-height: 20px;
+  }
+  .diary-thread--reading .btn-sm:not(#ds) {
+    height: var(--ds-control-h);
+    min-height: var(--ds-control-h);
+    padding: 0 var(--ds-control-px);
+    font-size: var(--ds-control-font);
+  }
+  :is(.am-shortcut, .am-starter, .intake-index__item):not(#ds) {
+    min-height: var(--ds-control-h);
+    font-size: var(--ds-control-font);
+  }
+}

@@ -216,7 +216,7 @@
 .am-card__title {
   margin: 0;
   font-weight: 700;
-  font-size: 17px;
+  font-size: var(--ds-title-font);
 }
 
 .am-preview {
@@ -658,18 +658,15 @@
   font-size: 14px;
 }
 
-/* OSS (minimal density): fewer items, larger touch targets — via the design-system token. */
-.am-home--minimal {
-  --ds-control-h: 56px;
-}
+/* OSS keeps the shared command density. */
 
 .am-home--minimal .am-shortcut {
-  font-size: 17px;
+  font-size: var(--ds-control-font);
 }
 
 .am-home--minimal .am-starter {
-  min-height: 52px;
-  font-size: 16px;
+  min-height: var(--ds-control-h);
+  font-size: var(--ds-control-font);
 }
 
 .am-round {

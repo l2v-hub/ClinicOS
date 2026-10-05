@@ -14,6 +14,8 @@ interface Props {
   dismissible?: boolean;
   closeOnOverlay?: boolean;
   dialogRole?: 'dialog' | 'alertdialog';
+  /** Destination for dialogs opened by a route rather than a visible trigger. */
+  returnFocus?: () => HTMLElement | null;
 }
 
 export function AccessibleDialogSurface({
@@ -26,15 +28,18 @@ export function AccessibleDialogSurface({
   dismissible = true,
   closeOnOverlay = true,
   dialogRole = 'dialog',
+  returnFocus,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const onCloseRef = useRef(onClose);
   const dismissibleRef = useRef(dismissible);
+  const returnFocusRef = useRef(returnFocus);
 
   useEffect(() => {
     onCloseRef.current = onClose;
     dismissibleRef.current = dismissible;
-  }, [dismissible, onClose]);
+    returnFocusRef.current = returnFocus;
+  }, [dismissible, onClose, returnFocus]);
 
   useEffect(() => {
     const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -80,7 +85,8 @@ export function AccessibleDialogSurface({
       document.removeEventListener('keydown', onKeyDown);
       const stackIndex = dialogStack.lastIndexOf(dialog);
       if (stackIndex >= 0) dialogStack.splice(stackIndex, 1);
-      if (trigger?.isConnected) trigger.focus();
+      if (trigger?.isConnected && trigger !== document.body) trigger.focus();
+      else returnFocusRef.current?.()?.focus();
     };
   }, []);
 

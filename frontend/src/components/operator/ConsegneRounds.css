@@ -2,7 +2,7 @@
   min-width: 0;
 }
 .handover-workspace :is(button, input, select) {
-  min-height: 44px;
+  min-height: var(--ds-control-h);
 }
 .handover-workspace :is(button, input, select, textarea, a):focus-visible {
   outline: 2px solid var(--blue);
@@ -224,13 +224,13 @@
 }
 .handover-rounds__history .diario-history-filters input {
   background: #fff;
-  min-height: 40px;
-  font-size: 13px;
+  min-height: var(--ds-control-h);
+  font-size: var(--ds-field-font);
 }
 .handover-rounds__history .diario-history-filters button:not(#ds) {
-  min-height: 40px;
-  padding: 8px 12px;
-  font-size: 13px;
+  min-height: var(--ds-control-h);
+  padding: 0 var(--ds-control-px);
+  font-size: var(--ds-control-font);
 }
 .handover-rounds__history .diario-cards {
   gap: 12px;

@@ -4,7 +4,7 @@
 }
 
 .table-filters__toolbar {
-  min-height: 52px;
+  min-height: calc(var(--ds-control-h) + 12px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -189,7 +189,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   font: inherit;
-  font-size: 13px;
+  font-size: var(--ds-field-font);
 }
 
 .table-filters__field :is(input, select):hover {

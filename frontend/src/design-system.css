@@ -16,10 +16,20 @@
    Le schede di navigazione (L2/L3) restano il componente unico TopNav.
    ───────────────────────────────────────────────────────────────────────────────────────────── */
 
+@import './compact-layout.css';
+
 :root {
-  --ds-control-h: 48px;
-  --ds-radius: 12px;
-  --ds-card-radius: 16px;
+  --ds-control-h: 36px;
+  --ds-control-font: 14px;
+  --ds-body-font: 14px;
+  --ds-title-font: 18px;
+  --ds-field-font: 14px;
+  --ds-control-px: 12px;
+  --ds-icon-size: 18px;
+  --ds-card-padding: 16px;
+  --ds-layout-gap: 16px;
+  --ds-radius: 8px;
+  --ds-card-radius: 12px;
   --ds-border-w: 2px;
   --ds-border: #e1e7f0;
   --ds-border-strong: #c9d3e1;
@@ -39,6 +49,31 @@
   --ds-font: var(--font-ui, 'Inter', system-ui, sans-serif);
 }
 
+/* Same density in every context; touch devices retain a larger hit area. */
+@media (pointer: coarse) {
+  :root {
+    --ds-control-h: 40px;
+    --ds-field-font: 16px;
+  }
+}
+@media (max-width: 600px) {
+  :root {
+    --ds-field-font: 16px;
+  }
+}
+/* Print layouts keep the pre-existing field metrics. */
+@media print {
+  :root {
+    --ds-control-h: 48px;
+    --ds-control-font: 16px;
+    --ds-field-font: 16px;
+    --ds-radius: 12px;
+    --ds-card-radius: 16px;
+    --ds-card-padding: 24px;
+    --ds-title-font: 20px;
+  }
+}
+
 /* ── Chip: filtri, selettori di vista, scelte ─────────────────────────────────────────────── */
 :is(
   .ds-chip,
@@ -52,12 +87,12 @@
   box-sizing: border-box;
   height: var(--ds-control-h);
   min-height: var(--ds-control-h);
-  padding: 0 16px;
+  padding: 0 var(--ds-control-px);
   border: var(--ds-border-w) solid var(--ds-border);
   border-radius: var(--ds-radius);
   background: var(--ds-surface);
   color: var(--ds-text);
-  font: 400 16px/24px var(--ds-font);
+  font: 400 var(--ds-control-font)/20px var(--ds-font);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -171,9 +206,9 @@
   box-sizing: border-box;
   height: var(--ds-control-h);
   min-height: var(--ds-control-h);
-  padding: 0 24px;
+  padding: 0 var(--ds-control-px);
   border-radius: var(--ds-radius);
-  font: 600 16px/24px var(--ds-font);
+  font: 600 var(--ds-control-font)/20px var(--ds-font);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -223,11 +258,11 @@
     .btn-danger
   )
   svg:not(#ds) {
-  width: 20px;
-  height: 20px;
+  width: var(--ds-icon-size);
+  height: var(--ds-icon-size);
   flex: none;
 }
-/* Link d'azione (testo blu, area di tocco 48) */
+/* Link d'azione (testo blu, area di tocco condivisa) */
 :is(.ds-link, .btn-link):not(#ds) {
   min-height: var(--ds-control-h);
   padding: 0 8px;
@@ -235,7 +270,7 @@
   border-radius: 8px;
   background: none;
   color: var(--ds-blue-active);
-  font: 600 16px/24px var(--ds-font);
+  font: 600 var(--ds-control-font)/20px var(--ds-font);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -249,6 +284,7 @@
   width: var(--ds-control-h);
   height: var(--ds-control-h);
   min-width: var(--ds-control-h);
+  min-height: var(--ds-control-h);
   padding: 0;
   border: var(--ds-border-w) solid var(--ds-border);
   border-radius: var(--ds-radius);
@@ -256,7 +292,7 @@
   color: var(--ds-text);
   display: inline-grid;
   place-items: center;
-  font: 600 16px/24px var(--ds-font);
+  font: 600 var(--ds-control-font)/20px var(--ds-font);
   cursor: pointer;
   box-shadow: none;
 }
@@ -264,8 +300,8 @@
   background: var(--ds-surface-2);
 }
 :is(.ds-icon-btn, .icon-btn) svg:not(#ds) {
-  width: 20px;
-  height: 20px;
+  width: var(--ds-icon-size);
+  height: var(--ds-icon-size);
 }
 
 /* ── Stati comuni ─────────────────────────────────────────────────────────────────────────── */
@@ -333,11 +369,11 @@
   padding: 0 12px;
   border: var(--ds-border-w) solid var(--ds-border);
   border-radius: var(--ds-radius);
-  font: 400 16px/24px var(--ds-font);
+  font: 400 var(--ds-field-font)/20px var(--ds-font);
   width: auto;
 }
 .ds-date-nav__label:not(#ds) {
-  font: 600 16px/24px var(--ds-font);
+  font: 600 var(--ds-control-font)/20px var(--ds-font);
   color: var(--ds-text);
   padding: 0 4px;
 }
@@ -347,7 +383,7 @@
   background: var(--ds-surface);
   border: 1px solid var(--ds-border);
   border-radius: var(--ds-card-radius);
-  padding: 24px;
+  padding: var(--ds-card-padding);
   min-width: 0;
 }
 .ds-card__head:not(#ds) {
@@ -359,7 +395,7 @@
 }
 .ds-card__title:not(#ds) {
   margin: 0;
-  font: 600 20px/28px var(--ds-font);
+  font: 600 var(--ds-title-font)/24px var(--ds-font);
   color: var(--ds-text);
 }
 .ds-eyebrow:not(#ds) {
@@ -398,7 +434,7 @@
 }
 
 /* ── Pulsante che diventa solo icona (azioni di intestazione) ─────────────────────────────── */
-/* Sotto i 1400 px: quadrato da 48 con la sola icona; il nome resta in aria-label e tooltip. */
+/* Sotto i 1400 px: quadrato della misura condivisa con la sola icona; il nome resta in aria-label e tooltip. */
 @media (max-width: 1399px) {
   .ds-btn--collapsible:not(#ds) {
     width: var(--ds-control-h);
@@ -442,8 +478,8 @@
 
 /* Icone a tratto nei pulsanti con etichetta comprimibile (azioni di intestazione della cartella). */
 .ds-btn--collapsible svg:not(#ds) {
-  width: 24px;
-  height: 24px;
+  width: var(--ds-icon-size);
+  height: var(--ds-icon-size);
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -463,8 +499,8 @@
 
 /* ── Icone nei link d'azione ─────────────────────────────────────────────────────────────── */
 :is(.ds-link, .btn-link) svg:not(#ds) {
-  width: 20px;
-  height: 20px;
+  width: var(--ds-icon-size);
+  height: var(--ds-icon-size);
   flex: none;
 }
 
@@ -497,19 +533,23 @@
 }
 
 /* ── Campi: stessa altezza, bordo, raggio, testo e fuoco dei controlli ───────────────────── */
-:is(input.form-input, select.form-input, select.form-select, .ds-date-nav__input):not(#ds) {
+:is(input.form-input, select.form-input, select.form-select, .ds-date-nav__input):not(#ds):not(
+    .qe-row__input
+  ) {
   box-sizing: border-box;
+  height: var(--ds-control-h);
   min-height: var(--ds-control-h);
+  padding-block: 4px;
   border-width: var(--ds-border-w);
   border-style: solid;
   border-radius: var(--ds-radius);
-  font-size: 16px;
+  font-size: var(--ds-field-font);
 }
 textarea.form-input:not(#ds) {
   border-width: var(--ds-border-w);
   border-style: solid;
   border-radius: var(--ds-radius);
-  font-size: 16px;
+  font-size: var(--ds-field-font);
 }
 :is(
     input.form-input,
@@ -525,7 +565,7 @@ textarea.form-input:not(#ds) {
 /* ── Badge di stato: stato clinico o di dato (NEWS2, "non in anagrafica") ──────────────────
    Come i badge del prototipo: 32px, raggio 8, 14/500, 8px ai lati (bordo compreso). Il testo clinico
    non si taglia mai: se non sta su una riga va a capo e il badge cresce ("da aggiornare" resta visibile). Un solo aspetto per tono; il rosso solo per
-   il rischio clinico. Se è cliccabile (apre un dettaglio) ha un'area di tocco di 48px. */
+   il rischio clinico. Se è cliccabile (apre un dettaglio) ha un'area di tocco di var(--ds-control-h). */
 .ds-badge:not(#ds) {
   position: relative;
   box-sizing: border-box;
@@ -533,15 +573,15 @@ textarea.form-input:not(#ds) {
   align-items: center;
   gap: 6px;
   height: auto;
-  min-height: 32px;
+  min-height: 24px;
   min-width: 0;
   max-width: 100%;
-  padding: 4px 6px;
+  padding: 1px 6px;
   border: var(--ds-border-w) solid transparent;
   border-radius: 8px;
   background: var(--ds-surface-2);
   color: var(--ds-text);
-  font: 500 14px/20px var(--ds-font);
+  font: 500 12px/18px var(--ds-font);
   font-variant-numeric: tabular-nums;
   white-space: normal;
   overflow-wrap: break-word;
@@ -554,13 +594,14 @@ textarea.form-input:not(#ds) {
 }
 button.ds-badge:not(#ds) {
   cursor: pointer;
+  min-height: var(--ds-control-h);
 }
-/* area di tocco di 48px attorno al badge cliccabile: il pseudo-elemento parte dal bordo interno
+/* area di tocco di var(--ds-control-h) attorno al badge cliccabile: il pseudo-elemento parte dal bordo interno
    (28px dentro un badge da 32 con bordo 2), quindi 10px sopra e sotto portano a 48 */
 button.ds-badge:not(#ds)::before {
   content: '';
   position: absolute;
-  inset: -10px -4px;
+  inset: 0;
 }
 button.ds-badge:not(#ds):hover:not(:disabled) {
   border-color: currentColor;
@@ -623,7 +664,7 @@ button.ds-badge:not(#ds):disabled {
 
 /* ── Pulsante a tutta larghezza (scelte in elenco, es. domande suggerite) ───────────────────
    Stesso aspetto del pulsante secondario; il testo sta a sinistra e va a capo (mai tagliato):
-   il pulsante cresce oltre i 48px solo quando serve. */
+   il pulsante cresce oltre i var(--ds-control-h) solo quando serve. */
 .ds-btn.ds-btn--block:not(#ds) {
   width: 100%;
   height: auto;
@@ -658,14 +699,14 @@ button.ds-badge:not(#ds):disabled {
 
 /* ── Intestazioni delle tabelle e intestazione ordinabile ───────────────────────────────────
    Una sola tipografia per le intestazioni (lista pazienti e tabelle cliniche, come il prototipo)
-   e un solo controllo per ordinare: tutta la cella, 48px, freccia ↑ ↓ ↕, blu se ordinata. */
+   e un solo controllo per ordinare: tutta la cella, var(--ds-control-h), freccia ↑ ↓ ↕, blu se ordinata. */
 :is(.clinicos-table thead th, .patient-roster th):not(#ds) {
   font: 500 14px/20px var(--ds-font);
   letter-spacing: normal;
   text-transform: none;
   color: var(--ds-text-muted);
 }
-/* intestazione alta quanto il controllo (48px): niente spazio verticale in più attorno */
+/* intestazione alta quanto il controllo (var(--ds-control-h)): niente spazio verticale in più attorno */
 .clinicos-table thead th:not(#ds) {
   height: var(--ds-control-h);
   padding-top: 0;
@@ -715,7 +756,7 @@ th[aria-sort] .ds-sort:not(#ds) {
 }
 
 /* Pulsante che può andare a capo: stesso aspetto, ma su schermi stretti il testo non viene
-   tagliato (il pulsante cresce oltre i 48px solo quando serve). */
+   tagliato (il pulsante cresce oltre i var(--ds-control-h) solo quando serve). */
 .ds-btn.ds-btn--wrap:not(#ds) {
   max-width: 100%;
   height: auto;

@@ -1,10 +1,9 @@
-/* Schermata "Il mio turno" (HMI 1). Misure del prototipo: spaziature 8/16/24, card bianche
-   raggio 16 padding 24, titoli 20/28 semibold, testo 16/24, didascalie 14/20, controlli 48. */
+/* Il mio turno uses shared control, typography and spacing tokens. */
 
 .operator-dashboard.turno {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--ds-layout-gap);
   max-width: none;
   margin: 0;
   width: 100%;
@@ -77,7 +76,7 @@
 .turno-grid {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: 24px;
+  gap: var(--ds-layout-gap);
   align-items: start;
 }
 .turno-side {
@@ -92,7 +91,7 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 24px;
+  padding: var(--ds-card-padding);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -104,7 +103,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px 16px;
-  min-height: 48px;
+  min-height: var(--ds-control-h);
 }
 .turno-card__title {
   display: flex;
@@ -114,12 +113,12 @@
 }
 .turno-h2 {
   margin: 0;
-  font: 600 20px/28px var(--font-ui);
+  font: 600 var(--ds-title-font)/24px var(--font-ui);
   color: var(--text);
 }
 .turno-empty {
   margin: 0;
-  font: 400 16px/24px var(--font-ui);
+  font: 400 var(--ds-body-font)/20px var(--font-ui);
   color: var(--text-muted);
 }
 
@@ -128,8 +127,8 @@
   align-items: center;
   gap: 4px;
   /* I badge portano i nomi (allergene, parametro, rischio): vanno a capo, mai troncati. */
-  min-height: 32px;
-  padding: 6px 8px;
+  min-height: 24px;
+  padding: 2px 6px;
   border-radius: 8px;
   font: 500 14px/20px var(--font-ui);
   white-space: normal;
@@ -254,7 +253,7 @@ button.turno-appt__who:hover {
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
-  font: 600 20px/28px var(--font-ui);
+  font: 600 var(--ds-title-font)/24px var(--font-ui);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
   overflow: hidden;
