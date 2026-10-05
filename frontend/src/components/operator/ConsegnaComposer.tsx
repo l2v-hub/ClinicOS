@@ -8,7 +8,9 @@ import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useCan } from '../../lib/capabilities';
 import { ClinicalNoteEditor } from './ClinicalNoteEditor';
 import { facilityLocalMinute } from '../../lib/facilityTime';
-const DiaryTherapyPanel = lazy(() => import('./cartella/DiaryTherapyPanel').then(m => ({ default: m.DiaryTherapyPanel })));
+const DiaryTherapyPanel = lazy(() =>
+  import('./cartella/DiaryTherapyPanel').then((m) => ({ default: m.DiaryTherapyPanel })),
+);
 export function ConsegnaComposer({
   patient,
   store,
@@ -18,6 +20,7 @@ export function ConsegnaComposer({
   message = '',
   focusRequest = 0,
   onTherapyCreated,
+  embedded = false,
 }: {
   patient: Paziente;
   store: ConsegnaDraftStore;
@@ -27,6 +30,7 @@ export function ConsegnaComposer({
   message?: string;
   focusRequest?: number;
   onTherapyCreated?: () => void;
+  embedded?: boolean;
 }) {
   const draft = useConsegnaDraft(store, patient.id);
   const canCreate = useCan('consegne.create');
@@ -51,7 +55,9 @@ export function ConsegnaComposer({
   }, [patient.id]);
   useEffect(() => {
     if (focusRequest) {
-      formRef.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: true });
+      formRef.current
+        ?.querySelector<HTMLTextAreaElement>('textarea')
+        ?.focus({ preventScroll: true });
     }
   }, [focusRequest]);
   const locked = draft.saving || Boolean(draft.pending) || Boolean(therapyStamp);
@@ -69,7 +75,7 @@ export function ConsegnaComposer({
   return (
     <section className="handover-rounds__composer" aria-label="Scrivi consegna">
       <div className="ho-card-head">
-        <h3>Consegna · {patientIdentityName(patient)}</h3>
+        <h3>{embedded ? 'Nuova nota' : `Consegna · ${patientIdentityName(patient)}`}</h3>
         <span className="ho-cap">{draft.dirty ? 'Bozza non salvata' : 'Nuova consegna'}</span>
       </div>
       <form
@@ -80,10 +86,22 @@ export function ConsegnaComposer({
           onSave(false);
         }}
       >
-        <div ref={identityRef} className="handover-rounds__composer-identity">
-          <PatientIdentity patient={patient} />
-        </div>
-        <div className="handover-rounds__fields">
+        {!embedded && (
+          <div ref={identityRef} className="handover-rounds__composer-identity">
+            <PatientIdentity patient={patient} />
+          </div>
+        )}
+        <ClinicalNoteEditor
+          content={draft.fields.note}
+          priority={draft.fields.priorita}
+          disabled={locked}
+          onChange={(change) =>
+            field({
+              ...(change.content !== undefined ? { note: change.content } : {}),
+              ...(change.priority ? { priorita: change.priority as PrioritaConsegna } : {}),
+            })
+          }
+        >
           <label htmlFor={`${id}-assignee`}>
             Assegna a
             <select
@@ -103,20 +121,44 @@ export function ConsegnaComposer({
                 ))}
             </select>
           </label>
-        </div>
-        <ClinicalNoteEditor content={draft.fields.note} priority={draft.fields.priorita} disabled={locked}
-          onChange={change => field({ ...(change.content !== undefined ? { note: change.content } : {}),
-            ...(change.priority ? { priorita: change.priority as PrioritaConsegna } : {}) })} />
-        {store.persistenceFailed() && <p role="alert">Bozza disponibile in questa pagina. Il browser non consente di conservarla dopo il ricaricamento.</p>}
-        {canPrescribe && <button type="button" className="ds-btn ds-btn--secondary" disabled={locked || !draft.fields.note.trim()}
-          onClick={() => setTherapyStamp(facilityLocalMinute())}>Anteprima terapia dal testo</button>}
-        {therapyStamp && <Suspense fallback={<p role="status">Apertura anteprima…</p>}>
-          <DiaryTherapyPanel pazienteId={patient.id} entry={{ title: null, content: draft.fields.note.trim(),
-            priority: draft.fields.priorita === 'alta' ? 'importante' : draft.fields.priorita,
-            status: 'aperta', entryDateTime: therapyStamp }}
-            onCreated={() => { store.discard(patient.id); setTherapyStamp(null); setTherapySaved(true); onTherapyCreated?.(); }}
-            onClose={() => setTherapyStamp(null)} />
-        </Suspense>}
+        </ClinicalNoteEditor>
+        {store.persistenceFailed() && (
+          <p role="alert">
+            Bozza disponibile in questa pagina. Il browser non consente di conservarla dopo il
+            ricaricamento.
+          </p>
+        )}
+        {canPrescribe && (
+          <button
+            type="button"
+            className="ds-btn ds-btn--secondary"
+            disabled={locked || !draft.fields.note.trim()}
+            onClick={() => setTherapyStamp(facilityLocalMinute())}
+          >
+            Anteprima terapia dal testo
+          </button>
+        )}
+        {therapyStamp && (
+          <Suspense fallback={<p role="status">Apertura anteprima…</p>}>
+            <DiaryTherapyPanel
+              pazienteId={patient.id}
+              entry={{
+                title: null,
+                content: draft.fields.note.trim(),
+                priority: draft.fields.priorita === 'alta' ? 'importante' : draft.fields.priorita,
+                status: 'aperta',
+                entryDateTime: therapyStamp,
+              }}
+              onCreated={() => {
+                store.discard(patient.id);
+                setTherapyStamp(null);
+                setTherapySaved(true);
+                onTherapyCreated?.();
+              }}
+              onClose={() => setTherapyStamp(null)}
+            />
+          </Suspense>
+        )}
         {therapySaved && <p role="status">Segnalazione e terapia salvate nel diario paziente.</p>}
         <div className="handover-rounds__actions">
           {draft.dirty && (

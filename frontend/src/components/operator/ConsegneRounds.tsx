@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { Operatore, Paziente } from '../../types';
 import type { ConsegnaCreate } from '../../lib/consegnaCreation';
 import { submitConsegna, type ConsegnaDraftStore } from '../../lib/consegnaDrafts';
@@ -9,6 +9,9 @@ import { useConsegneRoster } from './useConsegneRoster';
 import { ConsegnePatientRoster } from './ConsegnePatientRoster';
 import { ConsegnaComposer } from './ConsegnaComposer';
 import { DiarioPazienteTab } from './cartella/DiarioPazienteTab';
+import { PatientIdentity } from '../shared/PatientIdentity';
+import { useCan } from '../../lib/capabilities';
+import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
 export function ConsegneRounds({
   store,
   operatori,
@@ -30,6 +33,10 @@ export function ConsegneRounds({
   const [focusRequest, setFocusRequest] = useState(0);
   const [showOrder, setShowOrder] = useState(false);
   const [historyVersion, setHistoryVersion] = useState(0);
+  const [requestedView, setView] = useState<'diary' | 'compose'>('diary');
+  const workspaceId = useId();
+  const canCreate = useCan('consegne.create');
+  const view = canCreate ? requestedView : 'diary';
   const selection = useRef({ id: '', generation: 0 });
   const lifecycle = useRef(0);
   useEffect(() => {
@@ -50,9 +57,13 @@ export function ConsegneRounds({
     selection.current = { id: value.id, generation: selection.current.generation + 1 };
     setSelected(value);
     setMessage('');
+    if (view === 'compose') setFocusRequest((value) => value + 1);
+  }
+  function openComposer() {
+    setView('compose');
     setFocusRequest((value) => value + 1);
   }
-  const first = roster.items.find(item => item.id === initialPatientId) ?? roster.items[0];
+  const first = roster.items.find((item) => item.id === initialPatientId) ?? roster.items[0];
   useEffect(() => {
     if (selected || !first) return;
     const timer = window.setTimeout(() => {
@@ -88,7 +99,7 @@ export function ConsegneRounds({
     const saved = await submitConsegna(store, token, onAdd);
     if (!saved || version !== lifecycle.current) return;
     setLastSaved(`Consegna salvata per ${patient.lastName}, ${patient.firstName}.`);
-    setHistoryVersion(value => value + 1);
+    setHistoryVersion((value) => value + 1);
     if (!advance) return;
     const nextPage = await continuation;
     if (version !== lifecycle.current) return;
@@ -179,7 +190,7 @@ export function ConsegneRounds({
             </button>
           )}
         </div>
-        <div>
+        <div className="handover-rounds__detail">
           {roster.error && (
             <p role="alert">
               {roster.error}{' '}
@@ -199,19 +210,106 @@ export function ConsegneRounds({
             </p>
           )}
           {patient ? (
-            <><ConsegnaComposer
-              key={patient.id}
-              patient={patient}
-              store={store}
-              operatori={operatori}
-              onSave={(advance) => void save(advance)}
-              nextAvailable={
-                index >= 0 && (index < roster.items.length - 1 || Boolean(roster.nextCursor))
-              }
-              message={message}
-              focusRequest={focusRequest}
-              onTherapyCreated={() => setHistoryVersion(value => value + 1)}
-            /><DiarioPazienteTab key={`history:${patient.id}:${historyVersion}`} pazienteId={patient.id} operatoreNome="" /></>
+            <>
+              <header className="handover-rounds__patient-heading">
+                <PatientIdentity patient={patient} />
+                <a className="ds-link" href={`#/dettaglio-paziente/${patient.id}`}>
+                  Apri cartella ↗
+                </a>
+              </header>
+              <div
+                className="handover-rounds__tabs"
+                role="tablist"
+                aria-label="Diario e nuova nota"
+                onKeyDown={(event) => {
+                  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+                  if (!canCreate) return;
+                  event.preventDefault();
+                  setFocusRequest(0);
+                  const next =
+                    event.key === 'Home'
+                      ? 'diary'
+                      : event.key === 'End'
+                        ? 'compose'
+                        : view === 'diary'
+                          ? 'compose'
+                          : 'diary';
+                  setView(next);
+                  document.getElementById(`${workspaceId}-${next}-tab`)?.focus();
+                }}
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  id={`${workspaceId}-diary-tab`}
+                  aria-selected={view === 'diary'}
+                  aria-controls={`${workspaceId}-diary-panel`}
+                  tabIndex={view === 'diary' ? 0 : -1}
+                  onClick={() => setView('diary')}
+                >
+                  Diario paziente
+                </button>
+                {canCreate && (
+                  <button
+                    type="button"
+                    role="tab"
+                    id={`${workspaceId}-compose-tab`}
+                    aria-selected={view === 'compose'}
+                    aria-controls={`${workspaceId}-compose-panel`}
+                    tabIndex={view === 'compose' ? 0 : -1}
+                    onClick={openComposer}
+                  >
+                    <span aria-hidden="true">＋</span> Nuova nota{' '}
+                    <DraftIndicator store={store} patientId={patient.id} />
+                  </button>
+                )}
+              </div>
+              <div
+                role="tabpanel"
+                id={`${workspaceId}-diary-panel`}
+                aria-labelledby={`${workspaceId}-diary-tab`}
+                hidden={view !== 'diary'}
+                className="handover-rounds__history"
+              >
+                <DiarioPazienteTab
+                  key={`history:${patient.id}:${historyVersion}`}
+                  pazienteId={patient.id}
+                  operatoreNome=""
+                  headerActions={
+                    canCreate ? (
+                      <button
+                        type="button"
+                        className="ds-btn ds-btn--secondary"
+                        onClick={openComposer}
+                      >
+                        ＋ Nuova nota
+                      </button>
+                    ) : null
+                  }
+                />
+              </div>
+              <div
+                role="tabpanel"
+                id={`${workspaceId}-compose-panel`}
+                aria-labelledby={`${workspaceId}-compose-tab`}
+                hidden={view !== 'compose'}
+              >
+                <ConsegnaComposer
+                  key={patient.id}
+                  embedded
+                  patient={patient}
+                  store={store}
+                  operatori={operatori}
+                  onSave={(advance) => void save(advance)}
+                  nextAvailable={
+                    index >= 0 && (index < roster.items.length - 1 || Boolean(roster.nextCursor))
+                  }
+                  message={message}
+                  focusRequest={view === 'compose' ? focusRequest : 0}
+                  onTherapyCreated={() => setHistoryVersion((value) => value + 1)}
+                />
+              </div>
+            </>
           ) : (
             <p>Seleziona un paziente per scrivere una consegna.</p>
           )}
@@ -219,4 +317,9 @@ export function ConsegneRounds({
       </div>
     </section>
   );
+}
+
+function DraftIndicator({ store, patientId }: { store: ConsegnaDraftStore; patientId: string }) {
+  const draft = useConsegnaDraft(store, patientId);
+  return draft.dirty ? <span className="handover-rounds__draft-chip">Bozza</span> : null;
 }

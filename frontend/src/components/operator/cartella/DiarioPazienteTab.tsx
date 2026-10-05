@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
 import { createSubmissionKey } from '../../../lib/submissionKey';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
 import { ClinicalTableSection, LoadingState, EmptyState } from './shared';
@@ -159,6 +159,8 @@ interface Props {
   legacyInfermieristico?: DiarioEntry[];
   legacyMedico?: DiarioEntry[];
   filterBy?: string;
+  /** A containing workspace can route creation to its own persistent composer. */
+  headerActions?: ReactNode;
   /** Diario terapia: apre la scheda Terapia con la riga di questa terapia in evidenza. */
   onOpenTherapy?: (therapyId: string) => void;
 }
@@ -171,6 +173,7 @@ export function DiarioPazienteTab({
   legacyMedico,
   filterBy,
   onOpenTherapy,
+  headerActions,
 }: Props) {
   // Ultima pagina gia' mostrata in sessione per questo paziente/filtro: il diario compare subito
   // e si rivalida in background invece di ripartire da "Caricamento…".
@@ -891,7 +894,7 @@ export function DiarioPazienteTab({
         count={entries.length}
         countLabel={hasMore ? 'voci caricate' : entries.length === 1 ? 'voce' : 'voci'}
         defaultOpen
-        actions={sectionActions}
+        actions={headerActions === undefined ? sectionActions : headerActions}
       >
         <form className="diario-history-filters" onSubmit={event => { event.preventDefault();
           if (dateDraft.from && dateDraft.to && dateDraft.from > dateDraft.to) return;

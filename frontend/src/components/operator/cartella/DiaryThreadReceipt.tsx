@@ -38,12 +38,12 @@ export function DiaryThreadReceipt({
     const reader = readReceipt.readBy;
     return (
       <div
-        className={`diary-thread diary-thread--${reader ? 'taken' : 'unread'}`}
+        className={`diary-thread diary-thread--reading diary-thread--${reader ? 'taken' : 'unread'}`}
         data-diary-reading-state={readReceipt.state}
       >
         <div className="diary-thread__reply">
           {reader ? (
-            <>
+            <div className="diary-thread__status">
               <div className="diary-thread__head">
                 <strong>
                   Letta da {reader.operatorName} (
@@ -56,14 +56,16 @@ export function DiaryThreadReceipt({
               <small>
                 Lettura confermata esplicitamente. L’intervento clinico non è dichiarato concluso.
               </small>
-            </>
+            </div>
           ) : (
             <>
-              <strong>Nessuno ha ancora confermato la lettura</strong>
-              <p className="diary-thread__message">
-                Aprire la nota non la segna come letta.
-                {readReceipt.isAuthor ? ' La conferma spetta a un altro operatore.' : ''}
-              </p>
+              <div className="diary-thread__status">
+                <strong>Nessuno ha ancora confermato la lettura</strong>
+                <p className="diary-thread__message">
+                  Aprire la nota non la segna come letta.
+                  {readReceipt.isAuthor ? ' La conferma spetta a un altro operatore.' : ''}
+                </p>
+              </div>
               {readReceipt.canAcknowledge && (
                 <button
                   type="button"
