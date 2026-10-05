@@ -40,53 +40,55 @@ export function DiaryThreadReceipt({
   const state = verified?.state ?? 'unavailable';
   return (
     <div className={`diary-thread diary-thread--${state}`} data-diary-response-state={state}>
-      <div className="diary-thread__reply">
-        {reader ? (
-          <>
-            <div className="diary-thread__head">
+      {(verified || personalReads.length === 0) && (
+        <div className="diary-thread__reply">
+          {reader ? (
+            <>
+              <div className="diary-thread__head">
+                <strong>
+                  Letta e compresa da {reader.operatorName} (
+                  {ROLE_LABELS[reader.operatorRole] ?? reader.operatorRole})
+                </strong>
+                <time dateTime={reader.acknowledgedAt}>
+                  {formatFacilityLocalMinute(reader.acknowledgedAt)}
+                </time>
+              </div>
+              <p className="diary-thread__message">«Ho capito» · conferma registrata</p>
+              <small>
+                Conferma di lettura e comprensione. L’intervento clinico non è dichiarato concluso.
+              </small>
+            </>
+          ) : verified?.state === 'active' ? (
+            <>
+              <strong>In attesa di conferma</strong>
+              <p className="diary-thread__message">
+                Nessuna conferma di lettura registrata. La voce potrebbe essere stata visionata
+                senza conferma.
+              </p>
+              <UrgencyNotice
+                urgency={verified}
+                onAcknowledge={onAcknowledge}
+                busy={busy}
+                disabled={disabled}
+                subject={subject}
+              />
+            </>
+          ) : (
+            <>
               <strong>
-                Letta e compresa da {reader.operatorName} (
-                {ROLE_LABELS[reader.operatorRole] ?? reader.operatorRole})
+                {state === 'none' ? 'Conferma non richiesta' : 'Visione non verificabile'}
               </strong>
-              <time dateTime={reader.acknowledgedAt}>
-                {formatFacilityLocalMinute(reader.acknowledgedAt)}
-              </time>
-            </div>
-            <p className="diary-thread__message">«Ho capito» · conferma registrata</p>
-            <small>
-              Conferma di lettura e comprensione. L’intervento clinico non è dichiarato concluso.
-            </small>
-          </>
-        ) : verified?.state === 'active' ? (
-          <>
-            <strong>In attesa di conferma</strong>
-            <UrgencyNotice
-              urgency={verified}
-              onAcknowledge={onAcknowledge}
-              busy={busy}
-              disabled={disabled}
-              subject={subject}
-            />
-          </>
-        ) : (
-          <>
-            <strong>
-              {state === 'none'
-                ? 'Conferma non richiesta'
-                : state === 'taken'
-                  ? 'Conferma storica non disponibile'
-                  : 'Conferma condivisa non disponibile'}
-            </strong>
-            <p className="diary-thread__message">
-              {state === 'none'
-                ? `La priorità ${priority} non prevede «Ho capito» nel flusso attuale.`
-                : state === 'taken'
-                  ? 'La voce proviene dal flusso precedente: chi ha letto e compreso non è registrato.'
-                  : 'Il server non restituisce lo stato di lettura condiviso di questa voce.'}
-            </p>
-          </>
-        )}
-      </div>
+              <p className="diary-thread__message">
+                {state === 'none'
+                  ? `Per la priorità ${priority} la conferma non è richiesta. Non è possibile sapere se la voce è stata visionata, da chi e quando.`
+                  : state === 'taken'
+                    ? 'Per questa voce storica non sono disponibili nome e data della conferma. Non è possibile verificare chi l’ha visionata e quando.'
+                    : 'Non sono disponibili conferme di lettura. Non è possibile sapere se la voce è stata visionata, da chi e quando.'}
+              </p>
+            </>
+          )}
+        </div>
+      )}
       {personalReads.map((row, index) => (
         <div className="diary-thread__reply diary-thread__reply--personal" key={index}>
           <div className="diary-thread__head">
@@ -98,7 +100,8 @@ export function DiaryThreadReceipt({
             </time>
           </div>
           <small>
-            Lettura personale registrata · registrazione personale, non una conferma condivisa.
+            Lettura personale registrata. Non conferma la lettura degli altri operatori né il
+            completamento dell’intervento.
           </small>
         </div>
       ))}

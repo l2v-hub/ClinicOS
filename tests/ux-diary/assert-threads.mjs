@@ -40,14 +40,14 @@ export async function assertTakenThread(page, out) {
 export async function assertThreadFallbacks(page) {
   const unavailable = page.locator('[data-entry-id="no-shared-trace"]');
   assert.equal(await unavailable.locator('[data-diary-response-state="unavailable"]').count(), 1);
-  assert.match(await unavailable.textContent(), /Conferma condivisa non disponibile/);
+  assert.doesNotMatch(await unavailable.textContent(), /Visione non verificabile/);
   assert.match(
     await unavailable.textContent(),
-    /Letta da Collega Legacy Test \(OSS\).*registrazione personale/s,
+    /Letta da Collega Legacy Test \(OSS\).*Lettura personale registrata/s,
   );
   assert.equal(await unavailable.locator('time').textContent(), '03/10/2026 18:35');
   const history = page.locator('[data-entry-id="taken-no-reader"]');
-  assert.match(await history.textContent(), /Conferma storica non disponibile/);
+  assert.match(await history.textContent(), /Visione non verificabile/);
   assert.equal(await history.locator('time').count(), 0);
   const important = page.locator('[data-entry-id="important-none"]');
   assert.match(await important.textContent(), /Importante.*Conferma non richiesta/s);
