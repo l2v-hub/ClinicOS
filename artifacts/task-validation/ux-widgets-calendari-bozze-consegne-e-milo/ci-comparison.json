@@ -1,0 +1,31 @@
+{
+  "baselineRun": 37206549449,
+  "currentRun": 37276810988,
+  "baselineFailures": [
+    "both reviewed import paths assign the authenticated operator to the new patient",
+    "finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella",
+    "a new process replays the persisted creation and finalization after response loss",
+    "DB validation rejects malformed and incomplete Transfers without weakening PAINAD",
+    "confirmDraft: persists therapies + vitals/pain into Cartella.data",
+    "handover creation resolves the patient inside the authenticated scope",
+    "intake autosave cannot replace extraction-owned narrative metadata",
+    "own patient access works and client authorship is ignored",
+    "patient rosters and aggregate projections carry the authenticated ownership scope",
+    "bounded patient roster projects and searches the canonical fiscal identity",
+    "ordinary operators cannot read or mutate another owner patient; managers retain global scope"
+  ],
+  "currentFailures": [
+    "both reviewed import paths assign the authenticated operator to the new patient",
+    "finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella",
+    "a new process replays the persisted creation and finalization after response loss",
+    "DB validation rejects malformed and incomplete Transfers without weakening PAINAD",
+    "confirmDraft: persists therapies + vitals/pain into Cartella.data",
+    "handover creation resolves the patient inside the authenticated scope",
+    "intake autosave cannot replace extraction-owned narrative metadata",
+    "own patient access works and client authorship is ignored",
+    "patient rosters and aggregate projections carry the authenticated ownership scope",
+    "bounded patient roster projects and searches the canonical fiscal identity",
+    "ordinary operators cannot read or mutate another owner patient; managers retain global scope"
+  ],
+  "sameFailures": true
+}

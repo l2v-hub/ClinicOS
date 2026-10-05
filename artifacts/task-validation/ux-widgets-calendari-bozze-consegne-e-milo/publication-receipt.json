@@ -41,7 +41,7 @@
   },
   "ciAtReceipt": {
     "frontendSecretScan": {"runId": 37276811014, "conclusion": "success"},
-    "aiImportE2E": {"runId": 37276810988, "status": "in_progress", "build": "success"}
+    "aiImportE2E": {"runId": 37276810988, "status": "completed", "conclusion": "failure", "build": "success", "failedBackendTests": 11, "baselineRunId": 37206549449, "sameFailuresAsBaseline": true, "newFailedTests": 0, "comparison": "ci-comparison.json"}
   },
   "backendDemo": "NOT_UPDATED; dedicated demo credential authorization remains pending. Production backend success is not demo completion."
 }
