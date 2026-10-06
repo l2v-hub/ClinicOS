@@ -127,7 +127,12 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
     })),
   ].map(({ row, source, sourceIndex }, i) => {
     let input: Record<string, unknown>;
+    let form: TherapyFormValue | undefined;
     try {
+      form =
+        source === 'import'
+          ? dischargeRowToTherapyForm(row as DischargeTherapyRow)
+          : (row as TherapyFormValue);
       input =
         source === 'import'
           ? dischargeRowToTherapyInput(row as DischargeTherapyRow, operatorName)
@@ -159,6 +164,11 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
     return {
       index: i + 1,
       source,
+      form,
+      originalText:
+        source === 'import' && typeof (row as DischargeTherapyRow)?.originalText === 'string'
+          ? (row as DischargeTherapyRow).originalText
+          : '',
       input: { ...input, intakeSource: { type: source, index: sourceIndex } },
       excluded: source === 'import' && (row as DischargeTherapyRow)?.excludedFromConfirm === true,
       sourceIndex,

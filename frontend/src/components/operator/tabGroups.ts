@@ -199,19 +199,8 @@ export function chartSectionOf(id?: TabId): ChartSection {
   return CHART_SECTIONS.find((section) => section.tabs.includes(tab))?.id ?? 'panoramica';
 }
 
-/** Prompt 10 §2: dalla cartella di un ospite, le voci di reparto Terapia / Parametri / Consegne
- *  aprono la stessa sezione di QUEL paziente (niente riselezione). Fuori dalla cartella restano
- *  le pagine di reparto. */
+/** Solo per le azioni Milo che indicano esplicitamente un paziente; la sidebar è globale. */
 export const PATIENT_SECTION_FOR_WARD_NAV: Readonly<Record<string, TabId>> = {
   'parametri-multipaziente': 'parametri',
   consegne: 'consegne',
 };
-
-export function patientSectionForWardNav(
-  navKey: string,
-  inPatientChart: boolean,
-  can: (capability: string) => boolean,
-): TabId | undefined {
-  const tab = inPatientChart ? PATIENT_SECTION_FOR_WARD_NAV[navKey] : undefined;
-  return tab && chartSectionAllowed(chartSectionOf(tab), can) ? tab : undefined;
-}

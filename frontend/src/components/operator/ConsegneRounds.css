@@ -47,16 +47,19 @@
 }
 .handover-rounds__roster {
   display: grid;
-  gap: 8px;
+  gap: 5px;
   list-style: none;
   padding: 0;
   margin: 0;
   min-width: 0;
 }
 .handover-rounds__patient {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   min-width: 0;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--surface, #fff);
   overflow-wrap: anywhere;
 }
@@ -67,26 +70,26 @@
 }
 .handover-rounds__select {
   display: flex;
-  gap: 12px;
+  gap: 6px;
   width: 100%;
   min-width: 0;
   text-align: left;
   border: 0;
-  border-radius: 12px;
+  border-radius: 8px;
   background: transparent;
-  padding: 12px;
+  padding: 6px;
   cursor: pointer;
   color: inherit;
 }
 .ho-bed {
   display: grid;
   place-items: center;
-  flex: 0 0 36px;
-  height: 36px;
+  flex: 0 0 28px;
+  height: 28px;
   border: 1px solid var(--border);
-  border-radius: 9px;
+  border-radius: 7px;
   background: #f5f8fc;
-  font-size: 15px;
+  font-size: 13px;
 }
 .ho-who {
   flex: 1;
@@ -95,12 +98,12 @@
 .handover-rounds__patient .patient-identity {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 1px;
   min-width: 0;
 }
 .handover-rounds__patient .patient-identity__name {
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 18px;
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -109,14 +112,34 @@
   font-size: 11px;
   line-height: 1.4;
 }
-.handover-rounds__patient > .ds-link:not(#ds) {
+.handover-rounds__patient > .handover-rounds__diary:not(#ds) {
+  --ds-icon-size: 16px;
   display: inline-flex;
-  margin: 0 12px 10px 60px;
-  font-size: 12px;
-  line-height: 18px;
+  justify-content: center;
+  margin: 0 8px 0 0;
   padding: 0;
   align-items: center;
-  min-height: 28px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--blue);
+  background: var(--surface, #fff);
+  text-decoration: none;
+}
+.handover-rounds__diary svg {
+  width: 16px;
+  height: 16px;
+}
+@media (pointer: coarse) {
+  .handover-rounds__patient > .handover-rounds__diary:not(#ds) {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
 }
 .handover-rounds__badges {
   display: flex;

@@ -32,6 +32,17 @@ export function TherapyIntakeEditor({
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [localCorrection, setLocalCorrection] = useState<TherapyCorrectionTarget | null>(null);
   useEffect(() => {
+    if (
+      therapyCorrection?.type !== 'manual' ||
+      therapyCorrection.index < 0 ||
+      therapyCorrection.index >= items.length
+    )
+      return;
+    // The editor is already mounted on the intake page when a summary error is selected.
+    setEditingIndex(therapyCorrection.index);
+    setLocalCorrection(therapyCorrection);
+  }, [therapyCorrection, items.length]);
+  useEffect(() => {
     if (localCorrection && rootRef.current) {
       focusTherapyCorrection(rootRef.current, localCorrection);
       setLocalCorrection(null);

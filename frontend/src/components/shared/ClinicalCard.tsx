@@ -51,6 +51,7 @@ export function ClinicalCard({
 
   function handleEditClick(e: React.MouseEvent) {
     e.stopPropagation();
+    setOpen(true);
     onEdit?.();
   }
 
@@ -106,7 +107,12 @@ export function ClinicalCard({
           </button>
         </div>
       </div>
-      <div id={contentId} className="clinical-card__content" style={contentStyle} hidden={collapsed}>
+      <div
+        id={contentId}
+        className="clinical-card__content"
+        style={contentStyle}
+        hidden={collapsed}
+      >
         <div ref={innerRef} className="clinical-card__content-inner">
           {children}
         </div>

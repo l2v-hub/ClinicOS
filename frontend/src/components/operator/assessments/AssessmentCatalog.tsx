@@ -20,7 +20,11 @@ import {
 import { useCan } from '../../../lib/capabilities';
 import './AssessmentCatalog.css';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
-import { hasLegacyDraft, deleteLegacyDraft, LEGACY_DRAFT_CHANGED } from '../../../lib/useLegacyModuleDraft';
+import {
+  hasLegacyDraft,
+  deleteLegacyDraft,
+  LEGACY_DRAFT_CHANGED,
+} from '../../../lib/useLegacyModuleDraft';
 
 type Action = 'open' | 'new' | 'resume';
 interface ViewProps {
@@ -56,7 +60,15 @@ function Latest({
   if (!module.type) {
     const date = legacyModuleDate(cartella, module.tab);
     const count = legacyModuleCount(cartella, module.tab);
-    if (local) return <><span className="assessment-draft-chip">Draft · bozza sul dispositivo</span><p>{count === 0 ? 'Nessuna compilazione salvata' : `${count ?? '—'} compilazioni salvate`}</p></>;
+    if (local)
+      return (
+        <>
+          <span className="assessment-draft-chip">Draft · bozza sul dispositivo</span>
+          <p>
+            {count === 0 ? 'Nessuna compilazione salvata' : `${count ?? '—'} compilazioni salvate`}
+          </p>
+        </>
+      );
     if (count === 0) return <p>Nessuna compilazione</p>;
     if (count === null) return <p>Dati del modulo non disponibili</p>;
     return (
@@ -170,7 +182,17 @@ export function AssessmentCatalogView({
                         <span aria-hidden="true">✎</span>
                       </button>
                     )}
-                    {canCreate && local && onDeleteLocal && <button type="button" className="btn-secondary assessment-catalog-icon" aria-label={`Elimina bozza locale ${module.label}`} title={`Elimina bozza locale ${module.label}`} onClick={() => onDeleteLocal(module)}><span aria-hidden="true">×</span></button>}
+                    {canCreate && local && onDeleteLocal && (
+                      <button
+                        type="button"
+                        className="btn-secondary assessment-catalog-icon"
+                        aria-label={`Elimina bozza locale ${module.label}`}
+                        title={`Elimina bozza locale ${module.label}`}
+                        onClick={() => onDeleteLocal(module)}
+                      >
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    )}
                   </div>
                 </article>
               );
@@ -225,6 +247,8 @@ function CatalogSession({
   onNrs: () => void;
   reader?: AssessmentCatalogReader;
 }) {
+  // Mutable draft stores must be read again on every subscription notification.
+  'use no memo';
   const [store] = useState(() =>
     createAssessmentCatalogState(
       reader ?? createAssessmentCatalogReader(API_URL, patientId, operatorHeaders()),
@@ -235,7 +259,11 @@ function CatalogSession({
   const canCreate = useCan('assessments.create_draft');
   const [deleting, setDeleting] = useState<ClinicalModule | null>(null);
   const [, setLegacyRevision] = useState(0);
-  useEffect(() => { const refresh=()=>setLegacyRevision(v=>v+1); window.addEventListener(LEGACY_DRAFT_CHANGED,refresh); return ()=>window.removeEventListener(LEGACY_DRAFT_CHANGED,refresh); },[]);
+  useEffect(() => {
+    const refresh = () => setLegacyRevision((v) => v + 1);
+    window.addEventListener(LEGACY_DRAFT_CHANGED, refresh);
+    return () => window.removeEventListener(LEGACY_DRAFT_CHANGED, refresh);
+  }, []);
   useSyncExternalStore(draftStore.subscribe, draftStore.getVersion, draftStore.getVersion);
   useEffect(() => {
     void store.load();
@@ -244,26 +272,43 @@ function CatalogSession({
   const localDraftTypes = new Set(
     CLINICAL_MODULES.flatMap((module) =>
       module.type &&
-      draftStore.list(patientId, module.type).some((draft) => draft.dirty || draft.pending || draft.record?.status === 'draft')
+      draftStore
+        .list(patientId, module.type)
+        .some((draft) => draft.dirty || draft.pending || draft.record?.status === 'draft')
         ? [module.type]
-        : !module.type && hasLegacyDraft(patientId,module.tab) ? [module.tab] : [],
+        : !module.type && hasLegacyDraft(patientId, module.tab)
+          ? [module.tab]
+          : [],
     ),
   );
   return (
     <>
-    {draftStore.persistenceFailed() && <p role="alert">Non è possibile conservare la bozza dopo il ricaricamento. Salvala sul server prima di uscire.</p>}
-    <AssessmentCatalogView
-      {...{ cartella, state, localDraftTypes, onOpen, onNrs, canCreate }}
-      onRetry={() => void store.load()}
-      onDeleteLocal={setDeleting}
-    />
-    <ConfirmDialog open={!!deleting} title="Eliminare la bozza locale?" message="Rimuove la compilazione conservata su questo dispositivo. Una bozza già salvata sul server resta nello storico. Un invio dall’esito incerto deve essere verificato prima di eliminarlo." confirmLabel="Elimina bozza" onCancel={() => setDeleting(null)} onConfirm={() => {
-      if (deleting?.type) for (const draft of draftStore.list(patientId, deleting.type)) {
-        if (!draft.busy && !draft.pending) draftStore.discard(draft.key);
-      }
-      else if (deleting) deleteLegacyDraft(patientId,deleting.tab);
-      setDeleting(null);
-    }} />
+      {draftStore.persistenceFailed() && (
+        <p role="alert">
+          Non è possibile conservare la bozza dopo il ricaricamento. Salvala sul server prima di
+          uscire.
+        </p>
+      )}
+      <AssessmentCatalogView
+        {...{ cartella, state, localDraftTypes, onOpen, onNrs, canCreate }}
+        onRetry={() => void store.load()}
+        onDeleteLocal={setDeleting}
+      />
+      <ConfirmDialog
+        open={!!deleting}
+        title="Eliminare la bozza locale?"
+        message="Rimuove la compilazione conservata su questo dispositivo. Una bozza già salvata sul server resta nello storico. Un invio dall’esito incerto deve essere verificato prima di eliminarlo."
+        confirmLabel="Elimina bozza"
+        onCancel={() => setDeleting(null)}
+        onConfirm={() => {
+          if (deleting?.type)
+            for (const draft of draftStore.list(patientId, deleting.type)) {
+              if (!draft.busy && !draft.pending) draftStore.discard(draft.key);
+            }
+          else if (deleting) deleteLegacyDraft(patientId, deleting.tab);
+          setDeleting(null);
+        }}
+      />
     </>
   );
 }

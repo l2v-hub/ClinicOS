@@ -100,7 +100,8 @@ test('handover and vital missing states disclose availability without a misleadi
     }),
   );
   assert.match(vitals, /Espandi ultimi parametri e NEWS2/);
-  assert.match(vitals, /non rilevato/);
+  assert.equal((vitals.match(/>N\/A</g) ?? []).length, 6);
+  assert.doesNotMatch(vitals, /non rilevato|class="vt__trend">nessuna rilevazione/i);
   assert.match(vitals, /non calcolabile/);
 });
 test('historical acknowledgement always shows colleague name, role and time even to acknowledger', () => {

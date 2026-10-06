@@ -230,6 +230,8 @@ const INTESTAZIONI = [
   'TERAPIA ALLA DIMISSIONE:',
   'Terapia consigliata:',
   'Terapia farmacologica alla dimissione:',
+  'Terapia in corso',
+  'Terapia domiciliare abituale',
   'TD:',
   'T.D.:',
   '## Terapia domiciliare',
@@ -267,6 +269,51 @@ test('AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia"
 test('AC2: una riga di prosa clinica che nomina la terapia non viene scartata', () => {
   const rows = parseDischargeTherapy('Terapia antibiotica proseguita per sette giorni in reparto');
   assert.equal(rows.length, 1, 'la riga non deve sparire silenziosamente');
+});
+
+test('explicit absence of therapy and inline headings do not create drug rows', () => {
+  for (const text of [
+    'TD: Non assume terapia domiciliare.',
+    'NON ASSUME ALCUNA TERAPIA FARMACOLOGICA',
+    'Terapia: nessuna.',
+    'Nessuna terapia in atto.',
+    'Terapia farmacologica non prescritta.',
+    'Non in terapia.',
+  ]) {
+    assert.deepEqual(parseDischargeTherapy(text), [], text);
+  }
+  for (const label of ['TD:', 'T.D.:', 'Terapia:', '**Terapia domiciliare:**']) {
+    const source = `${label} Ramipril 5 mg 1 cpr per os ore 08:00`;
+    const rows = parseDischargeTherapy(source);
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].farmacoNome, 'RAMIPRIL');
+    assert.equal(rows[0].originalText, source);
+    assert.equal(rows[0].dosaggio, '5 mg');
+    assert.deepEqual(rows[0].orari, ['08:00']);
+  }
+});
+
+test('negative therapy statements leave nearby prescriptions and ambiguous instructions for review', () => {
+  for (const separator of ['\n', '\n\n']) {
+    const rows = parseDischargeTherapy(
+      `Terapia domiciliare: nessuna${separator}Ramipril 5 mg 1 cpr per os ore 08:00`,
+    );
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].farmacoNome, 'RAMIPRIL');
+  }
+  for (const source of [
+    'Non assumere Ramipril 5 mg',
+    'Non assume terapia anticoagulante',
+    'Nessuna terapia salvo Ramipril',
+    'TD: NON',
+    'NON',
+    'Farmaco da verificare',
+  ]) {
+    const kept = parseDischargeTherapy(source);
+    assert.equal(kept.length, 1, source);
+    assert.equal(kept[0].originalText, source);
+    assert.equal(kept[0].stato, 'da_verificare', source);
+  }
 });
 
 // ── Note = tutto ciò che non si riesce a collocare ───────────────────────────

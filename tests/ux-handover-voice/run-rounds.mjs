@@ -4,7 +4,11 @@ import { mkdirSync } from 'node:fs';
 const out = 'artifacts/task-validation/consegne-readable/screenshots';
 mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ headless: true });
-const context = await browser.newContext({ viewport: { width: 1150, height: 1004 } });
+const touch = process.env.HANDOVER_TOUCH === '1';
+const context = await browser.newContext({
+  hasTouch: touch,
+  viewport: { width: 1150, height: 1004 },
+});
 const patients = [
   {
     id: 'patient-a',
@@ -19,6 +23,13 @@ const patients = [
     lastName: 'MANARA',
     codiceFiscale: 'MNRDNR34R67D360I',
     dateOfBirth: '1934-10-27',
+    location: {
+      status: 'assigned',
+      source: 'assignment',
+      room: '201',
+      bed: 'A',
+      asOf: new Date().toISOString().slice(0, 10),
+    },
   },
 ];
 let longRoster = false;
@@ -54,7 +65,10 @@ await context.route('http://localhost:3001/**', async (route) => {
               ...Array.from({ length: 30 }, (_, i) => ({
                 ...patients[0],
                 id: i === 29 ? 'patient-last' : `other-${i}`,
-                lastName: `Paziente ${i}`,
+                lastName:
+                  i === 0
+                    ? 'Cognome composto molto lungo da mantenere interamente leggibile'
+                    : `Paziente ${i}`,
               })),
             ]
           : patients,
@@ -113,6 +127,26 @@ try {
   assert.equal(await diary().getAttribute('aria-selected'), 'true');
   assert.equal(await note().isVisible(), false);
   assert.equal(posts + ackPosts, 0, 'opening never saves or confirms reading');
+  const firstRow = page.locator('.handover-rounds__patient').first();
+  const diaryLink = firstRow.getByRole('link', { name: 'Diario di NANNI, MIRIAM', exact: true });
+  assert.equal(await diaryLink.getAttribute('href'), '#/dettaglio-paziente/patient-a');
+  assert.equal((await diaryLink.textContent()).trim(), '', 'diary action is icon only');
+  assert.equal(await diaryLink.locator('svg').count(), 1);
+  assert.equal(await diaryLink.getAttribute('title'), 'Apri diario paziente');
+  await diaryLink.focus();
+  await page.keyboard.press('Enter');
+  assert.match(page.url(), /#\/dettaglio-paziente\/patient-a$/);
+  await page.goBack();
+  await page.getByRole('link', { name: 'Diario di MANARA, DIANORA', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  assert.match(page.url(), /#\/dettaglio-paziente\/patient-b$/);
+  assert.equal(
+    await firstRow.getByRole('button').getAttribute('aria-pressed'),
+    'true',
+    'diary arrow does not fire patient selection',
+  );
+  await page.goBack();
+  assert.equal(posts + ackPosts, 0, 'diary navigation does not save or confirm reading');
   for (const width of [1150, 1024, 800, 390]) {
     await page.setViewportSize({ width, height: 1004 });
     if (width <= 1023)
@@ -135,6 +169,14 @@ try {
         .evaluate((el) => getComputedStyle(el).paddingLeft),
       '0px',
     );
+    assert.ok((await firstRow.boundingBox()).height <= 85, 'patient card uses a compact row');
+    const linkBounds = await diaryLink.boundingBox();
+    const coarse = await page.evaluate(() => matchMedia('(pointer: coarse)').matches);
+    assert.ok(
+      linkBounds.width >= (coarse ? 40 : 32) && linkBounds.height >= (coarse ? 40 : 32),
+      `arrow keeps a usable target: ${JSON.stringify({ width, touch, coarse, linkBounds })}`,
+    );
+    assert.equal(await firstRow.evaluate((el) => el.scrollWidth <= el.clientWidth), true);
     await page.screenshot({ path: `${out}/history-${width}.png`, fullPage: true });
   }
   await page.setViewportSize({ width: 1150, height: 1004 });
@@ -156,6 +198,7 @@ try {
   await note().fill('Bozza B');
   await select('NANNI').click();
   assert.match(await note().inputValue(), /Bozza A/);
+  assert.match(await firstRow.locator('.handover-rounds__badges').textContent(), /Bozza/);
   await page.screenshot({ path: `${out}/composer-1150.png`, fullPage: true });
   await page.reload();
   await compose().waitFor();
@@ -220,6 +263,24 @@ try {
     'revealing the selected patient only scrolls the roster, never the diary',
   );
   assert.ok((await page.locator('.handover-rounds__roster').evaluate((el) => el.scrollTop)) > 0);
+  const longRow = page
+    .locator('.handover-rounds__patient')
+    .filter({ hasText: 'Cognome composto molto lungo' });
+  assert.match(
+    await longRow.locator('.patient-identity__name').textContent(),
+    /interamente leggibile/,
+  );
+  assert.equal(await longRow.evaluate((el) => el.scrollWidth <= el.clientWidth), true);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForFunction(
+    () => document.querySelector('.teams-sidebar').getBoundingClientRect().right <= 0,
+  );
+  await page.locator('.handover-rounds__roster').evaluate((el) => {
+    el.scrollTop = 0;
+  });
+  assert.equal(await longRow.evaluate((el) => el.scrollWidth <= el.clientWidth), true);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  await longRow.screenshot({ path: `${out}/long-roster-390${touch ? '-touch' : ''}.png` });
   assert.deepEqual(errors, []);
   console.log(
     'PASS Consegne: readable responsive layout, persistent drafts, focus/tabs, failed-save retry, save-next, bounded history; no implicit reading confirmation.',

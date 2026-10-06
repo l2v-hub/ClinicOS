@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useWidgetOpen } from '../WidgetGroup';
+import { SectionToggle } from '../SectionToggle';
 import { SemanticTaggedText } from './SemanticTaggedText';
 import type { SemanticAnnotation, SemanticTag } from './types';
 
@@ -92,6 +93,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
   const src = sourceLabel(sources);
 
   function startEdit() {
+    setOpen(true);
     setDraft(displayText);
     setEditing(true);
   }
@@ -117,7 +119,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
       data-testid={`narr-${sectionKey}`}
     >
       <header className="narrative-section__head">
-        <button type="button" className="ds-icon-btn" aria-label={`${open ? 'Comprimi' : 'Espandi'} ${title}`} aria-expanded={open} aria-controls={bodyId} onClick={() => setOpen(!open)}>{open ? '▾' : '▸'}</button>
+        <SectionToggle title={title} open={open} bodyId={bodyId} onToggle={() => setOpen(!open)} />
         <h3>{title}</h3>
         {reviewStatus && (
           <span className={`narrative-status narrative-status--${reviewStatus}`}>
@@ -135,7 +137,10 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
             <button
               type="button"
               className="ds-btn ds-btn--secondary"
-              onClick={() => setShowSource((s) => !s)}
+              onClick={() => {
+                setOpen(true);
+                setShowSource((s) => !s);
+              }}
             >
               {showSource ? 'Nascondi fonte' : 'Visualizza fonte'}
             </button>
@@ -149,62 +154,62 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
       </header>
 
       <div id={bodyId} hidden={!open}>
-      {editing ? (
-        <div className="narrative-edit">
-          <textarea
-            className="srev-textarea"
-            value={draft}
-            disabled={props.busy}
-            rows={Math.min(16, Math.max(4, draft.split('\n').length + 1))}
-            onChange={(e) => setDraft(e.target.value)}
-          />
-          <div className="narrative-edit__actions">
-            <button
-              type="button"
-              className="btn-success btn-sm"
+        {editing ? (
+          <div className="narrative-edit">
+            <textarea
+              className="srev-textarea"
+              value={draft}
               disabled={props.busy}
-              onClick={save}
-            >
-              Salva
-            </button>
-            <button
-              type="button"
-              className="btn-ghost btn-sm"
-              disabled={props.busy}
-              onClick={cancel}
-            >
-              Annulla
-            </button>
-            <button
-              type="button"
-              className="btn-secondary btn-sm"
-              disabled={props.busy || !originalText.trim()}
-              onClick={restoreOriginal}
-            >
-              Ripristina testo importato
-            </button>
+              rows={Math.min(16, Math.max(4, draft.split('\n').length + 1))}
+              onChange={(e) => setDraft(e.target.value)}
+            />
+            <div className="narrative-edit__actions">
+              <button
+                type="button"
+                className="btn-success btn-sm"
+                disabled={props.busy}
+                onClick={save}
+              >
+                Salva
+              </button>
+              <button
+                type="button"
+                className="btn-ghost btn-sm"
+                disabled={props.busy}
+                onClick={cancel}
+              >
+                Annulla
+              </button>
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                disabled={props.busy || !originalText.trim()}
+                onClick={restoreOriginal}
+              >
+                Ripristina testo importato
+              </button>
+            </div>
           </div>
-        </div>
-      ) : isEmpty ? (
-        <div className="narrative-empty">
-          <p>Nessuna informazione disponibile.</p>
-          {editable && (
-            <button type="button" className="btn-secondary btn-sm" onClick={startEdit}>
-              Aggiungi informazioni
-            </button>
-          )}
-        </div>
-      ) : (
-        <>
-          <SemanticTaggedText
-            formatMarkdown
-            rawText={displayText}
-            annotations={toAnnotations(annotations)}
-            sourceTitle={src || undefined}
-          />
-          {showSource && src && <p className="srev-source">{src}</p>}
-        </>
-      )}
+        ) : isEmpty ? (
+          <div className="narrative-empty">
+            <p>Nessuna informazione disponibile.</p>
+            {editable && (
+              <button type="button" className="btn-secondary btn-sm" onClick={startEdit}>
+                Aggiungi informazioni
+              </button>
+            )}
+          </div>
+        ) : (
+          <>
+            <SemanticTaggedText
+              formatMarkdown
+              rawText={displayText}
+              annotations={toAnnotations(annotations)}
+              sourceTitle={src || undefined}
+            />
+            {showSource && src && <p className="srev-source">{src}</p>}
+          </>
+        )}
       </div>
     </section>
   );

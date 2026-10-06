@@ -76,11 +76,18 @@ test('composer retains patient-specific draft and identity after remount; permit
 });
 
 test('roster always opens the patient diary instead of duplicating summaries', () => {
-  const html = render(React.createElement(ConsegnePatientRoster, {
-    patients: [identityPatient], summaries: { [identityPatient.id]: { status: 'error' } },
-    store: createConsegnaDraftStore(), onSelect() {}, onRetry() {},
-  }));
-  assert.match(html, /Diario paziente/);
+  const html = render(
+    React.createElement(ConsegnePatientRoster, {
+      patients: [identityPatient],
+      summaries: { [identityPatient.id]: { status: 'error' } },
+      store: createConsegnaDraftStore(),
+      onSelect() {},
+      onRetry() {},
+    }),
+  );
+  assert.match(html, /aria-label="Diario di Rossi, Mario"/);
+  assert.match(html, /title="Apri diario paziente"/);
+  assert.match(html, /<a[^>]*class="ds-icon-btn handover-rounds__diary"[^>]*>[\s\S]*?<svg/);
   assert.ok(html.includes(`#/dettaglio-paziente/${identityPatient.id}`));
   assert.doesNotMatch(html, /Riprova riepilogo|Riepilogo non disponibile/);
 });

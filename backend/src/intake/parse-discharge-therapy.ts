@@ -1,8 +1,9 @@
 // Bug #156: turn a discharge-letter therapy TEXT block into structured, editable therapy rows —
 // ONE per drug — never a single text blob. Deterministic and GENERIC (no hardcoded drug names):
 // it parses the common Italian discharge prescription line shape and degrades gracefully to a
-// "da_verificare" row when a line is incomplete (a line is never dropped, and the original text is
-// always preserved). PRIVACY: this module never logs; callers must log only counts/status, not text.
+// "da_verificare" row when a prescription is incomplete. Headings and complete no-therapy
+// statements are not prescriptions; callers retain the full source text for review.
+// PRIVACY: this module never logs; callers must log only counts/status, not text.
 
 export interface ParsedTherapyRow {
   farmacoNome: string; // drug name (first token), e.g. KEPPRA
@@ -100,6 +101,7 @@ const KEYWORD_TERAPIA =
 // (titolo) da "Terapia con Ramipril per os" (prescrizione): scartare quest'ultima come titolo
 // perderebbe un farmaco senza lasciare traccia — il fallimento peggiore possibile.
 const QUALIFICATORI = new Set([
+  'abituale',
   'a',
   'al',
   'alla',
@@ -111,6 +113,7 @@ const QUALIFICATORI = new Set([
   'consigliato',
   'continuativa',
   'corrente',
+  'corso',
   'da',
   'del',
   'della',
@@ -166,13 +169,50 @@ export function isIntestazioneTerapia(line: string): boolean {
     .every((p) => QUALIFICATORI.has(p.toLowerCase().replace(/[.,;:]/g, '')));
 }
 
+/** Remove only a heading label before a colon, never a prescription's clock time. */
+function withoutInlineTherapyLabel(line: string): string {
+  const cleaned = ripulisciRiga(line);
+  const colon = cleaned.indexOf(':');
+  if (colon < 0) return line.trim();
+  const label = cleaned.slice(0, colon).trim();
+  const keyword = KEYWORD_TERAPIA.exec(label);
+  if (!keyword) return line.trim();
+  const qualifiers = label.slice(keyword[0].length).trim().split(/\s+/).filter(Boolean);
+  if (!qualifiers.every((word) => QUALIFICATORI.has(word.toLowerCase()))) return line.trim();
+  return cleaned.slice(colon + 1).trim();
+}
+
+// Anchored, complete statements only: a specific drug, exception, restriction or unfinished
+// "NON" must remain a candidate for review. Absence in one line cannot suppress another drug.
+const THERAPY_DESCRIPTION =
+  'terapia(?:\\s+(?:farmacologica|domiciliare|in atto|in corso|alla dimissione))*';
+const NO_THERAPY = new RegExp(
+  `^(?:(?:il paziente|la paziente|paziente)\\s+)?(?:` +
+    `non\\s+(?:assume|esegue|pratica)\\s+(?:(?:alcuna|nessuna)\\s+)?${THERAPY_DESCRIPTION}|` +
+    `non\\s+in\\s+${THERAPY_DESCRIPTION}|nessuna\\s+${THERAPY_DESCRIPTION}|` +
+    `${THERAPY_DESCRIPTION}\\s+(?:assente|non prescritta|non assunta))$`,
+  'i',
+);
+function isNonPrescription(line: string): boolean {
+  if (isIntestazioneTerapia(line)) return true;
+  const content = withoutInlineTherapyLabel(line);
+  const statement = ripulisciRiga(content)
+    .replace(/[.;]+$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return (
+    NO_THERAPY.test(statement) ||
+    (content !== line.trim() && /^(?:nessuna|assente|non prescritta)$/i.test(statement))
+  );
+}
+
 /** Split a therapy text block into candidate prescription lines (headers/blank lines dropped). */
 export function splitTherapyLines(text: string): string[] {
   return (text ?? '')
     .split(/\r?\n/)
     .map((l) => l.trim())
     .filter((l) => l.length > 0)
-    .filter((l) => !isIntestazioneTerapia(l));
+    .filter((l) => !isNonPrescription(l));
 }
 
 /** #296: split the block into paragraphs on runs of ≥1 blank line (the end-of-therapy delimiter). */
@@ -184,7 +224,7 @@ function splitTherapyParagraphs(text: string): string[][] {
     if (line.length === 0) {
       if (current.length) paragraphs.push(current);
       current = [];
-    } else if (!isIntestazioneTerapia(line)) {
+    } else if (!isNonPrescription(line)) {
       // L'intestazione viene scartata SENZA chiudere il paragrafo: annuncia l'elenco, non lo separa.
       current.push(line);
     }
@@ -245,7 +285,7 @@ function trovaListaOrari(testo: string, collocato: Uint8Array, primoCampoEsplici
 export function parseTherapyLine(line: string): ParsedTherapyRow {
   const originalText = line.trim();
   // `originalText` resta verbatim per l'audit; l'estrazione lavora sulla riga senza etichetta.
-  const testo = originalText.replace(PREFISSO_TERAPIA, '');
+  const testo = withoutInlineTherapyLabel(originalText).replace(PREFISSO_TERAPIA, '');
 
   const collocato = new Uint8Array(testo.length);
   const marca = (index: number | undefined | null, length: number) => {
@@ -346,8 +386,12 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   // Un numero rimasto fuori da ogni campo (una concentrazione, una posologia) e' clinicamente
   // rilevante: la riga va rivista anche quando il resto e' ben formato.
   const residuoNumerico = /\d/.test(note);
+  // A retained negative instruction is not an affirmed prescription, even with dose/route.
+  const negativeInstruction = /^(?:non|nessuna|nessun)\b/i.test(testo);
   const stato: ParsedTherapyRow['stato'] =
-    farmacoNome && signals >= 2 && !residuoNumerico ? 'ok' : 'da_verificare';
+    farmacoNome && signals >= 2 && !residuoNumerico && !negativeInstruction
+      ? 'ok'
+      : 'da_verificare';
 
   return {
     farmacoNome,

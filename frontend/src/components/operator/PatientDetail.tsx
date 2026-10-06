@@ -11,6 +11,7 @@ import { DemographicsStatus } from '../shared/DemographicsStatus';
 import { PatientIntakeReview } from './PatientIntakeReview';
 import { PatientContacts } from './PatientContacts';
 import { WidgetGroup } from '../shared/WidgetGroup';
+import { ClinicalCard } from '../shared/ClinicalCard';
 import { usePatientIntakeReview } from '../../lib/patientIntakeReview';
 import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { ConsegnaQuickAdd } from './ConsegnaQuickAdd';
@@ -437,6 +438,7 @@ export function PatientDetail({
 
   // Profilo edit
   const [editProfilo, setEditProfilo] = useState(false);
+  const [profileExpanded, setProfileExpanded] = useState(true);
   const [profiloPhoneError, setProfiloPhoneError] = useState<string | null>(null);
   const [profiloSaveError, setProfiloSaveError] = useState<string | null>(null);
   const [profiloSaving, setProfiloSaving] = useState(false);
@@ -1456,6 +1458,7 @@ export function PatientDetail({
   // ── Tab rendering ──────────────────────────────────────────────────────────
 
   function openProfileEditor(field?: DemographicField) {
+    setProfileExpanded(true);
     setProfiloForm({
       indirizzo: cartella.indirizzo?.trim() || paziente.address || '',
       codiceFiscale: paziente.codiceFiscale ?? cartella.codiceFiscale,
@@ -1491,227 +1494,210 @@ export function PatientDetail({
     if (editProfilo && which === 'contatti') return null;
     return (
       <div className="cr-tab-content">
-        <ClinicalTableSection
+        <ClinicalCard
           title={which === 'contatti' ? 'Contatti' : 'Anagrafica'}
-          actions={
-            editProfilo ? undefined : (
-              // Salva/Annulla in modifica sono gia' resi dal footer di InlineForm sotto — un
-              // secondo paio qui sopra duplicherebbe l'azione (Ciclo 16, backlog Ciclo 12).
-              <button
-                className="btn-sm"
-                onClick={() => {
-                  openProfileEditor();
-                }}
-              >
-                Modifica
-              </button>
-            )
-          }
+          expanded={profileExpanded}
+          onToggle={setProfileExpanded}
+          onEdit={editProfilo ? undefined : () => openProfileEditor()}
         >
-          <div className="cts__body--padded">
-            {editProfilo ? (
-              <InlineForm
-                onSave={saveProfiloHandler}
-                onCancel={() => setEditProfilo(false)}
-                saving={saving || profiloSaving}
-              >
-                {profiloSaveError && (
-                  <p className="form-error" role="alert">
-                    {profiloSaveError}
-                  </p>
-                )}
-                <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Email</label>
-                    <input
-                      className="form-input"
-                      type="email"
-                      value={profiloForm.email ?? ''}
-                      onChange={(e) => setProfiloForm((p) => ({ ...p, email: e.target.value }))}
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label" htmlFor="patient-profile-phone">
-                      Telefono (necessario per completare la scheda)
-                    </label>
-                    <input
-                      ref={profiloPhoneRef}
-                      id="patient-profile-phone"
-                      className="form-input"
-                      type="tel"
-                      autoComplete="tel"
-                      maxLength={PATIENT_PHONE_MAX_LENGTH}
-                      aria-invalid={!!profiloPhoneError}
-                      aria-describedby={
-                        profiloPhoneError ? 'patient-profile-phone-error' : undefined
-                      }
-                      value={profiloForm.phone ?? ''}
-                      onChange={(e) => {
-                        setProfiloForm((p) => ({ ...p, phone: e.target.value }));
-                        if (profiloPhoneError) {
-                          const validated = validatePatientPhone(e.target.value);
-                          setProfiloPhoneError(validated.ok ? null : validated.error);
-                        }
-                      }}
-                    />
-                    {profiloPhoneError && (
-                      <span id="patient-profile-phone-error" className="form-error" role="alert">
-                        {profiloPhoneError}
-                      </span>
-                    )}
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Indirizzo</label>
-                    <input
-                      className="form-input"
-                      value={profiloForm.indirizzo ?? ''}
-                      onChange={(e) => setProfiloForm((p) => ({ ...p, indirizzo: e.target.value }))}
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label" htmlFor="patient-profile-codiceFiscale">
-                      Codice Fiscale
-                    </label>
-                    <input
-                      id="patient-profile-codiceFiscale"
-                      aria-invalid={!!profiloFieldErrors.codiceFiscale}
-                      aria-describedby={
-                        profiloFieldErrors.codiceFiscale ? 'patient-profile-cf-error' : undefined
-                      }
-                      className="form-input"
-                      value={profiloForm.codiceFiscale ?? ''}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({ ...p, codiceFiscale: e.target.value }))
-                      }
-                    />
-                    {profiloFieldErrors.codiceFiscale && (
-                      <span id="patient-profile-cf-error" className="form-error" role="alert">
-                        {profiloFieldErrors.codiceFiscale}
-                      </span>
-                    )}
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label" htmlFor="patient-profile-dateOfBirth">
-                      Data di nascita
-                    </label>
-                    <input
-                      id="patient-profile-dateOfBirth"
-                      className="form-input"
-                      type="date"
-                      value={profiloForm.dateOfBirth ?? ''}
-                      aria-invalid={!!profiloFieldErrors.dateOfBirth}
-                      aria-describedby={
-                        profiloFieldErrors.dateOfBirth ? 'patient-profile-birth-error' : undefined
-                      }
-                      onChange={(event) =>
-                        setProfiloForm((form) => ({ ...form, dateOfBirth: event.target.value }))
-                      }
-                    />
-                    {profiloFieldErrors.dateOfBirth && (
-                      <span id="patient-profile-birth-error" className="form-error" role="alert">
-                        {profiloFieldErrors.dateOfBirth}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="form-field" style={{ marginTop: 8 }}>
-                  <label className="form-label">Note generali</label>
-                  <textarea
+          {editProfilo ? (
+            <InlineForm
+              onSave={saveProfiloHandler}
+              onCancel={() => setEditProfilo(false)}
+              saving={saving || profiloSaving}
+            >
+              {profiloSaveError && (
+                <p className="form-error" role="alert">
+                  {profiloSaveError}
+                </p>
+              )}
+              <div className="op-form-grid">
+                <div className="form-field">
+                  <label className="form-label">Email</label>
+                  <input
                     className="form-input"
-                    rows={3}
-                    value={profiloForm.noteGenerali ?? ''}
-                    onChange={(e) =>
-                      setProfiloForm((p) => ({ ...p, noteGenerali: e.target.value }))
-                    }
+                    type="email"
+                    value={profiloForm.email ?? ''}
+                    onChange={(e) => setProfiloForm((p) => ({ ...p, email: e.target.value }))}
                   />
                 </div>
-              </InlineForm>
-            ) : (
-              <>
-                <div className="cr-profilo-grid" style={{ marginTop: 12 }}>
-                  {which === 'profilo' && (
-                    <div className="cr-profilo-group">
-                      <div className="cr-profilo-group__title">Anagrafica</div>
-                      <div className="cr-profilo-row">
-                        <span>Nome</span>
-                        <strong>
-                          {paziente.firstName} {paziente.lastName}
-                        </strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Data nascita</span>
-                        <strong>{birthSummary(paziente.dateOfBirth)}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Sesso</span>
-                        <strong>{paziente.sex ?? '—'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Codice Fiscale</span>
-                        <strong className="cr-mono">
-                          {paziente.codiceFiscale ?? cartella.codiceFiscale ?? '—'}
-                        </strong>
-                      </div>
-                    </div>
-                  )}
-                  {which === 'contatti' && (
-                    <div className="cr-profilo-group">
-                      <div className="cr-profilo-group__title">Contatti</div>
-                      <div className="cr-profilo-row">
-                        <span>Email</span>
-                        <strong>{paziente.email?.trim() || 'Non indicata'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Telefono</span>
-                        <strong>{paziente.phone?.trim() || 'Da completare · obbligatorio'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Indirizzo</span>
-                        <strong>
-                          {cartella.indirizzo?.trim() || paziente.address?.trim() || 'Non indicato'}
-                        </strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Referente</span>
-                        <strong>
-                          {[
-                            // Le colonne del paziente sono la fonte aggiornata (intake, voce,
-                            // PATCH); la copia in cartella resta per le cartelle importate prima.
-                            paziente.emergencyContactName?.trim() ||
-                              cartella.contattoEmergenzaNome?.trim(),
-                            cartella.contattoEmergenzaRel?.trim(),
-                          ]
-                            .filter(Boolean)
-                            .join(' · ') || 'Non indicato'}
-                        </strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Telefono referente</span>
-                        <strong>
-                          {paziente.emergencyContactPhone?.trim() ||
-                            cartella.contattoEmergenzaTel?.trim() ||
-                            'Non indicato'}
-                        </strong>
-                      </div>
-                      {cartella.contattoEmergenzaAltro?.trim() && (
-                        <div className="cr-profilo-row">
-                          <span>Altro contatto di emergenza</span>
-                          <strong>{cartella.contattoEmergenzaAltro}</strong>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  {cartella.noteGenerali && (
-                    <div className="cr-profilo-group cr-profilo-group--full">
-                      <div className="cr-profilo-group__title">Note generali</div>
-                      <p className="cr-note-text">{cartella.noteGenerali}</p>
-                    </div>
+                <div className="form-field">
+                  <label className="form-label" htmlFor="patient-profile-phone">
+                    Telefono (necessario per completare la scheda)
+                  </label>
+                  <input
+                    ref={profiloPhoneRef}
+                    id="patient-profile-phone"
+                    className="form-input"
+                    type="tel"
+                    autoComplete="tel"
+                    maxLength={PATIENT_PHONE_MAX_LENGTH}
+                    aria-invalid={!!profiloPhoneError}
+                    aria-describedby={profiloPhoneError ? 'patient-profile-phone-error' : undefined}
+                    value={profiloForm.phone ?? ''}
+                    onChange={(e) => {
+                      setProfiloForm((p) => ({ ...p, phone: e.target.value }));
+                      if (profiloPhoneError) {
+                        const validated = validatePatientPhone(e.target.value);
+                        setProfiloPhoneError(validated.ok ? null : validated.error);
+                      }
+                    }}
+                  />
+                  {profiloPhoneError && (
+                    <span id="patient-profile-phone-error" className="form-error" role="alert">
+                      {profiloPhoneError}
+                    </span>
                   )}
                 </div>
-              </>
-            )}
-          </div>
-        </ClinicalTableSection>
+                <div className="form-field">
+                  <label className="form-label">Indirizzo</label>
+                  <input
+                    className="form-input"
+                    value={profiloForm.indirizzo ?? ''}
+                    onChange={(e) => setProfiloForm((p) => ({ ...p, indirizzo: e.target.value }))}
+                  />
+                </div>
+                <div className="form-field">
+                  <label className="form-label" htmlFor="patient-profile-codiceFiscale">
+                    Codice Fiscale
+                  </label>
+                  <input
+                    id="patient-profile-codiceFiscale"
+                    aria-invalid={!!profiloFieldErrors.codiceFiscale}
+                    aria-describedby={
+                      profiloFieldErrors.codiceFiscale ? 'patient-profile-cf-error' : undefined
+                    }
+                    className="form-input"
+                    value={profiloForm.codiceFiscale ?? ''}
+                    onChange={(e) =>
+                      setProfiloForm((p) => ({ ...p, codiceFiscale: e.target.value }))
+                    }
+                  />
+                  {profiloFieldErrors.codiceFiscale && (
+                    <span id="patient-profile-cf-error" className="form-error" role="alert">
+                      {profiloFieldErrors.codiceFiscale}
+                    </span>
+                  )}
+                </div>
+                <div className="form-field">
+                  <label className="form-label" htmlFor="patient-profile-dateOfBirth">
+                    Data di nascita
+                  </label>
+                  <input
+                    id="patient-profile-dateOfBirth"
+                    className="form-input"
+                    type="date"
+                    value={profiloForm.dateOfBirth ?? ''}
+                    aria-invalid={!!profiloFieldErrors.dateOfBirth}
+                    aria-describedby={
+                      profiloFieldErrors.dateOfBirth ? 'patient-profile-birth-error' : undefined
+                    }
+                    onChange={(event) =>
+                      setProfiloForm((form) => ({ ...form, dateOfBirth: event.target.value }))
+                    }
+                  />
+                  {profiloFieldErrors.dateOfBirth && (
+                    <span id="patient-profile-birth-error" className="form-error" role="alert">
+                      {profiloFieldErrors.dateOfBirth}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="form-field" style={{ marginTop: 8 }}>
+                <label className="form-label">Note generali</label>
+                <textarea
+                  className="form-input"
+                  rows={3}
+                  value={profiloForm.noteGenerali ?? ''}
+                  onChange={(e) => setProfiloForm((p) => ({ ...p, noteGenerali: e.target.value }))}
+                />
+              </div>
+            </InlineForm>
+          ) : (
+            <>
+              <div className="cr-profilo-grid" style={{ marginTop: 12 }}>
+                {which === 'profilo' && (
+                  <div className="cr-profilo-group">
+                    <div className="cr-profilo-group__title">Anagrafica</div>
+                    <div className="cr-profilo-row">
+                      <span>Nome</span>
+                      <strong>
+                        {paziente.firstName} {paziente.lastName}
+                      </strong>
+                    </div>
+                    <div className="cr-profilo-row">
+                      <span>Data nascita</span>
+                      <strong>{birthSummary(paziente.dateOfBirth)}</strong>
+                    </div>
+                    <div className="cr-profilo-row">
+                      <span>Sesso</span>
+                      <strong>{paziente.sex ?? '—'}</strong>
+                    </div>
+                    <div className="cr-profilo-row">
+                      <span>Codice Fiscale</span>
+                      <strong className="cr-mono">
+                        {paziente.codiceFiscale ?? cartella.codiceFiscale ?? '—'}
+                      </strong>
+                    </div>
+                  </div>
+                )}
+                {which === 'contatti' && (
+                  <div className="cr-profilo-group">
+                    <div className="cr-profilo-group__title">Contatti</div>
+                    <div className="cr-profilo-row">
+                      <span>Email</span>
+                      <strong>{paziente.email?.trim() || 'Non indicata'}</strong>
+                    </div>
+                    <div className="cr-profilo-row">
+                      <span>Telefono</span>
+                      <strong>{paziente.phone?.trim() || 'Da completare · obbligatorio'}</strong>
+                    </div>
+                    <div className="cr-profilo-row">
+                      <span>Indirizzo</span>
+                      <strong>
+                        {cartella.indirizzo?.trim() || paziente.address?.trim() || 'Non indicato'}
+                      </strong>
+                    </div>
+                    <div className="cr-profilo-row">
+                      <span>Referente</span>
+                      <strong>
+                        {[
+                          // Le colonne del paziente sono la fonte aggiornata (intake, voce,
+                          // PATCH); la copia in cartella resta per le cartelle importate prima.
+                          paziente.emergencyContactName?.trim() ||
+                            cartella.contattoEmergenzaNome?.trim(),
+                          cartella.contattoEmergenzaRel?.trim(),
+                        ]
+                          .filter(Boolean)
+                          .join(' · ') || 'Non indicato'}
+                      </strong>
+                    </div>
+                    <div className="cr-profilo-row">
+                      <span>Telefono referente</span>
+                      <strong>
+                        {paziente.emergencyContactPhone?.trim() ||
+                          cartella.contattoEmergenzaTel?.trim() ||
+                          'Non indicato'}
+                      </strong>
+                    </div>
+                    {cartella.contattoEmergenzaAltro?.trim() && (
+                      <div className="cr-profilo-row">
+                        <span>Altro contatto di emergenza</span>
+                        <strong>{cartella.contattoEmergenzaAltro}</strong>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {cartella.noteGenerali && (
+                  <div className="cr-profilo-group cr-profilo-group--full">
+                    <div className="cr-profilo-group__title">Note generali</div>
+                    <p className="cr-note-text">{cartella.noteGenerali}</p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </ClinicalCard>
       </div>
     );
   }
@@ -2356,9 +2342,7 @@ export function PatientDetail({
           {`${paziente.lastName}, ${paziente.firstName}`.trim().replace(/^,\s*/, '')}
         </h1>
       </div>
-      <p className="page-header__subtitle">
-        {patientSubtitle}
-      </p>
+      <p className="page-header__subtitle">{patientSubtitle}</p>
     </div>
   );
 
@@ -2379,8 +2363,7 @@ export function PatientDetail({
     (s) => ({
       key: s.id,
       label: s.label,
-      badge:
-        s.tabs.reduce((sum, id) => sum + (TAB_BADGES[id] ?? 0), 0) || undefined,
+      badge: s.tabs.reduce((sum, id) => sum + (TAB_BADGES[id] ?? 0), 0) || undefined,
     }),
   );
   const patientPanelLabelledBy = `patient-section-${section}`;
@@ -2397,7 +2380,8 @@ export function PatientDetail({
   const pinRequest = itemFocus?.requestId ?? 0;
   useEffect(() => {
     if (tab === firstOfSection && !pinItem) return;
-    const selector = pinItem ?? `[data-chart-part="${tab === 'contatti' ? 'presa-in-carico' : tab}"]`;
+    const selector =
+      pinItem ?? `[data-chart-part="${tab === 'contatti' ? 'presa-in-carico' : tab}"]`;
     const block: ScrollLogicalPosition = pinItem ? 'center' : 'start';
     const find = () => document.querySelector(selector);
     const highlighted: HTMLElement[] = [];
@@ -2459,58 +2443,58 @@ export function PatientDetail({
         {((section === 'moduli' && tab === 'medicazioni') || legacyVisits.has('medicazioni')) && (
           <div hidden={!(section === 'moduli' && tab === 'medicazioni')}>
             <WidgetGroup>
-            <MedicazioniTab
-              key={paziente.id}
-              createRequest={
-                legacyCreates.medicazioni?.patientId === paziente.id
-                  ? legacyCreates.medicazioni.request
-                  : undefined
-              }
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={(updates) =>
-                onUpdateCartella(cartella.pazienteId, updates, { optimistic: false })
-              }
-              operatoreNome={operatoreNome}
-              operatoreId={operatoreId}
-              operatoreRole={operatoreRole}
-            />
+              <MedicazioniTab
+                key={paziente.id}
+                createRequest={
+                  legacyCreates.medicazioni?.patientId === paziente.id
+                    ? legacyCreates.medicazioni.request
+                    : undefined
+                }
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={(updates) =>
+                  onUpdateCartella(cartella.pazienteId, updates, { optimistic: false })
+                }
+                operatoreNome={operatoreNome}
+                operatoreId={operatoreId}
+                operatoreRole={operatoreRole}
+              />
             </WidgetGroup>
           </div>
         )}
         {((section === 'moduli' && tab === 'contenzioni') || legacyVisits.has('contenzioni')) && (
           <div hidden={!(section === 'moduli' && tab === 'contenzioni')}>
             <WidgetGroup>
-            <ContenzioniTab
-              key={paziente.id}
-              createRequest={
-                legacyCreates.contenzioni?.patientId === paziente.id
-                  ? legacyCreates.contenzioni.request
-                  : undefined
-              }
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
+              <ContenzioniTab
+                key={paziente.id}
+                createRequest={
+                  legacyCreates.contenzioni?.patientId === paziente.id
+                    ? legacyCreates.contenzioni.request
+                    : undefined
+                }
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
             </WidgetGroup>
           </div>
         )}
         {((section === 'moduli' && tab === 'braden') || legacyVisits.has('braden')) && (
           <div hidden={!(section === 'moduli' && tab === 'braden')}>
             <WidgetGroup>
-            <ScalaBradenTab
-              key={paziente.id}
-              createRequest={
-                legacyCreates.braden?.patientId === paziente.id
-                  ? legacyCreates.braden.request
-                  : undefined
-              }
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
+              <ScalaBradenTab
+                key={paziente.id}
+                createRequest={
+                  legacyCreates.braden?.patientId === paziente.id
+                    ? legacyCreates.braden.request
+                    : undefined
+                }
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
             </WidgetGroup>
           </div>
         )}
@@ -2594,7 +2578,16 @@ export function PatientDetail({
             paziente={paziente}
             onUpdate={upd}
             operatoreNome={operatoreNome}
-            contacts={<PatientContacts patient={paziente} chart={cartella} onEdit={() => { openProfileEditor(); setTab('profilo'); }} />}
+            contacts={
+              <PatientContacts
+                patient={paziente}
+                chart={cartella}
+                onEdit={() => {
+                  openProfileEditor();
+                  setTab('profilo');
+                }}
+              />
+            }
           />
         )}
         {current === 'documenti' && (
@@ -2806,7 +2799,12 @@ export function PatientDetail({
               </span>
               <span>
                 <strong>Attenzione permanente · allergie{hasAllergie ? ' gravi' : ''}:</strong>{' '}
-                {(cartella.allergie ?? []).map((a) => `${a.allergene}${hasAllergie && a.gravita !== 'grave' ? ` (${a.gravita})` : ''}`).join(', ')}
+                {(cartella.allergie ?? [])
+                  .map(
+                    (a) =>
+                      `${a.allergene}${hasAllergie && a.gravita !== 'grave' ? ` (${a.gravita})` : ''}`,
+                  )
+                  .join(', ')}
               </span>
               <span className="cr-alert-strip__link">Gestisci →</span>
             </button>
@@ -2916,11 +2914,13 @@ export function PatientDetail({
                 </div>
               </>
             ) : (
-              sectionTabs.filter((id) => id !== 'contatti').map((id) => (
-                <div key={id} className="chart-part" data-chart-part={id}>
-                  <Suspense fallback={<ClinicalSectionLoading />}>{renderTab(id)}</Suspense>
-                </div>
-              ))
+              sectionTabs
+                .filter((id) => id !== 'contatti')
+                .map((id) => (
+                  <div key={id} className="chart-part" data-chart-part={id}>
+                    <Suspense fallback={<ClinicalSectionLoading />}>{renderTab(id)}</Suspense>
+                  </div>
+                ))
             )}
             <div className="chart-keepalive">{renderKeepAliveModules()}</div>
           </Suspense>

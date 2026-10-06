@@ -215,7 +215,8 @@ test('verification renders real manual times and an actionable indexed blocker',
       onReviewTherapies() {},
     }),
   );
-  assert.match(markup, /ore 08:00, 20:00/);
+  assert.match(markup, /<dd>08:00<\/dd>/);
+  assert.match(markup, /<dd>20:00<\/dd>/);
   assert.match(markup, /Terapia 1: Indica il nome del farmaco/);
   assert.match(markup, /Correggi terapie/);
   assert.match(markup, /class="btn-success" disabled=""/);

@@ -8,7 +8,8 @@ import type {
   UscitaLog,
   Paziente,
 } from '../../../types';
-import { todayStr, nowISO, nowTime, PrintButton, ClinicalTableSection } from './shared';
+import { todayStr, nowISO, nowTime, PrintButton } from './shared';
+import { ClinicalCard } from '../../shared/ClinicalCard';
 import { ClinicalTable } from './ClinicalTable';
 
 interface Props {
@@ -629,17 +630,12 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
 
       {/* ── Web view ── */}
       <div className="web-content">
-        <ClinicalTableSection
+        <ClinicalCard
           title="Dimissione Infermieristica"
-          actions={
-            <>
-              <button className="btn-sm" onClick={() => setModulo(true)}>
-                Vista modulo
-              </button>
-            </>
-          }
+          editLabel="Vista modulo"
+          onEdit={() => setModulo(true)}
         >
-          <div className="cts__body--padded">
+          <div>
             {/* ── Dimissione section ── */}
             <div className="cr-section-header" style={{ marginBottom: 12 }}>
               <span className="cr-section-title">Scheda di Dimissione</span>
@@ -1601,7 +1597,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
               </div>
             </div>
           </div>
-        </ClinicalTableSection>
+        </ClinicalCard>
       </div>
     </div>
   );

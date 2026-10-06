@@ -4,6 +4,7 @@ import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';
 import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
 import { parsePatientLocation } from '../../lib/patientIdentity';
 import { PatientIdentity } from '../shared/PatientIdentity';
+import { IcoChevronRight } from '../../icons';
 import type { SummaryState } from './useConsegneRoster';
 /** Camera dalla posizione attuale; mai inventata. */
 function roomOf(patient: Paziente): string {
@@ -58,11 +59,12 @@ function RosterPatient({
         </span>
       </button>
       <a
-        className="ds-link"
+        className="ds-icon-btn handover-rounds__diary"
         href={`#/dettaglio-paziente/${encodeURIComponent(patient.id)}`}
         aria-label={`Diario di ${patient.lastName}, ${patient.firstName}`}
+        title="Apri diario paziente"
       >
-        Diario paziente →
+        <IcoChevronRight />
       </a>
     </li>
   );

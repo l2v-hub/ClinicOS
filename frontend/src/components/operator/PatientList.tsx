@@ -16,7 +16,6 @@ import {
   countListViews,
   matchesListSignal,
   matchesListView,
-  unknownStateCount,
   type ListView,
   type PatientListEntry,
   type PatientListSignal,
@@ -204,14 +203,6 @@ export function PatientList({
   const contiVista = useMemo(
     () =>
       countListViews(
-        filtratiBase.map((p) => p.id),
-        (id) => summaryMap.get(id)?.statoRicovero,
-      ),
-    [filtratiBase, summaryMap],
-  );
-  const statiNonNoti = useMemo(
-    () =>
-      unknownStateCount(
         filtratiBase.map((p) => p.id),
         (id) => summaryMap.get(id)?.statoRicovero,
       ),
@@ -410,17 +401,6 @@ export function PatientList({
             </button>
           </div>
         </div>
-        {statiNonNoti > 0 && vista !== 'tutti' && (
-          <p className="plist-note" role="status">
-            {statiNonNoti === 1 ? '1 paziente ha' : `${statiNonNoti} pazienti hanno`} lo stato di
-            ricovero non ancora disponibile:{' '}
-            {vista === 'dimessi'
-              ? 'i dimessi non si possono ancora distinguere.'
-              : statiNonNoti === 1
-                ? 'resta fra i ricoverati finché il dato non arriva.'
-                : 'restano fra i ricoverati finché il dato non arriva.'}
-          </p>
-        )}
         {segnale && (
           <p className="plist-note plist-note--signal" role="status" data-list-signal={segnale}>
             Filtro attivo: <strong>{LIST_SIGNAL_LABEL[segnale]}</strong> ({filtrati.length} fra i

@@ -1,5 +1,6 @@
 // Shared utilities for cartella clinica sub-tabs
 import { useWidgetOpen } from '../../shared/WidgetGroup';
+import { SectionToggle } from '../../shared/SectionToggle';
 
 export function uid(): string {
   return crypto.randomUUID();
@@ -180,33 +181,31 @@ export function ClinicalTableSection({
 
   return (
     <div className={`cts${open ? ' cts--open' : ''}`}>
-      {/* header è un div role=button (non <button>) così i pulsanti azione annidati sono HTML valido
-          e i tap su mobile non innescano per errore anche il toggle della sezione. */}
-      <div
-        className="cts__header"
-        role="button"
-        tabIndex={0}
-        aria-expanded={open}
-        aria-controls={bodyId}
-        onClick={() => setOpen((v) => !v)}
-        onKeyDown={(e) => {
-          if (e.target !== e.currentTarget) return;
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setOpen((v) => !v);
-          }
-        }}
-      >
+      {/* Native toggle and separate actions share the same control as imported sections. */}
+      <div className="cts__header" onClick={() => setOpen((v) => !v)}>
         <div className="cts__header-left">
-          <span className="cts__chevron">{open ? '▼' : '▶'}</span>
+          <SectionToggle
+            title={title}
+            open={open}
+            bodyId={bodyId}
+            onToggle={() => setOpen((v) => !v)}
+          />
           <span className="cts__title">{title}</span>
           {badge && <span className="cts__badge">{badge}</span>}
         </div>
-        <div className="cts__header-right" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="cts__header-right"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(true);
+          }}
+        >
           {actions}
         </div>
       </div>
-      <div id={bodyId} className="cts__body" hidden={!open}>{children}</div>
+      <div id={bodyId} className="cts__body" hidden={!open}>
+        {children}
+      </div>
     </div>
   );
 }

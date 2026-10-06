@@ -61,10 +61,10 @@ export function VitalsOverview({
         <div key={tile.key} className={`vt vt--${tile.tone}`}>
           <span className="vt__label">{tile.label}</span>
           <span className="vt__value">
-            {tile.value ?? '—'}
-            <small>{tile.value === null ? 'non rilevato' : tile.unit}</small>
+            {tile.value ?? 'N/A'}
+            {tile.value !== null && <small>{tile.unit}</small>}
           </span>
-          <span className="vt__trend">{tile.at ? `alle ${tile.at}` : 'nessuna rilevazione'}</span>
+          <span className="vt__trend">{tile.at ? `alle ${tile.at}` : ''}</span>
           {large && tile.trend && <span className="vt__trend">{tile.trend}</span>}
         </div>
       ))}
@@ -77,17 +77,26 @@ export function VitalsOverview({
       >
         <span className="vt__label">NEWS2</span>
         <span className="vt__value">
-          {n.score ?? '—'}
-          <small>{n.score === null ? 'non calcolabile' : 'punti'}</small>
+          {n.score ?? 'N/A'}
+          {n.score !== null && <small>punti</small>}
         </span>
-        <span className="vt__trend">{n.at ?? 'nessuna rilevazione'}</span>
+        <span className="vt__trend">{n.at ?? ''}</span>
       </button>
     </div>
   );
   return (
     <section className="vitals-summary" aria-label="Ultimi parametri e NEWS2">
       <div className="vitals-summary__head">
-        <button type="button" className="ds-icon-btn" aria-expanded={open} aria-controls={bodyId} aria-label={`${open ? 'Comprimi' : 'Espandi'} ultimi parametri`} onClick={()=>setOpen(!open)}>{open ? '▾' : '▸'}</button>
+        <button
+          type="button"
+          className="ds-icon-btn"
+          aria-expanded={open}
+          aria-controls={bodyId}
+          aria-label={`${open ? 'Comprimi' : 'Espandi'} ultimi parametri`}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? '▾' : '▸'}
+        </button>
         <h2>Ultimi parametri</h2>
         <div className="vitals-summary__actions">
           {onRecordNow && canRecord && (
@@ -123,10 +132,10 @@ export function VitalsOverview({
         </div>
       </div>
       <div id={bodyId} hidden={!open}>
-      {grid(false)}
-      <p className={`vitals-summary__status vitals-summary__status--${tone}`}>
-        <strong>NEWS2:</strong> {detail}
-      </p>
+        {grid(false)}
+        <p className={`vitals-summary__status vitals-summary__status--${tone}`}>
+          <strong>NEWS2:</strong> {detail}
+        </p>
       </div>
       {expanded && (
         <AccessibleDialogSurface

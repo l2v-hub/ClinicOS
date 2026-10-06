@@ -1,0 +1,12 @@
+{
+  "decision": "ALLOW scoped commit, ordinary push and existing-service publication after independent release QA",
+  "humanAuthorization": "User: procedi e pussha tutto, replying to explicit request for commit, push and publication of verified corrections",
+  "repository": "https://github.com/l2v-hub/ClinicOS.git",
+  "branches": ["codex/ux-discovery-loop", "main"],
+  "baseHead": "01e9b03d573baf68b469dc348e14cf326ef5cea0",
+  "remoteBase": "8bb23447af3c853cb6a9d8717acfaa8eebe6a8c0",
+  "scope": "Pending verified frontend, intake parser, tests and UX guidance; preserve unrelated main checkout",
+  "publication": "Existing Vercel project clinicos__ and existing GitHub Railway workflow; no new secrets, credentials, schema, dependency or workflow changes",
+  "conditions": ["Final source checks pass", "Independent read-only QA passes", "Immutable commit binds release inputs", "Normal fast-forward pushes only", "Read-only online verification"],
+  "excluded": "Local caches, scratch, videos and generated test screenshots are retained locally"
+}

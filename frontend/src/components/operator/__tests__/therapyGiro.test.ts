@@ -164,6 +164,13 @@ test('page shows the round by real time: only hours with administrations, counts
       onLoadMore() {},
       onConfirm() {},
       onNotAdministered() {},
+      calendarState: {
+        mode: 'giro',
+        date: '2026-09-23',
+        weekOf: '2026-09-23',
+        open: null,
+        scrollTop: 0,
+      },
     }),
   );
   assert.match(html, /Giro terapia/);
@@ -173,6 +180,42 @@ test('page shows the round by real time: only hours with administrations, counts
   assert.match(html, /aria-valuenow="0"/);
   assert.match(html, /class="giro-patient"/);
   assert.match(html, /aria-label="Erogata: Rossi, Mario/);
+});
+
+test('calendar is the main view; directed dose requests retain loading and retry feedback', () => {
+  const props = {
+    slots: [],
+    loading: true,
+    error: null,
+    pageInfo: {
+      hasMore: false,
+      nextCursor: null,
+      loadedTherapies: 0,
+      completeness: 'complete' as const,
+      summaryExact: true,
+    },
+    loadingMore: false,
+    loadMoreError: null,
+    onLoad() {},
+    onLoadMore() {},
+    onConfirm() {},
+    onNotAdministered() {},
+  };
+  const calendar = render(React.createElement(TherapyRoundsPage, props));
+  assert.match(calendar, /Calendario terapie/);
+  assert.match(calendar, /aria-label="Calendario della settimana"/);
+  assert.doesNotMatch(calendar, /class="giro-bar"/);
+  const directed = { ...props, entry: { requestId: 1, time: '08:00', date: '2026-10-06' } };
+  assert.match(render(React.createElement(TherapyRoundsPage, directed)), /Caricamento terapie/);
+  const failed = render(
+    React.createElement(TherapyRoundsPage, {
+      ...directed,
+      loading: false,
+      error: 'Lettura non disponibile',
+    }),
+  );
+  assert.match(failed, /role="alert".*Lettura non disponibile.*Riprova/s);
+  assert.doesNotMatch(failed, /aria-label="Calendario della settimana"/);
 });
 
 const adm = (
