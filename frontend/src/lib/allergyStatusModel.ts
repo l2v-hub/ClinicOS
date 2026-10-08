@@ -22,7 +22,7 @@ export interface AllergySummary {
 }
 
 export function deriveAllergySummary(
-  list: AllergiaItem[] | undefined,
+  list: ReadonlyArray<Pick<AllergiaItem, 'allergene'>> | undefined,
   status: AllergyStatus | undefined,
 ): AllergySummary {
   const items = list ?? [];

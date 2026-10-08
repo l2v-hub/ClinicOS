@@ -1,4 +1,28 @@
 /* Giro terapia — HMI 1 (artifacts/hmi-parity/proto/terapia.png). */
+.giro-allergies {
+  margin: 0 16px 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  overflow-wrap: anywhere;
+  font: 400 14px/20px var(--font-ui);
+}
+.giro-allergies__status { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.giro-allergies__source { color: var(--text-muted); }
+.giro-allergies__list { margin: 8px 0; padding-left: 20px; }
+.giro-allergies__details summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 12px 0;
+  color: var(--text);
+  font-weight: 600;
+}
+.giro-allergies__details summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.giro-allergies__details p { margin: 4px 0; }
+.giro-allergies__documentation { padding: 8px 0; border-top: 1px solid var(--border); }
+
 .giro-view {
   display: flex;
   flex-direction: column;

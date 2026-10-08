@@ -21,6 +21,7 @@ import { doseStatus } from '../../lib/therapyDoseStatus';
 import { IcoCheck } from '../../icons';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { GlucoseAdministrationControl } from './cartella/GlucoseAdministrationControl';
+import { TherapyPatientAllergies } from './TherapyPatientAllergies';
 
 export type FiltroStato = 'tutte' | TherapyAdministration['status'];
 
@@ -200,6 +201,13 @@ export function TherapyGiroRows({
                     </span>
                   </div>
                 </div>
+              )}
+              {!hidePatientHead && (
+                <TherapyPatientAllergies
+                  patientId={p.patientId}
+                  patientName={name}
+                  contextKey={`${date}:${time.ora}`}
+                />
               )}
               <ul className="giro-drugs" aria-label={`Farmaci di ${name} delle ${time.ora}`}>
                 {items.map((item) => {
