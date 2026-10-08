@@ -122,7 +122,11 @@ export function TerapiaFarmacologicaTab({
   const [error, setError] = useState('');
   const [therapyLoadError, setTherapyLoadError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [createSlot, setCreateSlot] = useState<{ patientId: string; date: string; time: string } | null>(null);
+  const [createSlot, setCreateSlot] = useState<{
+    patientId: string;
+    date: string;
+    time: string;
+  } | null>(null);
   const createDialogTitle = useId();
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<TherapyForm>(emptyTherapyForm());
@@ -273,6 +277,16 @@ export function TerapiaFarmacologicaTab({
   const [saveAttempted, setSaveAttempted] = useState(false);
   const [saveError, setSaveError] = useState('');
   const formShellRef = useRef<HTMLDivElement>(null);
+  const editFocusPending = useRef(false);
+  useEffect(() => {
+    if (!editFocusPending.current || !showForm || !editId || view !== 'attivi' || !canUpdateTherapy)
+      return;
+    const heading = formShellRef.current?.querySelector<HTMLElement>('h2');
+    if (!heading) return;
+    editFocusPending.current = false;
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView({ block: 'center', behavior: 'instant' });
+  }, [showForm, editId, view, canUpdateTherapy]);
   const formIssues = showForm && saveAttempted ? therapyFormIssues(form) : [];
   const resetSaveFeedback = () => {
     setSaveAttempted(false);
@@ -296,16 +310,18 @@ export function TerapiaFarmacologicaTab({
     setCreateSlot({ patientId: paziente.id, date, time });
   }
   const openEdit = (t: PatientTherapyAPI) => {
+    if (!canUpdateTherapy || saving || t.patientId !== paziente.id) return;
     resetSaveFeedback();
+    editFocusPending.current = true;
+    setCreateSlot(null);
     setEditId(t.id);
     setForm(therapyToForm(t));
     setShowForm(true);
     setView('attivi');
-    window.requestAnimationFrame(() =>
-      formShellRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }),
-    );
+    rememberTherapyView(paziente.id, 'attivi');
   };
   function closeForm() {
+    editFocusPending.current = false;
     resetSaveFeedback();
     setShowForm(false);
     setCreateSlot(null);
@@ -679,7 +695,9 @@ export function TerapiaFarmacologicaTab({
   const therapyPager = nextTherapyCursor ? (
     <div className="tf-pager">
       {therapyLoadError && therapies.length > 0 && (
-        <p className="tf-pager__error" role="alert">{therapyLoadError}</p>
+        <p className="tf-pager__error" role="alert">
+          {therapyLoadError}
+        </p>
       )}
       <span>
         {therapies.length} di {therapySummary?.total ?? '—'} terapie caricate
@@ -719,8 +737,14 @@ export function TerapiaFarmacologicaTab({
   const formShell = (
     <div className="terapia-sched-form therapy-form-shell" ref={formShellRef}>
       <header className="therapy-form-shell__heading">
-        <h2 id={createDialogTitle}>{editId ? 'Modifica terapia' : 'Nuova terapia'}</h2>
-        {createSlot && <p>{createSlot.date} · ore {createSlot.time}</p>}
+        <h2 id={createDialogTitle} tabIndex={-1}>
+          {editId ? 'Modifica terapia' : 'Nuova terapia'}
+        </h2>
+        {createSlot && (
+          <p>
+            {createSlot.date} · ore {createSlot.time}
+          </p>
+        )}
         <p>I campi con * sono obbligatori.</p>
       </header>
       <TherapyFormFields
@@ -788,23 +812,47 @@ export function TerapiaFarmacologicaTab({
 
         {activeView === 'attivi' && (
           <div className="cts__body--padded tf-active">
-            {nextTherapyCursor && <p role="status">Verifica anagrafica parziale: carica le altre terapie per consultare tutti i farmaci.</p>}
-            {editing ? formShell : listState ?? <>
-              <TherapyDrugList therapies={attive} openId={openDrugId} focusId={focusDrugId}
-                onToggle={toggleDrug} renderDetail={renderDetail} label="Farmaci attivi"
-                lineBadge={lineBadge} emptyText={nextTherapyCursor ? 'Nessun farmaco attivo tra le terapie caricate.' : 'Nessun farmaco attivo.'} />
-              {therapyPager}
-            </>}
+            {nextTherapyCursor && (
+              <p role="status">
+                Verifica anagrafica parziale: carica le altre terapie per consultare tutti i
+                farmaci.
+              </p>
+            )}
+            {editing
+              ? formShell
+              : (listState ?? (
+                  <>
+                    <TherapyDrugList
+                      therapies={attive}
+                      openId={openDrugId}
+                      focusId={focusDrugId}
+                      onToggle={toggleDrug}
+                      renderDetail={renderDetail}
+                      label="Farmaci attivi"
+                      lineBadge={lineBadge}
+                      emptyText={
+                        nextTherapyCursor
+                          ? 'Nessun farmaco attivo tra le terapie caricate.'
+                          : 'Nessun farmaco attivo.'
+                      }
+                    />
+                    {therapyPager}
+                  </>
+                ))}
           </div>
         )}
         {activeView === 'calendario' && (
           <div className="cts__body--padded tf-calendar-view">
             <PatientTherapyCalendar
               key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}
-              patientId={paziente.id} initialDate={calendarFocus?.date}
-              initialOpenTime={calendarFocus?.time} focusTherapyId={focusDrugId ?? undefined}
+              patientId={paziente.id}
+              initialDate={calendarFocus?.date}
+              initialOpenTime={calendarFocus?.time}
+              focusTherapyId={focusDrugId ?? undefined}
               onCreate={canCreateTherapy ? openCalendarCreate : undefined}
-              refreshKey={calendarRefresh} />
+              onEditTherapy={canUpdateTherapy ? openEdit : undefined}
+              refreshKey={calendarRefresh}
+            />
           </div>
         )}
 
@@ -849,12 +897,28 @@ export function TerapiaFarmacologicaTab({
         {activeView === 'nuova' && <div className="cts__body--padded">{formShell}</div>}
       </ClinicalTableSection>
 
-      {createSlot && createSlot.patientId === paziente.id && canCreateTherapy && <AccessibleDialogSurface
-        labelledBy={createDialogTitle} className="therapy-calendar-dialog"
-        dismissible={!saving} closeOnOverlay={!saving} onClose={closeForm}>
-        <button type="button" className="ds-icon-btn" aria-label="Chiudi nuova terapia" title="Chiudi nuova terapia" data-dialog-initial-focus disabled={saving} onClick={closeForm}>×</button>
-        {formShell}
-      </AccessibleDialogSurface>}
+      {createSlot && createSlot.patientId === paziente.id && canCreateTherapy && (
+        <AccessibleDialogSurface
+          labelledBy={createDialogTitle}
+          className="therapy-calendar-dialog"
+          dismissible={!saving}
+          closeOnOverlay={!saving}
+          onClose={closeForm}
+        >
+          <button
+            type="button"
+            className="ds-icon-btn"
+            aria-label="Chiudi nuova terapia"
+            title="Chiudi nuova terapia"
+            data-dialog-initial-focus
+            disabled={saving}
+            onClick={closeForm}
+          >
+            ×
+          </button>
+          {formShell}
+        </AccessibleDialogSurface>
+      )}
 
       <ConfirmDialog
         open={pendingDeleteId !== null}

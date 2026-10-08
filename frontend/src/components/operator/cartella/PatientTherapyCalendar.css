@@ -2,6 +2,66 @@
   padding: 16px;
   min-width: 0;
 }
+/* One vertical path through summary, details and hours. Horizontal week content remains
+   locally reachable on narrow screens, without adding a height-limited inner scroller. */
+.patient-therapy-calendar .therapy-calendar-grid {
+  max-height: none;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+.patient-therapy-calendar__summary {
+  margin-bottom: 12px;
+}
+.patient-therapy-calendar__empty {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.patient-therapy-calendar__programming {
+  padding: 12px 14px;
+  border: 1px solid var(--ds-border, #e1e7f0);
+  border-left: 4px solid var(--ds-blue, #2f6bed);
+  border-radius: var(--ds-radius, 12px);
+  background: var(--ds-blue-tint, #eaf1fe);
+  color: var(--ds-text, #16202e);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.patient-therapy-calendar__programming p {
+  margin: 0 0 6px;
+}
+.patient-therapy-calendar__programming summary {
+  min-height: 44px;
+  padding: 10px 0;
+  cursor: pointer;
+  font-weight: 650;
+}
+.patient-therapy-calendar__programming summary:focus-visible {
+  outline: var(--ds-focus, 3px solid #245bb5);
+  outline-offset: 2px;
+}
+.patient-therapy-calendar__programming ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.patient-therapy-calendar__programming li {
+  padding: 12px 0;
+  border-top: 1px solid var(--ds-border, #e1e7f0);
+}
+.patient-therapy-calendar__programming li > strong,
+.patient-therapy-calendar__programming li > span {
+  display: block;
+}
+.patient-therapy-calendar__programming li > p {
+  margin-top: 4px;
+}
+.patient-therapy-calendar__programming button {
+  min-height: 44px;
+  max-width: 100%;
+  white-space: normal;
+}
 .patient-therapy-calendar__toolbar {
   display: flex;
   align-items: center;
