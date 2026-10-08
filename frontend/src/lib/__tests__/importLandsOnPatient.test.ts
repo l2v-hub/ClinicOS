@@ -40,11 +40,11 @@ test('"Nuovo ingresso" opens the start page, then the shared NewPatientFlow, and
   // La pagina è una voce di navigazione (#/nuovo-ingresso): App la apre e la chiude.
   assert.equal(list.match(/onClick=\{onOpenNewIntake\}/g)?.length, 2);
   // Prompt 10 AT-13: la pagina di ingresso esiste solo per chi può aprire la bozza.
-  assert.match(list, /if \(newIntake && canIntake\)\s*return \(\s*<NewPatientStart/);
+  assert.match(list, /if \(newIntake && canIntake\)\s*return \(\s*<>\s*<NewPatientStart/);
   assert.match(list, /useCan\('intake\.create_draft'\)/);
   assert.match(
     list,
-    /<NewPatientStart[\s\S]*?onChoose=\{\(path\) => \{[\s\S]*?setNewPatientPath\(path\);\s*onCloseNewIntake\?\.\(\);/,
+    /<NewPatientStart[\s\S]*?onChoose=\{setNewPatientPath\}[\s\S]*?\{newPatientFlow\}/,
   );
   const app = src('../App.tsx');
   assert.match(
@@ -52,7 +52,10 @@ test('"Nuovo ingresso" opens the start page, then the shared NewPatientFlow, and
     /navKey === 'pazienti' \|\| navKey === 'nuovo-ingresso'\) && \(\s*<PatientList\s+newIntake=\{navKey === 'nuovo-ingresso'\}/,
   );
   assert.match(app, /onOpenNewIntake=\{\(\) => navigate\('nuovo-ingresso'\)\}/);
-  assert.match(app, /onCloseNewIntake=\{\(\) => goBack\('pazienti'\)\}/);
+  assert.match(
+    app,
+    /onCloseNewIntake=\{\(\) => \{\s*intakeReturnFocusRef\.current = true;\s*goBack\('pazienti'\);/,
+  );
   assert.match(list, /<NewPatientFlow\s+initialPath=\{newPatientPath\}/);
   assert.match(
     list,

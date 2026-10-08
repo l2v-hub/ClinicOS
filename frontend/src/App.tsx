@@ -595,6 +595,7 @@ export default function App() {
   // PatientList owns its bounded page; only the selected patient is retained globally. Its filters
   // stay lifted here so they survive while that component unmounts for an open patient chart.
   const [pazientiRicerca, setPazientiRicerca] = useState('');
+  const intakeReturnFocusRef = useRef(false);
   const [pazientiFiltroSesso, setPazientiFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [pazienteSelezionato, setPazienteSelezionato] = useState<Paziente | null>(null);
   // Direct access: vista e filtro con cui aprire la lista (tessere KPI, segnalazioni).
@@ -3781,8 +3782,8 @@ export default function App() {
                             onRetryClinicalOverview={() => void loadClinicalOverview()}
                           />
                         )}
-                        {/* Nuovo ingresso è una voce di navigazione: la lista resta montata sotto
-                          (ricerca e filtri conservati), freccia e sidebar riportano ai pazienti. */}
+                        {/* Nuovo ingresso è una voce di navigazione: ricerca e filtri vivono in App;
+                          il gruppo della pagina viene rimontato al cambio di route. */}
                         {/* Anche la shell di amministrazione (supervisore) arriva qui dalle tessere
                           «Apri lista pazienti»: decide la capability, non la shell. */}
                         {(!isAdmin || canNavigate(capabilities, 'pazienti')) &&
@@ -3791,7 +3792,11 @@ export default function App() {
                               newIntake={navKey === 'nuovo-ingresso'}
                               entry={patientListEntry}
                               onOpenNewIntake={() => navigate('nuovo-ingresso')}
-                              onCloseNewIntake={() => goBack('pazienti')}
+                              intakeReturnFocus={intakeReturnFocusRef}
+                              onCloseNewIntake={() => {
+                                intakeReturnFocusRef.current = true;
+                                goBack('pazienti');
+                              }}
                               totalPatients={clinicalOverview?.totalPatients ?? 0}
                               ricerca={pazientiRicerca}
                               onRicercaChange={setPazientiRicerca}

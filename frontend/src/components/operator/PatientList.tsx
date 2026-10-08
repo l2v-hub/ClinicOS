@@ -54,6 +54,8 @@ interface PatientListProps {
   newIntake?: boolean;
   onOpenNewIntake?: () => void;
   onCloseNewIntake?: () => void;
+  /** One-shot focus request owned by App across the keyed route remount. */
+  intakeReturnFocus?: { current: boolean };
   /** Direct access: aperta da una tessera/segnalazione, la lista parte già sulla vista e sul
    *  filtro di ciò che quella tessera conta (es. «Dimessi in archivio» → vista Dimessi). */
   entry?: PatientListEntry & { key: number };
@@ -74,6 +76,7 @@ export function PatientList({
   newIntake = false,
   onOpenNewIntake,
   onCloseNewIntake,
+  intakeReturnFocus,
   entry,
 }: PatientListProps) {
   const {
@@ -116,6 +119,10 @@ export function PatientList({
   const newIntakeButtonRef = useRef<HTMLButtonElement>(null);
   const focusNewIntakeRef = useRef(false);
   useEffect(() => {
+    if (!newIntake && intakeReturnFocus?.current) {
+      focusNewIntakeRef.current = true;
+      intakeReturnFocus.current = false;
+    }
     // Qualunque uscita dalla pagina (link, freccia, sidebar, flusso chiuso) torna qui.
     if (newIntake) focusNewIntakeRef.current = true;
     if (!focusNewIntakeRef.current || newIntake || newPatientPath) return;
@@ -258,16 +265,7 @@ export function PatientList({
   if (newIntake && canIntake)
     return (
       <>
-        <NewPatientStart
-          onBack={() => {
-            onCloseNewIntake?.();
-            // Back remounts the roster; focus its new, visible intake trigger.
-            window.requestAnimationFrame(() =>
-              document.querySelector<HTMLButtonElement>('[data-intake-trigger]')?.focus(),
-            );
-          }}
-          onChoose={setNewPatientPath}
-        />
+        <NewPatientStart onBack={() => onCloseNewIntake?.()} onChoose={setNewPatientPath} />
         {newPatientFlow}
       </>
     );

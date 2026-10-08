@@ -46,6 +46,8 @@ test('cancel keeps draft save behavior but never performs patient confirmation',
     /onClose=\{\(\) => \{\s*focusNewIntakeRef\.current = true;\s*setNewPatientPath\(null\);/,
   );
   assert.match(list, /data-intake-trigger/);
+  assert.match(list, /if \(!newIntake && intakeReturnFocus\?\.current\)/);
+  assert.match(list, /intakeReturnFocus\.current = false/);
 });
 
 test('failed lazy module gets local announced retry and cancel instead of silent roster navigation', () => {
