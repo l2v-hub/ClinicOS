@@ -1,4 +1,6 @@
 export type TherapyField =
+  | 'doseMode'
+  | 'glucoseScale'
   | 'farmacoNome'
   | 'dataInizio'
   | 'dataFine'

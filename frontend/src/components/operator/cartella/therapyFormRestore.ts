@@ -29,7 +29,7 @@ export function schedulesFromTherapy(t: PatientTherapyAPI): ScheduleRow[] {
     if (t.fasceSera) times.push('20:00');
     if (t.fasceNotte) times.push('22:00');
   }
-  if (!times.length) times.push('08:00');
+  if (!times.length && t.doseMode !== 'glucose_scale') times.push('08:00');
   return times.map((time) => ({
     time,
     quantityNumerator: 1,

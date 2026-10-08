@@ -7,6 +7,8 @@ import type { ReactNode } from 'react';
 import type { PatientTherapyAPI } from '../../../types';
 import { computeEquivalent, formatFraction, scheduleLabel } from './therapyDose';
 import { schedulesFromTherapy } from './therapyFormRestore';
+import { GlucoseScaleSummary } from './GlucoseScaleEditor';
+import { glucoseScaleRows } from './glucoseScale';
 
 const WEEKDAYS = ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 const TIPO_LABEL: Record<string, string> = {
@@ -30,6 +32,10 @@ function weekdays(t: PatientTherapyAPI): string | null {
 
 /** «08:00 1 compressa · 20:00 ½ compressa» (al bisogno: «al bisogno»). */
 function scheduleText(t: PatientTherapyAPI): string {
+  if (t.doseMode === 'glucose_scale')
+    return `Schema glicemico · ${schedulesFromTherapy(t)
+      .map((s) => s.time)
+      .join(' · ')}`;
   if (t.tipo === 'al_bisogno') return 'al bisogno';
   const structured = Boolean(t.schedules?.length);
   const rows = schedulesFromTherapy(t).map((s) =>
@@ -42,6 +48,18 @@ function scheduleText(t: PatientTherapyAPI): string {
 }
 
 function ScheduleDetail({ t }: { t: PatientTherapyAPI }) {
+  if (t.doseMode === 'glucose_scale')
+    return (
+      <>
+        <p>
+          Rilevazioni:{' '}
+          {schedulesFromTherapy(t)
+            .map((s) => s.time)
+            .join(', ') || 'da indicare'}
+        </p>
+        <GlucoseScaleSummary rows={glucoseScaleRows(t.doseProtocol)} />
+      </>
+    );
   if (t.tipo === 'al_bisogno') return <span>Al bisogno (nessun orario fisso)</span>;
   const structured = Boolean(t.schedules?.length);
   return (

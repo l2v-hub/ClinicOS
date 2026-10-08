@@ -20,6 +20,7 @@ import {
 import { doseStatus } from '../../lib/therapyDoseStatus';
 import { IcoCheck } from '../../icons';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
+import { GlucoseAdministrationControl } from './cartella/GlucoseAdministrationControl';
 
 export type FiltroStato = 'tutte' | TherapyAdministration['status'];
 
@@ -204,7 +205,11 @@ export function TherapyGiroRows({
                 {items.map((item) => {
                   const a = item.a;
                   const key = `${p.patientId}|${a.therapyId}|${item.fascia}`;
-                  const actionTarget = `${name} · ${patientIdentifier(identity)} · ${a.drugName} · ${a.dosage}`;
+                  const doseLabel =
+                    a.doseMode === 'glucose_scale' && a.status !== 'administered'
+                      ? 'Secondo schema glicemico'
+                      : a.dosage;
+                  const actionTarget = `${name} · ${patientIdentifier(identity)} · ${a.drugName} · ${doseLabel}`;
                   const isSending = pendingKeys.has(key);
                   const expanded = expandedKey === key && !readOnly;
                   const at = administeredTime(a.administeredAt);
@@ -222,14 +227,14 @@ export function TherapyGiroRows({
                       }}
                       tabIndex={-1}
                       className={`giro-drug${a.status !== 'pending' ? ' giro-drug--done' : ''}`}
-                      aria-label={`${a.drugName} ${a.dosage}`}
+                      aria-label={`${a.drugName} ${doseLabel}`}
                     >
                       {!hideDrugInfo && (
                         <div className="giro-drug__info">
                           {/* Nome sulla prima riga, dose e via sulla seconda: la dose una volta sola. */}
                           <span className="giro-drug__name">{a.drugName}</span>
                           <span className="giro-drug__cap">
-                            {`${a.quantityLabel || a.dosage} · ${a.route}${
+                            {`${a.doseMode === 'glucose_scale' && a.status !== 'administered' ? 'Secondo schema glicemico' : a.quantityLabel || a.dosage} · ${a.route}${
                               hidePatientHead ? ` · ore ${a.scheduledTime || time.ora}` : ''
                             }`}
                           </span>
@@ -274,28 +279,48 @@ export function TherapyGiroRows({
                             >
                               Non somm.
                             </button>
-                            <button
-                              type="button"
-                              className="ds-btn ds-btn--primary"
-                              aria-label={`Erogata: ${actionTarget}`}
-                              disabled={isSending}
-                              onClick={() => {
-                                if (pendingKeys.has(key)) return;
-                                if (expanded) closeReasons();
-                                if (requiresConfirmation) {
-                                  setPendingConfirm({
-                                    key,
-                                    info: buildInfo(p, item),
-                                    label: actionTarget,
-                                  });
-                                  return;
-                                }
-                                administer(key, buildInfo(p, item), false);
-                              }}
-                            >
-                              <IcoCheck />
-                              {isSending ? 'Invio…' : 'Somministra'}
-                            </button>
+                            {a.doseMode === 'glucose_scale' ? (
+                              <GlucoseAdministrationControl
+                                key={`${key}|${date}|${a.scheduledTime}`}
+                                protocol={a.doseProtocol}
+                                target={actionTarget}
+                                sending={isSending}
+                                onConfirm={(measuredGlucose, units) => {
+                                  if (expanded) closeReasons();
+                                  const info = { ...buildInfo(p, item), measuredGlucose };
+                                  if (requiresConfirmation)
+                                    setPendingConfirm({
+                                      key,
+                                      info,
+                                      label: `${actionTarget} · glicemia ${measuredGlucose} mg/dL · ${units} unità`,
+                                    });
+                                  else administer(key, info, true);
+                                }}
+                              />
+                            ) : (
+                              <button
+                                type="button"
+                                className="ds-btn ds-btn--primary"
+                                aria-label={`Erogata: ${actionTarget}`}
+                                disabled={isSending}
+                                onClick={() => {
+                                  if (pendingKeys.has(key)) return;
+                                  if (expanded) closeReasons();
+                                  if (requiresConfirmation) {
+                                    setPendingConfirm({
+                                      key,
+                                      info: buildInfo(p, item),
+                                      label: actionTarget,
+                                    });
+                                    return;
+                                  }
+                                  administer(key, buildInfo(p, item), false);
+                                }}
+                              >
+                                <IcoCheck />
+                                {isSending ? 'Invio…' : 'Somministra'}
+                              </button>
+                            )}
                           </>
                         )}
                         {renderDrugActions?.(a.therapyId)}

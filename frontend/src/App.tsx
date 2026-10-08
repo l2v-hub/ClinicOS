@@ -3194,37 +3194,6 @@ export default function App() {
   // ── Therapy CRUD (API-persisted with optimistic update) ─────────────────────
 
   async function confirmTherapy(info: TherapyActionInfo) {
-    const now = new Date();
-    setTherapySlots((prev) =>
-      prev.map((slot) => {
-        if (slot.fascia !== info.fascia) return slot;
-        return {
-          ...slot,
-          summary: {
-            ...slot.summary,
-            administered: slot.summary.administered + 1,
-            pending: Math.max(0, slot.summary.pending - 1),
-          },
-          patients: slot.patients.map((p: TherapySlotPatient) => {
-            if (p.patientId !== info.patientId) return p;
-            return {
-              ...p,
-              administrations: p.administrations.map((a: TherapyAdministration) =>
-                a.therapyId === info.therapyId
-                  ? {
-                      ...a,
-                      status: 'administered' as const,
-                      administeredAt: now.toISOString(),
-                      administeredBy: utente?.nome ?? '',
-                    }
-                  : a,
-              ),
-            };
-          }),
-        };
-      }),
-    );
-
     try {
       const res = await fetch(`${API_URL}/therapy-slots/confirm`, {
         method: 'POST',
@@ -3240,6 +3209,7 @@ export default function App() {
           operatoreId: utente?.id ?? '',
           operatoreNome: utente?.nome ?? '',
           therapyId: info.therapyId,
+          ...(info.measuredGlucose !== undefined ? { measuredGlucose: info.measuredGlucose } : {}),
         }),
       });
 

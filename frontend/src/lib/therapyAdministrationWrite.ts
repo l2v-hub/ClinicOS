@@ -35,7 +35,10 @@ export async function administrationErrorMessage(res: Response): Promise<string>
   return `Registrazione non riuscita (errore ${res.status}). Riprova.`;
 }
 
-type SlotKey = Pick<TherapyActionInfo, 'patientId' | 'therapyId' | 'date' | 'fascia'>;
+type SlotKey = Pick<
+  TherapyActionInfo,
+  'patientId' | 'therapyId' | 'date' | 'fascia' | 'measuredGlucose'
+>;
 
 /** Corpo della richiesta: solo la chiave dello slot (nessun farmaco/dose/ora dal client). */
 export function administrationBody(
@@ -48,6 +51,9 @@ export function administrationBody(
     therapyId: info.therapyId,
     date: info.date,
     fascia: info.fascia,
+    ...(outcome.kind === 'administered' && info.measuredGlucose !== undefined
+      ? { measuredGlucose: info.measuredGlucose }
+      : {}),
     ...(outcome.kind === 'not_administered'
       ? { motivo: outcome.motivo, ...(outcome.note.trim() ? { note: outcome.note } : {}) }
       : {}),

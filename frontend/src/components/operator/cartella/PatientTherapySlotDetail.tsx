@@ -14,6 +14,7 @@ import { getCurrentOperator } from '../../../lib/operatorSession';
 import { patientGiroTime, type GiroTime } from '../../../lib/therapyGiro';
 import { recordAdministration } from '../../../lib/therapyAdministrationWrite';
 import { TherapyGiroRows } from '../TherapyGiroRows';
+import { GlucoseAdministrationControl } from './GlucoseAdministrationControl';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { facilityNow } from '../../../lib/therapyDoseStatus';
 // Le righe del giro portano con sé i loro stili (badge, pulsanti, motivi), anche fuori dal giro.
@@ -133,31 +134,57 @@ export function PatientTherapySlotDetail({
       ? state.time.patients.flatMap((group) =>
           group.items
             .filter((item) => item.a.status === 'not_administered')
-            .map(
-              (item): TherapyActionInfo => ({
-                patientId: group.patient.patientId,
-                therapyId: item.a.therapyId,
-                drugName: item.a.drugName,
-                dosage: item.a.quantityLabel || item.a.dosage,
-                route: item.a.route,
-                date,
-                fascia: item.fascia,
-                ora: item.a.scheduledTime || time,
-              }),
-            ),
+            .map((item): TherapyActionInfo => ({
+              patientId: group.patient.patientId,
+              therapyId: item.a.therapyId,
+              drugName: item.a.drugName,
+              dosage: item.a.quantityLabel || item.a.dosage,
+              route: item.a.route,
+              date,
+              fascia: item.fascia,
+              ora: item.a.scheduledTime || time,
+            })),
         )
       : [];
 
   const headingId = `ptc-detail-${time.replace(':', '')}`;
   function retryButton(info: TherapyActionInfo) {
     const key = `${info.therapyId}|${info.fascia}`;
-    return <button
-      type="button"
-      className="ds-btn ds-btn--primary patient-therapy-slot-detail__retry"
-      disabled={sendingRetry === key}
-      aria-label={`Somministra ora: ${info.drugName} ${info.dosage}, ore ${info.ora}`}
-      onClick={() => needsConfirmation ? setRetry(info) : void administerAgain(info, false)}
-    >{sendingRetry === key ? 'Invio…' : 'Somministra ora'}</button>;
+    const administration =
+      state.status === 'ready'
+        ? state.time?.patients
+            .flatMap((group) => group.items)
+            .find((item) => item.a.therapyId === info.therapyId && item.fascia === info.fascia)?.a
+        : null;
+    if (administration?.doseMode === 'glucose_scale')
+      return (
+        <GlucoseAdministrationControl
+          key={key}
+          protocol={administration.doseProtocol}
+          target={`${info.drugName}, ore ${info.ora}`}
+          sending={sendingRetry === key}
+          onConfirm={(measuredGlucose, units) => {
+            const measuredInfo = {
+              ...info,
+              measuredGlucose,
+              dosage: `${units} unità (glicemia ${measuredGlucose} mg/dL)`,
+            };
+            if (needsConfirmation) setRetry(measuredInfo);
+            else void administerAgain(measuredInfo, true);
+          }}
+        />
+      );
+    return (
+      <button
+        type="button"
+        className="ds-btn ds-btn--primary patient-therapy-slot-detail__retry"
+        disabled={sendingRetry === key}
+        aria-label={`Somministra ora: ${info.drugName} ${info.dosage}, ore ${info.ora}`}
+        onClick={() => (needsConfirmation ? setRetry(info) : void administerAgain(info, false))}
+      >
+        {sendingRetry === key ? 'Invio…' : 'Somministra ora'}
+      </button>
+    );
   }
   return (
     <section
@@ -167,22 +194,36 @@ export function PatientTherapySlotDetail({
       data-testid="patient-therapy-slot-detail"
       data-focus-therapy={focusTherapyId}
     >
-      {!embedded ? <header className="patient-therapy-slot-detail__head">
-        <h4 id={headingId}>
-          Ore {time} · {events.length} {events.length === 1 ? 'terapia' : 'terapie'}
+      {!embedded ? (
+        <header className="patient-therapy-slot-detail__head">
+          <h4 id={headingId}>
+            Ore {time} · {events.length} {events.length === 1 ? 'terapia' : 'terapie'}
+          </h4>
+          <button type="button" className="btn-secondary btn-sm" onClick={onClose}>
+            Chiudi
+          </button>
+        </header>
+      ) : (
+        <h4 id={headingId} className="ds-sr-only">
+          Somministrazioni delle {time}
         </h4>
-        <button type="button" className="btn-secondary btn-sm" onClick={onClose}>
-          Chiudi
-        </button>
-      </header> : <h4 id={headingId} className="ds-sr-only">Somministrazioni delle {time}</h4>}
+      )}
       <h5 className="patient-therapy-slot-detail__sub">Somministrazione del {formatDay(date)}</h5>
       {embedded && (state.status !== 'ready' || !state.time) && (
-        <ul className="patient-therapy-slot-detail__prescriptions" aria-label="Prescrizioni dell’orario">
-          {events.map((event) => <li key={event.id} className="giro-drug__info">
-            <strong className="giro-drug__name">{event.drugName}</strong>
-            <span className="giro-drug__cap">{event.dose}{event.strength ? ` — ${event.strength}` : ''} · {event.route}</span>
-            <PrescriptionDetails event={event} />
-          </li>)}
+        <ul
+          className="patient-therapy-slot-detail__prescriptions"
+          aria-label="Prescrizioni dell’orario"
+        >
+          {events.map((event) => (
+            <li key={event.id} className="giro-drug__info">
+              <strong className="giro-drug__name">{event.drugName}</strong>
+              <span className="giro-drug__cap">
+                {event.dose}
+                {event.strength ? ` — ${event.strength}` : ''} · {event.route}
+              </span>
+              <PrescriptionDetails event={event} />
+            </li>
+          ))}
         </ul>
       )}
       {state.status === 'loading' && <p role="status">Caricamento dello stato…</p>}
@@ -216,14 +257,22 @@ export function PatientTherapySlotDetail({
             filtro="tutte"
             readOnly={!canAdminister}
             hidePatientHead
-            renderDrugDetails={embedded ? (therapyId) => {
-              const event = events.find((item) => item.therapyId === therapyId);
-              return event ? <PrescriptionDetails event={event} /> : null;
-            } : undefined}
-            renderDrugActions={embedded ? (therapyId) => {
-              const info = missedToday.find((item) => item.therapyId === therapyId);
-              return info ? retryButton(info) : null;
-            } : undefined}
+            renderDrugDetails={
+              embedded
+                ? (therapyId) => {
+                    const event = events.find((item) => item.therapyId === therapyId);
+                    return event ? <PrescriptionDetails event={event} /> : null;
+                  }
+                : undefined
+            }
+            renderDrugActions={
+              embedded
+                ? (therapyId) => {
+                    const info = missedToday.find((item) => item.therapyId === therapyId);
+                    return info ? retryButton(info) : null;
+                  }
+                : undefined
+            }
             requiresConfirmation={needsConfirmation}
             onConfirm={
               canAdminister
@@ -301,9 +350,13 @@ function PrescriptionDetails({ event }: { event: CalendarOccurrence }) {
     event.prescriber && `Prescrittore: ${event.prescriber}`,
     event.endDate && `Fine: ${event.endDate}`,
     event.oneTime && 'Una tantum',
-  ].filter(Boolean).join(' · ');
-  return <>
-    {details && <span className="patient-therapy-slot-detail__prescription">{details}</span>}
-    {event.note && <span className="patient-therapy-slot-detail__note">{event.note}</span>}
-  </>;
+  ]
+    .filter(Boolean)
+    .join(' · ');
+  return (
+    <>
+      {details && <span className="patient-therapy-slot-detail__prescription">{details}</span>}
+      {event.note && <span className="patient-therapy-slot-detail__note">{event.note}</span>}
+    </>
+  );
 }

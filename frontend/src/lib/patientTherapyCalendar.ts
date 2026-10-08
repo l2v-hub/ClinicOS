@@ -98,7 +98,10 @@ export function buildPatientTherapyDay(
       id: therapy.id,
       therapyId: therapy.id,
       drugName: therapy.farmacoNome,
-      dose: therapy.dosaggio.trim() || 'Dose non indicata',
+      dose:
+        therapy.doseMode === 'glucose_scale'
+          ? 'Secondo schema glicemico'
+          : therapy.dosaggio.trim() || 'Dose non indicata',
       strength: null,
       route: therapy.viaSomministrazione.trim() || 'Via non indicata',
       prescriber: therapy.prescrittore?.trim() || null,
@@ -152,13 +155,19 @@ export function buildPatientTherapyDay(
           ...medication,
           id: `${therapy.id}:schedule:${schedule.id}:${index}`,
           time: schedule.time,
-          dose: scheduleDose(schedule),
-          strength: computeEquivalent(
-            schedule.quantityNumerator,
-            schedule.quantityDenominator,
-            therapy.commercialStrengthValue,
-            therapy.commercialStrengthUnit,
-          ),
+          dose:
+            therapy.doseMode === 'glucose_scale'
+              ? 'Secondo schema glicemico'
+              : scheduleDose(schedule),
+          strength:
+            therapy.doseMode === 'glucose_scale'
+              ? null
+              : computeEquivalent(
+                  schedule.quantityNumerator,
+                  schedule.quantityDenominator,
+                  therapy.commercialStrengthValue,
+                  therapy.commercialStrengthUnit,
+                ),
           oneTime: therapy.tipo === 'una_tantum',
         });
       });

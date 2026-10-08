@@ -33,19 +33,23 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
       ...value,
       schedules: value.schedules.map((s, i) => (i === idx ? { ...s, ...patch } : s)),
     });
-  const clearDraft = (idx: number) => setCustomQty((current) =>
-    Object.fromEntries(Object.entries(current).filter(([key]) => Number(key) !== idx)));
+  const clearDraft = (idx: number) =>
+    setCustomQty((current) =>
+      Object.fromEntries(Object.entries(current).filter(([key]) => Number(key) !== idx)),
+    );
   const addSchedule = () =>
     onChange({
       ...value,
       schedules: [
         ...value.schedules,
         {
-          time: '18:00',
+          time: value.doseMode === 'glucose_scale' ? '' : '18:00',
           quantityNumerator: 1,
           quantityDenominator: 1,
           administrationUnit:
-            value.schedules.at(-1)?.administrationUnit ||
+            (value.doseMode === 'glucose_scale'
+              ? 'unità'
+              : value.schedules.at(-1)?.administrationUnit) ||
             administrationUnitForForm(value.pharmaceuticalForm),
         },
       ],
@@ -85,7 +89,9 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
         return (
           <div key={i} className="sched-row therapy-schedules__row">
             <div className="form-group therapy-schedules__time">
-              <label htmlFor={`${id}-time-${i}`}>Orario {i + 1}</label>
+              <label htmlFor={`${id}-time-${i}`}>
+                {value.doseMode === 'glucose_scale' ? 'Rilevazione' : 'Orario'} {i + 1}
+              </label>
               <input
                 id={`${id}-time-${i}`}
                 {...feedback.attributes('time', i)}
@@ -96,101 +102,106 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
               />
               {feedback.error('time', i)}
             </div>
-            <div className="form-group therapy-schedules__quantity">
-              <label htmlFor={`${id}-quantity-${i}`}>
-                Quantità <span className="therapy-form__sr">orario {i + 1}</span>
-              </label>
-              <div className="sched-row__qty">
-                {divisible ? (
-                  <>
-                    {FRACTION_PRESETS.filter((p) => value.allowedFractions.includes(p.key)).map(
-                      (p) => (
-                        <button
-                          key={p.key}
-                          type="button"
-                          aria-label={`${p.key} ${s.administrationUnit}, orario ${i + 1}`}
-                          aria-pressed={
-                            s.quantityNumerator === p.num && s.quantityDenominator === p.den
-                          }
-                          className={`qty-chip${s.quantityNumerator === p.num && s.quantityDenominator === p.den ? ' qty-chip--on' : ''}`}
-                          onClick={() => {
+            {value.doseMode !== 'glucose_scale' && (
+              <>
+                <div className="form-group therapy-schedules__quantity">
+                  <label htmlFor={`${id}-quantity-${i}`}>
+                    Quantità <span className="therapy-form__sr">orario {i + 1}</span>
+                  </label>
+                  <div className="sched-row__qty">
+                    {divisible ? (
+                      <>
+                        {FRACTION_PRESETS.filter((p) => value.allowedFractions.includes(p.key)).map(
+                          (p) => (
+                            <button
+                              key={p.key}
+                              type="button"
+                              aria-label={`${p.key} ${s.administrationUnit}, orario ${i + 1}`}
+                              aria-pressed={
+                                s.quantityNumerator === p.num && s.quantityDenominator === p.den
+                              }
+                              className={`qty-chip${s.quantityNumerator === p.num && s.quantityDenominator === p.den ? ' qty-chip--on' : ''}`}
+                              onClick={() => {
+                                updateSchedule(i, {
+                                  quantityNumerator: p.num,
+                                  quantityDenominator: p.den,
+                                });
+                                clearDraft(i);
+                              }}
+                            >
+                              {p.label}
+                            </button>
+                          ),
+                        )}
+                        <input
+                          id={`${id}-quantity-${i}`}
+                          {...feedback.attributes('quantity', i)}
+                          className="form-input qty-chip__other"
+                          placeholder="Altro: es. 1/3"
+                          value={customQty[i] ?? ''}
+                          onChange={(e) => {
+                            setCustomQty((c) => ({ ...c, [i]: e.target.value }));
+                            const parsed = parseQuantity(e.target.value);
                             updateSchedule(i, {
-                              quantityNumerator: p.num,
-                              quantityDenominator: p.den,
+                              quantityNumerator: parsed?.num ?? 0,
+                              quantityDenominator: parsed?.den ?? 1,
                             });
-                            clearDraft(i);
                           }}
-                        >
-                          {p.label}
-                        </button>
-                      ),
+                        />
+                      </>
+                    ) : (
+                      <input
+                        id={`${id}-quantity-${i}`}
+                        {...feedback.attributes('quantity', i)}
+                        className="form-input qty-chip__other"
+                        type="number"
+                        min={isPatchUnit(s.administrationUnit) ? '1' : '0'}
+                        step={isPatchUnit(s.administrationUnit) ? '1' : 'any'}
+                        placeholder="Quantità"
+                        value={
+                          customQty[i] ??
+                          (s.quantityDenominator === 1
+                            ? String(s.quantityNumerator)
+                            : s.quantityNumerator / s.quantityDenominator)
+                        }
+                        onChange={(e) => {
+                          setCustomQty((c) => ({ ...c, [i]: e.target.value }));
+                          const parsed = parseQuantity(e.target.value);
+                          updateSchedule(i, {
+                            quantityNumerator: parsed?.num ?? 0,
+                            quantityDenominator: parsed?.den ?? 1,
+                          });
+                        }}
+                      />
                     )}
-                    <input
-                      id={`${id}-quantity-${i}`}
-                      {...feedback.attributes('quantity', i)}
-                      className="form-input qty-chip__other"
-                      placeholder="Altro: es. 1/3"
-                      value={customQty[i] ?? ''}
-                      onChange={(e) => {
-                        setCustomQty((c) => ({ ...c, [i]: e.target.value }));
-                        const parsed = parseQuantity(e.target.value);
-                        updateSchedule(i, {
-                          quantityNumerator: parsed?.num ?? 0,
-                          quantityDenominator: parsed?.den ?? 1,
-                        });
-                      }}
-                    />
-                  </>
-                ) : (
-                  <input
-                    id={`${id}-quantity-${i}`}
-                    {...feedback.attributes('quantity', i)}
-                    className="form-input qty-chip__other"
-                    type="number"
-                    min={isPatchUnit(s.administrationUnit) ? '1' : '0'}
-                    step={isPatchUnit(s.administrationUnit) ? '1' : 'any'}
-                    placeholder="Quantità"
-                    value={
-                      customQty[i] ?? (s.quantityDenominator === 1
-                        ? String(s.quantityNumerator)
-                        : s.quantityNumerator / s.quantityDenominator)
-                    }
+                  </div>
+                  {feedback.error('quantity', i)}
+                </div>
+                <div className="form-group therapy-schedules__unit">
+                  <label htmlFor={`${id}-unit-${i}`}>
+                    Unità <span className="therapy-form__sr">orario {i + 1}</span>
+                  </label>
+                  <select
+                    id={`${id}-unit-${i}`}
+                    {...feedback.attributes('administrationUnit', i)}
+                    className="form-select"
+                    value={s.administrationUnit}
                     onChange={(e) => {
-                      setCustomQty((c) => ({ ...c, [i]: e.target.value }));
-                      const parsed = parseQuantity(e.target.value);
-                      updateSchedule(i, {
-                        quantityNumerator: parsed?.num ?? 0,
-                        quantityDenominator: parsed?.den ?? 1,
-                      });
+                      clearDraft(i);
+                      updateSchedule(i, { administrationUnit: e.target.value });
                     }}
-                  />
-                )}
-              </div>
-              {feedback.error('quantity', i)}
-            </div>
-            <div className="form-group therapy-schedules__unit">
-              <label htmlFor={`${id}-unit-${i}`}>
-                Unità <span className="therapy-form__sr">orario {i + 1}</span>
-              </label>
-              <select
-                id={`${id}-unit-${i}`}
-                {...feedback.attributes('administrationUnit', i)}
-                className="form-select"
-                value={s.administrationUnit}
-                onChange={(e) => {
-                  clearDraft(i);
-                  updateSchedule(i, { administrationUnit: e.target.value });
-                }}
-              >
-                <option value="">Seleziona unità</option>
-                {ADMIN_UNITS.map((u) => (
-                  <option key={u} value={u}>
-                    {u}
-                  </option>
-                ))}
-              </select>
-              {feedback.error('administrationUnit', i)}
-            </div>
+                  >
+                    <option value="">Seleziona unità</option>
+                    {ADMIN_UNITS.map((u) => (
+                      <option key={u} value={u}>
+                        {u}
+                      </option>
+                    ))}
+                  </select>
+                  {feedback.error('administrationUnit', i)}
+                </div>
+              </>
+            )}
             <button
               type="button"
               className="btn-secondary therapy-schedules__remove"
@@ -211,12 +222,21 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
               </svg>
             </button>
             <div className="sched-row__resolved">
-              {s.time} — {s.quantityNumerator > 0 ? formatFraction(s.quantityNumerator, s.quantityDenominator) : 'Quantità da correggere'}{' '}
-              {s.administrationUnit}
-              {s.quantityNumerator > 0 && eq && (
+              {value.doseMode === 'glucose_scale' ? (
+                `${s.time || 'Orario da indicare'} — dose secondo glicemia misurata`
+              ) : (
                 <>
-                  {' '}
-                  — <strong>equivalente a {eq}</strong>
+                  {s.time} —{' '}
+                  {s.quantityNumerator > 0
+                    ? formatFraction(s.quantityNumerator, s.quantityDenominator)
+                    : 'Quantità da correggere'}{' '}
+                  {s.administrationUnit}
+                  {s.quantityNumerator > 0 && eq && (
+                    <>
+                      {' '}
+                      — <strong>equivalente a {eq}</strong>
+                    </>
+                  )}
                 </>
               )}
             </div>

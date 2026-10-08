@@ -1101,6 +1101,8 @@ export type MotivoNonErogazione =
   | 'altro';
 
 export interface TherapyAdministration {
+  doseMode?: 'fixed' | 'glucose_scale';
+  doseProtocol?: unknown | null;
   administrationId: string | null;
   therapyId: string;
   drugName: string;
@@ -1115,6 +1117,7 @@ export interface TherapyAdministration {
 }
 
 export interface TherapyActionInfo {
+  measuredGlucose?: number;
   patientId: string;
   therapyId: string;
   drugName: string;
@@ -1183,6 +1186,8 @@ export interface TherapyScheduleAPI {
 }
 
 export interface PatientTherapyAPI {
+  doseMode?: 'fixed' | 'glucose_scale';
+  doseProtocol?: unknown | null;
   id: string;
   patientId: string;
   farmacoNome: string;

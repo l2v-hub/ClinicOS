@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import type { TherapyFormValue } from './TherapyFormFields';
 import { formatFraction } from './therapyDose';
+import { GlucoseScaleSummary } from './GlucoseScaleEditor';
 
 const WEEKDAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 const TYPES = { periodica: 'Periodica', una_tantum: 'Una tantum', al_bisogno: 'Al bisogno' };
@@ -39,10 +40,16 @@ export function TherapyFormPreview({ value }: { value: TherapyFormValue }) {
                 <li key={i}>
                   <strong>{schedule.time || 'Orario da indicare'}</strong>
                   <span>
-                    {schedule.quantityNumerator > 0 && schedule.quantityDenominator > 0
-                      ? formatFraction(schedule.quantityNumerator, schedule.quantityDenominator)
-                      : 'Quantità da indicare'}{' '}
-                    {schedule.administrationUnit || '· unità da indicare'}
+                    {value.doseMode === 'glucose_scale' ? (
+                      'Dose secondo glicemia misurata'
+                    ) : (
+                      <>
+                        {schedule.quantityNumerator > 0 && schedule.quantityDenominator > 0
+                          ? formatFraction(schedule.quantityNumerator, schedule.quantityDenominator)
+                          : 'Quantità da indicare'}{' '}
+                        {schedule.administrationUnit || '· unità da indicare'}
+                      </>
+                    )}
                   </span>
                 </li>
               ))}
@@ -51,6 +58,9 @@ export function TherapyFormPreview({ value }: { value: TherapyFormValue }) {
             <p>Orari e dosi da indicare.</p>
           )}
         </>
+      )}
+      {value.doseMode === 'glucose_scale' && (
+        <GlucoseScaleSummary rows={value.glucoseScale ?? []} />
       )}
       {value.tipo === 'una_tantum' && (
         <p>

@@ -14,6 +14,8 @@ import { TherapyScheduleEditor } from './TherapyScheduleEditor';
 import { TherapyFormPreview } from './TherapyFormPreview';
 import { therapyFieldFeedback, type TherapyFieldIssue } from './therapyFieldFeedback';
 import './TherapyFormFields.css';
+import { GlucoseScaleEditor } from './GlucoseScaleEditor';
+import type { GlucoseDoseRuleForm } from './glucoseScale';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -37,6 +39,8 @@ export const VIA_OPTIONS = [
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface TherapyFormValue {
+  doseMode?: 'fixed' | 'glucose_scale';
+  glucoseScale?: GlucoseDoseRuleForm[];
   farmacoNome: string;
   drugPackageRef?: string | null;
   drugPackageDetached?: boolean;
@@ -102,6 +106,8 @@ export function emptyTherapyForm(): TherapyFormValue {
     note: '',
     dataSomministrazione: todayStr(),
     orarioSomministrazione: '',
+    doseMode: 'fixed',
+    glucoseScale: [],
   };
 }
 
@@ -259,6 +265,7 @@ export function TherapyFormFields({
             >
               <input
                 type="radio"
+                disabled={value.doseMode === 'glucose_scale' && type.value !== 'periodica'}
                 name={`${id}-type`}
                 value={type.value}
                 checked={value.tipo === type.value}
@@ -399,7 +406,56 @@ export function TherapyFormFields({
           <h3 id={`${id}-doses`}>
             <span aria-hidden="true">3</span> Orari e dosi
           </h3>
-          {!isPatchUnit(value.pharmaceuticalForm) && (
+          <div
+            className="therapy-form__chips"
+            role="group"
+            aria-label="Modalità della dose"
+            tabIndex={-1}
+            {...feedback.attributes('doseMode')}
+          >
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              aria-pressed={value.doseMode !== 'glucose_scale'}
+              onClick={() =>
+                update({
+                  doseMode: 'fixed',
+                  schedules:
+                    value.doseMode === 'glucose_scale'
+                      ? value.schedules.map((s) => ({
+                          ...s,
+                          quantityNumerator: 0,
+                          quantityDenominator: 1,
+                        }))
+                      : value.schedules,
+                })
+              }
+            >
+              Dose fissa
+            </button>
+            <button
+              type="button"
+              className="ds-btn ds-btn--secondary"
+              aria-pressed={value.doseMode === 'glucose_scale'}
+              onClick={() =>
+                update({
+                  doseMode: 'glucose_scale',
+                  schedules: value.schedules.map((s) => ({ ...s, administrationUnit: 'unità' })),
+                })
+              }
+            >
+              Schema glicemico
+            </button>
+          </div>
+          {feedback.error('doseMode')}
+          {value.doseMode === 'glucose_scale' && (
+            <GlucoseScaleEditor
+              value={value.glucoseScale ?? []}
+              onChange={(glucoseScale) => update({ glucoseScale })}
+              issues={issues}
+            />
+          )}
+          {value.doseMode !== 'glucose_scale' && !isPatchUnit(value.pharmaceuticalForm) && (
             <details className="therapy-form__disclosure" open={hasFractions || undefined}>
               <summary>
                 Divisibilità <span>Frazioni consentite</span>

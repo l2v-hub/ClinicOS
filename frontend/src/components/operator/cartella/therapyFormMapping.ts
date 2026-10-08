@@ -2,6 +2,7 @@ import type { PatientTherapyAPI } from '../../../types';
 import type { TherapyFormValue } from './TherapyFormFields';
 import { FRACTION_PRESETS, parseAllowedFractions } from './therapyDose';
 import { schedulesFromTherapy } from './therapyFormRestore';
+import { glucoseScaleRows, validateGlucoseScaleRows } from './glucoseScale';
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
 export function therapyToForm(t: PatientTherapyAPI): TherapyFormValue {
@@ -29,6 +30,8 @@ export function therapyToForm(t: PatientTherapyAPI): TherapyFormValue {
     note: t.note ?? '',
     dataSomministrazione: t.dataSomministrazione ?? todayStr(),
     orarioSomministrazione: t.orarioSomministrazione ?? '',
+    doseMode: t.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed',
+    glucoseScale: glucoseScaleRows(t.doseProtocol),
   };
 }
 
@@ -53,6 +56,11 @@ export function formToPayload(form: TherapyFormValue, patientId: string, operato
       : [];
   return {
     patientId,
+    doseMode: form.doseMode ?? 'fixed',
+    doseProtocol:
+      form.doseMode === 'glucose_scale'
+        ? validateGlucoseScaleRows(form.glucoseScale ?? []).protocol
+        : null,
     farmacoNome: form.farmacoNome,
     drugPackageRef: form.drugPackageRef || null,
     dosaggio: '', // derived server-side from strength + form

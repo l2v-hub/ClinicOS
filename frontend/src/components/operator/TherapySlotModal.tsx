@@ -10,6 +10,7 @@ import { patientIdentifier, patientIdentityName } from '../../lib/patientIdentit
 import { PatientIdentity } from '../shared/PatientIdentity';
 import { MOTIVI } from '../../lib/therapyGiro';
 import './TherapySlotModal.css';
+import { GlucoseAdministrationControl } from './cartella/GlucoseAdministrationControl';
 
 interface Props {
   slot: TherapySlot;
@@ -199,14 +200,17 @@ export function TherapySlotModal({
                   const key = `${p.patientId}|${a.therapyId}`;
                   const isPending = pendingKeys.has(key);
                   const identity = { ...p, id: p.patientId };
-                  const actionTarget = `${patientIdentityName(identity)} · ${patientIdentifier(identity)} · ${a.drugName} · ${a.dosage}`;
+                  const actionTarget = `${patientIdentityName(identity)} · ${patientIdentifier(identity)} · ${a.drugName} · ${a.doseMode === 'glucose_scale' && a.status !== 'administered' ? 'Secondo schema glicemico' : a.dosage}`;
                   return (
                     <div key={key}>
                       <div className="therapy-drug-row">
                         <div className="therapy-drug-row__info">
                           <span className="therapy-drug-row__name">{a.drugName}</span>
                           <span className="therapy-drug-row__meta">
-                            {a.dosage} · {a.route} · {a.scheduledTime}
+                            {a.doseMode === 'glucose_scale' && a.status !== 'administered'
+                              ? 'Secondo schema glicemico'
+                              : a.dosage}{' '}
+                            · {a.route} · {a.scheduledTime}
                           </span>
                         </div>
                         <div className="therapy-drug-row__actions">
@@ -233,18 +237,31 @@ export function TherapySlotModal({
                           )}
                           {a.status === 'pending' && !readOnly && (
                             <>
-                              <button
-                                className="therapy-action-btn therapy-action-btn--confirm"
-                                aria-label={`Erogata: ${actionTarget}`}
-                                disabled={isPending}
-                                style={{ opacity: isPending ? 0.6 : 1 }}
-                                onClick={() => {
-                                  setPendingKeys((prev) => new Set(prev).add(key));
-                                  onConfirm?.(buildInfo(p, a));
-                                }}
-                              >
-                                {isPending ? 'Invio…' : 'Erogata'}
-                              </button>
+                              {a.doseMode === 'glucose_scale' ? (
+                                <GlucoseAdministrationControl
+                                  key={`${key}|${date}|${a.scheduledTime}`}
+                                  protocol={a.doseProtocol}
+                                  target={actionTarget}
+                                  sending={isPending}
+                                  onConfirm={(measuredGlucose) => {
+                                    setPendingKeys((prev) => new Set(prev).add(key));
+                                    onConfirm?.({ ...buildInfo(p, a), measuredGlucose });
+                                  }}
+                                />
+                              ) : (
+                                <button
+                                  className="therapy-action-btn therapy-action-btn--confirm"
+                                  aria-label={`Erogata: ${actionTarget}`}
+                                  disabled={isPending}
+                                  style={{ opacity: isPending ? 0.6 : 1 }}
+                                  onClick={() => {
+                                    setPendingKeys((prev) => new Set(prev).add(key));
+                                    onConfirm?.(buildInfo(p, a));
+                                  }}
+                                >
+                                  {isPending ? 'Invio…' : 'Erogata'}
+                                </button>
+                              )}
                               <button
                                 className="therapy-action-btn therapy-action-btn--reject"
                                 aria-label={`Non erogata: ${actionTarget}`}
