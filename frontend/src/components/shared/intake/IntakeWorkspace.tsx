@@ -457,7 +457,7 @@ export function IntakeWorkspace({
     const next = {
       ...dataRef.current,
       [key]: value,
-      ...(['terapia', 'terapiaImport'].includes(key)
+      ...(key === 'terapia' || key === 'terapiaImport'
         ? { _accepted: { ...accepted, therapy: false } }
         : key === 'anagrafica'
           ? { _accepted: { ...accepted, demographics: false } }

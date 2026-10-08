@@ -1,0 +1,17 @@
+{
+  "decision": "allowed_subject_to_validation",
+  "authority": "User explicitly requested online release and then authorized integration with current main, resolution of conflicts and retesting",
+  "integrationOwner": "/root",
+  "baseline": "13f0aacd3837a6c65dffb9f648228767ec15fbb5",
+  "featureReference": "44bc99c53d8d6846ff65a0e0ed8a5cb9b6932fac",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/insulin-online-20261008",
+  "writerScopes": {
+    "backend": "C:/w-insulin-be: backend/src and prisma",
+    "therapyUI": "C:/Workspace/ClinicOSHouse-worktrees/insulin-ui-port-20261008: therapy forms and administration frontend paths",
+    "integration": "frontend shared intake, suggestion model, evidence and integrated release"
+  },
+  "publicationTargets": ["origin/main via fast-forward only", "GitHub Actions Deploy Backend to Railway", "Vercel project clinicos__ production alias clinicos-eosin.vercel.app"],
+  "databasePolicy": "Additive migration through configured deployment only; no production seeds, resets or patient writes during smoke checks",
+  "excluded": ["unrelated primary-workspace edits", "coordination databases/caches", "secret files", "real patient attachments"],
+  "gate": "Independent QA on exact integrated source before production promotion"
+}
