@@ -5,7 +5,10 @@ import { schedulesFromTherapy } from './therapyFormRestore';
 import { glucoseScaleRows, validateGlucoseScaleRows } from './glucoseScale';
 const todayStr = () => new Date().toISOString().slice(0, 10);
 
-export function therapyToForm(t: PatientTherapyAPI): TherapyFormValue {
+export function therapyToForm(
+  t: PatientTherapyAPI,
+  { exactTimesOnly = false }: { exactTimesOnly?: boolean } = {},
+): TherapyFormValue {
   return {
     farmacoNome: t.farmacoNome,
     drugPackageRef: t.drugPackageRef ?? null,
@@ -19,7 +22,7 @@ export function therapyToForm(t: PatientTherapyAPI): TherapyFormValue {
     stato: t.stato,
     dataInizio: t.dataInizio,
     dataFine: t.dataFine ?? '',
-    schedules: schedulesFromTherapy(t),
+    schedules: schedulesFromTherapy(t, exactTimesOnly),
     giorniSettimana: t.giorniSettimana
       ? t.giorniSettimana
           .split(',')

@@ -43,7 +43,8 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
       schedules: [
         ...value.schedules,
         {
-          time: value.doseMode === 'glucose_scale' ? '' : '18:00',
+          // A new row is not a prescribed time: the clinician must explicitly enter it.
+          time: '',
           quantityNumerator: 1,
           quantityDenominator: 1,
           administrationUnit:

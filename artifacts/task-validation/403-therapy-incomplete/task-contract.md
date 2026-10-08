@@ -12,6 +12,8 @@ The calendar reports zero doses and renders 24 empty hours before listing incomp
 
 Show distinct scheduled-dose and incomplete-prescription counts before the grid. Explain zero scheduled doses explicitly. Make incomplete details reachable there without a nested vertical scroller. Authorized prescribers can open the existing populated prescription editor; other roles see the prescribing clinician as their reference. Never infer exact hours from named time bands.
 
+QA iteration repair: summary also precedes date toolbar/heading so it remains visible on mobile with legitimate optional-demographics reminders. Calendar-linked editing opts into exact saved times only: no legacy band/default restoration; other legacy entry points retain compatibility. Newly added editor rows have blank times requiring explicit entry. Shared clinical calendar engine/read logic remains untouched. Restore unrelated formatter changes before final QA.
+
 ## Acceptance Criteria
 
 1. AC1: At 1150x1004 and mobile390, the initial calendar screen distinguishes scheduled doses/exact hours from incomplete therapies, including the mixed valid/invalid and PRN cases.

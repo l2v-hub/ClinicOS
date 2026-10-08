@@ -2,7 +2,7 @@ import type { PatientTherapyAPI } from '../../../types';
 import { administrationUnitForForm, type ScheduleRow } from './therapyDose';
 
 // Prefer saved quantities/units; legacy rows can derive a unit only from their saved form.
-export function schedulesFromTherapy(t: PatientTherapyAPI): ScheduleRow[] {
+export function schedulesFromTherapy(t: PatientTherapyAPI, exactTimesOnly = false): ScheduleRow[] {
   const unit = administrationUnitForForm(t.pharmaceuticalForm ?? '') || 'compressa';
   if (t.schedules && t.schedules.length) {
     return t.schedules
@@ -22,14 +22,14 @@ export function schedulesFromTherapy(t: PatientTherapyAPI): ScheduleRow[] {
         .map((s) => s.trim())
         .filter(Boolean),
     );
-  if (!times.length) {
+  if (!times.length && !exactTimesOnly) {
     if (t.fasceMattina) times.push('08:00');
     if (t.fascePranzo) times.push('12:00');
     if (t.fascePomeriggio) times.push('16:00');
     if (t.fasceSera) times.push('20:00');
     if (t.fasceNotte) times.push('22:00');
   }
-  if (!times.length && t.doseMode !== 'glucose_scale') times.push('08:00');
+  if (!times.length && !exactTimesOnly && t.doseMode !== 'glucose_scale') times.push('08:00');
   return times.map((time) => ({
     time,
     quantityNumerator: 1,
