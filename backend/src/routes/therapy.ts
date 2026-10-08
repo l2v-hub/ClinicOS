@@ -120,8 +120,17 @@ router.post('/confirm', async (req, res) => {
     const record = await prisma.$transaction(
       async (tx) => {
         const authoritative = await resolveAuthoritativeTherapy(tx, input, actor);
-        const { therapyId, patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora } =
-          authoritative;
+        const {
+          therapyId,
+          patientId,
+          farmacoNome,
+          farmacoDose,
+          farmacoVia,
+          date,
+          fascia,
+          ora,
+          doseContext,
+        } = authoritative;
         const existing = await tx.medicationAdministration.findUnique({
           where: { therapyId_date_fascia: { therapyId, date, fascia } },
         });
@@ -141,6 +150,7 @@ router.post('/confirm', async (req, res) => {
             operatoreId: actor.id,
             operatoreNome: actor.name || actor.id,
             confirmedAt: new Date(),
+            doseContext,
           },
           update: {
             patientId,
@@ -154,6 +164,7 @@ router.post('/confirm', async (req, res) => {
             confirmedAt: new Date(),
             motivo: null,
             note: null,
+            doseContext,
           },
         });
       },
@@ -198,7 +209,9 @@ router.post('/not-administered', async (req, res) => {
     const actor = (req as AuthedRequest).operator!;
     const record = await prisma.$transaction(
       async (tx) => {
-        const authoritative = await resolveAuthoritativeTherapy(tx, input, actor);
+        const authoritative = await resolveAuthoritativeTherapy(tx, input, actor, {
+          requireDoseMeasurement: false,
+        });
         const {
           therapyId,
           patientId,

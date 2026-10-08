@@ -73,8 +73,29 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
     }
   }
   const current = await prisma.patientIntakeDraft.findUniqueOrThrow({ where: { id } });
+  if (current.status !== 'draft') {
+    throw new AiExtractionError('config', 'Una bozza già confermata non può essere modificata');
+  }
   const existingData = (current.data ?? {}) as Record<string, unknown>;
   const merged: Record<string, unknown> = { ...existingData, ...patch };
+  const existingAccepted =
+    existingData._accepted &&
+    typeof existingData._accepted === 'object' &&
+    !Array.isArray(existingData._accepted)
+      ? (existingData._accepted as Record<string, unknown>)
+      : {};
+  const patchAccepted =
+    patch._accepted && typeof patch._accepted === 'object' && !Array.isArray(patch._accepted)
+      ? (patch._accepted as Record<string, unknown>)
+      : {};
+  const accepted = { ...existingAccepted, ...patchAccepted };
+  if (Object.hasOwn(patch, 'anagrafica')) accepted.demographics = false;
+  if (Object.hasOwn(patch, 'terapia') || Object.hasOwn(patch, 'terapiaImport')) {
+    accepted.therapy = false;
+  }
+  if (Object.hasOwn(patch, '_accepted') || Object.keys(accepted).length) {
+    merged._accepted = accepted;
+  }
   return prisma.patientIntakeDraft.update({
     where: { id },
     data: {

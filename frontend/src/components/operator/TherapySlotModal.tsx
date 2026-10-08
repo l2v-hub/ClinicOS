@@ -7,6 +7,7 @@ import type {
   TherapyActionInfo,
 } from '../../types';
 import { sortPazienti } from '../../lib/patientSort';
+import { doseForGlucose } from './cartella/glucoseScale';
 
 interface Props {
   slot: TherapySlot;
@@ -51,6 +52,7 @@ export function TherapySlotModal({
   const [noteText, setNoteText] = useState('');
   const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
   const [filtroStato, setFiltroStato] = useState<FiltroStato>('tutte');
+  const [glucoseByKey, setGlucoseByKey] = useState<Record<string, string>>({});
 
   const { summary } = slot;
   // Issue #129: il backend restituisce i pazienti in ordine di terapia — qui
@@ -79,7 +81,7 @@ export function TherapySlotModal({
     },
   ];
 
-  function buildInfo(p: TherapySlotPatient, a: TherapyAdministration) {
+  function buildInfo(p: TherapySlotPatient, a: TherapyAdministration, measuredGlucose?: number) {
     return {
       patientId: p.patientId,
       therapyId: a.therapyId,
@@ -89,6 +91,7 @@ export function TherapySlotModal({
       date,
       fascia: slot.fascia,
       ora: slot.ora,
+      ...(measuredGlucose !== undefined ? { measuredGlucose } : {}),
     };
   }
 
@@ -165,6 +168,12 @@ export function TherapySlotModal({
                 {p.administrations.map((a) => {
                   const key = `${p.patientId}|${a.therapyId}`;
                   const isPending = pendingKeys.has(key);
+                  const glucoseValue = glucoseByKey[key] ?? '';
+                  const measuredGlucose = glucoseValue.trim() ? Number(glucoseValue) : null;
+                  const resolvedUnits =
+                    a.doseMode === 'glucose_scale' && measuredGlucose !== null
+                      ? doseForGlucose(a.doseProtocol, measuredGlucose)
+                      : null;
                   return (
                     <div key={key}>
                       <div className="therapy-drug-row">
@@ -198,17 +207,60 @@ export function TherapySlotModal({
                           )}
                           {a.status === 'pending' && !readOnly && (
                             <>
-                              <button
-                                className="therapy-action-btn therapy-action-btn--confirm"
-                                disabled={isPending}
-                                style={{ opacity: isPending ? 0.6 : 1 }}
-                                onClick={() => {
-                                  setPendingKeys((prev) => new Set(prev).add(key));
-                                  onConfirm?.(buildInfo(p, a));
-                                }}
-                              >
-                                {isPending ? 'Invio…' : 'Erogata'}
-                              </button>
+                              {a.doseMode === 'glucose_scale' ? (
+                                <div className="therapy-glucose-confirm">
+                                  <label htmlFor={`glucose-${key}`}>Glicemia (mg/dL)</label>
+                                  <input
+                                    id={`glucose-${key}`}
+                                    className="therapy-note-input"
+                                    type="number"
+                                    min="10"
+                                    max="1000"
+                                    inputMode="numeric"
+                                    value={glucoseValue}
+                                    onChange={(event) =>
+                                      setGlucoseByKey((current) => ({
+                                        ...current,
+                                        [key]: event.target.value,
+                                      }))
+                                    }
+                                  />
+                                  {measuredGlucose !== null && resolvedUnits !== null && (
+                                    <span className="therapy-glucose-confirm__dose" role="status">
+                                      Dose prevista: <strong>{resolvedUnits} unità</strong>
+                                    </span>
+                                  )}
+                                  {measuredGlucose !== null && resolvedUnits === null && (
+                                    <span className="therapy-glucose-confirm__warning" role="alert">
+                                      Valore non coperto: verifica la prescrizione.
+                                    </span>
+                                  )}
+                                  <button
+                                    className="therapy-action-btn therapy-action-btn--confirm"
+                                    disabled={isPending || resolvedUnits === null}
+                                    onClick={() => {
+                                      if (measuredGlucose === null || resolvedUnits === null)
+                                        return;
+                                      setPendingKeys((prev) => new Set(prev).add(key));
+                                      onConfirm?.(buildInfo(p, a, measuredGlucose));
+                                    }}
+                                  >
+                                    {isPending ? 'Invio…' : 'Conferma somministrazione'}
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  className="therapy-action-btn therapy-action-btn--confirm"
+                                  disabled={isPending}
+                                  style={{ opacity: isPending ? 0.6 : 1 }}
+                                  onClick={() => {
+                                    setPendingKeys((prev) => new Set(prev).add(key));
+                                    onConfirm?.(buildInfo(p, a));
+                                  }}
+                                >
+                                  {isPending ? 'Invio…' : 'Erogata'}
+                                </button>
+                              )}
                               <button
                                 className="therapy-action-btn therapy-action-btn--reject"
                                 onClick={() => {

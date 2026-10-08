@@ -4,6 +4,7 @@ import type { Paziente } from '../../../types';
 import { TherapyFormFields, emptyTherapyForm } from '../cartella/TherapyFormFields';
 import type { TherapyFormValue } from '../cartella/TherapyFormFields';
 import { ClinicalSectionLoading } from '../ClinicalSectionLoading';
+import { validateGlucoseScaleRows } from '../cartella/glucoseScale';
 
 // Lazy import keeps import.meta.env out of module-evaluation scope,
 // which allows the patientSections registry test to run in Node without Vite.
@@ -53,9 +54,12 @@ function TherapyIntakeEditor({
   const items = value ?? [];
   const [draftItem, setDraftItem] = useState<TherapyFormValue>(emptyTherapyForm);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const invalidScale =
+    draftItem.doseMode === 'glucose_scale' &&
+    validateGlucoseScaleRows(draftItem.glucoseScale).errors.length > 0;
 
   function handleAdd() {
-    if (!draftItem.farmacoNome.trim()) return;
+    if (!draftItem.farmacoNome.trim() || invalidScale) return;
     if (editingIndex !== null) {
       onChange(items.map((item, i) => (i === editingIndex ? draftItem : item)));
       setEditingIndex(null);
@@ -86,6 +90,7 @@ function TherapyIntakeEditor({
   }
 
   const doseSummary = (item: TherapyFormValue) => {
+    if (item.doseMode === 'glucose_scale') return 'Dose secondo schema glicemico';
     const parts = [
       item.commercialStrengthValue,
       item.commercialStrengthUnit,
@@ -112,10 +117,11 @@ function TherapyIntakeEditor({
             className="btn-success btn-sm"
             type="button"
             onClick={handleAdd}
-            disabled={!draftItem.farmacoNome.trim()}
+            disabled={!draftItem.farmacoNome.trim() || invalidScale}
           >
             {editingIndex !== null ? 'Salva modifiche' : 'Aggiungi terapia'}
           </button>
+          {invalidScale && <span className="form-hint">Completa lo schema glicemico.</span>}
         </div>
       </div>
 

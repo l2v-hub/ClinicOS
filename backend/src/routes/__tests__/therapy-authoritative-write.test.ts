@@ -9,6 +9,7 @@ let server: Server;
 let base = '';
 let patientId = '';
 let therapyId = '';
+let glucoseScaleTherapyId = '';
 let ownerUserId = '';
 const ownerOperatorId = `verified-op-${Date.now()}`;
 const date = '2033-04-05';
@@ -47,6 +48,30 @@ before(async () => {
     },
   });
   therapyId = therapy.id;
+  const glucoseScaleTherapy = await prisma.patientTherapy.create({
+    data: {
+      patientId,
+      farmacoNome: 'Insulina test',
+      dosaggio: 'Dose secondo schema glicemico',
+      viaSomministrazione: 'sottocute',
+      tipo: 'periodica',
+      stato: 'attiva',
+      dataInizio: '2033-01-01',
+      fascePranzo: true,
+      doseMode: 'glucose_scale',
+      doseProtocol: {
+        kind: 'blood_glucose',
+        measurementUnit: 'mg/dL',
+        doseUnit: 'unità',
+        rules: [
+          { minMgDl: 200, maxMgDl: 250, units: 4 },
+          { minMgDl: 251, maxMgDl: 300, units: 6 },
+          { minMgDl: 350, maxMgDl: 450, units: 8 },
+        ],
+      },
+    },
+  });
+  glucoseScaleTherapyId = glucoseScaleTherapy.id;
   const app = express();
   app.use(express.json());
   app.use('/therapy-slots', therapyRouter);
@@ -57,6 +82,74 @@ before(async () => {
       resolve();
     });
   });
+});
+
+test('conditional insulin requires a measured glucose and stores the server-resolved dose', async () => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Operator-Id': ownerOperatorId,
+    'X-Operator-Role': 'operatore',
+  };
+  const request = (body: Record<string, unknown>) =>
+    fetch(`${base}/therapy-slots/confirm`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        patientId,
+        therapyId: glucoseScaleTherapyId,
+        fascia: 'pranzo',
+        ...body,
+      }),
+    });
+
+  const missing = await request({ date: '2033-04-07' });
+  assert.equal(missing.status, 400, await missing.text());
+
+  const uncovered = await request({ date: '2033-04-08', measuredGlucose: 325 });
+  assert.equal(uncovered.status, 409, await uncovered.text());
+
+  const covered = await request({
+    date: '2033-04-09',
+    measuredGlucose: 280,
+    farmacoDose: '999 unità',
+  });
+  assert.equal(covered.status, 200, await covered.text());
+  const stored = await prisma.medicationAdministration.findUniqueOrThrow({
+    where: {
+      therapyId_date_fascia: {
+        therapyId: glucoseScaleTherapyId,
+        date: '2033-04-09',
+        fascia: 'pranzo',
+      },
+    },
+  });
+  assert.equal(stored.farmacoDose, '6 unità (glicemia 280 mg/dL)');
+  assert.deepEqual(stored.doseContext, {
+    kind: 'blood_glucose',
+    glucoseMgDl: 280,
+    doseUnits: 6,
+  });
+});
+
+test('conditional insulin rejects coercible non-number glucose values', async () => {
+  for (const [index, measuredGlucose] of [null, true, [280]].entries()) {
+    const response = await fetch(`${base}/therapy-slots/confirm`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Operator-Id': ownerOperatorId,
+        'X-Operator-Role': 'operatore',
+      },
+      body: JSON.stringify({
+        patientId,
+        therapyId: glucoseScaleTherapyId,
+        date: `2033-04-${10 + index}`,
+        fascia: 'pranzo',
+        measuredGlucose,
+      }),
+    });
+    assert.equal(response.status, 400, await response.text());
+  }
 });
 
 after(async () => {

@@ -13,6 +13,9 @@ import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sect
 import { persistImportDocuments } from './patient-documents.js';
 import { getDraft } from '../../intake/draft-service.js';
 import { createTherapyInTx, type TherapyCreateInput } from '../../therapies/therapy-create.js';
+import { InvalidDoseProtocolError } from '../../therapies/glucose-scale.js';
+import { TherapyInputError } from '../../therapies/input-validation.js';
+import { InvalidTherapySchedulesError, TherapyDateRangeError } from '../../lib/therapy-dose.js';
 import {
   therapiesWithAuthenticatedActor,
   type ClinicalActor,
@@ -80,6 +83,15 @@ export interface ConfirmResult {
   status: 'created' | 'updated' | 'idempotent' | 'duplicate';
   patient?: { id: string; firstName: string; lastName: string; medicalRecordNumber: string };
   duplicate?: DuplicateInfo;
+}
+
+function isTherapyValidationError(error: unknown): error is Error {
+  return (
+    error instanceof InvalidDoseProtocolError ||
+    error instanceof TherapyInputError ||
+    error instanceof InvalidTherapySchedulesError ||
+    error instanceof TherapyDateRangeError
+  );
 }
 
 /** Merge reviewed cartella into an existing one: non-empty scalars win, arrays concat+dedup. */
@@ -368,12 +380,12 @@ export async function confirmDraft(
         undefined,
         err instanceof Error ? err.message.slice(0, 120) : 'error',
       );
-    throw err instanceof AiExtractionError
-      ? err
-      : new AiExtractionError(
-          'provider_error',
-          'Errore durante la conferma transazionale della bozza',
-        );
+    if (err instanceof AiExtractionError) throw err;
+    if (isTherapyValidationError(err)) throw new AiExtractionError('config', err.message);
+    throw new AiExtractionError(
+      'provider_error',
+      'Errore durante la conferma transazionale della bozza',
+    );
   }
 }
 

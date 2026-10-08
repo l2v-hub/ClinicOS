@@ -22,10 +22,12 @@ const TEXT_LIMITS = {
   allowedFractions: 256,
   drugPackageRef: 256,
   giorniSettimana: 64,
+  doseMode: 32,
 } as const;
 
 const THERAPY_TYPES = new Set(['periodica', 'una_tantum', 'al_bisogno']);
 const THERAPY_STATUSES = new Set(['attiva', 'sospesa', 'conclusa']);
+const DOSE_MODES = new Set(['fixed', 'glucose_scale']);
 
 export function assertTherapyScalarInput(input: Record<string, unknown>): void {
   for (const [field, max] of Object.entries(TEXT_LIMITS)) {
@@ -45,5 +47,8 @@ export function assertTherapyScalarInput(input: Record<string, unknown>): void {
   }
   if (typeof input.stato === 'string' && !THERAPY_STATUSES.has(input.stato)) {
     throw new TherapyInputError('stato non valido');
+  }
+  if (typeof input.doseMode === 'string' && !DOSE_MODES.has(input.doseMode)) {
+    throw new TherapyInputError('doseMode non valido');
   }
 }

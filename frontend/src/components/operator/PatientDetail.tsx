@@ -2755,7 +2755,7 @@ export function PatientDetail({
         return (
           <TopNav
             variant="level3"
-            className="top-nav--section-grid"
+            className={`top-nav--section-grid${activeGroup === 'panoramica' ? ' top-nav--section-compact' : ''}`}
             ariaLabel={`Sezioni di ${grp.label}`}
             idPrefix="patient-secondary"
             panelId="patient-tab-panel"

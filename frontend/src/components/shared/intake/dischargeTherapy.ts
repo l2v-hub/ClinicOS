@@ -9,6 +9,7 @@ import {
   formatFraction,
   parseQuantity,
 } from '../../operator/cartella/therapyDose';
+import { validateGlucoseScaleRows } from '../../operator/cartella/glucoseScale';
 
 export interface DischargeTherapyRow {
   farmacoNome: string;
@@ -23,6 +24,8 @@ export interface DischargeTherapyRow {
   note: string;
   originalText: string;
   stato: 'ok' | 'da_verificare';
+  doseMode?: 'fixed' | 'glucose_scale';
+  glucoseScale?: Array<{ minMgDl: number; maxMgDl: number | null; units: number }>;
 }
 
 const VIA_MAP: Record<string, string> = {
@@ -58,6 +61,8 @@ export function dischargeRowToTherapyInput(
 ): Record<string, unknown> {
   const orari = Array.isArray(r.orari) ? r.orari.filter((t) => /^\d{1,2}:\d{2}$/.test(t)) : [];
   const giorni = Array.isArray(r.giorni) ? r.giorni : [];
+  const quantity = parseQuantity((r.quantita || '').split(/\s+/)[0] ?? '') ?? { num: 1, den: 1 };
+  const doseMode = r.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed';
   const note = [
     r.note?.trim() || '',
     r.classe ? `Classe ${r.classe}` : '',
@@ -76,12 +81,31 @@ export function dischargeRowToTherapyInput(
     stato: 'attiva',
     ...(r.forma ? { pharmaceuticalForm: r.forma } : {}),
     allowedFractions: '1',
+    doseMode,
+    ...(doseMode === 'glucose_scale'
+      ? {
+          doseProtocol: {
+            kind: 'blood_glucose',
+            measurementUnit: 'mg/dL',
+            doseUnit: 'unità',
+            rules: r.glucoseScale ?? [],
+          },
+        }
+      : {}),
     schedules: orari.map((time) => ({
       time,
-      quantityNumerator: 1,
-      quantityDenominator: 1,
-      administrationUnit: '',
+      quantityNumerator: quantity.num,
+      quantityDenominator: quantity.den,
+      administrationUnit: doseMode === 'glucose_scale' ? 'unità' : r.forma || 'compressa',
     })),
+    ...(giorni.length
+      ? {
+          giorniSettimana: giorni
+            .map(dayToIso)
+            .filter((day): day is number => day !== null)
+            .join(','),
+        }
+      : {}),
     ...(operatoreNome ? { operatoreInseritore: operatoreNome } : {}),
     ...(note ? { note } : {}),
   };
@@ -176,14 +200,16 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
           quantityDenominator: qty.den,
           administrationUnit,
         }))
-      : [
-          {
-            ...base.schedules[0],
-            quantityNumerator: qty.num,
-            quantityDenominator: qty.den,
-            administrationUnit,
-          },
-        ];
+      : r.doseMode === 'glucose_scale'
+        ? []
+        : [
+            {
+              ...base.schedules[0],
+              quantityNumerator: qty.num,
+              quantityDenominator: qty.den,
+              administrationUnit,
+            },
+          ];
 
   const giorniSettimana = Array.isArray(r.giorni)
     ? (r.giorni.map(dayToIso).filter((n): n is number => n != null) as number[]).sort(
@@ -209,6 +235,12 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
     schedules,
     giorniSettimana,
     note: noteParts,
+    doseMode: r.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed',
+    glucoseScale: (r.glucoseScale ?? []).map((rule) => ({
+      minMgDl: String(rule.minMgDl),
+      maxMgDl: rule.maxMgDl == null ? '' : String(rule.maxMgDl),
+      units: String(rule.units),
+    })),
   };
 }
 
@@ -228,6 +260,13 @@ export function therapyFormToDischargeRow(
   const dosaggio = v.commercialStrengthValue.trim()
     ? `${v.commercialStrengthValue} ${v.commercialStrengthUnit}`.trim()
     : base.dosaggio;
+  const scaleValidation = validateGlucoseScaleRows(v.glucoseScale);
+  const glucoseScale = scaleValidation.protocol?.rules ?? [];
+  const scheduleValid = times.length > 0;
+  const reviewedAndValid =
+    Boolean((v.farmacoNome || '').trim()) &&
+    scheduleValid &&
+    (v.doseMode === 'fixed' || scaleValidation.errors.length === 0);
 
   return {
     ...base,
@@ -241,6 +280,8 @@ export function therapyFormToDischargeRow(
     dataInizio: v.dataInizio || base.dataInizio,
     note: v.note,
     // originalText & classe intentionally preserved from base.
-    stato: 'ok',
+    stato: reviewedAndValid ? 'ok' : 'da_verificare',
+    doseMode: v.doseMode,
+    ...(v.doseMode === 'glucose_scale' ? { glucoseScale } : { glucoseScale: undefined }),
   };
 }

@@ -39,10 +39,15 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
     : [];
   const allergieStatus = data.allergieStatus as string | undefined;
   const terapieImport = Array.isArray(data.terapiaImport)
-    ? (data.terapiaImport as Array<{ farmacoNome?: string; orari?: string[]; stato?: string }>)
+    ? (data.terapiaImport as Array<{
+        farmacoNome?: string;
+        orari?: string[];
+        stato?: string;
+        doseMode?: string;
+      }>)
     : [];
   const terapieManuali = Array.isArray(data.terapia)
-    ? (data.terapia as Array<{ farmacoNome?: string; schedules?: Array<{ orario?: string }> }>)
+    ? (data.terapia as Array<{ farmacoNome?: string; schedules?: Array<{ time?: string }> }>)
     : [];
   const anamnesi = (data.anamnesi ?? {}) as { patologicaProssima?: string };
   const diagnosi = Array.isArray(data.diagnosi)
@@ -58,6 +63,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
   const demoAccepted = accepted.demographics === true;
   const therapyAccepted = accepted.therapy === true;
+  const unresolvedTherapies = terapieImport.filter((therapy) => therapy.stato !== 'ok').length;
 
   const missingDemo: string[] = [];
   if (!a.firstName?.trim()) missingDemo.push('Nome');
@@ -74,6 +80,13 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
       ok: missingDemo.length === 0,
     },
     { label: 'Accetta anagrafica', ok: demoAccepted },
+    {
+      label:
+        unresolvedTherapies > 0
+          ? `Terapie della dimissione ancora da verificare: ${unresolvedTherapies}`
+          : 'Terapie della dimissione verificate',
+      ok: unresolvedTherapies === 0,
+    },
     { label: 'Accetta terapia', ok: therapyAccepted },
   ];
   const canCreate = checklist.every((c) => c.ok);
@@ -163,6 +176,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
               <li key={`imp-${i}`}>
                 {t.farmacoNome || '—'}
                 {t.orari?.length ? ` — ore ${t.orari.join(', ')}` : ''}
+                {t.doseMode === 'glucose_scale' ? ' — schema glicemico' : ''}
                 {t.stato === 'da_verificare' ? ' ⚠ da verificare' : ''}
               </li>
             ))}
@@ -171,7 +185,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
                 {t.farmacoNome || '—'}
                 {t.schedules?.length
                   ? ` — ore ${t.schedules
-                      .map((s) => s.orario)
+                      .map((s) => s.time)
                       .filter(Boolean)
                       .join(', ')}`
                   : ''}
@@ -186,7 +200,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
           <input
             type="checkbox"
             checked={therapyAccepted}
-            disabled={busy}
+            disabled={busy || unresolvedTherapies > 0}
             onChange={(e) =>
               onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
             }

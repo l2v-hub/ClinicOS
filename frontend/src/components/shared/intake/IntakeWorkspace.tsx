@@ -10,6 +10,7 @@ import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields
 import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
 import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
 import { buildConfirmCartella } from './confirmCartella';
+import { validateGlucoseScaleRows } from '../../operator/cartella/glucoseScale';
 import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 
 // "Documenti" (import/scatta foto in questo step) non e' ancora implementato (F5): finche' resta
@@ -119,6 +120,10 @@ function therapyFormToInput(f: TherapyFormValue, operatoreNome?: string): Record
     ...(f.pharmaceuticalForm ? { pharmaceuticalForm: f.pharmaceuticalForm } : {}),
     allowedFractions: allowed.length ? allowed.join(',') : '1',
     schedules,
+    doseMode: f.doseMode,
+    ...(f.doseMode === 'glucose_scale'
+      ? { doseProtocol: validateGlucoseScaleRows(f.glucoseScale).protocol }
+      : {}),
     ...(f.prescrittore ? { prescrittore: f.prescrittore } : {}),
     ...(operatoreNome ? { operatoreInseritore: operatoreNome } : {}),
     ...(f.note ? { note: f.note } : {}),
@@ -181,6 +186,8 @@ export function IntakeWorkspace({
 
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingPatchRef = useRef<Record<string, unknown>>({});
+  const savePromiseRef = useRef<Promise<void> | null>(null);
   const bodyRef = useRef<HTMLDivElement | null>(null);
 
   // Create draft on first open (or load an existing import draft).
@@ -257,25 +264,67 @@ export function IntakeWorkspace({
   const isFirst = step === 1;
   const isLast = step === STEPS.length;
 
-  /** Update a top-level section key and debounce-patch the draft */
+  function persistPendingPatch(): Promise<void> {
+    if (!draftId || Object.keys(pendingPatchRef.current).length === 0) {
+      return Promise.resolve();
+    }
+    const patch = pendingPatchRef.current;
+    pendingPatchRef.current = {};
+    setSaveState('saving');
+    // Serialize whole-JSON draft patches. Parallel read/merge/write requests could otherwise
+    // overwrite an acceptance or a just-edited therapy even when they touch different keys.
+    const previous = savePromiseRef.current;
+    const promise = (previous ? previous.catch(() => undefined) : Promise.resolve())
+      .then(() => patchDraft(draftId, patch, op))
+      .then(() => setSaveState('saved'))
+      .catch((err: unknown) => {
+        setSaveState('error');
+        console.error(
+          '[ClinicOS] autosave bozza intake non riuscito:',
+          err instanceof Error ? err.message : 'errore sconosciuto',
+        );
+        throw err;
+      });
+    savePromiseRef.current = promise;
+    return promise;
+  }
+
+  /** Update a top-level section key and debounce-patch the draft. Acceptance is persisted now. */
   function updateSection(key: keyof DraftData, value: unknown) {
-    const next = { ...data, [key]: value };
+    const invalidatesTherapyAcceptance = key === 'terapia' || key === 'terapiaImport';
+    const invalidatesDemographicsAcceptance = key === 'anagrafica';
+    const currentAccepted = acceptedFlags();
+    const nextAccepted = {
+      ...currentAccepted,
+      ...(invalidatesTherapyAcceptance && currentAccepted.therapy ? { therapy: false } : {}),
+      ...(invalidatesDemographicsAcceptance && currentAccepted.demographics
+        ? { demographics: false }
+        : {}),
+    };
+    const acceptanceChanged =
+      nextAccepted.therapy !== currentAccepted.therapy ||
+      nextAccepted.demographics !== currentAccepted.demographics;
+    const next = {
+      ...data,
+      [key]: value,
+      ...(acceptanceChanged ? { _accepted: nextAccepted } : {}),
+    };
     setData(next);
 
     if (!draftId) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
+    pendingPatchRef.current = {
+      ...pendingPatchRef.current,
+      [key]: value,
+      ...(acceptanceChanged ? { _accepted: nextAccepted } : {}),
+    };
+    if (key === '_accepted') {
+      void persistPendingPatch().catch(() => {});
+      return;
+    }
     setSaveState('saving');
     debounceRef.current = setTimeout(() => {
-      patchDraft(draftId, { [key]: value }, op)
-        .then(() => setSaveState('saved'))
-        .catch((err: unknown) => {
-          // #234: no longer swallowed — surface an error state (no PHI in the log).
-          setSaveState('error');
-          console.error(
-            '[ClinicOS] autosave bozza intake non riuscito:',
-            err instanceof Error ? err.message : 'errore sconosciuto',
-          );
-        });
+      void persistPendingPatch().catch(() => {});
     }, 500);
   }
 
@@ -308,6 +357,19 @@ export function IntakeWorkspace({
       setSubmitAttempted(true);
       setSubmitError(
         'Prima di creare il paziente accetta l’anagrafica e la terapia (vedi checklist).',
+      );
+      return;
+    }
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
+    try {
+      await savePromiseRef.current;
+      await persistPendingPatch();
+    } catch {
+      setSubmitError(
+        'Salvataggio della revisione non riuscito. Riprova prima di creare il paziente.',
       );
       return;
     }

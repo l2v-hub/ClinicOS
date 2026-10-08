@@ -81,19 +81,26 @@ export function StepClinica({
     ? (data.terapiaImport as DischargeTherapyRow[])
     : [];
   const manualTerapia = Array.isArray(data.terapia) ? (data.terapia as unknown[]) : [];
+  const dischargeTherapyText =
+    typeof data._terapiaText === 'string' ? data._terapiaText.trim() : '';
   // #235: therapy is "empty" when neither imported rows nor manual rows exist. The acceptance
   // label adapts to distinguish "nessuna terapia" from "non ancora revisionata".
   const therapyEmpty = terapiaImport.length === 0 && manualTerapia.length === 0;
+  const unresolvedTherapies =
+    terapiaImport.filter((row) => row.stato !== 'ok').length +
+    (dischargeTherapyText && terapiaImport.length === 0 && manualTerapia.length === 0 ? 1 : 0);
   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
   const therapyAccepted = accepted.therapy === true;
 
   return (
     <>
-      {terapiaImport.length > 0 && (
+      {(terapiaImport.length > 0 || dischargeTherapyText) && (
         <div className="step-clinica__section">
           <DischargeTherapyReview
             rows={terapiaImport}
             onChange={(v) => onUpdateSection('terapiaImport', v)}
+            operatoreNome={operatoreNome}
+            sourceText={dischargeTherapyText || undefined}
           />
         </div>
       )}
@@ -103,14 +110,17 @@ export function StepClinica({
           <input
             type="checkbox"
             checked={therapyAccepted}
+            disabled={unresolvedTherapies > 0}
             onChange={(e) =>
               onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
             }
           />
           <span>
-            {therapyEmpty
-              ? 'Confermo: nessuna terapia da inserire'
-              : 'Confermo di aver revisionato la terapia proposta'}
+            {unresolvedTherapies > 0
+              ? `Completa prima ${unresolvedTherapies} ${unresolvedTherapies === 1 ? 'terapia da verificare' : 'terapie da verificare'}`
+              : therapyEmpty
+                ? 'Confermo: nessuna terapia da inserire'
+                : 'Confermo di aver revisionato la terapia proposta'}
           </span>
         </label>
       </div>

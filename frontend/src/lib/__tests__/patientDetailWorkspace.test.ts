@@ -27,7 +27,8 @@ const therapyTab = readFileSync(
 test('patient record exposes a labelled two-level navigation and controlled tab panel', () => {
   assert.match(patientDetail, /ariaLabel="Aree della cartella paziente"/);
   assert.match(patientDetail, /visualLabel="Aree cartella"/);
-  assert.match(patientDetail, /className="top-nav--section-grid"/);
+  assert.match(patientDetail, /className=\{`top-nav--section-grid/);
+  assert.match(patientDetail, /activeGroup === 'panoramica' \? ' top-nav--section-compact' : ''/);
   assert.doesNotMatch(patientDetail, /visualLabel=\{`\$\{grp\.label\} · contenuti`\}/);
   assert.match(patientDetail, /ariaLabel="Sezioni del profilo paziente"/);
   assert.doesNotMatch(patientDetail, /visualLabel="Dettagli profilo"/);
@@ -53,6 +54,14 @@ test('top navigation follows the keyboard tab pattern with one focusable active 
   assert.match(
     topNavStyles,
     /\.top-nav--section-grid \.top-nav__item\s*\{[\s\S]*?white-space: normal[\s\S]*?text-wrap: balance/,
+  );
+  assert.match(
+    topNavStyles,
+    /\.top-nav--section-compact \.top-nav__items\s*\{[\s\S]*?display: flex[\s\S]*?width: auto/,
+  );
+  assert.match(
+    topNavStyles,
+    /\.top-nav--section-compact \.top-nav__item\s*\{[\s\S]*?width: auto[\s\S]*?white-space: nowrap/,
   );
 });
 

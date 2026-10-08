@@ -4,6 +4,11 @@ import { AppointmentListInputError, parseIsoCalendarDate } from '../appointments
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
 import { therapyWhereForDate } from './therapy-query.js';
 import { hasGlobalPatientScope } from '../patients/patient-scope.js';
+import {
+  doseForGlucose,
+  InvalidDoseProtocolError,
+  normalizeGlucoseScaleProtocol,
+} from './glucose-scale.js';
 
 export class TherapyWriteInputError extends Error {
   constructor(
@@ -58,6 +63,7 @@ const ACCEPTED_FIELDS = new Set([
   'ora',
   'operatoreId',
   'operatoreNome',
+  'measuredGlucose',
 ]);
 
 export interface TherapyAdministrationInput {
@@ -67,6 +73,7 @@ export interface TherapyAdministrationInput {
   fascia: keyof typeof FASCIA_FLAGS;
   motivo?: string;
   note?: string;
+  measuredGlucose?: number;
 }
 
 export interface AuthoritativeTherapyAdministration extends TherapyAdministrationInput {
@@ -74,6 +81,11 @@ export interface AuthoritativeTherapyAdministration extends TherapyAdministratio
   farmacoDose: string;
   farmacoVia: string;
   ora: string;
+  doseContext?: {
+    kind: 'blood_glucose';
+    glucoseMgDl: number;
+    doseUnits: number;
+  };
 }
 
 function boundedString(
@@ -123,6 +135,14 @@ export function parseTherapyAdministrationBody(
   if (!(fascia in FASCIA_FLAGS)) throw new TherapyWriteInputError('fascia non valida');
   const motivo = boundedString(body, 'motivo', 200, requireReason);
   const note = boundedString(body, 'note', 2_000);
+  let measuredGlucose: number | undefined;
+  if (body.measuredGlucose !== undefined) {
+    const parsed = body.measuredGlucose;
+    if (typeof parsed !== 'number' || !Number.isInteger(parsed) || parsed < 10 || parsed > 1000) {
+      throw new TherapyWriteInputError('Glicemia non valida');
+    }
+    measuredGlucose = parsed;
+  }
   return {
     patientId,
     therapyId,
@@ -130,6 +150,7 @@ export function parseTherapyAdministrationBody(
     fascia: fascia as keyof typeof FASCIA_FLAGS,
     motivo,
     note,
+    measuredGlucose,
   };
 }
 
@@ -146,6 +167,7 @@ export async function resolveAuthoritativeTherapy(
   tx: Prisma.TransactionClient,
   input: TherapyAdministrationInput,
   actor: Operator,
+  options: { requireDoseMeasurement?: boolean } = { requireDoseMeasurement: true },
 ): Promise<AuthoritativeTherapyAdministration> {
   const therapy = await tx.patientTherapy.findFirst({
     where: {
@@ -159,6 +181,8 @@ export async function resolveAuthoritativeTherapy(
       dosaggio: true,
       viaSomministrazione: true,
       giorniSettimana: true,
+      doseMode: true,
+      doseProtocol: true,
       fasceMattina: true,
       fascePranzo: true,
       fascePomeriggio: true,
@@ -188,18 +212,54 @@ export async function resolveAuthoritativeTherapy(
   // The read model creates slots from the fascia flags. A write must be accepted only for an
   // administration the operator could actually see in that same read model.
   if (!therapy[flag]) throw new TherapyNotDueError();
+  let conditionalDose: number | null = null;
+  let doseContext: AuthoritativeTherapyAdministration['doseContext'];
+  if (therapy.doseMode === 'glucose_scale' && options.requireDoseMeasurement !== false) {
+    if (input.measuredGlucose === undefined) {
+      throw new TherapyWriteInputError(
+        'Rileva la glicemia prima di confermare la somministrazione',
+      );
+    }
+    let protocol: ReturnType<typeof normalizeGlucoseScaleProtocol>;
+    try {
+      protocol = normalizeGlucoseScaleProtocol(therapy.doseProtocol);
+    } catch (error) {
+      if (error instanceof InvalidDoseProtocolError) {
+        throw new TherapyWriteInputError(
+          'Schema glicemico non valido: verifica la prescrizione prima di somministrare',
+          409,
+        );
+      }
+      throw error;
+    }
+    conditionalDose = doseForGlucose(protocol, input.measuredGlucose);
+    if (conditionalDose === null) {
+      throw new TherapyWriteInputError(
+        'Glicemia fuori dalle fasce prescritte: verifica la prescrizione prima di somministrare',
+        409,
+      );
+    }
+    doseContext = {
+      kind: 'blood_glucose',
+      glucoseMgDl: input.measuredGlucose,
+      doseUnits: conditionalDose,
+    };
+  }
   return {
     ...input,
     farmacoNome: therapy.farmacoNome,
     farmacoDose:
-      (schedule &&
-        scheduleDoseLabel(
-          schedule,
-          therapy.commercialStrengthValue,
-          therapy.commercialStrengthUnit,
-        )) ||
-      therapy.dosaggio,
+      conditionalDose !== null
+        ? `${conditionalDose} unità (glicemia ${input.measuredGlucose} mg/dL)`
+        : (schedule &&
+            scheduleDoseLabel(
+              schedule,
+              therapy.commercialStrengthValue,
+              therapy.commercialStrengthUnit,
+            )) ||
+          therapy.dosaggio,
     farmacoVia: therapy.viaSomministrazione || 'orale',
     ora: schedule?.time || FALLBACK_TIMES[input.fascia],
+    ...(doseContext ? { doseContext } : {}),
   };
 }

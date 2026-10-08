@@ -379,6 +379,178 @@
   }
 }
 
+/* Terapie condizionali: schema glicemico e conferma dose al letto. */
+.glucose-scale-editor {
+  padding: 14px;
+  border: 1px solid #c9d8f2;
+  border-radius: 12px;
+  background: #f7faff;
+}
+
+.glucose-scale-editor__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.glucose-scale-editor__heading label {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.glucose-scale-editor__rows {
+  display: grid;
+  gap: 8px;
+}
+
+.glucose-scale-editor__row {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(110px, 1fr) minmax(110px, 1fr) auto;
+  align-items: end;
+  gap: 8px;
+}
+
+.glucose-scale-editor__row label {
+  display: grid;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.glucose-scale-editor__errors {
+  margin: 10px 0 0;
+  padding: 10px 12px 10px 28px;
+  border-radius: 8px;
+  color: #9f1239;
+  background: #fff1f2;
+  font-size: 12px;
+}
+
+.therapy-glucose-confirm {
+  display: grid;
+  grid-template-columns: minmax(125px, 150px) minmax(170px, auto);
+  align-items: end;
+  gap: 6px 10px;
+  padding: 10px;
+  border: 1px solid #c9d8f2;
+  border-radius: 10px;
+  background: #f7faff;
+}
+
+.therapy-glucose-confirm label {
+  grid-column: 1;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.therapy-glucose-confirm input {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.therapy-glucose-confirm__dose,
+.therapy-glucose-confirm__warning {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-size: 12px;
+}
+
+.therapy-glucose-confirm__dose {
+  color: #0f766e;
+}
+
+.therapy-glucose-confirm__warning {
+  color: #b42318;
+}
+
+.therapy-glucose-confirm .therapy-action-btn {
+  grid-column: 1 / -1;
+  justify-content: center;
+}
+
+/* Confronto affiancato tra fonte di dimissione e terapie strutturate. */
+.discharge-therapy-review__workspace {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.6fr);
+  align-items: start;
+  gap: 14px;
+}
+
+.discharge-therapy-review__source {
+  position: sticky;
+  top: 0;
+  max-height: min(65vh, 680px);
+  overflow: auto;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--blue);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.discharge-therapy-review__source p {
+  margin: 6px 0 12px;
+  color: var(--text-muted);
+}
+
+.discharge-therapy-review__source pre {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.discharge-therapy-review__forms {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .discharge-therapy-review__workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .discharge-therapy-review__source {
+    position: static;
+    max-height: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .glucose-scale-editor__heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .glucose-scale-editor__row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .glucose-scale-editor__row > button {
+    grid-column: 1 / -1;
+  }
+
+  .therapy-glucose-confirm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .therapy-glucose-confirm__dose,
+  .therapy-glucose-confirm__warning {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
 @media print {
   @page {
     size: A4;

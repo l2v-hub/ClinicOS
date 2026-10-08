@@ -232,6 +232,7 @@ model MedicationAdministration {
   confirmedAt   DateTime?
   motivo        String?
   note          String?
+  doseContext   Json?     // measured glucose + resolved dose for conditional protocols
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   patient       Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
@@ -296,6 +297,8 @@ model PatientTherapy {
   // #241: intermittent weekday posology. Comma list of ISO weekday numbers (Mon=1 … Sun=7);
   // NULL/empty = every day (preserves prior behavior, fully backward-compatible).
   giorniSettimana         String?
+  doseMode                String   @default("fixed") // fixed | glucose_scale
+  doseProtocol            Json?    // validated conditional-dose protocol; never executed without measurement
   schedules               TherapySchedule[]
   administrations         MedicationAdministration[]
   createdAt            DateTime @default(now())

@@ -20,7 +20,16 @@ test('operator never receives facility suggestions', () => {
   const prompts = flatten('operatore', false);
   assert.deepEqual(
     prompts.map((prompt) => prompt.audience),
-    ['operator'],
+    ['operator', 'operator', 'operator', 'operator'],
+  );
+  assert.deepEqual(
+    prompts.map((prompt) => prompt.text),
+    [
+      'Cosa devo fare adesso?',
+      'Cosa mi manca oggi?',
+      'Qual è la prossima terapia da somministrare?',
+      'Mostrami le mie consegne',
+    ],
   );
 });
 
@@ -33,6 +42,7 @@ test('patient suggestions are shown only with a current patient and stay availab
     flatten('operatore', true).filter((prompt) => prompt.audience === 'patient').length,
     3,
   );
+  assert.equal(flatten('operatore', true).length, 4);
 
   const adminAudiences = new Set(flatten('admin', true).map((prompt) => prompt.audience));
   assert.deepEqual(adminAudiences, new Set(['facility', 'patient', 'operator']));

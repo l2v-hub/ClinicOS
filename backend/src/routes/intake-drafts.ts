@@ -7,15 +7,20 @@ import {
   listDrafts,
   seedDraftFromImport,
 } from '../intake/draft-service.js';
-import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
+import { confirmDraft } from '../ai/upload/confirm-service.js';
 import { AiExtractionError } from '../ai/types.js';
 import { importJobIsAccessible, requireOwnedIntakeDraft } from '../ai/ownership.js';
+import { confirmPayloadFromDraft } from '../intake/confirm-payload.js';
 
 // ── Intake Drafts Router — mounted at /intake/drafts (F3 EPIC #120 / #125) ───
 // Operator-gated CRUD + autosave endpoints for PatientIntakeDraft.
 
 const intakeDraftsRouter = Router();
 
+intakeDraftsRouter.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
 intakeDraftsRouter.use(requireOperator);
 intakeDraftsRouter.param('id', requireOwnedIntakeDraft);
 
@@ -120,7 +125,32 @@ intakeDraftsRouter.patch('/:id', async (req, res) => {
 // 201 created / 200 idempotent|updated / 409 duplicate (mirrors ai-jobs.ts confirm).
 intakeDraftsRouter.post('/:id/confirm', async (req, res) => {
   try {
-    const payload = (req.body ?? {}) as ConfirmPayload;
+    const draft = await getDraft(String(req.params.id));
+    const draftData = (draft?.data ?? {}) as Record<string, unknown>;
+    const accepted = (draftData._accepted ?? {}) as Record<string, unknown>;
+    if (accepted.demographics !== true || accepted.therapy !== true) {
+      return res.status(400).json({
+        error: 'Revisiona e accetta anagrafica e terapia prima di creare il paziente',
+      });
+    }
+    const importedRows = Array.isArray(draftData.terapiaImport)
+      ? (draftData.terapiaImport as Array<{ stato?: unknown }>)
+      : [];
+    if (importedRows.some((row) => row.stato !== 'ok')) {
+      return res.status(400).json({
+        error: 'Completa la revisione delle terapie rilevate dalla dimissione',
+      });
+    }
+    const dischargeTherapyText =
+      typeof draftData._terapiaText === 'string' ? draftData._terapiaText.trim() : '';
+    const manualRows = Array.isArray(draftData.terapia) ? draftData.terapia : [];
+    if (dischargeTherapyText && importedRows.length === 0 && manualRows.length === 0) {
+      return res.status(400).json({
+        error:
+          'La dimissione contiene una sezione terapia non riconosciuta: inserisci e verifica le prescrizioni prima di confermare',
+      });
+    }
+    const payload = confirmPayloadFromDraft(draftData, req.body, (req as AuthedRequest).operator!);
     const result = await confirmDraft(
       String(req.params.id),
       payload,

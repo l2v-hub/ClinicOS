@@ -30,11 +30,28 @@ const FACILITY_PROMPTS: AgnosSuggestedPrompt[] = [
   },
 ];
 
-const OPERATOR_PROMPT: AgnosSuggestedPrompt = {
-  id: 'operator-now',
-  audience: 'operator',
-  text: 'Cosa devo fare adesso?',
-};
+const OPERATOR_PROMPTS: AgnosSuggestedPrompt[] = [
+  {
+    id: 'operator-now',
+    audience: 'operator',
+    text: 'Cosa devo fare adesso?',
+  },
+  {
+    id: 'operator-missing-today',
+    audience: 'operator',
+    text: 'Cosa mi manca oggi?',
+  },
+  {
+    id: 'operator-next-therapy',
+    audience: 'operator',
+    text: 'Qual è la prossima terapia da somministrare?',
+  },
+  {
+    id: 'operator-handovers',
+    audience: 'operator',
+    text: 'Mostrami le mie consegne',
+  },
+];
 
 const PATIENT_PROMPTS: AgnosSuggestedPrompt[] = [
   {
@@ -80,6 +97,12 @@ export function agnosSuggestedPromptGroups(
     groups.push({ id: 'patient', label: 'Paziente aperto', prompts: patientPrompts });
   }
 
-  groups.push({ id: 'operator', label: 'Attività operativa', prompts: [OPERATOR_PROMPT] });
+  const operatorPromptLimit =
+    isFacilityRole(role) || hasCurrentPatient ? 1 : OPERATOR_PROMPTS.length;
+  groups.push({
+    id: 'operator',
+    label: 'Attività operativa',
+    prompts: OPERATOR_PROMPTS.slice(0, operatorPromptLimit),
+  });
   return groups;
 }

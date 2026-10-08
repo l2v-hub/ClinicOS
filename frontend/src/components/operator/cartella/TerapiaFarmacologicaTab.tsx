@@ -23,6 +23,7 @@ import {
   type ScheduleRow,
 } from './therapyDose';
 import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
+import { glucoseScaleRows, validateGlucoseScaleRows } from './glucoseScale';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { TopNav, type TopNavItem } from '../../navigation/TopNav';
 import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './farmacoRiferimento';
@@ -169,6 +170,8 @@ function therapyToForm(t: PatientTherapyAPI): TherapyForm {
     note: t.note ?? '',
     dataSomministrazione: t.dataSomministrazione ?? todayStr(),
     orarioSomministrazione: t.orarioSomministrazione ?? '',
+    doseMode: t.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed',
+    glucoseScale: glucoseScaleRows(t.doseProtocol),
   };
 }
 
@@ -209,6 +212,10 @@ function formToPayload(form: TherapyForm, patientId: string, operatoreNome: stri
         ? form.giorniSettimana.join(',')
         : null,
     schedules,
+    doseMode: form.doseMode,
+    ...(form.doseMode === 'glucose_scale'
+      ? { doseProtocol: validateGlucoseScaleRows(form.glucoseScale).protocol }
+      : { doseProtocol: null }),
     prescrittore: form.prescrittore || null,
     operatoreInseritore: operatoreNome,
     note: form.note || null,
@@ -250,6 +257,19 @@ function ScheduleSummary({ t }: { t: PatientTherapyAPI }) {
   const rows = schedulesFromTherapy(t);
   const hasStructured = t.schedules && t.schedules.length > 0;
   if (!rows.length) return <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>—</span>;
+  if (t.doseMode === 'glucose_scale') {
+    const rules = glucoseScaleRows(t.doseProtocol);
+    return (
+      <div className="sched-summary">
+        <strong>Schema glicemico</strong>
+        {rules.map((rule, index) => (
+          <span key={index}>
+            {rule.minMgDl}–{rule.maxMgDl || 'oltre'} mg/dL → {rule.units} unità
+          </span>
+        ))}
+      </div>
+    );
+  }
   return (
     <div className="sched-summary">
       {rows.map((s, i) => {
@@ -577,6 +597,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       setError('Aggiungi almeno un orario di somministrazione.');
       return;
     }
+    if (form.doseMode === 'glucose_scale') {
+      const validation = validateGlucoseScaleRows(form.glucoseScale);
+      if (!validation.protocol) {
+        setError(validation.errors[0] ?? 'Completa lo schema glicemico.');
+        return;
+      }
+    }
     const payload = formToPayload(form, paziente.id, operatoreNome);
     try {
       setSaving(true);
@@ -676,7 +703,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   // Gli stessi campi che `handleSave` pretende, elencati per nome: prima il salvataggio usciva
   // in silenzio e il clic sembrava non aver fatto nulla.
   const campiMancanti =
-    [!form.farmacoNome.trim() && 'il prodotto medicinale', !form.dataInizio && 'la data di inizio']
+    [
+      !form.farmacoNome.trim() && 'il prodotto medicinale',
+      !form.dataInizio && 'la data di inizio',
+      form.doseMode === 'glucose_scale' &&
+        validateGlucoseScaleRows(form.glucoseScale).errors.length > 0 &&
+        'uno schema glicemico valido',
+    ]
       .filter((v): v is string => typeof v === 'string')
       .join(' e ') || null;
 

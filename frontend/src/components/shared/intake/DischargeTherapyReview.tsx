@@ -20,9 +20,10 @@ interface Props {
   rows: DischargeTherapyRow[];
   onChange: (rows: DischargeTherapyRow[]) => void;
   operatoreNome?: string;
+  sourceText?: string;
 }
 
-export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props) {
+export function DischargeTherapyReview({ rows, onChange, operatoreNome, sourceText }: Props) {
   // Full-fidelity local form state (one TherapyFormValue per row): deriving the form from the raw
   // row on every render would be lossy (row ⇄ form is not a perfect round-trip).
   const [forms, setForms] = useState<TherapyFormValue[]>(() => rows.map(dischargeRowToTherapyForm));
@@ -47,7 +48,7 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
     onChange(rows.filter((_, idx) => idx !== i));
   }
 
-  if (!Array.isArray(rows) || rows.length === 0) return null;
+  if (!Array.isArray(rows) || (rows.length === 0 && !sourceText)) return null;
   const daVerificare = rows.filter((r) => r.stato === 'da_verificare').length;
 
   return (
@@ -69,55 +70,75 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
           controlla prima di salvare.
         </p>
       )}
-      {rows.map((r, i) => (
-        <article
-          key={i}
-          className="discharge-therapy-review__item"
-          data-testid="discharge-therapy-row"
-          data-stato={r.stato}
-          data-farmaco={r.farmacoNome}
-        >
-          <div className="discharge-therapy-review__item-head">
-            <strong>{forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco'}</strong>
-            {r.stato === 'da_verificare' ? (
-              <span className="discharge-therapy-review__badge is-verify">da verificare</span>
-            ) : (
-              <span className="discharge-therapy-review__badge is-ok">ok</span>
-            )}
-            <button
-              type="button"
-              className="icon-btn icon-btn--sm icon-btn--danger"
-              data-testid="discharge-therapy-remove"
-              onClick={() => rimuoviRiga(i)}
-              title="Non riportare questo farmaco nella terapia"
-              aria-label={`Elimina ${forms[i]?.farmacoNome || r.farmacoNome || 'farmaco'} dalla terapia`}
+      {rows.length === 0 && sourceText && (
+        <p className="discharge-therapy-review__alert" role="alert">
+          Nessuna terapia è stata riconosciuta automaticamente. Confronta il testo e inserisci
+          manualmente tutte le prescrizioni prima di accettare.
+        </p>
+      )}
+      <div className={sourceText ? 'discharge-therapy-review__workspace' : undefined}>
+        {sourceText && (
+          <aside
+            className="discharge-therapy-review__source"
+            aria-label="Testo terapia dalla lettera di dimissione"
+          >
+            <strong>Confronto con la dimissione</strong>
+            <p>Verifica anche le terapie non riconosciute automaticamente prima di confermare.</p>
+            <pre>{sourceText}</pre>
+          </aside>
+        )}
+        <div className="discharge-therapy-review__forms">
+          {rows.map((r, i) => (
+            <article
+              key={i}
+              className="discharge-therapy-review__item"
+              data-testid="discharge-therapy-row"
+              data-stato={r.stato}
+              data-farmaco={r.farmacoNome}
             >
-              ✕
-            </button>
-          </div>
-          {r.originalText && (
-            <blockquote
-              className="discharge-therapy-review__original"
-              data-testid="discharge-original-text"
-            >
-              <span className="discharge-therapy-review__original-label">Dal documento:</span>{' '}
-              {r.originalText}
-            </blockquote>
-          )}
-          {forms[i] && (
-            <div className="ec-modal-add-form">
-              <TherapyFormFields
-                value={forms[i]}
-                onChange={(v) => updateForm(i, v)}
-                operatoreNome={operatoreNome}
-              />
-            </div>
-          )}
-        </article>
-      ))}
+              <div className="discharge-therapy-review__item-head">
+                <strong>{forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco'}</strong>
+                {r.stato === 'da_verificare' ? (
+                  <span className="discharge-therapy-review__badge is-verify">da verificare</span>
+                ) : (
+                  <span className="discharge-therapy-review__badge is-ok">ok</span>
+                )}
+                <button
+                  type="button"
+                  className="icon-btn icon-btn--sm icon-btn--danger"
+                  data-testid="discharge-therapy-remove"
+                  onClick={() => rimuoviRiga(i)}
+                  title="Non riportare questo farmaco nella terapia"
+                  aria-label={`Elimina ${forms[i]?.farmacoNome || r.farmacoNome || 'farmaco'} dalla terapia`}
+                >
+                  ✕
+                </button>
+              </div>
+              {r.originalText && (
+                <blockquote
+                  className="discharge-therapy-review__original"
+                  data-testid="discharge-original-text"
+                >
+                  <span className="discharge-therapy-review__original-label">Dal documento:</span>{' '}
+                  {r.originalText}
+                </blockquote>
+              )}
+              {forms[i] && (
+                <div className="ec-modal-add-form">
+                  <TherapyFormFields
+                    value={forms[i]}
+                    onChange={(v) => updateForm(i, v)}
+                    operatoreNome={operatoreNome}
+                  />
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
       <p className="discharge-therapy-review__hint">
-        Le righe verranno salvate nella terapia del paziente alla conferma. Elimina con ✕ i farmaci
-        che non vanno riportati.
+        Le righe verranno salvate nella terapia del paziente alla conferma. Confronta l’elenco con
+        la dimissione, aggiungi manualmente ciò che manca ed elimina con ✕ ciò che non va riportato.
       </p>
     </section>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { CampoFarmaco } from './CampoFarmaco';
 import {
   FRACTION_PRESETS,
@@ -11,6 +11,7 @@ import {
   computeEquivalent,
   type ScheduleRow,
 } from './therapyDose';
+import { validateGlucoseScaleRows, type GlucoseDoseRuleForm } from './glucoseScale';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -35,6 +36,8 @@ export interface TherapyFormValue {
   note: string;
   dataSomministrazione: string;
   orarioSomministrazione: string;
+  doseMode: 'fixed' | 'glucose_scale';
+  glucoseScale: GlucoseDoseRuleForm[];
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -79,6 +82,8 @@ export function emptyTherapyForm(): TherapyFormValue {
     note: '',
     dataSomministrazione: todayStr(),
     orarioSomministrazione: '',
+    doseMode: 'fixed',
+    glucoseScale: [],
   };
 }
 
@@ -92,6 +97,8 @@ interface TherapyFormFieldsProps {
 
 export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
   const [customQty, setCustomQty] = useState<Record<number, string>>({});
+  const radioId = useId();
+  const glucoseValidation = validateGlucoseScaleRows(value.glucoseScale);
 
   const update = (patch: Partial<TherapyFormValue>) => onChange({ ...value, ...patch });
 
@@ -124,6 +131,11 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
 
   const removeSchedule = (idx: number) =>
     onChange({ ...value, schedules: value.schedules.filter((_, i) => i !== idx) });
+
+  const updateGlucoseRule = (idx: number, patch: Partial<GlucoseDoseRuleForm>) =>
+    update({
+      glucoseScale: value.glucoseScale.map((rule, i) => (i === idx ? { ...rule, ...patch } : rule)),
+    });
 
   const toggleAllowedFraction = (key: string) => {
     if (key === '1') return;
@@ -257,7 +269,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           <label>
             <input
               type="radio"
-              name="tf-tipo"
+              name={`${radioId}-tipo`}
               value="periodica"
               checked={value.tipo === 'periodica'}
               onChange={() => update({ tipo: 'periodica' })}
@@ -267,7 +279,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           <label>
             <input
               type="radio"
-              name="tf-tipo"
+              name={`${radioId}-tipo`}
               value="una_tantum"
               checked={value.tipo === 'una_tantum'}
               onChange={() => update({ tipo: 'una_tantum' })}
@@ -277,7 +289,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           <label>
             <input
               type="radio"
-              name="tf-tipo"
+              name={`${radioId}-tipo`}
               value="al_bisogno"
               checked={value.tipo === 'al_bisogno'}
               onChange={() => update({ tipo: 'al_bisogno' })}
@@ -286,6 +298,48 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           </label>
         </div>
       </div>
+      {value.tipo === 'periodica' && (
+        <div className="form-group form-group--full">
+          <label>Modalità di calcolo della dose</label>
+          <div className="tipo-radio" role="radiogroup" aria-label="Modalità dose">
+            <label>
+              <input
+                type="radio"
+                name={`${radioId}-dose-mode`}
+                checked={value.doseMode === 'fixed'}
+                onChange={() => update({ doseMode: 'fixed' })}
+              />{' '}
+              Dose fissa per orario
+            </label>
+            <label>
+              <input
+                type="radio"
+                name={`${radioId}-dose-mode`}
+                checked={value.doseMode === 'glucose_scale'}
+                onChange={() =>
+                  update({
+                    doseMode: 'glucose_scale',
+                    glucoseScale:
+                      value.glucoseScale.length > 0
+                        ? value.glucoseScale
+                        : [{ minMgDl: '', maxMgDl: '', units: '' }],
+                    schedules: value.schedules.map((schedule) => ({
+                      ...schedule,
+                      administrationUnit: 'unità',
+                    })),
+                  })
+                }
+              />{' '}
+              Schema in base alla glicemia
+            </label>
+          </div>
+          {value.doseMode === 'glucose_scale' && (
+            <small className="form-hint">
+              La dose viene determinata solo dopo la rilevazione della glicemia.
+            </small>
+          )}
+        </div>
+      )}
       <div className="form-group">
         <label>Data inizio *</label>
         <input
@@ -330,7 +384,11 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
       )}
       {value.tipo === 'periodica' && (
         <div className="form-group form-group--full">
-          <label>Orari e quantità per somministrazione</label>
+          <label>
+            {value.doseMode === 'glucose_scale'
+              ? 'Orari di rilevazione e somministrazione'
+              : 'Orari e quantità per somministrazione'}
+          </label>
           <div className="sched-editor">
             {value.schedules.map((s, i) => {
               const divisible = DIVISIBLE_UNITS.has(s.administrationUnit);
@@ -371,11 +429,13 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                       ✕
                     </button>
                   </div>
-                  <div className="sched-row__qty">
-                    {divisible ? (
-                      <>
-                        {FRACTION_PRESETS.filter((p) => value.allowedFractions.includes(p.key)).map(
-                          (p) => (
+                  {value.doseMode === 'fixed' && (
+                    <div className="sched-row__qty">
+                      {divisible ? (
+                        <>
+                          {FRACTION_PRESETS.filter((p) =>
+                            value.allowedFractions.includes(p.key),
+                          ).map((p) => (
                             <button
                               key={p.key}
                               type="button"
@@ -390,14 +450,35 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                             >
                               {p.label}
                             </button>
-                          ),
-                        )}
+                          ))}
+                          <input
+                            className="form-input qty-chip__other"
+                            placeholder="Altro (es. 1/3, 0.5)"
+                            value={customQty[i] ?? ''}
+                            onChange={(e) => setCustomQty((c) => ({ ...c, [i]: e.target.value }))}
+                            onBlur={(e) => {
+                              const parsed = parseQuantity(e.target.value);
+                              if (parsed)
+                                updateSchedule(i, {
+                                  quantityNumerator: parsed.num,
+                                  quantityDenominator: parsed.den,
+                                });
+                            }}
+                          />
+                        </>
+                      ) : (
                         <input
                           className="form-input qty-chip__other"
-                          placeholder="Altro (es. 1/3, 0.5)"
-                          value={customQty[i] ?? ''}
-                          onChange={(e) => setCustomQty((c) => ({ ...c, [i]: e.target.value }))}
-                          onBlur={(e) => {
+                          type="number"
+                          min="0"
+                          step="any"
+                          placeholder="Quantità"
+                          value={
+                            s.quantityDenominator === 1
+                              ? String(s.quantityNumerator)
+                              : s.quantityNumerator / s.quantityDenominator
+                          }
+                          onChange={(e) => {
                             const parsed = parseQuantity(e.target.value);
                             if (parsed)
                               updateSchedule(i, {
@@ -406,34 +487,15 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                               });
                           }}
                         />
-                      </>
-                    ) : (
-                      <input
-                        className="form-input qty-chip__other"
-                        type="number"
-                        min="0"
-                        step="any"
-                        placeholder="Quantità"
-                        value={
-                          s.quantityDenominator === 1
-                            ? String(s.quantityNumerator)
-                            : s.quantityNumerator / s.quantityDenominator
-                        }
-                        onChange={(e) => {
-                          const parsed = parseQuantity(e.target.value);
-                          if (parsed)
-                            updateSchedule(i, {
-                              quantityNumerator: parsed.num,
-                              quantityDenominator: parsed.den,
-                            });
-                        }}
-                      />
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                   <div className="sched-row__resolved">
-                    {s.time} — {formatFraction(s.quantityNumerator, s.quantityDenominator)}{' '}
-                    {s.administrationUnit}
-                    {eq && (
+                    {s.time} —{' '}
+                    {value.doseMode === 'glucose_scale'
+                      ? 'dose da calcolare sulla glicemia'
+                      : `${formatFraction(s.quantityNumerator, s.quantityDenominator)} ${s.administrationUnit}`}
+                    {value.doseMode === 'fixed' && eq && (
                       <>
                         {' '}
                         — <strong>equivalente a {eq}</strong>
@@ -447,6 +509,94 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
               + Aggiungi orario
             </button>
           </div>
+        </div>
+      )}
+      {value.tipo === 'periodica' && value.doseMode === 'glucose_scale' && (
+        <div className="form-group form-group--full glucose-scale-editor">
+          <div className="glucose-scale-editor__heading">
+            <div>
+              <label>Schema glicemia → dose</label>
+              <small className="form-hint">Intervalli inclusivi, valori in mg/dL.</small>
+            </div>
+            <button
+              type="button"
+              className="btn-secondary btn-sm"
+              disabled={value.glucoseScale.length >= 32}
+              onClick={() =>
+                update({
+                  glucoseScale: [...value.glucoseScale, { minMgDl: '', maxMgDl: '', units: '' }],
+                })
+              }
+            >
+              + Aggiungi fascia
+            </button>
+          </div>
+          <div className="glucose-scale-editor__rows">
+            {value.glucoseScale.map((rule, index) => (
+              <div className="glucose-scale-editor__row" key={index}>
+                <label>
+                  Da
+                  <input
+                    className="form-input"
+                    type="number"
+                    min="10"
+                    max="1000"
+                    inputMode="numeric"
+                    value={rule.minMgDl}
+                    onChange={(event) => updateGlucoseRule(index, { minMgDl: event.target.value })}
+                  />
+                </label>
+                <label>
+                  A
+                  <input
+                    className="form-input"
+                    type="number"
+                    min="10"
+                    max="1000"
+                    inputMode="numeric"
+                    placeholder="oltre"
+                    value={rule.maxMgDl}
+                    onChange={(event) => updateGlucoseRule(index, { maxMgDl: event.target.value })}
+                  />
+                </label>
+                <label>
+                  Dose (unità)
+                  <input
+                    className="form-input"
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    inputMode="decimal"
+                    value={rule.units}
+                    onChange={(event) => updateGlucoseRule(index, { units: event.target.value })}
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  aria-label={`Rimuovi fascia ${index + 1}`}
+                  onClick={() =>
+                    update({
+                      glucoseScale: value.glucoseScale.filter((_, i) => i !== index),
+                    })
+                  }
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+          {glucoseValidation.errors.length > 0 && (
+            <ul className="glucose-scale-editor__errors" role="alert">
+              {glucoseValidation.errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          )}
+          <p className="form-hint">
+            Un valore non coperto dallo schema bloccherà la conferma: l’operatore dovrà verificare
+            la prescrizione, senza dosi suggerite automaticamente.
+          </p>
         </div>
       )}
       {value.tipo === 'periodica' && (

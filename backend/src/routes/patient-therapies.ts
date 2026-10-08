@@ -16,6 +16,10 @@ import {
   normalizeGiorniSettimana,
   type TherapyCreateInput,
 } from '../therapies/therapy-create.js';
+import {
+  InvalidDoseProtocolError,
+  normalizeGlucoseScaleProtocol,
+} from '../therapies/glucose-scale.js';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
 import {
@@ -70,6 +74,8 @@ const therapyListSelect = {
   allowedFractions: true,
   drugPackageRef: true,
   giorniSettimana: true,
+  doseMode: true,
+  doseProtocol: true,
   createdAt: true,
   updatedAt: true,
   schedules: {
@@ -231,7 +237,8 @@ router.post('/:patientId/therapies', async (req, res) => {
       msg.includes('Campi obbligatori') ||
       error instanceof TherapyInputError ||
       error instanceof InvalidTherapySchedulesError ||
-      error instanceof TherapyDateRangeError
+      error instanceof TherapyDateRangeError ||
+      error instanceof InvalidDoseProtocolError
     ) {
       res.status(400).json({ error: msg });
       return;
@@ -250,6 +257,7 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     assertTherapyScalarInput(body);
     const existing = await prisma.patientTherapy.findFirst({
       where: { id: therapyId, patientId },
+      include: { _count: { select: { schedules: true } } },
     });
     if (!existing) {
       res.status(404).json({ error: 'Terapia non trovata' });
@@ -280,6 +288,8 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
       'allowedFractions',
       'drugPackageRef',
       'giorniSettimana',
+      'doseMode',
+      'doseProtocol',
     ];
 
     const updates: Record<string, unknown> = {};
@@ -296,6 +306,31 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     if ('giorniSettimana' in updates) {
       updates.giorniSettimana = normalizeGiorniSettimana(updates.giorniSettimana as string | null);
     }
+    const hasSchedules = body.schedules !== undefined;
+    if (hasSchedules) assertValidSchedulesInput(body.schedules);
+    const schedules: ScheduleInput[] = hasSchedules ? normalizeSchedules(body.schedules) : [];
+    const nextDoseMode =
+      updates.doseMode === 'glucose_scale' ||
+      (updates.doseMode === undefined && existing.doseMode === 'glucose_scale')
+        ? 'glucose_scale'
+        : 'fixed';
+    updates.doseMode = nextDoseMode;
+    if (nextDoseMode === 'glucose_scale') {
+      if (
+        (hasSchedules && schedules.length === 0) ||
+        (!hasSchedules && existing._count.schedules === 0)
+      ) {
+        throw new InvalidDoseProtocolError(
+          'Aggiungi almeno un orario di rilevazione e somministrazione',
+        );
+      }
+      updates.doseProtocol = normalizeGlucoseScaleProtocol(
+        updates.doseProtocol ?? existing.doseProtocol,
+      );
+      updates.dosaggio = 'Dose secondo schema glicemico';
+    } else {
+      updates.doseProtocol = null;
+    }
     if ('dataInizio' in updates || 'dataFine' in updates) {
       const dates = normalizeTherapyDateRange(
         updates.dataInizio ?? existing.dataInizio,
@@ -306,10 +341,6 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     }
 
     // If schedules are provided, replace them atomically and re-derive legacy fascia/orari.
-    const hasSchedules = body.schedules !== undefined;
-    if (hasSchedules) assertValidSchedulesInput(body.schedules);
-    const schedules: ScheduleInput[] = hasSchedules ? normalizeSchedules(body.schedules) : [];
-
     const therapy = await prisma.$transaction(async (tx) => {
       if (hasSchedules) {
         await tx.therapySchedule.deleteMany({ where: { therapyId } });
@@ -341,7 +372,8 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     if (
       error instanceof TherapyInputError ||
       error instanceof InvalidTherapySchedulesError ||
-      error instanceof TherapyDateRangeError
+      error instanceof TherapyDateRangeError ||
+      error instanceof InvalidDoseProtocolError
     ) {
       res.status(400).json({ error: error.message });
       return;

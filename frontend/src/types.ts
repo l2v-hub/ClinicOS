@@ -1022,6 +1022,8 @@ export interface TherapyAdministration {
   administeredAt: string | null;
   administeredBy: string | null;
   notAdministeredReason: string | null;
+  doseMode?: 'fixed' | 'glucose_scale';
+  doseProtocol?: unknown | null;
 }
 
 export interface TherapyActionInfo {
@@ -1033,6 +1035,7 @@ export interface TherapyActionInfo {
   date: string;
   fascia: string;
   ora: string;
+  measuredGlucose?: number;
 }
 
 export interface TherapySlotPatient {
@@ -1116,6 +1119,8 @@ export interface PatientTherapyAPI {
   allowedFractions?: string | null;
   drugPackageRef?: string | null;
   giorniSettimana?: string | null; // #241: comma list of ISO weekdays (1..7); null = every day
+  doseMode?: 'fixed' | 'glucose_scale';
+  doseProtocol?: unknown | null;
   schedules?: TherapyScheduleAPI[];
   createdAt: string;
   updatedAt: string;
