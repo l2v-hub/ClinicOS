@@ -8,6 +8,10 @@ import {
   parseQuantity,
 } from '../../operator/cartella/therapyDose';
 import { therapyFormToInput } from './therapyFormPayload';
+import {
+  validateGlucoseScaleRows,
+  type GlucoseDoseRule,
+} from '../../operator/cartella/glucoseScale';
 
 export interface DischargeTherapyRow {
   farmacoNome: string;
@@ -22,6 +26,8 @@ export interface DischargeTherapyRow {
   note: string;
   originalText: string;
   stato: 'ok' | 'da_verificare';
+  doseMode?: 'fixed' | 'glucose_scale';
+  glucoseScale?: GlucoseDoseRule[];
   excludedFromConfirm?: boolean;
   reviewedTherapy?: TherapyFormValue;
   importSource?: { groupId: string; inputHash: string };
@@ -122,11 +128,12 @@ export function parseDosaggio(raw: string) {
 
 /** Legacy imports leave unknown clinical values blank for explicit correction. */
 export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormValue {
-  if (r.reviewedTherapy) return structuredClone(r.reviewedTherapy);
+  if (r.reviewedTherapy) return { ...emptyTherapyForm(), ...structuredClone(r.reviewedTherapy) };
   const forma = mapForma(r.forma);
   const dose = parseDosaggio(r.dosaggio);
   const qty = parseAdministration(r.quantita, forma);
   const times = Array.isArray(r.orari) && r.orari.length ? r.orari : [''];
+  const scale = r.doseMode === 'glucose_scale';
   return {
     ...emptyTherapyForm(),
     farmacoNome: (r.farmacoNome || '').trim(),
@@ -137,11 +144,18 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
       CODE_TO_FORM_VIA[(r.viaSomministrazione || '').toUpperCase()] ?? r.viaSomministrazione ?? '',
     dataInizio: r.dataInizio?.trim() ?? '',
     dataSomministrazione: '',
+    doseMode: scale ? 'glucose_scale' : 'fixed',
+    glucoseScale: (r.glucoseScale ?? []).map((rule) => ({
+      minMgDl: String(rule.minMgDl),
+      maxMgDl: rule.maxMgDl === null ? '' : String(rule.maxMgDl),
+      units: String(rule.units),
+    })),
     schedules: times.map((time) => ({
       time: /^\d:\d{2}$/.test(time) ? `0${time}` : time,
-      quantityNumerator: qty.num,
-      quantityDenominator: qty.den,
-      administrationUnit: qty.unit,
+      // Technical schedule metadata only: a scale's administered dose is resolved from glucose.
+      quantityNumerator: scale ? 1 : qty.num,
+      quantityDenominator: scale ? 1 : qty.den,
+      administrationUnit: scale ? 'unità' : qty.unit,
     })),
     giorniSettimana: Array.isArray(r.giorni) ? r.giorni.map(dayToIso).sort((a, b) => a - b) : [],
     note: [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '']
@@ -164,9 +178,17 @@ export function therapyFormToDischargeRow(
       ? `${v.commercialStrengthValue} ${v.commercialStrengthUnit}`.trim()
       : '',
     viaSomministrazione: v.viaSomministrazione,
-    quantita: first
-      ? `${formatFraction(first.quantityNumerator, first.quantityDenominator)} ${first.administrationUnit}`.trim()
-      : '',
+    doseMode: v.doseMode ?? 'fixed',
+    glucoseScale:
+      v.doseMode === 'glucose_scale'
+        ? validateGlucoseScaleRows(v.glucoseScale ?? []).protocol?.rules
+        : undefined,
+    quantita:
+      v.doseMode === 'glucose_scale'
+        ? ''
+        : first
+          ? `${formatFraction(first.quantityNumerator, first.quantityDenominator)} ${first.administrationUnit}`.trim()
+          : '',
     orari: v.schedules.map((s) => s.time),
     giorni: v.giorniSettimana.map((n) => DAY_ABBR[n - 1] ?? ''),
     dataInizio: v.dataInizio,

@@ -120,34 +120,22 @@ export function StepClinica({
 
   return (
     <>
-      {therapyBlock && typeof data._terapiaText === 'string' && data._terapiaText.trim() && (
-        <details className="step-clinica__section" data-testid="therapy-source-comparison">
-          <summary>Confronta con il testo completo della terapia</summary>
-          <p className="form-hint">
-            Controlla che tutti i farmaci del documento siano presenti. Puoi aggiungere quelli
-            mancanti con «Aggiungi farmaco».
-          </p>
-          <pre
-            className="discharge-therapy-review__original"
-            style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}
-          >
-            {data._terapiaText}
-          </pre>
-        </details>
-      )}
-      {therapyBlock && terapiaImport.length > 0 && (
-        <div className="step-clinica__section">
-          <DischargeTherapyReview
-            rows={terapiaImport}
-            onChange={(v) => onUpdateSection('terapiaImport', v)}
-            operatoreNome={operatoreNome}
-            sourceResultHash={
-              (data._importSource as { resultHash?: string } | undefined)?.resultHash
-            }
-            onBackToDocuments={onBackToDocuments}
-          />
-        </div>
-      )}
+      {therapyBlock &&
+        (terapiaImport.length > 0 ||
+          (typeof data._terapiaText === 'string' && data._terapiaText.trim())) && (
+          <div className="step-clinica__section">
+            <DischargeTherapyReview
+              rows={terapiaImport}
+              onChange={(v) => onUpdateSection('terapiaImport', v)}
+              operatoreNome={operatoreNome}
+              sourceText={typeof data._terapiaText === 'string' ? data._terapiaText : undefined}
+              sourceResultHash={
+                (data._importSource as { resultHash?: string } | undefined)?.resultHash
+              }
+              onBackToDocuments={onBackToDocuments}
+            />
+          </div>
+        )}
       {/* #235: explicit therapy acceptance — required before the patient can be created. */}
       {therapyBlock && showTherapyAcceptance && (
         <div className="step-clinica__section">

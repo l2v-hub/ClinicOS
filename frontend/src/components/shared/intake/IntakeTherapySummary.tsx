@@ -4,6 +4,7 @@ import type { ScheduleRow } from '../../operator/cartella/therapyDose';
 import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
 import type { buildIntakeTherapyReview } from './intakeTherapies';
 import './IntakeTherapySummary.css';
+import { glucoseScaleRows } from '../../operator/cartella/glucoseScale';
 
 type Review = ReturnType<typeof buildIntakeTherapyReview>[number];
 interface Props {
@@ -68,6 +69,8 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {
     : Array.isArray(input.schedules)
       ? (input.schedules as ScheduleRow[])
       : [];
+  const scale = input.doseMode === 'glucose_scale';
+  const rules = glucoseScaleRows(input.doseProtocol);
   return (
     <article className="intake-therapy-summary" data-testid={`intake-therapy-${t.index}`}>
       <header className="intake-therapy-summary__header">
@@ -91,6 +94,20 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {
         {field('Unità del dosaggio', 'commercialStrengthUnit', value('commercialStrengthUnit'))}
         {field('Via di somministrazione', 'viaSomministrazione', value('viaSomministrazione'))}
         {field('Tipo di terapia', 'tipo', value('tipo'))}
+        {scale && field('Dosaggio', 'doseMode', 'Schema glicemico — dose dopo la rilevazione')}
+        {scale &&
+          field(
+            'Schema glicemico',
+            'glucoseScale',
+            rules.length
+              ? rules
+                  .map(
+                    (rule) =>
+                      `${rule.minMgDl}–${rule.maxMgDl || 'oltre'} mg/dL → ${rule.units} unità`,
+                  )
+                  .join('; ')
+              : 'Schema da completare',
+          )}
         {field('Data di inizio', 'dataInizio', value('dataInizio'))}
         {(Boolean(value('dataFine')) || t.diagnostics.some((d) => d.field === 'dataFine')) &&
           field('Data di fine', 'dataFine', value('dataFine'))}
@@ -130,14 +147,16 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {
             {schedules.map((schedule, i) => (
               <div className="intake-therapy-summary__schedule" key={i}>
                 {field(`Ora ${i + 1}`, 'time', schedule?.time, i)}
-                {field(
-                  `Quantità ${i + 1}`,
-                  'quantity',
-                  schedule
-                    ? `${text(schedule.quantityNumerator)} / ${text(schedule.quantityDenominator)}`
-                    : undefined,
-                  i,
-                )}
+                {!scale &&
+                  field(
+                    `Quantità ${i + 1}`,
+                    'quantity',
+                    schedule
+                      ? `${text(schedule.quantityNumerator)} / ${text(schedule.quantityDenominator)}`
+                      : undefined,
+                    i,
+                  )}
+                {scale && <p className="form-hint">Rileva la glicemia prima di somministrare.</p>}
                 {field(
                   `Unità di somministrazione ${i + 1}`,
                   'administrationUnit',

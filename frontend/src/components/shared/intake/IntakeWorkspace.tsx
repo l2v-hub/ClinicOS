@@ -453,7 +453,16 @@ export function IntakeWorkspace({
 
   function updateSection(key: keyof DraftData, value: unknown) {
     if (submittingRef.current || proposalRequestRef.current) return;
-    const next = { ...dataRef.current, [key]: value };
+    const accepted = dataRef.current._accepted ?? {};
+    const next = {
+      ...dataRef.current,
+      [key]: value,
+      ...(['terapia', 'terapiaImport'].includes(key)
+        ? { _accepted: { ...accepted, therapy: false } }
+        : key === 'anagrafica'
+          ? { _accepted: { ...accepted, demographics: false } }
+          : {}),
+    };
     commitLocal(next);
 
     if (!draftId) return;

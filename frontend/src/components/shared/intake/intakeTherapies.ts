@@ -9,6 +9,7 @@ import { therapyFormToInput } from './therapyFormPayload';
 import { isPatchUnit } from '../../operator/cartella/therapyDose';
 import type { TherapyFieldIssue } from '../../operator/cartella/therapyFieldFeedback';
 import type { IntakeTherapyDiagnostic } from './intakeTherapyNavigation';
+import { glucoseScaleRows, validateGlucoseScaleRows } from '../../operator/cartella/glucoseScale';
 
 const hasText = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
 const validTime = (v: unknown): v is string =>
@@ -57,6 +58,20 @@ export function therapyInputDiagnostics(input: Record<string, unknown>): Therapy
     add('tipo', 'Verifica il tipo di terapia');
   if (!['attiva', 'sospesa', 'conclusa'].includes(String(input.stato)))
     add('stato', 'Verifica lo stato della terapia');
+  const scale = input.doseMode === 'glucose_scale';
+  if (input.doseMode !== undefined && !['fixed', 'glucose_scale'].includes(String(input.doseMode)))
+    add('doseMode', 'Verifica la modalità di dosaggio');
+  if (scale) {
+    const protocol = input.doseProtocol as Record<string, unknown> | null;
+    if (!protocol || protocol.kind !== 'blood_glucose')
+      add('glucoseScale', 'Inserisci uno schema glicemico valido');
+    else
+      validateGlucoseScaleRows(glucoseScaleRows(protocol)).errors.forEach((message) =>
+        add('glucoseScale', message),
+      );
+    if (input.tipo !== 'periodica')
+      add('tipo', 'Lo schema glicemico richiede gli orari di rilevazione');
+  }
   if (input.commercialStrengthValue !== undefined) {
     if (
       !Number.isFinite(input.commercialStrengthValue) ||
@@ -82,15 +97,17 @@ export function therapyInputDiagnostics(input: Record<string, unknown>): Therapy
       if (!s || !validTime(s.time))
         add('time', `Orario ${index + 1}: indica un’ora valida (00:00–23:59)`, index);
       if (
-        !s ||
-        ![s.quantityNumerator, s.quantityDenominator].every(
-          (v) => Number.isSafeInteger(v) && v > 0 && v <= 1000,
-        )
+        !scale &&
+        (!s ||
+          ![s.quantityNumerator, s.quantityDenominator].every(
+            (v) => Number.isSafeInteger(v) && v > 0 && v <= 1000,
+          ))
       )
         add('quantity', `Orario ${index + 1}: indica una quantità valida`, index);
       if (!s || !hasText(s.administrationUnit) || s.administrationUnit.length > 64)
         add('administrationUnit', `Orario ${index + 1}: scegli l’unità di somministrazione`, index);
       if (
+        !scale &&
         s &&
         hasText(s.administrationUnit) &&
         isPatchUnit(s.administrationUnit) &&

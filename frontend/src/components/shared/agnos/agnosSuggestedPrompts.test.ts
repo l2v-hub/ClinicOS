@@ -16,11 +16,20 @@ test('admin receives facility and operational suggestions without overflowing th
   assert.ok(groups.find((group) => group.id === 'operator')?.prompts.length);
 });
 
-test('operator never receives facility suggestions', () => {
+test('operator receives four contextual operational questions, never facility suggestions', () => {
   const prompts = flatten('operatore', false);
   assert.deepEqual(
     prompts.map((prompt) => prompt.audience),
-    ['operator'],
+    ['operator', 'operator', 'operator', 'operator'],
+  );
+  assert.deepEqual(
+    prompts.map((prompt) => prompt.text),
+    [
+      'Cosa devo fare adesso?',
+      'Cosa mi manca oggi?',
+      'Qual è la prossima terapia da somministrare?',
+      'Mostrami le mie consegne',
+    ],
   );
 });
 

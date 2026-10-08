@@ -1,5 +1,6 @@
 import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
 import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
+import { validateGlucoseScaleRows } from '../../operator/cartella/glucoseScale';
 
 /** One lossless confirmation mapper for manual and reviewed imported therapies. */
 export function therapyFormToInput(
@@ -15,6 +16,10 @@ export function therapyFormToInput(
     viaSomministrazione: f.viaSomministrazione,
     tipo: f.tipo,
     stato: f.stato,
+    doseMode: f.doseMode ?? 'fixed',
+    ...(f.doseMode === 'glucose_scale'
+      ? { doseProtocol: validateGlucoseScaleRows(f.glucoseScale ?? []).protocol }
+      : {}),
     ...(f.commercialStrengthValue?.trim()
       ? { commercialStrengthValue: Number(f.commercialStrengthValue) }
       : {}),

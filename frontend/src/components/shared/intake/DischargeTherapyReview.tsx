@@ -28,6 +28,7 @@ interface Props {
   rows: DischargeTherapyRow[];
   onChange: (rows: DischargeTherapyRow[]) => void;
   operatoreNome?: string;
+  sourceText?: string;
   sourceResultHash?: string;
   /** Flusso «da documenti»: torna alla revisione, dove si sceglie il valore dei conflitti. */
   onBackToDocuments?: () => void;
@@ -37,6 +38,7 @@ export function DischargeTherapyReview({
   rows,
   onChange,
   operatoreNome,
+  sourceText,
   sourceResultHash,
   onBackToDocuments,
 }: Props) {
@@ -61,7 +63,7 @@ export function DischargeTherapyReview({
     );
   }
 
-  if (!Array.isArray(rows) || rows.length === 0) return null;
+  if (!Array.isArray(rows) || (rows.length === 0 && !sourceText?.trim())) return null;
   const review = buildIntakeTherapyReview({ terapiaImport: rows });
   const chips = rows.map((r) => therapySourceChip(source.job, r));
   const daVerificare = review.filter((r) => !r.excluded && r.issues.length > 0).length;
@@ -85,153 +87,182 @@ export function DischargeTherapyReview({
           controlla prima di salvare.
         </p>
       )}
-      {rows.map((r, i) => (
-        <article
-          key={i}
-          className="discharge-therapy-review__item"
-          data-testid="discharge-therapy-row"
-          data-stato={r.stato}
-          data-farmaco={r.farmacoNome}
-          data-therapy-source="import"
-          data-therapy-index={i}
-        >
-          <div className="discharge-therapy-review__item-head">
-            <strong>
-              {i + 1}. {forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco da indicare'}
-            </strong>
-            {r.conflictDeferred ? (
-              <span className="discharge-therapy-review__badge is-verify">
-                Dati diversi tra le lettere · resta in bozza
-              </span>
-            ) : r.excludedFromConfirm ? (
-              <span className="discharge-therapy-review__badge is-verify">
-                Resta in bozza · da verificare
-              </span>
-            ) : review[i].issues.length > 0 ? (
-              <span className="discharge-therapy-review__badge is-verify">da verificare</span>
-            ) : (
-              <span className="discharge-therapy-review__badge is-ok">ok</span>
-            )}
-            {chips[i] && source.open && (
-              <button
-                type="button"
-                className="btn-secondary btn-sm"
-                data-testid="discharge-therapy-source"
-                aria-label={chips[i]!.ariaLabel}
-                onClick={(e) => source.open?.(chips[i]!.target, e.currentTarget)}
-              >
-                {chips[i]!.label}
-              </button>
-            )}
-            {!r.conflictDeferred && (
-              <button
-                type="button"
-                className="btn-secondary btn-sm"
-                data-testid="discharge-therapy-remove"
-                onClick={() => toggleDeferred(i)}
-                title="Non riportare questo farmaco nella terapia"
-                aria-label={`${r.excludedFromConfirm ? 'Reincludi' : 'Lascia in bozza'} ${forms[i]?.farmacoNome || r.farmacoNome || 'farmaco'}`}
-              >
-                {r.excludedFromConfirm ? 'Reincludi' : 'Lascia in bozza'}
-              </button>
-            )}
-          </div>
-          {r.conflictDeferred && (
-            <div
-              className="discharge-therapy-review__alert"
-              role="note"
-              data-testid="discharge-therapy-conflict"
-            >
-              <p>
-                Le lettere riportano dati diversi per questo farmaco: non può essere prescritto
-                finché non scegli il valore corretto. La riga resta in bozza e non blocca la
-                creazione del paziente.
-              </p>
-              <p>
-                {onBackToDocuments
-                  ? 'Scegli il valore nella revisione dei documenti, poi includi la terapia.'
-                  : 'Confronta il documento e, se serve, inserisci la terapia come nuova voce.'}
-              </p>
-              {onBackToDocuments && (
-                <button
-                  type="button"
-                  className="btn-secondary btn-sm"
-                  data-testid="discharge-therapy-resolve"
-                  onClick={onBackToDocuments}
-                >
-                  Torna alla revisione dei documenti
-                </button>
-              )}
-            </div>
-          )}
-          {review[i].issues.length > 0 && (
-            <p className="discharge-therapy-review__alert">{review[i].issues.join('; ')}.</p>
-          )}
-          {r.sourceOutdated && (
-            <p className="discharge-therapy-review__alert" role="alert">
-              La fonte è cambiata. I valori che hai corretto sono conservati: confronta le nuove
-              pagine e mantieni, correggi o lascia in bozza questa terapia.
+      {rows.length === 0 && sourceText?.trim() && (
+        <p className="discharge-therapy-review__alert" role="alert">
+          Nessuna terapia riconosciuta automaticamente: confronta il documento e aggiungi con
+          «Aggiungi farmaco» le prescrizioni mancanti prima di confermare.
+        </p>
+      )}
+      <div className={sourceText?.trim() ? 'discharge-therapy-review__workspace' : undefined}>
+        {sourceText?.trim() && (
+          <aside
+            className="discharge-therapy-review__source"
+            aria-label="Testo terapia dalla lettera di dimissione"
+            data-testid="therapy-source-comparison"
+          >
+            <strong>Confronta con il testo completo della terapia</strong>
+            <p>
+              Verifica anche i farmaci non riconosciuti. Usa il collegamento alla fonte per aprire
+              le pagine originali della dimissione.
             </p>
-          )}
-          {r.originalText && (
-            <blockquote
-              className="discharge-therapy-review__original"
-              data-testid="discharge-original-text"
+            <pre>{sourceText}</pre>
+          </aside>
+        )}
+        <div className="discharge-therapy-review__forms">
+          {rows.map((r, i) => (
+            <article
+              key={i}
+              className="discharge-therapy-review__item"
+              data-testid="discharge-therapy-row"
+              data-stato={r.stato}
+              data-farmaco={r.farmacoNome}
+              data-therapy-source="import"
+              data-therapy-index={i}
             >
-              <span className="discharge-therapy-review__original-label">Dal documento:</span>{' '}
-              {r.originalText}
-            </blockquote>
-          )}
-          {forms[i] && !r.excludedFromConfirm && (
-            <div className="ec-modal-add-form">
-              <TherapyFormFields
-                value={forms[i]}
-                onChange={(v) => updateForm(i, v)}
-                operatoreNome={operatoreNome}
-                issues={review[i].diagnostics}
-                prescriberSuggestions={INTAKE_PRESCRIBER_SUGGESTIONS}
-              />
-              {review[i].requiresSourceReview && (
-                <div
-                  tabIndex={-1}
-                  role="group"
-                  aria-label="Verifica della terapia estratta dal documento"
-                  {...therapyFieldFeedback(`${id}-${i}`, review[i].diagnostics).attributes(
-                    'sourceReview',
-                  )}
-                >
-                  {therapyFieldFeedback(`${id}-${i}`, review[i].diagnostics).error('sourceReview')}
+              <div className="discharge-therapy-review__item-head">
+                <strong>
+                  {i + 1}. {forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco da indicare'}
+                </strong>
+                {r.conflictDeferred ? (
+                  <span className="discharge-therapy-review__badge is-verify">
+                    Dati diversi tra le lettere · resta in bozza
+                  </span>
+                ) : r.excludedFromConfirm ? (
+                  <span className="discharge-therapy-review__badge is-verify">
+                    Resta in bozza · da verificare
+                  </span>
+                ) : review[i].issues.length > 0 ? (
+                  <span className="discharge-therapy-review__badge is-verify">da verificare</span>
+                ) : (
+                  <span className="discharge-therapy-review__badge is-ok">ok</span>
+                )}
+                {chips[i] && source.open && (
                   <button
                     type="button"
-                    className="btn-secondary"
-                    disabled={
-                      therapyInputIssues(review[i].input).length > 0 ||
-                      (r.sourceOutdated === true && !sourceResultHash)
-                    }
-                    onClick={() =>
-                      onChange(
-                        rows.map((row, idx) =>
-                          idx === i
-                            ? therapyFormToDischargeRow(forms[i], {
-                                ...row,
-                                stato: 'ok',
-                                ...(row.sourceOutdated
-                                  ? { sourceOutdated: false, sourceReviewHash: sourceResultHash }
-                                  : {}),
-                              })
-                            : row,
-                        ),
-                      )
-                    }
+                    className="btn-secondary btn-sm"
+                    data-testid="discharge-therapy-source"
+                    aria-label={chips[i]!.ariaLabel}
+                    onClick={(e) => source.open?.(chips[i]!.target, e.currentTarget)}
                   >
-                    Ho verificato questa terapia
+                    {chips[i]!.label}
                   </button>
+                )}
+                {!r.conflictDeferred && (
+                  <button
+                    type="button"
+                    className="btn-secondary btn-sm"
+                    data-testid="discharge-therapy-remove"
+                    onClick={() => toggleDeferred(i)}
+                    title="Non riportare questo farmaco nella terapia"
+                    aria-label={`${r.excludedFromConfirm ? 'Reincludi' : 'Lascia in bozza'} ${forms[i]?.farmacoNome || r.farmacoNome || 'farmaco'}`}
+                  >
+                    {r.excludedFromConfirm ? 'Reincludi' : 'Lascia in bozza'}
+                  </button>
+                )}
+              </div>
+              {r.conflictDeferred && (
+                <div
+                  className="discharge-therapy-review__alert"
+                  role="note"
+                  data-testid="discharge-therapy-conflict"
+                >
+                  <p>
+                    Le lettere riportano dati diversi per questo farmaco: non può essere prescritto
+                    finché non scegli il valore corretto. La riga resta in bozza e non blocca la
+                    creazione del paziente.
+                  </p>
+                  <p>
+                    {onBackToDocuments
+                      ? 'Scegli il valore nella revisione dei documenti, poi includi la terapia.'
+                      : 'Confronta il documento e, se serve, inserisci la terapia come nuova voce.'}
+                  </p>
+                  {onBackToDocuments && (
+                    <button
+                      type="button"
+                      className="btn-secondary btn-sm"
+                      data-testid="discharge-therapy-resolve"
+                      onClick={onBackToDocuments}
+                    >
+                      Torna alla revisione dei documenti
+                    </button>
+                  )}
                 </div>
               )}
-            </div>
-          )}
-        </article>
-      ))}
+              {review[i].issues.length > 0 && (
+                <p className="discharge-therapy-review__alert">{review[i].issues.join('; ')}.</p>
+              )}
+              {r.sourceOutdated && (
+                <p className="discharge-therapy-review__alert" role="alert">
+                  La fonte è cambiata. I valori che hai corretto sono conservati: confronta le nuove
+                  pagine e mantieni, correggi o lascia in bozza questa terapia.
+                </p>
+              )}
+              {r.originalText && (
+                <blockquote
+                  className="discharge-therapy-review__original"
+                  data-testid="discharge-original-text"
+                >
+                  <span className="discharge-therapy-review__original-label">Dal documento:</span>{' '}
+                  {r.originalText}
+                </blockquote>
+              )}
+              {forms[i] && !r.excludedFromConfirm && (
+                <div className="ec-modal-add-form">
+                  <TherapyFormFields
+                    value={forms[i]}
+                    onChange={(v) => updateForm(i, v)}
+                    operatoreNome={operatoreNome}
+                    issues={review[i].diagnostics}
+                    prescriberSuggestions={INTAKE_PRESCRIBER_SUGGESTIONS}
+                  />
+                  {review[i].requiresSourceReview && (
+                    <div
+                      tabIndex={-1}
+                      role="group"
+                      aria-label="Verifica della terapia estratta dal documento"
+                      {...therapyFieldFeedback(`${id}-${i}`, review[i].diagnostics).attributes(
+                        'sourceReview',
+                      )}
+                    >
+                      {therapyFieldFeedback(`${id}-${i}`, review[i].diagnostics).error(
+                        'sourceReview',
+                      )}
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        disabled={
+                          therapyInputIssues(review[i].input).length > 0 ||
+                          (r.sourceOutdated === true && !sourceResultHash)
+                        }
+                        onClick={() =>
+                          onChange(
+                            rows.map((row, idx) =>
+                              idx === i
+                                ? therapyFormToDischargeRow(forms[i], {
+                                    ...row,
+                                    stato: 'ok',
+                                    ...(row.sourceOutdated
+                                      ? {
+                                          sourceOutdated: false,
+                                          sourceReviewHash: sourceResultHash,
+                                        }
+                                      : {}),
+                                  })
+                                : row,
+                            ),
+                          )
+                        }
+                      >
+                        Ho verificato questa terapia
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
       <p className="discharge-therapy-review__hint">
         Verranno create solo le terapie incluse e verificate. «Lascia in bozza» conserva la riga
         originale senza creare una prescrizione somministrabile.
