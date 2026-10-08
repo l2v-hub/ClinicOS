@@ -1,0 +1,1188 @@
+{
+  "source": "actual frontend App.tsx/index.html, synthetic intercepted localhost API only",
+  "outcomes": [
+    {
+      "name": "AC1 real App route opens manual form and focuses Name",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 Tab and Shift Tab contained in manual dialog",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 Cancel returns method chooser and method focus, no patient created",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 Escape returns method chooser and method focus",
+      "status": "PASS"
+    },
+    {
+      "name": "Draft Name persists after actual reload and relogin",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 Back returns roster and focuses new intake action; count unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 repeated eight Back route-remount cycles restore roster action focus",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 announced draft opening failure and Riprova opens same route",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 lazy module failure has local alert and retry reload recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 lazy module failure Cancel returns chosen method focus without draft",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 denied capability populated roster no intake action or draft",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 denied capability empty roster no intake action or draft",
+      "status": "PASS"
+    },
+    {
+      "name": "Mobile manual form visible and first Name focus",
+      "status": "PASS"
+    }
+  ],
+  "unexpectedApi": [],
+  "expectedInjected": [
+    "Injected draft opening 503"
+  ],
+  "runtime": [
+    {
+      "role": "nurse",
+      "openingCalls": 1,
+      "moduleAborted": false,
+      "blockedExternal": [],
+      "errors": [],
+      "expectedErrors": [],
+      "pageErrors": [],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "POST",
+          "path": "/intake/drafts"
+        },
+        {
+          "method": "PATCH",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "PATCH",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "GET",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "PATCH",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "GET",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "PATCH",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "PATCH",
+          "path": "/intake/drafts/QA-DRAFT-402"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        }
+      ]
+    },
+    {
+      "role": "nurse",
+      "openingCalls": 2,
+      "moduleAborted": false,
+      "blockedExternal": [],
+      "errors": [],
+      "expectedErrors": [
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      ],
+      "pageErrors": [],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "POST",
+          "path": "/intake/drafts"
+        },
+        {
+          "method": "POST",
+          "path": "/intake/drafts"
+        }
+      ]
+    },
+    {
+      "role": "nurse",
+      "openingCalls": 1,
+      "moduleAborted": true,
+      "blockedExternal": [],
+      "errors": [],
+      "expectedErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "%o\n\n%s\n\n%s\n TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:5185/src/components/shared/intake/IntakeWorkspace.tsx The above error occurred in one of your React components. React will try to recreate this component tree from scratch using the error boundary you provided, IntakeFlowBoundary."
+      ],
+      "pageErrors": [],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "POST",
+          "path": "/intake/drafts"
+        }
+      ]
+    },
+    {
+      "role": "nurse",
+      "openingCalls": 0,
+      "moduleAborted": true,
+      "blockedExternal": [],
+      "errors": [],
+      "expectedErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "%o\n\n%s\n\n%s\n TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:5185/src/components/shared/intake/IntakeWorkspace.tsx The above error occurred in one of your React components. React will try to recreate this component tree from scratch using the error boundary you provided, IntakeFlowBoundary."
+      ],
+      "pageErrors": [],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        }
+      ]
+    },
+    {
+      "role": "oss",
+      "openingCalls": 0,
+      "moduleAborted": false,
+      "blockedExternal": [],
+      "errors": [],
+      "expectedErrors": [],
+      "pageErrors": [],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        }
+      ]
+    },
+    {
+      "role": "oss",
+      "openingCalls": 0,
+      "moduleAborted": false,
+      "blockedExternal": [],
+      "errors": [],
+      "expectedErrors": [],
+      "pageErrors": [],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        }
+      ]
+    },
+    {
+      "role": "nurse",
+      "openingCalls": 1,
+      "moduleAborted": false,
+      "blockedExternal": [],
+      "errors": [],
+      "expectedErrors": [],
+      "pageErrors": [],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/ai/extraction/status"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-402/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "POST",
+          "path": "/intake/drafts"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-08T21:57:12Z",
+  "issue": 402,
+  "actor": "root integration and release gatekeeper",
+  "applicationCommit": "2b7ae91375289209dea113498ade8dfd5faf719a",
+  "frontendInputsSha256": "336b8e7771bf9a07a4116dd39c63f66c4a6265ff16d2d520dbe6d1d23e994569",
+  "authority": "Direct user request: resolve each GitHub bug sequentially, deploy without repeated confirmation and publish screenshot proof before verified closure",
+  "decision": "ALLOW scoped push and Git-linked Vercel production deployment after independent QA and root QA rerun",
+  "evidence": "Independent117focused/types/build and13browser checks; root reran13browserchecks/eightBackcycles, nine navigation tests, source receipt and secret scan (zero findings)",
+  "waiver": "Explicitly accept only the twelve unchanged baseline frontend failures for this isolated bug; zero new failures",
+  "safety": "No production patient reads/writes, no backend/config/dependency changes, no secret/PHI evidence; clean committed application source; primary user checkout preserved",
+  "closure": "Allowed only after production READY/source/alias checks and pinned screenshot evidence are posted on GitHub"
+}

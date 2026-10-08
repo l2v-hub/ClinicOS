@@ -1,0 +1,70 @@
+{
+  "source": "actual frontend App.tsx/index.html, synthetic intercepted localhost API only",
+  "outcomes": [
+    {
+      "name": "AC1 real App route opens manual form and focuses Name",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 Tab and Shift Tab contained in manual dialog",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 Cancel returns method chooser and method focus, no patient created",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 Escape returns method chooser and method focus",
+      "status": "PASS"
+    },
+    {
+      "name": "Draft Name persists after actual reload and relogin",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 Back returns roster and focuses new intake action; count unchanged",
+      "status": "FAIL",
+      "message": "unexpected console/HTTP errors\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 8\n\n- Array []\n+ Array [\n+   \"Failed to load resource: net::ERR_FAILED\",\n+   \"HTTP 500 /patients/QA-PATIENT-402/parameter-readings\",\n+   \"Failed to load resource: the server responded with a status of 500 (Internal Server Error)\",\n+   \"Failed to load resource: net::ERR_FAILED\",\n+   \"HTTP 500 /patients/QA-PATIENT-402/parameter-readings\",\n+   \"Failed to load resource: the server responded with a status of 500 (Internal Server Error)\",\n+ ]"
+    },
+    {
+      "name": "AC3 announced draft opening failure and Riprova opens same route",
+      "status": "FAIL",
+      "message": "unexpected console/HTTP errors\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 5\n\n- Array []\n+ Array [\n+   \"Failed to load resource: net::ERR_FAILED\",\n+   \"HTTP 500 /patients/QA-PATIENT-402/parameter-readings\",\n+   \"Failed to load resource: the server responded with a status of 500 (Internal Server Error)\",\n+ ]"
+    },
+    {
+      "name": "AC3 lazy module failure has local alert and retry reload recovery",
+      "status": "FAIL",
+      "message": "unexpected console/HTTP errors\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 5\n\n- Array []\n+ Array [\n+   \"Failed to load resource: net::ERR_FAILED\",\n+   \"HTTP 500 /patients/QA-PATIENT-402/parameter-readings\",\n+   \"Failed to load resource: the server responded with a status of 500 (Internal Server Error)\",\n+ ]"
+    },
+    {
+      "name": "AC4 denied capability populated roster no intake action or draft",
+      "status": "FAIL",
+      "message": "unexpected console/HTTP errors\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 5\n\n- Array []\n+ Array [\n+   \"Failed to load resource: net::ERR_FAILED\",\n+   \"HTTP 500 /patients/QA-PATIENT-402/parameter-readings\",\n+   \"Failed to load resource: the server responded with a status of 500 (Internal Server Error)\",\n+ ]"
+    },
+    {
+      "name": "AC4 denied capability empty roster no intake action or draft",
+      "status": "FAIL",
+      "message": "unexpected console/HTTP errors\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 3\n\n- Array []\n+ Array [\n+   \"Failed to load resource: net::ERR_FAILED\",\n+ ]"
+    },
+    {
+      "name": "Mobile manual form visible and first Name focus",
+      "status": "FAIL",
+      "message": "unexpected console/HTTP errors\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 5\n\n- Array []\n+ Array [\n+   \"Failed to load resource: net::ERR_FAILED\",\n+   \"HTTP 500 /patients/QA-PATIENT-402/parameter-readings\",\n+   \"Failed to load resource: the server responded with a status of 500 (Internal Server Error)\",\n+ ]"
+    }
+  ],
+  "unexpectedApi": [
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings",
+    "Unhandled/forbidden API GET /patients/QA-PATIENT-402/parameter-readings"
+  ],
+  "expectedInjected": [
+    "Injected draft opening 503"
+  ]
+}
