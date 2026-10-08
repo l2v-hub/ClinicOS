@@ -2,6 +2,45 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseDischargeTherapy, parseTherapyLine } from '../parse-discharge-therapy.js';
 
+test('dose insulinica condizionale: conserva le fasce glicemia→unità senza inventare quantità fisse', () => {
+  const row = parseTherapyLine(
+    'HUMALOG 100 UI/ML 4 U se glicemia tra 200-250, 6 U tra 251-300, 8 U da 350-450',
+  );
+  assert.equal(row.farmacoNome, 'HUMALOG');
+  assert.equal(row.doseMode, 'glucose_scale');
+  assert.deepEqual(row.glucoseScale, [
+    { minMgDl: 200, maxMgDl: 250, units: 4 },
+    { minMgDl: 251, maxMgDl: 300, units: 6 },
+    { minMgDl: 350, maxMgDl: 450, units: 8 },
+  ]);
+  assert.equal(row.quantita, '');
+  assert.equal(row.stato, 'da_verificare', 'gli orari mancanti non devono essere inventati');
+});
+
+test('dose insulinica condizionale: mantiene da verificare le fasce con estremi sovrapposti', () => {
+  const row = parseTherapyLine('INSULINA 4 U tra 200-250, 6 U tra 250-300');
+  assert.equal(row.doseMode, 'glucose_scale');
+  assert.equal(row.stato, 'da_verificare');
+});
+
+test('dose insulinica condizionale: riconosce anche la notazione intervallo-freccia-dose', () => {
+  const unicode = parseTherapyLine('INSULINA 100 UI/ML 100-150→3U, 151-200→4U');
+  assert.equal(unicode.doseMode, 'glucose_scale');
+  assert.deepEqual(unicode.glucoseScale, [
+    { minMgDl: 100, maxMgDl: 150, units: 3 },
+    { minMgDl: 151, maxMgDl: 200, units: 4 },
+  ]);
+
+  const ascii = parseTherapyLine('INSULINA 100 UI/ML 201-250 -> 6 U');
+  assert.deepEqual(ascii.glucoseScale, [{ minMgDl: 201, maxMgDl: 250, units: 6 }]);
+});
+
+test('dose insulinica condizionale: una fascia invertita resta da verificare', () => {
+  const row = parseTherapyLine('INSULINA 100 UI/ML 300-250→6U');
+  assert.equal(row.doseMode, 'glucose_scale');
+  assert.equal(row.stato, 'da_verificare');
+});
+
 // Realistic fixture from issue #156 (NOT hardcoded in the parser — used only as test data).
 const FIXTURE = [
   'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)',

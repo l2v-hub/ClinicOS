@@ -53,6 +53,8 @@ export interface SlotAdministration {
   administeredAt: string | null;
   administeredBy: string | null;
   notAdministeredReason: string | null;
+  doseMode: 'fixed' | 'glucose_scale';
+  doseProtocol: unknown | null;
 }
 
 export interface SlotPatient {
@@ -232,6 +234,8 @@ async function buildTherapySlotSourcePage(
       fasceNotte: true,
       commercialStrengthValue: true,
       commercialStrengthUnit: true,
+      doseMode: true,
+      doseProtocol: true,
       schedules: {
         take: MAX_THERAPY_SCHEDULES + 1,
         select: {
@@ -337,15 +341,23 @@ async function buildTherapySlotSourcePage(
       const sched = (pt.schedules as ScheduleInput[] | undefined)?.find(
         (s) => s.fascia === f.fascia,
       );
-      const quantityLabel = sched
-        ? scheduleDoseLabel(sched, pt.commercialStrengthValue, pt.commercialStrengthUnit)
-        : null;
+      const quantityLabel =
+        existing?.stato === 'erogata' && pt.doseMode === 'glucose_scale'
+          ? (existing.farmacoDose ?? 'Dose registrata')
+          : sched
+            ? pt.doseMode === 'glucose_scale'
+              ? 'Dose da calcolare sulla glicemia'
+              : scheduleDoseLabel(sched, pt.commercialStrengthValue, pt.commercialStrengthUnit)
+            : null;
 
       const administrationEntry: SlotAdministration = {
         administrationId: existing?.id ?? null,
         therapyId: pt.id,
         drugName: pt.farmacoNome,
-        dosage: quantityLabel ?? pt.dosaggio,
+        dosage:
+          existing?.stato === 'erogata'
+            ? (existing.farmacoDose ?? pt.dosaggio)
+            : (quantityLabel ?? pt.dosaggio),
         quantityLabel,
         route: pt.viaSomministrazione || 'orale',
         scheduledTime: sched?.time || f.ora,
@@ -353,6 +365,8 @@ async function buildTherapySlotSourcePage(
         administeredAt: existing?.confirmedAt ? new Date(existing.confirmedAt).toISOString() : null,
         administeredBy: existing?.operatoreNome ?? null,
         notAdministeredReason: existing?.motivo ?? null,
+        doseMode: pt.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed',
+        doseProtocol: pt.doseProtocol ?? null,
       };
 
       if (!patientMap.has(pt.patientId)) {

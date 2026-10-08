@@ -22,6 +22,7 @@ const TEXT_LIMITS = {
   allowedFractions: 256,
   drugPackageRef: 256,
   giorniSettimana: 64,
+  doseMode: 32,
 } as const;
 
 /** Nomi dei campi come li vede l'operatore: i messaggi non espongono le chiavi dell'API. */
@@ -42,10 +43,12 @@ const FIELD_LABELS: Record<keyof typeof TEXT_LIMITS, string> = {
   allowedFractions: 'Frazioni consentite',
   drugPackageRef: 'Confezione AIFA',
   giorniSettimana: 'Giorni della settimana',
+  doseMode: 'Modalità dose',
 };
 
 const THERAPY_TYPES = new Set(['periodica', 'una_tantum', 'al_bisogno']);
 const THERAPY_STATUSES = new Set(['attiva', 'sospesa', 'conclusa']);
+const DOSE_MODES = new Set(['fixed', 'glucose_scale']);
 
 export function assertTherapyScalarInput(input: Record<string, unknown>): void {
   for (const [field, max] of Object.entries(TEXT_LIMITS)) {
@@ -66,5 +69,8 @@ export function assertTherapyScalarInput(input: Record<string, unknown>): void {
   }
   if (typeof input.stato === 'string' && !THERAPY_STATUSES.has(input.stato)) {
     throw new TherapyInputError('Stato terapia non valido: attiva, sospesa o conclusa');
+  }
+  if (input.doseMode !== undefined && !DOSE_MODES.has(input.doseMode as string)) {
+    throw new TherapyInputError('Modalità dose non valida');
   }
 }

@@ -357,6 +357,7 @@ model MedicationAdministration {
   operatoreId   String?
   operatoreNome String?
   confirmedAt   DateTime?
+  doseContext   Json?
   motivo        String?
   note          String?
   createdAt     DateTime  @default(now())
@@ -451,6 +452,8 @@ model PatientTherapy {
   // #241: intermittent weekday posology. Comma list of ISO weekday numbers (Mon=1 … Sun=7);
   // NULL/empty = every day (preserves prior behavior, fully backward-compatible).
   giorniSettimana         String?
+  doseMode                String   @default("fixed") // fixed | glucose_scale
+  doseProtocol            Json?
   schedules               TherapySchedule[]
   administrations         MedicationAdministration[]
   prnAdministrations      PrnAdministration[]

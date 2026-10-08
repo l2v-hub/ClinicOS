@@ -12,8 +12,9 @@ import {
   deriveLegacyFromSchedules,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
-import type { PatientTherapy, TherapySchedule } from '@prisma/client';
+import type { PatientTherapy, Prisma, TherapySchedule } from '@prisma/client';
 import { assertTherapyScalarInput, TherapyInputError } from './input-validation.js';
+import { InvalidDoseProtocolError, normalizeGlucoseScaleProtocol } from './glucose-scale.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -53,6 +54,8 @@ export interface TherapyCreateInput {
   allowedFractions?: string;
   drugPackageRef?: string;
   giorniSettimana?: string; // #241: comma list of ISO weekdays (1..7); empty/undefined = every day
+  doseMode?: 'fixed' | 'glucose_scale';
+  doseProtocol?: unknown;
   schedules?: unknown;
 }
 
@@ -121,6 +124,17 @@ export function validateTherapyCreateInput(input: TherapyCreateInput) {
 
   const dates = normalizeTherapyDateRange(dataInizio, input.dataFine);
   if (input.schedules !== undefined) assertValidSchedulesInput(input.schedules);
+  if (input.doseMode === 'glucose_scale') {
+    if ((input.tipo ?? 'periodica') !== 'periodica') {
+      throw new InvalidDoseProtocolError('Lo schema glicemico richiede una terapia periodica');
+    }
+    normalizeGlucoseScaleProtocol(input.doseProtocol);
+    if (!Array.isArray(input.schedules) || input.schedules.length === 0) {
+      throw new InvalidDoseProtocolError(
+        'Aggiungi almeno un orario di rilevazione e somministrazione',
+      );
+    }
+  }
   return dates;
 }
 
@@ -147,7 +161,19 @@ export async function createTherapyInTx(
       ? input.pharmaceuticalForm.trim()
       : null;
 
-  const dosaggio = deriveDosaggio(input.dosaggio, strengthValue, strengthUnit, form);
+  const doseMode = input.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed';
+  const doseProtocol =
+    doseMode === 'glucose_scale' ? normalizeGlucoseScaleProtocol(input.doseProtocol) : null;
+  if (doseMode === 'glucose_scale' && schedules.length === 0) {
+    throw new InvalidDoseProtocolError(
+      'Aggiungi almeno un orario di rilevazione e somministrazione',
+    );
+  }
+
+  const dosaggio =
+    doseMode === 'glucose_scale'
+      ? 'Dose secondo schema glicemico'
+      : deriveDosaggio(input.dosaggio, strengthValue, strengthUnit, form);
 
   // Derive legacy fascia boolean flags + orarioSpecifico from structured schedules.
   // When no schedules are supplied fall back to legacy boolean flags from the input.
@@ -163,7 +189,7 @@ export async function createTherapyInTx(
           orarioSpecifico: input.orarioSpecifico ?? null,
         };
 
-  return tx.patientTherapy.create({
+  const therapy = await tx.patientTherapy.create({
     data: {
       patientId,
       farmacoNome,
@@ -196,8 +222,11 @@ export async function createTherapyInTx(
           ? input.drugPackageRef.trim()
           : null,
       giorniSettimana: normalizeGiorniSettimana(input.giorniSettimana),
+      doseMode,
+      doseProtocol: doseProtocol ? (doseProtocol as unknown as Prisma.InputJsonValue) : undefined,
       schedules: schedules.length ? { create: schedules } : undefined,
     },
     include: { schedules: { orderBy: { time: 'asc' } } },
   });
+  return therapy as PatientTherapyWithSchedules;
 }

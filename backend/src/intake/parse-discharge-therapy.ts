@@ -5,6 +5,8 @@
 // statements are not prescriptions; callers retain the full source text for review.
 // PRIVACY: this module never logs; callers must log only counts/status, not text.
 
+import { normalizeGlucoseScaleProtocol } from '../therapies/glucose-scale.js';
+
 export interface ParsedTherapyRow {
   farmacoNome: string; // drug name (first token), e.g. KEPPRA
   forma: string; // pharmaceutical form, e.g. "CPR RIV", "SCIR", "POLVERE"
@@ -18,6 +20,8 @@ export interface ParsedTherapyRow {
   note: string; // leftover free text
   originalText: string; // source line kept verbatim (audit / operator reference)
   stato: 'ok' | 'da_verificare';
+  doseMode?: 'fixed' | 'glucose_scale';
+  glucoseScale?: Array<{ minMgDl: number; maxMgDl: number | null; units: number }>;
 }
 
 const ROUTES = [
@@ -81,6 +85,10 @@ function detectRoute(text: string): string {
 const QTY_RE = new RegExp(`\\b(\\d+(?:\\/\\d+)?)\\s+(${UNITS})\\b`, 'i');
 const DOSE_RE =
   /\b(\d+(?:[.,]\d+)?)\s?(MGR|MCG|MG|GR|G|UI|ML)\b(\s?\/\s?\d+(?:[.,]\d+)?\s?(?:UI|ML|MG|MGR|MCG|GR|G))?/i;
+const GLUCOSE_SCALE_RE =
+  /(\d+(?:[.,]\d+)?)\s*(?:U|UI|unit[àa])\s*(?:se\s+(?:la\s+)?glicemia\s+)?(?:tra|da)?\s*(\d{2,4})\s*[-–]\s*(\d{2,4})/gi;
+const GLUCOSE_SCALE_ARROW_RE =
+  /(\d{2,4})\s*[-–]\s*(\d{2,4})\s*(?:->|→|:)\s*(\d+(?:[.,]\d+)?)\s*(?:U|UI|unit[àa])/gi;
 const DAY_RE = new RegExp(`\\b(${DAYS.join('|')})\\b`, 'g');
 
 function toIsoDate(dmy: string | undefined): string {
@@ -319,7 +327,42 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   const dosaggio = doseM ? doseM[0].replace(/\s+/g, ' ').trim() : '';
   marca(doseM?.index, doseM?.[0].length ?? 0);
 
-  const nomeGrezzo = testo.match(/^([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9.\-]*)/)?.[1] ?? '';
+  const glucoseScale: Array<{ minMgDl: number; maxMgDl: number | null; units: number }> = [];
+  for (const match of testo.matchAll(GLUCOSE_SCALE_RE)) {
+    const units = Number(match[1].replace(',', '.'));
+    const minMgDl = Number(match[2]);
+    const maxMgDl = Number(match[3]);
+    if (Number.isFinite(units) && Number.isInteger(minMgDl) && Number.isInteger(maxMgDl)) {
+      glucoseScale.push({ minMgDl, maxMgDl, units });
+      marca(match.index, match[0].length);
+    }
+  }
+  for (const match of testo.matchAll(GLUCOSE_SCALE_ARROW_RE)) {
+    const minMgDl = Number(match[1]);
+    const maxMgDl = Number(match[2]);
+    const units = Number(match[3].replace(',', '.'));
+    if (Number.isFinite(units) && Number.isInteger(minMgDl) && Number.isInteger(maxMgDl)) {
+      glucoseScale.push({ minMgDl, maxMgDl, units });
+      marca(match.index, match[0].length);
+    }
+  }
+  const doseMode = glucoseScale.length > 0 ? ('glucose_scale' as const) : ('fixed' as const);
+  let normalizedGlucoseScale = glucoseScale;
+  let glucoseScaleValid = true;
+  if (glucoseScale.length) {
+    try {
+      normalizedGlucoseScale = normalizeGlucoseScaleProtocol({
+        kind: 'blood_glucose',
+        measurementUnit: 'mg/dL',
+        doseUnit: 'unità',
+        rules: glucoseScale,
+      }).rules;
+    } catch {
+      glucoseScaleValid = false;
+    }
+  }
+
+  const nomeGrezzo = testo.match(/^([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9.-]*)/)?.[1] ?? '';
   const farmacoNome = nomeGrezzo.toUpperCase();
   marca(0, nomeGrezzo.length);
 
@@ -382,6 +425,7 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     quantita,
     dataInizio,
     viaSomministrazione,
+    glucoseScale.length ? 'schema' : '',
   ].filter(Boolean).length;
   // Un numero rimasto fuori da ogni campo (una concentrazione, una posologia) e' clinicamente
   // rilevante: la riga va rivista anche quando il resto e' ben formato.
@@ -389,7 +433,12 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   // A retained negative instruction is not an affirmed prescription, even with dose/route.
   const negativeInstruction = /^(?:non|nessuna|nessun)\b/i.test(testo);
   const stato: ParsedTherapyRow['stato'] =
-    farmacoNome && signals >= 2 && !residuoNumerico && !negativeInstruction
+    farmacoNome &&
+    signals >= 2 &&
+    !residuoNumerico &&
+    !negativeInstruction &&
+    glucoseScaleValid &&
+    (doseMode === 'fixed' || orari.length > 0)
       ? 'ok'
       : 'da_verificare';
 
@@ -406,6 +455,8 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     note,
     originalText,
     stato,
+    doseMode,
+    ...(glucoseScale.length ? { glucoseScale: normalizedGlucoseScale } : {}),
   };
 }
 

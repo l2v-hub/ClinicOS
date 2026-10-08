@@ -1,5 +1,6 @@
 import { AiExtractionError } from '../ai/types.js';
 import type { TherapyCreateInput } from '../therapies/therapy-create.js';
+import { normalizeGlucoseScaleProtocol } from '../therapies/glucose-scale.js';
 
 type Row = Record<string, unknown>;
 type Source = { type: 'import' | 'manual'; index: number };
@@ -23,6 +24,8 @@ const FIELD_LABEL: Record<string, string> = {
   orarioSomministrazione: 'orario di somministrazione',
   giorniSettimana: 'giorni della settimana',
   schedules: 'orari e quantità',
+  doseMode: 'modalità dose',
+  doseProtocol: 'schema glicemico',
 };
 const RETRY =
   'Attendi «Bozza salvata» (o riapri la scheda), verifica la riga nella sezione Terapia e riprova.';
@@ -42,6 +45,18 @@ const mismatch = (row?: number, field?: string) =>
   );
 
 function checkReviewedForm(source: Row, input: ReviewedInput, row: number) {
+  const mode = source.doseMode === 'glucose_scale' ? 'glucose_scale' : 'fixed';
+  if (mode !== (input.doseMode ?? 'fixed')) throw mismatch(row, 'doseMode');
+  if (mode === 'glucose_scale') {
+    const scaleRows = rows(source.glucoseScale).map((rule) => ({
+      minMgDl: Number(rule.minMgDl),
+      maxMgDl: rule.maxMgDl === '' || rule.maxMgDl === null ? null : Number(rule.maxMgDl),
+      units: text(rule.units) === '' && typeof rule.units !== 'number' ? NaN : Number(rule.units),
+    }));
+    const saved = normalizeGlucoseScaleProtocol({ kind: 'blood_glucose', rules: scaleRows });
+    const submitted = normalizeGlucoseScaleProtocol(input.doseProtocol);
+    if (JSON.stringify(saved) !== JSON.stringify(submitted)) throw mismatch(row, 'doseProtocol');
+  }
   for (const key of [
     'farmacoNome',
     'dataInizio',
@@ -73,9 +88,13 @@ function checkReviewedForm(source: Row, input: ReviewedInput, row: number) {
   const project = (value: unknown) =>
     rows(value).map((s) => ({
       time: text(s.time),
-      quantityNumerator: s.quantityNumerator,
-      quantityDenominator: s.quantityDenominator,
-      administrationUnit: text(s.administrationUnit),
+      ...(mode === 'fixed'
+        ? {
+            quantityNumerator: s.quantityNumerator,
+            quantityDenominator: s.quantityDenominator,
+            administrationUnit: text(s.administrationUnit),
+          }
+        : {}),
     }));
   if (
     source.tipo === 'periodica' &&

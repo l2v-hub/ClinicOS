@@ -13,6 +13,7 @@ export interface TherapyAdministrationPageRow {
   therapyId: string | null;
   patientId: string;
   farmacoNome: string;
+  farmacoDose?: string;
   fascia: string;
   stato: string;
   confirmedAt: Date | null;
@@ -63,6 +64,7 @@ export async function findTherapyPageAdministrations(
         ma."therapyId",
         ma."patientId",
         ma."farmacoNome",
+        ma."farmacoDose",
         ma.fascia,
         ma.stato,
         ma."confirmedAt",
@@ -91,6 +93,7 @@ export async function findTherapyPageAdministrations(
             ma."therapyId",
             ma."patientId",
             ma."farmacoNome",
+            ma."farmacoDose",
             ma.fascia,
             ma.stato,
             ma."confirmedAt",

@@ -159,6 +159,7 @@ export async function recordPrnAdministration(
           where: { id: input.therapyId, patientId: input.patientId, ...scopeWhere(actor) },
           select: {
             tipo: true,
+            doseMode: true,
             stato: true,
             dataInizio: true,
             dataFine: true,
@@ -183,6 +184,7 @@ export async function recordPrnAdministration(
         if (!therapy) throw new TherapyNotFoundError();
         if (
           therapy.tipo !== 'al_bisogno' ||
+          therapy.doseMode === 'glucose_scale' ||
           therapy.stato !== 'attiva' ||
           therapy.dataInizio > date ||
           (therapy.dataFine !== null && therapy.dataFine < date)

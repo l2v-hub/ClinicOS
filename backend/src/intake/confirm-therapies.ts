@@ -5,6 +5,7 @@ import {
   normalizeTherapyDateRange,
 } from '../lib/therapy-dose.js';
 import { TherapyInputError } from '../therapies/input-validation.js';
+import { InvalidDoseProtocolError } from '../therapies/glucose-scale.js';
 import {
   validateTherapyCreateInput,
   type TherapyCreateInput,
@@ -14,7 +15,8 @@ export function isTherapyValidationError(error: unknown): error is Error {
   return (
     error instanceof TherapyInputError ||
     error instanceof TherapyDateRangeError ||
-    error instanceof InvalidTherapySchedulesError
+    error instanceof InvalidTherapySchedulesError ||
+    error instanceof InvalidDoseProtocolError
   );
 }
 
@@ -57,14 +59,15 @@ export function validateConfirmTherapies(
         const seen = new Set<string>();
         for (const schedule of input.schedules) {
           if (
+            input.doseMode !== 'glucose_scale' &&
             ![schedule.quantityNumerator, schedule.quantityDenominator].every(
               (v) => typeof v === 'number' && Number.isSafeInteger(v) && v > 0 && v <= 1000,
             )
           )
             throw new TherapyInputError('Quantità di somministrazione mancante o non valida');
-          if (!schedule.administrationUnit?.trim())
+          if (input.doseMode !== 'glucose_scale' && !schedule.administrationUnit?.trim())
             throw new TherapyInputError('Unità di somministrazione mancante');
-          const key = `${schedule.time.trim().padStart(5, '0')}|${schedule.administrationUnit.trim()}`;
+          const key = `${schedule.time.trim().padStart(5, '0')}|${schedule.administrationUnit?.trim() ?? 'unità'}`;
           if (seen.has(key)) throw new TherapyInputError('Orario duplicato: verifica le quantità');
           seen.add(key);
         }
