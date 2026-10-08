@@ -1,5 +1,6 @@
-import { lazy, Suspense, useState } from 'react';
+import { Component, lazy, Suspense, useState, type ReactNode } from 'react';
 import { DialogLoading } from '../shared/DialogLoading';
+import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { NewPatientChooser, type NewPatientPath } from './NewPatientChooser';
 
 const IntakeWorkspace = lazy(() =>
@@ -12,6 +13,43 @@ const DischargeImportModal = lazy(() =>
     default: module.DischargeImportModal,
   })),
 );
+
+/** A failed browser module import can stay cached until reload. Recover locally
+ * without dropping the method route or pretending a patient was created. */
+class IntakeFlowBoundary extends Component<
+  { children: ReactNode; onClose: () => void },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <AccessibleDialogSurface labelledBy="intake-flow-error" onClose={this.props.onClose}>
+        <h2 id="intake-flow-error">Impossibile aprire il modulo</h2>
+        <p role="alert">
+          Il modulo non è stato caricato. Riprova ricarica la pagina mantenendo la scelta del metodo
+          e la bozza già salvata; nessun paziente viene creato.
+        </p>
+        <button
+          type="button"
+          className="ds-btn ds-btn--primary"
+          data-dialog-initial-focus
+          onClick={() => window.location.reload()}
+        >
+          Riprova
+        </button>
+        <button type="button" className="ds-btn ds-btn--secondary" onClick={this.props.onClose}>
+          Annulla
+        </button>
+      </AccessibleDialogSurface>
+    );
+  }
+}
 
 interface Props {
   onClose: () => void;
@@ -43,25 +81,27 @@ export function NewPatientFlow({
   if (path === null) return <NewPatientChooser onClose={onClose} onChoose={setPath} />;
 
   return (
-    <Suspense fallback={<DialogLoading onClose={onClose} />}>
-      {path === 'documenti' ? (
-        <DischargeImportModal
-          open
-          onClose={onClose}
-          onImported={(patientId, moduleTabId) => onDone(patientId, moduleTabId, 'documenti')}
-          operatorId={operatorId}
-          operatorRole={operatorRole}
-        />
-      ) : (
-        <IntakeWorkspace
-          open
-          onClose={onClose}
-          onCreated={(patientId, moduleTabId) => onDone(patientId, moduleTabId, 'manuale')}
-          operatorId={operatorId}
-          operatorRole={operatorRole}
-          operatoreNome={operatoreNome}
-        />
-      )}
-    </Suspense>
+    <IntakeFlowBoundary onClose={onClose}>
+      <Suspense fallback={<DialogLoading onClose={onClose} />}>
+        {path === 'documenti' ? (
+          <DischargeImportModal
+            open
+            onClose={onClose}
+            onImported={(patientId, moduleTabId) => onDone(patientId, moduleTabId, 'documenti')}
+            operatorId={operatorId}
+            operatorRole={operatorRole}
+          />
+        ) : (
+          <IntakeWorkspace
+            open
+            onClose={onClose}
+            onCreated={(patientId, moduleTabId) => onDone(patientId, moduleTabId, 'manuale')}
+            operatorId={operatorId}
+            operatorRole={operatorRole}
+            operatoreNome={operatoreNome}
+          />
+        )}
+      </Suspense>
+    </IntakeFlowBoundary>
   );
 }

@@ -130,6 +130,8 @@ export function IntakeWorkspace({
   const [draftId, setDraftId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [openingAttempt, setOpeningAttempt] = useState(0);
+  const initialManualFocusRef = useRef(false);
   const [data, setData] = useState<DraftData>({});
   // Bozza più recente (anche fra due render) e ultima bozza nota al server: dopo un'unione AI o una
   // decisione la scheda si ricarica senza perdere quanto l'operatore sta scrivendo.
@@ -202,6 +204,7 @@ export function IntakeWorkspace({
   //    (so reopening for a *different* import draft re-loads the correct one).
   useEffect(() => {
     if (!open) {
+      initialManualFocusRef.current = false;
       if (debounceRef.current) clearTimeout(debounceRef.current);
       setActive('anagrafica');
       setSavedAt(null);
@@ -263,7 +266,24 @@ export function IntakeWorkspace({
     return () => {
       active = false;
     };
-  }, [open, draftId, importDraftId, operatorId, operatorRole]);
+  }, [open, draftId, importDraftId, operatorId, operatorRole, openingAttempt]);
+
+  // The asynchronous draft loads after the dialog's initial focus pass. Focus
+  // Name once, without stealing focus on autosave or subsequent field updates.
+  useEffect(() => {
+    if (!open || importDraftId || !draftId || loading || error || initialManualFocusRef.current)
+      return;
+    const frame = window.requestAnimationFrame(() => {
+      const first = bodyRef.current?.querySelector<HTMLInputElement>(
+        '[data-demographic-field="firstName"]',
+      );
+      if (!first) return;
+      initialManualFocusRef.current = true;
+      first.focus({ preventScroll: true });
+      first.scrollIntoView({ block: 'nearest' });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [open, importDraftId, draftId, loading, error]);
 
   // Indice: evidenzia la sezione in vista mentre si scorre il corpo.
   useEffect(() => {
@@ -840,7 +860,9 @@ export function IntakeWorkspace({
           type="button"
           className="ds-icon-btn"
           onClick={() => void saveAndClose()}
-          aria-label="Chiudi e salva la bozza"
+          aria-label={
+            draftId && !loading && !error ? 'Annulla ingresso e salva la bozza' : 'Annulla ingresso'
+          }
           data-dialog-initial-focus
           disabled={submitting}
         >
@@ -897,7 +919,19 @@ export function IntakeWorkspace({
               <span className="import-modal__progress-txt">Apertura scheda…</span>
             </div>
           )}
-          {error && <p className="import-modal__error">{error}</p>}
+          {error && (
+            <div className="import-modal__error" role="alert">
+              <p>{error}</p>
+              <button
+                type="button"
+                className="ds-btn ds-btn--secondary"
+                data-testid="intake-retry-opening"
+                onClick={() => setOpeningAttempt((attempt) => attempt + 1)}
+              >
+                Riprova
+              </button>
+            </div>
+          )}
           {!loading && !error && (
             <IntakeAiProvider
               paths={aiPaths}

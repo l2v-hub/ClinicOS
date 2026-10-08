@@ -236,15 +236,40 @@ export function PatientList({
     onImported?.(patientId, moduleTabId);
   };
 
+  // Keep the chosen flow on the method route. Navigating here would remount the
+  // keyed App page and discard this local selection before its dialog appears.
+  const newPatientFlow = canIntake && newPatientPath && (
+    <NewPatientFlow
+      initialPath={newPatientPath}
+      onClose={() => {
+        focusNewIntakeRef.current = true;
+        setNewPatientPath(null);
+      }}
+      onDone={(patientId, moduleTabId, path) => {
+        setNewPatientPath(null);
+        if (path === 'documenti' || !patientId) void loadPage(undefined, false);
+        onImported?.(patientId, moduleTabId);
+      }}
+      operatorId={operatorId}
+      operatorRole={operatorRole}
+    />
+  );
+
   if (newIntake && canIntake)
     return (
-      <NewPatientStart
-        onBack={() => onCloseNewIntake?.()}
-        onChoose={(path) => {
-          setNewPatientPath(path);
-          onCloseNewIntake?.();
-        }}
-      />
+      <>
+        <NewPatientStart
+          onBack={() => {
+            onCloseNewIntake?.();
+            // Back remounts the roster; focus its new, visible intake trigger.
+            window.requestAnimationFrame(() =>
+              document.querySelector<HTMLButtonElement>('[data-intake-trigger]')?.focus(),
+            );
+          }}
+          onChoose={setNewPatientPath}
+        />
+        {newPatientFlow}
+      </>
     );
 
   return (
@@ -278,6 +303,7 @@ export function PatientList({
             />
             <button
               ref={newIntakeButtonRef}
+              data-intake-trigger
               type="button"
               className="ds-btn ds-btn--primary"
               onClick={onOpenNewIntake}
@@ -462,7 +488,7 @@ export function PatientList({
                 ? 'Prova a modificare la ricerca o i filtri.'
                 : 'Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.'}
             </p>
-            {!ricerca && filtroSesso === 'tutti' && (
+            {canIntake && !ricerca && filtroSesso === 'tutti' && (
               <button className="btn-success" onClick={onOpenNewIntake}>
                 <IcoPlus /> Aggiungi primo paziente
               </button>
@@ -507,23 +533,7 @@ export function PatientList({
         )}
       </section>
 
-      {newPatientPath && (
-        <NewPatientFlow
-          initialPath={newPatientPath}
-          onClose={() => {
-            focusNewIntakeRef.current = true;
-            setNewPatientPath(null);
-          }}
-          onDone={(patientId, moduleTabId, path) => {
-            setNewPatientPath(null);
-            // l'import può aggiornare un paziente esistente: la lista si ricarica sempre
-            if (path === 'documenti' || !patientId) void loadPage(undefined, false);
-            onImported?.(patientId, moduleTabId);
-          }}
-          operatorId={operatorId}
-          operatorRole={operatorRole}
-        />
-      )}
+      {newPatientFlow}
 
       <ConfirmDialog
         open={pendingDelete !== null}
