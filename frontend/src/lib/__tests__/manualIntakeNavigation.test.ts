@@ -32,6 +32,7 @@ test('draft opening has announced explicit retry and manual-only first field foc
   assert.match(workspace, /if \(!open \|\| importDraftId \|\| !draftId \|\| loading \|\| error/);
   assert.match(workspace, /data-demographic-field="firstName"/);
   assert.match(workspace, /initialManualFocusRef\.current = true/);
+  assert.match(workspace, /first\.scrollIntoView\(\{ block: 'center', behavior: 'instant' \}\)/);
 });
 
 test('cancel keeps draft save behavior but never performs patient confirmation', () => {

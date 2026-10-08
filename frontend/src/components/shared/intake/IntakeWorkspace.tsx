@@ -280,7 +280,7 @@ export function IntakeWorkspace({
       if (!first) return;
       initialManualFocusRef.current = true;
       first.focus({ preventScroll: true });
-      first.scrollIntoView({ block: 'nearest' });
+      first.scrollIntoView({ block: 'center', behavior: 'instant' });
     });
     return () => window.cancelAnimationFrame(frame);
   }, [open, importDraftId, draftId, loading, error]);
