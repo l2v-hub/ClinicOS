@@ -1,0 +1,474 @@
+(node:22776) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC1: "Ramipril 5 mg 1 cpr per os ore 8" becomes RAMIPRIL, 5 mg, 1 compressa, orale, 08:00 (38.4669ms)
+✔ AC2: unrecognised text leaves every field empty and blocks the confirmation (4.814ms)
+✔ AC2: two times in the same fascia block the confirmation and suggest two therapies (1.3907ms)
+✔ compound strengths are never turned into a number: they stay in the notes as written (1.223ms)
+✔ fractions, written dates and inferred years are kept exactly (1.3124ms)
+✔ weekdays and routes map to the Terapia form values, unknown ones stay empty (0.41ms)
+✔ al bisogno keeps the quantity readable in the notes and needs no schedule (1.6584ms)
+✔ no entry date → no invented start date (0.244ms)
+✔ AC3: suspension, administration and change intents have no confirmation and say where to act (1.8527ms)
+✔ every warning, ambiguity and inference has an Italian text (0.7072ms)
+✔ fascia conflicts follow the server rule, including the same time repeated (0.3252ms)
+✔ AC4: same preview version reuses the requestId, any edit mints a new one (1.3466ms)
+✔ generated requestIds are UUIDs accepted by the server (2.0748ms)
+✔ with-therapy body: entry as saved, therapy through the Terapia mapper, no client operator (1.4555ms)
+✔ server errors become Italian messages (0.5449ms)
+✔ diary card link: linked therapy, deleted therapy, ordinary entry (0.2093ms)
+✔ preview failure: each cause has its own reason; only 401/403 block the manual form (0.2567ms)
+✔ manual fallback: empty therapy form, diary text in the notes, nothing inferred (0.415ms)
+✔ partial preview lists what the interpreter did not understand (0.7529ms)
+✔ AI proposal: proposed fields and AI notes are shown, AI outage is explained (0.8296ms)
+(node:22776) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:27484) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ validazione schema glicemico: produce protocollo ordinato e conserva i buchi (7.0342ms)
+✔ validazione schema glicemico: segnala intervalli sovrapposti (0.8098ms)
+✔ misurazione deve essere intera e nei limiti anche per una fascia aperta (0.5911ms)
+✔ anteprima rifiuta protocolli con unità o tipo non riconosciuti (0.3502ms)
+(node:27484) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:42900) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ scale form hides fixed quantity, keeps exact schedule and renders prescription preview (18.6603ms)
+✔ saved scale round trips independently of commercial strength and weekday settings (2.1563ms)
+✔ glucose administration requires measurement and never posts a selected dose (1.1256ms)
+✔ modern round renders glucose control for writable scale dose and none for read-only (4.3556ms)
+(node:42900) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22952) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ manual inhaler selection exposes puff while preserving explicit alternatives and quantities (24.2139ms)
+✔ AIFA and OCR recognize explicit inhalers before generic powder and solution forms (1.7895ms)
+✔ nebulizer, nasal and capsule forms are not converted to inhalers or puff by their route (2.0014ms)
+✔ OCR puff quantities and exact inhaler form survive review, payload validation and JSON reload (6.0228ms)
+✔ inhaler OCR only supplies a fallback unit when the quantity did not specify one (0.4103ms)
+✔ manual payload, restored schedules, calendar and administration labels retain puff (2.5324ms)
+(node:22952) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20692) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ preview keeps incomplete OCR values visibly incomplete without filling a dose or date (18.114ms)
+✔ preview follows the therapy type without presenting latent schedules as active instructions (2.3507ms)
+✔ multiple forms have unique labels and radio groups; imported notes and fractions remain exposed (21.8566ms)
+(node:20692) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38652) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38652) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a timed-out therapy day is retryable and late data cannot repopulate its cache (75.0044ms)
+✔ an old timeout cannot evict a newer in-flight read after mutation invalidation (19.3156ms)
+✔ malformed payloads and HTTP failure remain failures, while an empty day succeeds (4.0338ms)
+(node:17128) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ keeps every exact time, simultaneous medication and per-dose fraction across a full day (43.7964ms)
+✔ isolates the patient and excludes suspended/concluded prescriptions (1.8504ms)
+✔ date range is inclusive and ISO weekdays are respected (4.75ms)
+✔ one-time dates and legacy times work independently from the recurring date range (0.8059ms)
+✔ PRN and fascia-only orders remain outside the grid without fabricated times or doses (1.1635ms)
+✔ invalid legacy dates/recurrence stay visible for correction instead of masquerading as empty (0.7629ms)
+✔ mixed invalid times retain valid occurrences and surface the anomaly (0.7556ms)
+✔ calendar date validation/navigation respects civil days, leap years and local midnight (1.6414ms)
+✔ reads all patient-scoped pages with operator headers, without returning a partial page (60.9792ms)
+✔ HTTP failure on a later page discards the whole read and a fresh retry recovers (4.0758ms)
+✔ rejects foreign patient payloads and malformed envelopes, not a false empty calendar (6.5396ms)
+✔ counts, cursor loops and capacity cannot silently truncate the patient regimen (2.7755ms)
+✔ timeout aborts the read and a subsequent retry does not share the stalled request (19.9038ms)
+✔ cancelled or late ignored-abort responses cannot complete a patient read (1.5127ms)
+(node:17128) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells (29.6477ms)
+✔ opening a calendar day loads that exact therapy date and carries it into mutations (3.376ms)
+✔ changing the agenda date or view closes any therapy modal before its date can change (1.9285ms)
+(node:33084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ calendar creation preserves selected local date and minute for recurring and one-time fields without changing defaults (7.5062ms)
+✔ invalid calendar date or HH:MM cannot initialize a prescription (0.8995ms)
+(node:26584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:42492) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Back calendar snapshot preserves minute precision, week, dialog and scroll (8.7623ms)
+✔ calendar remembers this ward history entry without names or changing patient entry (0.8533ms)
+✔ active prescription links have their own tab, dose links keep calendar (0.7091ms)
+(node:42492) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:31060) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ zero doses distinguishes incomplete prescriptions immediately and keeps original reasons (14.1393ms)
+✔ non-prescriber sees clinician reference, never an editor action (0.925ms)
+✔ authorized edit is tied to the original incomplete therapy (0.9915ms)
+✔ mixed valid and invalid schedules preserve separate counts without claiming total drugs (0.7801ms)
+✔ genuinely empty and week states explain the displayed period without incomplete warning (0.5174ms)
+(node:31060) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ warning precedes grid and parent forwards only permitted existing-prescription edits (12.1795ms)
+✔ incomplete calendar editor never derives hours from bands or missing times (4.9509ms)
+✔ strict editor preserves saved exact/invalid times and quantities for explicit correction (0.4039ms)
+✔ adding a schedule requires an explicit time rather than a default dose hour (2.2394ms)
+(node:15332) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy slots are loaded only when the therapy page is visible, including history navigation (4.5621ms)
+✔ agenda follows the bounded page contract and aborts obsolete date requests (1.4909ms)
+(node:15332) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39156) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy page loader returns a complete deduplicated clinical list (78.047ms)
+✔ therapy page loader rejects a repeating cursor instead of looping forever (2.9613ms)
+✔ therapy page loader carries every server filter on the first page (1.6132ms)
+(node:39156) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy UI loads incrementally while emergency print requires every active page (31.312ms)
+✔ therapy failures are announced and never rendered as empty clinical results (3.9644ms)
+✔ medication administration history follows the bounded opaque cursor feed (1.9123ms)
+(node:21336) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy slot URL is bounded and carries an opaque cursor (2.794ms)
+✔ therapy pages merge patients and therapies while replacing exact summaries (4.2724ms)
+✔ therapy page parser rejects partial responses without a continuation cursor (1.1719ms)
+(node:21336) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26208) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ cycle-1 sub-views land on the new views (backward-compatible links) (4.3084ms)
+✔ an inactive drug lands in Storico › sospese; Nuova only with therapy.create (0.7264ms)
+✔ the URL remembers the view; Storico on «sospese» keeps its filter (1.7248ms)
+✔ rememberTherapyView replaces the current entry (hash + history.state) of this chart only (1.1862ms)
+✔ band → real prescription time (07:00 stays 07:00), else the rounds time (0.8492ms)
+✔ Storico filters: period, drug, status (given / not given / al bisogno), newest first (58.0739ms)
+✔ PRN doses are read per day only for short periods (bounded reads) (1.0023ms)
+(node:26208) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:2788) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ dose status in words: pending, late N min (facility time), administered, not given (4.0853ms)
+✔ ward cell lists every dose (patient · drug · dose · status), late first, no "+N" (7.245ms)
+✔ write bodies carry only the slot key / PRN key — never a client dose, drug or time (0.3683ms)
+✔ PRN write shows the server message on refusal (18.9952ms)
+✔ supervisor confirmation is read from the capability map (0.3038ms)
+✔ patient calendar event carries strength, prescriber, note, end date and its status (1.2351ms)
+✔ drug panel takes every dose of one drug of one patient, by real time (1.1816ms)
+✔ giro rows: late pending dose shows «In ritardo di N min» next to the actions (0.5188ms)
+(node:2788) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy tab: role-based actions, drug tap detail, direct-access prop (source contract) (12.768ms)
+✔ direct access: therapyTarget selects the sub-view and the day on the first render (161.7168ms)
+✔ ward giro entry: opens the requested hour/band with filter and focused patient (37.4613ms)
+(node:34248) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ the week runs Monday to Sunday around any day, across month and year ends (5.0812ms)
+✔ time slots of the week are listed once each, in time order, even if a day lacks one (12.8662ms)
+✔ cell state: empty, complete, to do today, future, and past without records (to verify) (0.4529ms)
+✔ cell label says what the data says, never "skipped" (0.4987ms)
+(node:34248) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 104
+ℹ suites 0
+ℹ pass 103
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1975.477
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\therapyAgendaDateGuard.test.ts:1:428
+✖ weekly and monthly views never repeat one-day therapy data across calendar cells (29.6477ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Le terapie sono disponibili nella vista Giorno/. Input:
+  
+  "import { useState, useMemo, Fragment, useEffect } from 'react';\r\n" +
+    "import { appointmentLanding, type PatientLanding } from '../../lib/patientTargetResolver';\r\n" +
+    'import type {\r\n' +
+    '  Appuntamento,\r\n' +
+    '  Operatore,\r\n' +
+    '  TherapySlot,\r\n' +
+    '  MotivoNonErogazione,\r\n' +
+    '  TherapySlotPageInfo,\r\n' +
+    '  TherapyActionInfo,\r\n' +
+    "} from '../../types';\r\n" +
+    "import { IcoCalendar, IcoPlus } from '../../icons';\r\n" +
+    "import { DateNav } from '../shared/DateNav';\r\n" +
+    "import { AppointmentForm } from '../shared/AppointmentForm';\r\n" +
+    "import { localIsoDate } from '../../lib/appointmentRange';\r\n" +
+    "import { AgendaLegend } from '../shared/AgendaLegend';\r\n" +
+    "import { AppuntamentoActions } from '../shared/AppuntamentoActions';\r\n" +
+    "import { TherapySlotCard } from '../shared/TherapySlotOverlay';\r\n" +
+    "import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';\r\n" +
+    "import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';\r\n" +
+    "import { PageHeader } from '../shared/PageHeader';\r\n" +
+    "import './OperatorAgendaHmi.css';\r\n" +
+    "import '../shared/AgendaInline.css';\r\n" +
+    "import { TherapySlotModal } from './TherapySlotModal';\r\n" +
+    "import { useCan } from '../../lib/capabilities';\r\n" +
+    '\r\n' +
+    "type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';\r\n" +
+    '\r\n' +
+    'interface OperatorAgendaProps {\r\n' +
+    '  operatoreId: string;\r\n' +
+    '  nomeOperatore: string;\r\n' +
+    '  operatori: Operatore[];\r\n' +
+    '  appuntamenti: Appuntamento[];\r\n' +
+    "  onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;\r\n" +
+    "  onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;\r\n" +
+    '  onDeleteAppuntamento?: (id: string) => void;\r\n' +
+    '  loadingAppuntamenti?: boolean;\r\n' +
+    '  appointmentLoadError?: string | null;\r\n' +
+    '  onRetryAppointments?: () => void;\r\n' +
+    '  onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;\r\n' +
+    '  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;\r\n' +
+    '  therapySlots?: TherapySlot[];\r\n' +
+    '  loadingTherapySlots?: boolean;\r\n' +
+    '  therapyLoadError?: string | null;\r\n' +
+    '  therapyLoadMoreError?: string | null;\r\n' +
+    '  therapyPageInfo?: TherapySlotPageInfo;\r\n' +
+    '  loadingMoreTherapySlots?: boolean;\r\n' +
+    '  onRetryTherapySlots?: () => void;\r\n' +
+    '  onLoadMoreTherapySlots?: () => void;\r\n' +
+    '  onConfirmTherapy?: (info: TherapyActionInfo) => void;\r\n' +
+    '  onNotAdministeredTherapy?: (\r\n' +
+    '    info: TherapyActionInfo,\r\n' +
+    '    motivo: MotivoNonErogazione,\r\n' +
+    '    note: string,\r\n' +
+    '  ) => void;\r\n' +
+    '  onLoadTherapySlots?: (date: string) => void;\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {\r\n' +
+    '  const h = Math.floor(i / 2) + 8;\r\n' +
+    "  const m = i % 2 === 0 ? '00' : '30';\r\n" +
+    "  return `${String(h).padStart(2, '0')}:${m}`;\r\n" +
+    '});\r\n' +
+    'const HOUR_SLOTS = TIME_SLOTS.filter((_, i) => i % 2 === 0);\r\n' +
+    '\r\n' +
+    'function addDays(d: Date, n: number): Date {\r\n' +
+    '  const r = new Date(d);\r\n' +
+    '  r.setDate(d.getDate() + n);\r\n' +
+    '  return r;\r\n' +
+    '}\r\n' +
+    'function getMondayOf(d: Date): Date {\r\n' +
+    '  const day = d.getDay();\r\n' +
+    '  return addDays(d, day === 0 ? -6 : 1 - day);\r\n' +
+    '}\r\n' +
+    'function getWeekDays(ref: Date): Date[] {\r\n' +
+    '  const mon = getMondayOf(ref);\r\n' +
+    '  return Array.from({ length: 7 }, (_, i) => addDays(mon, i));\r\n' +
+    '}\r\n' +
+    'function getMonthMatrix(ref: Date): Date[] {\r\n' +
+    '  const y = ref.getFullYear(),\r\n' +
+    '    m = ref.getMonth();\r\n' +
+    '  const mon = getMondayOf(new Date(y, m, 1));\r\n' +
+    '  return Array.from({ length: 42 }, (_, i) => addDays(mon, i));\r\n' +
+    '}\r\n' +
+    'function isoDate(d: Date): string {\r\n' +
+    '  return localIsoDate(d);\r\n' +
+    '}\r\n' +
+    'function fmtDateLong(d: Date): string {\r\n' +
+    "  return d.toLocaleDateString('it-IT', {\r\n" +
+    "    weekday: 'long',\r\n" +
+    "    day: 'numeric',\r\n" +
+    "    month: 'long',\r\n" +
+    "    year: 'numeric',\r\n" +
+    '  });\r\n' +
+    '}\r\n' +
+    'function fmtMonth(d: Date): string {\r\n' +
+    "  return d.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });\r\n" +
+    '}\r\n' +
+    '\r\n' +
+    'const TIPO_LABEL: Record<string, string> = {\r\n' +
+    "  visita: 'Visita',\r\n" +
+    "  controllo: 'Controllo',\r\n" +
+    "  procedura: 'Procedura',\r\n" +
+    "  urgenza: 'Urgenza',\r\n" +
+    "  consulto: 'Consulto',\r\n" +
+    "  'follow-up': 'Follow-up',\r\n" +
+    "  altro: 'Altro',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'export function OperatorAgenda({\r\n' +
+    '  operatoreId,\r\n' +
+    '  nomeOperatore,\r\n' +
+    '  operatori,\r\n' +
+    '  appuntamenti,\r\n' +
+    '  onAddAppuntamento,\r\n' +
+    '  onUpdateAppuntamento,\r\n' +
+    '  onDeleteAppuntamento,\r\n' +
+    '  loadingAppuntamenti = false,\r\n' +
+    '  appointmentLoadError = null,\r\n' +
+    '  onRetryAppointments,\r\n' +
+    '  onLoadAppointments,\r\n' +
+    '  onSelectPaziente,\r\n' +
+    '  therapySlots,\r\n' +
+    '  loadingTherapySlots = false,\r\n' +
+    '  therapyLoadError = null,\r\n' +
+    '  therapyLoadMoreError = null,\r\n' +
+    '  therapyPageInfo,\r\n' +
+    '  loadingMoreTherapySlots = false,\r\n' +
+    '  onRetryTherapySlots,\r\n' +
+    '  onLoadMoreTherapySlots,\r\n' +
+    '  onConfirmTherapy,\r\n' +
+    '  onNotAdministeredTherapy,\r\n' +
+    '  onLoadTherapySlots,\r\n' +
+    '}: OperatorAgendaProps) {\r\n' +
+    '  // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).\r\n' +
+    "  const canCreateAppointment = useCan('appointments.create');\r\n" +
+    "  const [view, setView] = useState<ViewMode>('giornaliero');\r\n" +
+    '  const [refDate, setRefDate] = useState(new Date());\r\n' +
+    "  const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');\r\n" +
+    '  const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);\r\n' +
+    '  const [selectedAptId, setSelectedAptId] = useState<string | null>(null);\r\n' +
+    '  const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);\r\n' +
+    '  const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);\r\n' +
+    '  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);\r\n' +
+    '\r\n' +
+    '  useEffect(() => {\r\n' +
+    '    const days =\r\n' +
+    "      view === 'giornaliero'\r\n" +
+    '        ? [refDate]\r\n' +
+    "        : view === 'settimanale'\r\n" +
+    '          ? getWeekDays(refDate)\r\n' +
+    '          : getMonthMatrix(refDate);\r\n' +
+    '    onLoadAppointments?.(isoDate(days[0]), isoDate(days[days.length - 1]), operatoreId);\r\n' +
+    '  }, [onLoadAppointments, operatoreId, refDate, view]);\r\n' +
+    '\r\n' +
+    '  const therapySlotsMap = new Map<string, TherapySlot>();\r\n' +
+    '  if (therapySlots) {\r\n' +
+    '    for (const ts of therapySlots) {\r\n' +
+    '      therapySlotsMap.set(ts.ora, ts);\r\n' +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  const myOp = operatori.find((o) => o.id === operatoreId);\r\n' +
+    "  const opColor = myOp?.colore ?? 'var(--blue)';\r\n" +
+    '\r\n' +
+    '  function myApts(data: string): Appuntamento[] {\r\n' +
+    '    return appuntamenti\r\n' +
+    '      .filter((a) => a.data === data && a.operatoreId === operatoreId)\r\n' +
+    '      .sort((a, b) => a.ora.localeCompare(b.ora));\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    "  /** Appuntamenti del giorno effettivamente mostrati, cioe' filtrati per stato. */\r\n" +
+    '  function visibleApts(data: string): Appuntamento[] {\r\n' +
+    '    return myApts(data).filter((a) => matchStato(a, filtroStato));\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function navigate(delta: number) {\r\n' +
+    '    setSelectedTherapySlotId(null);\r\n' +
+    '    setRefDate((d) => {\r\n' +
+    '      let next: Date;\r\n' +
+    "      if (view === 'giornaliero') next = addDays(d, delta);\r\n" +
+    "      else if (view === 'settimanale') next = addDays(d, delta * 7);\r\n" +
+    '      else {\r\n' +
+    '        next = new Date(d);\r\n' +
+    '        next.setMonth(d.getMonth() + delta);\r\n' +
+    '      }\r\n' +
+    "      if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(next));\r\n" +
+    '      return next;\r\n' +
+    '    });\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function changeView(next: ViewMode) {\r\n' +
+    '    setSelectedTherapySlotId(null);\r\n' +
+    '    setView(next);\r\n' +
+    "    if (next === 'giornaliero') onLoadTherapySlots?.(isoDate(refDate));\r\n" +
+    '  }\r\n' +
+    '\r\n' +
+    '  function openDay(date: Date) {\r\n' +
+    '    setSelectedTherapySlotId(null);\r\n' +
+    '    setRefDate(date);\r\n' +
+    "    setView('giornaliero');\r\n" +
+    '    onLoadTherapySlots?.(isoDate(date));\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function goToday() {\r\n' +
+    '    const today = new Date();\r\n' +
+    '    setSelectedTherapySlotId(null);\r\n' +
+    '    setRefDate(today);\r\n' +
+    "    if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(today));\r\n" +
+    '  }\r\n' +
+    '\r\n' +
+    '  function titleLabel(): string {\r\n' +
+    "    if (view === 'giornaliero') return fmtDateLong(refDate);\r\n" +
+    "    if (view === 'settimanale') {\r\n" +
+    '      const days = getWeekDays(refDate);\r\n' +
+    "      return `${days[0].toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })} – ${days[6].toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })}`;\r\n" +
+    '    }\r\n' +
+    '    return fmtMonth(refDate);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  const todayStr = isoDate(refDate);\r\n' +
+    '  const isToday = todayStr === isoDate(new Date());\r\n' +
+    "  const agendaTitle = view === 'giornaliero' && isToday ? 'Agenda di oggi' : 'Agenda';\r\n" +
+    '  const todayApts = useMemo(\r\n' +
+    '    () =>\r\n' +
+    '      appuntamenti\r\n' +
+    '        .filter(\r\n' +
+    '          (appointment) => appointment.data === todayStr && appointment.operatoreId === operatoreId,\r\n' +
+    '        )\r\n' +
+    '        .sort((left, right) => left.ora.localeCompare(right.ora)),\r\n' +
+    '    [appuntamenti, operatoreId, todayStr],\r\n' +
+    '  );\r\n' +
+    '\r\n' +
+    '  function aptsInRange(days: Date[]): number {\r\n' +
+    '    const from = isoDate(days[0]);\r\n' +
+    '    const to = isoDate(days[days.length - 1]);\r\n' +
+    '    return appuntamenti.filter(\r\n' +
+    '      (a) =>\r\n' +
+    '        a.operatoreId === operatoreId &&\r\n' +
+    '        a.data >= from &&\r\n' +
+    '        a.data <= to &&\r\n' +
+    '        matchStato(a, filtroStato),\r\n' +
+    '    ).length;\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  // Appuntamenti del range visualizzato (giorno/settimana/mese), non filtrati: alimentano\r\n' +
+    '  // i conteggi dei chip di stato, che devono restare stabili al variare del filtro.\r\n' +
+    '  const rangeApts = useMemo(() => {\r\n' +
+    '    const days =\r\n' +
+    "      view === 'giornaliero'\r\n" +
+    '        ? [refDate]\r\n' +
+    "        : view === 'settimanale'\r\n" +
+    '          ? getWeekDays(refDate)\r\n' +
+    '          : getMonthMatrix(refDate);\r\n' +
+    '    const from = isoDate(days[0]);\r\n' +
+    '    const to = isoDate(days[days.length - 1]);\r\n' +
+    '    return appuntamenti.filter(\r\n' +
+    '      (a) => a.operatoreId === operatoreId && a.data >= from && a.data <= to,\r\n' +
+    '    );\r\n' +
+    '  }, [appuntamenti, operatoreId, view, refDate]);\r\n' +
+    '  // Indice per lookup O(1) nella griglia giornaliera: senza, ogni cella orario richiamava\r\n' +
+    "  // myApts() e rifiltrava/riordinava l'intero array `appuntamenti` (TIME_SLOTS.length volte\r\n" +
+    '  // per render, su un array con gli appuntamenti di tutti gli operatori, non solo i propri).\r\n' +
+    '  const todayAptByOra = useMemo(() => {\r\n' +
+    '    const map = new Map<string, Appuntamento>();\r\n' +
+    '    for (const a of todayApts) map.set(a.ora, a);\r\n' +
+    '    return map;\r\n' +
+    '  }, [todayApts]);\r\n' +
+    `  // "Nuovo appuntamento": prima fascia libera del giorno (oggi: non prima dell'ora attuale).\r\n` +
+    '  // Prima fascia libera non ancora iniziata (arrotondata per eccesso); nessuna nei giorni passati.\r\n' +
+    '  function firstFreeFrom(now: Date): string | null {\r\n' +
+    '    if (todayStr < isoDate(now)) return null;\r\n' +
+    '    const minutes = now.getHours() * 60 + now.getMinutes();\r\n' +
+    '    return (\r\n' +
+    '      TIME_SLOTS.find((or'... 21011 more characters
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\frontend\src\lib\__tests__\therapyAgendaDateGuard.test.ts:21:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useState, useMemo, Fragment, useEffect } from \'react\';\r\nimport { appointmentLanding, type PatientLanding } from \'../../lib/patientTargetResolver\';\r\nimport type {\r\n  Appuntamento,\r\n  Operatore,\r\n  TherapySlot,\r\n  MotivoNonErogazione,\r\n  TherapySlotPageInfo,\r\n  TherapyActionInfo,\r\n} from \'../../types\';\r\nimport { IcoCalendar, IcoPlus } from \'../../icons\';\r\nimport { DateNav } from \'../shared/DateNav\';\r\nimport { AppointmentForm } from \'../shared/AppointmentForm\';\r\nimport { localIsoDate } from \'../../lib/appointmentRange\';\r\nimport { AgendaLegend } from \'../shared/AgendaLegend\';\r\nimport { AppuntamentoActions } from \'../shared/AppuntamentoActions\';\r\nimport { TherapySlotCard } from \'../shared/TherapySlotOverlay\';\r\nimport { AgendaStatoFilterRow } from \'../shared/AgendaStatoFilter\';\r\nimport { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from \'../shared/agendaStato\';\r\nimport { PageHeader } from \'../shared/PageHeader\';\r\nimport \'./OperatorAgendaHmi.css\';\r\nimport \'../shared/AgendaInline.css\';\r\nimport { TherapySlotModal } from \'./TherapySlotModal\';\r\nimport { useCan } from \'../../lib/capabilities\';\r\n\r\ntype ViewMode = \'giornaliero\' | \'settimanale\' | \'mensile\';\r\n\r\ninterface OperatorAgendaProps {\r\n  operatoreId: string;\r\n  nomeOperatore: string;\r\n  operatori: Operatore[];\r\n  appuntamenti: Appuntamento[];\r\n  onAddAppuntamento: (apt: Omit<Appuntamento, \'id\'>) => Promise<string | null>;\r\n  onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, \'id\'>) => Promise<string | null>;\r\n  onDeleteAppuntamento?: (id: string) => void;\r\n  loadingAppuntamenti?: boolean;\r\n  appointmentLoadError?: string | null;\r\n  onRetryAppointments?: () => void;\r\n  onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;\r\n  onSelectPaziente?: (nome: string, patientId?: string, landing?: PatientLanding) => void;\r\n  therapySlots?: TherapySlot[];\r\n  loadingTherapySlots?: boolean;\r\n  therapyLoadError?: string | null;\r\n  therapyLoadMoreError?: string | null;\r\n  therapyPageInfo?: TherapySlotPageInfo;\r\n  loadingMoreTherapySlots?: boolean;\r\n  onRetryTherapySlots?: () => void;\r\n  onLoadMoreTherapySlots?: () => void;\r\n  onConfirmTherapy?: (info: TherapyActionInfo) => void;\r\n  onNotAdministeredTherapy?: (\r\n    info: TherapyActionInfo,\r\n    motivo: MotivoNonErogazione,\r\n    note: string,\r\n  ) => void;\r\n  onLoadTherapySlots?: (date: string) => void;\r\n}\r\n\r\nconst TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {\r\n  const h = Math.floor(i / 2) + 8;\r\n  const m = i % 2 === 0 ? \'00\' : \'30\';\r\n  return `${String(h).padStart(2, \'0\')}:${m}`;\r\n});\r\nconst HOUR_SLOTS = TIME_SLOTS.filter((_, i) => i % 2 === 0);\r\n\r\nfunction addDays(d: Date, n: number): Date {\r\n  const r = new Date(d);\r\n  r.setDate(d.getDate() + n);\r\n  return r;\r\n}\r\nfunction getMondayOf(d: Date): Date {\r\n  const day = d.getDay();\r\n  return addDays(d, day === 0 ? -6 : 1 - day);\r\n}\r\nfunction getWeekDays(ref: Date): Date[] {\r\n  const mon = getMondayOf(ref);\r\n  return Array.from({ length: 7 }, (_, i) => addDays(mon, i));\r\n}\r\nfunction getMonthMatrix(ref: Date): Date[] {\r\n  const y = ref.getFullYear(),\r\n    m = ref.getMonth();\r\n  const mon = getMondayOf(new Date(y, m, 1));\r\n  return Array.from({ length: 42 }, (_, i) => addDays(mon, i));\r\n}\r\nfunction isoDate(d: Date): string {\r\n  return localIsoDate(d);\r\n}\r\nfunction fmtDateLong(d: Date): string {\r\n  return d.toLocaleDateString(\'it-IT\', {\r\n    weekday: \'long\',\r\n    day: \'numeric\',\r\n    month: \'long\',\r\n    year: \'numeric\',\r\n  });\r\n}\r\nfunction fmtMonth(d: Date): string {\r\n  return d.toLocaleDateString(\'it-IT\', { month: \'long\', year: \'numeric\' });\r\n}\r\n\r\nconst TIPO_LABEL: Record<string, string> = {\r\n  visita: \'Visita\',\r\n  controllo: \'Controllo\',\r\n  procedura: \'Procedura\',\r\n  urgenza: \'Urgenza\',\r\n  consulto: \'Consulto\',\r\n  \'follow-up\': \'Follow-up\',\r\n  altro: \'Altro\',\r\n};\r\n\r\nexport function OperatorAgenda({\r\n  operatoreId,\r\n  nomeOperatore,\r\n  operatori,\r\n  appuntamenti,\r\n  onAddAppuntamento,\r\n  onUpdateAppuntamento,\r\n  onDeleteAppuntamento,\r\n  loadingAppuntamenti = false,\r\n  appointmentLoadError = null,\r\n  onRetryAppointments,\r\n  onLoadAppointments,\r\n  onSelectPaziente,\r\n  therapySlots,\r\n  loadingTherapySlots = false,\r\n  therapyLoadError = null,\r\n  therapyLoadMoreError = null,\r\n  therapyPageInfo,\r\n  loadingMoreTherapySlots = false,\r\n  onRetryTherapySlots,\r\n  onLoadMoreTherapySlots,\r\n  onConfirmTherapy,\r\n  onNotAdministeredTherapy,\r\n  onLoadTherapySlots,\r\n}: OperatorAgendaProps) {\r\n  // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).\r\n  const canCreateAppointment = useCan(\'appointments.create\');\r\n  const [view, setView] = useState<ViewMode>(\'giornaliero\');\r\n  const [refDate, setRefDate] = useState(new Date());\r\n  const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>(\'tutti\');\r\n  const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);\r\n  const [selectedAptId, setSelectedAptId] = useState<string | null>(null);\r\n  const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);\r\n  const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);\r\n  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);\r\n\r\n  useEffect(() => {\r\n    const days =\r\n      view === \'giornaliero\'\r\n        ? [refDate]\r\n        : view === \'settimanale\'\r\n          ? getWeekDays(refDate)\r\n          : getMonthMatrix(refDate);\r\n    onLoadAppointments?.(isoDate(days[0]), isoDate(days[days.length - 1]), operatoreId);\r\n  }, [onLoadAppointments, operatoreId, refDate, view]);\r\n\r\n  const therapySlotsMap = new Map<string, TherapySlot>();\r\n  if (therapySlots) {\r\n    for (const ts of therapySlots) {\r\n      therapySlotsMap.set(ts.ora, ts);\r\n    }\r\n  }\r\n\r\n  const myOp = operatori.find((o) => o.id === operatoreId);\r\n  const opColor = myOp?.colore ?? \'var(--blue)\';\r\n\r\n  function myApts(data: string): Appuntamento[] {\r\n    return appuntamenti\r\n      .filter((a) => a.data === data && a.operatoreId === operatoreId)\r\n      .sort((a, b) => a.ora.localeCompare(b.ora));\r\n  }\r\n\r\n  /** Appuntamenti del giorno effettivamente mostrati, cioe\' filtrati per stato. */\r\n  function visibleApts(data: string): Appuntamento[] {\r\n    return myApts(data).filter((a) => matchStato(a, filtroStato));\r\n  }\r\n\r\n  function navigate(delta: number) {\r\n    setSelectedTherapySlotId(null);\r\n    setRefDate((d) => {\r\n      let next: Date;\r\n      if (view === \'giornaliero\') next = addDays(d, delta);\r\n      else if (view === \'settimanale\') next = addDays(d, delta * 7);\r\n      else {\r\n        next = new Date(d);\r\n        next.setMonth(d.getMonth() + delta);\r\n      }\r\n      if (view === \'giornaliero\') onLoadTherapySlots?.(isoDate(next));\r\n      return next;\r\n    });\r\n  }\r\n\r\n  function changeView(next: ViewMode) {\r\n    setSelectedTherapySlotId(null);\r\n    setView(next);\r\n    if (next === \'giornaliero\') onLoadTherapySlots?.(isoDate(refDate));\r\n  }\r\n\r\n  function openDay(date: Date) {\r\n    setSelectedTherapySlotId(null);\r\n    setRefDate(date);\r\n    setView(\'giornaliero\');\r\n    onLoadTherapySlots?.(isoDate(date));\r\n  }\r\n\r\n  function goToday() {\r\n    const today = new Date();\r\n    setSelectedTherapySlotId(null);\r\n    setRefDate(today);\r\n    if (view === \'giornaliero\') onLoadTherapySlots?.(isoDate(today));\r\n  }\r\n\r\n  function titleLabel(): string {\r\n    if (view === \'giornaliero\') return fmtDateLong(refDate);\r\n    if (view === \'settimanale\') {\r\n      const days = getWeekDays(refDate);\r\n      return `${days[0].toLocaleDateString(\'it-IT\', { day: \'numeric\', month: \'short\' })} – ${days[6].toLocaleDateString(\'it-IT\', { day: \'numeric\', month: \'short\', year: \'numeric\' })}`;\r\n    }\r\n    return fmtMonth(refDate);\r\n  }\r\n\r\n  const todayStr = isoDate(refDate);\r\n  const isToday = todayStr === isoDate(new Date());\r\n  const agendaTitle = view === \'giornaliero\' && isToday ? \'Agenda di oggi\' : \'Agenda\';\r\n  const todayApts = useMemo(\r\n    () =>\r\n      appuntamenti\r\n        .filter(\r\n          (appointment) => appointment.data === todayStr && appointment.operatoreId === operatoreId,\r\n        )\r\n        .sort((left, right) => left.ora.localeCompare(right.ora)),\r\n    [appuntamenti, operatoreId, todayStr],\r\n  );\r\n\r\n  function aptsInRange(days: Date[]): number {\r\n    const from = isoDate(days[0]);\r\n    const to = isoDate(days[days.length - 1]);\r\n    return appuntamenti.filter(\r\n      (a) =>\r\n        a.operatoreId === operatoreId &&\r\n        a.data >= from &&\r\n        a.data <= to &&\r\n        matchStato(a, filtroStato),\r\n    ).length;\r\n  }\r\n\r\n  // Appuntamenti del range visualizzato (giorno/settimana/mese), non filtrati: alimentano\r\n  // i conteggi dei chip di stato, che devono restare stabili al variare del filtro.\r\n  const rangeApts = useMemo(() => {\r\n    const days =\r\n      view === \'giornaliero\'\r\n        ? [refDate]\r\n        : view === \'settimanale\'\r\n          ? getWeekDays(refDate)\r\n          : getMonthMatrix(refDate);\r\n    const from = isoDate(days[0]);\r\n    const to = isoDate(days[days.length - 1]);\r\n    return appuntamenti.filter(\r\n      (a) => a.operatoreId === operatoreId && a.data >= from && a.data <= to,\r\n    );\r\n  }, [appuntamenti, operatoreId, view, refDate]);\r\n  // Indice per lookup O(1) nella griglia giornaliera: senza, ogni cella orario richiamava\r\n  // myApts() e rifiltrava/riordinava l\'intero array `appuntamenti` (TIME_SLOTS.length volte\r\n  // per render, su un array con gli appuntamenti di tutti gli operatori, non solo i propri).\r\n  const todayAptByOra = useMemo(() => {\r\n    const map = new Map<string, Appuntamento>();\r\n    for (const a of todayApts) map.set(a.ora, a);\r\n    return map;\r\n  }, [todayApts]);\r\n  // "Nuovo appuntamento": prima fascia libera del giorno (oggi: non prima dell\'ora attuale).\r\n  // Prima fascia libera non ancora iniziata (arrotondata per eccesso); nessuna nei giorni passati.\r\n  function firstFreeFrom(now: Date): string | null {\r\n    if (todayStr < isoDate(now)) return null;\r\n    const minutes = now.getHours() * 60 + now.getMinutes();\r\n    return (\r\n      TIME_SLOTS.find((or'... 21011 more characters,
+    expected: /Le terapie sono disponibili nella vista Giorno/,
+    operator: 'match',
+    diff: 'simple'
+  }

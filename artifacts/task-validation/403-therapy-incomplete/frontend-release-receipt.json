@@ -1,0 +1,29 @@
+{
+  "issue": 403,
+  "applicationCommit": "038dd839cc69d054d38caeac2eb17dc146440746",
+  "localSourceAggregateSha256": "3acf1b69a253e8f054654b131fd8f0fd88d0534708466b2a5cc61dca6eb76ac1",
+  "deployment": {
+    "id": "dpl_FYwJUybuhcZX2BC7DRQX59w2UA78",
+    "readyState": "READY",
+    "target": "production",
+    "aliasAssigned": true,
+    "productionAlias": "clinicos-eosin.vercel.app",
+    "gitSourceSha": "038dd839cc69d054d38caeac2eb17dc146440746",
+    "githubCommitSha": "038dd839cc69d054d38caeac2eb17dc146440746",
+    "mechanism": "Existing Git-linked main deployment, no duplicate CLI release"
+  },
+  "publicVerification": {
+    "rootHttp": 200,
+    "linkedAssets": ["/assets/index-CN6yIMW6.js", "/assets/PatientDetail-CZ46Z2zB.js", "/assets/PatientDetailLazyTabs-MjKDUHGO.js", "/assets/TerapiaFarmacologicaTab-fGxq9aOb.js", "/assets/intakeTherapies-Bxovp125.js"],
+    "therapyAssetHttp": 200,
+    "distinctProgrammedDoseText": true,
+    "incompleteSummaryText": true,
+    "explicitEmptyStateText": true,
+    "exactTimesOnlyEditorOption": true,
+    "linkedScheduleEditorBlankNewTime": true,
+    "backendHealthHttp": 200,
+    "backendHealthStatus": "ok"
+  },
+  "scope": "Static public frontend/metadata and backend health reads only; zero production patient test writes. Backend not changed/deployed by this task.",
+  "limitations": "Browser proof uses actual source-bound SPA with intercepted synthetic local APIs, not live database persistence or clinical/hardware certification. Local and Vercel bundles can differ by supported environment/toolchain; source commit and served feature fingerprints verified. Initial static discovery probes did not follow the extra lazy-tabs chunk; final linked asset chain above is verified."
+}

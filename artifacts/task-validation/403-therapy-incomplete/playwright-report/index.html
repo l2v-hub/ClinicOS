@@ -1,0 +1,1113 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Issue403 independent browser assertions</title></head><body><h1>Issue403 actual SPA independent QA</h1><p>Synthetic localhost fixtures only. Executable assertions: qa-browser.mjs.</p><pre>{
+  "source": "Actual SPA index.html/main.tsx/App.tsx; synthetic intercepted localhost APIs only; no persistence writes or real DB claim",
+  "outcomes": [
+    {
+      "name": "AC1 desktop first screen distinguishes zero doses from two incomplete prescriptions",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 explicit zero dose incomplete state; no false absence of therapy",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 nurse keyboard expands exact source reasons; no edit; prescribing clinician reference",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 day warning and expanded details share outer scroll, no grid vertical scroller",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 incomplete week counts prescriptions once and explicit week empty state",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 doctor edits complete second-page prescription with focus and populated form; no fabricated hour or write",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1 mixed valid-invalid and PRN: one exact dose, two incomplete, PRN separate",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 mixed week aggregates all seven days without duplicate incomplete or invented times",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 empty zero-dose state not classified as incomplete",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 prn zero-dose state not classified as incomplete",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1 mobile390 first screen count and incomplete warning visible without overlap",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 mobile details keyboard reachable and week locally horizontally reachable without page x or grid y scrolling",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 mobile update-only prescriber existing editor focused and truly hittable, no creation permission or time invented",
+      "status": "PASS"
+    }
+  ],
+  "unexpectedApi": [],
+  "runtime": [
+    {
+      "role": "nurse",
+      "scenario": "incomplete",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&amp;to=2026-10-09&amp;limit=1000&amp;operatorId=QA-NURSE-403"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&amp;limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&amp;patientId=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&amp;month=10&amp;year=2026&amp;date=2026-10-09&amp;view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20A&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva&amp;cursor=QA-CURSOR-403"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-05"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-06"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-07"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-08"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-10"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-11"
+        }
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "pageErrors": []
+    },
+    {
+      "role": "doctor",
+      "scenario": "incomplete",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&amp;to=2026-10-09&amp;limit=1000&amp;operatorId=QA-DOCTOR-403"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&amp;limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&amp;patientId=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20A&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva&amp;cursor=QA-CURSOR-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&amp;month=10&amp;year=2026&amp;date=2026-10-09&amp;view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-403"
+        }
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "pageErrors": []
+    },
+    {
+      "role": "nurse",
+      "scenario": "mixed",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&amp;to=2026-10-09&amp;limit=1000&amp;operatorId=QA-NURSE-403"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&amp;limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&amp;patientId=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&amp;month=10&amp;year=2026&amp;date=2026-10-09&amp;view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20A&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20MISTO&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20PRN&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-05"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-06"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-07"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-08"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-10"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-11"
+        }
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "pageErrors": []
+    },
+    {
+      "role": "nurse",
+      "scenario": "empty",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&amp;to=2026-10-09&amp;limit=1000&amp;operatorId=QA-NURSE-403"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&amp;limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&amp;patientId=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&amp;month=10&amp;year=2026&amp;date=2026-10-09&amp;view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-403"
+        }
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "pageErrors": []
+    },
+    {
+      "role": "nurse",
+      "scenario": "prn",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&amp;to=2026-10-09&amp;limit=1000&amp;operatorId=QA-NURSE-403"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&amp;limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&amp;patientId=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&amp;month=10&amp;year=2026&amp;date=2026-10-09&amp;view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20PRN&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-403"
+        }
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "pageErrors": []
+    },
+    {
+      "role": "nurse",
+      "scenario": "incomplete",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&amp;to=2026-10-09&amp;limit=1000&amp;operatorId=QA-NURSE-403"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&amp;limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&amp;patientId=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&amp;month=10&amp;year=2026&amp;date=2026-10-09&amp;view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20A&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva&amp;cursor=QA-CURSOR-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-05"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-06"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-07"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-08"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-10"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-11"
+        }
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "pageErrors": []
+    },
+    {
+      "role": "doctor",
+      "scenario": "incomplete",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&amp;to=2026-10-09&amp;limit=1000&amp;operatorId=QA-DOCTOR-403"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&amp;limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&amp;patientId=QA-PATIENT-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&amp;month=10&amp;year=2026&amp;date=2026-10-09&amp;view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%20A&amp;limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-403/therapies/page",
+          "query": "?limit=100&amp;status=attiva&amp;cursor=QA-CURSOR-403"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-403"
+        }
+      ],
+      "blockedExternal": [],
+      "errors": [],
+      "pageErrors": []
+    }
+  ]
+}</pre></body></html>

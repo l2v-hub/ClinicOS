@@ -1,0 +1,12 @@
+{
+  "issue": 403,
+  "decision": "ALLOW — independent/root QA and exact-source production READY/static/health verification passed; publish pinned proof and verified closure",
+  "authorization": "Direct user request: fix one bug at a time, deploy without repeated approval, publish screenshot proof and close only verified acceptance criteria",
+  "candidateCommit": "038dd839cc69d054d38caeac2eb17dc146440746",
+  "frontendSourceTreeSha256": "3acf1b69a253e8f054654b131fd8f0fd88d0534708466b2a5cc61dca6eb76ac1",
+  "independentVerdict": "READY FOR CODEX QA",
+  "rootGate": { "focusedTests": "36/36 PASS", "fullSpaBrowser": "13/13 PASS", "sourceReceipt": "PASS identical clean committed application inputs", "secretScan": "source/bundle/artifacts 0 findings", "unexpectedErrors": 0, "clinicalTestWrites": 0 },
+  "baselineWaiver": "Exactly12 unchanged full frontend failures;1165 total1153pass12fail, zero new; broader focused104total103pass1same baseline guard. This is not a claim of globally green regression.",
+  "releaseScope": "Git-linked Vercel frontend only; no backend/schema/dependency/config changes",
+  "denied": ["Real patient test writes", "Secrets/PHI in proof", "Backend authorization weakening", "Claiming clinical or ward hardware acceptance", "Closing before exact-source deployment and proof are verified"]
+}

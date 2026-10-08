@@ -1,0 +1,60 @@
+(node:10792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ keeps every exact time, simultaneous medication and per-dose fraction across a full day (14.6171ms)
+✔ isolates the patient and excludes suspended/concluded prescriptions (0.4933ms)
+✔ date range is inclusive and ISO weekdays are respected (0.8548ms)
+✔ one-time dates and legacy times work independently from the recurring date range (0.3811ms)
+✔ PRN and fascia-only orders remain outside the grid without fabricated times or doses (1.1924ms)
+✔ invalid legacy dates/recurrence stay visible for correction instead of masquerading as empty (0.4827ms)
+✔ mixed invalid times retain valid occurrences and surface the anomaly (0.8286ms)
+✔ calendar date validation/navigation respects civil days, leap years and local midnight (1.3974ms)
+✔ reads all patient-scoped pages with operator headers, without returning a partial page (23.2891ms)
+✔ HTTP failure on a later page discards the whole read and a fresh retry recovers (1.2173ms)
+✔ rejects foreign patient payloads and malformed envelopes, not a false empty calendar (3.0528ms)
+✔ counts, cursor loops and capacity cannot silently truncate the patient regimen (0.9074ms)
+(node:10792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ timeout aborts the read and a subsequent retry does not share the stalled request (13.989ms)
+✔ cancelled or late ignored-abort responses cannot complete a patient read (0.699ms)
+(node:19704) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ calendar creation preserves selected local date and minute for recurring and one-time fields without changing defaults (2.1058ms)
+✔ invalid calendar date or HH:MM cannot initialize a prescription (0.3376ms)
+(node:19704) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ zero doses distinguishes incomplete prescriptions immediately and keeps original reasons (8.1969ms)
+✔ non-prescriber sees clinician reference, never an editor action (0.772ms)
+✔ authorized edit is tied to the original incomplete therapy (0.82ms)
+✔ mixed valid and invalid schedules preserve separate counts without claiming total drugs (0.6242ms)
+✔ genuinely empty and week states explain the displayed period without incomplete warning (0.4323ms)
+(node:22596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ warning precedes grid and parent forwards only permitted existing-prescription edits (9.1719ms)
+✔ incomplete calendar editor never derives hours from bands or missing times (2.1976ms)
+✔ strict editor preserves saved exact/invalid times and quantities for explicit correction (0.3008ms)
+✔ adding a schedule requires an explicit time rather than a default dose hour (1.42ms)
+(node:20944) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ dose status in words: pending, late N min (facility time), administered, not given (2.5749ms)
+✔ ward cell lists every dose (patient · drug · dose · status), late first, no "+N" (6.3951ms)
+✔ write bodies carry only the slot key / PRN key — never a client dose, drug or time (0.3211ms)
+✔ PRN write shows the server message on refusal (14.4059ms)
+✔ supervisor confirmation is read from the capability map (0.3915ms)
+✔ patient calendar event carries strength, prescriber, note, end date and its status (1.1926ms)
+✔ drug panel takes every dose of one drug of one patient, by real time (1.5539ms)
+✔ giro rows: late pending dose shows «In ritardo di N min» next to the actions (0.4838ms)
+(node:20944) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy tab: role-based actions, drug tap detail, direct-access prop (source contract) (10.9735ms)
+✔ direct access: therapyTarget selects the sub-view and the day on the first render (150.7892ms)
+✔ ward giro entry: opens the requested hour/band with filter and focused patient (35.6828ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 751.3946
