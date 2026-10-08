@@ -10,12 +10,17 @@ export function DemographicsStatus({
   value,
   onEdit,
   busy = false,
+  optionalFields = [],
 }: {
   value: Demographics;
   onEdit?: (field: DemographicField) => void;
   busy?: boolean;
+  /** Context-specific required identity; full profile completeness remains the default. */
+  optionalFields?: readonly DemographicField[];
 }) {
-  const fields = incompleteDemographicFields(value);
+  const fields = incompleteDemographicFields(value).filter(
+    (field) => !optionalFields.includes(field),
+  );
   if (!fields.length) return null;
   return (
     <aside className="demographics-status" aria-label="Completezza anagrafica">

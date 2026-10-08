@@ -74,10 +74,9 @@ export function StepVerifica({
 
   // #235: acceptance gate — build the residual-blocks checklist.
   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
-  const demoAccepted = accepted.demographics === true;
   const therapyAccepted = accepted.therapy === true;
 
-  const missingDemo = Object.values(intakeDemographicErrors(a));
+  const missingDemo = Object.values(intakeDemographicErrors(a, true));
 
   const checklist: Array<{ label: string; ok: boolean; target?: TherapyCorrectionTarget }> = [
     {
@@ -86,8 +85,7 @@ export function StepVerifica({
         : 'Dati anagrafici obbligatori',
       ok: missingDemo.length === 0,
     },
-    { label: 'Conferma i dati anagrafici', ok: demoAccepted },
-    { label: 'Conferma la terapia', ok: therapyAccepted },
+    ...(therapies.length ? [{ label: 'Conferma la terapia', ok: therapyAccepted }] : []),
     ...invalidTherapies.flatMap((t) =>
       t.diagnostics.map((issue) => ({
         label: `Terapia ${t.index}: ${issue.message}`,
@@ -107,7 +105,12 @@ export function StepVerifica({
           storico NRS. Non saranno confermati come nuove valutazioni.
         </p>
       )}
-      <DemographicsStatus value={a} onEdit={onReviewDemographics} busy={busy} />
+      <DemographicsStatus
+        value={a}
+        onEdit={onReviewDemographics}
+        busy={busy}
+        optionalFields={['phone']}
+      />
 
       <section className="step-verifica__section">
         <h4 className="step-verifica__section-title">Anagrafica</h4>
@@ -144,21 +147,6 @@ export function StepVerifica({
             ) : null;
           })}
         </dl>
-        {showAcceptance && (
-          <label className="step-verifica__accept" data-testid="accept-demographics">
-            <input
-              type="checkbox"
-              checked={demoAccepted}
-              disabled={busy}
-              onChange={(e) =>
-                onUpdateSection('_accepted', { ...accepted, demographics: e.target.checked })
-              }
-            />
-            <span>
-              Confermo i dati anagrafici disponibili; i dati mancanti restano da completare
-            </span>
-          </label>
-        )}
       </section>
 
       {/* #281: recap leggibile — allergie, terapie, anamnesi/diagnosi con i VALORI reali */}

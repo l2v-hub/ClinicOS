@@ -27,7 +27,10 @@ test('patient list exposes the canonical fiscal identity and never shows MRN', (
   assert.doesNotMatch(list, /MRN|medicalRecordNumber/);
   // HMI 1: il codice fiscale è sotto il nome ("N anni · Letto · CF"); si ordina ancora dal
   // selettore dell'ordinamento (opzione fiscalCode di PATIENT_SORT_LABELS).
-  assert.match(roster, /\{rosterAge\(patient\)\}[\s\S]{0,120}<PatientIdentifier patient=\{patient\} \/>/);
+  assert.match(
+    roster,
+    /\{rosterAge\(patient\)\}[\s\S]{0,120}<PatientIdentifier patient=\{patient\} \/>/,
+  );
   assert.match(roster, /Object\.entries\(PATIENT_SORT_LABELS\)/);
   assert.match(roster, /<PatientIdentity patient=\{patient\}/);
   assert.match(roster, /<PatientIdentifier patient=\{patient\}/);
@@ -77,7 +80,9 @@ test('new-patient wizard keeps required identity visible and progressively discl
   assert.match(step, /npm-card--collapsible/);
   assert.match(step, /open=\{expanded\}/);
   assert.match(step, /onToggle=/);
-  assert.match(step, /2 necessar[i] all’ingresso/);
+  assert.match(step, /4 necessar[i] all’ingresso/);
+  assert.match(step, /path="anagrafica.dateOfBirth"\s+required/);
+  assert.match(step, /path="anagrafica.codiceFiscale"\s+required/);
   assert.match(step, /Facoltativo/);
 });
 

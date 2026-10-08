@@ -1,0 +1,12 @@
+import { spawnSync } from 'node:child_process';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+const out='artifacts/task-validation/intake-minimum-identity-20261008';
+const git=(...args)=>spawnSync('git',args,{encoding:'utf8'}).stdout.trim();
+const hash=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
+const changed=git('diff','--name-only','--','frontend').split(/\r?\n/).filter(Boolean);
+const frontend=git('ls-files','frontend/src','frontend/package.json','frontend/tsconfig.app.json','frontend/vite.config.ts','package-lock.json').split(/\r?\n/).filter(Boolean).map(path=>({path,sha256:hash(path)}));
+const receipt={baseline:git('rev-parse','HEAD'),sourceState:'baseline plus uncommitted scoped frontend diff; no commit or publish',changed:changed.map(path=>({path,sha256:hash(path)})),frontendSourceTreeSha256:createHash('sha256').update(JSON.stringify(frontend)).digest('hex'),frontend,qaScripts:['qa-browser.mjs','qa-surface.tsx','qa-surface.html','qa-server.mjs','qa-commands.mjs'].map(name=>({path:`${out}/${name}`,sha256:hash(`${out}/${name}`)})),surface:'Real current-source IntakeWorkspace, canonical app styles; synthetic mocked draft transport; no real DB persistence assertion'};
+writeFileSync(`${out}/independent-source-receipt.json`,JSON.stringify(receipt,null,2));
+const args=['--import','tsx','--test','backend/src/intake/__tests__/confirm-therapy-validation.test.ts','backend/src/intake/__tests__/import-error-specificity.test.ts','backend/src/patients/__tests__/patient-phone.test.ts'];
+const r=spawnSync(process.execPath,args,{encoding:'utf8',maxBuffer:20*1024*1024});writeFileSync(`${out}/logs/qa-backend-compatibility.log`,r.stdout+r.stderr);console.log(`backend compatibility exit ${r.status}`);process.exitCode=r.status;

@@ -22,7 +22,12 @@ const imported: DischargeTherapyRow = {
   stato: 'da_verificare',
 };
 const base = {
-  anagrafica: { firstName: 'Ada', lastName: 'Rossi' },
+  anagrafica: {
+    firstName: 'Ada',
+    lastName: 'Rossi',
+    dateOfBirth: '1980-01-01',
+    codiceFiscale: 'RSSMRA80A01H501U',
+  },
   _accepted: { demographics: true, therapy: true },
 };
 function reviewMarkup(data: Record<string, unknown>) {
@@ -38,13 +43,20 @@ function reviewMarkup(data: Record<string, unknown>) {
   );
 }
 
-test('accepted minimal demographics can create patient and missing fields remain actionable', () => {
-  const markup = reviewMarkup(base);
-  assert.match(markup, /Anagrafica da completare/);
-  for (const field of ['Data di nascita', 'Codice fiscale', 'Telefono'])
-    assert.ok(markup.includes(`>${field}</button>`));
+test('four identity fields can create patient without optional phone or acceptance flags', () => {
+  const markup = reviewMarkup({ anagrafica: base.anagrafica });
+  assert.doesNotMatch(markup, /Anagrafica da completare/);
+  assert.doesNotMatch(markup, /data-testid="accept-demographics"/);
   assert.match(markup, /class="btn-success"[^>]*>/);
   assert.doesNotMatch(markup, /class="btn-success"[^>]*disabled/);
+});
+
+test('missing birth date and fiscal code are actionable and block summary creation', () => {
+  const markup = reviewMarkup({ anagrafica: { firstName: 'Ada', lastName: 'Rossi' } });
+  for (const field of ['Data di nascita', 'Codice fiscale'])
+    assert.ok(markup.includes(`>${field}</button>`));
+  assert.ok(!markup.includes('>Telefono</button>'));
+  assert.match(markup, /class="btn-success"[^>]*disabled/);
 });
 
 test('unverified imported therapy still blocks confirmation until explicitly excluded', () => {

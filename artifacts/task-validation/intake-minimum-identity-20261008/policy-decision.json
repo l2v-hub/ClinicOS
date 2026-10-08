@@ -1,0 +1,10 @@
+{
+  "task": "intake-minimum-identity-20261008",
+  "baseline": "54d65b24304be50b191ffcec874f2e25a8b43bf8",
+  "authority": "User explicitly authorized sequential GitHub bug fixes, commit/push/deploy without repeated approval and publication of synthetic proof",
+  "allowed": ["isolated local frontend edits", "synthetic local tests", "independent QA", "commit", "push", "frontend deployment", "GitHub evidence comments"],
+  "not_exercised": ["production patient writes"],
+  "source_receipt": "independent-source-receipt.json",
+  "gate": "Independent QA accepted; unchanged twelve-failure regression baseline explicitly waived for scoped local implementation",
+  "limitations": ["mocked browser persistence", "no new server API identity mandate", "deployment must be verified before claiming online"]
+}

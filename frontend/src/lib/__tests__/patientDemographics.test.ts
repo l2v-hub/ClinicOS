@@ -11,10 +11,27 @@ import { intakeDemographicErrors, reviewedIdentityPatch } from '../intakeDemogra
 import { parsePatientIntakeReview } from '../patientIntakeReview';
 
 const minimal = { firstName: 'Ada', lastName: 'Rossi' };
-test('intake accepts unavailable identity details and records exactly what remains incomplete', () => {
+test('intake requires birth date and fiscal code, but never requires phone', () => {
   for (const empty of [undefined, null, '', '  ']) {
     const patient = { ...minimal, codiceFiscale: empty, dateOfBirth: empty, phone: empty };
-    assert.deepEqual(intakeDemographicErrors(patient), {});
+    assert.deepEqual(Object.keys(intakeDemographicErrors(patient, true)), [
+      'dateOfBirth',
+      'codiceFiscale',
+    ]);
+    assert.deepEqual(
+      intakeDemographicErrors(patient),
+      {},
+      'legacy profile edits remain progressive',
+    );
+    assert.deepEqual(
+      intakeDemographicErrors({
+        ...minimal,
+        dateOfBirth: '1980-01-01',
+        codiceFiscale: 'RSSMRA80A01H501U',
+        phone: empty,
+      }),
+      {},
+    );
     assert.deepEqual(incompleteDemographicFields(patient), [
       'dateOfBirth',
       'codiceFiscale',
@@ -33,7 +50,15 @@ test('provided fields remain validated; complete data clears the incomplete stat
     codiceFiscale: 'inventato',
   });
   assert.deepEqual(Object.keys(invalid), ['dateOfBirth', 'codiceFiscale', 'phone']);
-  assert.deepEqual(incompleteDemographicFields({ ...minimal, dateOfBirth: '1980-01-01', codiceFiscale: 'inventato', phone: 'nessuno' }), ['codiceFiscale', 'phone']);
+  assert.deepEqual(
+    incompleteDemographicFields({
+      ...minimal,
+      dateOfBirth: '1980-01-01',
+      codiceFiscale: 'inventato',
+      phone: 'nessuno',
+    }),
+    ['codiceFiscale', 'phone'],
+  );
   const complete = {
     ...minimal,
     dateOfBirth: '1980-01-01',

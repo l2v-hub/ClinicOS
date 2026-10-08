@@ -16,7 +16,7 @@ import {
 import { deriveAutoCFUpdate, normalizeCF, type FiscalCodeOrigin } from '../../../lib/codiceFiscale';
 import { useAiField } from './intakeAiOrigin';
 import { AiBadge } from './IntakeAiBadge';
-import { PATIENT_PHONE_MAX_LENGTH, validatePatientPhone } from '../../../lib/patientPhone';
+import { PATIENT_PHONE_MAX_LENGTH } from '../../../lib/patientPhone';
 
 interface AnagraficaData {
   firstName?: string;
@@ -225,11 +225,13 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
       onChange(next);
     };
 
-  const errors = submitAttempted ? intakeDemographicErrors(value) : {};
-  const phoneValidation = validatePatientPhone(value.phone);
+  const validationErrors = intakeDemographicErrors(value, true);
+  const errors = submitAttempted ? validationErrors : {};
 
-  const requiredCompleted =
-    Number(Boolean(value.firstName?.trim())) + Number(Boolean(value.lastName?.trim()));
+  const requiredCompleted = ['firstName', 'lastName', 'dateOfBirth', 'codiceFiscale'].filter(
+    (field) =>
+      !validationErrors[field as 'firstName' | 'lastName' | 'dateOfBirth' | 'codiceFiscale'],
+  ).length;
   const contactsCompleted = filledCount(value, [
     'phone',
     'email',
@@ -249,23 +251,24 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
     <>
       <DemographicsStatus
         value={value}
+        optionalFields={['phone']}
         onEdit={(field) =>
           document.querySelector<HTMLElement>(`[data-demographic-field="${field}"]`)?.focus()
         }
       />
       <p className="form-hint">
-        Puoi registrare l’ingresso con nome e cognome e completare in seguito gli altri dati
-        disponibili.
+        Per registrare l’ingresso servono nome, cognome, codice fiscale e data di nascita. Tutti gli
+        altri dati sono facoltativi e possono essere completati successivamente.
       </p>
       <NpmCard
         title="Dati personali"
         desc="Identità e dati necessari alla registrazione"
         status={
-          requiredCompleted === 2
+          requiredCompleted === 4
             ? 'Dati minimi presenti'
-            : `${requiredCompleted}/2 necessari all’ingresso`
+            : `${requiredCompleted}/4 necessari all’ingresso`
         }
-        statusTone={requiredCompleted === 2 ? 'complete' : submitAttempted ? 'error' : 'progress'}
+        statusTone={requiredCompleted === 4 ? 'complete' : submitAttempted ? 'error' : 'progress'}
       >
         <div className="npm-grid npm-grid--identity">
           <NpmField label="Nome" path="anagrafica.firstName" required error={errors.firstName}>
@@ -291,6 +294,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
           <NpmField
             label="Data di nascita"
             path="anagrafica.dateOfBirth"
+            required
             error={errors.dateOfBirth}
           >
             <input
@@ -333,6 +337,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
           <NpmField
             label="Codice fiscale"
             path="anagrafica.codiceFiscale"
+            required
             span2
             error={errors.codiceFiscale}
             hint={
@@ -371,9 +376,9 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
 
       <NpmCard
         title="Recapiti"
-        desc="Il telefono è necessario per completare la scheda; puoi aggiungerlo dopo l’ingresso"
-        status={phoneValidation.ok ? `${contactsCompleted}/6 compilati` : 'Telefono da completare'}
-        statusTone={phoneValidation.ok ? 'complete' : submitAttempted ? 'error' : 'progress'}
+        desc="Facoltativi: puoi aggiungerli dopo l’ingresso"
+        status={`${contactsCompleted}/6 compilati · facoltativi`}
+        statusTone="optional"
       >
         <div className="npm-grid npm-grid--contacts">
           <NpmField label="Telefono" path="anagrafica.phone" error={errors.phone}>

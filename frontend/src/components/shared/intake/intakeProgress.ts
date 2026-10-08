@@ -45,7 +45,7 @@ export function intakeProgress(
 ): { sections: Record<IntakeSectionId, IntakeSectionStatus>; missing: IntakeMissingStep[] } {
   const anagrafica = (data.anagrafica ?? {}) as Record<string, unknown>;
   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
-  const demoErrors = Object.values(intakeDemographicErrors(anagrafica));
+  const demoErrors = Object.values(intakeDemographicErrors(anagrafica, true));
   const review = buildIntakeTherapyReview(data);
   const invalid = review.filter((row) => !row.excluded && row.issues.length > 0);
   const pendingProposals = Array.isArray(data._importProposals)
@@ -59,8 +59,6 @@ export function intakeProgress(
       label: `Dati anagrafici da correggere: ${demoErrors.join(', ')}`,
       section: 'anagrafica',
     });
-  if (accepted.demographics !== true)
-    missing.push({ label: 'Conferma i dati anagrafici', section: 'anagrafica' });
   for (const row of invalid)
     for (const issue of row.diagnostics)
       missing.push({
@@ -75,7 +73,9 @@ export function intakeProgress(
     });
   if (options.proposalUncertain)
     missing.push({ label: 'Decisione in attesa di risposta', section: 'terapia' });
-  if (accepted.therapy !== true) missing.push({ label: 'Conferma la terapia', section: 'terapia' });
+  const activeTherapies = review.filter((row) => !row.excluded);
+  if (activeTherapies.length && accepted.therapy !== true)
+    missing.push({ label: 'Conferma la terapia', section: 'terapia' });
   // Proposte dei documenti sui campi: il backend rifiuta la conferma (409 field_proposals_pending).
   const fieldProposals = pendingFieldProposals(data).length;
   if (fieldProposals > 0)
@@ -92,17 +92,17 @@ export function intakeProgress(
   const sections: Record<IntakeSectionId, IntakeSectionStatus> = {
     anagrafica: anagraficaIssues.length
       ? { kind: 'issues', count: demoErrors.length }
-      : accepted.demographics === true
-        ? { kind: 'done' }
-        : { kind: 'confirm' },
+      : { kind: 'done' },
     ingresso: filled(data.ingresso) ? { kind: 'done' } : { kind: 'empty' },
     allergie:
       filled(data.allergie) || filled(data.allergieStatus) ? { kind: 'done' } : { kind: 'empty' },
     terapia: terapiaIssues.length
       ? { kind: 'issues', count: terapiaIssues.length }
-      : accepted.therapy === true
-        ? { kind: 'done' }
-        : { kind: 'confirm' },
+      : !activeTherapies.length
+        ? { kind: 'empty' }
+        : accepted.therapy === true
+          ? { kind: 'done' }
+          : { kind: 'confirm' },
     diagnosi: filled(data.anamnesi) || filled(data.diagnosi) ? { kind: 'done' } : { kind: 'empty' },
     parametri: filled(data.parametri) ? { kind: 'done' } : { kind: 'empty' },
     moduli: options.moduleSelected ? { kind: 'done' } : { kind: 'empty' },

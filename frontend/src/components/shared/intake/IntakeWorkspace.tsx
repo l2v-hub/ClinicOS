@@ -558,13 +558,14 @@ export function IntakeWorkspace({
     return (data._accepted ?? {}) as AcceptedFlags;
   }
 
-  /** #235: both explicit acceptances required before the patient can be created. */
+  /** Creation confirms identity; actual prescriptions still require explicit review. */
   function acceptanceComplete(): boolean {
     const acc = acceptedFlags();
     const pending =
       Array.isArray(data._importProposals) &&
       data._importProposals.some((value: ImportProposal) => value.status === 'pending');
-    return acc.demographics === true && acc.therapy === true && !pending && !proposalUncertain;
+    const hasTherapies = buildIntakeTherapyReview(data).some((row) => !row.excluded);
+    return (!hasTherapies || acc.therapy === true) && !pending && !proposalUncertain;
   }
 
   function reviewDemographicField(field: DemographicField) {
@@ -573,7 +574,7 @@ export function IntakeWorkspace({
 
   async function handleConfirm(force = false, allergyConflictOverride = false) {
     if (!draftId || submittingRef.current) return;
-    const demographicErrors = intakeDemographicErrors(data.anagrafica ?? {});
+    const demographicErrors = intakeDemographicErrors(data.anagrafica ?? {}, true);
     const firstInvalid = Object.keys(demographicErrors)[0] as DemographicField | undefined;
     if (firstInvalid) {
       setSubmitAttempted(true);
@@ -582,11 +583,11 @@ export function IntakeWorkspace({
       return;
     }
     const phoneValidation = validatePatientPhone(data.anagrafica?.phone);
-    // #235: acceptance gate — demographics + therapy must be explicitly accepted.
+    // Never require an acceptance for an empty therapy section.
     if (!acceptanceComplete()) {
       setSubmitAttempted(true);
       setSubmitError(
-        'Prima di creare il paziente accetta l’anagrafica e la terapia (vedi checklist).',
+        'Prima di creare il paziente conferma le terapie presenti e decidi le proposte d’import in sospeso.',
       );
       return;
     }
@@ -959,24 +960,9 @@ export function IntakeWorkspace({
                 <section {...sectionProps('anagrafica')}>
                   <header className="intake-section__head">
                     {sectionTitle('anagrafica')}
-                    <button
-                      type="button"
-                      className="ds-btn ds-btn--secondary ds-btn--wrap"
-                      data-testid="accept-demographics"
-                      aria-pressed={accepted.demographics === true}
-                      disabled={submitting}
-                      onClick={() =>
-                        updateSection('_accepted', {
-                          ...accepted,
-                          demographics: accepted.demographics !== true,
-                        })
-                      }
-                    >
-                      <IcoCheck />
-                      {accepted.demographics === true
-                        ? 'Dati anagrafici confermati'
-                        : 'Conferma i dati anagrafici'}
-                    </button>
+                    <span className="form-hint">
+                      Gli altri dati possono essere completati dopo l’ingresso
+                    </span>
                   </header>
                   <StepAnagrafica
                     value={data.anagrafica ?? {}}

@@ -1,0 +1,79 @@
+{
+  "surface": "Current source IntakeWorkspace; synthetic mocked draft transport, not real DB persistence",
+  "checks": [
+    {
+      "name": "Exactly four identity controls required; optional controls not required",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Missing firstName independently blocks creation despite legacy acceptance",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Missing lastName independently blocks creation despite legacy acceptance",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Missing dateOfBirth independently blocks creation despite legacy acceptance",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Missing codiceFiscale independently blocks creation despite legacy acceptance",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Four fields alone enable creation and summary without optional clinical input",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Creation sends identity without inventing optional values or therapy",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Invalid supplied optional phone still blocks",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Optional edits autosave and survive browser reload",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Confirmed payload preserves optional values",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Actual valid therapy requires explicit acceptance",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Invalid actual therapy still blocks after acceptance",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Pending therapy import decision blocks creation",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Pending document field proposal blocks creation",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Invalid supplied codiceFiscale blocks creation",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Invalid supplied dateOfBirth blocks creation",
+      "outcome": "PASS"
+    },
+    {
+      "name": "Mobile minimum identity flow remains operable without horizontal overflow",
+      "outcome": "PASS"
+    },
+    {
+      "name": "No console, runtime or relevant HTTP errors",
+      "outcome": "PASS"
+    }
+  ],
+  "errors": [],
+  "http": []
+}

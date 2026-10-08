@@ -8,16 +8,21 @@ import {
 } from './patientDemographics';
 const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
 
-/** Entry permits unavailable details; a supplied value must still be valid. */
+/** New intake opts into four required fields; legacy edits remain progressive. */
 export function intakeDemographicErrors(
   value: Demographics,
+  requireIdentity = false,
 ): Partial<Record<DemographicField, string>> {
   const errors: Partial<Record<DemographicField, string>> = {};
   if (!text(value.firstName)) errors.firstName = 'Nome obbligatorio';
   if (!text(value.lastName)) errors.lastName = 'Cognome obbligatorio';
-  if (!missingValue(value.dateOfBirth) && !birthDateValue(value.dateOfBirth))
+  if (missingValue(value.dateOfBirth)) {
+    if (requireIdentity) errors.dateOfBirth = 'Data di nascita obbligatoria';
+  } else if (!birthDateValue(value.dateOfBirth))
     errors.dateOfBirth = 'Inserisci una data di nascita valida e non futura';
-  if (!missingValue(value.codiceFiscale) && !isValidCF(text(value.codiceFiscale)))
+  if (missingValue(value.codiceFiscale)) {
+    if (requireIdentity) errors.codiceFiscale = 'Codice fiscale obbligatorio';
+  } else if (!isValidCF(text(value.codiceFiscale)))
     errors.codiceFiscale = 'Codice fiscale non valido (16 caratteri, carattere di controllo)';
   if (!missingValue(value.phone)) {
     const phone = validatePatientPhone(value.phone);
