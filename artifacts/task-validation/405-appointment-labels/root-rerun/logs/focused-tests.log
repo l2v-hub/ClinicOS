@@ -1,0 +1,33 @@
+(node:11640) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator and admin agendas expose the same accessible navigation contract (1.1252ms)
+✔ daily agenda stays task-focused instead of rendering dashboard occupancy metrics (0.7946ms)
+✔ admin daily operator selectors are compact, keyboard-visible native buttons (0.8647ms)
+✔ admin daily grid covers the working day with compact half-hour rows (0.8677ms)
+✔ therapy work is one native action with a prominent non-repeated pending state (0.5049ms)
+✔ daily appointments use strong status surfaces and therapy cards reflow on phones (0.3338ms)
+(node:11640) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40896) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ shared appointment form uses the keyboard-safe dialog surface (0.8664ms)
+✔ every create field has one visible associated label, not placeholder-only naming (10.1354ms)
+✔ multiple appointment forms use unique control, help and title ids (4.1514ms)
+✔ save error is announced and described by dialog and save control, not attributed to arbitrary fields (0.198ms)
+(node:40896) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:34824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ appointment range URL always carries an explicit bounded interval (1.3062ms)
+✔ appointment calendar dates use local components instead of UTC conversion (1.2299ms)
+✔ App appointment reads use only the bounded range builder (1.5486ms)
+(node:34824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 481.3756

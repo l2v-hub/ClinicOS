@@ -1,0 +1,275 @@
+diff --git a/frontend/src/components/shared/AppointmentForm.tsx b/frontend/src/components/shared/AppointmentForm.tsx
+index 874948c1..5a3199ef 100644
+--- a/frontend/src/components/shared/AppointmentForm.tsx
++++ b/frontend/src/components/shared/AppointmentForm.tsx
+@@ -1,4 +1,4 @@
+-import { useState, useEffect, useRef } from 'react';
++import { useState, useEffect, useRef, useId } from 'react';
+ import type { Appuntamento, Operatore, Paziente, TipoIntervento } from '../../types';
+ import { IcoX, IcoCheck, IcoPlus } from '../../icons';
+ import { AccessibleDialogSurface } from './AccessibleDialogSurface';
+@@ -51,6 +51,10 @@ export function AppointmentForm({
+   operatorId,
+   operatoreNome,
+ }: AppointmentFormProps) {
++  const formId = useId();
++  const fieldId = (field: string) => `${formId}-appointment-${field}`;
++  const titleId = fieldId('title');
++  const errorId = fieldId('save-error');
+   const isEdit = appuntamento !== undefined;
+   const [form, setForm] = useState({
+     data: appuntamento?.data ?? data,
+@@ -151,12 +155,13 @@ export function AppointmentForm({
+   return (
+     <>
+       <AccessibleDialogSurface
+-        labelledBy="appointment-dialog-title"
++        labelledBy={titleId}
++        describedBy={saveError ? errorId : undefined}
+         onClose={onCancel}
+         dismissible={!saving}
+       >
+         <div className="modal-header">
+-          <h3 className="modal-title" id="appointment-dialog-title">
++          <h3 className="modal-title" id={titleId}>
+             {isEdit ? 'Modifica Appuntamento' : 'Nuovo Appuntamento'}
+           </h3>
+           <button
+@@ -183,7 +188,7 @@ export function AppointmentForm({
+             <div>
+               <PatientCombobox
+                 key={comboKey}
+-                inputId="appointment-patient"
++                inputId={fieldId('patient')}
+                 label="Paziente"
+                 selected={selectedPatient}
+                 onChange={choosePatientByHand}
+@@ -220,8 +225,11 @@ export function AppointmentForm({
+             style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}
+           >
+             <div className="form-field">
+-              <label className="form-label">Data</label>
++              <label className="form-label" htmlFor={fieldId('date')}>
++                Data
++              </label>
+               <input
++                id={fieldId('date')}
+                 className="form-input"
+                 type="date"
+                 value={form.data}
+@@ -229,8 +237,11 @@ export function AppointmentForm({
+               />
+             </div>
+             <div className="form-field">
+-              <label className="form-label">Ora</label>
++              <label className="form-label" htmlFor={fieldId('time')}>
++                Ora
++              </label>
+               <input
++                id={fieldId('time')}
+                 className="form-input"
+                 type="time"
+                 value={form.ora}
+@@ -238,8 +249,11 @@ export function AppointmentForm({
+               />
+             </div>
+             <div className="form-field">
+-              <label className="form-label">Durata</label>
++              <label className="form-label" htmlFor={fieldId('duration')}>
++                Durata
++              </label>
+               <select
++                id={fieldId('duration')}
+                 className="form-select"
+                 value={form.durata}
+                 onChange={(e) => setForm((f) => ({ ...f, durata: Number(e.target.value) }))}
+@@ -252,8 +266,11 @@ export function AppointmentForm({
+               </select>
+             </div>
+             <div className="form-field">
+-              <label className="form-label">Tipo intervento</label>
++              <label className="form-label" htmlFor={fieldId('type')}>
++                Tipo intervento
++              </label>
+               <select
++                id={fieldId('type')}
+                 className="form-select"
+                 value={form.tipoIntervento}
+                 onChange={(e) =>
+@@ -268,8 +285,11 @@ export function AppointmentForm({
+               </select>
+             </div>
+             <div className="form-field">
+-              <label className="form-label">Priorità</label>
++              <label className="form-label" htmlFor={fieldId('priority')}>
++                Priorità
++              </label>
+               <select
++                id={fieldId('priority')}
+                 className="form-select"
+                 value={form.priorita}
+                 onChange={(e) =>
+@@ -282,8 +302,11 @@ export function AppointmentForm({
+               </select>
+             </div>
+             <div className="form-field">
+-              <label className="form-label">Operatore</label>
++              <label className="form-label" htmlFor={fieldId('operator')}>
++                Operatore
++              </label>
+               <select
++                id={fieldId('operator')}
+                 className="form-select"
+                 value={form.operatoreId}
+                 onChange={(e) => setForm((f) => ({ ...f, operatoreId: e.target.value }))}
+@@ -298,8 +321,11 @@ export function AppointmentForm({
+               </select>
+             </div>
+             <div className="form-field">
+-              <label className="form-label">Camera (opz.)</label>
++              <label className="form-label" htmlFor={fieldId('room')}>
++                Camera (opz.)
++              </label>
+               <input
++                id={fieldId('room')}
+                 className="form-input"
+                 value={form.cameraId}
+                 onChange={(e) => setForm((f) => ({ ...f, cameraId: e.target.value }))}
+@@ -307,8 +333,11 @@ export function AppointmentForm({
+               />
+             </div>
+             <div className="form-field">
+-              <label className="form-label">Stato</label>
++              <label className="form-label" htmlFor={fieldId('state')}>
++                Stato
++              </label>
+               <select
++                id={fieldId('state')}
+                 className="form-select"
+                 value={form.stato}
+                 onChange={(e) =>
+@@ -324,8 +353,11 @@ export function AppointmentForm({
+           </div>
+ 
+           <div className="form-field">
+-            <label className="form-label">Note cliniche</label>
++            <label className="form-label" htmlFor={fieldId('notes')}>
++              Note cliniche
++            </label>
+             <textarea
++              id={fieldId('notes')}
+               className="form-input"
+               rows={3}
+               value={form.note}
+@@ -350,6 +382,7 @@ export function AppointmentForm({
+           {saveError && (
+             <p
+               className="form-error"
++              id={errorId}
+               role="alert"
+               style={{ color: 'var(--red, #DC2626)', margin: '0 auto 0 0', fontSize: 13 }}
+             >
+@@ -361,6 +394,7 @@ export function AppointmentForm({
+           </button>
+           <button
+             className="btn-success"
++            aria-describedby={saveError ? errorId : undefined}
+             onClick={() => {
+               void salva();
+             }}
+diff --git a/frontend/src/lib/__tests__/appointmentDialogAccessibility.test.ts b/frontend/src/lib/__tests__/appointmentDialogAccessibility.test.ts
+index 01305b9e..402c60e7 100644
+--- a/frontend/src/lib/__tests__/appointmentDialogAccessibility.test.ts
++++ b/frontend/src/lib/__tests__/appointmentDialogAccessibility.test.ts
+@@ -1,6 +1,11 @@
+ import assert from 'node:assert/strict';
+ import { readFileSync } from 'node:fs';
+ import test from 'node:test';
++import React from 'react';
++import { renderToStaticMarkup } from 'react-dom/server';
++import { AppointmentForm } from '../../components/shared/AppointmentForm';
++
++Object.assign(globalThis, { React });
+ 
+ const appointmentForm = readFileSync(
+   new URL('../../components/shared/AppointmentForm.tsx', import.meta.url),
+@@ -9,10 +14,10 @@ const appointmentForm = readFileSync(
+ 
+ test('shared appointment form uses the keyboard-safe dialog surface', () => {
+   assert.match(appointmentForm, /<AccessibleDialogSurface/);
+-  assert.match(appointmentForm, /labelledBy="appointment-dialog-title"/);
++  assert.match(appointmentForm, /labelledBy=\{titleId\}/);
+   assert.match(appointmentForm, /onClose=\{onCancel\}/);
+   assert.match(appointmentForm, /dismissible=\{!saving\}/);
+-  assert.match(appointmentForm, /id="appointment-dialog-title"/);
++  assert.match(appointmentForm, /id=\{titleId\}/);
+   assert.match(appointmentForm, /aria-label="Chiudi"/);
+   assert.match(appointmentForm, /data-dialog-initial-focus/);
+   assert.match(appointmentForm, /disabled=\{saving\}/);
+@@ -20,3 +25,66 @@ test('shared appointment form uses the keyboard-safe dialog surface', () => {
+   assert.match(appointmentForm, /finally \{\s*setSaving\(false\)/);
+   assert.doesNotMatch(appointmentForm, /className="modal-overlay"/);
+ });
++
++const props = {
++  data: '2026-10-09',
++  ora: '14:00',
++  operatoreId: 'QA-OP-405',
++  operatori: [],
++  onSave: async () => null,
++  onCancel: () => {},
++};
++const render = (count = 1) =>
++  renderToStaticMarkup(
++    React.createElement(
++      React.Fragment,
++      {},
++      ...Array.from({ length: count }, (_, index) =>
++        React.createElement(AppointmentForm, { ...props, key: index }),
++      ),
++    ),
++  );
++
++test('every create field has one visible associated label, not placeholder-only naming', () => {
++  const html = render();
++  const labels = [...html.matchAll(/<label[^>]*for="([^"]+)"[^>]*>([^<]+)<\/label>/g)];
++  assert.deepEqual(
++    labels.map((match) => match[2].trim()),
++    [
++      'Paziente',
++      'Data',
++      'Ora',
++      'Durata',
++      'Tipo intervento',
++      'Priorità',
++      'Operatore',
++      'Camera (opz.)',
++      'Stato',
++      'Note cliniche',
++    ],
++  );
++  for (const match of labels) {
++    const controls = [...html.matchAll(/<(?:input|select|textarea)\b[^>]*\sid="([^"]+)"/g)].filter(
++      (control) => control[1] === match[1],
++    );
++    assert.equal(controls.length, 1, match[2]);
++  }
++});
++test('multiple appointment forms use unique control, help and title ids', () => {
++  const html = render(2);
++  const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
++  assert.equal(new Set(ids).size, ids.length);
++  const labels = [...html.matchAll(/for="([^"]+)"/g)].map((match) => match[1]);
++  assert.equal(new Set(labels).size, labels.length);
++  const headings = [...html.matchAll(/aria-labelledby="([^"]+)"/g)].map((match) => match[1]);
++  assert.equal(headings.length, 2);
++  assert.equal(new Set(headings).size, 2);
++  headings.forEach((id) => assert.ok(ids.includes(id)));
++});
++test('save error is announced and described by dialog and save control, not attributed to arbitrary fields', () => {
++  assert.match(appointmentForm, /describedBy=\{saveError \? errorId : undefined\}/);
++  assert.match(appointmentForm, /aria-describedby=\{saveError \? errorId : undefined\}/);
++  assert.match(appointmentForm, /id=\{errorId\}/);
++  assert.match(appointmentForm, /role="alert"/);
++  assert.doesNotMatch(appointmentForm, /aria-invalid=\{.*saveError/);
++});

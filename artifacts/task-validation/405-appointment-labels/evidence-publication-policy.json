@@ -1,0 +1,15 @@
+{
+  "issue": 405,
+  "decision": "ALLOW EVIDENCE ONLY; DENY APPLICATION PRODUCTION PROMOTION",
+  "authority": "User explicitly authorized GitHub screenshot evidence and issue status updates for sequential bug fixes.",
+  "target": "codex/405-qa-evidence",
+  "branchBase": "45f3582dae64b0f34d2c1181286ed1d919d85d97",
+  "allowedPaths": ["artifacts/task-validation/405-appointment-labels/**"],
+  "applicationChangesOnEvidenceBranch": false,
+  "localApplicationCandidate": "21f8c75c221c464fb00499326cf261143b444bf4",
+  "candidateReviewMaterial": "local-candidate.patch; source/evidence receipts",
+  "screenReaderAcceptance": "UNVERIFIED",
+  "productionPromotion": "BLOCKED",
+  "githubIssueClosure": false,
+  "limitations": "Screenshots prove partial synthetic automated checks only, not AT speech, production release or real backend durability. Application source must remain byte-identical to the already-released branch base."
+}

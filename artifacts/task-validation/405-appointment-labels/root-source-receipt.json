@@ -1,0 +1,50 @@
+{
+  "observedAt": "2026-10-08T23:15:09.301Z",
+  "issue": 405,
+  "applicationCommit": "21f8c75c221c464fb00499326cf261143b444bf4",
+  "applicationSourceHash": "622bb25bcf7c7674729c1dd8820ee91feb24954c563b91a6a45ee33f70b75206",
+  "independentReceiptSha256": "7542a312c0307954677ea0f4859634c7d9a55d2db0d18846c850bc5ca27b61a4",
+  "independentSourceAndEvidenceHashesMatch": true,
+  "independentReportSha256": "27f9df0ca18edb727ad4797ff9713b2f7d40e281b464898b70746590ab07d264",
+  "rootAutomatedBrowserChecks": [
+    {
+      "name": "AC1/2 nurse actual create10 names and native label clicks",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2/4 native Tab order/trap Escape and cancel restore origin slot",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1 browser error live alert/descriptions and patient selected semantics, not real reader proof",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 pending save remains non-dismissible; retry payload unchanged and mocked reload persistence",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1/2 edit9 linked fields readonly patient; Escape returns edit trigger",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1/2/4 mobile create10 names native clicks Tab trap Escape origin return",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1/2 shared admin form10 names native clicks and Escape closes; admin pointer cell has no baseline focus target",
+      "status": "PASS"
+    }
+  ],
+  "rootGateResultsSha256": "33573f0ca625a0d7a435c6e908fae344476bb00858101e37d88721a2cedb0ca9",
+  "screenReaderAcceptance": "UNVERIFIED",
+  "releaseDecision": "BLOCKED",
+  "productionPush": false,
+  "productionDeployment": false,
+  "githubClosure": false,
+  "closureChecker": {
+    "exit": 1,
+    "reason": "NON COMPLETABILE — decisione: BLOCKED"
+  },
+  "authority": "User authorized sequential bug fixes, deployments and screenshots; this does not replace required acceptance evidence."
+}

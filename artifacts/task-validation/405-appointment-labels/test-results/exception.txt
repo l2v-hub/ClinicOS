@@ -1,0 +1,15 @@
+Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 3
+
+- Array []
++ Array [
++   "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
++ ]
+    at captureRawStack (C:\w-insulin-qa\node_modules\playwright-core\lib\coreBundle.js:3172:17)
+    at callMatcherAsStep (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12877:57)
+    at Object.toEqual (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12867:23)
+    at clean (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\artifacts\task-validation\405-appointment-labels\qa-browser.mjs:68:142)
+    at finish (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\artifacts\task-validation\405-appointment-labels\qa-browser.mjs:69:34)
+    at C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\artifacts\task-validation\405-appointment-labels\qa-browser.mjs:81:561

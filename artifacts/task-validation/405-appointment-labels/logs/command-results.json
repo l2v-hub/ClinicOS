@@ -1,0 +1,26 @@
+[
+  {
+    "name": "types",
+    "exit": 0
+  },
+  {
+    "name": "tsc-build",
+    "exit": 0
+  },
+  {
+    "name": "vite-build",
+    "exit": 0
+  },
+  {
+    "name": "focused-tests",
+    "exit": 0
+  },
+  {
+    "name": "security-scan",
+    "exit": 0
+  },
+  {
+    "name": "full-regression",
+    "exit": 1
+  }
+]
