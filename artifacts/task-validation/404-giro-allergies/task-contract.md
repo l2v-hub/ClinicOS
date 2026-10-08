@@ -14,7 +14,7 @@ Read fresh cartella allergy fields for visible Giro cards only, bounded concurre
 
 ## Acceptance Criteria
 
-1. AC1: Every visible Giro patient card displays source-bound allergy state, including missing/malformed/failed/unauthorized source as unknown. Explicit verified absence and patient denial remain distinct. Reject mismatched patient responses; cancel stale reads on identity/context/unmount and suppress denied reads.
+1. AC1: Every visible Giro patient card displays source-bound allergy state, including undocumented/malformed/failed/unauthorized source as unknown. Explicit verified absence and patient denial remain distinct, including valid legacy status-only records per #244. Missing list alone never implies absence. Reject malformed statuses and mismatched patient responses; cancel stale reads on identity/context/unmount and suppress denied reads.
 2. AC2: Known allergens and textual severity/reaction appear before Somministra, not color/count alone; list takes precedence over contradictory absence. Desktop1150 and mobile390 remain readable without page overflow.
 3. AC3: Open/close details by pointer/keyboard while preserving patient/date/fascia/filter and scroll position. Native local disclosure does not navigate or write.
 4. AC4: Exercise full supervisor administration confirmation in synthetic actual SPA: cancel means zero writes; confirm has unchanged correct key/confirmed:true; refreshed administered state and reload reflect simulated persisted response. Also test unauthorized read, retry and stale response isolation. Explicitly distinguish mock-transport persistence from real database/clinical validation.

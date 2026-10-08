@@ -43,13 +43,18 @@ test('explicit verified absence and patient denial remain distinct', () => {
   ] as const) {
     const snapshot = projectGiroAllergies(body([], status), id);
     assert.equal(deriveAllergySummary(snapshot.items, snapshot.status).label, label);
+    const statusOnly = projectGiroAllergies(
+      { patientId: id, data: { allergieStatus: status } },
+      id,
+    );
+    assert.equal(deriveAllergySummary(statusOnly.items, statusOnly.status).label, label);
   }
 });
 test('missing/null/undocumented source never becomes verified absence', () => {
   for (const value of [
     { patientId: id, data: null },
     { patientId: id, data: {} },
-    { patientId: id, data: { allergieStatus: 'assenti' } },
+    { patientId: id, data: { allergieStatus: 'presenti' } },
     body([], 'presenti'),
     body([]),
   ]) {
@@ -71,9 +76,19 @@ test('malformed source and patient mismatch reject instead of claiming absence',
     body([{}], 'assenti'),
     body([null]),
     body([], 'unknown-status'),
+    body([], ['assenti']),
+    body([], { status: 'assenti' }),
+    { patientId: id, data: { pazienteId: 'different', allergie: [], allergieStatus: 'assenti' } },
   ]) {
     assert.throws(() => projectGiroAllergies(value, id));
   }
+});
+test('malformed severity never becomes an invented valid severity', () => {
+  const snapshot = projectGiroAllergies(
+    body([{ allergene: 'Sostanza sintetica', gravita: ['grave'] }]),
+    id,
+  );
+  assert.equal(snapshot.items[0].gravita, undefined);
 });
 test('allergen and severity/reaction/documentation are preserved, other chart fields discarded', () => {
   const item = {

@@ -23,22 +23,26 @@ export function projectGiroAllergies(body: unknown, patientId: string): GiroAlle
   if (!record(body) || body.patientId !== patientId) throw new Error('Invalid allergy source');
   if (body.data === null) return { items: [] };
   if (!record(body.data)) throw new Error('Invalid allergy source');
+  if (body.data.pazienteId !== undefined && body.data.pazienteId !== patientId) {
+    throw new Error('Invalid allergy identity');
+  }
   const { allergie, allergieStatus } = body.data;
   if (allergie !== undefined && !Array.isArray(allergie)) throw new Error('Invalid allergy list');
   if (
     allergieStatus !== undefined &&
-    !['presenti', 'assenti', 'paziente_nega'].includes(String(allergieStatus))
+    (typeof allergieStatus !== 'string' ||
+      !['presenti', 'assenti', 'paziente_nega'].includes(allergieStatus))
   ) {
     throw new Error('Invalid allergy status');
   }
-  if (allergie === undefined) return { items: [] };
-  const items = allergie.map((item: unknown): GiroAllergy => {
+  const items = (allergie ?? []).map((item: unknown): GiroAllergy => {
     if (!record(item) || !text(item.allergene)) throw new Error('Invalid allergy entry');
     return {
       allergene: text(item.allergene),
-      gravita: ['lieve', 'moderata', 'grave'].includes(String(item.gravita))
-        ? (item.gravita as GiroAllergy['gravita'])
-        : undefined,
+      gravita:
+        typeof item.gravita === 'string' && ['lieve', 'moderata', 'grave'].includes(item.gravita)
+          ? (item.gravita as GiroAllergy['gravita'])
+          : undefined,
       reazione: text(item.reazione),
       documentato: text(item.documentato),
       documentatoDa: text(item.documentatoDa),
