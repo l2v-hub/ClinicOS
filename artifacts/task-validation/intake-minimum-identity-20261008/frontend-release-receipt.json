@@ -1,0 +1,22 @@
+{
+  "verifiedAt": "2026-10-08T21:37:00Z",
+  "applicationCommit": "318b81a056897bb5c3f4bae273f1225febca8297",
+  "frontendInputsSha256": "bcfb4cf5f284a2eed4239412634395d83194776f45fdb93c15d7186905021073",
+  "authorization": "Explicit user request to push and deploy online, followed by continuous authorized sequential bug resolution",
+  "promotion": "Authorized with explicit waiver for twelve independently confirmed unchanged baseline frontend failures; all scoped gates pass",
+  "deploymentMechanism": "Git-linked Vercel deployment after push to main; no redundant manual deploy",
+  "deploymentId": "dpl_8f7D7PjHZdVn1aLA2zmo1hFGhbdS",
+  "readyState": "READY",
+  "target": "production",
+  "gitSourceSha": "318b81a056897bb5c3f4bae273f1225febca8297",
+  "githubCommitSha": "318b81a056897bb5c3f4bae273f1225febca8297",
+  "aliasAssigned": true,
+  "publicUrl": "https://clinicos-eosin.vercel.app",
+  "publicRootHttp": 200,
+  "mainAsset": "/assets/index-C3UWuitK.js",
+  "backendHealthHttp": 200,
+  "backendHealth": "ok",
+  "privacy": "No production patient data read or written during release verification; browser proof uses synthetic loopback fixtures",
+  "qa": "postcommit-qa-report.md; 133 focused tests, types/build, secret scan and eighteen browser acceptance assertions pass",
+  "limitations": "No authenticated full-SPA production patient creation or real database persistence claim; frontend-only policy, unchanged progressive server API"
+}

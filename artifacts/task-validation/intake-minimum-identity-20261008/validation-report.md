@@ -53,10 +53,10 @@ Independent types/build PASS (qa-types.log,qa-build.log,qa-vite-build.log). Full
 - Browser draft persistence is mocked, not real database or full-SPA/OCR/authentication evidence. Existing backend compatibility tests use stubs.
 - Four-field requirement is new-intake UI policy; reusable server normalization remains progressive. No new server API mandate.
 - Existing non-empty prescriptions still require safe review and corrections; unfinished imported rows may be explicitly deferred using existing controls.
-- No commit, push or deployment performed for this new task. Online application has not received this fix.
+- Published application commit `318b81a056897bb5c3f4bae273f1225febca8297` to main. Post-commit independent QA repeated all scoped gates after formatter changes:133 targeted tests and18 browser checks pass. Vercel production deployment `dpl_8f7D7PjHZdVn1aLA2zmo1hFGhbdS` is READY and its gitSource/meta both match this exact commit; public alias assigned, root HTTP200 and backend health200/ok. See `postcommit-qa-report.md`, `postcommit-source-receipt.json` and `frontend-release-receipt.json`. No production patient mutation.
 
 ## Final Decision
 
 CLOSED — VERIFIED
 
-Scoped implementation verified locally after independent QA and explicit baseline waiver. Publication remains a separate user-authorized step.
+Scoped implementation and user-authorized publication verified after independent post-commit QA and explicit baseline waiver. Browser acceptance evidence remains synthetic/local, not production patient creation.

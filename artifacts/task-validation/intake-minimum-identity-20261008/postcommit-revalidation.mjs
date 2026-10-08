@@ -1,0 +1,34 @@
+import { spawnSync } from 'node:child_process';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve } from 'node:path';
+const task='artifacts/task-validation/intake-minimum-identity-20261008';
+const out=task+'/postcommit';mkdirSync(out+'/logs',{recursive:true});
+const git=(...args)=>spawnSync('git',args,{encoding:'utf8'}).stdout.trim();
+const hash=path=>createHash('sha256').update(readFileSync(path)).digest('hex');
+const candidate=git('rev-parse','HEAD');
+if(candidate!=='318b81a056897bb5c3f4bae273f1225febca8297') throw new Error('Candidate commit changed');
+if(git('status','--porcelain','--untracked-files=no','--','frontend','backend','prisma','package.json','package-lock.json'))throw new Error('Application source not clean');
+const paths=git('ls-files','frontend/src','frontend/package.json','frontend/tsconfig.app.json','frontend/vite.config.ts','package-lock.json').split(/\r?\n/).filter(Boolean);
+const frontend=paths.map(path=>({path,sha256:hash(path)}));
+const changed=git('diff','--name-only','54d65b24304be50b191ffcec874f2e25a8b43bf8',candidate,'--','frontend').split(/\r?\n/).filter(Boolean).map(path=>({path,sha256:hash(path)}));
+const receipt={baseline:'54d65b24304be50b191ffcec874f2e25a8b43bf8',candidate,repositoryTree:git('rev-parse','HEAD^{tree}'),sourceState:'clean committed application source, after commit hook formatting',frontendSourceTreeSha256:createHash('sha256').update(JSON.stringify(frontend)).digest('hex'),changed,frontend,harness:['qa-browser.mjs','qa-surface.tsx','qa-surface.html','qa-server.mjs'].map(name=>({path:task+'/'+name,sha256:hash(task+'/'+name)})),surface:'Actual committed IntakeWorkspace and app styles; synthetic mocked draft transport, no database persistence claim'};
+writeFileSync(task+'/postcommit-source-receipt.json',JSON.stringify(receipt,null,2));
+function command(name,args,cwd='.'){const r=spawnSync(process.execPath,args,{cwd,encoding:'utf8',maxBuffer:40*1024*1024});writeFileSync(out+'/logs/'+name+'.log',r.stdout+r.stderr);console.log(name+': exit '+r.status);if(r.status!==0)process.exitCode=1;}
+command('types',['../node_modules/typescript/bin/tsc','--noEmit'],'frontend');
+command('build-types',['../node_modules/typescript/bin/tsc','-b'],'frontend');
+command('vite-build',['../node_modules/vite/bin/vite.js','build'],'frontend');
+const tests=spawnSync('rg',['--files','frontend/src/components/shared/intake/__tests__','-g','*.test.ts','-g','*.test.tsx'],{encoding:'utf8'}).stdout.trim().split(/\r?\n/);
+command('focused-tests',['--import','tsx','--import','./scripts/stub-css-loader.mjs','--test',...tests,'frontend/src/lib/__tests__/patientDemographics.test.ts']);
+command('identity-guard',['--import','tsx','--import','./scripts/stub-css-loader.mjs','--test','--test-name-pattern','keeps required identity','frontend/src/lib/__tests__/patientListIdentityGuard.test.ts']);
+command('backend-compatibility',['--import','tsx','--test','backend/src/intake/__tests__/confirm-therapy-validation.test.ts','backend/src/intake/__tests__/import-error-specificity.test.ts','backend/src/patients/__tests__/patient-phone.test.ts']);
+command('secrets',['scripts/security/scan-frontend-secrets.mjs']);
+// Mechanical evidence-output redirection only: the committed browser assertions are unchanged.
+const browserScript=readFileSync(task+'/qa-browser.mjs','utf8').replace("resolve('artifacts/task-validation/intake-minimum-identity-20261008')", "resolve('artifacts/task-validation/intake-minimum-identity-20261008/postcommit')");
+if(browserScript===readFileSync(task+'/qa-browser.mjs','utf8')) throw new Error('Could not redirect browser output');
+writeFileSync(out+'/qa-browser-postcommit.mjs',browserScript);
+command('browser',[out+'/qa-browser-postcommit.mjs']);
+const regression=spawnSync(process.execPath,['../scripts/run-node-tests.mjs'],{cwd:'frontend',encoding:'utf8',maxBuffer:40*1024*1024});
+writeFileSync(out+'/logs/full-regression.log',regression.stdout+regression.stderr);
+console.log('full regression exit '+regression.status+' (known baseline failures expected)');
+console.log((regression.stdout+regression.stderr).split(/\r?\n/).filter(line=>/^(ℹ tests|ℹ pass|ℹ fail)/.test(line)).join('\n'));
