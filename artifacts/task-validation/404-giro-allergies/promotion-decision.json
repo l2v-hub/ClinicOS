@@ -1,0 +1,12 @@
+{
+  "issue": 404,
+  "decision": "ALLOW source-bound frontend main push after independent and root acceptance gates; closure remains pending exact production READY and pinned proof",
+  "authorization": "Direct user authorized sequential bugs, commit/push/deploy without repeated approval, screenshot proof and verified closure",
+  "candidateCommit": "848ae9613c3cfe2a6eae81308719964475dc9afe",
+  "frontendSourceTreeSha256": "203df922820be0446c51cf4eb138c14bd7d58dbf099626fe88bb63dbf9bcdc45",
+  "independentVerdict": "READY FOR CODEX QA",
+  "rootGate": { "focused": "34/34 PASS", "actualSpa": "17/17 PASS, separate root-rerun evidence", "types": "PASS", "sourceReceipt": "PASS clean exact committed application inputs; same SHA256", "security": "source/bundle/evidence 0 findings", "unexpectedApiRuntimeHttpExternal": 0, "simulatedConfirmPosts": 1, "realPatientWrites": 0 },
+  "baselineWaiver": "1175 total1163 PASS12 exact unchanged baseline FAIL; zero new, not globally green",
+  "releaseScope": "Git-linked Vercel frontend only; no backend/schema/policy/dependency change",
+  "denied": ["Real patient test writes", "Secrets or PHI publication", "Clinical compatibility/dose decisions", "Claiming real DB durability or hardware/sunlight acceptance", "Closure before READY and pinned evidence"]
+}

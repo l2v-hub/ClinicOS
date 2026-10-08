@@ -1,0 +1,1 @@
+frontend secret scan OK — 0 findings in: frontend/src/lib/allergyStatusModel.ts, frontend/src/lib/therapyAllergyRead.ts, frontend/src/lib/__tests__/therapyGiroAllergies.test.ts, frontend/src/components/operator/TherapyPatientAllergies.tsx, frontend/src/components/operator/TherapyGiroRows.tsx, frontend/src/components/operator/TherapyRoundsPage.css, frontend/dist

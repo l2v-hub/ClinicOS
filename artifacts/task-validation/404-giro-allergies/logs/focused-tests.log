@@ -1,0 +1,54 @@
+(node:15012) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ deriveAllergySummary: non-empty list wins regardless of status (count) (0.8874ms)
+✔ deriveAllergySummary: non-empty list wins even if status contradicts it (legacy/edge data) (0.1696ms)
+✔ deriveAllergySummary: empty list + status assenti -> success, verified-absent (0.0933ms)
+✔ deriveAllergySummary: empty list + status paziente_nega -> info, patient denies (0.0804ms)
+✔ deriveAllergySummary: undefined status + empty list -> warning, undocumented (0.0976ms)
+✔ deriveAllergySummary: empty list + undefined status (explicit []) -> warning, undocumented (0.0957ms)
+✔ deriveAllergySummary: status presenti but list emptied (edge case) -> falls back to undocumented (0.0837ms)
+✔ canSetStatus: blocks "assenti" when the list has entries (0.2145ms)
+✔ canSetStatus: blocks "paziente_nega" when the list has entries (0.1454ms)
+✔ canSetStatus: allows "presenti" even when the list has entries (0.174ms)
+✔ canSetStatus: allows "assenti" when the list is empty (0.1136ms)
+✔ canSetStatus: allows "paziente_nega" when the list is empty (0.0675ms)
+✔ canSetStatus: allows "assenti"/"paziente_nega" when list is undefined (0.0744ms)
+(node:15012) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:41236) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ known list wins contradictory absence and keeps source text without inventing severity (1.5581ms)
+✔ explicit verified absence and patient denial remain distinct (0.1708ms)
+✔ missing/null/undocumented source never becomes verified absence (0.1485ms)
+✔ malformed source and patient mismatch reject instead of claiming absence (0.3202ms)
+✔ malformed severity never becomes an invented valid severity (0.1106ms)
+✔ allergen and severity/reaction/documentation are preserved, other chart fields discarded (0.1363ms)
+✔ fresh scoped request uses encoded identity, existing auth headers and no-store (16.1491ms)
+✔ failed HTTP and aborted late response never return source data (0.9013ms)
+✔ bounded concurrency never starts a cancelled queued read; slots released after completion (0.7882ms)
+✔ UI context is before drug/actions; local disclosure preserves route and existing admin payload (0.8057ms)
+(node:41236) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:9416) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ dose status in words: pending, late N min (facility time), administered, not given (2.4782ms)
+✔ ward cell lists every dose (patient · drug · dose · status), late first, no "+N" (5.8457ms)
+✔ write bodies carry only the slot key / PRN key — never a client dose, drug or time (0.2865ms)
+✔ PRN write shows the server message on refusal (14.1852ms)
+✔ supervisor confirmation is read from the capability map (0.2129ms)
+✔ patient calendar event carries strength, prescriber, note, end date and its status (1.0081ms)
+✔ drug panel takes every dose of one drug of one patient, by real time (1.1062ms)
+✔ giro rows: late pending dose shows «In ritardo di N min» next to the actions (0.4522ms)
+(node:9416) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy tab: role-based actions, drug tap detail, direct-access prop (source contract) (9.8674ms)
+✔ direct access: therapyTarget selects the sub-view and the day on the first render (128.3489ms)
+✔ ward giro entry: opens the requested hour/band with filter and focused patient (29.2963ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 595.2474

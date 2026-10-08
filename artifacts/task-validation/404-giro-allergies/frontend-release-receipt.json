@@ -1,0 +1,56 @@
+{
+  "issue": 404,
+  "applicationCommit": "848ae9613c3cfe2a6eae81308719964475dc9afe",
+  "localSourceAggregateSha256": "203df922820be0446c51cf4eb138c14bd7d58dbf099626fe88bb63dbf9bcdc45",
+  "deployment": {
+    "id": "dpl_GrzPUgT6JHKFwNCkEhzwLBTxqR6C",
+    "readyState": "READY",
+    "target": "production",
+    "aliasAssigned": true,
+    "productionAlias": "clinicos-eosin.vercel.app",
+    "gitSourceSha": "848ae9613c3cfe2a6eae81308719964475dc9afe",
+    "githubCommitSha": "848ae9613c3cfe2a6eae81308719964475dc9afe",
+    "mechanism": "Existing Git-linked main; no duplicate CLI release"
+  },
+  "publicVerification": {
+    "rootHttp": 200,
+    "linkedAssets": [
+      "/assets/index-BdNbwy2w.js",
+      "/assets/TherapyRoundsPage-cqK5PdqE.js",
+      "/assets/AccessibleDialogSurface-C3E9HpqC.js",
+      "/assets/appointmentRange-Bcoh8cH0.js",
+      "/assets/capabilities-sGJaafSh.js",
+      "/assets/compiler-runtime-XYET9J12.js",
+      "/assets/GlucoseAdministrationControl-DZcdn3WH.js",
+      "/assets/operatorSession-CocZDchv.js",
+      "/assets/PageHeader-C_z0EFBp.js",
+      "/assets/patientTherapyCalendar-oJO4T2nO.js",
+      "/assets/react-B3nAlWH0.js",
+      "/assets/RosterOrderControl-C4cgWjH7.js",
+      "/assets/TherapyRoundsPage-Bj7cjpEY.js"
+    ],
+    "roundsHttp": 200,
+    "allergyContext": true,
+    "knownSeverity": true,
+    "unknownRole": true,
+    "retry": true,
+    "nativeDetails": true,
+    "statusModel": true,
+    "patientIdentityValidation": true,
+    "noStoreRead": true,
+    "backendHealthHttp": 200,
+    "backendStatus": "ok",
+    "statusModelLocation": "/assets/allergyStatusModel-MCtsmAIL.js"
+  },
+  "rootGate": {
+    "focused": 34,
+    "browser": 17,
+    "passed": 17,
+    "unexpectedApiRuntimeHttpExternal": 0,
+    "simulatedClinicalPosts": 1,
+    "realWrites": 0
+  },
+  "reportPreservation": "Root preserved the independent READY FOR CODEX QA report byte-for-byte as independent-validation-report.md; receipt's report path amended to preserved snapshot, original hash unchanged. Root postrelease decision is separate in validation-report.md.",
+  "scope": "Frontend deployment/static public assets/backend health only; no production patient data reads/writes; no backend deployment.",
+  "limitations": "Real source-bound SPA with synthetic intercepted local APIs, not real DB durability, live backend authorization, compatibility or hardware/sunlight certification. Initial static marker probes omitted the nested allergyStatusModel chunk; absence/denial/unknown markers confirmed in that linked asset (HTTP200)."
+}
