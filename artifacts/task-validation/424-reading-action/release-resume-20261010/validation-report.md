@@ -12,6 +12,6 @@ All clinical/auth APIs intercepted BEFORE wire; only production static GETs sent
 
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
 
-Functional/local/current production and independent/root rerun PASS; final CI comparison, canonical privacy scan, immutable proof push and public pinned screenshot verification remain before closure. No issue closure is performed by this report.
+Root release decision AUTHORIZED by direct human iteration/deploy/publication authority. All four original acceptance criteria and fresh independent21/root-identical21 current-production cases pass. CI37992961607 attempt4 completed after container setup recovered: exact same single accepted422 backend failure name/stage,0new; secret37992961608success, downstream skipped and not globally green. Prior3 infrastructure failures retained. Before closure, canonical privacy/hash scan and proof publication were verified;3 synthetic public PNG HTTP200/raw hashes verified on phase1 proof308c21d5eabace90d0d9623ebf7d8eece6306b42. Final proof is rescanned and all public bytes rechecked by publication gate before GitHub closure. No main rollback/source rewrite, actual alias remainsb7. Historical DB evidence is reviewed unchanged evidence, not a new DB run.

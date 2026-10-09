@@ -1,0 +1,50 @@
+{
+  "decision": "AUTHORIZED VERIFIED ISSUE424 CLOSURE AFTER FINAL PUBLICATION GATE",
+  "authority": "Direct human authorization; root independent release owner",
+  "originalApplicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "currentProductionCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "protectedBugPathsIdentical": true,
+  "originalCriteriaPassed": 4,
+  "immutableQaFiles": 66,
+  "immutableQaManifestSha256": "4567bcf2883517856dd2ca8a98f7c99c55a26743c7302033edfa2fda2d15b377",
+  "historicalImmutableQaFiles": 129,
+  "historicalImmutableQaManifestSha256": "7079affea9bc5191002a1af77c113fd3016cddcb09786568afba211978175058",
+  "independentBrowserCases": 21,
+  "rootByteIdenticalBrowserCases": 21,
+  "sourceSha256": "4cbd1b51f7c9991533f3882511ffa71262c66f3f09fac9a3b8bf29b617560574",
+  "rootSourceFiles": 1472,
+  "results": [
+    {
+      "lane": "ordinary",
+      "count": 17,
+      "recipeSha256": "f8423ad458b1bf1696ab3373300f0da3298e202ac66a31149c72c86379b28414",
+      "rootByteIdentical": true
+    },
+    {
+      "lane": "supplemental",
+      "count": 4,
+      "recipeSha256": "c42cd62084ea40ed9a243b2a3475b9ced395e1703ba474cbb8b15187639b80e7",
+      "rootByteIdentical": true
+    }
+  ],
+  "guards": "0unexpected/external/pageErrors/clinicalWrites; exact negative503/409 mocked",
+  "rootFreshFocused": 32,
+  "rootFreshFull": "1252/1240PASS/12exactbaseline/0new",
+  "database": "Historical original12 actualPostgres perroot/QA, source/BE/schema byte-identical; no new DB claim",
+  "deployment": "dpl_2am1AHqBzDcCYtctXYmCqJvKXEYW",
+  "bundleSha256": "4091a73cabe0f6669d1cc119ae189211034118fcf84edf15478b1a67c017d001",
+  "styleAssets": [
+    {
+      "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+      "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+    }
+  ],
+  "htmlSha256": "9615db4620f46f85913f352e531a9ccd68fff393f3f3f89d158e8f0c624abcd7",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T22:52:29.902Z",
+  "ciRun": 37992961607,
+  "ciAttempt": 4,
+  "ciNewFailures": 0,
+  "publicPhase1Proof": "308c21d5eabace90d0d9623ebf7d8eece6306b42",
+  "verifiedPublicImages": 3
+}

@@ -1,0 +1,25 @@
+{
+  "decision": "PUBLIC PINNED SYNTHETIC PNG BYTES VERIFIED",
+  "proofCommit": "308c21d5eabace90d0d9623ebf7d8eece6306b42",
+  "images": [
+    {
+      "path": "root-ordinary/screenshots/desktop-after-brief-notes.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/308c21d5eabace90d0d9623ebf7d8eece6306b42/artifacts/task-validation/424-reading-action/release-resume-20261010/root-ordinary/screenshots/desktop-after-brief-notes.png",
+      "http": 200,
+      "sha256": "ae6c87c9b558e1aec6a3a62cbf6cdfe75227c27d2ac974a33944bf2eec4383b0"
+    },
+    {
+      "path": "root-ordinary/screenshots/authoritative-read-active-urgency.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/308c21d5eabace90d0d9623ebf7d8eece6306b42/artifacts/task-validation/424-reading-action/release-resume-20261010/root-ordinary/screenshots/authoritative-read-active-urgency.png",
+      "http": 200,
+      "sha256": "4474283d146ed887cfca4da24b37dc1672dfee5ebf1c576f463674dfe1a88566"
+    },
+    {
+      "path": "root-supplemental/screenshots/direct-chart-confirmed.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/308c21d5eabace90d0d9623ebf7d8eece6306b42/artifacts/task-validation/424-reading-action/release-resume-20261010/root-supplemental/screenshots/direct-chart-confirmed.png",
+      "http": 200,
+      "sha256": "87b0f90468fe6e0e22ba65ac90a7a3d009fb8fdaa13524bb2102a4bffed4d358"
+    }
+  ],
+  "at": "2026-10-09T22:52:29.822Z"
+}
