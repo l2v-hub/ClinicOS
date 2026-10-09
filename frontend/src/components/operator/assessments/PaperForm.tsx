@@ -22,6 +22,7 @@ import { PaperSheet } from './PaperSheet';
 import { partialTotal } from '../../../lib/assessments/paper/paperLayout';
 import { measureText, paperFields } from './paperFields';
 import { assessmentEditable } from '../../../lib/assessments/assessmentTime';
+import { AssessmentDraftStatus, draftAvailability } from './AssessmentDraftStatus';
 import './PainadCompilation.css';
 
 type MeasureKey = 'weightKg' | 'heightM' | 'calfCm';
@@ -58,6 +59,7 @@ export function PaperForm({
   const locked = draft.busy || !!draft.pending;
   const result = paperResult(scale, answers);
   const count = answeredPaperCount(scale, answers);
+  const availability = draftAvailability(draft, store.persistenceFailed());
   const missing = draft.failure?.missingPaths ?? [];
   const [raw, setRaw] = useState<Partial<Record<MeasureKey, string>>>(() =>
     Object.fromEntries(
@@ -199,6 +201,7 @@ export function PaperForm({
       {focused && <div className="painad-compilation-toolbar" role="region" aria-label="Azioni compilazione PAINAD">
         <div role="status" aria-live="polite">
           <strong>Bozza in modifica · {count} di 5 risposte</strong>
+          <span>{availability.label}</span>
           <span>{result ? 'Compilazione completa · da verificare' : `Compilazione in corso · punteggio parziale ${partialTotal(scale, answers)} / ${scale.maximum}`}</span>
         </div>
         <div className="assessment-actions">
@@ -209,7 +212,7 @@ export function PaperForm({
       {focused ? <details className="painad-metadata" open={draft.predecessorId ? true : undefined}>
         <summary>Data e compilatore · {operatorName}</summary>
         <AssessmentDateFields draft={draft} store={store} />
-        <p className="assessment-hint">La bozza resta disponibile dopo il ricaricamento in questa scheda. Salvala sul server per ritrovarla dopo l’accesso successivo.</p>
+        <AssessmentDraftStatus draft={draft} storageFailed={store.persistenceFailed()} helpOnly />
       </details> : <AssessmentDateFields draft={draft} store={store} />}
       <PaperSheet
         scale={scale}

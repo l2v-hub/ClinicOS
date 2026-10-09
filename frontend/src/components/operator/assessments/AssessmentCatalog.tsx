@@ -63,7 +63,7 @@ function Latest({
     if (local)
       return (
         <>
-          <span className="assessment-draft-chip">Draft · bozza sul dispositivo</span>
+          <span className="assessment-draft-chip">Bozza da riprendere</span>
           <p>
             {count === 0 ? 'Nessuna compilazione salvata' : `${count ?? '—'} compilazioni salvate`}
           </p>
@@ -101,13 +101,13 @@ function Latest({
               : 'Nessuna compilazione finale'}
           </p>
         ))}
-      {!!item?.ownDraftCount && (
+      {state.status === 'ready' && !!item?.ownDraftCount && (
         <p>
-          {item.ownDraftCount} {item.ownDraftCount === 1 ? 'bozza personale' : 'bozze personali'}
-          {item.latestOwnDraft ? ` · aggiornata ${time(item.latestOwnDraft.updatedAt)}` : ''}
+          {item.ownDraftCount} {item.ownDraftCount === 1 ? 'bozza salvata personale' : 'bozze salvate personali'}
+          {item.latestOwnDraft ? ` · ultimo salvataggio confermato ${time(item.latestOwnDraft.updatedAt)}` : ''}
         </p>
       )}
-      {local && <span className="assessment-draft-chip">Draft · bozza sul dispositivo</span>}
+      {local && <span className="assessment-draft-chip">Bozza da riprendere</span>}
     </>
   );
 }
@@ -285,8 +285,7 @@ function CatalogSession({
     <>
       {draftStore.persistenceFailed() && (
         <p role="alert">
-          Non è possibile conservare la bozza dopo il ricaricamento. Salvala sul server prima di
-          uscire.
+          Non è possibile conservare le modifiche dopo il ricaricamento. Salva la bozza in ClinicOS e attendi la conferma prima di uscire.
         </p>
       )}
       <AssessmentCatalogView
@@ -297,7 +296,7 @@ function CatalogSession({
       <ConfirmDialog
         open={!!deleting}
         title="Eliminare la bozza locale?"
-        message="Rimuove la compilazione conservata su questo dispositivo. Una bozza già salvata sul server resta nello storico. Un invio dall’esito incerto deve essere verificato prima di eliminarlo."
+        message="Rimuove la compilazione conservata in questa finestra. Una bozza già salvata in ClinicOS resta nello storico personale. Un invio dall’esito incerto deve essere verificato prima di eliminarlo."
         confirmLabel="Elimina bozza"
         onCancel={() => setDeleting(null)}
         onConfirm={() => {

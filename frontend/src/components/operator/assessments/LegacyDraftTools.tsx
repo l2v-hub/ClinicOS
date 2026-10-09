@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import { localDraftHelp } from './AssessmentDraftStatus';
 export function LegacyDraftTools({
   dirty,
   error,
@@ -14,12 +15,13 @@ export function LegacyDraftTools({
     <>
       {error && (
         <p role="alert">
-          La bozza locale non è disponibile. Le modifiche attuali restano in questa scheda: salva prima di uscire.
+          Il browser non consente di conservare le modifiche dopo il ricaricamento. Salva in ClinicOS e attendi la conferma prima di uscire.
         </p>
       )}
       {dirty && (
         <div className="assessment-local">
-          <span className="assessment-draft-chip">{error ? 'Draft · conservazione locale non disponibile' : 'Draft · bozza sul dispositivo'}</span>
+          <span className="assessment-draft-chip">Bozza da riprendere in questa finestra</span>
+          <p className="assessment-hint">{localDraftHelp(error)}</p>
           <button type="button" className="btn-secondary btn-sm" onClick={() => setConfirm(true)}>
             Elimina bozza
           </button>
@@ -28,7 +30,7 @@ export function LegacyDraftTools({
       <ConfirmDialog
         open={confirm}
         title="Eliminare la bozza?"
-        message="La compilazione non salvata verrà rimossa da questa scheda. I dati già registrati del paziente restano disponibili."
+        message="La compilazione non salvata verrà rimossa da questa finestra. I dati già registrati del paziente restano disponibili."
         confirmLabel="Elimina bozza"
         onCancel={() => setConfirm(false)}
         onConfirm={() => {

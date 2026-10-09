@@ -28,6 +28,7 @@ import { TinettiForm } from './TinettiForm';
 import { MnaForm } from './MnaForm';
 import { GdsForm } from './GdsForm';
 import { PaperForm } from './PaperForm';
+import { AssessmentDraftStatus } from './AssessmentDraftStatus';
 import { displayPaperScale } from './paperRecord';
 import { useCan } from '../../../lib/capabilities';
 import { ASSESSMENT_VERSIONS } from '../../../lib/assessments/assessmentTypes';
@@ -298,12 +299,12 @@ function AssessmentSession({
             <p>Nessuna scheda finale corrente. Avvia una nuova compilazione.</p>
           )}
           {!focusedCompilation && <p className="assessment-hint">
-            Compilatore: {operatorName}. La bozza resta disponibile dopo il ricaricamento in questa scheda. Salvala sul server per ritrovarla dopo l’accesso successivo.
+            Compilatore: {operatorName}. Salva la bozza in ClinicOS e attendi la conferma prima di uscire.
           </p>}
           {store.persistenceFailed() && <p role="alert">Bozza disponibile in questa pagina. Il browser non consente di conservarla dopo il ricaricamento.</p>}
           {resumableDrafts.length > 0 && (
             <div className="assessment-local">
-              <span>Draft · compilazioni da completare</span>
+              <span>Bozze da riprendere</span>
               {resumableDrafts.map((item) => (
                 <button
                   key={item.key}
@@ -321,6 +322,7 @@ function AssessmentSession({
           {error && <p role="alert">{error}</p>}
           {draft && (
             <section aria-label={`Scheda ${definition.title}`}>
+              {record?.status !== 'final' && !(focusedCompilation && displayPaperScale({ type, formVersion: record?.formVersion ?? ASSESSMENT_VERSIONS[type] })) && <AssessmentDraftStatus draft={draft} storageFailed={store.persistenceFailed()} />}
               {record?.status === 'final' ? (
                 <>
                   <AssessmentFinal
@@ -372,11 +374,6 @@ function AssessmentSession({
                 </>
               ) : (
                 <>
-                  {record && !draft.dirty && !draft.pending && (
-                    <p role="status" className="assessment-saved">
-                      Bozza salvata · versione {record.version} · {record.author.name}
-                    </p>
-                  )}
                   {(() => {
                     const paper = displayPaperScale({
                       type,
@@ -496,8 +493,8 @@ function AssessmentSession({
           confirm === 'discard'
             ? 'I dati locali verranno rimossi. Un salvataggio già avvenuto o ancora incerto non viene annullato: verifica lo storico.'
             : confirm === 'accept'
-              ? 'I campi locali saranno sostituiti dalla versione letta dal server.'
-              : 'Le tue risposte resteranno nella compilazione e il prossimo salvataggio aggiornerà la versione letta dal server.'
+              ? 'I campi locali saranno sostituiti dalla versione letta da ClinicOS.'
+              : 'Le tue risposte resteranno nella compilazione e il prossimo salvataggio aggiornerà la versione letta da ClinicOS.'
         }
         confirmLabel="Conferma"
         onCancel={() => setConfirm(null)}
