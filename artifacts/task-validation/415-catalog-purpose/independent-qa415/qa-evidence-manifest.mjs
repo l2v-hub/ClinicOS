@@ -1,0 +1,13 @@
+import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
+import {resolve,relative} from 'node:path';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const out=resolve('artifacts/task-validation/415-catalog-purpose/independent-qa415');
+const receipt=JSON.parse(readFileSync(resolve(out,'source-receipt.json'),'utf8'));
+assert.equal(receipt.sourceSha256,'6be776fab17aae587589b039db30f5df3be8d6a8e7910cfd5be6f0863b3b6902');
+const browser=JSON.parse(readFileSync(resolve(out,'browser-final/test-results/results.json'),'utf8'));
+assert(browser.outcomes.every(o=>o.status==='PASS'));assert.equal(browser.states.length,5);
+const r=spawnSync('git',['diff','288dac948c8a46e26e1bef87d6266b2497727566','HEAD'],{encoding:'utf8',maxBuffer:10*1024*1024});assert.equal(r.status,0);writeFileSync(resolve(out,'diff-reviewed.patch'),r.stdout);
+const files=[];function visit(dir){for(const entry of readdirSync(dir,{withFileTypes:true})){const path=resolve(dir,entry.name);if(entry.isDirectory())visit(path);else if(entry.name!=='evidence-manifest.json'){const value=readFileSync(path);files.push({path:relative(out,path).replaceAll('\\','/'),sha256:createHash('sha256').update(value).digest('hex'),bytes:value.length});}}}visit(out);files.sort((a,b)=>a.path.localeCompare(b.path));
+const manifest={applicationCommit:receipt.applicationCommit,sourceSha256:receipt.sourceSha256,baseline:receipt.baseline,verdict:'READY FOR CODEX QA',evidenceRoot:out.replaceAll('\\','/'),manifestExcludesOnlySelf:true,allFilesIncluded:true,files};writeFileSync(resolve(out,'evidence-manifest.json'),JSON.stringify(manifest,null,2));console.log(JSON.stringify({files:files.length,applicationCommit:manifest.applicationCommit,sourceSha256:manifest.sourceSha256,verdict:manifest.verdict}));

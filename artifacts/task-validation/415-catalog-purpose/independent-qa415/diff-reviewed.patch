@@ -1,0 +1,578 @@
+diff --git a/frontend/src/components/operator/PatientDetail.tsx b/frontend/src/components/operator/PatientDetail.tsx
+index 39c4eddb..06c5efb8 100644
+--- a/frontend/src/components/operator/PatientDetail.tsx
++++ b/frontend/src/components/operator/PatientDetail.tsx
+@@ -335,6 +335,9 @@ export function PatientDetail({
+   const [legacyCreates, setLegacyCreates] = useState<
+     Partial<Record<TabId, { patientId: string; request: string }>>
+   >({});
++  const [legacyCatalogViews, setLegacyCatalogViews] = useState<
++    Partial<Record<TabId, { patientId: string; request: string; action: 'history' | 'resume' }>>
++  >({});
+   const intakeReview = usePatientIntakeReview(paziente.id, operatoreId, operatoreRole);
+   useEffect(
+     () => () => {
+@@ -2448,6 +2451,7 @@ export function PatientDetail({
+             <WidgetGroup>
+               <MedicazioniTab
+                 key={paziente.id}
++                catalogViewRequest={legacyCatalogViews.medicazioni?.patientId === paziente.id ? legacyCatalogViews.medicazioni : undefined}
+                 createRequest={
+                   legacyCreates.medicazioni?.patientId === paziente.id
+                     ? legacyCreates.medicazioni.request
+@@ -2470,6 +2474,7 @@ export function PatientDetail({
+             <WidgetGroup>
+               <ContenzioniTab
+                 key={paziente.id}
++                catalogViewRequest={legacyCatalogViews.contenzioni?.patientId === paziente.id ? legacyCatalogViews.contenzioni : undefined}
+                 createRequest={
+                   legacyCreates.contenzioni?.patientId === paziente.id
+                     ? legacyCreates.contenzioni.request
+@@ -2488,6 +2493,7 @@ export function PatientDetail({
+             <WidgetGroup>
+               <ScalaBradenTab
+                 key={paziente.id}
++                catalogViewRequest={legacyCatalogViews.braden?.patientId === paziente.id ? legacyCatalogViews.braden : undefined}
+                 createRequest={
+                   legacyCreates.braden?.patientId === paziente.id
+                     ? legacyCreates.braden.request
+@@ -2539,11 +2545,16 @@ export function PatientDetail({
+                     }
+                   : null,
+               );
+-              if (!module.type && action === 'new')
++              if (!module.type && action === 'new') {
++                setLegacyCatalogViews(previous => ({...previous, [module.tab]: undefined}));
+                 setLegacyCreates((previous) => ({
+                   ...previous,
+                   [module.tab]: { patientId: paziente.id, request: crypto.randomUUID() },
+                 }));
++              } else if (!module.type) {
++                setLegacyCreates(previous => ({...previous, [module.tab]: undefined}));
++                setLegacyCatalogViews(previous => ({...previous, [module.tab]: {patientId:paziente.id,request:crypto.randomUUID(),action}}));
++              }
+               switchTab(module.tab);
+             }}
+           />
+@@ -2721,6 +2732,7 @@ export function PatientDetail({
+                 ? assessmentFocus.assessment.localKey
+                 : undefined
+             }
++            historyOnly={assessmentFocus?.patientId === paziente.id && assessmentFocus.assessment.type === (current === 'gds' ? 'gds15' : current) && assessmentFocus.assessment.historyOnly}
+             onOpenArchive={(documentId, assessment) => {
+               setArchiveFocus({ patientId: paziente.id, documentId, assessment });
+               switchTab('documenti');
+diff --git a/frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts b/frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts
+index 6c1494bc..eb187fbb 100644
+--- a/frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts
++++ b/frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts
+@@ -18,34 +18,34 @@ const render = (state: AssessmentCatalogState, cartella = {} as CartellaPaziente
+ test('catalog immediately exposes ten routes and new commands with a separate NRS history link', () => {
+   const html = render({ status: 'loading', data: null, error: null });
+   assert.equal((html.match(/<h4>/g) ?? []).length, 10);
+-  assert.equal((html.match(/aria-label="Apri /g) ?? []).length, 10);
+-  assert.equal((html.match(/aria-label="Nuova compilazione /g) ?? []).length, 10);
++  assert.equal((html.match(/aria-label="Storico /g) ?? []).length, 10);
++  assert.equal((html.match(/aria-label="Compila /g) ?? []).length, 10);
+   assert.match(html, /Assistenza e mobilizzazione/);
+   assert.match(html, /Scale di valutazione/);
+   assert.match(html, /Storico NRS precedente/);
+   assert.match(html, /Caricamento date e bozze/);
+-  assert.doesNotMatch(html, /Nessuna compilazione finale/);
++  assert.doesNotMatch(html, /Nessuna compilazione completa/);
+ });
+ test('metadata error is retryable rather than empty; own-only and local drafts remain reachable', () => {
+   const failed = render({ status: 'error', data: null, error: 'Errore controllato' });
+   assert.match(failed, /role="alert"/);
+   assert.match(failed, /Riprova/);
+-  assert.doesNotMatch(failed, /Nessuna compilazione finale/);
++  assert.doesNotMatch(failed, /Nessuna compilazione completa/);
+   const data = empty();
+   const row = data.items[4];
+   row.ownDraftCount = 2;
+   row.latestOwnDraft = { id: 'mine', formVersion: row.formVersion, assessedAt: '2026-09-23T07:00:00.000Z', createdAt: '2026-09-23T07:00:00.000Z', updatedAt: '2026-09-23T08:00:00.000Z' };
+   const html = render({ status: 'ready', data, error: null }, {} as CartellaPaziente, new Set(['mna']));
+-  assert.match(html, /Bozza personale · nessuna compilazione finale/);
++  assert.match(html, /Bozza personale · nessuna compilazione completa/);
+   assert.match(html, /Riprendi bozza GDS-15/);
+   assert.match(html, /Riprendi bozza MNA/);
+-  assert.match(html, /Bozza locale da salvare/);
++  assert.match(html, /Bozza da riprendere/);
+ });
+ test('legacy rows distinguish no compilation, unavailable dates and valid start dates', () => {
+   const html = render({ status: 'ready', data: empty(), error: null }, { medicazioniFerite: [], contenzioni: [{ dataInizio: '2026-09-20' }], valutazioniBraden: [{}] } as unknown as CartellaPaziente);
+-  assert.match(html, /Medicazioni<\/h4><p>Nessuna compilazione/);
++  assert.match(html, /Medicazioni<\/h4><p class="assessment-catalog-purpose">[^<]+<\/p><p>Nessuna compilazione/);
+   assert.match(html, /Ultimo inizio riportato: 20\/09\/2026/);
+-  assert.match(html, /Braden<\/h4><p>Data di compilazione non disponibile/);
++  assert.match(html, /Braden<\/h4><p class="assessment-catalog-purpose">[^<]+<\/p><p>Data di compilazione non disponibile/);
+ });
+ test('legacy new entry opens the existing form while the default remains history and no save is invoked', () => {
+   let writes = 0;
+diff --git a/frontend/src/components/operator/__tests__/catalogPurpose415.test.ts b/frontend/src/components/operator/__tests__/catalogPurpose415.test.ts
+new file mode 100644
+index 00000000..be313985
+--- /dev/null
++++ b/frontend/src/components/operator/__tests__/catalogPurpose415.test.ts
+@@ -0,0 +1,64 @@
++import assert from 'node:assert/strict';
++import { test } from 'node:test';
++import React from 'react';
++import { renderToStaticMarkup } from 'react-dom/server';
++import { AssessmentCatalogView } from '../assessments/AssessmentCatalog';
++import { assessmentCatalogEntry } from '../../../lib/assessments/assessmentEntry';
++import { createAssessmentDraftStore } from '../../../lib/assessments/assessmentDraftStore';
++import { CATALOG_TYPES, type AssessmentCatalogData } from '../../../lib/assessments/assessmentCatalog';
++import type { AssessmentCatalogState } from '../../../lib/assessments/assessmentCatalogState';
++import { ASSESSMENT_VERSIONS } from '../../../lib/assessments/assessmentTypes';
++import type { CartellaPaziente } from '../../../types';
++Object.assign(globalThis, { React });
++const data = () => ({ items: CATALOG_TYPES.map(type => ({type, formVersion: ASSESSMENT_VERSIONS[type], latestFinal:null, latestOwnDraft:null, ownDraftCount:0})) });
++const render = (canCreate=true) => renderToStaticMarkup(React.createElement(AssessmentCatalogView, {cartella:{} as CartellaPaziente,state:{status:'ready',data:data(),error:null},localDraftTypes:new Set(['mna']),canCreate,onRetry(){},onOpen(){},onNrs(){}}));
++test('415 purpose text and unchanged catalog names accompany visible text actions, not tooltips', () => {
++  const html=render();
++  for(const name of ['Braden','PAINAD','Tinetti','MNA®-SF','GDS-15','Indice di Barthel','UCLA · Sonno-veglia (NPI)']) assert.ok(html.includes(`<h4>${name}</h4>`));
++  for(const purpose of ['Rischio di compromissione','Valutazione osservazionale del dolore','Equilibrio e andatura','Screening rapido','Screening della depressione','Autonomia nelle attività','Item Sonno']) assert.ok(html.includes(purpose),purpose);
++  assert.equal((html.match(/aria-label="Storico /g)||[]).length,10);
++  assert.equal((html.match(/aria-label="Compila /g)||[]).length,10);
++  assert.match(html,/>Storico<\/button>/);
++  assert.match(html,/>Compila<\/button>/);
++  assert.match(html,/>Riprendi bozza<\/button>/);
++  assert.doesNotMatch(html,/ title=/);
++});
++test('415 history is non-mutating and does not automatically resume local or server drafts', () => {
++  const store=createAssessmentDraftStore();
++  const key=store.create('synthetic415',undefined,'mna');
++  const before=JSON.stringify(store.list('synthetic415','mna'));
++  const entry=assessmentCatalogEntry('synthetic415','mna','history',store);
++  assert.deepEqual(entry,{type:'mna',historyOnly:true});
++  assert.equal(JSON.stringify(store.list('synthetic415','mna')),before);
++  assert.equal(assessmentCatalogEntry('synthetic415','mna','resume',store).localKey,key);
++});
++test('415 read-only actor sees history and purposes, without compilation or draft mutation actions', () => {
++  const html=render(false);
++  assert.equal((html.match(/aria-label="Storico /g)||[]).length,10);
++  assert.doesNotMatch(html,/aria-label="(?:Compila|Riprendi bozza|Elimina bozza)/);
++  assert.match(html,/Valutazione osservazionale del dolore/);
++});
++test('415 empty, local, saved-own and real latest-final dates are distinct; never invent a score', () => {
++  const values: AssessmentCatalogData=data();
++  values.items[0].latestFinal={id:'synthetic-final',formVersion:ASSESSMENT_VERSIONS.painad,assessedAt:'2026-10-07T08:00:00.000Z',createdAt:'2026-10-08T08:00:00.000Z',finalizedAt:'2026-10-09T08:00:00.000Z'};
++  values.items[0].ownDraftCount=1;
++  values.items[0].latestOwnDraft={id:'synthetic-own',formVersion:ASSESSMENT_VERSIONS.painad,assessedAt:'2026-10-09T08:00:00.000Z',createdAt:'2026-10-09T08:00:00.000Z',updatedAt:'2026-10-09T09:00:00.000Z'};
++  values.items[2].ownDraftCount=1;values.items[2].latestOwnDraft={...values.items[0].latestOwnDraft,formVersion:ASSESSMENT_VERSIONS.tinetti};
++  const html=renderToStaticMarkup(React.createElement(AssessmentCatalogView,{cartella:{} as CartellaPaziente,state:{status:'ready',data:values,error:null},localDraftTypes:new Set(['mna']),onRetry(){},onOpen(){},onNrs(){}}));
++  assert.match(html,/Ultima completa: <strong>07\/10\/26, 10:00/);
++  assert.match(html,/Registrata 08\/10\/26, 10:00 · Finalizzata/);
++  assert.match(html,/1 bozza salvata personale/);
++  assert.match(html,/Bozza personale · nessuna compilazione completa/);
++  assert.match(html,/Bozza da riprendere/);
++  assert.doesNotMatch(html,/synthetic-final|synthetic-own|Punteggio totale/);
++});
++test('415 loading and failed metadata do not assert empty or stale saved drafts', () => {
++  const stale: AssessmentCatalogData=data();stale.items[0].ownDraftCount=1;
++  for(const status of ['loading','error'] as const){
++    const state:AssessmentCatalogState={status,data:stale,error:status==='error'?'Errore sintetico':null};
++    const html=renderToStaticMarkup(React.createElement(AssessmentCatalogView,{cartella:{} as CartellaPaziente,state,localDraftTypes:new Set(),onRetry(){},onOpen(){},onNrs(){}}));
++    const painad=html.split('<h4>PAINAD</h4>')[1].split('</article>')[0];
++    assert.doesNotMatch(painad,/Nessuna compilazione|bozza salvata personale|Riprendi bozza/);
++    assert.match(painad,status==='loading'?/Caricamento date e bozze/:/Date e bozze non disponibili/);
++  }
++});
+diff --git a/frontend/src/components/operator/__tests__/paperScalesUi.test.ts b/frontend/src/components/operator/__tests__/paperScalesUi.test.ts
+index ea55e7ba..565df539 100644
+--- a/frontend/src/components/operator/__tests__/paperScalesUi.test.ts
++++ b/frontend/src/components/operator/__tests__/paperScalesUi.test.ts
+@@ -267,10 +267,10 @@ test('catalog lists Barthel and UCLA-NPI, accepts a v1 latest final, and hides 
+   assert.match(nurse, /Indice di Barthel/);
+   assert.match(nurse, /UCLA · Sonno-veglia \(NPI\)/);
+   assert.match(nurse, /MNA®-SF/);
+-  assert.equal((nurse.match(/aria-label="Nuova compilazione /g) ?? []).length, 10);
++  assert.equal((nurse.match(/aria-label="Compila /g) ?? []).length, 10);
+   const oss = view(false);
+-  assert.equal((oss.match(/aria-label="Nuova compilazione /g) ?? []).length, 0);
+-  assert.equal((oss.match(/aria-label="Apri /g) ?? []).length, 10);
++  assert.equal((oss.match(/aria-label="Compila /g) ?? []).length, 0);
++  assert.equal((oss.match(/aria-label="Storico /g) ?? []).length, 10);
+ });
+ 
+ test('MNA v1 correction starts an empty MNA-SF draft; Tinetti/GDS v1 answers carry over to v2', () => {
+diff --git a/frontend/src/components/operator/assessments/AssessmentCatalog.css b/frontend/src/components/operator/assessments/AssessmentCatalog.css
+index 691a68ce..be235832 100644
+--- a/frontend/src/components/operator/assessments/AssessmentCatalog.css
++++ b/frontend/src/components/operator/assessments/AssessmentCatalog.css
+@@ -1,4 +1,4 @@
+-.assessment-catalog { display: grid; gap: 18px; }
++.assessment-catalog { display: grid; gap: 18px; --ds-control-h: 44px; }
+ /* Keep the catalog on the same left axis as the patient TopNav. */
+ @media screen { .assessment-catalog { margin-inline: 24px; } }
+ @media screen and (max-width: 900px) { .assessment-catalog { margin-inline: 16px; } }
+@@ -8,7 +8,10 @@
+ .assessment-catalog-list { display: grid; gap: 8px; }
+ .assessment-catalog-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--border-color, #d8e0e8); border-radius: 10px; background: var(--surface, #fff); }
+ .assessment-catalog-row > div:first-child { min-width: 0; display: grid; gap: 5px; overflow-wrap: anywhere; }
+-.assessment-catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex-shrink: 0; }
++.assessment-catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 100%; }
++.assessment-catalog-purpose { color: var(--text-secondary, #526170); font-size: .9rem; }
++.assessment-catalog-action { white-space: normal; }
++.assessment-catalog-action:focus-visible { outline: 3px solid var(--primary, #2563eb); outline-offset: 3px; }
+ .assessment-catalog-secondary { font-size: .85rem; color: var(--text-muted, #526170); }
+ .patient-module-return { align-self: flex-start; width: fit-content; max-width: 100%; margin-bottom: 12px; }
+ .nrs-legacy { display: grid; gap: 12px; }
+@@ -21,9 +24,9 @@
+ .nrs-print-surface { display: none; }
+ .assessment-catalog-icon { width:40px; height:40px; min-width:40px; min-height:40px; padding:0; display:grid; place-items:center; font-size:24px; }
+ .assessment-draft-chip { padding:2px 8px; border-radius:20px; width:fit-content; background:var(--amber-bg,#fdf3e2); color:#8a5300; font-size:12px; }
+-@media (max-width: 480px) { .assessment-catalog-row { align-items:flex-start; flex-direction:column; } .assessment-catalog-actions { display:flex; } }
++@media (max-width: 900px) { .assessment-catalog-row { align-items:flex-start; flex-direction:column; } .assessment-catalog-actions { display:flex; } }
+ @media (max-width: 768px) {
+-  .assessment-catalog button, .patient-module-return {
++  .assessment-catalog > button, .assessment-catalog .assessment-catalog-actions button, .patient-module-return {
+     min-width: 44px;
+     min-height: 44px;
+     max-width: 100%;
+diff --git a/frontend/src/components/operator/assessments/AssessmentCatalog.tsx b/frontend/src/components/operator/assessments/AssessmentCatalog.tsx
+index d34ab549..9eecac7c 100644
+--- a/frontend/src/components/operator/assessments/AssessmentCatalog.tsx
++++ b/frontend/src/components/operator/assessments/AssessmentCatalog.tsx
+@@ -18,6 +18,7 @@ import {
+   type AssessmentCatalogState,
+ } from '../../../lib/assessments/assessmentCatalogState';
+ import { useCan } from '../../../lib/capabilities';
++import { assessmentDefinition } from '../../../lib/assessments/assessmentDefinition';
+ import './AssessmentCatalog.css';
+ import { ConfirmDialog } from '../../shared/ConfirmDialog';
+ import {
+@@ -26,7 +27,7 @@ import {
+   LEGACY_DRAFT_CHANGED,
+ } from '../../../lib/useLegacyModuleDraft';
+ 
+-type Action = 'open' | 'new' | 'resume';
++type Action = 'history' | 'new' | 'resume';
+ interface ViewProps {
+   cartella: CartellaPaziente;
+   state: AssessmentCatalogState;
+@@ -87,7 +88,7 @@ function Latest({
+         (item?.latestFinal ? (
+           <>
+             <p>
+-              Ultima compilazione: <strong>{time(item.latestFinal.assessedAt)}</strong>
++              Ultima completa: <strong>{time(item.latestFinal.assessedAt)}</strong>
+             </p>
+             <p className="assessment-catalog-secondary">
+               Registrata {time(item.latestFinal.createdAt)} · Finalizzata{' '}
+@@ -97,8 +98,8 @@ function Latest({
+         ) : (
+           <p>
+             {item?.ownDraftCount
+-              ? 'Bozza personale · nessuna compilazione finale'
+-              : 'Nessuna compilazione finale'}
++              ? 'Bozza personale · nessuna compilazione completa'
++              : local ? 'Nessuna compilazione completa' : 'Nessuna compilazione'}
+           </p>
+         ))}
+       {state.status === 'ready' && !!item?.ownDraftCount && (
+@@ -136,12 +137,18 @@ export function AssessmentCatalogView({
+           <h3>{group}</h3>
+           <div className="assessment-catalog-list">
+             {CLINICAL_MODULES.filter((module) => module.group === group).map((module) => {
+-              const item = state.data?.items.find((row) => row.type === module.type);
++              const item = state.status === 'ready' ? state.data?.items.find((row) => row.type === module.type) : undefined;
+               const local = localDraftTypes.has(module.type ?? module.tab);
++              // Modern purposes reuse the current paper/model description. Braden wording
++              // comes from the tracked blank sheet and existing app risk legend, not new thresholds.
++              const purpose = module.type ? assessmentDefinition(module.type).description
++                : module.tab === 'braden' ? 'Rischio di compromissione dell’integrità cutanea.'
++                : module.tab === 'medicazioni' ? 'Scheda Medicazioni / Lesioni' : 'Contenzioni / Protezioni';
+               return (
+                 <article key={module.tab} className="assessment-catalog-row">
+                   <div>
+                     <h4>{module.label}</h4>
++                    <p className="assessment-catalog-purpose">{purpose}</p>
+                     <Latest
+                       module={module}
+                       cartella={cartella}
+@@ -153,44 +160,40 @@ export function AssessmentCatalogView({
+                   <div className="assessment-catalog-actions">
+                     <button
+                       type="button"
+-                      className="btn-secondary assessment-catalog-icon"
+-                      aria-label={`Apri ${module.label}`}
+-                      title={`Apri ${module.label}`}
+-                      onClick={() => onOpen(module, 'open', item)}
++                      className="btn-secondary assessment-catalog-action"
++                      aria-label={`Storico ${module.label}`}
++                      onClick={() => onOpen(module, 'history', item)}
+                     >
+-                      <span aria-hidden="true">›</span>
++                      Storico
+                     </button>
+                     {canCreate && (
+                       <button
+                         type="button"
+-                        className="btn-primary assessment-catalog-icon"
+-                        aria-label={`Nuova compilazione ${module.label}`}
+-                        title={`Nuova compilazione ${module.label}`}
++                        className="btn-primary assessment-catalog-action"
++                        aria-label={`Compila ${module.label}`}
+                         onClick={() => onOpen(module, 'new', item)}
+                       >
+-                        <span aria-hidden="true">＋</span>
++                        Compila
+                       </button>
+                     )}
+                     {canCreate && (local || !!item?.ownDraftCount) && (
+                       <button
+                         type="button"
+-                        className="btn-secondary assessment-catalog-icon"
++                        className="btn-secondary assessment-catalog-action"
+                         aria-label={`Riprendi bozza ${module.label}`}
+-                        title={`Riprendi bozza ${module.label}`}
+                         onClick={() => onOpen(module, 'resume', item)}
+                       >
+-                        <span aria-hidden="true">✎</span>
++                        Riprendi bozza
+                       </button>
+                     )}
+                     {canCreate && local && onDeleteLocal && (
+                       <button
+                         type="button"
+-                        className="btn-secondary assessment-catalog-icon"
++                        className="btn-secondary assessment-catalog-action"
+                         aria-label={`Elimina bozza locale ${module.label}`}
+-                        title={`Elimina bozza locale ${module.label}`}
+                         onClick={() => onDeleteLocal(module)}
+                       >
+-                        <span aria-hidden="true">×</span>
++                        Elimina bozza locale
+                       </button>
+                     )}
+                   </div>
+diff --git a/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx b/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx
+index 5f57df91..06b50c4b 100644
+--- a/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx
++++ b/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx
+@@ -53,6 +53,7 @@ export interface AssessmentWorkspaceProps {
+   initialAssessment?: AssessmentTarget;
+   initialAssessmentId?: string;
+   initialDraftKey?: string;
++  historyOnly?: boolean;
+   onOpenArchive?: (documentId: string, assessment: AssessmentTarget) => void;
+   client?: AssessmentClient;
+   children?: ReactNode;
+@@ -77,6 +78,7 @@ function AssessmentSession({
+   initialAssessment,
+   initialAssessmentId,
+   initialDraftKey,
++  historyOnly = false,
+   onOpenArchive,
+   client: providedClient,
+   children,
+@@ -100,6 +102,7 @@ function AssessmentSession({
+   const [store] = useState(() => draftStore ?? createAssessmentDraftStore());
+   const workspaceRef = useRef<HTMLDivElement>(null);
+   const identityRef = useRef<HTMLDivElement>(null);
++  const historyRef = useRef<HTMLDivElement>(null);
+   useEffect(() => {
+     const workspace = workspaceRef.current;
+     const identity = identityRef.current;
+@@ -194,6 +197,13 @@ function AssessmentSession({
+     }
+   }
+   useEffect(() => {
++    if (historyOnly && !initialDraftKey && !entryId) {
++      const timer = window.setTimeout(() => {
++        select(null);
++        historyRef.current?.focus();
++      }, 0);
++      return () => window.clearTimeout(timer);
++    }
+     if (!initialDraftKey && !entryId && type === 'painad') return;
+     const timer = window.setTimeout(() => {
+       if (initialDraftKey) {
+@@ -207,7 +217,7 @@ function AssessmentSession({
+     return () => window.clearTimeout(timer);
+     // Session key fences patient/actor changes; an explicit entry ID opens one record.
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+-  }, [entryId, initialDraftKey, type]);
++  }, [entryId, initialDraftKey, type, historyOnly]);
+   function create(predecessor?: AssessmentDto) {
+     try {
+       select(store.create(patient.id, predecessor, type));
+@@ -478,7 +488,9 @@ function AssessmentSession({
+               )}
+             </section>
+           )}
+-          <AssessmentHistory history={history} onOpen={(item) => void open(item.id)} />
++          <div ref={historyRef} tabIndex={-1} aria-label={`Storico ${definition.title}`}>
++            <AssessmentHistory history={history} onOpen={(item) => void open(item.id)} />
++          </div>
+         </div>
+       </ClinicalTableSection>
+       {children}
+diff --git a/frontend/src/components/operator/assessments/useLegacyCatalogView.ts b/frontend/src/components/operator/assessments/useLegacyCatalogView.ts
+new file mode 100644
+index 00000000..efde2b24
+--- /dev/null
++++ b/frontend/src/components/operator/assessments/useLegacyCatalogView.ts
+@@ -0,0 +1,11 @@
++import { useEffect, useEffectEvent } from 'react';
++import type { LegacyCatalogViewRequest } from '../../../lib/assessments/assessmentEntry';
++/** Navigation changes the view, never answers or the identity of an existing edit. */
++export function useLegacyCatalogView(request: LegacyCatalogViewRequest | undefined, show: (compile: boolean) => void) {
++  const apply = useEffectEvent(show);
++  useEffect(() => {
++    if (!request) return;
++    const timer = setTimeout(() => apply(request.action === 'resume'), 0);
++    return () => clearTimeout(timer);
++  }, [request]);
++}
+diff --git a/frontend/src/components/operator/cartella/ContenzioniTab.tsx b/frontend/src/components/operator/cartella/ContenzioniTab.tsx
+index 657ccb97..256bbbf3 100644
+--- a/frontend/src/components/operator/cartella/ContenzioniTab.tsx
++++ b/frontend/src/components/operator/cartella/ContenzioniTab.tsx
+@@ -2,6 +2,8 @@ import { useEffect, useEffectEvent, useRef, useState } from 'react';
+ import { legacyEntryTransition } from '../../../lib/assessments/assessmentEntry';
+ import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
+ import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
++import { useLegacyCatalogView } from '../assessments/useLegacyCatalogView';
++import type { LegacyCatalogViewRequest } from '../../../lib/assessments/assessmentEntry';
+ import { IcoCheck } from '../../../icons';
+ import type {
+   CartellaPaziente,
+@@ -26,6 +28,7 @@ interface Props {
+   onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
+   operatoreNome: string;
+   createRequest?: string;
++  catalogViewRequest?: LegacyCatalogViewRequest;
+ }
+ 
+ const TIPO_LABEL: Record<TipoContenzione, string> = {
+@@ -363,7 +366,7 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
+ 
+ // ── Main component ────────────────────────────────────────────────────────
+ 
+-export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
++export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, createRequest, catalogViewRequest }: Props) {
+   const list = cartella.contenzioni ?? [];
+   const localDraft = useLegacyModuleDraft(paziente.id,'contenzioni',EMPTY_FORM,!!createRequest);
+   const { show:showAdd,setShow:setShowAdd,editId,setEditId,form,setForm } = localDraft;
+@@ -374,6 +377,10 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
+   const entryForm = useRef<HTMLDivElement>(null);
+   const entryGate = useRef<HTMLDivElement>(null);
+   const [entryBlocked, setEntryBlocked] = useState(false);
++  useLegacyCatalogView(catalogViewRequest, compile => {
++    setShowAdd(compile); setModulo(false); setEntryBlocked(false);
++    if (compile) setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
++  });
+   function applyEntry(action: 'request' | 'resume' | 'discard') {
+     const next = legacyEntryTransition(action, { editId, form }, () => ({ ...EMPTY_FORM }));
+     setEditId(next.editId); setForm(next.form); setEntryBlocked(next.blocked); setShowAdd(next.showForm); setModulo(false);
+diff --git a/frontend/src/components/operator/cartella/MedicazioniTab.tsx b/frontend/src/components/operator/cartella/MedicazioniTab.tsx
+index c6598007..08a6ab35 100644
+--- a/frontend/src/components/operator/cartella/MedicazioniTab.tsx
++++ b/frontend/src/components/operator/cartella/MedicazioniTab.tsx
+@@ -14,6 +14,8 @@ import { ClinicalAttachments } from './ClinicalAttachments';
+ import { attachDressingDocument } from '../../../lib/clinicalAttachments';
+ import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
+ import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
++import { useLegacyCatalogView } from '../assessments/useLegacyCatalogView';
++import type { LegacyCatalogViewRequest } from '../../../lib/assessments/assessmentEntry';
+ 
+ interface Props {
+   cartella: CartellaPaziente;
+@@ -23,6 +25,7 @@ interface Props {
+   operatoreId?: string;
+   operatoreRole?: string;
+   createRequest?: string;
++  catalogViewRequest?: LegacyCatalogViewRequest;
+ }
+ 
+ const ESSUDATO_LABEL: Record<EssudatoLivello, string> = {
+@@ -700,6 +703,7 @@ export function MedicazioniTab({
+   operatoreId,
+   operatoreRole,
+   createRequest,
++  catalogViewRequest,
+ }: Props) {
+   const meds = cartella.medicazioniFerite ?? [];
+   const medsRef = useRef(meds);
+@@ -713,6 +717,10 @@ export function MedicazioniTab({
+   const entryForm = useRef<HTMLDivElement>(null);
+   const entryGate = useRef<HTMLDivElement>(null);
+   const [entryBlocked, setEntryBlocked] = useState(false);
++  useLegacyCatalogView(catalogViewRequest, compile => {
++    setShowAdd(compile); setModulo(false); setEntryBlocked(false);
++    if (compile) setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
++  });
+   function applyEntry(action: 'request' | 'resume' | 'discard') {
+     const next = legacyEntryTransition(action, { editId, form }, () => ({
+       ...EMPTY_FORM,
+diff --git a/frontend/src/components/operator/cartella/ScalaBradenTab.tsx b/frontend/src/components/operator/cartella/ScalaBradenTab.tsx
+index 10c525df..3c80ba1c 100644
+--- a/frontend/src/components/operator/cartella/ScalaBradenTab.tsx
++++ b/frontend/src/components/operator/cartella/ScalaBradenTab.tsx
+@@ -1,6 +1,8 @@
+ import { useEffect, useRef, useState } from 'react';
+ import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
+ import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
++import { useLegacyCatalogView } from '../assessments/useLegacyCatalogView';
++import type { LegacyCatalogViewRequest } from '../../../lib/assessments/assessmentEntry';
+ import type { CartellaPaziente, ScalaBradenValutazione, Paziente } from '../../../types';
+ import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
+ import { ClinicalTable } from './ClinicalTable';
+@@ -12,6 +14,7 @@ interface Props {
+   onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
+   operatoreNome: string;
+   createRequest?: string;
++  catalogViewRequest?: LegacyCatalogViewRequest;
+ }
+ 
+ interface BradenFormState {
+@@ -501,7 +504,7 @@ function BradenHistoryTable({
+   );
+ }
+ 
+-export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
++export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, createRequest, catalogViewRequest }: Props) {
+   const list = cartella.valutazioniBraden ?? [];
+   const localDraft = useLegacyModuleDraft<BradenFormState>(paziente.id,'braden',EMPTY_FORM,!!createRequest);
+   const { show:showAdd,setShow:setShowAdd,form,setForm } = localDraft;
+@@ -510,6 +513,10 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
+   const [modulo, setModulo] = useState(false);
+   const [moduloTarget, setModuloTarget] = useState<string | null>(null); // id valutazione
+   const entryForm = useRef<HTMLDivElement>(null);
++  useLegacyCatalogView(catalogViewRequest, compile => {
++    setShowAdd(compile); setModulo(false);
++    if (compile) setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
++  });
+   useEffect(() => {
+     if (!createRequest) return;
+     let focusTimer: ReturnType<typeof setTimeout> | undefined;
+diff --git a/frontend/src/lib/assessments/assessmentEntry.ts b/frontend/src/lib/assessments/assessmentEntry.ts
+index 4c84f025..d1e8e7fe 100644
+--- a/frontend/src/lib/assessments/assessmentEntry.ts
++++ b/frontend/src/lib/assessments/assessmentEntry.ts
+@@ -1,7 +1,8 @@
+ import type { AssessmentDraftStore } from './assessmentDraftStore';
+ import type { AssessmentType } from './assessmentTypes';
+ import type { AssessmentCatalogItem } from './assessmentCatalog';
+-export interface AssessmentEntry { type: AssessmentType; id?: string; localKey?: string }
++export interface AssessmentEntry { type: AssessmentType; id?: string; localKey?: string; historyOnly?: boolean }
++export interface LegacyCatalogViewRequest { request: string; action: 'history' | 'resume' }
+ /** An explicit new request must not turn an existing-record edit into a hidden update. */
+ export function legacyEntryTransition<T>(action: 'request' | 'resume' | 'discard', state: { editId: string | null; form: T }, empty: () => T) {
+   if (action === 'request' && state.editId) return { ...state, blocked: true, showForm: false };
+@@ -9,10 +10,11 @@ export function legacyEntryTransition<T>(action: 'request' | 'resume' | 'discard
+   return { ...state, blocked: false, showForm: true };
+ }
+ export function assessmentCatalogEntry(
+-  patientId: string, type: AssessmentType, action: 'open' | 'new' | 'resume',
++  patientId: string, type: AssessmentType, action: 'open' | 'history' | 'new' | 'resume',
+   store: AssessmentDraftStore, item?: AssessmentCatalogItem,
+ ): AssessmentEntry {
+   if (item && item.type !== type) throw new Error('Tipo di modulo non corrispondente.');
++  if (action === 'history') return { type, historyOnly: true };
+   if (action === 'new') return { type, localKey: store.create(patientId, undefined, type) };
+   const local = store.list(patientId, type).find(draft => draft.dirty || draft.pending || draft.record?.status === 'draft');
+   if (action === 'resume') {

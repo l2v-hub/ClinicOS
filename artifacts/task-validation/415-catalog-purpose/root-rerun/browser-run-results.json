@@ -1,0 +1,8 @@
+[
+  {
+    "name": "ordinary-browser",
+    "script": "artifacts/task-validation/415-catalog-purpose/qa-browser-415.mjs",
+    "output": "artifacts/task-validation/415-catalog-purpose/root-rerun/browser",
+    "exit": 0
+  }
+]

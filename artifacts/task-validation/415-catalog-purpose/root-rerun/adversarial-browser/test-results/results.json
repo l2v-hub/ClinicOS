@@ -1,0 +1,1955 @@
+{
+  "outcomes": [
+    {
+      "name": "official names, ten visible purposes/text actions, no catalog tooltip or invented score",
+      "status": "PASS"
+    },
+    {
+      "name": "saved-own resume alone reads exact draft; history with latest final and saved-own reads neither",
+      "status": "PASS"
+    },
+    {
+      "name": "coexisting final metadata, saved-own and local draft; repeated history preserves exact answers without auto-resume",
+      "status": "PASS"
+    },
+    {
+      "name": "new/history/resume route PAINAD preserves local state with no domain writes",
+      "status": "PASS"
+    },
+    {
+      "name": "new/history/resume route Trasferimenti posturali preserves local state with no domain writes",
+      "status": "PASS"
+    },
+    {
+      "name": "new/history/resume route Tinetti preserves local state with no domain writes",
+      "status": "PASS"
+    },
+    {
+      "name": "new/history/resume route MNA®-SF preserves local state with no domain writes",
+      "status": "PASS"
+    },
+    {
+      "name": "new/history/resume route GDS-15 preserves local state with no domain writes",
+      "status": "PASS"
+    },
+    {
+      "name": "new/history/resume route Indice di Barthel preserves local state with no domain writes",
+      "status": "PASS"
+    },
+    {
+      "name": "new/history/resume route UCLA · Sonno-veglia (NPI) preserves local state with no domain writes",
+      "status": "PASS"
+    },
+    {
+      "name": "local-delete cancellation preserves draft; confirmation removes only local draft",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy Medicazioni: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy Contenzioni: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy Braden: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update",
+      "status": "PASS"
+    },
+    {
+      "name": "held metadata loading never reports empty; controlled error distinct and retry recovers",
+      "status": "PASS"
+    },
+    {
+      "name": "read-only OSS actor sees all purposes/history but no compile/resume/delete action",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile 390px, visible text and >=44px targets, keyboard focus and text history",
+      "status": "PASS"
+    },
+    {
+      "name": "catalog-metadata guarded network/console",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy-restored-edit guarded network/console",
+      "status": "PASS"
+    },
+    {
+      "name": "loading-error-retry guarded network/console",
+      "status": "PASS"
+    },
+    {
+      "name": "readonly guarded network/console",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile-keyboard guarded network/console",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/QA-OWN-415"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        }
+      ],
+      "domainWrites": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": []
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        }
+      ],
+      "domainWrites": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": []
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        }
+      ],
+      "domainWrites": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+        "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      ],
+      "pageErrors": [],
+      "httpErrors": [
+        {
+          "status": 503,
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "status": 503,
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        }
+      ]
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        }
+      ],
+      "domainWrites": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": []
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        }
+      ],
+      "domainWrites": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": []
+    }
+  ],
+  "synthetic": true,
+  "fixtureReuse": "QA414 synthetic actor/patient only; original adversarial scenarios authored independently",
+  "productionWrites": 0
+}

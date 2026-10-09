@@ -1,0 +1,13 @@
+import {spawnSync} from 'node:child_process';
+import {writeFileSync,readFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const out='artifacts/task-validation/415-catalog-purpose/independent-qa415/commands';
+const git=args=>spawnSync('git',args,{cwd:'C:/w-414',encoding:'utf8'});
+const base='288dac948c8a46e26e1bef87d6266b2497727566';
+const delta=git(['diff','--name-only',base,'HEAD','--','frontend/src','backend/src','prisma','frontend/package.json','package.json','package-lock.json','frontend/tsconfig.app.json','scripts/run-node-tests.mjs']);assert.equal(delta.status,0);assert.equal(delta.stdout.trim(),'');
+const r=spawnSync(process.execPath,['../scripts/run-node-tests.mjs'],{cwd:'C:/w-414/frontend',encoding:'utf8',maxBuffer:50*1024*1024,env:{...process.env,TSX_TSCONFIG_PATH:'C:/w-414/frontend/tsconfig.app.json',NODE_OPTIONS:'--max-old-space-size=4096'}});
+const log=(r.stdout||'')+(r.stderr||'');writeFileSync(`${out}/independent-baseline-full.log`,log);
+const stats=l=>Object.fromEntries([...l.matchAll(/^ℹ (tests|pass|fail|skipped) (\d+)/gm)].map(m=>[m[1],+m[2]]));
+const failures=l=>[...new Set([...l.matchAll(/^✖ (.*?) \([\d.]+ms\)/gm)].map(m=>m[1]))].sort();
+const candidate=readFileSync(`${out}/full-regression.log`,'utf8');assert.deepEqual(failures(candidate),failures(log));assert.equal(stats(log).fail,12);
+const result={baselineApplication:base,baselineCheckoutHead:git(['rev-parse','HEAD']).stdout.trim(),applicationInputsUnchanged:true,baselineStats:stats(log),candidateStats:stats(candidate),sameFailures:true,baselineFailures:failures(log),newFailures:[]};writeFileSync(`${out}/independent-baseline-comparison.json`,JSON.stringify(result,null,2));console.log(JSON.stringify(result));

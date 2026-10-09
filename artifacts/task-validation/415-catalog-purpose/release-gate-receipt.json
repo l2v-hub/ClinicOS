@@ -1,0 +1,26 @@
+{
+  "applicationCommit": "0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+  "applicationSourceSha256": "6be776fab17aae587589b039db30f5df3be8d6a8e7910cfd5be6f0863b3b6902",
+  "checkedAt": "2026-10-09T12:45:02.158Z",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct human authorization; root integration gate. Independent QA and Ruflo ledger cannot promote.",
+  "independentManifestSha256": "8ffc227e5bda03437a6545b219ace5cca82774992fdec697c7a5f95fb711c43e",
+  "independentFiles": 113,
+  "acceptance": {
+    "AC1": "Ten unchanged names with source-backed purpose",
+    "AC2": "Textual new/history/resume actions and history-only entry without implicit draft creation",
+    "AC3": "Empty/draft/latest-final metadata distinct, loading/error not empty, legacy edit identity preserved",
+    "AC4": "Native keyboard visible focus and 44px wrapping mobile targets without tooltips"
+  },
+  "focusedPassEach": 54,
+  "supplementarySsrEach": 4,
+  "ordinaryRootBrowser": 13,
+  "adversarialBrowserEach": 22,
+  "unchangedFrontendBaselineFailures": 12,
+  "newFrontendFailures": 0,
+  "productionPatientTestMutations": 0,
+  "backendChanges": false,
+  "excluded": "Unreleased405/408/410, primary dirty checkout and launchers, original patient photos",
+  "knownLimits": "Synthetic metadata/UI fixtures, not server persistence or physical hardware certification. Broad481security/7dependency baseline remains. Global CI not green.",
+  "deploymentAcceptance": "Pending exact-source Vercel READY and guarded compiled production SPA rerun"
+}

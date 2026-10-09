@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const root='artifacts/task-validation/415-catalog-purpose',application='0d7adc361b92c8466655d9ed830d2b87bbd0f419';
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8'});assert.equal(r.status,0);return r.stdout.trim();};
+const credential=JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json','utf8')).env.GH_TOKEN;
+const gh=args=>{const r=spawnSync('gh',args,{encoding:'utf8',env:{...process.env,GH_TOKEN:credential}});assert.equal(r.status,0,'GitHub operation failed');return r.stdout.trim();};
+const read=path=>JSON.parse(readFileSync(root+'/'+path,'utf8'));
+const deployment=read('deployment-receipt.json'),publication=read('publication-manifest.json'),ci=read('ci-comparison.json'),gate=read('release-gate-receipt.json');
+assert.equal(deployment.applicationCommit,application);assert.equal(deployment.decision,'VERIFIED RELEASE');assert.equal(ci.frontendSecretScanConclusion,'success');assert.deepEqual(ci.newFailureNames,[]);
+assert.equal(gate.applicationCommit,application);assert.equal(gate.decision,'AUTHORIZED SCOPED APPLICATION PROMOTION');
+assert.match(readFileSync(root+'/validation-report.md','utf8'),/## Final Decision\s+CLOSED — VERIFIED/);
+assert.equal(git(['branch','--show-current']),'codex/bug-415-catalog-purpose');
+const proof=git(['rev-parse','HEAD']);assert.notEqual(proof,application);
+assert.match(git(['ls-remote','origin','refs/heads/codex/bug-415-catalog-purpose']),new RegExp('^'+proof));
+assert.match(git(['ls-remote','origin','refs/heads/main']),new RegExp('^'+application));
+git(['diff','--exit-code',application,proof,'--','frontend','backend','prisma','package.json','package-lock.json','scripts/build','scripts/run-node-tests.mjs']);
+const sha=buffer=>createHash('sha256').update(buffer).digest('hex');
+for(const row of publication.files){const r=spawnSync('git',['show',`${proof}:${row.path}`],{maxBuffer:100*1024*1024});assert.equal(r.status,0);assert.equal(sha(r.stdout),row.gitBlobSha256,'Published canonical evidence drift');}
+const raw=`https://raw.githubusercontent.com/l2v-hub/ClinicOS/${proof}/${root}`,tree=`https://github.com/l2v-hub/ClinicOS/tree/${proof}/${root}`;
+const images=['catalog-desktop.png','painad-resumed.png','catalog-mobile.png'],verified=[];
+for(const image of images){const path=`online-final/screenshots/${image}`,response=await fetch(`${raw}/${path}`);assert.equal(response.status,200);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(sha(bytes),sha(readFileSync(`${root}/${path}`)));verified.push({path,http:response.status,sha256:sha(bytes)});}
+const issue=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/415']));assert.equal(issue.state,'open');
+const body=`CLOSED — VERIFIED: tutti e quattro i criteri originali verificati.\n\nCorrezione [${application}](https://github.com/l2v-hub/ClinicOS/commit/${application}). Nomi invariati, scopo breve visibile, pulsanti testuali Compila/Storico e azioni di bozza. Le descrizioni riutilizzano i modelli attuali; Braden riusa il foglio vuoto versionato e la legenda esistente. Non si dichiara una nuova approvazione clinica, né si modificano formule, domande o punteggi.\n\nStorico consulta lo storico senza aprire automaticamente una bozza o la scheda corrente. Le bozze legacy conservano risposte e identità di modifica tra storico, ripresa e reload. Compila mantiene il riuso sicuro delle bozze esistenti. Date di compilazione, registrazione/finalizzazione e bozze restano distinte; caricamento/errore non sono dati vuoti. Nessun risultato inventato o nuova lettura clinica completa per il catalogo.\n\nVercel ${deployment.vercel.id} READY con Git SHA esatto e [alias ClinicOS](https://clinicos-eosin.vercel.app/) verificati; backend invariato, health200. QA indipendente e riesecuzione root registrati nel report. 54 test mirati +4 SSR,13 gruppi browser root e13 gruppi sulla SPA compilata online; 22 gruppi avversi indipendenti e22 nella riesecuzione root. Tutte le API online intercettate prima della rete,solo dati sintetici,0 scritture su pazienti di produzione. Emulazione mobile,non certificazione hardware o screen-reader reale.\n\nSuite frontend1215 test,1203 PASS,12 fallimenti identici alla baseline,0 nuovi. Types/build/scansione segreti PASS; CI generale mantiene lo stesso unico fallimento backend preesistente,downstream import saltati,non dichiarati PASS. Nessuna certificazione di CI/sicurezza globalmente pulite.\n\nProve immutabili ${proof}: [report AC](${tree}/validation-report.md),[QA indipendente](${tree}/independent-qa415/validation-report.md),[manifest canonico/hash](${tree}/publication-manifest.json),[deployment](${tree}/deployment-receipt.json),[confronto CI](${tree}/ci-comparison.json),[trace online](${raw}/online-final/desktop-trace.zip),[report browser](${tree}/online-final/playwright-report),[risultati](${tree}/online-final/test-results),[video](${tree}/online-final/video).\n\n${images.map(image=>`### ${image}\n![415 ${image}](${raw}/online-final/screenshots/${image})`).join('\n\n')}`;
+const comment=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/415/comments','--method','POST','-f',`body=${body}`]));
+gh(['api','repos/l2v-hub/ClinicOS/issues/415','--method','PATCH','-f','state=closed','-f','state_reason=completed']);
+const closed=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/415']));assert.equal(closed.state,'closed');assert.equal(closed.state_reason,'completed');
+const receipt={applicationCommit:application,proofCommit:proof,proofBranch:'codex/bug-415-catalog-purpose',deployment:deployment.vercel.id,githubProof:comment.html_url,state:closed.state,closedAt:closed.closed_at,canonicalHashesVerified:publication.files.length,images:verified,secretChecks:publication.secretChecks,zipEntriesChecked:publication.zipEntriesChecked,productionPatientTestMutations:0};
+writeFileSync(root+'/github-closure-receipt.json',JSON.stringify(receipt,null,2));console.log(JSON.stringify(receipt));

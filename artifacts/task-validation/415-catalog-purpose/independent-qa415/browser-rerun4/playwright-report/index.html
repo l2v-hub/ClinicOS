@@ -1,0 +1,76 @@
+<!doctype html><meta charset="utf-8"><title>Independent #415 Playwright assertion report</title><h1>Independent #415 synthetic actual-SPA assertions</h1><p>Each result comes from executed Playwright assertions; controlled 503 expected only in explicit retry case.</p><pre>[
+  {
+    "name": "official names, ten visible purposes/text actions, no catalog tooltip or invented score",
+    "status": "PASS"
+  },
+  {
+    "name": "saved-own resume alone reads exact draft; history with latest final and saved-own reads neither",
+    "status": "PASS"
+  },
+  {
+    "name": "coexisting final metadata, saved-own and local draft; repeated history preserves exact answers without auto-resume",
+    "status": "PASS"
+  },
+  {
+    "name": "new/history/resume route PAINAD preserves local state with no domain writes",
+    "status": "PASS"
+  },
+  {
+    "name": "new/history/resume route Trasferimenti posturali preserves local state with no domain writes",
+    "status": "PASS"
+  },
+  {
+    "name": "new/history/resume route Tinetti preserves local state with no domain writes",
+    "status": "PASS"
+  },
+  {
+    "name": "new/history/resume route MNA®-SF preserves local state with no domain writes",
+    "status": "PASS"
+  },
+  {
+    "name": "new/history/resume route GDS-15 preserves local state with no domain writes",
+    "status": "PASS"
+  },
+  {
+    "name": "new/history/resume route Indice di Barthel preserves local state with no domain writes",
+    "status": "PASS"
+  },
+  {
+    "name": "new/history/resume route UCLA · Sonno-veglia (NPI) preserves local state with no domain writes",
+    "status": "PASS"
+  },
+  {
+    "name": "local-delete cancellation preserves draft; confirmation removes only local draft",
+    "status": "PASS"
+  },
+  {
+    "name": "legacy Medicazioni: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update",
+    "status": "PASS"
+  },
+  {
+    "name": "legacy Contenzioni: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update",
+    "status": "PASS"
+  },
+  {
+    "name": "legacy Braden: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update",
+    "status": "PASS"
+  },
+  {
+    "name": "held metadata loading never reports empty; controlled error distinct and retry recovers",
+    "status": "FAIL",
+    "error": "expect(locator).toBeVisible() failed\n\nLocator: locator('.assessment-catalog').getByRole('alert')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 5000ms\n  - waiting for locator('.assessment-catalog').getByRole('alert')\n"
+  },
+  {
+    "name": "catalog-metadata guarded network/console",
+    "status": "PASS"
+  },
+  {
+    "name": "legacy-restored-edit guarded network/console",
+    "status": "PASS"
+  },
+  {
+    "name": "loading-error-retry guarded network/console",
+    "status": "FAIL",
+    "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 6\n\n- Array []\n+ Array [\n+   Object {\n+     \"path\": \"/patients/QA-PATIENT-414/assessments/catalog\",\n+     \"status\": 503,\n+   },\n+ ]"
+  }
+]</pre>

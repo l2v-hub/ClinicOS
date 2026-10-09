@@ -1,0 +1,15 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const root='artifacts/task-validation/415-catalog-purpose',baseline='288dac948c8a46e26e1bef87d6266b2497727566';
+const candidate=JSON.parse(readFileSync('.claude/security-scans/scan-all-deep.json','utf8'));
+const prior=JSON.parse(readFileSync('C:/w-414/.claude/security-scans/scan-all-deep.json','utf8'));
+const findings=s=>s.issues??s.vulnerabilities??s.findings;
+const changed=spawnSync('git',['diff','--name-only',baseline,'HEAD','--','frontend/src'],{encoding:'utf8'}).stdout.trim().split('\n');
+const touched=findings(candidate).filter(f=>changed.includes(f.location.replaceAll('\\','/').split(':')[0]));
+assert.deepEqual(touched,[]);
+const deps=s=>findings(s).filter(f=>f.type==='Dependency CVE');assert.deepEqual(deps(candidate),deps(prior));
+assert.equal(spawnSync('git',['diff','--exit-code',baseline,'HEAD','--','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','backend/src','prisma','frontend/src/config.ts']).status,0);
+writeFileSync(root+'/security-receipt.json',JSON.stringify({applicationCommit:spawnSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim(),baseline,scanExit:1,tool:'ruflo security scan --depth full (resolved deep)',candidateScanSha256:createHash('sha256').update(readFileSync('.claude/security-scans/scan-all-deep.json')).digest('hex'),findings:findings(candidate).length,touchedFindings:touched,unchangedDependencyFindings:deps(candidate),newTouchedFindings:[],changedProductionPaths:changed,review:'Presentation and explicit view intent only; escaped React strings, no new HTML sink/endpoint/auth/config/dependency/version/persistence rule. No score or clinical approval invented. Pre-existing broad security findings retained; not a clean security certification.'},null,2));
+console.log(JSON.stringify({findings:findings(candidate).length,touched:0,dependencyFindings:deps(candidate).length}));

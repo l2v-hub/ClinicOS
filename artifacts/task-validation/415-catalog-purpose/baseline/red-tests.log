@@ -1,0 +1,82 @@
+(node:23316) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✖ 415 purpose text and unchanged catalog names accompany visible text actions, not tooltips (10.6157ms)
+✖ 415 history is non-mutating and does not automatically resume local or server drafts (2.288ms)
+✖ 415 read-only actor sees history and purposes, without compilation or draft mutation actions (2.1418ms)
+(node:23316) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 453.253
+
+✖ failing tests:
+
+test at frontend\src\components\operator\__tests__\catalogPurpose415.test.ts:1:1081
+✖ 415 purpose text and unchanged catalog names accompany visible text actions, not tooltips (10.6157ms)
+  AssertionError [ERR_ASSERTION]: Rischio di compromissione
+      at TestContext.<anonymous> (C:\w-415\frontend\src\components\operator\__tests__\catalogPurpose415.test.ts:17:200)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at frontend\src\components\operator\__tests__\catalogPurpose415.test.ts:1:1898
+✖ 415 history is non-mutating and does not automatically resume local or server drafts (2.288ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   localKey: 'b010721d-008b-4d7c-a97c-253f2209684d',
+  -   historyOnly: true,
+      type: 'mna'
+    }
+  
+      at TestContext.<anonymous> (C:\w-415\frontend\src\components\operator\__tests__\catalogPurpose415.test.ts:30:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { type: 'mna', localKey: 'b010721d-008b-4d7c-a97c-253f2209684d' },
+    expected: { type: 'mna', historyOnly: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\components\operator\__tests__\catalogPurpose415.test.ts:1:2436
+✖ 415 read-only actor sees history and purposes, without compilation or draft mutation actions (2.1418ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 10
+  
+      at TestContext.<anonymous> (C:\w-415\frontend\src\components\operator\__tests__\catalogPurpose415.test.ts:36:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 10,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+EXIT 1

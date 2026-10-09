@@ -1,0 +1,15 @@
+PASS ten purposes and textual actions, empty not finalized
+PASS native keyboard history lands on history, not implicit current or draft
+PASS explicit history Tinetti skips current and does not create
+PASS explicit history MNA®-SF skips current and does not create
+PASS explicit history GDS-15 skips current and does not create
+PASS explicit history Indice di Barthel skips current and does not create
+PASS explicit history UCLA · Sonno-veglia (NPI) skips current and does not create
+PASS explicit history Trasferimenti posturali skips current and does not create
+PASS Compila via Space then history preserves local PAINAD and resume focus
+PASS legacy Medicazioni history hides form and resume retains values through refresh
+PASS legacy Contenzioni history hides form and resume retains values through refresh
+PASS legacy Braden history hides form and resume retains values through refresh
+PASS mobile visible purpose/text targets wrap without clipping
+
+EXIT 0

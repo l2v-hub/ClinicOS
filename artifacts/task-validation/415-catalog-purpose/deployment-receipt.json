@@ -1,0 +1,57 @@
+{
+  "applicationCommit": "0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+  "checkedAt": "2026-10-09T12:49:02.5820683Z",
+  "decision": "VERIFIED RELEASE",
+  "productionPatientTestMutations": 0,
+  "vercel": {
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-CbPcgKmE.js",
+    "id": "dpl_DSbBqXaqyfLoAikKsJHwxqW1SA1V",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "state": "READY",
+    "assessmentChunks": [
+      {
+        "actionsPresent": false,
+        "activeDraftStatusPresent": false,
+        "compactPresentationPresent": false,
+        "http": 200,
+        "sha256": "6b88b6afb67fe0bde8b9f799789c618f962154391ae6699955fff3747e15443e",
+        "url": "https://clinicos-eosin.vercel.app/assets/AssessmentDraftStatus-D7A6pyVM.js"
+      },
+      {
+        "actionsPresent": true,
+        "activeDraftStatusPresent": false,
+        "compactPresentationPresent": false,
+        "http": 200,
+        "sha256": "f6d18a27e9c376e5ac33e6fdad79e717665ea4ca32b2c4840bf79c615ee8c7cc",
+        "url": "https://clinicos-eosin.vercel.app/assets/AssessmentWorkspace-8qbUseBZ.js"
+      },
+      {
+        "actionsPresent": true,
+        "activeDraftStatusPresent": true,
+        "compactPresentationPresent": true,
+        "http": 200,
+        "sha256": "5cfc45e3c7f3e4fd8853752e23cc296699ad70b7d90c2547f70e04939575e535",
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetail-9PERB_Bd.js"
+      },
+      {
+        "actionsPresent": false,
+        "activeDraftStatusPresent": false,
+        "compactPresentationPresent": false,
+        "http": 200,
+        "sha256": "a04e2e46c6874e9b6e8e6bc05f6180fea145baa05c7f86ee1c9debbedb38d61a",
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetailLazyTabs-C-1jFRQi.js"
+      }
+    ],
+    "http": 200,
+    "bundleSha256": "e3d0bcc0c11552e2b7877ae738361a6e0954faec83c628b27bbeda471860a7ea",
+    "gitSourceSha": "0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+    "githubCommitSha": "0d7adc361b92c8466655d9ed830d2b87bbd0f419"
+  },
+  "backend": {
+    "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "healthHttp": 200,
+    "provenance": "No415backend/schema/API edits; accepted409retained, no production patient test writes.",
+    "changed": false
+  }
+}

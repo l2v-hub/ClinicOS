@@ -1,0 +1,69 @@
+{
+  "applicationCommit": "0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+  "baseline": "288dac948c8a46e26e1bef87d6266b2497727566",
+  "scanExit": 1,
+  "tool": "ruflo security scan --depth full (resolved deep)",
+  "candidateScanSha256": "5817d4bfe27cdfb8df9677a78284e57e88d79f4a8b84c3de69bd8af83ed153cb",
+  "findings": 481,
+  "touchedFindings": [],
+  "unchangedDependencyFindings": [
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:braces",
+      "description": "braces vulnerable to stack-exhausti"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:concurrently",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:lint-staged",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:micromatch",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:proxy-addr",
+      "description": "proxy-addr vulnerable to IP spoofin"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:shell-quote",
+      "description": "shell-quote: `quote()` command inje"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:source-map-js",
+      "description": "source-map-js allows event-loop den"
+    }
+  ],
+  "newTouchedFindings": [],
+  "changedProductionPaths": [
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/__tests__/assessmentCatalogUi.test.ts",
+    "frontend/src/components/operator/__tests__/catalogPurpose415.test.ts",
+    "frontend/src/components/operator/__tests__/paperScalesUi.test.ts",
+    "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+    "frontend/src/components/operator/assessments/AssessmentCatalog.tsx",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+    "frontend/src/components/operator/assessments/useLegacyCatalogView.ts",
+    "frontend/src/components/operator/cartella/ContenzioniTab.tsx",
+    "frontend/src/components/operator/cartella/MedicazioniTab.tsx",
+    "frontend/src/components/operator/cartella/ScalaBradenTab.tsx",
+    "frontend/src/lib/assessments/assessmentEntry.ts"
+  ],
+  "review": "Presentation and explicit view intent only; escaped React strings, no new HTML sink/endpoint/auth/config/dependency/version/persistence rule. No score or clinical approval invented. Pre-existing broad security findings retained; not a clean security certification."
+}

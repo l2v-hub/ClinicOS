@@ -1,0 +1,22 @@
+PASS official names, ten visible purposes/text actions, no catalog tooltip or invented score
+PASS saved-own resume alone reads exact draft; history with latest final and saved-own reads neither
+PASS coexisting final metadata, saved-own and local draft; repeated history preserves exact answers without auto-resume
+PASS new/history/resume route PAINAD preserves local state with no domain writes
+PASS new/history/resume route Trasferimenti posturali preserves local state with no domain writes
+PASS new/history/resume route Tinetti preserves local state with no domain writes
+PASS new/history/resume route MNA®-SF preserves local state with no domain writes
+PASS new/history/resume route GDS-15 preserves local state with no domain writes
+PASS new/history/resume route Indice di Barthel preserves local state with no domain writes
+PASS new/history/resume route UCLA · Sonno-veglia (NPI) preserves local state with no domain writes
+PASS local-delete cancellation preserves draft; confirmation removes only local draft
+PASS legacy Medicazioni: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update
+PASS legacy Contenzioni: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update
+PASS legacy Braden: kept-alive and restored edit identity survives repeated history/resume; new blocks hidden update
+PASS held metadata loading never reports empty; controlled error distinct and retry recovers
+PASS read-only OSS actor sees all purposes/history but no compile/resume/delete action
+PASS mobile 390px, visible text and >=44px targets, keyboard focus and text history
+PASS catalog-metadata guarded network/console
+PASS legacy-restored-edit guarded network/console
+PASS loading-error-retry guarded network/console
+PASS readonly guarded network/console
+PASS mobile-keyboard guarded network/console
