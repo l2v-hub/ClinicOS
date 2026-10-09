@@ -141,6 +141,7 @@ function AssessmentSession({
     setError,
   });
   const localDrafts = store.list(patient.id, type).filter((item) => item.dirty || item.pending || item.record?.status === 'draft');
+  const resumableDrafts = localDrafts.filter(item => type !== 'painad' || item.key !== selectedKey);
   useEffect(() => {
     const version = ++life.current;
     const active = requests.current;
@@ -300,10 +301,10 @@ function AssessmentSession({
             Compilatore: {operatorName}. La bozza resta disponibile dopo il ricaricamento in questa scheda. Salvala sul server per ritrovarla dopo l’accesso successivo.
           </p>}
           {store.persistenceFailed() && <p role="alert">Bozza disponibile in questa pagina. Il browser non consente di conservarla dopo il ricaricamento.</p>}
-          {localDrafts.length > 0 && (
+          {resumableDrafts.length > 0 && (
             <div className="assessment-local">
-              {localDrafts.some(item => !focusedCompilation || item.key !== selectedKey) && <span>Draft · compilazioni da completare</span>}
-              {localDrafts.filter(item => !focusedCompilation || item.key !== selectedKey).map((item) => (
+              <span>Draft · compilazioni da completare</span>
+              {resumableDrafts.map((item) => (
                 <button
                   key={item.key}
                   type="button"
