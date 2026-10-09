@@ -14,6 +14,23 @@ const ROLE_LABELS: Record<string, string> = {
   altro: 'Operatore',
 };
 
+/** Shared, optional explanation outside individual notes. Opening it never records a read. */
+export function DiaryReadingGuide() {
+  return (
+    <details className="diary-reading-guide">
+      <summary>Come funziona la conferma di lettura</summary>
+      <p>
+        Aprire la nota non conferma la lettura. «Conferma lettura» registra chi ha confermato e
+        quando; la conferma spetta a un altro operatore, non all’autore della nota.
+      </p>
+      <p>
+        La conferma di lettura non prende in carico l’urgenza e non dichiara completato
+        l’intervento. La presa in carico resta un’azione separata, «Ho capito».
+      </p>
+    </details>
+  );
+}
+
 /** A response belongs to its original diary message. Only server receipts name a reader. */
 export function DiaryThreadReceipt({
   urgency,
@@ -46,35 +63,31 @@ export function DiaryThreadReceipt({
             <div className="diary-thread__status">
               <div className="diary-thread__head">
                 <strong>
-                  Letta da {reader.operatorName} (
+                  Lettura confermata da {reader.operatorName} (
                   {ROLE_LABELS[reader.operatorRole] ?? reader.operatorRole})
                 </strong>
                 <time dateTime={reader.acknowledgedAt}>
                   {formatFacilityLocalMinute(reader.acknowledgedAt)}
                 </time>
               </div>
-              <small>
-                Lettura confermata esplicitamente. L’intervento clinico non è dichiarato concluso.
-              </small>
             </div>
           ) : (
             <>
               <div className="diary-thread__status">
-                <strong>Nessuno ha ancora confermato la lettura</strong>
-                <p className="diary-thread__message">
-                  Aprire la nota non la segna come letta.
-                  {readReceipt.isAuthor ? ' La conferma spetta a un altro operatore.' : ''}
-                </p>
+                <strong>Lettura non confermata</strong>
+                {readReceipt.isAuthor && (
+                  <p className="diary-thread__message">Conferma riservata a un altro operatore.</p>
+                )}
               </div>
               {readReceipt.canAcknowledge && (
                 <button
                   type="button"
                   className="btn-secondary btn-sm"
-                  aria-label={`Segna come letto: ${subject}`}
+                  aria-label={`Conferma lettura: ${subject}`}
                   disabled={disabled || busy}
                   onClick={onAcknowledge}
                 >
-                  {busy ? 'Registrazione…' : 'Letto'}
+                  {busy ? 'Registrazione…' : 'Conferma lettura'}
                 </button>
               )}
             </>

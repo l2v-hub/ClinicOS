@@ -5,7 +5,7 @@ import { formatFacilityLocalMinute } from '../../lib/facilityTime';
 import { useCan } from '../../lib/capabilities';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import { UrgencyNotice } from '../shared/UrgencyNotice';
-import { DiaryThreadReceipt } from './cartella/DiaryThreadReceipt';
+import { DiaryReadingGuide, DiaryThreadReceipt } from './cartella/DiaryThreadReceipt';
 import { useUnreadDiaryQueue } from './useUnreadDiaryQueue';
 
 export function ConsegneUnreadQueue({
@@ -41,8 +41,9 @@ export function ConsegneUnreadQueue({
       </h2>
       <p>
         Note di diario e consegne nel tuo perimetro, senza conferma esplicita di un altro operatore.
-        Tutte le date e priorità. Aprire una nota non conferma la lettura.
+        Tutte le date e priorità.
       </p>
+      <DiaryReadingGuide />
       <p role="status">
         {queue.page
           ? `${queue.page.entries.length} note caricate di ${queue.page.totalUnread} non confermate`

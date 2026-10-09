@@ -25,7 +25,7 @@ import { ClinicalNoteEditor } from '../ClinicalNoteEditor';
 import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload';
 import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
-import { DiaryThreadReceipt } from './DiaryThreadReceipt';
+import { DiaryReadingGuide, DiaryThreadReceipt } from './DiaryThreadReceipt';
 import { UrgencyNotice } from '../../shared/UrgencyNotice';
 import { isActiveUrgency, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
 import {
@@ -1037,6 +1037,7 @@ export function DiarioPazienteTab({
         <p className="form-hint">
           Pagina {historyDepth + 1} · fino a 50 segnalazioni, dalla più recente.
         </p>
+        <DiaryReadingGuide />
         {historyDepth > 0 && (
           <button
             type="button"
