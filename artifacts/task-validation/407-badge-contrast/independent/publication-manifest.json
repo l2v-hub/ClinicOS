@@ -1,0 +1,146 @@
+{
+  "applicationCommit": "973d78e5e109032a36cf89cf80fd8eb2a848a649",
+  "applicationSourceSha256": "469fa3754fd8e9dee7166f53282edb1ea0e8688d20ad3112031c66ac4607be1f",
+  "verdict": "BLOCKED",
+  "blocker": "Original AC2 device visual check not yet performed in this independent headless run; a genuine visible Windows Chrome desktop-browser check remains for root under the explicitly reconciled contract. No mobile physical-device/sunlight certification.",
+  "passingBrowserAssertions": 6,
+  "excluded": [
+    "debug-attempts/**",
+    "unrelated launcher changes",
+    "generated coordination metadata"
+  ],
+  "files": [
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/command-results.json",
+      "sha256": "0e6e3f24214d840e10ae9b6252bf9494775f3ee89a20b9a7ad37cdcc83042810"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/contract-snapshot.md",
+      "sha256": "77c61a7a238384be4c02c7b74eec46aaf00e4d2def9d71e8c4a155f717cfe003"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/focused.log",
+      "sha256": "bc505e7490a802e3577154073ab35f4d1408637d6613f23aed0214f67371cc6b"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/full-regression.log",
+      "sha256": "c5c84894f8e1ffe652d1c0f854b3e344d90e1c3967ec571134ba8f51b7f4bfdb"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/implementation-receipt-snapshot.md",
+      "sha256": "949a3409738d98d20a5e52870d203d990c9978b8e42b183b935ba756f395799d"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/issue-specific.log",
+      "sha256": "98e8402f450583cc4b4a4208df9bf38f31944eb197df52729ebbcabd74cce651"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/mobile-trace.zip",
+      "sha256": "d2982032b3d5904e51a4999f1b767999e41b9e0c96eaafaafa47499e504a2c1d"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/playwright-report/index.html",
+      "sha256": "9b71dadece67d24df3d90879791eb7aeccc1e745d28f413f4e089044193e4242"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/desktop-actual-control-focus.png",
+      "sha256": "a0245984bda0fd13436f12aa879e065db109a363420ee75acd40eb7464b7eb72"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/desktop-roster-default.png",
+      "sha256": "230f36e304a36451fdaed0f471d602a2f2f4eebbfef9904d8eacbce0d4d0a463"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/desktop-roster-focused-parent.png",
+      "sha256": "e6050dffc9ea174734fff43f8da35c145fd80e9b75f498dbf7ac0f6092ff27ab"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/desktop-roster-hover.png",
+      "sha256": "bd2990108105cc4eee0e4d9ad1c4e9b94f25fa7bcef2e5f4851aa25408483992"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/desktop-shared-css-probe.png",
+      "sha256": "7a6699dc1bc35e03d4fd1173664cbc53256113ac52663120e964aaf6273d7cbe"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/mobile-actual-control-focus.png",
+      "sha256": "197736564aec30d771d00047883cda5a8297bb334b270624929a49be4bd1c405"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/mobile-roster-default.png",
+      "sha256": "eaa7dff9a544b83ba7fbf7fd6341078b705371db10ff62c1e148c6030bae7255"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/mobile-roster-focused-parent.png",
+      "sha256": "e1fd724804246a2560938cbf76205c4d2ab5c49a8b88959e16c341d522b4b04f"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/mobile-roster-hover.png",
+      "sha256": "eaa7dff9a544b83ba7fbf7fd6341078b705371db10ff62c1e148c6030bae7255"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/screenshots/mobile-shared-css-probe.png",
+      "sha256": "2ec56fce8a6990250b7180797989edd8976d7bc84bd79cedab2f0abcc904d8bf"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/source-receipt.json",
+      "sha256": "37ee11fb429b4867255039953f61fe0670a09134af286cedf6ffc07366b7278e"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/test-results/browser-results.json",
+      "sha256": "40accc86427b112bbf82861f6194caa4d2d1e3fa76397e3308d154bdfbe9cee0"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/trace.zip",
+      "sha256": "92b090b05de52555bff3e4242d6b5616c6c7d4b0cc7d97d8b08c6fcbecc6536e"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/validation-report.md",
+      "sha256": "f9a3e0b45747e02c0396ff4005352518c9e6364ca2b0875a342c51429ece7678"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/video/desktop.webm",
+      "sha256": "e8a954c8337f5f27a24e924f7586cd1c811cae3d2e30e792550671faa0fdecb2"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/video/mobile.webm",
+      "sha256": "1aaa51359fcde0d0ddb63eed1ec192d4e7018119108cafeed2e7b7cfe0b45d9c"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/independent/vite-build.log",
+      "sha256": "6831165bf8115809963750b842358b1dd761863fd1f08d5cc25031d97a0c70e5"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/qa-browser.mjs",
+      "sha256": "cdb52de4052eaabb99456e7dfbc1ecaa6f9c84229d834a8b855ad24109324dca"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/qa-commands.mjs",
+      "sha256": "e8f8af8946464730ad92faa1d30cf4a61e3411d8133926b5fcb5fd7211bd4e16"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/qa-publication-receipt.mjs",
+      "sha256": "d45f3b7ab6fe254ccd1edd94582d040309b9178ce2f3e6b814b3918adf6e2524"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/qa-server.mjs",
+      "sha256": "239511a2faaf0babc5c0abc311446fa51d83de24ede337b04e5eed11b875b068"
+    },
+    {
+      "path": "artifacts/task-validation/407-badge-contrast/qa-source-receipt.mjs",
+      "sha256": "35bfdb1ec82a30708499b43460d210f65b7e7aed245077187238467e12af7cf7"
+    }
+  ]
+}

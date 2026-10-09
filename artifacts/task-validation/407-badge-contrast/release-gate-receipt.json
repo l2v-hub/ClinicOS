@@ -1,0 +1,22 @@
+{
+  "applicationCommit": "973d78e5e109032a36cf89cf80fd8eb2a848a649",
+  "applicationSourceSha256": "469fa3754fd8e9dee7166f53282edb1ea0e8688d20ad3112031c66ac4607be1f",
+  "decision": "AUTHORIZED SCOPED FRONTEND RELEASE",
+  "checkedAt": "2026-10-09T06:53:37.135Z",
+  "authority": "Human user explicitly authorized sequential fixes, push, deployment, synthetic screenshots and verified closure. Root integration gate, not Ruflo or QA worker, authorizes this exact immutable candidate.",
+  "acceptance": {
+    "AC1": "PASS token+actual CSS states",
+    "AC2": "PASS automated+actual visible Windows Chrome desktop, independent addendum",
+    "AC3": "PASS literal visible accessible label",
+    "AC4": "PASS separate diagnostics, no blanket compliance claim"
+  },
+  "rootBrowserGroups": 6,
+  "independentBrowserGroups": 6,
+  "issueTests": 4,
+  "baselineFailures": 12,
+  "newFailures": 0,
+  "physicalPanelSunlightMobileCertification": false,
+  "productionPatientMutations": 0,
+  "backendDeployment": "NOT APPLICABLE",
+  "excludedSource": "405 unverified candidate, unrelated launchers, metadata, all non407 app changes"
+}

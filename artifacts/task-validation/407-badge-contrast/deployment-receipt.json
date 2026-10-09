@@ -1,0 +1,29 @@
+{
+  "applicationCommit": "973d78e5e109032a36cf89cf80fd8eb2a848a649",
+  "checkedAt": "2026-10-09T06:55:27.5376085Z",
+  "decision": "VERIFIED RELEASE",
+  "productionPatientReads": 0,
+  "productionMutations": 0,
+  "vercel": {
+    "http": 200,
+    "id": "dpl_4KJ9aUYGd5JbENqUcJq171CdL8iJ",
+    "aliases": [
+      "clinicos-eosin.vercel.app",
+      "clinicos-lucalavia-2482s-projects.vercel.app",
+      "clinicos-git-main-lucalavia-2482s-projects.vercel.app"
+    ],
+    "cssSha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379",
+    "cssHttp": 200,
+    "githubCommitSha": "973d78e5e109032a36cf89cf80fd8eb2a848a649",
+    "cssUrl": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+    "state": "READY",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "badgeTokenPresent": true,
+    "gitSourceSha": "973d78e5e109032a36cf89cf80fd8eb2a848a649",
+    "badgeConsumerPresent": true
+  },
+  "backend": {
+    "status": "NOT APPLICABLE",
+    "reason": "CSS/test-only fix; backend application remains verified406 deployment, no manual backend release."
+  }
+}

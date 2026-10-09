@@ -1,0 +1,31 @@
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+const out=resolve(process.env.QA407_OUTPUT || 'artifacts/task-validation/407-badge-contrast/root');
+mkdirSync(out,{recursive:true});
+const records=[];
+function run(name,args,cwd=resolve('.')) {
+ const result=spawnSync(process.execPath,args,{cwd,encoding:'utf8',maxBuffer:40*1024*1024,env:{...process.env,NODE_OPTIONS:'--max-old-space-size=4096'}});
+ const log=(result.stdout||'')+(result.stderr||'');
+ writeFileSync(resolve(out,`${name}.log`),log);
+ const stats=Object.fromEntries([...log.matchAll(/^ℹ (tests|pass|fail|skipped) (\d+)/gm)].map(m=>[m[1],Number(m[2])]));
+ const failures=[...new Set([...log.matchAll(/^✖ (.*?) \([\d.]+ms\)/gm)].map(m=>m[1]))].sort();
+ records.push({name,exit:result.status,...stats,...(failures.length?{failures}:{})});
+ console.log(`${name}: exit${result.status} ${JSON.stringify(stats)}`);
+}
+run('frontend-types',['../node_modules/typescript/bin/tsc','--noEmit'],resolve('frontend'));
+run('tsc-build',['../node_modules/typescript/bin/tsc','-b'],resolve('frontend'));
+run('vite-build',['../node_modules/vite/bin/vite.js','build'],resolve('frontend'));
+run('issue-specific',['--import','tsx','--test','frontend/src/lib/__tests__/successBadgeContrast.test.ts']);
+run('focused',['--import','tsx','--import','./scripts/stub-css-loader.mjs','--test','frontend/src/lib/__tests__/successBadgeContrast.test.ts','frontend/src/lib/__tests__/patientRosterSort.test.ts','frontend/src/lib/__tests__/patientRosterGuard.test.ts','frontend/src/lib/__tests__/patientListView.test.ts','frontend/src/lib/__tests__/patientListIdentityGuard.test.ts']);
+run('security-scan',['scripts/security/scan-frontend-secrets.mjs','frontend/src','frontend/dist']);
+run('full-regression',['../scripts/run-node-tests.mjs'],resolve('frontend'));
+const baselineResult=spawnSync('git',['show','6c83db4bb3fb98acd34c7b4245cdd86b04c53565:artifacts/task-validation/406-therapy-route-regime/root-rerun/full-regression.log'],{encoding:'utf8',maxBuffer:40*1024*1024});
+if(baselineResult.status!==0)throw new Error('Pinned baseline missing');
+const baselineFailures=[...new Set([...baselineResult.stdout.matchAll(/^✖ (.*?) \([\d.]+ms\)/gm)].map(m=>m[1]))].sort();
+const current=records.find(r=>r.name==='full-regression');
+const newFailures=(current.failures||[]).filter(f=>!baselineFailures.includes(f));
+const focused=records.find(r=>r.name==='focused');
+const focusedNewFailures=(focused.failures||[]).filter(f=>!baselineFailures.includes(f));
+writeFileSync(resolve(out,'command-results.json'),JSON.stringify({records,baselineProof:'6c83db4bb3fb98acd34c7b4245cdd86b04c53565',baselineApplication:'c11c0990f6313a53a8bcde467046eecef69e012a',baselineFailures,newFailures,focusedNewFailures,waiver:'The roster guard regression subset contains7 of the same12 baseline failures; issue-specific contrast tests must pass with zero failures.'},null,2));
+if(records.some(r=>!['full-regression','focused'].includes(r.name)&&r.exit!==0)||focused.fail!==7||focusedNewFailures.length||current.fail!==12||newFailures.length)process.exitCode=1;

@@ -1,0 +1,12 @@
+✔ success badge text token reaches normal-text contrast without rounding (1.2754ms)
+✔ all shared green status badges consume the readable text token and actual light surface (1.1719ms)
+✔ the original point measurement remains reproducible, not silently waived as large text (0.3625ms)
+✔ badge text fix preserves global accent colors and explicit admission text (1.0681ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 359.5956

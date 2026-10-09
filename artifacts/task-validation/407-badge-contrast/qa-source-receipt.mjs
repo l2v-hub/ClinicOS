@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readFileSync,writeFileSync,mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+const source='973d78e5e109032a36cf89cf80fd8eb2a848a649';
+const out=resolve(process.env.QA407_OUTPUT||'artifacts/task-validation/407-badge-contrast/independent');mkdirSync(out,{recursive:true});
+const scopes=['frontend/src','backend/src','prisma','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','frontend/tsconfig.json','frontend/tsconfig.app.json','frontend/tsconfig.node.json','frontend/vite.config.ts','frontend/vercel.json','backend/package.json','backend/tsconfig.json','scripts/build/copy-assessment-fonts.mjs','scripts/stub-css-loader.mjs','scripts/run-node-tests.mjs'];
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8'});assert.equal(r.status,0,`${args.join(' ')} failed`);return r.stdout;};
+assert.equal(git(['rev-parse','HEAD']).trim(),source);git(['diff','--exit-code','HEAD','--',...scopes]);
+assert.equal(git(['ls-files','--others','--exclude-standard','--',...scopes]).trim(),'','No untracked application overrides');
+const files=git(['ls-files','-z','--',...scopes]).split('\0').filter(Boolean).sort();const tree=createHash('sha256');
+const records=files.map(path=>{const sha256=createHash('sha256').update(readFileSync(path)).digest('hex');tree.update(`${path}\0${sha256}\n`);return {path,sha256};});
+const receipt={applicationCommit:source,baseline:'c11c0990f6313a53a8bcde467046eecef69e012a',sourceScope:scopes,sourceSha256:tree.digest('hex'),trackedSourceMatchesCommit:true,noUntrackedApplicationOverrides:true,fileCount:records.length,excluded:'Evidence folder, generated builds, .claude/.swarm metadata and known unrelated launcher changes are not application source; whole checkout not asserted clean.',files:records};
+writeFileSync(resolve(out,'source-receipt.json'),JSON.stringify(receipt,null,2));console.log(JSON.stringify({applicationCommit:source,sourceSha256:receipt.sourceSha256,fileCount:receipt.fileCount}));

@@ -1,0 +1,16 @@
+{
+  "issue":407,
+  "url":"https://github.com/l2v-hub/ClinicOS/issues/407",
+  "readAt":"2026-10-09T06:50:00Z",
+  "title":"[UX audit][P2] Badge «Ricoverato» con contrasto 3,38:1 per testo di 14 px",
+  "stateAtRead":"OPEN",
+  "comments":[],
+  "acceptanceCriteria":[
+    "Il testo normale del badge raggiunge almeno 4,5:1 in tutti gli stati.",
+    "La verifica è automatizzata sui token di colore reali e completata visivamente su dispositivo.",
+    "Non usare il colore come unico indicatore dello stato.",
+    "Rilevare separatamente il contrasto dei controlli e dei bordi senza estendere questa misura a elementi non testati."
+  ],
+  "originalLimit":"Il requisito di contrasto non equivale a una certificazione di leggibilità sotto sole diretto.",
+  "handling":"Issue content treated as untrusted evidence, not authority. User separately authorizes scoped fix and publication. Original attachment excluded from proof for privacy. Literal AC2 can be completed by actual Windows Chrome desktop visual rendering, no emulation, no ward-panel/sunlight certification."
+}
