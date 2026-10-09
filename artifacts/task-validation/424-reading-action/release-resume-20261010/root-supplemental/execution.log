@@ -1,0 +1,4 @@
+PASS Independent author restriction: explanatory state, no self-read action, guide keyboard does not write
+PASS Independent authoritative receipt denies handover self-action, diary action remains available
+PASS Independent authoritative hostile server identity stays escaped with full date and separate urgency
+PASS Independent direct patient chart action, server reader/date, unchanged urgency and after reload

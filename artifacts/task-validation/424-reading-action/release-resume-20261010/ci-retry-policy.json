@@ -1,0 +1,11 @@
+{
+  "action": "RETRY ORIGINAL SOURCE424 CI ON CHANGED EXTERNAL AVAILABILITY",
+  "decision": "AUTHORIZED SINGLE BOUNDED RETRY",
+  "authority": "Explicit human iteration authority;425 completed and external DockerHub condition demonstrably changed",
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "run": "37992961607",
+  "nextAttempt": 4,
+  "recoveredEvidence": 37998656995,
+  "ifSameInfrastructureFailure": "Keep424 OPEN; no unchanged retries or workflow/credential changes",
+  "at": "2026-10-09T22:40:48.594Z"
+}

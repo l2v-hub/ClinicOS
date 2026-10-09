@@ -1,0 +1,12 @@
+{
+  "kind": "Evidence harness failure; no application/browser failure",
+  "privacyRecipe": "privacy-scan.ps1",
+  "privacyExit": 1,
+  "privacyError": "Windows PowerShell5 System.IO.Compression.ZipArchive type was not loaded",
+  "sealRecipe": "verify-and-seal.mjs",
+  "sealExit": 1,
+  "sealError": "Missing privacy-receipt.json after prior failure; no immutable manifest produced",
+  "intermediateUnsealedReceipt": "verification-receipt.json; not final READY seal",
+  "preservedOriginalRecipes": true,
+  "repairScope": "New privacy-scan02.ps1 adds explicit System.IO.Compression assembly load; new verify-and-seal02.mjs uses distinct final verification-receipt02.json; old failed recipes unchanged"
+}

@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdirSync,existsSync,copyFileSync,createWriteStream} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {spawn} from 'node:child_process';
+const root='artifacts/task-validation/424-reading-action/release-resume-20261010',qa='C:/w-424-qa/artifacts/task-validation/424-reading-action/release-resume-independent-20261010';
+const lane=process.argv[2];assert.ok(['ordinary','supplemental'].includes(lane));
+const receipt=JSON.parse(readFileSync(qa+'/pre-run/continuity-and-frozen-recipes.json','utf8')),deployment=JSON.parse(readFileSync(root+'/deployment-receipt.json','utf8'));
+assert.equal(deployment.applicationCommit,receipt.current);assert.equal(deployment.decision,'VERIFIED RELEASE');
+const name=lane==='ordinary'?'compiled-browser.mjs':'compiled-supplemental.mjs',frozen=receipt.recipes.find(r=>r.name===name);assert.ok(frozen);
+const sha=b=>createHash('sha256').update(b).digest('hex'),qaPath=qa+'/pre-run/recipes/'+name,recipe=root+'/root-recipes/'+name,out=root+'/root-'+lane;
+assert.equal(sha(readFileSync(qaPath)),frozen.sha256);mkdirSync(root+'/root-recipes',{recursive:true});assert.equal(existsSync(out),false);copyFileSync(qaPath,recipe);assert.equal(sha(readFileSync(recipe)),frozen.sha256);mkdirSync(out);
+writeFileSync(out+'/pre-execution-policy.json',JSON.stringify({decision:'AUTHORIZED ROOT BYTE-IDENTICAL INDEPENDENT COMPILED RERUN',authority:'Direct user authorization and independent browser lane handoff',applicationCommit:receipt.current,originalBugApplication:'67d21c3e9257a5acb8c9b25130c9417fb92185fb',recipe,name,sha256:frozen.sha256,productionPatientTestMutations:0,at:new Date().toISOString()},null,2));
+const log=createWriteStream(out+'/execution.log'),child=spawn(process.execPath,[recipe,out],{cwd:'C:/w-424',env:{...process.env,SOURCE_COMMIT:receipt.current,APP_URL:'https://clinicos-eosin.vercel.app'}});
+child.stdout.on('data',b=>{log.write(b);process.stdout.write(b);});child.stderr.on('data',b=>{log.write(b);process.stderr.write(b);});const exit=await new Promise(resolve=>child.on('close',resolve));await new Promise(resolve=>log.end(resolve));writeFileSync(out+'/execution-result.json',JSON.stringify({exitCode:exit,recipeSha256:frozen.sha256,applicationCommit:receipt.current,at:new Date().toISOString()},null,2));process.exitCode=exit;

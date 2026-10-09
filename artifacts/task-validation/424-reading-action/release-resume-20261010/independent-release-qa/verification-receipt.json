@@ -1,0 +1,153 @@
+{
+  "at": "2026-10-09T22:48:00.984Z",
+  "decision": "READY FOR CODEX QA",
+  "previousManifestVerified": "7079affea9bc5191002a1af77c113fd3016cddcb09786568afba211978175058",
+  "previousFilesVerified": 129,
+  "previousSourceFilesUnchanged": 1472,
+  "currentProduction": {
+    "id": "dpl_2am1AHqBzDcCYtctXYmCqJvKXEYW",
+    "state": "READY",
+    "githubCommitSha": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+    "gitSourceSha": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+    "alias": "https://clinicos-eosin.vercel.app/",
+    "htmlSha256": "9615db4620f46f85913f352e531a9ccd68fff393f3f3f89d158e8f0c624abcd7",
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-BOMa-W3k.js",
+    "bundleSha256": "4091a73cabe0f6669d1cc119ae189211034118fcf84edf15478b1a67c017d001",
+    "styles": [
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+        "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+      }
+    ]
+  },
+  "ordinaryCases": 17,
+  "supplementalCases": 4,
+  "guardSummary": [
+    {
+      "lane": "ordinary",
+      "index": 0,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [
+        {
+          "status": 503,
+          "path": "/patients/QA-PATIENT-409-0/diary/zz-urgent/ack"
+        },
+        {
+          "status": 503,
+          "path": "/patients/diary-unread-patient-counts"
+        }
+      ],
+      "syntheticReceipts": 3
+    },
+    {
+      "lane": "ordinary",
+      "index": 1,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 0
+    },
+    {
+      "lane": "ordinary",
+      "index": 2,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 1
+    },
+    {
+      "lane": "ordinary",
+      "index": 3,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 1
+    },
+    {
+      "lane": "ordinary",
+      "index": 4,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [
+        {
+          "status": 409,
+          "path": "/patients/QA-PATIENT-409-0/diary/zz-urgent/ack"
+        }
+      ],
+      "syntheticReceipts": 3
+    },
+    {
+      "lane": "ordinary",
+      "index": 5,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 1
+    },
+    {
+      "lane": "supplemental",
+      "index": 0,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 0
+    },
+    {
+      "lane": "supplemental",
+      "index": 1,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 0
+    },
+    {
+      "lane": "supplemental",
+      "index": 2,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 0
+    },
+    {
+      "lane": "supplemental",
+      "index": 3,
+      "forbiddenWrites": 0,
+      "unexpectedApis": 0,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "expectedNegativeHttp": [],
+      "syntheticReceipts": 1
+    }
+  ],
+  "screenshotsVisuallyReviewed": [
+    "supplemental01/screenshots/direct-chart-confirmed.png",
+    "ordinary01/screenshots/mobile-after-brief-notes.png"
+  ],
+  "browserLane": "FREE; both child processes exit0 and browser finally blocks complete; no local servers started",
+  "gitStatus": " M run-claude-queue.ps1\n M start-claude-team.ps1\n?? artifacts/task-validation/424-reading-action/\n",
+  "limitations": [
+    "Previous32focused/12realDB reviewed, not rerun in this continuation",
+    "CI status not certified by this independent worker",
+    "Mock receipt reload is not DB persistence proof",
+    "No hardware or human PHI/global vulnerability/global green certification"
+  ]
+}

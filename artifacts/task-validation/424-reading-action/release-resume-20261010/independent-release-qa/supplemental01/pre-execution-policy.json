@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-09T22:46:22.261Z",
+  "decision": "AUTHORIZED",
+  "scope": "Assigned current-production compiled browser QA; synthetic API interception before wire; no provider mutations",
+  "recipeSha256": "c42cd62084ea40ed9a243b2a3475b9ced395e1703ba474cbb8b15187639b80e7",
+  "recipeName": "compiled-supplemental.mjs",
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "APP_URL": "https://clinicos-eosin.vercel.app",
+  "argv": [
+    "C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\release-resume-independent-20261010\\pre-run\\recipes\\compiled-supplemental.mjs",
+    "C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\release-resume-independent-20261010\\supplemental01"
+  ]
+}

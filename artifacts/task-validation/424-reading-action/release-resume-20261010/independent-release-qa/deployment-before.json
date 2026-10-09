@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-09T22:45:50.455Z",
+  "phase": "before",
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "vercel": {
+    "id": "dpl_2am1AHqBzDcCYtctXYmCqJvKXEYW",
+    "state": "READY",
+    "githubCommitSha": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+    "gitSourceSha": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+    "alias": "https://clinicos-eosin.vercel.app/",
+    "htmlSha256": "9615db4620f46f85913f352e531a9ccd68fff393f3f3f89d158e8f0c624abcd7",
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-BOMa-W3k.js",
+    "bundleSha256": "4091a73cabe0f6669d1cc119ae189211034118fcf84edf15478b1a67c017d001",
+    "styles": [
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+        "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+      }
+    ]
+  },
+  "realRequests": "Read-only Vercel metadata and static GET only",
+  "clinicalApiRequests": 0,
+  "productionPatientMutations": 0
+}

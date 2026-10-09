@@ -1,0 +1,17 @@
+# Issue424 — release continuation on current production
+
+Original fix67d21c3e9257a5acb8c9b25130c9417fb92185fb is included byte-identically in current accepted productionb7ae14d120c1e70ccf72784206a505f8c48f975e. No source rewrite, main push or rollback in this continuation. Historical original deployment and blocked report retained unchanged, not confused with current alias.
+
+All four original criteria PASS: explicit visible and accessible Conferma lettura; authoritative server reader/role/full Europe/Rome acknowledgedAt after refetch/reload; read purpose separate from clinical takeover/completion; brief full-content cards and one collapsed common guide. Fresh independently frozen current-production17+4 and root byte-identical17+4 PASS; direct chart/doctor/nurse/author/capability/hostile escaping, keyboard/busy,503/409/malformed retry, stale role/view and draft fences, pagination/counts and mobile covered. Actual synthetic chart/mobile pixels inspected. Source binding confirms five original Git blobs67==b7 and1472 physical root files unchanged SHA4cbd1b51f7c9991533f3882511ffa71262c66f3f09fac9a3b8bf29b617560574; backend/schema/config/deps/workflows unchanged.
+
+New independent66-file sealed bundle manifest4567bcf2883517856dd2ca8a98f7c99c55a26743c7302033edfa2fda2d15b377 copied raw, including one privacy-harness assembly-loading failure and successful repair. Prior129-file manifest7079affea9bc5191002a1af77c113fd3016cddcb09786568afba211978175058 remains raw unchanged. Root fresh32focused/types/backend-types/tsc-b/real Vite React compiler build/secrets PASS; full1252/1240PASS/12 exact baseline failures/0new, not globally green. Original independent/root12 actual local PostgreSQL tests and57migrations remain valid historical evidence for unchanged source/BE/schema; not fabricated as newly run or production DB proof. UI reload is mocked in-memory persistence.
+
+Current Vercel dpl_2am1AHqBzDcCYtctXYmCqJvKXEYW READY exact metadata/Gitb7; alias/static HTTP200. Before/after HTML9615db4620f46f85913f352e531a9ccd68fff393f3f3f89d158e8f0c624abcd7, JS4091a73cabe0f6669d1cc119ae189211034118fcf84edf15478b1a67c017d001, CSS9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379 invariant. Root original before tool output retained transparently after routine receipt refresh; independent before/after immutable provider reads also match. Backend retained47a/ed539 unchanged health200, no deployment needed.
+
+All clinical/auth APIs intercepted BEFORE wire; only production static GETs sent. Zero unexpected/external/pageErrors/clinicalWrites; exact mocked503/409 only. All fixtures invented, no real patient images/PHI/secret publication, no hardware/touch/AT/clinical certification. Actual configured credential scan of canonical staged bytes and bounded ZIP contents required before publication. No source/capability expansion; native primary launchers/dirty work preserved. All old failed CI attempts remain retained. CI attempt4 entered backend tests after changed container availability; final comparison and public screenshot hashes still required.
+
+## Final Decision
+
+IMPLEMENTED — NOT VERIFIED
+
+Functional/local/current production and independent/root rerun PASS; final CI comparison, canonical privacy scan, immutable proof push and public pinned screenshot verification remain before closure. No issue closure is performed by this report.

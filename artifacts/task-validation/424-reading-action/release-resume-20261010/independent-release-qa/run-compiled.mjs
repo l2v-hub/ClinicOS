@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+const own=path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w:)/,'$1'));
+const lane=process.argv[2];assert.ok(['ordinary01','supplemental01'].includes(lane));
+const receipt=JSON.parse(fs.readFileSync(path.join(own,'pre-run/continuity-and-frozen-recipes.json'),'utf8'));
+const binding=JSON.parse(fs.readFileSync(path.join(own,'deployment-before.json'),'utf8'));assert.equal(binding.applicationCommit,receipt.current);
+const recipeName=lane==='ordinary01'?'compiled-browser.mjs':'compiled-supplemental.mjs',recipe=path.join(own,'pre-run/recipes',recipeName),hash=crypto.createHash('sha256').update(fs.readFileSync(recipe)).digest('hex');assert.equal(hash,receipt.recipes.find(r=>r.name===recipeName).sha256);
+const out=path.join(own,lane);assert.equal(fs.existsSync(out),false);fs.mkdirSync(out,{recursive:true});
+fs.writeFileSync(path.join(out,'pre-execution-policy.json'),JSON.stringify({at:new Date().toISOString(),decision:'AUTHORIZED',scope:'Assigned current-production compiled browser QA; synthetic API interception before wire; no provider mutations',recipeSha256:hash,recipeName,applicationCommit:receipt.current,APP_URL:'https://clinicos-eosin.vercel.app',argv:[recipe,out]},null,2));
+const stdout=fs.createWriteStream(path.join(out,'execution.log'));
+const child=spawn(process.execPath,[recipe,out],{cwd:'C:/w-424-qa',env:{...process.env,SOURCE_COMMIT:receipt.current,APP_URL:'https://clinicos-eosin.vercel.app'}});
+child.stdout.on('data',b=>{stdout.write(b);process.stdout.write(b);});child.stderr.on('data',b=>{stdout.write(b);process.stderr.write(b);});
+const code=await new Promise(resolve=>child.on('close',resolve));await new Promise(resolve=>stdout.end(resolve));fs.writeFileSync(path.join(out,'execution-result.json'),JSON.stringify({exitCode:code,completedAt:new Date().toISOString(),childPid:child.pid,recipeSha256:hash,applicationCommit:receipt.current},null,2));process.exitCode=code;

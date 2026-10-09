@@ -1,0 +1,9 @@
+﻿{
+    "zipMembersChecked":  1200,
+    "syntheticFixtureSourceReviewed":  true,
+    "credentialFindings":  0,
+    "limitations":  "No automated general PHI detector claim; no global vulnerability/CVE, hardware or provider certification. Previous real PostgreSQL tests reviewed but not rerun.",
+    "filesChecked":  64,
+    "configuredCredentialChecks":  3792,
+    "scope":  "All new release-continuation evidence; archives expanded bounded100MB"
+}

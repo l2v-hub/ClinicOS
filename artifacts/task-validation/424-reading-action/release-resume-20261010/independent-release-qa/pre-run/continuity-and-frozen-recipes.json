@@ -1,0 +1,98 @@
+{
+  "at": "2026-10-09T22:45:06.041Z",
+  "authority": "Independent release continuation artifact-only",
+  "candidate": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "current": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "baseline": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "priorManifestSha256": "7079affea9bc5191002a1af77c113fd3016cddcb09786568afba211978175058",
+  "priorFilesVerified": 129,
+  "priorSourceFilesVerified": 1472,
+  "priorSourceSha256": "8b16c3ce319301b04b79b85fd4e956bc466c053a3ee5506b69661de12c01b84f",
+  "blobs": [
+    {
+      "path": "frontend/src/components/operator/ConsegneUnreadQueue.tsx",
+      "sha256": "305633c5cc295f429ca57addf624f896bcb745fdb292388ef902821adcff0edc",
+      "bytes": 6309,
+      "candidateBlob": "0011454c0db8ad80888827114d1c228c98852c51",
+      "currentBlob": "0011454c0db8ad80888827114d1c228c98852c51"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+      "sha256": "62f7c6f1fffe10dda5fe126288d78626b474bc62448c675c10052f0bb1494954",
+      "bytes": 42862,
+      "candidateBlob": "1ad7c972bea859dc608c3adafd34a3451a29830e",
+      "currentBlob": "1ad7c972bea859dc608c3adafd34a3451a29830e"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiaryThreadReceipt.css",
+      "sha256": "3069ad87fc2e8023e04cc2b97c9b7c3dbd9ec5c38f5f0d21888573c0160420c6",
+      "bytes": 2622,
+      "candidateBlob": "5b740e9a08f39bd430281ec574bbd3a1c2f21f53",
+      "currentBlob": "5b740e9a08f39bd430281ec574bbd3a1c2f21f53"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiaryThreadReceipt.tsx",
+      "sha256": "cae545293c37845815e0c06a9aa4ca79f58c03e34d69f5e820194768bdc4af46",
+      "bytes": 6644,
+      "candidateBlob": "68d02e6d0e0fef7bc50a80791aebd55e82f35f58",
+      "currentBlob": "68d02e6d0e0fef7bc50a80791aebd55e82f35f58"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/diaryReading.test.ts",
+      "sha256": "5ef0aef48017bf7662c5564b294a0c2b94ec61f0a9c4470d76df34940304d47d",
+      "bytes": 6739,
+      "candidateBlob": "ed40ec30bb97ccf6bd6e9a064160a6cbae4fb7c8",
+      "currentBlob": "ed40ec30bb97ccf6bd6e9a064160a6cbae4fb7c8"
+    }
+  ],
+  "protectedPathsUnchanged": [
+    "backend",
+    "prisma",
+    "package.json",
+    "package-lock.json",
+    "frontend/package.json",
+    "frontend/package-lock.json",
+    "frontend/tsconfig.json",
+    "frontend/tsconfig.app.json",
+    "frontend/tsconfig.node.json",
+    "frontend/vite.config.ts",
+    "frontend/vercel.json",
+    "frontend/src/config.ts",
+    ".github/workflows"
+  ],
+  "reviewedPriorNotRerun": {
+    "focused": {
+      "name": "focused",
+      "exit": 0,
+      "tests": 32,
+      "pass": 32,
+      "fail": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "db": {
+      "synthetic": true,
+      "realPostgres": true,
+      "status": 0,
+      "migrations": 57
+    },
+    "ordinaryCases": 17,
+    "supplementalCases": 4
+  },
+  "recipes": [
+    {
+      "name": "compiled-browser.mjs",
+      "sha256": "f8423ad458b1bf1696ab3373300f0da3298e202ac66a31149c72c86379b28414",
+      "bytes": 32231,
+      "source": "C:/w-424/artifacts/task-validation/424-reading-action/compiled-online/pre-run/recipes/compiled-browser.mjs",
+      "target": "C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\release-resume-independent-20261010\\pre-run\\recipes\\compiled-browser.mjs"
+    },
+    {
+      "name": "compiled-supplemental.mjs",
+      "sha256": "c42cd62084ea40ed9a243b2a3475b9ced395e1703ba474cbb8b15187639b80e7",
+      "bytes": 18715,
+      "source": "C:/w-424/artifacts/task-validation/424-reading-action/compiled-online/pre-run/recipes/compiled-supplemental.mjs",
+      "target": "C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\release-resume-independent-20261010\\pre-run\\recipes\\compiled-supplemental.mjs"
+    }
+  ]
+}

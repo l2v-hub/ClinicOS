@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const root='artifacts/task-validation/424-reading-action/release-resume-20261010',app='67d21c3e9257a5acb8c9b25130c9417fb92185fb',production='b7ae14d120c1e70ccf72784206a505f8c48f975e';
+const git=args=>{const r=spawnSync('git',args,{encoding:null,maxBuffer:30e6});assert.equal(r.status,0,'Source binding failed');return r.stdout;},sha=b=>createHash('sha256').update(b).digest('hex');
+const old=JSON.parse(readFileSync('artifacts/task-validation/424-reading-action/root-frozen/source-receipt.json','utf8'));
+assert.equal(old.applicationCommit,app);assert.equal(old.fileCount,1472);assert.equal(old.sourceSha256,'4cbd1b51f7c9991533f3882511ffa71262c66f3f09fac9a3b8bf29b617560574');
+git(['diff','--exit-code',app,'--',...old.sourceScope]);assert.equal(git(['ls-files','--others','--exclude-standard','--',...old.sourceScope]).toString().trim(),'');
+const tree=createHash('sha256');for(const file of old.files){assert.equal(sha(readFileSync(file.path)),file.sha256,file.path);tree.update(`${file.path}\0${file.sha256}\n`);}assert.equal(tree.digest('hex'),old.sourceSha256);
+const paths=git(['diff','--name-only',old.baseline,app]).toString().trim().split(/\r?\n/).sort();assert.equal(paths.length,5);assert.ok(paths.every(p=>p.startsWith('frontend/src/')));
+git(['merge-base','--is-ancestor',app,production]);const blobs=paths.map(path=>{const original=git(['show',`${app}:${path}`]),online=git(['show',`${production}:${path}`]);assert.ok(original.equals(online),path);return {path,sha256:sha(original),byteIdenticalInProduction:true};});
+git(['diff','--exit-code',app,production,'--','backend','prisma','frontend/src/config.ts','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json']);
+const receipt={at:new Date().toISOString(),applicationCommit:app,localProofHead:git(['rev-parse','HEAD']).toString().trim(),currentProductionCommit:production,sourceScope:old.sourceScope,fileCount:old.fileCount,sourceSha256:old.sourceSha256,physicalSourceMatchesOriginalFrozen:true,productionIsDescendant:true,protectedBugPaths:blobs,backendSchemaConfigDependenciesUnchanged:true,priorDatabaseEvidence:'Historical 12 real local Postgres tests per independent/root, no new database run claimed',decision:'SOURCE BINDING VERIFIED, NOT A NEW APP RELEASE'};
+writeFileSync(root+`/source-binding-${process.argv[2]||'before'}.json`,JSON.stringify(receipt,null,2));console.log(JSON.stringify({...receipt,sourceScope:undefined,protectedBugPaths:blobs.map(p=>p.path)}));

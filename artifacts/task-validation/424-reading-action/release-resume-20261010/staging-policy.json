@@ -1,0 +1,10 @@
+{
+  "decision": "AUTHORIZED SCOPED EVIDENCE ONLY",
+  "authority": "Explicit human publication authority, root sole integration writer",
+  "scope": "artifacts/task-validation/424-reading-action/release-resume-20261010",
+  "source67": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "production": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "noMainPushOrRollback": true,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T22:51:18.160Z"
+}

@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const out='artifacts/task-validation/424-reading-action/release-resume-20261010',app='67d21c3e9257a5acb8c9b25130c9417fb92185fb',run='37992961607';
+const config=JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json','utf8')).env;
+const gh=args=>{const r=spawnSync('gh',args,{encoding:'utf8',maxBuffer:30e6,env:{...process.env,GH_TOKEN:config.GITHUB_TOKEN||config.GH_TOKEN}});assert.equal(r.status,0,'CI operation failed safely');return r.stdout;};
+const recovered=JSON.parse(readFileSync('C:/w-425/artifacts/task-validation/425-chart-scroll/ci-comparison.json'));assert.equal(recovered.applicationCommit,'b7ae14d120c1e70ccf72784206a505f8c48f975e');assert.equal(recovered.candidateRun,37998656995);assert.deepEqual(recovered.failedSteps,['gate: Backend unit tests']);assert.deepEqual(recovered.newFailureNames,[]);
+const issue=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/424']));assert.equal(issue.state,'open');assert.equal(issue.body,JSON.parse(readFileSync('artifacts/task-validation/424-reading-action/original-issue.json')).body);
+const current=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/actions/runs/'+run]));assert.equal(current.head_sha,app);assert.equal(current.run_attempt,3);assert.equal(current.status,'completed');assert.equal(current.conclusion,'failure');
+const policy={action:'RETRY ORIGINAL SOURCE424 CI ON CHANGED EXTERNAL AVAILABILITY',decision:'AUTHORIZED SINGLE BOUNDED RETRY',authority:'Explicit human iteration authority;425 completed and external DockerHub condition demonstrably changed',applicationCommit:app,run,nextAttempt:4,recoveredEvidence:recovered.candidateRun,ifSameInfrastructureFailure:'Keep424 OPEN; no unchanged retries or workflow/credential changes',at:new Date().toISOString()};writeFileSync(out+'/ci-retry-policy.json',JSON.stringify(policy,null,2));
+gh(['run','rerun',run,'--repo','l2v-hub/ClinicOS','--failed']);console.log('Original424 source CI attempt4 dispatched after verified external recovery; no app source changed');

@@ -1,0 +1,11 @@
+{
+  "decision": "AUTHORIZED ROOT BYTE-IDENTICAL INDEPENDENT COMPILED RERUN",
+  "authority": "Direct user authorization and independent browser lane handoff",
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "originalBugApplication": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "recipe": "artifacts/task-validation/424-reading-action/release-resume-20261010/root-recipes/compiled-browser.mjs",
+  "name": "compiled-browser.mjs",
+  "sha256": "f8423ad458b1bf1696ab3373300f0da3298e202ac66a31149c72c86379b28414",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T22:47:42.580Z"
+}

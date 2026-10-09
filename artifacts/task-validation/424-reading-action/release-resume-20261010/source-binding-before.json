@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-09T22:45:32.011Z",
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "localProofHead": "6632cda65c3678b231034e659764207cb7313794",
+  "currentProductionCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "sourceScope": [
+    "frontend/src",
+    "backend/src",
+    "prisma",
+    "package.json",
+    "package-lock.json",
+    "frontend/package.json",
+    "frontend/package-lock.json",
+    "frontend/tsconfig.json",
+    "frontend/tsconfig.app.json",
+    "frontend/tsconfig.node.json",
+    "frontend/vite.config.ts",
+    "frontend/vercel.json",
+    "backend/package.json",
+    "backend/tsconfig.json",
+    "scripts/build/copy-assessment-fonts.mjs",
+    "scripts/stub-css-loader.mjs",
+    "scripts/run-node-tests.mjs"
+  ],
+  "fileCount": 1472,
+  "sourceSha256": "4cbd1b51f7c9991533f3882511ffa71262c66f3f09fac9a3b8bf29b617560574",
+  "physicalSourceMatchesOriginalFrozen": true,
+  "productionIsDescendant": true,
+  "protectedBugPaths": [
+    {
+      "path": "frontend/src/components/operator/ConsegneUnreadQueue.tsx",
+      "sha256": "305633c5cc295f429ca57addf624f896bcb745fdb292388ef902821adcff0edc",
+      "byteIdenticalInProduction": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+      "sha256": "62f7c6f1fffe10dda5fe126288d78626b474bc62448c675c10052f0bb1494954",
+      "byteIdenticalInProduction": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiaryThreadReceipt.css",
+      "sha256": "3069ad87fc2e8023e04cc2b97c9b7c3dbd9ec5c38f5f0d21888573c0160420c6",
+      "byteIdenticalInProduction": true
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiaryThreadReceipt.tsx",
+      "sha256": "cae545293c37845815e0c06a9aa4ca79f58c03e34d69f5e820194768bdc4af46",
+      "byteIdenticalInProduction": true
+    },
+    {
+      "path": "frontend/src/lib/__tests__/diaryReading.test.ts",
+      "sha256": "5ef0aef48017bf7662c5564b294a0c2b94ec61f0a9c4470d76df34940304d47d",
+      "byteIdenticalInProduction": true
+    }
+  ],
+  "backendSchemaConfigDependenciesUnchanged": true,
+  "priorDatabaseEvidence": "Historical 12 real local Postgres tests per independent/root, no new database run claimed",
+  "decision": "SOURCE BINDING VERIFIED, NOT A NEW APP RELEASE"
+}

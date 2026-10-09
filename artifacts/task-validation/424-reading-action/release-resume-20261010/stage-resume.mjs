@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+import {readdirSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/424-reading-action/release-resume-20261010',git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20e6});assert.equal(r.status,0,'Scoped evidence operation failed');return r.stdout.trim();};
+assert.equal(git(['branch','--show-current']),'codex/bug-424-reading-action');assert.ok(git(['ls-remote','origin','refs/heads/main']).startsWith('b7ae14d120c1e70ccf72784206a505f8c48f975e\t'));
+const staged=git(['diff','--cached','--name-only']).split('\n').filter(Boolean);assert.ok(staged.every(p=>p.startsWith('artifacts/task-validation/424-reading-action/')));
+const paths=[];function walk(dir){for(const e of readdirSync(dir,{withFileTypes:true})){const p=dir+'/'+e.name;if(e.isDirectory())walk(p);else paths.push(p);}}walk(root);assert.ok(paths.every(p=>!p.includes('runtime-cache')&&!p.includes('scratch-prisma')&&!p.endsWith('.env')));
+writeFileSync(root+'/staging-policy.json',JSON.stringify({decision:'AUTHORIZED SCOPED EVIDENCE ONLY',authority:'Explicit human publication authority, root sole integration writer',scope:root,source67:'67d21c3e9257a5acb8c9b25130c9417fb92185fb',production:'b7ae14d120c1e70ccf72784206a505f8c48f975e',noMainPushOrRollback:true,productionPatientTestMutations:0,at:new Date().toISOString()},null,2));paths.push(root+'/staging-policy.json');for(let i=0;i<paths.length;i+=40)git(['add','-f','--',...paths.slice(i,i+40)]);console.log(JSON.stringify({stagedResumeFiles:paths.length,applicationChanges:0}));

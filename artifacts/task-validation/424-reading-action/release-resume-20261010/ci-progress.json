@@ -1,0 +1,61 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "checkedAt": "2026-10-09T22:48:55.454Z",
+  "candidateRun": 37992961607,
+  "candidateStatus": "in_progress",
+  "secretRun": 37992961608,
+  "secretStatus": "completed",
+  "secretConclusion": "success",
+  "jobs": [
+    {
+      "name": "gate",
+      "status": "in_progress",
+      "conclusion": "",
+      "activeSteps": [
+        {
+          "name": "Backend unit tests",
+          "status": "in_progress"
+        },
+        {
+          "name": "Import E2E (API, deterministic)",
+          "status": "pending"
+        },
+        {
+          "name": "New/existing targeting E2E (REQ-021, confirm new vs existing)",
+          "status": "pending"
+        },
+        {
+          "name": "Async import E2E (REQ-022, 202 + worker + reclaim + retry)",
+          "status": "pending"
+        },
+        {
+          "name": "Therapy import E2E (#156, parser -> seed terapiaImport -> confirm -> PatientTherapy)",
+          "status": "pending"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "status": "pending"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "pending"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending"
+        },
+        {
+          "name": "Stop containers",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "secret-scan",
+      "status": "completed",
+      "conclusion": "success",
+      "activeSteps": []
+    }
+  ],
+  "decision": "PENDING, not final CI receipt"
+}

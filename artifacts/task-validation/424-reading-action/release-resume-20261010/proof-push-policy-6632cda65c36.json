@@ -1,0 +1,15 @@
+{
+  "decision": "AUTHORIZED IMMUTABLE SYNTHETIC PROOF BRANCH COMMIT/PUSH",
+  "authority": "Direct human authorization; root independently accepted release continuation, not issue closure",
+  "originalApplicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "currentProductionCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "parentProof": "6632cda65c3678b231034e659764207cb7313794",
+  "branch": "codex/bug-424-reading-action",
+  "scope": "artifacts/task-validation/424-reading-action/release-resume-20261010",
+  "canonicalFiles": 487,
+  "credentialChecks": 22227,
+  "zipMembers": 6922,
+  "noMainPushOrRollback": true,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T22:51:31.285Z"
+}

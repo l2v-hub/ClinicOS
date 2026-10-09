@@ -1,0 +1,11 @@
+{
+  "decision": "AUTHORIZED ROOT BYTE-IDENTICAL INDEPENDENT COMPILED RERUN",
+  "authority": "Direct user authorization and independent browser lane handoff",
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "originalBugApplication": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "recipe": "artifacts/task-validation/424-reading-action/release-resume-20261010/root-recipes/compiled-supplemental.mjs",
+  "name": "compiled-supplemental.mjs",
+  "sha256": "c42cd62084ea40ed9a243b2a3475b9ced395e1703ba474cbb8b15187639b80e7",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T22:48:05.141Z"
+}
