@@ -203,7 +203,7 @@ export function PaperForm({
         </div>
         <div className="assessment-actions">
           <button type="submit" className="btn-secondary" disabled={locked || !draft.dirty || invalidMeasures}>{draft.busy ? 'Salvataggio…' : 'Salva bozza'}</button>
-          <button type="button" className="btn-primary" disabled={locked || !result || invalidMeasures} onClick={onPreview}>Salva e verifica anteprima</button>
+          <button type="button" className="btn-primary" disabled={locked || !result || invalidMeasures} onClick={() => { if (root.current?.reportValidity()) onPreview(); }}>Salva e verifica anteprima</button>
         </div>
       </div>}
       {focused ? <details className="painad-metadata" open={draft.predecessorId ? true : undefined}>
