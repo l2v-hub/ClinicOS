@@ -1,0 +1,18 @@
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,existsSync} from 'node:fs';
+import {resolve} from 'node:path';
+import assert from 'node:assert/strict';
+const dir=resolve('artifacts/task-validation/419-calendar-create/independent-qa419');
+const env=JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json','utf8')).env;
+const r=spawnSync('gh',['issue','view','419','--repo','l2v-hub/ClinicOS','--json','number,title,body,comments,state,labels'],{encoding:'utf8',env:{...process.env,GH_TOKEN:env.GITHUB_TOKEN||env.GH_TOKEN}});
+assert.equal(r.status,0,'Safe independent issue read failed');
+writeFileSync(`${dir}/original-issue.json`,r.stdout);
+const attempt=process.argv[2];assert.match(attempt,/^attempt-[0-9]+$/);
+assert.equal(existsSync(`${dir}/${attempt}`),false,'Never overwrite a prior attempt');mkdirSync(`${dir}/${attempt}/before`,{recursive:true});
+const paths=['recipe.mjs','fixture.mjs','server.mjs','commands.mjs','source-receipt.mjs','prepare.mjs','task-contract.md','original-issue.json'];
+const files=paths.map(path=>{const bytes=readFileSync(`${dir}/${path}`);copyFileSync(`${dir}/${path}`,`${dir}/${attempt}/before/${path}.source`);return{path,sha256:createHash('sha256').update(bytes).digest('hex')};});
+const runtimeInputs=['frontend/vite.config.ts','frontend/tsconfig.app.json','frontend/package.json','frontend/src/config.ts','frontend/src/lib/tabletScale.ts'];
+const available=runtimeInputs.filter(p=>existsSync(p)).map(path=>{const bytes=readFileSync(path);return{path,sha256:createHash('sha256').update(bytes).digest('hex')};});
+writeFileSync(`${dir}/${attempt}/before/pre-run-receipt.json`,JSON.stringify({snapshotAt:new Date().toISOString(),applicationCommit:'fa028c11ffe5dbfe514df8110e6ccf7f6b977602',files,runtimeInputs:available,sourceBeforeReceiptSha256:createHash('sha256').update(readFileSync(`${dir}/source-before/source-receipt.json`)).digest('hex'),browser:'Playwright Chromium',runtime:'actualSPA/config/compiler own7493',api:'All clinical API intercepted before network; no real writes'},null,2));
+console.log('Independent pre-run bytes captured; issue419 still '+JSON.parse(r.stdout).state);

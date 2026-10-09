@@ -1,0 +1,64 @@
+{
+  "snapshotAt": "2026-10-09T17:38:03.974Z",
+  "applicationCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "files": [
+    {
+      "path": "recipe.mjs",
+      "sha256": "2eb7d712a1e87918c788c389ada94876ef0bc85af5be774e69e16964a641bd26"
+    },
+    {
+      "path": "fixture.mjs",
+      "sha256": "528e08b81d0a2142129a19a5829e595bcc5a8e34b0023b25ab4a2f6ad42ad008"
+    },
+    {
+      "path": "server.mjs",
+      "sha256": "7f548486eb8e2b6a48e42606562a03dcfd3339aab99af1f69115198393023922"
+    },
+    {
+      "path": "commands.mjs",
+      "sha256": "607b0a566e61e320322233136863074aea529258ed86350db4073a8681906890"
+    },
+    {
+      "path": "source-receipt.mjs",
+      "sha256": "196e45880bc773d720ba353b614b486165e8a656012d59a923e08fe81aca7de6"
+    },
+    {
+      "path": "prepare.mjs",
+      "sha256": "4bc9a9a81ae552812b580a1ca0126b90bbebe631c46d0c856699e7fb8272ae29"
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "da3cd9395f7facb5c5b079f8b5d0907a58e72a4acdba499ab47923c6e4875e48"
+    },
+    {
+      "path": "original-issue.json",
+      "sha256": "5eeedd9ab92b719693b10580619aac96bf01e37bbcdd71bc0d15cbea0cf6d0cb"
+    }
+  ],
+  "runtimeInputs": [
+    {
+      "path": "frontend/vite.config.ts",
+      "sha256": "ec75b4405e60b7e4ab6de65ff536063b952a6d66fbc86a0d977cfa3d2f427ae8"
+    },
+    {
+      "path": "frontend/tsconfig.app.json",
+      "sha256": "beb4745fe309bec67d29e9a8945b498f08d7164b0dd12ebd63a49818cd4548dd"
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "319c3acade0ca06ff325e4749a65ab331bdd8c106086ccffd1d8be8f48468ac3"
+    },
+    {
+      "path": "frontend/src/config.ts",
+      "sha256": "923cf19061cbac016a49adef2b61714a40d61d928342e26207f5e00af3887750"
+    },
+    {
+      "path": "frontend/src/lib/tabletScale.ts",
+      "sha256": "31f238738506b18d725fd2d6e8d35fc5be9e9631f42dd9299c73c10b33ad47e3"
+    }
+  ],
+  "sourceBeforeReceiptSha256": "a93aa08c59e9fab8fe3e915e3cd88f2452e85460ff09a9004262adff44322eb6",
+  "browser": "Playwright Chromium",
+  "runtime": "actualSPA/config/compiler own7493",
+  "api": "All clinical API intercepted before network; no real writes"
+}

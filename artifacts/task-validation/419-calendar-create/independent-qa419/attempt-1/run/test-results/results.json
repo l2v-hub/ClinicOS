@@ -1,0 +1,83 @@
+{
+  "results": [
+    {
+      "name": "empty-primary-explicit-context",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:04.714Z",
+      "finishedAt": "2026-10-09T17:38:24.163Z"
+    },
+    {
+      "name": "daily-keyboard-both-keys",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:24.285Z",
+      "finishedAt": "2026-10-09T17:38:28.155Z"
+    },
+    {
+      "name": "present-and-hidden-occupied",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:28.268Z",
+      "finishedAt": "2026-10-09T17:38:32.909Z"
+    },
+    {
+      "name": "past-day-no-hidden-opener",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:33.095Z",
+      "finishedAt": "2026-10-09T17:38:37.801Z"
+    },
+    {
+      "name": "after-hours-visible-next-date-path",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:37.921Z",
+      "finishedAt": "2026-10-09T17:38:41.768Z"
+    },
+    {
+      "name": "full-day-visible-reason",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:41.931Z",
+      "finishedAt": "2026-10-09T17:38:46.349Z"
+    },
+    {
+      "name": "denied-role-daily-and-weekly",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:46.459Z",
+      "finishedAt": "2026-10-09T17:38:49.771Z"
+    },
+    {
+      "name": "weekly-keyboard-and-past-policy",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:49.893Z",
+      "finishedAt": "2026-10-09T17:38:53.755Z"
+    },
+    {
+      "name": "patient-selection-required-and-enables",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:53.879Z",
+      "finishedAt": "2026-10-09T17:38:57.707Z"
+    },
+    {
+      "name": "minute-tick-updates-visible-availability",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:38:57.839Z",
+      "finishedAt": "2026-10-09T17:39:00.570Z"
+    },
+    {
+      "name": "click-time-recheck-without-render-tick",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:39:00.688Z",
+      "finishedAt": "2026-10-09T17:39:03.817Z"
+    },
+    {
+      "name": "permission-revocation-and-restoration",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:39:03.941Z",
+      "finishedAt": "2026-10-09T17:39:08.250Z"
+    },
+    {
+      "name": "mobile-visible-help-and-context",
+      "status": "PASS",
+      "startedAt": "2026-10-09T17:39:08.364Z",
+      "finishedAt": "2026-10-09T17:39:12.534Z"
+    }
+  ],
+  "productionPatientMutations": 0
+}

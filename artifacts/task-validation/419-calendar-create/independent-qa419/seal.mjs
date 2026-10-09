@@ -1,0 +1,27 @@
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync,readdirSync,statSync,existsSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {resolve,relative} from 'node:path';
+const dir=resolve('artifacts/task-validation/419-calendar-create/independent-qa419');
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:80*1024*1024});assert.equal(r.status,0,args[0]);return r.stdout;};
+assert.equal(git(['rev-parse','HEAD']).trim(),'fa028c11ffe5dbfe514df8110e6ccf7f6b977602');
+const before=JSON.parse(readFileSync(`${dir}/source-before/source-receipt.json`)),after=JSON.parse(readFileSync(`${dir}/source-after/source-receipt.json`));
+assert.deepEqual(before,after);
+const paths=before.files.map(f=>f.path);
+const batch=spawnSync('git',['cat-file','--batch'],{input:paths.map(p=>`HEAD:${p}\n`).join(''),maxBuffer:100*1024*1024});assert.equal(batch.status,0);let cursor=0;const tree=createHash('sha256');
+const canonical=paths.map(path=>{const end=batch.stdout.indexOf(10,cursor);const head=batch.stdout.subarray(cursor,end).toString().split(' ');assert.equal(head[1],'blob');const size=Number(head[2]),start=end+1,blob=batch.stdout.subarray(start,start+size);cursor=start+size+1;const physical=readFileSync(path);assert.equal(sha(physical),before.files.find(f=>f.path===path).sha256);const equal=physical.equals(blob);if(!equal){assert.equal(blob.includes(0),false,'Non-text physical divergence');assert.equal(physical.toString().replace(/\r\n/g,'\n'),blob.toString().replace(/\r\n/g,'\n'),path);}const canonicalSha256=sha(blob);tree.update(`${path}\0${canonicalSha256}\n`);return{path,physicalSha256:sha(physical),canonicalSha256,physicalEqualGit:equal};});
+writeFileSync(`${dir}/canonical-source-receipt.json`,JSON.stringify({applicationCommit:after.applicationCommit,sourceScope:after.sourceScope,canonicalSha256:tree.digest('hex'),physicalSha256:after.sourceSha256,sourceFileCount:paths.length,physicalEqualsGit:canonical.filter(f=>f.physicalEqualGit).length,permittedLineEndingOnly:canonical.filter(f=>!f.physicalEqualGit).length,files:canonical},null,2));
+const results=JSON.parse(readFileSync(`${dir}/attempt-1/run/test-results/results.json`));assert.equal(results.results.length,13);assert.ok(results.results.every(r=>r.status==='PASS'));assert.equal(results.productionPatientMutations,0);
+const pre=JSON.parse(readFileSync(`${dir}/attempt-1/before/pre-run-receipt.json`));for(const file of pre.files)assert.equal(sha(readFileSync(`${dir}/attempt-1/before/${file.path}.source`)),file.sha256);
+assert.ok(pre.snapshotAt<results.results[0].startedAt,'Recipe snapshot must precede first browser execution');
+const commands=JSON.parse(readFileSync(`${dir}/commands/command-results.json`));assert.equal(commands.newFailures.length,0);assert.ok(commands.records.every(r=>r.name==='full-regression'||r.exit===0));assert.equal(commands.records.find(r=>r.name==='full-regression').fail,12);
+function walk(path){return readdirSync(path).sort().flatMap(name=>{const target=resolve(path,name);return statSync(target).isDirectory()?walk(target):[target];});}
+const cache=resolve(dir,'runtime-cache');const cacheFiles=existsSync(cache)?walk(cache).map(path=>({path:relative(cache,path).replace(/\\/g,'/'),sha256:sha(readFileSync(path)),bytes:statSync(path).size})):[];
+writeFileSync(`${dir}/runtime-cache-manifest.json`,JSON.stringify({excludedFromProof:'Owned Vite optimizer runtime cache only; byte manifested separately, not deleted or represented as source.',files:cacheFiles},null,2));
+assert.equal(existsSync(`${dir}/immutable-manifest.json`),false,'Never overwrite a seal');
+const files=walk(dir).filter(path=>!path.startsWith(cache+'/')&&!path.startsWith(cache+'\\')).map(path=>({path:relative(dir,path).replace(/\\/g,'/'),sha256:sha(readFileSync(path)),bytes:statSync(path).size}));
+assert.ok(files.every(f=>f.bytes<100*1024*1024));
+const manifest={sealedAt:new Date().toISOString(),decision:'READY FOR CODEX QA',applicationCommit:after.applicationCommit,baselineCommit:after.baseline,fileCount:files.length,retention:'All files from independent original attempt retained; no failed attempt or recipe overwritten. Archived snapshot recipes end .source. Original raw traces/video/guards included.',excluded:'runtime-cache separately byte-manifested; no original evidence excluded',files};
+writeFileSync(`${dir}/immutable-manifest.json`,JSON.stringify(manifest,null,2));console.log(JSON.stringify({decision:manifest.decision,files:files.length,manifestSha256:sha(readFileSync(`${dir}/immutable-manifest.json`))}));

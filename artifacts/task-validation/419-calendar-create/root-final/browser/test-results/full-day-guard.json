@@ -1,0 +1,313 @@
+{
+  "allowed": true,
+  "appointments": [
+    {
+      "id": "QA-FULL-0",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "08:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-1",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "08:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-2",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "09:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-3",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "09:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-4",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "10:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-5",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "10:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-6",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "11:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-7",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "11:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-8",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "12:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-9",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "12:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-10",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "13:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-11",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "13:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-12",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "14:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-13",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "14:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-14",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "15:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-15",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "15:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-16",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "16:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-17",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "16:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-18",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "17:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-19",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "17:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-20",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "18:00",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    },
+    {
+      "id": "QA-FULL-21",
+      "operatorId": "QA-NURSE-419",
+      "patientName": "Persona Sintetica",
+      "data": "2026-10-09",
+      "ora": "18:30",
+      "durata": 30,
+      "tipologia": "visita",
+      "stato": "programmato"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/me/roster-order"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/notes"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/operators/directory/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    }
+  ],
+  "errors": [],
+  "pageErrors": [],
+  "httpErrors": [],
+  "unexpected": [],
+  "external": [],
+  "writes": []
+}

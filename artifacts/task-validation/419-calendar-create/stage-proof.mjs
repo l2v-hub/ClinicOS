@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {readdirSync,readFileSync,copyFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/419-calendar-create';
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20e6});assert.equal(r.status,0,'Git evidence staging failed safely');return r.stdout.trim();};
+assert.equal(git(['rev-parse','HEAD']),'fa028c11ffe5dbfe514df8110e6ccf7f6b977602');
+assert.equal(git(['diff','--name-only','--cached','--','frontend','backend','prisma','package.json','package-lock.json']),'');
+const dirs=['baseline-before/source','baseline-before2','root-final','root-rerun','compiled-online','independent-qa419'];
+const paths=[];
+function walk(dir){for(const e of readdirSync(dir,{withFileTypes:true})){const path=dir+'/'+e.name;if(e.isDirectory())walk(path);else paths.push(path);}}
+copyFileSync(root+'/before.mjs',root+'/baseline-before2/before.mjs.post-run.source');
+copyFileSync(root+'/fixture.mjs',root+'/baseline-before2/fixture.mjs.post-run.source');
+for(const dir of dirs)walk(root+'/'+dir);
+for(const e of readdirSync(root,{withFileTypes:true}))if(e.isFile()&&!['ci-progress.json','publication-manifest.json','publication-policy-receipt.json','github-closure-receipt.json'].includes(e.name))paths.push(root+'/'+e.name);
+for(const name of ['baseline-code-scan.json','candidate-code-scan.json','comparison.json'])paths.push(root+'/security/'+name);
+assert.ok(paths.every(p=>!p.includes('runtime-cache/')&&!p.includes('/global-scan.json')));
+for(let i=0;i<paths.length;i+=50)git(['add','-f','--',...paths.slice(i,i+50)]);
+const staged=git(['diff','--cached','--name-only']).split('\n').filter(Boolean);assert.ok(staged.every(p=>p.startsWith(root+'/')));const count=new Set([...staged,root+'/proof-staging-policy.json']).size;
+writeFileSync(root+'/proof-staging-policy.json',JSON.stringify({decision:'AUTHORIZED SCOPED SYNTHETIC EVIDENCE STAGING',authority:'Direct human authorization; root sole proof writer',applicationCommit:'fa028c11ffe5dbfe514df8110e6ccf7f6b977602',explicitDirectoryAllowlist:dirs,artifactCount:count,excluded:['root failed development runs retained locally','runtime caches','raw broad historical security diagnostic','dirty primary','blocked405/408/410/416 app candidates'],at:new Date().toISOString(),remaining:'Canonical configured-credential and expanded ZIP scans; completed CI/deployment/online gates; immutable proof branch and source-bound GitHub comment'} ,null,2));
+git(['add','-f','--',root+'/proof-staging-policy.json']);console.log(JSON.stringify({stagedArtifactFiles:count,decision:'Scoped evidence staged only; not yet published'}));

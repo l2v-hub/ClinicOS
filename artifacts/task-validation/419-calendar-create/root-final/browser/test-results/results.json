@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "name": "after-hours",
+      "status": "PASS"
+    },
+    {
+      "name": "empty-primary-and-slots",
+      "status": "PASS"
+    },
+    {
+      "name": "denied-role",
+      "status": "PASS"
+    },
+    {
+      "name": "populated-filtered-occupancy",
+      "status": "PASS"
+    },
+    {
+      "name": "past-and-weekly",
+      "status": "PASS"
+    },
+    {
+      "name": "clock-boundary",
+      "status": "PASS"
+    },
+    {
+      "name": "full-day",
+      "status": "PASS"
+    },
+    {
+      "name": "patient-selection-enables-save",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile-empty",
+      "status": "PASS"
+    }
+  ],
+  "productionPatientMutations": 0
+}

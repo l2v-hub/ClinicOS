@@ -1,0 +1,23 @@
+{
+  "decision": "AUTHORIZED SCOPED SYNTHETIC EVIDENCE STAGING",
+  "authority": "Direct human authorization; root sole proof writer",
+  "applicationCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "explicitDirectoryAllowlist": [
+    "baseline-before/source",
+    "baseline-before2",
+    "root-final",
+    "root-rerun",
+    "compiled-online",
+    "independent-qa419"
+  ],
+  "artifactCount": 362,
+  "excluded": [
+    "root failed development runs retained locally",
+    "runtime caches",
+    "raw broad historical security diagnostic",
+    "dirty primary",
+    "blocked405/408/410/416 app candidates"
+  ],
+  "at": "2026-10-09T18:01:13.553Z",
+  "remaining": "Canonical configured-credential and expanded ZIP scans; completed CI/deployment/online gates; immutable proof branch and source-bound GitHub comment"
+}

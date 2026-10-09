@@ -1,0 +1,12 @@
+{
+  "action": "PUSH EXACT APPLICATION TO MAIN",
+  "authority": "Direct human authorization, independently assessed root release gate",
+  "application": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "expectedRemoteBaseline": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "sourceSha256": "9c5bf87df471f3a51fdcb851b20a4df3794fe7bcb3d3ba64ce4953e4c8eebe08",
+  "decision": "AUTHORIZED",
+  "at": "2026-10-09T17:48:17.852Z",
+  "excluded": "All QA artifact commits, unrelated dirty launchers, blocked issue candidates and dirty primary",
+  "result": "REMOTE MAIN EXACT APPLICATION VERIFIED",
+  "verifiedAt": "2026-10-09T17:48:21.017Z"
+}

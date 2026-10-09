@@ -1,0 +1,18 @@
+{
+  "deletedFiles": 0,
+  "decision": "STOP EXACT OWNED QA SERVERS AFTER COMPLETED ACCEPTANCE",
+  "excluded": "All unrelated launchers, production services and worktrees unchanged",
+  "servers": [
+    {
+      "port": 7491,
+      "pid": 25700,
+      "command": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/419-calendar-create/qa-server.mjs"
+    },
+    {
+      "port": 7494,
+      "pid": 39320,
+      "command": "\"C:\\Program Files\\nodejs\\node.exe\" C:/w-419/artifacts/task-validation/419-calendar-create/qa-server.mjs"
+    }
+  ],
+  "at": "2026-10-09T17:55:00.9194302Z"
+}

@@ -1,0 +1,16 @@
+{
+  "createdAt": "2026-10-09T17:40:27.413Z",
+  "files": [
+    {
+      "path": "recipe.mjs",
+      "sha256": "2eb7d712a1e87918c788c389ada94876ef0bc85af5be774e69e16964a641bd26"
+    },
+    {
+      "path": "fixture.mjs",
+      "sha256": "528e08b81d0a2142129a19a5829e595bcc5a8e34b0023b25ab4a2f6ad42ad008"
+    }
+  ],
+  "application": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "actualRuntime": "root-owned SPA actual compiler7491",
+  "recipeOrigin": "Readonly independent13-case recipe copied byte-identically; source physical differences individually canonical checked separately"
+}

@@ -1,0 +1,110 @@
+{
+  "excludedFromProof": "Owned Vite optimizer runtime cache only; byte manifested separately, not deleted or represented as source.",
+  "files": [
+    {
+      "path": "deps/@azure_msal-browser.js",
+      "sha256": "c630b63826d3879de24ae7e6fd1bd9a3029930bcef732f7a959e04c99b40c5bb",
+      "bytes": 657898
+    },
+    {
+      "path": "deps/@azure_msal-browser.js.map",
+      "sha256": "0065ed8e9367736a1990945c04247d135d9ba6d4ac5c0a987ddf26500e2e2b29",
+      "bytes": 1294342
+    },
+    {
+      "path": "deps/_metadata.json",
+      "sha256": "623664edd8894db22949784acb3d11a816e91262e3d1bf150afcb4e5eba7b5ac",
+      "bytes": 2606
+    },
+    {
+      "path": "deps/codice-fiscale-js.js",
+      "sha256": "68493fda20fec6ddc817775c408973fd10e24e7e3330dc6a439327cfb0ad9be2",
+      "bytes": 898289
+    },
+    {
+      "path": "deps/codice-fiscale-js.js.map",
+      "sha256": "e96b8d31cc5b123e33b355c4c492c094e4d3808ab9c1bc650fb408d5ff94b7c2",
+      "bytes": 943461
+    },
+    {
+      "path": "deps/package.json",
+      "sha256": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+      "bytes": 23
+    },
+    {
+      "path": "deps/pdfjs-dist.js",
+      "sha256": "a0efc0f0a76e3b4fb592fbd4ff2a758b248fb012ba5fd53bd786efe4e4ff8747",
+      "bytes": 758672
+    },
+    {
+      "path": "deps/pdfjs-dist.js.map",
+      "sha256": "5db5743419da92b462e74448a63c3d09d140f4bce6f40a6f53d45d89ebeeddbf",
+      "bytes": 1391364
+    },
+    {
+      "path": "deps/react-dom.js",
+      "sha256": "d3999c276a3657a1d11f2ef41d2c555e61acededc83deaa21cd168a936c94622",
+      "bytes": 14657
+    },
+    {
+      "path": "deps/react-dom.js.map",
+      "sha256": "a026bb67844cc42089d30e5c985e42b390b2c1da86e30b652ccb6cf90d8caa3b",
+      "bytes": 25802
+    },
+    {
+      "path": "deps/react-dom_client.js",
+      "sha256": "d421bce0e5c44f3b2e3f629240eb5bb5890a3310cce69519a4a7bc61912b0cad",
+      "bytes": 821082
+    },
+    {
+      "path": "deps/react-dom_client.js.map",
+      "sha256": "e8de5c959f80b6ea2db4eded6bdc074c64979ce54c81002df1d6c65821be3c39",
+      "bytes": 1499361
+    },
+    {
+      "path": "deps/react.js",
+      "sha256": "8e28a62d37fcaa99b98ca657e74a5d12970081a57e1d3ef61ec8238d5c684007",
+      "bytes": 38368
+    },
+    {
+      "path": "deps/react.js.map",
+      "sha256": "5121d4d342246661c599c4769fdf296f5503c17cbb8b51d3e05c11a325a87a99",
+      "bytes": 68987
+    },
+    {
+      "path": "deps/react_compiler-runtime.js",
+      "sha256": "e3c240ee467b12c6abe77bdfce864f97857bf77a11e5c54d86d91ee0b7be6688",
+      "bytes": 1841
+    },
+    {
+      "path": "deps/react_compiler-runtime.js.map",
+      "sha256": "77356b35e13c0789d94884d0870ad59a2aaabd6affc9190463e9984384f96136",
+      "bytes": 2168
+    },
+    {
+      "path": "deps/react_jsx-dev-runtime.js",
+      "sha256": "356acc15dec55bc76da16336b82a5aee782f493428a4f8c49ecc96ab7d473664",
+      "bytes": 10588
+    },
+    {
+      "path": "deps/react_jsx-dev-runtime.js.map",
+      "sha256": "e2e41c9d7146b7c66997e2bef42a90e148e07d56c4095fb1073d5084d06b4a2a",
+      "bytes": 18268
+    },
+    {
+      "path": "deps/react_jsx-runtime.js",
+      "sha256": "10d3924e69d025e0ea9283d1c4a52e59fcbd3959ba8669b60a7c2471da587cf0",
+      "bytes": 10865
+    },
+    {
+      "path": "deps/react_jsx-runtime.js.map",
+      "sha256": "17016b93a3db48cc13e2402d68e749f4abe2eb7f9db2c1c2756634d9b4f24e4b",
+      "bytes": 18836
+    },
+    {
+      "path": "deps/rolldown-runtime-EAsCxrDo.js",
+      "sha256": "dd3545c6894fd8d3327997ebe3ada59e8d2e768d1a4ec615a6e05b99867c4258",
+      "bytes": 496
+    }
+  ]
+}

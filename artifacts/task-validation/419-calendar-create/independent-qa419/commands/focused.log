@@ -1,0 +1,40 @@
+(node:33720) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator and admin agendas expose the same accessible navigation contract (2.0681ms)
+✔ daily agenda stays task-focused instead of rendering dashboard occupancy metrics (1.3383ms)
+✔ admin daily operator selectors are compact, keyboard-visible native buttons (0.85ms)
+✔ admin daily grid covers the working day with compact half-hour rows (1.0041ms)
+✔ therapy work is one native action with a prominent non-repeated pending state (1.1835ms)
+✔ daily appointments use strong status surfaces and therapy cards reflow on phones (0.7848ms)
+(node:33720) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29760) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ appointment range URL always carries an explicit bounded interval (1.9077ms)
+✔ appointment calendar dates use local components instead of UTC conversion (1.9552ms)
+✔ App appointment reads use only the bounded range builder (3.3082ms)
+(node:29760) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:35836) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ can(): allowed, denied, missing, and no policy map (1.999ms)
+✔ canNavigate(): pages follow their backing capability, dashboards are always visible (0.3463ms)
+✔ capabilityDeniedMessage(): only policy 403s get the role message (0.482ms)
+(node:35836) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:7828) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ authorization, occupancy and existing local minute policy apply together (1.8131ms)
+✔ first slot skips occupied starts even if a status filter hides them (0.4999ms)
+✔ minute boundary is rechecked without introducing a seconds policy (0.3227ms)
+✔ operator entrypoints use one checked opener and denied drafts are discarded (1.3707ms)
+(node:7828) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 762.7396

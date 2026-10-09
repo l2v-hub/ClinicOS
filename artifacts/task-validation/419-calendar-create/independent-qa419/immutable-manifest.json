@@ -1,0 +1,521 @@
+{
+  "sealedAt": "2026-10-09T17:42:27.267Z",
+  "decision": "READY FOR CODEX QA",
+  "applicationCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "baselineCommit": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "fileCount": 102,
+  "retention": "All files from independent original attempt retained; no failed attempt or recipe overwritten. Archived snapshot recipes end .source. Original raw traces/video/guards included.",
+  "excluded": "runtime-cache separately byte-manifested; no original evidence excluded",
+  "files": [
+    {
+      "path": "attempt-1/before/commands.mjs.source",
+      "sha256": "607b0a566e61e320322233136863074aea529258ed86350db4073a8681906890",
+      "bytes": 2734
+    },
+    {
+      "path": "attempt-1/before/fixture.mjs.source",
+      "sha256": "528e08b81d0a2142129a19a5829e595bcc5a8e34b0023b25ab4a2f6ad42ad008",
+      "bytes": 7202
+    },
+    {
+      "path": "attempt-1/before/original-issue.json.source",
+      "sha256": "5eeedd9ab92b719693b10580619aac96bf01e37bbcdd71bc0d15cbea0cf6d0cb",
+      "bytes": 2619
+    },
+    {
+      "path": "attempt-1/before/pre-run-receipt.json",
+      "sha256": "072a2042fdff80481769cc812635309d22efe15f60902e9a64418b7599c47102",
+      "bytes": 2124
+    },
+    {
+      "path": "attempt-1/before/prepare.mjs.source",
+      "sha256": "4bc9a9a81ae552812b580a1ca0126b90bbebe631c46d0c856699e7fb8272ae29",
+      "bytes": 2248
+    },
+    {
+      "path": "attempt-1/before/recipe.mjs.source",
+      "sha256": "2eb7d712a1e87918c788c389ada94876ef0bc85af5be774e69e16964a641bd26",
+      "bytes": 10165
+    },
+    {
+      "path": "attempt-1/before/server.mjs.source",
+      "sha256": "7f548486eb8e2b6a48e42606562a03dcfd3339aab99af1f69115198393023922",
+      "bytes": 782
+    },
+    {
+      "path": "attempt-1/before/source-receipt.mjs.source",
+      "sha256": "196e45880bc773d720ba353b614b486165e8a656012d59a923e08fe81aca7de6",
+      "bytes": 2857
+    },
+    {
+      "path": "attempt-1/before/task-contract.md.source",
+      "sha256": "da3cd9395f7facb5c5b079f8b5d0907a58e72a4acdba499ab47923c6e4875e48",
+      "bytes": 2074
+    },
+    {
+      "path": "attempt-1/run/playwright-report/index.html",
+      "sha256": "4e915d434a9bf0649bf5391e5df6cb62197e5713dd260f8bb1d2b7805a5875f1",
+      "bytes": 2378
+    },
+    {
+      "path": "attempt-1/run/screenshots/after-hours-visible-next-date-path.png",
+      "sha256": "33d67552b5ca7d4b077465322f0bb57e7b1883bf8c429ae7f6580a4e9001956a",
+      "bytes": 119565
+    },
+    {
+      "path": "attempt-1/run/screenshots/click-time-recheck-without-render-tick.png",
+      "sha256": "28c6dd302192d02dab2bb2896a9dd7355fb671205d582993d664a19cfd8e3efe",
+      "bytes": 52815
+    },
+    {
+      "path": "attempt-1/run/screenshots/daily-keyboard-both-keys.png",
+      "sha256": "5e3c3e9f27792be60deb838d2aa860dfd78552f641a97e4e0b889d3bd89ccc07",
+      "bytes": 122565
+    },
+    {
+      "path": "attempt-1/run/screenshots/denied-role-daily-and-weekly.png",
+      "sha256": "c8eff7a3e589885c2a0f50025ff8f47e6a7616319dc5a2d88d1cbdf5865d313d",
+      "bytes": 56463
+    },
+    {
+      "path": "attempt-1/run/screenshots/empty-primary-explicit-context.png",
+      "sha256": "a7840012d2a3df0ba20c3c66c874da6222d5a46762bb55c6484dfded76dc2b9b",
+      "bytes": 121420
+    },
+    {
+      "path": "attempt-1/run/screenshots/full-day-visible-reason.png",
+      "sha256": "e5afc2b5313a4e27f21eb1e8fb39758ad8dc75ca7f287d4a56a236a1c1b5a632",
+      "bytes": 119377
+    },
+    {
+      "path": "attempt-1/run/screenshots/minute-tick-updates-visible-availability.png",
+      "sha256": "f20af7836a8dd0ec90d10088ad17f4f372464f8020fa40d01c99af298b076a36",
+      "bytes": 69025
+    },
+    {
+      "path": "attempt-1/run/screenshots/mobile-visible-help-and-context.png",
+      "sha256": "3974ecc4331fda677626279a56c2eaecb3ec9906cfc649420debc9b302569535",
+      "bytes": 41610
+    },
+    {
+      "path": "attempt-1/run/screenshots/past-day-no-hidden-opener.png",
+      "sha256": "75083e30476de912f2c8b41fd6e91374fd28b6b9e46b3a3ce1c4661a2a9772e9",
+      "bytes": 67013
+    },
+    {
+      "path": "attempt-1/run/screenshots/patient-selection-required-and-enables.png",
+      "sha256": "c7f005d98eb852bf7f6e92a3d38cd100351494bf90807f981c8b8527ec87c6f8",
+      "bytes": 126641
+    },
+    {
+      "path": "attempt-1/run/screenshots/permission-revocation-and-restoration.png",
+      "sha256": "898f0e42700da4245645413b312c5630f87d65d2d583353204c5c9234062c487",
+      "bytes": 119016
+    },
+    {
+      "path": "attempt-1/run/screenshots/present-and-hidden-occupied.png",
+      "sha256": "dd5cb1743a4ffb554a5f8b10cff4feaf34f7289e477eb67d0f1ce4a2c1e5f012",
+      "bytes": 119257
+    },
+    {
+      "path": "attempt-1/run/screenshots/weekly-keyboard-and-past-policy.png",
+      "sha256": "da2ca101ab4b80235cd5fd456bb659f352ddcc397f7c15fe027c476071a7072b",
+      "bytes": 106970
+    },
+    {
+      "path": "attempt-1/run/test-results/after-hours-visible-next-date-path-guard.json",
+      "sha256": "e3f05fe922ab0860f03cfadc9cfbeed31fe419f5469c9caf89dc4de3c681320a",
+      "bytes": 1654
+    },
+    {
+      "path": "attempt-1/run/test-results/after-hours-visible-next-date-path.json",
+      "sha256": "236599f448b3eeae7f688117ec6da308626437b7b666c499e540952054b2efee",
+      "bytes": 1927
+    },
+    {
+      "path": "attempt-1/run/test-results/click-time-recheck-without-render-tick-guard.json",
+      "sha256": "423a17c3fdbb77bf6d74f7b400b6bd791bb19d3d3b645ecaa0cf70235de9ee11",
+      "bytes": 1748
+    },
+    {
+      "path": "attempt-1/run/test-results/click-time-recheck-without-render-tick.json",
+      "sha256": "dc0a42a12860092d553c6d43f2e533b625b5e18cf87cad6214354addc932683c",
+      "bytes": 2033
+    },
+    {
+      "path": "attempt-1/run/test-results/daily-keyboard-both-keys-guard.json",
+      "sha256": "dfaf80d0ddfc9ad2070b93479b73fac1bed6b76f85d472074cdc92071d914490",
+      "bytes": 1667
+    },
+    {
+      "path": "attempt-1/run/test-results/daily-keyboard-both-keys.json",
+      "sha256": "244e7f19058588f46538ca6ed7050cbb6bf878b3b276afa1acca271dbd0d3e82",
+      "bytes": 1930
+    },
+    {
+      "path": "attempt-1/run/test-results/denied-role-daily-and-weekly-guard.json",
+      "sha256": "6e94b71ca8e9a9db23188f0988a6e79aeaed52121942196ceecd0bb59f7df6f2",
+      "bytes": 1734
+    },
+    {
+      "path": "attempt-1/run/test-results/denied-role-daily-and-weekly.json",
+      "sha256": "5c248dec331f8a3cd6c59ece461b75ad873a54724278ad433449b411072288c4",
+      "bytes": 2009
+    },
+    {
+      "path": "attempt-1/run/test-results/empty-primary-explicit-context-guard.json",
+      "sha256": "35bd7bcbf5e55f02f8b4604f5a512926f28a3cf6b29c0f3c1d85ea0968ba9f10",
+      "bytes": 1667
+    },
+    {
+      "path": "attempt-1/run/test-results/empty-primary-explicit-context.json",
+      "sha256": "e9095931d9f93e594cecf15bbffea0ff5d3e2117dd0a554a30c9bd847da2b27b",
+      "bytes": 1936
+    },
+    {
+      "path": "attempt-1/run/test-results/full-day-visible-reason-guard.json",
+      "sha256": "9797adb2d26c7b1937ff6440f07f6eb91a901f3d354bc4c7226c27f165b9d0cb",
+      "bytes": 7916
+    },
+    {
+      "path": "attempt-1/run/test-results/full-day-visible-reason.json",
+      "sha256": "6fcfb7a5ed1e618aa7e9c44fb0cbbaade64b5a3b5ace39a5e78b884248cd4861",
+      "bytes": 8700
+    },
+    {
+      "path": "attempt-1/run/test-results/minute-tick-updates-visible-availability-guard.json",
+      "sha256": "423a17c3fdbb77bf6d74f7b400b6bd791bb19d3d3b645ecaa0cf70235de9ee11",
+      "bytes": 1748
+    },
+    {
+      "path": "attempt-1/run/test-results/minute-tick-updates-visible-availability.json",
+      "sha256": "640358ab67c9ab1aa9e21b96160ead03d04069d712cbcfd9ae60f827b4c96967",
+      "bytes": 2035
+    },
+    {
+      "path": "attempt-1/run/test-results/mobile-visible-help-and-context-guard.json",
+      "sha256": "c14bbc07357907b663b8500759eb106e6c0370740c7e9c42a58382bd492c0190",
+      "bytes": 1588
+    },
+    {
+      "path": "attempt-1/run/test-results/mobile-visible-help-and-context.json",
+      "sha256": "796c47609b752d57cd20d2b4b3a1b386b4141fa49575d2d7293707599ff5af89",
+      "bytes": 1850
+    },
+    {
+      "path": "attempt-1/run/test-results/past-day-no-hidden-opener-guard.json",
+      "sha256": "517a02238ee4f4766c41261a95bb52005f69f29e1d8ed688d606c846426814a6",
+      "bytes": 1733
+    },
+    {
+      "path": "attempt-1/run/test-results/past-day-no-hidden-opener.json",
+      "sha256": "86587b36ca8b73cf43d71e29a238d0c459f522b19d4c9a482b6b2c237d9111f4",
+      "bytes": 2005
+    },
+    {
+      "path": "attempt-1/run/test-results/patient-selection-required-and-enables-guard.json",
+      "sha256": "23c6a502fd45bf74a2b686cffb27151eec91ef9c769f32e865bce005089ca1ba",
+      "bytes": 1742
+    },
+    {
+      "path": "attempt-1/run/test-results/patient-selection-required-and-enables.json",
+      "sha256": "c8bad0af6e48ed1374fbabe2733afa2a5b55c48d088e6df356b68bcc8619cef1",
+      "bytes": 2027
+    },
+    {
+      "path": "attempt-1/run/test-results/permission-revocation-and-restoration-guard.json",
+      "sha256": "9fdacbbea548d0153849a28a688fe1ac4b54070b66559233b60227b3ee1f2010",
+      "bytes": 1872
+    },
+    {
+      "path": "attempt-1/run/test-results/permission-revocation-and-restoration.json",
+      "sha256": "37fe17abf8e882f9bfc83036115ff1a05700ed590dbd86eed8598c94f0a13e72",
+      "bytes": 2172
+    },
+    {
+      "path": "attempt-1/run/test-results/present-and-hidden-occupied-guard.json",
+      "sha256": "e7790edc5756d7f5b1a3488ec2dacea18f03cc744a21b149af9fe30e1e283d35",
+      "bytes": 1886
+    },
+    {
+      "path": "attempt-1/run/test-results/present-and-hidden-occupied.json",
+      "sha256": "d81f1fdb35034f5370febd9dfd6f10bf6eb0fe9d9b69ea67d81ef66f115f6fb3",
+      "bytes": 2170
+    },
+    {
+      "path": "attempt-1/run/test-results/results.json",
+      "sha256": "a29b8466aef91b05546dafa940695bf996b827d4c5797105d6a0ca51ccbbc499",
+      "bytes": 2399
+    },
+    {
+      "path": "attempt-1/run/test-results/run-progress.json",
+      "sha256": "e300c84a0b6f8c359455431c202c6e78aa98611636d1574949707d59e22f88c3",
+      "bytes": 2189
+    },
+    {
+      "path": "attempt-1/run/test-results/weekly-keyboard-and-past-policy-guard.json",
+      "sha256": "517a02238ee4f4766c41261a95bb52005f69f29e1d8ed688d606c846426814a6",
+      "bytes": 1733
+    },
+    {
+      "path": "attempt-1/run/test-results/weekly-keyboard-and-past-policy.json",
+      "sha256": "2d24c6f188a4bee69fc862e5c98fe832492a2f578d2bf09e7489d85894f30928",
+      "bytes": 2011
+    },
+    {
+      "path": "attempt-1/run/trace/after-hours-visible-next-date-path.zip",
+      "sha256": "39dad0318ae7f5e6cbbe7fbbb0115f55b7d10f4f7a9a567349c03af90468f669",
+      "bytes": 1284920
+    },
+    {
+      "path": "attempt-1/run/trace/click-time-recheck-without-render-tick.zip",
+      "sha256": "dd0016daa61fda84e7ce817f1bf7b36bcca0c0a0677f616145f070954c2298b5",
+      "bytes": 1081862
+    },
+    {
+      "path": "attempt-1/run/trace/daily-keyboard-both-keys.zip",
+      "sha256": "8a757c5cc36683b2c0bf819017c0f4f165bcbe85fb0e5d34dcae4c50818ae823",
+      "bytes": 1228929
+    },
+    {
+      "path": "attempt-1/run/trace/denied-role-daily-and-weekly.zip",
+      "sha256": "6d21562a15f36f5dd700baaa26d38e7df104278140e45bb4cd5c772e2fe2ed8b",
+      "bytes": 1156823
+    },
+    {
+      "path": "attempt-1/run/trace/empty-primary-explicit-context.zip",
+      "sha256": "9ed6e6dbce1b7022e9f345ca8f140cd904b4566791f0a6063997f6cc2f5e0e79",
+      "bytes": 4785066
+    },
+    {
+      "path": "attempt-1/run/trace/full-day-visible-reason.zip",
+      "sha256": "423543a5305ef324d16f26b3f0899cffb5239b8e5248231899b972b1ea2f2995",
+      "bytes": 1002444
+    },
+    {
+      "path": "attempt-1/run/trace/minute-tick-updates-visible-availability.zip",
+      "sha256": "7c3cecc701e431888a339b6cd40c56b17196d1efa9fc32628e7d80974b82af47",
+      "bytes": 946308
+    },
+    {
+      "path": "attempt-1/run/trace/mobile-visible-help-and-context.zip",
+      "sha256": "7f8160f40a370c35ad586b5e88bea9d6e5a063838363540f8150ba7dabd80b55",
+      "bytes": 1535531
+    },
+    {
+      "path": "attempt-1/run/trace/past-day-no-hidden-opener.zip",
+      "sha256": "551fc73edfe2abc2daba08ccea6850eae689b0b0555fdb9ec0b734f8920ca7b4",
+      "bytes": 1352587
+    },
+    {
+      "path": "attempt-1/run/trace/patient-selection-required-and-enables.zip",
+      "sha256": "fa631985f696b4618824370833924665b206c02ea86ead8a41459c019f99dda8",
+      "bytes": 1349981
+    },
+    {
+      "path": "attempt-1/run/trace/permission-revocation-and-restoration.zip",
+      "sha256": "650485b6fb1a9f1fd0261ce6c552870ca1f8fa2a1b375c11b96c151e48facb27",
+      "bytes": 1087252
+    },
+    {
+      "path": "attempt-1/run/trace/present-and-hidden-occupied.zip",
+      "sha256": "3242d66457005ecdedb72287c08ab3c95d619f79be7a617f486698590e03a1e5",
+      "bytes": 1447122
+    },
+    {
+      "path": "attempt-1/run/trace/weekly-keyboard-and-past-policy.zip",
+      "sha256": "da83f20c743360643beffadbc28d2af8295f95fe3f0c6fd7dea839f172d0aee6",
+      "bytes": 1282286
+    },
+    {
+      "path": "attempt-1/run/video/page@0d9be3f9510e607ac88388cf860efeaa.webm",
+      "sha256": "cbe56be59bc49525d8497425ad82ecc6b1e87fa29ac445cb4eb93e4f2b8f6437",
+      "bytes": 160774
+    },
+    {
+      "path": "attempt-1/run/video/page@14b0acd95072eb67ff54decb956711d4.webm",
+      "sha256": "6080ddc41d317cfa4750a1888be2d005997b31dc796bcb257b9f68f947e064e2",
+      "bytes": 134872
+    },
+    {
+      "path": "attempt-1/run/video/page@17dbc91af7b6bc81d68ba00c77728ad7.webm",
+      "sha256": "776cfc02ccf9dd02f5974e322969a3b209116f2ace2b031bbd228de556f694d8",
+      "bytes": 254059
+    },
+    {
+      "path": "attempt-1/run/video/page@411dc5a7a9aff533a6d0bb624617c106.webm",
+      "sha256": "8ce13b8f32ed4a3707f938912896413a487673189a35ffe48dcbfe33cd0aa6e0",
+      "bytes": 204842
+    },
+    {
+      "path": "attempt-1/run/video/page@64f1b2c6f07e3cc1026a52d132c8be2e.webm",
+      "sha256": "9b324efd976f2eb6593c9bfbd1fd375089828b2724854c11f09189b75199f859",
+      "bytes": 209716
+    },
+    {
+      "path": "attempt-1/run/video/page@7a61238131ef4d75be5819d9119fb388.webm",
+      "sha256": "f13aa495f130ca85c5958f73cd4ff1abe28b9a4cae742f42960ebad69217d399",
+      "bytes": 167588
+    },
+    {
+      "path": "attempt-1/run/video/page@87304d39496f8f05f4a89acacc9b6994.webm",
+      "sha256": "6b2805a7ffeac77982a91ffa09f3d4aecdfc4e06547eace9bceb711e86448982",
+      "bytes": 186846
+    },
+    {
+      "path": "attempt-1/run/video/page@8f34a9fd82f3c12a016f9803fea0afae.webm",
+      "sha256": "854d4539a33d588cb3ba5eee2689fb6b054df06f7330547ff5c5d1c78a086102",
+      "bytes": 188977
+    },
+    {
+      "path": "attempt-1/run/video/page@93fb78ac5657c43ea6513187ef5a4279.webm",
+      "sha256": "b04f1be8416104afcee95b99d45668907909752ee8e188687e6453d497374e4d",
+      "bytes": 139427
+    },
+    {
+      "path": "attempt-1/run/video/page@9bc1a09483ef5eaae3a883833eba5b1b.webm",
+      "sha256": "933b165069eae0bbc7fd7946908adfa30f87c5c6ea52f26bab387d20d1e91745",
+      "bytes": 218448
+    },
+    {
+      "path": "attempt-1/run/video/page@c404a06383e42561d1a230c0596d7892.webm",
+      "sha256": "31bb172ba99232b7a29c70c8cf32803deadb3b0b6a5589a4bef79e32ec0d677f",
+      "bytes": 145600
+    },
+    {
+      "path": "attempt-1/run/video/page@d1c7e91a8a702901a1b0277b07e4fc8c.webm",
+      "sha256": "0e91219e0bf3a17f9d8c43d25da183db76030be28dec063d2d16c24dcfc2e091",
+      "bytes": 241142
+    },
+    {
+      "path": "attempt-1/run/video/page@e18d470501a55d8d709feca260f04e9d.webm",
+      "sha256": "7998fa0018fd67eb21cf776bade786455e40ecfb30a63f23c718985e78b65d6a",
+      "bytes": 327795
+    },
+    {
+      "path": "canonical-source-receipt.json",
+      "sha256": "f4fc462c64cadd1bd6379935f341597b9081ed8ad5fc3040a6427fd69ed4eb3e",
+      "bytes": 437632
+    },
+    {
+      "path": "commands/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "commands/command-results.json",
+      "sha256": "832b9185e077326dcc1b3e3d56ccc40fff90a15d627946f19e9eebc80d5a1ac6",
+      "bytes": 2824
+    },
+    {
+      "path": "commands/focused.log",
+      "sha256": "abef3e9b1eb06c3449b54c7e3327a041a7fba7c28b2c1632d6812b3973d11acf",
+      "bytes": 3015
+    },
+    {
+      "path": "commands/frontend-tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "commands/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "commands/full-regression.log",
+      "sha256": "3d021fea31bb6c98f2ac6295a4298f317ca69ec889dcd025e395e9670d61a269",
+      "bytes": 423074
+    },
+    {
+      "path": "commands/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "bytes": 71
+    },
+    {
+      "path": "commands/vite-build.log",
+      "sha256": "aba5d7d0d914237d10617a1eb0a0c22ae67351ad8d00248d17480b3a85fb52d4",
+      "bytes": 15087
+    },
+    {
+      "path": "commands.mjs",
+      "sha256": "607b0a566e61e320322233136863074aea529258ed86350db4073a8681906890",
+      "bytes": 2734
+    },
+    {
+      "path": "diff-review.md",
+      "sha256": "8f6263660871546870d7a5f2ee40b2212866324fbd2bbdf6c51441f4b65d9aa7",
+      "bytes": 2911
+    },
+    {
+      "path": "fixture.mjs",
+      "sha256": "528e08b81d0a2142129a19a5829e595bcc5a8e34b0023b25ab4a2f6ad42ad008",
+      "bytes": 7202
+    },
+    {
+      "path": "original-issue.json",
+      "sha256": "5eeedd9ab92b719693b10580619aac96bf01e37bbcdd71bc0d15cbea0cf6d0cb",
+      "bytes": 2619
+    },
+    {
+      "path": "prepare.mjs",
+      "sha256": "4bc9a9a81ae552812b580a1ca0126b90bbebe631c46d0c856699e7fb8272ae29",
+      "bytes": 2248
+    },
+    {
+      "path": "privacy-scan-receipt.json",
+      "sha256": "6ca25fd987ed652ab71d39840a50acddf06f11f0c731a6a9e61465bd1ab20609",
+      "bytes": 331
+    },
+    {
+      "path": "privacy-scan.ps1",
+      "sha256": "a857c8d26e142dcdc09eeede5e0c1cde2ce937bafe50a0b757c0be60d28f4ec4",
+      "bytes": 2484
+    },
+    {
+      "path": "recipe.mjs",
+      "sha256": "2eb7d712a1e87918c788c389ada94876ef0bc85af5be774e69e16964a641bd26",
+      "bytes": 10165
+    },
+    {
+      "path": "runtime-cache-manifest.json",
+      "sha256": "47c1689f0f86683c292a2c5e7aed69a985b7ff0499848a11b348e4c2aceea18b",
+      "bytes": 3532
+    },
+    {
+      "path": "seal.mjs",
+      "sha256": "847be6aa8f439bb944daa5dd44c6074a994a452357fbc54ced0955b284421653",
+      "bytes": 4668
+    },
+    {
+      "path": "server.mjs",
+      "sha256": "7f548486eb8e2b6a48e42606562a03dcfd3339aab99af1f69115198393023922",
+      "bytes": 782
+    },
+    {
+      "path": "source-after/source-receipt.json",
+      "sha256": "a93aa08c59e9fab8fe3e915e3cd88f2452e85460ff09a9004262adff44322eb6",
+      "bytes": 241730
+    },
+    {
+      "path": "source-before/source-receipt.json",
+      "sha256": "a93aa08c59e9fab8fe3e915e3cd88f2452e85460ff09a9004262adff44322eb6",
+      "bytes": 241730
+    },
+    {
+      "path": "source-receipt.mjs",
+      "sha256": "196e45880bc773d720ba353b614b486165e8a656012d59a923e08fe81aca7de6",
+      "bytes": 2857
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "da3cd9395f7facb5c5b079f8b5d0907a58e72a4acdba499ab47923c6e4875e48",
+      "bytes": 2074
+    },
+    {
+      "path": "validation-report.md",
+      "sha256": "42d3ac5f21a7be7215a7c2ca6003ac12c9cf03e8699383e1ccd1779116fb02e9",
+      "bytes": 4588
+    }
+  ]
+}

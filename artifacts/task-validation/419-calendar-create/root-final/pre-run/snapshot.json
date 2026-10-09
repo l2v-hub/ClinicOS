@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-09T17:33:38.134Z",
+  "application": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "records": [
+    {
+      "path": "fixture.mjs",
+      "sha256": "528e08b81d0a2142129a19a5829e595bcc5a8e34b0023b25ab4a2f6ad42ad008"
+    },
+    {
+      "path": "after.mjs",
+      "sha256": "ca265e7ff6f7b3aa0faae349ef5748bbf12a3dfb468ada8bf8bdbcf49b7ea0c2"
+    },
+    {
+      "path": "qa-server.mjs",
+      "sha256": "1bed0469adde33281b74068351ee31df24c4ad4e66c2096330248482c11558e6"
+    },
+    {
+      "path": "commands.mjs",
+      "sha256": "607b0a566e61e320322233136863074aea529258ed86350db4073a8681906890"
+    },
+    {
+      "path": "source-receipt.mjs",
+      "sha256": "196e45880bc773d720ba353b614b486165e8a656012d59a923e08fe81aca7de6"
+    }
+  ]
+}

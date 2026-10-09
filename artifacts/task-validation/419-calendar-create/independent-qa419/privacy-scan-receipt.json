@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-09T17:42:25.2377258Z",
+  "files": 99,
+  "expandedZipEntries": 1371,
+  "configuredCredentials": 3,
+  "actualCredentialChecks": 4410,
+  "findings": 0,
+  "productionPatientMutations": 0,
+  "limitations": "Synthetic fixtures reviewed. No claim of comprehensive pre-existing repository PHI audit."
+}

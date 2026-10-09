@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND PROOF COMMIT AND PUSH",
+  "authority": "Direct human authorization; root release gate plus independent/re-run/compiled online/CI comparison passed",
+  "applicationCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "branch": "codex/bug-419-calendar-create",
+  "scope": "artifacts/task-validation/419-calendar-create",
+  "artifacts": 362,
+  "configuredCredentialChecks": 15396,
+  "expandedZipMembers": 4770,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T18:01:20.570Z",
+  "excluded": "No main proof promotion or application change, no primary/blocked source"
+}

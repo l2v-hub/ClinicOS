@@ -1,0 +1,10 @@
+{
+  "applicationCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "sourceSha256": "9c5bf87df471f3a51fdcb851b20a4df3794fe7bcb3d3ba64ce4953e4c8eebe08",
+  "qaManifestSha256": "9ad595c015aef9796c77093c9c7bf8e889b3f268872b25c58e52acca04e8b6bd",
+  "immutableFilesVerified": 102,
+  "sourceFilesVerified": 1466,
+  "physicalDifferencesAllowed": "CRLF/LF only after individual content equality",
+  "checkedAt": "2026-10-09T17:43:37.716Z",
+  "decision": "ARTIFACT INTEGRITY VERIFIED; root still must review report/recipes/images and rerun, not a release gate alone"
+}

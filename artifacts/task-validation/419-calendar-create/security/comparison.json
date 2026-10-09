@@ -1,0 +1,29 @@
+{
+  "candidate": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "baseline": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "sourceScan": {
+    "critical": 0,
+    "high": 0,
+    "medium": 3,
+    "low": 0,
+    "total": 3
+  },
+  "identicalFindings": true,
+  "newSourceFindings": [],
+  "changedPathsFindings": [],
+  "dependencyManifestsUnchanged": [
+    "package.json",
+    "package-lock.json",
+    "frontend/package.json",
+    "backend/package.json"
+  ],
+  "globalScannerSummary": {
+    "critical": 3,
+    "high": 177,
+    "medium": 332,
+    "low": 0,
+    "total": 512
+  },
+  "globalScannerLimit": "Broad scan includes historical evidence and generic dependency warnings. Not claimed clean, not a validated CVE audit. No dependency changes in419; scoped actual application source compared byte-bound accepted baseline, three identical medium heuristic warnings outside all six changed paths. Root reviewed new diff AuthZ/input/XSS separately.",
+  "ownGeneratedReportsMovedOutOfApplicationSource": true
+}

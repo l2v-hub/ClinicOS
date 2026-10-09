@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync} from 'node:fs';
+const root='artifacts/task-validation/419-calendar-create',app='fa028c11ffe5dbfe514df8110e6ccf7f6b977602',branch='codex/bug-419-calendar-create';
+const read=p=>JSON.parse(readFileSync(root+'/'+p,'utf8'));
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20e6});assert.equal(r.status,0,'Protected proof action failed safely');return r.stdout.trim();};
+assert.equal(git(['rev-parse','HEAD']),app);assert.equal(git(['branch','--show-current']),branch);
+const ci=read('ci-comparison.json'),online=read('compiled-online/online-receipt.json'),deployment=read('deployment-receipt.json'),publication=read('publication-manifest.json');
+assert.deepEqual(ci.newFailureNames,[]);assert.equal(ci.frontendSecretScanConclusion,'success');assert.equal(online.cases,13);assert.equal(online.applicationCommit,app);assert.equal(deployment.applicationCommit,app);assert.equal(deployment.decision,'VERIFIED RELEASE');assert.equal(publication.applicationCommit,app);assert.equal(publication.originalIndependentManifestFrozen,true);
+assert.equal(spawnSync(process.execPath,['scripts/quality-gate/check-closure.js',root],{encoding:'utf8'}).status,0);
+assert.ok(git(['diff','--cached','--name-only']).split('\n').every(p=>p.startsWith(root+'/')));
+writeFileSync(root+'/proof-publication-policy.json',JSON.stringify({decision:'AUTHORIZED SOURCE-BOUND PROOF COMMIT AND PUSH',authority:'Direct human authorization; root release gate plus independent/re-run/compiled online/CI comparison passed',applicationCommit:app,branch,scope:root,artifacts:publication.files.length,configuredCredentialChecks:publication.secretChecks,expandedZipMembers:publication.zipEntriesChecked,productionPatientTestMutations:0,at:new Date().toISOString(),excluded:'No main proof promotion or application change, no primary/blocked source'},null,2));
+git(['add','-f','--',root+'/publication-manifest.json',root+'/proof-publication-policy.json']);
+git(['commit','-m','test(agenda): publish source-bound issue 419 acceptance evidence']);
+const proof=git(['rev-parse','HEAD']);git(['diff','--exit-code',app,proof,'--','frontend','backend','prisma','package.json','package-lock.json']);
+git(['push','origin','HEAD:refs/heads/'+branch]);assert.match(git(['ls-remote','origin','refs/heads/'+branch]),new RegExp('^'+proof));
+console.log(JSON.stringify({applicationCommit:app,proofCommit:proof,branch,decision:'PROOF BRANCH PUSH VERIFIED; GitHub screenshot/closure gates still required'}));

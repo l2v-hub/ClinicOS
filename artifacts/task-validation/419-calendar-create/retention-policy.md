@@ -1,0 +1,15 @@
+# #419 evidence retention and publication envelope
+
+All root preliminary outputs remain locally preserved. They are not final public proof: root-before, root-after1/2/3, root-initial, baseline-before (cold-load harness attempt). No failed attempt is relabelled passing.
+
+First root baseline reproduced both incompatible entrypoints and captured their PNGs, but guard failed because the fixture omitted the read-only /patients/parameters/page endpoint. First candidate run under root-before (default output routing mistake) has its distinct after-hours trace/guard and no authoritative before pass. root-after1 populated case used the wrong DTO keys and correctly failed. Correct DTO keys and endpoint interception are part of the final recipe. baseline-before cold-module load exceeded the initial five-second expectation; baseline-before2 uses an explicit 20-second expectation and passed the same original result and all guards.
+
+Root authoritative public proof: baseline-before2 screenshot/trace/video/report plus accepted-base source capture from baseline-before/source (unchanged clean d028 checkout); root-final pre-run recipe/source snapshot, commands, nine browser scenarios; root-rerun after independent QA; compiled online guarded verification; independent-qa419 verbatim immutable bundle including every original preliminary failed artifact disclosed in its seal. Root preliminary images were not overwritten: filenames/attempt directories differ. Original failed unflushed traces are not retroactively called complete traces.
+
+baseline-before2 recipe bytes will be captured as a post-run copy, explicitly not a pre-run snapshot; source binding comes from clean accepted d028 with before-source snapshot and no source edits. Final candidate recipe bytes/source were saved before its root-final execution. Each later independent/rerun/online attempt requires a fresh snapshot and distinct outputs. No archived .source file is executable test discovery.
+
+Only synthetic identities/patients intercepted before network. No original clinical photos, actual patient imports, provider credentials, dirty-primary source, blocked405/408/410/416 candidates or runtime caches are published. Proof Git staging is explicit paths, maximum blob/member100MB, binary equality and credential/expanded ZIP scan required. Independent local manifests are preserved byte-identically; canonical Git text LF/CRLF normalization is separately recorded, never confused with binary changes.
+
+Historical twelve frontend baseline failures and same backend CI failure are disclosed, not claimed green. No human hardware, sunlight, gloves or real screen-reader acceptance is claimed for the original #419 desktop-only criteria.
+
+The broad global security scan is retained locally as a diagnostic, excluded from public evidence because it traverses historical artifacts. Its 512 heuristic warnings are disclosed in the published comparison, not claimed clean or validated CVEs. Actual frontend source scans for accepted baseline and candidate plus the exact comparison are published.
