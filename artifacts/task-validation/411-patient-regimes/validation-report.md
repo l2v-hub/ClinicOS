@@ -64,7 +64,7 @@ Evidence export: Windows Git normalizes some text CRLF to LF. Initial byte-hash 
 
 12 unchanged baseline full-suite failures and7dependency findings not addressed by411. Mobile/grayscale are emulation, not real glare/AT/clinical-policy signoff. No clinical data persistence modified. Default state counts withheld for missing enrichment, loaded rendered identity count remains explicit. Pending405/408/410 excluded, not silently waived. Original medical/audit photos not published.
 
-GitHub Frontend Secret Scan37908237109 SUCCESS. Broad AI Import E2E Gate37908237127 still in progress at proof preparation (backend unit stage); no claim that this unrelated full pipeline passed. Prior accepted409 run37903586519 failed at backend unit stage;411 changes no backend, dependencies or pipeline. Required frontend types/build, scoped tests, regression-delta check, independent review, all original AC and production verification passed. This closure is scoped to411, not certification of the existing broad backend/import pipeline.
+GitHub Frontend Secret Scan37908237109 SUCCESS. Broad AI Import E2E Gate37908237127 FAILURE at backend unit stage, matching accepted409 run37903586519. Sanitized failed-test names compared: identical single failure "therapy reads and writes apply patient scope before loading clinical data",0new; ci-comparison.json. Downstream import/browser/provider stages skipped, not certified.411 changes no backend, dependencies or pipeline. Required frontend types/build, scoped tests, regression-delta check, independent review, all original AC and production verification passed. This closure is scoped to411, not certification of the existing broad backend/import pipeline.
 
 ## Final Decision
 

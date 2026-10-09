@@ -11,7 +11,7 @@ const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => {
   return e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`];
 });
 const metadata = ['task-contract.md', 'issue-source.md', 'architecture-review.md', 'baseline-red.md', 'implementation-receipt.md', 'independent-qa-report.md', 'validation-report.md', 'security-review.md', 'security-receipt.json', 'security-receipt.mjs', 'release-inspection.ps1', 'save-deployment-receipt.mjs', 'deployment-receipt.json', 'root-release-gate.mjs', 'release-gate-receipt.json', 'publication-final.mjs', 'qa-commands.mjs', 'qa-browser.mjs', 'qa-server.mjs', 'qa-source-receipt.mjs', 'qa-extra-rerun.mjs', 'qa-online.mjs'];
-const paths = [...new Set([...independent.files.map(f => f.path), `${root}/independent-qa/evidence-manifest.json`, ...walk(`${root}/root-rerun`), ...metadata.map(x => `${root}/${x}`)])].sort();
+const paths = [...new Set([...independent.files.map(f => f.path), `${root}/independent-qa/evidence-manifest.json`, `${root}/ci-comparison.json`, ...walk(`${root}/root-rerun`), ...metadata.map(x => `${root}/${x}`)])].sort();
 // Inspect ZIP members in memory only: no path extraction or filesystem writes.
 function zipMembers(bytes) {
   let end = -1;

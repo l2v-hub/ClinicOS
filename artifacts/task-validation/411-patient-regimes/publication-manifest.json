@@ -2,7 +2,7 @@
   "applicationCommit": "8b327ca55ab5d8d4c5e0c19afcb828c017eeb3df",
   "applicationSourceSha256": "d5c10518d55750fb19731dbfbbd03da4b52b0769f8d25b83bff07d99fe781580",
   "decision": "SOURCE-BOUND SYNTHETIC PROOF",
-  "secretChecks": 6915,
+  "secretChecks": 6918,
   "zipEntriesChecked": 2174,
   "originalIndependentManifestFrozen": true,
   "productionPatientTestMutations": 0,
@@ -25,6 +25,12 @@
       "path": "artifacts/task-validation/411-patient-regimes/baseline-red.md",
       "sha256": "c57de8bc4a1a77ab3489941d4026ae0c03592ac34b3617d3956d8bb6e2225518",
       "gitBlobSha256": "c57de8bc4a1a77ab3489941d4026ae0c03592ac34b3617d3956d8bb6e2225518",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/ci-comparison.json",
+      "sha256": "b15734164ea1213b3eb0e7794c45fd4ab8d83b2b9f8e5a78f6fce93d8e2c28a7",
+      "gitBlobSha256": "b15734164ea1213b3eb0e7794c45fd4ab8d83b2b9f8e5a78f6fce93d8e2c28a7",
       "exportNormalization": "none"
     },
     {
@@ -329,8 +335,8 @@
     },
     {
       "path": "artifacts/task-validation/411-patient-regimes/publication-final.mjs",
-      "sha256": "7a0d3435e17ca47989c88dee8b4d5989c6db234c8145273cb489da6afe1f5a20",
-      "gitBlobSha256": "7a0d3435e17ca47989c88dee8b4d5989c6db234c8145273cb489da6afe1f5a20",
+      "sha256": "85486a9fec31c2b6c3485220fbf5c2ebaa8fd9f91f0f52de577c6be4f243c9b2",
+      "gitBlobSha256": "85486a9fec31c2b6c3485220fbf5c2ebaa8fd9f91f0f52de577c6be4f243c9b2",
       "exportNormalization": "none"
     },
     {
@@ -797,8 +803,8 @@
     },
     {
       "path": "artifacts/task-validation/411-patient-regimes/validation-report.md",
-      "sha256": "fa339f1fa63baea439de7b2d65ae3bac68899ab0acd2d2a2d7670a57df97add7",
-      "gitBlobSha256": "fa339f1fa63baea439de7b2d65ae3bac68899ab0acd2d2a2d7670a57df97add7",
+      "sha256": "3fdc698c1e1bc1399fc9748b19bad787fa861423f60cc6d7d3bf039cd40d3652",
+      "gitBlobSha256": "3fdc698c1e1bc1399fc9748b19bad787fa861423f60cc6d7d3bf039cd40d3652",
       "exportNormalization": "none"
     }
   ],
