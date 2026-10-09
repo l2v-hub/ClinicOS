@@ -1,5 +1,19 @@
 # #409 root exact-source validation
 
+## Final Decision
+
+CLOSED — VERIFIED
+
+Formal closure receipt added after the verified deployment and GitHub closure at 2026-10-09T08:20:32Z. This evidence-only addendum changes no application source, reruns no QA, and preserves the original immutable proof commit 5c9f094fe62fa8deedf0c6b9fa7afd85022e87fd and its 92-file manifest at that commit. The manifest is not claimed to describe a later amended report.
+
+| Area | Test | Esito | Evidence |
+|---|---|---|---|
+| Frontend | fresh independent plus root focused15/browser12/types/build; zero new regression failures | PASS scoped | independent-qa-report.md; root-rerun/commands/command-results.json; root-rerun/test-results/browser-results.json |
+| Backend | isolated PostgreSQL12/12,57 migrations, types/build; provider migration applied | PASS | root-rerun; deployment-receipt.json |
+| Agnos | not modified | NA | application diff |
+| Security/privacy | credential and immutable artifact gates, synthetic screenshots HTTP200 | PASS scoped | publication-manifest.json at original proof5c9f; security-review.md |
+| Release | source47a Vercel READY/backend SUCCESS/health200; original AC1–4 satisfied | PASS | release-gate-receipt.json; deployment-receipt.json; GitHub409 comment6077214216 |
+
 Application: 47a4b16c111d9b9bfd0b138991958a8ca8f6c351; accepted baseline 973d78e5e109032a36cf89cf80fd8eb2a848a649. Source hash 3497659ff1207d2b6c2b222c2ed08a92bf63cc9341a33cf5795c06a14cf2eece, 1,437 tracked application/build inputs, identical before/after independent QA and root rerun. No untracked application overrides. Only this issue's app commit promoted; pending405/408 and dirty primary/launchers excluded.
 
 Root read the fresh independent report and checked its frozen 35-file evidence manifest. Root then reran commands, actual isolated PostgreSQL, Prisma validation/custom-output generation and actual guarded SPA browser tests, on exactly the same commit. Each run: focused15/15, realDB12/12, browser12/12; types/backend TypeScript emission/frontend TypeScript+Vite build/secret scan PASS. Full frontend1,189/1,177/12: the same12 accepted-baseline failures, zero new; no entirely-green regression claim. Backend emission does not generate shared Prisma client; temporary isolated generation separately validates new models and production provider build performs normal client generation.
