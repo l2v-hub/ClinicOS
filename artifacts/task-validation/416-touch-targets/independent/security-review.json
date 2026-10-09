@@ -1,0 +1,26 @@
+{
+  "applicationCommit": "a57cffe6337929f4021913d7b319a85e5feef9f8",
+  "reviewedFiles": [
+    "frontend/src/App.tsx",
+    "frontend/src/app-additions.css",
+    "frontend/src/compact-layout.css",
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/PatientList.css",
+    "frontend/src/components/operator/PatientList.tsx",
+    "frontend/src/components/operator/__tests__/touchTargets416.test.ts",
+    "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+    "frontend/src/design-system.css",
+    "frontend/src/lib/__tests__/patientRecordPrint.test.ts",
+    "frontend/src/lib/useBedsideTouchLayout.ts"
+  ],
+  "review": "All 12 full diff files manually inspected. Only visual target metrics/wrapping/text plus bounded ResizeObserver; no clinical scoring, API, auth, schema, dependency, log or HTML sink changes. Native unchanged event handlers, canonical blue/focus tokens. Print rule screen-only. No real patient data; guards before navigation, local synthetic fixtures only.",
+  "independentSecretScan": "commands/security-scan.log: source and newly built dist zero findings",
+  "broadScan": "Previously generated root/baseline scans independently compared; not rerun here; scanner output is not blanket security certification",
+  "broadFindings": 481,
+  "dependencyFindings": 7,
+  "unchangedDependencyFindings": true,
+  "touchedFindings": [],
+  "scanSha256": "946fc991a45c1f83276e9ac4a6de7d2b1ba2f03500406dc997820589a4be0085",
+  "priorScanSha256": "5817d4bfe27cdfb8df9677a78284e57e88d79f4a8b84c3de69bd8af83ed153cb"
+}

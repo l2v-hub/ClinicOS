@@ -1,0 +1,79 @@
+{
+  "records": [
+    {
+      "name": "frontend-types",
+      "exit": 0
+    },
+    {
+      "name": "backend-types",
+      "exit": 0
+    },
+    {
+      "name": "frontend-tsc-build",
+      "exit": 0
+    },
+    {
+      "name": "vite-build",
+      "exit": 0
+    },
+    {
+      "name": "focused",
+      "exit": 0,
+      "tests": 66,
+      "pass": 66,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "name": "catalog-ssr-with-vite-url-stub",
+      "exit": 0,
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "name": "security-scan",
+      "exit": 0
+    },
+    {
+      "name": "full-regression",
+      "exit": 1,
+      "tests": 1219,
+      "pass": 1207,
+      "fail": 12,
+      "skipped": 0,
+      "failures": [
+        "Assistant classic fallback with a known resident opens that resident section",
+        "a single parameters table is always visible and uses the operational table contract",
+        "multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+        "multi-patient parameters uses one bounded page instead of cartella fan-out",
+        "multi-patient quick entry exposes every action and field to assistive technology",
+        "multi-patient quick entry reuses the ClinicOS form and action design system",
+        "multi-patient refresh keeps the previous roster visible and announces progress",
+        "new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+        "only design-system.css decides how a canonical control looks",
+        "schedule reads are abortable, session-safe and retryable",
+        "src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+        "weekly and monthly views never repeat one-day therapy data across calendar cells"
+      ]
+    }
+  ],
+  "baselineProof": "82920e256904b8a967ecb343cc19add281f58ed0",
+  "baselineApplication": "0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+  "baselineFailures": [
+    "Assistant classic fallback with a known resident opens that resident section",
+    "a single parameters table is always visible and uses the operational table contract",
+    "multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+    "multi-patient parameters uses one bounded page instead of cartella fan-out",
+    "multi-patient quick entry exposes every action and field to assistive technology",
+    "multi-patient quick entry reuses the ClinicOS form and action design system",
+    "multi-patient refresh keeps the previous roster visible and announces progress",
+    "new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+    "only design-system.css decides how a canonical control looks",
+    "schedule reads are abortable, session-safe and retryable",
+    "src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+    "weekly and monthly views never repeat one-day therapy data across calendar cells"
+  ],
+  "newFailures": []
+}

@@ -1,0 +1,15 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const root='artifacts/task-validation/416-touch-targets',baseline='0d7adc361b92c8466655d9ed830d2b87bbd0f419';
+const candidate=JSON.parse(readFileSync('.claude/security-scans/scan-all-deep.json','utf8'));
+const prior=JSON.parse(readFileSync('C:/w-415/.claude/security-scans/scan-all-deep.json','utf8'));
+const findings=s=>s.issues??s.vulnerabilities??s.findings;
+const changed=spawnSync('git',['diff','--name-only',baseline,'HEAD','--','frontend/src'],{encoding:'utf8'}).stdout.trim().split('\n');
+const touched=findings(candidate).filter(f=>changed.includes(f.location.replaceAll('\\','/').split(':')[0]));
+assert.deepEqual(touched,[]);
+const deps=s=>findings(s).filter(f=>f.type==='Dependency CVE');assert.deepEqual(deps(candidate),deps(prior));
+assert.equal(spawnSync('git',['diff','--exit-code',baseline,'HEAD','--','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','backend/src','prisma','frontend/src/config.ts']).status,0);
+writeFileSync(root+'/security-receipt.json',JSON.stringify({applicationCommit:spawnSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim(),baseline,scanExit:1,tool:'ruflo security scan --depth full (resolved deep)',candidateScanSha256:createHash('sha256').update(readFileSync('.claude/security-scans/scan-all-deep.json')).digest('hex'),findings:findings(candidate).length,touchedFindings:touched,unchangedDependencyFindings:deps(candidate),newTouchedFindings:[],changedProductionPaths:changed,review:'Layout/control geometry and visible text only; bounded ResizeObserver writes a numeric CSS metric and cleans up, no new HTML sink/endpoint/auth/config/dependency/persistence rule. No clinical or hardware approval invented. Pre-existing broad security findings retained; not a clean security certification.'},null,2));
+console.log(JSON.stringify({findings:findings(candidate).length,touched:0,dependencyFindings:deps(candidate).length}));

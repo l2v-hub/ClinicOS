@@ -1,0 +1,16 @@
+(node:30340) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ catalog immediately exposes ten routes and new commands with a separate NRS history link (16.765ms)
+✔ metadata error is retryable rather than empty; own-only and local drafts remain reachable (10.2773ms)
+✔ legacy rows distinguish no compilation, unavailable dates and valid start dates (4.2721ms)
+✔ legacy new entry opens the existing form while the default remains history and no save is invoked (57.9399ms)
+(node:30340) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1714.9422

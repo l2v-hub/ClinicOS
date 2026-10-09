@@ -1,0 +1,648 @@
+[
+  {
+    "scope": "chart",
+    "undersized": [
+      {
+        "name": "Indietro: Sintetica, Persona",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-back"
+      },
+      {
+        "name": "Apri Milo, assistente clinico AI, a schermo intero",
+        "w": 80,
+        "h": 36,
+        "cls": "topbar-search topbar-assistant"
+      },
+      {
+        "name": "Cerca paziente, camera, codice fiscale",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-search"
+      },
+      {
+        "name": "Infermiere Sintetico, Infermiere: menu utente",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-avatar"
+      },
+      {
+        "name": "▴ Chiudi tutte le sezioni",
+        "w": 181.75,
+        "h": 36,
+        "cls": "btn-secondary btn-sm"
+      },
+      {
+        "name": "Panoramica",
+        "w": 99.640625,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Dati di ingresso",
+        "w": 124.21875,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Clinica1",
+        "w": 96.734375,
+        "h": 36,
+        "cls": "top-nav__item is-active"
+      },
+      {
+        "name": "Terapia",
+        "w": 72.03125,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Parametri",
+        "w": 86.859375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Moduli",
+        "w": 71.734375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Documenti",
+        "w": 95.859375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Dimissione",
+        "w": 95.375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Stampa la scheda",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-btn ds-btn--secondary ds-btn--collapsible"
+      },
+      {
+        "name": "Invio in Pronto Soccorso",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-btn ds-btn--secondary ds-btn--collapsible"
+      },
+      {
+        "name": "Codice fiscale",
+        "w": 102.53125,
+        "h": 36,
+        "cls": "ds-link"
+      },
+      {
+        "name": "Telefono",
+        "w": 70.625,
+        "h": 36,
+        "cls": "ds-link"
+      },
+      {
+        "name": "Comprimi Diagnosi / Lista Problemi",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      },
+      {
+        "name": "Modifica",
+        "w": 36,
+        "h": 36,
+        "cls": "icon-btn icon-btn--sm icon-btn--edit"
+      },
+      {
+        "name": "Elimina",
+        "w": 36,
+        "h": 36,
+        "cls": "icon-btn icon-btn--sm icon-btn--danger"
+      },
+      {
+        "name": "Comprimi Indicatori di Rischio",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      },
+      {
+        "name": "Comprimi Allergie e intolleranze",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "Presenti",
+        "w": 79.046875,
+        "h": 36,
+        "cls": "btn-sm btn-secondary"
+      },
+      {
+        "name": "Assenti",
+        "w": 73.796875,
+        "h": 36,
+        "cls": "btn-sm btn-secondary"
+      },
+      {
+        "name": "Paziente nega",
+        "w": 116.46875,
+        "h": 36,
+        "cls": "btn-sm btn-secondary"
+      },
+      {
+        "name": "Comprimi Anamnesi",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "Modifica",
+        "w": 71.78125,
+        "h": 36,
+        "cls": "clinical-card__edit btn-link"
+      },
+      {
+        "name": "Comprimi Patologie note e interventi pregressi",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn clinical-card__toggle"
+      },
+      {
+        "name": "Patologie note e interventi pregressi",
+        "w": 938,
+        "h": 27,
+        "cls": "inline-edit-block__value inline-edit__value"
+      },
+      {
+        "name": "Modifica",
+        "w": 71.78125,
+        "h": 36,
+        "cls": "clinical-card__edit btn-link"
+      },
+      {
+        "name": "Espandi Note aggiuntive",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn clinical-card__toggle"
+      },
+      {
+        "name": "Comprimi Esami ematici",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      },
+      {
+        "name": "Carica file",
+        "w": 116.171875,
+        "h": 36,
+        "cls": "btn-secondary btn-sm"
+      },
+      {
+        "name": "Scatta foto",
+        "w": 123.3125,
+        "h": 36,
+        "cls": "btn-secondary btn-sm"
+      },
+      {
+        "name": "Comprimi RX / Diagnostica per immagini",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      },
+      {
+        "name": "Carica file",
+        "w": 116.171875,
+        "h": 36,
+        "cls": "btn-secondary btn-sm"
+      },
+      {
+        "name": "Scatta foto",
+        "w": 123.3125,
+        "h": 36,
+        "cls": "btn-secondary btn-sm"
+      },
+      {
+        "name": "Comprimi Consulenze specialistiche",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      },
+      {
+        "name": "Carica file",
+        "w": 116.171875,
+        "h": 36,
+        "cls": "btn-secondary btn-sm"
+      },
+      {
+        "name": "Scatta foto",
+        "w": 123.3125,
+        "h": 36,
+        "cls": "btn-secondary btn-sm"
+      },
+      {
+        "name": "Comprimi Note Cliniche",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      },
+      {
+        "name": "Comprimi Storico Visite",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      },
+      {
+        "name": "Comprimi Consegne",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "+ Aggiungi",
+        "w": 99.9375,
+        "h": 36,
+        "cls": "btn-sm"
+      }
+    ]
+  },
+  {
+    "scope": "modules",
+    "undersized": [
+      {
+        "name": "Indietro: Sintetica, Persona · Diagnosi",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-back"
+      },
+      {
+        "name": "Apri Milo, assistente clinico AI, a schermo intero",
+        "w": 80,
+        "h": 36,
+        "cls": "topbar-search topbar-assistant"
+      },
+      {
+        "name": "Cerca paziente, camera, codice fiscale",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-search"
+      },
+      {
+        "name": "Infermiere Sintetico, Infermiere: menu utente",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-avatar"
+      },
+      {
+        "name": "Panoramica",
+        "w": 99.640625,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Dati di ingresso",
+        "w": 124.21875,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Clinica1",
+        "w": 95.359375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Terapia",
+        "w": 72.03125,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Parametri",
+        "w": 86.859375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Moduli",
+        "w": 73.234375,
+        "h": 36,
+        "cls": "top-nav__item is-active"
+      },
+      {
+        "name": "Documenti",
+        "w": 95.859375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Dimissione",
+        "w": 95.375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Stampa la scheda",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-btn ds-btn--secondary ds-btn--collapsible"
+      },
+      {
+        "name": "Invio in Pronto Soccorso",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-btn ds-btn--secondary ds-btn--collapsible"
+      },
+      {
+        "name": "Codice fiscale",
+        "w": 102.53125,
+        "h": 36,
+        "cls": "ds-link"
+      },
+      {
+        "name": "Telefono",
+        "w": 70.625,
+        "h": 36,
+        "cls": "ds-link"
+      }
+    ]
+  },
+  {
+    "scope": "workspace",
+    "undersized": [
+      {
+        "name": "Indietro: Sintetica, Persona · Moduli",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-back"
+      },
+      {
+        "name": "Apri Milo, assistente clinico AI, a schermo intero",
+        "w": 80,
+        "h": 36,
+        "cls": "topbar-search topbar-assistant"
+      },
+      {
+        "name": "Cerca paziente, camera, codice fiscale",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-search"
+      },
+      {
+        "name": "Infermiere Sintetico, Infermiere: menu utente",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-avatar"
+      },
+      {
+        "name": "Panoramica",
+        "w": 99.640625,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Dati di ingresso",
+        "w": 124.21875,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Clinica1",
+        "w": 95.359375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Terapia",
+        "w": 72.03125,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Parametri",
+        "w": 86.859375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Moduli",
+        "w": 73.234375,
+        "h": 36,
+        "cls": "top-nav__item is-active"
+      },
+      {
+        "name": "Documenti",
+        "w": 95.859375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Dimissione",
+        "w": 95.375,
+        "h": 36,
+        "cls": "top-nav__item"
+      },
+      {
+        "name": "Stampa la scheda",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-btn ds-btn--secondary ds-btn--collapsible"
+      },
+      {
+        "name": "Invio in Pronto Soccorso",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-btn ds-btn--secondary ds-btn--collapsible"
+      },
+      {
+        "name": "Codice fiscale",
+        "w": 102.53125,
+        "h": 36,
+        "cls": "ds-link"
+      },
+      {
+        "name": "Telefono",
+        "w": 70.625,
+        "h": 36,
+        "cls": "ds-link"
+      },
+      {
+        "name": "← Tutti i moduli",
+        "w": 128.53125,
+        "h": 36,
+        "cls": "btn-secondary btn-sm patient-module-return"
+      },
+      {
+        "name": "Comprimi Scala PAINAD",
+        "w": 36,
+        "h": 36,
+        "cls": "ds-icon-btn"
+      },
+      {
+        "name": "Nuova valutazione PAINAD",
+        "w": 40,
+        "h": 36,
+        "cls": "btn-primary assessment-catalog-icon"
+      },
+      {
+        "name": "TutteLe mie bozzeFinali",
+        "w": 234,
+        "h": 36,
+        "cls": "form-select"
+      },
+      {
+        "name": null,
+        "w": 234,
+        "h": 36,
+        "cls": "form-input"
+      },
+      {
+        "name": null,
+        "w": 234,
+        "h": 36,
+        "cls": "form-input"
+      },
+      {
+        "name": "Aggiorna storico",
+        "w": 234,
+        "h": 36,
+        "cls": "btn-secondary"
+      }
+    ]
+  },
+  {
+    "scope": "roster",
+    "undersized": [
+      {
+        "name": "Indietro: Sintetica, Persona · Scala PAINAD",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-back"
+      },
+      {
+        "name": "Apri Milo, assistente clinico AI, a schermo intero",
+        "w": 80,
+        "h": 36,
+        "cls": "topbar-search topbar-assistant"
+      },
+      {
+        "name": "Cerca paziente, camera, codice fiscale",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-search"
+      },
+      {
+        "name": "Infermiere Sintetico, Infermiere: menu utente",
+        "w": 36,
+        "h": 36,
+        "cls": "topbar-avatar"
+      },
+      {
+        "name": "Cerca paziente per nome o codice fiscale",
+        "w": 472.203125,
+        "h": 34,
+        "cls": "search-input"
+      },
+      {
+        "name": "Cancella",
+        "w": 26,
+        "h": 26,
+        "cls": "search-clear-btn"
+      },
+      {
+        "name": "Non dimessi",
+        "w": 104.734375,
+        "h": 36,
+        "cls": "ds-chip"
+      },
+      {
+        "name": "Dimessi e archivio",
+        "w": 138.921875,
+        "h": 36,
+        "cls": "ds-chip"
+      },
+      {
+        "name": "Tutti0",
+        "w": 88.578125,
+        "h": 36,
+        "cls": "ds-chip"
+      },
+      {
+        "name": "Filtri e ordine",
+        "w": 109.5625,
+        "h": 36,
+        "cls": "ds-chip"
+      },
+      {
+        "name": "Tutti i regimiRicoveratoDay HospitalAmbulatorialeDimessoNon disponibile",
+        "w": 220,
+        "h": 36,
+        "cls": "form-input"
+      },
+      {
+        "name": "Ordina per paziente in ordine decrescente",
+        "w": 273.90625,
+        "h": 36,
+        "cls": "ds-sort patient-roster__sort"
+      },
+      {
+        "name": "Ordina per regime in ordine crescente",
+        "w": 92.265625,
+        "h": 36,
+        "cls": "ds-sort patient-roster__sort"
+      },
+      {
+        "name": "Ordina per segnalazioni in ordine crescente",
+        "w": 251.3125,
+        "h": 36,
+        "cls": "ds-sort patient-roster__sort"
+      }
+    ]
+  }
+]
+
+EXIT 0

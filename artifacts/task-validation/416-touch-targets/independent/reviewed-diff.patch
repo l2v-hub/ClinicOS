@@ -1,0 +1,283 @@
+diff --git a/frontend/src/App.tsx b/frontend/src/App.tsx
+index 5d65d1a2..83c2f8dc 100644
+--- a/frontend/src/App.tsx
++++ b/frontend/src/App.tsx
+@@ -16,6 +16,7 @@ import './App.css';
+ import './design-system.css';
+ import { API_URL } from './config';
+ import { useRosterOrder } from './lib/useRosterOrder';
++import { useBedsideTouchLayout } from './lib/useBedsideTouchLayout';
+ import {
+   createConsegna,
+   type ConsegnaCreateRequest,
+@@ -457,6 +458,7 @@ export default function App() {
+   const [loginPending, setLoginPending] = useState(false);
+   const [loginError, setLoginError] = useState<string | null>(null);
+   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
++  useBedsideTouchLayout(navKey, Boolean(utente));
+   const [toastMsg, setToastMsg] = useState<string | null>(null);
+   const [aiOpen, setAiOpen] = useState(false);
+   const [assistantModeOpen, setAssistantModeOpen] = useState(false);
+diff --git a/frontend/src/app-additions.css b/frontend/src/app-additions.css
+index a8059a7e..9a25f934 100644
+--- a/frontend/src/app-additions.css
++++ b/frontend/src/app-additions.css
+@@ -10712,6 +10712,7 @@ textarea.form-input {
+    contenuto), azioni Stampa e Invio in PS a destra. */
+ .chart-sections {
+   display: flex;
++  flex-wrap: wrap;
+   align-items: center;
+   gap: 8px;
+   margin: 0 0 24px;
+@@ -10722,10 +10723,17 @@ textarea.form-input {
+ }
+ .chart-sections__actions {
+   display: flex;
++  flex-wrap: wrap;
+   gap: 8px;
+   flex: none;
+   margin-left: auto;
+ }
++.patient-record-view .inline-edit-block__value {
++  margin: 0;
++}
++.patient-record-view .inline-edit__actions {
++  gap: 8px;
++}
+ 
+ @media (max-width: 1023px) {
+   .chart-sections {
+diff --git a/frontend/src/compact-layout.css b/frontend/src/compact-layout.css
+index f933eb2b..d8ee2f4d 100644
+--- a/frontend/src/compact-layout.css
++++ b/frontend/src/compact-layout.css
+@@ -137,3 +137,10 @@
+     font-size: var(--ds-control-font);
+   }
+ }
++/* The mobile topbar can wrap: native focus/scroll must clear its measured height. */
++@media screen and (max-width: 1023px) {
++  .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view))
++    main :is(button, input, select, textarea, [tabindex]):not(#ds) {
++    scroll-margin-block-start: calc(var(--ds-topbar-occlusion, var(--topbar-h, 64px)) + 16px);
++  }
++}
+diff --git a/frontend/src/components/operator/PatientDetail.tsx b/frontend/src/components/operator/PatientDetail.tsx
+index 06c5efb8..80516bd6 100644
+--- a/frontend/src/components/operator/PatientDetail.tsx
++++ b/frontend/src/components/operator/PatientDetail.tsx
+@@ -2774,7 +2774,7 @@ export function PatientDetail({
+         <div className="chart-sections__actions">
+           <button
+             type="button"
+-            className="ds-btn ds-btn--secondary ds-btn--collapsible"
++            className="ds-btn ds-btn--secondary"
+             onClick={() => setShowPrintDialog(true)}
+             title="Stampa la scheda"
+             aria-label="Stampa la scheda"
+@@ -2786,7 +2786,7 @@ export function PatientDetail({
+           </button>
+           <button
+             type="button"
+-            className="ds-btn ds-btn--secondary ds-btn--collapsible"
++            className="ds-btn ds-btn--secondary"
+             onClick={() => setShowInvioPS(true)}
+             title="Invio in Pronto Soccorso"
+             aria-label="Invio in Pronto Soccorso"
+diff --git a/frontend/src/components/operator/PatientList.css b/frontend/src/components/operator/PatientList.css
+index 99312f15..adbdda3d 100644
+--- a/frontend/src/components/operator/PatientList.css
++++ b/frontend/src/components/operator/PatientList.css
+@@ -238,6 +238,9 @@
+ }
+ 
+ /* apri/elimina: ds-icon-btn canonici (design-system.css) */
++td.patient-roster__actions > button + button {
++  margin-inline-start: 8px;
++}
+ 
+ .patient-roster__empty {
+   height: 88px;
+diff --git a/frontend/src/components/operator/PatientList.tsx b/frontend/src/components/operator/PatientList.tsx
+index 93a4bfe1..f2f9bc95 100644
+--- a/frontend/src/components/operator/PatientList.tsx
++++ b/frontend/src/components/operator/PatientList.tsx
+@@ -393,7 +393,7 @@ export function PatientList({
+             />
+             {ricerca && (
+               <button
+-                className="search-clear-btn"
++                className="ds-icon-btn search-clear-btn"
+                 onClick={() => {
+                   setVista(vistaPrimaDellaRicerca ?? 'in_carico');
+                   setVistaPrimaDellaRicerca(null);
+diff --git a/frontend/src/components/operator/__tests__/touchTargets416.test.ts b/frontend/src/components/operator/__tests__/touchTargets416.test.ts
+new file mode 100644
+index 00000000..0cc313b2
+--- /dev/null
++++ b/frontend/src/components/operator/__tests__/touchTargets416.test.ts
+@@ -0,0 +1,34 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {readFileSync} from 'node:fs';
++const read=(file:string)=>readFileSync(new URL(`../../../${file}`,import.meta.url),'utf8');
++test('416 uses a screen-only bedside control token, not a blanket WCAG failure',()=>{
++  const css=read('design-system.css');
++  assert.match(css,/@media screen\s*\{[\s\S]*?\.main-area-clean:has\(> main > :is\(\.patient-list-view, \.patient-record-view, \.rooms-view\)\)[\s\S]*?--ds-control-h: 44px/);
++  assert.match(css,/@media print[\s\S]*?--ds-control-h: 48px/);
++  assert.match(css,/bedside design goal.*not.*WCAG/i);
++});
++test('416 keeps shared icon controls from shrinking and search targets separate',()=>{
++  const css=read('design-system.css');
++  assert.match(css,/:is\(\.ds-icon-btn, \.icon-btn\):not\(#ds\)[\s\S]*?flex-shrink: 0/);
++  assert.match(css,/\.patient-list-view \.search-clear-btn:not\(#ds\)[\s\S]*?position: static/);
++  assert.match(read('components/operator/PatientList.tsx'),/className="ds-icon-btn search-clear-btn"/);
++  assert.match(read('components/operator/PatientList.css'),/td\.patient-roster__actions > button \+ button\s*\{\s*margin-inline-start: 8px/);
++});
++test('416 main chart and assessment actions have visible text, unchanged handlers',()=>{
++  const workspace=read('components/operator/assessments/AssessmentWorkspace.tsx');
++  assert.doesNotMatch(workspace,/assessment-catalog-icon/);
++  assert.match(workspace,/onClick=\{\(\) => create\(\)\}>[\s\S]*?Nuova compilazione/);
++  const chart=read('components/operator/PatientDetail.tsx');
++  assert.doesNotMatch(chart,/ds-btn--collapsible/);
++  assert.match(chart,/onClick=\{\(\) => setShowPrintDialog\(true\)\}/);
++  assert.match(chart,/onClick=\{\(\) => setShowInvioPS\(true\)\}/);
++});
++test('416 mobile controls clear the actual wrapping header without changing navigation',()=>{
++  const hook=read('lib/useBedsideTouchLayout.ts');
++  assert.match(hook,/new ResizeObserver\(measure\)/);
++  assert.match(hook,/header.getBoundingClientRect\(\).height/);
++  assert.match(hook,/observer.disconnect\(\)/);
++  assert.doesNotMatch(hook,/fetch\(|setNavKey|setSessionCapabilities/);
++  assert.match(read('compact-layout.css'),/scroll-margin-block-start: calc\(var\(--ds-topbar-occlusion/);
++});
+diff --git a/frontend/src/components/operator/assessments/AssessmentCatalog.css b/frontend/src/components/operator/assessments/AssessmentCatalog.css
+index be235832..4f505fa9 100644
+--- a/frontend/src/components/operator/assessments/AssessmentCatalog.css
++++ b/frontend/src/components/operator/assessments/AssessmentCatalog.css
+@@ -22,7 +22,6 @@
+ .nrs-legacy dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+ .nrs-legacy-note { white-space: pre-wrap; overflow-wrap: anywhere; }
+ .nrs-print-surface { display: none; }
+-.assessment-catalog-icon { width:40px; height:40px; min-width:40px; min-height:40px; padding:0; display:grid; place-items:center; font-size:24px; }
+ .assessment-draft-chip { padding:2px 8px; border-radius:20px; width:fit-content; background:var(--amber-bg,#fdf3e2); color:#8a5300; font-size:12px; }
+ @media (max-width: 900px) { .assessment-catalog-row { align-items:flex-start; flex-direction:column; } .assessment-catalog-actions { display:flex; } }
+ @media (max-width: 768px) {
+diff --git a/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx b/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx
+index 06b50c4b..004cdacf 100644
+--- a/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx
++++ b/frontend/src/components/operator/assessments/AssessmentWorkspace.tsx
+@@ -285,8 +285,8 @@ function AssessmentSession({
+         title={definition.title}
+         actions={
+           canCreate && (
+-            <button type="button" className="btn-primary assessment-catalog-icon" aria-label={type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'} title="Nuova compilazione" onClick={() => create()}>
+-              <span aria-hidden="true">＋</span>
++            <button type="button" className="btn-primary" aria-label={type === 'painad' ? 'Nuova valutazione PAINAD' : 'Nuova compilazione'} title="Nuova compilazione" onClick={() => create()}>
++              Nuova compilazione
+             </button>
+           )
+         }
+diff --git a/frontend/src/design-system.css b/frontend/src/design-system.css
+index b2aa28a0..5f40d4d7 100644
+--- a/frontend/src/design-system.css
++++ b/frontend/src/design-system.css
+@@ -61,6 +61,50 @@
+     --ds-field-font: 16px;
+   }
+ }
++/* 44px is a contextual bedside design goal, not a blanket WCAG AA failure rule.
++   The ancestor also contains the portal topbar: patient/room controls inherit
++   one canonical token. Other routes and printed forms keep their metrics. */
++@media screen {
++  .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view)) {
++    --ds-control-h: 44px;
++  }
++  .main-area-clean:has(> main > :is(.patient-list-view, .patient-record-view, .rooms-view))
++    .compact-topbar button:focus-visible {
++    outline: var(--ds-focus);
++    outline-offset: 2px;
++  }
++  .patient-list-view .search-wrap:not(#ds) {
++    height: calc(var(--ds-control-h) + 2px);
++    gap: 8px;
++    padding-inline-end: 4px;
++  }
++  .patient-list-view .search-wrap:not(#ds) .search-input {
++    flex: 1;
++    min-width: 0;
++    width: 0;
++    padding-inline-end: 4px;
++  }
++  .patient-list-view .search-input:not(#ds):focus-visible {
++    outline: var(--ds-focus);
++    outline-offset: -3px;
++  }
++  .patient-list-view .search-clear-btn:not(#ds) {
++    position: static;
++  }
++  .patient-record-view :is(.inline-edit__value, .inline-edit-row, .inline-edit__btn):not(#ds) {
++    min-height: var(--ds-control-h);
++    min-width: var(--ds-control-h);
++  }
++  .patient-record-view .inline-edit__btn:not(#ds) {
++    width: var(--ds-control-h);
++    height: var(--ds-control-h);
++    flex-shrink: 0;
++  }
++  .patient-record-view :is(.inline-edit__value, .inline-edit-row, .inline-edit__btn):not(#ds):focus-visible {
++    outline: var(--ds-focus);
++    outline-offset: 2px;
++  }
++}
+ /* Print layouts keep the pre-existing field metrics. */
+ @media print {
+   :root {
+@@ -281,6 +325,7 @@
+ /* ── Pulsante icona ───────────────────────────────────────────────────────────────────────── */
+ :is(.ds-icon-btn, .icon-btn):not(#ds) {
+   box-sizing: border-box;
++  flex-shrink: 0;
+   width: var(--ds-control-h);
+   height: var(--ds-control-h);
+   min-width: var(--ds-control-h);
+diff --git a/frontend/src/lib/__tests__/patientRecordPrint.test.ts b/frontend/src/lib/__tests__/patientRecordPrint.test.ts
+index 46ae31af..4bdc3730 100644
+--- a/frontend/src/lib/__tests__/patientRecordPrint.test.ts
++++ b/frontend/src/lib/__tests__/patientRecordPrint.test.ts
+@@ -36,7 +36,7 @@ test('global patient print always opens the selective dialog instead of printing
+   assert.doesNotMatch(detail, /window\.print\(\)/);
+   assert.match(
+     detail,
+-    /className="ds-btn ds-btn--secondary ds-btn--collapsible"\s+onClick=\{\(\) => setShowPrintDialog\(true\)\}/,
++    /className="ds-btn ds-btn--secondary"\s+onClick=\{\(\) => setShowPrintDialog\(true\)\}/,
+   );
+   assert.match(detail, /<PatientRecordPrintDialog/);
+ });
+diff --git a/frontend/src/lib/useBedsideTouchLayout.ts b/frontend/src/lib/useBedsideTouchLayout.ts
+new file mode 100644
+index 00000000..d4499b5d
+--- /dev/null
++++ b/frontend/src/lib/useBedsideTouchLayout.ts
+@@ -0,0 +1,20 @@
++import {useEffect} from 'react';
++import type {NavKey} from '../types';
++
++/** Layout-only measurement: never changes identity, navigation or control handlers. */
++export function useBedsideTouchLayout(route: NavKey, authenticated: boolean) {
++  useEffect(() => {
++    if (!authenticated || !['pazienti', 'dettaglio-paziente', 'posti-letto'].includes(route)) return;
++    const root = document.querySelector<HTMLElement>('.main-area-clean');
++    const header = root?.querySelector<HTMLElement>('.compact-topbar');
++    if (!root || !header) return;
++    const measure = () => root.style.setProperty('--ds-topbar-occlusion', `${header.getBoundingClientRect().height}px`);
++    measure();
++    const observer = new ResizeObserver(measure);
++    observer.observe(header);
++    return () => {
++      observer.disconnect();
++      root.style.removeProperty('--ds-topbar-occlusion');
++    };
++  }, [route, authenticated]);
++}

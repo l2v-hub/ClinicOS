@@ -1,0 +1,13 @@
+{
+  "command": "C:\\Program Files\\nodejs\\node.exe",
+  "args": [
+    "node_modules/tsx/dist/cli.mjs",
+    "artifacts/task-validation/416-touch-targets/independent/independent-browser.mjs",
+    "artifacts/task-validation/416-touch-targets/independent/browser-second"
+  ],
+  "cwd": "C:\\w-416-qa",
+  "envOverrides": {
+    "TSX_TSCONFIG_PATH": "C:/w-416-qa/frontend/tsconfig.app.json"
+  },
+  "boundary": "Synthetic intercepted local SPA; originalAC3 real hardware unverified"
+}

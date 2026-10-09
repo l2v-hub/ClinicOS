@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const qa='C:/w-416-qa',server='C:/w-416',out=`${qa}/artifacts/task-validation/416-touch-targets/independent`;
+const a=JSON.parse(readFileSync(`${out}/before/source-receipt.json`)),b=JSON.parse(readFileSync(`${out}/server-before/source-receipt.json`));
+assert.equal(a.applicationCommit,b.applicationCommit);assert.equal(a.files.length,b.files.length);
+const sha=x=>createHash('sha256').update(x).digest('hex');
+const files=a.files.map(x=>{const y=b.files.find(y=>y.path===x.path);assert.ok(y);const q=readFileSync(`${qa}/${x.path}`),s=readFileSync(`${server}/${x.path}`);assert.equal(sha(q),x.sha256);assert.equal(sha(s),y.sha256);const normalize=t=>t.toString('utf8').replaceAll('\r\n','\n');const git=spawnSync('git',['show',`${a.applicationCommit}:${x.path}`],{cwd:qa,maxBuffer:20*1024*1024});assert.equal(git.status,0);if(!q.equals(s))assert.equal(normalize(q),normalize(s));assert.equal(normalize(q),normalize(git.stdout));return{path:x.path,qaPhysical:x.sha256,serverPhysical:y.sha256,canonicalBlobSha256:sha(git.stdout),mapping:q.equals(s)?'byte-identical':'CRLF/LF-only'};});
+writeFileSync(`${out}/source-mapping.json`,JSON.stringify({commit:a.applicationCommit,qaPhysicalSourceSha256:a.sourceSha256,serverPhysicalSourceSha256:b.sourceSha256,inputs:files.length,lineEndingOnly:files.filter(f=>f.mapping!=='byte-identical').length,allCanonicalBlobsEqual:true,files},null,2));console.log(`Canonical mapping: ${files.length} exact git inputs; ${files.filter(f=>f.mapping!=='byte-identical').length} line-ending-only differences`);

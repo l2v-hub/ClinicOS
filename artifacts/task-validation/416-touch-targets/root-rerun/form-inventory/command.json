@@ -1,0 +1,11 @@
+{
+  "cwd": "C:/w-416-qa",
+  "args": [
+    "node_modules/tsx/dist/cli.mjs",
+    "C:/w-416-qa/artifacts/task-validation/416-touch-targets/independent/form-inventory-browser.mjs",
+    "C:/w-416/artifacts/task-validation/416-touch-targets/root-rerun/form-inventory"
+  ],
+  "QA_BASE_URL": "http://127.0.0.1:7478",
+  "TSX_TSCONFIG_PATH": "C:/w-416-qa/frontend/tsconfig.app.json",
+  "physicalTouch": "UNVERIFIED"
+}

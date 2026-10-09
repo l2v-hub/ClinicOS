@@ -1,0 +1,69 @@
+{
+  "applicationCommit": "a57cffe6337929f4021913d7b319a85e5feef9f8",
+  "baseline": "0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+  "scanExit": 1,
+  "tool": "ruflo security scan --depth full (resolved deep)",
+  "candidateScanSha256": "946fc991a45c1f83276e9ac4a6de7d2b1ba2f03500406dc997820589a4be0085",
+  "findings": 481,
+  "touchedFindings": [],
+  "unchangedDependencyFindings": [
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:braces",
+      "description": "braces vulnerable to stack-exhausti"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:concurrently",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:lint-staged",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:micromatch",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:proxy-addr",
+      "description": "proxy-addr vulnerable to IP spoofin"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:shell-quote",
+      "description": "shell-quote: `quote()` command inje"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:source-map-js",
+      "description": "source-map-js allows event-loop den"
+    }
+  ],
+  "newTouchedFindings": [],
+  "changedProductionPaths": [
+    "frontend/src/App.tsx",
+    "frontend/src/app-additions.css",
+    "frontend/src/compact-layout.css",
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/PatientList.css",
+    "frontend/src/components/operator/PatientList.tsx",
+    "frontend/src/components/operator/__tests__/touchTargets416.test.ts",
+    "frontend/src/components/operator/assessments/AssessmentCatalog.css",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+    "frontend/src/design-system.css",
+    "frontend/src/lib/__tests__/patientRecordPrint.test.ts",
+    "frontend/src/lib/useBedsideTouchLayout.ts"
+  ],
+  "review": "Layout/control geometry and visible text only; bounded ResizeObserver writes a numeric CSS metric and cleans up, no new HTML sink/endpoint/auth/config/dependency/persistence rule. No clinical or hardware approval invented. Pre-existing broad security findings retained; not a clean security certification."
+}

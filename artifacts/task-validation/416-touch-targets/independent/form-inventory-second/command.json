@@ -1,0 +1,14 @@
+{
+  "command": "C:\\Program Files\\nodejs\\node.exe",
+  "args": [
+    "node_modules/tsx/dist/cli.mjs",
+    "artifacts/task-validation/416-touch-targets/independent/form-inventory-browser.mjs",
+    "artifacts/task-validation/416-touch-targets/independent/form-inventory-second"
+  ],
+  "cwd": "C:\\w-416-qa",
+  "envOverrides": {
+    "TSX_TSCONFIG_PATH": "C:/w-416-qa/frontend/tsconfig.app.json",
+    "QA_BASE_URL": "http://127.0.0.1:7478"
+  },
+  "boundary": "Synthetic intercepted local SPA; originalAC3 real hardware unverified"
+}

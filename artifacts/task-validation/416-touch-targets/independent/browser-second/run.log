@@ -1,0 +1,24 @@
+PASS nurse-1150:roster independent bounds and clear via keyboard
+PASS nurse-1150:chart toolbar navigation inline cancel and print
+PASS nurse-1150:catalog purpose native creation and draft-history-reload
+PASS nurse-1280:roster independent bounds and clear via keyboard
+PASS nurse-1280:chart toolbar navigation inline cancel and print
+PASS nurse-1280:catalog purpose native creation and draft-history-reload
+PASS nurse-390-coarse:roster independent bounds and clear via keyboard
+PASS nurse-390-coarse:chart toolbar navigation inline cancel and print
+PASS nurse-390-coarse:catalog purpose native creation and draft-history-reload
+PASS nurse-1280-coarse:roster independent bounds and clear via keyboard
+PASS nurse-1280-coarse:chart toolbar navigation inline cancel and print
+PASS nurse-1280-coarse:catalog purpose native creation and draft-history-reload
+PASS supervisor-1150:roster independent bounds and clear via keyboard
+PASS supervisor-1150:chart toolbar navigation inline cancel and print
+PASS supervisor-1150:catalog purpose native creation and draft-history-reload
+PASS supervisor-1150:rooms edit bed dialog native escape
+PASS supervisor-1280:roster independent bounds and clear via keyboard
+PASS supervisor-1280:chart toolbar navigation inline cancel and print
+PASS supervisor-1280:catalog purpose native creation and draft-history-reload
+PASS supervisor-1280:rooms edit bed dialog native escape
+PASS supervisor-390-coarse:roster independent bounds and clear via keyboard
+PASS supervisor-390-coarse:chart toolbar navigation inline cancel and print
+PASS supervisor-390-coarse:catalog purpose native creation and draft-history-reload
+PASS supervisor-390-coarse:rooms edit bed dialog native escape

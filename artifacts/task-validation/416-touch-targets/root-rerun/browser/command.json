@@ -1,0 +1,11 @@
+{
+  "cwd": "C:/w-416",
+  "args": [
+    "node_modules/tsx/dist/cli.mjs",
+    "C:/w-416/artifacts/task-validation/416-touch-targets/qa-browser-416.mjs",
+    "C:/w-416/artifacts/task-validation/416-touch-targets/root-rerun/browser"
+  ],
+  "QA_BASE_URL": "http://127.0.0.1:7478",
+  "TSX_TSCONFIG_PATH": "C:/w-416/frontend/tsconfig.app.json",
+  "physicalTouch": "UNVERIFIED"
+}

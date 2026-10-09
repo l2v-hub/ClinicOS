@@ -1,0 +1,13 @@
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const out='artifacts/task-validation/416-touch-targets/independent',baseline='0d7adc361b92c8466655d9ed830d2b87bbd0f419';
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20*1024*1024});assert.equal(r.status,0);return r.stdout;};
+const diff=git(['diff',baseline,'HEAD']);writeFileSync(`${out}/reviewed-diff.patch`,diff);
+const changed=git(['diff','--name-only',baseline,'HEAD']).trim().split('\n');assert.equal(changed.length,12);assert.ok(changed.every(p=>p.startsWith('frontend/src/')));
+assert.equal(git(['diff',baseline,'HEAD','--','backend','prisma','frontend/src/config.ts','frontend/src/lib/capabilities.ts','frontend/src/lib/assessments','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json']).trim(),'');
+const scanPath='C:/w-416/.claude/security-scans/scan-all-deep.json',priorPath='C:/w-415/.claude/security-scans/scan-all-deep.json';
+const scan=JSON.parse(readFileSync(scanPath)),prior=JSON.parse(readFileSync(priorPath));const findings=s=>s.issues??s.vulnerabilities??s.findings;const deps=s=>findings(s).filter(f=>f.type==='Dependency CVE');
+assert.deepEqual(deps(scan),deps(prior));const touched=findings(scan).filter(f=>changed.includes(f.location.replaceAll('\\','/').split(':')[0]));assert.deepEqual(touched,[]);
+writeFileSync(`${out}/security-review.json`,JSON.stringify({applicationCommit:git(['rev-parse','HEAD']).trim(),reviewedFiles:changed,review:'All 12 full diff files manually inspected. Only visual target metrics/wrapping/text plus bounded ResizeObserver; no clinical scoring, API, auth, schema, dependency, log or HTML sink changes. Native unchanged event handlers, canonical blue/focus tokens. Print rule screen-only. No real patient data; guards before navigation, local synthetic fixtures only.',independentSecretScan:'commands/security-scan.log: source and newly built dist zero findings',broadScan:'Previously generated root/baseline scans independently compared; not rerun here; scanner output is not blanket security certification',broadFindings:findings(scan).length,dependencyFindings:deps(scan).length,unchangedDependencyFindings:true,touchedFindings:touched,scanSha256:createHash('sha256').update(readFileSync(scanPath)).digest('hex'),priorScanSha256:createHash('sha256').update(readFileSync(priorPath)).digest('hex')},null,2));console.log('Independent full diff/scoped security review: 12files; broad481/7deps unchanged0touched');

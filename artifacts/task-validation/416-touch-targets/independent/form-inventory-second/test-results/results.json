@@ -1,0 +1,159 @@
+{
+  "geometry": [
+    {
+      "mobile": false,
+      "name": "← Tutti i moduli",
+      "w": 128.53125,
+      "h": 44,
+      "class": "btn-secondary btn-sm patient-module-return"
+    },
+    {
+      "mobile": false,
+      "name": "Comprimi Scala PAINAD",
+      "w": 44,
+      "h": 44,
+      "class": "ds-icon-btn"
+    },
+    {
+      "mobile": false,
+      "name": "Nuova valutazione PAINAD",
+      "w": 157.828125,
+      "h": 44,
+      "class": "btn-primary"
+    },
+    {
+      "mobile": false,
+      "name": "Salva bozza",
+      "w": 101.71875,
+      "h": 44,
+      "class": "btn-secondary"
+    },
+    {
+      "mobile": false,
+      "name": "Salva e verifica anteprima",
+      "w": 190.265625,
+      "h": 44,
+      "class": "btn-primary"
+    },
+    {
+      "mobile": false,
+      "name": "Chiudi · conserva compilazione",
+      "w": 196.71875,
+      "h": 44,
+      "class": "link-btn"
+    },
+    {
+      "mobile": false,
+      "name": "Elimina bozza locale",
+      "w": 127.90625,
+      "h": 44,
+      "class": "link-btn"
+    },
+    {
+      "mobile": false,
+      "name": "TutteLe mie bozzeFinali",
+      "w": 234,
+      "h": 44,
+      "class": "form-select"
+    },
+    {
+      "mobile": false,
+      "name": "",
+      "w": 234,
+      "h": 44,
+      "class": "form-input"
+    },
+    {
+      "mobile": false,
+      "name": "",
+      "w": 234,
+      "h": 44,
+      "class": "form-input"
+    },
+    {
+      "mobile": false,
+      "name": "Aggiorna storico",
+      "w": 234,
+      "h": 44,
+      "class": "btn-secondary"
+    },
+    {
+      "mobile": true,
+      "name": "← Tutti i moduli",
+      "w": 128.53125,
+      "h": 44,
+      "class": "btn-secondary btn-sm patient-module-return"
+    },
+    {
+      "mobile": true,
+      "name": "Comprimi Scala PAINAD",
+      "w": 44,
+      "h": 44,
+      "class": "ds-icon-btn"
+    },
+    {
+      "mobile": true,
+      "name": "Nuova valutazione PAINAD",
+      "w": 157.828125,
+      "h": 44,
+      "class": "btn-primary"
+    },
+    {
+      "mobile": true,
+      "name": "Salva bozza",
+      "w": 103.734375,
+      "h": 44,
+      "class": "btn-secondary"
+    },
+    {
+      "mobile": true,
+      "name": "Salva e verifica anteprima",
+      "w": 190.265625,
+      "h": 44,
+      "class": "btn-primary"
+    },
+    {
+      "mobile": true,
+      "name": "Chiudi · conserva compilazione",
+      "w": 324,
+      "h": 44,
+      "class": "link-btn"
+    },
+    {
+      "mobile": true,
+      "name": "Elimina bozza locale",
+      "w": 324,
+      "h": 44,
+      "class": "link-btn"
+    },
+    {
+      "mobile": true,
+      "name": "TutteLe mie bozzeFinali",
+      "w": 324,
+      "h": 44,
+      "class": "form-select"
+    },
+    {
+      "mobile": true,
+      "name": "",
+      "w": 324,
+      "h": 44,
+      "class": "form-input"
+    },
+    {
+      "mobile": true,
+      "name": "",
+      "w": 324,
+      "h": 44,
+      "class": "form-input"
+    },
+    {
+      "mobile": true,
+      "name": "Aggiorna storico",
+      "w": 324,
+      "h": 44,
+      "class": "btn-secondary"
+    }
+  ],
+  "verdict": "PASS focused PAINAD workspace non-choice fields/buttons; unchanged radio dimensions excluded; hardwareAC3unverified"
+}

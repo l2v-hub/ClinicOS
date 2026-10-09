@@ -1,0 +1,3992 @@
+{
+  "message": "expect(locator).toBeVisible() failed\n\nLocator: locator('.patient-list-view,.patient-record-view').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 5000ms\n  - waiting for locator('.patient-list-view,.patient-record-view').first()\n",
+  "outcomes": [
+    {
+      "name": "nurse-1150:roster independent bounds and clear via keyboard",
+      "status": "PASS"
+    },
+    {
+      "name": "nurse-1150:chart toolbar navigation inline cancel and print",
+      "status": "PASS"
+    }
+  ],
+  "geometry": [
+    {
+      "label": "nurse-1150:roster",
+      "name": "Cerca paziente per nome o codice fiscale",
+      "class": "search-input",
+      "w": 352.203125,
+      "h": 44,
+      "x": 146,
+      "y": 114,
+      "right": 498.203125,
+      "bottom": 158,
+      "hits": [
+        {
+          "x": 148,
+          "y": 136,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 496.203125,
+          "y": 136,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 322.1015625,
+          "y": 116,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 322.1015625,
+          "y": 156,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 322.1015625,
+          "y": 136,
+          "inside": true,
+          "hit": "INPUT"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:roster",
+      "name": "Cancella",
+      "class": "ds-icon-btn search-clear-btn",
+      "w": 44,
+      "h": 44,
+      "x": 506.203125,
+      "y": 114,
+      "right": 550.203125,
+      "bottom": 158,
+      "hits": [
+        {
+          "x": 508.203125,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 548.203125,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 528.203125,
+          "y": 116,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 528.203125,
+          "y": 156,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 528.203125,
+          "y": 136,
+          "inside": true,
+          "hit": "line"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:roster",
+      "name": "Non dimessi1",
+      "class": "ds-chip",
+      "w": 136.734375,
+      "h": 44,
+      "x": 571.203125,
+      "y": 114,
+      "right": 707.9375,
+      "bottom": 158,
+      "hits": [
+        {
+          "x": 573.203125,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 705.9375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 639.5703125,
+          "y": 116,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 639.5703125,
+          "y": 156,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 639.5703125,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:roster",
+      "name": "Dimessi e archivio0",
+      "class": "ds-chip",
+      "w": 170.921875,
+      "h": 44,
+      "x": 715.9375,
+      "y": 114,
+      "right": 886.859375,
+      "bottom": 158,
+      "hits": [
+        {
+          "x": 717.9375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 884.859375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 801.3984375,
+          "y": 116,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 801.3984375,
+          "y": 156,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 801.3984375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:roster",
+      "name": "Tutti1",
+      "class": "ds-chip",
+      "w": 88.578125,
+      "h": 44,
+      "x": 894.859375,
+      "y": 114,
+      "right": 983.4375,
+      "bottom": 158,
+      "hits": [
+        {
+          "x": 896.859375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 981.4375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 939.1484375,
+          "y": 116,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 939.1484375,
+          "y": 156,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 939.1484375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:roster",
+      "name": "Filtri e ordine",
+      "class": "ds-chip",
+      "w": 109.5625,
+      "h": 44,
+      "x": 991.4375,
+      "y": 114,
+      "right": 1101,
+      "bottom": 158,
+      "hits": [
+        {
+          "x": 993.4375,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1099,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1046.21875,
+          "y": 116,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1046.21875,
+          "y": 156,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1046.21875,
+          "y": 136,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:roster",
+      "name": "Elimina Persona Sintetica",
+      "class": "ds-icon-btn ds-icon-btn--danger patient-roster__delete",
+      "w": 44,
+      "h": 44,
+      "x": 997,
+      "y": 382.03125,
+      "right": 1041,
+      "bottom": 426.03125,
+      "hits": [
+        {
+          "x": 999,
+          "y": 404.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1039,
+          "y": 404.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1019,
+          "y": 384.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1019,
+          "y": 424.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1019,
+          "y": 404.03125,
+          "inside": true,
+          "hit": "svg"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:roster",
+      "name": "Apri cartella di Persona Sintetica",
+      "class": "ds-icon-btn patient-roster__open",
+      "w": 44,
+      "h": 44,
+      "x": 1049,
+      "y": 382.03125,
+      "right": 1093,
+      "bottom": 426.03125,
+      "hits": [
+        {
+          "x": 1051,
+          "y": 404.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1091,
+          "y": 404.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1071,
+          "y": 384.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1071,
+          "y": 424.03125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1071,
+          "y": 404.03125,
+          "inside": true,
+          "hit": "svg"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:open/delete",
+      "nonoverlap": true,
+      "boxes": [
+        {
+          "name": "Elimina Persona Sintetica",
+          "x": 997,
+          "y": 382.03125,
+          "right": 1041,
+          "bottom": 426.03125
+        },
+        {
+          "name": "Apri cartella di Persona Sintetica",
+          "x": 1049,
+          "y": 382.03125,
+          "right": 1093,
+          "bottom": 426.03125
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:search-clear",
+      "nonoverlap": true,
+      "boxes": [
+        {
+          "name": "Cerca paziente per nome o codice fiscale",
+          "x": 146,
+          "y": 114,
+          "right": 498.203125,
+          "bottom": 158
+        },
+        {
+          "name": "Cancella",
+          "x": 506.203125,
+          "y": 114,
+          "right": 550.203125,
+          "bottom": 158
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Indietro: Sintetica, Persona",
+      "class": "topbar-back",
+      "w": 44,
+      "h": 44,
+      "x": 112,
+      "y": 9.5,
+      "right": 156,
+      "bottom": 53.5,
+      "hits": [
+        {
+          "x": 114,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 154,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 134,
+          "y": 11.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 134,
+          "y": 51.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 134,
+          "y": 31.5,
+          "inside": true,
+          "hit": "svg"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Apri Milo, assistente clinico AI, a schermo intero",
+      "class": "topbar-search topbar-assistant",
+      "w": 80,
+      "h": 44,
+      "x": 942,
+      "y": 9.5,
+      "right": 1022,
+      "bottom": 53.5,
+      "hits": [
+        {
+          "x": 944,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1020,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 982,
+          "y": 11.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 982,
+          "y": 51.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 982,
+          "y": 31.5,
+          "inside": true,
+          "hit": "SPAN"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Cerca paziente, camera, codice fiscale",
+      "class": "topbar-search",
+      "w": 44,
+      "h": 44,
+      "x": 1034,
+      "y": 9.5,
+      "right": 1078,
+      "bottom": 53.5,
+      "hits": [
+        {
+          "x": 1036,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1076,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1056,
+          "y": 11.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1056,
+          "y": 51.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1056,
+          "y": 31.5,
+          "inside": true,
+          "hit": "svg"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Infermiere Sintetico, Infermiere: menu utente",
+      "class": "topbar-avatar",
+      "w": 44,
+      "h": 44,
+      "x": 1090,
+      "y": 9.5,
+      "right": 1134,
+      "bottom": 53.5,
+      "hits": [
+        {
+          "x": 1092,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1132,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1112,
+          "y": 11.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1112,
+          "y": 51.5,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1112,
+          "y": 31.5,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Panoramica",
+      "class": "top-nav__item",
+      "w": 99.640625,
+      "h": 44,
+      "x": 120,
+      "y": 138,
+      "right": 219.640625,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 122,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 217.640625,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 169.8203125,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 169.8203125,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 169.8203125,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Dati di ingresso",
+      "class": "top-nav__item",
+      "w": 124.21875,
+      "h": 44,
+      "x": 225.640625,
+      "y": 138,
+      "right": 349.859375,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 227.640625,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 347.859375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 287.75,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 287.75,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 287.75,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Clinica1",
+      "class": "top-nav__item is-active",
+      "w": 96.734375,
+      "h": 44,
+      "x": 355.859375,
+      "y": 138,
+      "right": 452.59375,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 357.859375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 450.59375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 404.2265625,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 404.2265625,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 404.2265625,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Terapia",
+      "class": "top-nav__item",
+      "w": 72.03125,
+      "h": 44,
+      "x": 458.59375,
+      "y": 138,
+      "right": 530.625,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 460.59375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 528.625,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 494.609375,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 494.609375,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 494.609375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Parametri",
+      "class": "top-nav__item",
+      "w": 86.859375,
+      "h": 44,
+      "x": 536.625,
+      "y": 138,
+      "right": 623.484375,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 538.625,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 621.484375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 580.0546875,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 580.0546875,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 580.0546875,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Moduli",
+      "class": "top-nav__item",
+      "w": 71.734375,
+      "h": 44,
+      "x": 629.484375,
+      "y": 138,
+      "right": 701.21875,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 631.484375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 699.21875,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 665.3515625,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 665.3515625,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 665.3515625,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Documenti",
+      "class": "top-nav__item",
+      "w": 95.859375,
+      "h": 44,
+      "x": 707.21875,
+      "y": 138,
+      "right": 803.078125,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 709.21875,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 801.078125,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 755.1484375,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 755.1484375,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 755.1484375,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Dimissione",
+      "class": "top-nav__item",
+      "w": 95.375,
+      "h": 44,
+      "x": 809.078125,
+      "y": 138,
+      "right": 904.453125,
+      "bottom": 182,
+      "hits": [
+        {
+          "x": 811.078125,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 902.453125,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 856.765625,
+          "y": 140,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 856.765625,
+          "y": 180,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 856.765625,
+          "y": 160,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Stampa la scheda",
+      "class": "ds-btn ds-btn--secondary",
+      "w": 101.578125,
+      "h": 44,
+      "x": 895.71875,
+      "y": 196,
+      "right": 997.296875,
+      "bottom": 240,
+      "hits": [
+        {
+          "x": 897.71875,
+          "y": 218,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 995.296875,
+          "y": 218,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 946.5078125,
+          "y": 198,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 946.5078125,
+          "y": 238,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 946.5078125,
+          "y": 218,
+          "inside": true,
+          "hit": "SPAN"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Invio in Pronto Soccorso",
+      "class": "ds-btn ds-btn--secondary",
+      "w": 120.703125,
+      "h": 44,
+      "x": 1005.296875,
+      "y": 196,
+      "right": 1126,
+      "bottom": 240,
+      "hits": [
+        {
+          "x": 1007.296875,
+          "y": 218,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1124,
+          "y": 218,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1065.6484375,
+          "y": 198,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1065.6484375,
+          "y": 238,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1065.6484375,
+          "y": 218,
+          "inside": true,
+          "hit": "SPAN"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Codice fiscale",
+      "class": "ds-link",
+      "w": 102.53125,
+      "h": 44,
+      "x": 443.4375,
+      "y": 298,
+      "right": 545.96875,
+      "bottom": 342,
+      "hits": [
+        {
+          "x": 445.4375,
+          "y": 320,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 543.96875,
+          "y": 320,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 494.703125,
+          "y": 300,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 494.703125,
+          "y": 340,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 494.703125,
+          "y": 320,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Telefono",
+      "class": "ds-link",
+      "w": 70.625,
+      "h": 44,
+      "x": 557.96875,
+      "y": 298,
+      "right": 628.59375,
+      "bottom": 342,
+      "hits": [
+        {
+          "x": 559.96875,
+          "y": 320,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 626.59375,
+          "y": 320,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 593.28125,
+          "y": 300,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 593.28125,
+          "y": 340,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 593.28125,
+          "y": 320,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:chart",
+      "name": "Patologie note e interventi pregressi",
+      "class": "inline-edit-block__value inline-edit__value",
+      "w": 938,
+      "h": 44,
+      "x": 154,
+      "y": 633.140625,
+      "right": 1092,
+      "bottom": 677.140625,
+      "hits": [
+        {
+          "x": 156,
+          "y": 655.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1090,
+          "y": 655.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 623,
+          "y": 635.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 623,
+          "y": 675.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 623,
+          "y": 655.140625,
+          "inside": true,
+          "hit": "SPAN"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:print-PS",
+      "nonoverlap": true,
+      "boxes": [
+        {
+          "name": "Stampa la scheda",
+          "x": 895.71875,
+          "y": 136,
+          "right": 997.296875,
+          "bottom": 180
+        },
+        {
+          "name": "Invio in Pronto Soccorso",
+          "x": 1005.296875,
+          "y": 136,
+          "right": 1126,
+          "bottom": 180
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:inline-actions",
+      "name": "Salva",
+      "class": "inline-edit__btn inline-edit__btn--save",
+      "w": 44,
+      "h": 44,
+      "x": 996,
+      "y": 788.140625,
+      "right": 1040,
+      "bottom": 832.140625,
+      "hits": [
+        {
+          "x": 998,
+          "y": 810.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1038,
+          "y": 810.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1018,
+          "y": 790.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1018,
+          "y": 830.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1018,
+          "y": 810.140625,
+          "inside": true,
+          "hit": "svg"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:inline-actions",
+      "name": "Annulla",
+      "class": "inline-edit__btn inline-edit__btn--cancel",
+      "w": 44,
+      "h": 44,
+      "x": 1048,
+      "y": 788.140625,
+      "right": 1092,
+      "bottom": 832.140625,
+      "hits": [
+        {
+          "x": 1050,
+          "y": 810.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1090,
+          "y": 810.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1070,
+          "y": 790.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1070,
+          "y": 830.140625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1070,
+          "y": 810.140625,
+          "inside": true,
+          "hit": "line"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:inline-save-cancel",
+      "nonoverlap": true,
+      "boxes": [
+        {
+          "name": "Salva",
+          "x": 996,
+          "y": 788.140625,
+          "right": 1040,
+          "bottom": 832.140625
+        },
+        {
+          "name": "Annulla",
+          "x": 1048,
+          "y": 788.140625,
+          "right": 1092,
+          "bottom": 832.140625
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:print-dialog",
+      "name": "Chiudi stampa",
+      "class": "icon-btn",
+      "w": 44,
+      "h": 44,
+      "x": 806,
+      "y": 237.96875,
+      "right": 850,
+      "bottom": 281.96875,
+      "hits": [
+        {
+          "x": 808,
+          "y": 259.96875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 848,
+          "y": 259.96875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 828,
+          "y": 239.96875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 828,
+          "y": 279.96875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 828,
+          "y": 259.96875,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:print-dialog",
+      "name": "Annulla",
+      "class": "btn-secondary",
+      "w": 76.53125,
+      "h": 44,
+      "x": 625.359375,
+      "y": 728.015625,
+      "right": 701.890625,
+      "bottom": 772.015625,
+      "hits": [
+        {
+          "x": 627.359375,
+          "y": 750.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 699.890625,
+          "y": 750.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 663.625,
+          "y": 730.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 663.625,
+          "y": 770.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 663.625,
+          "y": 750.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:print-dialog",
+      "name": "Stampa selezione",
+      "class": "btn-primary",
+      "w": 138.109375,
+      "h": 44,
+      "x": 711.890625,
+      "y": 728.015625,
+      "right": 850,
+      "bottom": 772.015625,
+      "hits": [
+        {
+          "x": 713.890625,
+          "y": 750.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 848,
+          "y": 750.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 780.9453125,
+          "y": 730.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 780.9453125,
+          "y": 770.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 780.9453125,
+          "y": 750.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico Medicazioni",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 365.46875,
+      "right": 1024.484375,
+      "bottom": 409.46875,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 387.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 387.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 367.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 407.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 387.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila Medicazioni",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 365.46875,
+      "right": 1113,
+      "bottom": 409.46875,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 387.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 387.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 367.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 407.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 387.46875,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico Contenzioni",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 466.9375,
+      "right": 1024.484375,
+      "bottom": 510.9375,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 488.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 488.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 468.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 508.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 488.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila Contenzioni",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 466.9375,
+      "right": 1113,
+      "bottom": 510.9375,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 488.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 488.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 468.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 508.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 488.9375,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico Trasferimenti posturali",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 568.40625,
+      "right": 1024.484375,
+      "bottom": 612.40625,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 590.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 590.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 570.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 610.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 590.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila Trasferimenti posturali",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 568.40625,
+      "right": 1113,
+      "bottom": 612.40625,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 590.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 590.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 570.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 610.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 590.40625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico Braden",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 713.609375,
+      "right": 1024.484375,
+      "bottom": 757.609375,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 735.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 735.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 715.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 755.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 735.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila Braden",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 713.609375,
+      "right": 1113,
+      "bottom": 757.609375,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 735.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 735.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 715.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 755.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 735.609375,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico PAINAD",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 815.078125,
+      "right": 1024.484375,
+      "bottom": 859.078125,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 837.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 837.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 817.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 857.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 837.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila PAINAD",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 815.078125,
+      "right": 1113,
+      "bottom": 859.078125,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 837.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 837.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 817.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 857.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 837.078125,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico Tinetti",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 916.546875,
+      "right": 1024.484375,
+      "bottom": 960.546875,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 938.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 938.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 918.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 958.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 938.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila Tinetti",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 916.546875,
+      "right": 1113,
+      "bottom": 960.546875,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 938.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 938.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 918.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 958.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 938.546875,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico MNA®-SF",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 633.015625,
+      "right": 1024.484375,
+      "bottom": 677.015625,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 655.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 655.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 635.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 675.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 655.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila MNA®-SF",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 633.015625,
+      "right": 1113,
+      "bottom": 677.015625,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 655.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 655.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 635.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 675.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 655.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico GDS-15",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 734.484375,
+      "right": 1024.484375,
+      "bottom": 778.484375,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 756.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 756.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 736.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 776.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 756.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila GDS-15",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 734.484375,
+      "right": 1113,
+      "bottom": 778.484375,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 756.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 756.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 736.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 776.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 756.484375,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico Indice di Barthel",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 835.953125,
+      "right": 1024.484375,
+      "bottom": 879.953125,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 857.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 857.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 837.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 877.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 857.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila Indice di Barthel",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 835.953125,
+      "right": 1113,
+      "bottom": 879.953125,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 857.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 857.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 837.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 877.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 857.953125,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico UCLA · Sonno-veglia (NPI)",
+      "class": "btn-secondary assessment-catalog-action",
+      "w": 72.34375,
+      "h": 44,
+      "x": 952.140625,
+      "y": 937.421875,
+      "right": 1024.484375,
+      "bottom": 981.421875,
+      "hits": [
+        {
+          "x": 954.140625,
+          "y": 959.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1022.484375,
+          "y": 959.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 939.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 979.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 988.3125,
+          "y": 959.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Compila UCLA · Sonno-veglia (NPI)",
+      "class": "btn-primary assessment-catalog-action",
+      "w": 80.515625,
+      "h": 44,
+      "x": 1032.484375,
+      "y": 937.421875,
+      "right": 1113,
+      "bottom": 981.421875,
+      "hits": [
+        {
+          "x": 1034.484375,
+          "y": 959.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 959.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 939.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 979.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1072.7421875,
+          "y": 959.421875,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog",
+      "name": "Storico NRS precedente",
+      "class": "btn-ghost",
+      "w": 1006,
+      "h": 44,
+      "x": 120,
+      "y": 944.15625,
+      "right": 1126,
+      "bottom": 988.15625,
+      "hits": [
+        {
+          "x": 122,
+          "y": 966.15625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1124,
+          "y": 966.15625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 623,
+          "y": 946.15625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 623,
+          "y": 986.15625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 623,
+          "y": 966.15625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:catalog-actions",
+      "nonoverlap": true,
+      "boxes": [
+        {
+          "name": "Storico Medicazioni",
+          "x": 952.140625,
+          "y": -99.53125,
+          "right": 1024.484375,
+          "bottom": -55.53125
+        },
+        {
+          "name": "Compila Medicazioni",
+          "x": 1032.484375,
+          "y": -99.53125,
+          "right": 1113,
+          "bottom": -55.53125
+        },
+        {
+          "name": "Storico Contenzioni",
+          "x": 952.140625,
+          "y": 1.9375,
+          "right": 1024.484375,
+          "bottom": 45.9375
+        },
+        {
+          "name": "Compila Contenzioni",
+          "x": 1032.484375,
+          "y": 1.9375,
+          "right": 1113,
+          "bottom": 45.9375
+        },
+        {
+          "name": "Storico Trasferimenti posturali",
+          "x": 952.140625,
+          "y": 103.40625,
+          "right": 1024.484375,
+          "bottom": 147.40625
+        },
+        {
+          "name": "Compila Trasferimenti posturali",
+          "x": 1032.484375,
+          "y": 103.40625,
+          "right": 1113,
+          "bottom": 147.40625
+        },
+        {
+          "name": "Storico Braden",
+          "x": 952.140625,
+          "y": 248.609375,
+          "right": 1024.484375,
+          "bottom": 292.609375
+        },
+        {
+          "name": "Compila Braden",
+          "x": 1032.484375,
+          "y": 248.609375,
+          "right": 1113,
+          "bottom": 292.609375
+        },
+        {
+          "name": "Storico PAINAD",
+          "x": 952.140625,
+          "y": 350.078125,
+          "right": 1024.484375,
+          "bottom": 394.078125
+        },
+        {
+          "name": "Compila PAINAD",
+          "x": 1032.484375,
+          "y": 350.078125,
+          "right": 1113,
+          "bottom": 394.078125
+        },
+        {
+          "name": "Storico Tinetti",
+          "x": 952.140625,
+          "y": 451.546875,
+          "right": 1024.484375,
+          "bottom": 495.546875
+        },
+        {
+          "name": "Compila Tinetti",
+          "x": 1032.484375,
+          "y": 451.546875,
+          "right": 1113,
+          "bottom": 495.546875
+        },
+        {
+          "name": "Storico MNA®-SF",
+          "x": 952.140625,
+          "y": 553.015625,
+          "right": 1024.484375,
+          "bottom": 597.015625
+        },
+        {
+          "name": "Compila MNA®-SF",
+          "x": 1032.484375,
+          "y": 553.015625,
+          "right": 1113,
+          "bottom": 597.015625
+        },
+        {
+          "name": "Storico GDS-15",
+          "x": 952.140625,
+          "y": 654.484375,
+          "right": 1024.484375,
+          "bottom": 698.484375
+        },
+        {
+          "name": "Compila GDS-15",
+          "x": 1032.484375,
+          "y": 654.484375,
+          "right": 1113,
+          "bottom": 698.484375
+        },
+        {
+          "name": "Storico Indice di Barthel",
+          "x": 952.140625,
+          "y": 755.953125,
+          "right": 1024.484375,
+          "bottom": 799.953125
+        },
+        {
+          "name": "Compila Indice di Barthel",
+          "x": 1032.484375,
+          "y": 755.953125,
+          "right": 1113,
+          "bottom": 799.953125
+        },
+        {
+          "name": "Storico UCLA · Sonno-veglia (NPI)",
+          "x": 952.140625,
+          "y": 857.421875,
+          "right": 1024.484375,
+          "bottom": 901.421875
+        },
+        {
+          "name": "Compila UCLA · Sonno-veglia (NPI)",
+          "x": 1032.484375,
+          "y": 857.421875,
+          "right": 1113,
+          "bottom": 901.421875
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:workspace",
+      "name": "← Tutti i moduli",
+      "class": "btn-secondary btn-sm patient-module-return",
+      "w": 128.53125,
+      "h": 44,
+      "x": 120,
+      "y": 307,
+      "right": 248.53125,
+      "bottom": 351,
+      "hits": [
+        {
+          "x": 122,
+          "y": 329,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 246.53125,
+          "y": 329,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 184.265625,
+          "y": 309,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 184.265625,
+          "y": 349,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 184.265625,
+          "y": 329,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:workspace",
+      "name": "Comprimi Scala PAINAD",
+      "class": "ds-icon-btn",
+      "w": 44,
+      "h": 44,
+      "x": 133,
+      "y": 388,
+      "right": 177,
+      "bottom": 432,
+      "hits": [
+        {
+          "x": 135,
+          "y": 410,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 175,
+          "y": 410,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 155,
+          "y": 390,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 155,
+          "y": 430,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 155,
+          "y": 410,
+          "inside": true,
+          "hit": "SPAN"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:workspace",
+      "name": "Nuova valutazione PAINAD",
+      "class": "btn-primary",
+      "w": 157.828125,
+      "h": 44,
+      "x": 955.171875,
+      "y": 388,
+      "right": 1113,
+      "bottom": 432,
+      "hits": [
+        {
+          "x": 957.171875,
+          "y": 410,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1111,
+          "y": 410,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1034.0859375,
+          "y": 390,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1034.0859375,
+          "y": 430,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1034.0859375,
+          "y": 410,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:workspace",
+      "name": "TutteLe mie bozzeFinali",
+      "class": "form-select",
+      "w": 234,
+      "h": 44,
+      "x": 137,
+      "y": 623.015625,
+      "right": 371,
+      "bottom": 667.015625,
+      "hits": [
+        {
+          "x": 139,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "SELECT"
+        },
+        {
+          "x": 369,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "SELECT"
+        },
+        {
+          "x": 254,
+          "y": 625.015625,
+          "inside": true,
+          "hit": "SELECT"
+        },
+        {
+          "x": 254,
+          "y": 665.015625,
+          "inside": true,
+          "hit": "SELECT"
+        },
+        {
+          "x": 254,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "SELECT"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:workspace",
+      "name": "",
+      "class": "form-input",
+      "w": 234,
+      "h": 44,
+      "x": 383,
+      "y": 623.015625,
+      "right": 617,
+      "bottom": 667.015625,
+      "hits": [
+        {
+          "x": 385,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 615,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 500,
+          "y": 625.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 500,
+          "y": 665.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 500,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "INPUT"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:workspace",
+      "name": "",
+      "class": "form-input",
+      "w": 234,
+      "h": 44,
+      "x": 629,
+      "y": 623.015625,
+      "right": 863,
+      "bottom": 667.015625,
+      "hits": [
+        {
+          "x": 631,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 861,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 746,
+          "y": 625.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 746,
+          "y": 665.015625,
+          "inside": true,
+          "hit": "INPUT"
+        },
+        {
+          "x": 746,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "INPUT"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:workspace",
+      "name": "Aggiorna storico",
+      "class": "btn-secondary",
+      "w": 234,
+      "h": 44,
+      "x": 875,
+      "y": 623.015625,
+      "right": 1109,
+      "bottom": 667.015625,
+      "hits": [
+        {
+          "x": 877,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 1107,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 992,
+          "y": 625.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 992,
+          "y": 665.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        },
+        {
+          "x": 992,
+          "y": 645.015625,
+          "inside": true,
+          "hit": "BUTTON"
+        }
+      ]
+    },
+    {
+      "label": "nurse-1150:unchanged-radio",
+      "width": 26,
+      "height": 26,
+      "scope": "Unchanged whole-cell native choice; not operator-validated equivalent44"
+    }
+  ],
+  "focus": [
+    {
+      "label": "nurse-1150:roster:Cerca paziente per nome o codice fiscale",
+      "name": "Cerca paziente per nome o codice fiscale",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 114,
+      "bottom": 158,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:roster:Cancella",
+      "name": "Cancella",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 114,
+      "bottom": 158,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:roster:Non dimessi1",
+      "name": "Non dimessi1",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 114,
+      "bottom": 158,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:roster:Dimessi e archivio0",
+      "name": "Dimessi e archivio0",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 114,
+      "bottom": 158,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:roster:Tutti1",
+      "name": "Tutti1",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 114,
+      "bottom": 158,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:roster:Filtri e ordine",
+      "name": "Filtri e ordine",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 114,
+      "bottom": 158,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:roster:Elimina Persona Sintetica",
+      "name": "Elimina Persona Sintetica",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 382.03125,
+      "bottom": 426.03125,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:roster:Apri cartella di Persona Sintetica",
+      "name": "Apri cartella di Persona Sintetica",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 382.03125,
+      "bottom": 426.03125,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:clear",
+      "name": "Cancella",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 114,
+      "bottom": 158,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Indietro: Sintetica, Persona",
+      "name": "Indietro: Sintetica, Persona",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 9.5,
+      "bottom": 53.5,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": true,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Apri Milo, assistente clinico AI, a schermo intero",
+      "name": "Apri Milo, assistente clinico AI, a schermo intero",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 9.5,
+      "bottom": 53.5,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": true,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Cerca paziente, camera, codice fiscale",
+      "name": "Cerca paziente, camera, codice fiscale",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 9.5,
+      "bottom": 53.5,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": true,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Infermiere Sintetico, Infermiere: menu utente",
+      "name": "Infermiere Sintetico, Infermiere: menu utente",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 9.5,
+      "bottom": 53.5,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": true,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Panoramica",
+      "name": "Panoramica",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": -1,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Dati di ingresso",
+      "name": "Dati di ingresso",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": -1,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Clinica1",
+      "name": "Clinica1",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Terapia",
+      "name": "Terapia",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": -1,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Parametri",
+      "name": "Parametri",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": -1,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Moduli",
+      "name": "Moduli",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": -1,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Documenti",
+      "name": "Documenti",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": -1,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Dimissione",
+      "name": "Dimissione",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 138,
+      "bottom": 182,
+      "headerBottom": 64,
+      "tabIndex": -1,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Stampa la scheda",
+      "name": "Stampa la scheda",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 196,
+      "bottom": 240,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Invio in Pronto Soccorso",
+      "name": "Invio in Pronto Soccorso",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 196,
+      "bottom": 240,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Codice fiscale",
+      "name": "Codice fiscale",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 298,
+      "bottom": 342,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Telefono",
+      "name": "Telefono",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 238,
+      "bottom": 282,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:chart:Patologie note e interventi pregressi",
+      "name": "Patologie note e interventi pregressi",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 633.140625,
+      "bottom": 677.140625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:inline",
+      "name": "Patologie note e interventi pregressi",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 693.140625,
+      "bottom": 737.140625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:inline-actions:Salva",
+      "name": "Salva",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 788.140625,
+      "bottom": 832.140625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:inline-actions:Annulla",
+      "name": "Annulla",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 788.140625,
+      "bottom": 832.140625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:print",
+      "name": "Stampa la scheda",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 196,
+      "bottom": 240,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:print-dialog:Chiudi stampa",
+      "name": "Chiudi stampa",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 237.96875,
+      "bottom": 281.96875,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:print-dialog:Annulla",
+      "name": "Annulla",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 728.015625,
+      "bottom": 772.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:print-dialog:Stampa selezione",
+      "name": "Stampa selezione",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 728.015625,
+      "bottom": 772.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico Medicazioni",
+      "name": "Storico Medicazioni",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 365.46875,
+      "bottom": 409.46875,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila Medicazioni",
+      "name": "Compila Medicazioni",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 365.46875,
+      "bottom": 409.46875,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico Contenzioni",
+      "name": "Storico Contenzioni",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 466.9375,
+      "bottom": 510.9375,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila Contenzioni",
+      "name": "Compila Contenzioni",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 466.9375,
+      "bottom": 510.9375,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico Trasferimenti posturali",
+      "name": "Storico Trasferimenti posturali",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 568.40625,
+      "bottom": 612.40625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila Trasferimenti posturali",
+      "name": "Compila Trasferimenti posturali",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 568.40625,
+      "bottom": 612.40625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico Braden",
+      "name": "Storico Braden",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 713.609375,
+      "bottom": 757.609375,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila Braden",
+      "name": "Compila Braden",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 713.609375,
+      "bottom": 757.609375,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico PAINAD",
+      "name": "Storico PAINAD",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 815.078125,
+      "bottom": 859.078125,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila PAINAD",
+      "name": "Compila PAINAD",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 815.078125,
+      "bottom": 859.078125,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico Tinetti",
+      "name": "Storico Tinetti",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 916.546875,
+      "bottom": 960.546875,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila Tinetti",
+      "name": "Compila Tinetti",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 531.546875,
+      "bottom": 575.546875,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico MNA®-SF",
+      "name": "Storico MNA®-SF",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 633.015625,
+      "bottom": 677.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila MNA®-SF",
+      "name": "Compila MNA®-SF",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 633.015625,
+      "bottom": 677.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico GDS-15",
+      "name": "Storico GDS-15",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 734.484375,
+      "bottom": 778.484375,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila GDS-15",
+      "name": "Compila GDS-15",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 734.484375,
+      "bottom": 778.484375,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico Indice di Barthel",
+      "name": "Storico Indice di Barthel",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 835.953125,
+      "bottom": 879.953125,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila Indice di Barthel",
+      "name": "Compila Indice di Barthel",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 835.953125,
+      "bottom": 879.953125,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico UCLA · Sonno-veglia (NPI)",
+      "name": "Storico UCLA · Sonno-veglia (NPI)",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 937.421875,
+      "bottom": 981.421875,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Compila UCLA · Sonno-veglia (NPI)",
+      "name": "Compila UCLA · Sonno-veglia (NPI)",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 857.421875,
+      "bottom": 901.421875,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:catalog:Storico NRS precedente",
+      "name": "Storico NRS precedente",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 944.15625,
+      "bottom": 988.15625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:workspace:← Tutti i moduli",
+      "name": "← Tutti i moduli",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 307,
+      "bottom": 351,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "0px"
+    },
+    {
+      "label": "nurse-1150:workspace:Comprimi Scala PAINAD",
+      "name": "Comprimi Scala PAINAD",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 388,
+      "bottom": 432,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "130px"
+    },
+    {
+      "label": "nurse-1150:workspace:Nuova valutazione PAINAD",
+      "name": "Nuova valutazione PAINAD",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 388,
+      "bottom": 432,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "130px"
+    },
+    {
+      "label": "nurse-1150:workspace:TutteLe mie bozzeFinali",
+      "name": "TutteLe mie bozzeFinali",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 623.015625,
+      "bottom": 667.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "130px"
+    },
+    {
+      "label": "nurse-1150:workspace:",
+      "name": "",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 623.015625,
+      "bottom": 667.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "130px"
+    },
+    {
+      "label": "nurse-1150:workspace:",
+      "name": "",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 623.015625,
+      "bottom": 667.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "130px"
+    },
+    {
+      "label": "nurse-1150:workspace:Aggiorna storico",
+      "name": "Aggiorna storico",
+      "outline": "solid",
+      "width": "3px",
+      "color": "rgb(36, 91, 181)",
+      "visible": true,
+      "top": 623.015625,
+      "bottom": 667.015625,
+      "headerBottom": 64,
+      "tabIndex": 0,
+      "withinHeader": false,
+      "scrollMargin": "130px"
+    }
+  ],
+  "states": [
+    {
+      "actorId": "QA-NURSE-414",
+      "empty": false,
+      "conflict": false,
+      "failRead": false,
+      "holdRead": false,
+      "mobile": false,
+      "doctor": false,
+      "held": false,
+      "sections": [
+        {
+          "sectionKey": "ALLERGIES",
+          "title": "Allergie",
+          "originalText": "Nessuna allergia nota",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "pending"
+        },
+        {
+          "sectionKey": "DIAGNOSIS",
+          "title": "Diagnosi",
+          "originalText": "Diagnosi sorgente sintetica",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [
+            {},
+            {
+              "fileName": "fonte-sintetica-412.txt",
+              "pageFrom": 2,
+              "pageTo": 3
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "sectionKey": "ANAMNESIS",
+          "title": "Anamnesi",
+          "originalText": "Anamnesi sorgente sintetica",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "pending"
+        },
+        {
+          "sectionKey": "HOSPITAL_COURSE",
+          "title": "Decorso ospedaliero",
+          "originalText": "",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "absent"
+        },
+        {
+          "sectionKey": "CONSULTATIONS",
+          "title": "Consulenze",
+          "originalText": "",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "absent"
+        },
+        {
+          "sectionKey": "IMAGING_DIAGNOSTICS",
+          "title": "Diagnostica per immagini",
+          "originalText": "",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "absent"
+        },
+        {
+          "sectionKey": "PROCEDURES_AND_INTERVENTIONS",
+          "title": "Prestazioni e interventi",
+          "originalText": "",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "absent"
+        },
+        {
+          "sectionKey": "THERAPY",
+          "title": "Terapia",
+          "originalText": "",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "absent"
+        },
+        {
+          "sectionKey": "ADVICE_AND_FOLLOW_UP",
+          "title": "Consigli e controlli",
+          "originalText": "",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "absent"
+        },
+        {
+          "sectionKey": "UNMAPPED_CONTENT",
+          "title": "Contenuto non classificato",
+          "originalText": "",
+          "reviewedText": "",
+          "displayText": "",
+          "annotations": [],
+          "sourceReferences": [],
+          "reviewStatus": "absent"
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "POST",
+          "path": "/patients/page/search"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/parameter-readings"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/narrative-sections"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-414/assessments/catalog"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        }
+      ],
+      "domainWrites": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "failSave": false,
+      "saveAttempts": 0
+    }
+  ]
+}

@@ -1,0 +1,441 @@
+{
+  "applicationCommit": "0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+  "scope": "Independent software BEFORE measurement, not historic audit or hardware test",
+  "measures": [
+    {
+      "label": "baseline-chart",
+      "controls": [
+        {
+          "name": "Indietro: Sintetica, Persona",
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Apri Milo, assistente clinico AI, a schermo intero",
+          "w": 80,
+          "h": 36
+        },
+        {
+          "name": "Cerca paziente, camera, codice fiscale",
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Infermiere Sintetico, Infermiere: menu utente",
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Stampa la scheda",
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Invio in Pronto Soccorso",
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Patologie note e interventi pregressi",
+          "w": 938,
+          "h": 27
+        }
+      ]
+    },
+    {
+      "label": "baseline-workspace",
+      "controls": [
+        {
+          "name": "Comprimi Scala PAINAD",
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Nuova valutazione PAINAD",
+          "w": 40,
+          "h": 36
+        },
+        {
+          "name": "TutteLe mie bozzeFinali",
+          "w": 234.00001525878906,
+          "h": 36
+        },
+        {
+          "name": "",
+          "w": 234,
+          "h": 36
+        },
+        {
+          "name": "",
+          "w": 234,
+          "h": 36
+        },
+        {
+          "name": "Aggiorna storico",
+          "w": 233.99993896484375,
+          "h": 36
+        }
+      ]
+    },
+    {
+      "label": "baseline-roster",
+      "controls": [
+        {
+          "name": "Cerca paziente per nome o codice fiscale",
+          "w": 406.59375,
+          "h": 34
+        },
+        {
+          "name": "Non dimessi1",
+          "w": 138.78125,
+          "h": 36
+        },
+        {
+          "name": "Dimessi e archivio0",
+          "w": 170.921875,
+          "h": 36
+        },
+        {
+          "name": "Tutti1",
+          "w": 88.140625,
+          "h": 36
+        },
+        {
+          "name": "Filtri e ordine",
+          "w": 109.5625,
+          "h": 36
+        },
+        {
+          "name": "Apri cartella di Persona Sintetica",
+          "w": 36,
+          "h": 36
+        }
+      ]
+    }
+  ],
+  "state": {
+    "actorId": "QA-NURSE-414",
+    "empty": false,
+    "conflict": false,
+    "failRead": false,
+    "holdRead": false,
+    "mobile": false,
+    "doctor": false,
+    "held": false,
+    "sections": [
+      {
+        "sectionKey": "ALLERGIES",
+        "title": "Allergie",
+        "originalText": "Nessuna allergia nota",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "pending"
+      },
+      {
+        "sectionKey": "DIAGNOSIS",
+        "title": "Diagnosi",
+        "originalText": "Diagnosi sorgente sintetica",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [
+          {},
+          {
+            "fileName": "fonte-sintetica-412.txt",
+            "pageFrom": 2,
+            "pageTo": 3
+          }
+        ],
+        "reviewStatus": "pending"
+      },
+      {
+        "sectionKey": "ANAMNESIS",
+        "title": "Anamnesi",
+        "originalText": "Anamnesi sorgente sintetica",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "pending"
+      },
+      {
+        "sectionKey": "HOSPITAL_COURSE",
+        "title": "Decorso ospedaliero",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "CONSULTATIONS",
+        "title": "Consulenze",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "IMAGING_DIAGNOSTICS",
+        "title": "Diagnostica per immagini",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "PROCEDURES_AND_INTERVENTIONS",
+        "title": "Prestazioni e interventi",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "THERAPY",
+        "title": "Terapia",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "ADVICE_AND_FOLLOW_UP",
+        "title": "Consigli e controlli",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      },
+      {
+        "sectionKey": "UNMAPPED_CONTENT",
+        "title": "Contenuto non classificato",
+        "originalText": "",
+        "reviewedText": "",
+        "displayText": "",
+        "annotations": [],
+        "sourceReferences": [],
+        "reviewStatus": "absent"
+      }
+    ],
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/simulator/session"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/me/roster-order"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/diary-unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/notes"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/directory/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/parameters/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/settings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/cartella"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/cartella"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/directory/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/room-options"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/diary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/narrative-sections"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/therapies/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/diary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/assessments/catalog"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/narrative-sections"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/documents"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/assessments/catalog"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/assessments/catalog"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/assessments"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-414/parameter-readings"
+      }
+    ],
+    "domainWrites": [],
+    "unexpected": [],
+    "external": [],
+    "errors": [],
+    "pageErrors": [],
+    "httpErrors": [],
+    "failSave": false,
+    "saveAttempts": 0
+  }
+}

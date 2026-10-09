@@ -1,0 +1,14 @@
+PASS desktop:chart controls actual44, edge hit tests, native focus
+PASS desktop:catalog/workspace fields and textual creation
+PASS desktop:roster/search44 with separated hitboxes, clear not open
+PASS compact-desktop:chart controls actual44, edge hit tests, native focus
+PASS compact-desktop:catalog/workspace fields and textual creation
+PASS compact-desktop:roster/search44 with separated hitboxes, clear not open
+PASS mobile-coarse:chart controls actual44, edge hit tests, native focus
+PASS mobile-coarse:catalog/workspace fields and textual creation
+PASS mobile-coarse:roster/search44 with separated hitboxes, clear not open
+PASS desktop-coarse:chart controls actual44, edge hit tests, native focus
+PASS desktop-coarse:catalog/workspace fields and textual creation
+PASS desktop-coarse:roster/search44 with separated hitboxes, clear not open
+PASS supervisor desktop:rooms/bed actions and form44
+PASS supervisor mobile emulation:rooms/bed actions and form44
