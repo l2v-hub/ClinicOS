@@ -65,7 +65,6 @@
 .parameter-single-entry .form-input {
   width: 100%;
   min-width: 0;
-  min-height: 40px;
 }
 .parameter-single-entry__notes {
   font-size: 12px;

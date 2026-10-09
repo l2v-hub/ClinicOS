@@ -1,0 +1,68 @@
+.parameter-reading-form {
+  container-type: inline-size;
+  min-width: 0;
+}
+.parameter-reading-form__layout {
+  display: grid;
+  gap: 20px;
+}
+.parameter-reading-form__fields {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  gap: 14px;
+  align-content: start;
+}
+.parameter-reading-form__field {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+  align-content: start;
+}
+.parameter-reading-form__field > span {
+  font-weight: 600;
+}
+.parameter-reading-form__field small,
+.parameter-reading-form__tools > small,
+.parameter-reading-form__help {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.parameter-reading-form__field .form-input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.parameter-reading-form__field--note {
+  grid-column: 1 / -1;
+}
+.parameter-reading-form__previous {
+  overflow-wrap: anywhere;
+}
+.parameter-reading-form__tools {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 0;
+}
+.parameter-reading-form__pad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.parameter-reading-form__pad .ds-btn {
+  min-width: 0;
+}
+.parameter-reading-form__news2 p,
+.parameter-reading-form__help {
+  margin: 5px 0 0;
+}
+@container (min-width: 700px) {
+  .parameter-reading-form__layout {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+}

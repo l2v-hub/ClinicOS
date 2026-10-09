@@ -7,8 +7,8 @@
 }
 .par-grid {
   display: grid;
-  grid-template-columns: 288px minmax(0, 1fr) 272px;
-  grid-template-areas: 'list form side';
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-areas: 'list form';
   gap: 24px;
   align-items: start;
 }
@@ -346,16 +346,14 @@
 @media (max-width: 1099px) {
   .par-grid {
     grid-template-columns: 240px minmax(0, 1fr);
-    grid-template-areas:
-      'list form'
-      'list side';
+    grid-template-areas: 'list form';
   }
 }
 /* Telefono: una colonna; l'elenco pazienti scorre in un riquadro. */
 @media (max-width: 699px) {
   .par-grid {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: 'list' 'form' 'side';
+    grid-template-areas: 'list' 'form';
   }
   .par-plist {
     max-height: 40vh;
@@ -401,7 +399,7 @@
 .par-pick .turno-pcard__news2 { justify-self:start; max-width:100%; margin-left:42px; font-size:12px; line-height:18px; }
 @media (max-width: 1099px) {
   .par-grid {
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 240px minmax(0, 1fr);
   }
 }
 @media (max-width: 699px) {

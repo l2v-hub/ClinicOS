@@ -1,19 +1,17 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import { getCurrentOperator, operatorHeaders } from '../../lib/operatorSession';
 import {
-  PARAMETER_FIELDS,
-  PARAMETER_OPTIONS,
   ParameterReadingSaveError,
   createParameterReadingRequest,
   parameterValuesIssue,
-  readingTime,
   saveParameterReading,
   type ParameterReadingRequest,
   type ParameterValues,
   type PatientParameterReading,
 } from '../../lib/patientParameterReadings';
 import { ParameterEntryClock } from './ParameterEntryClock';
+import { ParameterReadingForm } from './ParameterReadingForm';
 
 interface Props {
   patientId: string;
@@ -33,10 +31,7 @@ export function PatientParameterEntry({
   const [saving, setSaving] = useState(false);
   const [uncertain, setUncertain] = useState(false);
   const [error, setError] = useState('');
-  const [invalidField, setInvalidField] = useState<keyof ParameterValues | null>(null);
-  const fields = useRef(new Map<string, HTMLInputElement | HTMLSelectElement>());
   const [savedAt, setSavedAt] = useState('');
-  const errorId = useId();
   const pending = useRef<ParameterReadingRequest | null>(null);
   const inFlight = useRef(false);
   const mounted = useRef(true);
@@ -47,9 +42,9 @@ export function PatientParameterEntry({
     };
   }, []);
   function update(key: keyof ParameterValues, value: string) {
+    if (saving || uncertain) return;
     setValues((previous) => ({ ...previous, [key]: value }));
     setError('');
-    setInvalidField(null);
     setSavedAt('');
     pending.current = null;
   }
@@ -62,9 +57,6 @@ export function PatientParameterEntry({
     const invalid = parameterValuesIssue(values);
     if (invalid) {
       setError(invalid.message);
-      setInvalidField(invalid.field);
-      // Il fuoco va sul campo da correggere (il primo, se manca ogni valore).
-      fields.current.get(invalid.field ?? PARAMETER_FIELDS[0].key)?.focus();
       return;
     }
     pending.current ??= createParameterReadingRequest(values);
@@ -99,101 +91,18 @@ export function PatientParameterEntry({
         <h3>Nuova rilevazione</h3>
         <ParameterEntryClock onDayChange={onDayChange} />
       </div>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          void save();
-        }}
-      >
-        <fieldset disabled={saving || uncertain} className="parameter-single-entry__fields">
-          <legend className="sr-only">Valori da registrare</legend>
-          {PARAMETER_FIELDS.map((field) => (
-            <label key={field.key}>
-              <span>
-                {field.label} {field.unit && <small>{field.unit}</small>}
-              </span>
-              {PARAMETER_OPTIONS[field.key] ? (
-                <select
-                  ref={(el) =>
-                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))
-                  }
-                  className="form-input"
-                  aria-label={`Nuova rilevazione ${field.label}`}
-                  aria-invalid={invalidField === field.key || undefined}
-                  aria-describedby={invalidField === field.key ? errorId : undefined}
-                  value={values[field.key] ?? ''}
-                  onChange={(event) => update(field.key, event.target.value)}
-                >
-                  <option value="">—</option>
-                  {PARAMETER_OPTIONS[field.key]!.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  ref={(el) =>
-                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))
-                  }
-                  className="form-input"
-                  aria-label={`Nuova rilevazione ${field.label}`}
-                  aria-invalid={invalidField === field.key || undefined}
-                  aria-describedby={invalidField === field.key ? errorId : undefined}
-                  value={values[field.key] ?? ''}
-                  inputMode={
-                    ['pa', 'evacuazione'].includes(field.key)
-                      ? 'text'
-                      : field.key === 'fr'
-                        ? 'numeric'
-                        : 'decimal'
-                  }
-                  maxLength={field.key === 'evacuazione' ? 200 : 32}
-                  placeholder={field.key === 'pa' ? '120/80' : '—'}
-                  onChange={(event) => update(field.key, event.target.value)}
-                />
-              )}
-            </label>
-          ))}
-        </fieldset>
-        <details className="parameter-single-entry__notes">
-          <summary>Note sulla rilevazione</summary>
-          <textarea
-            className="form-input"
-            aria-label="Note della nuova rilevazione"
-            rows={2}
-            maxLength={2000}
-            disabled={saving || uncertain}
-            value={values.note ?? ''}
-            onChange={(event) => update('note', event.target.value)}
-          />
-        </details>
-        <div className="parameter-single-entry__actions">
-          <span>Data e ora vengono registrate quando premi Salva.</span>
-          <button type="submit" className="btn-primary" disabled={saving} aria-busy={saving}>
-            {saving ? 'Salvataggio…' : uncertain ? 'Riprova salvataggio' : 'Salva rilevazione'}
-          </button>
-        </div>
-      </form>
-      {error && (
-        <div role="alert" className="parameter-trends-error" id={errorId}>
-          <p>{error}</p>
-          {uncertain && pending.current && (
-            <p>
-              Rilevazione del {readingTime(pending.current.measuredAt)}. Riprova per verificare lo
-              stesso salvataggio.
-            </p>
-          )}
-        </div>
-      )}
-      {savedAt && (
-        <div className="parameter-single-entry__success" role="status">
-          <span>Rilevazione salvata · {readingTime(savedAt)}</span>
-          <button type="button" className="link-btn" onClick={onShowToday}>
-            Mostra oggi
-          </button>
-        </div>
-      )}
+      <ParameterReadingForm
+        patientId={patientId}
+        values={values}
+        saving={saving}
+        uncertain={uncertain}
+        error={error}
+        savedAt={savedAt}
+        pendingAt={pending.current?.measuredAt}
+        onChange={update}
+        onSave={save}
+        onOpenHistory={onShowToday}
+      />
     </section>
   );
 }
