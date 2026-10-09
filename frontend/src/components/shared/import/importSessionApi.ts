@@ -28,7 +28,11 @@ export function canStartNewImport(error: unknown) {
 export function assertSessionJob(value: ImportJob): ImportJob {
   if (['expired', 'cancelled', 'confirmed'].includes(value?.status))
     throw new ImportApiError(
-      'La sessione è scaduta, eliminata o già conclusa. Puoi iniziare una nuova importazione.',
+      value.status === 'expired'
+        ? 'La sessione è scaduta. Per una nuova importazione, ricarica i documenti.'
+        : value.status === 'cancelled'
+          ? 'La sessione è stata eliminata. Per una nuova importazione, ricarica i documenti.'
+          : 'Questa importazione è già conclusa. Per importare altri documenti, inizia una nuova sessione.',
       410,
       'session_terminal',
     );
@@ -79,8 +83,19 @@ export class ImportSessionApi {
     return data as T;
   }
   async get(id: string) {
-    const value = await this.json<ImportJob>(`/${encodeURIComponent(id)}`);
-    return assertSessionJob(value);
+    try {
+      const value = await this.json<ImportJob>(`/${encodeURIComponent(id)}`);
+      return assertSessionJob(value);
+    } catch (error) {
+      // Missing and inaccessible jobs share a masked 404; it does not prove deletion.
+      if (error instanceof ImportApiError && error.status === 404)
+        throw new ImportApiError(
+          'La sessione non è disponibile. Per una nuova importazione, ricarica i documenti.',
+          404,
+          'session_unavailable',
+        );
+      throw error;
+    }
   }
   async create(key: string) {
     const data = await this.json<{ job: ImportJob }>(

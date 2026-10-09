@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { getCurrentOperator } from '../../lib/operatorSession';
+import { useRecencyClock } from '../../lib/useRecencyClock';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
 import { ImportDocumentsWorkspace } from './import/ImportDocumentsWorkspace';
 import { ImportReviewWorkspace } from './import/ImportReviewWorkspace';
-import { canStartNewImport, ImportApiError, ImportSessionApi } from './import/importSessionApi';
+import { ImportApiError, ImportSessionApi } from './import/importSessionApi';
+import {
+  importFailureMessage,
+  importRecoveryPresentation,
+  isUnavailableSession,
+} from './import/importSessionRecovery';
 import { operatorImportApi } from './import/operatorImportApi';
 import { importSessionMemory } from './import/importSessionMemory';
 import { ImportSourceCache } from './import/importSourceCache';
@@ -48,6 +54,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
   const [opening, setOpening] = useState(true);
   const [attempt, setAttempt] = useState(0);
   const [terminal, setTerminal] = useState(false);
+  const [creation, setCreation] = useState<'pending' | 'created' | null>(null);
   const [retryMutation, setRetryMutation] = useState<(() => Promise<ImportJob>) | null>(null);
   const active = useRef(true);
   const busyRef = useRef(false);
@@ -60,6 +67,25 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
     jobRef.current = value;
     if (active.current) setJob(value);
   }, []);
+  const invalidateSession = useCallback(() => {
+    jobRef.current = null;
+    setJob(null);
+    setResult(null);
+    setDraftId(null);
+    setRetryMutation(null);
+    setStep('documents');
+    setTerminal(true);
+    setCreation(null);
+  }, []);
+  const now = useRecencyClock();
+  const recovery = importRecoveryPresentation({
+    job,
+    opening,
+    error: !!error,
+    terminal,
+    pendingUpload,
+    now,
+  });
   const jobId = job?.id;
   const maxFileBytes = job?.limits.maxFileBytes;
   const [sourceCache, setSourceCache] = useState<{
@@ -90,11 +116,14 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
   }, []);
   useEffect(() => {
     let alive = true;
+    let sessionRead = true;
     void importSessionMemory
       .open({ operatorId: actor.operatorId, operatorRole: actor.operatorRole }, api)
       .then(async (value) => {
         if (!alive) return;
         updateJob(value);
+        sessionRead = false;
+        setCreation((current) => (current === 'pending' ? 'created' : current));
         if (value.review.draftId && value.review.draftSourceIsCurrent) {
           setDraftId(value.review.draftId);
           setStep('workspace');
@@ -109,8 +138,8 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
       })
       .catch((e) => {
         if (alive) {
-          setTerminal(canStartNewImport(e));
-          setError(e instanceof Error ? e.message : 'Impossibile riaprire la sessione. Riprova.');
+          if (isUnavailableSession(e, sessionRead)) invalidateSession();
+          setError(importFailureMessage(e));
         }
       })
       .finally(() => {
@@ -119,16 +148,18 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
     return () => {
       alive = false;
     };
-  }, [api, actor.operatorId, actor.operatorRole, attempt, updateJob]);
+  }, [api, actor.operatorId, actor.operatorRole, attempt, updateJob, invalidateSession]);
   const processing = job ? activeImport(job) : false;
   useEffect(() => {
     if (!processing || !jobId) return;
     let alive = true;
     let timer: ReturnType<typeof setTimeout> | undefined;
     async function poll() {
+      let sessionRead = true;
       try {
         const value = await api.get(jobId!);
         if (!alive) return;
+        sessionRead = false;
         if (value.status === 'review_ready') {
           const data = await api.result(value.id);
           if (alive) {
@@ -144,17 +175,9 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
         }
       } catch (e) {
         if (alive) {
-          setError(
-            e instanceof Error
-              ? e.message
-              : 'Connessione interrotta. La sessione è conservata; nuovo tentativo in corso.',
-          );
-          if (canStartNewImport(e)) {
-            setTerminal(true);
-            setJob(null);
-            jobRef.current = null;
-            setResult(null);
-            setStep('documents');
+          setError(importFailureMessage(e));
+          if (isUnavailableSession(e, sessionRead)) {
+            invalidateSession();
             alive = false;
           }
         }
@@ -167,7 +190,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
       alive = false;
       if (timer) clearTimeout(timer);
     };
-  }, [processing, jobId, api, updateJob]);
+  }, [processing, jobId, api, updateJob, invalidateSession]);
   function checkResult(value: ImportResult) {
     try {
       assertNoLegacyImportArrays(value._narrative as Record<string, unknown> | undefined);
@@ -190,14 +213,17 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
     } catch (e) {
       if (!active.current) return false;
       if (e instanceof ImportApiError && e.code === 'revision_conflict') {
-        const value =
-          e.job ?? (jobRef.current ? await api.get(jobRef.current.id).catch(() => null) : null);
-        if (value) updateJob(value);
-        setError(
-          'La sessione è cambiata. Ordine e pagine sono aggiornati: ripeti la modifica desiderata.',
-        );
+        try {
+          const value = e.job ?? (jobRef.current ? await api.get(jobRef.current.id) : null);
+          if (value) updateJob(value);
+          setError('La sessione è cambiata. Ripeti la modifica dopo aver verificato le pagine.');
+        } catch (readError) {
+          if (isUnavailableSession(readError, true)) invalidateSession();
+          setError(importFailureMessage(readError));
+        }
       } else {
-        setError(e instanceof Error ? e.message : 'Operazione non riuscita. Riprova.');
+        if (isUnavailableSession(e)) invalidateSession();
+        setError(importFailureMessage(e));
         if (!(e instanceof ImportApiError) || e.status >= 500) setRetryMutation(() => action);
       }
       return false;
@@ -215,15 +241,18 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
   }
   async function backFromDraft() {
     if (!job) return;
+    let sessionRead = true;
     try {
       const next = await api.get(job.id);
       updateJob(next);
+      sessionRead = false;
       const data = await api.result(job.id);
       checkResult(data);
       setResult(data);
       setStep('review');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Impossibile aprire i documenti.');
+      if (isUnavailableSession(e, sessionRead)) invalidateSession();
+      setError(importFailureMessage(e));
       setStep('documents');
     }
   }
@@ -243,9 +272,8 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
       importSessionMemory.clear(actor);
       onClose();
     } catch (e) {
-      setError(
-        e instanceof Error ? e.message : 'Eliminazione non riuscita. La sessione è conservata.',
-      );
+      if (isUnavailableSession(e)) invalidateSession();
+      setError(importFailureMessage(e));
     } finally {
       busyRef.current = false;
       if (active.current) setBusy(false);
@@ -295,7 +323,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
           className="icon-btn"
           disabled={busy || pendingUpload}
           onClick={onClose}
-          aria-label="Chiudi e conserva sessione"
+          aria-label={recovery.closeLabel}
           data-dialog-initial-focus
         >
           ×
@@ -313,7 +341,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
               Riprova operazione
             </button>
           )}
-          {!job &&
+          {!retryMutation &&
             !opening &&
             (terminal ? (
               <button
@@ -321,6 +349,7 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
                 onClick={() => {
                   importSessionMemory.clear(actor);
                   setTerminal(false);
+                  setCreation('pending');
                   setOpening(true);
                   setError('');
                   setAttempt((value) => value + 1);
@@ -342,7 +371,16 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
             ))}
         </div>
       )}
-      {opening && <p role="status">Apertura sessione salvata…</p>}
+      {opening && (
+        <p role="status">
+          {creation === 'pending'
+            ? 'Creazione nuova sessione…'
+            : 'Verifica o creazione della sessione…'}
+        </p>
+      )}
+      {!opening && !error && creation === 'created' && (
+        <p role="status">Nuova sessione creata. Aggiungi i documenti da importare.</p>
+      )}
       {job &&
         cache &&
         !opening &&
@@ -383,13 +421,16 @@ function ImportSession({ onClose, onImported, actor }: Props & { actor: ImportAc
           />
         ))}
       <footer className="import-session-footer">
-        <span>Chiudendo conservi le pagine già salvate nella tua sessione.</span>
-        {job?.expiresAt && (
+        <span>{recovery.footer}</span>
+        {recovery.expiresAt && (
           <span>
-            Scadenza sessione: {new Date(job.expiresAt).toLocaleString('it-IT')}. Le operazioni
-            salvate rinnovano la scadenza.
+            Scadenza sessione: {recovery.expiresAt.toLocaleString('it-IT')}. Le operazioni salvate
+            rinnovano la scadenza.
           </span>
         )}
+        <button className="btn-secondary btn-sm" disabled={busy || pendingUpload} onClick={onClose}>
+          Chiudi importazione
+        </button>
         {job && (
           <button
             className="btn-danger btn-sm"
