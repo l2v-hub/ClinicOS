@@ -1,0 +1,39 @@
+(node:33688) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ handover workspace defaults to unread queue and explicit filtered feed preserves its target (24.1843ms)
+✔ composer retains patient-specific draft and identity after remount; permitted assignment is visible (5.5631ms)
+✔ roster always opens the patient diary instead of duplicating summaries (1.9513ms)
+✔ uncertain save keeps fields locked and exposes exact retry, deleted outcome never offers advance (3.8697ms)
+✔ both PatientDetail entry points share receipt-backed quick-add and keep the same draft (4.7241ms)
+(node:33688) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:41304) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ generic workspace defaults to selected Non confermate, not first patient or date restriction (17.0995ms)
+✔ sidebar and session defaults explicitly target unread, while dashboard feed remains separate (1.4379ms)
+(node:41304) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38064) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all priorities support explicit Letto, opening cannot confirm; author waits for a colleague (16.3689ms)
+✔ confirmed reading displays identity, role and full facility date; no action remains (1.9497ms)
+✔ unknown or malformed receipts and counts never manufacture an unread number or confirmation (5.2514ms)
+✔ explicit POST requests reading and validates durable receipt before any client update (30.3845ms)
+(node:38064) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22048) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ queue accepts a bounded mixed-source page with exact counts without confusing active urgency with unread (3.7336ms)
+✔ malformed, duplicate, mismatched, read or missing-count rows fail closed rather than fabricating zero (1.5639ms)
+✔ patient counts client is bounded, private, abortable and missing patients are not coerced to zero (44.9784ms)
+✔ count transport failure, duplicate ids, negative/string counts and out-of-request ids remain errors (1.902ms)
+(node:22048) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1096.8272

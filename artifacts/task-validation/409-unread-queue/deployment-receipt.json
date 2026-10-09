@@ -1,0 +1,49 @@
+{
+  "applicationCommit": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+  "checkedAt": "2026-10-09T08:18:22.0765984Z",
+  "decision": "VERIFIED RELEASE",
+  "productionPatientTestMutations": 0,
+  "vercel": {
+    "unreadQueueChunks": [
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/ConsegneWorkspace-DJzrW5Jv.js",
+        "unreadQueuePresent": true,
+        "sha256": "1ad890ec0e0a027105392c104e000fd3105653b6d9737c416281b2e439e3b07a"
+      }
+    ],
+    "id": "dpl_6GFhZBk1mw8yCbDsQZZJPuifZ1SB",
+    "githubCommitSha": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "http": 200,
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "gitSourceSha": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-BGotyd54.js",
+    "bundleSha256": "0bd80be9dc0571b77ec7f0b5b6a0aae378a1615d4515eb5b4b3e7de4e0bbb340",
+    "aliases": [
+      "clinicos-eosin.vercel.app",
+      "clinicos-lucalavia-2482s-projects.vercel.app",
+      "clinicos-git-main-lucalavia-2482s-projects.vercel.app"
+    ],
+    "state": "READY"
+  },
+  "backend": {
+    "eventHeadSha": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "railwayStatus": "SUCCESS",
+    "actualCheckoutSha": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "healthHttp": 200,
+    "runId": 37903586484,
+    "runUrl": "https://github.com/l2v-hub/ClinicOS/actions/runs/37903586484",
+    "healthUrl": "https://clinicos-backend-production-df88.up.railway.app/health",
+    "provenance": "Actual Actions checkout log + Railway deployment ID + provider SUCCESS/image digest + explicit Applying migration log; no production patient test writes",
+    "workflowConclusion": "success",
+    "imageDigest": "sha256:6bf7d7faa8678af12a5a29c622ad8bc95a2ffd88dbbc67430dc761231b838117",
+    "migrationLogObserved": true,
+    "railwayDeploymentId": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "migrationName": "20261009090000_explicit_diary_reads",
+    "migrationApplicationMessages": [
+      {
+        "timestamp": "2026-10-09T08:15:57.713413204Z",
+        "message": "Applying migration `20261009090000_explicit_diary_reads`"
+      }
+    ]
+  }
+}

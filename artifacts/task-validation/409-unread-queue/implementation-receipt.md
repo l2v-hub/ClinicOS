@@ -1,0 +1,9 @@
+# #409 scoped implementation decision
+
+Baseline accepted main: 973d78e5e109032a36cf89cf80fd8eb2a848a649. Sole application writer: root in C:/w-409. Dirty primary checkout and unrelated launchers remain untouched. Human sequential implementation/commit/push/deploy/evidence authorization applies; this receipt is not a release gate.
+
+Acceptance-preserving design: one scoped SQL union for badge/list/patient counts; bounded keyset pages and actor/scope/patient-bound content-free cursors. Separate additive append-only reading tables keep existing urgency facts unchanged. Plain reading does not take clinical charge; historical urgency acknowledgments also remain evidence of reading. Server-owned authorship, original capability gates, private no-store responses, validated client receipts, stale/session fencing and explicit unavailable states are retained.
+
+Frontend navigation tests were observed red before the frontend implementation, then green. Backend implementation preceded new backend tests; no backend test-first claim is made. Real isolated PostgreSQL initially found an oversized cursor caused by spreading a full entry. Fixed to encode only id/time/binding; regression asserts exact keys and traverses 53 mixed-source rows. Two assertions were corrected to reflect existing legacy-closed urgency semantics and newly authorized explicit feed rendering, not to waive implementation failures.
+
+Application source frozen at 47a4b16c111d9b9bfd0b138991958a8ca8f6c351; no push, production deployment or issue closure yet. Initial checks passed focused tests, types/build, isolated PostgreSQL and migration/client compatibility; full frontend regression has only the same 12 accepted baseline failures. Browser acceptance additionally exercises delayed receipts across role/session changes. Required next gates: frozen-source fresh independent QA and root rerun, verified frontend/backend deployments and immutable synthetic screenshot publication.

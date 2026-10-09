@@ -1,0 +1,183 @@
+{
+  "applicationCommit": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+  "sourceSha256": "3497659ff1207d2b6c2b222c2ed08a92bf63cc9341a33cf5795c06a14cf2eece",
+  "fileCount": 35,
+  "excluded": "scratch-prisma generated client; manifest itself; root-owned or parent evidence. Hash inventory is not a publication secret/PHI certificate.",
+  "files": [
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/denied-session-trace.zip",
+      "bytes": 1387832,
+      "sha256": "d83eac76757c4ac01b9b23ba4013ab36fa8b8cc0cd9e718010ade43a62ec3a25"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/desktop-trace.zip",
+      "bytes": 4165179,
+      "sha256": "cfc178c74960155fcd4e4be0abbfc1410c1328246b7fc0b922485aab4ae5b4b1"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/fencing-draft-trace.zip",
+      "bytes": 2013444,
+      "sha256": "53fae2d19936d5d6e0e1436364c38961c9abe0b8d9e709867bb30336046d7e66"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/mobile-trace.zip",
+      "bytes": 1674082,
+      "sha256": "5e15c731f89a1d8f4a3af00a9edb2522c56bda2d66b91ec2730a226b781e4267"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/denied-role-no-leaked-queue.png",
+      "bytes": 43205,
+      "sha256": "29142fa0ec41bc8e3602e02f3dbee7670c42aba08af42258587207820e998084"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/desktop-confirmed-read-badge52.png",
+      "bytes": 103187,
+      "sha256": "b449099a1c253164d6c3181cee2a85839a995f3e5b58346457e4f0606aac90d3"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/desktop-count-unavailable.png",
+      "bytes": 117156,
+      "sha256": "eadf16a0eaddae67945594bed4af13d541da6fec05d7e7b1b7237c1f1254fbd1"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/desktop-failed-read-no-decrement.png",
+      "bytes": 102578,
+      "sha256": "7f75f21bff34421aa8dc110424c4eae8fe60785313b7702471bf3dd836c6c2ee"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/desktop-outside-first-page-target.png",
+      "bytes": 114018,
+      "sha256": "674ba3c40d62a575bbdf589c2e5ea8691a06b8349738aa5e336b6bbae19f467e"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/desktop-read-urgent-still-active.png",
+      "bytes": 112795,
+      "sha256": "5c2d71b23a27b550d39381b13f206d6cad7b2c82e124bd104c00cf69756970ee"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/desktop-unread-badge53.png",
+      "bytes": 102418,
+      "sha256": "1ba1e81106b11ad038f73d88bf5a67471d9cf967e3e9de8a2143ccd7b720d044"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/mobile-grayscale-note-controls.png",
+      "bytes": 43208,
+      "sha256": "bb48599c15471a0a9217f3e8453d71b1635fcbeb446e7e38ab12afa2bb4be355"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/screenshots/mobile-grayscale-queue.png",
+      "bytes": 45136,
+      "sha256": "8c9e7fde2bebf28b0f6e9a4c631f8fed5f48c6ed822531ab60528e3bb209decd"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/test-results/browser-results.json",
+      "bytes": 292356,
+      "sha256": "554e8b014524b9a99bcaa5bd38df0b1c333df29e3f21eb6ec78fc8282c6b1531"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/video/denied-session.webm",
+      "bytes": 222383,
+      "sha256": "05f33b991b41abb8e999d4adae60826f902a7c383c1447025bc393023a8c5317"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/video/desktop.webm",
+      "bytes": 815364,
+      "sha256": "e93ad8139ed6d3f7ca158e1cbeeac5e0041c075e6de82bdbbfe07a0b6bd1278d"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/video/fencing-draft.webm",
+      "bytes": 434459,
+      "sha256": "116b875f432093e49b01c1740ba37ae36a0224f721b0a73c3fc31a688e92e201"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/browser/video/mobile.webm",
+      "bytes": 289125,
+      "sha256": "5b0ee772c122511f9ee58777a0638ae4708551cdce0887ca79b6b89230bb122c"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/backend-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/backend-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/command-results.json",
+      "bytes": 3012,
+      "sha256": "b70c766ef4213d1e4992802f27286d569b86e8988d1fcea788e2fa3c0d999833"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/focused.log",
+      "bytes": 3265,
+      "sha256": "fa56ffb1ad7f175afd4fdaf6318d243001d1f321d5f9d3d556d1372fe6273977"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/frontend-tsc-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/frontend-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/full-regression.log",
+      "bytes": 414462,
+      "sha256": "9225df28c662385d306e57c8a6a57b6e2731ac8f749fb48814e38dbb17bca3a7"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/security-scan.log",
+      "bytes": 71,
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/commands/vite-build.log",
+      "bytes": 14657,
+      "sha256": "f62c57c87a73c116b63d9e851fc6ba2b7d04a15734e95cf0e44a87173287fd50"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/db/migrations.json",
+      "bytes": 8068,
+      "sha256": "4801debeac66d510b4ce2c7e11d55a524e7e04f8d2981574d24d4752db469694"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/db/result.json",
+      "bytes": 82,
+      "sha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/db/tests.log",
+      "bytes": 1653,
+      "sha256": "e41faff4bac471970f19220b4f965da46f462ce91953683e05dcd8bdb6f366f6"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/prisma/generate.log",
+      "bytes": 406,
+      "sha256": "96d3f5f488499e1d00e3c05c5ea5d82d8a76b757410bac5eb06075b7d52cb7d4"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/prisma/result.json",
+      "bytes": 355,
+      "sha256": "120fae418cf165f75bc8d7d42b9dd29a3c3e846ad0f5aedce379c7eae6d8f73c"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/prisma/validate.log",
+      "bytes": 302,
+      "sha256": "81e3247466284c81c636c3090e5035021f5c58688ad7d6d5edc6bc4f8f36249d"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/source-after/source-receipt.json",
+      "bytes": 236327,
+      "sha256": "a937b9bd96becf278f3e295c67ce4bd4b685b2426dd7163192992353bf92e441"
+    },
+    {
+      "path": "artifacts/task-validation/409-unread-queue/independent-qa/source-before/source-receipt.json",
+      "bytes": 236327,
+      "sha256": "a937b9bd96becf278f3e295c67ce4bd4b685b2426dd7163192992353bf92e441"
+    }
+  ]
+}

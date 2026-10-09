@@ -1,0 +1,23 @@
+{
+  "applicationCommit": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+  "applicationSourceSha256": "3497659ff1207d2b6c2b222c2ed08a92bf63cc9341a33cf5795c06a14cf2eece",
+  "checkedAt": "2026-10-09T08:12:22.311Z",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct human authorization for sequential fixes, commits, pushes, frontend/backend deployments and synthetic GitHub evidence; root integration release gate, not a QA worker or coordination ledger.",
+  "acceptance": {
+    "AC1": "PASS exact two-source bounded queue/counts",
+    "AC2": "PASS default/re-entry Non confermate",
+    "AC3": "PASS separate reading/urgency facts and actions",
+    "AC4": "PASS exact patient counts and explicit non-color states"
+  },
+  "independentBrowserPass": 12,
+  "rootBrowserPass": 12,
+  "realDbPassEach": 12,
+  "focusedPassEach": 15,
+  "baselineFailures": 12,
+  "newFailures": 0,
+  "existingDependencyFindings": "7 unchanged (3 critical/4 high), no clean repository security certification",
+  "productionPatientTestMutations": 0,
+  "deploymentAcceptance": "PENDING exact-source frontend/backend readiness, additive migration evidence and read-only smoke; issue remains OPEN",
+  "excludedSource": "Unreleased405/408 candidates, unrelated launchers, coordination metadata; primary dirty preserved"
+}

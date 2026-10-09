@@ -1,0 +1,837 @@
+{
+  "timestamp": "2026-10-09T08:05:47.016Z",
+  "target": "backend/src",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 137,
+    "medium": 0,
+    "low": 0,
+    "total": 137
+  },
+  "findings": [
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\assistant\\service.ts:189",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\assistant\\service.ts:196",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\assistant\\service.ts:241",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\assistant\\service.ts:242",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:134",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:265",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:270",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:271",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:272",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:277",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:281",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:286",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:287",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:307",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:336",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:355",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:372",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:662",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:672",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:675",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:676",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:677",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:678",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:707",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:708",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:788",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:803",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:926",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:928",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:930",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:932",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1006",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1007",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1008",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1169",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1173",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1176",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1179",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1235",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1239",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1244",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1245",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\gateway\\services.ts:1312",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "ai\\upload\\pages\\repository.ts:114",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\access.ts:50",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\access.ts:94",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\catalog.ts:60",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\document-access.ts:55",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\document-access.ts:60",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\history.ts:83",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\history.ts:84",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\history.ts:86",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\history.ts:89",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\history.ts:93",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\history.ts:102",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "assessments\\service.ts:231",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\patient-summary.ts:46",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\patient-summary.ts:49",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:58",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:73",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:81",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:83",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:90",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:135",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:181",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "consegne\\read-service.ts:229",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\alphabetical-order.ts:9",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\alphabetical-order.ts:15",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\alphabetical-order.ts:18",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\alphabetical-order.ts:19",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\alphabetical-order.ts:20",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\cartella-update.ts:88",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\diary-read-service.ts:69",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\diary-read-service.ts:71",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\diary-read-service.ts:72",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\diary-read-service.ts:73",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\diary-read-service.ts:75",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\diary-reading.ts:51",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\diary-reading.ts:55",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:55",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:57",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:62",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:71",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:72",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:76",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:79",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:94",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\identity-page.ts:101",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\operational-identity.ts:31",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\operational-identity.ts:112",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\operational-identity.ts:114",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\operational-identity.ts:116",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameter-readings.ts:113",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameter-readings.ts:126",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:83",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:127",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:130",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:138",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:139",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:140",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:141",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:142",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:153",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\parameters-page.ts:161",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "patients\\room-filter.ts:19",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:20",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:33",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:39",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:40",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:44",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:46",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:53",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:58",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:72",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:84",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "roster\\order-key.ts:92",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:93",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:95",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:97",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:99",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:104",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:122",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:135",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\note.ts:263",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\patients.ts:142",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "routes\\__tests__\\patient-diary-therapy-db.test.ts:407",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "services\\consegna-service.ts:31",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\due-therapy-query.ts:38",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\due-therapy-query.ts:41",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-administration-page.ts:58",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-administration-page.ts:87",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-candidate-page.ts:31",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-candidate-page.ts:35",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-candidate-page.ts:55",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-slots.ts:104",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-slots.ts:107",
+      "description": "Possible SQL injection"
+    },
+    {
+      "severity": "HIGH",
+      "type": "SQL Injection",
+      "location": "therapies\\therapy-slots.ts:109",
+      "description": "Possible SQL injection"
+    }
+  ]
+}

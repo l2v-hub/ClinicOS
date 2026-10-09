@@ -1,0 +1,17 @@
+{
+  "sourceSchemaSha256": "78ed3c09f94f341de1a7468812ce52d902bdd799faaa169ae8c42282868252fc",
+  "records": [
+    {
+      "command": "validate",
+      "exit": 0
+    },
+    {
+      "command": "generate",
+      "exit": 0
+    }
+  ],
+  "newModelsGenerated": true,
+  "tempOutputOnly": true,
+  "noDatabaseConnection": true,
+  "sharedNodeModulesUnchanged": true
+}
