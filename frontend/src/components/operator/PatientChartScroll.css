@@ -26,6 +26,10 @@
 /* Below the desktop shell breakpoint the document owns vertical scrolling. Release the
    entire constrained chart chain, not only one Y axis subsequently converted by hidden X. */
 @media screen and (max-width: 1023px) {
+  html:has(.patient-record-view) {
+    scroll-padding-block: 160px 12px;
+  }
+
   .app-shell .main-area-clean .page-content:has(.patient-record-view) {
     height: auto;
     max-height: none;

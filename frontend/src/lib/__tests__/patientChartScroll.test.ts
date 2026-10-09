@@ -17,6 +17,7 @@ test('chart tabs do not become another vertical owner through cross-axis convers
 });
 test('small chart viewports explicitly release both axes and the constrained ancestor chain', () => {
   assert.match(css, /@media screen and \(max-width: 1023px\)/);
+  assert.match(css, /html:has\(\.patient-record-view\)\s*\{[^}]*scroll-padding-block:\s*160px 12px;/s);
   assert.match(css, /\.page-content:has\(\.patient-record-view\)[^}]*height:\s*auto;[^}]*overflow:\s*visible;/s);
   assert.match(css, /\.patient-record-view[^}]*\.cr-detail-content\s*\{[^}]*height:\s*auto;[^}]*overflow:\s*visible;/s);
 });
