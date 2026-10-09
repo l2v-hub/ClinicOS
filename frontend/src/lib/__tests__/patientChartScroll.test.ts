@@ -26,3 +26,7 @@ test('patient prescribing actions remain in flow rather than covering keyboard f
   assert.match(css, /scroll-margin-block:\s*12px;/);
   assert.doesNotMatch(css, /\.therapy-calendar-grid\s*\{/);
 });
+
+test('chart transitions do not create a clipped containing block for fixed therapy dialogs', () => {
+  assert.match(css, /\.patient-record-view \.cr-detail-content\.tab-panel-transition\s*\{[^}]*animation:\s*none;/s);
+});
