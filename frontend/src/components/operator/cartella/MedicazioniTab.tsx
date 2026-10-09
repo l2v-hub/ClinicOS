@@ -14,6 +14,8 @@ import { ClinicalAttachments } from './ClinicalAttachments';
 import { attachDressingDocument } from '../../../lib/clinicalAttachments';
 import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
 import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
+import { useLegacyCatalogView } from '../assessments/useLegacyCatalogView';
+import type { LegacyCatalogViewRequest } from '../../../lib/assessments/assessmentEntry';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -23,6 +25,7 @@ interface Props {
   operatoreId?: string;
   operatoreRole?: string;
   createRequest?: string;
+  catalogViewRequest?: LegacyCatalogViewRequest;
 }
 
 const ESSUDATO_LABEL: Record<EssudatoLivello, string> = {
@@ -700,6 +703,7 @@ export function MedicazioniTab({
   operatoreId,
   operatoreRole,
   createRequest,
+  catalogViewRequest,
 }: Props) {
   const meds = cartella.medicazioniFerite ?? [];
   const medsRef = useRef(meds);
@@ -713,6 +717,10 @@ export function MedicazioniTab({
   const entryForm = useRef<HTMLDivElement>(null);
   const entryGate = useRef<HTMLDivElement>(null);
   const [entryBlocked, setEntryBlocked] = useState(false);
+  useLegacyCatalogView(catalogViewRequest, compile => {
+    setShowAdd(compile); setModulo(false); setEntryBlocked(false);
+    if (compile) setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
+  });
   function applyEntry(action: 'request' | 'resume' | 'discard') {
     const next = legacyEntryTransition(action, { editId, form }, () => ({
       ...EMPTY_FORM,

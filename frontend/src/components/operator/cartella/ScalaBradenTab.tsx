@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
 import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
+import { useLegacyCatalogView } from '../assessments/useLegacyCatalogView';
+import type { LegacyCatalogViewRequest } from '../../../lib/assessments/assessmentEntry';
 import type { CartellaPaziente, ScalaBradenValutazione, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
@@ -12,6 +14,7 @@ interface Props {
   onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
   createRequest?: string;
+  catalogViewRequest?: LegacyCatalogViewRequest;
 }
 
 interface BradenFormState {
@@ -501,7 +504,7 @@ function BradenHistoryTable({
   );
 }
 
-export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
+export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, createRequest, catalogViewRequest }: Props) {
   const list = cartella.valutazioniBraden ?? [];
   const localDraft = useLegacyModuleDraft<BradenFormState>(paziente.id,'braden',EMPTY_FORM,!!createRequest);
   const { show:showAdd,setShow:setShowAdd,form,setForm } = localDraft;
@@ -510,6 +513,10 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome, cr
   const [modulo, setModulo] = useState(false);
   const [moduloTarget, setModuloTarget] = useState<string | null>(null); // id valutazione
   const entryForm = useRef<HTMLDivElement>(null);
+  useLegacyCatalogView(catalogViewRequest, compile => {
+    setShowAdd(compile); setModulo(false);
+    if (compile) setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
+  });
   useEffect(() => {
     if (!createRequest) return;
     let focusTimer: ReturnType<typeof setTimeout> | undefined;

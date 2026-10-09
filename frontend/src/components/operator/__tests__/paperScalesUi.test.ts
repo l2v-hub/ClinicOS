@@ -267,10 +267,10 @@ test('catalog lists Barthel and UCLA-NPI, accepts a v1 latest final, and hides �
   assert.match(nurse, /Indice di Barthel/);
   assert.match(nurse, /UCLA · Sonno-veglia \(NPI\)/);
   assert.match(nurse, /MNA®-SF/);
-  assert.equal((nurse.match(/aria-label="Nuova compilazione /g) ?? []).length, 10);
+  assert.equal((nurse.match(/aria-label="Compila /g) ?? []).length, 10);
   const oss = view(false);
-  assert.equal((oss.match(/aria-label="Nuova compilazione /g) ?? []).length, 0);
-  assert.equal((oss.match(/aria-label="Apri /g) ?? []).length, 10);
+  assert.equal((oss.match(/aria-label="Compila /g) ?? []).length, 0);
+  assert.equal((oss.match(/aria-label="Storico /g) ?? []).length, 10);
 });
 
 test('MNA v1 correction starts an empty MNA-SF draft; Tinetti/GDS v1 answers carry over to v2', () => {

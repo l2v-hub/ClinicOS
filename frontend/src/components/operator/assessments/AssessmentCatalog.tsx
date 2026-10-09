@@ -18,6 +18,7 @@ import {
   type AssessmentCatalogState,
 } from '../../../lib/assessments/assessmentCatalogState';
 import { useCan } from '../../../lib/capabilities';
+import { assessmentDefinition } from '../../../lib/assessments/assessmentDefinition';
 import './AssessmentCatalog.css';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import {
@@ -26,7 +27,7 @@ import {
   LEGACY_DRAFT_CHANGED,
 } from '../../../lib/useLegacyModuleDraft';
 
-type Action = 'open' | 'new' | 'resume';
+type Action = 'history' | 'new' | 'resume';
 interface ViewProps {
   cartella: CartellaPaziente;
   state: AssessmentCatalogState;
@@ -87,7 +88,7 @@ function Latest({
         (item?.latestFinal ? (
           <>
             <p>
-              Ultima compilazione: <strong>{time(item.latestFinal.assessedAt)}</strong>
+              Ultima completa: <strong>{time(item.latestFinal.assessedAt)}</strong>
             </p>
             <p className="assessment-catalog-secondary">
               Registrata {time(item.latestFinal.createdAt)} · Finalizzata{' '}
@@ -97,8 +98,8 @@ function Latest({
         ) : (
           <p>
             {item?.ownDraftCount
-              ? 'Bozza personale · nessuna compilazione finale'
-              : 'Nessuna compilazione finale'}
+              ? 'Bozza personale · nessuna compilazione completa'
+              : local ? 'Nessuna compilazione completa' : 'Nessuna compilazione'}
           </p>
         ))}
       {state.status === 'ready' && !!item?.ownDraftCount && (
@@ -136,12 +137,18 @@ export function AssessmentCatalogView({
           <h3>{group}</h3>
           <div className="assessment-catalog-list">
             {CLINICAL_MODULES.filter((module) => module.group === group).map((module) => {
-              const item = state.data?.items.find((row) => row.type === module.type);
+              const item = state.status === 'ready' ? state.data?.items.find((row) => row.type === module.type) : undefined;
               const local = localDraftTypes.has(module.type ?? module.tab);
+              // Modern purposes reuse the current paper/model description. Braden wording
+              // comes from the tracked blank sheet and existing app risk legend, not new thresholds.
+              const purpose = module.type ? assessmentDefinition(module.type).description
+                : module.tab === 'braden' ? 'Rischio di compromissione dell’integrità cutanea.'
+                : module.tab === 'medicazioni' ? 'Scheda Medicazioni / Lesioni' : 'Contenzioni / Protezioni';
               return (
                 <article key={module.tab} className="assessment-catalog-row">
                   <div>
                     <h4>{module.label}</h4>
+                    <p className="assessment-catalog-purpose">{purpose}</p>
                     <Latest
                       module={module}
                       cartella={cartella}
@@ -153,44 +160,40 @@ export function AssessmentCatalogView({
                   <div className="assessment-catalog-actions">
                     <button
                       type="button"
-                      className="btn-secondary assessment-catalog-icon"
-                      aria-label={`Apri ${module.label}`}
-                      title={`Apri ${module.label}`}
-                      onClick={() => onOpen(module, 'open', item)}
+                      className="btn-secondary assessment-catalog-action"
+                      aria-label={`Storico ${module.label}`}
+                      onClick={() => onOpen(module, 'history', item)}
                     >
-                      <span aria-hidden="true">›</span>
+                      Storico
                     </button>
                     {canCreate && (
                       <button
                         type="button"
-                        className="btn-primary assessment-catalog-icon"
-                        aria-label={`Nuova compilazione ${module.label}`}
-                        title={`Nuova compilazione ${module.label}`}
+                        className="btn-primary assessment-catalog-action"
+                        aria-label={`Compila ${module.label}`}
                         onClick={() => onOpen(module, 'new', item)}
                       >
-                        <span aria-hidden="true">＋</span>
+                        Compila
                       </button>
                     )}
                     {canCreate && (local || !!item?.ownDraftCount) && (
                       <button
                         type="button"
-                        className="btn-secondary assessment-catalog-icon"
+                        className="btn-secondary assessment-catalog-action"
                         aria-label={`Riprendi bozza ${module.label}`}
-                        title={`Riprendi bozza ${module.label}`}
                         onClick={() => onOpen(module, 'resume', item)}
                       >
-                        <span aria-hidden="true">✎</span>
+                        Riprendi bozza
                       </button>
                     )}
                     {canCreate && local && onDeleteLocal && (
                       <button
                         type="button"
-                        className="btn-secondary assessment-catalog-icon"
+                        className="btn-secondary assessment-catalog-action"
                         aria-label={`Elimina bozza locale ${module.label}`}
-                        title={`Elimina bozza locale ${module.label}`}
                         onClick={() => onDeleteLocal(module)}
                       >
-                        <span aria-hidden="true">×</span>
+                        Elimina bozza locale
                       </button>
                     )}
                   </div>

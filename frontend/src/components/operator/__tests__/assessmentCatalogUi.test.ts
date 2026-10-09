@@ -18,34 +18,34 @@ const render = (state: AssessmentCatalogState, cartella = {} as CartellaPaziente
 test('catalog immediately exposes ten routes and new commands with a separate NRS history link', () => {
   const html = render({ status: 'loading', data: null, error: null });
   assert.equal((html.match(/<h4>/g) ?? []).length, 10);
-  assert.equal((html.match(/aria-label="Apri /g) ?? []).length, 10);
-  assert.equal((html.match(/aria-label="Nuova compilazione /g) ?? []).length, 10);
+  assert.equal((html.match(/aria-label="Storico /g) ?? []).length, 10);
+  assert.equal((html.match(/aria-label="Compila /g) ?? []).length, 10);
   assert.match(html, /Assistenza e mobilizzazione/);
   assert.match(html, /Scale di valutazione/);
   assert.match(html, /Storico NRS precedente/);
   assert.match(html, /Caricamento date e bozze/);
-  assert.doesNotMatch(html, /Nessuna compilazione finale/);
+  assert.doesNotMatch(html, /Nessuna compilazione completa/);
 });
 test('metadata error is retryable rather than empty; own-only and local drafts remain reachable', () => {
   const failed = render({ status: 'error', data: null, error: 'Errore controllato' });
   assert.match(failed, /role="alert"/);
   assert.match(failed, /Riprova/);
-  assert.doesNotMatch(failed, /Nessuna compilazione finale/);
+  assert.doesNotMatch(failed, /Nessuna compilazione completa/);
   const data = empty();
   const row = data.items[4];
   row.ownDraftCount = 2;
   row.latestOwnDraft = { id: 'mine', formVersion: row.formVersion, assessedAt: '2026-09-23T07:00:00.000Z', createdAt: '2026-09-23T07:00:00.000Z', updatedAt: '2026-09-23T08:00:00.000Z' };
   const html = render({ status: 'ready', data, error: null }, {} as CartellaPaziente, new Set(['mna']));
-  assert.match(html, /Bozza personale · nessuna compilazione finale/);
+  assert.match(html, /Bozza personale · nessuna compilazione completa/);
   assert.match(html, /Riprendi bozza GDS-15/);
   assert.match(html, /Riprendi bozza MNA/);
-  assert.match(html, /Bozza locale da salvare/);
+  assert.match(html, /Bozza da riprendere/);
 });
 test('legacy rows distinguish no compilation, unavailable dates and valid start dates', () => {
   const html = render({ status: 'ready', data: empty(), error: null }, { medicazioniFerite: [], contenzioni: [{ dataInizio: '2026-09-20' }], valutazioniBraden: [{}] } as unknown as CartellaPaziente);
-  assert.match(html, /Medicazioni<\/h4><p>Nessuna compilazione/);
+  assert.match(html, /Medicazioni<\/h4><p class="assessment-catalog-purpose">[^<]+<\/p><p>Nessuna compilazione/);
   assert.match(html, /Ultimo inizio riportato: 20\/09\/2026/);
-  assert.match(html, /Braden<\/h4><p>Data di compilazione non disponibile/);
+  assert.match(html, /Braden<\/h4><p class="assessment-catalog-purpose">[^<]+<\/p><p>Data di compilazione non disponibile/);
 });
 test('legacy new entry opens the existing form while the default remains history and no save is invoked', () => {
   let writes = 0;

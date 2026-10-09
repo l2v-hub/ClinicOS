@@ -1,4 +1,4 @@
-.assessment-catalog { display: grid; gap: 18px; }
+.assessment-catalog { display: grid; gap: 18px; --ds-control-h: 44px; }
 /* Keep the catalog on the same left axis as the patient TopNav. */
 @media screen { .assessment-catalog { margin-inline: 24px; } }
 @media screen and (max-width: 900px) { .assessment-catalog { margin-inline: 16px; } }
@@ -8,7 +8,10 @@
 .assessment-catalog-list { display: grid; gap: 8px; }
 .assessment-catalog-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--border-color, #d8e0e8); border-radius: 10px; background: var(--surface, #fff); }
 .assessment-catalog-row > div:first-child { min-width: 0; display: grid; gap: 5px; overflow-wrap: anywhere; }
-.assessment-catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex-shrink: 0; }
+.assessment-catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 100%; }
+.assessment-catalog-purpose { color: var(--text-secondary, #526170); font-size: .9rem; }
+.assessment-catalog-action { white-space: normal; }
+.assessment-catalog-action:focus-visible { outline: 3px solid var(--primary, #2563eb); outline-offset: 3px; }
 .assessment-catalog-secondary { font-size: .85rem; color: var(--text-muted, #526170); }
 .patient-module-return { align-self: flex-start; width: fit-content; max-width: 100%; margin-bottom: 12px; }
 .nrs-legacy { display: grid; gap: 12px; }
@@ -21,9 +24,9 @@
 .nrs-print-surface { display: none; }
 .assessment-catalog-icon { width:40px; height:40px; min-width:40px; min-height:40px; padding:0; display:grid; place-items:center; font-size:24px; }
 .assessment-draft-chip { padding:2px 8px; border-radius:20px; width:fit-content; background:var(--amber-bg,#fdf3e2); color:#8a5300; font-size:12px; }
-@media (max-width: 480px) { .assessment-catalog-row { align-items:flex-start; flex-direction:column; } .assessment-catalog-actions { display:flex; } }
+@media (max-width: 900px) { .assessment-catalog-row { align-items:flex-start; flex-direction:column; } .assessment-catalog-actions { display:flex; } }
 @media (max-width: 768px) {
-  .assessment-catalog button, .patient-module-return {
+  .assessment-catalog > button, .assessment-catalog .assessment-catalog-actions button, .patient-module-return {
     min-width: 44px;
     min-height: 44px;
     max-width: 100%;

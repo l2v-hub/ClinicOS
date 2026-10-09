@@ -1,7 +1,8 @@
 import type { AssessmentDraftStore } from './assessmentDraftStore';
 import type { AssessmentType } from './assessmentTypes';
 import type { AssessmentCatalogItem } from './assessmentCatalog';
-export interface AssessmentEntry { type: AssessmentType; id?: string; localKey?: string }
+export interface AssessmentEntry { type: AssessmentType; id?: string; localKey?: string; historyOnly?: boolean }
+export interface LegacyCatalogViewRequest { request: string; action: 'history' | 'resume' }
 /** An explicit new request must not turn an existing-record edit into a hidden update. */
 export function legacyEntryTransition<T>(action: 'request' | 'resume' | 'discard', state: { editId: string | null; form: T }, empty: () => T) {
   if (action === 'request' && state.editId) return { ...state, blocked: true, showForm: false };
@@ -9,10 +10,11 @@ export function legacyEntryTransition<T>(action: 'request' | 'resume' | 'discard
   return { ...state, blocked: false, showForm: true };
 }
 export function assessmentCatalogEntry(
-  patientId: string, type: AssessmentType, action: 'open' | 'new' | 'resume',
+  patientId: string, type: AssessmentType, action: 'open' | 'history' | 'new' | 'resume',
   store: AssessmentDraftStore, item?: AssessmentCatalogItem,
 ): AssessmentEntry {
   if (item && item.type !== type) throw new Error('Tipo di modulo non corrispondente.');
+  if (action === 'history') return { type, historyOnly: true };
   if (action === 'new') return { type, localKey: store.create(patientId, undefined, type) };
   const local = store.list(patientId, type).find(draft => draft.dirty || draft.pending || draft.record?.status === 'draft');
   if (action === 'resume') {

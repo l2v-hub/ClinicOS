@@ -53,6 +53,7 @@ export interface AssessmentWorkspaceProps {
   initialAssessment?: AssessmentTarget;
   initialAssessmentId?: string;
   initialDraftKey?: string;
+  historyOnly?: boolean;
   onOpenArchive?: (documentId: string, assessment: AssessmentTarget) => void;
   client?: AssessmentClient;
   children?: ReactNode;
@@ -77,6 +78,7 @@ function AssessmentSession({
   initialAssessment,
   initialAssessmentId,
   initialDraftKey,
+  historyOnly = false,
   onOpenArchive,
   client: providedClient,
   children,
@@ -100,6 +102,7 @@ function AssessmentSession({
   const [store] = useState(() => draftStore ?? createAssessmentDraftStore());
   const workspaceRef = useRef<HTMLDivElement>(null);
   const identityRef = useRef<HTMLDivElement>(null);
+  const historyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const workspace = workspaceRef.current;
     const identity = identityRef.current;
@@ -194,6 +197,13 @@ function AssessmentSession({
     }
   }
   useEffect(() => {
+    if (historyOnly && !initialDraftKey && !entryId) {
+      const timer = window.setTimeout(() => {
+        select(null);
+        historyRef.current?.focus();
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
     if (!initialDraftKey && !entryId && type === 'painad') return;
     const timer = window.setTimeout(() => {
       if (initialDraftKey) {
@@ -207,7 +217,7 @@ function AssessmentSession({
     return () => window.clearTimeout(timer);
     // Session key fences patient/actor changes; an explicit entry ID opens one record.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entryId, initialDraftKey, type]);
+  }, [entryId, initialDraftKey, type, historyOnly]);
   function create(predecessor?: AssessmentDto) {
     try {
       select(store.create(patient.id, predecessor, type));
@@ -478,7 +488,9 @@ function AssessmentSession({
               )}
             </section>
           )}
-          <AssessmentHistory history={history} onOpen={(item) => void open(item.id)} />
+          <div ref={historyRef} tabIndex={-1} aria-label={`Storico ${definition.title}`}>
+            <AssessmentHistory history={history} onOpen={(item) => void open(item.id)} />
+          </div>
         </div>
       </ClinicalTableSection>
       {children}

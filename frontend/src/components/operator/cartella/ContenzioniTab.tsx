@@ -2,6 +2,8 @@ import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { legacyEntryTransition } from '../../../lib/assessments/assessmentEntry';
 import { useLegacyModuleDraft } from '../../../lib/useLegacyModuleDraft';
 import { LegacyDraftTools } from '../assessments/LegacyDraftTools';
+import { useLegacyCatalogView } from '../assessments/useLegacyCatalogView';
+import type { LegacyCatalogViewRequest } from '../../../lib/assessments/assessmentEntry';
 import { IcoCheck } from '../../../icons';
 import type {
   CartellaPaziente,
@@ -26,6 +28,7 @@ interface Props {
   onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
   createRequest?: string;
+  catalogViewRequest?: LegacyCatalogViewRequest;
 }
 
 const TIPO_LABEL: Record<TipoContenzione, string> = {
@@ -363,7 +366,7 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
 
 // ── Main component ────────────────────────────────────────────────────────
 
-export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, createRequest }: Props) {
+export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, createRequest, catalogViewRequest }: Props) {
   const list = cartella.contenzioni ?? [];
   const localDraft = useLegacyModuleDraft(paziente.id,'contenzioni',EMPTY_FORM,!!createRequest);
   const { show:showAdd,setShow:setShowAdd,editId,setEditId,form,setForm } = localDraft;
@@ -374,6 +377,10 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome, cr
   const entryForm = useRef<HTMLDivElement>(null);
   const entryGate = useRef<HTMLDivElement>(null);
   const [entryBlocked, setEntryBlocked] = useState(false);
+  useLegacyCatalogView(catalogViewRequest, compile => {
+    setShowAdd(compile); setModulo(false); setEntryBlocked(false);
+    if (compile) setTimeout(() => entryForm.current?.querySelector<HTMLInputElement>('input')?.focus(), 0);
+  });
   function applyEntry(action: 'request' | 'resume' | 'discard') {
     const next = legacyEntryTransition(action, { editId, form }, () => ({ ...EMPTY_FORM }));
     setEditId(next.editId); setForm(next.form); setEntryBlocked(next.blocked); setShowAdd(next.showForm); setModulo(false);

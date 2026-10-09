@@ -335,6 +335,9 @@ export function PatientDetail({
   const [legacyCreates, setLegacyCreates] = useState<
     Partial<Record<TabId, { patientId: string; request: string }>>
   >({});
+  const [legacyCatalogViews, setLegacyCatalogViews] = useState<
+    Partial<Record<TabId, { patientId: string; request: string; action: 'history' | 'resume' }>>
+  >({});
   const intakeReview = usePatientIntakeReview(paziente.id, operatoreId, operatoreRole);
   useEffect(
     () => () => {
@@ -2448,6 +2451,7 @@ export function PatientDetail({
             <WidgetGroup>
               <MedicazioniTab
                 key={paziente.id}
+                catalogViewRequest={legacyCatalogViews.medicazioni?.patientId === paziente.id ? legacyCatalogViews.medicazioni : undefined}
                 createRequest={
                   legacyCreates.medicazioni?.patientId === paziente.id
                     ? legacyCreates.medicazioni.request
@@ -2470,6 +2474,7 @@ export function PatientDetail({
             <WidgetGroup>
               <ContenzioniTab
                 key={paziente.id}
+                catalogViewRequest={legacyCatalogViews.contenzioni?.patientId === paziente.id ? legacyCatalogViews.contenzioni : undefined}
                 createRequest={
                   legacyCreates.contenzioni?.patientId === paziente.id
                     ? legacyCreates.contenzioni.request
@@ -2488,6 +2493,7 @@ export function PatientDetail({
             <WidgetGroup>
               <ScalaBradenTab
                 key={paziente.id}
+                catalogViewRequest={legacyCatalogViews.braden?.patientId === paziente.id ? legacyCatalogViews.braden : undefined}
                 createRequest={
                   legacyCreates.braden?.patientId === paziente.id
                     ? legacyCreates.braden.request
@@ -2539,11 +2545,16 @@ export function PatientDetail({
                     }
                   : null,
               );
-              if (!module.type && action === 'new')
+              if (!module.type && action === 'new') {
+                setLegacyCatalogViews(previous => ({...previous, [module.tab]: undefined}));
                 setLegacyCreates((previous) => ({
                   ...previous,
                   [module.tab]: { patientId: paziente.id, request: crypto.randomUUID() },
                 }));
+              } else if (!module.type) {
+                setLegacyCreates(previous => ({...previous, [module.tab]: undefined}));
+                setLegacyCatalogViews(previous => ({...previous, [module.tab]: {patientId:paziente.id,request:crypto.randomUUID(),action}}));
+              }
               switchTab(module.tab);
             }}
           />
@@ -2721,6 +2732,7 @@ export function PatientDetail({
                 ? assessmentFocus.assessment.localKey
                 : undefined
             }
+            historyOnly={assessmentFocus?.patientId === paziente.id && assessmentFocus.assessment.type === (current === 'gds' ? 'gds15' : current) && assessmentFocus.assessment.historyOnly}
             onOpenArchive={(documentId, assessment) => {
               setArchiveFocus({ patientId: paziente.id, documentId, assessment });
               switchTab('documenti');
