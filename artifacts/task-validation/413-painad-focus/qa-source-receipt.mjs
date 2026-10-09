@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+const source = process.argv[2]; if (!/^[a-f0-9]{40}$/.test(source || '')) throw new Error('Exact application commit required');
+const out = resolve(process.argv[3] || 'artifacts/task-validation/413-painad-focus/root-initial'); mkdirSync(out, { recursive: true });
+const scopes = ['frontend/src', 'backend/src', 'prisma', 'package.json', 'package-lock.json', 'frontend/package.json', 'frontend/package-lock.json', 'frontend/tsconfig.json', 'frontend/tsconfig.app.json', 'frontend/tsconfig.node.json', 'frontend/vite.config.ts', 'frontend/vercel.json', 'backend/package.json', 'backend/tsconfig.json', 'scripts/build/copy-assessment-fonts.mjs', 'scripts/stub-css-loader.mjs', 'scripts/run-node-tests.mjs'];
+const git = args => { const result = spawnSync('git', args, { encoding: 'utf8' }); assert.equal(result.status, 0, `${args.join(' ')} failed`); return result.stdout; };
+assert.equal(git(['rev-parse', 'HEAD']).trim(), source); git(['diff', '--exit-code', 'HEAD', '--', ...scopes]);
+assert.equal(git(['ls-files', '--others', '--exclude-standard', '--', ...scopes]).trim(), '');
+const paths = git(['ls-files', '-z', '--', ...scopes]).split('\0').filter(Boolean).sort(), tree = createHash('sha256');
+const files = paths.map(path => { const sha256 = createHash('sha256').update(readFileSync(path)).digest('hex'); tree.update(`${path}\0${sha256}\n`); return { path, sha256 }; });
+const clinicalPaths=['frontend/src/lib/assessments/paper/definitions.ts','frontend/src/lib/assessments/paper/engine.ts','frontend/src/lib/assessments/painadDefinition.ts','frontend/src/lib/assessments/assessmentTypes.ts','frontend/src/lib/assessments/assessmentDraftStore.ts','frontend/src/lib/assessments/assessmentClient.ts'];
+git(['diff','--exit-code','3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56','--',...clinicalPaths,'backend/src','prisma','frontend/src/config.ts']);
+const receipt = { applicationCommit: source, baseline: '3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56', clinicalPathsUnchanged:clinicalPaths, sourceScope: scopes, sourceSha256: tree.digest('hex'), trackedSourceMatchesCommit: true, noUntrackedApplicationOverrides: true, fileCount: files.length, excluded: 'QA artifacts/generated builds/known unrelated launchers; no whole checkout cleanliness assertion', files };
+writeFileSync(resolve(out, 'source-receipt.json'), JSON.stringify(receipt, null, 2)); console.log(JSON.stringify({ applicationCommit: source, sourceSha256: receipt.sourceSha256, fileCount: receipt.fileCount }));

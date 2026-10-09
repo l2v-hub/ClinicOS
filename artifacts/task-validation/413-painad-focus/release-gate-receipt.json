@@ -1,0 +1,26 @@
+{
+  "applicationCommit": "e01bd55114e2b5b1615b4088d988a41aad60eb80",
+  "applicationSourceSha256": "b1bf67f6ae4357cc76015a39879eebb342669836f3c01ae1937add0674e347c8",
+  "checkedAt": "2026-10-09T10:50:11.862Z",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct user authorization; root integration gate, not QA or ledger promotion authority",
+  "acceptance": {
+    "AC1": "First named question/focus immediately visible; patient identifier retained",
+    "AC2": "No redundant active resume; inactive local resume/reload retained",
+    "AC3": "Progress/actions unobscured start/middle/end desktop/mobile/tablet",
+    "AC4": "Validated definitions/engines/criteria unchanged; partial/complete/preview/final distinction retained"
+  },
+  "focusedPassEach": 38,
+  "browserPassEach": 13,
+  "baselineFailures": 12,
+  "newFailures": 0,
+  "productionPatientTestMutations": 0,
+  "backendChanges": false,
+  "deploymentAcceptance": "VERIFIED exact-source READY alias/assets200 plus13 compiled synthetic browser groups, all backend requests intercepted before network",
+  "knownLimits": "12 unchanged frontend regression failures; unchanged broad CI backend failure and7dependency findings/481scan findings, no global green or clean security certification",
+  "excludedSource": "Unreleased405/408/410, primary dirty checkout, launchers/coordination, original patient audit photos",
+  "routing": "Provider Git-main deployment; accepted409backend retained unchanged.",
+  "productionDeployment": "dpl_7zpdzhFSHXYrkidnZSsu6Rgrs3mz",
+  "compiledOnlineBrowserPass": 13,
+  "finalVerifiedAt": "2026-10-09T11:02:06.491Z"
+}

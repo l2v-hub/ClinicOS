@@ -1,0 +1,63 @@
+{
+  "applicationCommit": "e01bd55114e2b5b1615b4088d988a41aad60eb80",
+  "baseline": "3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56",
+  "scanExit": 1,
+  "tool": "ruflo security scan --depth full (resolved deep)",
+  "candidateScanSha256": "5718d607daedfa1e09a6fe3b799e04eeb0cb85d76f3f62285aff709da8c2a7c9",
+  "findings": 481,
+  "touchedFindings": [],
+  "unchangedDependencyFindings": [
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:braces",
+      "description": "braces vulnerable to stack-exhausti"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:concurrently",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:lint-staged",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:micromatch",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:proxy-addr",
+      "description": "proxy-addr vulnerable to IP spoofin"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:shell-quote",
+      "description": "shell-quote: `quote()` command inje"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:source-map-js",
+      "description": "source-map-js allows event-loop den"
+    }
+  ],
+  "newTouchedFindings": [],
+  "changedProductionPaths": [
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/__tests__/painadFocus413.test.ts",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+    "frontend/src/components/operator/assessments/PainadCompilation.css",
+    "frontend/src/components/operator/assessments/PaperForm.tsx",
+    "frontend/src/components/operator/assessments/PaperSheet.tsx"
+  ],
+  "review": "PAINAD-only presentation/focus/progress; escaped React patient identifiers and author text, no new HTML sink/endpoint/auth/config/dependency/version/persistence rule. Existing clinical engines and immutable records unchanged. Pre-existing broad security findings retained; not a clean security certification."
+}

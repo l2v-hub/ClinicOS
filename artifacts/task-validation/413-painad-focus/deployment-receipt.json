@@ -1,0 +1,49 @@
+{
+  "applicationCommit": "e01bd55114e2b5b1615b4088d988a41aad60eb80",
+  "checkedAt": "2026-10-09T10:53:34.2075358Z",
+  "decision": "VERIFIED RELEASE",
+  "productionPatientTestMutations": 0,
+  "vercel": {
+    "id": "dpl_7zpdzhFSHXYrkidnZSsu6Rgrs3mz",
+    "gitSourceSha": "e01bd55114e2b5b1615b4088d988a41aad60eb80",
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-CTZpz6cn.js",
+    "githubCommitSha": "e01bd55114e2b5b1615b4088d988a41aad60eb80",
+    "http": 200,
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "bundleSha256": "691c1447ba26b09175b8d58d740a7093d1897db28045b11da375eef4c6999657",
+    "state": "READY",
+    "assessmentChunks": [
+      {
+        "compactPresentationPresent": true,
+        "http": 200,
+        "sha256": "f569f9b48e97b82c9f917b684c3f6a8b4835f98a497546153b872139f2febef4",
+        "activeDraftStatusPresent": true,
+        "actionsPresent": true,
+        "url": "https://clinicos-eosin.vercel.app/assets/AssessmentWorkspace-DlfMr2_4.js"
+      },
+      {
+        "compactPresentationPresent": false,
+        "http": 200,
+        "sha256": "fa00d5df35cbbba366c1af2cda1354bcfeb72e61a07e010cea2438be266e44b9",
+        "activeDraftStatusPresent": false,
+        "actionsPresent": false,
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetail-BCHPi-6Y.js"
+      },
+      {
+        "compactPresentationPresent": false,
+        "http": 200,
+        "sha256": "b5cd4d314e2d098866cd2399f9095a145edb58acb16cc84cddd7d045de58d2e4",
+        "activeDraftStatusPresent": false,
+        "actionsPresent": false,
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetailLazyTabs-stc5vrPc.js"
+      }
+    ]
+  },
+  "backend": {
+    "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "healthHttp": 200,
+    "provenance": "No413backend/schema/API edits; accepted409retained, no production patient test writes.",
+    "changed": false
+  }
+}

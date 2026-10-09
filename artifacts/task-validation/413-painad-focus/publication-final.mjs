@@ -1,0 +1,77 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { inflateRawSync } from 'node:zlib';
+const root = 'artifacts/task-validation/413-painad-focus';
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const independent = JSON.parse(readFileSync(`${root}/independent-qa/refinement-e01/immutable-manifest.json`, 'utf8'));
+const independentFiles = independent.files.map(file=>({...file,path:`${root}/independent-qa/refinement-e01/${file.path}`}));
+const earlierFiles=['independent-qa','independent-qa/refinement87','independent-qa/refinement15'].flatMap(folder=>{
+ const manifestPath=`${root}/${folder}/immutable-manifest.json`,bytes=readFileSync(manifestPath),manifest=JSON.parse(bytes);
+ assert.ok(['FAILED VALIDATION','READY FOR CODEX QA'].includes(manifest.verdict));
+ return [...manifest.files.map(file=>({...file,path:`${root}/${folder}/${file.path}`})),{path:manifestPath,sha256:sha(bytes)}];
+});
+const walk = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => {
+  if (e.name === 'online-browser' || e.name.startsWith('scratch-prisma-') || e.name.startsWith('failure')) return [];
+  return e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`];
+});
+const metadata = ['task-contract.md', 'issue-source.md', 'implementation-receipt.md', 'validation-report.md', 'security-receipt.json', 'security-receipt.mjs', 'release-inspection.ps1', 'save-deployment-receipt.mjs', 'deployment-receipt.json', 'root-release-gate.mjs', 'release-gate-receipt.json', 'publication-final.mjs', 'qa-commands.mjs', 'qa-browser.mjs', 'qa-fixture.mjs', 'qa-server.mjs', 'qa-source-receipt.mjs', 'qa-extra-rerun.mjs', 'qa-online.mjs'];
+const paths = [...new Set([...independentFiles.map(f => f.path),...earlierFiles.map(f=>f.path), `${root}/independent-qa/refinement-e01/immutable-manifest.json`, `${root}/ci-comparison.json`,`${root}/collect-ci-receipt.mjs`,`${root}/verify-final-release.mjs`,`${root}/github-comment-template.md`, ...walk(`${root}/root-refinement-e01`), ...walk(`${root}/baseline`), ...metadata.map(x => `${root}/${x}`)])].sort();
+// Inspect ZIP members in memory only: no path extraction or filesystem writes.
+function zipMembers(bytes) {
+  let end = -1;
+  for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65557); i--) if (bytes.readUInt32LE(i) === 0x06054b50) { end = i; break; }
+  assert.ok(end >= 0, 'Invalid trace ZIP');
+  const result = []; let cursor = bytes.readUInt32LE(end + 16);
+  for (let n = 0; n < bytes.readUInt16LE(end + 10); n++) {
+    assert.equal(bytes.readUInt32LE(cursor), 0x02014b50);
+    const method = bytes.readUInt16LE(cursor + 10), size = bytes.readUInt32LE(cursor + 20), fullSize = bytes.readUInt32LE(cursor + 24);
+    const nameLength = bytes.readUInt16LE(cursor + 28), extraLength = bytes.readUInt16LE(cursor + 30), commentLength = bytes.readUInt16LE(cursor + 32);
+    const name = bytes.subarray(cursor + 46, cursor + 46 + nameLength).toString('utf8');
+    const local = bytes.readUInt32LE(cursor + 42); assert.equal(bytes.readUInt32LE(local), 0x04034b50); assert.ok(fullSize < 100*1024*1024);
+    const start = local + 30 + bytes.readUInt16LE(local + 26) + bytes.readUInt16LE(local + 28);
+    const data = bytes.subarray(start, start + size);
+    const body = method === 0 ? data : method === 8 ? inflateRawSync(data, { maxOutputLength: 100*1024*1024 }) : null;
+    assert.ok(body, 'Unsupported ZIP method'); assert.equal(body.length, fullSize);
+    result.push({ name, body }); cursor += 46 + nameLength + extraLength + commentLength;
+  }
+  return result;
+}
+const mode = process.argv[2];
+if (mode === 'prepare') {
+  assert.equal(JSON.parse(readFileSync(`${root}/deployment-receipt.json`, 'utf8')).decision, 'VERIFIED RELEASE');
+  const credentials = JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json', 'utf8')).env;
+  const secrets = Object.entries(credentials).filter(([k,v]) => /TOKEN|API_KEY|SECRET|PASSWORD/i.test(k) && typeof v === 'string' && v.length > 15).map(([,v]) => Buffer.from(v));
+  let secretChecks = 0, zipEntriesChecked = 0;
+  function inspect(bytes, name) {
+    for (const token of secrets) { assert.ok(!bytes.includes(token), `Private credential in ${name}`); secretChecks++; }
+    const originalIdentityHashes = new Set(['1d3a4ae11144b3587052817140734891ec70f3493bc96b55a4208e8580386184', 'c529285a2c38b806cbb05729b864e0ea026a1bbc30ddffb69971b93b48043b07']);
+    const words = bytes.toString('utf8').toUpperCase().match(/[A-Z0-9]{8,}/g) || [];
+    assert.ok(words.every(word => !originalIdentityHashes.has(sha(Buffer.from(word)))), `Original patient evidence in ${name}`);
+    if (!/\.(png|jpe?g|webm|zip)$/i.test(name)) assert.ok(!/\b[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]\b/.test(bytes.toString('utf8')), `Fiscal identifier requires review in ${name}`);
+  }
+  for (const path of paths) {
+    const bytes = readFileSync(path); inspect(bytes, path);
+    if (path.endsWith('.zip')) for (const member of zipMembers(bytes)) { inspect(member.body, `${path}:${member.name}`); zipEntriesChecked++; }
+  }
+  for (const file of [...independentFiles,...earlierFiles]) assert.equal(sha(readFileSync(file.path)), file.sha256);
+  const stageFiles = spawnSync('git', ['add', '-f', '--', ...paths], { encoding: 'utf8' }); assert.equal(stageFiles.status, 0, stageFiles.stderr);
+  const exportedFiles = paths.map(path => {
+    const local = readFileSync(path);
+    const staged = spawnSync('git', ['show', `:${path}`], { maxBuffer: 50*1024*1024 }); assert.equal(staged.status, 0);
+    const exact = local.equals(staged.stdout);
+    if (!exact) assert.ok(Buffer.from(local.toString('utf8').replace(/\r\n/g, '\n')).equals(staged.stdout), `Non-EOL export drift: ${path}`);
+    return { path, sha256: sha(local), gitBlobSha256: sha(staged.stdout), exportNormalization: exact ? 'none' : 'CRLF to LF only' };
+  });
+  const receipt = { applicationCommit: independent.applicationCommit, applicationSourceSha256: independent.sourceSha256, decision: 'SOURCE-BOUND SYNTHETIC PROOF', secretChecks, zipEntriesChecked, originalIndependentManifestFrozen: true, productionPatientTestMutations: 0, excluded: ['root-initial/debug/failures and initial online-browser transport-guard failure', 'scratch-prisma generated client', '405/408/410 unreleased app sources', 'dirty launchers', 'coordination metadata', 'original audit/medical photos'], files: paths.map(path => ({ path, sha256: sha(readFileSync(path)) })) };
+  receipt.files = exportedFiles;
+  receipt.exportPolicy = 'Independent local manifest remains frozen. Git may normalize text CRLF to LF; each exported blob is separately bound and byte-checked against only that transformation. No binary or substantive drift permitted.';
+  writeFileSync(`${root}/publication-manifest.json`, JSON.stringify(receipt, null, 2));
+  const stage = spawnSync('git', ['add', '-f', '--', ...paths, `${root}/publication-manifest.json`], { encoding: 'utf8' }); assert.equal(stage.status, 0, stage.stderr);
+  console.log(JSON.stringify({ files: receipt.files.length, secretChecks, zipEntriesChecked, stagedExplicitPaths: true }));
+} else if (mode === 'verify-git') {
+  const receipt = JSON.parse(readFileSync(`${root}/publication-manifest.json`, 'utf8'));
+  for (const file of receipt.files) { const r = spawnSync('git', ['show', `HEAD:${file.path}`], { maxBuffer: 50*1024*1024 }); assert.equal(r.status, 0); assert.equal(sha(r.stdout), file.gitBlobSha256, file.path); }
+  console.log(JSON.stringify({ gitBlobHashesVerified: receipt.files.length, applicationCommit: receipt.applicationCommit }));
+} else throw new Error('prepare or verify-git required');
