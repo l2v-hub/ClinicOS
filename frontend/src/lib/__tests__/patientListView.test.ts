@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { countListViews, matchesListView, unknownStateCount } from '../patientListView';
 
-test('Ricoverati keeps admitted, day hospital and unknown state; excludes discharged', () => {
+test('Non dimessi keeps admitted, day hospital and unknown state; excludes discharged', () => {
   assert.equal(matchesListView('ricoverato', 'in_carico'), true);
   assert.equal(matchesListView('day_hospital' as 'ricoverato', 'in_carico'), true);
   assert.equal(matchesListView(undefined, 'in_carico'), true);
@@ -32,7 +32,7 @@ test('counts add up when every state is known', () => {
   );
 });
 
-test('with any unknown state the Ricoverati/Dimessi counts are not verifiable (null), never a false zero', () => {
+test('with any unknown state the Non dimessi/Dimessi counts are not verifiable (null), never a false zero', () => {
   const stato: Record<string, 'ricoverato' | 'dimesso' | undefined> = {
     a: 'ricoverato',
     b: 'dimesso',

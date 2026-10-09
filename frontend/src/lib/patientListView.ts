@@ -1,18 +1,19 @@
-// Viste della lista pazienti (HMI 1): "Ricoverati" (in carico), "Dimessi e archivio", "Tutti".
+// Internal in_carico key remains compatible; its exact broad UI meaning is Non dimessi.
 // Lo stato di ricovero viene dal riepilogo clinico; se per un paziente non è ancora noto, il
 // paziente resta fra quelli in carico: non lo si nasconde per un dato mancante.
 import type { ClinicalSummaryEntry } from '../types';
+import { patientRegime } from './patientRegime';
 
 export type ListView = 'in_carico' | 'dimessi' | 'tutti';
 
 export const LIST_VIEW_LABEL: Record<ListView, string> = {
-  in_carico: 'Ricoverati',
+  in_carico: 'Non dimessi',
   dimessi: 'Dimessi e archivio',
   tutti: 'Tutti',
 };
 
 export function matchesListView(
-  stato: ClinicalSummaryEntry['statoRicovero'] | null | undefined,
+  stato: string | null | undefined,
   view: ListView,
 ): boolean {
   if (view === 'tutti') return true;
@@ -21,17 +22,17 @@ export function matchesListView(
 }
 
 /** Conteggi delle viste. Se lo stato di ricovero di anche un solo paziente non è noto (riepilogo
- *  in caricamento o non disponibile), "Ricoverati" e "Dimessi" non sono verificabili: null. */
+ *  in caricamento o non disponibile), "Non dimessi" e "Dimessi" non sono verificabili: null. */
 export function countListViews(
   ids: string[],
-  statoOf: (id: string) => ClinicalSummaryEntry['statoRicovero'] | null | undefined,
+  statoOf: (id: string) => string | null | undefined,
 ): Record<ListView, number | null> {
   let inCarico = 0;
   let dimessi = 0;
   let unknown = 0;
   for (const id of ids) {
     const stato = statoOf(id);
-    if (stato === undefined || stato === null) unknown++;
+    if (patientRegime(stato) === 'non_disponibile') unknown++;
     else if (stato === 'dimesso') dimessi++;
     else inCarico++;
   }
@@ -45,9 +46,9 @@ export function countListViews(
 /** Quanti pazienti caricati hanno lo stato di ricovero non noto. */
 export function unknownStateCount(
   ids: string[],
-  statoOf: (id: string) => ClinicalSummaryEntry['statoRicovero'] | null | undefined,
+  statoOf: (id: string) => string | null | undefined,
 ): number {
-  return ids.filter((id) => statoOf(id) === undefined || statoOf(id) === null).length;
+  return ids.filter((id) => patientRegime(statoOf(id)) === 'non_disponibile').length;
 }
 
 // ── Direct access: the list opened already filtered on what a KPI tile / notification counts ──

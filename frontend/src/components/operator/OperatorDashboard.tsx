@@ -83,9 +83,7 @@ export function OperatorDashboard({
   const critici = clinicalOverview?.critici ?? 0;
   const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
   const allergieGravi = clinicalOverview?.allergieGravi ?? 0;
-  // In carico = non dimessi, la stessa regola delle card Turno e della lista "Ricoverati": un
-  // paziente senza stato di ricovero esplicito non è un "dimesso" (prima l'intestazione diceva
-  // "0 ricoverati" accanto a cinque card di pazienti).
+  // Same literal non-discharged predicate as the list; this is not an admission count.
   const pazientiRicoverati = clinicalOverview
     ? Math.max(0, clinicalOverview.totalPatients - clinicalOverview.dimessi)
     : 0;
@@ -116,7 +114,7 @@ export function OperatorDashboard({
 
   const subtitle = [
     clinicalOverviewReady
-      ? `${pazientiRicoverati} ${pazientiRicoverati === 1 ? 'ricoverato' : 'ricoverati'}`
+      ? `${pazientiRicoverati} ${pazientiRicoverati === 1 ? 'paziente non dimesso' : 'pazienti non dimessi'}`
       : '',
     utente.reparto?.trim() ?? '',
   ]
@@ -140,6 +138,10 @@ export function OperatorDashboard({
         onOpenTherapy={onOpenLateTherapy ?? (() => onNavigate('terapie'))}
         onOpenPatientList={onOpenPatientList}
       />
+      <p className="dashboard-regime-note">
+        Non dimessi: pazienti senza dimissione registrata nel tuo perimetro, inclusi Day Hospital,
+        ambulatoriali e regime non disponibile. La lista distingue i singoli regimi.
+      </p>
 
       <div className="turno-grid">
         <AdessoQueue

@@ -4,7 +4,7 @@ import {
   type DashboardKpiItem,
   type DashboardKpiTone,
 } from '../shared/DashboardKpiBand';
-import type { PatientListEntry } from '../../lib/patientListView';
+import { LIST_VIEW_LABEL, type PatientListEntry } from '../../lib/patientListView';
 
 interface Props {
   loading: boolean;
@@ -112,17 +112,13 @@ export function OperatorClinicalKpiBand({
     }),
     {
       id: 'ricoverati',
-      label: 'Ricoverati',
+      label: LIST_VIEW_LABEL.in_carico,
       value: clinicalReady ? pazientiRicoverati : '—',
-      status: clinicalReady
-        ? pazientiRicoverati === 1
-          ? '1 paziente in carico'
-          : `${pazientiRicoverati} pazienti in carico`
-        : 'Dato non disponibile',
+      status: clinicalReady ? 'Senza dimissione registrata · nel tuo perimetro' : 'Dato non disponibile',
       tone: clinicalReady ? 'info' : 'unknown',
       icon: <IcoBed />,
       onOpen: openList({ view: 'in_carico' }, onOpenPazienti),
-      actionLabel: 'Apri i pazienti ricoverati',
+      actionLabel: 'Apri i pazienti non dimessi',
     },
     {
       id: 'somministrazioni',

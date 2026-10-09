@@ -40,7 +40,7 @@ test('patient list exposes the canonical fiscal identity and never shows MRN', (
 test('roster has five operational columns and native accessible actions', () => {
   assert.equal((roster.match(/<th scope="col"/g) ?? []).length, 5);
   // HMI 1: colonna NEWS2 al posto della colonna codice fiscale (che va sotto il nome).
-  for (const heading of ['Paziente', 'Ricovero', 'Segnalazioni', 'Azione']) {
+  for (const heading of ['Paziente', 'Regime', 'Segnalazioni', 'Azione']) {
     assert.match(roster, new RegExp(heading));
   }
   assert.match(roster, /<th scope="col">NEWS2<\/th>/);

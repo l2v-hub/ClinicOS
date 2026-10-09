@@ -374,3 +374,10 @@ button.turno-appt__who:hover {
   font: 500 14px/20px var(--font-ui);
   color: var(--text-muted);
 }
+.dashboard-regime-note {
+  margin: 8px 0 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}

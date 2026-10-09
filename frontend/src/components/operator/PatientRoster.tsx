@@ -17,12 +17,12 @@ import {
   type PatientSignal,
 } from '../../lib/patientTargetResolver';
 import {
-  ADMISSION_LABELS as STATO_RICOVERO_LABEL,
   PATIENT_SORT_LABELS,
   togglePatientSort,
   type PatientRosterSort,
   type PatientSortField,
 } from '../../lib/patientRosterSort';
+import { patientRegime, PATIENT_REGIME_LABEL } from '../../lib/patientRegime';
 
 function PatientSignals({
   patient,
@@ -217,13 +217,13 @@ const PatientCard = memo(function PatientCard({
           patientId={patient.id}
           patientName={`${patient.lastName}, ${patient.firstName}`}
         />
-        {state ? (
+        {patientRegime(state) !== 'non_disponibile' ? (
           <span className={`stato-pill stato-pill--ricovero-${state}`}>
-            {STATO_RICOVERO_LABEL[state] ?? state}
+            {PATIENT_REGIME_LABEL[patientRegime(state)]}
           </span>
         ) : (
           <span className="patient-signals__empty">
-            {summaryLoading ? 'Caricamento ricovero…' : 'Ricovero non disponibile'}
+            {summaryLoading ? 'Caricamento regime…' : 'Regime non disponibile'}
           </span>
         )}
         <PatientSignals
@@ -386,7 +386,7 @@ export function PatientRoster({
                 {sortButton('patient', 'Paziente')}
               </th>
               <th scope="col" aria-sort={ariaSort('admission')}>
-                {sortButton('admission', 'Ricovero')}
+                {sortButton('admission', 'Regime')}
               </th>
               <th scope="col">NEWS2</th>
               <th scope="col" aria-sort={ariaSort('signals')}>
@@ -454,9 +454,9 @@ export function PatientRoster({
                       </div>
                     </td>
                     <td>
-                      {state ? (
+                      {patientRegime(state) !== 'non_disponibile' ? (
                         <span className={`stato-pill stato-pill--ricovero-${state}`}>
-                          {STATO_RICOVERO_LABEL[state] ?? state}
+                          {PATIENT_REGIME_LABEL[patientRegime(state)]}
                         </span>
                       ) : (
                         <span className="patient-signals__empty">

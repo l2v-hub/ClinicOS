@@ -25,6 +25,8 @@ import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { useCan } from '../../lib/capabilities';
 import { PatientRoster } from './PatientRoster';
+import { PatientRegimeControls } from './PatientRegimeControls';
+import { matchesPatientRegime, type PatientRegimeFilter } from '../../lib/patientRegime';
 import { RosterOrderControl } from '../shared/RosterOrderControl';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
 import { sortPatientRoster, type PatientRosterSort } from '../../lib/patientRosterSort';
@@ -129,8 +131,9 @@ export function PatientList({
     focusNewIntakeRef.current = false;
     newIntakeButtonRef.current?.focus();
   });
-  // Vista come il prototipo: "Ricoverati" (in carico) predefinita, "Dimessi e archivio", "Tutti".
+  // Non dimessi includes every record without an explicit discharge, not just admissions.
   const [vista, setVista] = useState<ListView>(entry?.view ?? 'in_carico');
+  const [regime, setRegime] = useState<PatientRegimeFilter>('tutti');
   const [segnale, setSegnale] = useState<PatientListSignal | null>(entry?.signal ?? null);
   const appliedEntryRef = useRef(entry?.key);
   useEffect(() => {
@@ -138,6 +141,7 @@ export function PatientList({
     appliedEntryRef.current = entry.key;
     setVista(entry.view ?? 'in_carico');
     setSegnale(entry.signal ?? null);
+    setRegime('tutti');
   }, [entry]);
   const [showFilters, setShowFilters] = useState(false);
   // Vista scelta prima di iniziare una ricerca: cancellata la ricerca, si torna lì.
@@ -204,7 +208,11 @@ export function PatientList({
     return map;
   }, [clinicalSummary]);
 
-  const filtratiBase = pazienti;
+  // Same local regime/signal intersection for view counts and rendered patients.
+  const filtratiBase = useMemo(() => pazienti.filter(p =>
+    matchesPatientRegime(summaryMap.get(p.id)?.statoRicovero, regime) &&
+    matchesListSignal(summaryMap.get(p.id), anomalie.perPaziente.has(p.id), segnale)),
+    [pazienti, summaryMap, regime, segnale, anomalie.perPaziente]);
 
   // Conteggi sulle pagine già caricate: il backend non espone ancora un aggregato per stato.
   const contiVista = useMemo(
@@ -219,8 +227,7 @@ export function PatientList({
     () =>
       filtratiBase.filter(
         (p) =>
-          matchesListView(summaryMap.get(p.id)?.statoRicovero, vista) &&
-          matchesListSignal(summaryMap.get(p.id), anomalie.perPaziente.has(p.id), segnale),
+          matchesListView(summaryMap.get(p.id)?.statoRicovero, vista),
       ),
     [filtratiBase, vista, summaryMap, segnale, anomalie.perPaziente],
   );
@@ -352,7 +359,7 @@ export function PatientList({
       )}
       {summaryLoading && pazienti.length > 0 && (
         <p className="patient-roster-status" role="status">
-          Aggiornamento ricoveri e segnalazioni…
+          Aggiornamento regimi e segnalazioni…
         </p>
       )}
 
@@ -376,6 +383,7 @@ export function PatientList({
                 if (value && !ricerca) {
                   setVistaPrimaDellaRicerca(vista);
                   setVista('tutti');
+                  setRegime('tutti');
                 } else if (!value && ricerca) {
                   setVista(vistaPrimaDellaRicerca ?? 'in_carico');
                   setVistaPrimaDellaRicerca(null);
@@ -407,7 +415,8 @@ export function PatientList({
                 onClick={() => setVista(v)}
               >
                 {LIST_VIEW_LABEL[v]}
-                {contiVista[v] !== null && <span className="ds-chip__count">{contiVista[v]}</span>}
+                {contiVista[v] !== null && (v === 'tutti' || (!summaryLoading && !summaryError)) &&
+                  <span className="ds-chip__count">{contiVista[v]}</span>}
               </button>
             ))}
             <button
@@ -425,6 +434,10 @@ export function PatientList({
             </button>
           </div>
         </div>
+        <PatientRegimeControls regime={regime} onChange={setRegime} view={vista}
+          count={filtrati.length} loaded={pazienti.length} hasMore={hasMore}
+          unverified={summaryLoading || Boolean(summaryError) || contiVista.in_carico === null || contiVista.dimessi === null}
+          loading={summaryLoading} />
         {segnale && (
           <p className="plist-note plist-note--signal" role="status" data-list-signal={segnale}>
             Filtro attivo: <strong>{LIST_SIGNAL_LABEL[segnale]}</strong> ({filtrati.length} fra i

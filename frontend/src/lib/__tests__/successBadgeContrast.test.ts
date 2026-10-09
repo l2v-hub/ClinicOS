@@ -67,7 +67,7 @@ test('badge text fix preserves global accent colors and explicit admission text'
   assert.equal(resolved('var(--emerald)'), '#16a37b');
   assert.equal(resolved('var(--emerald-bg)'), '#e7f7f0');
   const roster = readFileSync(new URL('../../components/operator/PatientRoster.tsx', import.meta.url), 'utf8');
-  assert.match(roster, /STATO_RICOVERO_LABEL\[state\] \?\? state/);
+  assert.match(roster, /PATIENT_REGIME_LABEL\[patientRegime\(state\)\]/);
   const labels = readFileSync(new URL('../patientRosterSort.ts', import.meta.url), 'utf8');
   assert.match(labels, /ricoverato:\s*'Ricoverato'/);
 });

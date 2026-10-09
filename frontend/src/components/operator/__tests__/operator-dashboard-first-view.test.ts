@@ -50,11 +50,11 @@ test('clinical snapshot uses five native compact value cards', () => {
     'Parametri critici',
     'Rischi elevati',
     'Allergie gravi',
-    'Ricoverati',
     'Terapie in ritardo',
   ]) {
     assert.match(kpis, new RegExp(label));
   }
+  assert.match(kpis, /label: LIST_VIEW_LABEL.in_carico/);
   assert.match(kpis, /somministrazioni\.inCorso \|\| somministrazioni\.fallito/);
   assert.match(kpis, /status: loading \? 'Aggiornamento…' : 'Dato non disponibile'/);
   assert.match(sharedKpis, /\$\{item\.actionLabel\}/);

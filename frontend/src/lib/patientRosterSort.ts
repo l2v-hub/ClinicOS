@@ -10,7 +10,7 @@ export interface PatientRosterSort {
 export const PATIENT_SORT_LABELS: Record<PatientSortField, string> = {
   patient: 'Paziente',
   fiscalCode: 'Codice fiscale',
-  admission: 'Ricovero',
+  admission: 'Regime',
   signals: 'Segnalazioni',
 };
 
