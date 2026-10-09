@@ -1,0 +1,14 @@
+✔ conditional insulin requires a measured glucose and stores the server-resolved dose (272.7204ms)
+✔ conditional insulin rejects coercible non-number glucose values (5.3907ms)
+✔ therapy confirm persists prescription fields, not spoofed client drug data (9.2697ms)
+✔ therapy confirm rejects a mismatched therapy/patient pair (29.0551ms)
+✔ two same-name prescriptions keep independent administration records (8.8076ms)
+✔ ordinary operators cannot read or mutate another owner patient; managers retain global scope (141.319ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11063.8457

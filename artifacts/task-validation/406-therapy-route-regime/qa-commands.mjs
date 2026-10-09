@@ -1,0 +1,31 @@
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+const out = resolve(process.env.QA406_OUTPUT || 'artifacts/task-validation/406-therapy-route-regime/root');
+mkdirSync(out, { recursive: true });
+const records = [];
+function run(name, args, cwd = resolve('.')) {
+  const result = spawnSync(process.execPath, args, { cwd, encoding: 'utf8', maxBuffer: 40 * 1024 * 1024, env: { ...process.env, DATABASE_URL: 'postgresql://test:test@127.0.0.1:1/route_test', AUTH_MODE: 'demo', NODE_ENV: 'test', NODE_OPTIONS: '--max-old-space-size=4096' } });
+  const log = (result.stdout || '') + (result.stderr || '');
+  writeFileSync(resolve(out, `${name}.log`), log);
+  const stats = Object.fromEntries([...log.matchAll(/^ℹ (tests|pass|fail|skipped) (\d+)/gm)].map(m => [m[1], Number(m[2])]));
+  const failures = [...new Set([...log.matchAll(/^✖ (.*?) \([\d.]+ms\)/gm)].map(m => m[1]))].sort();
+  records.push({ name, exit: result.status, ...stats, ...(failures.length ? { failures } : {}) });
+  console.log(`${name}: exit${result.status} ${JSON.stringify(stats)}`);
+}
+run('frontend-types', ['../node_modules/typescript/bin/tsc', '--noEmit'], resolve('frontend'));
+run('backend-types', ['node_modules/typescript/bin/tsc', '-p', 'backend/tsconfig.json', '--noEmit']);
+run('tsc-build', ['../node_modules/typescript/bin/tsc', '-b'], resolve('frontend'));
+run('vite-build', ['../node_modules/vite/bin/vite.js', 'build'], resolve('frontend'));
+run('backend-build', ['node_modules/typescript/bin/tsc', '-p', 'backend/tsconfig.json']);
+run('backend-fonts', ['scripts/build/copy-assessment-fonts.mjs']);
+run('frontend-focused', ['--import', 'tsx', '--import', './scripts/stub-css-loader.mjs', '--test', 'frontend/src/components/operator/cartella/__tests__/therapyRouteRegime.test.ts', 'frontend/src/components/operator/cartella/__tests__/therapyFormPresentation.test.ts', 'frontend/src/components/operator/cartella/__tests__/inhalerTherapy.test.ts', 'frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts', 'frontend/src/components/shared/intake/__tests__/therapyFieldFeedback.test.ts']);
+run('backend-focused', ['--import', 'tsx', '--test', 'backend/src/therapies/__tests__/route-regime.test.ts', 'backend/src/therapies/__tests__/input-validation.test.ts', 'backend/src/routes/__tests__/patient-therapy-route-regime.test.ts', 'backend/src/intake/__tests__/confirm-therapy-validation.test.ts', 'backend/src/routes/__tests__/patient-diary-therapy-contract.test.ts', 'backend/src/routes/__tests__/patient-clinical-scope-contract.test.ts']);
+run('security-scan', ['scripts/security/scan-frontend-secrets.mjs', 'frontend/src', 'frontend/dist', 'backend/src/therapies/input-validation.ts', 'backend/src/routes/patient-therapies.ts']);
+run('full-regression', ['../scripts/run-node-tests.mjs'], resolve('frontend'));
+const current = records.find(r => r.name === 'full-regression');
+const baselineLog = readFileSync('artifacts/task-validation/404-giro-allergies/logs/full-regression.log', 'utf8');
+const baselineFailures = [...new Set([...baselineLog.matchAll(/^✖ (.*?) \([\d.]+ms\)/gm)].map(m => m[1]))].sort();
+const newFailures = (current.failures || []).filter(f => !baselineFailures.includes(f));
+writeFileSync(resolve(out, 'command-results.json'), JSON.stringify({ records, baselineSource: '45f3582d:404-giro-allergies/logs/full-regression.log', baselineFailures, newFailures }, null, 2));
+if (records.some(r => r.name !== 'full-regression' && r.exit !== 0) || current.fail !== 12 || newFailures.length) process.exitCode = 1;

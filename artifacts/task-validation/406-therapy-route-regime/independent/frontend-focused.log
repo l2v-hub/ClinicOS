@@ -1,0 +1,66 @@
+(node:30288) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ manual inhaler selection exposes puff while preserving explicit alternatives and quantities (24.8594ms)
+✔ AIFA and OCR recognize explicit inhalers before generic powder and solution forms (1.7219ms)
+✔ nebulizer, nasal and capsule forms are not converted to inhalers or puff by their route (1.9123ms)
+✔ OCR puff quantities and exact inhaler form survive review, payload validation and JSON reload (6.3654ms)
+✔ inhaler OCR only supplies a fallback unit when the quantity did not specify one (0.4602ms)
+✔ manual payload, restored schedules, calendar and administration labels retain puff (2.3853ms)
+(node:30288) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:15780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ preview keeps incomplete OCR values visibly incomplete without filling a dose or date (13.3383ms)
+✔ preview follows the therapy type without presenting latent schedules as active instructions (1.8004ms)
+✔ multiple forms have unique labels and radio groups; imported notes and fractions remain exposed (19.8221ms)
+(node:15780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ route options never contain scheduling regimes (0.9886ms)
+✔ legacy regimen route is not selectable or confirmed and remains unchanged for review (65.0775ms)
+✔ selecting every regimen preserves real route and latent schedule draft without PRN active times (4.7241ms)
+✔ changing legacy type does not implicitly fix the recorded ambiguous route (0.2363ms)
+(node:39132) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26488) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (3.2846ms)
+✔ PO03: operational notes never receive OCR source or class metadata (0.4187ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (0.7024ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (0.2454ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (1.2365ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (0.6503ms)
+✔ missing or ambiguous raw quantities never become a default dose (1.4856ms)
+✔ explicit unit takes priority over form and compound strength stays raw (0.3136ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (0.8753ms)
+✔ verification renders real manual times and an actionable indexed blocker (13.4359ms)
+✔ liquid and inhaled quantities keep their explicit unit (0.4377ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (0.4615ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (0.6907ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (0.6464ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (2.1733ms)
+✔ intake keeps complete therapy source available next to manual additions (36.9812ms)
+(node:26488) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:30064) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ diagnostics address original source indices despite excluded imports and multiple schedules (3.4019ms)
+✔ invalid drug, dates, route, strength, weekdays and each dose field have described inline errors (13.8991ms)
+✔ a duplicate or invalid second time marks only that time and preserves the other schedule (22.0417ms)
+✔ empty schedules and divided patches expose the correct correction controls (13.5702ms)
+✔ PRN ignores periodic schedules and residual invalid end date/weekdays remain reachable after a type change (12.2503ms)
+✔ one-off data and time blockers identify separate editable fields (5.1253ms)
+✔ summary correction opens the exact manual row through the section registry, even after excluded imports (37.9338ms)
+✔ summary imported source-review action targets the original row and time edits never acknowledge OCR (10.7524ms)
+✔ excluded blockers are absent from correction actions and busy disables remaining actions (0.9261ms)
+(node:30064) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1066.6045

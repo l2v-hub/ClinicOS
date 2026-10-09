@@ -1,0 +1,11 @@
+# Root release gate — issue 406
+
+Decision: ALLOW publication of application commit `c11c0990f6313a53a8bcde467046eecef69e012a` only. Human authorization: sequential bug implementation, commit, push, deployment and synthetic GitHub evidence. Independent QA has released ownership; root is the sole application writer. Issue 405 remains excluded and externally blocked.
+
+Root independently repeated the frozen candidate gates: frontend 38/38, backend 48/48; frontend/backend types and builds; security scan; isolated real PostgreSQL 6/6 issue-specific checks and 21/21 existing integration regressions; actual SPA desktop/mobile browser 9/9. Commands exited successfully. The complete frontend suite has 1179 tests, 1167 passes and 12 failures exactly matching the pinned baseline; zero new failures. This is a scoped waiver, not a clean full-suite claim.
+
+The 1427-file application source receipt matches independent QA exactly: `dbf9633c6e28bef714e813852b3c954d79b79d2e1dd790a966f38ca6868a3895`. All 48 independent publication files were SHA256 verified unchanged. Browser API writes/reloads are synthetic intercepted persistence; real database persistence is separately proven through the actual Express router on isolated PostgreSQL 18.4 (not CI PostgreSQL 16). No production patient writes, external AI calls or credentials in evidence. Root-owned browser server was stopped after the run.
+
+AC1: route excludes regimen choices and legacy variants cannot become selected valid routes. AC2: route and schedule draft survive type changes; PRN has no active scheduled doses. AC3: actual shared forms and previews distinguish route and therapy type on desktop/mobile. AC4: shared API/intake boundaries reject regimen routes before writes, merged PUT cannot bypass validation; legacy repair requires explicit route/type, and exact status-only suspension/conclusion preserves clinical fields. Existing authorization controls remain unchanged. No inferred clinical route or data migration.
+
+Release must additionally verify Git-linked Vercel deployment and the backend workflow's actual checked-out SHA plus Railway deployment identity/health before issue closure. Dependency vulnerabilities and the baseline failures are outside this fix and are not claimed resolved. Independent reports remain immutable.

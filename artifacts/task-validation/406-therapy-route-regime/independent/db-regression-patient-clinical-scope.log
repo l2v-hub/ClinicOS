@@ -1,0 +1,24 @@
+✔ patient search matches names and partial fiscal codes without escaping operator scope (307.7514ms)
+✔ ordinary operator cannot access another patient clinical resources (22.9827ms)
+POST /patients/cmv0khb0c0006wslpxzwkjimu/therapies → created id=cmv0khb5k000dwslp6vad3w5f (1 schedules)
+PUT /patients/cmv0khb0c0006wslpxzwkjimu/therapies/cmv0khb5k000dwslp6vad3w5f → updated (0 schedules)
+POST /patients/cmv0khb0c0006wslpxzwkjimu/therapies → created id=cmv0khb68000fwslpk9weqj06 (0 schedules)
+PUT /patients/cmv0khb0c0006wslpxzwkjimu/therapies/cmv0khb5k000dwslp6vad3w5f → updated (scalars only)
+✔ own patient access works and client authorship is ignored (49.3323ms)
+POST /patients/cmv0khb0c0006wslpxzwkjimu/room-assignments → created id=cmv0khb7c000hwslp5zjtpd3c
+PUT /patients/cmv0khb0c0006wslpxzwkjimu/room-assignments/cmv0khb7c000hwslp5zjtpd3c → updated
+✔ operator can list safe placement options and assign or move only an own patient (42.5917ms)
+✔ assignment rejects a bed whose room is inactive (9.8613ms)
+✔ manager retains global access while missing and unauthorized patients share 404 (6.7867ms)
+✔ patient roster, summaries, detail and cartella never cross ordinary-operator ownership (70.4519ms)
+POST /patients → creato id=cmv0khbas000kwslp2h5vq149 nome="Nuovo Scoped"
+✔ manager reads globally and patient creation binds ownership to the authenticated actor (19.4266ms)
+✔ text and voice assistant deny foreign-patient preview and execution (33.4705ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11334.2278

@@ -1,0 +1,35 @@
+{
+  "applicationCommit": "c11c0990f6313a53a8bcde467046eecef69e012a",
+  "checkedAt": "2026-10-09T06:29:33.0534252Z",
+  "decision": "VERIFIED RELEASE",
+  "productionMutations": 0,
+  "vercel": {
+    "id": "dpl_FsEgnzXDHUsKqDs67R3swyPnjpXe",
+    "state": "READY",
+    "gitSourceSha": "c11c0990f6313a53a8bcde467046eecef69e012a",
+    "githubCommitSha": "c11c0990f6313a53a8bcde467046eecef69e012a",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "http": 200,
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-xYJmntri.js",
+    "bundleSha256": "101f55b0250d368dfa56d6f4b3cf49b5b05984c9384a262c85201f0d439397a2",
+    "clinicalChunk": "https://clinicos-eosin.vercel.app/assets/intakeTherapies-Bqx-tz7N.js",
+    "clinicalChunkSha256": "2d88abb06ac935e7418c62948be2cf08579ae80d15d32961a5580b54397a6cb2",
+    "legacyReviewGuardPresent": true,
+    "distinctTypePreviewPresent": true
+  },
+  "backend": {
+    "runId": 37893378620,
+    "runUrl": "https://github.com/l2v-hub/ClinicOS/actions/runs/37893378620",
+    "eventHeadSha": "c11c0990f6313a53a8bcde467046eecef69e012a",
+    "actualCheckoutSha": "c11c0990f6313a53a8bcde467046eecef69e012a",
+    "actualCheckoutEvidence": "Run actions/checkout@v4: git log -1 --format=%H followed by candidate SHA. Set up job Commit c3d12f... is runner-image metadata, NOT the repository checkout.",
+    "workflowConclusion": "success",
+    "railwayDeploymentId": "208694a8-aed2-4895-abf4-e101cb67c40f",
+    "railwayStatus": "SUCCESS",
+    "imageDigest": "sha256:2eba1892c324071c32255b1f283f2f7f4d7f1f358039f9a63fb0aedadeafb473",
+    "healthUrl": "https://clinicos-backend-production-df88.up.railway.app/health",
+    "healthHttp": 200,
+    "provenance": "Actual Actions checkout log + printed Railway deployment ID + provider SUCCESS/image digest. Railway metadata itself has no git SHA. No manual duplicate deployment."
+  },
+  "evidencePublication": "Proof-only commit is published on codex/bug-406-prn-route, not main; this avoids a duplicate production build. Main remains the exact application candidate."
+}

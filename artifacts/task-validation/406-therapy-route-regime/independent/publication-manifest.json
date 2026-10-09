@@ -1,0 +1,205 @@
+{
+  "applicationCommit": "c11c0990f6313a53a8bcde467046eecef69e012a",
+  "applicationSourceSha256": "dbf9633c6e28bef714e813852b3c954d79b79d2e1dd790a966f38ca6868a3895",
+  "verdict": "READY FOR CODEX QA",
+  "passingBrowserAssertions": 9,
+  "excluded": [
+    "debug-attempts/**",
+    "unrelated launcher changes",
+    "generated coordination metadata"
+  ],
+  "files": [
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/implementation-receipt.md",
+      "sha256": "353da2e4e31481f3ffc012dfbfbc7dfdd624000f1457a95c75cc13c35d8fe67e"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/backend-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/backend-focused.log",
+      "sha256": "15d03a90b75e0be1ae136267724629c3168203ab9bc4ffbd69bf9b060bd095a4"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/backend-fonts.log",
+      "sha256": "2502ef00b7addbf9c894176a433b4a165f7736f2f0ff3387ed18f9bc7e868060"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/command-results.json",
+      "sha256": "62a3142afb47ddea08ce9a1f7ac540b1dfd4c9eac4249a67a9ddfcee80420dce"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/db-regression-patient-clinical-scope.log",
+      "sha256": "3bc396d9c397440d744f8916fb8ca4f1b457db98ffab620eec2da12ce0f9c2cb"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/db-regression-results.json",
+      "sha256": "180bd0847628b53734562f4254b81e4abdc91b2ab8f2f3479ea676d4d7611888"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/db-regression-therapy-authoritative-write.log",
+      "sha256": "767b7158d272215b9f7bab4ecf8415ab0fbef5ad5b92395d730b349fcca4beac"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/db-regression-therapy-prn-confirmation.log",
+      "sha256": "1ee3e417a2a2449033b6edbe1719a2cf59375bead0ff1d81519b6971cf9d0240"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/db-results.json",
+      "sha256": "6fc73daedde85c13b33823a6c093e710e31ba80352bca4797b776df0c8b59f8d"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/denied-role-trace.zip",
+      "sha256": "cf49e561f77468ab0f254219ec27d37981869e30c36b94d90aaa8f9df9dca49d"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/frontend-focused.log",
+      "sha256": "8d08479e72ed3f2c525b10fe29c1c9b2f5f6b07df58a9193f3f98ceaa5b3eb6b"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/full-regression.log",
+      "sha256": "846489613ab6098a652f7b36c2dad3ed8ee15ac540be797ad160a9eefc519003"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/mobile-trace.zip",
+      "sha256": "272566358236671a8f0ec6eb27bd70092216a99e4fee4d3e5bbb14aa09c96376"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/playwright-report/index.html",
+      "sha256": "612d4ad78d80385a9fba3d97c40b79637d8c8e61ba81439b99cfb65de1cb85a8"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/denied-role-controls.png",
+      "sha256": "55ba9775ccd8049a17e49b5330f82d015cc32355ffed38e1a28e2f8b081d1066"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/desktop-calendar-create-dialog.png",
+      "sha256": "69ce3bd20a21bfccd6e22e73edad24b28194fadb55cc661e69bf54e6c91a9c4c"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/desktop-created-prn-after-reload.png",
+      "sha256": "dcc1b647b85d374a12b87c2525968cff69ae5f179ff403bf09abc54b07980786"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/desktop-legacy-repaired-after-reload.png",
+      "sha256": "38731a1e0f336687f6e371ab8d60ed337df2356a629f57e28852093ca67aec6d"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/desktop-legacy-review-field.png",
+      "sha256": "0ded89c48c9b3dea986437d0b66fcf83d3c577f6c265b4d373c7c362e34681a4"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/desktop-legacy-review-no-conversion.png",
+      "sha256": "36280412e9deeae4bf1c15dd4b1dc7e2118ec8b75d6234c1a855d43a94a090d1"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/desktop-periodic-before-prn.png",
+      "sha256": "74203aded8414e1e146fb254ca2698f6c2da10ce6e61414394840d7d14ab42f0"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/desktop-prn-route-separated.png",
+      "sha256": "d8d17db0751f129491c4620548ca4d941a8887adad22e048fb3852123cf3a4d9"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/mobile-calendar-create-dialog.png",
+      "sha256": "81563d40aa122901904e6f4f37450b34515fb5a4107f7b62521fdf47cb7a66dc"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/mobile-legacy-review-field.png",
+      "sha256": "0e22fa45fa12280a3c6696de1bb08d54affc1723ca2e71166bfbc68db4e6f748"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/mobile-legacy-review.png",
+      "sha256": "84891572f51c0b8606d6fb1af671ee3d55cc26e2a40b28238c55914746bf42e3"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/screenshots/mobile-route-regime-separated.png",
+      "sha256": "cb2c109e2f6bab4ca9046efd024c83dee4d87171914d81bc81103b432d3d9a49"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/security-scan.log",
+      "sha256": "7989a6d636ec3a03acb905c1758c1a5d6c8cbe532a6b14f6d92c30e247dd2578"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/source-receipt.json",
+      "sha256": "7fc942bcabda61a482ab4c5310491986df6014202fdcafe5a25b865ba6d1ab94"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/test-results/browser-results.json",
+      "sha256": "8f7df12268227c18c21926c49311ce3bdb15b595f4010b5e2f7896a6facff00c"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/trace.zip",
+      "sha256": "f7190a2abfeeeb349fcb47393fe845f2a68594bc51d7c0056b3ec15a8b31ec55"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/validation-report.md",
+      "sha256": "568636382e3db850520d70fdfd81cbb0e18576a434d3bb75063968f633cf7fc5"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/video/denied-role.webm",
+      "sha256": "14d41dcb85e7e883253925be5466d484cc120ac45f4d8c884456dfce90097fbd"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/video/desktop.webm",
+      "sha256": "5d9c5cdb34dc6ba615100f6c7e23b1aa672e744c64b46c7a04bc59005ea0239a"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/video/mobile.webm",
+      "sha256": "b8053c11445a2c166ea112bc7ab54258596e97cccf29fd881efd6f31d76d4ce4"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/independent/vite-build.log",
+      "sha256": "d5c54bbd40c092d604873e6ed07f1f3f5bd8d8cdcd04bbf34e05d25f4bc82d18"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/issue-source.json",
+      "sha256": "d0c0176ad5f66e03484dd5fec6339692cd11f096d7e66f9b1edd8641d22cccd1"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/qa-browser.mjs",
+      "sha256": "b0915c079d9c18027d73f40e80211da3b169f0beb880dd63a9f77eb1b498d851"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/qa-commands.mjs",
+      "sha256": "5428b8779e40ee10287ab7519683b6d69ac6667409ee40481ca052b35928e353"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/qa-db-regression.mjs",
+      "sha256": "ace420e2f9af8522886a7781a7c72daa93d5814cf96d8032c0c621d17a0d8dea"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/qa-db.mjs",
+      "sha256": "4f4364dc15c3c2b535bdcfbd4e21fb466e2c0e0032a37efb1700cbc15bc6f784"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/qa-publication-receipt.mjs",
+      "sha256": "680e3a14825bca9f3fae0db65e97376a3a4621dc9bccb8794eb32e2591999771"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/qa-server.mjs",
+      "sha256": "311097de2eef5aac0b2ab102e03b9d6f0f119dd9edc9452b00f58e3700ffbdf4"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/qa-source-receipt.mjs",
+      "sha256": "10c88ba5be263f3f7a3bb879cd154065965b41d0211ff25fc77f8f69e092fd79"
+    },
+    {
+      "path": "artifacts/task-validation/406-therapy-route-regime/task-contract.md",
+      "sha256": "eea5da69cb8ef8086a25b73add7cead601b9697b7b41104fda3e2982cc8d9243"
+    }
+  ]
+}

@@ -1,0 +1,1200 @@
+{
+  "application": "Actual index.html/main.tsx/App.tsx SPA, guarded intercepted synthetic localhost APIs. Browser writes/reload are simulated transport persistence; real PostgreSQL evidence is separate db-results.json.",
+  "outcomes": [
+    {
+      "name": "AC1/3 actual physician create choices exclude regimes and preview has distinct route/type",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 native labels/keyboard and all three types preserve real route + latent periodic time/quantity",
+      "status": "PASS"
+    },
+    {
+      "name": "AC2 create PRN synthetic payload retains route and no active schedules; result survives reload",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1/3 legacy ambiguous route shown as review, nonselectable; type switch never mutates original; rejected save has zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "AC4 explicit legacy repair, intentional server400 remains visible, unchanged source then retry and reload preserves actual route/PRN",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 desktop actual calendar create dialog preserves route/regime, Escape cancels with zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "AC1/3 mobile390 real edit review, native route label and distinct preview, no automatic conversion",
+      "status": "PASS"
+    },
+    {
+      "name": "AC3 mobile actual calendar create dialog route/regime and Escape cancels with zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "Security denied nurse create/edit capabilities suppress prescription controls and every write",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "mobile": false,
+      "denied": false,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-DOCTOR-406"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20LEGACY%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20REGOLARE%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=Farmaco+nuovo+sintetico&limite=25"
+        },
+        {
+          "method": "POST",
+          "path": "/patients/QA-PATIENT-406/therapies",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20NUOVO%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-DOCTOR-406"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20LEGACY%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20NUOVO%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20REGOLARE%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-406"
+        },
+        {
+          "method": "PUT",
+          "path": "/patients/QA-PATIENT-406/therapies/QA-LEGACY-406",
+          "query": ""
+        },
+        {
+          "method": "PUT",
+          "path": "/patients/QA-PATIENT-406/therapies/QA-LEGACY-406",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-DOCTOR-406"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20LEGACY%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20NUOVO%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20REGOLARE%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        }
+      ],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/patients/QA-PATIENT-406/therapies",
+          "body": {
+            "patientId": "QA-PATIENT-406",
+            "doseMode": "fixed",
+            "doseProtocol": null,
+            "farmacoNome": "Farmaco nuovo sintetico",
+            "drugPackageRef": null,
+            "dosaggio": "",
+            "viaSomministrazione": "SC",
+            "tipo": "al_bisogno",
+            "stato": "attiva",
+            "dataInizio": "2026-10-09",
+            "dataFine": null,
+            "commercialStrengthValue": null,
+            "commercialStrengthUnit": "mg",
+            "pharmaceuticalForm": "compressa",
+            "allowedFractions": "1",
+            "giorniSettimana": null,
+            "schedules": [],
+            "prescrittore": null,
+            "operatoreInseritore": "Medico Sintetico",
+            "note": null,
+            "dataSomministrazione": null,
+            "orarioSomministrazione": null,
+            "requestId": "eeb18c5f-39eb-4810-b4ab-7cb72764dba6"
+          }
+        },
+        {
+          "method": "PUT",
+          "path": "/patients/QA-PATIENT-406/therapies/QA-LEGACY-406",
+          "body": {
+            "patientId": "QA-PATIENT-406",
+            "doseMode": "fixed",
+            "doseProtocol": null,
+            "farmacoNome": "Farmaco legacy sintetico",
+            "drugPackageRef": null,
+            "dosaggio": "",
+            "viaSomministrazione": "SC",
+            "tipo": "al_bisogno",
+            "stato": "attiva",
+            "dataInizio": "2026-01-01",
+            "dataFine": null,
+            "commercialStrengthValue": null,
+            "commercialStrengthUnit": "mg",
+            "pharmaceuticalForm": "compressa",
+            "allowedFractions": "1",
+            "giorniSettimana": null,
+            "schedules": [],
+            "prescrittore": "Medico sintetico",
+            "operatoreInseritore": "Medico Sintetico",
+            "note": "Nota sintetica",
+            "dataSomministrazione": null,
+            "orarioSomministrazione": null
+          }
+        },
+        {
+          "method": "PUT",
+          "path": "/patients/QA-PATIENT-406/therapies/QA-LEGACY-406",
+          "body": {
+            "patientId": "QA-PATIENT-406",
+            "doseMode": "fixed",
+            "doseProtocol": null,
+            "farmacoNome": "Farmaco legacy sintetico",
+            "drugPackageRef": null,
+            "dosaggio": "",
+            "viaSomministrazione": "SC",
+            "tipo": "al_bisogno",
+            "stato": "attiva",
+            "dataInizio": "2026-01-01",
+            "dataFine": null,
+            "commercialStrengthValue": null,
+            "commercialStrengthUnit": "mg",
+            "pharmaceuticalForm": "compressa",
+            "allowedFractions": "1",
+            "giorniSettimana": null,
+            "schedules": [],
+            "prescrittore": "Medico sintetico",
+            "operatoreInseritore": "Medico Sintetico",
+            "note": "Nota sintetica",
+            "dataSomministrazione": null,
+            "orarioSomministrazione": null
+          }
+        }
+      ],
+      "errors": [
+        "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+      ],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedHttp": [
+        {
+          "path": "/patients/QA-PATIENT-406/therapies/QA-LEGACY-406",
+          "status": 400
+        }
+      ],
+      "blockedExternal": [],
+      "unexpected": [],
+      "rejectNext": false,
+      "items": [
+        {
+          "id": "QA-LEGACY-406",
+          "patientId": "QA-PATIENT-406",
+          "farmacoNome": "Farmaco legacy sintetico",
+          "dosaggio": "",
+          "viaSomministrazione": "SC",
+          "tipo": "al_bisogno",
+          "stato": "attiva",
+          "dataInizio": "2026-01-01",
+          "dataFine": null,
+          "fasceMattina": true,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": false,
+          "fasceNotte": false,
+          "orarioSpecifico": null,
+          "prescrittore": "Medico sintetico",
+          "operatoreInseritore": "Medico Sintetico",
+          "note": "Nota sintetica",
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "doseMode": "fixed",
+          "doseProtocol": null,
+          "pharmaceuticalForm": "compressa",
+          "commercialStrengthValue": null,
+          "commercialStrengthUnit": "mg",
+          "allowedFractions": "1",
+          "schedules": [],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "drugPackageRef": null,
+          "giorniSettimana": null
+        },
+        {
+          "id": "QA-REGULAR-406",
+          "patientId": "QA-PATIENT-406",
+          "farmacoNome": "Farmaco regolare sintetico",
+          "dosaggio": "1 compressa",
+          "viaSomministrazione": "SC",
+          "tipo": "periodica",
+          "stato": "attiva",
+          "dataInizio": "2026-01-01",
+          "dataFine": null,
+          "fasceMattina": true,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": false,
+          "fasceNotte": false,
+          "orarioSpecifico": null,
+          "prescrittore": "Medico sintetico",
+          "operatoreInseritore": null,
+          "note": "Nota sintetica",
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "doseMode": "fixed",
+          "doseProtocol": null,
+          "pharmaceuticalForm": "compressa",
+          "commercialStrengthValue": null,
+          "commercialStrengthUnit": null,
+          "allowedFractions": "1",
+          "schedules": [
+            {
+              "id": "QA-REGULAR-406-S",
+              "therapyId": "QA-REGULAR-406",
+              "time": "08:00",
+              "fascia": "mattina",
+              "quantityNumerator": 1,
+              "quantityDenominator": 1,
+              "administrationUnit": "compressa"
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "QA-CREATED-406",
+          "patientId": "QA-PATIENT-406",
+          "farmacoNome": "Farmaco nuovo sintetico",
+          "dosaggio": "",
+          "viaSomministrazione": "SC",
+          "tipo": "al_bisogno",
+          "stato": "attiva",
+          "dataInizio": "2026-10-09",
+          "dataFine": null,
+          "fasceMattina": true,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": false,
+          "fasceNotte": false,
+          "orarioSpecifico": null,
+          "prescrittore": null,
+          "operatoreInseritore": "Medico Sintetico",
+          "note": null,
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "doseMode": "fixed",
+          "doseProtocol": null,
+          "pharmaceuticalForm": "compressa",
+          "commercialStrengthValue": null,
+          "commercialStrengthUnit": "mg",
+          "allowedFractions": "1",
+          "schedules": [],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z",
+          "drugPackageRef": null,
+          "giorniSettimana": null,
+          "requestId": "eeb18c5f-39eb-4810-b4ab-7cb72764dba6"
+        }
+      ],
+      "routeOptions": [
+        {
+          "value": "orale",
+          "text": "orale"
+        },
+        {
+          "value": "IM",
+          "text": "IM"
+        },
+        {
+          "value": "SC",
+          "text": "SC"
+        },
+        {
+          "value": "IV",
+          "text": "IV"
+        },
+        {
+          "value": "sublinguale",
+          "text": "sublinguale"
+        },
+        {
+          "value": "topico",
+          "text": "topico"
+        },
+        {
+          "value": "transdermica",
+          "text": "transdermica"
+        },
+        {
+          "value": "inalatoria",
+          "text": "inalatoria"
+        },
+        {
+          "value": "rettale",
+          "text": "rettale"
+        },
+        {
+          "value": "oftalmica",
+          "text": "oftalmica"
+        },
+        {
+          "value": "otologica",
+          "text": "otologica"
+        },
+        {
+          "value": "nasale",
+          "text": "nasale"
+        },
+        {
+          "value": "vaginale",
+          "text": "vaginale"
+        }
+      ]
+    },
+    {
+      "mobile": true,
+      "denied": false,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-DOCTOR-406"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20LEGACY%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20REGOLARE%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=attiva"
+        }
+      ],
+      "writes": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedHttp": [],
+      "blockedExternal": [],
+      "unexpected": [],
+      "rejectNext": false,
+      "items": [
+        {
+          "id": "QA-LEGACY-406",
+          "patientId": "QA-PATIENT-406",
+          "farmacoNome": "Farmaco legacy sintetico",
+          "dosaggio": "1 compressa",
+          "viaSomministrazione": "al bisogno",
+          "tipo": "periodica",
+          "stato": "attiva",
+          "dataInizio": "2026-01-01",
+          "dataFine": null,
+          "fasceMattina": true,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": false,
+          "fasceNotte": false,
+          "orarioSpecifico": null,
+          "prescrittore": "Medico sintetico",
+          "operatoreInseritore": null,
+          "note": "Nota sintetica",
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "doseMode": "fixed",
+          "doseProtocol": null,
+          "pharmaceuticalForm": "compressa",
+          "commercialStrengthValue": null,
+          "commercialStrengthUnit": null,
+          "allowedFractions": "1",
+          "schedules": [
+            {
+              "id": "QA-LEGACY-406-S",
+              "therapyId": "QA-LEGACY-406",
+              "time": "08:00",
+              "fascia": "mattina",
+              "quantityNumerator": 1,
+              "quantityDenominator": 1,
+              "administrationUnit": "compressa"
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "QA-REGULAR-406",
+          "patientId": "QA-PATIENT-406",
+          "farmacoNome": "Farmaco regolare sintetico",
+          "dosaggio": "1 compressa",
+          "viaSomministrazione": "SC",
+          "tipo": "periodica",
+          "stato": "attiva",
+          "dataInizio": "2026-01-01",
+          "dataFine": null,
+          "fasceMattina": true,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": false,
+          "fasceNotte": false,
+          "orarioSpecifico": null,
+          "prescrittore": "Medico sintetico",
+          "operatoreInseritore": null,
+          "note": "Nota sintetica",
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "doseMode": "fixed",
+          "doseProtocol": null,
+          "pharmaceuticalForm": "compressa",
+          "commercialStrengthValue": null,
+          "commercialStrengthUnit": null,
+          "allowedFractions": "1",
+          "schedules": [
+            {
+              "id": "QA-REGULAR-406-S",
+              "therapyId": "QA-REGULAR-406",
+              "time": "08:00",
+              "fascia": "mattina",
+              "quantityNumerator": 1,
+              "quantityDenominator": 1,
+              "administrationUnit": "compressa"
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "mobile": false,
+      "denied": true,
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-NURSE-406"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-406/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-406"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20LEGACY%20SINTETICO&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20REGOLARE%20SINTETICO&limite=25"
+        }
+      ],
+      "writes": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedHttp": [],
+      "blockedExternal": [],
+      "unexpected": [],
+      "rejectNext": false,
+      "items": [
+        {
+          "id": "QA-LEGACY-406",
+          "patientId": "QA-PATIENT-406",
+          "farmacoNome": "Farmaco legacy sintetico",
+          "dosaggio": "1 compressa",
+          "viaSomministrazione": "al bisogno",
+          "tipo": "periodica",
+          "stato": "attiva",
+          "dataInizio": "2026-01-01",
+          "dataFine": null,
+          "fasceMattina": true,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": false,
+          "fasceNotte": false,
+          "orarioSpecifico": null,
+          "prescrittore": "Medico sintetico",
+          "operatoreInseritore": null,
+          "note": "Nota sintetica",
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "doseMode": "fixed",
+          "doseProtocol": null,
+          "pharmaceuticalForm": "compressa",
+          "commercialStrengthValue": null,
+          "commercialStrengthUnit": null,
+          "allowedFractions": "1",
+          "schedules": [
+            {
+              "id": "QA-LEGACY-406-S",
+              "therapyId": "QA-LEGACY-406",
+              "time": "08:00",
+              "fascia": "mattina",
+              "quantityNumerator": 1,
+              "quantityDenominator": 1,
+              "administrationUnit": "compressa"
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        },
+        {
+          "id": "QA-REGULAR-406",
+          "patientId": "QA-PATIENT-406",
+          "farmacoNome": "Farmaco regolare sintetico",
+          "dosaggio": "1 compressa",
+          "viaSomministrazione": "SC",
+          "tipo": "periodica",
+          "stato": "attiva",
+          "dataInizio": "2026-01-01",
+          "dataFine": null,
+          "fasceMattina": true,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": false,
+          "fasceNotte": false,
+          "orarioSpecifico": null,
+          "prescrittore": "Medico sintetico",
+          "operatoreInseritore": null,
+          "note": "Nota sintetica",
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "doseMode": "fixed",
+          "doseProtocol": null,
+          "pharmaceuticalForm": "compressa",
+          "commercialStrengthValue": null,
+          "commercialStrengthUnit": null,
+          "allowedFractions": "1",
+          "schedules": [
+            {
+              "id": "QA-REGULAR-406-S",
+              "therapyId": "QA-REGULAR-406",
+              "time": "08:00",
+              "fascia": "mattina",
+              "quantityNumerator": 1,
+              "quantityDenominator": 1,
+              "administrationUnit": "compressa"
+            }
+          ],
+          "createdAt": "2026-01-01T00:00:00Z",
+          "updatedAt": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  ]
+}

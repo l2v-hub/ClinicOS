@@ -1,0 +1,19 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ nurse records a PRN dose: dose from the prescription, server time, audited (1392.7813ms)
+✔ PRN is idempotent per requestId and allows a second dose the same day (72.9578ms)
+✔ PRN input: indication mandatory, no client dose/time, only al_bisogno therapies (32.0546ms)
+✔ doctor and OSS cannot record PRN (403 capability_denied, nothing written) (17.9055ms)
+✔ supervisor: rejected without explicit confirmation (scheduled, not-given, PRN), accepted with (70.1623ms)
+✔ nurse scheduled flow unchanged: no confirmation flag needed, one dose per band (34.4134ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13334.9965

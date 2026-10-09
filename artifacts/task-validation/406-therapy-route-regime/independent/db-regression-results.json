@@ -1,0 +1,30 @@
+{
+  "kind": "Existing scoped backend regression tests against new isolated loopback PostgreSQL, no ambient URL/provider credential",
+  "version": "PostgreSQL 18.4 on x86_64-windows, compiled by msvc-19.44.35226, 64-bit",
+  "records": [
+    {
+      "name": "therapy-authoritative-write",
+      "exit": 0,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "name": "therapy-prn-confirmation",
+      "exit": 0,
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "name": "patient-clinical-scope",
+      "exit": 0,
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0
+    }
+  ]
+}

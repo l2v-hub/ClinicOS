@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readFileSync,writeFileSync,mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+const source='c11c0990f6313a53a8bcde467046eecef69e012a';
+const out=resolve(process.env.QA406_OUTPUT || 'artifacts/task-validation/406-therapy-route-regime/independent');mkdirSync(out,{recursive:true});
+const scopes=['frontend/src','backend/src','prisma','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','frontend/tsconfig.json','frontend/tsconfig.app.json','frontend/tsconfig.node.json','frontend/vite.config.ts','frontend/vercel.json','backend/package.json','backend/tsconfig.json','docs/therapy-route-regime-review.md','scripts/build/copy-assessment-fonts.mjs','scripts/stub-css-loader.mjs','scripts/run-node-tests.mjs'];
+const git=(args)=>{const r=spawnSync('git',args,{encoding:'utf8'});assert.equal(r.status,0,`${args.join(' ')} failed`);return r.stdout;};
+assert.equal(git(['rev-parse','HEAD']).trim(),source);
+git(['diff','--exit-code','HEAD','--',...scopes]);
+assert.equal(git(['ls-files','--others','--exclude-standard','--',...scopes]).trim(),'','No untracked application overrides');
+const files=git(['ls-files','-z','--',...scopes]).split('\0').filter(Boolean).sort();
+const tree=createHash('sha256');
+const records=files.map(path=>{const sha256=createHash('sha256').update(readFileSync(path)).digest('hex');tree.update(`${path}\0${sha256}\n`);return {path,sha256};});
+const receipt={applicationCommit:source,baseline:'45f3582dae64b0f34d2c1181286ed1d919d85d97',sourceScope:scopes,sourceSha256:tree.digest('hex'),trackedSourceMatchesCommit:true,noUntrackedApplicationOverrides:true,fileCount:records.length,excluded:'Evidence folder, generated builds, .claude/.swarm generated metadata and known unrelated launcher changes are not application source. Whole checkout is not asserted clean.',files:records};
+writeFileSync(resolve(out,'source-receipt.json'),JSON.stringify(receipt,null,2));console.log(JSON.stringify({applicationCommit:receipt.applicationCommit,sourceSha256:receipt.sourceSha256,fileCount:receipt.fileCount,trackedSourceMatchesCommit:true}));
