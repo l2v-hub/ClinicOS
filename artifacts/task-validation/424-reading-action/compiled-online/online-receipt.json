@@ -1,0 +1,13 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "deployment": "dpl_5uc2LzDHYnUB8dkqmPhs1kZDnn2m",
+  "bundleSha256": "c458119f1312a363d5959be8137594f461b3e2ee3548807fe2afe7f3674b96d2",
+  "cases": 21,
+  "ordinary": 17,
+  "supplemental": 4,
+  "decision": "COMPILED ONLINE ACCEPTANCE VERIFIED",
+  "beforeAfterBundleUnchanged": true,
+  "allClinicalApisInterceptedBeforeWire": true,
+  "productionPatientTestMutations": 0,
+  "apiReload": "In-memory synthetic UI transport only; actual durable reading contract separately tested with12 fresh localPostgreSQL tests"
+}

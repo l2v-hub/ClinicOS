@@ -1,0 +1,1 @@
+{"recipe":"artifacts/task-validation/424-reading-action/independent-qa/supplemental02.mjs","sha256":"30a7ccd4ddbbc51fe2ed066c393123ca8f6f91a63b78dfbac47e0d4e50ba686b","candidate":"67d21c3e9257a5acb8c9b25130c9417fb92185fb","policy":"Fix QA fixture only: denied handover capability removed navigation, unrelated to product defect; attempt01 preserved. Serial7515, guarded transport."}

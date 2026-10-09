@@ -1,0 +1,1 @@
+{"recipe":"artifacts/task-validation/424-reading-action/independent-qa/supplemental01.mjs","sha256":"ebc2849777dcc62f024c61a3bcecc15b49304211435b370bdf577bcb27e0a5b2","candidate":"67d21c3e9257a5acb8c9b25130c9417fb92185fb","policy":"QA-only guarded synthetic browser; serial lane owned7515; no production writes"}

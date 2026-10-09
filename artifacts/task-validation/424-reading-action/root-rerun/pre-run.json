@@ -1,0 +1,38 @@
+{
+  "decision": "AUTHORIZED EXACT INDEPENDENT RECIPE ROOT RERUN",
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "authority": "Human implementation/release authorization; QA browser7515 stopped/free, root sole writer/browser",
+  "qaSeal": "Still completing, promotion prohibited until immutable manifest validated; these exact pre-execution recipe hashes will be compared to final seal",
+  "records": [
+    {
+      "name": "browser.mjs",
+      "sha256": "ea344c048ce809c136c103cf4a26eda6d39e03997bdb4a2e32a6a4755c407ec7"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "07b1c3bad01cbd26dd61fd370a9d3db4c209b9128424a30b72ce795b8f8a3c31"
+    },
+    {
+      "name": "commands.mjs",
+      "sha256": "7be95a1b2c135b4ad23f1c698cde2454178b5c12eba7b2a5faa079c0ae51137d"
+    },
+    {
+      "name": "db-regression.mjs",
+      "sha256": "0566d7bf0cc8f9b5ab367bccaeb90d2b2e27082fc7becee5e28894ef076e2776"
+    },
+    {
+      "name": "prisma-validation.mjs",
+      "sha256": "5fab9b28a78a2c8b9979132e0f6f648c7bc604acfcd18e48c89f31ee895b7682"
+    },
+    {
+      "name": "source-receipt.mjs",
+      "sha256": "07b4769c4b252a15d2a93ae88f855d78167da8220f06f29a5df3269cd824ec07"
+    },
+    {
+      "name": "supplemental03.mjs",
+      "sha256": "805ba759b87ab1c7bd2c819d3cafca98b9b1f63d252847a0b5ea89b04060e866"
+    }
+  ],
+  "sourceBound": true,
+  "at": "2026-10-09T21:13:01.886Z"
+}

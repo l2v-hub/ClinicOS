@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-09T21:11:10.226Z",
+  "target": "C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\independent-qa\\security02/candidate",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "findings": []
+}

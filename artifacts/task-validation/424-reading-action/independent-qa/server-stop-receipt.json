@@ -1,0 +1,12 @@
+{
+  "policy": "Stop only verified QA-owned server after serial browser complete",
+  "before": {
+    "pid": 31520,
+    "port": 7515,
+    "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/424-reading-action/independent-qa/qa-server.mjs"
+  },
+  "after": {
+    "listenerAbsent": true,
+    "port": 7515
+  }
+}

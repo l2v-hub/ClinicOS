@@ -1,0 +1,132 @@
+.diary-thread {
+  margin: 14px 0 0 12px;
+  padding: 0 0 0 16px;
+  border-left: 2px solid #cdd8e8;
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.diary-thread__reply {
+  position: relative;
+  padding: 12px 14px;
+  border: 1px solid #d8e3f1;
+  border-radius: 0 12px 12px 12px;
+  background: #f4f8fd;
+  color: #263e5e;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.diary-thread__reply::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 18px;
+  width: 16px;
+  border-top: 2px solid #cdd8e8;
+}
+.diary-thread__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.diary-thread__head time {
+  color: #536782;
+  font-size: 12px;
+}
+.diary-thread__message {
+  margin: 5px 0;
+}
+.diary-thread__reply small {
+  display: block;
+  color: #536782;
+  font-size: 12px;
+}
+.diary-thread--active > .diary-thread__reply {
+  border-color: #efc3cb;
+  background: #fff7f8;
+}
+.diary-thread--active > .diary-thread__reply > strong {
+  color: #b42335;
+}
+.diary-thread .urgency-notice {
+  margin-top: 6px;
+  padding-top: 0;
+  border-top: 0;
+}
+.diary-thread__reply--personal {
+  background: #f8fafc;
+}
+.patient-record-view .diario-card__author {
+  margin: 8px 0 4px;
+}
+.diary-thread.diary-thread--reading {
+  margin: 6px 0 0;
+  padding: 0;
+  border: 0;
+}
+.diary-thread--reading > .diary-thread__reply {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 6px 0 0;
+  border: 0;
+  border-top: 1px solid var(--border, #d8e3f1);
+  border-radius: 0;
+  background: transparent;
+}
+.diary-thread--reading > .diary-thread__reply::before {
+  display: none;
+}
+.diary-thread__status {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.diary-thread--reading .diary-thread__message {
+  margin: 2px 0 0;
+  color: #536782;
+}
+.diary-thread--reading .btn-sm {
+  min-height: 40px;
+  padding: 6px 14px;
+  flex: 0 0 auto;
+}
+.diary-reading-guide {
+  margin: 8px 0 12px;
+  color: var(--text-secondary, #536782);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.diary-reading-guide summary {
+  cursor: pointer;
+  width: fit-content;
+  max-width: 100%;
+  color: var(--primary, #2563eb);
+  padding: 6px 0;
+}
+.diary-reading-guide summary:focus-visible {
+  outline: 2px solid var(--primary, #2563eb);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.diary-reading-guide p {
+  margin: 6px 0;
+  max-width: 72ch;
+}
+@media (max-width: 600px) {
+  .diary-thread {
+    margin-left: 0;
+    padding-left: 12px;
+  }
+  .diary-thread__reply {
+    padding: 10px;
+  }
+  .diary-thread__reply::before {
+    left: -14px;
+    width: 12px;
+  }
+}

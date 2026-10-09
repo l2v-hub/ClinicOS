@@ -1,0 +1,19 @@
+{
+  "policy": "Root explicitly authorized exact recoverable move of two newly generated untracked Ruflo ledger side effects. No delete, no recursive or broad directory move, no application changes. Native scanner completion did not grant authority.",
+  "records": [
+    {
+      "source": "C:\\w-424-qa\\.claude\\.proven-config-version",
+      "beforeSha256": "0b8ad646c4959a4515bab9787993f826610556966f1a70ae5b3c806503f01ed4",
+      "afterSha256": "0b8ad646c4959a4515bab9787993f826610556966f1a70ae5b3c806503f01ed4",
+      "sourceAbsent": true,
+      "target": "C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\independent-qa\\security02\\coordination-side-effects\\.proven-config-version"
+    },
+    {
+      "source": "C:\\w-424-qa\\.claude\\proven-config.json",
+      "beforeSha256": "8d39b61f287d7b4f6f559b840893bf4ca6eb5a4e008bad3baad04d17dba34493",
+      "afterSha256": "8d39b61f287d7b4f6f559b840893bf4ca6eb5a4e008bad3baad04d17dba34493",
+      "sourceAbsent": true,
+      "target": "C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\independent-qa\\security02\\coordination-side-effects\\proven-config.json"
+    }
+  ]
+}

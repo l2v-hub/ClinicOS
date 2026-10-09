@@ -1,0 +1,22 @@
+{
+  "decision": "AUTHORIZED SCOPED SYNTHETIC EVIDENCE STAGING",
+  "authority": "Direct human authorization; root sole proof writer",
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "explicitDirectoryAllowlist": [
+    "baseline04",
+    "root-frozen",
+    "root-rerun",
+    "compiled-online",
+    "independent-qa"
+  ],
+  "artifactCount": 337,
+  "at": "2026-10-09T21:30:19.892Z",
+  "excluded": [
+    "Root failed/dev attempts retained locally",
+    "runtime caches",
+    "scratch generated Prisma clones",
+    "dirty primary/launchers",
+    "blocked405/408/410/416 candidates",
+    "real patient attachments"
+  ]
+}

@@ -1,0 +1,15 @@
+
+Security Scan
+──────────────────────────────────────────────────
+... Scanning C:\w-424-qa\artifacts\task-validation\424-reading-action\independent-qa\security02/candidate...                                    Scan complete
+
+No security issues found!
+
++-------------------------------------------- Scan Summary --------------------------------------------+
+| Target: C:\w-424-qa\artifacts\task-validation\424-reading-action\independent-qa\security02/candidate |
+| Depth: deep                                                                                          |
+| Type: code                                                                                           |
+|                                                                                                      |
+| Critical: 0  High: 0  Medium: 0  Low: 0                                                              |
+| Total Issues: 0                                                                                      |
++------------------------------------------------------------------------------------------------------+

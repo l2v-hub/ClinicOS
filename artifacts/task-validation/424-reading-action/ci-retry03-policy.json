@@ -1,0 +1,9 @@
+{
+  "decision": "AUTHORIZED LAST BOUNDED INFRASTRUCTURE RETRY",
+  "authority": "Direct human iteration/testing authorization; source/config/env unchanged; no credential provisioning or paid infrastructure",
+  "run": "37992961607",
+  "nextAttempt": 3,
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "ifSameFailure": "Do not misstate CI as same backend baseline; preserve open issue, pinned partial evidence and external blocker, proceed next independent queue issue",
+  "at": "2026-10-09T21:26:48.790Z"
+}

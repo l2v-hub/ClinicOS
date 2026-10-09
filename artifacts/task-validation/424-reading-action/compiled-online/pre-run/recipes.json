@@ -1,0 +1,21 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "files": [
+    {
+      "name": "compiled-browser.mjs",
+      "sha256": "f8423ad458b1bf1696ab3373300f0da3298e202ac66a31149c72c86379b28414"
+    },
+    {
+      "name": "compiled-supplemental.mjs",
+      "sha256": "c42cd62084ea40ed9a243b2a3475b9ced395e1703ba474cbb8b15187639b80e7"
+    },
+    {
+      "name": "verify-online.mjs",
+      "sha256": "ce30ec0df1be38e6c6ec8e3e5736b01355f1e4647b84f396fb5479c925fb929a"
+    }
+  ],
+  "at": "2026-10-09T21:23:43.881Z",
+  "decision": "FROZEN BEFORE ONLINE BROWSER EXECUTION",
+  "cases": 21,
+  "authority": "Human authorized static production QA only, all clinical/auth APIs mocked before wire"
+}

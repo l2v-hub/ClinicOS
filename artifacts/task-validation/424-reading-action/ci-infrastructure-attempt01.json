@@ -1,0 +1,238 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "run": "37992961607",
+  "state": {
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "completedAt": "2026-10-09T21:22:09Z",
+        "conclusion": "success",
+        "databaseId": 114031595877,
+        "name": "secret-scan",
+        "startedAt": "2026-10-09T21:21:35Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-09T21:21:36Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-09T21:21:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:07Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-09T21:21:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:07Z",
+            "conclusion": "success",
+            "name": "Scan for leaked API keys",
+            "number": 3,
+            "startedAt": "2026-10-09T21:22:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:07Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 6,
+            "startedAt": "2026-10-09T21:22:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:07Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 7,
+            "startedAt": "2026-10-09T21:22:07Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/37992961607/job/114031595877"
+      },
+      {
+        "completedAt": "2026-10-09T21:22:53Z",
+        "conclusion": "failure",
+        "databaseId": 114031813008,
+        "name": "gate",
+        "startedAt": "2026-10-09T21:22:11Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-09T21:22:13Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-09T21:22:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "failure",
+            "name": "Initialize containers",
+            "number": 2,
+            "startedAt": "2026-10-09T21:22:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Run actions/checkout@v4",
+            "number": 3,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Run actions/setup-node@v4",
+            "number": 4,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Run actions/setup-python@v5",
+            "number": 5,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Install",
+            "number": 6,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Browser-e2e CI-path config guard (#267)",
+            "number": 7,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Apply migrations",
+            "number": 8,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Build (frontend + backend)",
+            "number": 9,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Install AI runtime deps",
+            "number": 10,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Start AI runtime (deterministic mock provider)",
+            "number": 11,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Backend unit tests",
+            "number": 12,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Import E2E (API, deterministic)",
+            "number": 13,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "New/existing targeting E2E (REQ-021, confirm new vs existing)",
+            "number": 14,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Async import E2E (REQ-022, 202 + worker + reclaim + retry)",
+            "number": 15,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "skipped",
+            "name": "Therapy import E2E (#156, parser -> seed terapiaImport -> confirm -> PatientTherapy)",
+            "number": 16,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "success",
+            "name": "Stop containers",
+            "number": 32,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-09T21:22:51Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 33,
+            "startedAt": "2026-10-09T21:22:51Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/37992961607/job/114031813008"
+      },
+      {
+        "completedAt": "2026-10-09T21:22:53Z",
+        "conclusion": "skipped",
+        "databaseId": 114032071709,
+        "name": "browser-e2e",
+        "startedAt": "2026-10-09T21:22:53Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/37992961607/job/114032071709"
+      },
+      {
+        "completedAt": "2026-10-09T21:22:53Z",
+        "conclusion": "skipped",
+        "databaseId": 114032072419,
+        "name": "real-provider",
+        "startedAt": "2026-10-09T21:22:53Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/37992961607/job/114032072419"
+      }
+    ],
+    "status": "completed"
+  },
+  "at": "2026-10-09T21:25:18.398Z",
+  "classification": "CI infrastructure before application checkout; full log retained sanitized; not accepted baseline backend test result"
+}

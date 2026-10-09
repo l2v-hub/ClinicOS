@@ -1,0 +1,42 @@
+{
+  "frozenBeforeExecution": true,
+  "note": "Recipes frozen before execution",
+  "files": [
+    {
+      "name": "browser.mjs",
+      "sha256": "421be28872c38ce586dd134e5f0ad090db1442f7a72efe4aba1f799f780f8711"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "0ec0ab6fab879fd0515a3b97853f02bbfbdb9f54a7bbd67ec2c8cbddba030e55"
+    },
+    {
+      "name": "commands.mjs",
+      "sha256": "db47c8e086ecc56452c010c46743c68410cebdc0f19918f7db91bf7cb5f41cef"
+    },
+    {
+      "name": "db-regression.mjs",
+      "sha256": "b50b033e88dd4b29d2ca03cd5e7e1d26b9c4923ad4e88028ae026e092fa8570f"
+    },
+    {
+      "name": "prisma-validation.mjs",
+      "sha256": "0cb60b28d9c1d96305e33864ca43c50328d650eebcd8c5662c67982e5a804e73"
+    },
+    {
+      "name": "source-receipt.mjs",
+      "sha256": "8fba2c79e957a4bb640833edbfd12b5380de7cf988b0b36dbaff1ba9ca9e457b"
+    },
+    {
+      "name": "task-contract.md",
+      "sha256": "5997ccbba2f65db32e11a63b6697cd21d42c320606199fd4abb4eb83460b81f4"
+    },
+    {
+      "name": "execution-policy.md",
+      "sha256": "42d6e219e72a4448e6af44334a4d3f8ed53f63034c779c07432c5e789219055e"
+    },
+    {
+      "name": "prepare-attempt.mjs",
+      "sha256": "cd0918245b9f0359d0905733efdc178ac54b61b3193b18bb912d1803904b44c0"
+    }
+  ]
+}

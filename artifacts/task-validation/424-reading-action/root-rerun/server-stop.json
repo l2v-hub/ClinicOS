@@ -1,0 +1,6 @@
+{
+  "port": 7513,
+  "pid": 24872,
+  "command": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/424-reading-action/root-rerun/recipes/qa-server.mjs",
+  "listenerFree": true
+}

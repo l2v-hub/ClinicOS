@@ -1,0 +1,24 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "checkedAt": "2026-10-09T21:23:37.531Z",
+  "decision": "VERIFIED RELEASE",
+  "vercel": {
+    "id": "dpl_5uc2LzDHYnUB8dkqmPhs1kZDnn2m",
+    "state": "READY",
+    "githubCommitSha": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+    "gitSourceSha": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "http": 200,
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-CSnPyVmf.js",
+    "bundleHttp": 200,
+    "bundleSha256": "c458119f1312a363d5959be8137594f461b3e2ee3548807fe2afe7f3674b96d2"
+  },
+  "backend": {
+    "changed": false,
+    "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "healthHttp": 200
+  },
+  "productionPatientTestMutations": 0,
+  "compiledSemanticAcceptance": "Separate guarded compiled online proof required before closure"
+}

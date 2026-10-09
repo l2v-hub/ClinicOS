@@ -1,0 +1,8 @@
+ruflo : Impossibile caricare il file C:\Users\Claudio\AppData\Roaming\npm\ruflo.ps1. L'esecuzione di script � 
+disabilitata nel sistema in uso. Per ulteriori informazioni, vedere about_Execution_Policies all'indirizzo 
+https://go.microsoft.com/fwlink/?LinkID=135170.
+In riga:1 car:1
++ ruflo security scan --target 'C:/w-424-qa/frontend/src' --depth deep  ...
++ ~~~~~
+    + CategoryInfo          : Errore di protezione: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess

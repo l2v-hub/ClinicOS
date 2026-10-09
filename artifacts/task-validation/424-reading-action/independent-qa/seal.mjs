@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,readdirSync,statSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+const root=resolve('artifacts/task-validation/424-reading-action/independent-qa'),hash=b=>createHash('sha256').update(b).digest('hex');assert.equal(existsSync(root+'/immutable-manifest.json'),false);
+const privacy=JSON.parse(readFileSync(root+'/privacy-receipt.json','utf8').replace(/^\uFEFF/,''));assert.equal(privacy.credentialFindings,0);assert.equal(privacy.syntheticFixtureSourceReviewed,true);
+const source=JSON.parse(readFileSync(root+'/source-after/source-receipt.json'));assert.equal(source.fileCount,1472);
+const recovery=JSON.parse(readFileSync(root+'/ledger-recovery-receipt.json','utf8').replace(/^\uFEFF/,''));assert.equal(recovery.records.length,2);assert.ok(recovery.records.every(x=>x.sourceAbsent&&x.beforeSha256===x.afterSha256));
+const files=[];function walk(dir,prefix=''){for(const n of readdirSync(dir)){if(n==='runtime-cache'||n==='immutable-manifest.json'||n.startsWith('scratch-prisma-'))continue;const p=dir+'/'+n,rel=prefix+n;if(statSync(p).isDirectory())walk(p,rel+'/');else files.push({path:rel,sha256:hash(readFileSync(p)),bytes:statSync(p).size});}}walk(root);files.sort((a,b)=>a.path.localeCompare(b.path));
+writeFileSync(root+'/immutable-manifest.json',JSON.stringify({applicationCommit:source.applicationCommit,applicationSourceSha256:source.sourceSha256,fileCount:1472,successfulPortableAttempts:{ordinary:{recipe:'browser.mjs',out:'attempt01/browser',cases:17},supplemental:{recipe:'supplemental03.mjs',out:'supplemental03',cases:4}},allFailedAttemptsRetained:true,excluded:['runtime compiler caches preserved locally','scratch generated Prisma clone preserved locally','build output dist outside evidence','fresh synthetic PostgreSQL datadir outside evidence, closed; command logs/migration receipts retained'],files},null,2));console.log(JSON.stringify({decision:'READY FOR CODEX QA',files:files.length,manifestSha256:hash(readFileSync(root+'/immutable-manifest.json'))}));

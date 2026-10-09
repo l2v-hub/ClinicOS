@@ -1,0 +1,86 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "fileCount": 1472,
+  "sourceSha256": "8b16c3ce319301b04b79b85fd4e956bc466c053a3ee5506b69661de12c01b84f",
+  "sourceUnchanged": true,
+  "strictUtf8CrLfOnlyCrossCheckoutDifferences": [
+    "frontend/src/components/operator/ConsegneUnreadQueue.tsx",
+    "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+    "frontend/src/components/operator/cartella/DiaryThreadReceipt.css",
+    "frontend/src/components/operator/cartella/DiaryThreadReceipt.tsx",
+    "frontend/src/lib/__tests__/diaryReading.test.ts"
+  ],
+  "extraInputs": [
+    {
+      "path": "tests/fixtures/po05-postgres.mjs",
+      "sha256": "bb169f4afdedbc88b2b17f48bab47616488f87a7eddd9ba1874db234912d0796"
+    },
+    {
+      "path": "backend/src/authz/__tests__/harness-support.ts",
+      "sha256": "b4b84a6bd946fb87f77efc2e019f5a3c15004e67275742de172fe5671a47abba"
+    }
+  ],
+  "ordinaryCases": 17,
+  "supplementalCases": 4,
+  "allSuccessfulGuardsPassed": true,
+  "failedHarnessAttemptsPreserved": [
+    "supplemental01",
+    "supplemental02",
+    "security-validation.mjs"
+  ],
+  "comparisons": [
+    {
+      "viewport": {
+        "width": 1150,
+        "height": 1004
+      },
+      "notes": [
+        {
+          "id": "d-052",
+          "before": 206.171875,
+          "after": 189.171875,
+          "savedPixels": 17
+        },
+        {
+          "id": "d-050",
+          "before": 206.171875,
+          "after": 189.171875,
+          "savedPixels": 17
+        },
+        {
+          "id": "d-048",
+          "before": 206.171875,
+          "after": 189.171875,
+          "savedPixels": 17
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "notes": [
+        {
+          "id": "d-052",
+          "before": 240.765625,
+          "after": 231.765625,
+          "savedPixels": 9
+        },
+        {
+          "id": "d-050",
+          "before": 240.765625,
+          "after": 231.765625,
+          "savedPixels": 9
+        },
+        {
+          "id": "d-048",
+          "before": 240.765625,
+          "after": 231.765625,
+          "savedPixels": 9
+        }
+      ]
+    }
+  ],
+  "visualInspection": "Actual direct chart and mobile result PNG pixels viewed by independent QA. Synthetic identities, exact server date and separate Ho capito drawn."
+}

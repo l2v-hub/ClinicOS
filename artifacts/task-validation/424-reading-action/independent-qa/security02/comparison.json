@@ -1,0 +1,37 @@
+{
+  "candidate": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "baseline": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "changed": [
+    "frontend/src/components/operator/ConsegneUnreadQueue.tsx",
+    "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+    "frontend/src/components/operator/cartella/DiaryThreadReceipt.css",
+    "frontend/src/components/operator/cartella/DiaryThreadReceipt.tsx",
+    "frontend/src/lib/__tests__/diaryReading.test.ts"
+  ],
+  "records": [
+    {
+      "kind": "baseline",
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    },
+    {
+      "kind": "candidate",
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    }
+  ],
+  "newFindings": [],
+  "scope": "Five changed files only, copied into QA-owned artifact samples before native scan to keep application readonly. No global vulnerability/CVE certification."
+}

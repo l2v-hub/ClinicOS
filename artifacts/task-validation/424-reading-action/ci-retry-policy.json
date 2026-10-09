@@ -1,0 +1,8 @@
+{
+  "decision": "AUTHORIZED ONE FAILED JOB RETRY",
+  "authority": "Direct human authorization to iterate deployment/testing without asking; no source/config/provider mutation",
+  "run": "37992961607",
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "reason": "First attempt stopped during container initialization before application checkout",
+  "at": "2026-10-09T21:25:18.400Z"
+}

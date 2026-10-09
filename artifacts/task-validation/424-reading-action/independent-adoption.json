@@ -1,0 +1,25 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "qaManifestSha256": "7079affea9bc5191002a1af77c113fd3016cddcb09786568afba211978175058",
+  "immutableQaFiles": 129,
+  "sourceFileCount": 1472,
+  "normalizedOnlyUtf8CrLfPaths": [
+    "frontend/src/components/operator/ConsegneUnreadQueue.tsx",
+    "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+    "frontend/src/components/operator/cartella/DiaryThreadReceipt.css",
+    "frontend/src/components/operator/cartella/DiaryThreadReceipt.tsx",
+    "frontend/src/lib/__tests__/diaryReading.test.ts"
+  ],
+  "extraInputsVerified": [
+    {
+      "path": "tests/fixtures/po05-postgres.mjs",
+      "sha256": "bb169f4afdedbc88b2b17f48bab47616488f87a7eddd9ba1874db234912d0796"
+    },
+    {
+      "path": "backend/src/authz/__tests__/harness-support.ts",
+      "sha256": "b4b84a6bd946fb87f77efc2e019f5a3c15004e67275742de172fe5671a47abba"
+    }
+  ],
+  "allFailedAttemptsRetained": true,
+  "rootExactRerunStillRequired": true
+}

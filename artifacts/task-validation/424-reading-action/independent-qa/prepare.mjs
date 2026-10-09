@@ -1,0 +1,13 @@
+import {readFileSync,writeFileSync,readdirSync,mkdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import {resolve} from 'node:path';
+import assert from 'node:assert/strict';
+const dir=resolve('artifacts/task-validation/424-reading-action/independent-qa');
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8'});assert.equal(r.status,0);return r.stdout;};
+assert.equal(git(['rev-parse','HEAD']).trim(),'67d21c3e9257a5acb8c9b25130c9417fb92185fb');
+const files=readdirSync(dir).filter(n=>/\.(mjs|md)$/.test(n)).sort().map(path=>({path,sha256:hash(readFileSync(dir+'/'+path))}));
+writeFileSync(dir+'/recipes-frozen.json',JSON.stringify({candidate:'67d21c3e9257a5acb8c9b25130c9417fb92185fb',files,policy:'Authorized independent local tests/artifacts only, no application edits, no external writes, browser after lane release. Fresh loopback DB overrides inherited URL. Native launcher changes preexisting, not changed by QA.',initialStatus:git(['status','--short'])},null,2));
+mkdirSync(dir+'/source-before',{recursive:true});
+const result=spawnSync(process.execPath,[dir+'/source-receipt.mjs','67d21c3e9257a5acb8c9b25130c9417fb92185fb',dir+'/source-before'],{encoding:'utf8'});process.stdout.write(result.stdout||'');process.stderr.write(result.stderr||'');assert.equal(result.status,0);

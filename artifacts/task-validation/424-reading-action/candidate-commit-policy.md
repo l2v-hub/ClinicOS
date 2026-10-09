@@ -1,0 +1,3 @@
+# Policy decision: AUTHORIZED
+
+Root may commit only the five frontend paths listed in task-contract.md from accepted b5f471cd2cd56839e7ebbd0d3daf0bbf04791468. Initial actual compiler/type/build/security checks and32 focused tests pass; full1252=1240PASS12 unchanged baseline failures/zero new;17 guarded browser assertions pass; fresh real PostgreSQL12 tests pass. Legacy urgency/auth/services/schema/config untouched. Dirty native launchers/Ruflo artifacts excluded. This is a candidate commit, NOT release authorization: fresh independent QA and exact root rerun/source binding plus before/after evidence and release gate remain mandatory before push main, deployment or closure.

@@ -1,0 +1,64 @@
+(node:9096) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-07: core priority UX is Normale / Urgente; a stored intermediate value is kept, not converted (1.8864ms)
+✔ AT-06: a new diary note sends no date, no state and no author (0.3344ms)
+✔ diary save errors surface the backend validation reason (24.7093ms)
+✔ diary form source: no «Stato» select and no manual date on the create form (1.0394ms)
+✔ handover composer offers only Normale / Urgente and no «aperta» wording (13.4043ms)
+(node:9096) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:24376) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ active shared state awaits understanding, author cannot self-confirm (13.0515ms)
+✔ taken receipt names the reader and stores full facility date, never clinical completion (1.9024ms)
+✔ historical missing trace and absent/invalid shared protocol never fabricate a reader (1.3475ms)
+✔ verified none requires no acknowledgement and legacy reads remain personal (1.9108ms)
+✔ empty or invalid personal receipts cannot imply a confirmed view (0.926ms)
+✔ server names are escaped as text (0.6524ms)
+(node:24376) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3632) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ can(): allowed, denied, missing, and no policy map (2.4558ms)
+✔ canNavigate(): pages follow their backing capability, dashboards are always visible (8.1328ms)
+✔ capabilityDeniedMessage(): only policy 403s get the role message (0.8741ms)
+(node:3632) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:13008) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all priorities describe the explicit reading action; author waits for a colleague (15.4985ms)
+✔ confirmed reading displays identity, role and full facility date; no action remains (1.2319ms)
+✔ busy and unavailable capability disable the existing reading action without changing its purpose (1.0734ms)
+✔ server reader and subject are escaped and never render hostile markup (1.0545ms)
+✔ collapsed contextual guide is shared once per diary or unread list, never in each receipt (1.7681ms)
+✔ unknown or malformed receipts and counts never manufacture an unread number or confirmation (3.505ms)
+✔ explicit POST requests reading and validates durable receipt before any client update (42.1066ms)
+(node:13008) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:16908) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ queue accepts a bounded mixed-source page with exact counts without confusing active urgency with unread (4.7437ms)
+✔ malformed, duplicate, mismatched, read or missing-count rows fail closed rather than fabricating zero (1.7439ms)
+✔ patient counts client is bounded, private, abortable and missing patients are not coerced to zero (37.2341ms)
+✔ count transport failure, duplicate ids, negative/string counts and out-of-request ids remain errors (2.0908ms)
+(node:16908) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:5644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ rules: active vs take-charge (never the author), counts (1.0455ms)
+✔ consegna labels: Urgente only while active; legacy alta shown as «(valore precedente)» (0.1915ms)
+✔ UrgencyNotice: button only for a non-author on an active urgency, trace afterwards (7.2111ms)
+✔ Turno «Adesso»: the author never gets their own urgency to do; taken ones never appear (1.6664ms)
+✔ Consegne feed: no aperta / in corso / completata anywhere; urgent section + «Ho capito» + trace (7.8295ms)
+✔ source guards: forms and edit never ask «Stato»; no transition handlers remain (2.4856ms)
+✔ postUrgencyAck: server message (e.g. author 409) is shown as is (18.2488ms)
+(node:5644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1489.7475

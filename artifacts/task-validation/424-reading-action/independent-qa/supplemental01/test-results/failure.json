@@ -1,0 +1,4482 @@
+{
+  "message": "locator.click: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.teams-sidebar').getByRole('button', { name: /Consegne/ })\u001b[22m\n",
+  "stack": "locator.click: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.teams-sidebar').getByRole('button', { name: /Consegne/ })\u001b[22m\n\n    at login (C:\\w-424-qa\\artifacts\\task-validation\\424-reading-action\\independent-qa\\supplemental01.mjs:115:86)\n    at async file:///C:/w-424-qa/artifacts/task-validation/424-reading-action/independent-qa/supplemental01.mjs:141:65",
+  "outcomes": [
+    {
+      "name": "Independent author restriction: explanatory state, no self-read action, guide keyboard does not write",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "mobile": false,
+      "rows": [
+        {
+          "id": "zz-urgent",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "zz-urgent",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 0",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "urgente",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": true,
+            "canAcknowledge": false
+          },
+          "urgency": {
+            "state": "active",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          }
+        },
+        {
+          "id": "d-052",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-052",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 52",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-050",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-050",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 50",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-048",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-048",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 48",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-046",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-046",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 46",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-044",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-044",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 44",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-042",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-042",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 42",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-040",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-040",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 40",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-038",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-038",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 38",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-036",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-036",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 36",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-034",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-034",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 34",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-032",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-032",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 32",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-030",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-030",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 30",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-028",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-028",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 28",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-026",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-026",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 26",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-024",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-024",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 24",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-022",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-022",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 22",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-020",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-020",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 20",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-018",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-018",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 18",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-016",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-016",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 16",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-014",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-014",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 14",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-012",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-012",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 12",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-010",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-010",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 10",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-008",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-008",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 8",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-006",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-006",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 6",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-004",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-004",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 4",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-002",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-002",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 2",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-051",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-051",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 51",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-049",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-049",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 49",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-047",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-047",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 47",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-045",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-045",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 45",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-043",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-043",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 43",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-041",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-041",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 41",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-039",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-039",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 39",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-037",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-037",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 37",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-035",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-035",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 35",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-033",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-033",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 33",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-031",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-031",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 31",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-029",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-029",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 29",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-027",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-027",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 27",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-025",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-025",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 25",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-023",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-023",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 23",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-021",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-021",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 21",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-019",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-019",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 19",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-017",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-017",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 17",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-015",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-015",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 15",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-013",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-013",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 13",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-011",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-011",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 11",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-009",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-009",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 9",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-007",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-007",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 7",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-005",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-005",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 5",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-003",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-003",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 3",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-001",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-001",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 1",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-NURSE-409"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread",
+          "query": "?limit=20"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread",
+          "query": "?limit=20"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-409-0"
+        }
+      ],
+      "clinicalWrites": [],
+      "allowedSyntheticReceipts": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "failNext": false,
+      "countError": false,
+      "role": "nurse"
+    },
+    {
+      "mobile": false,
+      "rows": [
+        {
+          "id": "zz-urgent",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "zz-urgent",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 0",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "urgente",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "active",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          }
+        },
+        {
+          "id": "d-052",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-052",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 52",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-050",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-050",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 50",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-048",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-048",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 48",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-046",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-046",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 46",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-044",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-044",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 44",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-042",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-042",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 42",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-040",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-040",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 40",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-038",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-038",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 38",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-036",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-036",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 36",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-034",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-034",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 34",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-032",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-032",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 32",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-030",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-030",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 30",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-028",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-028",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 28",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-026",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-026",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 26",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-024",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-024",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 24",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-022",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-022",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 22",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-020",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-020",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 20",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-018",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-018",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 18",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-016",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-016",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 16",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-014",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-014",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 14",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-012",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-012",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 12",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-010",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-010",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 10",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-008",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-008",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 8",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-006",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-006",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 6",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-004",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-004",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 4",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "d-002",
+          "patientId": "QA-PATIENT-409-0",
+          "sourceId": "d-002",
+          "sourceType": "diary",
+          "identity": {
+            "id": "QA-PATIENT-409-0",
+            "firstName": "Persona",
+            "lastName": "Sintetica",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 2",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-051",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-051",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 51",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-049",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-049",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 49",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-047",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-047",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 47",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-045",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-045",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 45",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-043",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-043",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 43",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-041",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-041",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 41",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-039",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-039",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 39",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-037",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-037",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 37",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-035",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-035",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 35",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-033",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-033",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 33",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-031",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-031",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 31",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-029",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-029",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 29",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-027",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-027",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 27",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-025",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-025",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 25",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-023",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-023",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 23",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-021",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-021",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 21",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-019",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-019",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 19",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-017",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-017",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 17",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-015",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-015",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 15",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-013",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-013",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 13",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-011",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-011",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 11",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-009",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-009",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 9",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-007",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-007",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 7",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-005",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-005",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 5",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-003",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-003",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 3",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "importante",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        },
+        {
+          "id": "consegna:d-001",
+          "patientId": "QA-PATIENT-409-1",
+          "sourceId": "d-001",
+          "sourceType": "consegna",
+          "identity": {
+            "id": "QA-PATIENT-409-1",
+            "firstName": "Persona",
+            "lastName": "Sintetica fuori pagina",
+            "codiceFiscale": null,
+            "dateOfBirth": "1980-01-01",
+            "location": {
+              "status": "unassigned",
+              "source": null,
+              "room": null,
+              "bed": null,
+              "asOf": "2026-10-09"
+            }
+          },
+          "entryDateTime": "2026-10-06T09:00",
+          "authorType": "medico",
+          "authorName": "Medico Sintetico",
+          "title": "Nota sintetica 1",
+          "content": "Dati inventati per verificare la coda. Nessuna informazione di un paziente reale.",
+          "priority": "normale",
+          "status": "aperta",
+          "category": null,
+          "readReceipt": {
+            "state": "unread",
+            "readBy": null,
+            "isAuthor": false,
+            "canAcknowledge": true
+          },
+          "urgency": {
+            "state": "none",
+            "takenBy": null,
+            "isAuthor": false,
+            "canAcknowledge": false
+          }
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-NURSE-409"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA-NURSE-409"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-10"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-409-0"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count",
+          "query": ""
+        }
+      ],
+      "clinicalWrites": [],
+      "allowedSyntheticReceipts": [],
+      "unexpected": [],
+      "external": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "failNext": false,
+      "countError": false,
+      "role": "nurse",
+      "denyConsegne": true
+    }
+  ]
+}

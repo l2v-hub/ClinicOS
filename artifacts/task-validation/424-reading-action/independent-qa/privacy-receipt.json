@@ -1,0 +1,9 @@
+{
+  "filesChecked": 128,
+  "configuredCredentialChecks": 5721,
+  "credentialFindings": 0,
+  "limitations": "No automated general PHI detector claim; no global vulnerability/CVE, hardware, production/provider certification. Fresh synthetic PostgreSQL contract separately passed12tests.",
+  "scope": "All independent evidence except non-publishable runtime compiler cache and scratch generated Prisma clone; archives expanded bounded100MB",
+  "syntheticFixtureSourceReviewed": true,
+  "zipMembersChecked": 1779
+}

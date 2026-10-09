@@ -1,0 +1,26 @@
+gate	Initialize containers	﻿2026-10-09T21:25:25.2771840Z ##[group]Checking docker version
+gate	Initialize containers	2026-10-09T21:25:25.2785137Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+gate	Initialize containers	2026-10-09T21:25:25.3965467Z '1.48'
+gate	Initialize containers	2026-10-09T21:25:25.3989749Z Docker daemon API version: '1.48'
+gate	Initialize containers	2026-10-09T21:25:25.3990535Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+gate	Initialize containers	2026-10-09T21:25:25.4160685Z '1.48'
+gate	Initialize containers	2026-10-09T21:25:25.4173803Z Docker client API version: '1.48'
+gate	Initialize containers	2026-10-09T21:25:25.4179164Z ##[endgroup]
+gate	Initialize containers	2026-10-09T21:25:25.4181999Z ##[group]Clean up resources from previous jobs
+gate	Initialize containers	2026-10-09T21:25:25.4187751Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=e5eb7c"
+gate	Initialize containers	2026-10-09T21:25:25.4336815Z ##[command]/usr/bin/docker network prune --force --filter "label=e5eb7c"
+gate	Initialize containers	2026-10-09T21:25:25.4487038Z ##[endgroup]
+gate	Initialize containers	2026-10-09T21:25:25.4487616Z ##[group]Create local container network
+gate	Initialize containers	2026-10-09T21:25:25.4497830Z ##[command]/usr/bin/docker network create --label e5eb7c github_network_60163aefdf54426f8f620a03e17e04c1
+gate	Initialize containers	2026-10-09T21:25:25.5053877Z e225085d45f11ad8312b3f979158da4761196c0f9f183d4994b7d456b2b6718f
+gate	Initialize containers	2026-10-09T21:25:25.5073939Z ##[endgroup]
+gate	Initialize containers	2026-10-09T21:25:25.5099600Z ##[group]Starting postgres service container
+gate	Initialize containers	2026-10-09T21:25:25.5123160Z ##[command]/usr/bin/docker pull postgres:16
+gate	Initialize containers	2026-10-09T21:25:26.2959732Z Error response from daemon: toomanyrequests: You have reached your unauthenticated pull rate limit. https://www.docker.com/increase-rate-limit
+gate	Initialize containers	2026-10-09T21:25:26.2990926Z ##[warning]Docker pull failed with exit code 1, back off 9.087 seconds before retry.
+gate	Initialize containers	2026-10-09T21:25:35.3871157Z ##[command]/usr/bin/docker pull postgres:16
+gate	Initialize containers	2026-10-09T21:25:36.1306032Z Error response from daemon: toomanyrequests: You have reached your unauthenticated pull rate limit. https://www.docker.com/increase-rate-limit
+gate	Initialize containers	2026-10-09T21:25:36.1320156Z ##[warning]Docker pull failed with exit code 1, back off 3.369 seconds before retry.
+gate	Initialize containers	2026-10-09T21:25:39.5007105Z ##[command]/usr/bin/docker pull postgres:16
+gate	Initialize containers	2026-10-09T21:25:54.7176699Z Error response from daemon: Head "https://registry-1.docker.io/v2/library/postgres/manifests/16": Get "https://auth.docker.io/token?account=githubactions&scope=repository%3Alibrary%2Fpostgres%3Apull&service=registry.docker.io": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+gate	Initialize containers	2026-10-09T21:25:54.7279964Z ##[error]Docker pull failed with exit code 1

@@ -1,0 +1,10 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "run": "37992961607",
+  "attempt": 2,
+  "status": "completed",
+  "conclusion": "failure",
+  "failedStage": "Initialize containers",
+  "classification": "Repeated DockerHub infrastructure failure before checkout; no application test verdict",
+  "at": "2026-10-09T21:26:48.789Z"
+}

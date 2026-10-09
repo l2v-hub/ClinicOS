@@ -1,0 +1,12 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "run": "37992961607",
+  "attempts": 3,
+  "decision": "BLOCKED EXTERNAL CI INFRASTRUCTURE; ISSUE MUST REMAIN OPEN",
+  "failedStage": "Initialize containers",
+  "reason": "DockerHub image pull rate limit/timeouts before application checkout, repeated in3 completed attempts",
+  "applicationTestVerdict": "Unavailable in CI; NOT the accepted backend failure and NOT global green",
+  "localEvidence": "Independent/root32 focused +12 real DB +21 browser each;21 compiled actual online PASS, deployment READY; full12 unchanged frontend failures",
+  "retryPolicy": "Do not repeat unchanged CI or provision credentials/change workflow; resume424 on external registry availability, continue next independent issue425 under completed-or-blocked sequential mandate",
+  "at": "2026-10-09T21:29:25.295Z"
+}

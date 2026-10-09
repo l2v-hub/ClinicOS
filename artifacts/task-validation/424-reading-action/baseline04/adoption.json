@@ -1,0 +1,49 @@
+{
+  "baselineApplication": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "exactBeforeEditSourceIdentityMatched": true,
+  "sourceSha256": "874a3a5362c8a36908f0bf4f733d1ec99b716cec563f6e5196725c431dd998a0",
+  "sourceBoundBaselineReplay": true,
+  "rootOwnedBaselineServer31392Stopped": true,
+  "files": [
+    {
+      "path": "browser/before-desktop-trace.zip",
+      "sha256": "3bc5499d6fab57a8ceafd990c003ac3c9b141e252711f0199599ce24932c88fe"
+    },
+    {
+      "path": "browser/before-mobile-trace.zip",
+      "sha256": "bfdd28062190fa3952bc1c6d96734502ef031842ab0cf2d98b562028fc0f7370"
+    },
+    {
+      "path": "browser/benchmark-mobile.json",
+      "sha256": "2a7abca55c6918d3285efa3d5f247ee82f101eb5330e9d3b894381da82c6aaf1"
+    },
+    {
+      "path": "browser/benchmark.json",
+      "sha256": "40edc143cea2a60637f4699894cf91168bf0da6ff4e0f8d9cd430cc2943ad585"
+    },
+    {
+      "path": "browser/screenshots/desktop-before-brief-notes.png",
+      "sha256": "826f1d58db8cac87fc95cf186954943fb8c52a7613d94841fa228e91a7cd6cec"
+    },
+    {
+      "path": "browser/screenshots/mobile-before-brief-notes.png",
+      "sha256": "baf48bcddb2578e83bc63b46421e4bb538a592618c081a4eae1cd4ae1356c9c3"
+    },
+    {
+      "path": "browser/test-results/browser-results.json",
+      "sha256": "18c46ee42be9d8c742bdccf7fdceb052cf09776e5ab5674ab8f53134039d6758"
+    },
+    {
+      "path": "browser/video/before-desktop.webm",
+      "sha256": "e376bed394f1cbd6cfda0f99644ae0ffc2f1b279e479f3d6b878093793c5dfe9"
+    },
+    {
+      "path": "browser/video/before-mobile.webm",
+      "sha256": "a49bec1c2a69f112e42c9269ebb2320970a76c43a99037015622934d62fd10bb"
+    },
+    {
+      "path": "source-receipt.json",
+      "sha256": "cb45b9f87beb15a582ce9239e59d94ec4fcd7d0e99eb896d78c95767ad4af41c"
+    }
+  ]
+}

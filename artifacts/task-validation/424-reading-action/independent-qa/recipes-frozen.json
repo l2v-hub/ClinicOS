@@ -1,0 +1,39 @@
+{
+  "candidate": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "files": [
+    {
+      "path": "browser.mjs",
+      "sha256": "ea344c048ce809c136c103cf4a26eda6d39e03997bdb4a2e32a6a4755c407ec7"
+    },
+    {
+      "path": "commands.mjs",
+      "sha256": "7be95a1b2c135b4ad23f1c698cde2454178b5c12eba7b2a5faa079c0ae51137d"
+    },
+    {
+      "path": "db-regression.mjs",
+      "sha256": "0566d7bf0cc8f9b5ab367bccaeb90d2b2e27082fc7becee5e28894ef076e2776"
+    },
+    {
+      "path": "prepare.mjs",
+      "sha256": "5ada1245d202d30168e7c10b3f6acf23b37054f3ee9e105b97de2ffa88392e97"
+    },
+    {
+      "path": "prisma-validation.mjs",
+      "sha256": "5fab9b28a78a2c8b9979132e0f6f648c7bc604acfcd18e48c89f31ee895b7682"
+    },
+    {
+      "path": "qa-server.mjs",
+      "sha256": "07b1c3bad01cbd26dd61fd370a9d3db4c209b9128424a30b72ce795b8f8a3c31"
+    },
+    {
+      "path": "source-receipt.mjs",
+      "sha256": "07b4769c4b252a15d2a93ae88f855d78167da8220f06f29a5df3269cd824ec07"
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "6cfac04fcafca6d1006590b7bd283e360e03bbf623e2a3e7c82b3ee4d26fc9c8"
+    }
+  ],
+  "policy": "Authorized independent local tests/artifacts only, no application edits, no external writes, browser after lane release. Fresh loopback DB overrides inherited URL. Native launcher changes preexisting, not changed by QA.",
+  "initialStatus": " M run-claude-queue.ps1\n M start-claude-team.ps1\n?? artifacts/task-validation/424-reading-action/\n"
+}

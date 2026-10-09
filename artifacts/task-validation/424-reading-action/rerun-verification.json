@@ -1,0 +1,25 @@
+{
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "decision": "EXACT INDEPENDENT ROOT RERUN VERIFIED",
+  "authority": "Explicit human commit/push/deploy authorization; root independent release decision after sealed QA and byte-identical root rerun",
+  "originalCriteriaPassed": 4,
+  "independentBrowserCases": 21,
+  "rootIndependentRerun": 21,
+  "focusedEach": 32,
+  "realLocalDbEach": 12,
+  "migrations": 57,
+  "sourceSha256": "4cbd1b51f7c9991533f3882511ffa71262c66f3f09fac9a3b8bf29b617560574",
+  "qaManifestSha256": "7079affea9bc5191002a1af77c113fd3016cddcb09786568afba211978175058",
+  "immutableQaFiles": 129,
+  "newFailures": 0,
+  "existingFullSuiteFailures": 12,
+  "productionPatientTestMutations": 0,
+  "scope": "Only five committed frontend presentation/test paths; backend/config/auth/schema/locks unchanged; no blocked405/408/410/416 source",
+  "remainingReleaseGates": [
+    "Exact production deployment",
+    "Compiled online acceptance",
+    "Complete CI baseline comparison",
+    "Canonical privacy scan and pinned public proof"
+  ],
+  "at": "2026-10-09T21:21:26.456Z"
+}

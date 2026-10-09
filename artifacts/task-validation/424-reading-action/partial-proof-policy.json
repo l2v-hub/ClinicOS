@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND PARTIAL EVIDENCE COMMIT/PUSH ONLY",
+  "authority": "Direct human evidence publishing authority; repeated external CI preventsclosure, no waiver",
+  "applicationCommit": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "branch": "codex/bug-424-reading-action",
+  "scope": "artifacts/task-validation/424-reading-action",
+  "artifacts": 337,
+  "configuredCredentialChecks": 14604,
+  "expandedZipMembers": 4531,
+  "productionPatientTestMutations": 0,
+  "issueMustRemainOpen": true,
+  "at": "2026-10-09T21:30:30.580Z"
+}

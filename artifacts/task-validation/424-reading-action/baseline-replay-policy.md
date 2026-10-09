@@ -1,0 +1,3 @@
+# Policy decision: AUTHORIZED
+
+Additional read-only application baseline checkout C:/w-424-base at exact accepted b5f471cd2cd56839e7ebbd0d3daf0bbf04791468 (detached). Root writes only task artifacts there, not application. Purpose: complete mobile before/after benchmark with identical latest synthetic recipe after root initial browser finished. Original desktop before edit baseline03 retained, failed harness attempts retained. Stop exact root7513 server before starting baseline7513, same single browser lane. Read-only shared dependency junction, no package/config changes, no database/provider/production calls. Preserve baseline checkout after use, no archive/delete authorization inferred.

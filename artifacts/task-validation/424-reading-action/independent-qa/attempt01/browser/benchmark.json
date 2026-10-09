@@ -1,0 +1,25 @@
+{
+  "before": false,
+  "source": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "viewport": {
+    "width": 1150,
+    "height": 1004
+  },
+  "heights": [
+    {
+      "id": "d-052",
+      "height": 189.171875,
+      "text": "MEDICO\nNORMALE\n06/10/2026 09:00\nSegnalata da Medico Sintetico\nNota sintetica 52\nDati inventati per verificare la coda. Nessuna informazione di un paziente reale.\nLettura non confermata\nConferma lettura"
+    },
+    {
+      "id": "d-050",
+      "height": 189.171875,
+      "text": "MEDICO\nNORMALE\n06/10/2026 09:00\nSegnalata da Medico Sintetico\nNota sintetica 50\nDati inventati per verificare la coda. Nessuna informazione di un paziente reale.\nLettura non confermata\nConferma lettura"
+    },
+    {
+      "id": "d-048",
+      "height": 189.171875,
+      "text": "MEDICO\nIMPORTANTE\n06/10/2026 09:00\nSegnalata da Medico Sintetico\nNota sintetica 48\nDati inventati per verificare la coda. Nessuna informazione di un paziente reale.\nLettura non confermata\nConferma lettura"
+    }
+  ]
+}

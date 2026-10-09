@@ -1,0 +1,30 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ counts every priority across patients beyond 50, status is not evidence of reading; GET writes nothing (1429.0848ms)
+✔ all-priority explicit reads share one authoritative receipt, are idempotent and do not alter the note (226.5457ms)
+✔ handover appears once in diary and counter; both source reads agree (86.8446ms)
+✔ scope and capability gates protect both aggregate and explicit receipts (60.741ms)
+✔ legacy own-name receipt with whitespace does not settle a note; invalid purpose writes nothing (67.5657ms)
+✔ urgent and all-priority read actions racing serialize without conflating reader and clinical taker (38.8372ms)
+✔ reading an active urgency never takes charge; same reader can explicitly take it later (28.9936ms)
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ exact badge/list/per-patient counts agree for both sources beyond 50 and tie dates; GET writes no receipt (1215.564ms)
+✔ bounded validated inputs and cursor are bound to actor, resident scope and patient filter (42.8633ms)
+✔ scope and capability are reapplied for queue and counts; no out-of-scope identity/count disclosures (42.0911ms)
+✔ both-source reading updates exact queue/count but keeps active urgency until separate same-actor takeover (341.0444ms)
+✔ new receipts are append-only, old urgency evidence remains compatible and parent cascade works (357.2083ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26888.4467
