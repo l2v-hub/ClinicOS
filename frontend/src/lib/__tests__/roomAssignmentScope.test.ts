@@ -7,7 +7,9 @@ const appSource = readFileSync(fileURLToPath(new URL('../../App.tsx', import.met
 const roomsSource = readFileSync(
   fileURLToPath(new URL('../../components/admin/RoomsManagement.tsx', import.meta.url)),
   'utf8',
-);
+) + readFileSync(new URL('../../components/admin/RoomManagementModel.ts', import.meta.url), 'utf8');
+const roomEditorSource = readFileSync(new URL('../../components/admin/RoomFormPanel.tsx', import.meta.url), 'utf8')
+  + readFileSync(new URL('../../components/admin/BedEditDialog.tsx', import.meta.url), 'utf8');
 const dashboardSource = readFileSync(
   fileURLToPath(new URL('../../components/admin/AdminDashboard.tsx', import.meta.url)),
   'utf8',
@@ -33,7 +35,8 @@ test('camera synchronization requests only the bounded active room-assignment sc
 
 test('room editor mirrors server bounds and never persists derived occupancy', () => {
   assert.match(roomsSource, /MAX_FACILITY_NOTE_LENGTH\s*=\s*2_000/);
-  assert.doesNotMatch(roomsSource, /<option value="occupato">/);
+  assert.doesNotMatch(roomsSource + roomEditorSource, /<option value="occupato">/);
+  assert.match(roomEditorSource, /maxLength=\{MAX_FACILITY_NOTE_LENGTH\}/);
   assert.match(roomsSource, /bed\.stato === 'manutenzione' \? 'manutenzione' : 'libero'/);
 });
 

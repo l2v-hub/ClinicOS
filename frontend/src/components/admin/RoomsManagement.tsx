@@ -1,119 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
+import { IcoPlus, IcoEdit, IcoX, IcoBed, IcoTrash } from '../../icons';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { ClinicalTableSection } from '../operator/cartella/shared';
-import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
+import { RoomFormPanel } from './RoomFormPanel';
+import { BedEditDialog } from './BedEditDialog';
+import './RoomActions.css';
+import { FORM_CAMERA_VUOTO, STATO_LETTO_CLASS, STATO_LETTO_LABEL, bedStatoDisplay, activeBedAssignment, fetchFacilityData, roomActionNames, bedEditName, type RoomAPI, type BedAPI, type OccupancyAPI, type StatoLetto, type BedEditTarget } from './RoomManagementModel';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
-
-/* ── API types ─────────────────────────────────────────── */
-
-interface AssignmentAPI {
-  id: string;
-  patientId: string;
-  startDate: string;
-  endDate: string | null;
-  patient: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;
-  };
-}
-
-interface BedAPI {
-  id: string;
-  roomId: string;
-  label: string;
-  stato: string;
-  note: string;
-  assignments: AssignmentAPI[];
-}
-
-interface RoomAPI {
-  id: string;
-  numero: string;
-  tipo: 'singola' | 'doppia' | 'altra';
-  piano: string;
-  reparto: string;
-  stato: 'attiva' | 'inattiva' | 'manutenzione';
-  note: string;
-  beds: BedAPI[];
-}
-
-interface OccupancyAPI {
-  totalRooms: number;
-  totalBeds: number;
-  occupiedBeds: number;
-  freeBeds: number;
-  maintenanceBeds: number;
-  occupancyPct: number;
-}
-
-/* ── Helpers ───────────────────────────────────────────── */
-
-type StatoLetto = 'libero' | 'occupato' | 'manutenzione';
-type TipoCamera = 'singola' | 'doppia' | 'altra';
-type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';
-const MAX_FACILITY_NOTE_LENGTH = 2_000;
-
-const STATO_LETTO_CLASS: Record<StatoLetto, string> = {
-  libero: 'letto--libero',
-  occupato: 'letto--occupato',
-  manutenzione: 'letto--manutenzione',
-};
-
-const STATO_LETTO_LABEL: Record<StatoLetto, string> = {
-  libero: 'Libero',
-  occupato: 'Occupato',
-  manutenzione: 'Manutenzione',
-};
-
-const FORM_CAMERA_VUOTO = {
-  numero: '',
-  tipo: 'singola' as TipoCamera,
-  piano: '1°',
-  reparto: '',
-  stato: 'attiva' as StatoCamera,
-  note: '',
-};
-
-function bedIsOccupied(bed: BedAPI): boolean {
-  const today = new Date().toISOString().slice(0, 10);
-  return bed.assignments.some(
-    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),
-  );
-}
-
-function bedStatoDisplay(bed: BedAPI): StatoLetto {
-  if (bed.stato === 'manutenzione') return 'manutenzione';
-  if (bedIsOccupied(bed)) return 'occupato';
-  return 'libero';
-}
-
-function activeBedAssignment(bed: BedAPI): AssignmentAPI | null {
-  const today = new Date().toISOString().slice(0, 10);
-  return (
-    bed.assignments.find(
-      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),
-    ) ?? null
-  );
-}
-
-async function fetchFacilityData(signal?: AbortSignal) {
-  const [roomsRes, occRes] = await Promise.all([
-    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),
-    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),
-  ]);
-  if (!roomsRes.ok || !occRes.ok) {
-    throw new Error('facility_data_unavailable');
-  }
-  const [rooms, occupancy] = await Promise.all([
-    roomsRes.json() as Promise<RoomAPI[]>,
-    occRes.json() as Promise<OccupancyAPI>,
-  ]);
-  return { rooms, occupancy };
-}
 
 /* ── Component ─────────────────────────────────────────── */
 
@@ -126,10 +20,11 @@ export function RoomsManagement() {
 
   const [formAperto, setFormAperto] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
+  const [editRoomNumber, setEditRoomNumber] = useState<string | null>(null);
   const [form, setForm] = useState(FORM_CAMERA_VUOTO);
   const [saving, setSaving] = useState(false);
 
-  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);
+  const [lettoEdit, setLettoEdit] = useState<BedEditTarget | null>(null);
   const [bedSaving, setBedSaving] = useState(false);
   const bedSaveInFlight = useRef(false);
   const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({
@@ -271,6 +166,7 @@ export function RoomsManagement() {
 
   function apriModificaCamera(room: RoomAPI) {
     setEditId(room.id);
+    setEditRoomNumber(room.numero);
     setForm({
       numero: room.numero,
       tipo: room.tipo,
@@ -284,8 +180,8 @@ export function RoomsManagement() {
 
   /* ── Bed edit ─────────────────────────────────────────── */
 
-  function apriLettoEdit(bed: BedAPI) {
-    setLettoEdit({ bedId: bed.id });
+  function apriLettoEdit(bed: BedAPI, room: RoomAPI) {
+    setLettoEdit({ bedId: bed.id, label: bed.label, roomNumber: room.numero });
     // "occupato" is derived from active assignments; it is never a persisted bed status.
     setLettoForm({
       stato: bed.stato === 'manutenzione' ? 'manutenzione' : 'libero',
@@ -416,176 +312,14 @@ export function RoomsManagement() {
         </div>
       </div>
 
-      {/* Room form */}
+      {/* Presentation-only editors; resource identity stays separate from editable values. */}
       {formAperto && (
-        <div className="op-form-panel">
-          <div className="op-form-panel__header">
-            <h3 className="op-form-panel__title">{editId ? 'Modifica Camera' : 'Nuova Camera'}</h3>
-            <button className="icon-btn" onClick={() => setFormAperto(false)}>
-              <IcoX />
-            </button>
-          </div>
-          <div className="op-form-grid">
-            <div className="form-field">
-              <label className="form-label">N° camera *</label>
-              <input
-                className="form-input"
-                value={form.numero}
-                maxLength={32}
-                onChange={(e) => setForm((p) => ({ ...p, numero: e.target.value }))}
-                placeholder="es. 101, PS-02"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Tipo</label>
-              <select
-                className="form-select"
-                value={form.tipo}
-                onChange={(e) => setForm((p) => ({ ...p, tipo: e.target.value as TipoCamera }))}
-              >
-                <option value="singola">Singola</option>
-                <option value="doppia">Doppia</option>
-                <option value="altra">Altra</option>
-              </select>
-            </div>
-            <div className="form-field">
-              <label className="form-label">Piano</label>
-              <input
-                className="form-input"
-                value={form.piano}
-                maxLength={64}
-                onChange={(e) => setForm((p) => ({ ...p, piano: e.target.value }))}
-                placeholder="1°, PT…"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Reparto</label>
-              <input
-                className="form-input"
-                value={form.reparto}
-                maxLength={64}
-                onChange={(e) => setForm((p) => ({ ...p, reparto: e.target.value }))}
-                placeholder="Cardiologia…"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Stato</label>
-              <select
-                className="form-select"
-                value={form.stato}
-                onChange={(e) => setForm((p) => ({ ...p, stato: e.target.value as StatoCamera }))}
-              >
-                <option value="attiva">Attiva</option>
-                <option value="inattiva">Inattiva</option>
-                <option value="manutenzione">Manutenzione</option>
-              </select>
-            </div>
-          </div>
-          <div className="form-field" style={{ marginTop: 8 }}>
-            <label className="form-label">Note</label>
-            <input
-              className="form-input"
-              value={form.note}
-              maxLength={MAX_FACILITY_NOTE_LENGTH}
-              onChange={(e) => setForm((p) => ({ ...p, note: e.target.value }))}
-              placeholder="Note sulla camera…"
-            />
-          </div>
-          <div className="op-form-panel__actions">
-            <button
-              className="btn-secondary"
-
-              onClick={() => setFormAperto(false)}
-            >
-              Annulla
-            </button>
-            <button
-              className="btn-success"
-
-              onClick={salvaCamera}
-              disabled={saving}
-            >
-              <IcoCheck /> {saving ? 'Salvataggio…' : editId ? 'Salva modifiche' : 'Crea camera'}
-            </button>
-          </div>
-        </div>
+        <RoomFormPanel roomNumber={editId ? editRoomNumber : null} form={form} onChange={setForm}
+          saving={saving} onSave={() => void salvaCamera()} onClose={() => setFormAperto(false)} />
       )}
-
-      {/* Bed edit modal */}
       {lettoEdit && (
-        <AccessibleDialogSurface
-          labelledBy="bed-edit-dialog-title"
-          onClose={() => setLettoEdit(null)}
-          dismissible={!bedSaving}
-        >
-          <div className="modal-header">
-            <h3 className="modal-title" id="bed-edit-dialog-title">
-              Modifica letto
-            </h3>
-            <button
-              type="button"
-              className="icon-btn"
-              aria-label="Chiudi modifica letto"
-              data-dialog-initial-focus
-              disabled={bedSaving}
-              onClick={() => setLettoEdit(null)}
-            >
-              <IcoX />
-            </button>
-          </div>
-          <div className="modal-body">
-            <div className="op-form-grid">
-              <div className="form-field">
-                <label className="form-label" htmlFor="bed-edit-status">
-                  Stato
-                </label>
-                <select
-                  id="bed-edit-status"
-                  className="form-select"
-                  value={lettoForm.stato}
-                  disabled={bedSaving}
-                  onChange={(e) => setLettoForm((p) => ({ ...p, stato: e.target.value }))}
-                >
-                  <option value="libero">Libero</option>
-                  <option value="manutenzione">Manutenzione</option>
-                </select>
-              </div>
-              <div className="form-field">
-                <label className="form-label" htmlFor="bed-edit-notes">
-                  Note
-                </label>
-                <input
-                  id="bed-edit-notes"
-                  className="form-input"
-                  value={lettoForm.note}
-                  maxLength={MAX_FACILITY_NOTE_LENGTH}
-                  disabled={bedSaving}
-                  onChange={(e) => setLettoForm((p) => ({ ...p, note: e.target.value }))}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn-secondary"
-
-              disabled={bedSaving}
-              onClick={() => setLettoEdit(null)}
-            >
-              Annulla
-            </button>
-            <button
-              type="button"
-              className="btn-success"
-
-              disabled={bedSaving}
-              onClick={salvaLetto}
-            >
-              <IcoCheck /> {bedSaving ? 'Salvataggio…' : 'Salva'}
-            </button>
-          </div>
-        </AccessibleDialogSurface>
+        <BedEditDialog target={lettoEdit} form={lettoForm} onChange={setLettoForm}
+          bedSaving={bedSaving} onSave={() => void salvaLetto()} onClose={() => setLettoEdit(null)} />
       )}
 
       {/* Filtro reparto */}
@@ -658,11 +392,13 @@ export function RoomsManagement() {
                       {occupati}/{room.beds.length}
                     </span>
                   </div>
+                  <div className="room-card__actions">
                   <button
                     className="icon-btn icon-btn--sm icon-btn--edit"
 
                     onClick={() => apriModificaCamera(room)}
-                    title="Modifica camera"
+                    title={roomActionNames(room.numero).edit}
+                    aria-label={roomActionNames(room.numero).edit}
                   >
                     <IcoEdit />
                   </button>
@@ -670,10 +406,12 @@ export function RoomsManagement() {
                     className="icon-btn icon-btn--danger"
 
                     onClick={() => setPendingRoom(room)}
-                    title="Elimina camera"
+                    title={roomActionNames(room.numero).remove}
+                    aria-label={roomActionNames(room.numero).remove}
                   >
-                    <IcoX />
+                    <IcoTrash />
                   </button>
+                  </div>
                 </div>
 
                 {room.note && <p className="room-note">{room.note}</p>}
@@ -714,8 +452,9 @@ export function RoomsManagement() {
                         <button
                           className="icon-btn icon-btn--sm"
 
-                          onClick={() => apriLettoEdit(bed)}
-                          title="Modifica letto"
+                          onClick={() => apriLettoEdit(bed, room)}
+                          title={bedEditName(bed.label, room.numero)}
+                          aria-label={bedEditName(bed.label, room.numero)}
                         >
                           <IcoEdit />
                         </button>
@@ -731,13 +470,13 @@ export function RoomsManagement() {
 
       <ConfirmDialog
         open={pendingRoom !== null}
-        title="Eliminare la camera?"
+        title={pendingRoom ? roomActionNames(pendingRoom.numero).deleteTitle : 'Eliminare la camera?'}
         message={
           pendingRoom
             ? `La camera ${pendingRoom.numero} verrà eliminata. L'azione non è reversibile.`
             : ''
         }
-        confirmLabel="Elimina camera"
+        confirmLabel={pendingRoom ? roomActionNames(pendingRoom.numero).remove : 'Elimina camera'}
         busy={deletingRoom}
         onConfirm={() => void confirmDeleteRoom()}
         onCancel={() => setPendingRoom(null)}
