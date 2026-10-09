@@ -1,0 +1,28 @@
+{
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "proofCommit": "28c8e2f09068fbdb8b215df8c5eea0ab09fc9afb",
+  "decision": "PINNED PUBLIC PROOF PREVERIFIED",
+  "canonicalHashesVerified": 643,
+  "images": [
+    {
+      "path": "compiled-online/browser03/doctor-1280-modal-save.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/28c8e2f09068fbdb8b215df8c5eea0ab09fc9afb/artifacts/task-validation/425-chart-scroll/compiled-online/browser03/doctor-1280-modal-save.png",
+      "http": 200,
+      "sha256": "5ed0918fa4079b7ed558d67a95e172fc648c51feb8cfa48939f7fc321c49bf90"
+    },
+    {
+      "path": "compiled-online/browser03/doctor-390-modal-save.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/28c8e2f09068fbdb8b215df8c5eea0ab09fc9afb/artifacts/task-validation/425-chart-scroll/compiled-online/browser03/doctor-390-modal-save.png",
+      "http": 200,
+      "sha256": "c7461f7fe8b54fbeeeb2c2ad1d1396e843e62bd3066c4d57eca973089cf39a64"
+    },
+    {
+      "path": "compiled-online/browser01/doctor-768-after-wheel.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/28c8e2f09068fbdb8b215df8c5eea0ab09fc9afb/artifacts/task-validation/425-chart-scroll/compiled-online/browser01/doctor-768-after-wheel.png",
+      "http": 200,
+      "sha256": "b3be0c83972b0ab77ce0cfd1e0b0c35e384b6f1b00fd5976ae1f5182d547d4f5"
+    }
+  ],
+  "at": "2026-10-09T22:34:29.735Z",
+  "productionPatientTestMutations": 0
+}
