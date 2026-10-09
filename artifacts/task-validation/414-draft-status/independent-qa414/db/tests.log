@@ -1,0 +1,16 @@
+✔ concurrent create uses one immutable initial receipt and replays the edited current draft (621.5159ms)
+✔ draft privacy and patient scope apply to reads, writes, create replay and revocation (29.464ms)
+✔ CAS permits one writer and incomplete finalization remains a draft (45.7863ms)
+✔ finalize replay persists once with Rome-date identity and immutable clinical data independent of Cartella (232.4382ms)
+✔ only one concurrent final correction may reference a predecessor of the same patient (87.4994ms)
+✔ history is bounded, scoped, stable across draft edits and excludes snapshots and answers (338.1309ms)
+✔ concurrent ownership change fences creation before a stale patient permission can write (50.5428ms)
+✔ a new process replays the persisted creation and finalization after response loss (21971.0885ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35204.0576

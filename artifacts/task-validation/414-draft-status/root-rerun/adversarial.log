@@ -1,0 +1,8 @@
+PASS desktop 413 focus survives new414 compact status
+PASS desktop blocked browser storage explicitly denies reload guarantee
+PASS desktop in-flight save retains locality and cannot become successful
+PASS desktop malformed successful transport keeps draft unconfirmed and retryable
+PASS mobile 413 focus survives new414 compact status
+PASS mobile blocked browser storage explicitly denies reload guarantee
+PASS mobile in-flight save retains locality and cannot become successful
+PASS mobile malformed successful transport keeps draft unconfirmed and retryable

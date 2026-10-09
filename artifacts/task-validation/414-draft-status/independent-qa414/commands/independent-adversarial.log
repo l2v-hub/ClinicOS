@@ -1,0 +1,39 @@
+node:internal/modules/cjs/loader:1519
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '../../../../../frontend/src/lib/assessments/assessmentDraftStore'
+Require stack:
+- C:\w-414\artifacts\task-validation\414-draft-status\independent-qa414\adversarial414.test.ts
+    at node:internal/modules/cjs/loader:1519:15
+    at T._resolveFilename (file:///C:/Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:15301)
+    at nextResolveSimple (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\tsx\dist\register-BoI6-WNn.cjs:10:1017)
+    at C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\tsx\dist\register-BoI6-WNn.cjs:9:4613
+    at C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\tsx\dist\register-BoI6-WNn.cjs:9:3894
+    at resolveTsPaths (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\tsx\dist\register-BoI6-WNn.cjs:10:770)
+    at Module._resolveFilename (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\tsx\dist\register-BoI6-WNn.cjs:10:1171)
+    at require (node:internal/modules/esm/translators:129:30)
+    at assert (C:\w-414\artifacts\task-validation\414-draft-status\independent-qa414\adversarial414.test.ts:5:44)
+    at Object.<anonymous> (C:\w-414\artifacts\task-validation\414-draft-status\independent-qa414\adversarial414.test.ts:117:2) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\w-414\\artifacts\\task-validation\\414-draft-status\\independent-qa414\\adversarial414.test.ts'
+  ]
+}
+
+Node.js v26.3.0
+✖ artifacts\task-validation\414-draft-status\independent-qa414\adversarial414.test.ts (1578.46ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1621.992
+
+✖ failing tests:
+
+test at artifacts\task-validation\414-draft-status\independent-qa414\adversarial414.test.ts:1:1
+✖ artifacts\task-validation\414-draft-status\independent-qa414\adversarial414.test.ts (1578.46ms)
+  'test failed'
