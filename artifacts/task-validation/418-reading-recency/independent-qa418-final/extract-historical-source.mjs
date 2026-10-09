@@ -1,0 +1,11 @@
+import {readFileSync,writeFileSync,readdirSync,mkdirSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import {createHash} from 'node:crypto';
+import {resolve,relative} from 'node:path';
+const out='C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final';
+const {yauzl}=createRequire('C:/w-insulin-qa/package.json')('C:/w-insulin-qa/node_modules/playwright-core/lib/utilsBundle.js');
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const walk=dir=>readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(resolve(dir,e.name)):[resolve(dir,e.name)]);
+const files=walk(out+'/browser-correct-viewport/test-results').filter(p=>p.endsWith('trace.zip'));const receipts=[];mkdirSync(out+'/historical-source',{recursive:true});
+for(const path of files)await new Promise((done,reject)=>yauzl.open(path,{lazyEntries:true},(error,zip)=>{if(error)return reject(error);zip.on('entry',e=>{if(!/^resources\/src@.*\.txt$/.test(e.fileName))return zip.readEntry();zip.openReadStream(e,(error,stream)=>{if(error)return reject(error);const chunks=[];stream.on('data',d=>chunks.push(d));stream.on('end',()=>{const bytes=Buffer.concat(chunks),s=bytes.toString('utf8');if(s.includes('QA-418-INDEPENDENT')){const h=sha(bytes);writeFileSync(out+'/historical-source/'+h+'.cjs',bytes);receipts.push({zip:relative(out,path).replaceAll('\\','/'),zipSha256:sha(readFileSync(path)),member:e.fileName,sourceSha256:h,bytes:bytes.length,reloadSupplementPresent:s.includes('after reload'),webSocketGuardPresent:s.includes('routeWebSocket')});}zip.readEntry();});});});zip.on('end',done);zip.on('error',reject);zip.readEntry();}));
+writeFileSync(out+'/historical-source/receipt.json',JSON.stringify({source:'Genuine original main-run trace ZIP members, not reconstructed',receipts},null,2));console.log(JSON.stringify({members:receipts.length,uniqueHashes:[...new Set(receipts.map(e=>e.sourceSha256))]}));

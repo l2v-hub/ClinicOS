@@ -1,0 +1,4 @@
+{"instant":"0000-01-01T00:00:00Z","status":"threw","error":"Error","message":"Data non valida"}
+{"instant":"0099-01-01T00:00:00Z","status":"threw","error":"Error","message":"Data non valida"}
+{"instant":"0999-01-01T00:00:00Z","status":"threw","error":"Error","message":"Data non valida"}
+{"instant":"1000-01-01T00:00:00Z","status":"returned","result":{"absolute":"01/01/1000 00:49","elapsed":"53574 settimane fa","valid":true}}

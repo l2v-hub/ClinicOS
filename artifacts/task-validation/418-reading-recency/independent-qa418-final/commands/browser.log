@@ -1,0 +1,26 @@
+
+Running 19 tests using 1 worker
+
+(node:20344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › desktop › overview: DST minutes days weeks associated, wraps and read-only idle (7.2s)
+  ok  2 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › desktop › chart: DST minutes days weeks associated, wraps and read-only idle (8.4s)
+  ok  3 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › desktop › ward: DST minutes days weeks associated, wraps and read-only idle (6.0s)
+  ok  4 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › tablet-emulated › overview: DST minutes days weeks associated, wraps and read-only idle (5.3s)
+  ok  5 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › tablet-emulated › chart: DST minutes days weeks associated, wraps and read-only idle (6.8s)
+  ok  6 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › tablet-emulated › ward: DST minutes days weeks associated, wraps and read-only idle (8.0s)
+  ok  7 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › mobile-emulated › overview: DST minutes days weeks associated, wraps and read-only idle (6.5s)
+  ok  8 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › mobile-emulated › chart: DST minutes days weeks associated, wraps and read-only idle (9.6s)
+  ok  9 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:79:166 › mobile-emulated › ward: DST minutes days weeks associated, wraps and read-only idle (20.3s)
+  ok 10 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:92:1 › expanded comparison has own full provenance and historical NEWS2 remains zero (14.0s)
+  ok 11 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:95:47 › overview: impossible/unzoned/future timestamps never imply present (5.3s)
+  ok 12 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:95:47 › chart: impossible/unzoned/future timestamps never imply present (3.4s)
+  ok 13 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:95:47 › ward: impossible/unzoned/future timestamps never imply present (2.6s)
+  ok 14 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:98:1 › bounded partial history does not invent empty history or populate new controls (3.2s)
+  ok 15 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:101:1 › spring DST transition is six elapsed minutes despite wall-clock jump (2.6s)
+  ok 16 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:106:2 › tablet diagnostic › runtime viewport and ward container bounds (3.9s)
+  ok 17 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:112:47 › overview: all unsupported four-digit year representations fail safe without UI crash (4.4s)
+  ok 18 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:112:47 › chart: all unsupported four-digit year representations fail safe without UI crash (4.7s)
+  ok 19 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:112:47 › ward: all unsupported four-digit year representations fail safe without UI crash (5.5s)
+
+  19 passed (2.5m)

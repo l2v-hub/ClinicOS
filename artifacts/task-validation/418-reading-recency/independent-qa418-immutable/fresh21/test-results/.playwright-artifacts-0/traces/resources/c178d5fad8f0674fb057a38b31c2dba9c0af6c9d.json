@@ -1,0 +1,1 @@
+{"readings":[{"id":"QA-only-FR","patientId":"QA-418-INDEPENDENT","requestId":"QA-only-FR","measuredAt":"2026-10-25T00:59:00Z","values":{"fr":"19"},"createdAt":"2026-10-25T00:59:00Z","authorOperatorId":"QA-418-NURSE","authorName":"Infermiere QA418"}],"hasMore":true,"nextCursor":"QA-next-page"}

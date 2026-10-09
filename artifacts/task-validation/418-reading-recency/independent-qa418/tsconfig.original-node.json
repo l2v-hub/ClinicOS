@@ -1,0 +1,6 @@
+{
+  "extends": "C:/w-418-qa/frontend/tsconfig.node.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "C:\\w-418-qa\\artifacts\\task-validation\\418-reading-recency\\independent-qa418/original-node.tsbuildinfo"
+  }
+}

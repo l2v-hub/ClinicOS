@@ -1,0 +1,88 @@
+[
+  {
+    "name": "types-app",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--project",
+      "tsconfig.app.json",
+      "--incremental",
+      "false"
+    ],
+    "cwd": "C:/w-418-qa/frontend",
+    "start": "2026-10-09T15:46:12.458Z",
+    "end": "2026-10-09T15:46:12.528Z",
+    "exitCode": 1
+  },
+  {
+    "name": "types-node",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--project",
+      "tsconfig.node.json",
+      "--incremental",
+      "false"
+    ],
+    "cwd": "C:/w-418-qa/frontend",
+    "start": "2026-10-09T15:46:12.530Z",
+    "end": "2026-10-09T15:46:12.591Z",
+    "exitCode": 1
+  },
+  {
+    "name": "build-types",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "-b",
+      "C:\\w-418-qa\\artifacts\\task-validation\\418-reading-recency\\independent-qa418/tsconfig.build.json"
+    ],
+    "cwd": "C:/w-418-qa/frontend",
+    "start": "2026-10-09T15:46:12.593Z",
+    "end": "2026-10-09T15:46:12.658Z",
+    "exitCode": 1
+  },
+  {
+    "name": "build-vite",
+    "args": [
+      "node_modules/vite/bin/vite.js",
+      "build",
+      "--outDir",
+      "C:\\w-418-qa\\artifacts\\task-validation\\418-reading-recency\\independent-qa418/generated-build"
+    ],
+    "cwd": "C:/w-418-qa/frontend",
+    "start": "2026-10-09T15:46:12.658Z",
+    "end": "2026-10-09T15:46:12.719Z",
+    "exitCode": 1
+  },
+  {
+    "name": "focused",
+    "args": [
+      "--import",
+      "tsx",
+      "--import",
+      "../scripts/stub-css-loader.mjs",
+      "--test",
+      "src/lib/__tests__/readingRecency.test.ts",
+      "src/lib/__tests__/parameterPad.test.ts",
+      "src/lib/__tests__/patientVitalsOverview.test.ts",
+      "src/lib/__tests__/news2.test.ts",
+      "src/lib/__tests__/news2History.test.ts",
+      "src/lib/__tests__/parameterEntryFocus.test.ts",
+      "src/lib/__tests__/parameterReadingValidation.test.ts"
+    ],
+    "cwd": "C:/w-418-qa/frontend",
+    "start": "2026-10-09T15:46:12.719Z",
+    "end": "2026-10-09T15:46:13.813Z",
+    "exitCode": 0
+  },
+  {
+    "name": "full-regression",
+    "args": [
+      "../scripts/run-node-tests.mjs"
+    ],
+    "cwd": "C:/w-418-qa/frontend",
+    "start": "2026-10-09T15:46:13.813Z",
+    "end": "2026-10-09T15:46:53.241Z",
+    "exitCode": 1
+  }
+]

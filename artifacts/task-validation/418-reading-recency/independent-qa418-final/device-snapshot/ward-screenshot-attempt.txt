@@ -1,0 +1,1 @@
+Original documented getScreenshot attempt timed out after 5000ms Page.captureScreenshot. Ward actual AX and DOM metrics were captured before attempted pixels; no substituted ward screenshot. Overview original actual desktop PNG succeeded on this candidate.

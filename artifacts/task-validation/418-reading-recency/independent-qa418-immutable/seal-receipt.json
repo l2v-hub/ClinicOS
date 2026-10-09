@@ -1,0 +1,17 @@
+{
+  "verdict": "READY FOR CODEX QA",
+  "application": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "files": 2128,
+  "manifestSha256": "53ba13ed123037041878f9da736765526df2176264466008e6406ee910d0a499",
+  "sealedAt": "2026-10-09T16:39:43.611Z",
+  "fresh21": {
+    "expected": 21,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "allFreshGateOriginalsPreserved": true,
+  "priorGateRetentionIncidentNotReinterpreted": true,
+  "serverStopped": true,
+  "scope": "All files in this new immutable gate sealed except recursive manifest/seal metadata; separately authorized prior sealed evidence reused by hash, no release authority."
+}

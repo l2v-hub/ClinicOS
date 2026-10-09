@@ -1,0 +1,176 @@
+{
+  "source": "Genuine original main-run trace ZIP members, not reconstructed",
+  "receipts": [
+    {
+      "zip": "browser-correct-viewport/test-results/independent-bounded-partia-a337f-ry-or-populate-new-controls/trace.zip",
+      "zipSha256": "a4d7599255cc4b079f5e31d39764ded797a35355b15f8c84d808f7075283f076",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-chart-all-unsu-4290e--fail-safe-without-UI-crash/trace.zip",
+      "zipSha256": "5eed16a4260ae13636719ba34d7e9f607e268ca096ad48e12be64ebcdd0e1849",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-chart-impossib-90697-estamps-never-imply-present/trace.zip",
+      "zipSha256": "f3b4bdc34106748bd4a001b583a6953057243fc99d87a5dcddefc986f70f50df",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-desktop-chart--112b9-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "035128db79778f053f760837c80cb43d724656f3975d1e2f43fa17b7bb48ee57",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-desktop-overvi-ebab6-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "5adc6be4000a66a397d28ba7d6b7d201f1cd3b57f2ddc87dece950de3a9f13ca",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-desktop-ward-D-26016-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "8ab0a9252db39c87af313fc2553704946bb2e694493102dec814e2e37a77eced",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-expanded-compa-940d5-storical-NEWS2-remains-zero/trace.zip",
+      "zipSha256": "eac2d519bd479e35b105e44089430e2dd50c56f50cafea0ecf21d622da052e1b",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-mobile-emulate-0e3b6-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "4b50797c2be0e3e037cd92abef8b98c64fe3391c49974b73747d2a12ea0d1298",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-mobile-emulate-79649-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "4af6ec4ec6d5980b0850a00760ea89c0a3795b29879d0101bbb4cac43d14aaf5",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-mobile-emulate-82900-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "f9de2b5313cfa22c921ace41320f58ecca7dea27af6b06ecd0cdbbe48d37d64f",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-overview-all-u-5bf95--fail-safe-without-UI-crash/trace.zip",
+      "zipSha256": "e3beda7a3e6af655f15f45ced90fbd23421427989c0317b1b9d41a005f0e1334",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-overview-impos-78241-estamps-never-imply-present/trace.zip",
+      "zipSha256": "bcd9081d1f8909e9ae2e680e3b18d31b0b90f4cde4cb395119a296a98eeec681",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-spring-DST-tra-7e6ad-tes-despite-wall-clock-jump/trace.zip",
+      "zipSha256": "b934f9bcf039193b00de5157e0c9cee54f202a711e55addefa8a8478b032bc7e",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-tablet-diagnos-61a77-t-and-ward-container-bounds/trace.zip",
+      "zipSha256": "4fc621ca63422210751e8b4496b45fedce08d4c8f5c3e1e3984f724ca0881f7d",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-tablet-emulate-40467-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "f2b49d29ced1f7ac0d6b3049aab0a90981bde4f95fcdbcf84899671ef2400540",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-tablet-emulate-40c9f-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "859e8805809bb685992fdc9dafc1442f61758932f6f977e6d4e17de0089da01c",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-tablet-emulate-61658-ed-wraps-and-read-only-idle/trace.zip",
+      "zipSha256": "7e0db8307aec70335388e0fed2e4c9c0c56f370ce4a152495bd4e5c7c55d5ca6",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "42f5ddb0b6b44c2770c8d55a4fbd422b6816793f981b26badcea79da836841b9",
+      "bytes": 18352,
+      "reloadSupplementPresent": false,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-ward-all-unsup-66bb4--fail-safe-without-UI-crash/trace.zip",
+      "zipSha256": "037e4e4dc2b17986e1a52fe553fe46b884f1493c5f444028f6e1b433aa3b8901",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    },
+    {
+      "zip": "browser-correct-viewport/test-results/independent-ward-impossibl-82252-estamps-never-imply-present/trace.zip",
+      "zipSha256": "8c05345b0a96586d091ca53571371d61de596ccf2f208ff5d91880781ccd5289",
+      "member": "resources/src@1f9385f99f81ab26b309307dee259fd1d1314bbd.txt",
+      "sourceSha256": "cd76391c8cea93743994c909135d7666daddf799e4605aae3268fae2d67325cd",
+      "bytes": 18993,
+      "reloadSupplementPresent": true,
+      "webSocketGuardPresent": false
+    }
+  ]
+}

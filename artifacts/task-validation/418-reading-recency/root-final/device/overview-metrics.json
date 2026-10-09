@@ -1,0 +1,62 @@
+{
+  "captions": [
+    {
+      "client": 189,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 322.18751525878906,
+      "scroll": 189,
+      "text": "Misurato il 09/10/2026 17:579 minuti fa",
+      "x": 133.0902862548828
+    },
+    {
+      "client": 191,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 658.0729370117188,
+      "scroll": 191,
+      "text": "Misurato il 06/10/2026 18:053 giorni fa",
+      "x": 466.6493225097656
+    },
+    {
+      "client": 194,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 993.8542175292968,
+      "scroll": 194,
+      "text": "Misurato il 25/09/2026 18:052 settimane fa",
+      "x": 800.2083740234375
+    },
+    {
+      "client": 194,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1327.4132995605469,
+      "scroll": 194,
+      "text": "Misurato il 25/09/2026 18:052 settimane fa",
+      "x": 1133.7674560546875
+    },
+    {
+      "client": 194,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1660.9722595214844,
+      "scroll": 194,
+      "text": "Misurato il 25/09/2026 18:052 settimane fa",
+      "x": 1467.326416015625
+    },
+    {
+      "client": 194,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1994.5313415527344,
+      "scroll": 194,
+      "text": "Misurato il 25/09/2026 18:052 settimane fa",
+      "x": 1800.885498046875
+    }
+  ],
+  "height": 1145,
+  "scale": 1,
+  "visibility": "visible",
+  "width": 2133
+}

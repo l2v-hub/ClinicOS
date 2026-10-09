@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {existsSync,mkdirSync,writeFileSync,readFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/418-reading-recency',out=root+'/online-final';
+const deployment=JSON.parse(readFileSync(root+'/deployment-receipt.json','utf8'));
+assert.equal(deployment.applicationCommit,'d028e1ee4c5c44d96b5005362b28f54e5c05fee1');assert.equal(deployment.decision,'VERIFIED RELEASE');
+assert.equal(existsSync(out),false,'Online evidence output already exists');mkdirSync(out,{recursive:true});
+const args=['--import','tsx','--loader','./scripts/stub-css-loader.mjs',root+'/qa-online-final.mjs',out];
+const startedAt=new Date().toISOString();
+const result=spawnSync(process.execPath,args,{encoding:'utf8',maxBuffer:30e6,env:{...process.env,TSX_TSCONFIG_PATH:'C:/w-418/frontend/tsconfig.app.json'}});
+writeFileSync(out+'/actual-command.log',result.stdout+result.stderr);
+writeFileSync(out+'/run-receipt.json',JSON.stringify({applicationCommit:deployment.applicationCommit,deployment:deployment.vercel.id,command:[process.execPath,...args],startedAt,finishedAt:new Date().toISOString(),exit:result.status,network:'Only production root/static asset GETs; all clinical API calls intercepted before network, synthetic fixtures, unexpected writes blocked'},null,2));
+assert.equal(result.status,0,'Compiled online acceptance failed; originals retained');
+const report=spawnSync(process.execPath,[root+'/make-browser-report.mjs',out],{encoding:'utf8'});assert.equal(report.status,0);
+console.log('Actual compiled production SPA24 groups PASS, guarded synthetic clinical APIs; original online proof retained');

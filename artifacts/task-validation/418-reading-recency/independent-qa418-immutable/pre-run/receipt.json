@@ -1,0 +1,23 @@
+{
+  "application": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "beforeExecution": true,
+  "files": [
+    {
+      "path": "independent.spec.cjs",
+      "sha256": "301be4a8f6a16e879e0e1b773f3e2760af013484e1b3f847623f278fe410c9b1"
+    },
+    {
+      "path": "playwright.config.cjs",
+      "sha256": "f1defd505bfa2f57e1f15b6943a098f3cd482d398c2c2a9f1b5f3db0834cc767"
+    },
+    {
+      "path": "server.mjs",
+      "sha256": "be7389b40400b4d684492c5746eb6f8d73dd1145fbdf0056a239a4469bfc8656"
+    }
+  ],
+  "sourceBeforeSha256": "59485a9f31799f83ee184ef840eb67dbb29eabed999182c914ced02a26d11a98",
+  "command": "node C:/w-insulin-qa/node_modules/playwright/cli.js test --config artifacts/task-validation/418-reading-recency/independent-qa418-immutable/playwright.config.cjs",
+  "cwd": "C:/w-418-qa-final",
+  "outputs": "All screenshots, JSON/HTML reports, traces, video and logs under this new immutable bundle; no reused run directory",
+  "at": "2026-10-09T16:33:26.527Z"
+}

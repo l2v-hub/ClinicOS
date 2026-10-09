@@ -1,0 +1,13 @@
+import { readFileSync,writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+const out='C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final';
+const proof='2e9c3233ac9e897d3fee1061c51c5f6bda8a6799';
+const p=spawnSync('git',['show',`${proof}:artifacts/task-validation/417-vitals-form/root-rerun/commands/full-regression.log`],{cwd:'C:/w-418-qa-final',encoding:'utf8',maxBuffer:32e6});
+if(p.status!==0)throw Error('Pinned baseline unavailable');
+writeFileSync(`${out}/commands/baseline417-full-regression.log`,p.stdout);
+const current=readFileSync(`${out}/commands/correct-runtime-full-regression.log`,'utf8');
+const failures=s=>[...new Set([...s.matchAll(/^✖ (.*?) \([\d.]+ms\)/gm)].map(m=>m[1].replaceAll('\\','/')))].sort();
+const stats=s=>Object.fromEntries([...s.matchAll(/^ℹ (tests|pass|fail|skipped) (\d+)/gm)].map(m=>[m[1],+m[2]]));
+const baseline=failures(p.stdout),candidate=failures(current);
+writeFileSync(`${out}/commands/baseline-comparison.json`,JSON.stringify({baselineProof:proof,baselineApplication:'02b4ba89af291186a72e040b868da024bb865164',candidateApplication:'d028e1ee4c5c44d96b5005362b28f54e5c05fee1',baselineStats:stats(p.stdout),candidateStats:stats(current),baseline,candidate,newFailures:candidate.filter(x=>!baseline.includes(x)),removedFailures:baseline.filter(x=>!candidate.includes(x)),globalGreen:false},null,2));
+console.log(`Source-pinned regression comparison: baseline${baseline.length} candidate${candidate.length} new${candidate.filter(x=>!baseline.includes(x)).length}`);

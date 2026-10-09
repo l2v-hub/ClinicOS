@@ -1,0 +1,12 @@
+import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
+import {resolve,relative} from 'node:path';
+import {createHash} from 'node:crypto';
+const out='C:/w-418-qa/artifacts/task-validation/418-reading-recency/independent-qa418';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const walk=dir=>readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(resolve(dir,e.name)):[resolve(dir,e.name)]);
+const paths=walk(out).filter(p=>!['SHA256-MANIFEST.json','seal-receipt.json'].includes(relative(out,p))).sort();
+const files=paths.map(path=>({path:relative(out,path).replaceAll('\\','/'),bytes:statSync(path).size,sha256:sha(readFileSync(path))}));
+writeFileSync(out+'/SHA256-MANIFEST.json',JSON.stringify({application:'ae2a94f3dc66a6f1c2eb693d1d9faf6c3924c01c',allFilesExceptRecursiveSealMetadata:true,files},null,2));
+const manifestHash=sha(readFileSync(out+'/SHA256-MANIFEST.json'));
+writeFileSync(out+'/seal-receipt.json',JSON.stringify({verdict:'FAILED VALIDATION',application:'ae2a94f3dc66a6f1c2eb693d1d9faf6c3924c01c',files:files.length,manifestSha256:manifestHash,sealedAt:new Date().toISOString(),scope:'Every artifact inside independent-qa418, no exclusion of failed attempts; only recursive manifest/seal metadata excluded by necessity. Emitted runtime files separately manifested, retained outside.',serverStopped:true},null,2));
+console.log(`Sealed${files.length} files; manifest${manifestHash}`);

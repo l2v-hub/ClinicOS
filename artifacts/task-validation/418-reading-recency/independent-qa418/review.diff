@@ -1,0 +1,403 @@
+diff --git a/frontend/src/components/operator/ParameterReadingForm.css b/frontend/src/components/operator/ParameterReadingForm.css
+index 83d5dbf0..38610e6e 100644
+--- a/frontend/src/components/operator/ParameterReadingForm.css
++++ b/frontend/src/components/operator/ParameterReadingForm.css
+@@ -43,6 +43,12 @@
+ .parameter-reading-form__previous {
+   overflow-wrap: anywhere;
+ }
++.parameter-reading-form__field small.parameter-reading-form__previous {
++  color: var(--text);
++  font-size: 14px;
++  font-weight: 500;
++  white-space: normal;
++}
+ .parameter-reading-form__tools {
+   display: grid;
+   gap: 10px;
+diff --git a/frontend/src/components/operator/ParameterReadingForm.tsx b/frontend/src/components/operator/ParameterReadingForm.tsx
+index 94a8e705..2282909c 100644
+--- a/frontend/src/components/operator/ParameterReadingForm.tsx
++++ b/frontend/src/components/operator/ParameterReadingForm.tsx
+@@ -20,6 +20,7 @@ import {
+   type ParameterValues,
+ } from '../../lib/patientParameterReadings';
+ import { usePreviousParameterValues } from '../../lib/usePreviousParameterValues';
++import { useRecencyClock } from '../../lib/useRecencyClock';
+ import { news2, NEWS2_LABELS } from '../../lib/news2';
+ import './ParameterReadingForm.css';
+ 
+@@ -58,6 +59,7 @@ export function ParameterReadingForm({
+   );
+   const saveButton = useRef<HTMLButtonElement>(null);
+   const previous = usePreviousParameterValues(patientId);
++  const now = useRecencyClock();
+   const locked = saving || uncertain;
+   const score = news2(values);
+   const activeNumeric = ENTRY_FIELDS.find((field) => field.key === active && field.numeric);
+@@ -192,7 +194,7 @@ export function ParameterReadingForm({
+                 )}
+                 {historical && (
+                   <small id={`${id}-previous`} className="parameter-reading-form__previous">
+-                    {previousText(previous, field.key as PreviousKey)}
++                    {previousText(previous, field.key as PreviousKey, now)}
+                   </small>
+                 )}
+                 {field.key === 'note' && noteSummary && <small>{noteSummary}</small>}
+diff --git a/frontend/src/components/operator/ReadingRecency.css b/frontend/src/components/operator/ReadingRecency.css
+new file mode 100644
+index 00000000..5b6c7811
+--- /dev/null
++++ b/frontend/src/components/operator/ReadingRecency.css
+@@ -0,0 +1,17 @@
++.reading-recency {
++  display: grid;
++  gap: 2px;
++  min-width: 0;
++  max-width: 100%;
++  color: var(--text);
++  font-size: 14px;
++  font-weight: 500;
++  line-height: 1.5;
++  overflow-wrap: anywhere;
++  white-space: normal;
++}
++.vt__trend.vt__comparison {
++  display: grid;
++  align-items: start;
++  overflow-wrap: anywhere;
++}
+diff --git a/frontend/src/components/operator/ReadingRecency.tsx b/frontend/src/components/operator/ReadingRecency.tsx
+new file mode 100644
+index 00000000..5240bc8e
+--- /dev/null
++++ b/frontend/src/components/operator/ReadingRecency.tsx
+@@ -0,0 +1,12 @@
++import { readingRecency } from '../../lib/readingRecency';
++import './ReadingRecency.css';
++
++export function ReadingRecency({ measuredAt, now }: { measuredAt: string; now: Date }) {
++  const recency = readingRecency(measuredAt, now);
++  return (
++    <span className="reading-recency">
++      <span>{recency.valid ? <>Misurato il <time dateTime={measuredAt}>{recency.absolute}</time></> : recency.absolute}</span>
++      {recency.elapsed && <span>{recency.elapsed}</span>}
++    </span>
++  );
++}
+diff --git a/frontend/src/components/operator/VitalsOverview.tsx b/frontend/src/components/operator/VitalsOverview.tsx
+index a2309834..bba758a9 100644
+--- a/frontend/src/components/operator/VitalsOverview.tsx
++++ b/frontend/src/components/operator/VitalsOverview.tsx
+@@ -4,6 +4,9 @@ import { news2Tile, vitalTiles } from '../../lib/patientVitalsOverview';
+ import type { PatientParameterReading } from '../../lib/patientParameterReadings';
+ import { useCan } from '../../lib/capabilities';
+ import { useWidgetOpen } from '../shared/WidgetGroup';
++import { useRecencyClock } from '../../lib/useRecencyClock';
++import { readingRecencyText } from '../../lib/readingRecency';
++import { ReadingRecency } from './ReadingRecency';
+ 
+ interface Props {
+   state: 'loading' | 'ready' | 'error';
+@@ -26,6 +29,7 @@ export function VitalsOverview({
+   const { open, setOpen, bodyId } = useWidgetOpen();
+   const titleId = useId();
+   const canRecord = useCan('parameters.create_reading');
++  const now = useRecencyClock();
+   if (state === 'error')
+     return (
+       <p className="vitals-note vitals-note--error" role="alert">
+@@ -41,8 +45,8 @@ export function VitalsOverview({
+         Caricamento dei parametri…
+       </p>
+     );
+-  const tiles = vitalTiles(readings);
+-  const n = news2Tile(readings);
++  const tiles = vitalTiles(readings, now);
++  const n = news2Tile(readings, now);
+   const tone =
+     n.tone === 'high' || n.tone === 'medium' ? 'crit' : n.tone === 'single' ? 'warn' : 'none';
+   const detail =
+@@ -64,8 +68,11 @@ export function VitalsOverview({
+             {tile.value ?? 'N/A'}
+             {tile.value !== null && <small>{tile.unit}</small>}
+           </span>
+-          <span className="vt__trend">{tile.at ? `alle ${tile.at}` : ''}</span>
+-          {large && tile.trend && <span className="vt__trend">{tile.trend}</span>}
++          {tile.measuredAt && <ReadingRecency measuredAt={tile.measuredAt} now={now} />}
++          {large && tile.trend && <span className="vt__trend vt__comparison">{tile.trend}
++            {tile.direction !== null && tile.previousMeasuredAt &&
++              <ReadingRecency measuredAt={tile.previousMeasuredAt} now={now} />}
++          </span>}
+         </div>
+       ))}
+       <button
+@@ -73,14 +80,14 @@ export function VitalsOverview({
+         className={`vt vt--news2 vt--${tone}`}
+         onClick={history}
+         aria-haspopup="dialog"
+-        aria-label={`NEWS2 ${n.score ?? 'non calcolabile'}${n.at ? ` alle ${n.at}` : ''}: ${detail}. Apri lo storico NEWS2`}
++        aria-label={`NEWS2 ${n.score ?? 'non calcolabile'}${n.measuredAt ? ` · ${readingRecencyText(n.measuredAt, now)}` : ''}: ${detail}. Apri lo storico NEWS2`}
+       >
+         <span className="vt__label">NEWS2</span>
+         <span className="vt__value">
+           {n.score ?? 'N/A'}
+           {n.score !== null && <small>punti</small>}
+         </span>
+-        <span className="vt__trend">{n.at ?? ''}</span>
++        {n.measuredAt && <ReadingRecency measuredAt={n.measuredAt} now={now} />}
+       </button>
+     </div>
+   );
+diff --git a/frontend/src/lib/__tests__/parameterPad.test.ts b/frontend/src/lib/__tests__/parameterPad.test.ts
+index 6dff54eb..214e5d0c 100644
+--- a/frontend/src/lib/__tests__/parameterPad.test.ts
++++ b/frontend/src/lib/__tests__/parameterPad.test.ts
+@@ -169,7 +169,7 @@ test('"Prima" never claims an absence that the unread history could contradict',
+   const now = new Date('2026-09-27T10:00:00.000Z');
+   assert.equal(
+     previousText({ status: 'ready', values, hasMore: false, count: 1 }, 'fr', now),
+-    'Prima: 24 · 08:05',
++    'Prima: 24 · Misurato il 27/09/2026 08:05 · 3 ore fa',
+   );
+   assert.equal(
+     previousText({ status: 'ready', values, hasMore: false, count: 1 }, 'dtx', now),
+diff --git a/frontend/src/lib/__tests__/patientVitalsOverview.test.ts b/frontend/src/lib/__tests__/patientVitalsOverview.test.ts
+index 993a4aed..001989d8 100644
+--- a/frontend/src/lib/__tests__/patientVitalsOverview.test.ts
++++ b/frontend/src/lib/__tests__/patientVitalsOverview.test.ts
+@@ -54,6 +54,8 @@ test('tiles show the latest value, the unit and the trend against the previous v
+   assert.equal(by.pa.trend, 'era 142/80');
+   assert.equal(by.temperatura.value, '38,2');
+   assert.equal(by.fr.at, '08:05');
++  assert.equal(by.fr.measuredAt, '2026-09-27T06:05:00.000Z');
++  assert.equal(by.fr.previousMeasuredAt, '2026-09-27T05:00:00.000Z');
+   // colore dal punteggio NEWS2 del parametro: FR 24 → 2 (ambra), SpO₂ 92 → 2, FC 108 → 1, T 38,2 → 1
+   assert.equal(by.fr.tone, 'warn');
+   assert.equal(by.spo2.tone, 'warn');
+@@ -64,10 +66,18 @@ test('a parameter never measured says so; a single value has no trend', () => {
+   const tiles = vitalTiles([r('a', '2026-09-27T06:00:00.000Z', { pa: '120/80' })], now);
+   const by = Object.fromEntries(tiles.map((t) => [t.key, t]));
+   assert.equal(by.fr.value, null);
++  assert.equal(by.fr.measuredAt, null);
+   assert.equal(by.pa.value, '120/80');
+   assert.equal(by.pa.trend, null);
+ });
+ 
++test('invalid historical timestamp never crashes overview or pretends to be current', () => {
++  const tiles = vitalTiles([r('bad', 'bad', full)], now);
++  assert.equal(tiles[0].at, 'Data/ora non verificabile');
++  assert.equal(tiles[0].measuredAt, 'bad');
++  assert.equal(news2Tile([r('bad', 'bad', full)], now).at, 'Data/ora non verificabile');
++});
++
+ test('NEWS2 tile: score of the latest complete reading (prototype example = 6)', () => {
+   const tile = news2Tile(
+     [
+@@ -84,6 +94,7 @@ test('NEWS2 tile: score of the latest complete reading (prototype example = 6)',
+   );
+   assert.equal(tile.score, 6);
+   assert.equal(tile.at, '08:05');
++  assert.equal(tile.measuredAt, '2026-09-27T06:05:00.000Z');
+   assert.equal(tile.tone, 'medium');
+   assert.ok(tile.response);
+ });
+diff --git a/frontend/src/lib/__tests__/readingRecency.test.ts b/frontend/src/lib/__tests__/readingRecency.test.ts
+new file mode 100644
+index 00000000..70cb918e
+--- /dev/null
++++ b/frontend/src/lib/__tests__/readingRecency.test.ts
+@@ -0,0 +1,30 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { readingRecency } from '../readingRecency';
++
++const now = new Date('2026-10-09T10:00:00Z');
++test('recency keeps full facility date/year/time and descriptive minutes, days and weeks', () => {
++  assert.deepEqual(readingRecency('2026-10-09T09:52:00Z', now), {
++    absolute: '09/10/2026 11:52', elapsed: '8 minuti fa', valid: true,
++  });
++  assert.equal(readingRecency('2026-10-06T10:00:00Z', now).elapsed, '3 giorni fa');
++  assert.equal(readingRecency('2026-09-25T10:00:00Z', now).elapsed, '2 settimane fa');
++});
++test('neutral elapsed boundaries never label a historical measure as current', () => {
++  for (const [seconds, text] of [[0, 'meno di un minuto fa'], [59, 'meno di un minuto fa'],
++    [60, '1 minuto fa'], [3600, '1 ora fa'], [86400, '1 giorno fa'], [604800, '1 settimana fa']] as const)
++    assert.equal(readingRecency(new Date(now.getTime() - seconds * 1000).toISOString(), now).elapsed, text);
++});
++test('invalid, unzoned and impossible calendar instants are explicit, not empty or now', () => {
++  for (const value of ['', 'bad', '2026-10-09T10:00:00', '2026-02-30T10:00:00Z'])
++    assert.deepEqual(readingRecency(value, now), { absolute: 'Data/ora non verificabile', elapsed: '', valid: false });
++  assert.equal(readingRecency('2026-10-09T11:00:00Z', now).elapsed, 'data/ora futura — da verificare');
++  assert.equal(readingRecency('2026-10-09T09:00:00Z', new Date(NaN)).elapsed, 'recenza non verificabile');
++});
++test('DST, timezone offsets, Rome midnight and year rollover use real elapsed time', () => {
++  assert.deepEqual(readingRecency('2026-03-29T01:30:00+01:00', new Date('2026-03-29T01:30:00Z')),
++    {absolute: '29/03/2026 01:30', elapsed: '1 ora fa', valid: true});
++  assert.equal(readingRecency('2026-10-25T02:30:00+02:00', new Date('2026-10-25T02:30:00+01:00')).elapsed, '1 ora fa');
++  assert.equal(readingRecency('2025-12-31T22:55:00Z', new Date('2025-12-31T23:05:00Z')).absolute, '31/12/2025 23:55');
++  assert.equal(readingRecency('2026-10-09T11:52:00+02:00', now).elapsed, '8 minuti fa');
++});
+diff --git a/frontend/src/lib/parameterPad.ts b/frontend/src/lib/parameterPad.ts
+index 6aea42e9..a186a6b9 100644
+--- a/frontend/src/lib/parameterPad.ts
++++ b/frontend/src/lib/parameterPad.ts
+@@ -2,6 +2,7 @@
+ // Il valore salvato resta quello di sempre: la pressione è un solo campo "sistolica/diastolica".
+ import type { ParameterValues, PatientParameterReading } from './patientParameterReadings';
+ import { facilityLocalMinute } from './facilityTime';
++import { readingRecencyText } from './readingRecency';
+ 
+ export type PadField = 'fr' | 'spo2' | 'pas' | 'pad' | 'fc' | 'temperatura' | 'dtx';
+ 
+@@ -148,5 +149,5 @@ export function previousText(
+         : `Prima: non fra le ultime ${state.count} rilevazioni`
+       : 'Nessuna rilevazione precedente';
+   const shown = key === 'o2' ? (item.value === 'si' ? 'con O2' : 'in aria') : item.value;
+-  return `Prima: ${shown} · ${whenLabel(item.measuredAt, now)}`;
++  return `Prima: ${shown} · ${readingRecencyText(item.measuredAt, now)}`;
+ }
+diff --git a/frontend/src/lib/patientVitalsOverview.ts b/frontend/src/lib/patientVitalsOverview.ts
+index 9f1cbbeb..2d0f3ada 100644
+--- a/frontend/src/lib/patientVitalsOverview.ts
++++ b/frontend/src/lib/patientVitalsOverview.ts
+@@ -4,6 +4,7 @@
+ import { NEWS2_LABELS, news2Parts, type News2Parameter } from './news2';
+ import { latestCompleteNews2, news2Points, news2Staleness, news2Tone } from './news2History';
+ import { readingTime, type PatientParameterReading } from './patientParameterReadings';
++import { readingRecency } from './readingRecency';
+ 
+ export type VitalKey = 'fr' | 'spo2' | 'pa' | 'fc' | 'temperatura';
+ /** Colore della tessera come il prototipo: dal punteggio NEWS2 del parametro (0 · 1–2 · 3). */
+@@ -19,6 +20,8 @@ export interface VitalTile {
+   direction: 'up' | 'down' | 'flat' | null;
+   tone: VitalTone;
+   at: string | null;
++  measuredAt: string | null;
++  previousMeasuredAt: string | null;
+ }
+ 
+ export interface News2Tile {
+@@ -26,6 +29,7 @@ export interface News2Tile {
+   score: number | null;
+   response: string | null;
+   at: string | null;
++  measuredAt: string | null;
+   tone: ReturnType<typeof news2Tone>;
+   stale: boolean;
+   /** Parametri mancanti nell'ultima rilevazione quando il NEWS2 non è calcolabile. */
+@@ -64,6 +68,7 @@ const numeric = (key: VitalKey, value: string): number | null => {
+ 
+ /** "08:05" se di oggi (ora della struttura), altrimenti "24/09 08:05". */
+ export function shortTime(instant: string, now = new Date()): string {
++  if (!readingRecency(instant, now).valid) return 'Data/ora non verificabile';
+   const full = readingTime(instant); // "dd/mm/yyyy hh:mm"
+   const today = readingTime(now.toISOString()).slice(0, 10);
+   return full.slice(0, 10) === today ? full.slice(-5) : `${full.slice(0, 5)} ${full.slice(-5)}`;
+@@ -90,6 +95,8 @@ export function vitalTiles(readings: PatientParameterReading[], now = new Date()
+         direction: null,
+         tone: 'none',
+         at: null,
++        measuredAt: null,
++        previousMeasuredAt: null,
+       };
+     const value = latest.values[key]!.trim();
+     const prev = withValue[1]?.values[key]?.trim() ?? null;
+@@ -121,6 +128,8 @@ export function vitalTiles(readings: PatientParameterReading[], now = new Date()
+       direction,
+       tone: partTone(part),
+       at: shortTime(latest.measuredAt, now),
++      measuredAt: latest.measuredAt,
++      previousMeasuredAt: withValue[1]?.measuredAt ?? null,
+     };
+   });
+ }
+@@ -134,6 +143,7 @@ export function news2Tile(readings: PatientParameterReading[], now = new Date())
+       score: latest.result.total,
+       response: latest.result.response,
+       at: shortTime(latest.reading.measuredAt, now),
++      measuredAt: latest.reading.measuredAt,
+       tone: news2Tone(latest),
+       stale: staleness.stale,
+       missing: [],
+@@ -144,6 +154,7 @@ export function news2Tile(readings: PatientParameterReading[], now = new Date())
+     score: null,
+     response: null,
+     at: last ? shortTime(last.reading.measuredAt, now) : null,
++    measuredAt: last?.reading.measuredAt ?? null,
+     tone: 'none',
+     stale: false,
+     missing: last ? last.result.missing.map((k) => NEWS2_LABELS[k]) : [],
+diff --git a/frontend/src/lib/readingRecency.ts b/frontend/src/lib/readingRecency.ts
+new file mode 100644
+index 00000000..7f72e79d
+--- /dev/null
++++ b/frontend/src/lib/readingRecency.ts
+@@ -0,0 +1,44 @@
++import { facilityLocalMinute, formatFacilityLocalMinute } from './facilityTime';
++
++export interface ReadingRecency {
++  absolute: string;
++  elapsed: string;
++  valid: boolean;
++}
++
++/** Historical provenance only: elapsed units are descriptive, never clinical cutoffs. */
++export function readingRecency(instant: string, now: Date = new Date()): ReadingRecency {
++  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.exec(instant);
++  const date = new Date(instant);
++  const year = Number(match?.[1]);
++  const month = Number(match?.[2]);
++  const day = Number(match?.[3]);
++  const days = [31, year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
++    31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
++  if (!match || !Number.isFinite(date.getTime()) || month < 1 || month > 12 ||
++    day < 1 || day > days[month - 1] || Number(match[4]) > 23 ||
++    Number(match[5]) > 59 || Number(match[6]) > 59)
++    return { absolute: 'Data/ora non verificabile', elapsed: '', valid: false };
++  const absolute = formatFacilityLocalMinute(facilityLocalMinute(date));
++  const age = now.getTime() - date.getTime();
++  if (!Number.isFinite(age)) return { absolute, elapsed: 'recenza non verificabile', valid: true };
++  if (age < 0) return { absolute, elapsed: 'data/ora futura — da verificare', valid: true };
++  const minutes = Math.floor(age / 60_000);
++  let elapsed = 'meno di un minuto fa';
++  const units: [number, string, string][] = [
++    [10_080, 'settimana', 'settimane'], [1440, 'giorno', 'giorni'],
++    [60, 'ora', 'ore'], [1, 'minuto', 'minuti'],
++  ];
++  for (const [size, singular, plural] of units) {
++    if (minutes < size) continue;
++    const count = Math.floor(minutes / size);
++    elapsed = `${count} ${count === 1 ? singular : plural} fa`;
++    break;
++  }
++  return { absolute, elapsed, valid: true };
++}
++
++export function readingRecencyText(instant: string, now: Date = new Date()): string {
++  const { absolute, elapsed, valid } = readingRecency(instant, now);
++  return `${valid ? 'Misurato il ' : ''}${absolute}${elapsed ? ` · ${elapsed}` : ''}`;
++}
+diff --git a/frontend/src/lib/useRecencyClock.ts b/frontend/src/lib/useRecencyClock.ts
+new file mode 100644
+index 00000000..e4f8b3c4
+--- /dev/null
++++ b/frontend/src/lib/useRecencyClock.ts
+@@ -0,0 +1,17 @@
++import { useEffect, useState } from 'react';
++
++/** One display-only clock per surface, not per field; never fetches or edits a draft. */
++export function useRecencyClock(): Date {
++  const [now, setNow] = useState(() => new Date());
++  useEffect(() => {
++    const update = () => setNow(new Date());
++    const visible = () => { if (document.visibilityState === 'visible') update(); };
++    const timer = window.setInterval(update, 60_000);
++    document.addEventListener('visibilitychange', visible);
++    return () => {
++      window.clearInterval(timer);
++      document.removeEventListener('visibilitychange', visible);
++    };
++  }, []);
++  return now;
++}

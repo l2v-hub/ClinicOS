@@ -1,0 +1,1 @@
+Read-only DOM evaluate rejected navigator.userAgent: navigator unavailable in documented scope. No UI action occurred. Retried only DOM-exposed viewport and elements.

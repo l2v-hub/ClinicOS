@@ -1,0 +1,114 @@
+
+Running 21 tests using 1 worker
+
+(node:19336) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › desktop › overview: DST minutes days weeks associated, wraps and read-only idle (7.3s)
+  ok  2 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › desktop › chart: DST minutes days weeks associated, wraps and read-only idle (10.9s)
+  ok  3 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › desktop › ward: DST minutes days weeks associated, wraps and read-only idle (10.0s)
+  ok  4 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › tablet-emulated › overview: DST minutes days weeks associated, wraps and read-only idle (8.7s)
+  ok  5 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › tablet-emulated › chart: DST minutes days weeks associated, wraps and read-only idle (11.0s)
+  ok  6 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › tablet-emulated › ward: DST minutes days weeks associated, wraps and read-only idle (8.8s)
+  ok  7 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › mobile-emulated › overview: DST minutes days weeks associated, wraps and read-only idle (9.3s)
+  ok  8 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › mobile-emulated › chart: DST minutes days weeks associated, wraps and read-only idle (8.5s)
+  ok  9 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:80:166 › mobile-emulated › ward: DST minutes days weeks associated, wraps and read-only idle (4.7s)
+  ok 10 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:93:1 › expanded comparison has own full provenance and historical NEWS2 remains zero (4.6s)
+  ok 11 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:96:47 › overview: impossible/unzoned/future timestamps never imply present (4.1s)
+  ok 12 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:96:47 › chart: impossible/unzoned/future timestamps never imply present (3.9s)
+  ok 13 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:96:47 › ward: impossible/unzoned/future timestamps never imply present (3.1s)
+  ok 14 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:99:1 › bounded partial history does not invent empty history or populate new controls (3.7s)
+  ok 15 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:102:1 › spring DST transition is six elapsed minutes despite wall-clock jump (2.9s)
+  ok 16 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:107:2 › tablet diagnostic › runtime viewport and ward container bounds (4.6s)
+  ok 17 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:113:47 › overview: all unsupported four-digit year representations fail safe without UI crash (4.3s)
+  ok 18 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:113:47 › chart: all unsupported four-digit year representations fail safe without UI crash (3.9s)
+  ok 19 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:113:47 › ward: all unsupported four-digit year representations fail safe without UI crash (3.2s)
+  x  20 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:121:39 › overview: synthetic read-only history retains its date/value provenance after reload (10.3s)
+(node:25928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  21 artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:121:39 › ward: synthetic read-only history retains its date/value provenance after reload (10.7s)
+
+
+  1) artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:121:39 › overview: synthetic read-only history retains its date/value provenance after reload 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Ultimi parametri e NEWS2' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('region', { name: 'Ultimi parametri e NEWS2' })
+
+
+      121 | for(const view of ['overview','ward'])test(`${view}: synthetic read-only history retains its date/value provenance after reload`,async({page,context},info)=>{
+      122 |  const state=await setup(page,context);let surface=await open(page,view);await expect(surface).toBeVisible();await verifyRange(surface,view);if(view==='ward')await blank(surface);
+    > 123 |  await page.reload();await expect(page.getByRole('region',{name:'Simulatore ruoli — solo sviluppo'})).toBeVisible();await page.getByRole('button',{name:nurse.name}).click();await expect(page.getByRole('heading',{name:'Il mio turno'})).toBeVisible();surface=await open(page,view);await expect(surface).toBeVisible();await verifyRange(surface,view);if(view==='ward')await blank(surface);await page.screenshot({path:`${out}/screenshots/${view}-after-reload.png`,fullPage:true});await clean(state,info);
+          |                                                                                                                                                                                              ^
+      124 | });
+      125 |
+        at C:\w-418-qa-final\artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:123:190
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-overview-synth-9858e-lue-provenance-after-reload\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-overview-synth-9858e-lue-provenance-after-reload\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-overview-synth-9858e-lue-provenance-after-reload\error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-overview-synth-9858e-lue-provenance-after-reload\trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-overview-synth-9858e-lue-provenance-after-reload\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:121:39 › ward: synthetic read-only history retains its date/value provenance after reload 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('form', { name: 'Nuova rilevazione', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('form', { name: 'Nuova rilevazione', exact: true })
+
+
+      121 | for(const view of ['overview','ward'])test(`${view}: synthetic read-only history retains its date/value provenance after reload`,async({page,context},info)=>{
+      122 |  const state=await setup(page,context);let surface=await open(page,view);await expect(surface).toBeVisible();await verifyRange(surface,view);if(view==='ward')await blank(surface);
+    > 123 |  await page.reload();await expect(page.getByRole('region',{name:'Simulatore ruoli — solo sviluppo'})).toBeVisible();await page.getByRole('button',{name:nurse.name}).click();await expect(page.getByRole('heading',{name:'Il mio turno'})).toBeVisible();surface=await open(page,view);await expect(surface).toBeVisible();await verifyRange(surface,view);if(view==='ward')await blank(surface);await page.screenshot({path:`${out}/screenshots/${view}-after-reload.png`,fullPage:true});await clean(state,info);
+          |                                                                                                                                                                                              ^
+      124 | });
+      125 |
+        at C:\w-418-qa-final\artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:123:190
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-ward-synthetic-374cd-lue-provenance-after-reload\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-ward-synthetic-374cd-lue-provenance-after-reload\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-ward-synthetic-374cd-lue-provenance-after-reload\error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-ward-synthetic-374cd-lue-provenance-after-reload\trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts\task-validation\418-reading-recency\independent-qa418-final\complete\test-results\independent-ward-synthetic-374cd-lue-provenance-after-reload\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:121:39 › overview: synthetic read-only history retains its date/value provenance after reload 
+    artifacts\task-validation\418-reading-recency\independent-qa418-final\independent.spec.cjs:121:39 › ward: synthetic read-only history retains its date/value provenance after reload 
+  19 passed (2.5m)

@@ -1,0 +1,7 @@
+{
+  "status": "ABORTED_HARNESS_COLLECTION_ERROR",
+  "candidate": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "reason": "Pre-run archival independent.spec.cjs was recursively discovered, collecting42 rather than21. Owned CLI PID39672 and descendants were validated and terminated before the duplicated second group. No application source changed.",
+  "originals": "fresh21, commands/fresh21.log, pre-run, collection-attempt1.config.cjs, collection-attempt1-spec.source preserved unchanged; incomplete reports/traces are not claimed complete",
+  "repair": "Only archival pre-run excluded from discovery; fresh21b isolated destinations and pre-run21b snapshots stored with .source extension. Same21 actual tests. No overwritten outputs or omitted behavioral test."
+}

@@ -1,0 +1,11 @@
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+const req=createRequire('C:/w-418-qa-final/frontend/package.json');
+const {createServer}=await import(pathToFileURL(req.resolve('vite')).href);
+const out=resolve('artifacts/task-validation/418-reading-recency/independent-qa418-final');
+mkdirSync(`${out}/../runtime-418-final/cache`,{recursive:true});
+const server=await createServer({configFile:false,envDir:false,root:resolve('frontend'),cacheDir:`${out}/../runtime-418-final/cache`,esbuild:{jsx:'automatic'},define:{'import.meta.env.VITE_API_URL':'"http://localhost:3001"','import.meta.env.VITE_ENTRA_CLIENT_ID':'""','import.meta.env.VITE_ENTRA_TENANT_ID':'""','import.meta.env.VITE_ENTRA_API_SCOPE':'""'},server:{host:'127.0.0.1',port:7483,strictPort:true,fs:{allow:[resolve('.')]}}});
+await server.listen();writeFileSync(`${out}/server-receipt.json`,JSON.stringify({pid:process.pid,port:7483,host:'127.0.0.1',head:'d028e1ee4c5c44d96b5005362b28f54e5c05fee1',source:'actual frontend SPA, only QA auth/API defines, no source edits',started:new Date().toISOString()},null,2));console.log('Independent418 actual SPA7483 started');
+for(const s of ['SIGINT','SIGTERM'])process.on(s,async()=>{await server.close();writeFileSync(`${out}/server-stopped.json`,JSON.stringify({pid:process.pid,stopped:new Date().toISOString()}));process.exit(0);});

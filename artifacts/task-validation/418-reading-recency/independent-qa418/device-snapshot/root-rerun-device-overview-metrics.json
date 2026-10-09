@@ -1,0 +1,93 @@
+{
+  "captions": [
+    {
+      "client": 191,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "scroll": 191,
+      "text": "Misurato il 09/10/2026 17:3410 minuti fa"
+    },
+    {
+      "client": 190,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "scroll": 190,
+      "text": "Misurato il 06/10/2026 17:423 giorni fa"
+    },
+    {
+      "client": 193,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "scroll": 193,
+      "text": "Misurato il 25/09/2026 17:422 settimane fa"
+    },
+    {
+      "client": 193,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "scroll": 193,
+      "text": "Misurato il 25/09/2026 17:422 settimane fa"
+    },
+    {
+      "client": 193,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "scroll": 193,
+      "text": "Misurato il 25/09/2026 17:422 settimane fa"
+    },
+    {
+      "client": 193,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "scroll": 193,
+      "text": "Misurato il 25/09/2026 17:422 settimane fa"
+    }
+  ],
+  "height": 1145,
+  "tiles": [
+    {
+      "height": 126.1805648803711,
+      "text": "FR18atti/minMisurato il 09/10/2026 17:3410 minuti fa",
+      "width": 321.5625305175781,
+      "x": 119.9826431274414,
+      "y": 339.201416015625
+    },
+    {
+      "height": 126.1805648803711,
+      "text": "SpO₂98% ariaMisurato il 06/10/2026 17:423 giorni fa",
+      "width": 321.5625305175781,
+      "x": 453.5416870117187,
+      "y": 339.201416015625
+    },
+    {
+      "height": 126.1805648803711,
+      "text": "PA120/80mmHgMisurato il 25/09/2026 17:422 settimane fa",
+      "width": 321.5625305175781,
+      "x": 787.1007080078125,
+      "y": 339.201416015625
+    },
+    {
+      "height": 126.1805648803711,
+      "text": "FC72bpmMisurato il 25/09/2026 17:422 settimane fa",
+      "width": 321.5625305175781,
+      "x": 1120.6597900390625,
+      "y": 339.201416015625
+    },
+    {
+      "height": 126.1805648803711,
+      "text": "Temp.36,5°CMisurato il 25/09/2026 17:422 settimane fa",
+      "width": 321.5625305175781,
+      "x": 1454.2188720703125,
+      "y": 339.201416015625
+    },
+    {
+      "height": 126.1805648803711,
+      "text": "NEWS20puntiMisurato il 25/09/2026 17:422 settimane fa",
+      "width": 321.5625305175781,
+      "x": 1787.77783203125,
+      "y": 339.201416015625
+    }
+  ],
+  "visibility": "visible",
+  "width": 2133
+}

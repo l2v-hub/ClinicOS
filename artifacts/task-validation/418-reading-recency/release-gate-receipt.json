@@ -1,0 +1,24 @@
+{
+  "applicationCommit": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "sourceSha256": "ba09c4cec75640ebad93bbdeeb41f45c687a411be5944424207dd2daee23274e",
+  "canonicalSha256": "1d889924d2e205fbe568b4914efbd1bfc7088b9b05c38ef1966ce62348dd7195",
+  "checkedAt": "2026-10-09T16:41:37.108Z",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct human authorization, root independent release decision; QA/Ruflo do not authorize publication",
+  "acceptance": {
+    "AC1": "Full measured date/year/time, readable14px wrapped captions associated with historical values including expanded own comparison date",
+    "AC2": "Historical/previous wording, blank new controls, guarded invalid/future/unsupported year provenance and live display clock without mutation/refetch",
+    "AC3": "Neutral descriptive minutes/hours/days/weeks text, no new clinical cutoffs; NEWS2/scoring/staleness unchanged",
+    "AC4": "Genuine normal Windows desktop synthetic minute/day/week comparison, original overview pixels+AX/DOM source-bound; no headless substitution"
+  },
+  "rootFocusedPass": 65,
+  "rootOrdinaryBrowser": 24,
+  "rootIndependentAuthoredBrowser": 21,
+  "unchangedBaselineFailures": 12,
+  "newFailures": 0,
+  "productionPatientTestMutations": 0,
+  "backendChanged": false,
+  "excluded": "Unreleased405/408/410/416, dirty primary and launchers, real patient audit photos",
+  "limits": "Ward screenshot timeout retained; actual overview screenshot succeeded. Desktop comparison only, no wardhardware/glare/gloves/real-screen-reader certification. Existing global regression/CI/security findings disclosed.",
+  "deploymentAcceptance": "PENDING exact-source READY production alias, static assets, backend health and guarded compiled online semantic checks"
+}

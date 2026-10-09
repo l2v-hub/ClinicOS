@@ -1,0 +1,17 @@
+{
+  "applicationCommit": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "deployment": "dpl_27WZBWrSYVVf9rZZMVgok7YkYyxu",
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "--import",
+    "tsx",
+    "--loader",
+    "./scripts/stub-css-loader.mjs",
+    "artifacts/task-validation/418-reading-recency/qa-online-final.mjs",
+    "artifacts/task-validation/418-reading-recency/online-final"
+  ],
+  "startedAt": "2026-10-09T16:45:23.320Z",
+  "finishedAt": "2026-10-09T16:46:28.854Z",
+  "exit": 0,
+  "network": "Only production root/static asset GETs; all clinical API calls intercepted before network, synthetic fixtures, unexpected writes blocked"
+}

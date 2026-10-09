@@ -1,0 +1,918 @@
+{
+  "root": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/runtime-418-final",
+  "candidate": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "emittedOnly": true,
+  "retainedNotDeleted": true,
+  "files": [
+    {
+      "path": "build/assets/AccessibleDialogSurface-LWnV1Aev.js",
+      "bytes": 2455,
+      "sha256": "f4325b1eb3d3ee9c10e8373b720a2dce7b13875e940715520af055422e515051"
+    },
+    {
+      "path": "build/assets/AdminAgenda-M6JD02pc.js",
+      "bytes": 18473,
+      "sha256": "0c37bdd8700ff46379cfa309b8c0c9966e9c1f9640aaf1f8afc6cea7118a21a1"
+    },
+    {
+      "path": "build/assets/AdminDashboard-CfKABW4v.css",
+      "bytes": 3671,
+      "sha256": "278f9623ed11194f8c42c4470c7fc1348ea6ee41cbdf07ef0405a084627cd1da"
+    },
+    {
+      "path": "build/assets/AdminDashboard-CzZsmcxR.js",
+      "bytes": 27687,
+      "sha256": "0b990cc48f8a7d1291e53c4e68af5ab9183c7c6eb80f7e10e80a84d9420b7126"
+    },
+    {
+      "path": "build/assets/AgendaInline-4KztTYiP.js",
+      "bytes": 23325,
+      "sha256": "7347d4bbb49c4c394dcdcc465a36ef080d380c593099d2451b6d2f073910e882"
+    },
+    {
+      "path": "build/assets/AgendaInline-BiARtFgk.css",
+      "bytes": 2722,
+      "sha256": "ad6db662fb0aa9e8be698310a5b5722d3a1b83d524e1f9de580d451427528f81"
+    },
+    {
+      "path": "build/assets/AgnosPanel-CW1huyUN.css",
+      "bytes": 4190,
+      "sha256": "d577de0b1aee1e92da61d9d949880d5f2f32e40aba30a8bb0b1518a890606e4d"
+    },
+    {
+      "path": "build/assets/AgnosPanel-J-GXxmY3.js",
+      "bytes": 47830,
+      "sha256": "4a432495701b67224abd3f6449c43200c0bc172361b9d1202d884b06d207f521"
+    },
+    {
+      "path": "build/assets/allergyStatusModel-MCtsmAIL.js",
+      "bytes": 521,
+      "sha256": "b5e50b2b93db8da077abf73c935a7ea178224d6a729964c108e114cf847112cb"
+    },
+    {
+      "path": "build/assets/AnagraficaFarmaciPage-BLCRf3SR.css",
+      "bytes": 1218,
+      "sha256": "6946f4325a62a5cdabbaf1620d442aa53fb609d7dd2221656c602d8192c90f76"
+    },
+    {
+      "path": "build/assets/AnagraficaFarmaciPage-CfdoZkGc.js",
+      "bytes": 2022,
+      "sha256": "5cb1bd9184b116309300c0fc61d96eb55297bad4d483be7f515822be52cd87c0"
+    },
+    {
+      "path": "build/assets/AnamnesisEditor-CXWyvZjW.js",
+      "bytes": 5407,
+      "sha256": "26abc6844c345973fe1a7c96b9e40c725109d27b76326a58f9bad41b0da8b349"
+    },
+    {
+      "path": "build/assets/appointmentRange-Bcoh8cH0.js",
+      "bytes": 309,
+      "sha256": "bf71782718943f19f9888d5dcfce3c734611f333fe05559e2f02a78df62a3e53"
+    },
+    {
+      "path": "build/assets/AssessmentCatalog-CCjgyrS9.css",
+      "bytes": 2580,
+      "sha256": "87d99f9cb1110b4cb8d74c45b69efdb2321c5ecd1ca72c8f2740249384b255d2"
+    },
+    {
+      "path": "build/assets/AssessmentDraftStatus-BrKGtD-b.js",
+      "bytes": 2641,
+      "sha256": "58825c95cc070070e5778d33133400f6ff3328d3bf500cbe641b80ea3d497830"
+    },
+    {
+      "path": "build/assets/AssessmentDraftStatus-DepsWT8d.css",
+      "bytes": 352,
+      "sha256": "70bc37f6c9a84b626133a43a0a1a420e913e2fc094cbb9076d0f077190eeddc7"
+    },
+    {
+      "path": "build/assets/assessmentEntry-DYo2nZTW.js",
+      "bytes": 687,
+      "sha256": "8eb709f7371d436a46667b35b54822a951b375a63bf627a1c2408cd669e853e7"
+    },
+    {
+      "path": "build/assets/assessmentTypes-H3bfR4sY.js",
+      "bytes": 22945,
+      "sha256": "088e1323beac4be35618562ce4aaee22a9449493b0d9f80ab37a89d80492eca9"
+    },
+    {
+      "path": "build/assets/AssessmentWorkspace-BU6sfsd2.css",
+      "bytes": 18258,
+      "sha256": "e7fad36e9e510ca9322c299d431132e06d2e58ad293d97139db6360dda009b00"
+    },
+    {
+      "path": "build/assets/AssessmentWorkspace-J43Tr6wt.js",
+      "bytes": 125103,
+      "sha256": "25b4b0c0f176f209ed5d5a641be57f3791d10fec5272f401df166dda26f45418"
+    },
+    {
+      "path": "build/assets/AssistantMode-CRNmQxYl.js",
+      "bytes": 62253,
+      "sha256": "27c366e7597e6a7771678099533eba985eca2aa0fff77f163a9553dc65c872e8"
+    },
+    {
+      "path": "build/assets/AssistantMode-DzeiogH9.css",
+      "bytes": 8940,
+      "sha256": "f83df91f3291d5c0e2404c7ddf026a06ddeb23ba2a8042cc012c6a40ca36ad67"
+    },
+    {
+      "path": "build/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css",
+      "bytes": 2996,
+      "sha256": "72bc2ec81ffd42f9246a3cfb44e0f672be44e07f34416a32b2e2aeb89e8f560a"
+    },
+    {
+      "path": "build/assets/AvvisoAnomalieFarmaci-zsozOIkf.js",
+      "bytes": 2124,
+      "sha256": "a32aab9db29f0e7e43a347f303824c78b04075ef2ccc2b9a281ca0da34bcf7de"
+    },
+    {
+      "path": "build/assets/CameraCapture-BZrPNFqj.css",
+      "bytes": 1855,
+      "sha256": "087605da365a42d9251f178fe12cee846c7ff8aa2d946796e7d969df1d49d0bc"
+    },
+    {
+      "path": "build/assets/CameraCapture-JXtcJXla.js",
+      "bytes": 14079,
+      "sha256": "e53531734ac00e0003cef87d892af64ae275029dc8631ffad34dc32d1203f15d"
+    },
+    {
+      "path": "build/assets/capabilities-sGJaafSh.js",
+      "bytes": 1484,
+      "sha256": "3c60c53929159bfef24dcf15b62c2bfc09db2364de0800e45972c452d80ca33e"
+    },
+    {
+      "path": "build/assets/ClinicalAttachments-Cyyak3VT.js",
+      "bytes": 4343,
+      "sha256": "8d876da9987967ca4442bb179f90ecf9d558a069a111ded1e828f4af7c74cabb"
+    },
+    {
+      "path": "build/assets/ClinicalCard-BC9Ecfp0.js",
+      "bytes": 2858,
+      "sha256": "93cea960b1abd0a8a5522d908cd10c0c226f670f030dd71fd414c6404f318625"
+    },
+    {
+      "path": "build/assets/clinicalHistory-Dc8Sh74T.js",
+      "bytes": 1855,
+      "sha256": "d619ba31010d85b762bd8728699a181199f1cadd0eb5c77c7ba5b3f6faae281f"
+    },
+    {
+      "path": "build/assets/ClinicalNoteEditor-QU8po2rl.css",
+      "bytes": 1346,
+      "sha256": "3966e250d6bc3d6b76cb407b0b168d1c5a836bee06e84cf3a986475f50a42aed"
+    },
+    {
+      "path": "build/assets/ClinicalNoteEditor-USOiR74F.js",
+      "bytes": 4458,
+      "sha256": "61e0fc3ebfbc2876fac3a4684bd25effb8faf1118e143506e5be5f918dacbac7"
+    },
+    {
+      "path": "build/assets/ClinicalSectionLoading-ClQ3dNtk.js",
+      "bytes": 447,
+      "sha256": "9d7c4c8f00c57ae779a2411fed2566d900994b73219e0cbcd4db7d8633ea3c31"
+    },
+    {
+      "path": "build/assets/ClinicalTable-DI2VoprI.js",
+      "bytes": 7998,
+      "sha256": "d663a70d2122698a928278822fc17710ff06258b06a9d774116b6f5bef5045ec"
+    },
+    {
+      "path": "build/assets/ClinicalTable-HlTQH1g4.css",
+      "bytes": 3762,
+      "sha256": "44c7276cfd850163bfbee12609d917d6a1a38bbbc1b3e6de7c9cd1e7beb18e55"
+    },
+    {
+      "path": "build/assets/compiler-runtime-XYET9J12.js",
+      "bytes": 221,
+      "sha256": "db9bb270e68f5c6ef2cb48570b74e652ad106300d84572479574b6105cd63ac9"
+    },
+    {
+      "path": "build/assets/ConfirmDialog-D8BT3jqF.js",
+      "bytes": 2235,
+      "sha256": "68862fe722d5312bcfcb9fe60176dda87e18a757639abd909ab4771daaff0efa"
+    },
+    {
+      "path": "build/assets/consegnaUrgency-DrFEu5MJ.js",
+      "bytes": 294,
+      "sha256": "9e5d70dbfaa444149b4e948d7504fc3f354c13b3be0f644622cca3a0ae2e77a5"
+    },
+    {
+      "path": "build/assets/ConsegneRounds-BP9N68un.css",
+      "bytes": 7504,
+      "sha256": "dd80c1a505990b37b9025cb584bc75249c491c63d09b758e929e7f6a95f41202"
+    },
+    {
+      "path": "build/assets/ConsegneRounds-DC5qFnM_.js",
+      "bytes": 10069,
+      "sha256": "a466ff15d5c7d1318dd2df342cf73e566720295d1edc099af048fcaba0b047d9"
+    },
+    {
+      "path": "build/assets/ConsegneWorkspace-Df-KQF84.css",
+      "bytes": 2864,
+      "sha256": "7acb329370a018f826a7c9482a6c3ad5b462658bc0a9166739a231674e1a1984"
+    },
+    {
+      "path": "build/assets/ConsegneWorkspace-Dlo1Y8KY.js",
+      "bytes": 56617,
+      "sha256": "f76b8deebd94087d4963808933689534de4d0675ce089075d76560cede2db53d"
+    },
+    {
+      "path": "build/assets/ContenzioniTab-Do0BTuBy.js",
+      "bytes": 32974,
+      "sha256": "c4d3c69d5e29fdc1c0d2ad16aef1c73e3db240b982a50a4990a48c70dda7e5fb"
+    },
+    {
+      "path": "build/assets/corePriority-B9P5skz3.js",
+      "bytes": 166,
+      "sha256": "a2e09c550876022df3bb5bb932f3bee9373dc1ecb76654d4821acb324e6ef052"
+    },
+    {
+      "path": "build/assets/DashboardKpiBand-B_ZN6mIU.css",
+      "bytes": 12189,
+      "sha256": "1627b2ad39115acaf0a9d7dcb18b3864eb4a478d40753cbc18b5cb150916ef2b"
+    },
+    {
+      "path": "build/assets/DashboardKpiBand-C5EabRza.js",
+      "bytes": 18228,
+      "sha256": "92d70e1bef5300826f200eadd83f620771062f6661b551085c388fb592537c5d"
+    },
+    {
+      "path": "build/assets/DiagnosisEditor-B-ZZ6bUu.css",
+      "bytes": 1881,
+      "sha256": "f27e83542b8b4aa5102c5e4f7abd69b0f212436040b572efe66860c1f29d158d"
+    },
+    {
+      "path": "build/assets/DiagnosisEditor-DZFBdIr4.js",
+      "bytes": 19114,
+      "sha256": "e85ff9118c07850791e85f5e9f0e72a38338adc7c8114810a1139384b10b65ac"
+    },
+    {
+      "path": "build/assets/DiarioPazienteTab-CPzVs7ik.js",
+      "bytes": 23930,
+      "sha256": "790dd448ebdd5a288d5041627ae5813c4fda2fce3fe2a3704fda913b3e0716c9"
+    },
+    {
+      "path": "build/assets/DiarioPazienteTab-CZjQJr10.css",
+      "bytes": 2031,
+      "sha256": "b9ee1cf6fc25ad7e91cb64a8c3ac89086f5d2588e73d4d582d07d04605471629"
+    },
+    {
+      "path": "build/assets/diaryTherapy-C-xql5m-.js",
+      "bytes": 9129,
+      "sha256": "9b750c4aa703117d323c541277b1552c77d765c10a4b6e4567cdc505dfc7a6b8"
+    },
+    {
+      "path": "build/assets/DiaryTherapyPanel-C9VpT_pb.css",
+      "bytes": 1807,
+      "sha256": "87383eaf9a9d36b228fa6252a4c976913f154d4b3d23b178f20029dbcf6b3144"
+    },
+    {
+      "path": "build/assets/DiaryTherapyPanel-DY1d7591.js",
+      "bytes": 5015,
+      "sha256": "5f08a654e42c760f369ddceaf604adb389a543edd1d08d7fbf07e9ca8c209855"
+    },
+    {
+      "path": "build/assets/DimissioneTab-DMwHTHn3.js",
+      "bytes": 59438,
+      "sha256": "cbdb5d78d78eecf52e81f79a71c2d67437a71d0efc47caa216435a6068849ddb"
+    },
+    {
+      "path": "build/assets/DischargeImportModal-BPcl_exO.css",
+      "bytes": 3977,
+      "sha256": "f7e60fcdbb115c578a1a6aaaff87886e084d8720204d76ec843e9247eba678c5"
+    },
+    {
+      "path": "build/assets/DischargeImportModal-DTFOeMHC.js",
+      "bytes": 42832,
+      "sha256": "81d280b0e796a25a1db456f49af348f98b81e77f39e0ef2ec84a970a128b3fd0"
+    },
+    {
+      "path": "build/assets/DocumentiTab-C_9_35DX.js",
+      "bytes": 28569,
+      "sha256": "2d38b816dbb8c1b14d69f36f9e2d59ca4ab5b7f8e7a3595b549780d43d8c6b70"
+    },
+    {
+      "path": "build/assets/DocumentiTab-DJY500eY.css",
+      "bytes": 8613,
+      "sha256": "607205b601c0c2754a64b2be724f3115f41ce456caedd90e1bb33c2f409f3c83"
+    },
+    {
+      "path": "build/assets/DocumentPreview-DUsdrTPn.js",
+      "bytes": 6475,
+      "sha256": "eb33ec78a17c45033700a0302f0275b37686e9101b5d4f90a09af289848293e9"
+    },
+    {
+      "path": "build/assets/EsamiConsulenzeTab-BXBax61N.js",
+      "bytes": 13006,
+      "sha256": "949411dffe1ee5af9cef652a2f78d59f9b4fe8827f8265b3f187a25b6db8b729"
+    },
+    {
+      "path": "build/assets/facilityTime-DLFyR9ze.js",
+      "bytes": 683,
+      "sha256": "476fea5fe332e3818d8abc778469e3b0876ceaa5d377f3e67c56b314c12b0f07"
+    },
+    {
+      "path": "build/assets/farmacoDocumento-DzyiFi7j.js",
+      "bytes": 1945,
+      "sha256": "a85d947ee84ac02d62eb0e4a5eedc79824b7ddb3e76699f5181bbffc1bb3182c"
+    },
+    {
+      "path": "build/assets/farmacoRiferimento-BS_osA9s.js",
+      "bytes": 1110,
+      "sha256": "aee174ccdd333a5ea0544a71e463ff02249ac2796449523846f5cbca679628ff"
+    },
+    {
+      "path": "build/assets/GlucoseAdministrationControl-BBI_Nz0V.js",
+      "bytes": 7797,
+      "sha256": "a3a1c95d9a63684ce8cf665aacdd33145df18a1d194d79ebe0c22a3cb64ec3ef"
+    },
+    {
+      "path": "build/assets/GlucoseScaleEditor-B_cUU26A.js",
+      "bytes": 5926,
+      "sha256": "72cd22d1fb2506b1a8c7d82cab56ece89298f32f4cc1441e47322a292d86353a"
+    },
+    {
+      "path": "build/assets/index-Cis1D9xe.js",
+      "bytes": 632602,
+      "sha256": "ec232189c1049953e9106794ea8f9836902546885205fb474a255831870c6e4e"
+    },
+    {
+      "path": "build/assets/index-DC8NTiJ6.css",
+      "bytes": 278687,
+      "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+    },
+    {
+      "path": "build/assets/InlineEditableField-BnmgYhWo.js",
+      "bytes": 4122,
+      "sha256": "60e583ea9d07bdeaa3bc32a310cad1ca575d0eb3eb6003d3bdef455522602f5b"
+    },
+    {
+      "path": "build/assets/intakeTherapies-0cCMLkMs.js",
+      "bytes": 43704,
+      "sha256": "9834dc9607fe096015dc201e878a932a95141d4e289d1feb56faf23c59548934"
+    },
+    {
+      "path": "build/assets/intakeTherapies-iYDttph8.css",
+      "bytes": 8887,
+      "sha256": "4db1e564d080db1499febd6f9f0e53bc601dc7cabf49dc94a051ffbbf0a7ce27"
+    },
+    {
+      "path": "build/assets/IntakeWorkspace-BxCvm4id.js",
+      "bytes": 130821,
+      "sha256": "c2bcfbc3724f9f8dd7a1826abf6bc415600bdc79649af0c9d6ed930340f7224b"
+    },
+    {
+      "path": "build/assets/IntakeWorkspace-CGXNSq0l.css",
+      "bytes": 10805,
+      "sha256": "9a4d5f327713fcbfe95456755a35a905259208b793e7d6378c36518a0b732f83"
+    },
+    {
+      "path": "build/assets/InvioPSModal-C3ZEf2Pj.js",
+      "bytes": 16298,
+      "sha256": "d15b0cff0388e908f199484760eda43e9b97bec165270dc300c17e080d6ad662"
+    },
+    {
+      "path": "build/assets/LazyNews2-_Z07ah2X.js",
+      "bytes": 987,
+      "sha256": "b88a5f1e23f26f99f785161e01c3f383bd6c50466edc68444b4c722ba32112c5"
+    },
+    {
+      "path": "build/assets/LoadErrorState-xcV4bwtJ.js",
+      "bytes": 579,
+      "sha256": "19886bac502f219bd1709e6e38a0ef05f90971b5c7afcd36db96ca041057cee5"
+    },
+    {
+      "path": "build/assets/MedicazioniTab-Bqy2PEhR.js",
+      "bytes": 28338,
+      "sha256": "263ee30c031f7e5aeb4c57993b68db1dc318f82b571da537453a2a174512205b"
+    },
+    {
+      "path": "build/assets/MultiPatientParametri-D-4y5rAR.css",
+      "bytes": 6437,
+      "sha256": "ec6b84c97c61fafdd7f3bcfb6f0f468e647a6c9882b9c14b987b18699ca8eb88"
+    },
+    {
+      "path": "build/assets/MultiPatientParametri-DGWxwdiB.js",
+      "bytes": 12309,
+      "sha256": "135c1d2a58ed693f5b5c9ec523a7810f4a8c0a314f410df381899d74b05096f7"
+    },
+    {
+      "path": "build/assets/NarrativeSectionsTab-BabjH-C5.css",
+      "bytes": 400,
+      "sha256": "29ec6f2d4ef36fb45544731b4513499b338091259065a534acea34b30fed0957"
+    },
+    {
+      "path": "build/assets/NarrativeSectionsTab-DKwb7eLN.js",
+      "bytes": 13702,
+      "sha256": "11c158f8b4f714b1240f41df5d080f46ea316aef0013ac57f4b90c58039e4051"
+    },
+    {
+      "path": "build/assets/NewPatientFlow-C2Nn6K32.js",
+      "bytes": 8924,
+      "sha256": "a8ea0ed82c2d3c08aab16aced68f819a8dc294ffa5f9cc3b8be435e9c4556b88"
+    },
+    {
+      "path": "build/assets/NewPatientFlow-DtDiBuAk.css",
+      "bytes": 1954,
+      "sha256": "0864c2afec290ab16175b11aa7de6ed71467fbfe8986b91bbb3ba986fc39c03f"
+    },
+    {
+      "path": "build/assets/News2Chip-CDbYa6d-.js",
+      "bytes": 28462,
+      "sha256": "df135862944d8acd51d5087a240809a7b838d909ef217e5c8b126a108ab88cbb"
+    },
+    {
+      "path": "build/assets/News2Chip-CT4ZleOC.css",
+      "bytes": 6667,
+      "sha256": "43598d67479a79a2a6bfa9547e20a1a9efc8731a904d45dac0b2af43bf644674"
+    },
+    {
+      "path": "build/assets/NotesPage-DyQBXekH.css",
+      "bytes": 5225,
+      "sha256": "67981788c6dcbe7bcb16f34fa72bb9c7a20d123b16d03f00fbf68900a96e5abc"
+    },
+    {
+      "path": "build/assets/NotesPage-Y-tXLLUa.js",
+      "bytes": 12974,
+      "sha256": "a5475b7556aef083db1d142d40fdb8a0718990f7cbb31a21d745b03fc3f5c645"
+    },
+    {
+      "path": "build/assets/OperatorAgenda-DdF3bcZ8.css",
+      "bytes": 3731,
+      "sha256": "562642dde89eea504efeb922b9f88c2acbdfde868954b5553ee4436184aa87fa"
+    },
+    {
+      "path": "build/assets/OperatorAgenda-DKcR6O1K.js",
+      "bytes": 18721,
+      "sha256": "98c1c51cdaba8eacf3f223116d0a2653ea3dfc71a76424f17f390c7f1ecfb8eb"
+    },
+    {
+      "path": "build/assets/OperatorDashboard-BfEy4SB4.js",
+      "bytes": 26583,
+      "sha256": "7984e4462781f82757af947c972b4ee50d72b723b5a39765a83336a544114040"
+    },
+    {
+      "path": "build/assets/OperatorDashboard-DR177w2Y.css",
+      "bytes": 9077,
+      "sha256": "0baefc94c73d10c08c65bde6131074277e22b49c0a31e226c9c397afe06fa8f7"
+    },
+    {
+      "path": "build/assets/OperatorManagement-CPpUw4YM.js",
+      "bytes": 24525,
+      "sha256": "e9d661ffbbddfc323c70c42ac80e49d9aeae11e6f70aa0f4338d22c63ba8b984"
+    },
+    {
+      "path": "build/assets/OperatorManagement-DTt4_Y4X.css",
+      "bytes": 4382,
+      "sha256": "2b326c2ae4a41201ce9cf10cce5377eb2620cb950d53db6d7f6694a979db7f5f"
+    },
+    {
+      "path": "build/assets/OperatorSchedule-3nwe090Q.js",
+      "bytes": 6854,
+      "sha256": "3027bf51b53588a2f3b260c697f6689e5bb7b74d3780c1144e9bfb656a45f3b8"
+    },
+    {
+      "path": "build/assets/operatorSession-CocZDchv.js",
+      "bytes": 416,
+      "sha256": "5c055dc77e7dbc7544956d254140116ad58b1173abb01a6a4f2f4ebb6b5f15e2"
+    },
+    {
+      "path": "build/assets/PageHeader-B6wUUxaA.js",
+      "bytes": 2207,
+      "sha256": "bdc84397a0ff4f43059e4380de93e6eb5487521592e34d35e621025bb4379cc9"
+    },
+    {
+      "path": "build/assets/PainAssessmentEditor-iL571_Vd.js",
+      "bytes": 6048,
+      "sha256": "6305991d44b831131dd8544bd30c44fbe049dfb950f9bc14bc69551bdcce9c39"
+    },
+    {
+      "path": "build/assets/ParametriTab-kYJnVnbG.js",
+      "bytes": 15585,
+      "sha256": "7211197df4a742d5ac1517d7ebb45fdd8240a4ea18829d1d0b0436d5b007e278"
+    },
+    {
+      "path": "build/assets/PatientArchivePreview-r-14S2Bl.js",
+      "bytes": 10025,
+      "sha256": "77836760ae9e4f2aea9e99a31e5637691f68ba37f178e95ab6231c3b0730c9c5"
+    },
+    {
+      "path": "build/assets/PatientCombobox-DgHNIkZf.js",
+      "bytes": 5558,
+      "sha256": "209d5c792d42bf73016fce0806398d51707d0baf648b7ef84273e9252634a52a"
+    },
+    {
+      "path": "build/assets/PatientCombobox-m3PNMGTn.css",
+      "bytes": 2693,
+      "sha256": "db8536a76160d9c44507ac9527ea47f0b5b9fd21c3055df5092e2a4167e15905"
+    },
+    {
+      "path": "build/assets/patientDemographics-OKkN11Bn.js",
+      "bytes": 427813,
+      "sha256": "5b8b91cc5a0f08dbd37c638a1cb671300f1c7630918d8a544ecf36b8b27c6a4a"
+    },
+    {
+      "path": "build/assets/PatientDetail-BkwNPSz3.css",
+      "bytes": 23462,
+      "sha256": "63e9869d1d7086b3ba5a271be45c6ad3f0e9e4020866c9ec6e4bb78208db0d96"
+    },
+    {
+      "path": "build/assets/PatientDetail-DVIshChm.js",
+      "bytes": 119610,
+      "sha256": "cc870c22a7e89ef7226156297541fb88d0615f3e88ca807a51914ee675b53293"
+    },
+    {
+      "path": "build/assets/PatientDetailLazyTabs-BKEpEmff.js",
+      "bytes": 7893,
+      "sha256": "124597085b12944aa1f5eef0e81764d7da114d7b1ba8777768054d29bb0e7aec"
+    },
+    {
+      "path": "build/assets/patientDocumentArchive-rObptemz.js",
+      "bytes": 3792,
+      "sha256": "42ece90b63cdd55e6cf7ed153b82a96696fbd10fb7682bea43a7dcd23460d9e5"
+    },
+    {
+      "path": "build/assets/PatientIdentity-CcceCeFU.css",
+      "bytes": 982,
+      "sha256": "9f0c99f9739ffc88708fd32a55c020d12cd8c8468d1c69358a8973ed587488c7"
+    },
+    {
+      "path": "build/assets/PatientIdentity-wr_76vnT.js",
+      "bytes": 1658,
+      "sha256": "71d3a454b2a26b01b183f05bdfa4c070f20a9ebf387a3423f54ad60195c17e6a"
+    },
+    {
+      "path": "build/assets/PatientList-DW9EjbBl.js",
+      "bytes": 32953,
+      "sha256": "698f3547c881c8121df3e1463e4174c0c8588941f40492d51ea74ac987c7ca80"
+    },
+    {
+      "path": "build/assets/PatientList-t9pGv_kY.css",
+      "bytes": 12774,
+      "sha256": "85ba598c581d1a94539982938a911597b4da636e9dee8d4919397fcab298cee9"
+    },
+    {
+      "path": "build/assets/patientListView-LVltQk8P.js",
+      "bytes": 2396,
+      "sha256": "276233b0206297931d62b8691a74fe113ec1c399a749afa9c72127ee08528ab4"
+    },
+    {
+      "path": "build/assets/PatientParameters-BML_WSVJ.css",
+      "bytes": 6310,
+      "sha256": "57333c10999b4987a48775c9e2e123d5e7e8d8185aa7765799e2d6c769ba4b7b"
+    },
+    {
+      "path": "build/assets/PatientParameters-D46qdfCz.js",
+      "bytes": 10100,
+      "sha256": "3da6b4b6d763110203c0a5e8ec5e0e057fc1fe21bb624cb9031aa3a774995706"
+    },
+    {
+      "path": "build/assets/patientTabSnapshots-Bm7XaQYi.js",
+      "bytes": 273,
+      "sha256": "5d9ad9928554b3565f9aa4fb8133fd45476bbcdeb4854371640b7e4a42dbecc9"
+    },
+    {
+      "path": "build/assets/patientTherapyCalendar-oJO4T2nO.js",
+      "bytes": 3753,
+      "sha256": "48d5947d6124aa3fc621762dfeaa0f573502ea29377dcf19137f0404c28384b7"
+    },
+    {
+      "path": "build/assets/pdf-BqQaa2SN.js",
+      "bytes": 427303,
+      "sha256": "69ec6ebeb4fe1ef1d5b72551d609a83417c6fcaf3bb2c956fcc75c8007866def"
+    },
+    {
+      "path": "build/assets/pdf.worker.min-0cTqlNvF.js",
+      "bytes": 127,
+      "sha256": "e8633803a22192ad68fd9f70e49865e393fa1c1c5ca55c931924e377d5c8bc16"
+    },
+    {
+      "path": "build/assets/pdf.worker.min-CHFwMXne.mjs",
+      "bytes": 1262398,
+      "sha256": "0613f41490dd6aaceed7a93fbbd38c85e6d6aa60474b6588c6e7709cfbe18cb3"
+    },
+    {
+      "path": "build/assets/PdfCanvasPreview-BY-O_bqx.css",
+      "bytes": 685,
+      "sha256": "798813cc9625b50f22879608a7ea64e095056a40b25be7920c1dfb740e757538"
+    },
+    {
+      "path": "build/assets/PdfCanvasPreview-iBh4s_-R.js",
+      "bytes": 4192,
+      "sha256": "e1692315774433c59292ccf80bb11313485c2fa8e8aa572f3cea55ce904d6f3d"
+    },
+    {
+      "path": "build/assets/presaInCarico-KSO7RO3U.js",
+      "bytes": 1046,
+      "sha256": "e8a104039d5dbe2dff5652efd42917b62e5b56eac32f64eadd6d17f539389afe"
+    },
+    {
+      "path": "build/assets/PresaInCaricoTab-BudvZ1Zc.js",
+      "bytes": 39685,
+      "sha256": "f14b4736f435b40b40c25dff6365e392b639ac5a8aa8b9bcbe957b0884e2f76a"
+    },
+    {
+      "path": "build/assets/react-B3nAlWH0.js",
+      "bytes": 8185,
+      "sha256": "ee9838a4cbba0a54feea8f2d38ec1d8d3c7592bc8b5cc325e0b53ff06c22755b"
+    },
+    {
+      "path": "build/assets/renderArchivePrint-B5kVVW3I.js",
+      "bytes": 3191,
+      "sha256": "f391eee0f988ef32f7cde202e665630e5073c52c5f7cc283763772ac7dfcb2ac"
+    },
+    {
+      "path": "build/assets/RicercaFarmaco-Bc5vYoPv.js",
+      "bytes": 8106,
+      "sha256": "d84060d4bfd5864de09bc92aac5b7f10a39b8487f3bc9c455e8fecf30356f500"
+    },
+    {
+      "path": "build/assets/RicercaFarmaco-G1ieY86a.css",
+      "bytes": 2669,
+      "sha256": "c43f45c748912184e754f08d4a63234f0575fcef1ba4de2a944f2e59f1237b6e"
+    },
+    {
+      "path": "build/assets/RolePermissionsPage-BA4C_1ah.js",
+      "bytes": 48034,
+      "sha256": "3f1eb88fc6864fbfbc10eb571d01fcb76ea622ea3bbb88c6f50650000c24d57b"
+    },
+    {
+      "path": "build/assets/RolePermissionsPage-Ch45e6Xy.css",
+      "bytes": 10847,
+      "sha256": "af8a27a5164c5291fde855a4eda25f4f5e3c67fad9787c7af03580d69982fcc7"
+    },
+    {
+      "path": "build/assets/RoomsManagement-DnKImXSi.js",
+      "bytes": 13730,
+      "sha256": "286604845e0b61fee5f9e9a0ccf5b3833d58a8c68ca70706eaae8ea9986494e8"
+    },
+    {
+      "path": "build/assets/rosterOrder-Cj3l_KEH.js",
+      "bytes": 3683,
+      "sha256": "5b147607fa995015155a7c66c872a3cdd6de737ad0ab7cfdbf03e130b8a130a8"
+    },
+    {
+      "path": "build/assets/RosterOrderControl-CejLrHws.js",
+      "bytes": 3972,
+      "sha256": "93012661bd13f81e41e31a9b55febd4540a92b59e4fa06034f80ca15cf0514db"
+    },
+    {
+      "path": "build/assets/RosterOrderControl-D6JdzpHU.css",
+      "bytes": 985,
+      "sha256": "1a86c648c8d24348d729e45c268ab9f1baa6c77a41b25019bb78bd83865ad22a"
+    },
+    {
+      "path": "build/assets/ScalaBradenTab-DlKumyBC.js",
+      "bytes": 16564,
+      "sha256": "10af364cf604270427411632dff41a92c53600cd74e3e5cb31a06a6784b53653"
+    },
+    {
+      "path": "build/assets/ScalaNRSTab-Pw9JK5p_.js",
+      "bytes": 4548,
+      "sha256": "bc65f5858d68c2d4853d25e224a6961a8006df48e26da80e25a8d9893aa73a40"
+    },
+    {
+      "path": "build/assets/ScalaTinettiTab-DgYLaNnF.js",
+      "bytes": 5479,
+      "sha256": "c4ffe5f14f5403a0641474a23665a79ed74e86d50bf904a22c205f609e0aad9c"
+    },
+    {
+      "path": "build/assets/SectionToggle-D6ZGsL3x.js",
+      "bytes": 651,
+      "sha256": "8bc7543656f36a6bd53fac70c4c6128c2059eb2d30b1c12030a678ea6448c5e2"
+    },
+    {
+      "path": "build/assets/SemanticTaggedText-BsF4GSPY.js",
+      "bytes": 5643,
+      "sha256": "41ae91bf458a3b5f2b1dcf3882bb5bb956716e2342c53b3c089bc1e28bbaf19d"
+    },
+    {
+      "path": "build/assets/SemanticTaggedText-Cy2K2aEq.css",
+      "bytes": 806,
+      "sha256": "8e1468ddc2dc49ec862668499bbb9eddfb070b2937558ba90d289df8cb597156"
+    },
+    {
+      "path": "build/assets/shared-CkqBHlLh.js",
+      "bytes": 4154,
+      "sha256": "fbdf21e30c9f9d2ca829927a42cc64cbb95bbd517758de379bb7d201610690a0"
+    },
+    {
+      "path": "build/assets/SortArrow-UPpnGORV.js",
+      "bytes": 786,
+      "sha256": "b74d058ead6efd944620a681f5a7eb8d646679737db9d58ca579ad79641b85c3"
+    },
+    {
+      "path": "build/assets/submissionKey-mAJteX_U.js",
+      "bytes": 308,
+      "sha256": "35c3ad357762a48e14b00c99a0ec5c831197e7963bd421aea63238d6c47aa59b"
+    },
+    {
+      "path": "build/assets/TerapiaFarmacologicaTab-DLO_ASFK.js",
+      "bytes": 68607,
+      "sha256": "5d703d97f99ac537cc78ce87ff9456ca8fa7d4ac3465454b80f65c63fc30de41"
+    },
+    {
+      "path": "build/assets/TerapiaFarmacologicaTab-zpCIETGM.css",
+      "bytes": 17003,
+      "sha256": "dd9a2131516d616ce0a072cceae8ac178b617ebbb736911aa5de92c48bc1cb01"
+    },
+    {
+      "path": "build/assets/therapyDose-hyD67tme.js",
+      "bytes": 2276,
+      "sha256": "27aefeec3bba91b4e45f2fce4e2d5dbf8458ffb7a9e1c4db7e3547edae1e3b64"
+    },
+    {
+      "path": "build/assets/TherapyEditor-sW9eiKVn.js",
+      "bytes": 6335,
+      "sha256": "880d0e2a309faf79234cbe939ba196077598a16572e86e20551f9077acff2ad9"
+    },
+    {
+      "path": "build/assets/therapyPages-CfwLuM2P.js",
+      "bytes": 1424,
+      "sha256": "61e90ee4e3049313fe15bad0416456c3543727cdb7aeb2f12efe53a1dfcde8fa"
+    },
+    {
+      "path": "build/assets/TherapyRoundsPage-CIClEI_9.css",
+      "bytes": 7108,
+      "sha256": "95cb3d6902d2373802a672a0193b37073fe6aecd796e100c81c8c4a32ac568e7"
+    },
+    {
+      "path": "build/assets/TherapyRoundsPage-CIs_nEdS.css",
+      "bytes": 9816,
+      "sha256": "043b6dd49dbad664073071e6b3429a22b3dfceb3c6c4438ed3a2076be38404ec"
+    },
+    {
+      "path": "build/assets/TherapyRoundsPage-DbyW3H4e.js",
+      "bytes": 17025,
+      "sha256": "f121b2cee67239cb47144f84e0bb2b285842df4dc1fd2ed2c547ae3e7cf2f0b9"
+    },
+    {
+      "path": "build/assets/TherapyRoundsPage-DVdCiK91.js",
+      "bytes": 16190,
+      "sha256": "21bb0c909b6d38461b5048ca0e4dc4b817f94985113b02ca3945360268126074"
+    },
+    {
+      "path": "build/assets/Tinetti-PvAQNSKS.css",
+      "bytes": 1900,
+      "sha256": "3d8d6819272cfe8d3243df9a45f3b89e140ac3387e4bea381fca59ba1c5c7b59"
+    },
+    {
+      "path": "build/assets/tinettiTypes-DMl49mUB.js",
+      "bytes": 523,
+      "sha256": "9f60c5f096533e5fa8f8dd7f0be11fdce534d86e6485a2dde1a6646380998463"
+    },
+    {
+      "path": "build/assets/TopNav-DgVjliS6.js",
+      "bytes": 2163,
+      "sha256": "d378a0ff2e6fdfda282ca9cf55c779ec3643da17902a0f458b08ef957034d4a7"
+    },
+    {
+      "path": "build/assets/TopNav-DQXC9CRC.css",
+      "bytes": 5743,
+      "sha256": "860dd730b27a7a153c13b4acd4833f2c12c3ef69482fa31c61be2e74b20d36ee"
+    },
+    {
+      "path": "build/assets/useAnomalieReparto-CYIssrxI.js",
+      "bytes": 4082,
+      "sha256": "a9c340257dd4348867b8c27dd4adb272e3421918706c10471f844a3657bf3b57"
+    },
+    {
+      "path": "build/assets/useLegacyCatalogView-DJ9CDfWf.js",
+      "bytes": 1811,
+      "sha256": "34889e2692fc94900954b22601d5b73e87fd7afa4f00370027f2359b984b4827"
+    },
+    {
+      "path": "build/assets/useMedicationSearch-B64lxwnX.js",
+      "bytes": 2418,
+      "sha256": "89bc24aeee4615e0551ea73a877c534e113a25dd51b0cc608f21078d507a6a13"
+    },
+    {
+      "path": "build/assets/usePatientDocuments-BBmdy6PQ.js",
+      "bytes": 2726,
+      "sha256": "1ea1600f1cf8ef6f268eb67a7831b3ac7e57efe4fbbaeec167660ed640791266"
+    },
+    {
+      "path": "build/assets/VisoreDocumentoFarmaco-BaEEBIbC.css",
+      "bytes": 3022,
+      "sha256": "d3c5d86fc5fa347af9737954e219b51d572f9d21ba4e3a40edf95d01801ff760"
+    },
+    {
+      "path": "build/assets/VisoreDocumentoFarmaco-DtBIEk8B.js",
+      "bytes": 11777,
+      "sha256": "c47a206815c9477a57dc69f94422c3bd7ff5d6096cebb0d33a050ac94f4ed3bc"
+    },
+    {
+      "path": "build/assets/VitalSignsEditor-C8IKKCtt.js",
+      "bytes": 2511,
+      "sha256": "679e7d204c735bdaa7d136c36e076263de5750fc7d74f0802cfd4b8d686e2cdc"
+    },
+    {
+      "path": "build/assets/voiceStartGate-vXRNXSzh.js",
+      "bytes": 1458,
+      "sha256": "c7dd234ed7751ce8b99dd2358cef8f5eb5d397486e8fa983b530d7580a3c6f48"
+    },
+    {
+      "path": "build/favicon.svg",
+      "bytes": 9522,
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "build/icons.svg",
+      "bytes": 5055,
+      "sha256": "7ca2d67c9c3aebf50cdc8709ee8aacf8cdb8cc7ea6325ea94939caef5da1c53d"
+    },
+    {
+      "path": "build/index.html",
+      "bytes": 1928,
+      "sha256": "47567b5ec3a3cb4cf84868151a6d2e81a90e736e22b305472fc68d70c86e74b2"
+    },
+    {
+      "path": "build/staticwebapp.config.json",
+      "bytes": 199,
+      "sha256": "9140fb79f5f0df71c63644e04a54e2cb738eedaa953f394d91319c0b106bcd2e"
+    },
+    {
+      "path": "cache/deps/@azure_msal-browser.js",
+      "bytes": 657898,
+      "sha256": "c630b63826d3879de24ae7e6fd1bd9a3029930bcef732f7a959e04c99b40c5bb"
+    },
+    {
+      "path": "cache/deps/@azure_msal-browser.js.map",
+      "bytes": 1294342,
+      "sha256": "0065ed8e9367736a1990945c04247d135d9ba6d4ac5c0a987ddf26500e2e2b29"
+    },
+    {
+      "path": "cache/deps/codice-fiscale-js.js",
+      "bytes": 898289,
+      "sha256": "68493fda20fec6ddc817775c408973fd10e24e7e3330dc6a439327cfb0ad9be2"
+    },
+    {
+      "path": "cache/deps/codice-fiscale-js.js.map",
+      "bytes": 943461,
+      "sha256": "e96b8d31cc5b123e33b355c4c492c094e4d3808ab9c1bc650fb408d5ff94b7c2"
+    },
+    {
+      "path": "cache/deps/package.json",
+      "bytes": 23,
+      "sha256": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a"
+    },
+    {
+      "path": "cache/deps/pdfjs-dist.js",
+      "bytes": 758672,
+      "sha256": "a0efc0f0a76e3b4fb592fbd4ff2a758b248fb012ba5fd53bd786efe4e4ff8747"
+    },
+    {
+      "path": "cache/deps/pdfjs-dist.js.map",
+      "bytes": 1391364,
+      "sha256": "5db5743419da92b462e74448a63c3d09d140f4bce6f40a6f53d45d89ebeeddbf"
+    },
+    {
+      "path": "cache/deps/react-dom.js",
+      "bytes": 14657,
+      "sha256": "d3999c276a3657a1d11f2ef41d2c555e61acededc83deaa21cd168a936c94622"
+    },
+    {
+      "path": "cache/deps/react-dom.js.map",
+      "bytes": 25802,
+      "sha256": "a026bb67844cc42089d30e5c985e42b390b2c1da86e30b652ccb6cf90d8caa3b"
+    },
+    {
+      "path": "cache/deps/react-dom_client.js",
+      "bytes": 821082,
+      "sha256": "d421bce0e5c44f3b2e3f629240eb5bb5890a3310cce69519a4a7bc61912b0cad"
+    },
+    {
+      "path": "cache/deps/react-dom_client.js.map",
+      "bytes": 1499361,
+      "sha256": "e8de5c959f80b6ea2db4eded6bdc074c64979ce54c81002df1d6c65821be3c39"
+    },
+    {
+      "path": "cache/deps/react.js",
+      "bytes": 38368,
+      "sha256": "8e28a62d37fcaa99b98ca657e74a5d12970081a57e1d3ef61ec8238d5c684007"
+    },
+    {
+      "path": "cache/deps/react.js.map",
+      "bytes": 68987,
+      "sha256": "5121d4d342246661c599c4769fdf296f5503c17cbb8b51d3e05c11a325a87a99"
+    },
+    {
+      "path": "cache/deps/react_jsx-dev-runtime.js",
+      "bytes": 10588,
+      "sha256": "356acc15dec55bc76da16336b82a5aee782f493428a4f8c49ecc96ab7d473664"
+    },
+    {
+      "path": "cache/deps/react_jsx-dev-runtime.js.map",
+      "bytes": 18268,
+      "sha256": "e2e41c9d7146b7c66997e2bef42a90e148e07d56c4095fb1073d5084d06b4a2a"
+    },
+    {
+      "path": "cache/deps/rolldown-runtime-EAsCxrDo.js",
+      "bytes": 496,
+      "sha256": "dd3545c6894fd8d3327997ebe3ada59e8d2e768d1a4ec615a6e05b99867c4258"
+    },
+    {
+      "path": "cache/deps/_metadata.json",
+      "bytes": 2075,
+      "sha256": "54f734a8ba26a8489fafda6d2f9af1109cdb85686bac951869fff90ef3743ffd"
+    }
+  ]
+}

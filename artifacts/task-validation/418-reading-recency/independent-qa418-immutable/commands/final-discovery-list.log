@@ -1,0 +1,23 @@
+Listing tests:
+  independent.spec.cjs:80:166 › desktop › overview: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › desktop › chart: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › desktop › ward: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › tablet-emulated › overview: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › tablet-emulated › chart: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › tablet-emulated › ward: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › mobile-emulated › overview: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › mobile-emulated › chart: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:80:166 › mobile-emulated › ward: DST minutes days weeks associated, wraps and read-only idle
+  independent.spec.cjs:93:1 › expanded comparison has own full provenance and historical NEWS2 remains zero
+  independent.spec.cjs:96:47 › overview: impossible/unzoned/future timestamps never imply present
+  independent.spec.cjs:96:47 › chart: impossible/unzoned/future timestamps never imply present
+  independent.spec.cjs:96:47 › ward: impossible/unzoned/future timestamps never imply present
+  independent.spec.cjs:99:1 › bounded partial history does not invent empty history or populate new controls
+  independent.spec.cjs:102:1 › spring DST transition is six elapsed minutes despite wall-clock jump
+  independent.spec.cjs:107:2 › tablet diagnostic › runtime viewport and ward container bounds
+  independent.spec.cjs:113:47 › overview: all unsupported four-digit year representations fail safe without UI crash
+  independent.spec.cjs:113:47 › chart: all unsupported four-digit year representations fail safe without UI crash
+  independent.spec.cjs:113:47 › ward: all unsupported four-digit year representations fail safe without UI crash
+  independent.spec.cjs:121:39 › overview: synthetic read-only history retains its date/value provenance after reload
+  independent.spec.cjs:121:39 › ward: synthetic read-only history retains its date/value provenance after reload
+Total: 21 tests in 1 file

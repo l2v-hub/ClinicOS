@@ -1,0 +1,13 @@
+{
+  "verdict": "BLOCKED",
+  "reason": "Earlier direct named full-page screenshots overwritten by final21 shared screenshot path; per-run original screenshots/traces/videos/reports and all negative attempts retained",
+  "technicalAcceptance": "PASS",
+  "application": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "files": 630,
+  "manifestSha256": "a96bf163867e3a0f4f18dde9f91d198d9f191ecc12ea3f50362dc7ab73ec34d8",
+  "sealedAt": "2026-10-09T16:32:32.591Z",
+  "allAttemptResultsPreserved": true,
+  "allEarlierStandalonePngBytesPreserved": false,
+  "serverStopped": true,
+  "scope": "All remaining files under independent-qa418-final sealed, only recursive seal/manifest metadata excluded; emitted runtime outside bundle separately manifested. No release authority."
+}

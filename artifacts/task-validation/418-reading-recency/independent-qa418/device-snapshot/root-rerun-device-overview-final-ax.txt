@@ -1,0 +1,118 @@
+Browser tab: 1809686341, Title: "ClinicOS — Gestione clinica", URL: "http://127.0.0.1:7482/#/dettaglio-paziente/QA-PATIENT-407".
+0 AXWebArea ClinicOS — Gestione clinica, URL: 127.0.0.1:7482/#/dettaglio-paziente/QA-PATIENT-407
+	1 container root
+		2 container Navigazione principale
+			3 button Turno
+			4 button Pazienti
+			5 button Terapia
+			6 button Parametri
+			7 button Consegne, 0 note senza conferma di lettura
+			8 button Agenda
+			9 button Farmaci
+		10 button Description: Indietro: Pazienti, Help: Torna a Pazienti (Alt+←)
+		24 container
+			29 heading Sintetica, Persona, Value: 1
+				30 text Sintetica, Persona
+			31 text Posto letto non disponibile · 46 anni · nato il 01/01/1980
+		15 text Turno  pomeriggio
+		16 text 17:50
+		17 button Description: Apri Milo, assistente clinico AI, a schermo intero, Help: Milo · assistente clinico AI (schermo intero)
+			18 image
+			19 text Milo
+		20 button Description: Cerca paziente, camera, codice fiscale, Help: Cerca paziente (Ctrl+K)
+			21 image
+		22 text SIMULATORE
+		23 button (collapsed) Description: Infermiere Sintetico, Infermiere: menu utente, Help: Infermiere Sintetico · Infermiere, Secondary Actions: Expand
+		28 container
+			32 button ▴ Chiudi tutte le sezioni
+			33 tab group Sezioni della cartella
+				34 tab (selected, settable, boolean) Panoramica, Value: 1, ID: patient-section-panoramica
+				35 tab (selectable, settable, boolean) Dati di ingresso, Value: 0, ID: patient-section-ingresso
+				36 tab (selectable, settable, boolean) Clinica, Value: 0, ID: patient-section-clinica
+				37 tab (selectable, settable, boolean) Terapia, Value: 0, ID: patient-section-terapia
+				38 tab (selectable, settable, boolean) Parametri, Value: 0, ID: patient-section-parametri
+				39 tab (selectable, settable, boolean) Moduli, Value: 0, ID: patient-section-moduli
+				40 tab (selectable, settable, boolean) Documenti, Value: 0, ID: patient-section-documenti
+				41 tab (selectable, settable, boolean) Dimissione, Value: 0, ID: patient-section-dimissione
+			42 button Stampa la scheda
+			43 button Invio in Pronto Soccorso
+			44 container Completezza anagrafica
+				45 text Anagrafica da completare
+				46 text Dati da completare:
+				47 content list
+					48 button Codice fiscale
+					49 button Telefono
+			50 container Description: Panoramica, ID: patient-tab-panel
+				51 container Ultimi parametri e NEWS2
+					52 button (expanded) Description: Comprimi ultimi parametri, Secondary Actions: Collapse
+					53 heading Ultimi parametri, Value: 2
+						91 text Ultimi parametri
+					54 button Rileva ora i parametri di questo paziente
+					55 pop up button Description: Espandi ultimi parametri e NEWS2, Help: Espandi parametri
+					56 container widget-_r_b_
+						92 text FR 18
+						93 text atti/min
+						94 text Misurato il 
+						95 text 09/10/2026 17:34
+						96 text 15 minuti fa SpO₂ 98
+						97 text % aria
+						98 text Misurato il 
+						99 text 06/10/2026 17:42
+						100 text 3 giorni fa PA 120/80
+						101 text mmHg
+						102 text Misurato il 
+						103 text 25/09/2026 17:42
+						104 text 2 settimane fa FC 72
+						105 text bpm
+						106 text Misurato il 
+						107 text 25/09/2026 17:42
+						108 text 2 settimane fa Temp. 36,5
+						109 text °C
+						110 text Misurato il 
+						111 text 25/09/2026 17:42
+						112 text 2 settimane fa
+						57 pop up button NEWS2 0 · Misurato il 25/09/2026 17:42 · 2 settimane fa: Da aggiornare · Monitoraggio ogni 12 ore. Apri lo storico NEWS2
+							113 text NEWS2
+							114 text 0
+							115 text punti
+							116 text Misurato il 
+							117 text 25/09/2026 17:42
+							118 text 2 settimane fa
+						119 container
+							120 text NEWS2: Da aggiornare · Monitoraggio ogni 12 ore
+				58 container Filtra il diario per autore
+					59 checkbox Tutti, Value: 1, ID: patient-diary-filter-tutti
+					60 checkbox Medico, Value: 0, ID: patient-diary-filter-medico
+					61 checkbox Infermiere, Value: 0, ID: patient-diary-filter-infermiere
+					62 checkbox OSS, Value: 0, ID: patient-diary-filter-oss
+					63 checkbox Fisioterapista, Value: 0, ID: patient-diary-filter-fisioterapista
+					64 checkbox Operatore, Value: 0, ID: patient-diary-filter-operatore
+					65 checkbox Altro, Value: 0, ID: patient-diary-filter-altro
+				66 container
+					67 button (expanded) Description: Comprimi Diario Paziente, Secondary Actions: Collapse
+					68 text Diario Paziente 0 voci
+					69 button Aggiungi voce
+						70 image
+						71 text Aggiungi voce
+				72 container widget-_r_d_
+					73 container
+						74 text Dal
+						75 date field (settable) Dal
+							76 container
+								77 stepper
+								78 stepper
+								79 stepper
+							80 pop up button Mostra selettore date Mostra selettore date
+						81 text Al
+						82 date field (settable) Al
+							83 container
+								84 stepper
+								85 stepper
+								86 stepper
+							87 pop up button Mostra selettore date Mostra selettore date
+						88 button Filtra storico
+					89 container
+						90 text Pagina  1  · fino a 50 segnalazioni, dalla più recente.
+					121 text Nessuna voce nel diario.
+
+The focused UI element is 10 button Description: Indietro: Pazienti, Help: Torna a Pazienti (Alt+←)

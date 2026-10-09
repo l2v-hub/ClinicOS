@@ -1,0 +1,104 @@
+[
+  {
+    "name": "types-app",
+    "args": [
+      "../node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--project",
+      "tsconfig.app.json",
+      "--incremental",
+      "false"
+    ],
+    "cwd": "C:/w-418-qa-final/frontend",
+    "start": "2026-10-09T16:10:00.316Z",
+    "end": "2026-10-09T16:10:13.184Z",
+    "exitCode": 0,
+    "TSX_TSCONFIG_PATH": "C:/w-418-qa-final/frontend/tsconfig.app.json",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  {
+    "name": "types-node",
+    "args": [
+      "../node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--project",
+      "tsconfig.node.json",
+      "--incremental",
+      "false"
+    ],
+    "cwd": "C:/w-418-qa-final/frontend",
+    "start": "2026-10-09T16:10:13.185Z",
+    "end": "2026-10-09T16:10:14.261Z",
+    "exitCode": 0,
+    "TSX_TSCONFIG_PATH": "C:/w-418-qa-final/frontend/tsconfig.app.json",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  {
+    "name": "build-types",
+    "args": [
+      "../node_modules/typescript/bin/tsc",
+      "-b",
+      "C:\\w-418-qa-final\\artifacts\\task-validation\\418-reading-recency\\independent-qa418-final/tsconfig.original-build.json"
+    ],
+    "cwd": "C:/w-418-qa-final/frontend",
+    "start": "2026-10-09T16:10:14.262Z",
+    "end": "2026-10-09T16:10:42.113Z",
+    "exitCode": 0,
+    "TSX_TSCONFIG_PATH": "C:/w-418-qa-final/frontend/tsconfig.app.json",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  {
+    "name": "build-vite",
+    "args": [
+      "../node_modules/vite/bin/vite.js",
+      "build",
+      "--configLoader",
+      "runner",
+      "--outDir",
+      "C:\\w-418-qa-final\\artifacts\\task-validation\\418-reading-recency\\independent-qa418-final/../runtime-418-final/build"
+    ],
+    "cwd": "C:/w-418-qa-final/frontend",
+    "start": "2026-10-09T16:10:42.113Z",
+    "end": "2026-10-09T16:11:29.703Z",
+    "exitCode": 0,
+    "TSX_TSCONFIG_PATH": "C:/w-418-qa-final/frontend/tsconfig.app.json",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  {
+    "name": "focused",
+    "args": [
+      "--import",
+      "tsx",
+      "--import",
+      "../scripts/stub-css-loader.mjs",
+      "--test",
+      "src/lib/__tests__/readingRecency.test.ts",
+      "src/lib/__tests__/parameterPad.test.ts",
+      "src/lib/__tests__/patientVitalsOverview.test.ts",
+      "src/lib/__tests__/news2.test.ts",
+      "src/lib/__tests__/news2History.test.ts",
+      "src/lib/__tests__/parameterEntrySchema.test.ts",
+      "src/lib/__tests__/parameterEntryDrafts.test.ts",
+      "src/lib/__tests__/parameterEntrySummary.test.ts",
+      "src/components/operator/__tests__/parameterReadingForm417.test.ts"
+    ],
+    "cwd": "C:/w-418-qa-final/frontend",
+    "start": "2026-10-09T16:11:29.721Z",
+    "end": "2026-10-09T16:11:32.262Z",
+    "exitCode": 0,
+    "TSX_TSCONFIG_PATH": "C:/w-418-qa-final/frontend/tsconfig.app.json",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  {
+    "name": "full-regression",
+    "args": [
+      "../scripts/run-node-tests.mjs"
+    ],
+    "cwd": "C:/w-418-qa-final/frontend",
+    "start": "2026-10-09T16:11:32.262Z",
+    "end": "2026-10-09T16:12:24.603Z",
+    "exitCode": 1,
+    "TSX_TSCONFIG_PATH": "C:/w-418-qa-final/frontend/tsconfig.app.json",
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  }
+]

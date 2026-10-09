@@ -1,0 +1,621 @@
+{
+  "candidate": "ae2a94f3dc66a6f1c2eb693d1d9faf6c3924c01c",
+  "originalBeforeAfterInputs": 1529,
+  "rootDeviceInputs": 1464,
+  "rootAllInputsNowBound": true,
+  "missingFromOriginalScopeResolvedBySupplement": [
+    {
+      "path": "prisma/migrations/20260430121929_init/migration.sql",
+      "physicalSha256": "f47abca97641f8281c36b622e54f921755f027699594cf332087bbca9c8273b7",
+      "rootPhysicalSha256": "f47abca97641f8281c36b622e54f921755f027699594cf332087bbca9c8273b7",
+      "canonicalGitBlob": "bb17cb2743cbf5a8f358bcdc5ea7367fe036d114",
+      "headGitBlob": "bb17cb2743cbf5a8f358bcdc5ea7367fe036d114",
+      "canonicalBytesSha256": "7e8a3f8d110caea66578b47a83004f8c7de25ae2493b9f30f21a845ccba398f1"
+    },
+    {
+      "path": "prisma/migrations/20260508180649_add_cartella_json/migration.sql",
+      "physicalSha256": "3837dd39a8d625672affff0f38070b88a5e501e707e4cd432a99849cd643acf9",
+      "rootPhysicalSha256": "3837dd39a8d625672affff0f38070b88a5e501e707e4cd432a99849cd643acf9",
+      "canonicalGitBlob": "84c2b8c4e66f5ac02f208ca98b3b33fd3381813c",
+      "headGitBlob": "84c2b8c4e66f5ac02f208ca98b3b33fd3381813c",
+      "canonicalBytesSha256": "7c3d69fe5063a4b29419dd9659145b3123b6cc284abba611d83277bca3fd4f31"
+    },
+    {
+      "path": "prisma/migrations/20260510120000_add_medication_administration/migration.sql",
+      "physicalSha256": "fe988bbe13c94f2852634167e1f26bd4cdba2c1d4fbe2cc8831015b668649a2d",
+      "rootPhysicalSha256": "fe988bbe13c94f2852634167e1f26bd4cdba2c1d4fbe2cc8831015b668649a2d",
+      "canonicalGitBlob": "61d298adc3ac688e8dc655342ad306d5a3b97042",
+      "headGitBlob": "61d298adc3ac688e8dc655342ad306d5a3b97042",
+      "canonicalBytesSha256": "a8ae996619e361f2351a9bacc25cb6fa7cb7629fb5e6f871676de3f8b55d383f"
+    },
+    {
+      "path": "prisma/migrations/20260510140000_add_patient_intake_document/migration.sql",
+      "physicalSha256": "c0a1c2259a3641f908ad3e63f64e7458c9d112737cfba674a845f9d851f2bfeb",
+      "rootPhysicalSha256": "c0a1c2259a3641f908ad3e63f64e7458c9d112737cfba674a845f9d851f2bfeb",
+      "canonicalGitBlob": "ffd6bf3fd9136d92ca7205ee9ad946ffac8f2c4a",
+      "headGitBlob": "ffd6bf3fd9136d92ca7205ee9ad946ffac8f2c4a",
+      "canonicalBytesSha256": "43c63629b45f92c88813b7304ad4afaa1a13b532623d7b399d2c0ed78f27019d"
+    },
+    {
+      "path": "prisma/migrations/20260510160000_add_patient_therapy/migration.sql",
+      "physicalSha256": "7859048e0bd3ea122fea7c49eff148250fd3b51ec47af8cadd6ac4ad4ce535d8",
+      "rootPhysicalSha256": "7859048e0bd3ea122fea7c49eff148250fd3b51ec47af8cadd6ac4ad4ce535d8",
+      "canonicalGitBlob": "549997b74baeb1e0620a969ceca99c9c7205fef0",
+      "headGitBlob": "549997b74baeb1e0620a969ceca99c9c7205fef0",
+      "canonicalBytesSha256": "e154043edd344048764e9f7f07559159079fa064c9602d7b7b8772987f2fe968"
+    },
+    {
+      "path": "prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql",
+      "physicalSha256": "44ea1516caff3bcfab779b57df50696c544852549c44b76db0a8979732e097e3",
+      "rootPhysicalSha256": "44ea1516caff3bcfab779b57df50696c544852549c44b76db0a8979732e097e3",
+      "canonicalGitBlob": "e76cda98118c7faf81650c66aa26ef1b9c0699b2",
+      "headGitBlob": "e76cda98118c7faf81650c66aa26ef1b9c0699b2",
+      "canonicalBytesSha256": "296c2d81c7e6aeb87878f62044df652c9093f28be10fbebb88c2100e84ca1bd9"
+    },
+    {
+      "path": "prisma/migrations/20260612090000_add_consegna/migration.sql",
+      "physicalSha256": "34480ed064bbd1170ccd93c86d09621ff173917fbfa2d4e1279711e3b416ae4e",
+      "rootPhysicalSha256": "34480ed064bbd1170ccd93c86d09621ff173917fbfa2d4e1279711e3b416ae4e",
+      "canonicalGitBlob": "c5969298edc21ed896ced379697ae2b7bd40fb74",
+      "headGitBlob": "c5969298edc21ed896ced379697ae2b7bd40fb74",
+      "canonicalBytesSha256": "3505ee1eef5080af7a2d9cad49d02f740dfaafb995da474f9754cc27197200f3"
+    },
+    {
+      "path": "prisma/migrations/20260612091500_add_nota/migration.sql",
+      "physicalSha256": "20fbda5265f2ff0c035b386f8ce0dbf1a7d742bbaa4228b69cc0e40323eb937b",
+      "rootPhysicalSha256": "20fbda5265f2ff0c035b386f8ce0dbf1a7d742bbaa4228b69cc0e40323eb937b",
+      "canonicalGitBlob": "7ccd7cbf8a40e586f044e7316c093c710287a42b",
+      "headGitBlob": "7ccd7cbf8a40e586f044e7316c093c710287a42b",
+      "canonicalBytesSha256": "74fa3d06b1dea892184b884ace6615eba2eeabd8fc8e7ae03e44211d813eb517"
+    },
+    {
+      "path": "prisma/migrations/20260613103741_add_import_jobs/migration.sql",
+      "physicalSha256": "52b8e904008d01a03a7d002d3ddf02e485cc368269db5e27be675ad0b6bef1df",
+      "rootPhysicalSha256": "52b8e904008d01a03a7d002d3ddf02e485cc368269db5e27be675ad0b6bef1df",
+      "canonicalGitBlob": "254938b20a3f9be1866b8d3b22129d2d95c97489",
+      "headGitBlob": "254938b20a3f9be1866b8d3b22129d2d95c97489",
+      "canonicalBytesSha256": "92456dd3e3f739e5e8877dd52d83abf6a1aee88bf32bb37a540a23cc3028eeca"
+    },
+    {
+      "path": "prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql",
+      "physicalSha256": "af7cf22199427ccf36c41f74d5c5259193825e39dfe3c634836bd3ce0bc40e61",
+      "rootPhysicalSha256": "af7cf22199427ccf36c41f74d5c5259193825e39dfe3c634836bd3ce0bc40e61",
+      "canonicalGitBlob": "144c2377ef66393c4c9683d8c8ea94b8e0babb5f",
+      "headGitBlob": "144c2377ef66393c4c9683d8c8ea94b8e0babb5f",
+      "canonicalBytesSha256": "749a93fb132b9d9410017b392e9e390b24e59dbebdab7955682c05a4c2f88842"
+    },
+    {
+      "path": "prisma/migrations/20260614091124_add_async_job_fields/migration.sql",
+      "physicalSha256": "7c0782cf396eefda1192cafd5b069fa615531c21d99ff8fe933058f27dcad3ef",
+      "rootPhysicalSha256": "7c0782cf396eefda1192cafd5b069fa615531c21d99ff8fe933058f27dcad3ef",
+      "canonicalGitBlob": "462ed04265618527925e21f474380d7c88e5db8e",
+      "headGitBlob": "462ed04265618527925e21f474380d7c88e5db8e",
+      "canonicalBytesSha256": "0bc0a2548f7c199a65bcfd69de02b3ee810afce6170be55e76dc4bad84aaf667"
+    },
+    {
+      "path": "prisma/migrations/20260616080000_add_patient_narrative_sections/migration.sql",
+      "physicalSha256": "2398f3ea8a74af34f68e3e371a006fc655cc1302b33d8d867b8a1b58ce3ece6b",
+      "rootPhysicalSha256": "2398f3ea8a74af34f68e3e371a006fc655cc1302b33d8d867b8a1b58ce3ece6b",
+      "canonicalGitBlob": "8f4d7dc573948beae2498b3f17ed665e29cbcfa2",
+      "headGitBlob": "8f4d7dc573948beae2498b3f17ed665e29cbcfa2",
+      "canonicalBytesSha256": "26b4f14fc818303b3f042c3f807b53e997f9ae8b1356156558e65632fcc5cf1a"
+    },
+    {
+      "path": "prisma/migrations/20260616220000_add_patient_documents/migration.sql",
+      "physicalSha256": "3361f5566152debc0a336877c12338caacad5868e6133d4ae41445afab29fa3a",
+      "rootPhysicalSha256": "3361f5566152debc0a336877c12338caacad5868e6133d4ae41445afab29fa3a",
+      "canonicalGitBlob": "b1b87703f8de54060cdef8a31670ac2ac5f84337",
+      "headGitBlob": "b1b87703f8de54060cdef8a31670ac2ac5f84337",
+      "canonicalBytesSha256": "06a92e168d807f3a03c4dd2779740c08714982f8996e7259d58eb191611d07c9"
+    },
+    {
+      "path": "prisma/migrations/20260621130000_add_importdocument_databytes/migration.sql",
+      "physicalSha256": "0c59143bdeac0d879eea4f5b37b062c014dba1b879a90ec68e8e695b35bd5243",
+      "rootPhysicalSha256": "0c59143bdeac0d879eea4f5b37b062c014dba1b879a90ec68e8e695b35bd5243",
+      "canonicalGitBlob": "8486643479e74b65d1b463265781c9b974ecdc0f",
+      "headGitBlob": "8486643479e74b65d1b463265781c9b974ecdc0f",
+      "canonicalBytesSha256": "26dd35495b7aab6846546935b5baa021e8fab24f10491e65f13c312b2c44b6e0"
+    },
+    {
+      "path": "prisma/migrations/20260624090000_req093_therapy_schedules/migration.sql",
+      "physicalSha256": "00431c4db8fcaecf875770d3c38bc38d76246995aff98b00426a367ee952d72a",
+      "rootPhysicalSha256": "00431c4db8fcaecf875770d3c38bc38d76246995aff98b00426a367ee952d72a",
+      "canonicalGitBlob": "bdd3b7aa69160efd6272e89f8537c23c8fad76d8",
+      "headGitBlob": "bdd3b7aa69160efd6272e89f8537c23c8fad76d8",
+      "canonicalBytesSha256": "1acc797e1b71457007aa631a26b1be309fb4f7d32a5007837ff054cb64aa786a"
+    },
+    {
+      "path": "prisma/migrations/20260628162637_add_patient_intake_draft/migration.sql",
+      "physicalSha256": "5a1ff3db4d46707eb98008f4a197c143a9f863c6cf124e80c4b11d2e27549385",
+      "rootPhysicalSha256": "5a1ff3db4d46707eb98008f4a197c143a9f863c6cf124e80c4b11d2e27549385",
+      "canonicalGitBlob": "a96d0b6a277e4b463070059898c5507b86577e29",
+      "headGitBlob": "a96d0b6a277e4b463070059898c5507b86577e29",
+      "canonicalBytesSha256": "2812629ecb2e02e97dad4a1edbfbae5fdd0957ff1b261f33f7276f3e45b9faa6"
+    },
+    {
+      "path": "prisma/migrations/20260629040947_unique_intake_draft_import_job/migration.sql",
+      "physicalSha256": "025b96958c2a2e6bd140c4068be1663b331c4ef1814072053a57b7a8ce93a467",
+      "rootPhysicalSha256": "025b96958c2a2e6bd140c4068be1663b331c4ef1814072053a57b7a8ce93a467",
+      "canonicalGitBlob": "74331fe8e908035913ffacc869210f1bd5868b33",
+      "headGitBlob": "74331fe8e908035913ffacc869210f1bd5868b33",
+      "canonicalBytesSha256": "a30d5a4207e821e7146f7be7a4176f8286179280f494937d95657a19aa362697"
+    },
+    {
+      "path": "prisma/migrations/20260703225843_ai_audit_event/migration.sql",
+      "physicalSha256": "924ab7dfc2d4c5c4f45e5c1e3a7ca6b6f1aed17e4bccda035e6db397abf9673e",
+      "rootPhysicalSha256": "924ab7dfc2d4c5c4f45e5c1e3a7ca6b6f1aed17e4bccda035e6db397abf9673e",
+      "canonicalGitBlob": "a9a0bfa4c84d8949228dbc71421b7907fa35c7f3",
+      "headGitBlob": "a9a0bfa4c84d8949228dbc71421b7907fa35c7f3",
+      "canonicalBytesSha256": "9b810377976a19085463d5db09efbd05dac8bb59ab3500fbe88e3c56051bd103"
+    },
+    {
+      "path": "prisma/migrations/20260708120000_therapy_giorni_settimana/migration.sql",
+      "physicalSha256": "e5ad425351ff953eb58309eee90c45f7a0b4ef4ae9f5b64d5e258d5173332f38",
+      "rootPhysicalSha256": "e5ad425351ff953eb58309eee90c45f7a0b4ef4ae9f5b64d5e258d5173332f38",
+      "canonicalGitBlob": "39c8858ef30cc08472bfa0f0b04e8833e79ba684",
+      "headGitBlob": "39c8858ef30cc08472bfa0f0b04e8833e79ba684",
+      "canonicalBytesSha256": "9c2c5c8c1b76b2364044f6859c46225021ca7ad374b7c9be390875a0ae7eaf12"
+    },
+    {
+      "path": "prisma/migrations/20260719120000_operator_ruolo_qualifica/migration.sql",
+      "physicalSha256": "1af18e9a8478bd2286874a4c78bdaac3cf537d8586c22c20588a715fa1535431",
+      "rootPhysicalSha256": "1af18e9a8478bd2286874a4c78bdaac3cf537d8586c22c20588a715fa1535431",
+      "canonicalGitBlob": "f9a5a06aec29ed30592b69a9942a6f9a548ccb24",
+      "headGitBlob": "f9a5a06aec29ed30592b69a9942a6f9a548ccb24",
+      "canonicalBytesSha256": "461d6422a1ae499f0956036e39ba0d99ccead83ea9c3cbc84cd27ea41f03f9e2"
+    },
+    {
+      "path": "prisma/migrations/20260720100000_operator_schedule/migration.sql",
+      "physicalSha256": "336ec86e151e35c0884d265d1d093e93892160915a65ca5c131ffd29fa64ba54",
+      "rootPhysicalSha256": "336ec86e151e35c0884d265d1d093e93892160915a65ca5c131ffd29fa64ba54",
+      "canonicalGitBlob": "9a209a001e813f05c2ef64af97fccfb09afc5c5c",
+      "headGitBlob": "9a209a001e813f05c2ef64af97fccfb09afc5c5c",
+      "canonicalBytesSha256": "8babd6d8f201a054a10d06cfd4ddc7334c0c15b943f1b5e46df26ccd176a277c"
+    },
+    {
+      "path": "prisma/migrations/20260720160000_patient_codice_fiscale/migration.sql",
+      "physicalSha256": "f737652d22427a1a6e732b06b0e85f1115a624c2d2f219f941c9a7b577eceefc",
+      "rootPhysicalSha256": "f737652d22427a1a6e732b06b0e85f1115a624c2d2f219f941c9a7b577eceefc",
+      "canonicalGitBlob": "64f6ddbc0dd0c269f0552b81337c3386678f5d00",
+      "headGitBlob": "64f6ddbc0dd0c269f0552b81337c3386678f5d00",
+      "canonicalBytesSha256": "50b49d0ed3618838d7318d63ff94acd366188bd0d14c3aa609700a584ca3ac32"
+    },
+    {
+      "path": "prisma/migrations/20260721090000_user_entra_object_id/migration.sql",
+      "physicalSha256": "41720b67308f4df8165241eeda7243b0db6b31d1dd058899a291f435b6b9229e",
+      "rootPhysicalSha256": "41720b67308f4df8165241eeda7243b0db6b31d1dd058899a291f435b6b9229e",
+      "canonicalGitBlob": "5fb2bc048ce9e4ef1a5e597066ea8d0f622f67ab",
+      "headGitBlob": "5fb2bc048ce9e4ef1a5e597066ea8d0f622f67ab",
+      "canonicalBytesSha256": "056e9c241c2f41fe149a5b89569c79a7e8fe6c8c5734ea57df1860d991a34d2d"
+    },
+    {
+      "path": "prisma/migrations/20260725140000_anagrafica_farmaci_aifa/migration.sql",
+      "physicalSha256": "fcbc3407aaeacc1a1cc7443d7f48de7191dc48ddc372cf2edfb9aac35c4d6938",
+      "rootPhysicalSha256": "fcbc3407aaeacc1a1cc7443d7f48de7191dc48ddc372cf2edfb9aac35c4d6938",
+      "canonicalGitBlob": "80203f3c1f5fb90a10317cf1681370bba8670b7d",
+      "headGitBlob": "80203f3c1f5fb90a10317cf1681370bba8670b7d",
+      "canonicalBytesSha256": "75961088e722d277ec89b78d1a9eddd6d280053b133a4130f31f9913571094b8"
+    },
+    {
+      "path": "prisma/migrations/20260731160000_clinical_lists_indexes/migration.sql",
+      "physicalSha256": "2eeded4189408c7701f35c35ed00f4268534681b8e0d2c408224016ea877c23e",
+      "rootPhysicalSha256": "2eeded4189408c7701f35c35ed00f4268534681b8e0d2c408224016ea877c23e",
+      "canonicalGitBlob": "7fb2070554ef74b19dee01621461279af6e312fb",
+      "headGitBlob": "7fb2070554ef74b19dee01621461279af6e312fb",
+      "canonicalBytesSha256": "afd0ca1fb5075b00aac7d48f0f2365cece03a868904cf73d8db307047c88498a"
+    },
+    {
+      "path": "prisma/migrations/20260731170000_therapy_appointment_indexes/migration.sql",
+      "physicalSha256": "014d3a7f486063abf5b711d0f9d2e16f7a7e2d87fc348262fde1e711fe8c138d",
+      "rootPhysicalSha256": "014d3a7f486063abf5b711d0f9d2e16f7a7e2d87fc348262fde1e711fe8c138d",
+      "canonicalGitBlob": "6b49cf9cebf4dc5eb1c600a9c0b8b259f4989bbe",
+      "headGitBlob": "6b49cf9cebf4dc5eb1c600a9c0b8b259f4989bbe",
+      "canonicalBytesSha256": "39402ac5a142677dc048c289e3b4af2fb4bb7161e7fc4b6455c28d9d505b393f"
+    },
+    {
+      "path": "prisma/migrations/20260829130000_therapy_slot_query_indexes/migration.sql",
+      "physicalSha256": "20140dd0a5a27e708c781e888cf4a925cb044b3b0a7cdb9f4209494a45ea04af",
+      "rootPhysicalSha256": "20140dd0a5a27e708c781e888cf4a925cb044b3b0a7cdb9f4209494a45ea04af",
+      "canonicalGitBlob": "388d29a9b78a54a7349e74d225a744bcccdff4ab",
+      "headGitBlob": "388d29a9b78a54a7349e74d225a744bcccdff4ab",
+      "canonicalBytesSha256": "fb65921d0c646dae783751a72b761a7e18cf25868aaebd3db04bcd92c8d2d952"
+    },
+    {
+      "path": "prisma/migrations/20260829140000_bind_administration_to_therapy/migration.sql",
+      "physicalSha256": "08c4619819b4925210dd6a98d2b847b82d27f60caeb8c00e5c46688255df6be9",
+      "rootPhysicalSha256": "08c4619819b4925210dd6a98d2b847b82d27f60caeb8c00e5c46688255df6be9",
+      "canonicalGitBlob": "85d4a5cffba8b16846ae45207ab8456eb7edde16",
+      "headGitBlob": "85d4a5cffba8b16846ae45207ab8456eb7edde16",
+      "canonicalBytesSha256": "1dfd341d857e1d9b93fdf28d41741885462775e85676c7d56bd257f8f42edd43"
+    },
+    {
+      "path": "prisma/migrations/20260829193000_bound_notes_mailbox/migration.sql",
+      "physicalSha256": "6943062a563ea83af03099398127b6aa6d03a5c0386b7b38ee22a9877aaf92ce",
+      "rootPhysicalSha256": "6943062a563ea83af03099398127b6aa6d03a5c0386b7b38ee22a9877aaf92ce",
+      "canonicalGitBlob": "8e025fd540af73f7d0dc1cab5e73f05f3c731d5f",
+      "headGitBlob": "8e025fd540af73f7d0dc1cab5e73f05f3c731d5f",
+      "canonicalBytesSha256": "973b2f378c2786fd8fb5f716150000c7282fd2ab8982ed2f64942d053c33f739"
+    },
+    {
+      "path": "prisma/migrations/20260829210000_bound_consegne_feed/migration.sql",
+      "physicalSha256": "a4e94b492dff58ea98d4e6dcf5a5aa8753a9a7bf4888f36bc4f8ed188a9ee12f",
+      "rootPhysicalSha256": "a4e94b492dff58ea98d4e6dcf5a5aa8753a9a7bf4888f36bc4f8ed188a9ee12f",
+      "canonicalGitBlob": "58793c116b63efb0511f84064605df880ddbf63d",
+      "headGitBlob": "58793c116b63efb0511f84064605df880ddbf63d",
+      "canonicalBytesSha256": "dd879a29a0fe4874c5592c20e6174b7ed144f12efcb09d40f8cc74595624c1fc"
+    },
+    {
+      "path": "prisma/migrations/20260829223000_bound_diary_feed/migration.sql",
+      "physicalSha256": "16ddc0ce17c53f0069476ceaf8a1694d60514610cba90e89c6df3929f4c2eebc",
+      "rootPhysicalSha256": "16ddc0ce17c53f0069476ceaf8a1694d60514610cba90e89c6df3929f4c2eebc",
+      "canonicalGitBlob": "2fa4e4057a2f9cbf6813d8e8501eefea3325ecc3",
+      "headGitBlob": "2fa4e4057a2f9cbf6813d8e8501eefea3325ecc3",
+      "canonicalBytesSha256": "d8e1bae907e907df2d84f26d1a4ab1f6f054280152bb605db0197afeb8fc77eb"
+    },
+    {
+      "path": "prisma/migrations/20260829233000_bound_therapy_feed/migration.sql",
+      "physicalSha256": "7fc97b0df2a40956165a516d141c74bf02aef15e2f46fbe7b6bf0a4a91033765",
+      "rootPhysicalSha256": "7fc97b0df2a40956165a516d141c74bf02aef15e2f46fbe7b6bf0a4a91033765",
+      "canonicalGitBlob": "179c89deb4d896ffdfe7081eea95fdb6ef754130",
+      "headGitBlob": "179c89deb4d896ffdfe7081eea95fdb6ef754130",
+      "canonicalBytesSha256": "cf9a2312947b3b586d11843c6d310dea823420b11d80e60f496ce33829ce47ae"
+    },
+    {
+      "path": "prisma/migrations/20260829234500_therapy_name_trgm/migration.sql",
+      "physicalSha256": "a2f36b48c523797490b9247df2461a91459accbb114497e73ed089c0024b4149",
+      "rootPhysicalSha256": "a2f36b48c523797490b9247df2461a91459accbb114497e73ed089c0024b4149",
+      "canonicalGitBlob": "dce2400ea56d874cfd25b43c232fae5ceca54d9b",
+      "headGitBlob": "dce2400ea56d874cfd25b43c232fae5ceca54d9b",
+      "canonicalBytesSha256": "7cfe5d45305bde26f955419ab3eaa50ea2cb93c9ef6bd26b82fb30b9ef9c4788"
+    },
+    {
+      "path": "prisma/migrations/20260830000500_medication_administration_feed/migration.sql",
+      "physicalSha256": "6495f8163d18e81cd04c99fc96e7aa3ebb0e07341539743a96ff5b84a6d3a43a",
+      "rootPhysicalSha256": "6495f8163d18e81cd04c99fc96e7aa3ebb0e07341539743a96ff5b84a6d3a43a",
+      "canonicalGitBlob": "e9a321b7fe8491887c5f043d088ab54019325811",
+      "headGitBlob": "e9a321b7fe8491887c5f043d088ab54019325811",
+      "canonicalBytesSha256": "4c58482140a8c6a0821994aeaaeec47fb11246e64f4f9572224338ff2283ca7c"
+    },
+    {
+      "path": "prisma/migrations/20260830002500_therapy_slot_scope/migration.sql",
+      "physicalSha256": "4f2a83a2414b42857e71773caa80a2d3bbe7e3f3191470cc9d343abd3ce9252f",
+      "rootPhysicalSha256": "4f2a83a2414b42857e71773caa80a2d3bbe7e3f3191470cc9d343abd3ce9252f",
+      "canonicalGitBlob": "d9c968ae8741354d31dd8e402fe50c92716e59be",
+      "headGitBlob": "d9c968ae8741354d31dd8e402fe50c92716e59be",
+      "canonicalBytesSha256": "164fb4e0009fc4ffa9e09f984ea891b8fd8b51598341bef53c2d9cc88829df34"
+    },
+    {
+      "path": "prisma/migrations/20260830010000_normalize_therapy_weekdays/migration.sql",
+      "physicalSha256": "e5d0bfd399f12958f28be4304f57150c179d28ddd38f33adc097b2cc3089b38d",
+      "rootPhysicalSha256": "e5d0bfd399f12958f28be4304f57150c179d28ddd38f33adc097b2cc3089b38d",
+      "canonicalGitBlob": "899564ba4be339260380526bc9c86333bad36ac1",
+      "headGitBlob": "899564ba4be339260380526bc9c86333bad36ac1",
+      "canonicalBytesSha256": "e0b4a394543db3e68ee08ac03c1042d24791925816dbe07f186d53b299e2776b"
+    },
+    {
+      "path": "prisma/migrations/20260902133000_backfill_demo_fiscal_codes/migration.sql",
+      "physicalSha256": "b89316e9ad4e14300d5cab170475274c8f2768cc1af85cc4ca300660b357b6b5",
+      "rootPhysicalSha256": "b89316e9ad4e14300d5cab170475274c8f2768cc1af85cc4ca300660b357b6b5",
+      "canonicalGitBlob": "b9ca5928beb9798a64dcf4c1754d97bf07869e59",
+      "headGitBlob": "b9ca5928beb9798a64dcf4c1754d97bf07869e59",
+      "canonicalBytesSha256": "bbcb99adcdb77f6095cacc698167ee34659bfdf4e822148ab55364317e3cdd71"
+    },
+    {
+      "path": "prisma/migrations/20260902193000_seed_demo_room_occupancy/migration.sql",
+      "physicalSha256": "b2f202f4f63058d7f84dc1b46a72774280b1ede6eacbe48017253bb684663230",
+      "rootPhysicalSha256": "b2f202f4f63058d7f84dc1b46a72774280b1ede6eacbe48017253bb684663230",
+      "canonicalGitBlob": "61d9a1bd082acc68b01f8266de58ffe7d34a248b",
+      "headGitBlob": "61d9a1bd082acc68b01f8266de58ffe7d34a248b",
+      "canonicalBytesSha256": "6a45a8c2b32677456192d2b3158764f40a63796a14ad1b24278b696c1e602c9c"
+    },
+    {
+      "path": "prisma/migrations/20260919110000_patient_parameter_readings/migration.sql",
+      "physicalSha256": "eebfddc50b7fdb67d16ead7847d9cca9514be48c83946aa702038d62e90e23cb",
+      "rootPhysicalSha256": "eebfddc50b7fdb67d16ead7847d9cca9514be48c83946aa702038d62e90e23cb",
+      "canonicalGitBlob": "10a69540c72b5e1e65badd528bf9a2f34d9f78bd",
+      "headGitBlob": "10a69540c72b5e1e65badd528bf9a2f34d9f78bd",
+      "canonicalBytesSha256": "ccc42cd229671ffb522a7143bdbfc850969e17b33c6a700573711bb6cba1ceab"
+    },
+    {
+      "path": "prisma/migrations/20260923002000_progressive_patient_identity/migration.sql",
+      "physicalSha256": "676cacc6d3bb009bbfe90197f44c943821bfe9b734dcc2ff96cda5ad450af537",
+      "rootPhysicalSha256": "676cacc6d3bb009bbfe90197f44c943821bfe9b734dcc2ff96cda5ad450af537",
+      "canonicalGitBlob": "4ba560a2a84ab55b95dff29b15d2739a911ca0f2",
+      "headGitBlob": "4ba560a2a84ab55b95dff29b15d2739a911ca0f2",
+      "canonicalBytesSha256": "dd4a55859a1a603130409161dc58d0f32a126333e44c5e560d84c5a713a19969"
+    },
+    {
+      "path": "prisma/migrations/20260923010000_import_page_sessions/migration.sql",
+      "physicalSha256": "e7d919db86789c45cdd507a1907f913c7a6f1ba154200e97bc8ef519f2e4a393",
+      "rootPhysicalSha256": "e7d919db86789c45cdd507a1907f913c7a6f1ba154200e97bc8ef519f2e4a393",
+      "canonicalGitBlob": "036c25bb5f56241965e112fae78e8f9be0997a07",
+      "headGitBlob": "036c25bb5f56241965e112fae78e8f9be0997a07",
+      "canonicalBytesSha256": "e33bd0a1f956fe27219c50de6a6987311d17964c444253c43015052cd58d10d5"
+    },
+    {
+      "path": "prisma/migrations/20260923020000_roster_order_contexts/migration.sql",
+      "physicalSha256": "0300fd42dee508d920387f9f511238cd99ddb1bed284b2308509d601b50321c8",
+      "rootPhysicalSha256": "0300fd42dee508d920387f9f511238cd99ddb1bed284b2308509d601b50321c8",
+      "canonicalGitBlob": "0f77b078e6d7458392e7c96e09b78eb531eceeb7",
+      "headGitBlob": "0f77b078e6d7458392e7c96e09b78eb531eceeb7",
+      "canonicalBytesSha256": "9bc3569bb547694965bece37142c6624e5d8dc1ff94b49b4f3ba66d97d90e1c8"
+    },
+    {
+      "path": "prisma/migrations/20260923030000_consegna_creation_receipts/migration.sql",
+      "physicalSha256": "5030552971b9a8f2676adc91e345a9799886af016110afce963b5b6bacfa6189",
+      "rootPhysicalSha256": "5030552971b9a8f2676adc91e345a9799886af016110afce963b5b6bacfa6189",
+      "canonicalGitBlob": "bd05655c371597cce6d2b2403e6d97ec956d3f2f",
+      "headGitBlob": "bd05655c371597cce6d2b2403e6d97ec956d3f2f",
+      "canonicalBytesSha256": "f1181b75b1b95e14ae3a7662f687d2e383574ae1805bdf796ce7cacbbbe18ef1"
+    },
+    {
+      "path": "prisma/migrations/20260923040000_patient_assessments/migration.sql",
+      "physicalSha256": "14c760e46313e6356fc8fdd0fba87d6fe492523e081763ad36c8bb95f3592552",
+      "rootPhysicalSha256": "14c760e46313e6356fc8fdd0fba87d6fe492523e081763ad36c8bb95f3592552",
+      "canonicalGitBlob": "96255d75b7defdb3bca5d3b5961e9d67562f5d60",
+      "headGitBlob": "96255d75b7defdb3bca5d3b5961e9d67562f5d60",
+      "canonicalBytesSha256": "f5c4c6fd115cd488dbb2c0b544bf1e4565b9290f5ea1c79063296c2d6ed73e60"
+    },
+    {
+      "path": "prisma/migrations/20260923050000_postural_transfers/migration.sql",
+      "physicalSha256": "526dba9c9c8d895efcb0eccd5848183eec441bd6e003e21bb28913a8aa245e8d",
+      "rootPhysicalSha256": "526dba9c9c8d895efcb0eccd5848183eec441bd6e003e21bb28913a8aa245e8d",
+      "canonicalGitBlob": "ebe6f56808274b01aafb0d03818a31f2fa222694",
+      "headGitBlob": "ebe6f56808274b01aafb0d03818a31f2fa222694",
+      "canonicalBytesSha256": "84fab71d7126de476a0fc354389c2ab39f2e2108887636db7ef7034e206b4aa2"
+    },
+    {
+      "path": "prisma/migrations/20260923060000_tinetti/migration.sql",
+      "physicalSha256": "7d0b2b76e5cb5f439e5182ae9cf2b2b1dd7280b9347c8478bfa3770fff3bb240",
+      "rootPhysicalSha256": "7d0b2b76e5cb5f439e5182ae9cf2b2b1dd7280b9347c8478bfa3770fff3bb240",
+      "canonicalGitBlob": "7615d0bbba396f9919e8fe65dec42fa684d04294",
+      "headGitBlob": "7615d0bbba396f9919e8fe65dec42fa684d04294",
+      "canonicalBytesSha256": "0b40795104f0f30d6886b5544aad553507cbf57354dcd7399608c3c5b4857022"
+    },
+    {
+      "path": "prisma/migrations/20260923070000_mna/migration.sql",
+      "physicalSha256": "656f19d38c460f5dfb51bb04d93b71c981c50379da0a55d32fc300f04191db14",
+      "rootPhysicalSha256": "656f19d38c460f5dfb51bb04d93b71c981c50379da0a55d32fc300f04191db14",
+      "canonicalGitBlob": "d7110a9fa7617c9d9705e88b6a2d9d81124234c0",
+      "headGitBlob": "d7110a9fa7617c9d9705e88b6a2d9d81124234c0",
+      "canonicalBytesSha256": "9a6e2dbf3bf4873d81b3f3f6dc24586e48d8f76ef186fe439c6fc95c7002c3fa"
+    },
+    {
+      "path": "prisma/migrations/20260923080000_gds15/migration.sql",
+      "physicalSha256": "04ae91419a06a0324162fea44f59e933220bb71075f8ca6a9d93d26a9609e7a1",
+      "rootPhysicalSha256": "04ae91419a06a0324162fea44f59e933220bb71075f8ca6a9d93d26a9609e7a1",
+      "canonicalGitBlob": "ca8b08b3315116981a723ce275630275f5358cdf",
+      "headGitBlob": "ca8b08b3315116981a723ce275630275f5358cdf",
+      "canonicalBytesSha256": "c790d45308efa60030eee687f5b0ace44f3b28d644617fd21a590a32fcd6dc57"
+    },
+    {
+      "path": "prisma/migrations/20260929090000_diary_therapy_link/migration.sql",
+      "physicalSha256": "2e9e328fa27573df326f1c9a72a10c5a4e16f773b7284651982884bd80c19e8b",
+      "rootPhysicalSha256": "2e9e328fa27573df326f1c9a72a10c5a4e16f773b7284651982884bd80c19e8b",
+      "canonicalGitBlob": "925747a62c899044db8695f0129c8e455d4e7270",
+      "headGitBlob": "925747a62c899044db8695f0129c8e455d4e7270",
+      "canonicalBytesSha256": "42999a87ca08f8103162e8598d4e306673601868a22c61635d5527db47858060"
+    },
+    {
+      "path": "prisma/migrations/20260930090000_authz_policy_versions/migration.sql",
+      "physicalSha256": "9ed837e73b97e71a752566991a862097e9ec289f63aac541a7a3844eae168c68",
+      "rootPhysicalSha256": "9ed837e73b97e71a752566991a862097e9ec289f63aac541a7a3844eae168c68",
+      "canonicalGitBlob": "d6114b8f1b929effc417c3871a3b070e8fb9fa35",
+      "headGitBlob": "d6114b8f1b929effc417c3871a3b070e8fb9fa35",
+      "canonicalBytesSha256": "a595b410fd6fa82d9ec69f300500acdb3910bacc74269bcd4997cb2f0b40c48a"
+    },
+    {
+      "path": "prisma/migrations/20261001090000_ai_audit_append_only/migration.sql",
+      "physicalSha256": "d3097112439885df4f6bf7355aec5dd1b45a27b341edd85a294aa447fd06387c",
+      "rootPhysicalSha256": "d3097112439885df4f6bf7355aec5dd1b45a27b341edd85a294aa447fd06387c",
+      "canonicalGitBlob": "78cc1e0e483fb20fd4d7d72b5e5ea92445a5bbea",
+      "headGitBlob": "78cc1e0e483fb20fd4d7d72b5e5ea92445a5bbea",
+      "canonicalBytesSha256": "0cd5334ecbd0c9a3f1276201a355db8518a58d9cc18a9956072f95d7abd4fcb2"
+    },
+    {
+      "path": "prisma/migrations/20261003090000_paper_scales/migration.sql",
+      "physicalSha256": "fc6f5a17f4440efd837165da08d143add1ab77bbbd396360881fb90e59e4d2ce",
+      "rootPhysicalSha256": "fc6f5a17f4440efd837165da08d143add1ab77bbbd396360881fb90e59e4d2ce",
+      "canonicalGitBlob": "23b9dbee4e8081f6670886a98e03eddfc4b2570f",
+      "headGitBlob": "23b9dbee4e8081f6670886a98e03eddfc4b2570f",
+      "canonicalBytesSha256": "d53b2e23c32346de75960064e0fa3ecd5e930846925efdba53a88b745be386e9"
+    },
+    {
+      "path": "prisma/migrations/20261003100000_diary_entry_acknowledgement/migration.sql",
+      "physicalSha256": "dc82a363fd6bfd8213c10c0d4045650e7288b1b6ded076c27e93e1c682a80423",
+      "rootPhysicalSha256": "dc82a363fd6bfd8213c10c0d4045650e7288b1b6ded076c27e93e1c682a80423",
+      "canonicalGitBlob": "6d0801859466407b1807f6374b901199d8ffcf95",
+      "headGitBlob": "6d0801859466407b1807f6374b901199d8ffcf95",
+      "canonicalBytesSha256": "2ebdd183596e6ea33d7a1c7479b51b77b664f3330cbd748836251b64b08e9291"
+    },
+    {
+      "path": "prisma/migrations/20261003100100_prn_administration/migration.sql",
+      "physicalSha256": "b596db68184afdc1dc542f0f1e88fc42e3223bfc30f3dd9866507a6ec10e2e4d",
+      "rootPhysicalSha256": "b596db68184afdc1dc542f0f1e88fc42e3223bfc30f3dd9866507a6ec10e2e4d",
+      "canonicalGitBlob": "700f30782de91979adedec66cc3f13589de88fd1",
+      "headGitBlob": "700f30782de91979adedec66cc3f13589de88fd1",
+      "canonicalBytesSha256": "22828cd9d857c4998f3f2d97900c62801742972084927d1999c723fe6b9b9a62"
+    },
+    {
+      "path": "prisma/migrations/20261003120000_urgency_take_charge/migration.sql",
+      "physicalSha256": "d96a239c9c1b401fc0d3623a57038c3a2647b2fb6bc5a785d871e3165bf8badc",
+      "rootPhysicalSha256": "d96a239c9c1b401fc0d3623a57038c3a2647b2fb6bc5a785d871e3165bf8badc",
+      "canonicalGitBlob": "4df8f6d2c1a45a9c42afebb1077d113c598f9397",
+      "headGitBlob": "4df8f6d2c1a45a9c42afebb1077d113c598f9397",
+      "canonicalBytesSha256": "436f1e517bd45ae85b852b4fc5c12dd361bd62ec4307e7922f36ad49e83272d5"
+    },
+    {
+      "path": "prisma/migrations/20261008150000_glucose_scale_therapy/migration.sql",
+      "physicalSha256": "9a3153f014bbcbc50d03f1713a5bd7edafe5d5570e3a5b05d2259c6b4d5b87ad",
+      "rootPhysicalSha256": "9a3153f014bbcbc50d03f1713a5bd7edafe5d5570e3a5b05d2259c6b4d5b87ad",
+      "canonicalGitBlob": "5e413d31426a425734985f42e80502953ec786ef",
+      "headGitBlob": "5e413d31426a425734985f42e80502953ec786ef",
+      "canonicalBytesSha256": "62d4d80167cf96e2f3201e807dd77a91c38992dbb5e8a07f83bac2bdad5840df"
+    },
+    {
+      "path": "prisma/migrations/20261009090000_explicit_diary_reads/migration.sql",
+      "physicalSha256": "ed428f94edbbac1c7c0751ff54dedcea9031b0dc0ad857d13b930481644095a9",
+      "rootPhysicalSha256": "ed428f94edbbac1c7c0751ff54dedcea9031b0dc0ad857d13b930481644095a9",
+      "canonicalGitBlob": "18a322fceae1275c674820f0b0e5446ed5cb004c",
+      "headGitBlob": "18a322fceae1275c674820f0b0e5446ed5cb004c",
+      "canonicalBytesSha256": "300136a5dddad2d07fe8f5b9a6fa97c8ba22fd135e0a520eb9c324c7bf1bd185"
+    },
+    {
+      "path": "prisma/migrations/migration_lock.toml",
+      "physicalSha256": "bc487c02c71ad9cae8694647129e3ea7f32b1fe7007d0a6ced064e51022cd3fb",
+      "rootPhysicalSha256": "bc487c02c71ad9cae8694647129e3ea7f32b1fe7007d0a6ced064e51022cd3fb",
+      "canonicalGitBlob": "044d57cdb0d5b5bff3475112359a4ee70439bf78",
+      "headGitBlob": "044d57cdb0d5b5bff3475112359a4ee70439bf78",
+      "canonicalBytesSha256": "99836963713b4f5b269ad49af0ed3d7b0b2e336115c2f92dc9ac683d139d0900"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "physicalSha256": "0dac242b346e838926beb875540e895e0132196232980e0c4b3c396a0b0633ef",
+      "rootPhysicalSha256": "0dac242b346e838926beb875540e895e0132196232980e0c4b3c396a0b0633ef",
+      "canonicalGitBlob": "5c1204c020055a693374a4141ab5a61ad9e55709",
+      "headGitBlob": "5c1204c020055a693374a4141ab5a61ad9e55709",
+      "canonicalBytesSha256": "3115451909ef4b5e10c7b29994b709b752f84f38d4d656754e48813ae1542dec"
+    },
+    {
+      "path": "prisma/test.prisma",
+      "physicalSha256": "dee01c968ca112591db492af65612fec716992fbb9356dea0f1f1702030a6cbd",
+      "rootPhysicalSha256": "dee01c968ca112591db492af65612fec716992fbb9356dea0f1f1702030a6cbd",
+      "canonicalGitBlob": "ed96b5afcc80d5e58571b5cf9716a644616d44e4",
+      "headGitBlob": "ed96b5afcc80d5e58571b5cf9716a644616d44e4",
+      "canonicalBytesSha256": "7744d50548afe5ca9c26e13fd6dd3b426dc4e1e50c63afa86ada81cd4e0fef36"
+    },
+    {
+      "path": "prisma/test.txt",
+      "physicalSha256": "cd2eca3535741f27a8ae40c31b0c41d4057a7a7b912b33b9aed86485d1c84676",
+      "rootPhysicalSha256": "cd2eca3535741f27a8ae40c31b0c41d4057a7a7b912b33b9aed86485d1c84676",
+      "canonicalGitBlob": "ce013625030ba8dba906f756967f9e9ca394464a",
+      "headGitBlob": "ce013625030ba8dba906f756967f9e9ca394464a",
+      "canonicalBytesSha256": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+    }
+  ],
+  "lineEndingOnlyPhysicalDifferencesCanonicalMatch": [
+    {
+      "path": "frontend/src/components/operator/ParameterReadingForm.css",
+      "rootPhysicalSha256": "76908a2ee0aaac98941425e477ceb2a3164e8addca12b7e17fbf12dd3fe0bccb",
+      "canonicalBytesSha256": "f86f2c8707ffb7fbaebfc639646f81db7049cd6123bccbe62536c4c7d2047e8c",
+      "rootLivePhysicalHash": "76908a2ee0aaac98941425e477ceb2a3164e8addca12b7e17fbf12dd3fe0bccb",
+      "rootLiveCanonicalBlob": "38610e6ee2aa4d76b3dca47498166429eb4479e0",
+      "qaPhysicalSha256": "7618227a6643920d4a71d060485b30d431fc710fadd40f84aa3098b5c2aa060a",
+      "canonicalGitBlob": "38610e6ee2aa4d76b3dca47498166429eb4479e0",
+      "headGitBlob": "38610e6ee2aa4d76b3dca47498166429eb4479e0"
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterReadingForm.tsx",
+      "rootPhysicalSha256": "f627719a6732315ba8a2eab0778792d5b0ff4bd6eefa51b70bae693ed99753bc",
+      "canonicalBytesSha256": "afd27a7c4c8724f6dd11ccb7b4415f573b296b91c3eb53f19e83840917e0952f",
+      "rootLivePhysicalHash": "f627719a6732315ba8a2eab0778792d5b0ff4bd6eefa51b70bae693ed99753bc",
+      "rootLiveCanonicalBlob": "2282909c5ffb44e3092fda865d53e3d3a596188b",
+      "qaPhysicalSha256": "013d691479f651e63b8be591bf3bdcecdb492df668e8832a2e06ddcbbbc699e8",
+      "canonicalGitBlob": "2282909c5ffb44e3092fda865d53e3d3a596188b",
+      "headGitBlob": "2282909c5ffb44e3092fda865d53e3d3a596188b"
+    },
+    {
+      "path": "frontend/src/components/operator/ReadingRecency.css",
+      "rootPhysicalSha256": "ea2f77744b8c9271b492458306e24e0f3a463976a5c64449f85ef4a0852c38cc",
+      "canonicalBytesSha256": "ea2f77744b8c9271b492458306e24e0f3a463976a5c64449f85ef4a0852c38cc",
+      "rootLivePhysicalHash": null,
+      "rootLiveCanonicalBlob": null,
+      "qaPhysicalSha256": "1e61ed123855d90171e5d196748dbec80311d3ab6ac27616db98d8dd634a1f55",
+      "canonicalGitBlob": "5b6c78112d5fcd819da7cda8f3e759343759b119",
+      "headGitBlob": "5b6c78112d5fcd819da7cda8f3e759343759b119"
+    },
+    {
+      "path": "frontend/src/components/operator/ReadingRecency.tsx",
+      "rootPhysicalSha256": "4963b51560346c1701b1c9d208e45d2159872ec9706085769a1c62620c7a971c",
+      "canonicalBytesSha256": "4963b51560346c1701b1c9d208e45d2159872ec9706085769a1c62620c7a971c",
+      "rootLivePhysicalHash": null,
+      "rootLiveCanonicalBlob": null,
+      "qaPhysicalSha256": "b7d8a5804793d6035fd314a4a75eaa4d037cb9a1342aaf61f161976ccbbe91ee",
+      "canonicalGitBlob": "5240bc8eccbf3727a909086f91f9c865eeb11405",
+      "headGitBlob": "5240bc8eccbf3727a909086f91f9c865eeb11405"
+    },
+    {
+      "path": "frontend/src/components/operator/VitalsOverview.tsx",
+      "rootPhysicalSha256": "ffde81343cbba9eec510f0d324ce975b62bff61519289007a39621a58d8a9bcd",
+      "canonicalBytesSha256": "00da1d5136c72022222d04657142b1c7859310f2596c4b25dea3d915800a9c49",
+      "rootLivePhysicalHash": "ffde81343cbba9eec510f0d324ce975b62bff61519289007a39621a58d8a9bcd",
+      "rootLiveCanonicalBlob": "bba758a933523115fad41bc1b0c42faca631a35d",
+      "qaPhysicalSha256": "73590e8bafd71c20739da1910ace2e7b42fb1562b503fb028f27b7bc14a4c56d",
+      "canonicalGitBlob": "bba758a933523115fad41bc1b0c42faca631a35d",
+      "headGitBlob": "bba758a933523115fad41bc1b0c42faca631a35d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterPad.test.ts",
+      "rootPhysicalSha256": "562a9cec3fb882f215fd273c8085b15e1911bdab2f72124671577aeb2b887161",
+      "canonicalBytesSha256": "a9592f173fb51da8712881e65df4a0fa30483fc54ca7552a0f861fd61a578195",
+      "rootLivePhysicalHash": "562a9cec3fb882f215fd273c8085b15e1911bdab2f72124671577aeb2b887161",
+      "rootLiveCanonicalBlob": "214e5d0cdd77fcee3aaad2f2dd677622512d68c7",
+      "qaPhysicalSha256": "c495f32f7b4675cfd9e7dd30ace148a01da699c5c2540e60e14cde085905a086",
+      "canonicalGitBlob": "214e5d0cdd77fcee3aaad2f2dd677622512d68c7",
+      "headGitBlob": "214e5d0cdd77fcee3aaad2f2dd677622512d68c7"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientVitalsOverview.test.ts",
+      "rootPhysicalSha256": "69db01b221c20dedb3d6b153f2ad0c8962083b401feb535a6d304891d1585be7",
+      "canonicalBytesSha256": "99cc114545bb429c12bf0d6aa85c765e173e5b2ecbbc3fd9d053856439115b1e",
+      "rootLivePhysicalHash": "69db01b221c20dedb3d6b153f2ad0c8962083b401feb535a6d304891d1585be7",
+      "rootLiveCanonicalBlob": "001989d86091f72b52976d874e46606d8ea9635e",
+      "qaPhysicalSha256": "aefa7ac93dbfaedf9faf3d79a74fd85e3f389a6323030fa70f5f01bcf73ba670",
+      "canonicalGitBlob": "001989d86091f72b52976d874e46606d8ea9635e",
+      "headGitBlob": "001989d86091f72b52976d874e46606d8ea9635e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/readingRecency.test.ts",
+      "rootPhysicalSha256": "a05393120cbcc24cc61f4811122b761f40006699196544c9938796ed671c4223",
+      "canonicalBytesSha256": "a05393120cbcc24cc61f4811122b761f40006699196544c9938796ed671c4223",
+      "rootLivePhysicalHash": null,
+      "rootLiveCanonicalBlob": null,
+      "qaPhysicalSha256": "6c5aededec0cdb8779ae5f0548cdf3483a44ac7a6ecca2f083d2ba27e955dada",
+      "canonicalGitBlob": "70cb918e9040a04b72953634776096847816dfa1",
+      "headGitBlob": "70cb918e9040a04b72953634776096847816dfa1"
+    },
+    {
+      "path": "frontend/src/lib/parameterPad.ts",
+      "rootPhysicalSha256": "039bc3669996bfe3e7744f719c59da98e28e1c3f71add56c916fefeb36a41388",
+      "canonicalBytesSha256": "8b33f8b6a98d0bf5e5ec24a8859854c3c9ae6654263b31bc01c5cf290526715d",
+      "rootLivePhysicalHash": "039bc3669996bfe3e7744f719c59da98e28e1c3f71add56c916fefeb36a41388",
+      "rootLiveCanonicalBlob": "a186a6b985afb2718517368677ce29e3ff14c159",
+      "qaPhysicalSha256": "c0be71a08aa0245569c2d037e1213e1bb5a75134f5828be006687e1e5abb4b1e",
+      "canonicalGitBlob": "a186a6b985afb2718517368677ce29e3ff14c159",
+      "headGitBlob": "a186a6b985afb2718517368677ce29e3ff14c159"
+    },
+    {
+      "path": "frontend/src/lib/patientVitalsOverview.ts",
+      "rootPhysicalSha256": "9fd5561c9b216f8396d772d2f11961e99527239d0648846c3111924605cf7b1d",
+      "canonicalBytesSha256": "e7308ec5310cd6e83135005ac93dd274e4aab99ad895728cac1c75b07fa77720",
+      "rootLivePhysicalHash": "9fd5561c9b216f8396d772d2f11961e99527239d0648846c3111924605cf7b1d",
+      "rootLiveCanonicalBlob": "2d0f3adafc7a5b8452a0c690500df1fac4f7f567",
+      "qaPhysicalSha256": "0d3774265d21bcefcc72cf0818820ecf9f5ca1a59f8a1cfb0ec8cacf5d38059d",
+      "canonicalGitBlob": "2d0f3adafc7a5b8452a0c690500df1fac4f7f567",
+      "headGitBlob": "2d0f3adafc7a5b8452a0c690500df1fac4f7f567"
+    },
+    {
+      "path": "frontend/src/lib/readingRecency.ts",
+      "rootPhysicalSha256": "0aaa2b5f948a6e57ac8f28369239ae8eed1ac329d74f4c52a7abdf10cfa076c4",
+      "canonicalBytesSha256": "0aaa2b5f948a6e57ac8f28369239ae8eed1ac329d74f4c52a7abdf10cfa076c4",
+      "rootLivePhysicalHash": null,
+      "rootLiveCanonicalBlob": null,
+      "qaPhysicalSha256": "01b0a093bb85b3dfec60a91c842e77bcc7bd094df1b9d826775dde51877e9809",
+      "canonicalGitBlob": "7f72e79dafcbebb0d547148353dcc40b9974a603",
+      "headGitBlob": "7f72e79dafcbebb0d547148353dcc40b9974a603"
+    },
+    {
+      "path": "frontend/src/lib/useRecencyClock.ts",
+      "rootPhysicalSha256": "b58d460235bf1312edb50b1eb4f74e24974d76852df37166329a03750be767d1",
+      "canonicalBytesSha256": "b58d460235bf1312edb50b1eb4f74e24974d76852df37166329a03750be767d1",
+      "rootLivePhysicalHash": null,
+      "rootLiveCanonicalBlob": null,
+      "qaPhysicalSha256": "6b8dec3c584b9b9c9c3859011d8ad845fcc8779d6c4b6754398c873812861880",
+      "canonicalGitBlob": "e4f8b3c4b49e88d781d424e051e3ecdcf3cdc385",
+      "headGitBlob": "e4f8b3c4b49e88d781d424e051e3ecdcf3cdc385"
+    }
+  ],
+  "untrackedPrisma": "",
+  "sourceChanges": "",
+  "limitations": "Original before/after manifest covered1529inputs, not Prisma. Later readonly supplement binds61Prisma physical and canonical identities to exact candidate/root receipt.5new rootLF files equal Git blob bytes;7mixed CRLF/LF edited files are independently read with physical hashes still equal frozen receipt and canonical blobs equal oldcandidate. QA CRLF physical inputs have same canonical Git blobs. Original first seal and diagnostic device-assessment preserved, not overwritten."
+}

@@ -1,0 +1,9 @@
+{
+  "verdict": "FAILED VALIDATION",
+  "application": "ae2a94f3dc66a6f1c2eb693d1d9faf6c3924c01c",
+  "files": 468,
+  "manifestSha256": "d3746339f2191382fbdbb75fbbde4e4ae4da820650c572f7f8d282331569ca8b",
+  "sealedAt": "2026-10-09T16:03:05.032Z",
+  "scope": "Every artifact inside independent-qa418, no exclusion of failed attempts; only recursive manifest/seal metadata excluded by necessity. Emitted runtime files separately manifested, retained outside.",
+  "serverStopped": true
+}

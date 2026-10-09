@@ -1,0 +1,45 @@
+[
+  {
+    "name": "backend-types",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "-p",
+      "backend/tsconfig.json",
+      "--noEmit"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "focused64",
+    "args": [
+      "--import",
+      "tsx",
+      "--import",
+      "./scripts/stub-css-loader.mjs",
+      "--test",
+      "frontend/src/lib/__tests__/readingRecency.test.ts",
+      "frontend/src/lib/__tests__/patientVitalsOverview.test.ts",
+      "frontend/src/lib/__tests__/facilityTime.test.ts",
+      "frontend/src/lib/__tests__/news2History.test.ts",
+      "frontend/src/lib/__tests__/parameterEntrySchema.test.ts",
+      "frontend/src/lib/__tests__/parameterPad.test.ts",
+      "frontend/src/lib/__tests__/parameterEntryDrafts.test.ts",
+      "frontend/src/lib/__tests__/parameterEntrySummary.test.ts",
+      "frontend/src/lib/__tests__/patientParameterReadings.test.ts",
+      "frontend/src/lib/__tests__/patientParameterWorkspace.test.ts",
+      "frontend/src/lib/__tests__/patientParametersPage.test.ts",
+      "frontend/src/lib/__tests__/news2.test.ts",
+      "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "security",
+    "args": [
+      "scripts/security/scan-frontend-secrets.mjs",
+      "frontend/src",
+      "artifacts/task-validation/418-reading-recency/runtime-418-final/build"
+    ],
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,80 @@
+(node:35620) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a normal set scores 0 and is complete (5.1019ms)
+✔ respiratory rate bands (3.5994ms)
+✔ SpO₂ scale 1 bands (0.7889ms)
+✔ supplemental oxygen scores 2 (0.4858ms)
+✔ systolic pressure bands use the first number of PA (0.863ms)
+✔ heart rate bands (0.7203ms)
+✔ consciousness: only A scores 0 (0.6437ms)
+✔ temperature bands accept the decimal comma (0.7311ms)
+✔ risk levels: single 3, medium 5–6, high ≥ 7 (1.1757ms)
+✔ an incomplete set is never presented as a NEWS2 (1.0009ms)
+✔ unparseable or implausible values never produce a score (0.9296ms)
+(node:35620) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38032) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ the chip uses the latest COMPLETE reading, not a newer partial one (12.4769ms)
+✔ no complete reading means no score (0.8194ms)
+✔ a reassuring score is stale when newer incomplete readings exist or it is older than 12 h (4.22ms)
+✔ staleness follows the RCP monitoring frequency of each risk level (5.8665ms)
+(node:38032) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29448) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ draft values and notes survive unsubscribe/remount and remain isolated by patient ID (8.2574ms)
+✔ in-flight and uncertain saves preserve the same body/id/time across remount and prevent duplicate send (7.5835ms)
+✔ verified failure permits correction with a fresh request, never clearing another patient draft (1.6834ms)
+✔ workspace/session cleanup rejects late responses even when the same patient ID returns (1.4943ms)
+(node:29448) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:10480) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ both entry surfaces render the same controlled form without owning a second field map (11.4544ms)
+✔ shared entry schema follows all fields, including NEWS2 choices, without auto-save navigation (129.7888ms)
+(node:10480) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:31768) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a late save cannot lower a newer daily snapshot; a newer save enriches an older snapshot (6.3908ms)
+✔ day rollover keeps patient identity but invalidates counts, including on a failed refresh (0.7826ms)
+(node:31768) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3360) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ blood pressure is split for the two cards and saved as the usual single value (13.4448ms)
+✔ keypad: digits, one comma only in decimal fields, delete (1.0687ms)
+✔ previous values come from the latest reading that has each field (4.3444ms)
+✔ time label is facility time, with the date only for previous days (1.2639ms)
+✔ live NEWS2 of the prototype example is 6 only when all seven are present (1.8399ms)
+✔ typed, pasted or dictated text is kept exactly: never a different valid number (3.7722ms)
+✔ systolic splits on the first slash without dropping anything (1.1323ms)
+✔ "Prima" never claims an absence that the unread history could contradict (3.7807ms)
+(node:3360) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33340) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ tiles show the latest value, the unit and the trend against the previous value (14.7708ms)
+✔ a parameter never measured says so; a single value has no trend (1.603ms)
+✔ invalid historical timestamp never crashes overview or pretends to be current (7.0075ms)
+✔ NEWS2 tile: score of the latest complete reading (prototype example = 6) (1.6814ms)
+✔ NEWS2 tile: not computable says which parameters are missing (4.6737ms)
+(node:33340) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17220) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ recency keeps full facility date/year/time and descriptive minutes, days and weeks (7.8891ms)
+✔ neutral elapsed boundaries never label a historical measure as current (1.3742ms)
+✔ invalid, unzoned and impossible calendar instants are explicit, not empty or now (0.6232ms)
+✔ DST, timezone offsets, Rome midnight and year rollover use real elapsed time (0.5166ms)
+(node:17220) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1517.9674

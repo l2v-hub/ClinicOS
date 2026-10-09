@@ -1,0 +1,5 @@
+# Development chronology (root)
+
+Contract and test skeleton were created in the same initial patch; validator then printed CONTRACT VALIDO before any application source changes. The desired stricter before-test-file-creation order was not followed; do not claim it was. Original RED was genuine missing-module failure (readingRecency did not exist), node26.3.0, tests1/pass0/fail1, ERR_MODULE_NOT_FOUND; command/output are also in this conversation. No deployment/release then.
+
+Initial focused16 passed. Initial types/build/scanner and focused63 passed; full1224/pass1212/fail12 identical pinned417 failures/no new. Initial browser17 ordinary? actual result file is authoritative; 15 passed groups before invalid-date fixture caused chart rendering to crash from legacy shortTime calling readingTime on invalid instant. All original artifacts retained root-initial/browser, no deletion. Fixed presentation guard, added overview invalid-source regression, then rerun independently. No validator/schema/clinical algorithm or real data changed. Actual final counts must be taken from final rerun, not this initial record.

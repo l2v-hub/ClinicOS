@@ -1,0 +1,11 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const parent='C:/w-418-qa-final/artifacts/task-validation/418-reading-recency',out=parent+'/independent-qa418-immutable',prior=parent+'/independent-qa418-final';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const seal=JSON.parse(readFileSync(prior+'/seal-receipt.json')),manifest=JSON.parse(readFileSync(prior+'/SHA256-MANIFEST.json'));
+if(seal.verdict!=='BLOCKED'||seal.application!=='d028e1ee4c5c44d96b5005362b28f54e5c05fee1'||sha(readFileSync(prior+'/SHA256-MANIFEST.json'))!==seal.manifestSha256)throw Error('Prior seal mismatch');
+for(const f of manifest.files)if(sha(readFileSync(prior+'/'+f.path))!==f.sha256)throw Error('Prior sealed original changed');
+const priorSource=JSON.parse(readFileSync(prior+'/source-after.json')),freshSource=JSON.parse(readFileSync(out+'/source-before.json'));
+if(priorSource.head!==freshSource.head||JSON.stringify(priorSource.entries)!==JSON.stringify(freshSource.entries))throw Error('Reused evidence application bytes differ');
+const selected=manifest.files.filter(f=>f.path.startsWith('commands/')||f.path==='runtime-manifest.json'||f.path==='source-integrity.json'||f.path==='review.diff'||f.path==='device-assessment.json'||f.path.startsWith('device-snapshot/'));
+writeFileSync(out+'/reused-evidence.json',JSON.stringify({candidate:seal.application,priorBundle:prior,priorVerdict:'BLOCKED retention, not technical source failure',priorManifestSha256:seal.manifestSha256,allPriorFilesVerified:manifest.files.length,priorApplicationInputsPhysicalAndCanonicalIdenticalToFreshBefore:true,authorization:'Root explicitly allows reuse types/focused65/full and device by hash on same immutable source; not reinterpreting prior retention incident',evidence:selected.map(f=>({...f,absolutePath:prior+'/'+f.path})),freshProofs:'Fresh21b complete actualSPA browser run, own source-before/after, own device collector and runtime/cache manifest, pre-run recipe snapshot and full final evidence seal'},null,2));console.log(`Prior sealed${manifest.files.length} originals verified; ${selected.length} source-bound supporting files referenced by hash`);

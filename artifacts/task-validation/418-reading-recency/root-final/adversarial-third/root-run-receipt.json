@@ -1,0 +1,6 @@
+{
+  "applicationCommit": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "exit": 0,
+  "onlyHarnessChanges": "port7483to7481, ownoutputdir and JSON reporter; assertions identical to fresh QA originals",
+  "productionPatientTestMutations": 0
+}

@@ -1,0 +1,10 @@
+{
+  "candidate": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "files": 1590,
+  "beforeAfterPhysicalAndCanonicalMatch": true,
+  "headCanonicalBlobsMatch": true,
+  "noUntrackedApplicationOverrides": true,
+  "sourceBeforeHash": "f382c967ebd3c717ecc894049de219948e1b0a2ce3002f1e089f4040195460d2",
+  "sourceAfterHash": "ea7474650b1b9a3f4a4b5876f0bdba8b3966afa66027c28b09f5ad2e6cb0db25",
+  "scopeIncludesPrisma": true
+}

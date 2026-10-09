@@ -1,0 +1,120 @@
+Browser tab: 1809686345, Title: "ClinicOS — Gestione clinica", URL: "http://127.0.0.1:7482/#/parametri-multipaziente".
+0 AXWebArea ClinicOS — Gestione clinica, URL: 127.0.0.1:7482/#/parametri-multipaziente
+	1 container root
+		2 container Navigazione principale
+			3 button Turno
+			4 button Pazienti
+			5 button Terapia
+			6 button Parametri
+			7 button Consegne, 0 note senza conferma di lettura
+			8 button Agenda
+			9 button Farmaci
+		20 button Description: Indietro: Sintetica, Persona, Help: Torna a Sintetica, Persona (Alt+←)
+		21 container
+			22 heading Parametri vitali, Value: 1
+				23 text Parametri vitali
+			24 text Rilevazione rapida con NEWS2
+		10 text Turno  pomeriggio
+		11 text 18:07
+		12 button Description: Apri Milo, assistente clinico AI, a schermo intero, Help: Milo · assistente clinico AI (schermo intero)
+			13 image
+			14 text Milo
+		15 button Description: Cerca paziente, camera, codice fiscale, Help: Cerca paziente (Ctrl+K)
+			16 image
+		17 text SIMULATORE
+		18 button (collapsed) Description: Infermiere Sintetico, Infermiere: menu utente, Help: Infermiere Sintetico · Infermiere, Secondary Actions: Expand
+		25 container
+			26 container Pazienti
+				27 text PAZIENTE
+				28 search text field (settable) Cerca paziente per nome o camera
+				29 text 1/1 con rilevazioni oggi
+				30 button (collapsed) Ordine del giro, Secondary Actions: Expand
+				31 content list
+					32 container
+						33 checkbox Description: Sintetica, Persona, camera non indicata. Ultimi 17:57 · 3 oggi, Value: 1
+						34 pop up button Description: NEWS2 0 · 25/09 18:05 · da aggiornare. Apri lo storico NEWS2, Help: Da aggiornare. Monitoraggio ogni 12 ore. Rilevazione del 25/09/2026 18:05. Dopo questa ci sono 2 rilevazioni incomplete. Tocca per lo storico.
+			35 container Rilevazione di Sintetica, Persona
+				36 heading Sintetica, Persona, Value: 2
+					37 text Sintetica, Persona
+				38 text Nato/a il 01/01/1980 · CF da completare
+				39 button Storico
+				40 container Nuova rilevazione
+					41 container Nuovi valori da registrare, separati dalle misure precedenti
+						42 text Nuovi valori da registrare, separati dalle misure precedenti
+						43 container
+							44 text FR atti/min
+							45 text field (settable) Nuova rilevazione FR
+							46 text Prima: 18 · Misurato il 09/10/2026 17:57 · 10 minuti fa
+						47 container
+							48 text SpO₂ %
+							49 text field (settable) Nuova rilevazione SpO₂
+							50 text Prima: 98 · Misurato il 06/10/2026 18:05 · 3 giorni fa
+						51 container
+							52 text O₂
+							53 pop up button (collapsed, settable) Description: Nuova rilevazione O₂, Value: —, Secondary Actions: Expand
+								54 menu
+									55 (selected) —
+									56 No (aria ambiente)
+									57 Sì
+							58 text Prima: in aria · Misurato il 06/10/2026 18:05 · 3 giorni fa
+						59 container
+							60 text PA sistolica mmHg
+							61 text field (settable) Nuova rilevazione PA sistolica
+							62 text Prima: 120 · Misurato il 25/09/2026 18:05 · 2 settimane fa
+						63 container
+							64 text PA diastolica mmHg
+							65 text field (settable) Nuova rilevazione PA diastolica
+							66 text Prima: 80 · Misurato il 25/09/2026 18:05 · 2 settimane fa
+						67 container
+							68 text FC bpm
+							69 text field (settable) Nuova rilevazione FC
+							70 text Prima: 72 · Misurato il 25/09/2026 18:05 · 2 settimane fa
+						71 container
+							72 text TC °C
+							73 text field (settable) Nuova rilevazione TC
+							74 text Prima: 36,5 · Misurato il 25/09/2026 18:05 · 2 settimane fa
+						75 container
+							76 text Coscienza
+							77 pop up button (collapsed, settable) Description: Nuova rilevazione Coscienza, Value: —, Secondary Actions: Expand
+								78 menu
+									79 (selected) —
+									80 A · Vigile
+									81 C · Confusione di nuova insorgenza
+									82 V · Risponde alla voce
+									83 P · Risponde al dolore
+									84 U · Non risponde
+							85 text Prima: A · Misurato il 25/09/2026 18:05 · 2 settimane fa
+						86 container
+							87 text DTX mg/dL
+							88 text field (settable) Nuova rilevazione DTX
+							89 text Prima: 110 · Misurato il 25/09/2026 18:05 · 2 settimane fa
+						90 container
+							91 text Evacuazione
+							92 text field (settable) Nuova rilevazione Evacuazione
+						93 container
+							94 text Note sulla rilevazione
+							95 text entry area (settable) Nuova rilevazione Note sulla rilevazione
+							96 text 0 note salvate oggi
+					97 container Tastierino numerico
+						98 button (disabled) 7
+						99 button (disabled) 8
+						100 button (disabled) 9
+						101 button (disabled) 4
+						102 button (disabled) 5
+						103 button (disabled) 6
+						104 button (disabled) 1
+						105 button (disabled) 2
+						106 button (disabled) 3
+						107 button (disabled) Virgola
+						108 button (disabled) 0
+						109 button (disabled) Cancella
+					110 text Seleziona un campo numerico. Il tastierino aggiunge o cancella in fondo al valore.
+					111 button Campo successivo
+					112 container
+						113 text NEWS2 in tempo reale ·  — Mancano: FR, SpO₂, O₂, PA, FC, Coscienza, TC
+					114 text NEWS2 usa i sette parametri della stessa rilevazione e la scala SpO₂ 1. O₂ indica l’ossigeno supplementare; coscienza usa ACVPU. Un punteggio incompleto non è un NEWS2 valido.
+					115 text Data e ora vengono registrate quando premi Salva.
+					116 button Salva rilevazione
+			117 text Operatore:  Infermiere Sintetico . Data e ora vengono registrate quando premi Salva.
+
+The focused UI element is 6 button Parametri

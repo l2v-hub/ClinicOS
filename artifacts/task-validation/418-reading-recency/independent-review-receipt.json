@@ -1,0 +1,35 @@
+{
+  "applicationCommit": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "decision": "SEALED ATTEMPTS, FRESH IMMUTABLE GATE AND EXACT SOURCE VERIFIED",
+  "seals": [
+    {
+      "folder": "independent-qa418",
+      "source": "ae2a94f3dc66a6f1c2eb693d1d9faf6c3924c01c",
+      "verdict": "FAILED VALIDATION",
+      "manifestSha256": "acaf99cbf8d1a8179e60280647e507c082031568753546e6883c3e529b53b8f8",
+      "files": 477
+    },
+    {
+      "folder": "independent-qa418-final",
+      "source": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+      "verdict": "BLOCKED",
+      "manifestSha256": "a96bf163867e3a0f4f18dde9f91d198d9f191ecc12ea3f50362dc7ab73ec34d8",
+      "files": 630
+    },
+    {
+      "folder": "independent-qa418-immutable",
+      "source": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+      "verdict": "READY FOR CODEX QA",
+      "manifestSha256": "53ba13ed123037041878f9da736765526df2176264466008e6406ee910d0a499",
+      "files": 2128
+    }
+  ],
+  "rootPhysicalSha256": "ba09c4cec75640ebad93bbdeeb41f45c687a411be5944424207dd2daee23274e",
+  "canonicalSha256": "1d889924d2e205fbe568b4914efbd1bfc7088b9b05c38ef1966ce62348dd7195",
+  "fileCount": 1464,
+  "independentTrackedRuntimeInputs": 1590,
+  "sourceNormalization": "Only identical Git bytes or LF/CRLF normalization, no substantive change",
+  "originalFailedAttemptPreserved": true,
+  "priorRetentionIncident": "d028 preliminary19 named standalone PNGs/one JSON overwritten by its full21 recipe; unrecoverable prior bytes disclosed. Original per-run traces/videos/automatic screenshots remain. Prior gate stays BLOCKED; no reinterpretation as READY. New isolated21 run has its own immutable originals.",
+  "reportAndScriptsRead": true
+}

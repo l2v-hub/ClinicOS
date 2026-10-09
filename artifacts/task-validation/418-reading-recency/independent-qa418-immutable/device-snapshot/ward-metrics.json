@@ -1,0 +1,135 @@
+{
+  "captions": [
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 557.3958587646484,
+      "scroll": 173,
+      "text": "Prima: 18 · Misurato il 09/10/2026 17:57 · 10 minuti fa",
+      "x": 383.9757080078125
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 744.8090667724609,
+      "scroll": 173,
+      "text": "Prima: 98 · Misurato il 06/10/2026 18:05 · 3 giorni fa",
+      "x": 571.388916015625
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 932.2396392822266,
+      "scroll": 173,
+      "text": "Prima: in aria · Misurato il 06/10/2026 18:05 · 3 giorni fa",
+      "x": 758.8021240234375
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1119.652816772461,
+      "scroll": 173,
+      "text": "Prima: 120 · Misurato il 25/09/2026 18:05 · 2 settimane fa",
+      "x": 946.232666015625
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1307.0660247802734,
+      "scroll": 173,
+      "text": "Prima: 80 · Misurato il 25/09/2026 18:05 · 2 settimane fa",
+      "x": 1133.6458740234375
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1494.496597290039,
+      "scroll": 173,
+      "text": "Prima: 72 · Misurato il 25/09/2026 18:05 · 2 settimane fa",
+      "x": 1321.05908203125
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1681.9097747802734,
+      "scroll": 173,
+      "text": "Prima: 36,5 · Misurato il 25/09/2026 18:05 · 2 settimane fa",
+      "x": 1508.4896240234375
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 1869.340347290039,
+      "scroll": 173,
+      "text": "Prima: A · Misurato il 25/09/2026 18:05 · 2 settimane fa",
+      "x": 1695.90283203125
+    },
+    {
+      "client": 173,
+      "color": "rgb(22, 32, 46)",
+      "font": "14px",
+      "right": 557.3958587646484,
+      "scroll": 173,
+      "text": "Prima: 110 · Misurato il 25/09/2026 18:05 · 2 settimane fa",
+      "x": 383.9757080078125
+    }
+  ],
+  "height": 1145,
+  "newValues": [
+    {
+      "label": "Nuova rilevazione FR",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione SpO₂",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione O₂",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione PA sistolica",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione PA diastolica",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione FC",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione TC",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione Coscienza",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione DTX",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione Evacuazione",
+      "value": ""
+    },
+    {
+      "label": "Nuova rilevazione Note sulla rilevazione",
+      "value": ""
+    }
+  ],
+  "scale": 1,
+  "visibility": "visible",
+  "width": 2133
+}

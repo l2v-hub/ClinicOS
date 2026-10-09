@@ -1,0 +1,10 @@
+{
+  "candidate": "ae2a94f3dc66a6f1c2eb693d1d9faf6c3924c01c",
+  "files": 1529,
+  "beforeAfterPhysicalAndCanonicalMatch": true,
+  "headCanonicalBlobsMatch": true,
+  "noUntrackedApplicationOverrides": true,
+  "preservedUnrelatedLauncherChange": true,
+  "sourceBeforeHash": "683027dbf7f7cc5e8bbe094b453cf92c013d024134d0101c9fdfd306b91c92d2",
+  "sourceAfterHash": "2bba8065facde2bd336962b5d104715ec59870e8d5830246d3b3f218d86c3ccb"
+}

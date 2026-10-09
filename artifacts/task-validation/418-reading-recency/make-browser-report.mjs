@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+const dir=resolve(process.argv[2]);const results=JSON.parse(readFileSync(`${dir}/browser-results.json`));
+assert.ok(results.outcomes.length&&results.outcomes.every(row=>row.status==='PASS'));
+for(const state of results.states)for(const key of ['domainWrites','unexpected','external','pageErrors'])assert.deepEqual(state[key],[]);
+for(const sub of ['playwright-report','test-results'])mkdirSync(`${dir}/${sub}`,{recursive:true});
+const escape=text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+writeFileSync(`${dir}/playwright-report/index.html`,`<!doctype html><html lang="it"><meta charset="utf-8"><title>418 actual Playwright assertion receipt</title><h1>418 · Actual SPA Playwright results</h1><p>${results.outcomes.length} executed assertions groups PASS. Only synthetic API fixtures; source/build identity recorded in source/deployment receipts. This is a report of actual Playwright-library runs, not a generated UI mock.</p><ul>${results.outcomes.map(row=>`<li>${escape(row.name)} — ${escape(row.status)}</li>`).join('')}</ul><p>Trace/video/screenshots and raw runtime/request guards accompany this report.</p></html>`);
+copyFileSync(`${dir}/browser-results.json`,`${dir}/test-results/results.json`);
+console.log(`Real browser report: ${results.outcomes.length} groups`);

@@ -1,0 +1,23 @@
+{
+  "application": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "beforeExecution": true,
+  "files": [
+    {
+      "path": "independent.spec.cjs",
+      "sha256": "9a523844ca48bba85a4deaf09b1517eb23f6eadc6a7824c696ef3b40a3913776"
+    },
+    {
+      "path": "playwright.config.cjs",
+      "sha256": "e6b83112da6bea17aa100e45946b02f120eee39f2c15722c2884df6d1cf1a651"
+    },
+    {
+      "path": "server.mjs",
+      "sha256": "be7389b40400b4d684492c5746eb6f8d73dd1145fbdf0056a239a4469bfc8656"
+    }
+  ],
+  "sourceBeforeSha256": "59485a9f31799f83ee184ef840eb67dbb29eabed999182c914ced02a26d11a98",
+  "command": "node C:/w-insulin-qa/node_modules/playwright/cli.js test --config artifacts/task-validation/418-reading-recency/independent-qa418-immutable/playwright.config.cjs",
+  "cwd": "C:/w-418-qa-final",
+  "outputs": "fresh21b only; earlier collection attempt fresh21 retained and excluded archival source pre-run cannot become test input",
+  "at": "2026-10-09T16:34:53.581Z"
+}

@@ -1,0 +1,7 @@
+# QA finding and root correction
+
+Fresh independent QA found that valid ISO instants with years 0000, 0099 or 0999 crash the changed historical display. Root reproduced with a new regression before implementation: five tests, four pass, one fail, Error: Data non valida from facilityLocalMinute via formatFacilityLocalMinute in readingRecency. Actual command: node --import tsx --test frontend/src/lib/__tests__/readingRecency.test.ts. The command output is retained in the conversation and independent original year-boundary.log.
+
+Root adds a local representation guard before the four-digit facility formatter. It also covers a valid ISO 9999 timestamp whose Rome-local year rolls over to five digits. This is a presentation format constraint, not a clinical year/age cutoff; shared facility formatter and scoring are unchanged. The same regression now passes five/five, including the supported 1000 boundary. Full new-candidate reruns are separate from ae2a evidence.
+
+The independent tablet apparent overflow was a harness coordinate mismatch: original tabletScale.ts intentionally sets initial-scale0.9 for coarse tablet input. Actual CSS viewport853 fit rect829; physical projection746 fits768. No app layout change. Preserve initial failed assertion and diagnostic; final root test checks actual CSS width and projected physical viewport on true touch/mobile emulation separately from desktop768.

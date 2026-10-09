@@ -1,0 +1,62 @@
+{
+  "client": 853,
+  "scroll": 853,
+  "visual": 853,
+  "scale": 0.9003517031669617,
+  "captions": [
+    {
+      "x": 288,
+      "right": 459,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 473,
+      "right": 644,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 658,
+      "right": 829,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 288,
+      "right": 459,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 473,
+      "right": 644,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 658,
+      "right": 829,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 288,
+      "right": 459,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 473,
+      "right": 644,
+      "scroll": 171,
+      "client": 171
+    },
+    {
+      "x": 658,
+      "right": 829,
+      "scroll": 171,
+      "client": 171
+    }
+  ]
+}

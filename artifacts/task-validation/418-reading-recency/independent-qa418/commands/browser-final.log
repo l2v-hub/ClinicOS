@@ -1,0 +1,61 @@
+
+Running 15 tests using 1 worker
+
+(node:16744) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › desktop › overview: DST minutes days weeks associated, wraps and read-only idle (3.0s)
+  ok  2 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › desktop › chart: DST minutes days weeks associated, wraps and read-only idle (4.7s)
+  ok  3 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › desktop › ward: DST minutes days weeks associated, wraps and read-only idle (4.0s)
+  ok  4 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › tablet-emulated › overview: DST minutes days weeks associated, wraps and read-only idle (4.4s)
+  ok  5 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › tablet-emulated › chart: DST minutes days weeks associated, wraps and read-only idle (5.6s)
+  x   6 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › tablet-emulated › ward: DST minutes days weeks associated, wraps and read-only idle (3.6s)
+(node:6792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › mobile-emulated › overview: DST minutes days weeks associated, wraps and read-only idle (4.8s)
+  ok  8 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › mobile-emulated › chart: DST minutes days weeks associated, wraps and read-only idle (5.4s)
+  ok  9 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › mobile-emulated › ward: DST minutes days weeks associated, wraps and read-only idle (4.5s)
+  ok 10 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:89:1 › expanded comparison has own full provenance and historical NEWS2 remains zero (3.4s)
+  ok 11 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:92:47 › overview: impossible/unzoned/future timestamps never imply present (4.0s)
+  ok 12 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:92:47 › chart: impossible/unzoned/future timestamps never imply present (6.1s)
+  ok 13 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:92:47 › ward: impossible/unzoned/future timestamps never imply present (3.0s)
+  ok 14 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:95:1 › bounded partial history does not invent empty history or populate new controls (3.4s)
+  ok 15 artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:98:1 › spring DST transition is six elapsed minutes despite wall-clock jump (3.7s)
+
+
+  1) artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › tablet-emulated › ward: DST minutes days weeks associated, wraps and read-only idle 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 768
+    Received:    829
+
+      79 |  const captions=surface.locator(view==='overview'?'.reading-recency':'.parameter-reading-form__previous');
+      80 |  const metrics=await captions.evaluateAll(els=>els.map(el=>{const s=getComputedStyle(el),r=el.getBoundingClientRect();return {text:el.textContent,font:+s.fontSize.replace('px',''),color:s.color,whiteSpace:s.whiteSpace,x:r.x,right:r.right,client:el.clientWidth,scroll:el.scrollWidth,width:r.width};}));
+    > 81 |  expect(metrics.length).toBeGreaterThan(0);for(const m of metrics){expect(m.font).toBeGreaterThanOrEqual(14);expect(m.whiteSpace).toBe('normal');expect(m.x).toBeGreaterThanOrEqual(0);expect(m.right).toBeLessThanOrEqual(profile.viewport.width);expect(m.scroll).toBeLessThanOrEqual(m.client+1);expect(m.text).not.toMatch(/attuale|appena rilevato|rilevato ora/i);}
+         |                                                                                                                                                                                                        ^
+      82 |  if(view!=='overview'){await blank(surface);await surface.getByLabel('Nuova rilevazione DTX',{exact:true}).fill('105');}
+      83 |  const count=state.calls.filter(x=>x.path.endsWith('/parameter-readings')).length;
+      84 |  await page.clock.fastForward(120000);await expect(surface).toContainText('8 minuti fa');expect(state.calls.filter(x=>x.path.endsWith('/parameter-readings')).length).toBe(count);
+        at C:\w-418-qa\artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:81:200
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418\browser-final\test-results\independent-tablet-emulate-61658-ed-wraps-and-read-only-idle\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418\browser-final\test-results\independent-tablet-emulate-61658-ed-wraps-and-read-only-idle\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts\task-validation\418-reading-recency\independent-qa418\browser-final\test-results\independent-tablet-emulate-61658-ed-wraps-and-read-only-idle\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts\task-validation\418-reading-recency\independent-qa418\browser-final\test-results\independent-tablet-emulate-61658-ed-wraps-and-read-only-idle\trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts\task-validation\418-reading-recency\independent-qa418\browser-final\test-results\independent-tablet-emulate-61658-ed-wraps-and-read-only-idle\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    artifacts\task-validation\418-reading-recency\independent-qa418\independent.spec.cjs:77:166 › tablet-emulated › ward: DST minutes days weeks associated, wraps and read-only idle 
+  14 passed (1.2m)

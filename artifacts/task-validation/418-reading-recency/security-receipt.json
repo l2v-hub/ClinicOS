@@ -1,0 +1,48 @@
+{
+  "applicationCommit": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "decision": "SCOPED SECURITY PASS",
+  "newTouchedFindings": [],
+  "baselineFindings": [
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "components\\shared\\sections\\NarrativeClinicalSection.tsx:8",
+      "description": "React XSS risk"
+    },
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "components\\shared\\sections\\SemanticTaggedText.tsx:4",
+      "description": "React XSS risk"
+    },
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "lib\\__tests__\\therapyGiroAllergies.test.ts:183",
+      "description": "React XSS risk"
+    }
+  ],
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 3,
+    "low": 0,
+    "total": 3
+  },
+  "paths": [
+    "frontend/src/components/operator/ParameterReadingForm.css",
+    "frontend/src/components/operator/ParameterReadingForm.tsx",
+    "frontend/src/components/operator/ReadingRecency.css",
+    "frontend/src/components/operator/ReadingRecency.tsx",
+    "frontend/src/components/operator/VitalsOverview.tsx",
+    "frontend/src/lib/__tests__/parameterPad.test.ts",
+    "frontend/src/lib/__tests__/patientVitalsOverview.test.ts",
+    "frontend/src/lib/__tests__/readingRecency.test.ts",
+    "frontend/src/lib/parameterPad.ts",
+    "frontend/src/lib/patientVitalsOverview.ts",
+    "frontend/src/lib/readingRecency.ts",
+    "frontend/src/lib/useRecencyClock.ts"
+  ],
+  "scope": "Exact same three pre-existing MEDIUM frontend findings outside changed paths; no new dependencies or endpoints/auth/config/clinical validators. No global security cleanliness assertion; source/dist and canonical publication credential scans separate.",
+  "productionPatientTestMutations": 0
+}

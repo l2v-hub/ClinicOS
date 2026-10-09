@@ -1,0 +1,242 @@
+{
+  "applicationCommit": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "mode": "QA-only same-origin synthetic actual desktop check, no patient mutations",
+  "fixtureAt": "2026-10-09T16:05:16.692Z",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/me/roster-order"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/notes"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/settings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/operators/directory/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/cartella"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/cartella"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/room-options"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/narrative-sections"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/therapies/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/diary"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/diary"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-407/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    }
+  ],
+  "deniedWrites": [],
+  "unexpected": [],
+  "clinicalWrites": 0,
+  "history": [
+    {
+      "id": "QA-MINUTES-418",
+      "requestId": "QA-MINUTES-418",
+      "patientId": "QA-PATIENT-407",
+      "measuredAt": "2026-10-09T15:57:16.692Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA-NURSE-418",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-09T15:57:16.692Z"
+    },
+    {
+      "id": "QA-DAYS-418",
+      "requestId": "QA-DAYS-418",
+      "patientId": "QA-PATIENT-407",
+      "measuredAt": "2026-10-06T16:05:16.692Z",
+      "values": {
+        "spo2": "98",
+        "o2": "no"
+      },
+      "authorOperatorId": "QA-NURSE-418",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-06T16:05:16.692Z"
+    },
+    {
+      "id": "QA-WEEKS-418",
+      "requestId": "QA-WEEKS-418",
+      "patientId": "QA-PATIENT-407",
+      "measuredAt": "2026-09-25T16:05:16.692Z",
+      "values": {
+        "fr": "16",
+        "spo2": "97",
+        "o2": "no",
+        "pa": "120/80",
+        "fc": "72",
+        "temperatura": "36,5",
+        "coscienza": "A",
+        "dtx": "110"
+      },
+      "authorOperatorId": "QA-NURSE-418",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-09-25T16:05:16.692Z"
+    }
+  ],
+  "checkedAt": "2026-10-09T16:08:37.878Z",
+  "actualBrowser": {
+    "provider": "Chrome extension ID3",
+    "tab": "1809686345",
+    "viewportCss": {
+      "width": 2133,
+      "height": 1145
+    },
+    "scale": 1,
+    "viewportOverride": false,
+    "mobileEmulation": false
+  },
+  "evidence": "Genuine visible desktop overview and ward AX/read-only rendered DOM metrics. Original overview desktop pixels captured by documented cua getScreenshot; ward pixel attempt timed out, original failure retained, no substituted image.",
+  "screenshot": {
+    "path": "overview-actual-desktop.png",
+    "sha256": "71629d0cd4831b209c9783789d113ff58eee683b54dd3e910c49fc9e58cadc68"
+  },
+  "verdict": "Actual desktop comparison recorded, independent AC assessment required; no production release or closure authorized by this receipt"
+}

@@ -1,0 +1,11 @@
+import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
+import {resolve,relative} from 'node:path';
+import {createHash} from 'node:crypto';
+const out='C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const walk=dir=>readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(resolve(dir,e.name)):[resolve(dir,e.name)]);
+const files=walk(out).filter(p=>!['SHA256-MANIFEST.json','seal-receipt.json'].includes(relative(out,p))).sort().map(p=>({path:relative(out,p).replaceAll('\\','/'),bytes:statSync(p).size,sha256:sha(readFileSync(p))}));
+writeFileSync(out+'/SHA256-MANIFEST.json',JSON.stringify({application:'d028e1ee4c5c44d96b5005362b28f54e5c05fee1',allFilesExceptRecursiveSealMetadata:true,files},null,2));
+const manifestSha256=sha(readFileSync(out+'/SHA256-MANIFEST.json'));
+writeFileSync(out+'/seal-receipt.json',JSON.stringify({verdict:'BLOCKED',reason:'Earlier direct named full-page screenshots overwritten by final21 shared screenshot path; per-run original screenshots/traces/videos/reports and all negative attempts retained',technicalAcceptance:'PASS',application:'d028e1ee4c5c44d96b5005362b28f54e5c05fee1',files:files.length,manifestSha256,sealedAt:new Date().toISOString(),allAttemptResultsPreserved:true,allEarlierStandalonePngBytesPreserved:false,serverStopped:true,scope:'All remaining files under independent-qa418-final sealed, only recursive seal/manifest metadata excluded; emitted runtime outside bundle separately manifested. No release authority.'},null,2));
+console.log(`Sealed${files.length} files; manifest${manifestSha256}`);

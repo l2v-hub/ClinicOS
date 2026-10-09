@@ -1,0 +1,240 @@
+{
+  "candidate": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "priorBundle": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final",
+  "priorVerdict": "BLOCKED retention, not technical source failure",
+  "priorManifestSha256": "a96bf163867e3a0f4f18dde9f91d198d9f191ecc12ea3f50362dc7ab73ec34d8",
+  "allPriorFilesVerified": 630,
+  "priorApplicationInputsPhysicalAndCanonicalIdenticalToFreshBefore": true,
+  "authorization": "Root explicitly allows reuse types/focused65/full and device by hash on same immutable source; not reinterpreting prior retention incident",
+  "evidence": [
+    {
+      "path": "commands/backend-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/backend-types.log"
+    },
+    {
+      "path": "commands/baseline-comparison.json",
+      "bytes": 2474,
+      "sha256": "68ca9c527753ca4873748301f0af5b348c8452531c69d382c85e6972979c82b5",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/baseline-comparison.json"
+    },
+    {
+      "path": "commands/baseline417-full-regression.log",
+      "bytes": 421585,
+      "sha256": "d617ac07410d35c0553820ebbc37a50c497de7d45ad7aa729c57053564b3e99f",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/baseline417-full-regression.log"
+    },
+    {
+      "path": "commands/browser.log",
+      "bytes": 3958,
+      "sha256": "ec41d31091b7a332b1d954b202ff7a9c87577d01b6713e386d040b18b59eb262",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/browser.log"
+    },
+    {
+      "path": "commands/complete-browser.log",
+      "bytes": 13445,
+      "sha256": "811d680102f8f72759204f001220bf826af1b01e15d6d15c401eefe7b4c3744a",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/complete-browser.log"
+    },
+    {
+      "path": "commands/correct-runtime-build-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/correct-runtime-build-types.log"
+    },
+    {
+      "path": "commands/correct-runtime-build-vite.log",
+      "bytes": 26201,
+      "sha256": "5abafba3068b7eebc2a53cc2f0b58f918c1c385ae6c9a06d33726b4f78690646",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/correct-runtime-build-vite.log"
+    },
+    {
+      "path": "commands/correct-runtime-focused.log",
+      "bytes": 7182,
+      "sha256": "4227a112a2f0d8e733639b7accbce24155a0f64eb2cc43d120b681773d51f8f4",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/correct-runtime-focused.log"
+    },
+    {
+      "path": "commands/correct-runtime-full-regression.log",
+      "bytes": 422653,
+      "sha256": "58e35d35e112ed467782ea556943fb0b959295780dc6f800e96b99644f09a0d8",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/correct-runtime-full-regression.log"
+    },
+    {
+      "path": "commands/correct-runtime-receipts.json",
+      "bytes": 3256,
+      "sha256": "f61a5ad8982cc58407d11a5978a97a4e514c821577a03c7158dea5192868d58f",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/correct-runtime-receipts.json"
+    },
+    {
+      "path": "commands/correct-runtime-types-app.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/correct-runtime-types-app.log"
+    },
+    {
+      "path": "commands/correct-runtime-types-node.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/correct-runtime-types-node.log"
+    },
+    {
+      "path": "commands/extras-receipts.json",
+      "bytes": 1411,
+      "sha256": "3e618bc40ba1737e0e992916c34702fd0e69bc7e1581180e2f276ee1dff7f1fe",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/extras-receipts.json"
+    },
+    {
+      "path": "commands/final-browser.log",
+      "bytes": 4362,
+      "sha256": "2a1793e99d699d53de7e9460b71b7891c57063d17693be437a4a2e25b6c166b7",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/final-browser.log"
+    },
+    {
+      "path": "commands/focused64.log",
+      "bytes": 10588,
+      "sha256": "78743032e44b510ec350e09f4ce8959f5022227ce3319c9abe14986056094c98",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/focused64.log"
+    },
+    {
+      "path": "commands/reload-correct.log",
+      "bytes": 9786,
+      "sha256": "fa34224e6cd16d41a3f73d780d77fa3709aa808ce5430684b61eb68548bc944a",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/reload-correct.log"
+    },
+    {
+      "path": "commands/reload-final.log",
+      "bytes": 624,
+      "sha256": "ee4a22ce70f9e842ca17948a897bd9130d0124b70a8da6bed687083239856f45",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/reload-final.log"
+    },
+    {
+      "path": "commands/reload.log",
+      "bytes": 9437,
+      "sha256": "5a9be0c22ba7bac04b606a98b82c3874b246e7ddd08338edf0a0e051fdf58524",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/reload.log"
+    },
+    {
+      "path": "commands/security.log",
+      "bytes": 127,
+      "sha256": "9ac0e2a6c946d3a84426cb58a1b4f3ec68d663f99a58a8ee472b930be40e5f3e",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/security.log"
+    },
+    {
+      "path": "commands/server.log",
+      "bytes": 39,
+      "sha256": "b534bb77c02f09f80b59eb46b0dc41f3c63c27db943ae6de46500303d638bf79",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/commands/server.log"
+    },
+    {
+      "path": "device-assessment.json",
+      "bytes": 11676,
+      "sha256": "431629929b6436580426bfc2eb1b09b6b74808a9c243efa9034ed04d0219c44c",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-assessment.json"
+    },
+    {
+      "path": "device-snapshot/browser-error-logs.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/browser-error-logs.json"
+    },
+    {
+      "path": "device-snapshot/device-receipt.md",
+      "bytes": 1615,
+      "sha256": "2ab8f230e204a1029edba6be139180edf7e993c783c90cd268282333728f157c",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/device-receipt.md"
+    },
+    {
+      "path": "device-snapshot/guard-receipt.json",
+      "bytes": 5671,
+      "sha256": "100c612d5610670cd09d0a15bfe6dcfad269c6a396d84c5ab2b7356251de70d0",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/guard-receipt.json"
+    },
+    {
+      "path": "device-snapshot/metrics-attempt1.txt",
+      "bytes": 166,
+      "sha256": "536a526b424b9aac51fd52983ea91e51a1ee4ae892f8c0b852c8959b22dd9e42",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/metrics-attempt1.txt"
+    },
+    {
+      "path": "device-snapshot/overview-actual-desktop.png",
+      "bytes": 122283,
+      "sha256": "71629d0cd4831b209c9783789d113ff58eee683b54dd3e910c49fc9e58cadc68",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/overview-actual-desktop.png"
+    },
+    {
+      "path": "device-snapshot/overview-final-ax.txt",
+      "bytes": 5183,
+      "sha256": "532939436243403bae5a800190fe6262462fb4cd7cd4a389db624975fbf7dad0",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/overview-final-ax.txt"
+    },
+    {
+      "path": "device-snapshot/overview-metrics.json",
+      "bytes": 1501,
+      "sha256": "0110fa95989af005330df002585b66c07c8e6269d5d38e26b19ec0c79fbaadb6",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/overview-metrics.json"
+    },
+    {
+      "path": "device-snapshot/qa-device-server-final.mjs",
+      "bytes": 6026,
+      "sha256": "ace8520a173dd5a4497154400686bf09d27fcdc53606f18c0485fe0cd9861cf6",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/qa-device-server-final.mjs"
+    },
+    {
+      "path": "device-snapshot/qa-device-server.mjs",
+      "bytes": 6026,
+      "sha256": "3810a33c69cfd06d9294e7c9734bb251c563f9e7d7a14c7a8e7d497393fbd888",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/qa-device-server.mjs"
+    },
+    {
+      "path": "device-snapshot/source-receipt.json",
+      "bytes": 241393,
+      "sha256": "d8bccc5dde8619b5f2ac433a2cbae3ca867599a0512866be32e8fdeafb349ebe",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/source-receipt.json"
+    },
+    {
+      "path": "device-snapshot/synthetic-readings.mjs",
+      "bytes": 557,
+      "sha256": "c05f011e2612e2f7d76bfebe3c1762723906803bf2ee24040e18ed5dfa8c3e12",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/synthetic-readings.mjs"
+    },
+    {
+      "path": "device-snapshot/ward-final-ax.txt",
+      "bytes": 5559,
+      "sha256": "f68cb1962f1e4e5a1af1cb8ba8b1703224fb5f5ac13bb800e2ba53afa8d93bdc",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/ward-final-ax.txt"
+    },
+    {
+      "path": "device-snapshot/ward-metrics.json",
+      "bytes": 3212,
+      "sha256": "490d6463d519905d37934d86e3241987237b43d9f82309f0d66d35317846fff2",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/ward-metrics.json"
+    },
+    {
+      "path": "device-snapshot/ward-screenshot-attempt.txt",
+      "bytes": 256,
+      "sha256": "c52c3f4af77de1fdc98c46ee5db33c4f975439a2e673e5e7aec7ddaaf2b27fd9",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/device-snapshot/ward-screenshot-attempt.txt"
+    },
+    {
+      "path": "review.diff",
+      "bytes": 19823,
+      "sha256": "395d3c90e9988481d02914318bfc4f73412558875f4e66cb852179644e13e28b",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/review.diff"
+    },
+    {
+      "path": "runtime-manifest.json",
+      "bytes": 31976,
+      "sha256": "0b7821aebd27f0a8b34f5a45b491514dcc50125a6d24cd96075779435ed48023",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/runtime-manifest.json"
+    },
+    {
+      "path": "source-integrity.json",
+      "bytes": 414,
+      "sha256": "a0e295b60b307ab8a3c4db2498dabb8740992f9bd414308680feb3ba66a1a49f",
+      "absolutePath": "C:/w-418-qa-final/artifacts/task-validation/418-reading-recency/independent-qa418-final/source-integrity.json"
+    }
+  ],
+  "freshProofs": "Fresh21b complete actualSPA browser run, own source-before/after, own device collector and runtime/cache manifest, pre-run recipe snapshot and full final evidence seal"
+}

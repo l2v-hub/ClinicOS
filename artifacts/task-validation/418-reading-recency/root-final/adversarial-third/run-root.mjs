@@ -1,0 +1,10 @@
+import {spawnSync} from 'node:child_process';
+import {createRequire} from 'node:module';
+import {dirname,resolve} from 'node:path';
+import {writeFileSync} from 'node:fs';
+const r=createRequire('C:/w-insulin-qa/package.json'),dir=dirname(new URL(import.meta.url).pathname.replace(/^\/(C:)/,'$1'));
+const cli=resolve(dirname(r.resolve('playwright/test')),'cli.js');
+const result=spawnSync(process.execPath,[cli,'test','--config',resolve(dir,'playwright.config.cjs')],{encoding:'utf8',maxBuffer:20*1024*1024});
+writeFileSync(resolve(dir,'root-run.log'),(result.stdout||'')+(result.stderr||''));
+writeFileSync(resolve(dir,'root-run-receipt.json'),JSON.stringify({applicationCommit:'d028e1ee4c5c44d96b5005362b28f54e5c05fee1',exit:result.status,onlyHarnessChanges:'port7483to7481, ownoutputdir and JSON reporter; assertions identical to fresh QA originals',productionPatientTestMutations:0},null,2));
+console.log(`Root independent-authored adversarial rerun exit${result.status}`);process.exitCode=result.status;

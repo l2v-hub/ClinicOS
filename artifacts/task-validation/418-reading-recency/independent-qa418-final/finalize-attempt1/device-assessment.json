@@ -1,0 +1,181 @@
+{
+  "candidate": "d028e1ee4c5c44d96b5005362b28f54e5c05fee1",
+  "rootInputs": 1464,
+  "allRootInputsBound": true,
+  "physicalLineEndingDifferences": [
+    {
+      "path": "frontend/src/components/operator/ParameterReadingForm.css",
+      "rootPhysicalSha256": "76908a2ee0aaac98941425e477ceb2a3164e8addca12b7e17fbf12dd3fe0bccb",
+      "qaPhysicalSha256": "7618227a6643920d4a71d060485b30d431fc710fadd40f84aa3098b5c2aa060a",
+      "rootCanonical": "38610e6ee2aa4d76b3dca47498166429eb4479e0",
+      "qaCanonical": "38610e6ee2aa4d76b3dca47498166429eb4479e0",
+      "candidateCanonical": "38610e6ee2aa4d76b3dca47498166429eb4479e0",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterReadingForm.tsx",
+      "rootPhysicalSha256": "f627719a6732315ba8a2eab0778792d5b0ff4bd6eefa51b70bae693ed99753bc",
+      "qaPhysicalSha256": "013d691479f651e63b8be591bf3bdcecdb492df668e8832a2e06ddcbbbc699e8",
+      "rootCanonical": "2282909c5ffb44e3092fda865d53e3d3a596188b",
+      "qaCanonical": "2282909c5ffb44e3092fda865d53e3d3a596188b",
+      "candidateCanonical": "2282909c5ffb44e3092fda865d53e3d3a596188b",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/components/operator/ReadingRecency.css",
+      "rootPhysicalSha256": "ea2f77744b8c9271b492458306e24e0f3a463976a5c64449f85ef4a0852c38cc",
+      "qaPhysicalSha256": "1e61ed123855d90171e5d196748dbec80311d3ab6ac27616db98d8dd634a1f55",
+      "rootCanonical": "5b6c78112d5fcd819da7cda8f3e759343759b119",
+      "qaCanonical": "5b6c78112d5fcd819da7cda8f3e759343759b119",
+      "candidateCanonical": "5b6c78112d5fcd819da7cda8f3e759343759b119",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/components/operator/ReadingRecency.tsx",
+      "rootPhysicalSha256": "4963b51560346c1701b1c9d208e45d2159872ec9706085769a1c62620c7a971c",
+      "qaPhysicalSha256": "b7d8a5804793d6035fd314a4a75eaa4d037cb9a1342aaf61f161976ccbbe91ee",
+      "rootCanonical": "5240bc8eccbf3727a909086f91f9c865eeb11405",
+      "qaCanonical": "5240bc8eccbf3727a909086f91f9c865eeb11405",
+      "candidateCanonical": "5240bc8eccbf3727a909086f91f9c865eeb11405",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/components/operator/VitalsOverview.tsx",
+      "rootPhysicalSha256": "ffde81343cbba9eec510f0d324ce975b62bff61519289007a39621a58d8a9bcd",
+      "qaPhysicalSha256": "73590e8bafd71c20739da1910ace2e7b42fb1562b503fb028f27b7bc14a4c56d",
+      "rootCanonical": "bba758a933523115fad41bc1b0c42faca631a35d",
+      "qaCanonical": "bba758a933523115fad41bc1b0c42faca631a35d",
+      "candidateCanonical": "bba758a933523115fad41bc1b0c42faca631a35d",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterPad.test.ts",
+      "rootPhysicalSha256": "562a9cec3fb882f215fd273c8085b15e1911bdab2f72124671577aeb2b887161",
+      "qaPhysicalSha256": "c495f32f7b4675cfd9e7dd30ace148a01da699c5c2540e60e14cde085905a086",
+      "rootCanonical": "214e5d0cdd77fcee3aaad2f2dd677622512d68c7",
+      "qaCanonical": "214e5d0cdd77fcee3aaad2f2dd677622512d68c7",
+      "candidateCanonical": "214e5d0cdd77fcee3aaad2f2dd677622512d68c7",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientVitalsOverview.test.ts",
+      "rootPhysicalSha256": "69db01b221c20dedb3d6b153f2ad0c8962083b401feb535a6d304891d1585be7",
+      "qaPhysicalSha256": "aefa7ac93dbfaedf9faf3d79a74fd85e3f389a6323030fa70f5f01bcf73ba670",
+      "rootCanonical": "001989d86091f72b52976d874e46606d8ea9635e",
+      "qaCanonical": "001989d86091f72b52976d874e46606d8ea9635e",
+      "candidateCanonical": "001989d86091f72b52976d874e46606d8ea9635e",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/readingRecency.test.ts",
+      "rootPhysicalSha256": "34226da0c56da07ee18b2a09f70540454ba56e506eb52ad30c4e1755d0108944",
+      "qaPhysicalSha256": "56860436cde0a98f069de40b789cf773a1f3525a39d5d31ada77905025b05615",
+      "rootCanonical": "84cc63c3d3e53d07fbb380c005d8bb4a45d59296",
+      "qaCanonical": "84cc63c3d3e53d07fbb380c005d8bb4a45d59296",
+      "candidateCanonical": "84cc63c3d3e53d07fbb380c005d8bb4a45d59296",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/lib/parameterPad.ts",
+      "rootPhysicalSha256": "039bc3669996bfe3e7744f719c59da98e28e1c3f71add56c916fefeb36a41388",
+      "qaPhysicalSha256": "c0be71a08aa0245569c2d037e1213e1bb5a75134f5828be006687e1e5abb4b1e",
+      "rootCanonical": "a186a6b985afb2718517368677ce29e3ff14c159",
+      "qaCanonical": "a186a6b985afb2718517368677ce29e3ff14c159",
+      "candidateCanonical": "a186a6b985afb2718517368677ce29e3ff14c159",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/lib/patientVitalsOverview.ts",
+      "rootPhysicalSha256": "9fd5561c9b216f8396d772d2f11961e99527239d0648846c3111924605cf7b1d",
+      "qaPhysicalSha256": "0d3774265d21bcefcc72cf0818820ecf9f5ca1a59f8a1cfb0ec8cacf5d38059d",
+      "rootCanonical": "2d0f3adafc7a5b8452a0c690500df1fac4f7f567",
+      "qaCanonical": "2d0f3adafc7a5b8452a0c690500df1fac4f7f567",
+      "candidateCanonical": "2d0f3adafc7a5b8452a0c690500df1fac4f7f567",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/lib/readingRecency.ts",
+      "rootPhysicalSha256": "5af9bf5a5405cd45be26a9ff96c7af96df6e19480be74742a563279ace1312fe",
+      "qaPhysicalSha256": "8a65f43dfe0743f4bda5e9a3908857f4366577eeaecdf8db84cfbfdd1440ceb0",
+      "rootCanonical": "edb60620483c988ff1660b2399d632b7344425bd",
+      "qaCanonical": "edb60620483c988ff1660b2399d632b7344425bd",
+      "candidateCanonical": "edb60620483c988ff1660b2399d632b7344425bd",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    },
+    {
+      "path": "frontend/src/lib/useRecencyClock.ts",
+      "rootPhysicalSha256": "b58d460235bf1312edb50b1eb4f74e24974d76852df37166329a03750be767d1",
+      "qaPhysicalSha256": "6b8dec3c584b9b9c9c3859011d8ad845fcc8779d6c4b6754398c873812861880",
+      "rootCanonical": "e4f8b3c4b49e88d781d424e051e3ecdcf3cdc385",
+      "qaCanonical": "e4f8b3c4b49e88d781d424e051e3ecdcf3cdc385",
+      "candidateCanonical": "e4f8b3c4b49e88d781d424e051e3ecdcf3cdc385",
+      "interpretation": "line endings differ physically; exact canonical Git blobs match and root physical bytes still match source-pinned device receipt"
+    }
+  ],
+  "snapshot": [
+    {
+      "source": "C:/w-418/artifacts/task-validation/418-reading-recency/root-final/source/source-receipt.json",
+      "snapshot": "device-snapshot/source-receipt.json",
+      "sha256": "d8bccc5dde8619b5f2ac433a2cbae3ca867599a0512866be32e8fdeafb349ebe"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\browser-error-logs.json",
+      "snapshot": "device-snapshot/browser-error-logs.json",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\device-receipt.md",
+      "snapshot": "device-snapshot/device-receipt.md",
+      "sha256": "2ab8f230e204a1029edba6be139180edf7e993c783c90cd268282333728f157c"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\guard-receipt.json",
+      "snapshot": "device-snapshot/guard-receipt.json",
+      "sha256": "100c612d5610670cd09d0a15bfe6dcfad269c6a396d84c5ab2b7356251de70d0"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\metrics-attempt1.txt",
+      "snapshot": "device-snapshot/metrics-attempt1.txt",
+      "sha256": "536a526b424b9aac51fd52983ea91e51a1ee4ae892f8c0b852c8959b22dd9e42"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\overview-actual-desktop.png",
+      "snapshot": "device-snapshot/overview-actual-desktop.png",
+      "sha256": "71629d0cd4831b209c9783789d113ff58eee683b54dd3e910c49fc9e58cadc68"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\overview-final-ax.txt",
+      "snapshot": "device-snapshot/overview-final-ax.txt",
+      "sha256": "532939436243403bae5a800190fe6262462fb4cd7cd4a389db624975fbf7dad0"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\overview-metrics.json",
+      "snapshot": "device-snapshot/overview-metrics.json",
+      "sha256": "0110fa95989af005330df002585b66c07c8e6269d5d38e26b19ec0c79fbaadb6"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\ward-final-ax.txt",
+      "snapshot": "device-snapshot/ward-final-ax.txt",
+      "sha256": "f68cb1962f1e4e5a1af1cb8ba8b1703224fb5f5ac13bb800e2ba53afa8d93bdc"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\ward-metrics.json",
+      "snapshot": "device-snapshot/ward-metrics.json",
+      "sha256": "490d6463d519905d37934d86e3241987237b43d9f82309f0d66d35317846fff2"
+    },
+    {
+      "source": "C:\\w-418\\artifacts\\task-validation\\418-reading-recency\\root-final\\device\\ward-screenshot-attempt.txt",
+      "snapshot": "device-snapshot/ward-screenshot-attempt.txt",
+      "sha256": "c52c3f4af77de1fdc98c46ee5db33c4f975439a2e673e5e7aec7ddaaf2b27fd9"
+    },
+    {
+      "source": "C:/w-418/artifacts/task-validation/418-reading-recency/qa-device-server.mjs",
+      "snapshot": "device-snapshot/qa-device-server.mjs",
+      "sha256": "3810a33c69cfd06d9294e7c9734bb251c563f9e7d7a14c7a8e7d497393fbd888"
+    }
+  ],
+  "decision": "PASS original literal desktop comparison AC4; actual original overview pixels independently visually inspected, 9minutes/3days/2weeks full-value/date association. Ward AX/DOM metrics compared on same actual normal2133x1145 desktop; ward screenshot failed and is not claimed. No headless substitution.",
+  "actualDeviceOverviewPixelsInspected": true,
+  "wardActualPixelsInspected": false,
+  "wardHardwareGlareOrATCertified": false
+}

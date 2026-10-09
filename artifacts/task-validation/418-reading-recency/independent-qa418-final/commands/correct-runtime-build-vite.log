@@ -1,0 +1,186 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 710 modules transformed.
+rendering chunks...
+computing gzip size...
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/index.html                                           1.92 kB │ gzip:   0.76 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/pdf.worker.min-CHFwMXne.mjs               1,262.39 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AssessmentDraftStatus-DepsWT8d.css            0.35 kB │ gzip:   0.21 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/NarrativeSectionsTab-BabjH-C5.css             0.40 kB │ gzip:   0.22 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PdfCanvasPreview-BY-O_bqx.css                 0.68 kB │ gzip:   0.37 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/SemanticTaggedText-Cy2K2aEq.css               0.80 kB │ gzip:   0.37 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientIdentity-CcceCeFU.css                  0.98 kB │ gzip:   0.37 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/RosterOrderControl-D6JdzpHU.css               0.98 kB │ gzip:   0.44 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AnagraficaFarmaciPage-BLCRf3SR.css            1.21 kB │ gzip:   0.37 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ClinicalNoteEditor-QU8po2rl.css               1.34 kB │ gzip:   0.58 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DiaryTherapyPanel-C9VpT_pb.css                1.80 kB │ gzip:   0.61 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/CameraCapture-BZrPNFqj.css                    1.85 kB │ gzip:   0.74 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DiagnosisEditor-B-ZZ6bUu.css                  1.88 kB │ gzip:   0.75 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/Tinetti-PvAQNSKS.css                          1.90 kB │ gzip:   0.60 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/NewPatientFlow-DtDiBuAk.css                   1.95 kB │ gzip:   0.65 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DiarioPazienteTab-CZjQJr10.css                2.03 kB │ gzip:   0.76 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AssessmentCatalog-CCjgyrS9.css                2.58 kB │ gzip:   0.88 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/RicercaFarmaco-G1ieY86a.css                   2.66 kB │ gzip:   0.89 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientCombobox-m3PNMGTn.css                  2.69 kB │ gzip:   0.91 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AgendaInline-BiARtFgk.css                     2.72 kB │ gzip:   0.92 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ConsegneWorkspace-Df-KQF84.css                2.86 kB │ gzip:   0.84 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css            2.99 kB │ gzip:   0.95 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/VisoreDocumentoFarmaco-BaEEBIbC.css           3.02 kB │ gzip:   0.90 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AdminDashboard-CfKABW4v.css                   3.67 kB │ gzip:   0.93 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/OperatorAgenda-DdF3bcZ8.css                   3.73 kB │ gzip:   1.01 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ClinicalTable-HlTQH1g4.css                    3.76 kB │ gzip:   1.01 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DischargeImportModal-BPcl_exO.css             3.97 kB │ gzip:   1.21 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AgnosPanel-CW1huyUN.css                       4.19 kB │ gzip:   1.42 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/OperatorManagement-DTt4_Y4X.css               4.38 kB │ gzip:   1.20 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/NotesPage-DyQBXekH.css                        5.22 kB │ gzip:   1.44 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TopNav-DQXC9CRC.css                           5.74 kB │ gzip:   1.51 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientParameters-BML_WSVJ.css                6.31 kB │ gzip:   1.55 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/MultiPatientParametri-D-4y5rAR.css            6.43 kB │ gzip:   1.64 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/News2Chip-CT4ZleOC.css                        6.66 kB │ gzip:   1.79 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TherapyRoundsPage-CIClEI_9.css                7.10 kB │ gzip:   1.75 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ConsegneRounds-BP9N68un.css                   7.50 kB │ gzip:   1.86 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DocumentiTab-DJY500eY.css                     8.61 kB │ gzip:   1.87 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/intakeTherapies-iYDttph8.css                  8.88 kB │ gzip:   2.20 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AssistantMode-DzeiogH9.css                    8.94 kB │ gzip:   2.29 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/OperatorDashboard-DR177w2Y.css                9.07 kB │ gzip:   2.07 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TherapyRoundsPage-CIs_nEdS.css                9.81 kB │ gzip:   2.33 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/IntakeWorkspace-CGXNSq0l.css                 10.80 kB │ gzip:   2.57 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/RolePermissionsPage-Ch45e6Xy.css             10.84 kB │ gzip:   2.76 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DashboardKpiBand-B_ZN6mIU.css                12.18 kB │ gzip:   2.34 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientList-t9pGv_kY.css                     12.77 kB │ gzip:   2.89 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TerapiaFarmacologicaTab-zpCIETGM.css         17.00 kB │ gzip:   3.35 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AssessmentWorkspace-BU6sfsd2.css             18.25 kB │ gzip:   4.10 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientDetail-BkwNPSz3.css                   23.46 kB │ gzip:   4.38 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/index-DC8NTiJ6.css                          278.68 kB │ gzip:  47.62 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/pdf.worker.min-0cTqlNvF.js                    0.12 kB │ gzip:   0.13 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/corePriority-B9P5skz3.js                      0.16 kB │ gzip:   0.13 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/compiler-runtime-XYET9J12.js                  0.22 kB │ gzip:   0.20 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/patientTabSnapshots-Bm7XaQYi.js               0.27 kB │ gzip:   0.21 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/consegnaUrgency-DrFEu5MJ.js                   0.29 kB │ gzip:   0.20 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/submissionKey-mAJteX_U.js                     0.30 kB │ gzip:   0.22 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/appointmentRange-Bcoh8cH0.js                  0.30 kB │ gzip:   0.23 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/operatorSession-CocZDchv.js                   0.41 kB │ gzip:   0.24 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ClinicalSectionLoading-ClQ3dNtk.js            0.44 kB │ gzip:   0.32 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/allergyStatusModel-MCtsmAIL.js                0.52 kB │ gzip:   0.30 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/tinettiTypes-DMl49mUB.js                      0.52 kB │ gzip:   0.34 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/LoadErrorState-xcV4bwtJ.js                    0.57 kB │ gzip:   0.39 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/SectionToggle-D6ZGsL3x.js                     0.65 kB │ gzip:   0.46 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/facilityTime-DLFyR9ze.js                      0.68 kB │ gzip:   0.41 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/assessmentEntry-DYo2nZTW.js                   0.68 kB │ gzip:   0.37 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/SortArrow-UPpnGORV.js                         0.78 kB │ gzip:   0.51 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/LazyNews2-_Z07ah2X.js                         0.98 kB │ gzip:   0.61 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/presaInCarico-KSO7RO3U.js                     1.04 kB │ gzip:   0.53 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/farmacoRiferimento-BS_osA9s.js                1.11 kB │ gzip:   0.65 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/therapyPages-CfwLuM2P.js                      1.42 kB │ gzip:   0.70 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/voiceStartGate-vXRNXSzh.js                    1.45 kB │ gzip:   0.67 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/capabilities-sGJaafSh.js                      1.48 kB │ gzip:   0.75 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientIdentity-wr_76vnT.js                   1.65 kB │ gzip:   0.82 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/useLegacyCatalogView-DJ9CDfWf.js              1.81 kB │ gzip:   1.04 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/clinicalHistory-Dc8Sh74T.js                   1.85 kB │ gzip:   0.87 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/farmacoDocumento-DzyiFi7j.js                  1.94 kB │ gzip:   0.96 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AnagraficaFarmaciPage-CfdoZkGc.js             2.02 kB │ gzip:   1.02 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AvvisoAnomalieFarmaci-zsozOIkf.js             2.12 kB │ gzip:   1.04 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TopNav-DgVjliS6.js                            2.16 kB │ gzip:   1.15 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PageHeader-B6wUUxaA.js                        2.20 kB │ gzip:   0.95 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ConfirmDialog-D8BT3jqF.js                     2.23 kB │ gzip:   1.12 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/therapyDose-hyD67tme.js                       2.27 kB │ gzip:   1.09 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/patientListView-LVltQk8P.js                   2.39 kB │ gzip:   1.07 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/useMedicationSearch-B64lxwnX.js               2.41 kB │ gzip:   1.23 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AccessibleDialogSurface-LWnV1Aev.js           2.45 kB │ gzip:   1.31 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/VitalSignsEditor-C8IKKCtt.js                  2.51 kB │ gzip:   1.23 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AssessmentDraftStatus-BrKGtD-b.js             2.64 kB │ gzip:   1.27 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/usePatientDocuments-BBmdy6PQ.js               2.72 kB │ gzip:   1.19 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ClinicalCard-BC9Ecfp0.js                      2.85 kB │ gzip:   1.52 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/renderArchivePrint-B5kVVW3I.js                3.19 kB │ gzip:   1.50 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/rosterOrder-Cj3l_KEH.js                       3.68 kB │ gzip:   1.44 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/patientTherapyCalendar-oJO4T2nO.js            3.75 kB │ gzip:   1.62 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/patientDocumentArchive-rObptemz.js            3.79 kB │ gzip:   1.58 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/RosterOrderControl-CejLrHws.js                3.97 kB │ gzip:   1.70 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/useAnomalieReparto-CYIssrxI.js                4.08 kB │ gzip:   1.87 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/InlineEditableField-BnmgYhWo.js               4.12 kB │ gzip:   1.44 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/shared-CkqBHlLh.js                            4.15 kB │ gzip:   1.77 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PdfCanvasPreview-iBh4s_-R.js                  4.19 kB │ gzip:   1.79 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ClinicalAttachments-Cyyak3VT.js               4.34 kB │ gzip:   1.86 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ClinicalNoteEditor-USOiR74F.js                4.45 kB │ gzip:   2.08 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ScalaNRSTab-Pw9JK5p_.js                       4.54 kB │ gzip:   2.05 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DiaryTherapyPanel-DY1d7591.js                 5.01 kB │ gzip:   2.00 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AnamnesisEditor-CXWyvZjW.js                   5.40 kB │ gzip:   2.41 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ScalaTinettiTab-DgYLaNnF.js                   5.47 kB │ gzip:   2.35 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientCombobox-DgHNIkZf.js                   5.55 kB │ gzip:   2.57 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/SemanticTaggedText-BsF4GSPY.js                5.64 kB │ gzip:   2.42 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/GlucoseScaleEditor-B_cUU26A.js                5.92 kB │ gzip:   2.58 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PainAssessmentEditor-iL571_Vd.js              6.04 kB │ gzip:   2.74 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TherapyEditor-sW9eiKVn.js                     6.33 kB │ gzip:   2.70 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DocumentPreview-DUsdrTPn.js                   6.47 kB │ gzip:   2.45 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/OperatorSchedule-3nwe090Q.js                  6.85 kB │ gzip:   2.71 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/GlucoseAdministrationControl-BBI_Nz0V.js      7.79 kB │ gzip:   3.33 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientDetailLazyTabs-BKEpEmff.js             7.89 kB │ gzip:   2.51 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ClinicalTable-DI2VoprI.js                     7.99 kB │ gzip:   3.17 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/RicercaFarmaco-Bc5vYoPv.js                    8.10 kB │ gzip:   3.15 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/react-B3nAlWH0.js                             8.18 kB │ gzip:   3.16 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/NewPatientFlow-C2Nn6K32.js                    8.92 kB │ gzip:   3.72 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/diaryTherapy-C-xql5m-.js                      9.12 kB │ gzip:   3.55 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientArchivePreview-r-14S2Bl.js            10.02 kB │ gzip:   4.09 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ConsegneRounds-DC5qFnM_.js                   10.06 kB │ gzip:   4.54 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientParameters-D46qdfCz.js                10.10 kB │ gzip:   4.19 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/VisoreDocumentoFarmaco-DtBIEk8B.js           11.77 kB │ gzip:   4.97 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/MultiPatientParametri-DGWxwdiB.js            12.30 kB │ gzip:   5.03 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/NotesPage-Y-tXLLUa.js                        12.97 kB │ gzip:   4.70 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/EsamiConsulenzeTab-BXBax61N.js               13.00 kB │ gzip:   4.99 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/NarrativeSectionsTab-DKwb7eLN.js             13.70 kB │ gzip:   4.82 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/RoomsManagement-DnKImXSi.js                  13.73 kB │ gzip:   3.83 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/CameraCapture-JXtcJXla.js                    14.07 kB │ gzip:   5.44 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ParametriTab-kYJnVnbG.js                     15.58 kB │ gzip:   5.24 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TherapyRoundsPage-DVdCiK91.js                16.19 kB │ gzip:   5.92 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/InvioPSModal-C3ZEf2Pj.js                     16.29 kB │ gzip:   5.05 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ScalaBradenTab-DlKumyBC.js                   16.56 kB │ gzip:   5.54 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TherapyRoundsPage-DbyW3H4e.js                17.02 kB │ gzip:   6.53 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DashboardKpiBand-C5EabRza.js                 18.22 kB │ gzip:   6.20 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AdminAgenda-M6JD02pc.js                      18.47 kB │ gzip:   6.52 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/OperatorAgenda-DKcR6O1K.js                   18.72 kB │ gzip:   6.88 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DiagnosisEditor-DZFBdIr4.js                  19.11 kB │ gzip:   6.03 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/assessmentTypes-H3bfR4sY.js                  22.94 kB │ gzip:   8.35 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AgendaInline-4KztTYiP.js                     23.32 kB │ gzip:   7.80 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DiarioPazienteTab-CPzVs7ik.js                23.93 kB │ gzip:   8.04 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/OperatorManagement-CPpUw4YM.js               24.52 kB │ gzip:   8.34 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/OperatorDashboard-BfEy4SB4.js                26.58 kB │ gzip:   9.55 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AdminDashboard-CzZsmcxR.js                   27.68 kB │ gzip:   8.88 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/MedicazioniTab-Bqy2PEhR.js                   28.33 kB │ gzip:   7.51 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/News2Chip-CDbYa6d-.js                        28.46 kB │ gzip:  10.50 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DocumentiTab-C_9_35DX.js                     28.56 kB │ gzip:   9.27 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientList-DW9EjbBl.js                      32.95 kB │ gzip:  11.61 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ContenzioniTab-Do0BTuBy.js                   32.97 kB │ gzip:   8.98 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PresaInCaricoTab-BudvZ1Zc.js                 39.68 kB │ gzip:  11.13 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DischargeImportModal-DTFOeMHC.js             42.83 kB │ gzip:  14.32 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/intakeTherapies-0cCMLkMs.js                  43.70 kB │ gzip:  13.85 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AgnosPanel-J-GXxmY3.js                       47.83 kB │ gzip:  15.59 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/RolePermissionsPage-BA4C_1ah.js              48.03 kB │ gzip:  14.33 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/ConsegneWorkspace-Dlo1Y8KY.js                56.61 kB │ gzip:  18.94 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/DimissioneTab-DMwHTHn3.js                    59.43 kB │ gzip:  14.48 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AssistantMode-CRNmQxYl.js                    62.25 kB │ gzip:  20.39 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/TerapiaFarmacologicaTab-DLO_ASFK.js          68.60 kB │ gzip:  22.44 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/PatientDetail-DVIshChm.js                   119.61 kB │ gzip:  32.50 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/AssessmentWorkspace-J43Tr6wt.js             125.10 kB │ gzip:  37.68 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/IntakeWorkspace-BxCvm4id.js                 130.82 kB │ gzip:  42.35 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/pdf-BqQaa2SN.js                             427.30 kB │ gzip: 127.39 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/patientDemographics-OKkN11Bn.js             427.81 kB │ gzip: 123.56 kB
+../artifacts/task-validation/418-reading-recency/runtime-418-final/build/assets/index-Cis1D9xe.js                           632.60 kB │ gzip: 181.69 kB
+
+✓ built in 44.32s
+
+(!) outDir C:\w-418-qa-final\artifacts\task-validation\418-reading-recency\runtime-418-final\build is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] [0mYour build spent 97% of 44.3s inside plugin hooks (42.9s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @rolldown/plugin-babel transform (95%, 42.1s, 467 calls)
+Those rows are 95% of the build; the rest of the 97% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:css transform (83 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
