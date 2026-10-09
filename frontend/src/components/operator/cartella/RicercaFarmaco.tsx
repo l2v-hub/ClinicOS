@@ -11,13 +11,15 @@
 //
 // PRIVACY: la query e' cio' che l'operatore digita. Nessun dato di paziente entra nell'URL.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useMedicationSearch } from './useMedicationSearch';
 import type { MedicationSearchCriterion } from './medicationSearch';
 import { IcoPill, IcoSearch, IcoX } from '../../../icons';
-import { documentoDi, testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
+import { documentoDi, type FarmacoTrovato } from './farmacoDocumento';
 import type { DocumentoFarmaco } from './farmacoDocumento';
+import { TableFilters } from '../../shared/TableFilters';
+import { filterPackages, packageForms, packageDocumentName, initialSearchPresentation, searchPresentationReducer } from './drugSearchPresentation';
 import './RicercaFarmaco.css';
 
 interface CorpoProps {
@@ -28,9 +30,9 @@ interface CorpoProps {
 }
 
 export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProps) {
-  const [query, setQuery] = useState(nomeIniziale);
-  const [criterio, setCriterio] = useState<MedicationSearchCriterion>('nome');
+  const [{ query, criterion: criterio, filters }, dispatch] = useReducer(searchPresentationReducer, nomeIniziale, initialSearchPresentation);
   const search = useMedicationSearch(query, criterio);
+  const visiblePackages = filterPackages(search.items, filters);
   const campo = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
           type="search"
           value={query}
           maxLength={80}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => dispatch({ type: 'query', value: e.target.value })}
           placeholder={
             criterio === 'nome'
               ? 'Nome commerciale — es. Tachipirina'
@@ -74,12 +76,35 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
             type="button"
             className={`filter-chip${criterio === valore ? ' active' : ''}`}
             aria-pressed={criterio === valore}
-            onClick={() => setCriterio(valore)}
+            onClick={() => dispatch({ type: 'criterion', value: valore })}
           >
             {etichetta}
           </button>
         ))}
       </div>
+
+      {search.items.length > 0 && (
+        <div className="ricerca-farmaco__filtri">
+          <p className="ricerca-farmaco__nota">
+            Filtri sulle {search.items.length} confezioni caricate per «{query.trim()}».
+            {search.nextCursor && ' Altre confezioni disponibili con Continua ricerca.'}
+          </p>
+          <TableFilters
+            tableLabel="farmaci"
+            fields={[
+              { key: 'forma', label: 'Forma farmaceutica', type: 'select', options: packageForms(search.items).map((form) => ({ value: form, label: form })) },
+              { key: 'confezione', label: 'Dosaggio / confezione', type: 'text' },
+            ]}
+            values={{ ...filters }}
+            onChange={(key, value) => {
+              if (key === 'forma' || key === 'confezione') dispatch({ type: 'filter', key, value });
+            }}
+            onClear={() => dispatch({ type: 'clear' })}
+            resultCount={visiblePackages.length}
+            totalCount={search.items.length}
+          />
+        </div>
+      )}
 
       <div className="ricerca-farmaco__esiti" aria-live="polite">
         {query.trim().length === 0 && (
@@ -104,9 +129,12 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
             {criterio === 'nome' ? ' fra i nomi commerciali. Provare per principio attivo.' : '.'}
           </p>
         )}
-        {search.items.length > 0 && (
+        {search.items.length > 0 && visiblePackages.length === 0 && (
+          <p className="ricerca-farmaco__nota">Nessuna confezione caricata corrisponde ai filtri. Azzera i filtri o continua la ricerca, se disponibile.</p>
+        )}
+        {visiblePackages.length > 0 && (
           <ul className="ricerca-farmaco__lista">
-            {search.items.map((f) => (
+            {visiblePackages.map((f) => (
               <RigaEsito key={f.aic} farmaco={f} onApriDocumento={onApriDocumento} />
             ))}
           </ul>
@@ -153,12 +181,9 @@ function RigaEsito({
             <span className="ricerca-farmaco__revocato">{farmaco.statoAmministrativo}</span>
           )}
         </p>
-        <p className="ricerca-farmaco__dettagli">
-          {[farmaco.descrizione, farmaco.forma].filter(Boolean).join(' · ') ||
-            testoConfezione(farmaco)}{' '}
-          · AIC{' '}
-          {farmaco.aic}
-        </p>
+        <p className="ricerca-farmaco__confezione">{farmaco.descrizione || 'Dosaggio / confezione non indicati'}</p>
+        <p className="ricerca-farmaco__forma">{farmaco.forma || 'Forma farmaceutica non indicata'}</p>
+        <p className="ricerca-farmaco__dettagli">AIC {farmaco.aic}</p>
         {farmaco.principiAttivi && farmaco.principiAttivi.length > 0 && (
           <p className="ricerca-farmaco__pa">
             {farmaco.principiAttivi
@@ -171,6 +196,7 @@ function RigaEsito({
         <button
           type="button"
           className="ds-btn ds-btn--secondary"
+          aria-label={packageDocumentName(farmaco, documento)}
           onClick={() => onApriDocumento(documento, farmaco)}
         >
           Apri {documento.tipo === 'rcp' ? 'RCP' : 'foglietto'}
