@@ -1,0 +1,39 @@
+{
+  "outcomes": [
+    {
+      "name": "desktop 413 focus survives new414 compact status",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop blocked browser storage explicitly denies reload guarantee",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop in-flight save retains locality and cannot become successful",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop malformed successful transport keeps draft unconfirmed and retryable",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile 413 focus survives new414 compact status",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile blocked browser storage explicitly denies reload guarantee",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile in-flight save retains locality and cannot become successful",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile malformed successful transport keeps draft unconfirmed and retryable",
+      "status": "PASS"
+    }
+  ],
+  "syntheticOnly": true,
+  "productionWrites": 0,
+  "malformed201Cases": 2
+}

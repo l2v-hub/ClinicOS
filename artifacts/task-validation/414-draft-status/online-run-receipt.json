@@ -1,0 +1,13 @@
+{
+  "applicationCommit": "288dac948c8a46e26e1bef87d6266b2497727566",
+  "deployment": "dpl_CwR4uuG35U7PD7tKWxLwf3kPmJzJ",
+  "command": "node --import tsx artifacts/task-validation/414-draft-status/qa-online.mjs artifacts/task-validation/414-draft-status/online-verified",
+  "executionSession": 37752,
+  "exitCode": 0,
+  "browserAssertionGroups": 10,
+  "artifactsComplete": true,
+  "compiledScreenshotsVisuallyReviewed": ["local-only.png", "save-pending.png", "confirmed-save.png", "failure-recovery.png", "mobile-confirmed-save.png"],
+  "scope": "Compiled production SPA static assets only. Every deployed backend API request intercepted before network; unchanged source assessment services run on fresh real local PostgreSQL; all other UI data synthetic.",
+  "productionPatientTestMutations": 0,
+  "distinctDevices": "Independent browser storage contexts, not physical-device certification"
+}

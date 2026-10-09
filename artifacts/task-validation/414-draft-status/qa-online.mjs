@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync } from 'node:fs';
+const root='artifacts/task-validation/414-draft-status';
+let helper=readFileSync(root+'/qa-fixture.mjs','utf8');
+const guard="if(!['127.0.0.1','localhost'].includes(url.hostname)){state.external.push(url.origin);return route.abort();}\n    if(url.port!=='3001')return route.continue();";
+assert.ok(helper.includes(guard));
+helper=helper.replace(guard,"if(url.hostname==='clinicos-eosin.vercel.app'&&req.method()==='GET')return route.continue();\n    if(url.hostname!=='clinicos-backend-demo.up.railway.app'){state.external.push(url.origin);return route.abort();}\n    // Every deployed API request fulfilled synthetically before network; assessment source service uses fresh local PostgreSQL.");
+assert.ok(helper.includes('http://127.0.0.1:7476/#/operator-dashboard'));
+helper=helper.replaceAll('http://127.0.0.1:7476/#/operator-dashboard','https://clinicos-eosin.vercel.app/#/operator-dashboard');
+writeFileSync(root+'/online-fixture.mjs',helper);
+process.env.QA_FIXTURE_MODULE='./online-fixture.mjs';
+await import('./qa-browser.mjs');

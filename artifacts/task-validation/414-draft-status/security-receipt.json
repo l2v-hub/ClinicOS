@@ -1,0 +1,64 @@
+{
+  "applicationCommit": "288dac948c8a46e26e1bef87d6266b2497727566",
+  "baseline": "e01bd55114e2b5b1615b4088d988a41aad60eb80",
+  "scanExit": 1,
+  "tool": "ruflo security scan --depth full (resolved deep)",
+  "candidateScanSha256": "d8e15dec24245dca9e497d5bd794e145f17feb417b286c3940a521352930414d",
+  "findings": 481,
+  "touchedFindings": [],
+  "unchangedDependencyFindings": [
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:braces",
+      "description": "braces vulnerable to stack-exhausti"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:concurrently",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:lint-staged",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:micromatch",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:proxy-addr",
+      "description": "proxy-addr vulnerable to IP spoofin"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:shell-quote",
+      "description": "shell-quote: `quote()` command inje"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:source-map-js",
+      "description": "source-map-js allows event-loop den"
+    }
+  ],
+  "newTouchedFindings": [],
+  "changedProductionPaths": [
+    "frontend/src/components/operator/__tests__/draftStatus414.test.ts",
+    "frontend/src/components/operator/assessments/AssessmentCatalog.tsx",
+    "frontend/src/components/operator/assessments/AssessmentDraftStatus.css",
+    "frontend/src/components/operator/assessments/AssessmentDraftStatus.tsx",
+    "frontend/src/components/operator/assessments/AssessmentWorkspace.tsx",
+    "frontend/src/components/operator/assessments/LegacyDraftTools.tsx",
+    "frontend/src/components/operator/assessments/PaperForm.tsx"
+  ],
+  "review": "Presentation only; escaped React strings, no new HTML sink/endpoint/auth/config/dependency/version/persistence rule. Author-only existing source DB guarantees tested; current write states require acknowledged receipt. Pre-existing broad security findings retained; not a clean security certification."
+}

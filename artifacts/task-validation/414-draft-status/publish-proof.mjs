@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const root='artifacts/task-validation/414-draft-status',application='288dac948c8a46e26e1bef87d6266b2497727566';
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8'});assert.equal(r.status,0);return r.stdout.trim();};
+const credential=JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json','utf8')).env.GH_TOKEN;
+const gh=args=>{const r=spawnSync('gh',args,{encoding:'utf8',env:{...process.env,GH_TOKEN:credential}});assert.equal(r.status,0,'GitHub operation failed');return r.stdout.trim();};
+const read=path=>JSON.parse(readFileSync(root+'/'+path,'utf8'));
+const deployment=read('deployment-receipt.json'),publication=read('publication-manifest.json'),ci=read('ci-comparison.json');
+assert.equal(deployment.applicationCommit,application);assert.equal(deployment.decision,'VERIFIED RELEASE');assert.equal(ci.frontendSecretScanConclusion,'success');assert.deepEqual(ci.newFailureNames,[]);
+assert.match(readFileSync(root+'/validation-report.md','utf8'),/## Final Decision\s+CLOSED — VERIFIED/);
+assert.equal(git(['branch','--show-current']),'codex/bug-414-draft-status');
+const proof=git(['rev-parse','HEAD']);assert.notEqual(proof,application);
+assert.match(git(['ls-remote','origin','refs/heads/codex/bug-414-draft-status']),new RegExp('^'+proof));
+assert.match(git(['ls-remote','origin','refs/heads/main']),new RegExp('^'+application));
+git(['diff','--exit-code',application,proof,'--','frontend','backend','prisma','package.json','package-lock.json','scripts/build','scripts/run-node-tests.mjs']);
+const sha=buffer=>createHash('sha256').update(buffer).digest('hex');
+for(const row of publication.files){const r=spawnSync('git',['show',`${proof}:${row.path}`],{maxBuffer:100*1024*1024});assert.equal(r.status,0);assert.equal(sha(r.stdout),row.gitBlobSha256,'Published canonical evidence drift');}
+const raw=`https://raw.githubusercontent.com/l2v-hub/ClinicOS/${proof}/${root}`,tree=`https://github.com/l2v-hub/ClinicOS/tree/${proof}/${root}`;
+const images=['local-only.png','save-pending.png','confirmed-save.png','mobile-confirmed-save.png'];
+const verified=[];
+for(const image of images){const path=`online-verified/screenshots/${image}`,response=await fetch(`${raw}/${path}`);assert.equal(response.status,200);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(sha(bytes),sha(readFileSync(`${root}/${path}`)));verified.push({path,http:response.status,sha256:sha(bytes)});}
+const issue=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/414']));assert.equal(issue.state,'open');
+const body=`CLOSED — VERIFIED: tutti e quattro i criteri originali verificati.\n\nCorrezione applicativa [${application}](https://github.com/l2v-hub/ClinicOS/commit/${application}), branch codex/bug-414-draft-status. La bozza distingue modifiche presenti solo nella finestra aperta, invio in corso, esito da verificare e salvataggio realmente confermato. La data è l’ultimo salvataggio confermato; recupero, privacy dell’autore e permessi paziente rimangono invariati.\n\nDeployment Vercel ${deployment.vercel.id}: READY, Git SHA esatto e alias [ClinicOS](https://clinicos-eosin.vercel.app/) verificati; backend invariato, health200.\n\nProve root e QA indipendente: 42 test mirati, 8 ulteriori test di stato, 8 test PostgreSQL reale e 18 gruppi browser ciascuno; 10 gruppi rieseguiti sulla SPA compilata online. Cambio sezione, reload, uscita/nuovo accesso, contesti di memoria distinti, invio sospeso/fallito, ricevuta non verificabile e retry idempotente verificati. I contesti distinti simulano dispositivi, non certificano hardware fisico. Solo dati sintetici: API online intercettate prima della rete, scritture esclusivamente sul DB locale di test.\n\nBuild/typecheck e scansione segreti PASS. Suite frontend:1210 test,1198 PASS,12 fallimenti identici alla baseline,0 nuovi. CI generale conserva lo stesso unico fallimento backend preesistente; test import downstream saltati, non dichiarati PASS. Nessuna affermazione di CI o sicurezza globalmente pulite.\n\nEvidenze immutabili al commit ${proof}: [report AC](${tree}/validation-report.md), [QA indipendente](${tree}/independent-qa414/validation-report.md), [manifest hash/controlli pubblicazione](${tree}/publication-manifest.json), [deployment](${tree}/deployment-receipt.json), [confronto CI](${tree}/ci-comparison.json), [trace online](${raw}/online-verified/context-0-trace.zip), [report browser](${tree}/online-verified/playwright-report), [risultati](${tree}/online-verified/test-results), [video](${tree}/online-verified/video).\n\n${images.map(image=>`### ${image}\n![414 ${image}](${raw}/online-verified/screenshots/${image})`).join('\n\n')}`;
+const comment=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/414/comments','--method','POST','-f',`body=${body}`]));
+gh(['api','repos/l2v-hub/ClinicOS/issues/414','--method','PATCH','-f','state=closed','-f','state_reason=completed']);
+const closed=JSON.parse(gh(['api','repos/l2v-hub/ClinicOS/issues/414']));assert.equal(closed.state,'closed');assert.equal(closed.state_reason,'completed');
+const receipt={applicationCommit:application,proofCommit:proof,proofBranch:'codex/bug-414-draft-status',deployment:deployment.vercel.id,githubProof:comment.html_url,state:closed.state,closedAt:closed.closed_at,canonicalHashesVerified:publication.files.length,images:verified,secretChecks:publication.secretChecks,zipEntriesChecked:publication.zipEntriesChecked,productionPatientTestMutations:0};
+writeFileSync(root+'/github-closure-receipt.json',JSON.stringify(receipt,null,2));console.log(JSON.stringify(receipt));

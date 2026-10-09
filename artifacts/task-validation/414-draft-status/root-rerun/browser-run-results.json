@@ -1,0 +1,10 @@
+[
+  {
+    "name": "ordinary",
+    "exit": 0
+  },
+  {
+    "name": "adversarial",
+    "exit": 0
+  }
+]
