@@ -1,0 +1,632 @@
+{
+  "phase": "form",
+  "requests": [
+    {
+      "requestIndex": 0,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 1,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 2,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "requestIndex": 3,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "requestIndex": 4,
+      "phase": "boot",
+      "method": "POST",
+      "path": "/auth/simulator/session",
+      "query": ""
+    },
+    {
+      "requestIndex": 5,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/me",
+      "query": ""
+    },
+    {
+      "requestIndex": 6,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/me/roster-order",
+      "query": ""
+    },
+    {
+      "requestIndex": 7,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/diary-unread-count",
+      "query": ""
+    },
+    {
+      "requestIndex": 8,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 9,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 10,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/consegne/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 11,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/notes",
+      "query": "?box=all&limit=50"
+    },
+    {
+      "requestIndex": 12,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 13,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-09"
+    },
+    {
+      "requestIndex": 14,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-10"
+    },
+    {
+      "requestIndex": 15,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 16,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "requestIndex": 17,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "requestIndex": 18,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "requestIndex": 19,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 20,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=25&asOf=2026-10-09"
+    },
+    {
+      "requestIndex": 21,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "requestIndex": 22,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 23,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    }
+  ],
+  "captionRequests": [
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7621
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7626
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8807
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7705
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "doubleInvokeEffectsOnFiber",
+          "lineNumber": 8923
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitDoubleInvokeEffectsInDEV",
+          "lineNumber": 8931
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8808
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    }
+  ],
+  "writes": [
+    {
+      "requestIndex": 4,
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    }
+  ],
+  "posts": [],
+  "saved": [],
+  "external": [],
+  "unexpected": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "httpErrors": [],
+  "allowedErrors": [],
+  "priorMode": "ready",
+  "failure": null,
+  "heldReads": [],
+  "heldPosts": [],
+  "prior": {
+    "fr": "18",
+    "spo2": "98",
+    "o2": "no",
+    "pa": "120/80",
+    "fc": "72",
+    "temperatura": "36,5",
+    "coscienza": "A",
+    "dtx": "110"
+  },
+  "hasMore": false
+}

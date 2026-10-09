@@ -1,0 +1,1272 @@
+diff --git a/frontend/src/components/operator/ParameterEntryPanel.tsx b/frontend/src/components/operator/ParameterEntryPanel.tsx
+index c34d95d0..320c2bf8 100644
+--- a/frontend/src/components/operator/ParameterEntryPanel.tsx
++++ b/frontend/src/components/operator/ParameterEntryPanel.tsx
+@@ -1,66 +1,23 @@
+-import { useEffect, useRef, useState } from 'react';
+ import { useParameterEntryDraft } from '../../lib/useParameterEntryDraft';
+ import type { ParameterDraftStore } from '../../lib/parameterEntryDrafts';
+ import type { ParameterPagePatient } from '../../lib/patientParametersPage';
+ import { patientIdentifier, patientIdentityName } from '../../lib/patientIdentity';
+ import {
+-  PARAMETER_FIELDS,
+-  PARAMETER_OPTIONS,
+-  PARAMETER_READING_SAVED_EVENT,
+   ParameterReadingSaveError,
+-  fetchParameterReadings,
+-  readingTime,
+   type ParameterReadingRequest,
+-  type ParameterValues,
+   type PatientParameterReading,
+ } from '../../lib/patientParameterReadings';
+-import {
+-  PAD_FIELDS,
+-  applyPadKey,
+-  nextPadField,
+-  padUpdate,
+-  padValue,
+-  previousText,
+-  previousValues,
+-  padInput,
+-  type PadField,
+-  type PreviousKey,
+-} from '../../lib/parameterPad';
+-import { NEWS2_LABELS, news2 } from '../../lib/news2';
+-import { API_URL } from '../../config';
+-import { operatorHeaders } from '../../lib/operatorSession';
+-import { IcoCheck, IcoChevronRight } from '../../icons';
+-
+-type PreviousState = Parameters<typeof previousText>[0];
+-
+-const COSCIENZA_SHORT: Record<string, string> = {
+-  A: 'A · Vigile',
+-  C: 'C · Confuso',
+-  V: 'V · Alla voce',
+-  P: 'P · Al dolore',
+-  U: 'U · Non risponde',
+-};
+-const RISK_CLASS: Record<string, string> = {
+-  nessuno: 'ok',
+-  basso: 'low',
+-  'basso-singolo': 'single',
+-  medio: 'medium',
+-  alto: 'high',
+-};
++import { ParameterReadingForm } from './ParameterReadingForm';
+ 
+ interface Props {
+   patient: ParameterPagePatient;
+   draftStore: ParameterDraftStore;
+   noteCount?: number;
+-  /** Riepilogo del giorno ancora in verifica (conteggio note non ancora noto). */
+   summaryPending?: boolean;
+-  /** Il paziente del modulo non è fra i risultati della ricerca in corso. */
+   outsideResults?: boolean;
+   onOpenHistory: () => void;
+   onSave: (request: ParameterReadingRequest) => Promise<PatientParameterReading>;
+ }
+-
+-/** Rilevazione di un paziente: card dei valori, tastierino, NEWS2 in tempo reale, salvataggio. */
+ export function ParameterEntryPanel({
+   patient,
+   draftStore,
+@@ -71,78 +28,13 @@ export function ParameterEntryPanel({
+   onSave,
+ }: Props) {
+   const { store, draft } = useParameterEntryDraft(patient.id, draftStore);
+-  const { values, saving, error, uncertain, savedAt } = draft;
+-  // null: il fuoco è in un campo di testo (evacuazione, nota) e il tastierino non scrive.
+-  const [active, setActive] = useState<PadField | null>('fr');
+-  const inputs = useRef(new Map<PadField, HTMLInputElement>());
+   const name = patientIdentityName(patient);
+-  const locked = saving || uncertain;
+-  const hasValues = PARAMETER_FIELDS.some((field) => values[field.key]?.trim());
+-
+-  // Ultimi valori registrati (lettura reale), aggiornati dopo ogni salvataggio del paziente.
+-  const [previous, setPrevious] = useState<{ id: string; state: PreviousState }>({
+-    id: patient.id,
+-    state: { status: 'loading' },
+-  });
+-  const [reload, setReload] = useState(0);
+-  useEffect(() => {
+-    const controller = new AbortController();
+-    fetchParameterReadings(
+-      API_URL,
+-      patient.id,
+-      {},
+-      { headers: operatorHeaders(), signal: controller.signal },
+-    )
+-      .then((page) =>
+-        setPrevious({
+-          id: patient.id,
+-          state: {
+-            status: 'ready',
+-            values: previousValues(page.readings),
+-            hasMore: page.hasMore,
+-            count: page.readings.length,
+-          },
+-        }),
+-      )
+-      .catch(() => {
+-        if (!controller.signal.aborted) setPrevious({ id: patient.id, state: { status: 'error' } });
+-      });
+-    return () => controller.abort();
+-  }, [patient.id, reload]);
+-  useEffect(() => {
+-    const onSaved = (event: Event) => {
+-      if ((event as CustomEvent<{ patientId?: string }>).detail?.patientId === patient.id)
+-        setReload((value) => value + 1);
+-    };
+-    window.addEventListener(PARAMETER_READING_SAVED_EVENT, onSaved);
+-    return () => window.removeEventListener(PARAMETER_READING_SAVED_EVENT, onSaved);
+-  }, [patient.id]);
+-  const prevState: PreviousState =
+-    previous.id === patient.id ? previous.state : { status: 'loading' };
+-
+-  function set(key: keyof ParameterValues, value: string) {
+-    store.update(patient.id, key, value);
+-  }
+-  function setPad(key: PadField, text: string) {
+-    const [field, value] = padUpdate(values, key, text);
+-    set(field, value);
+-  }
+-  function focusField(key: PadField) {
+-    setActive(key);
+-    inputs.current.get(key)?.focus();
+-  }
+-  function press(key: string) {
+-    if (locked || !active) return;
+-    const field = PAD_FIELDS.find((f) => f.key === active)!;
+-    setPad(active, applyPadKey(padValue(values, active), key, field.decimals));
+-  }
+   async function save() {
+     const token = store.begin(patient.id);
+     if (!token) return;
+     try {
+       const saved = await onSave(token.request);
+       store.succeed(token, saved.measuredAt);
+-      setActive('fr');
+     } catch (cause) {
+       const unknownOutcome = !(cause instanceof ParameterReadingSaveError) || cause.uncertain;
+       store.fail(
+@@ -152,231 +44,41 @@ export function ParameterEntryPanel({
+       );
+     }
+   }
+-  function previousLine(key: PreviousKey) {
+-    return previousText(prevState, key);
+-  }
+-  const noteLine =
++  const noteSummary =
+     noteCount !== undefined
+       ? `${noteCount} ${noteCount === 1 ? 'nota salvata' : 'note salvate'} oggi`
+       : summaryPending
+         ? 'verifica note in corso'
+         : 'conteggio note non disponibile';
+-
+-  const score = news2(values);
+-  const anyNews2 = score.missing.length < 7;
+   return (
+-    <>
+-      <section className="par-form" aria-label={`Rilevazione di ${name}`}>
+-        {outsideResults && (
+-          <p className="par-outside" role="status">
+-            {name} non è nei risultati della ricerca: questa rilevazione resta sua.
+-          </p>
+-        )}
+-        <div className="par-form__head">
+-          <div className="par-form__who">
+-            <h2 className="par-form__name">{name}</h2>
+-            <span className="par-cap">{patientIdentifier(patient)}</span>
+-          </div>
+-          <button type="button" className="ds-link" onClick={onOpenHistory}>
+-            Storico
+-          </button>
+-        </div>
+-        <div className="par-cards">
+-          {PAD_FIELDS.map((field) => {
+-            const value = padValue(values, field.key);
+-            const id = `par-${patient.id}-${field.key}`;
+-            return (
+-              <label
+-                key={field.key}
+-                htmlFor={id}
+-                className={`par-card${active === field.key ? ' par-card--active' : ''}`}
+-              >
+-                <span className="par-card__label">{field.label}</span>
+-                <span className="par-card__value">
+-                  <input
+-                    id={id}
+-                    ref={(el) => {
+-                      if (el) inputs.current.set(field.key, el);
+-                      else inputs.current.delete(field.key);
+-                    }}
+-                    className="par-card__input"
+-                    value={value}
+-                    placeholder="—"
+-                    inputMode={field.decimals ? 'decimal' : 'numeric'}
+-                    // Nessun maxLength: il browser non deve troncare un valore incollato o dettato.
+-                    disabled={locked}
+-                    aria-label={`${field.label} (${field.unit}) per ${name}`}
+-                    onFocus={() => setActive(field.key)}
+-                    onChange={(event) => {
+-                      const next = padInput(values, field.key, event.target.value);
+-                      if (!next) return;
+-                      set(next.field, next.value);
+-                      if (next.split) focusField('pad');
+-                    }}
+-                    onKeyDown={(event) => {
+-                      if (event.key === 'Enter') {
+-                        event.preventDefault();
+-                        const next = nextPadField(field.key);
+-                        if (next) focusField(next);
+-                        else void save();
+-                      }
+-                    }}
+-                  />
+-                  <span className="par-card__unit">{field.unit}</span>
+-                </span>
+-                <span className="par-cap">{previousLine(field.key)}</span>
+-              </label>
+-            );
+-          })}
+-        </div>
+-        <div className="par-choice">
+-          <span className="par-choice__label" id={`par-o2-${patient.id}`}>
+-            Ossigeno
+-          </span>
+-          <div className="ds-chip-group" role="group" aria-labelledby={`par-o2-${patient.id}`}>
+-            {PARAMETER_OPTIONS.o2!.map((option) => (
+-              <button
+-                type="button"
+-                key={option.value}
+-                className="ds-chip"
+-                aria-pressed={values.o2 === option.value}
+-                disabled={locked}
+-                onClick={() => set('o2', values.o2 === option.value ? '' : option.value)}
+-              >
+-                {option.value === 'si' ? 'Con O2' : 'In aria'}
+-              </button>
+-            ))}
+-          </div>
+-          <span className="par-cap">{previousLine('o2')}</span>
+-        </div>
+-        <div className="par-choice">
+-          <span className="par-choice__label" id={`par-acvpu-${patient.id}`}>
+-            Coscienza
+-          </span>
+-          <div className="ds-chip-group" role="group" aria-labelledby={`par-acvpu-${patient.id}`}>
+-            {PARAMETER_OPTIONS.coscienza!.map((option) => (
+-              <button
+-                type="button"
+-                key={option.value}
+-                className="ds-chip"
+-                title={option.label}
+-                aria-label={option.label}
+-                aria-pressed={values.coscienza === option.value}
+-                disabled={locked}
+-                onClick={() =>
+-                  set('coscienza', values.coscienza === option.value ? '' : option.value)
+-                }
+-              >
+-                {COSCIENZA_SHORT[option.value] ?? option.label}
+-              </button>
+-            ))}
+-          </div>
+-          <span className="par-cap">{previousLine('coscienza')}</span>
+-        </div>
+-        <div className="par-extra">
+-          <label className="par-field">
+-            <span className="par-choice__label">Evacuazione</span>
+-            <input
+-              className="form-input par-text"
+-              value={values.evacuazione ?? ''}
+-              maxLength={200}
+-              disabled={locked}
+-              aria-label={`Evacuazione per ${name}`}
+-              onFocus={() => setActive(null)}
+-              onChange={(event) => set('evacuazione', event.target.value)}
+-            />
+-          </label>
+-          <label className="par-field">
+-            <span className="par-choice__label">Nota · {noteLine}</span>
+-            <textarea
+-              className="form-input par-text"
+-              rows={2}
+-              maxLength={2000}
+-              value={values.note ?? ''}
+-              disabled={locked}
+-              aria-label={`Note per ${name}`}
+-              onFocus={() => setActive(null)}
+-              onChange={(event) => set('note', event.target.value)}
+-            />
+-          </label>
+-        </div>
+-      </section>
+-      <aside className="par-side" aria-label="Tastierino e salvataggio">
+-        <div className="par-pad" role="group" aria-label="Tastierino numerico">
+-          {['7', '8', '9', '4', '5', '6', '1', '2', '3', ',', '0', 'back'].map((key) => (
+-            <button
+-              type="button"
+-              key={key}
+-              className="par-pad__key"
+-              disabled={
+-                locked ||
+-                !active ||
+-                (key === ',' && !PAD_FIELDS.find((f) => f.key === active)?.decimals)
+-              }
+-              aria-label={key === 'back' ? 'Cancella' : key === ',' ? 'Virgola' : key}
+-              // Il tastierino non ruba il fuoco al campo attivo.
+-              onPointerDown={(event) => event.preventDefault()}
+-              onClick={() => press(key)}
+-            >
+-              {key === 'back' ? '⌫' : key}
+-            </button>
+-          ))}
+-        </div>
+-        <button
+-          type="button"
+-          className="ds-btn ds-btn--secondary par-wide"
+-          disabled={locked}
+-          onPointerDown={(event) => event.preventDefault()}
+-          onClick={() => {
+-            const next = active ? nextPadField(active) : null;
+-            focusField(next ?? 'fr');
+-          }}
+-        >
+-          Campo successivo
+-          <IcoChevronRight />
+-        </button>
+-        <div
+-          className={`par-news2${score.complete ? ` par-news2--${RISK_CLASS[score.risk!]}` : ''}`}
+-          role="status"
+-          aria-live="polite"
+-        >
+-          <span className="par-news2__title">NEWS2 in tempo reale</span>
+-          <span className="par-news2__score">{score.complete ? score.total : '—'}</span>
+-          <span className="par-news2__text">
+-            {score.complete
+-              ? score.response
+-              : anyNews2
+-                ? `Mancano: ${score.missing.map((key) => NEWS2_LABELS[key]).join(', ')}`
+-                : 'Inserisci i valori'}
+-          </span>
++    <section className="par-form" aria-label={`Rilevazione di ${name}`}>
++      {outsideResults && (
++        <p className="par-outside" role="status">
++          {name} non è nei risultati della ricerca: questa rilevazione resta sua.
++        </p>
++      )}
++      <div className="par-form__head">
++        <div className="par-form__who">
++          <h2 className="par-form__name">{name}</h2>
++          <span className="par-cap">{patientIdentifier(patient)}</span>
+         </div>
+-        <button
+-          type="button"
+-          className="ds-btn ds-btn--primary par-wide"
+-          disabled={saving || !hasValues}
+-          aria-busy={saving}
+-          aria-label={`Salva parametri per ${name}`}
+-          onClick={() => void save()}
+-        >
+-          <IcoCheck />
+-          {saving ? 'Salvo…' : uncertain ? 'Riprova' : 'Salva parametri'}
++        <button type="button" className="ds-link" onClick={onOpenHistory}>
++          Storico
+         </button>
+-        {savedAt && (
+-          <p className="par-result" role="status">
+-            Rilevazione archiviata · {readingTime(savedAt)}
+-          </p>
+-        )}
+-        {error && (
+-          <div className="par-error" role="alert">
+-            {error}
+-            {uncertain && (
+-              <button className="ds-link" type="button" onClick={onOpenHistory}>
+-                Controlla lo storico
+-              </button>
+-            )}
+-          </div>
+-        )}
+-      </aside>
+-    </>
++      </div>
++      <ParameterReadingForm
++        patientId={patient.id}
++        values={draft.values}
++        saving={draft.saving}
++        uncertain={draft.uncertain}
++        error={draft.error}
++        savedAt={draft.savedAt}
++        pendingAt={draft.pending?.measuredAt}
++        noteSummary={noteSummary}
++        onChange={(key, value) => store.update(patient.id, key, value)}
++        onSave={save}
++        onOpenHistory={onOpenHistory}
++      />
++    </section>
+   );
+ }
+diff --git a/frontend/src/components/operator/ParameterReadingForm.css b/frontend/src/components/operator/ParameterReadingForm.css
+new file mode 100644
+index 00000000..83d5dbf0
+--- /dev/null
++++ b/frontend/src/components/operator/ParameterReadingForm.css
+@@ -0,0 +1,68 @@
++.parameter-reading-form {
++  container-type: inline-size;
++  min-width: 0;
++}
++.parameter-reading-form__layout {
++  display: grid;
++  gap: 20px;
++}
++.parameter-reading-form__fields {
++  border: 0;
++  margin: 0;
++  padding: 0;
++  min-width: 0;
++  display: grid;
++  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
++  gap: 14px;
++  align-content: start;
++}
++.parameter-reading-form__field {
++  display: grid;
++  min-width: 0;
++  gap: 5px;
++  align-content: start;
++}
++.parameter-reading-form__field > span {
++  font-weight: 600;
++}
++.parameter-reading-form__field small,
++.parameter-reading-form__tools > small,
++.parameter-reading-form__help {
++  color: var(--text-muted);
++  font-size: 12px;
++  line-height: 1.5;
++}
++.parameter-reading-form__field .form-input {
++  width: 100%;
++  min-width: 0;
++  box-sizing: border-box;
++}
++.parameter-reading-form__field--note {
++  grid-column: 1 / -1;
++}
++.parameter-reading-form__previous {
++  overflow-wrap: anywhere;
++}
++.parameter-reading-form__tools {
++  display: grid;
++  gap: 10px;
++  align-content: start;
++  min-width: 0;
++}
++.parameter-reading-form__pad {
++  display: grid;
++  grid-template-columns: repeat(3, minmax(0, 1fr));
++  gap: 8px;
++}
++.parameter-reading-form__pad .ds-btn {
++  min-width: 0;
++}
++.parameter-reading-form__news2 p,
++.parameter-reading-form__help {
++  margin: 5px 0 0;
++}
++@container (min-width: 700px) {
++  .parameter-reading-form__layout {
++    grid-template-columns: minmax(0, 1fr) 220px;
++  }
++}
+diff --git a/frontend/src/components/operator/ParameterReadingForm.tsx b/frontend/src/components/operator/ParameterReadingForm.tsx
+new file mode 100644
+index 00000000..94a8e705
+--- /dev/null
++++ b/frontend/src/components/operator/ParameterReadingForm.tsx
+@@ -0,0 +1,297 @@
++import { useId, useRef, useState } from 'react';
++import {
++  ENTRY_FIELDS,
++  entryFieldForError,
++  nextEntryField,
++  type EntryFieldKey,
++} from '../../lib/parameterEntrySchema';
++import {
++  applyPadKey,
++  padInput,
++  padUpdate,
++  padValue,
++  previousText,
++  type PadField,
++  type PreviousKey,
++} from '../../lib/parameterPad';
++import {
++  parameterValuesIssue,
++  readingTime,
++  type ParameterValues,
++} from '../../lib/patientParameterReadings';
++import { usePreviousParameterValues } from '../../lib/usePreviousParameterValues';
++import { news2, NEWS2_LABELS } from '../../lib/news2';
++import './ParameterReadingForm.css';
++
++interface Props {
++  patientId: string;
++  values: ParameterValues;
++  saving: boolean;
++  uncertain: boolean;
++  error: string;
++  savedAt?: string | null;
++  pendingAt?: string;
++  noteSummary?: string;
++  onChange: (key: keyof ParameterValues, value: string) => void;
++  onSave: () => void | Promise<void>;
++  onOpenHistory: () => void;
++}
++/** Shared presentation. Each workspace retains its own session/draft/save ownership. */
++export function ParameterReadingForm({
++  patientId,
++  values,
++  saving,
++  uncertain,
++  error,
++  savedAt,
++  pendingAt,
++  noteSummary,
++  onChange,
++  onSave,
++  onOpenHistory,
++}: Props) {
++  const prefix = useId();
++  const [active, setActive] = useState<EntryFieldKey | null>(null);
++  const [invalid, setInvalid] = useState<ReturnType<typeof parameterValuesIssue>>(null);
++  const fields = useRef(
++    new Map<EntryFieldKey, HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(),
++  );
++  const saveButton = useRef<HTMLButtonElement>(null);
++  const previous = usePreviousParameterValues(patientId);
++  const locked = saving || uncertain;
++  const score = news2(values);
++  const activeNumeric = ENTRY_FIELDS.find((field) => field.key === active && field.numeric);
++  const errorId = `${prefix}-error`;
++  function update(key: keyof ParameterValues, value: string) {
++    if (locked) return;
++    setInvalid(null);
++    onChange(key, value);
++  }
++  function focus(key: EntryFieldKey | null) {
++    if (key) {
++      setActive(key);
++      fields.current.get(key)?.focus();
++    } else saveButton.current?.focus();
++  }
++  function submit() {
++    if (saving) return;
++    const issue = parameterValuesIssue(values);
++    setInvalid(issue);
++    if (issue) {
++      focus(entryFieldForError(issue.field));
++      return;
++    }
++    void onSave();
++  }
++  function press(key: string) {
++    if (locked || !activeNumeric) return;
++    const padKey = activeNumeric.key as PadField;
++    const [field, value] = padUpdate(
++      values,
++      padKey,
++      applyPadKey(padValue(values, padKey), key, !!activeNumeric.decimals),
++    );
++    update(field, value);
++  }
++  return (
++    <form
++      className="parameter-reading-form"
++      aria-label="Nuova rilevazione"
++      onSubmit={(event) => {
++        event.preventDefault();
++        submit();
++      }}
++    >
++      <div className="parameter-reading-form__layout">
++        <fieldset disabled={locked} className="parameter-reading-form__fields">
++          <legend>Nuovi valori da registrare, separati dalle misure precedenti</legend>
++          {ENTRY_FIELDS.map((field) => {
++            const id = `${prefix}-${field.key}`;
++            const historical = !['evacuazione', 'note'].includes(field.key);
++            const affected =
++              (!!invalid && invalid.field === null && field.key === 'fr') ||
++              invalid?.field === field.key ||
++              (invalid?.field === 'pa' && ['pas', 'pad'].includes(field.key));
++            const common = {
++              id,
++              className: 'form-input',
++              'aria-label': `Nuova rilevazione ${field.label}`,
++              'aria-invalid': affected || undefined,
++              'aria-describedby':
++                [
++                  historical ? `${id}-previous` : '',
++                  affected ? errorId : '',
++                  field.key === 'o2' || field.key === 'coscienza' ? `${prefix}-news2-help` : '',
++                ]
++                  .filter(Boolean)
++                  .join(' ') || undefined,
++              value: field.numeric
++                ? padValue(values, field.key as PadField)
++                : (values[field.key as keyof ParameterValues] ?? ''),
++              onFocus: () => setActive(field.key),
++              ref: (element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null) => {
++                if (element) fields.current.set(field.key, element);
++                else fields.current.delete(field.key);
++              },
++            };
++            return (
++              <label
++                key={field.key}
++                htmlFor={id}
++                className={`parameter-reading-form__field${field.key === 'note' ? ' parameter-reading-form__field--note' : ''}`}
++              >
++                <span>
++                  {field.label} {field.unit && <small>{field.unit}</small>}
++                </span>
++                {field.options ? (
++                  <select
++                    {...common}
++                    onChange={(event) =>
++                      update(field.key as keyof ParameterValues, event.target.value)
++                    }
++                  >
++                    <option value="">—</option>
++                    {field.options.map((option) => (
++                      <option key={option.value} value={option.value}>
++                        {option.label}
++                      </option>
++                    ))}
++                  </select>
++                ) : field.key === 'note' ? (
++                  <textarea
++                    {...common}
++                    rows={2}
++                    maxLength={2000}
++                    onChange={(event) => update('note', event.target.value)}
++                  />
++                ) : (
++                  <input
++                    {...common}
++                    type="text"
++                    placeholder="—"
++                    inputMode={field.numeric ? (field.decimals ? 'decimal' : 'numeric') : 'text'}
++                    maxLength={field.numeric ? undefined : 200}
++                    onChange={(event) => {
++                      if (!field.numeric) {
++                        update(field.key as keyof ParameterValues, event.target.value);
++                        return;
++                      }
++                      const next = padInput(values, field.key as PadField, event.target.value);
++                      if (next) {
++                        update(next.field, next.value);
++                        if (next.split) focus('pad');
++                      }
++                    }}
++                    onKeyDown={(event) => {
++                      if (event.key === 'Enter') {
++                        event.preventDefault();
++                        focus(nextEntryField(field.key));
++                      }
++                    }}
++                  />
++                )}
++                {historical && (
++                  <small id={`${id}-previous`} className="parameter-reading-form__previous">
++                    {previousText(previous, field.key as PreviousKey)}
++                  </small>
++                )}
++                {field.key === 'note' && noteSummary && <small>{noteSummary}</small>}
++              </label>
++            );
++          })}
++        </fieldset>
++        <div className="parameter-reading-form__tools">
++          <div
++            role="group"
++            aria-label="Tastierino numerico"
++            className="parameter-reading-form__pad"
++          >
++            {['7', '8', '9', '4', '5', '6', '1', '2', '3', ',', '0', 'back'].map((key) => (
++              <button
++                type="button"
++                key={key}
++                className="ds-btn ds-btn--secondary"
++                disabled={locked || !activeNumeric || (key === ',' && !activeNumeric.decimals)}
++                aria-label={key === 'back' ? 'Cancella' : key === ',' ? 'Virgola' : key}
++                onPointerDown={(event) => event.preventDefault()}
++                onClick={() => press(key)}
++              >
++                {key === 'back' ? '⌫' : key}
++              </button>
++            ))}
++          </div>
++          <small>
++            Seleziona un campo numerico. Il tastierino aggiunge o cancella in fondo al valore.
++          </small>
++          <button
++            type="button"
++            className="ds-btn ds-btn--secondary"
++            disabled={locked}
++            onPointerDown={(event) => event.preventDefault()}
++            onClick={() => focus(nextEntryField(active))}
++          >
++            Campo successivo
++          </button>
++          <div className="parameter-reading-form__news2" role="status" aria-live="polite">
++            <strong>NEWS2 in tempo reale · {score.complete ? score.total : '—'}</strong>
++            <p>
++              {score.complete
++                ? score.response
++                : `Mancano: ${score.missing.map((key) => NEWS2_LABELS[key]).join(', ')}`}
++            </p>
++          </div>
++          <p id={`${prefix}-news2-help`} className="parameter-reading-form__help">
++            NEWS2 usa i sette parametri della stessa rilevazione e la scala SpO₂ 1. O₂ indica
++            l’ossigeno supplementare; coscienza usa ACVPU. Un punteggio incompleto non è un NEWS2
++            valido.
++          </p>
++          <small>Data e ora vengono registrate quando premi Salva.</small>
++          <button
++            ref={saveButton}
++            type="submit"
++            className="ds-btn ds-btn--primary"
++            disabled={saving}
++            aria-busy={saving}
++            onFocus={() => setActive(null)}
++          >
++            {saving ? 'Salvataggio…' : uncertain ? 'Riprova salvataggio' : 'Salva rilevazione'}
++          </button>
++          {(invalid || error) && (
++            <div role="alert" id={errorId} className="parameter-trends-error">
++              <p>{invalid?.message ?? error}</p>
++              {uncertain && (
++                <>
++                  <p>
++                    Rilevazione del {pendingAt ? readingTime(pendingAt) : 'salvataggio in verifica'}
++                    . Riprova per verificare lo stesso salvataggio.
++                  </p>
++                  <button
++                    type="button"
++                    className="ds-link"
++                    onFocus={() => setActive(null)}
++                    onClick={onOpenHistory}
++                  >
++                    Controlla lo storico
++                  </button>
++                </>
++              )}
++            </div>
++          )}
++          {savedAt && (
++            <div role="status" className="parameter-single-entry__success">
++              <span>Rilevazione salvata · {readingTime(savedAt)}</span>
++              <button
++                type="button"
++                className="ds-link"
++                onFocus={() => setActive(null)}
++                onClick={onOpenHistory}
++              >
++                Mostra lo storico
++              </button>
++            </div>
++          )}
++        </div>
++      </div>
++    </form>
++  );
++}
+diff --git a/frontend/src/components/operator/ParametriVitali.css b/frontend/src/components/operator/ParametriVitali.css
+index a5b66160..3a73eef6 100644
+--- a/frontend/src/components/operator/ParametriVitali.css
++++ b/frontend/src/components/operator/ParametriVitali.css
+@@ -7,8 +7,8 @@
+ }
+ .par-grid {
+   display: grid;
+-  grid-template-columns: 288px minmax(0, 1fr) 272px;
+-  grid-template-areas: 'list form side';
++  grid-template-columns: 240px minmax(0, 1fr);
++  grid-template-areas: 'list form';
+   gap: 24px;
+   align-items: start;
+ }
+@@ -346,16 +346,14 @@
+ @media (max-width: 1099px) {
+   .par-grid {
+     grid-template-columns: 240px minmax(0, 1fr);
+-    grid-template-areas:
+-      'list form'
+-      'list side';
++    grid-template-areas: 'list form';
+   }
+ }
+ /* Telefono: una colonna; l'elenco pazienti scorre in un riquadro. */
+ @media (max-width: 699px) {
+   .par-grid {
+     grid-template-columns: minmax(0, 1fr);
+-    grid-template-areas: 'list' 'form' 'side';
++    grid-template-areas: 'list' 'form';
+   }
+   .par-plist {
+     max-height: 40vh;
+@@ -401,7 +399,7 @@
+ .par-pick .turno-pcard__news2 { justify-self:start; max-width:100%; margin-left:42px; font-size:12px; line-height:18px; }
+ @media (max-width: 1099px) {
+   .par-grid {
+-    grid-template-columns: 300px minmax(0, 1fr);
++    grid-template-columns: 240px minmax(0, 1fr);
+   }
+ }
+ @media (max-width: 699px) {
+diff --git a/frontend/src/components/operator/PatientParameterEntry.tsx b/frontend/src/components/operator/PatientParameterEntry.tsx
+index 12593eb9..b19b701b 100644
+--- a/frontend/src/components/operator/PatientParameterEntry.tsx
++++ b/frontend/src/components/operator/PatientParameterEntry.tsx
+@@ -1,19 +1,17 @@
+-import { useEffect, useId, useRef, useState } from 'react';
++import { useEffect, useRef, useState } from 'react';
+ import { API_URL } from '../../config';
+ import { getCurrentOperator, operatorHeaders } from '../../lib/operatorSession';
+ import {
+-  PARAMETER_FIELDS,
+-  PARAMETER_OPTIONS,
+   ParameterReadingSaveError,
+   createParameterReadingRequest,
+   parameterValuesIssue,
+-  readingTime,
+   saveParameterReading,
+   type ParameterReadingRequest,
+   type ParameterValues,
+   type PatientParameterReading,
+ } from '../../lib/patientParameterReadings';
+ import { ParameterEntryClock } from './ParameterEntryClock';
++import { ParameterReadingForm } from './ParameterReadingForm';
+ 
+ interface Props {
+   patientId: string;
+@@ -33,10 +31,7 @@ export function PatientParameterEntry({
+   const [saving, setSaving] = useState(false);
+   const [uncertain, setUncertain] = useState(false);
+   const [error, setError] = useState('');
+-  const [invalidField, setInvalidField] = useState<keyof ParameterValues | null>(null);
+-  const fields = useRef(new Map<string, HTMLInputElement | HTMLSelectElement>());
+   const [savedAt, setSavedAt] = useState('');
+-  const errorId = useId();
+   const pending = useRef<ParameterReadingRequest | null>(null);
+   const inFlight = useRef(false);
+   const mounted = useRef(true);
+@@ -47,9 +42,9 @@ export function PatientParameterEntry({
+     };
+   }, []);
+   function update(key: keyof ParameterValues, value: string) {
++    if (saving || uncertain) return;
+     setValues((previous) => ({ ...previous, [key]: value }));
+     setError('');
+-    setInvalidField(null);
+     setSavedAt('');
+     pending.current = null;
+   }
+@@ -62,9 +57,6 @@ export function PatientParameterEntry({
+     const invalid = parameterValuesIssue(values);
+     if (invalid) {
+       setError(invalid.message);
+-      setInvalidField(invalid.field);
+-      // Il fuoco va sul campo da correggere (il primo, se manca ogni valore).
+-      fields.current.get(invalid.field ?? PARAMETER_FIELDS[0].key)?.focus();
+       return;
+     }
+     pending.current ??= createParameterReadingRequest(values);
+@@ -99,101 +91,18 @@ export function PatientParameterEntry({
+         <h3>Nuova rilevazione</h3>
+         <ParameterEntryClock onDayChange={onDayChange} />
+       </div>
+-      <form
+-        onSubmit={(event) => {
+-          event.preventDefault();
+-          void save();
+-        }}
+-      >
+-        <fieldset disabled={saving || uncertain} className="parameter-single-entry__fields">
+-          <legend className="sr-only">Valori da registrare</legend>
+-          {PARAMETER_FIELDS.map((field) => (
+-            <label key={field.key}>
+-              <span>
+-                {field.label} {field.unit && <small>{field.unit}</small>}
+-              </span>
+-              {PARAMETER_OPTIONS[field.key] ? (
+-                <select
+-                  ref={(el) =>
+-                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))
+-                  }
+-                  className="form-input"
+-                  aria-label={`Nuova rilevazione ${field.label}`}
+-                  aria-invalid={invalidField === field.key || undefined}
+-                  aria-describedby={invalidField === field.key ? errorId : undefined}
+-                  value={values[field.key] ?? ''}
+-                  onChange={(event) => update(field.key, event.target.value)}
+-                >
+-                  <option value="">—</option>
+-                  {PARAMETER_OPTIONS[field.key]!.map((option) => (
+-                    <option key={option.value} value={option.value}>
+-                      {option.label}
+-                    </option>
+-                  ))}
+-                </select>
+-              ) : (
+-                <input
+-                  ref={(el) =>
+-                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))
+-                  }
+-                  className="form-input"
+-                  aria-label={`Nuova rilevazione ${field.label}`}
+-                  aria-invalid={invalidField === field.key || undefined}
+-                  aria-describedby={invalidField === field.key ? errorId : undefined}
+-                  value={values[field.key] ?? ''}
+-                  inputMode={
+-                    ['pa', 'evacuazione'].includes(field.key)
+-                      ? 'text'
+-                      : field.key === 'fr'
+-                        ? 'numeric'
+-                        : 'decimal'
+-                  }
+-                  maxLength={field.key === 'evacuazione' ? 200 : 32}
+-                  placeholder={field.key === 'pa' ? '120/80' : '—'}
+-                  onChange={(event) => update(field.key, event.target.value)}
+-                />
+-              )}
+-            </label>
+-          ))}
+-        </fieldset>
+-        <details className="parameter-single-entry__notes">
+-          <summary>Note sulla rilevazione</summary>
+-          <textarea
+-            className="form-input"
+-            aria-label="Note della nuova rilevazione"
+-            rows={2}
+-            maxLength={2000}
+-            disabled={saving || uncertain}
+-            value={values.note ?? ''}
+-            onChange={(event) => update('note', event.target.value)}
+-          />
+-        </details>
+-        <div className="parameter-single-entry__actions">
+-          <span>Data e ora vengono registrate quando premi Salva.</span>
+-          <button type="submit" className="btn-primary" disabled={saving} aria-busy={saving}>
+-            {saving ? 'Salvataggio…' : uncertain ? 'Riprova salvataggio' : 'Salva rilevazione'}
+-          </button>
+-        </div>
+-      </form>
+-      {error && (
+-        <div role="alert" className="parameter-trends-error" id={errorId}>
+-          <p>{error}</p>
+-          {uncertain && pending.current && (
+-            <p>
+-              Rilevazione del {readingTime(pending.current.measuredAt)}. Riprova per verificare lo
+-              stesso salvataggio.
+-            </p>
+-          )}
+-        </div>
+-      )}
+-      {savedAt && (
+-        <div className="parameter-single-entry__success" role="status">
+-          <span>Rilevazione salvata · {readingTime(savedAt)}</span>
+-          <button type="button" className="link-btn" onClick={onShowToday}>
+-            Mostra oggi
+-          </button>
+-        </div>
+-      )}
++      <ParameterReadingForm
++        patientId={patientId}
++        values={values}
++        saving={saving}
++        uncertain={uncertain}
++        error={error}
++        savedAt={savedAt}
++        pendingAt={pending.current?.measuredAt}
++        onChange={update}
++        onSave={save}
++        onOpenHistory={onShowToday}
++      />
+     </section>
+   );
+ }
+diff --git a/frontend/src/components/operator/PatientParameterWorkspace.css b/frontend/src/components/operator/PatientParameterWorkspace.css
+index d281acea..64f16b59 100644
+--- a/frontend/src/components/operator/PatientParameterWorkspace.css
++++ b/frontend/src/components/operator/PatientParameterWorkspace.css
+@@ -65,7 +65,6 @@
+ .parameter-single-entry .form-input {
+   width: 100%;
+   min-width: 0;
+-  min-height: 40px;
+ }
+ .parameter-single-entry__notes {
+   font-size: 12px;
+diff --git a/frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts b/frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts
+new file mode 100644
+index 00000000..467999ff
+--- /dev/null
++++ b/frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts
+@@ -0,0 +1,86 @@
++import assert from 'node:assert/strict';
++import { test } from 'node:test';
++import React from 'react';
++import { renderToStaticMarkup } from 'react-dom/server';
++import { ParameterReadingForm } from '../ParameterReadingForm';
++import { PatientParameterEntry } from '../PatientParameterEntry';
++import { ParameterEntryPanel } from '../ParameterEntryPanel';
++import { createParameterDraftStore } from '../../../lib/parameterEntryDrafts';
++Object.assign(globalThis, { React });
++const noop = () => {};
++const form = (extra = {}) =>
++  renderToStaticMarkup(
++    React.createElement(ParameterReadingForm, {
++      patientId: 'QA-SYNTHETIC-417',
++      values: {},
++      saving: false,
++      uncertain: false,
++      error: '',
++      onChange: noop,
++      onSave: noop,
++      onOpenHistory: noop,
++      ...extra,
++    }),
++  );
++
++test('417 both workspaces use exactly the shared field order, full ACVPU options and no prior prefill', () => {
++  const chart = renderToStaticMarkup(
++    React.createElement(PatientParameterEntry, {
++      patientId: 'QA-SYNTHETIC-417',
++      operatorId: 'QA-ACTOR',
++      onSaved: noop,
++      onDayChange: noop,
++      onShowToday: noop,
++    }),
++  );
++  const ward = renderToStaticMarkup(
++    React.createElement(ParameterEntryPanel, {
++      patient: {
++        id: 'QA-SYNTHETIC-417',
++        firstName: 'Persona',
++        lastName: 'Sintetica',
++        medicalRecordNumber: 'QA',
++      },
++      draftStore: createParameterDraftStore(),
++      onSave: async () => {
++        throw Error('SSR never saves');
++      },
++      onOpenHistory: noop,
++    }),
++  );
++  const fields = (html: string) =>
++    [...html.matchAll(/aria-label="Nuova rilevazione ([^"]+)"/g)].map((m) => m[1]);
++  assert.deepEqual(fields(chart), fields(ward));
++  assert.equal(fields(chart).length, 11);
++  for (const html of [chart, ward]) {
++    assert.match(html, /Confusione di nuova insorgenza/);
++    assert.match(html, /Risponde alla voce/);
++    assert.match(html, /Prima: …/);
++    assert.doesNotMatch(html, /value="(?:120|80|98)"/);
++    assert.match(html, /NEWS2 usa i sette parametri/);
++  }
++});
++test('417 numeric raw text is never maxlength-truncated and keypad starts inactive', () => {
++  const html = form({ values: { fc: '1'.repeat(50), pa: '120/80/70' } });
++  const input = html.match(/<input[^>]+aria-label="Nuova rilevazione FC"[^>]*>/)?.[0];
++  assert.ok(input);
++  assert.doesNotMatch(input, /maxLength/i);
++  assert.match(input, new RegExp('1'.repeat(50)));
++  assert.match(html, /value="80\/70"/);
++  assert.equal(
++    (html.match(/class="ds-btn ds-btn--secondary" disabled="" aria-label=/g) ?? []).length,
++    12,
++  );
++});
++test('417 uncertain saves lock fields but retain enabled explicit retry and error/history guidance', () => {
++  const html = form({
++    uncertain: true,
++    error: 'Risposta persa',
++    pendingAt: '2026-10-09T08:00:00.000Z',
++  });
++  assert.match(html, /<fieldset disabled=""/);
++  assert.match(html, /role="alert"/);
++  assert.match(html, /Riprova salvataggio/);
++  assert.match(html, /Controlla lo storico/);
++  assert.doesNotMatch(html.match(/<button[^>]*type="submit"[^>]*>/)?.[0] ?? '', /disabled/);
++});
+diff --git a/frontend/src/lib/__tests__/parameterEntrySchema.test.ts b/frontend/src/lib/__tests__/parameterEntrySchema.test.ts
+new file mode 100644
+index 00000000..965bd459
+--- /dev/null
++++ b/frontend/src/lib/__tests__/parameterEntrySchema.test.ts
+@@ -0,0 +1,46 @@
++import { test } from 'node:test';
++import assert from 'node:assert/strict';
++import { readFileSync } from 'node:fs';
++
++test('both entry surfaces render the same controlled form without owning a second field map', () => {
++  for (const file of ['PatientParameterEntry.tsx', 'ParameterEntryPanel.tsx']) {
++    const source = readFileSync(
++      new URL(`../../components/operator/${file}`, import.meta.url),
++      'utf8',
++    );
++    assert.match(source, /<ParameterReadingForm\b/);
++    assert.doesNotMatch(source, /PARAMETER_FIELDS\.map|PAD_FIELDS\.map|COSCIENZA_SHORT/);
++  }
++});
++
++test('shared entry schema follows all fields, including NEWS2 choices, without auto-save navigation', async () => {
++  const { ENTRY_FIELDS, nextEntryField } = await import('../parameterEntrySchema');
++  assert.deepEqual(
++    ENTRY_FIELDS.map((field) => field.key),
++    [
++      'fr',
++      'spo2',
++      'o2',
++      'pas',
++      'pad',
++      'fc',
++      'temperatura',
++      'coscienza',
++      'dtx',
++      'evacuazione',
++      'note',
++    ],
++  );
++  assert.equal(nextEntryField('spo2'), 'o2');
++  assert.equal(nextEntryField('temperatura'), 'coscienza');
++  assert.equal(nextEntryField('dtx'), 'evacuazione');
++  assert.equal(nextEntryField('note'), null);
++  const { PARAMETER_FIELDS, PARAMETER_OPTIONS } = await import('../patientParameterReadings');
++  for (const field of ENTRY_FIELDS) {
++    if (['pas', 'pad', 'note'].includes(field.key)) continue;
++    const original = PARAMETER_FIELDS.find((item) => item.key === field.key)!;
++    assert.equal(field.label, original.label);
++    assert.equal(field.unit, original.unit);
++    assert.deepEqual(field.options, PARAMETER_OPTIONS[original.key]);
++  }
++});
+diff --git a/frontend/src/lib/parameterEntrySchema.ts b/frontend/src/lib/parameterEntrySchema.ts
+new file mode 100644
+index 00000000..dea1b730
+--- /dev/null
++++ b/frontend/src/lib/parameterEntrySchema.ts
+@@ -0,0 +1,48 @@
++import {
++  PARAMETER_FIELDS,
++  PARAMETER_OPTIONS,
++  type ParameterValues,
++} from './patientParameterReadings';
++import { PAD_FIELDS, type PadField } from './parameterPad';
++
++export type EntryFieldKey = PadField | 'o2' | 'coscienza' | 'evacuazione' | 'note';
++export interface EntryField {
++  key: EntryFieldKey;
++  label: string;
++  unit?: string;
++  decimals?: boolean;
++  numeric: boolean;
++  options?: readonly { value: string; label: string }[];
++}
++const ORDER: EntryFieldKey[] = [
++  'fr',
++  'spo2',
++  'o2',
++  'pas',
++  'pad',
++  'fc',
++  'temperatura',
++  'coscienza',
++  'dtx',
++  'evacuazione',
++  'note',
++];
++/** Presentation only: persisted fields, validation and clinical score stay unchanged. */
++export const ENTRY_FIELDS: EntryField[] = ORDER.map((key) => {
++  const numeric = PAD_FIELDS.find((field) => field.key === key);
++  const original = PARAMETER_FIELDS.find((field) => field.key === key);
++  return {
++    key,
++    label: original?.label ?? numeric?.label ?? 'Note sulla rilevazione',
++    unit: original?.unit ?? numeric?.unit,
++    numeric: !!numeric,
++    decimals: numeric?.decimals,
++    options: original ? PARAMETER_OPTIONS[original.key] : undefined,
++  };
++});
++export function nextEntryField(key: EntryFieldKey | null): EntryFieldKey | null {
++  return key === null ? ORDER[0] : (ORDER[ORDER.indexOf(key) + 1] ?? null);
++}
++export function entryFieldForError(key: keyof ParameterValues | null): EntryFieldKey {
++  return key === 'pa' ? 'pas' : (key ?? 'fr');
++}
+diff --git a/frontend/src/lib/usePreviousParameterValues.ts b/frontend/src/lib/usePreviousParameterValues.ts
+new file mode 100644
+index 00000000..9aec06e5
+--- /dev/null
++++ b/frontend/src/lib/usePreviousParameterValues.ts
+@@ -0,0 +1,53 @@
++import { useEffect, useState } from 'react';
++import { API_URL } from '../config';
++import { operatorHeaders } from './operatorSession';
++import { fetchParameterReadings, PARAMETER_READING_SAVED_EVENT } from './patientParameterReadings';
++import { previousValues, type previousText } from './parameterPad';
++
++type PreviousState = Parameters<typeof previousText>[0];
++/** A bounded, read-only history caption, never a source of current input values. */
++export function usePreviousParameterValues(patientId: string): PreviousState {
++  const [previous, setPrevious] = useState<{ id: string; state: PreviousState }>({
++    id: patientId,
++    state: { status: 'loading' },
++  });
++  const [reload, setReload] = useState(0);
++  useEffect(() => {
++    const controller = new AbortController();
++    setPrevious({ id: patientId, state: { status: 'loading' } });
++    fetchParameterReadings(
++      API_URL,
++      patientId,
++      {},
++      {
++        headers: operatorHeaders(),
++        signal: controller.signal,
++      },
++    )
++      .then((page) => {
++        if (!controller.signal.aborted)
++          setPrevious({
++            id: patientId,
++            state: {
++              status: 'ready',
++              values: previousValues(page.readings),
++              hasMore: page.hasMore,
++              count: page.readings.length,
++            },
++          });
++      })
++      .catch(() => {
++        if (!controller.signal.aborted) setPrevious({ id: patientId, state: { status: 'error' } });
++      });
++    return () => controller.abort();
++  }, [patientId, reload]);
++  useEffect(() => {
++    const onSaved = (event: Event) => {
++      if ((event as CustomEvent<{ patientId?: string }>).detail?.patientId === patientId)
++        setReload((value) => value + 1);
++    };
++    window.addEventListener(PARAMETER_READING_SAVED_EVENT, onSaved);
++    return () => window.removeEventListener(PARAMETER_READING_SAVED_EVENT, onSaved);
++  }, [patientId]);
++  return previous.id === patientId ? previous.state : { status: 'loading' };
++}

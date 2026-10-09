@@ -1,0 +1,1 @@
+function e(e=new Date){let t=e=>String(e).padStart(2,`0`);return`${e.getFullYear()}-${t(e.getMonth()+1)}-${t(e.getDate())}`}function t(e,t){let n=new URLSearchParams({from:t.from,to:t.to,limit:`1000`});return t.operatorId&&n.set(`operatorId`,t.operatorId),`${e}/appointments?${n.toString()}`}export{e as n,t};

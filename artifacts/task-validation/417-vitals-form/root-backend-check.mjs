@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {writeFileSync} from 'node:fs';
+const root='artifacts/task-validation/417-vitals-form/root-rerun/commands';
+const args=['--import','tsx','--test','backend/src/patients/__tests__/parameter-reading-input.test.ts'];
+const r=spawnSync(process.execPath,args,{encoding:'utf8',env:{...process.env,AUTH_MODE:'demo',NODE_ENV:'test'}});
+const log=(r.stdout||'')+(r.stderr||'');writeFileSync(root+'/backend-input-focused.log',log);
+const stats=Object.fromEntries([...log.matchAll(/^ℹ (tests|pass|fail|skipped) (\d+)/gm)].map(m=>[m[1],Number(m[2])]));
+assert.equal(r.status,0);assert.equal(stats.pass,7);assert.equal(stats.fail,0);
+writeFileSync(root+'/backend-input-receipt.json',JSON.stringify({args,exit:r.status,...stats,scope:'Existing backend input validator unchanged; synthetic tests, no production database writes'},null,2));console.log(JSON.stringify(stats));

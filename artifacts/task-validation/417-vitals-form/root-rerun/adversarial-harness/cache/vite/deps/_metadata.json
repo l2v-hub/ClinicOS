@@ -1,0 +1,56 @@
+{
+  "hash": "b9ae9f40",
+  "configHash": "f091031c",
+  "lockfileHash": "33f99b1b",
+  "browserHash": "acfa971c",
+  "optimized": {
+    "@azure/msal-browser": {
+      "src": "../../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/@azure/msal-browser/dist/index.mjs",
+      "file": "@azure_msal-browser.js",
+      "fileHash": "00d4fe3f",
+      "needsInterop": false
+    },
+    "codice-fiscale-js": {
+      "src": "../../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/codice-fiscale-js/dist/codice.fiscale.commonjs2.js",
+      "file": "codice-fiscale-js.js",
+      "fileHash": "065f5bd2",
+      "needsInterop": true
+    },
+    "pdfjs-dist": {
+      "src": "../../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/pdfjs-dist/build/pdf.mjs",
+      "file": "pdfjs-dist.js",
+      "fileHash": "a9491320",
+      "needsInterop": false
+    },
+    "react-dom": {
+      "src": "../../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "2e95dec0",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "224ae5ab",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "4f187373",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "dbaa622c",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "rolldown-runtime-EAsCxrDo": {
+      "file": "rolldown-runtime-EAsCxrDo.js",
+      "isDynamicEntry": false
+    }
+  }
+}

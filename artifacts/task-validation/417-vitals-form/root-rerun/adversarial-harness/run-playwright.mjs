@@ -1,0 +1,10 @@
+import {spawn} from 'node:child_process';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {mkdirSync,writeFileSync,copyFileSync} from 'node:fs';
+const base=dirname(fileURLToPath(import.meta.url)),run=process.argv[2]||'root-final',out=resolve(base,run);mkdirSync(out,{recursive:true});
+for(const file of ['fixture.cjs','independent.spec.cjs','playwright.config.cjs'])copyFileSync(resolve(base,file),resolve(out,`original-${file}`));
+const args=['C:/w-insulin-qa/node_modules/playwright/cli.js','test','--config',resolve(base,'playwright.config.cjs')];
+const child=spawn(process.execPath,args,{env:{...process.env,QA_RUN:run},stdio:['ignore','pipe','pipe']});let stdout='',stderr='';
+child.stdout.on('data',buf=>{stdout+=buf;process.stdout.write(buf);});child.stderr.on('data',buf=>{stderr+=buf;process.stderr.write(buf);});
+const code=await new Promise(resolve=>child.on('close',resolve));writeFileSync(resolve(out,'run-command.log'),stdout+stderr);writeFileSync(resolve(out,'run-receipt.json'),JSON.stringify({node:process.execPath,args,run,exit:code,sourceCommit:'02b4ba89af291186a72e040b868da024bb865164',port:7480,workers:1},null,2));process.exitCode=code;

@@ -1,0 +1,13 @@
+# Root independent gate interpretation
+
+Candidate02b4ba89af291186a72e040b868da024bb865164 is frozen. Primary dirty checkout, known launcher/config automation edits and unreleased405/408/410/416 are excluded. No concurrent application writer. Root is the human-authorized integration release owner; QA and Ruflo do not grant publication authority.
+
+Root read the complete independent fixture/spec/config/server/runner, command runner, canonical diff audit, physical/canonical bootstrap, supplemental runtime binder and sealing script. The rerun copies fixture/spec/config unchanged into root-rerun/adversarial-harness. Only server and runner artifact-base resolution changes to their own directory, so no sealed independent file or cache is overwritten; port7480, assertions, one worker and synthetic routing remain unchanged.
+
+The new historical-caption hook is bounded50 and selected-patient only. Chromium network initiator frames distinguish it from unchanged dashboard LazyNews2 reads and chart-period history pagination. These legacy consumers are recorded, not incorrectly counted as new-form fanout or claimed removed. Original independent failing harness runs remain FAIL and retain original scripts/results; they are not deleted, replaced or retroactively called passing.
+
+Controlled negative cases inject exact request-index/path/status400 or503. An intentionally aborted request may never produce an HTTP response, so observed errors must be a subset of the explicit injected ledger. Unexpected errors, console errors other than the corresponding controlled resource failures, runtime exceptions, external hosts and unscoped mutations still fail. A zero-unexpected-error claim does not mean the negative cases returned200.
+
+POSTs mutate only an in-memory synthetic reading collection intercepted before backend traffic. Reload intentionally reauthenticates the same simulator identity while retaining this collection. This proves frontend reloading, request identity, retry and attribution, not real database persistence or production authentication. Responsiveness uses desktop/tablet/mobile viewports, not physical devices or screen-reader acceptance. No clinical thresholds, dose rules, scoring algorithms, backend contracts, authorization or dependencies change.
+
+Security source/dist and actual configured-credential canonical scans are distinct from the broad scanner. The candidate/current frontend scanner object has exactly the same three untouched MEDIUM findings as accepted415; broad dependency findings remain. No global security-clean or CI-green claim. Full1220/1208/12 failures exactly match pinned415 baseline names; no new failure. Scope passes only if all original AC tests, fresh QA, root rerun and exact-source online gate pass.

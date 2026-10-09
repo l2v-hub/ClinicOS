@@ -1,0 +1,129 @@
+[
+  {
+    "view": "chart",
+    "fields": [
+      {
+        "label": "Nuova rilevazione PA",
+        "mode": "text",
+        "placeholder": "120/80"
+      },
+      {
+        "label": "Nuova rilevazione SpO₂",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": "Nuova rilevazione O₂",
+        "mode": ""
+      },
+      {
+        "label": "Nuova rilevazione FC",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": "Nuova rilevazione FR",
+        "mode": "numeric",
+        "placeholder": "—"
+      },
+      {
+        "label": "Nuova rilevazione TC",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": "Nuova rilevazione Coscienza",
+        "mode": ""
+      },
+      {
+        "label": "Nuova rilevazione DTX",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": "Nuova rilevazione Evacuazione",
+        "mode": "text",
+        "placeholder": "—"
+      }
+    ],
+    "source": "accepted415 0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+    "unexpected": [],
+    "writes": []
+  },
+  {
+    "view": "ward",
+    "fields": [
+      {
+        "label": "FR (atti/min) per Sintetica, Persona",
+        "mode": "numeric",
+        "placeholder": "—"
+      },
+      {
+        "label": "SpO2 (%) per Sintetica, Persona",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": "PA sistolica (mmHg) per Sintetica, Persona",
+        "mode": "numeric",
+        "placeholder": "—"
+      },
+      {
+        "label": "PA diastolica (mmHg) per Sintetica, Persona",
+        "mode": "numeric",
+        "placeholder": "—"
+      },
+      {
+        "label": "FC (bpm) per Sintetica, Persona",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": "Temperatura (°C) per Sintetica, Persona",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": "DTX (mg/dL) per Sintetica, Persona",
+        "mode": "decimal",
+        "placeholder": "—"
+      },
+      {
+        "label": null,
+        "mode": ""
+      },
+      {
+        "label": null,
+        "mode": ""
+      },
+      {
+        "label": "A · Vigile",
+        "mode": ""
+      },
+      {
+        "label": "C · Confusione di nuova insorgenza",
+        "mode": ""
+      },
+      {
+        "label": "V · Risponde alla voce",
+        "mode": ""
+      },
+      {
+        "label": "P · Risponde al dolore",
+        "mode": ""
+      },
+      {
+        "label": "U · Non risponde",
+        "mode": ""
+      },
+      {
+        "label": "Evacuazione per Sintetica, Persona",
+        "mode": "",
+        "placeholder": ""
+      }
+    ],
+    "source": "accepted415 0d7adc361b92c8466655d9ed830d2b87bbd0f419",
+    "unexpected": [],
+    "writes": []
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "sealedAt": "2026-10-09T15:03:58.685Z",
+  "decision": "READY FOR CODEX QA",
+  "applicationCommit": "02b4ba89af291186a72e040b868da024bb865164",
+  "manifestSha256": "e08e9a072896c8e41cb0dea1fed965eaaa1edd359c90eaa69a53094a48487a55",
+  "artifactAggregateSha256": "6709803d1eb3bd59a14c97beafe47ad1331dcdb14b18b4ff09655a2a9ac85cc2",
+  "fileCount": 908,
+  "browserLaneReleased": true,
+  "noFurtherArtifactEditsAllowed": true
+}

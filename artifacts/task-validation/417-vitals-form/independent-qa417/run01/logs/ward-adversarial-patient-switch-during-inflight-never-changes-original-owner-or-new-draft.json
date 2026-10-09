@@ -1,0 +1,408 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/me/roster-order",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne/overview",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/notes",
+      "query": "?box=all&limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-09"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-10"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=25&asOf=2026-10-09"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "POST",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "POST",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/me/roster-order",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne/overview",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/notes",
+      "query": "?box=all&limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-09"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-10"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=25&asOf=2026-10-09"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    }
+  ],
+  "writes": [
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    },
+    {
+      "method": "POST",
+      "path": "/patients/QA417-A/parameter-readings"
+    },
+    {
+      "method": "POST",
+      "path": "/patients/QA417-B/parameter-readings"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    }
+  ],
+  "posts": [
+    {
+      "patientId": "QA417-A",
+      "requestId": "432a6f5b-89ef-4cf1-9e08-88d569bb0ec2",
+      "measuredAt": "2026-10-09T14:49:33.590Z",
+      "values": {
+        "fc": "73"
+      }
+    },
+    {
+      "patientId": "QA417-B",
+      "requestId": "28d710b1-a0c9-40ce-8081-9460f0a599ea",
+      "measuredAt": "2026-10-09T14:49:34.424Z",
+      "values": {
+        "fc": "83"
+      }
+    }
+  ],
+  "saved": [
+    {
+      "requestId": "432a6f5b-89ef-4cf1-9e08-88d569bb0ec2",
+      "measuredAt": "2026-10-09T14:49:33.590Z",
+      "values": {
+        "fc": "73"
+      },
+      "id": "QA417-SAVED-0",
+      "patientId": "QA417-A",
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-09T14:49:33.590Z"
+    },
+    {
+      "requestId": "28d710b1-a0c9-40ce-8081-9460f0a599ea",
+      "measuredAt": "2026-10-09T14:49:34.424Z",
+      "values": {
+        "fc": "83"
+      },
+      "id": "QA417-SAVED-1",
+      "patientId": "QA417-B",
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-09T14:49:34.424Z"
+    }
+  ],
+  "external": [],
+  "unexpected": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "httpErrors": [],
+  "allowedErrors": [],
+  "priorMode": "ready",
+  "failure": null,
+  "heldReads": [],
+  "heldPosts": [],
+  "prior": {
+    "fr": "18",
+    "spo2": "98",
+    "o2": "no",
+    "pa": "120/80",
+    "fc": "72",
+    "temperatura": "36,5",
+    "coscienza": "A",
+    "dtx": "110"
+  },
+  "hasMore": false,
+  "holdPost": false
+}

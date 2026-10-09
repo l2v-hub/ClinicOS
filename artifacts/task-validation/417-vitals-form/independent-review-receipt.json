@@ -1,0 +1,24 @@
+{
+  "applicationCommit": "02b4ba89af291186a72e040b868da024bb865164",
+  "decision": "INDEPENDENT ORIGINALS AND EXACT SOURCE VERIFIED",
+  "originalManifestSha256": "e08e9a072896c8e41cb0dea1fed965eaaa1edd359c90eaa69a53094a48487a55",
+  "immutableFiles": 908,
+  "rootPhysicalSha256": "66ad2baf06ce7ed812ef743e57acbef562201396535112d7d5bfcf3299b0920b",
+  "qaPhysicalSha256": "5e98e5299838702c75ec482be38aeb1fd407156edba2ca7cd104746dfe3d134c",
+  "canonicalSha256": "9158eb3a95698b2c1b200aeea3a7c3ec0439e795723cb8d8bc5cef06f68707d1",
+  "sourceFiles": 1459,
+  "supplementalRuntimeInputsVerified": 1580,
+  "sourceNormalization": "Only original Git blob or LF/CRLF equivalents accepted, never substantive changes",
+  "normalizations": [
+    "frontend/src/components/operator/ParameterEntryPanel.tsx",
+    "frontend/src/components/operator/ParameterReadingForm.css",
+    "frontend/src/components/operator/ParameterReadingForm.tsx",
+    "frontend/src/components/operator/ParametriVitali.css",
+    "frontend/src/components/operator/PatientParameterEntry.tsx",
+    "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+    "frontend/src/lib/__tests__/parameterEntrySchema.test.ts",
+    "frontend/src/lib/parameterEntrySchema.ts",
+    "frontend/src/lib/usePreviousParameterValues.ts"
+  ],
+  "reportAndScriptsRead": true
+}

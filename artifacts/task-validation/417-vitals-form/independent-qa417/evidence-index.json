@@ -1,0 +1,783 @@
+{
+  "sourceCommit": "02b4ba89af291186a72e040b868da024bb865164",
+  "run": "run04-final",
+  "testCount": 24,
+  "stats": {
+    "startTime": "2026-10-09T14:54:59.317Z",
+    "duration": 316053.995,
+    "expected": 24,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "AC1 identical visible labels units format order options in both actual SPA views",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3501,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-AC1-identical--5c17b-ns-in-both-actual-SPA-views\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-AC1-identical--5c17b-ns-in-both-actual-SPA-views\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-AC1-identical--5c17b-ns-in-both-actual-SPA-views\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart AC2 native Tab NEWS2 guidance Enter Next allfields no premature save",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7942,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC2-nati-43b8a-allfields-no-premature-save\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC2-nati-43b8a-allfields-no-premature-save\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC2-nati-43b8a-allfields-no-premature-save\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart AC3 historical loading blank pagination truthful no selected-patient fanout",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5911,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC3-hist-cce8d--no-selected-patient-fanout\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC3-hist-cce8d--no-selected-patient-fanout\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC3-hist-cce8d--no-selected-patient-fanout\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart AC3 previous-error never treated as blank verified history and inputs editable",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7053,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC3-prev-6ee1a-history-and-inputs-editable\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC3-prev-6ee1a-history-and-inputs-editable\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC3-prev-6ee1a-history-and-inputs-editable\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart AC4 same malformed bounds oversize decimal and error linkage no invalid POST",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 32112,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-same-b8a7e-ror-linkage-no-invalid-POST\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-same-b8a7e-ror-linkage-no-invalid-POST\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-same-b8a7e-ror-linkage-no-invalid-POST\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart AC4 keypad end semantics native caret choice-disable and focus-deactivation",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8745,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-keyp-d2295-able-and-focus-deactivation\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-keyp-d2295-able-and-focus-deactivation\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-keyp-d2295-able-and-focus-deactivation\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart AC4 complete current NEWS2 payload uncertainty same request one durable reading reload",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 14140,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-comp-80e2c--one-durable-reading-reload\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-comp-80e2c--one-durable-reading-reload\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-comp-80e2c--one-durable-reading-reload\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart AC4 definitive rejection editable correction new identity decimal dot partial score",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 14293,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-defi-13b98-y-decimal-dot-partial-score\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-defi-13b98-y-decimal-dot-partial-score\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-AC4-defi-13b98-y-decimal-dot-partial-score\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward AC2 native Tab NEWS2 guidance Enter Next allfields no premature save",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 12909,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC2-nativ-33d4b-allfields-no-premature-save\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC2-nativ-33d4b-allfields-no-premature-save\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC2-nativ-33d4b-allfields-no-premature-save\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward AC3 historical loading blank pagination truthful no selected-patient fanout",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6502,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC3-histo-55106--no-selected-patient-fanout\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC3-histo-55106--no-selected-patient-fanout\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC3-histo-55106--no-selected-patient-fanout\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward AC3 previous-error never treated as blank verified history and inputs editable",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6814,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC3-previ-4d5a0-history-and-inputs-editable\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC3-previ-4d5a0-history-and-inputs-editable\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC3-previ-4d5a0-history-and-inputs-editable\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward AC4 same malformed bounds oversize decimal and error linkage no invalid POST",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 48938,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-same--5cc5d-ror-linkage-no-invalid-POST\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-same--5cc5d-ror-linkage-no-invalid-POST\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-same--5cc5d-ror-linkage-no-invalid-POST\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward AC4 keypad end semantics native caret choice-disable and focus-deactivation",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7603,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-keypa-04c9e-able-and-focus-deactivation\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-keypa-04c9e-able-and-focus-deactivation\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-keypa-04c9e-able-and-focus-deactivation\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward AC4 complete current NEWS2 payload uncertainty same request one durable reading reload",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 13617,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-compl-41dc2--one-durable-reading-reload\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-compl-41dc2--one-durable-reading-reload\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-compl-41dc2--one-durable-reading-reload\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward AC4 definitive rejection editable correction new identity decimal dot partial score",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8331,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-defin-daa54-y-decimal-dot-partial-score\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-defin-daa54-y-decimal-dot-partial-score\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-AC4-defin-daa54-y-decimal-dot-partial-score\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward adversarial patient switch during inflight never changes original owner or new draft",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 9298,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-adversari-b5c80-original-owner-or-new-draft\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-adversari-b5c80-original-owner-or-new-draft\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-adversari-b5c80-original-owner-or-new-draft\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart adversarial stale session save guard and unmount inflight response cannot overwrite new chart",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7084,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-adversar-89a80--cannot-overwrite-new-chart\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-adversar-89a80--cannot-overwrite-new-chart\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-adversar-89a80--cannot-overwrite-new-chart\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward previous loading aborted on patient switch cannot leak original captions into second patient",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 4692,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-previous--fc6ab-aptions-into-second-patient\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-previous--fc6ab-aptions-into-second-patient\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-previous--fc6ab-aptions-into-second-patient\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart privacy XSS free text bounded literal payload persists and renders as text",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 10414,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-privacy--7fa18-ersists-and-renders-as-text\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-privacy--7fa18-ersists-and-renders-as-text\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-privacy--7fa18-ersists-and-renders-as-text\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward privacy XSS free text bounded literal payload persists and renders as text",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7421,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-privacy-X-6e2bc-ersists-and-renders-as-text\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-privacy-X-6e2bc-ersists-and-renders-as-text\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-privacy-X-6e2bc-ersists-and-renders-as-text\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart responsive tablet fields fit and keyboard reaches every input",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6906,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-responsi-abd97-eyboard-reaches-every-input\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-responsi-abd97-eyboard-reaches-every-input\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-responsi-abd97-eyboard-reaches-every-input\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward responsive tablet fields fit and keyboard reaches every input",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5634,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-responsiv-c5956-eyboard-reaches-every-input\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-responsiv-c5956-eyboard-reaches-every-input\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-responsiv-c5956-eyboard-reaches-every-input\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "chart responsive mobile fields fit and keyboard reaches every input",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5938,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-responsi-2bf5b-eyboard-reaches-every-input\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-responsi-2bf5b-eyboard-reaches-every-input\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-chart-responsi-2bf5b-eyboard-reaches-every-input\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "ward responsive mobile fields fit and keyboard reaches every input",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 4605,
+          "attachments": [
+            {
+              "name": "screenshot",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-responsiv-0f629-eyboard-reaches-every-input\\test-finished-1.png",
+              "contentType": "image/png"
+            },
+            {
+              "name": "guarded-runtime-and-synthetic-writes",
+              "path": null,
+              "contentType": "application/json"
+            },
+            {
+              "name": "video",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-responsiv-0f629-eyboard-reaches-every-input\\video.webm",
+              "contentType": "video/webm"
+            },
+            {
+              "name": "trace",
+              "path": "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\run04-final\\test-results\\independent-ward-responsiv-0f629-eyboard-reaches-every-input\\trace.zip",
+              "contentType": "application/zip"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

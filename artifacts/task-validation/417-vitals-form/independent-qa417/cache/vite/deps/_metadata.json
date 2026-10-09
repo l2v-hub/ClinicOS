@@ -1,0 +1,56 @@
+{
+  "hash": "2a208300",
+  "configHash": "c465222f",
+  "lockfileHash": "33f99b1b",
+  "browserHash": "0527f679",
+  "optimized": {
+    "@azure/msal-browser": {
+      "src": "../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/@azure/msal-browser/dist/index.mjs",
+      "file": "@azure_msal-browser.js",
+      "fileHash": "5a5abe1f",
+      "needsInterop": false
+    },
+    "codice-fiscale-js": {
+      "src": "../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/codice-fiscale-js/dist/codice.fiscale.commonjs2.js",
+      "file": "codice-fiscale-js.js",
+      "fileHash": "30057e47",
+      "needsInterop": true
+    },
+    "pdfjs-dist": {
+      "src": "../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/pdfjs-dist/build/pdf.mjs",
+      "file": "pdfjs-dist.js",
+      "fileHash": "deb68af2",
+      "needsInterop": false
+    },
+    "react-dom": {
+      "src": "../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "e5df9d7b",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "aed9930f",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "979c3627",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "8482a835",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "rolldown-runtime-EAsCxrDo": {
+      "file": "rolldown-runtime-EAsCxrDo.js",
+      "isDynamicEntry": false
+    }
+  }
+}

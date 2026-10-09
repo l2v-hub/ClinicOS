@@ -1,0 +1,14 @@
+{
+  "node": "C:\\Program Files\\nodejs\\node.exe",
+  "args": [
+    "C:/w-insulin-qa/node_modules/playwright/cli.js",
+    "test",
+    "--config",
+    "C:\\w-417\\artifacts\\task-validation\\417-vitals-form\\root-rerun\\adversarial-harness\\playwright.config.cjs"
+  ],
+  "run": "root-final",
+  "exit": 0,
+  "sourceCommit": "02b4ba89af291186a72e040b868da024bb865164",
+  "port": 7480,
+  "workers": 1
+}

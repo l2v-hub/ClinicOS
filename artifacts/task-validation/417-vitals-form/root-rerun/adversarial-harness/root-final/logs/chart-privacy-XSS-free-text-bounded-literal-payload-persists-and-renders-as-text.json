@@ -1,0 +1,2224 @@
+{
+  "phase": "form",
+  "requests": [
+    {
+      "requestIndex": 0,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 1,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 2,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "requestIndex": 3,
+      "phase": "boot",
+      "method": "POST",
+      "path": "/auth/simulator/session",
+      "query": ""
+    },
+    {
+      "requestIndex": 4,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/me",
+      "query": ""
+    },
+    {
+      "requestIndex": 5,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/me/roster-order",
+      "query": ""
+    },
+    {
+      "requestIndex": 6,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/diary-unread-count",
+      "query": ""
+    },
+    {
+      "requestIndex": 7,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 8,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 9,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/consegne/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 10,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/notes",
+      "query": "?box=all&limit=50"
+    },
+    {
+      "requestIndex": 11,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 12,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-09"
+    },
+    {
+      "requestIndex": 13,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-10"
+    },
+    {
+      "requestIndex": 14,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 15,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "requestIndex": 16,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "requestIndex": 17,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "requestIndex": 18,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/settings",
+      "query": ""
+    },
+    {
+      "requestIndex": 19,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 20,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "requestIndex": 21,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 22,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 23,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 24,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 25,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/cartella",
+      "query": ""
+    },
+    {
+      "requestIndex": 26,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/cartella",
+      "query": ""
+    },
+    {
+      "requestIndex": 27,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A",
+      "query": ""
+    },
+    {
+      "requestIndex": 28,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "requestIndex": 29,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/room-options",
+      "query": ""
+    },
+    {
+      "requestIndex": 30,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/consegne",
+      "query": "?limit=20&patientId=QA417-A"
+    },
+    {
+      "requestIndex": 31,
+      "phase": "form",
+      "method": "GET",
+      "path": "/consegne",
+      "query": "?limit=20&patientId=QA417-A"
+    },
+    {
+      "requestIndex": 32,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 33,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 34,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/diary",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 35,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/narrative-sections",
+      "query": ""
+    },
+    {
+      "requestIndex": 36,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/therapies/page",
+      "query": "?limit=100&status=tutte"
+    },
+    {
+      "requestIndex": 37,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/diary",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 38,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/assessments/catalog",
+      "query": ""
+    },
+    {
+      "requestIndex": 39,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 40,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50&month=2026-10"
+    },
+    {
+      "requestIndex": 41,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 42,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50&month=2026-10"
+    },
+    {
+      "requestIndex": 43,
+      "phase": "form",
+      "method": "POST",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": ""
+    },
+    {
+      "requestIndex": 44,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 45,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50&month=2026-10"
+    },
+    {
+      "requestIndex": 46,
+      "phase": "form",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 47,
+      "phase": "form",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 48,
+      "phase": "form",
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "requestIndex": 49,
+      "phase": "form",
+      "method": "POST",
+      "path": "/auth/simulator/session",
+      "query": ""
+    },
+    {
+      "requestIndex": 50,
+      "phase": "form",
+      "method": "GET",
+      "path": "/auth/me",
+      "query": ""
+    },
+    {
+      "requestIndex": 51,
+      "phase": "form",
+      "method": "GET",
+      "path": "/me/roster-order",
+      "query": ""
+    },
+    {
+      "requestIndex": 52,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/diary-unread-count",
+      "query": ""
+    },
+    {
+      "requestIndex": 53,
+      "phase": "form",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 54,
+      "phase": "form",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 55,
+      "phase": "form",
+      "method": "GET",
+      "path": "/consegne/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 56,
+      "phase": "form",
+      "method": "GET",
+      "path": "/notes",
+      "query": "?box=all&limit=50"
+    },
+    {
+      "requestIndex": 57,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 58,
+      "phase": "form",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-09"
+    },
+    {
+      "requestIndex": 59,
+      "phase": "form",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-10"
+    },
+    {
+      "requestIndex": 60,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 61,
+      "phase": "form",
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "requestIndex": 62,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "requestIndex": 63,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "requestIndex": 64,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/settings",
+      "query": ""
+    },
+    {
+      "requestIndex": 65,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 66,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "requestIndex": 67,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 68,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 69,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 70,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 71,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/cartella",
+      "query": ""
+    },
+    {
+      "requestIndex": 72,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/cartella",
+      "query": ""
+    },
+    {
+      "requestIndex": 73,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A",
+      "query": ""
+    },
+    {
+      "requestIndex": 74,
+      "phase": "form",
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "requestIndex": 75,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/room-options",
+      "query": ""
+    },
+    {
+      "requestIndex": 76,
+      "phase": "form",
+      "method": "GET",
+      "path": "/consegne",
+      "query": "?limit=20&patientId=QA417-A"
+    },
+    {
+      "requestIndex": 77,
+      "phase": "form",
+      "method": "GET",
+      "path": "/consegne",
+      "query": "?limit=20&patientId=QA417-A"
+    },
+    {
+      "requestIndex": 78,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 79,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 80,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/narrative-sections",
+      "query": ""
+    },
+    {
+      "requestIndex": 81,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/therapies/page",
+      "query": "?limit=100&status=tutte"
+    },
+    {
+      "requestIndex": 82,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/diary",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 83,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/assessments/catalog",
+      "query": ""
+    },
+    {
+      "requestIndex": 84,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/diary",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 85,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 86,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50&month=2026-10"
+    },
+    {
+      "requestIndex": 87,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 88,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50&month=2026-10"
+    }
+  ],
+  "captionRequests": [
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7621
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7626
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8807
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7705
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "doubleInvokeEffectsOnFiber",
+          "lineNumber": 8923
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitDoubleInvokeEffectsInDEV",
+          "lineNumber": 8931
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8808
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7617
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7621
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7626
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8807
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7621
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7626
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8807
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7705
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "doubleInvokeEffectsOnFiber",
+          "lineNumber": 8923
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "commitDoubleInvokeEffectsInDEV",
+          "lineNumber": 8931
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8808
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417/artifacts/task-validation/417-vitals-form/root-rerun/adversarial-harness/cache/vite/deps/react-dom_client.js?v=ad07782d",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    }
+  ],
+  "writes": [
+    {
+      "requestIndex": 3,
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    },
+    {
+      "requestIndex": 43,
+      "method": "POST",
+      "path": "/patients/QA417-A/parameter-readings"
+    },
+    {
+      "requestIndex": 49,
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    }
+  ],
+  "posts": [
+    {
+      "patientId": "QA417-A",
+      "requestId": "0a006266-9b61-46a3-9fba-2a722b797b43",
+      "measuredAt": "2026-10-09T15:04:21.754Z",
+      "values": {
+        "fr": "18",
+        "note": "<img src=x onerror=\"window.qa417Xss=true\"> Nota sintetica"
+      }
+    }
+  ],
+  "saved": [
+    {
+      "requestId": "0a006266-9b61-46a3-9fba-2a722b797b43",
+      "measuredAt": "2026-10-09T15:04:21.754Z",
+      "values": {
+        "fr": "18",
+        "note": "<img src=x onerror=\"window.qa417Xss=true\"> Nota sintetica"
+      },
+      "id": "QA417-SAVED-0",
+      "patientId": "QA417-A",
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-09T15:04:21.754Z"
+    }
+  ],
+  "external": [],
+  "unexpected": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "httpErrors": [],
+  "allowedErrors": [],
+  "priorMode": "ready",
+  "failure": null,
+  "heldReads": [],
+  "heldPosts": [],
+  "prior": {
+    "fr": "18",
+    "spo2": "98",
+    "o2": "no",
+    "pa": "120/80",
+    "fc": "72",
+    "temperatura": "36,5",
+    "coscienza": "A",
+    "dtx": "110"
+  },
+  "hasMore": false
+}

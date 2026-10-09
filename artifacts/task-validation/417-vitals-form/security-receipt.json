@@ -1,0 +1,46 @@
+{
+  "applicationCommit": "02b4ba89af291186a72e040b868da024bb865164",
+  "checkedAt": "2026-10-09T14:44:18.033Z",
+  "touchedPaths": [
+    "frontend/src/components/operator/ParameterEntryPanel.tsx",
+    "frontend/src/components/operator/ParameterReadingForm.css",
+    "frontend/src/components/operator/ParameterReadingForm.tsx",
+    "frontend/src/components/operator/ParametriVitali.css",
+    "frontend/src/components/operator/PatientParameterEntry.tsx",
+    "frontend/src/components/operator/PatientParameterWorkspace.css",
+    "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+    "frontend/src/lib/__tests__/parameterEntrySchema.test.ts",
+    "frontend/src/lib/parameterEntrySchema.ts",
+    "frontend/src/lib/usePreviousParameterValues.ts"
+  ],
+  "newTouchedFindings": [],
+  "frontendDeepCodeBaseline": {
+    "critical": 0,
+    "high": 0,
+    "medium": 3,
+    "low": 0,
+    "total": 3
+  },
+  "baselineFindings": [
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "components\\shared\\sections\\NarrativeClinicalSection.tsx:8",
+      "description": "React XSS risk"
+    },
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "components\\shared\\sections\\SemanticTaggedText.tsx:4",
+      "description": "React XSS risk"
+    },
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "lib\\__tests__\\therapyGiroAllergies.test.ts:183",
+      "description": "React XSS risk"
+    }
+  ],
+  "scope": "No new source finding; identical3medium pre-existing frontend findings. Standard broad all148 incl7old dependency warnings NOT globally green. Clinical validators/API/auth/config/deps unchanged, React escapes input; all browser APIs guarded synthetic only. Canonical configured-credential and ZIP member publication scan still required.",
+  "productionPatientTestMutations": 0
+}

@@ -1,0 +1,427 @@
+/* Parametri vitali — HMI 1 (artifacts/hmi-parity/proto/parametri.png). */
+.par-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.par-grid {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-areas: 'list form';
+  gap: 24px;
+  align-items: start;
+}
+.par-patients {
+  grid-area: list;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.par-form {
+  grid-area: form;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.par-side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.par-eyebrow {
+  font: 600 14px/20px var(--font-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.par-cap {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  min-width: 0;
+}
+
+.par-pad__key:focus-visible,
+.par-pick__main:focus-visible {
+  outline: 3px solid #245bb5;
+  outline-offset: 2px;
+}
+
+/* Colonna pazienti */
+.par-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.par-search__ico {
+  position: absolute;
+  left: 14px;
+  display: grid;
+  color: var(--text-muted);
+}
+.par-search__ico svg {
+  width: 18px;
+  height: 18px;
+}
+.par-search__input {
+  width: 100%;
+  height: 48px;
+  padding: 0 44px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font: 400 16px/24px var(--font-ui);
+  color: var(--text);
+}
+.par-search__clear {
+  position: absolute;
+  right: 4px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.par-patients__tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.par-plist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.par-pick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 8px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 2px solid transparent;
+}
+.par-pick--selected {
+  border-color: var(--blue);
+  background: #eaf1fe;
+}
+.par-pick__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.par-pick__bed {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 12px;
+  background: #f5f7fb;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font: 600 18px/24px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.par-pick__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.par-pick__name {
+  font: 600 16px/24px var(--font-ui);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.par-pick .par-cap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.par-pick__draft {
+  color: #8a5300;
+  font-weight: 600;
+}
+.par-pick .turno-pcard__news2 {
+  flex: none;
+}
+.par-more {
+  align-self: flex-start;
+  min-height: 48px;
+}
+
+/* Paziente scelto */
+.par-form__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.par-form__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.par-form__name {
+  margin: 0;
+  font: 600 20px/28px var(--font-ui);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.par-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.par-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  cursor: text;
+  min-width: 0;
+  margin: 0;
+}
+.par-card--active {
+  border-color: var(--blue);
+}
+.par-card__label {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+.par-card__value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+/* Il campo è la card: niente riquadro del campo globale (form-controls.css). */
+.par-view .par-card input.par-card__input {
+  --control-bg: transparent;
+  --control-border: transparent;
+  box-shadow: none;
+  /* Il campo cresce col valore: l'unità resta accanto, come nel prototipo. */
+  field-sizing: content;
+  width: auto;
+  min-width: 2ch;
+  max-width: 100%;
+  flex: 0 1 auto;
+  height: 40px;
+  border: 0;
+  padding: 0;
+  background: none;
+  font: 600 28px/36px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.par-view .par-card input.par-card__input:focus {
+  outline: none;
+}
+.par-card__input::placeholder {
+  color: var(--text);
+}
+.par-card__unit {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.par-choice,
+.par-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+.par-choice__label {
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text-muted);
+}
+
+.par-extra {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.par-text {
+  min-height: 48px;
+  width: 100%;
+}
+
+/* Tastierino e salvataggio */
+.par-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.par-pad__key {
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: 600 20px/28px var(--font-ui);
+  cursor: pointer;
+}
+.par-pad__key:active:not(:disabled) {
+  background: #eaf1fe;
+}
+
+.par-pad__key:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.par-news2 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #eaf1fe;
+  color: #1d4fc4;
+}
+.par-news2__title {
+  font: 600 14px/20px var(--font-ui);
+}
+.par-news2__score {
+  font: 700 28px/36px var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+.par-news2__text {
+  font: 400 16px/24px var(--font-ui);
+}
+.par-news2--ok {
+  background: #e6f6ef;
+  color: #0e7a55;
+}
+.par-news2--low {
+  background: #eaf1fe;
+  color: #1d4fc4;
+}
+.par-news2--single,
+.par-news2--medium {
+  background: var(--amber-bg);
+  color: #8a5300;
+}
+.par-news2--high {
+  background: #fdecee;
+  color: #b3261e;
+}
+.par-result {
+  margin: 0;
+  color: #0e7a55;
+  font: 600 14px/20px var(--font-ui);
+}
+.par-error {
+  color: #b3261e;
+  font: 400 14px/20px var(--font-ui);
+}
+
+/* Tablet: pazienti a sinistra, tastierino sotto il modulo. */
+@media (max-width: 1099px) {
+  .par-grid {
+    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-areas: 'list form';
+  }
+}
+/* Telefono: una colonna; l'elenco pazienti scorre in un riquadro. */
+@media (max-width: 699px) {
+  .par-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'list' 'form';
+  }
+  .par-plist {
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  .par-cards,
+  .par-extra {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .par-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Sul telefono c'è già la tastiera numerica di sistema (inputMode). */
+  .par-pad {
+    display: none;
+  }
+}
+/* Schermi larghi: tastierino, NEWS2 e Salva restano a vista mentre si scorre il modulo. */
+@media (min-width: 1100px) {
+  .par-side {
+    position: sticky;
+    top: 16px;
+  }
+}
+
+/* QA: il nome non si tronca (omonimi, stessa camera). Va a capo su più righe se serve. */
+.par-pick__name,
+.par-pick .par-cap {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+.par-pick__main {
+  align-items: flex-start;
+}
+.par-pick { display:grid; grid-template-columns:minmax(0,1fr); padding:8px; gap:4px; }
+.par-pick__main { width:100%; padding:0; gap:10px; }
+.par-pick__text { flex:1; min-width:0; }
+.par-pick__bed { width:32px; height:32px; border-radius:8px; font-size:14px; }
+.par-pick__name { font-size:14px; line-height:20px; overflow-wrap:normal; word-break:normal; }
+.par-pick .par-cap { font-size:12px; line-height:18px; overflow-wrap:normal; }
+.par-pick .turno-pcard__news2 { justify-self:start; max-width:100%; margin-left:42px; font-size:12px; line-height:18px; }
+@media (max-width: 1099px) {
+  .par-grid {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+}
+@media (max-width: 699px) {
+  .par-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.par-outside {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--amber-bg);
+  color: #8a5300;
+  font: 600 14px/20px var(--font-ui);
+}
+
+/* Un solo pulsante per cancellare la ricerca (quello della pagina). */
+.par-search__input::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Azioni della colonna laterale a tutta larghezza (solo layout). */
+.par-wide {
+  width: 100%;
+}

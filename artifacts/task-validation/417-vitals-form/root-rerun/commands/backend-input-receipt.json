@@ -1,0 +1,14 @@
+{
+  "args": [
+    "--import",
+    "tsx",
+    "--test",
+    "backend/src/patients/__tests__/parameter-reading-input.test.ts"
+  ],
+  "exit": 0,
+  "tests": 7,
+  "pass": 7,
+  "fail": 0,
+  "skipped": 0,
+  "scope": "Existing backend input validator unchanged; synthetic tests, no production database writes"
+}

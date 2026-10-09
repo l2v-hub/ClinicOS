@@ -1,0 +1,24 @@
+import {readFileSync,readdirSync,statSync,writeFileSync,existsSync} from 'node:fs';
+import {resolve,relative} from 'node:path';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const base=resolve('artifacts/task-validation/417-vitals-form/independent-qa417');
+assert(!existsSync(resolve(base,'SHA256-MANIFEST.json')),'Already sealed: do not overwrite');
+const before=JSON.parse(readFileSync(resolve(base,'source/before-source-receipt.json'))),after=JSON.parse(readFileSync(resolve(base,'source/after-source-receipt.json')));
+assert.equal(before.commit,after.commit);assert.equal(before.physicalSha256,after.physicalSha256);assert.equal(before.canonicalSha256,after.canonicalSha256);assert.deepEqual(before.files,after.files);
+const results=JSON.parse(readFileSync(resolve(base,'run04-final/raw-results.json')));assert.equal(results.stats.expected,24);assert.equal(results.stats.unexpected,0);assert.equal(results.stats.flaky,0);assert.equal(results.stats.skipped,0);
+const commands=JSON.parse(readFileSync(resolve(base,'commands/command-results.json')));assert.deepEqual(commands.newFailures,[]);assert(commands.records.every(r=>r.name==='full-frontend'||r.exit===0));
+const walk=dir=>readdirSync(dir).sort().flatMap(name=>{const p=resolve(dir,name);return statSync(p).isDirectory()?walk(p):[p];});
+const reports=[];function suites(rows){for(const suite of rows){for(const spec of suite.specs||[]){for(const t of spec.tests||[]){reports.push({title:spec.title,status:t.status,results:t.results.map(r=>({status:r.status,duration:r.duration,attachments:r.attachments.map(a=>({name:a.name,path:a.path||null,contentType:a.contentType}))}))});}}suites(suite.suites||[]);}}suites(results.suites);
+writeFileSync(resolve(base,'evidence-index.json'),JSON.stringify({sourceCommit:after.commit,run:'run04-final',testCount:reports.length,stats:results.stats,tests:reports},null,2));
+const currentEnv=JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json','utf8')).env;
+const credentials=Object.entries(currentEnv).filter(([key,value])=>/(TOKEN|KEY|PASSWORD|SECRET)/.test(key)&&typeof value==='string'&&value.length>=20).map(([,value])=>Buffer.from(value));
+const sealFiles=walk(base);let credentialMatches=0;for(const p of sealFiles){const data=readFileSync(p);for(const credential of credentials)if(data.includes(credential))credentialMatches++;}
+assert.equal(credentialMatches,0,'Actual configured credential inclusion detected: do not publish');
+writeFileSync(resolve(base,'artifact-privacy-receipt.json'),JSON.stringify({checkedAt:new Date().toISOString(),actualConfiguredCredentialsComparedInMemory:credentials.length,credentialMatches:0,onlySyntheticPatientFixtures:true,noCredentialValueOrProviderBodyWritten:true},null,2));
+const files=walk(base).map(p=>{const data=readFileSync(p);return{path:relative(base,p).replaceAll('\\','/'),bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')};}).sort((a,b)=>a.path.localeCompare(b.path));
+const aggregate=createHash('sha256');for(const f of files)aggregate.update(`${f.path}\0${f.sha256}\0${f.bytes}\n`);
+const manifest={schema:'clinicOS.independent-qa-artifact-manifest.v1',applicationCommit:after.commit,applicationPhysicalSha256:after.physicalSha256,applicationCanonicalSha256:after.canonicalSha256,applicationInputCount:after.fileCount,artifactAggregateSha256:aggregate.digest('hex'),fileCount:files.length,exclusions:['SHA256-MANIFEST.json (self-reference)','seal-receipt.json (manifest digest receipt)'],files};
+const text=JSON.stringify(manifest,null,2);writeFileSync(resolve(base,'SHA256-MANIFEST.json'),text);
+const receipt={sealedAt:new Date().toISOString(),decision:'READY FOR CODEX QA',applicationCommit:after.commit,manifestSha256:createHash('sha256').update(text).digest('hex'),artifactAggregateSha256:manifest.artifactAggregateSha256,fileCount:files.length,browserLaneReleased:true,noFurtherArtifactEditsAllowed:true};
+writeFileSync(resolve(base,'seal-receipt.json'),JSON.stringify(receipt,null,2));console.log(JSON.stringify(receipt));

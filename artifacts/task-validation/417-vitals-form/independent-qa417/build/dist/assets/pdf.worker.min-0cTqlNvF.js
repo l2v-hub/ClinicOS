@@ -1,0 +1,1 @@
+import{r as e}from"./react-B3nAlWH0.js";var t=e({default:()=>n}),n=`/assets/pdf.worker.min-CHFwMXne.mjs`;export{t as n,n as t};

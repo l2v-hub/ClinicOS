@@ -1,0 +1,15 @@
+✔ requires bounded typed values and at least one clinical parameter (3.0669ms)
+✔ rejects invalid time, identity and injected author; accepts canonical UTC save instants (0.2991ms)
+✔ facility day observes Rome midnight and DST transition dates (14.4118ms)
+✔ history cursors bind patient/date and paging remains bounded (1.3411ms)
+✔ monthly history validates the month and binds pagination to that month (0.3288ms)
+✔ accepts the NEWS2 parameters and rejects values outside their rules (0.4313ms)
+✔ rejects physiologically impossible values (wrong number), never corrects them (0.3498ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 326.4788

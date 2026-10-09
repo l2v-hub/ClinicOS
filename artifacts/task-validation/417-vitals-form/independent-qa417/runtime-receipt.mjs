@@ -1,0 +1,15 @@
+import {readFileSync,writeFileSync,realpathSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {createRequire} from 'node:module';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+import assert from 'node:assert/strict';
+const base=resolve('artifacts/task-validation/417-vitals-form/independent-qa417'),commit='02b4ba89af291186a72e040b868da024bb865164';
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20*1024*1024});assert.equal(r.status,0,args.join(' '));return r.stdout;};
+const scopes=['frontend','backend','prisma','scripts','package.json','package-lock.json'];
+git(['diff','--exit-code',commit,'--',...scopes]);assert.equal(git(['ls-files','--others','--exclude-standard','--',...scopes]).trim(),'');
+const files=git(['ls-files','-s','--',...scopes]).trim().split('\n').map(row=>{const [meta,path]=row.split('\t');return{path,gitBlob:meta.split(' ')[1],physicalSha256:createHash('sha256').update(readFileSync(path)).digest('hex')};});
+const versions={};for(const name of ['typescript','tsx','vite','react','react-dom'])versions[name]=JSON.parse(readFileSync(resolve('node_modules',name,'package.json'))).version;
+const qaRequire=createRequire('C:/w-insulin-qa/package.json');versions.playwright=qaRequire('playwright/package.json').version;
+writeFileSync(resolve(base,'source/supplemental-runtime-inputs.json'),JSON.stringify({commit,scopes,inputCount:files.length,trackedScopesEqualCommit:true,noUntrackedOverrides:true,includesIndexPublicAndBuildScripts:true,nodeVersion:process.version,nodeExecutable:process.execPath,dependencyJunction:realpathSync('node_modules'),dependencyBehavior:'Read-only consumption; all cache/build outputs explicitly inside assigned QA artifact folder',versions,files},null,2));
+console.log(JSON.stringify({commit,inputCount:files.length,nodeVersion:process.version,versions}));

@@ -1,0 +1,31 @@
+
+Running 24 tests using 1 worker
+
+  ok  1 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:11:1 › AC1 identical visible labels units format order options in both actual SPA views (3.5s)
+  ok  2 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:19:2 › chart AC2 native Tab NEWS2 guidance Enter Next allfields no premature save (7.9s)
+  ok  3 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:30:2 › chart AC3 historical loading blank pagination truthful no selected-patient fanout (5.9s)
+  ok  4 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:43:2 › chart AC3 previous-error never treated as blank verified history and inputs editable (7.1s)
+  ok  5 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:47:2 › chart AC4 same malformed bounds oversize decimal and error linkage no invalid POST (32.1s)
+  ok  6 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:53:2 › chart AC4 keypad end semantics native caret choice-disable and focus-deactivation (8.7s)
+  ok  7 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:61:2 › chart AC4 complete current NEWS2 payload uncertainty same request one durable reading reload (14.1s)
+  ok  8 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:69:2 › chart AC4 definitive rejection editable correction new identity decimal dot partial score (14.3s)
+  ok  9 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:19:2 › ward AC2 native Tab NEWS2 guidance Enter Next allfields no premature save (12.9s)
+  ok 10 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:30:2 › ward AC3 historical loading blank pagination truthful no selected-patient fanout (6.5s)
+  ok 11 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:43:2 › ward AC3 previous-error never treated as blank verified history and inputs editable (6.8s)
+  ok 12 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:47:2 › ward AC4 same malformed bounds oversize decimal and error linkage no invalid POST (48.9s)
+  ok 13 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:53:2 › ward AC4 keypad end semantics native caret choice-disable and focus-deactivation (7.6s)
+  ok 14 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:61:2 › ward AC4 complete current NEWS2 payload uncertainty same request one durable reading reload (13.6s)
+  ok 15 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:69:2 › ward AC4 definitive rejection editable correction new identity decimal dot partial score (8.3s)
+  ok 16 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:75:1 › ward adversarial patient switch during inflight never changes original owner or new draft (9.3s)
+  ok 17 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:82:1 › chart adversarial stale session save guard and unmount inflight response cannot overwrite new chart (7.1s)
+  ok 18 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:88:1 › ward previous loading aborted on patient switch cannot leak original captions into second patient (4.7s)
+  ok 19 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:93:36 › chart privacy XSS free text bounded literal payload persists and renders as text (10.4s)
+  ok 20 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:93:36 › ward privacy XSS free text bounded literal payload persists and renders as text (7.4s)
+  ok 21 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:100:109 › chart responsive tablet fields fit and keyboard reaches every input (6.9s)
+  ok 22 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:100:109 › ward responsive tablet fields fit and keyboard reaches every input (5.6s)
+  ok 23 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:100:109 › chart responsive mobile fields fit and keyboard reaches every input (5.9s)
+  ok 24 artifacts\task-validation\417-vitals-form\independent-qa417\independent.spec.cjs:100:109 › ward responsive mobile fields fit and keyboard reaches every input (4.6s)
+
+  24 passed (5.3m)
+(node:13156) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

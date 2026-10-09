@@ -1,0 +1,136 @@
+[
+  {
+    "name": "contract",
+    "args": [
+      "scripts/quality-gate/validate-task-contract.js",
+      "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "failures": []
+  },
+  {
+    "name": "frontend-types-app",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "frontend/tsconfig.app.json"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "failures": []
+  },
+  {
+    "name": "frontend-types-config",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "frontend/tsconfig.node.json"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "failures": []
+  },
+  {
+    "name": "backend-types",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "backend/tsconfig.json"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "failures": []
+  },
+  {
+    "name": "production-build",
+    "args": [
+      "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\qa-build.mjs"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "failures": []
+  },
+  {
+    "name": "frontend-focused",
+    "args": [
+      "--import",
+      "tsx",
+      "--import",
+      "./scripts/stub-css-loader.mjs",
+      "--test",
+      "frontend/src/components/operator/__tests__/parameterReadingForm417.test.ts",
+      "frontend/src/lib/__tests__/parameterEntrySchema.test.ts",
+      "frontend/src/lib/__tests__/parameterPad.test.ts",
+      "frontend/src/lib/__tests__/parameterEntryDrafts.test.ts",
+      "frontend/src/lib/__tests__/parameterEntrySummary.test.ts",
+      "frontend/src/lib/__tests__/patientParameterReadings.test.ts",
+      "frontend/src/lib/__tests__/patientParameterWorkspace.test.ts",
+      "frontend/src/lib/__tests__/patientParametersPage.test.ts",
+      "frontend/src/lib/__tests__/news2.test.ts"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "tests": 47,
+    "pass": 47,
+    "fail": 0,
+    "skipped": 0,
+    "failures": []
+  },
+  {
+    "name": "backend-input-focused",
+    "args": [
+      "--import",
+      "tsx",
+      "--test",
+      "backend/src/patients/__tests__/parameter-reading-input.test.ts"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "skipped": 0,
+    "failures": []
+  },
+  {
+    "name": "security-source-dist",
+    "args": [
+      "scripts/security/scan-frontend-secrets.mjs",
+      "frontend/src",
+      "C:\\w-417-qa\\artifacts\\task-validation\\417-vitals-form\\independent-qa417\\build\\dist"
+    ],
+    "cwd": "C:\\w-417-qa",
+    "exit": 0,
+    "failures": []
+  },
+  {
+    "name": "full-frontend",
+    "args": [
+      "../scripts/run-node-tests.mjs"
+    ],
+    "cwd": "C:\\w-417-qa\\frontend",
+    "exit": 1,
+    "tests": 1220,
+    "pass": 1208,
+    "fail": 12,
+    "skipped": 0,
+    "failures": [
+      "Assistant classic fallback with a known resident opens that resident section",
+      "a single parameters table is always visible and uses the operational table contract",
+      "multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+      "multi-patient parameters uses one bounded page instead of cartella fan-out",
+      "multi-patient quick entry exposes every action and field to assistive technology",
+      "multi-patient quick entry reuses the ClinicOS form and action design system",
+      "multi-patient refresh keeps the previous roster visible and announces progress",
+      "new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+      "only design-system.css decides how a canonical control looks",
+      "schedule reads are abortable, session-safe and retryable",
+      "src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+      "weekly and monthly views never repeat one-day therapy data across calendar cells"
+    ]
+  }
+]

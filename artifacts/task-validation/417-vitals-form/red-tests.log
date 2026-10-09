@@ -1,0 +1,246 @@
+✖ both entry surfaces render the same controlled form without owning a second field map (3.1142ms)
+✖ shared entry schema follows all fields, including NEWS2 choices, without auto-save navigation (1.1035ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 529.6437
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\parameterEntrySchema.test.ts:1:102
+✖ both entry surfaces render the same controlled form without owning a second field map (3.1142ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /<ParameterReadingForm\b/. Input:
+  
+  "import { useEffect, useId, useRef, useState } from 'react';\r\n" +
+    "import { API_URL } from '../../config';\r\n" +
+    "import { getCurrentOperator, operatorHeaders } from '../../lib/operatorSession';\r\n" +
+    'import {\r\n' +
+    '  PARAMETER_FIELDS,\r\n' +
+    '  PARAMETER_OPTIONS,\r\n' +
+    '  ParameterReadingSaveError,\r\n' +
+    '  createParameterReadingRequest,\r\n' +
+    '  parameterValuesIssue,\r\n' +
+    '  readingTime,\r\n' +
+    '  saveParameterReading,\r\n' +
+    '  type ParameterReadingRequest,\r\n' +
+    '  type ParameterValues,\r\n' +
+    '  type PatientParameterReading,\r\n' +
+    "} from '../../lib/patientParameterReadings';\r\n" +
+    "import { ParameterEntryClock } from './ParameterEntryClock';\r\n" +
+    '\r\n' +
+    'interface Props {\r\n' +
+    '  patientId: string;\r\n' +
+    '  operatorId: string;\r\n' +
+    '  onSaved: (reading: PatientParameterReading) => void;\r\n' +
+    '  onDayChange: (day: string) => void;\r\n' +
+    '  onShowToday: () => void;\r\n' +
+    '}\r\n' +
+    'export function PatientParameterEntry({\r\n' +
+    '  patientId,\r\n' +
+    '  operatorId,\r\n' +
+    '  onSaved,\r\n' +
+    '  onDayChange,\r\n' +
+    '  onShowToday,\r\n' +
+    '}: Props) {\r\n' +
+    '  const [values, setValues] = useState<ParameterValues>({});\r\n' +
+    '  const [saving, setSaving] = useState(false);\r\n' +
+    '  const [uncertain, setUncertain] = useState(false);\r\n' +
+    "  const [error, setError] = useState('');\r\n" +
+    '  const [invalidField, setInvalidField] = useState<keyof ParameterValues | null>(null);\r\n' +
+    '  const fields = useRef(new Map<string, HTMLInputElement | HTMLSelectElement>());\r\n' +
+    "  const [savedAt, setSavedAt] = useState('');\r\n" +
+    '  const errorId = useId();\r\n' +
+    '  const pending = useRef<ParameterReadingRequest | null>(null);\r\n' +
+    '  const inFlight = useRef(false);\r\n' +
+    '  const mounted = useRef(true);\r\n' +
+    '  useEffect(() => {\r\n' +
+    '    mounted.current = true;\r\n' +
+    '    return () => {\r\n' +
+    '      mounted.current = false;\r\n' +
+    '    };\r\n' +
+    '  }, []);\r\n' +
+    '  function update(key: keyof ParameterValues, value: string) {\r\n' +
+    '    setValues((previous) => ({ ...previous, [key]: value }));\r\n' +
+    "    setError('');\r\n" +
+    '    setInvalidField(null);\r\n' +
+    "    setSavedAt('');\r\n" +
+    '    pending.current = null;\r\n' +
+    '  }\r\n' +
+    '  async function save() {\r\n' +
+    '    if (inFlight.current) return;\r\n' +
+    '    if (getCurrentOperator()?.id !== operatorId) {\r\n' +
+    "      setError('La sessione operatore è cambiata. Riapri la scheda prima di salvare.');\r\n" +
+    '      return;\r\n' +
+    '    }\r\n' +
+    '    const invalid = parameterValuesIssue(values);\r\n' +
+    '    if (invalid) {\r\n' +
+    '      setError(invalid.message);\r\n' +
+    '      setInvalidField(invalid.field);\r\n' +
+    '      // Il fuoco va sul campo da correggere (il primo, se manca ogni valore).\r\n' +
+    '      fields.current.get(invalid.field ?? PARAMETER_FIELDS[0].key)?.focus();\r\n' +
+    '      return;\r\n' +
+    '    }\r\n' +
+    '    pending.current ??= createParameterReadingRequest(values);\r\n' +
+    '    inFlight.current = true;\r\n' +
+    '    setSaving(true);\r\n' +
+    "    setError('');\r\n" +
+    "    setSavedAt('');\r\n" +
+    '    try {\r\n' +
+    '      const { reading } = await saveParameterReading(API_URL, patientId, pending.current, {\r\n' +
+    '        headers: operatorHeaders(),\r\n' +
+    '      });\r\n' +
+    '      if (!mounted.current || getCurrentOperator()?.id !== operatorId) return;\r\n' +
+    '      pending.current = null;\r\n' +
+    '      setValues({});\r\n' +
+    '      setUncertain(false);\r\n' +
+    '      setSavedAt(reading.measuredAt);\r\n' +
+    '      onSaved(reading);\r\n' +
+    '    } catch (cause) {\r\n' +
+    '      if (!mounted.current || getCurrentOperator()?.id !== operatorId) return;\r\n' +
+    '      const unknownOutcome = !(cause instanceof ParameterReadingSaveError) || cause.uncertain;\r\n' +
+    '      setUncertain(unknownOutcome);\r\n' +
+    '      if (!unknownOutcome) pending.current = null;\r\n' +
+    "      setError(cause instanceof Error ? cause.message : 'Salvataggio non verificato. Riprova.');\r\n" +
+    '    } finally {\r\n' +
+    '      inFlight.current = false;\r\n' +
+    '      if (mounted.current) setSaving(false);\r\n' +
+    '    }\r\n' +
+    '  }\r\n' +
+    '  return (\r\n' +
+    '    <section className="parameter-single-entry" aria-label="Registra parametri del paziente">\r\n' +
+    '      <div className="parameter-single-entry__heading">\r\n' +
+    '        <h3>Nuova rilevazione</h3>\r\n' +
+    '        <ParameterEntryClock onDayChange={onDayChange} />\r\n' +
+    '      </div>\r\n' +
+    '      <form\r\n' +
+    '        onSubmit={(event) => {\r\n' +
+    '          event.preventDefault();\r\n' +
+    '          void save();\r\n' +
+    '        }}\r\n' +
+    '      >\r\n' +
+    '        <fieldset disabled={saving || uncertain} className="parameter-single-entry__fields">\r\n' +
+    '          <legend className="sr-only">Valori da registrare</legend>\r\n' +
+    '          {PARAMETER_FIELDS.map((field) => (\r\n' +
+    '            <label key={field.key}>\r\n' +
+    '              <span>\r\n' +
+    '                {field.label} {field.unit && <small>{field.unit}</small>}\r\n' +
+    '              </span>\r\n' +
+    '              {PARAMETER_OPTIONS[field.key] ? (\r\n' +
+    '                <select\r\n' +
+    '                  ref={(el) =>\r\n' +
+    '                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))\r\n' +
+    '                  }\r\n' +
+    '                  className="form-input"\r\n' +
+    '                  aria-label={`Nuova rilevazione ${field.label}`}\r\n' +
+    '                  aria-invalid={invalidField === field.key || undefined}\r\n' +
+    '                  aria-describedby={invalidField === field.key ? errorId : undefined}\r\n' +
+    "                  value={values[field.key] ?? ''}\r\n" +
+    '                  onChange={(event) => update(field.key, event.target.value)}\r\n' +
+    '                >\r\n' +
+    '                  <option value="">—</option>\r\n' +
+    '                  {PARAMETER_OPTIONS[field.key]!.map((option) => (\r\n' +
+    '                    <option key={option.value} value={option.value}>\r\n' +
+    '                      {option.label}\r\n' +
+    '                    </option>\r\n' +
+    '                  ))}\r\n' +
+    '                </select>\r\n' +
+    '              ) : (\r\n' +
+    '                <input\r\n' +
+    '                  ref={(el) =>\r\n' +
+    '                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))\r\n' +
+    '                  }\r\n' +
+    '                  className="form-input"\r\n' +
+    '                  aria-label={`Nuova rilevazione ${field.label}`}\r\n' +
+    '                  aria-invalid={invalidField === field.key || undefined}\r\n' +
+    '                  aria-describedby={invalidField === field.key ? errorId : undefined}\r\n' +
+    "                  value={values[field.key] ?? ''}\r\n" +
+    '                  inputMode={\r\n' +
+    "                    ['pa', 'evacuazione'].includes(field.key)\r\n" +
+    "                      ? 'text'\r\n" +
+    "                      : field.key === 'fr'\r\n" +
+    "                        ? 'numeric'\r\n" +
+    "                        : 'decimal'\r\n" +
+    '                  }\r\n' +
+    "                  maxLength={field.key === 'evacuazione' ? 200 : 32}\r\n" +
+    "                  placeholder={field.key === 'pa' ? '120/80' : '—'}\r\n" +
+    '                  onChange={(event) => update(field.key, event.target.value)}\r\n' +
+    '                />\r\n' +
+    '              )}\r\n' +
+    '            </label>\r\n' +
+    '          ))}\r\n' +
+    '        </fieldset>\r\n' +
+    '        <details className="parameter-single-entry__notes">\r\n' +
+    '          <summary>Note sulla rilevazione</summary>\r\n' +
+    '          <textarea\r\n' +
+    '            className="form-input"\r\n' +
+    '            aria-label="Note della nuova rilevazione"\r\n' +
+    '            rows={2}\r\n' +
+    '            maxLength={2000}\r\n' +
+    '            disabled={saving || uncertain}\r\n' +
+    "            value={values.note ?? ''}\r\n" +
+    "            onChange={(event) => update('note', event.target.value)}\r\n" +
+    '          />\r\n' +
+    '        </details>\r\n' +
+    '        <div className="parameter-single-entry__actions">\r\n' +
+    '          <span>Data e ora vengono registrate quando premi Salva.</span>\r\n' +
+    '          <button type="submit" className="btn-primary" disabled={saving} aria-busy={saving}>\r\n' +
+    "            {saving ? 'Salvataggio…' : uncertain ? 'Riprova salvataggio' : 'Salva rilevazione'}\r\n" +
+    '          </button>\r\n' +
+    '        </div>\r\n' +
+    '      </form>\r\n' +
+    '      {error && (\r\n' +
+    '        <div role="alert" className="parameter-trends-error" id={errorId}>\r\n' +
+    '          <p>{error}</p>\r\n' +
+    '          {uncertain && pending.current && (\r\n' +
+    '            <p>\r\n' +
+    '              Rilevazione del {readingTime(pending.current.measuredAt)}. Riprova per verificare lo\r\n' +
+    '              stesso salvataggio.\r\n' +
+    '            </p>\r\n' +
+    '          )}\r\n' +
+    '        </div>\r\n' +
+    '      )}\r\n' +
+    '      {savedAt && (\r\n' +
+    '        <div className="parameter-single-entry__success" role="status">\r\n' +
+    '          <span>Rilevazione salvata · {readingTime(savedAt)}</span>\r\n' +
+    '          <button type="button" className="link-btn" onClick={onShowToday}>\r\n' +
+    '            Mostra oggi\r\n' +
+    '          </button>\r\n' +
+    '        </div>\r\n' +
+    '      )}\r\n' +
+    '    </section>\r\n' +
+    '  );\r\n' +
+    '}\r\n'
+  
+      at TestContext.<anonymous> (C:\w-417\frontend\src\lib\__tests__\parameterEntrySchema.test.ts:8:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useEffect, useId, useRef, useState } from \'react\';\r\nimport { API_URL } from \'../../config\';\r\nimport { getCurrentOperator, operatorHeaders } from \'../../lib/operatorSession\';\r\nimport {\r\n  PARAMETER_FIELDS,\r\n  PARAMETER_OPTIONS,\r\n  ParameterReadingSaveError,\r\n  createParameterReadingRequest,\r\n  parameterValuesIssue,\r\n  readingTime,\r\n  saveParameterReading,\r\n  type ParameterReadingRequest,\r\n  type ParameterValues,\r\n  type PatientParameterReading,\r\n} from \'../../lib/patientParameterReadings\';\r\nimport { ParameterEntryClock } from \'./ParameterEntryClock\';\r\n\r\ninterface Props {\r\n  patientId: string;\r\n  operatorId: string;\r\n  onSaved: (reading: PatientParameterReading) => void;\r\n  onDayChange: (day: string) => void;\r\n  onShowToday: () => void;\r\n}\r\nexport function PatientParameterEntry({\r\n  patientId,\r\n  operatorId,\r\n  onSaved,\r\n  onDayChange,\r\n  onShowToday,\r\n}: Props) {\r\n  const [values, setValues] = useState<ParameterValues>({});\r\n  const [saving, setSaving] = useState(false);\r\n  const [uncertain, setUncertain] = useState(false);\r\n  const [error, setError] = useState(\'\');\r\n  const [invalidField, setInvalidField] = useState<keyof ParameterValues | null>(null);\r\n  const fields = useRef(new Map<string, HTMLInputElement | HTMLSelectElement>());\r\n  const [savedAt, setSavedAt] = useState(\'\');\r\n  const errorId = useId();\r\n  const pending = useRef<ParameterReadingRequest | null>(null);\r\n  const inFlight = useRef(false);\r\n  const mounted = useRef(true);\r\n  useEffect(() => {\r\n    mounted.current = true;\r\n    return () => {\r\n      mounted.current = false;\r\n    };\r\n  }, []);\r\n  function update(key: keyof ParameterValues, value: string) {\r\n    setValues((previous) => ({ ...previous, [key]: value }));\r\n    setError(\'\');\r\n    setInvalidField(null);\r\n    setSavedAt(\'\');\r\n    pending.current = null;\r\n  }\r\n  async function save() {\r\n    if (inFlight.current) return;\r\n    if (getCurrentOperator()?.id !== operatorId) {\r\n      setError(\'La sessione operatore è cambiata. Riapri la scheda prima di salvare.\');\r\n      return;\r\n    }\r\n    const invalid = parameterValuesIssue(values);\r\n    if (invalid) {\r\n      setError(invalid.message);\r\n      setInvalidField(invalid.field);\r\n      // Il fuoco va sul campo da correggere (il primo, se manca ogni valore).\r\n      fields.current.get(invalid.field ?? PARAMETER_FIELDS[0].key)?.focus();\r\n      return;\r\n    }\r\n    pending.current ??= createParameterReadingRequest(values);\r\n    inFlight.current = true;\r\n    setSaving(true);\r\n    setError(\'\');\r\n    setSavedAt(\'\');\r\n    try {\r\n      const { reading } = await saveParameterReading(API_URL, patientId, pending.current, {\r\n        headers: operatorHeaders(),\r\n      });\r\n      if (!mounted.current || getCurrentOperator()?.id !== operatorId) return;\r\n      pending.current = null;\r\n      setValues({});\r\n      setUncertain(false);\r\n      setSavedAt(reading.measuredAt);\r\n      onSaved(reading);\r\n    } catch (cause) {\r\n      if (!mounted.current || getCurrentOperator()?.id !== operatorId) return;\r\n      const unknownOutcome = !(cause instanceof ParameterReadingSaveError) || cause.uncertain;\r\n      setUncertain(unknownOutcome);\r\n      if (!unknownOutcome) pending.current = null;\r\n      setError(cause instanceof Error ? cause.message : \'Salvataggio non verificato. Riprova.\');\r\n    } finally {\r\n      inFlight.current = false;\r\n      if (mounted.current) setSaving(false);\r\n    }\r\n  }\r\n  return (\r\n    <section className="parameter-single-entry" aria-label="Registra parametri del paziente">\r\n      <div className="parameter-single-entry__heading">\r\n        <h3>Nuova rilevazione</h3>\r\n        <ParameterEntryClock onDayChange={onDayChange} />\r\n      </div>\r\n      <form\r\n        onSubmit={(event) => {\r\n          event.preventDefault();\r\n          void save();\r\n        }}\r\n      >\r\n        <fieldset disabled={saving || uncertain} className="parameter-single-entry__fields">\r\n          <legend className="sr-only">Valori da registrare</legend>\r\n          {PARAMETER_FIELDS.map((field) => (\r\n            <label key={field.key}>\r\n              <span>\r\n                {field.label} {field.unit && <small>{field.unit}</small>}\r\n              </span>\r\n              {PARAMETER_OPTIONS[field.key] ? (\r\n                <select\r\n                  ref={(el) =>\r\n                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))\r\n                  }\r\n                  className="form-input"\r\n                  aria-label={`Nuova rilevazione ${field.label}`}\r\n                  aria-invalid={invalidField === field.key || undefined}\r\n                  aria-describedby={invalidField === field.key ? errorId : undefined}\r\n                  value={values[field.key] ?? \'\'}\r\n                  onChange={(event) => update(field.key, event.target.value)}\r\n                >\r\n                  <option value="">—</option>\r\n                  {PARAMETER_OPTIONS[field.key]!.map((option) => (\r\n                    <option key={option.value} value={option.value}>\r\n                      {option.label}\r\n                    </option>\r\n                  ))}\r\n                </select>\r\n              ) : (\r\n                <input\r\n                  ref={(el) =>\r\n                    void (el ? fields.current.set(field.key, el) : fields.current.delete(field.key))\r\n                  }\r\n                  className="form-input"\r\n                  aria-label={`Nuova rilevazione ${field.label}`}\r\n                  aria-invalid={invalidField === field.key || undefined}\r\n                  aria-describedby={invalidField === field.key ? errorId : undefined}\r\n                  value={values[field.key] ?? \'\'}\r\n                  inputMode={\r\n                    [\'pa\', \'evacuazione\'].includes(field.key)\r\n                      ? \'text\'\r\n                      : field.key === \'fr\'\r\n                        ? \'numeric\'\r\n                        : \'decimal\'\r\n                  }\r\n                  maxLength={field.key === \'evacuazione\' ? 200 : 32}\r\n                  placeholder={field.key === \'pa\' ? \'120/80\' : \'—\'}\r\n                  onChange={(event) => update(field.key, event.target.value)}\r\n                />\r\n              )}\r\n            </label>\r\n          ))}\r\n        </fieldset>\r\n        <details className="parameter-single-entry__notes">\r\n          <summary>Note sulla rilevazione</summary>\r\n          <textarea\r\n            className="form-input"\r\n            aria-label="Note della nuova rilevazione"\r\n            rows={2}\r\n            maxLength={2000}\r\n            disabled={saving || uncertain}\r\n            value={values.note ?? \'\'}\r\n            onChange={(event) => update(\'note\', event.target.value)}\r\n          />\r\n        </details>\r\n        <div className="parameter-single-entry__actions">\r\n          <span>Data e ora vengono registrate quando premi Salva.</span>\r\n          <button type="submit" className="btn-primary" disabled={saving} aria-busy={saving}>\r\n            {saving ? \'Salvataggio…\' : uncertain ? \'Riprova salvataggio\' : \'Salva rilevazione\'}\r\n          </button>\r\n        </div>\r\n      </form>\r\n      {error && (\r\n        <div role="alert" className="parameter-trends-error" id={errorId}>\r\n          <p>{error}</p>\r\n          {uncertain && pending.current && (\r\n            <p>\r\n              Rilevazione del {readingTime(pending.current.measuredAt)}. Riprova per verificare lo\r\n              stesso salvataggio.\r\n            </p>\r\n          )}\r\n        </div>\r\n      )}\r\n      {savedAt && (\r\n        <div className="parameter-single-entry__success" role="status">\r\n          <span>Rilevazione salvata · {readingTime(savedAt)}</span>\r\n          <button type="button" className="link-btn" onClick={onShowToday}>\r\n            Mostra oggi\r\n          </button>\r\n        </div>\r\n      )}\r\n    </section>\r\n  );\r\n}\r\n',
+    expected: /<ParameterReadingForm\b/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\parameterEntrySchema.test.ts:1:503
+✖ shared entry schema follows all fields, including NEWS2 choices, without auto-save navigation (1.1035ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\w-417\frontend\src\lib\parameterEntrySchema' imported from C:\w-417\frontend\src\lib\__tests__\parameterEntrySchema.test.ts
+      at finalizeResolution (node:internal/modules/esm/resolve:271:11)
+      at moduleResolve (node:internal/modules/esm/resolve:865:10)
+      at defaultResolve (node:internal/modules/esm/resolve:992:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at resolveBaseSync (file:///C:/Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:9102)
+      at resolveDirectorySync (file:///C:/Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:10315)
+      at resolveTsPathsSync (file:///C:/Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:11547)
+      at resolve (file:///C:/Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/tsx/dist/register-zZ7SWseA.mjs:2:13365) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///C:/w-417/frontend/src/lib/parameterEntrySchema'
+  }

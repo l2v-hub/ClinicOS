@@ -1,0 +1,1530 @@
+{
+  "phase": "form",
+  "requests": [
+    {
+      "requestIndex": 0,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 1,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/status",
+      "query": ""
+    },
+    {
+      "requestIndex": 2,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "requestIndex": 3,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/simulator/identities",
+      "query": ""
+    },
+    {
+      "requestIndex": 4,
+      "phase": "boot",
+      "method": "POST",
+      "path": "/auth/simulator/session",
+      "query": ""
+    },
+    {
+      "requestIndex": 5,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/auth/me",
+      "query": ""
+    },
+    {
+      "requestIndex": 6,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/me/roster-order",
+      "query": ""
+    },
+    {
+      "requestIndex": 7,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/diary-unread-count",
+      "query": ""
+    },
+    {
+      "requestIndex": 8,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 9,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/appointments",
+      "query": "?from=2026-10-09&to=2026-10-09&limit=1000&operatorId=QA417-NURSE"
+    },
+    {
+      "requestIndex": 10,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/consegne/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 11,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/notes",
+      "query": "?box=all&limit=50"
+    },
+    {
+      "requestIndex": 12,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview",
+      "query": ""
+    },
+    {
+      "requestIndex": 13,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-09"
+    },
+    {
+      "requestIndex": 14,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/therapy-slots",
+      "query": "?date=2026-10-10"
+    },
+    {
+      "requestIndex": 15,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 16,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/operators/directory/page",
+      "query": "?limit=100"
+    },
+    {
+      "requestIndex": 17,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/parameters/page",
+      "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+    },
+    {
+      "requestIndex": 18,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 19,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/settings",
+      "query": ""
+    },
+    {
+      "requestIndex": 20,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/page",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 21,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "requestIndex": 22,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/clinical-summary",
+      "query": "?patientIds=QA417-A%2CQA417-B"
+    },
+    {
+      "requestIndex": 23,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 24,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-B/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 25,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/cartella",
+      "query": ""
+    },
+    {
+      "requestIndex": 26,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A/cartella",
+      "query": ""
+    },
+    {
+      "requestIndex": 27,
+      "phase": "boot",
+      "method": "GET",
+      "path": "/patients/QA417-A",
+      "query": ""
+    },
+    {
+      "requestIndex": 28,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/room-options",
+      "query": ""
+    },
+    {
+      "requestIndex": 29,
+      "phase": "form",
+      "method": "GET",
+      "path": "/consegne",
+      "query": "?limit=20&patientId=QA417-A"
+    },
+    {
+      "requestIndex": 30,
+      "phase": "form",
+      "method": "GET",
+      "path": "/consegne",
+      "query": "?limit=20&patientId=QA417-A"
+    },
+    {
+      "requestIndex": 31,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 32,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 33,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/narrative-sections",
+      "query": ""
+    },
+    {
+      "requestIndex": 34,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/therapies/page",
+      "query": "?limit=100&status=tutte"
+    },
+    {
+      "requestIndex": 35,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/diary",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 36,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/assessments/catalog",
+      "query": ""
+    },
+    {
+      "requestIndex": 37,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/diary",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 38,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 39,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50&month=2026-10"
+    },
+    {
+      "requestIndex": 40,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50"
+    },
+    {
+      "requestIndex": 41,
+      "phase": "form",
+      "method": "GET",
+      "path": "/patients/QA417-A/parameter-readings",
+      "query": "?limit=50&month=2026-10"
+    }
+  ],
+  "captionRequests": [
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7664
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7657
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7621
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7671
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraversePassiveMountEffects",
+          "lineNumber": 7605
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitPassiveMountOnFiber",
+          "lineNumber": 7626
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8807
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    },
+    {
+      "url": "http://localhost:3001/patients/QA417-A/parameter-readings?limit=50",
+      "method": "GET",
+      "frames": [
+        {
+          "url": "http://127.0.0.1:7480/src/lib/patientParameterReadings.ts",
+          "functionName": "fetchParameterReadings",
+          "lineNumber": 179
+        },
+        {
+          "url": "http://127.0.0.1:7480/src/lib/usePreviousParameterValues.ts",
+          "functionName": "",
+          "lineNumber": 18
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "react_stack_bottom_frame",
+          "lineNumber": 12901
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookEffectListMount",
+          "lineNumber": 6616
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitHookPassiveMountEffects",
+          "lineNumber": 6651
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7700
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7699
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7705
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseReconnectPassiveEffects",
+          "lineNumber": 7687
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "reconnectPassiveEffects",
+          "lineNumber": 7712
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "doubleInvokeEffectsOnFiber",
+          "lineNumber": 8923
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "runWithFiberInDEV",
+          "lineNumber": 850
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "recursivelyTraverseAndDoubleInvokeEffectsInDEV",
+          "lineNumber": 8916
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "commitDoubleInvokeEffectsInDEV",
+          "lineNumber": 8931
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "flushPassiveEffects",
+          "lineNumber": 8808
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "",
+          "lineNumber": 8561
+        },
+        {
+          "url": "http://127.0.0.1:7480/@fs/C:/w-417-qa/artifacts/task-validation/417-vitals-form/independent-qa417/cache/vite/deps/react-dom_client.js?v=b896ea85",
+          "functionName": "performWorkUntilDeadline",
+          "lineNumber": 35
+        }
+      ]
+    }
+  ],
+  "writes": [
+    {
+      "requestIndex": 4,
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    }
+  ],
+  "posts": [],
+  "saved": [],
+  "external": [],
+  "unexpected": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "httpErrors": [],
+  "allowedErrors": [],
+  "priorMode": "ready",
+  "failure": null,
+  "heldReads": [],
+  "heldPosts": [],
+  "prior": {
+    "fr": "18",
+    "spo2": "98",
+    "o2": "no",
+    "pa": "120/80",
+    "fc": "72",
+    "temperatura": "36,5",
+    "coscienza": "A",
+    "dtx": "110"
+  },
+  "hasMore": true,
+  "historyRows": [
+    {
+      "id": "QA417-PAGE-0",
+      "requestId": "QA417-PAGE-0",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:59:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-1",
+      "requestId": "QA417-PAGE-1",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:58:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-2",
+      "requestId": "QA417-PAGE-2",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:57:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-3",
+      "requestId": "QA417-PAGE-3",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:56:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-4",
+      "requestId": "QA417-PAGE-4",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:55:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-5",
+      "requestId": "QA417-PAGE-5",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:54:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-6",
+      "requestId": "QA417-PAGE-6",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:53:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-7",
+      "requestId": "QA417-PAGE-7",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:52:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-8",
+      "requestId": "QA417-PAGE-8",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:51:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-9",
+      "requestId": "QA417-PAGE-9",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:50:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-10",
+      "requestId": "QA417-PAGE-10",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:49:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-11",
+      "requestId": "QA417-PAGE-11",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:48:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-12",
+      "requestId": "QA417-PAGE-12",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:47:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-13",
+      "requestId": "QA417-PAGE-13",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:46:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-14",
+      "requestId": "QA417-PAGE-14",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:45:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-15",
+      "requestId": "QA417-PAGE-15",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:44:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-16",
+      "requestId": "QA417-PAGE-16",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:43:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-17",
+      "requestId": "QA417-PAGE-17",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:42:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-18",
+      "requestId": "QA417-PAGE-18",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:41:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-19",
+      "requestId": "QA417-PAGE-19",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:40:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-20",
+      "requestId": "QA417-PAGE-20",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:39:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-21",
+      "requestId": "QA417-PAGE-21",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:38:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-22",
+      "requestId": "QA417-PAGE-22",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:37:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-23",
+      "requestId": "QA417-PAGE-23",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:36:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-24",
+      "requestId": "QA417-PAGE-24",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:35:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-25",
+      "requestId": "QA417-PAGE-25",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:34:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-26",
+      "requestId": "QA417-PAGE-26",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:33:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-27",
+      "requestId": "QA417-PAGE-27",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:32:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-28",
+      "requestId": "QA417-PAGE-28",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:31:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-29",
+      "requestId": "QA417-PAGE-29",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:30:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-30",
+      "requestId": "QA417-PAGE-30",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:29:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-31",
+      "requestId": "QA417-PAGE-31",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:28:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-32",
+      "requestId": "QA417-PAGE-32",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:27:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-33",
+      "requestId": "QA417-PAGE-33",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:26:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-34",
+      "requestId": "QA417-PAGE-34",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:25:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-35",
+      "requestId": "QA417-PAGE-35",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:24:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-36",
+      "requestId": "QA417-PAGE-36",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:23:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-37",
+      "requestId": "QA417-PAGE-37",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:22:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-38",
+      "requestId": "QA417-PAGE-38",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:21:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-39",
+      "requestId": "QA417-PAGE-39",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:20:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-40",
+      "requestId": "QA417-PAGE-40",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:19:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-41",
+      "requestId": "QA417-PAGE-41",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:18:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-42",
+      "requestId": "QA417-PAGE-42",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:17:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-43",
+      "requestId": "QA417-PAGE-43",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:16:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-44",
+      "requestId": "QA417-PAGE-44",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:15:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-45",
+      "requestId": "QA417-PAGE-45",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:14:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-46",
+      "requestId": "QA417-PAGE-46",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:13:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-47",
+      "requestId": "QA417-PAGE-47",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:12:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-48",
+      "requestId": "QA417-PAGE-48",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:11:00.000Z",
+      "values": {
+        "fr": "18"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    },
+    {
+      "id": "QA417-PAGE-49",
+      "requestId": "QA417-PAGE-49",
+      "patientId": "QA417-A",
+      "measuredAt": "2026-10-08T08:10:00.000Z",
+      "values": {
+        "fr": "19"
+      },
+      "authorOperatorId": "QA417-NURSE",
+      "authorName": "Infermiere Sintetico",
+      "createdAt": "2026-10-08T08:00:00.000Z"
+    }
+  ]
+}

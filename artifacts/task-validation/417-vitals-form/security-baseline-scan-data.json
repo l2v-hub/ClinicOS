@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-10-09T14:36:17.461Z",
+  "target": "frontend/src",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 3,
+    "low": 0,
+    "total": 3
+  },
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "components\\shared\\sections\\NarrativeClinicalSection.tsx:8",
+      "description": "React XSS risk"
+    },
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "components\\shared\\sections\\SemanticTaggedText.tsx:4",
+      "description": "React XSS risk"
+    },
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "lib\\__tests__\\therapyGiroAllergies.test.ts:183",
+      "description": "React XSS risk"
+    }
+  ]
+}

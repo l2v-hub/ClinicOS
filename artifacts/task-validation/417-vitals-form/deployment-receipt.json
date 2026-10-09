@@ -1,0 +1,73 @@
+{
+  "applicationCommit": "02b4ba89af291186a72e040b868da024bb865164",
+  "checkedAt": "2026-10-09T15:09:50.6396734Z",
+  "decision": "VERIFIED RELEASE",
+  "productionPatientTestMutations": 0,
+  "vercel": {
+    "githubCommitSha": "02b4ba89af291186a72e040b868da024bb865164",
+    "parameterChunks": [
+      {
+        "http": 200,
+        "liveNews2Present": false,
+        "url": "https://clinicos-eosin.vercel.app/assets/MultiPatientParametri-B6OxCeq6.js",
+        "explicitActionsPresent": false,
+        "sha256": "8a3d8d055f272e963268d2d3a76c8c20f8472898fdaba47d6afad04ba7887986",
+        "sharedFormPresent": false
+      },
+      {
+        "http": 200,
+        "liveNews2Present": false,
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetail-DWKB9Dg9.js",
+        "explicitActionsPresent": false,
+        "sha256": "01a8e3669a2c21909deac66a166d0cf587a5990f4ff486e47d32b60186b0ad2e",
+        "sharedFormPresent": false
+      },
+      {
+        "http": 200,
+        "liveNews2Present": false,
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetailLazyTabs-ClS6nyWg.js",
+        "explicitActionsPresent": false,
+        "sha256": "69c7655facd45018122c9d66ad07ee9b2b46245aea25ed8bb08bffab7777a22d",
+        "sharedFormPresent": false
+      },
+      {
+        "http": 200,
+        "liveNews2Present": true,
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientParameters-748Hg_Va.js",
+        "explicitActionsPresent": true,
+        "sha256": "0c9762a62c6d86b9b87caed893813c6ce07dad499842d418f9b57379a3027380",
+        "sharedFormPresent": true
+      },
+      {
+        "http": 200,
+        "liveNews2Present": false,
+        "url": "https://clinicos-eosin.vercel.app/assets/MultiPatientParametri-B6OxCeq6.js",
+        "explicitActionsPresent": false,
+        "sha256": "8a3d8d055f272e963268d2d3a76c8c20f8472898fdaba47d6afad04ba7887986",
+        "sharedFormPresent": false
+      },
+      {
+        "http": 200,
+        "liveNews2Present": false,
+        "url": "https://clinicos-eosin.vercel.app/assets/MultiPatientParametri-B6OxCeq6.js",
+        "explicitActionsPresent": false,
+        "sha256": "8a3d8d055f272e963268d2d3a76c8c20f8472898fdaba47d6afad04ba7887986",
+        "sharedFormPresent": false
+      }
+    ],
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "gitSourceSha": "02b4ba89af291186a72e040b868da024bb865164",
+    "bundleSha256": "2453438c7727b283dfc3a3e8428aeaab438ad5a0e8d486e51bc255336e45af4f",
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-TnsRm3c8.js",
+    "http": 200,
+    "id": "dpl_4ScLxtbRzCUaNDd4gmii4DD53iXh",
+    "state": "READY"
+  },
+  "backend": {
+    "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "provenance": "No417backend/schema/API edits; accepted409retained, no production patient test writes.",
+    "healthHttp": 200,
+    "changed": false
+  }
+}

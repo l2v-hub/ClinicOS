@@ -1,0 +1,1 @@
+var e=(e,t)=>`therapies:${e}:${JSON.stringify(t)}`,t=(e,t)=>`diary:${e}:${t}`,n=e=>`narrative:${e}`,r=e=>`assessments:${e}`,i={attiva:0,sospesa:1,conclusa:2};function a(e){return[...e].sort((e,t)=>(i[e.stato]??9)-(i[t.stato]??9))}export{e as a,a as i,t as n,n as r,r as t};

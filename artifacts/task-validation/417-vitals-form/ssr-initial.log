@@ -1,0 +1,15 @@
+(node:5796) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 417 both workspaces use exactly the shared field order, full ACVPU options and no prior prefill (13.8338ms)
+✔ 417 numeric raw text is never maxlength-truncated and keypad starts inactive (1.9423ms)
+✔ 417 uncertain saves lock fields but retain enabled explicit retry and error/history guidance (1.9797ms)
+(node:5796) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 533.2957
