@@ -1,0 +1,14 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "baselineApplication": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 3,
+    "low": 0,
+    "total": 3
+  },
+  "newSourceFindings": [],
+  "changedPathFindings": [],
+  "scope": "Three inherited MEDIUM source heuristics outside four changed paths. No global clean or CVE claim."
+}

@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {mkdirSync,copyFileSync,existsSync,writeFileSync,readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/422-drug-results',out=root+'/'+(process.argv[2]||'before-run-01');assert.equal(existsSync(out),false);mkdirSync(out+'/pre-run',{recursive:true});
+const records=[];for(const name of ['fixture.mjs','before.mjs','qa-server.mjs','task-contract.md','execution-policy.md']){copyFileSync(root+'/'+name,out+'/'+name);records.push({path:name,sha256:createHash('sha256').update(readFileSync(out+'/'+name)).digest('hex')});}
+const assetOrigin='C:/w-421/artifacts/task-validation/421-import-empty/independent-qa421/pdf-01/synthetic-two-pages.pdf';copyFileSync(assetOrigin,root+'/synthetic-reference.pdf');copyFileSync(assetOrigin,out+'/synthetic-reference.pdf');records.push({path:'synthetic-reference.pdf',sha256:createHash('sha256').update(readFileSync(assetOrigin)).digest('hex'),origin:assetOrigin,policy:'Opaque reuse of existing anonymous QA421 PDF bytes; not official clinical content'});
+const base='80b313227a9a2b9fefc0441c718b259d0d901cae',r=spawnSync('git',['diff','--exit-code',base,'--','frontend','backend','prisma','package.json','package-lock.json'],{encoding:'utf8'});assert.equal(r.status,0);assert.equal(spawnSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim(),base);
+assert.equal(spawnSync('git',['ls-files','--others','--exclude-standard','--','frontend/src','backend/src','prisma'],{encoding:'utf8'}).stdout.trim(),'');
+const files=spawnSync('git',['ls-files','-z','--','frontend/src','backend/src','prisma','package.json','package-lock.json','frontend/package.json','frontend/vite.config.ts','frontend/tsconfig.app.json','frontend/tsconfig.node.json','scripts/run-node-tests.mjs'],{encoding:'utf8'}).stdout.split('\0').filter(Boolean).sort().map(path=>({path,sha256:createHash('sha256').update(readFileSync(path)).digest('hex')}));
+writeFileSync(out+'/pre-run/source.json',JSON.stringify({applicationCommit:base,files,trackedSourceMatchesCommit:true},null,2));writeFileSync(out+'/pre-run/snapshot.json',JSON.stringify({applicationCommit:base,capturedAt:new Date().toISOString(),records},null,2));

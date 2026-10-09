@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND PROOF COMMIT AND PUSH",
+  "authority": "Direct human authorization; independent/root release/compiled/CI comparison passed",
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "branch": "codex/bug-422-drug-results",
+  "scope": "artifacts/task-validation/422-drug-results",
+  "artifacts": 668,
+  "configuredCredentialChecks": 29454,
+  "expandedZipMembers": 9150,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T20:40:52.204Z",
+  "excluded": "No main proof promotion or application change, no primary/blocked source"
+}

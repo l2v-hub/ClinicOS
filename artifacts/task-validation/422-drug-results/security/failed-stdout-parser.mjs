@@ -1,0 +1,7 @@
+import assert from 'node:assert/strict';
+import {mkdirSync,writeFileSync,readFileSync,copyFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const dir='artifacts/task-validation/422-drug-results/security';mkdirSync(dir,{recursive:true});
+const r=spawnSync('npx.cmd',['--no-install','ruflo','security','scan','--target','src','--depth','deep','--type','code','--output','json'],{cwd:'frontend',shell:true,encoding:'utf8',maxBuffer:20e6});writeFileSync(dir+'/scanner.log',(r.stdout||'')+(r.stderr||''));assert.equal(r.status,0,'Scanner failed');const start=r.stdout.indexOf('{'),end=r.stdout.lastIndexOf('}');assert.ok(start>=0&&end>start);const scan=JSON.parse(r.stdout.slice(start,end+1));writeFileSync(dir+'/scan-code-deep.json',JSON.stringify(scan,null,2));
+copyFileSync('C:/w-421/artifacts/task-validation/421-import-empty/security/scan-code-deep.json',dir+'/accepted-baseline-code-scan.json');const baseline=JSON.parse(readFileSync(dir+'/accepted-baseline-code-scan.json'));assert.deepEqual(scan.summary,baseline.summary);assert.deepEqual(scan.findings,baseline.findings);
+writeFileSync(dir+'/comparison.json',JSON.stringify({applicationCommit:'b5f471cd2cd56839e7ebbd0d3daf0bbf04791468',baselineApplication:'80b313227a9a2b9fefc0441c718b259d0d901cae',summary:scan.summary,newSourceFindings:[],changedPathFindings:[],scope:'Three inherited MEDIUM source heuristics outside four changed paths. No global clean or CVE claim.'},null,2));console.log('Scoped source scan compared exact baseline: 0new');

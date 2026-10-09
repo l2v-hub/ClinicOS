@@ -1,0 +1,19 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "sourceSha256": "24ab2a167a50fb8d14166cea31deb225eb566bc6ecff7b10312162de87283814",
+  "sourceFiles": 1472,
+  "rootBrowserCases": 11,
+  "focusedTests": 34,
+  "fullTests": 1249,
+  "fullPass": 1237,
+  "unchangedBaselineFailures": 12,
+  "newFailures": 0,
+  "rootServer": {
+    "port": 7509,
+    "pid": 6988,
+    "exactCommandAndListenerVerifiedBeforeStop": true,
+    "stopped": true
+  },
+  "productionPatientTestMutations": 0,
+  "decision": "ROOT VERIFIED; independent QA and root byte-identical rerun required before release"
+}

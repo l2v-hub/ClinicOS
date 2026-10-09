@@ -1,0 +1,504 @@
+{
+  "name": "mobile-long-results",
+  "status": "PASS",
+  "guard": {
+    "items": [
+      {
+        "aic": "000000001",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/1/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000002",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/2/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000003",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "120 MG/5 ML FLACONE 120 ML",
+        "forma": "Sciroppo",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/3/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000004",
+        "denominazione": "MEDICINALE QA PLUS",
+        "descrizione": "250 MG 30 CAPSULE",
+        "forma": "Capsula",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/4/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000005",
+        "denominazione": "MEDICINALE QA DENOMINAZIONE MOLTO LUNGA TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE TESTO ORIGINALE ",
+        "descrizione": "0,5 MG/ML CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA CONFEZIONE ORIGINALE MOLTO LUNGA ",
+        "forma": "Soluzione orale",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/5/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000006",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/6/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000007",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/7/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000008",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/8/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000009",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/9/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000010",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/10/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000011",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/11/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000012",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/12/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000013",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/13/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000014",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/14/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000015",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/15/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000016",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/16/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000017",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/17/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000018",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/18/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000019",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/19/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000020",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/20/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000021",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/21/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000022",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/22/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000023",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/23/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000024",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "1000 MG 10 COMPRESSE",
+        "forma": "Compressa rivestita",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/24/stampati?ts=RCP"
+      },
+      {
+        "aic": "000000025",
+        "denominazione": "MEDICINALE QA",
+        "descrizione": "500 MG 20 COMPRESSE",
+        "forma": "Compressa",
+        "principiAttivi": [
+          {
+            "nome": "Principio sintetico",
+            "quantita": 99,
+            "unita": "mg"
+          }
+        ],
+        "statoAmministrativo": "Autorizzata",
+        "linkFi": null,
+        "linkRcp": "https://api.aifa.gov.it/aifa-bdf-eif-be/1.0.0/organizzazione/1/farmaci/25/stampati?ts=RCP"
+      }
+    ],
+    "hasMore": false,
+    "criterion": "nome",
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/simulator/session"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/me/roster-order"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/diary-unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/notes"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/directory/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/parameters/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/farmaci/cerca"
+      }
+    ],
+    "catalogRequests": [
+      {
+        "q": "Medicinale",
+        "limite": "25"
+      }
+    ],
+    "documentRequests": [],
+    "expectedHttp": [],
+    "httpErrors": [],
+    "errors": [],
+    "pageErrors": [],
+    "unexpected": [],
+    "external": [],
+    "writes": [],
+    "completedCatalog": [
+      {
+        "q": "Medicinale",
+        "limite": "25"
+      }
+    ]
+  }
+}

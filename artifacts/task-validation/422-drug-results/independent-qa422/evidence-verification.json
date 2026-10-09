@@ -1,0 +1,164 @@
+{
+  "commandsVerified": true,
+  "exactBaselineFailures": 12,
+  "newFailures": 0,
+  "attempts": [
+    {
+      "attempt": "extra-01",
+      "results": [
+        {
+          "name": "raw-order-and-form-options",
+          "status": "PASS"
+        },
+        {
+          "name": "collapsed-filter-clear-keeps-original-search",
+          "status": "PASS"
+        },
+        {
+          "name": "mobile-many-similar-packages",
+          "status": "PASS"
+        },
+        {
+          "name": "keyboard-fi-exact-package",
+          "status": "PASS"
+        },
+        {
+          "name": "zero-visible-error-retry-keeps-cursor",
+          "status": "PASS"
+        },
+        {
+          "name": "shared-therapy-modal-original-callback",
+          "status": "FAIL",
+          "error": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('dialog', { name: 'Cerca un farmaco in anagrafica' })\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 45000ms\n  - waiting for getByRole('dialog', { name: 'Cerca un farmaco in anagrafica' })\n"
+        }
+      ]
+    },
+    {
+      "attempt": "extra-02",
+      "results": [
+        {
+          "name": "raw-order-and-form-options",
+          "status": "PASS"
+        },
+        {
+          "name": "collapsed-filter-clear-keeps-original-search",
+          "status": "PASS"
+        },
+        {
+          "name": "mobile-many-similar-packages",
+          "status": "PASS"
+        },
+        {
+          "name": "keyboard-fi-exact-package",
+          "status": "FAIL",
+          "error": "expect(locator).toBeVisible() failed\n\nLocator: locator('canvas').first()\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 45000ms\n  - waiting for locator('canvas').first()\n"
+        }
+      ]
+    },
+    {
+      "attempt": "extra-03",
+      "results": [
+        {
+          "name": "raw-order-and-form-options",
+          "status": "PASS"
+        },
+        {
+          "name": "collapsed-filter-clear-keeps-original-search",
+          "status": "PASS"
+        },
+        {
+          "name": "mobile-many-similar-packages",
+          "status": "PASS"
+        },
+        {
+          "name": "keyboard-fi-exact-package",
+          "status": "PASS"
+        },
+        {
+          "name": "zero-visible-error-retry-keeps-cursor",
+          "status": "PASS"
+        },
+        {
+          "name": "shared-therapy-modal-original-callback",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "attempt": "ordinary-01",
+      "results": [
+        {
+          "name": "desktop-packages",
+          "status": "FAIL",
+          "error": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Il mio turno' })\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 20000ms\n  - waiting for getByRole('heading', { name: 'Il mio turno' })\n"
+        }
+      ]
+    },
+    {
+      "attempt": "ordinary-02",
+      "results": [
+        {
+          "name": "desktop-packages",
+          "status": "PASS"
+        },
+        {
+          "name": "filters-count-reset",
+          "status": "PASS"
+        },
+        {
+          "name": "query-and-criterion-reset",
+          "status": "PASS"
+        },
+        {
+          "name": "filtered-zero-continuation",
+          "status": "PASS"
+        },
+        {
+          "name": "empty-page-continuation",
+          "status": "PASS"
+        },
+        {
+          "name": "continuation-error-retry",
+          "status": "PASS"
+        },
+        {
+          "name": "no-server-results",
+          "status": "PASS"
+        },
+        {
+          "name": "missing-revoked-and-fi",
+          "status": "PASS"
+        },
+        {
+          "name": "keyboard-exact-document",
+          "status": "PASS"
+        },
+        {
+          "name": "late-original-response",
+          "status": "PASS"
+        },
+        {
+          "name": "mobile-long-results",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "attempt": "supplemental-01",
+      "results": [
+        {
+          "name": "drawn-rcp",
+          "status": "PASS"
+        },
+        {
+          "name": "drawn-fi",
+          "status": "PASS"
+        },
+        {
+          "name": "modal-visible-result-before-close",
+          "status": "PASS"
+        }
+      ]
+    }
+  ]
+}

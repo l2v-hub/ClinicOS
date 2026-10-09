@@ -1,0 +1,11 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "sourceSha256": "24ab2a167a50fb8d14166cea31deb225eb566bc6ecff7b10312162de87283814",
+  "independentBrowserCases": 20,
+  "rootIndependentRerun": 20,
+  "byteIdenticalRecipes": true,
+  "originalQaManifestSha256": "4e946c3867d4a8137086256f5f864c76d2c8f718bfe12de5aa74d66baa1fe546",
+  "qaFiles": 299,
+  "productionPatientTestMutations": 0,
+  "decision": "INDEPENDENT PLUS ROOT BYTE-IDENTICAL RERUN VERIFIED"
+}

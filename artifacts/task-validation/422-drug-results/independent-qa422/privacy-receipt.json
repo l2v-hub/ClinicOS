@@ -1,0 +1,9 @@
+{
+  "credentialFindings": 0,
+  "syntheticFixtureSourceReviewed": null,
+  "configuredCredentialChecks": 13497,
+  "zipMembersChecked": 4201,
+  "limitations": "No automated general PHI detector claim, no global vulnerability certification, no clinical RCP validity, no hardware/provider/database certification",
+  "scope": "All independent evidence except non-publishable runtime compiler cache; archives expanded in memory, bounded100MB",
+  "filesChecked": 298
+}

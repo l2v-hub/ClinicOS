@@ -1,0 +1,7 @@
+frontend-types: exit0 {}
+backend-types: exit0 {}
+frontend-tsc-build: exit0 {}
+vite-build: exit0 {}
+focused: exit0 {"tests":34,"pass":34,"fail":0,"skipped":0}
+security-scan: exit0 {}
+full-regression: exit1 {"tests":1249,"pass":1237,"fail":12,"skipped":0}

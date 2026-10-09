@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "name": "drawn-rcp",
+      "status": "PASS"
+    },
+    {
+      "name": "drawn-fi",
+      "status": "PASS"
+    },
+    {
+      "name": "modal-visible-result-before-close",
+      "status": "PASS"
+    }
+  ],
+  "productionPatientMutations": 0
+}

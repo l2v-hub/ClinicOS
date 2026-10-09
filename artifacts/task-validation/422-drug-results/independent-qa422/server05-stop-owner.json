@@ -1,0 +1,7 @@
+{
+  "process": 38272,
+  "command": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/422-drug-results/independent-qa422/qa-server.mjs",
+  "localAddress": "127.0.0.1",
+  "port": 7511,
+  "decision": "Stop exact owned QA server after final20 successful browser cases; lane released"
+}

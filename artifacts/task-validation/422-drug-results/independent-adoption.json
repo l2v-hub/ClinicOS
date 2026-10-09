@@ -1,0 +1,15 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "qaManifestSha256": "4e946c3867d4a8137086256f5f864c76d2c8f718bfe12de5aa74d66baa1fe546",
+  "immutableQaFiles": 299,
+  "qaSourceFiles": 1675,
+  "normalizedOnlyUtf8CrLfPaths": [
+    "frontend/src/components/operator/cartella/RicercaFarmaco.css",
+    "frontend/src/components/operator/cartella/RicercaFarmaco.tsx",
+    "frontend/src/components/operator/cartella/__tests__/drugSearchPresentation.test.ts",
+    "frontend/src/components/operator/cartella/drugSearchPresentation.ts"
+  ],
+  "originalIndependentAttemptsRetained": true,
+  "rootByteIdenticalRerunStillRequired": true,
+  "at": "2026-10-09T20:24:07.924Z"
+}

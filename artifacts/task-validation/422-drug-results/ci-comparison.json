@@ -1,0 +1,26 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "baselineApplication": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "baselineRun": 37980557694,
+  "candidateRun": 37987185985,
+  "workflow": "AI Import E2E Gate",
+  "candidateConclusion": "failure",
+  "failedStage": "Backend unit tests",
+  "baselineFailureNames": [
+    "therapy reads and writes apply patient scope before loading clinical data"
+  ],
+  "candidateFailureNames": [
+    "therapy reads and writes apply patient scope before loading clinical data"
+  ],
+  "newFailureNames": [],
+  "failedSteps": [
+    "gate: Backend unit tests"
+  ],
+  "baselineFailedSteps": [
+    "gate: Backend unit tests"
+  ],
+  "downstreamImportTests": "Skipped, not claimed passing",
+  "frontendSecretScanRun": 37987185988,
+  "frontendSecretScanConclusion": "success",
+  "scope": "No422 backend/pipeline changes, exact same single accepted421failure. Scoped compiled acceptance separately verified, no global CI green claim"
+}

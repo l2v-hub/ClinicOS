@@ -1,0 +1,29 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "sourceSha256": "24ab2a167a50fb8d14166cea31deb225eb566bc6ecff7b10312162de87283814",
+  "independentBrowserCases": 20,
+  "rootIndependentRerun": 20,
+  "byteIdenticalRecipes": true,
+  "originalQaManifestSha256": "4e946c3867d4a8137086256f5f864c76d2c8f718bfe12de5aa74d66baa1fe546",
+  "qaFiles": 299,
+  "productionPatientTestMutations": 0,
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct human commit/push/deploy authorization; root integration decision after new independent reviewer and exact root rerun",
+  "originalCriteriaPassed": 4,
+  "criteria": [
+    "Raw supplied dosage/form visibly distinguish packages; desktop/mobile pixels inspected",
+    "Unique package-bound RCP/FI names and exact identity callback with actual anonymous PDF drawn pixels",
+    "Loaded-only counts; removable/atomic filters retain original query/order/cursor/retry",
+    "Long/similar/missing/no results and continuation failure/late-response paths pass"
+  ],
+  "qaManifestSha256": "4e946c3867d4a8137086256f5f864c76d2c8f718bfe12de5aa74d66baa1fe546",
+  "qaSourceFiles": 1675,
+  "rootSourceFiles": 1472,
+  "focusedTests": 34,
+  "fullTests": 1249,
+  "fullPass": 1237,
+  "unchangedBaselineFailures": 12,
+  "newFailures": 0,
+  "at": "2026-10-09T20:27:56.161Z",
+  "limitations": "Actual source/compiler and synthetic intercepted APIs. No clinical RCP validity, real DB/OCR/provider/hardware claim. Deployment and publication gates still required"
+}

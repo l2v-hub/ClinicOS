@@ -1,0 +1,103 @@
+{
+  "name": "no-server-results",
+  "status": "PASS",
+  "guard": {
+    "items": [],
+    "hasMore": false,
+    "criterion": "nome",
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/simulator/session"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/me/roster-order"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/diary-unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/notes"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/directory/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/parameters/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/farmaci/cerca"
+      }
+    ],
+    "catalogRequests": [
+      {
+        "q": "Assente",
+        "limite": "25"
+      }
+    ],
+    "documentRequests": [],
+    "expectedHttp": [],
+    "httpErrors": [],
+    "errors": [],
+    "pageErrors": [],
+    "unexpected": [],
+    "external": [],
+    "writes": [],
+    "completedCatalog": [
+      {
+        "q": "Assente",
+        "limite": "25"
+      }
+    ]
+  }
+}

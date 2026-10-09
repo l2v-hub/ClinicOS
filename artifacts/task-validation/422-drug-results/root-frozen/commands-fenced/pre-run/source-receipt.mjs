@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+const source=process.argv[2],out=process.argv[3];assert.match(source||'',/^[a-f0-9]{40}$/);assert.ok(out);mkdirSync(out,{recursive:true});
+const scopes=['frontend/src','backend/src','prisma','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','frontend/tsconfig.json','frontend/tsconfig.app.json','frontend/tsconfig.node.json','frontend/vite.config.ts','frontend/vercel.json','backend/package.json','backend/tsconfig.json','scripts/build/copy-assessment-fonts.mjs','scripts/stub-css-loader.mjs','scripts/run-node-tests.mjs'];
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8'});assert.equal(r.status,0,'Source check failed');return r.stdout;};
+assert.equal(git(['rev-parse','HEAD']).trim(),source);git(['diff','--exit-code','HEAD','--',...scopes]);assert.equal(git(['ls-files','--others','--exclude-standard','--',...scopes]).trim(),'');
+const files=git(['ls-files','-z','--',...scopes]).split('\0').filter(Boolean).sort().map(path=>({path,sha256:createHash('sha256').update(readFileSync(path)).digest('hex')})),tree=createHash('sha256');for(const f of files)tree.update(`${f.path}\0${f.sha256}\n`);
+const baseline='80b313227a9a2b9fefc0441c718b259d0d901cae';git(['diff','--exit-code',baseline,'--','backend','prisma','frontend/src/config.ts','frontend/src/components/shared/TableFilters.tsx','frontend/src/components/shared/TableFilters.css','frontend/src/components/operator/cartella/useMedicationSearch.ts','frontend/src/components/operator/cartella/medicationSearch.ts','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json']);
+const receipt={applicationCommit:source,baseline,sourceScope:scopes,sourceSha256:tree.digest('hex'),fileCount:files.length,trackedSourceMatchesCommit:true,noUntrackedApplicationOverrides:true,files};writeFileSync(out+'/source-receipt.json',JSON.stringify(receipt,null,2));console.log(JSON.stringify({applicationCommit:source,sourceSha256:receipt.sourceSha256,fileCount:files.length}));

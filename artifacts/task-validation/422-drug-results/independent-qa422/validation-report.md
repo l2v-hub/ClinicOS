@@ -1,0 +1,24 @@
+# Independent QA #422
+
+Final Decision: READY FOR CODEX QA
+
+Fresh reviewer, not implementer; original issue and comments read before contract, independently re-read safely from GitHub. Candidate b5f471cd2cd56839e7ebbd0d3daf0bbf04791468 vs80b313227a9a2b9fefc0441c718b259d0d901cae. Application readonly, own evidence folder only. Full source diff four presentation paths; no backend/config/schema/auth/dependency changes. Exact1675 physical input hashes unchanged before/after all runs (`source-before.json`, `source-after-final-2.json`); unrelated native launchers excluded and recorded.
+
+| Original criterion | Result | Concrete evidence |
+|---|---|---|
+| Dosage and form distinguish same-name packages on first scan | PASS | ordinary-02 desktop-packages exact500/1000MG, Sciroppo/form badge and25 rows; mobile-long-results full raw strings/no horizontal overflow; extra-03 mobile-many-similar-packages; actual desktop/mobile pixels inspected |
+| Every RCP accessible name includes original product/package | PASS | ordinary-02 unique25 accessible names and keyboard exactRCP package2; extra-03 keyboard FI exact37; supplemental-02 RCP/FI exact49 plus genuinely rendered anonymous PDF (>100px dimensions and >50 opaque dark pixels), visible filtered shared modal exact original callback package3 |
+| Filters retain counts/original search and remove easily | PASS | ordinary-02 filters-count-reset casefold11/25, same selected criterion preserves filters, query/mode atomic reset, zero-visible continuation1/26, empty first page continuation,503 retry samecursor; extra-03 raw-order/forms-from-all, collapsed clear retains query/no extra GET, zero-visible503 retry retains filter/cursor |
+| Long/no results/very similar denominations verified | PASS | ordinary-02 long mobile strings and25+continuation, no server results vs no local matches, missing/revoked/FI/no-document and PA99MG excluded from dose filter, fulfilled late response waiting completedCatalog2; extra-03 mobile similar names and original order |
+
+Successful portable proof: ordinary-02/after.mjs11; extra-03/extra.mjs6; supplemental-02/strong.mjs3 =20 successful cases. Each has pre-run recipe SHA and immutable source snapshot, traces, videos, screenshot, test-results and HTML report. Fixture/server/assets paths are portable relative to recipe; root rerun changes only EV_OUT/QA_PORT. For faithful final modal screenshot use supplemental-02/screenshots/modal-visible-result-before-close.png, not extra03 blank after Escape. Modal entry imports actual application App/design-system/index/print styles; test-only virtual module and read-only dependency realpath allow are localhost harness only.
+
+Independently executed frontend/backend types, actual frontend tsc-b plus actual Vite/React compiler build, focused34 and frontend source/bundle secret scan PASS (`commands/command-results.json`). Full1249 tests:1237PASS/12FAIL exact pinned421 baseline f05b627e904831c2097da3ab04ab68c3254d1e44,0 new. Full suite is NOT globally green. `evidence-verification-final.json` verifies exact baseline failures and every frozen recipe before/after.
+
+All earlier failures retained: ordinary-01 cold compiler20s, extra-01 Windows virtual-module harness, extra-02 PDF worker read-only junction allow-list environment; supplemental-01 all3 passed but modal stylesheet omissions limited visual parity. Full details in preparation-limits.md; failures have traces/video/failure screenshot and real guards, no relevant errors ignored. Subsequent fresh attempts retain every original assertion; no application fixes were made by QA.
+
+Security reviewed in diff-review.md: escaped React strings, no raw HTML/SQL or privileged changes, typed local filters/reducer, no source record mutation or inferred clinical strength, no new packages/config/role bypass. All clinical/catalog/document APIs intercepted before wire with synthetic-only fixtures, actual external hosts blocked, no production writes. Successful case guards assert zero unexpected console/HTTP/page/host/writes; injected503 accepted only exact count/path. Actual configured credential scan includes expanded trace ZIP members (`privacy-receipt.json`), with no secret values logged. Original audit patient images not copied. Anonymous two-page QA421 PDF reused byte-for-byte, synthetic/no clinical content; actual FI pixels and faithful modal/desktop/mobile pixels inspected.
+
+Final browser lane released after verifying exact owned7511 listener/command and stopping server (`server05-stop-owner.json`). No further evidence writes after immutable-manifest.json seal. Runtime compiler caches are preserved locally but excluded from public evidence. No clinical RCP validity, OCR/provider/DB persistence, hardware or real screen reader certification. No Git writes, deployment or issue publication performed by reviewer.
+
+Codex must now re-run the QA Gate.

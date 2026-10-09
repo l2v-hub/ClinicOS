@@ -1,0 +1,10 @@
+{
+  "results": [
+    {
+      "name": "desktop-packages",
+      "status": "FAIL",
+      "error": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Il mio turno' })\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 20000ms\n  - waiting for getByRole('heading', { name: 'Il mio turno' })\n"
+    }
+  ],
+  "productionPatientMutations": 0
+}

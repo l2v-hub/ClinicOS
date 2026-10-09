@@ -1,0 +1,9 @@
+{
+  "decision": "AUTHORIZED COMPILED PRODUCTION STATIC QA ONLY",
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "deployment": "dpl_GGzEmjSBXnCzBeiuUw1rLxYtxMYz",
+  "bundleSha256": "a3cb604df0c4702283537375fde2d7c1b141d99084d6583cc141f966aece31bd",
+  "authority": "Human authorized release verification; all clinical/catalog/document/auth APIs mocked BEFORE network",
+  "mutationsOnRealPatients": 0,
+  "at": "2026-10-09T20:30:54.756Z"
+}

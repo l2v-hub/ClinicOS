@@ -1,0 +1,22 @@
+{
+  "decision": "AUTHORIZED SCOPED SYNTHETIC EVIDENCE STAGING",
+  "authority": "Direct human authorization; root sole proof writer",
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "explicitDirectoryAllowlist": [
+    "before-run-02",
+    "root-frozen",
+    "root-rerun",
+    "compiled-online",
+    "independent-qa422",
+    "security"
+  ],
+  "artifactCount": 668,
+  "at": "2026-10-09T20:40:18.447Z",
+  "excluded": [
+    "Root failed/dev attempts retained locally",
+    "runtime caches",
+    "dirty primary/launchers",
+    "blocked405/408/410/416 candidates",
+    "real patient attachments"
+  ]
+}

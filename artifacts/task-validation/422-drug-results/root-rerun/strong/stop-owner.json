@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-09T20:27:54.0409461Z",
+  "authority": "Root sole browser writer; synthetic local QA session",
+  "port": 7509,
+  "decision": "AUTHORIZED STOP EXACT OWNED LOCAL QA SERVER",
+  "result": "OWNED SERVER STOPPED AND PORT FREE",
+  "pid": 40876,
+  "command": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/422-drug-results/root-rerun/strong/qa-server.mjs"
+}

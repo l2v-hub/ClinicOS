@@ -1,0 +1,272 @@
+diff --git a/frontend/src/components/operator/cartella/RicercaFarmaco.css b/frontend/src/components/operator/cartella/RicercaFarmaco.css
+index 096c1e81..a929a568 100644
+--- a/frontend/src/components/operator/cartella/RicercaFarmaco.css
++++ b/frontend/src/components/operator/cartella/RicercaFarmaco.css
+@@ -62,6 +62,34 @@
+   color: var(--red);
+ }
+ 
++.ricerca-farmaco__filtri {
++  display: grid;
++  gap: 8px;
++  min-width: 0;
++}
++
++.ricerca-farmaco__confezione {
++  margin: 5px 0;
++  font-size: 14px;
++  font-weight: 700;
++  color: var(--text);
++  overflow-wrap: anywhere;
++}
++
++.ricerca-farmaco__forma {
++  display: inline-block;
++  max-width: 100%;
++  margin: 0 0 3px;
++  padding: 3px 8px;
++  border: 1px solid var(--border);
++  border-radius: 6px;
++  background: var(--blue-soft, #edf3ff);
++  color: var(--text);
++  font-size: 12px;
++  font-weight: 600;
++  overflow-wrap: anywhere;
++}
++
+ .ricerca-farmaco__lista {
+   margin: 0;
+   padding: 0;
+@@ -192,7 +220,7 @@
+   /* Base esplicita: su schermi stretti è il pulsante ad andare a capo, non le parole a spezzarsi. */
+   flex: 1 1 200px;
+   min-width: 0;
+-  overflow-wrap: break-word;
++  overflow-wrap: anywhere;
+ }
+ @media (max-width: 600px) {
+   .ricerca-farmaco__riga {
+diff --git a/frontend/src/components/operator/cartella/RicercaFarmaco.tsx b/frontend/src/components/operator/cartella/RicercaFarmaco.tsx
+index 2400cf1f..5e855779 100644
+--- a/frontend/src/components/operator/cartella/RicercaFarmaco.tsx
++++ b/frontend/src/components/operator/cartella/RicercaFarmaco.tsx
+@@ -11,13 +11,15 @@
+ //
+ // PRIVACY: la query e' cio' che l'operatore digita. Nessun dato di paziente entra nell'URL.
+ 
+-import { useEffect, useRef, useState } from 'react';
++import { useEffect, useReducer, useRef } from 'react';
+ import { createPortal } from 'react-dom';
+ import { useMedicationSearch } from './useMedicationSearch';
+ import type { MedicationSearchCriterion } from './medicationSearch';
+ import { IcoPill, IcoSearch, IcoX } from '../../../icons';
+-import { documentoDi, testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
++import { documentoDi, type FarmacoTrovato } from './farmacoDocumento';
+ import type { DocumentoFarmaco } from './farmacoDocumento';
++import { TableFilters } from '../../shared/TableFilters';
++import { filterPackages, packageForms, packageDocumentName, initialSearchPresentation, searchPresentationReducer } from './drugSearchPresentation';
+ import './RicercaFarmaco.css';
+ 
+ interface CorpoProps {
+@@ -28,9 +30,9 @@ interface CorpoProps {
+ }
+ 
+ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProps) {
+-  const [query, setQuery] = useState(nomeIniziale);
+-  const [criterio, setCriterio] = useState<MedicationSearchCriterion>('nome');
++  const [{ query, criterion: criterio, filters }, dispatch] = useReducer(searchPresentationReducer, nomeIniziale, initialSearchPresentation);
+   const search = useMedicationSearch(query, criterio);
++  const visiblePackages = filterPackages(search.items, filters);
+   const campo = useRef<HTMLInputElement | null>(null);
+ 
+   useEffect(() => {
+@@ -46,7 +48,7 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
+           type="search"
+           value={query}
+           maxLength={80}
+-          onChange={(e) => setQuery(e.target.value)}
++          onChange={(e) => dispatch({ type: 'query', value: e.target.value })}
+           placeholder={
+             criterio === 'nome'
+               ? 'Nome commerciale — es. Tachipirina'
+@@ -74,13 +76,36 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
+             type="button"
+             className={`filter-chip${criterio === valore ? ' active' : ''}`}
+             aria-pressed={criterio === valore}
+-            onClick={() => setCriterio(valore)}
++            onClick={() => dispatch({ type: 'criterion', value: valore })}
+           >
+             {etichetta}
+           </button>
+         ))}
+       </div>
+ 
++      {search.items.length > 0 && (
++        <div className="ricerca-farmaco__filtri">
++          <p className="ricerca-farmaco__nota">
++            Filtri sulle {search.items.length} confezioni caricate per «{query.trim()}».
++            {search.nextCursor && ' Altre confezioni disponibili con Continua ricerca.'}
++          </p>
++          <TableFilters
++            tableLabel="farmaci"
++            fields={[
++              { key: 'forma', label: 'Forma farmaceutica', type: 'select', options: packageForms(search.items).map((form) => ({ value: form, label: form })) },
++              { key: 'confezione', label: 'Dosaggio / confezione', type: 'text' },
++            ]}
++            values={{ ...filters }}
++            onChange={(key, value) => {
++              if (key === 'forma' || key === 'confezione') dispatch({ type: 'filter', key, value });
++            }}
++            onClear={() => dispatch({ type: 'clear' })}
++            resultCount={visiblePackages.length}
++            totalCount={search.items.length}
++          />
++        </div>
++      )}
++
+       <div className="ricerca-farmaco__esiti" aria-live="polite">
+         {query.trim().length === 0 && (
+           <p className="ricerca-farmaco__nota ricerca-farmaco__vuoto">
+@@ -104,9 +129,12 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
+             {criterio === 'nome' ? ' fra i nomi commerciali. Provare per principio attivo.' : '.'}
+           </p>
+         )}
+-        {search.items.length > 0 && (
++        {search.items.length > 0 && visiblePackages.length === 0 && (
++          <p className="ricerca-farmaco__nota">Nessuna confezione caricata corrisponde ai filtri. Azzera i filtri o continua la ricerca, se disponibile.</p>
++        )}
++        {visiblePackages.length > 0 && (
+           <ul className="ricerca-farmaco__lista">
+-            {search.items.map((f) => (
++            {visiblePackages.map((f) => (
+               <RigaEsito key={f.aic} farmaco={f} onApriDocumento={onApriDocumento} />
+             ))}
+           </ul>
+@@ -153,12 +181,9 @@ function RigaEsito({
+             <span className="ricerca-farmaco__revocato">{farmaco.statoAmministrativo}</span>
+           )}
+         </p>
+-        <p className="ricerca-farmaco__dettagli">
+-          {[farmaco.descrizione, farmaco.forma].filter(Boolean).join(' · ') ||
+-            testoConfezione(farmaco)}{' '}
+-          · AIC{' '}
+-          {farmaco.aic}
+-        </p>
++        <p className="ricerca-farmaco__confezione">{farmaco.descrizione || 'Dosaggio / confezione non indicati'}</p>
++        <p className="ricerca-farmaco__forma">{farmaco.forma || 'Forma farmaceutica non indicata'}</p>
++        <p className="ricerca-farmaco__dettagli">AIC {farmaco.aic}</p>
+         {farmaco.principiAttivi && farmaco.principiAttivi.length > 0 && (
+           <p className="ricerca-farmaco__pa">
+             {farmaco.principiAttivi
+@@ -171,6 +196,7 @@ function RigaEsito({
+         <button
+           type="button"
+           className="ds-btn ds-btn--secondary"
++          aria-label={packageDocumentName(farmaco, documento)}
+           onClick={() => onApriDocumento(documento, farmaco)}
+         >
+           Apri {documento.tipo === 'rcp' ? 'RCP' : 'foglietto'}
+diff --git a/frontend/src/components/operator/cartella/__tests__/drugSearchPresentation.test.ts b/frontend/src/components/operator/cartella/__tests__/drugSearchPresentation.test.ts
+new file mode 100644
+index 00000000..1621da17
+--- /dev/null
++++ b/frontend/src/components/operator/cartella/__tests__/drugSearchPresentation.test.ts
+@@ -0,0 +1,40 @@
++import assert from 'node:assert/strict';
++import test from 'node:test';
++import {documentoDi,type FarmacoTrovato} from '../farmacoDocumento';
++import {filterPackages,packageForms,packageDocumentName,searchPresentationReducer,initialSearchPresentation} from '../drugSearchPresentation';
++const product=(aic:string,extra:Partial<FarmacoTrovato>={}):FarmacoTrovato=>({aic,denominazione:'MEDICINALE QA',descrizione:'500 MG 20 COMPRESSE',forma:'Compressa',linkFi:null,linkRcp:'https://synthetic.invalid/rcp',...extra});
++
++test('filters preserve original loaded order, exact records and original array without filters',()=>{
++ const items=[product('000000001'),product('000000002',{descrizione:'1000 MG 10 COMPRESSE'}),product('000000003')];
++ assert.strictEqual(filterPackages(items,{forma:'',confezione:''}),items);
++ const found=filterPackages(items,{forma:'Compressa',confezione:'500 MG'});
++ assert.deepEqual(found,[items[0],items[2]]);assert.strictEqual(found[0],items[0]);assert.strictEqual(found[1],items[2]);assert.equal(items.length,3);
++});
++test('form options derive from all loaded raw strings, not a filtered record list',()=>{
++ const items=[product('1',{forma:'Sciroppo'}),product('2'),product('3'),product('4',{forma:null})];
++ assert.deepEqual(packageForms(items),['Compressa','Sciroppo']);assert.deepEqual(items.map(f=>f.aic),['1','2','3','4']);
++});
++test('text filters only original denomination and description, never infer from ingredient quantities',()=>{
++ const f=product('1',{descrizione:null,principiAttivi:[{nome:'Principio QA',quantita:99,unita:'mg'}]});
++ assert.deepEqual(filterPackages([f],{forma:'',confezione:'99 mg'}),[]);
++ assert.deepEqual(filterPackages([product('2')],{forma:'',confezione:'  500 mg  '}),[product('2')]);
++ assert.equal(filterPackages([f],{forma:'',confezione:'medicinale qa'}).length,1);
++});
++test('each accessible document action includes exact full package data and AIC without changing document',()=>{
++ const f=product('000000001',{descrizione:'500 MG 20 COMPRESSE',forma:'Compressa'}),doc=documentoDi(f)!;
++ assert.equal(packageDocumentName(f,doc),'Apri RCP di MEDICINALE QA · 500 MG 20 COMPRESSE · Compressa · AIC 000000001');
++ assert.equal(doc.href,f.linkRcp);assert.equal(f.descrizione,'500 MG 20 COMPRESSE');
++ const other=product('000000002');assert.notEqual(packageDocumentName(other,documentoDi(other)!),packageDocumentName(f,doc));
++});
++test('FI fallback and missing metadata still name original product and exact AIC',()=>{
++ const f=product('000000003',{descrizione:null,forma:null,linkRcp:null,linkFi:'https://synthetic.invalid/fi'});
++ assert.equal(packageDocumentName(f,documentoDi(f)!),'Apri foglietto di MEDICINALE QA · AIC 000000003');
++ assert.deepEqual(filterPackages([f],{forma:'Compressa',confezione:''}),[]);
++});
++test('query and criterion change atomically clear filters, clear alone preserves search',()=>{
++ let state=initialSearchPresentation('Medicinale');state=searchPresentationReducer(state,{type:'filter',key:'forma',value:'Compressa'});
++ const same=searchPresentationReducer(state,{type:'criterion',value:'nome'});assert.strictEqual(same,state);
++ const query=searchPresentationReducer(state,{type:'query',value:'Nuova ricerca'});assert.deepEqual(query.filters,{forma:'',confezione:''});assert.equal(query.query,'Nuova ricerca');
++ const criterion=searchPresentationReducer(state,{type:'criterion',value:'principio-attivo'});assert.deepEqual(criterion.filters,{forma:'',confezione:''});assert.equal(criterion.query,'Medicinale');
++ const cleared=searchPresentationReducer(state,{type:'clear'});assert.equal(cleared.query,'Medicinale');assert.equal(cleared.criterion,'nome');assert.deepEqual(cleared.filters,{forma:'',confezione:''});
++});
+diff --git a/frontend/src/components/operator/cartella/drugSearchPresentation.ts b/frontend/src/components/operator/cartella/drugSearchPresentation.ts
+new file mode 100644
+index 00000000..017f9902
+--- /dev/null
++++ b/frontend/src/components/operator/cartella/drugSearchPresentation.ts
+@@ -0,0 +1,52 @@
++import type { DocumentoFarmaco, FarmacoTrovato } from './farmacoDocumento';
++import type { MedicationSearchCriterion } from './medicationSearch';
++
++export interface PackageFilters {
++  forma: string;
++  confezione: string;
++}
++
++// Presentation only: match the source strings, never infer strength from ingredients.
++export function filterPackages(items: FarmacoTrovato[], filters: PackageFilters): FarmacoTrovato[] {
++  const text = filters.confezione.trim().toLocaleLowerCase('it');
++  if (!filters.forma && !text) return items;
++  return items.filter((item) =>
++    (!filters.forma || item.forma === filters.forma) &&
++    (!text || [item.denominazione, item.descrizione].filter(Boolean).join(' ').toLocaleLowerCase('it').includes(text)),
++  );
++}
++
++export function packageForms(items: FarmacoTrovato[]): string[] {
++  return [...new Set(items.map((item) => item.forma).filter((form): form is string => Boolean(form)))].sort();
++}
++
++export function packageDocumentName(item: FarmacoTrovato, document: DocumentoFarmaco): string {
++  const identity = [item.denominazione, item.descrizione, item.forma, `AIC ${item.aic}`].filter(Boolean).join(' · ');
++  return `Apri ${document.tipo === 'rcp' ? 'RCP' : 'foglietto'} di ${identity}`;
++}
++
++interface SearchPresentation {
++  query: string;
++  criterion: MedicationSearchCriterion;
++  filters: PackageFilters;
++}
++type SearchPresentationEvent =
++  | { type: 'query'; value: string }
++  | { type: 'criterion'; value: MedicationSearchCriterion }
++  | { type: 'filter'; key: keyof PackageFilters; value: string }
++  | { type: 'clear' };
++const emptyFilters = (): PackageFilters => ({ forma: '', confezione: '' });
++
++export function initialSearchPresentation(query: string): SearchPresentation {
++  return { query, criterion: 'nome', filters: emptyFilters() };
++}
++
++// One transition clears local filters before the new search can render.
++export function searchPresentationReducer(state: SearchPresentation, event: SearchPresentationEvent): SearchPresentation {
++  switch (event.type) {
++    case 'query': return event.value === state.query ? state : { ...state, query: event.value, filters: emptyFilters() };
++    case 'criterion': return event.value === state.criterion ? state : { ...state, criterion: event.value, filters: emptyFilters() };
++    case 'filter': return { ...state, filters: { ...state.filters, [event.key]: event.value } };
++    case 'clear': return { ...state, filters: emptyFilters() };
++  }
++}

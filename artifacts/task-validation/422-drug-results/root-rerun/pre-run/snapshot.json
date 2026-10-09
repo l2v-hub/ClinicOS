@@ -1,0 +1,147 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "at": "2026-10-09T20:24:08.925Z",
+  "records": [
+    {
+      "path": "ordinary/fixture.mjs",
+      "source": "ordinary-02/fixture.mjs",
+      "sha256": "45075b690364ade4a1c1d68f79ee43a2f3610f3197e7907646d6914382343ffe"
+    },
+    {
+      "path": "ordinary/after.mjs",
+      "source": "ordinary-02/after.mjs",
+      "sha256": "9765be380fe7a147a5016fd5e90fded964c1bd50f68e9f55cbc521af895190ab"
+    },
+    {
+      "path": "ordinary/extra.mjs",
+      "source": "ordinary-02/extra.mjs",
+      "sha256": "649fa4eb2505555e817661bff65e02a37e95b8b251e6dca576f0ab677b220ad5"
+    },
+    {
+      "path": "ordinary/qa-server.mjs",
+      "source": "ordinary-02/qa-server.mjs",
+      "sha256": "3988bd33a26cddcf9cb8882edce6961a562105f3672936ec3ad0461d63be0b0c"
+    },
+    {
+      "path": "ordinary/modal-surface.html",
+      "source": "ordinary-02/modal-surface.html",
+      "sha256": "d69ae8a8aa9f12e92d19ce18b046d7823b9dbd1010d59e38ee7e71bf8293dabb"
+    },
+    {
+      "path": "ordinary/modal-entry.jsx",
+      "source": "ordinary-02/modal-entry.jsx",
+      "sha256": "769ee4113eb7dbf0ca3642c6dbac04db29a732a95d16fa5d0f5aa1875b0c1f91"
+    },
+    {
+      "path": "ordinary/synthetic-reference.pdf",
+      "source": "ordinary-02/synthetic-reference.pdf",
+      "sha256": "dad94e56aedceb49c1a7203bd48b4c238339f0f228bc9f66b9f4f2d639bbfe67"
+    },
+    {
+      "path": "ordinary/task-contract.md",
+      "source": "ordinary-02/task-contract.md",
+      "sha256": "d8a1c47d218ef016001d99153ebbf97195a3df2917f7de262436be29a3c10de3"
+    },
+    {
+      "path": "ordinary/source-before.json",
+      "source": "ordinary-02/source-before.json",
+      "sha256": "a129892bfd8d09d1a2988728a830c66f7a9814571a62607cc9e1cc83d4e5f9e0"
+    },
+    {
+      "path": "extra/fixture.mjs",
+      "source": "extra-03/fixture.mjs",
+      "sha256": "45075b690364ade4a1c1d68f79ee43a2f3610f3197e7907646d6914382343ffe"
+    },
+    {
+      "path": "extra/after.mjs",
+      "source": "extra-03/after.mjs",
+      "sha256": "9765be380fe7a147a5016fd5e90fded964c1bd50f68e9f55cbc521af895190ab"
+    },
+    {
+      "path": "extra/extra.mjs",
+      "source": "extra-03/extra.mjs",
+      "sha256": "649fa4eb2505555e817661bff65e02a37e95b8b251e6dca576f0ab677b220ad5"
+    },
+    {
+      "path": "extra/qa-server.mjs",
+      "source": "extra-03/qa-server.mjs",
+      "sha256": "2a47fe22fa8735a64af30034a8afd7e21aa947178144ac0a70b816068ec362ef"
+    },
+    {
+      "path": "extra/modal-surface.html",
+      "source": "extra-03/modal-surface.html",
+      "sha256": "d69ae8a8aa9f12e92d19ce18b046d7823b9dbd1010d59e38ee7e71bf8293dabb"
+    },
+    {
+      "path": "extra/modal-entry.jsx",
+      "source": "extra-03/modal-entry.jsx",
+      "sha256": "769ee4113eb7dbf0ca3642c6dbac04db29a732a95d16fa5d0f5aa1875b0c1f91"
+    },
+    {
+      "path": "extra/synthetic-reference.pdf",
+      "source": "extra-03/synthetic-reference.pdf",
+      "sha256": "dad94e56aedceb49c1a7203bd48b4c238339f0f228bc9f66b9f4f2d639bbfe67"
+    },
+    {
+      "path": "extra/task-contract.md",
+      "source": "extra-03/task-contract.md",
+      "sha256": "d8a1c47d218ef016001d99153ebbf97195a3df2917f7de262436be29a3c10de3"
+    },
+    {
+      "path": "extra/source-before.json",
+      "source": "extra-03/source-before.json",
+      "sha256": "a129892bfd8d09d1a2988728a830c66f7a9814571a62607cc9e1cc83d4e5f9e0"
+    },
+    {
+      "path": "strong/fixture.mjs",
+      "source": "supplemental-02/fixture.mjs",
+      "sha256": "45075b690364ade4a1c1d68f79ee43a2f3610f3197e7907646d6914382343ffe"
+    },
+    {
+      "path": "strong/after.mjs",
+      "source": "supplemental-02/after.mjs",
+      "sha256": "9765be380fe7a147a5016fd5e90fded964c1bd50f68e9f55cbc521af895190ab"
+    },
+    {
+      "path": "strong/extra.mjs",
+      "source": "supplemental-02/extra.mjs",
+      "sha256": "649fa4eb2505555e817661bff65e02a37e95b8b251e6dca576f0ab677b220ad5"
+    },
+    {
+      "path": "strong/strong.mjs",
+      "source": "supplemental-02/strong.mjs",
+      "sha256": "3631374a598c4bca3104d96d81faeae38ecb1b6bcd0c162e1c232a22a2619196"
+    },
+    {
+      "path": "strong/qa-server.mjs",
+      "source": "supplemental-02/qa-server.mjs",
+      "sha256": "2a47fe22fa8735a64af30034a8afd7e21aa947178144ac0a70b816068ec362ef"
+    },
+    {
+      "path": "strong/modal-surface.html",
+      "source": "supplemental-02/modal-surface.html",
+      "sha256": "d69ae8a8aa9f12e92d19ce18b046d7823b9dbd1010d59e38ee7e71bf8293dabb"
+    },
+    {
+      "path": "strong/modal-entry.jsx",
+      "source": "supplemental-02/modal-entry.jsx",
+      "sha256": "7335ac88506d45af0b8d051a99a425171a34f96e264bbcc98a5a813d6045e341"
+    },
+    {
+      "path": "strong/synthetic-reference.pdf",
+      "source": "supplemental-02/synthetic-reference.pdf",
+      "sha256": "dad94e56aedceb49c1a7203bd48b4c238339f0f228bc9f66b9f4f2d639bbfe67"
+    },
+    {
+      "path": "strong/task-contract.md",
+      "source": "supplemental-02/task-contract.md",
+      "sha256": "d8a1c47d218ef016001d99153ebbf97195a3df2917f7de262436be29a3c10de3"
+    },
+    {
+      "path": "strong/source-before.json",
+      "source": "supplemental-02/source-before.json",
+      "sha256": "a129892bfd8d09d1a2988728a830c66f7a9814571a62607cc9e1cc83d4e5f9e0"
+    }
+  ],
+  "policy": "Byte-identical sealed independent successful recipes only, environment port/output changed; original failed independent attempt still public and immutable"
+}

@@ -1,0 +1,66 @@
+(node:39440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ catalog references become backend IDs only, including FI, without patient context (5.8411ms)
+✔ retrieves PDF through backend with cancellation and no credentials (82.4667ms)
+✔ source failures provide a retry message without asserting the PDF exists or reflecting raw errors (2.5083ms)
+(node:39440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29224) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ filters preserve original loaded order, exact records and original array without filters (8.5682ms)
+✔ form options derive from all loaded raw strings, not a filtered record list (1.1356ms)
+✔ text filters only original denomination and description, never infer from ingredient quantities (1.2834ms)
+✔ each accessible document action includes exact full package data and AIC without changing document (1.1299ms)
+✔ FI fallback and missing metadata still name original product and exact AIC (0.8892ms)
+✔ query and criterion change atomically clear filters, clear alone preserves search (1.2107ms)
+(node:29224) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:28088) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC1: preferisce l RCP, il documento destinato al professionista sanitario (4.7291ms)
+✔ AC1: senza RCP ripiega sul foglietto illustrativo (0.6279ms)
+✔ AC3: senza alcun documento non produce link — meglio nessuna icona che una rotta (0.4418ms)
+✔ AC4: i nomi sono deduplicati e normalizzati, una ricerca per farmaco non per riga (4.7026ms)
+✔ AC4: gli spazi interni multipli non generano chiavi diverse (0.5032ms)
+✔ AC4: i nomi vuoti non generano ricerche (0.4785ms)
+✔ l'etichetta accessibile distingue i due documenti e avvisa della nuova scheda (0.9809ms)
+✔ AC5: la chiave di ricerca contiene solo il nome del farmaco (0.6786ms)
+(node:28088) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:31792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AC7: la chiave esatta distingue due dosaggi dello stesso farmaco (3.3162ms)
+✔ AC7: senza dosaggio ripiega su una risoluzione dello stesso farmaco invece di arrendersi (1.1533ms)
+✔ AC7: un dosaggio che non combacia ripiega comunque sul farmaco (0.8019ms)
+✔ AC7: il ripiego regge i nomi con spazi — e il vecchio taglio al primo spazio no (0.6349ms)
+✔ AC7: il nome e normalizzato come in anagrafica (maiuscole, spazi ridondanti) (0.7055ms)
+✔ AC7: un farmaco assente resta assente — il ripiego non inventa una risoluzione (0.805ms)
+✔ AC7: su piu' righe dello stesso farmaco il ripiego e stabile (0.8807ms)
+✔ AC7: mappa vuota — nessuna risoluzione, nessuna eccezione (0.3562ms)
+(node:31792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:4384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:4384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ continuation reaches more than 12 packages, preserves rows on failure and retries the same cursor (34.4549ms)
+✔ query and criterion changes clear results and ignore late success or failure (59.2154ms)
+✔ short queries and disposed searches neither send nor accept obsolete work (31.78ms)
+✔ empty scan pages continue; malformed responses remain retryable (46.9653ms)
+✔ cursor requests retain query, criterion and limit without patient information (2.4733ms)
+✔ restore requests exact AIC and rejects another package with the same name (45.0906ms)
+(node:4820) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ can(): allowed, denied, missing, and no policy map (4.3024ms)
+✔ canNavigate(): pages follow their backing capability, dashboards are always visible (0.8301ms)
+✔ capabilityDeniedMessage(): only policy 403s get the role message (1.4275ms)
+(node:4820) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1359.0656

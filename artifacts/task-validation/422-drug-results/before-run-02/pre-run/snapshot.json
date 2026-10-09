@@ -1,0 +1,32 @@
+{
+  "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "capturedAt": "2026-10-09T19:52:02.857Z",
+  "records": [
+    {
+      "path": "fixture.mjs",
+      "sha256": "a43c18e973e4937a66be65cfe272b7aeb7a2b8afe1bb0434e24594381b7b4646"
+    },
+    {
+      "path": "before.mjs",
+      "sha256": "7a842466e893581d9c8f20d6c3e3f0a692501fbfe1d908e2b6b26da80cde7973"
+    },
+    {
+      "path": "qa-server.mjs",
+      "sha256": "82fb2bd01cd8ed14356bc4e68ebceadaf05993e327748a8b8a3ae27992be6c8d"
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "1950aa912e161a85225e3cd8c9bf43bf9729d2ef5ac6de408693ad8dbf75edd6"
+    },
+    {
+      "path": "execution-policy.md",
+      "sha256": "bfb293c8c5eb3cc4521a19ac208e0f5c896ce0b4eaa166ba635d65ceb38f8da4"
+    },
+    {
+      "path": "synthetic-reference.pdf",
+      "sha256": "dad94e56aedceb49c1a7203bd48b4c238339f0f228bc9f66b9f4f2d639bbfe67",
+      "origin": "C:/w-421/artifacts/task-validation/421-import-empty/independent-qa421/pdf-01/synthetic-two-pages.pdf",
+      "policy": "Opaque reuse of existing anonymous QA421 PDF bytes; not official clinical content"
+    }
+  ]
+}

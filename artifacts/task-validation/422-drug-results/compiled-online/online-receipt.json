@@ -1,0 +1,10 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "deployment": "dpl_GGzEmjSBXnCzBeiuUw1rLxYtxMYz",
+  "bundleSha256": "a3cb604df0c4702283537375fde2d7c1b141d99084d6583cc141f966aece31bd",
+  "cases": 11,
+  "decision": "COMPILED ONLINE ACCEPTANCE VERIFIED",
+  "beforeAfterBundleUnchanged": true,
+  "allClinicalApisInterceptedBeforeWire": true,
+  "productionPatientTestMutations": 0
+}

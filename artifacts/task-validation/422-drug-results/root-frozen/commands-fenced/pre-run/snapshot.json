@@ -1,0 +1,18 @@
+{
+  "applicationCommit": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "at": "2026-10-09T20:05:32.985Z",
+  "files": [
+    {
+      "path": "commands.mjs",
+      "sha256": "c0c81f2486fbeed6039e30fb76d6c069ad0b0e114e61eacdb55933e796bd41ef"
+    },
+    {
+      "path": "source-receipt.mjs",
+      "sha256": "1bd9f57091d109503872e155099208e61263140aea043005eb5c8bb62f819021"
+    },
+    {
+      "path": "frozen-commands.mjs",
+      "sha256": "c618af115082a947c6fe853628c0fdf02519a1bc225125cc0e37dc2e1e2c1a8c"
+    }
+  ]
+}

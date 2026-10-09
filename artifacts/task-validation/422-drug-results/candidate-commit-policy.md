@@ -1,0 +1,3 @@
+# Candidate commit policy
+
+AUTHORIZED by direct human user for local candidate commit only: exact four scoped presentation source/test paths, accepted baseline80b313, root sole application writer C:/w-422. Root-dev-02 actual SPA11 browser cases PASS with synthetic API guards; root-dev-commands34focused/types/actual compiler build PASS, full1249/1237PASS/12exactbaselineFAIL/0new. TDD6red-to-green preserved. Candidate is not a release decision: frozen-source root rerun, NEW independent QA, root byte-identical rerun and source/privacy/release gates remain required before main push, deployment or issue closure. No config, manifests, API, clinical/source blocked branches, primary dirty changes, evidence or secrets included in candidate.
