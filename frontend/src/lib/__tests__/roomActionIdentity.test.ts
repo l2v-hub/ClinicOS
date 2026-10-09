@@ -56,3 +56,13 @@ test('bed resource headings wrap bounded custom labels within the dialog', () =>
   assert.match(dialog, /className="modal-title room-bed-edit__title"/);
   assert.match(css, /\.rooms-view \.room-bed-edit__title\s*\{[^}]*min-width:\s*0;[^}]*overflow-wrap:\s*anywhere;/);
 });
+test('long camera identities wrap in the inline editor and deletion confirmation without shared control overrides', () => {
+  const css = readFileSync(new URL('../../components/admin/RoomActions.css', import.meta.url), 'utf8');
+  for (const selector of ['#room-edit-panel-title', '.confirm-dialog__title']) {
+    assert.ok(css.includes('.rooms-view ' + selector), selector);
+  }
+  assert.match(css, /\.rooms-view #room-edit-panel-title[\s\S]*?min-width:\s*0;[\s\S]*?overflow-wrap:\s*anywhere;/);
+  assert.match(css, /\.rooms-view \.confirm-dialog__message\s*\{[^}]*overflow-wrap:\s*anywhere;/);
+  assert.match(css, /\.rooms-view \.confirm-dialog__actions\s*\{[^}]*flex-wrap:\s*wrap;/);
+  assert.match(css, /\.rooms-view \.confirm-dialog__actions \.btn-danger\s*\{[^}]*max-width:\s*100%;[^}]*white-space:\s*normal;[^}]*overflow-wrap:\s*anywhere;/);
+});
