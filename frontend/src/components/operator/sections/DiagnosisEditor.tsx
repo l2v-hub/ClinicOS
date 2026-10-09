@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import type { Diagnosi } from '../../../types';
 import type { SectionProps } from './types';
 import { IcoEdit, IcoX } from '../../../icons';
@@ -85,7 +85,8 @@ export function DiagnosisEditor({
   onChange,
   readOnly,
   operatoreNome,
-}: SectionProps<Diagnosi[]>) {
+  sourceDetail,
+}: SectionProps<Diagnosi[]> & { sourceDetail?: ReactNode }) {
   const list = value ?? [];
 
   const [showAddDiag, setShowAddDiag] = useState(false);
@@ -149,6 +150,7 @@ export function DiagnosisEditor({
       }
     >
       <div className="cts__body--padded">
+        {sourceDetail && <p className="srev-source">Dati correnti registrati — Diagnosi</p>}
         {!readOnly && showAddDiag && (
           <InlineForm
             onSave={addDiagnosi}
@@ -329,6 +331,7 @@ export function DiagnosisEditor({
             ),
           )}
         </div>
+        {sourceDetail}
       </div>
     </ClinicalTableSection>
   );

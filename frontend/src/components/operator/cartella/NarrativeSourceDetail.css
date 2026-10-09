@@ -1,0 +1,15 @@
+.clinical-source-detail {
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 8px;
+  min-width: 0;
+}
+.clinical-source-detail > summary {
+  cursor: pointer;
+  min-height: 48px;
+  padding: 8px 0;
+  overflow-wrap: anywhere;
+}
+.clinical-source-detail > summary > span { margin-inline-end: 8px; }
+.clinical-source-detail > summary > .srev-source { display: block; }
+.clinical-source-detail__original { white-space: pre-wrap; overflow-wrap: anywhere; }

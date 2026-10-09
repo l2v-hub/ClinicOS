@@ -1702,7 +1702,7 @@ export function PatientDetail({
     );
   }
 
-  function renderDiagnosi() {
+  function renderDiagnosi(sourceDetail?: React.ReactNode) {
     return (
       <div className="cr-tab-content">
         <DiagnosisEditor
@@ -1710,6 +1710,7 @@ export function PatientDetail({
           value={cartella.diagnosi ?? []}
           onChange={(list) => upd({ diagnosi: list })}
           operatoreNome={operatoreNome}
+          sourceDetail={sourceDetail}
         />
 
         <ClinicalTableSection
@@ -2546,7 +2547,6 @@ export function PatientDetail({
           />
         )}
         {(current === 'profilo' || current === 'contatti') && renderProfilo(current)}
-        {current === 'diagnosi' && renderDiagnosi()}
         {current === 'terapia-farmacologica' && (
           <TherapyEditor
             mode="patient-chart"
@@ -2617,38 +2617,41 @@ export function PatientDetail({
         )}
         {(current === 'diagnosi' || current === 'sezioni-narrative') && (
           <>
-            {/* #278: anamnesi strutturata modificabile — stesso cast Anamnesi ⇄
-                  Record<string, unknown> già usato in patientSections.ts */}
-            <ClinicalTableSection title="Allergie e intolleranze">
-              <div className="cts__body--padded" data-chart-anchor="allergie">
-                <AllergiesEditor
-                  mode="patient-chart"
-                  value={cartella.allergie ?? []}
-                  status={cartella.allergieStatus}
-                  onStatusChange={(status) => upd({ allergieStatus: status })}
-                  operatoreNome={operatoreNome}
-                  onChange={(list) => upd({ allergie: list })}
-                />
-              </div>
-            </ClinicalTableSection>
-            <AnamnesisEditor
-              mode="patient-chart"
-              showAllergySummary={false}
-              value={cartella.anamnesi as unknown as Record<string, unknown>}
-              onChange={(v) => upd({ anamnesi: v as unknown as Anamnesi })}
-              readOnly={false}
-              operatoreNome={operatoreNome}
-              allergie={cartella.allergie ?? []}
-            />
             <NarrativeSectionsTab
-              key={
+              refreshVersion={
                 assistantSectionRefresh?.actionType === 'update_narrative_section'
                   ? assistantSectionRefresh.version
-                  : 'narrative'
+                  : 0
               }
               patientId={paziente.id}
               operatoreId={operatoreId}
               operatoreRole={operatoreRole}
+              renderCurrentTopic={(topic, sourceDetail) => {
+                if (topic === 'DIAGNOSIS') return renderDiagnosi(sourceDetail);
+                if (topic === 'ALLERGIES') return (
+                  <ClinicalTableSection title="Allergie e intolleranze">
+                    <div className="cts__body--padded" data-chart-anchor="allergie">
+                      <p className="srev-source">Dati correnti registrati — Allergie</p>
+                      <AllergiesEditor
+                        mode="patient-chart"
+                        value={cartella.allergie ?? []}
+                        status={cartella.allergieStatus}
+                        onStatusChange={status => upd({ allergieStatus: status })}
+                        operatoreNome={operatoreNome}
+                        onChange={list => upd({ allergie: list })}
+                      />
+                      {sourceDetail}
+                    </div>
+                  </ClinicalTableSection>
+                );
+                return <AnamnesisEditor
+                  mode="patient-chart" showAllergySummary={false}
+                  value={cartella.anamnesi as unknown as Record<string, unknown>}
+                  onChange={v => upd({ anamnesi: v as unknown as Anamnesi })}
+                  readOnly={false} operatoreNome={operatoreNome}
+                  allergie={cartella.allergie ?? []} sourceDetail={sourceDetail}
+                />;
+              }}
             />
           </>
         )}

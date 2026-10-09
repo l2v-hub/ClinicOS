@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { API_URL } from '../../../config';
 import { operatorHeaders } from '../../../lib/operatorSession';
 import {
@@ -9,35 +9,28 @@ import {
 import { narrativeCacheKey } from '../../../lib/patientTabSnapshots';
 import {
   NarrativeClinicalSection,
-  type BoldTag,
-  type SourceRef,
 } from '../../shared/sections/NarrativeClinicalSection';
 import { DocumentSourcePanel } from '../../shared/DocumentSourcePanel';
+import { NarrativeSourceDetail, type NarrativeSectionDTO as SectionDTO } from './NarrativeSourceDetail';
+import { STRUCTURED_CLINICAL_TOPICS, partitionNarrativeSections, type StructuredClinicalTopic } from '../../../lib/clinicalNarrativePresentation';
 
 // Scheda Paziente — narrative clinical sections (REQ-030). Always shows the canonical
 // sections as faithful text blocks (REQ-029 API); editable, originalText never overwritten.
-
-interface SectionDTO {
-  sectionKey: string;
-  title: string;
-  originalText: string;
-  reviewedText: string;
-  displayText: string;
-  annotations: BoldTag[];
-  sourceReferences: SourceRef[];
-  reviewStatus: string;
-}
 
 interface NarrativeSectionsTabProps {
   patientId: string;
   operatoreId?: string;
   operatoreRole?: string;
+  renderCurrentTopic?: (topic: StructuredClinicalTopic, sourceDetail: ReactNode) => ReactNode;
+  refreshVersion?: number;
 }
 
 export function NarrativeSectionsTab({
   patientId,
   operatoreId,
   operatoreRole,
+  renderCurrentTopic,
+  refreshVersion,
 }: NarrativeSectionsTabProps) {
   // Sezioni gia' mostrate in sessione per questo paziente: compaiono subito e si rivalidano.
   const cachedSections = readSessionCache<SectionDTO[]>(narrativeCacheKey(patientId));
@@ -105,7 +98,7 @@ export function NarrativeSectionsTab({
     })();
 
     return () => controller.abort();
-  }, [patientId, reloadVersion]);
+  }, [patientId, reloadVersion, refreshVersion]);
 
   async function save(sectionKey: string, reviewedText: string) {
     const requestedPatientId = patientId;
@@ -142,59 +135,65 @@ export function NarrativeSectionsTab({
     }
   }
 
-  if (loading) return <p className="cr-empty">Caricamento sezioni cliniche…</p>;
-  if (error)
+  function renderSource(s: SectionDTO, defaultOpen = true) {
+    const ref = (s.sourceReferences ?? []).find(source => source.fileName);
     return (
-      <div className="alert alert--error" role="alert">
-        <span className="alert__text">{error}</span>
-        <button
-          type="button"
-          className="btn-secondary btn-sm"
-          onClick={() => setReloadVersion((v) => v + 1)}
-        >
-          Riprova
-        </button>
-      </div>
+      <NarrativeClinicalSection
+        key={s.sectionKey}
+        sectionKey={s.sectionKey}
+        title={`${s.reviewedText.trim() ? 'Testo rivisto' : ref ? 'Testo importato' : 'Testo sorgente'} — ${s.title}`}
+        originalText={s.originalText}
+        reviewedText={s.reviewedText}
+        annotations={s.annotations}
+        sources={s.sourceReferences}
+        critical={s.reviewStatus === 'conflict'}
+        editable
+        defaultOpen={defaultOpen}
+        reviewStatus={s.reviewStatus}
+        busy={savingKey === s.sectionKey}
+        onSave={(text) => save(s.sectionKey, text)}
+        onCompareSource={ref || (s.originalText || s.displayText || '').trim()
+          ? () => setCompare({ fileName: ref?.fileName, page: ref?.pageFrom,
+              sourceText: s.originalText || s.displayText,
+              title: `Fonte originale — ${s.title}` }) : undefined}
+      />
     );
+  }
+  const { standalone, empty } = partitionNarrativeSections(sections);
 
   return (
     <div className="narrative-sections" data-testid="patient-narrative-sections">
+      {loading && <p className="cr-empty" role="status">Caricamento testo sorgente… I dati correnti restano consultabili.</p>}
+      {error && (
+        <div className="alert alert--error" role="alert">
+          <span className="alert__text">{error} I dati correnti restano consultabili.</span>
+          <button type="button" className="btn-secondary btn-sm" onClick={() => setReloadVersion(v => v + 1)}>Riprova</button>
+        </div>
+      )}
       {saveError && (
         <div className="alert alert--error" role="alert">
           <span className="alert__text">{saveError}</span>
         </div>
       )}
-      {sections.map((s) => {
-        const ref = (s.sourceReferences ?? [])[0] as
-          { fileName?: string; pageFrom?: number } | undefined;
-        return (
-          <NarrativeClinicalSection
-            key={s.sectionKey}
-            sectionKey={s.sectionKey}
-            title={s.title}
-            originalText={s.originalText}
-            reviewedText={s.reviewedText}
-            annotations={s.annotations}
-            sources={s.sourceReferences}
-            critical={s.sectionKey === 'ALLERGIES' && s.reviewStatus === 'conflict'}
-            editable
-            reviewStatus={s.reviewStatus}
-            busy={savingKey === s.sectionKey}
-            onSave={(text) => save(s.sectionKey, text)}
-            onCompareSource={
-              ref || (s.displayText || '').trim()
-                ? () =>
-                    setCompare({
-                      fileName: ref?.fileName,
-                      page: ref?.pageFrom,
-                      sourceText: s.displayText || s.originalText,
-                      title: `Fonte — ${s.title}`,
-                    })
-                : undefined
-            }
-          />
-        );
+      {renderCurrentTopic && STRUCTURED_CLINICAL_TOPICS.map(topic => {
+        const section = sections.find(s => s.sectionKey === topic);
+        const sourceDetail = loading || error || !section
+          ? <p className="srev-source">Testo sorgente non disponibile per questo argomento; non conferma l’assenza clinica.</p>
+          : <NarrativeSourceDetail section={section}>{renderSource(section)}</NarrativeSourceDetail>;
+        return <div key={topic} data-clinical-topic={topic}>{renderCurrentTopic(topic, sourceDetail)}</div>;
       })}
+      {!loading && !error && (
+        <>
+          {(renderCurrentTopic ? standalone : sections.filter(s => !empty.includes(s))).map(s => renderSource(s))}
+          {empty.length > 0 && (
+            <details className="clinical-source-detail" data-testid="document-absences">
+              <summary>{empty.length} argomenti senza testo sorgente: {empty.map(s => s.title).join(', ')}</summary>
+              <p className="srev-source">Non presente nel documento non significa assente nel paziente. I dati correnti vanno consultati separatamente.</p>
+              {empty.map(s => renderSource(s, false))}
+            </details>
+          )}
+        </>
+      )}
       {compare && (
         <DocumentSourcePanel
           patientId={patientId}

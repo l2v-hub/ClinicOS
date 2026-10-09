@@ -37,6 +37,7 @@ export interface NarrativeClinicalSectionProps {
   /** REQ-035 v2: open the source document side panel for this section. */
   onCompareSource?: () => void;
   busy?: boolean;
+  defaultOpen?: boolean;
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -85,7 +86,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
   const [showSource, setShowSource] = useState(false);
-  const { open, setOpen, bodyId } = useWidgetOpen();
+  const { open, setOpen, bodyId } = useWidgetOpen(props.defaultOpen);
 
   const displayText = reviewedText.trim() ? reviewedText : originalText;
   const isEmpty = !displayText.trim();

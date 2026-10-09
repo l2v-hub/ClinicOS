@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { SectionProps } from './types';
 import type { AllergiaItem } from '../../../types';
 import { nowISO, fmtDateTime, ClinicalTableSection } from '../cartella/shared';
@@ -28,6 +28,7 @@ const SECTIONS: ASection[] = [
 type AnamnesisEditorProps = SectionProps<Record<string, unknown>> & {
   allergie?: AllergiaItem[];
   showAllergySummary?: boolean;
+  sourceDetail?: ReactNode;
 };
 
 export function AnamnesisEditor({
@@ -37,6 +38,7 @@ export function AnamnesisEditor({
   operatoreNome,
   allergie = [],
   showAllergySummary = true,
+  sourceDetail,
 }: AnamnesisEditorProps) {
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [draft, setDraft] = useState<Record<string, unknown>>({});
@@ -68,6 +70,7 @@ export function AnamnesisEditor({
     <div className="cr-tab-content">
       <ClinicalTableSection title="Anamnesi">
         <div className="cts__body--padded">
+          {sourceDetail && <p className="srev-source">Dati correnti registrati — Anamnesi</p>}
           {/* Allergie — read-only ClinicalCard (no onEdit: allergies are managed via the dedicated modal flow elsewhere in the app, not inline) */}
           {showAllergySummary && (
             <ClinicalCard title="Allergie" defaultExpanded={true}>
@@ -113,7 +116,7 @@ export function AnamnesisEditor({
               <ClinicalCard
                 key={id}
                 title={label}
-                defaultExpanded={true}
+                defaultExpanded={sourceDetail ? !!val.trim() : true}
                 onEdit={readOnly ? undefined : () => startCardEdit(id)}
               >
                 {isEditing ? (
@@ -196,6 +199,7 @@ export function AnamnesisEditor({
               {String(anamnesi.operatore ?? '')}
             </p>
           )}
+          {sourceDetail}
         </div>
       </ClinicalTableSection>
     </div>
