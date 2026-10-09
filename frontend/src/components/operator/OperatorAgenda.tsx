@@ -22,6 +22,11 @@ import './OperatorAgendaHmi.css';
 import '../shared/AgendaInline.css';
 import { TherapySlotModal } from './TherapySlotModal';
 import { useCan } from '../../lib/capabilities';
+import {
+  canOpenOperatorAppointment,
+  firstOperatorAppointmentSlot,
+} from '../../lib/operatorAppointmentCreation';
+import { useRecencyClock } from '../../lib/useRecencyClock';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
@@ -133,6 +138,7 @@ export function OperatorAgenda({
 }: OperatorAgendaProps) {
   // Creazione appuntamenti: la GUI la nasconde se il ruolo non la consente (il backend decide).
   const canCreateAppointment = useCan('appointments.create');
+  const now = useRecencyClock();
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
   const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
@@ -141,6 +147,12 @@ export function OperatorAgenda({
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // A denied session must not resurrect a pending creation when permission returns.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!canCreateAppointment) setAptForm(null);
+  }, [canCreateAppointment]);
 
   useEffect(() => {
     const days =
@@ -268,26 +280,32 @@ export function OperatorAgenda({
   // "Nuovo appuntamento": prima fascia libera del giorno (oggi: non prima dell'ora attuale).
   // Prima fascia libera non ancora iniziata (arrotondata per eccesso); nessuna nei giorni passati.
   function firstFreeFrom(now: Date): string | null {
-    if (todayStr < isoDate(now)) return null;
-    const minutes = now.getHours() * 60 + now.getMinutes();
-    return (
-      TIME_SLOTS.find((ora) => {
-        if (todayAptByOra.has(ora)) return false;
-        if (todayStr > isoDate(now)) return true;
-        const [h, m] = ora.split(':').map(Number);
-        return h * 60 + m >= minutes;
-      }) ?? null
+    return firstOperatorAppointmentSlot(
+      canCreateAppointment,
+      todayStr,
+      TIME_SLOTS,
+      new Set(todayAptByOra.keys()),
+      now,
     );
   }
-  const firstFreeSlot = firstFreeFrom(new Date());
-  const isPastDay = todayStr < isoDate(new Date());
-  const newAptHint = firstFreeSlot
-    ? undefined
-    : isPastDay
-      ? 'Giorno passato: nessun nuovo appuntamento'
-      : isToday
-        ? 'Nessuna fascia libera nelle ore rimanenti di oggi'
-        : 'Nessuna fascia libera in questa giornata';
+  function openCreation(data: string, ora: string) {
+    const occupied = appuntamenti.some(
+      (a) => a.operatoreId === operatoreId && a.data === data && a.ora === ora,
+    );
+    if (canOpenOperatorAppointment(canCreateAppointment, data, ora, occupied, new Date()))
+      setAptForm({ data, ora });
+  }
+  const firstFreeSlot = firstFreeFrom(now);
+  const isPastDay = todayStr < isoDate(now);
+  const newAptHint = !canCreateAppointment
+    ? 'Il tuo ruolo non può creare appuntamenti.'
+    : firstFreeSlot
+      ? 'Usa Nuovo appuntamento oppure scegli una fascia disponibile. Seleziona il paziente nel modulo.'
+      : isPastDay
+        ? 'Giorno passato: non puoi creare nuovi appuntamenti. Scegli oggi o una data futura.'
+        : todayStr === isoDate(now)
+          ? 'Nessuna fascia libera nelle ore rimanenti di oggi. Scegli una data futura.'
+          : 'Nessuna fascia libera in questa giornata. Scegli un’altra data.';
   // Extract activeSlot OUTSIDE JSX — avoids React Compiler IIFE caching bug
   const activeSlot = selectedTherapySlotId
     ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)
@@ -414,17 +432,21 @@ export function OperatorAgenda({
               type="button"
               className="ds-btn ds-btn--primary"
               disabled={!firstFreeSlot || !canCreateAppointment}
-              title={canCreateAppointment ? newAptHint : 'Il tuo ruolo non può creare appuntamenti'}
+              aria-describedby="operator-appointment-creation-help"
               onClick={() => {
                 // Ricalcolata al clic: la pagina può restare aperta a lungo.
                 const ora = firstFreeFrom(new Date());
-                if (ora) setAptForm({ data: todayStr, ora });
+                if (ora) openCreation(todayStr, ora);
               }}
             >
               <IcoCalendar />
               Nuovo appuntamento
             </button>
           </div>
+          <p id="operator-appointment-creation-help" className="agt-creation-help">
+            {todayApts.length === 0 && 'Nessun appuntamento in questa giornata. '}
+            {newAptHint}
+          </p>
           <div className="agt-day-wrap">
             {TIME_SLOTS.map((ora) => {
               const tSlot = therapySlotsMap.get(ora);
@@ -434,6 +456,13 @@ export function OperatorAgenda({
               const apt = slotApt && matchStato(slotApt, filtroStato) ? slotApt : undefined;
               const isHour = ora.endsWith(':00');
               const isSelected = apt?.id === selectedAptId;
+              const canCreateSlot = canOpenOperatorAppointment(
+                canCreateAppointment,
+                todayStr,
+                ora,
+                !!slotApt,
+                now,
+              );
 
               return (
                 <div key={ora}>
@@ -447,18 +476,18 @@ export function OperatorAgenda({
 
                   {/* Regular time slot */}
                   <div
-                    className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : ' agt-slot--free'}`}
-                    role={!slotApt ? 'button' : undefined}
-                    tabIndex={!slotApt ? 0 : undefined}
-                    aria-label={!slotApt ? `Crea appuntamento alle ${ora}` : undefined}
+                    className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : canCreateSlot ? ' agt-slot--free' : ' agt-slot--unavailable'}`}
+                    role={canCreateSlot ? 'button' : undefined}
+                    tabIndex={canCreateSlot ? 0 : undefined}
+                    aria-label={canCreateSlot ? `Crea appuntamento alle ${ora}` : undefined}
                     onClick={() => {
                       if (apt) setSelectedAptId(isSelected ? null : apt.id);
-                      else if (!slotApt) setAptForm({ data: todayStr, ora });
+                      else if (canCreateSlot) openCreation(todayStr, ora);
                     }}
                     onKeyDown={(event) => {
-                      if (!slotApt && (event.key === 'Enter' || event.key === ' ')) {
+                      if (canCreateSlot && (event.key === 'Enter' || event.key === ' ')) {
                         event.preventDefault();
-                        setAptForm({ data: todayStr, ora });
+                        openCreation(todayStr, ora);
                       }
                     }}
                   >
@@ -517,7 +546,7 @@ export function OperatorAgenda({
                           />
                         )}
                       </div>
-                    ) : slotApt ? null : (
+                    ) : slotApt || !canCreateSlot ? null : (
                       <div className="agt-free-slot">
                         <span className="agt-free-slot__plus">
                           <IcoPlus />
@@ -573,11 +602,29 @@ export function OperatorAgenda({
                     (a) => a.ora === ora || a.ora === ora.replace(':00', ':30'),
                   );
                   const apts = cellApts.filter((a) => matchStato(a, filtroStato));
+                  const canCreateCell = canOpenOperatorAppointment(
+                    canCreateAppointment,
+                    dStr,
+                    ora,
+                    cellApts.length > 0,
+                    now,
+                  );
                   return (
                     <div
                       key={`${dStr}-${ora}`}
-                      className={`agt-week-cell${cellApts.length === 0 ? ' free' : ''}`}
-                      onClick={() => cellApts.length === 0 && setAptForm({ data: dStr, ora })}
+                      className={`agt-week-cell${canCreateCell ? ' free' : ''}`}
+                      role={canCreateCell ? 'button' : undefined}
+                      tabIndex={canCreateCell ? 0 : undefined}
+                      aria-label={
+                        canCreateCell ? `Crea appuntamento il ${dStr} alle ${ora}` : undefined
+                      }
+                      onClick={() => canCreateCell && openCreation(dStr, ora)}
+                      onKeyDown={(event) => {
+                        if (canCreateCell && (event.key === 'Enter' || event.key === ' ')) {
+                          event.preventDefault();
+                          openCreation(dStr, ora);
+                        }
+                      }}
                     >
                       {apts.map((a) => (
                         <div
@@ -616,7 +663,7 @@ export function OperatorAgenda({
                           </span>
                         </div>
                       ))}
-                      {cellApts.length === 0 && (
+                      {canCreateCell && (
                         <span className="agt-week-add">
                           <IcoPlus />
                         </span>
@@ -704,6 +751,7 @@ export function OperatorAgenda({
           operatoreId={operatoreId}
           operatori={operatori}
           onSave={async (apt) => {
+            if (!canCreateAppointment) return 'Operazione non consentita per il tuo ruolo';
             const err = await onAddAppuntamento(apt);
             if (!err) setAptForm(null);
             return err;

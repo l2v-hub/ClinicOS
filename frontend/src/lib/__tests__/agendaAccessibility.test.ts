@@ -86,7 +86,7 @@ test('therapy work is one native action with a prominent non-repeated pending st
   );
   assert.match(agendaStyles, /\.agt-therapy-slot:focus-visible\s*\{/);
   assert.match(therapySlot, /<button[\s\S]*?className={`agt-week-therapy-dot/);
-  assert.match(operatorAgenda, /aria-label=\{!slotApt \? `Crea appuntamento alle \$\{ora\}`/);
+  assert.match(operatorAgenda, /aria-label=\{canCreateSlot \? `Crea appuntamento alle \$\{ora\}`/);
 });
 
 test('daily appointments use strong status surfaces and therapy cards reflow on phones', () => {

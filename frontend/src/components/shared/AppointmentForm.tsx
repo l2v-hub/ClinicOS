@@ -185,6 +185,8 @@ export function AppointmentForm({
                 key={comboKey}
                 inputId="appointment-patient"
                 label="Paziente"
+                required
+                helperText="Seleziona un paziente per salvare l’appuntamento. Cerca per nome, cognome o codice fiscale."
                 selected={selectedPatient}
                 onChange={choosePatientByHand}
                 disabled={saving}

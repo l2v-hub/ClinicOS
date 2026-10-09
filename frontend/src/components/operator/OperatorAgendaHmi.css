@@ -28,6 +28,15 @@
 .agt-view--hmi .agt-day-wrap {
   overflow: visible;
 }
+.agt-view--hmi .agt-creation-help {
+  margin: 12px 0;
+  font: 400 14px/20px var(--font-ui);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.agt-view--hmi .agt-slot--unavailable {
+  cursor: default;
+}
 .agt-view--hmi .agt-slot,
 .agt-view--hmi .agt-slot--hour,
 .agt-view--hmi .agt-slot--half {
