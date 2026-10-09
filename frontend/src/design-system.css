@@ -619,7 +619,7 @@ button.ds-badge:not(#ds):disabled {
 }
 .ds-badge--ok:not(#ds) {
   background: var(--emerald-bg, #e7f7f0);
-  color: color-mix(in srgb, var(--emerald, #16a37b) 65%, black);
+  color: var(--badge-success-text, #0b6b60);
 }
 .ds-badge--info:not(#ds) {
   background: var(--ds-blue-tint);

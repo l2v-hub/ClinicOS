@@ -62,6 +62,8 @@
   --indigo-bg: #eef3fe;
   --emerald: #16a37b;
   --emerald-bg: #e7f7f0;
+  /* Normal-size success badge text; keep decorative/brand accents unchanged. */
+  --badge-success-text: #0b6b60;
   --amber: #c77700;
   --amber-bg: #fdf3e2;
   --red: #d93a4a;
@@ -3567,7 +3569,7 @@ body {
 
 .stato-pill--attivo {
   background: var(--emerald-bg);
-  color: var(--emerald);
+  color: var(--badge-success-text);
   border: 1px solid rgba(5, 150, 105, 0.2);
 }
 .stato-pill--inattivo {
@@ -3586,13 +3588,13 @@ body {
 }
 .stato-pill--consegna-completata {
   background: var(--emerald-bg);
-  color: var(--emerald);
+  color: var(--badge-success-text);
 }
 
 /* Stato ricovero (lista pazienti) */
 .stato-pill--ricovero-ricoverato {
   background: var(--emerald-bg);
-  color: var(--teal);
+  color: var(--badge-success-text);
 }
 .stato-pill--ricovero-ambulatoriale {
   background: var(--indigo-bg);
@@ -5907,7 +5909,7 @@ textarea.form-input {
   white-space: nowrap;
 }
 .status-badge--success {
-  color: var(--c-success);
+  color: var(--badge-success-text);
   background: var(--c-success-bg);
 }
 .status-badge--warning {
