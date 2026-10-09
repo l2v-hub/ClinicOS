@@ -183,6 +183,14 @@ export function PaperForm({
       ref={root}
       className={`assessment-form paper-form${focused ? ' paper-form--focused' : ''}`}
       aria-busy={draft.busy}
+      onInvalidCapture={(event) => {
+        if (!focused || !(event.target instanceof HTMLElement)) return;
+        const metadata = event.target.closest<HTMLDetailsElement>('.painad-metadata');
+        if (!metadata) return;
+        metadata.open = true;
+        event.target.focus({ preventScroll: true });
+        event.target.scrollIntoView({ block: 'center', behavior: 'instant' });
+      }}
       onSubmit={(event) => {
         event.preventDefault();
         if (!invalidMeasures) onSave();
