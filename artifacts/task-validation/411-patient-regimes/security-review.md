@@ -1,0 +1,7 @@
+# Scoped security review
+
+Mandated npx --no-install ruflo security scan --depth full ran (tool resolves deprecated full to deep). Exit1 with481 findings:3critical/177high/301medium; identical totals to accepted409 scan. Existing seven dependency findings (3critical/4high) unchanged; package/lock inputs unchanged. No finding touches a changed production source path. security-receipt.json binds actual scan hashes and checks exact touched paths/dependency findings; original full scan retained locally. No blanket clean-security claim.
+
+Manual boundary review: canonical status membership is explicit equality (including __proto__ treated unavailable), no object-property membership inference, no normalization/writeback, React escaped text/static options, no new endpoint/permission/request amplification. Existing capability/session fencing preserved. Synthetic browser denies all domain writes/unexpected external requests. Existing read-only POST patient search is explicitly allowed. Failed summary fixture503 is intentional and recovery checked; unrelated failures not waived.
+
+No original medical photos, real patient names/identifiers, secret or raw provider responses in public proof. Publication additionally scans private credential byte sequences and unzipped trace members in memory, verifies immutable artifact hashes and inspects synthetic screenshot pixels. No live production patient write for test.

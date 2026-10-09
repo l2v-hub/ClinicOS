@@ -1,0 +1,73 @@
+{
+  "tool": "npx --no-install ruflo security scan --depth full (resolved deep)",
+  "scanExit": 1,
+  "reason": "Pre-existing findings; not a clean security certification",
+  "candidateScanSha256": "42e930377a750e348c881f115090b36d3a1ff8a83d9d9f49ad02d7c8ce154c52",
+  "baselineApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+  "baselineScanSha256": "523023d42257a2b86436a5bacfffd79689d10014a06f5ed57618e72dd90d34a3",
+  "findings": 481,
+  "unchangedDependencyFindings": [
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:braces",
+      "description": "braces vulnerable to stack-exhausti"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:concurrently",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:lint-staged",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:micromatch",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:proxy-addr",
+      "description": "proxy-addr vulnerable to IP spoofin"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:shell-quote",
+      "description": "shell-quote: `quote()` command inje"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:source-map-js",
+      "description": "source-map-js allows event-loop den"
+    }
+  ],
+  "changedProductionPaths": [
+    "frontend/src/components/operator/OperatorClinicalKpiBand.tsx",
+    "frontend/src/components/operator/OperatorDashboard.css",
+    "frontend/src/components/operator/OperatorDashboard.tsx",
+    "frontend/src/components/operator/PatientList.tsx",
+    "frontend/src/components/operator/PatientRegimeControls.css",
+    "frontend/src/components/operator/PatientRegimeControls.tsx",
+    "frontend/src/components/operator/PatientRoster.tsx",
+    "frontend/src/components/operator/__tests__/operator-dashboard-first-view.test.ts",
+    "frontend/src/components/operator/__tests__/rosterOrderUi.test.ts",
+    "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+    "frontend/src/lib/__tests__/patientListView.test.ts",
+    "frontend/src/lib/__tests__/patientRegime411.test.ts",
+    "frontend/src/lib/__tests__/successBadgeContrast.test.ts",
+    "frontend/src/lib/patientListView.ts",
+    "frontend/src/lib/patientRegime.ts",
+    "frontend/src/lib/patientRosterSort.ts"
+  ],
+  "touchedFindings": [],
+  "review": "Exact canonical membership; no input normalization/data write, no new HTTP endpoint/permission, React escaped text, static option labels; existing unsafe-render/dependency findings outside scope retained."
+}

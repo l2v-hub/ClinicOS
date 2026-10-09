@@ -1,0 +1,31 @@
+(node:33068) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ independent411 exhaustive regime/view intersections preserve unknown rather than fabricate admission (0.625ms)
+✔ independent411 known counters equal strict rendered predicates; one absent regime invalidates only state counters (1.1911ms)
+✖ independent411 rendered control announces scope/loading, never implies clinical state of missing data (1.8264ms)
+(node:33068) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 298.0137
+
+✖ failing tests:
+
+test at artifacts\task-validation\411-patient-regimes\independent-qa\adversarial.test.ts:2:3342
+✖ independent411 rendered control announces scope/loading, never implies clinical state of missing data (1.8264ms)
+  ReferenceError: React is not defined
+      at PatientRegimeControls (C:\w-411\frontend\src\components\operator\PatientRegimeControls.tsx:15:3)
+      at Object.react_stack_bottom_frame (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:9808:18)
+      at renderWithHooks (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5062:19)
+      at renderElement (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5497:23)
+      at retryNode (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:6417:31)
+      at performWork (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:7435:17)
+      at startWork (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:8270:7)
+      at renderToStringImpl (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:8380:7)
+      at process.env.NODE_ENV.exports.renderToStaticMarkup (C:\Workspace\ClinicOSHouse-worktrees\insulin-online-20261008\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:9861:14)
+      at TestContext.<anonymous> (C:\w-411\artifacts\task-validation\411-patient-regimes\independent-qa\adversarial.test.ts:44:16)

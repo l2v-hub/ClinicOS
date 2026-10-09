@@ -1,0 +1,25 @@
+{
+  "sourceBeforeAfterEqual": true,
+  "originalAcceptanceCriteria": 4,
+  "focusedTests": 20,
+  "adversarialTests": 3,
+  "suppliedBrowserGroups": 11,
+  "independentlyAuthoredBrowserGroups": 2,
+  "fullRegression": {
+    "tests": 1195,
+    "pass": 1183,
+    "knownBaselineFailures": 12,
+    "newFailures": 0
+  },
+  "security": {
+    "findings": 481,
+    "unchangedDependencyFindings": 7,
+    "touchedFindings": 0,
+    "noCleanCertification": true
+  },
+  "runtime7474Stopped": true,
+  "initialProbeRefinements": [
+    "QA-only SSR needed application automatic JSX configuration",
+    "Unknown outside exact known DH intersection does not invalidate its verified zero; initial incorrect QA assertion corrected"
+  ]
+}

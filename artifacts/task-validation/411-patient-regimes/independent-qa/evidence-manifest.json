@@ -1,0 +1,190 @@
+{
+  "applicationCommit": "8b327ca55ab5d8d4c5e0c19afcb828c017eeb3df",
+  "sourceSha256": "d5c10518d55750fb19731dbfbbd03da4b52b0769f8d25b83bff07d99fe781580",
+  "files": [
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa-report.md",
+      "sha256": "dc280882d8c4785f66338a0c5411e71aa38b2147c87ecf6d41f098d69d84d473"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-automatic-jsx.log",
+      "sha256": "9803f8a3c43c05cec44e66479f36687b1364843f4700e7dcc02fadb34bc3ec58"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser.mjs",
+      "sha256": "71d843deb600a06ad56ed14e0490b747e70a3c9920fa4e43ddcb9e10e4461521"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser/independent-keyboard-sex-trace.zip",
+      "sha256": "e8c4a8eff6eb8f66366bf66823ac17284b9bdcd424ef36e9e79e2db6c8421968"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser/playwright-report/index.html",
+      "sha256": "136132f10a0478f685584c44d8148f97c5263a865a8fb1a963bfd5b7d1a3904d"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser/screenshots/native-keyboard-day-hospital.png",
+      "sha256": "9a463c4028c7234831355210c09bbc5a5ff4fb7957502be770a6ea21aff0fc55"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser/screenshots/sex-regime-intersection.png",
+      "sha256": "cf26190d5e637765aa7917b6a34362e22426f7814fc274ce8a4c413c876e8b3e"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser/test-results/browser-results.json",
+      "sha256": "4bf07f37fea4b92b7af13d18c28094e230ceeb4dd415e97ac9e66c78f61b16db"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser/video/independent-keyboard-sex.webm",
+      "sha256": "c09ba2ba1d43737b7ae49830b9ba8170a03ee6b426f3405c01a19388dbe213ff"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial-browser/video/page@7cb7363777ec2a8db1fbcc176d960113.webm",
+      "sha256": "c2830c17009630995d375824f9f965bbc58908cab191936c65453d6c0401ca36"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial.log",
+      "sha256": "740994ab12ef8eaed9257b04d28c93eb5d2a70d2e93ab14681d4596d08f0c2ba"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/adversarial.test.ts",
+      "sha256": "5111b8d948491a3bda57a84c15bc02c4f9432320a56d1cdb9428bdde6595cc5c"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/after/source-receipt.json",
+      "sha256": "2d9e5fafecd32d3afd9fdc03353e7af538dc568b194db8acebb7736052f72833"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/before/source-receipt.json",
+      "sha256": "2d9e5fafecd32d3afd9fdc03353e7af538dc568b194db8acebb7736052f72833"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/denied-summary-trace.zip",
+      "sha256": "9ad1fa60c28a56238c01d05701b8465156e61665a1c90d55393566cb0f3df187"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/desktop-trace.zip",
+      "sha256": "41079cc5b895363c7271c0eb05bd5640b87419418e4161b00cee866e17726acf"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/failed-summary-trace.zip",
+      "sha256": "01ce3f27efbea38d9e6bc1caee64ee4921017d77c45d81cdd7c23a8ac2f05fe1"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/loading-summary-trace.zip",
+      "sha256": "42960e17a61d983d0ef56518617bd25723b240644058de5b141ed9288cad718e"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/mobile-trace.zip",
+      "sha256": "e19e8e0e77abf861ba3a5ee4abba32418407cd6f1de67a2008166e8fb62ddb28"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/physician-trace.zip",
+      "sha256": "890f03188ed58230cd2eb6b095e9609a3d591edefeb8c859bfe4984bf1369f3d"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/playwright-report/index.html",
+      "sha256": "be9b754791d8dd1f9f68b1908b07aad7d37a273a00af0451f15534404a4b051b"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/dashboard-non-dimessi7.png",
+      "sha256": "453b8c3670ac038a24e49efc7633ea5800bbbcfdc382cf398fefbe97871682e9"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/desktop-broad3-loaded4.png",
+      "sha256": "fbb65274530f1295185803ff1e88d76694b7ad9e9bef90401df6b250cadcc037"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/desktop-day-hospital1.png",
+      "sha256": "53b972a694ec1e0ee3c52d3449b00e3b2b943d1fa28efeeb469a19da4f238727"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/desktop-unavailable3-loaded8.png",
+      "sha256": "52a701327d98b9264ee85efdc8ed5d0fe27bd4801cfe7907505c7962ac4f9683"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/failed-summary-identities-retained.png",
+      "sha256": "836b17c30916c8b2333bc00189ee5e54ba8f2eb40a3fcd5207c3f8f98634145b"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/mobile-grayscale-day-hospital.png",
+      "sha256": "9f2e3a60b27cf9d8d4e553dda9ce8630a1157830d97a01f875789d8f269f904c"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/mobile-grayscale-unavailable.png",
+      "sha256": "2b612624d3804dbd8f3f9edfb56fbb4565d75096a45b8e064121d9f0b53e00c3"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/screenshots/physician-default-non-dimessi.png",
+      "sha256": "10f99bb89e56404363fc2e456bba9995995701d7bd514109f46b00383d7c98a8"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/test-results/browser-results.json",
+      "sha256": "909c8265fcb1ee68c99e0d6e426ffec5624cad2523c9ca4a677564162e5693d8"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/video/denied-summary.webm",
+      "sha256": "6484e2a734ea87b53f22d7f2cbaca74168c1ff387559ea5f823d3cdc30c7a911"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/video/desktop.webm",
+      "sha256": "e59dc24dfb415e9c8ae83e3b64c9dccef4ef7e6df2f23d96baed8681f567cc6a"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/video/failed-summary.webm",
+      "sha256": "7b763220cd2764b960432dc3e76df2b063718409d7409bf4bc5155fbc1fe1f41"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/video/loading-summary.webm",
+      "sha256": "2ad53b7595c527ab932cd8643160066eb39e5c7df85f7615b594fca87854bb39"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/video/mobile.webm",
+      "sha256": "ba31d66c65bc826e04b3ecc1f5b2b904503bc7ffe82447090ff6d097cca16bca"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/browser/video/physician.webm",
+      "sha256": "222c3557d074dc21c86a3e7eb895ecf722d9ef95bce0fd322f1e801309a88987"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/command-results.json",
+      "sha256": "2d761a6f5f69cf4b7bee3dc6004e3f84ad512703ac1bce51a34789dfedc746c5"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/focused.log",
+      "sha256": "bf43391129c6785268ce6eb0d82b0dd9e8303a990b45e847cf74fa0cf7eacf3a"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/frontend-tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/full-regression.log",
+      "sha256": "64570d96bbd1b0c30d495d24b14ae6510336a93b7ad7c5578c9074531c020672"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/commands/vite-build.log",
+      "sha256": "9e6d6c0f6e98f302225412d39f01deffd854fdec90eb6cc00936ee1b47674d7d"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/freeze-evidence.mjs",
+      "sha256": "6abff49de6ef0e3be721ed99b2a4622f22bc3894f2516d5da21c1fdce80537ce"
+    },
+    {
+      "path": "artifacts/task-validation/411-patient-regimes/independent-qa/independent-checks.json",
+      "sha256": "26eb0815c11dedcf830950f137ab3a97a53da5a48e37a03b9dc139bec77dc688"
+    }
+  ]
+}

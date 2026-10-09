@@ -1,0 +1,38 @@
+{
+  "applicationCommit": "8b327ca55ab5d8d4c5e0c19afcb828c017eeb3df",
+  "checkedAt": "2026-10-09T09:04:26.3169360Z",
+  "decision": "VERIFIED RELEASE",
+  "productionPatientTestMutations": 0,
+  "vercel": {
+    "aliases": [
+      "clinicos-eosin.vercel.app",
+      "clinicos-lucalavia-2482s-projects.vercel.app",
+      "clinicos-git-main-lucalavia-2482s-projects.vercel.app"
+    ],
+    "state": "READY",
+    "id": "dpl_3C9Xk6kMpWe3cP3u78E5ptSNQPR9",
+    "http": 200,
+    "gitSourceSha": "8b327ca55ab5d8d4c5e0c19afcb828c017eeb3df",
+    "bundleSha256": "a817a901901200dec383c0b3a324b7351f977773067cc613182dce6439d0d969",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-CiM9OX1l.js",
+    "entryContainsRegime": false,
+    "githubCommitSha": "8b327ca55ab5d8d4c5e0c19afcb828c017eeb3df",
+    "regimeChunks": [
+      {
+        "regimeControlsPresent": true,
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientList-BuHcdy6c.js",
+        "http": 200,
+        "sha256": "ab97070bd0c1608caf6e8cb446e683c4d068352e3b276da149b54e8e4f13adf2"
+      }
+    ]
+  },
+  "backend": {
+    "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "healthHttp": 200,
+    "provenance": "No411backend/schema/API changes; previously verified409retained. No fake redeployment or production patient test write.",
+    "healthUrl": "https://clinicos-backend-production-df88.up.railway.app/health",
+    "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "changed": false
+  }
+}

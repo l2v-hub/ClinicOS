@@ -1,0 +1,44 @@
+(node:38592) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ clinical overview owns an abortable retry without reloading unrelated dashboard feeds (1.8169ms)
+✔ operator dashboard never presents unavailable clinical metrics as verified zeroes (0.4534ms)
+✔ admin dashboard shares the same explicit unavailable-data and recovery contract (0.4161ms)
+(node:38592) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39764) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Non dimessi keeps admitted, day hospital and unknown state; excludes discharged (0.8415ms)
+✔ Dimessi e archivio shows only discharged; Tutti shows everyone (0.2079ms)
+✔ counts add up when every state is known (0.878ms)
+✔ with any unknown state the Non dimessi/Dimessi counts are not verifiable (null), never a false zero (0.2164ms)
+(node:39764) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:7368) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 411 broad view describes the exact non-discharged predicate, not admission (1.0524ms)
+✔ 411 canonical regimes match strictly and have human readable labels (0.268ms)
+✔ 411 missing/unsupported runtime regime never becomes admitted or discharged (0.1458ms)
+✔ 411 contextual view counts agree with each exact rendered intersection (0.3174ms)
+✔ 411 state counts remain unverified for malformed or unavailable regimes (1.0111ms)
+✔ 411 KPI and dashboard copy describe the broad set without changing navigation key (0.9142ms)
+(node:7368) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:18684) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ all fields start ascending and toggle both ways (2.534ms)
+✔ names use Italian surname and given name order; empty names remain last both ways (1.6175ms)
+✔ tax codes are case-insensitive and missing values stay last, including whitespace (0.4376ms)
+✔ admissions sort by displayed labels with unavailable summaries/status last (0.3859ms)
+✔ signals are numeric: critical counts once, all visible sources contribute, missing is not zero (0.3019ms)
+✔ equal field values use deterministic name/id ties independent of incoming page order (0.3443ms)
+✔ sorting does not mutate inputs and reorders appended rows and asynchronously resolved signals (0.2465ms)
+(node:18684) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 372.6396
