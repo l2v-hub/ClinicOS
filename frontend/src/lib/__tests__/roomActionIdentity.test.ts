@@ -50,3 +50,9 @@ test('all newly touched room presentation modules meet the500line budget', () =>
     assert.ok(source.split('\n').length <500, name);
   }
 });
+test('bed resource headings wrap bounded custom labels within the dialog', () => {
+  const dialog = readFileSync(new URL('../../components/admin/BedEditDialog.tsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../../components/admin/RoomActions.css', import.meta.url), 'utf8');
+  assert.match(dialog, /className="modal-title room-bed-edit__title"/);
+  assert.match(css, /\.rooms-view \.room-bed-edit__title\s*\{[^}]*min-width:\s*0;[^}]*overflow-wrap:\s*anywhere;/);
+});

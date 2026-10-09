@@ -12,3 +12,9 @@
 .rooms-view .room-card__actions .icon-btn--danger {
   margin-inline-start: 4px;
 }
+
+.rooms-view .room-bed-edit__title {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}

@@ -16,7 +16,7 @@ export function BedEditDialog({ target, form, onChange, bedSaving, onSave, onClo
   return (
     <AccessibleDialogSurface labelledBy="bed-edit-dialog-title" onClose={onClose} dismissible={!bedSaving}>
       <div className="modal-header">
-        <h3 className="modal-title" id="bed-edit-dialog-title">{title}</h3>
+        <h3 className="modal-title room-bed-edit__title" id="bed-edit-dialog-title">{title}</h3>
         <button type="button" className="icon-btn" aria-label={`Chiudi ${title}`} data-dialog-initial-focus
           disabled={bedSaving} onClick={onClose}><IcoX /></button>
       </div>
