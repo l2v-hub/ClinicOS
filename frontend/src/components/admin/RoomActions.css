@@ -43,3 +43,8 @@
   white-space: normal;
   overflow-wrap: anywhere;
 }
+
+.rooms-view .confirm-dialog__actions .btn-danger:not(#ds) {
+  height: auto;
+  white-space: normal;
+}

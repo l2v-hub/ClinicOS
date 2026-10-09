@@ -66,3 +66,7 @@ test('long camera identities wrap in the inline editor and deletion confirmation
   assert.match(css, /\.rooms-view \.confirm-dialog__actions\s*\{[^}]*flex-wrap:\s*wrap;/);
   assert.match(css, /\.rooms-view \.confirm-dialog__actions \.btn-danger\s*\{[^}]*max-width:\s*100%;[^}]*white-space:\s*normal;[^}]*overflow-wrap:\s*anywhere;/);
 });
+test('bounded destructive text defeats canonical nowrap specificity without replacing the shared skin', () => {
+  const css = readFileSync(new URL('../../components/admin/RoomActions.css', import.meta.url), 'utf8');
+  assert.match(css, /\.rooms-view \.confirm-dialog__actions \.btn-danger:not\(#ds\)\s*\{[^}]*height:\s*auto;[^}]*white-space:\s*normal;/);
+});
