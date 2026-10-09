@@ -1,0 +1,76 @@
+{
+  "tool": "npx --no-install ruflo security scan --depth full (resolved deep)",
+  "scanExit": 1,
+  "reason": "Pre-existing findings; not a clean security certification",
+  "candidateScanSha256": "54ca045e362a950fccdbaf83c160aa9c24cda5f4f45e3eb42a1163b77571f240",
+  "baselineApplication": "8b327ca55ab5d8d4c5e0c19afcb828c017eeb3df",
+  "baselineScanSha256": "42e930377a750e348c881f115090b36d3a1ff8a83d9d9f49ad02d7c8ce154c52",
+  "findings": 481,
+  "unchangedDependencyFindings": [
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:braces",
+      "description": "braces vulnerable to stack-exhausti"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:concurrently",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:lint-staged",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:micromatch",
+      "description": "Vulnerability"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:proxy-addr",
+      "description": "proxy-addr vulnerable to IP spoofin"
+    },
+    {
+      "severity": "CRITICAL",
+      "type": "Dependency CVE",
+      "location": "package.json:shell-quote",
+      "description": "shell-quote: `quote()` command inje"
+    },
+    {
+      "severity": "HIGH",
+      "type": "Dependency CVE",
+      "location": "package.json:source-map-js",
+      "description": "source-map-js allows event-loop den"
+    }
+  ],
+  "changedProductionPaths": [
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/__tests__/clinicalSourceDetail412.test.ts",
+    "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+    "frontend/src/components/operator/cartella/NarrativeSourceDetail.css",
+    "frontend/src/components/operator/cartella/NarrativeSourceDetail.tsx",
+    "frontend/src/components/operator/sections/AnamnesisEditor.tsx",
+    "frontend/src/components/operator/sections/DiagnosisEditor.tsx",
+    "frontend/src/components/shared/sections/NarrativeClinicalSection.tsx",
+    "frontend/src/lib/__tests__/clinicalNarrativePresentation412.test.ts",
+    "frontend/src/lib/clinicalNarrativePresentation.ts"
+  ],
+  "touchedFindings": [
+    {
+      "severity": "MEDIUM",
+      "type": "React XSS",
+      "location": "frontend\\src\\components\\shared\\sections\\NarrativeClinicalSection.tsx:8",
+      "description": "React XSS risk"
+    }
+  ],
+  "newTouchedFindings": [],
+  "preExistingTouchedReview": "One exact baseline React XSS heuristic points to unchanged comment stating no dangerouslySetInnerHTML. Actual renderer uses escaped React text; no raw HTML sink added, SSR escape assertion passes. Not suppressed or claimed absent.",
+  "review": "Exact canonical membership/document-absence markers, React escaped original/source text, no automatic clinical synchronization. Existing narrative PUT unchanged; no new endpoint/permission/schema/config/dependency. Pre-existing repository security findings retained."
+}

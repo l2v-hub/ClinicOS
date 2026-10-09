@@ -1,0 +1,1202 @@
+{
+  "applicationCommit": "3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56",
+  "applicationSourceSha256": "d32b0be8dbc37b5f29df11578836bdc5720c9f420218e4b3d0e1f69c8bd50457",
+  "decision": "SOURCE-BOUND SYNTHETIC PROOF",
+  "secretChecks": 20244,
+  "zipEntriesChecked": 6551,
+  "originalIndependentManifestFrozen": true,
+  "productionPatientTestMutations": 0,
+  "excluded": [
+    "root-initial/debug/failures and initial online-browser transport-guard failure",
+    "scratch-prisma generated client",
+    "405/408/410 unreleased app sources",
+    "dirty launchers",
+    "coordination metadata",
+    "original audit/medical photos"
+  ],
+  "files": [
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/architecture-review.md",
+      "sha256": "61a58c5d9f8c69e3a09779a33c31654c4db8dba300c2e2a17166b212240c395f",
+      "gitBlobSha256": "61a58c5d9f8c69e3a09779a33c31654c4db8dba300c2e2a17166b212240c395f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/baseline-red.md",
+      "sha256": "0e5aee462c351d385ad3707f5571f5c29f78299ce44e539aff8c6ca6262f99de",
+      "gitBlobSha256": "0e5aee462c351d385ad3707f5571f5c29f78299ce44e539aff8c6ca6262f99de",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/ci-comparison.json",
+      "sha256": "ecf6db9a989b1b121870069c351d81c650e39b8e0ce4a06f7ab128bf4ef8af77",
+      "gitBlobSha256": "ecf6db9a989b1b121870069c351d81c650e39b8e0ce4a06f7ab128bf4ef8af77",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/collect-ci-receipt.mjs",
+      "sha256": "8fdedcb9f99f5a3f7cf427a73f019e6036150c0ce4fea9f3a2d14ccdef739c8c",
+      "gitBlobSha256": "8fdedcb9f99f5a3f7cf427a73f019e6036150c0ce4fea9f3a2d14ccdef739c8c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/deployment-receipt.json",
+      "sha256": "cde34b483b93d623a6efc164265271c3791a9a6b338dc94d341a1351f4e56a0b",
+      "gitBlobSha256": "cde34b483b93d623a6efc164265271c3791a9a6b338dc94d341a1351f4e56a0b",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/github-comment-template.md",
+      "sha256": "138ef1ab6b31df61aa61a3c237cd26f9057e24670ccfe513ed24e114d0f65042",
+      "gitBlobSha256": "138ef1ab6b31df61aa61a3c237cd26f9057e24670ccfe513ed24e114d0f65042",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/implementation-receipt.md",
+      "sha256": "e6cae979ca0fa2dcc43be2fb60e1143b42f8143929124dfca6334ae788608a09",
+      "gitBlobSha256": "e6cae979ca0fa2dcc43be2fb60e1143b42f8143929124dfca6334ae788608a09",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/empty-conflict-trace.zip",
+      "sha256": "eb0d943e0466cdb3fb8cfc539d4eb22ca256b98ce83b82f7f14bc2ecb649e376",
+      "gitBlobSha256": "eb0d943e0466cdb3fb8cfc539d4eb22ca256b98ce83b82f7f14bc2ecb649e376",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/extra-conflict-trace.zip",
+      "sha256": "9053bf763926271d105d4851b1c6296e6276a2a3b7f5dd2111039bd361e830f2",
+      "gitBlobSha256": "9053bf763926271d105d4851b1c6296e6276a2a3b7f5dd2111039bd361e830f2",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/loading-source-trace.zip",
+      "sha256": "ed15d7da0d0b995ec8161495ff24bfdf5987db5c2aeb6ef57573f6fbca697e45",
+      "gitBlobSha256": "ed15d7da0d0b995ec8161495ff24bfdf5987db5c2aeb6ef57573f6fbca697e45",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/mixed-trace.zip",
+      "sha256": "c4a5cbfc968d4a5668ff4dd20979d0618406831491a1b88ccbc0d8cf98bc2027",
+      "gitBlobSha256": "c4a5cbfc968d4a5668ff4dd20979d0618406831491a1b88ccbc0d8cf98bc2027",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/mobile-physician-trace.zip",
+      "sha256": "db89c9621dba725ee2f9fbce22d9619895a27c1cdda75a17def2d2830789d2bc",
+      "gitBlobSha256": "db89c9621dba725ee2f9fbce22d9619895a27c1cdda75a17def2d2830789d2bc",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/playwright-report/index.html",
+      "sha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "gitBlobSha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/screenshots/compact-document-absence-visible-conflict.png",
+      "sha256": "5690237da3bd45eb6091f9a1377dd08b3ccb707ea216d70e1c62458c6e0e445c",
+      "gitBlobSha256": "5690237da3bd45eb6091f9a1377dd08b3ccb707ea216d70e1c62458c6e0e445c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/screenshots/current-draft-after-source-retry.png",
+      "sha256": "364f412f64fb68e0b1066647b909ce5775334c471b86a70ba5fc22c6057a99d0",
+      "gitBlobSha256": "364f412f64fb68e0b1066647b909ce5775334c471b86a70ba5fc22c6057a99d0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/screenshots/current-with-compact-sources.png",
+      "sha256": "aec57c926ab582a00af0bbfad0f6e514c02d1f77931a71a1333e92afeb574e13",
+      "gitBlobSha256": "aec57c926ab582a00af0bbfad0f6e514c02d1f77931a71a1333e92afeb574e13",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/screenshots/desktop-compact-seven-absences.png",
+      "sha256": "934e6541cd17c51f3945e0d42c3095da3644e1f7012dd46ec32929e91f2737d9",
+      "gitBlobSha256": "934e6541cd17c51f3945e0d42c3095da3644e1f7012dd46ec32929e91f2737d9",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/screenshots/mobile-current-source.png",
+      "sha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "gitBlobSha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/screenshots/reviewed-original-current-distinct.png",
+      "sha256": "d24d01fbe284b0408fe57518988d92d8c4e3fa52ebc59c3d0d6caa7d6b1d8fbb",
+      "gitBlobSha256": "d24d01fbe284b0408fe57518988d92d8c4e3fa52ebc59c3d0d6caa7d6b1d8fbb",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/screenshots/unsupported-source-and-conflict.png",
+      "sha256": "c5244cf42315cb9deaa356bab9c2b465d84e1a64189d5d6b367f69c94df45845",
+      "gitBlobSha256": "c5244cf42315cb9deaa356bab9c2b465d84e1a64189d5d6b367f69c94df45845",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/source-error-trace.zip",
+      "sha256": "7090a2b7d4023c410e67ddf31bcc4d88ddeedc02cd7e4c96a1f82b58691faade",
+      "gitBlobSha256": "7090a2b7d4023c410e67ddf31bcc4d88ddeedc02cd7e4c96a1f82b58691faade",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/test-results/browser-results.json",
+      "sha256": "333721c13c357de01524c47c844b968e0809a4e87ba8744533096884a6dfc973",
+      "gitBlobSha256": "333721c13c357de01524c47c844b968e0809a4e87ba8744533096884a6dfc973",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/video/empty-conflict.webm",
+      "sha256": "c888d3ba25e171dba1ebd74b1271811ac82c1d5d14d8b1f33d5e81d82ab5712e",
+      "gitBlobSha256": "c888d3ba25e171dba1ebd74b1271811ac82c1d5d14d8b1f33d5e81d82ab5712e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/video/extra-conflict.webm",
+      "sha256": "8c43b321dc8293ac343e13c8a5fb87047340ddcd5c68a8f260ea944db92b67b8",
+      "gitBlobSha256": "8c43b321dc8293ac343e13c8a5fb87047340ddcd5c68a8f260ea944db92b67b8",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/video/loading-source.webm",
+      "sha256": "951e4771ecb9e388043ea2862e6bc3cc43b73cae74dfac065c2725f2c9ecb3c7",
+      "gitBlobSha256": "951e4771ecb9e388043ea2862e6bc3cc43b73cae74dfac065c2725f2c9ecb3c7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/video/mixed.webm",
+      "sha256": "01aadd39a723a9e3ec05ec3841313f1126e04683cc6b4ce2bf1cf27d4ebf6f03",
+      "gitBlobSha256": "01aadd39a723a9e3ec05ec3841313f1126e04683cc6b4ce2bf1cf27d4ebf6f03",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/video/mobile-physician.webm",
+      "sha256": "685ed2feaf34cc112824b1503d40acd40c46d47ca0bd896afbd84049409b14bc",
+      "gitBlobSha256": "685ed2feaf34cc112824b1503d40acd40c46d47ca0bd896afbd84049409b14bc",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser-final/video/source-error.webm",
+      "sha256": "8aa359a50798bbb3fdd14155292e4b0805f4f5f2ab1129f4fda31822fb513db7",
+      "gitBlobSha256": "8aa359a50798bbb3fdd14155292e4b0805f4f5f2ab1129f4fda31822fb513db7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser.mjs",
+      "sha256": "958f6a4f887c9e81e091475bf8d79893d37d025331c6d2730dfe890aa0522cbd",
+      "gitBlobSha256": "958f6a4f887c9e81e091475bf8d79893d37d025331c6d2730dfe890aa0522cbd",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/empty-conflict-trace.zip",
+      "sha256": "57f55f2c347455528d0086df4125310c95c3408384de190e279c5a1d4bb8d9cc",
+      "gitBlobSha256": "57f55f2c347455528d0086df4125310c95c3408384de190e279c5a1d4bb8d9cc",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/extra-conflict-trace.zip",
+      "sha256": "f57278463033113c581c16f352161717105b5ca5d264ad448477d47ecb3b51cc",
+      "gitBlobSha256": "f57278463033113c581c16f352161717105b5ca5d264ad448477d47ecb3b51cc",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/loading-source-trace.zip",
+      "sha256": "9c38a6d40e3e398c460e45a82cd3c332c735c0064c15eb554ecbd296e2d0da1f",
+      "gitBlobSha256": "9c38a6d40e3e398c460e45a82cd3c332c735c0064c15eb554ecbd296e2d0da1f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/mixed-trace.zip",
+      "sha256": "674d18500909c371881b5daf32d87b1802ba1f5ee197842c55de8fc111136018",
+      "gitBlobSha256": "674d18500909c371881b5daf32d87b1802ba1f5ee197842c55de8fc111136018",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/mobile-physician-trace.zip",
+      "sha256": "7b5dfc7e1f58c342238d9768abd4c2efb1cffcf4a2cc5f1b01740b1ae178b4d7",
+      "gitBlobSha256": "7b5dfc7e1f58c342238d9768abd4c2efb1cffcf4a2cc5f1b01740b1ae178b4d7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/playwright-report/index.html",
+      "sha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "gitBlobSha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/screenshots/compact-document-absence-visible-conflict.png",
+      "sha256": "694dc7dc60d8d0920ec770fc729f77058293f6cc22e4a1483d6c8236c00e04f7",
+      "gitBlobSha256": "694dc7dc60d8d0920ec770fc729f77058293f6cc22e4a1483d6c8236c00e04f7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/screenshots/current-draft-after-source-retry.png",
+      "sha256": "eba2f10c804de98ca7febe815c912315ee6fb8f4b1e852bed21ba038c1812f3c",
+      "gitBlobSha256": "eba2f10c804de98ca7febe815c912315ee6fb8f4b1e852bed21ba038c1812f3c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/screenshots/current-with-compact-sources.png",
+      "sha256": "704c5d84440dcd77fe6e535e2eea64f1fb08c696a914e14aab0c0a86f783323c",
+      "gitBlobSha256": "704c5d84440dcd77fe6e535e2eea64f1fb08c696a914e14aab0c0a86f783323c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/screenshots/mobile-current-source.png",
+      "sha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "gitBlobSha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/screenshots/reviewed-original-current-distinct.png",
+      "sha256": "880b214e0bc7988a75288cee38415f9817a710abb9ab7515ee226fbd4e6ff742",
+      "gitBlobSha256": "880b214e0bc7988a75288cee38415f9817a710abb9ab7515ee226fbd4e6ff742",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/screenshots/unsupported-source-and-conflict.png",
+      "sha256": "ade14b45ce222dc9362672e0459e274fbda5b8c530a41c735228a9f062a35073",
+      "gitBlobSha256": "ade14b45ce222dc9362672e0459e274fbda5b8c530a41c735228a9f062a35073",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/source-error-trace.zip",
+      "sha256": "811f66ad9f1160eda379396a0c041da29c70126110a4bfe3d2166e27c2d34f95",
+      "gitBlobSha256": "811f66ad9f1160eda379396a0c041da29c70126110a4bfe3d2166e27c2d34f95",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/test-results/browser-results.json",
+      "sha256": "e846a44a864fcf98e4eb30d7607f96f5dc6f8f2a06bc916888e4e92d40a85040",
+      "gitBlobSha256": "e846a44a864fcf98e4eb30d7607f96f5dc6f8f2a06bc916888e4e92d40a85040",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/video/empty-conflict.webm",
+      "sha256": "f40eae30efd7a34f87d311899659455e49daa851a919a7937fe8e41053290662",
+      "gitBlobSha256": "f40eae30efd7a34f87d311899659455e49daa851a919a7937fe8e41053290662",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/video/extra-conflict.webm",
+      "sha256": "8271a69a7a66351b5ab88eddcb4745658ad6eed2028e33f2d2d1fb47f89eab53",
+      "gitBlobSha256": "8271a69a7a66351b5ab88eddcb4745658ad6eed2028e33f2d2d1fb47f89eab53",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/video/loading-source.webm",
+      "sha256": "b24951c92c1acae9d6239ae105bf2ce65f7b1e0f83d75eeff149db62090e2b6f",
+      "gitBlobSha256": "b24951c92c1acae9d6239ae105bf2ce65f7b1e0f83d75eeff149db62090e2b6f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/video/mixed.webm",
+      "sha256": "2c07833fbf6d7537454d837ba277434d534ac872ab6cdfa5d2e26e89ab60501f",
+      "gitBlobSha256": "2c07833fbf6d7537454d837ba277434d534ac872ab6cdfa5d2e26e89ab60501f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/video/mobile-physician.webm",
+      "sha256": "0156e7965957112a84c089dec39082a64bca858acfea5b835f5596020d88a4b9",
+      "gitBlobSha256": "0156e7965957112a84c089dec39082a64bca858acfea5b835f5596020d88a4b9",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser/video/source-error.webm",
+      "sha256": "0ae88baefbd1014c4672c041a7bd5994ceff26c9c28dbb59da4c235b09697bd7",
+      "gitBlobSha256": "0ae88baefbd1014c4672c041a7bd5994ceff26c9c28dbb59da4c235b09697bd7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-unit.log",
+      "sha256": "f5181fdd5da821e38196609bc6f47d6a6d5c1664bc4a6271df6fdc4ad2d17e66",
+      "gitBlobSha256": "f5181fdd5da821e38196609bc6f47d6a6d5c1664bc4a6271df6fdc4ad2d17e66",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-unit.test.tsx",
+      "sha256": "d8eee21efedda3a26dfac5ab6776f6f90ba35799c2c69e4533b6d845aac31047",
+      "gitBlobSha256": "d8eee21efedda3a26dfac5ab6776f6f90ba35799c2c69e4533b6d845aac31047",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/empty-conflict-trace.zip",
+      "sha256": "baa2f0dce4eec6204693fa3d7ab08eb637f5c5f6bd532f86b37dd06036ce8ccd",
+      "gitBlobSha256": "baa2f0dce4eec6204693fa3d7ab08eb637f5c5f6bd532f86b37dd06036ce8ccd",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/loading-source-trace.zip",
+      "sha256": "e3bffbe2970eb7d0be374c54017abaaed164802692f7b32ad5f4e8d12df48e11",
+      "gitBlobSha256": "e3bffbe2970eb7d0be374c54017abaaed164802692f7b32ad5f4e8d12df48e11",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/mixed-trace.zip",
+      "sha256": "2d669e766e24d1a79ffe0ffe3fbf3a113f70468d26dbe6c956d3b662e38acbe1",
+      "gitBlobSha256": "2d669e766e24d1a79ffe0ffe3fbf3a113f70468d26dbe6c956d3b662e38acbe1",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/mobile-physician-trace.zip",
+      "sha256": "bfdcda03a306e63ec15c487506b61fb9bdb721539393b92e3137349f3c8aed13",
+      "gitBlobSha256": "bfdcda03a306e63ec15c487506b61fb9bdb721539393b92e3137349f3c8aed13",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/playwright-report/index.html",
+      "sha256": "ba55a7b3ff5326b2316939113dfc6ca6a35c9b56eb6f236ba41b08cce29ffb39",
+      "gitBlobSha256": "ba55a7b3ff5326b2316939113dfc6ca6a35c9b56eb6f236ba41b08cce29ffb39",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/screenshots/compact-document-absence-visible-conflict.png",
+      "sha256": "ea7ec5c7fe138da1dbb335022b5d432452004f3ecea242340db9334f204416de",
+      "gitBlobSha256": "ea7ec5c7fe138da1dbb335022b5d432452004f3ecea242340db9334f204416de",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/screenshots/current-with-compact-sources.png",
+      "sha256": "697a4874a9b4de4e8920e3e2f946182a4f25c7b4b4de2ad3d7facfb2d5eefe0d",
+      "gitBlobSha256": "697a4874a9b4de4e8920e3e2f946182a4f25c7b4b4de2ad3d7facfb2d5eefe0d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/screenshots/mobile-current-source.png",
+      "sha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "gitBlobSha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/screenshots/reviewed-original-current-distinct.png",
+      "sha256": "0c0d10bcc58f578eb2f3ac95efa3f2bd0d038e08c564fb1d61b10c18d412d1e9",
+      "gitBlobSha256": "0c0d10bcc58f578eb2f3ac95efa3f2bd0d038e08c564fb1d61b10c18d412d1e9",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/source-error-trace.zip",
+      "sha256": "a6183f0c99063c464308fc91e38a04594c873a81785bce3b1dc5afa68ccd8252",
+      "gitBlobSha256": "a6183f0c99063c464308fc91e38a04594c873a81785bce3b1dc5afa68ccd8252",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/test-results/browser-results.json",
+      "sha256": "2e63c664127a357e999fa28325aec5871d86aeae32c6217e660443bf818e8b23",
+      "gitBlobSha256": "2e63c664127a357e999fa28325aec5871d86aeae32c6217e660443bf818e8b23",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/video/empty-conflict.webm",
+      "sha256": "88f0f9c80a67ee6c124b5b07cd3026d80d6b548b0d97dc5f8f153e2ca192e68d",
+      "gitBlobSha256": "88f0f9c80a67ee6c124b5b07cd3026d80d6b548b0d97dc5f8f153e2ca192e68d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/video/loading-source.webm",
+      "sha256": "579a1a575fdc90c6ccb89cc912dc4b50c92782742853b7c7132903510971af15",
+      "gitBlobSha256": "579a1a575fdc90c6ccb89cc912dc4b50c92782742853b7c7132903510971af15",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/video/mixed.webm",
+      "sha256": "2f1637b368fa1886af0bd0d7241ac35563a6aac84e7bb623d32fd2bfe9b83845",
+      "gitBlobSha256": "2f1637b368fa1886af0bd0d7241ac35563a6aac84e7bb623d32fd2bfe9b83845",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/video/mobile-physician.webm",
+      "sha256": "f76c783e10c771f7b5d6b1912071f283caf497525ee88eb2128ea7cba2dd1cb3",
+      "gitBlobSha256": "f76c783e10c771f7b5d6b1912071f283caf497525ee88eb2128ea7cba2dd1cb3",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/browser/video/source-error.webm",
+      "sha256": "118a432f68ece3f17d22511f68e04bf5599f30c71f121b2ea546135d865309f8",
+      "gitBlobSha256": "118a432f68ece3f17d22511f68e04bf5599f30c71f121b2ea546135d865309f8",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/command-results.json",
+      "sha256": "15418daec68e0c113afe443939fcc7e5ae4d0c4633202a19745e2330f548347f",
+      "gitBlobSha256": "15418daec68e0c113afe443939fcc7e5ae4d0c4633202a19745e2330f548347f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/focused.log",
+      "sha256": "892c123c6c01dbac080502fd7bdba87ab2d26a791cd26e174aa9d0374047e40a",
+      "gitBlobSha256": "892c123c6c01dbac080502fd7bdba87ab2d26a791cd26e174aa9d0374047e40a",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/frontend-tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/full-regression.log",
+      "sha256": "f871885431c54811aa09156559d29d95d107a2a5ed8fdc65e07d8d212d8fcce0",
+      "gitBlobSha256": "f871885431c54811aa09156559d29d95d107a2a5ed8fdc65e07d8d212d8fcce0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/commands/vite-build.log",
+      "sha256": "03e5c041345bf8a8a8a2b2a2dd2a192f58f98b623925ceea12766f41f66d01d3",
+      "gitBlobSha256": "03e5c041345bf8a8a8a2b2a2dd2a192f58f98b623925ceea12766f41f66d01d3",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/freeze-evidence.mjs",
+      "sha256": "bad37baeec1e148fcd844b9c6618e1bc0a439ae1f4e4ba6db93f82e0f0ca9468",
+      "gitBlobSha256": "bad37baeec1e148fcd844b9c6618e1bc0a439ae1f4e4ba6db93f82e0f0ca9468",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/immutable-manifest.json",
+      "sha256": "72d01ed15f3b375395639f97b34fa1f4aa9423f99d44deb7e21c9a752cb1c894",
+      "gitBlobSha256": "72d01ed15f3b375395639f97b34fa1f4aa9423f99d44deb7e21c9a752cb1c894",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/security-review.json",
+      "sha256": "0ccaa1d11fbbf92d098daa1244fbda79e4be4318651c18d3b36c7d03d11ffc7b",
+      "gitBlobSha256": "0ccaa1d11fbbf92d098daa1244fbda79e4be4318651c18d3b36c7d03d11ffc7b",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/source-after/source-receipt.json",
+      "sha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "gitBlobSha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/source-before/source-receipt.json",
+      "sha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "gitBlobSha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/independent-qa/validation-report.md",
+      "sha256": "dbd775915f79e3d81cd471caa8f69b490ea85565d6202ad6f58cd5d503f8f79c",
+      "gitBlobSha256": "dbd775915f79e3d81cd471caa8f69b490ea85565d6202ad6f58cd5d503f8f79c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/issue-source.md",
+      "sha256": "72cbc5f2998f4123aa9e77bc6b73522db32cba0e6d2ef9769a947c2836bffb00",
+      "gitBlobSha256": "72cbc5f2998f4123aa9e77bc6b73522db32cba0e6d2ef9769a947c2836bffb00",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/publication-final.mjs",
+      "sha256": "30b40a112cadc951b07202b607e842de268b1acf9821269c58075bd440339664",
+      "gitBlobSha256": "30b40a112cadc951b07202b607e842de268b1acf9821269c58075bd440339664",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-baseline-server.mjs",
+      "sha256": "d2ab6b3e1c2c0acc952a3e005cf4f0350dbcc6ac730e3191e2196b307e044ac0",
+      "gitBlobSha256": "d2ab6b3e1c2c0acc952a3e005cf4f0350dbcc6ac730e3191e2196b307e044ac0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-baseline.mjs",
+      "sha256": "0411c76e8e8c54f28015f630b6fc214a1030e07e92c5d40ae50f6c84f2ccf640",
+      "gitBlobSha256": "0411c76e8e8c54f28015f630b6fc214a1030e07e92c5d40ae50f6c84f2ccf640",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-browser.mjs",
+      "sha256": "93e330c76be78eb3151215824bb46fdbc95a03a2ee11a2238f86489097bc4f9f",
+      "gitBlobSha256": "93e330c76be78eb3151215824bb46fdbc95a03a2ee11a2238f86489097bc4f9f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-commands.mjs",
+      "sha256": "bd544698e352d9c653cdc747b784fe1809c7c2d05b8fae56c37f5332c1e541a7",
+      "gitBlobSha256": "bd544698e352d9c653cdc747b784fe1809c7c2d05b8fae56c37f5332c1e541a7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-extra-rerun.mjs",
+      "sha256": "76d319f9d5246a2324e386099cb3bc8f7b5752c5d0c0d08c2aec736e8172ca44",
+      "gitBlobSha256": "76d319f9d5246a2324e386099cb3bc8f7b5752c5d0c0d08c2aec736e8172ca44",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-online.mjs",
+      "sha256": "f56d466fcd208aa6e0c840e373b231eb040f3e22ccfa41548147c5c071182e0d",
+      "gitBlobSha256": "f56d466fcd208aa6e0c840e373b231eb040f3e22ccfa41548147c5c071182e0d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-server.mjs",
+      "sha256": "ffd9ca6a5058e34da541969d6083814e64f1db89dcd4711a11c5cf34cb966e54",
+      "gitBlobSha256": "ffd9ca6a5058e34da541969d6083814e64f1db89dcd4711a11c5cf34cb966e54",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/qa-source-receipt.mjs",
+      "sha256": "e0cdb368fcb28433959bfcc38d558377f727cbce56bdf6a092ca3d2a9564ffd6",
+      "gitBlobSha256": "e0cdb368fcb28433959bfcc38d558377f727cbce56bdf6a092ca3d2a9564ffd6",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/release-gate-receipt.json",
+      "sha256": "213a0f3676272061e77afe7dcdfa163105fcd8ea95a7ba5bfdee459c7a5fcf43",
+      "gitBlobSha256": "213a0f3676272061e77afe7dcdfa163105fcd8ea95a7ba5bfdee459c7a5fcf43",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/release-inspection.ps1",
+      "sha256": "ff7fb320ed99c08dc888c6757583f24f810d70acb8eb640b75eba70bb0044457",
+      "gitBlobSha256": "ff7fb320ed99c08dc888c6757583f24f810d70acb8eb640b75eba70bb0044457",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-release-gate.mjs",
+      "sha256": "6c421f68b840a421d42528a2f3e74218f5f906801d5ff6dc4ed2055484245b23",
+      "gitBlobSha256": "6c421f68b840a421d42528a2f3e74218f5f906801d5ff6dc4ed2055484245b23",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/adversarial-unit.log",
+      "sha256": "e0ff643dc7748f87223003602fc62bcfcb5c11b0b51136e779b215189e378cef",
+      "gitBlobSha256": "e0ff643dc7748f87223003602fc62bcfcb5c11b0b51136e779b215189e378cef",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser-complete/before-accepted8b-trace.zip",
+      "sha256": "326ff5ec6a8c8209026d0ce0de3e6f96cbe99136b370d1c7ec701cf0e67625e7",
+      "gitBlobSha256": "326ff5ec6a8c8209026d0ce0de3e6f96cbe99136b370d1c7ec701cf0e67625e7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser-complete/screenshots/before-accepted8b-duplicate-topics.png",
+      "sha256": "8450a5425c8b7d4af4c96faa37423c3565df9b0f7cd28d41f98ca85563396de4",
+      "gitBlobSha256": "8450a5425c8b7d4af4c96faa37423c3565df9b0f7cd28d41f98ca85563396de4",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser-complete/screenshots/before-accepted8b-expanded-empty-sources.png",
+      "sha256": "56a03f92823567486b11fb692bdd30bfcacc81a0540b8b5a9bd926aa6e08cfbb",
+      "gitBlobSha256": "56a03f92823567486b11fb692bdd30bfcacc81a0540b8b5a9bd926aa6e08cfbb",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser-complete/screenshots/before-accepted8b-separate-source-topics.png",
+      "sha256": "4cca17cb0ac2c1a29b734c1efbc6e78f3dabf4a4aab221444c03a03c89195068",
+      "gitBlobSha256": "4cca17cb0ac2c1a29b734c1efbc6e78f3dabf4a4aab221444c03a03c89195068",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser-complete/test-results/browser-results.json",
+      "sha256": "db1633b653c3f3b75592c0dc39a0f8b7428c5d4f904a90cb81ee09051b43ef42",
+      "gitBlobSha256": "db1633b653c3f3b75592c0dc39a0f8b7428c5d4f904a90cb81ee09051b43ef42",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser-complete/video/before-accepted8b.webm",
+      "sha256": "e110ab468ff12778f363700b65376fe59daedb1beb1fdb63367930867a935f0c",
+      "gitBlobSha256": "e110ab468ff12778f363700b65376fe59daedb1beb1fdb63367930867a935f0c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser/before-accepted8b-trace.zip",
+      "sha256": "53e16c59c484a9d29126afba21f10e0ac45dbd08b564910980718c36a457a9af",
+      "gitBlobSha256": "53e16c59c484a9d29126afba21f10e0ac45dbd08b564910980718c36a457a9af",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser/screenshots/before-accepted8b-duplicate-topics.png",
+      "sha256": "3de3d2b89939ba52f6d018982ef2ac1ec9978d0fbde083578e7b5d784f3ceadf",
+      "gitBlobSha256": "3de3d2b89939ba52f6d018982ef2ac1ec9978d0fbde083578e7b5d784f3ceadf",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser/test-results/browser-results.json",
+      "sha256": "4aa3fa107bbbbbfb82fdd7f7d9222cbe278ce88c8fb3c3c00247648531aa04ae",
+      "gitBlobSha256": "4aa3fa107bbbbbfb82fdd7f7d9222cbe278ce88c8fb3c3c00247648531aa04ae",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-browser/video/before-accepted8b.webm",
+      "sha256": "d929b7514131476d8a3796f43629763828c8e660473f874847938f149ff42020",
+      "gitBlobSha256": "d929b7514131476d8a3796f43629763828c8e660473f874847938f149ff42020",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/baseline-source/source-receipt.json",
+      "sha256": "3949351bcb93f981e1e697acb13c1a8927ee036c5630e5f72fcd7fb8eb291d48",
+      "gitBlobSha256": "3949351bcb93f981e1e697acb13c1a8927ee036c5630e5f72fcd7fb8eb291d48",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/empty-conflict-trace.zip",
+      "sha256": "b465303989e60b5f98cf4c6c19c1d1bd97c56765e94c50f25e886cdecfa14d2a",
+      "gitBlobSha256": "b465303989e60b5f98cf4c6c19c1d1bd97c56765e94c50f25e886cdecfa14d2a",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/loading-source-trace.zip",
+      "sha256": "4cabfccfb8564c07e7dee652c4d4c1e8d76283fa95295141a965c84a7ddcdeef",
+      "gitBlobSha256": "4cabfccfb8564c07e7dee652c4d4c1e8d76283fa95295141a965c84a7ddcdeef",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/mixed-trace.zip",
+      "sha256": "fdb66787bba223f3bea8cef4ca7e37fae91574fcdb06a1c6a0d97960eed18c38",
+      "gitBlobSha256": "fdb66787bba223f3bea8cef4ca7e37fae91574fcdb06a1c6a0d97960eed18c38",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/mobile-physician-trace.zip",
+      "sha256": "b762aa4061a9452f1463f858c742fee935bbb8d6085bedd4aa00cdf3e0ba7371",
+      "gitBlobSha256": "b762aa4061a9452f1463f858c742fee935bbb8d6085bedd4aa00cdf3e0ba7371",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/playwright-report/index.html",
+      "sha256": "ba55a7b3ff5326b2316939113dfc6ca6a35c9b56eb6f236ba41b08cce29ffb39",
+      "gitBlobSha256": "ba55a7b3ff5326b2316939113dfc6ca6a35c9b56eb6f236ba41b08cce29ffb39",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/screenshots/compact-document-absence-visible-conflict.png",
+      "sha256": "c8c7529841b62a46a63c687dda946e7b1368d55880f50e23fe384e86937f3b21",
+      "gitBlobSha256": "c8c7529841b62a46a63c687dda946e7b1368d55880f50e23fe384e86937f3b21",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/screenshots/current-with-compact-sources.png",
+      "sha256": "11bd17a659ca7f804848a42a9f0ac66ceb63d8e6d9982b5ea8f80797a7595591",
+      "gitBlobSha256": "11bd17a659ca7f804848a42a9f0ac66ceb63d8e6d9982b5ea8f80797a7595591",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/screenshots/mobile-current-source.png",
+      "sha256": "055fb3c0dd484f041c5eb233c9fff57e656549ba8daab98b646b072086a86588",
+      "gitBlobSha256": "055fb3c0dd484f041c5eb233c9fff57e656549ba8daab98b646b072086a86588",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/screenshots/reviewed-original-current-distinct.png",
+      "sha256": "43896dde74b1f6f4e8454870faf41ef1aeb77ce4147fa5d7c44bb4bc3c27ab4d",
+      "gitBlobSha256": "43896dde74b1f6f4e8454870faf41ef1aeb77ce4147fa5d7c44bb4bc3c27ab4d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/source-error-trace.zip",
+      "sha256": "8acd91a0afb85fd4d1df378ca71356dda8983b9e56b07ae1164468f71d3d2ed8",
+      "gitBlobSha256": "8acd91a0afb85fd4d1df378ca71356dda8983b9e56b07ae1164468f71d3d2ed8",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/test-results/browser-results.json",
+      "sha256": "1b621eb690be94b196c3aae4fb540a2334432597239cf755310d6bc1029eda13",
+      "gitBlobSha256": "1b621eb690be94b196c3aae4fb540a2334432597239cf755310d6bc1029eda13",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/video/empty-conflict.webm",
+      "sha256": "49af56e8f749c606a8135c4357dabb7c9833cda8f84513d8df9acc7fd62d49e3",
+      "gitBlobSha256": "49af56e8f749c606a8135c4357dabb7c9833cda8f84513d8df9acc7fd62d49e3",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/video/loading-source.webm",
+      "sha256": "0360778a1399ff6546f0418f5bea99301c8846e0283f58d6b376eff7048fbecd",
+      "gitBlobSha256": "0360778a1399ff6546f0418f5bea99301c8846e0283f58d6b376eff7048fbecd",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/video/mixed.webm",
+      "sha256": "bebb636bca3ff213328fbae1ddfe4dae78a7dd32980d88c5640743a7e55f7981",
+      "gitBlobSha256": "bebb636bca3ff213328fbae1ddfe4dae78a7dd32980d88c5640743a7e55f7981",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/video/mobile-physician.webm",
+      "sha256": "9b1c8f79cbe8c60171c2e58a0402e452ad114442335704737caaf02cc7064b5d",
+      "gitBlobSha256": "9b1c8f79cbe8c60171c2e58a0402e452ad114442335704737caaf02cc7064b5d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/browser/video/source-error.webm",
+      "sha256": "f50903a12d7e61dd42dd2b9ae3939231d72bc70a9984259297154d78768231ba",
+      "gitBlobSha256": "f50903a12d7e61dd42dd2b9ae3939231d72bc70a9984259297154d78768231ba",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/backend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/command-results.json",
+      "sha256": "15418daec68e0c113afe443939fcc7e5ae4d0c4633202a19745e2330f548347f",
+      "gitBlobSha256": "15418daec68e0c113afe443939fcc7e5ae4d0c4633202a19745e2330f548347f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/focused.log",
+      "sha256": "98734cfd0c3a533d46ece31b2d9ca8b6af69024af72d0345ca91d228eeee5d93",
+      "gitBlobSha256": "98734cfd0c3a533d46ece31b2d9ca8b6af69024af72d0345ca91d228eeee5d93",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/frontend-tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/full-regression.log",
+      "sha256": "0a65cf9629768ca3927f16b578a4f156bd2aa9678e443528e86c34c703ff2b5c",
+      "gitBlobSha256": "0a65cf9629768ca3927f16b578a4f156bd2aa9678e443528e86c34c703ff2b5c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/commands/vite-build.log",
+      "sha256": "88b6863eb9d7b5bf873c087a6b6a7ca9dc499a33d42ae2a42642a7395d9fd020",
+      "gitBlobSha256": "88b6863eb9d7b5bf873c087a6b6a7ca9dc499a33d42ae2a42642a7395d9fd020",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/empty-conflict-trace.zip",
+      "sha256": "5843a865c66ca70b36b5f2b0bf2a52c0fa3e0fd9d26c0c981d3d77641cb4ee42",
+      "gitBlobSha256": "5843a865c66ca70b36b5f2b0bf2a52c0fa3e0fd9d26c0c981d3d77641cb4ee42",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/extra-conflict-trace.zip",
+      "sha256": "c7c3eb80ab08987f11c258583fe5b6620d63e8a891e382b0c927439f65c7e3e3",
+      "gitBlobSha256": "c7c3eb80ab08987f11c258583fe5b6620d63e8a891e382b0c927439f65c7e3e3",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/loading-source-trace.zip",
+      "sha256": "ff7c90b33568c666d809a17f653530a559a15d17628772b516de7d116d0b97fe",
+      "gitBlobSha256": "ff7c90b33568c666d809a17f653530a559a15d17628772b516de7d116d0b97fe",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/mixed-trace.zip",
+      "sha256": "c2a8d3b8896935df8d5c42797ef55913f903aff6fac7e952e362b98bf2414079",
+      "gitBlobSha256": "c2a8d3b8896935df8d5c42797ef55913f903aff6fac7e952e362b98bf2414079",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/mobile-physician-trace.zip",
+      "sha256": "aee6652c78aba96fc07f637c6e0b70dac0f31b42a50c5b654170a8ed229fe0e1",
+      "gitBlobSha256": "aee6652c78aba96fc07f637c6e0b70dac0f31b42a50c5b654170a8ed229fe0e1",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/playwright-report/index.html",
+      "sha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "gitBlobSha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/screenshots/compact-document-absence-visible-conflict.png",
+      "sha256": "7fca4bd918766718865c5b3af3878d8dd7456993b12fa1c07a9d943c3b1418d4",
+      "gitBlobSha256": "7fca4bd918766718865c5b3af3878d8dd7456993b12fa1c07a9d943c3b1418d4",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/screenshots/current-draft-after-source-retry.png",
+      "sha256": "79fbe194f1e64330d3d04cfa00a1cca10d363eabf8cf0063f0df37a661e9aa19",
+      "gitBlobSha256": "79fbe194f1e64330d3d04cfa00a1cca10d363eabf8cf0063f0df37a661e9aa19",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/screenshots/current-with-compact-sources.png",
+      "sha256": "6afb4ebe1f4cc8d79b37ee9b73588d86a5961beeb6ac4f0651be93766a128787",
+      "gitBlobSha256": "6afb4ebe1f4cc8d79b37ee9b73588d86a5961beeb6ac4f0651be93766a128787",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/screenshots/desktop-compact-seven-absences.png",
+      "sha256": "a0333771e2054de31bdb65810a018235edf6c7dd6983dcae71b67fff69b40674",
+      "gitBlobSha256": "a0333771e2054de31bdb65810a018235edf6c7dd6983dcae71b67fff69b40674",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/screenshots/mobile-current-source.png",
+      "sha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "gitBlobSha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/screenshots/reviewed-original-current-distinct.png",
+      "sha256": "43896dde74b1f6f4e8454870faf41ef1aeb77ce4147fa5d7c44bb4bc3c27ab4d",
+      "gitBlobSha256": "43896dde74b1f6f4e8454870faf41ef1aeb77ce4147fa5d7c44bb4bc3c27ab4d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/screenshots/unsupported-source-and-conflict.png",
+      "sha256": "1957d4e8731fe03a0cf998d8b3750ce0d62efd520b31576b1e7fe055bbeb0215",
+      "gitBlobSha256": "1957d4e8731fe03a0cf998d8b3750ce0d62efd520b31576b1e7fe055bbeb0215",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/source-error-trace.zip",
+      "sha256": "6242fff5c2dff5b389ca5765ae3dd3b04046e02ed73e0d3df846c38703658f97",
+      "gitBlobSha256": "6242fff5c2dff5b389ca5765ae3dd3b04046e02ed73e0d3df846c38703658f97",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/test-results/browser-results.json",
+      "sha256": "cf2481288e89ca503fdfc0daa6f18555ff8d3940024751ff680493c79e1f2983",
+      "gitBlobSha256": "cf2481288e89ca503fdfc0daa6f18555ff8d3940024751ff680493c79e1f2983",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/video/empty-conflict.webm",
+      "sha256": "c8a41a70d8c9c73a33765cf8cfeedf6c9c9959e1770eeb678486ccfc3ca6a8ab",
+      "gitBlobSha256": "c8a41a70d8c9c73a33765cf8cfeedf6c9c9959e1770eeb678486ccfc3ca6a8ab",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/video/extra-conflict.webm",
+      "sha256": "fad5a0bc234b58f606d1888547caf81f4759c5540411ee652f2728a36525ee35",
+      "gitBlobSha256": "fad5a0bc234b58f606d1888547caf81f4759c5540411ee652f2728a36525ee35",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/video/loading-source.webm",
+      "sha256": "e24b5e6a2ab9876e486de683d922b747d7a39dea2d093aa42f4bea3a2b7b4f13",
+      "gitBlobSha256": "e24b5e6a2ab9876e486de683d922b747d7a39dea2d093aa42f4bea3a2b7b4f13",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/video/mixed.webm",
+      "sha256": "b09d42db3e81117074f210a414d3c67d14a9641d5ca708ae26142ea4101d8d16",
+      "gitBlobSha256": "b09d42db3e81117074f210a414d3c67d14a9641d5ca708ae26142ea4101d8d16",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/video/mobile-physician.webm",
+      "sha256": "6189e936371c9e4320e9896d637a3ae93176861a2b9e0cfac98a55ca2e46ceaf",
+      "gitBlobSha256": "6189e936371c9e4320e9896d637a3ae93176861a2b9e0cfac98a55ca2e46ceaf",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/extra-browser/video/source-error.webm",
+      "sha256": "d37dce061e43ec945af1d515f1f36bae549a9f741d3a1e10f85a004d767d94da",
+      "gitBlobSha256": "d37dce061e43ec945af1d515f1f36bae549a9f741d3a1e10f85a004d767d94da",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/empty-conflict-trace.zip",
+      "sha256": "f2e18c975b1196e72d642379716dd3cd09618a9e43e5d989c13146d8f145a585",
+      "gitBlobSha256": "f2e18c975b1196e72d642379716dd3cd09618a9e43e5d989c13146d8f145a585",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/extra-conflict-trace.zip",
+      "sha256": "52048edbef07a6032964cdc7ba410175560f376d10183a1dcf161d002e6fc0b9",
+      "gitBlobSha256": "52048edbef07a6032964cdc7ba410175560f376d10183a1dcf161d002e6fc0b9",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/loading-source-trace.zip",
+      "sha256": "d93b98ae5494fb95afee549ee956f6cfe0284f1710201f567a90bd76af3c2add",
+      "gitBlobSha256": "d93b98ae5494fb95afee549ee956f6cfe0284f1710201f567a90bd76af3c2add",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/mixed-trace.zip",
+      "sha256": "624b03fd9be9dde0433f282a934a87615042dcbed97fc8222a576082a48cd08c",
+      "gitBlobSha256": "624b03fd9be9dde0433f282a934a87615042dcbed97fc8222a576082a48cd08c",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/mobile-physician-trace.zip",
+      "sha256": "962c031414a526afbf1e0e7d0e006f3d8184109bf1e349a96cddf8a23cea31b0",
+      "gitBlobSha256": "962c031414a526afbf1e0e7d0e006f3d8184109bf1e349a96cddf8a23cea31b0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/playwright-report/index.html",
+      "sha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "gitBlobSha256": "4a2f5c53b834660aedfe60b713b80520b43708ab0a7e7923c6dca91dcb756cc1",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/screenshots/compact-document-absence-visible-conflict.png",
+      "sha256": "19074fa515d5875098c75f1e280276118a87bc0a4272a148daee2551496582be",
+      "gitBlobSha256": "19074fa515d5875098c75f1e280276118a87bc0a4272a148daee2551496582be",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/screenshots/current-draft-after-source-retry.png",
+      "sha256": "6384a2c6d386387f30cf99c25be218d261dfb8ab76b0686ffbcffa546c814593",
+      "gitBlobSha256": "6384a2c6d386387f30cf99c25be218d261dfb8ab76b0686ffbcffa546c814593",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/screenshots/current-with-compact-sources.png",
+      "sha256": "73535b44e04e49a09bf733d25ca0d08f7910a88517215c9c77c00677fac0aacb",
+      "gitBlobSha256": "73535b44e04e49a09bf733d25ca0d08f7910a88517215c9c77c00677fac0aacb",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/screenshots/desktop-compact-seven-absences.png",
+      "sha256": "bbb127c5448522b51aa6b15cb61b02a53f86a2e7cdf1cc3b18a1d0ca4eae47c9",
+      "gitBlobSha256": "bbb127c5448522b51aa6b15cb61b02a53f86a2e7cdf1cc3b18a1d0ca4eae47c9",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/screenshots/mobile-current-source.png",
+      "sha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "gitBlobSha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/screenshots/reviewed-original-current-distinct.png",
+      "sha256": "8dad20accffd191165b3d426df430c53b5e8757dc1bb9b32142ec93f4db05b66",
+      "gitBlobSha256": "8dad20accffd191165b3d426df430c53b5e8757dc1bb9b32142ec93f4db05b66",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/screenshots/unsupported-source-and-conflict.png",
+      "sha256": "09845a551a14105925ea113bf5798317fc027adb0f245b9bd472185558b59d2b",
+      "gitBlobSha256": "09845a551a14105925ea113bf5798317fc027adb0f245b9bd472185558b59d2b",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/source-error-trace.zip",
+      "sha256": "334f6957e2929cd122fbfda007bdcbb6f1466edb0ca58f0a7d71243681319e39",
+      "gitBlobSha256": "334f6957e2929cd122fbfda007bdcbb6f1466edb0ca58f0a7d71243681319e39",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/test-results/browser-results.json",
+      "sha256": "12f3edb544dc9f5c17d0027ace059d9f5def9714573e7151dbeb2ca20c99bbf4",
+      "gitBlobSha256": "12f3edb544dc9f5c17d0027ace059d9f5def9714573e7151dbeb2ca20c99bbf4",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/video/empty-conflict.webm",
+      "sha256": "c82dd6eb8c93cfe4b3f7b2b2a57aedb3bd7d48aaf93ea60157c9e6775594925d",
+      "gitBlobSha256": "c82dd6eb8c93cfe4b3f7b2b2a57aedb3bd7d48aaf93ea60157c9e6775594925d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/video/extra-conflict.webm",
+      "sha256": "1819f827342bd5056bfbcc2b052e5e8a908e5aef926ec2630ccd917e1b36200b",
+      "gitBlobSha256": "1819f827342bd5056bfbcc2b052e5e8a908e5aef926ec2630ccd917e1b36200b",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/video/loading-source.webm",
+      "sha256": "282c31b1432259a0c3d0ad088687d06daf8c0aa13394176ceac739042b33d643",
+      "gitBlobSha256": "282c31b1432259a0c3d0ad088687d06daf8c0aa13394176ceac739042b33d643",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/video/mixed.webm",
+      "sha256": "f7e420d7b6c743540a455ad5a864b900afe1182eb1da9aa569ab382c12e04d2e",
+      "gitBlobSha256": "f7e420d7b6c743540a455ad5a864b900afe1182eb1da9aa569ab382c12e04d2e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/video/mobile-physician.webm",
+      "sha256": "f99fba6c2b6517a5b8a6e67bf97c660d7fade39af5cfa5abb824a02d1fe3487d",
+      "gitBlobSha256": "f99fba6c2b6517a5b8a6e67bf97c660d7fade39af5cfa5abb824a02d1fe3487d",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-extra-verified/video/source-error.webm",
+      "sha256": "2deb32eb18026bac23aca72783fe7e2c129c6de47d92da4e227d684e4929b8b1",
+      "gitBlobSha256": "2deb32eb18026bac23aca72783fe7e2c129c6de47d92da4e227d684e4929b8b1",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/empty-conflict-trace.zip",
+      "sha256": "e82f77b8cf61a887bce94063e698f83f532431bcb9a577f7bc12d2b4c6823e88",
+      "gitBlobSha256": "e82f77b8cf61a887bce94063e698f83f532431bcb9a577f7bc12d2b4c6823e88",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/loading-source-trace.zip",
+      "sha256": "68c80e844a86f20a74b6ad1e3d2aaa2726edd3e732585275c6e8ff48fd8e4c9f",
+      "gitBlobSha256": "68c80e844a86f20a74b6ad1e3d2aaa2726edd3e732585275c6e8ff48fd8e4c9f",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/mixed-trace.zip",
+      "sha256": "f77cca3d3f6e291f3257e8347e6760618a99c1aad44eaa4c6eae249dcbfdde17",
+      "gitBlobSha256": "f77cca3d3f6e291f3257e8347e6760618a99c1aad44eaa4c6eae249dcbfdde17",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/mobile-physician-trace.zip",
+      "sha256": "fdd690f173d2ffdd51969019f64c1d2f581de5fa3f1d726f56b197669c202d0a",
+      "gitBlobSha256": "fdd690f173d2ffdd51969019f64c1d2f581de5fa3f1d726f56b197669c202d0a",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/playwright-report/index.html",
+      "sha256": "ba55a7b3ff5326b2316939113dfc6ca6a35c9b56eb6f236ba41b08cce29ffb39",
+      "gitBlobSha256": "ba55a7b3ff5326b2316939113dfc6ca6a35c9b56eb6f236ba41b08cce29ffb39",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/screenshots/compact-document-absence-visible-conflict.png",
+      "sha256": "19074fa515d5875098c75f1e280276118a87bc0a4272a148daee2551496582be",
+      "gitBlobSha256": "19074fa515d5875098c75f1e280276118a87bc0a4272a148daee2551496582be",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/screenshots/current-with-compact-sources.png",
+      "sha256": "09845a551a14105925ea113bf5798317fc027adb0f245b9bd472185558b59d2b",
+      "gitBlobSha256": "09845a551a14105925ea113bf5798317fc027adb0f245b9bd472185558b59d2b",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/screenshots/mobile-current-source.png",
+      "sha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "gitBlobSha256": "9507cc76d07be73058f277de554ebd86d94942cd25d7d57cda23b282cebbad0e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/screenshots/reviewed-original-current-distinct.png",
+      "sha256": "8dad20accffd191165b3d426df430c53b5e8757dc1bb9b32142ec93f4db05b66",
+      "gitBlobSha256": "8dad20accffd191165b3d426df430c53b5e8757dc1bb9b32142ec93f4db05b66",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/source-error-trace.zip",
+      "sha256": "cf1f518714fed89c8870df2b520e8d1bdb62602569ed25615b69622b2ffd51b9",
+      "gitBlobSha256": "cf1f518714fed89c8870df2b520e8d1bdb62602569ed25615b69622b2ffd51b9",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/test-results/browser-results.json",
+      "sha256": "7863f2570087f864b0191674ad0dfb1f7b0c64a5d9bc7be7dda864f9e4d8f692",
+      "gitBlobSha256": "7863f2570087f864b0191674ad0dfb1f7b0c64a5d9bc7be7dda864f9e4d8f692",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/video/empty-conflict.webm",
+      "sha256": "adc50202427ca0b40b022bb5b9c379acf4f1fc9e965b7cd891661e4a1fbac164",
+      "gitBlobSha256": "adc50202427ca0b40b022bb5b9c379acf4f1fc9e965b7cd891661e4a1fbac164",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/video/loading-source.webm",
+      "sha256": "72bf1965b9cf2af805aad39a3546d84f4049b5903cbd8cb2e6030d97c6e0b54e",
+      "gitBlobSha256": "72bf1965b9cf2af805aad39a3546d84f4049b5903cbd8cb2e6030d97c6e0b54e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/video/mixed.webm",
+      "sha256": "b5864fd8bf248ad1646b31a35fbd093b72cb77044f3b309185376714c4089552",
+      "gitBlobSha256": "b5864fd8bf248ad1646b31a35fbd093b72cb77044f3b309185376714c4089552",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/video/mobile-physician.webm",
+      "sha256": "842a2f7fe004fcf47a5c11ae0fb3f5069f4a0cfe278e8bba9e6fd6d5d8e8e372",
+      "gitBlobSha256": "842a2f7fe004fcf47a5c11ae0fb3f5069f4a0cfe278e8bba9e6fd6d5d8e8e372",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/online-verified/video/source-error.webm",
+      "sha256": "85e5efcd1df7d2a20f2682e9054eedaf0117195f96efb683663e118c7f0d50d0",
+      "gitBlobSha256": "85e5efcd1df7d2a20f2682e9054eedaf0117195f96efb683663e118c7f0d50d0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/source-after/source-receipt.json",
+      "sha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "gitBlobSha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/root-rerun/source-before/source-receipt.json",
+      "sha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "gitBlobSha256": "43e3eb4f58b3140942842915fcff29fa22d37304b1ac9fdef8df1e7617be4ed0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/save-deployment-receipt.mjs",
+      "sha256": "646632ed168fb86f8902dff8688686afc2fb02cde375d83dd5e5e117a0c3fb1e",
+      "gitBlobSha256": "646632ed168fb86f8902dff8688686afc2fb02cde375d83dd5e5e117a0c3fb1e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/security-receipt.json",
+      "sha256": "e17c0dcda8513e55cf38bb5d86e76c34acb017a700d9bb7a8b565b332c31b0cf",
+      "gitBlobSha256": "e17c0dcda8513e55cf38bb5d86e76c34acb017a700d9bb7a8b565b332c31b0cf",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/security-receipt.mjs",
+      "sha256": "8bb18fab50b407e0725deaedce520cc60ecfbdf590c59ea948fc7edcabfa0a1e",
+      "gitBlobSha256": "8bb18fab50b407e0725deaedce520cc60ecfbdf590c59ea948fc7edcabfa0a1e",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/security-review.md",
+      "sha256": "1009250cca1aa2b64a4a9db739352a18b36416ee790f3ec71688b66c3081fbd0",
+      "gitBlobSha256": "1009250cca1aa2b64a4a9db739352a18b36416ee790f3ec71688b66c3081fbd0",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/task-contract.md",
+      "sha256": "79272731b489df3c0805c3d8c6f40780eac93e2cee6c33c7b94fe2100ee3b715",
+      "gitBlobSha256": "79272731b489df3c0805c3d8c6f40780eac93e2cee6c33c7b94fe2100ee3b715",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/validation-report.md",
+      "sha256": "09a13610455fdb4baf0963dda3d30bea72c2503b18c2587761f6d2a0068cc6d7",
+      "gitBlobSha256": "09a13610455fdb4baf0963dda3d30bea72c2503b18c2587761f6d2a0068cc6d7",
+      "exportNormalization": "none"
+    },
+    {
+      "path": "artifacts/task-validation/412-clinical-topics/verify-final-release.mjs",
+      "sha256": "09ab05c0c025726f22e5aa9026b8f4ca0ecf44d5cee770c34d7827479db4f79d",
+      "gitBlobSha256": "09ab05c0c025726f22e5aa9026b8f4ca0ecf44d5cee770c34d7827479db4f79d",
+      "exportNormalization": "none"
+    }
+  ],
+  "exportPolicy": "Independent local manifest remains frozen. Git may normalize text CRLF to LF; each exported blob is separately bound and byte-checked against only that transformation. No binary or substantive drift permitted."
+}

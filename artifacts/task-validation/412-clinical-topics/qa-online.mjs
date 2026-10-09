@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+let helper=readFileSync(process.argv[3]==='extra'?'artifacts/task-validation/412-clinical-topics/independent-qa/adversarial-browser.mjs':'artifacts/task-validation/412-clinical-topics/qa-browser.mjs','utf8');
+const guard="if(!['127.0.0.1','localhost'].includes(url.hostname)){state.external.push(url.origin);return route.abort();}\n    if(url.port!=='3001')return route.continue();";
+assert.ok(helper.includes(guard));
+helper=helper.replace(guard,"if(url.hostname==='clinicos-eosin.vercel.app'&&req.method()==='GET')return route.continue();\n    if(url.hostname!=='clinicos-backend-demo.up.railway.app'){state.external.push(url.origin);return route.abort();}\n    // All requests to the exact deployed API host fulfilled synthetically before network.");
+assert.ok(helper.includes('http://127.0.0.1:7475/#/operator-dashboard'));
+helper=helper.replace('http://127.0.0.1:7475/#/operator-dashboard','https://clinicos-eosin.vercel.app/#/operator-dashboard');
+helper=helper.replace('Actual source SPA, fully intercepted synthetic API','Exact-source deployed compiled frontend, every backend request fulfilled before network with synthetic API');
+assert.ok(process.argv[2]);
+await import('data:text/javascript;base64,'+Buffer.from(helper).toString('base64'));

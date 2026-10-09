@@ -1,0 +1,27 @@
+{
+  "applicationCommit": "3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56",
+  "baseline": "8b327ca55ab5d8d4c5e0c19afcb828c017eeb3df",
+  "scanSummary": {
+    "critical": 3,
+    "high": 177,
+    "medium": 301,
+    "low": 0,
+    "total": 481
+  },
+  "independentlyReviewedTouchedFinding": {
+    "severity": "MEDIUM",
+    "type": "React XSS",
+    "location": "frontend\\src\\components\\shared\\sections\\NarrativeClinicalSection.tsx:8",
+    "description": "React XSS risk"
+  },
+  "baselineIdentical": true,
+  "implicatedLineUnchanged": true,
+  "rawHtmlSinkAdded": false,
+  "actualBrowserEscapedMarkupAssertion": true,
+  "changedEndpoints": false,
+  "changedPermissions": false,
+  "changedDependencies": false,
+  "clinicalSourceAutoAdoption": false,
+  "actualFullScanExecutedByRoot": true,
+  "scope": "Independent diff/runtime/security review; full scanner raw input independently compared, not reexecuted outside assigned artifact ownership."
+}

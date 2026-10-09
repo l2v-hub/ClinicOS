@@ -1,0 +1,87 @@
+(node:18932) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ source details closed initially retain all source references and explicit conflict (30.3386ms)
+✔ reviewed narrative keeps escaped original and does not invent import provenance (2.101ms)
+✔ meaningful source with stale absent status is not labelled document absence (1.4331ms)
+(node:18932) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:20444) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ P10-INT-1: a row deferred for a document conflict offers no «Reincludi» and explains why (20.9427ms)
+✔ P10-INT-1: the documents flow offers the way back to resolve the conflict (2.0525ms)
+✔ P10-INT-1: an operator-deferred row (no conflict) can still be re-included (2.1272ms)
+✔ P10-INT-1: the save banner reason is the server 4xx message, never a technical one (0.6563ms)
+✔ P10-INT-3: each imported therapy row opens the photo of its letter (first page) (35.174ms)
+✔ P10-INT-4: «Dimissione ospedaliera» is a one-tap prescriber, never written without the tap (36.2781ms)
+✔ P10-INT-2: the allergy summary no longer points to a non-existent «tab Diagnosi» (14.0936ms)
+✔ P10-INT-5: DTX 20 is part of the monthly sheet history (1.3141ms)
+(node:20444) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:9212) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ legacy history proposal selects an explicit remote block, preserves negations and never overrides text (2.7767ms)
+✔ removed editing cards stay absent in chart/intake; retained fields, allergies and previous source remain readable (32.3483ms)
+✔ history/source survive confirmation without inferred replacements or dropping hidden legacy values (1.1255ms)
+✔ confirmation summary uses retained past history and notes, never relabels generic history (5.6799ms)
+✔ printed PS document shows each current diagnosis once and keeps documented prior history separate (10.4957ms)
+(node:9212) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:27636) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ document absence placeholders are not clinical negative statements (7.9155ms)
+✔ only exact canonical topics compose the existing structured entry (0.5709ms)
+✔ current topics are never also standalone; empty non-topic cards compact together (2.0516ms)
+✔ original, reviewed and conflicts remain accessible despite absent status or placeholder (0.3169ms)
+(node:27636) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22756) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22756) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ narrative loading aborts stale requests and applies only the latest sequence (34.3982ms)
+✔ narrative save failures stay visible and preserve the draft for retry (9.4162ms)
+(node:21172) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ chart groups organize intake and clinical work while legacy links keep their destination (5.0124ms)
+✔ discharge opens directly beside Documents and legacy links keep the same module (1.9175ms)
+✔ Agnos opens the separate therapy page for both roles without confusing the agenda (1.6737ms)
+✔ demographic write preview opens the page that displays the field being changed (1.0688ms)
+✔ HMI 1: 8 chart sections as in the prototype; every legacy tab opens the section that holds it (3.4965ms)
+✔ Prompt 10 AT-13: le sezioni negate dalla policy non sono offerte al ruolo (2.5641ms)
+(node:21172) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient detail specialist modules stay behind explicit lazy imports (3.1841ms)
+✔ patient detail keeps a local accessible loading state without an empty clinical claim (0.6132ms)
+✔ diary filter metadata is dependency-light and does not eager-load the diary tab (0.4291ms)
+✔ patient changes remount the chart and stale diary reads cannot retarget (0.7968ms)
+(node:39824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:6172) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ patient record exposes ONE labelled section rail and a controlled tab panel (14.1158ms)
+✔ top navigation follows the keyboard tab pattern with one focusable active tab (6.993ms)
+✔ therapy sections reuse the canonical contextual navigation (1.7511ms)
+✔ HMI 1 Panoramica: parameter and NEWS2 tiles from the real readings, then the diary (1.3536ms)
+✔ overview is three columns on wide screens, two on tablet and one on phone (2.3225ms)
+✔ patient record applies one screen-only contract to cards, key-value rows and tables (1.0513ms)
+✔ patient record data contract keeps tablet overflow local and stacks key-value rows on phones (1.6805ms)
+(node:6172) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19688) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ legacy #/dettaglio-paziente/<id> still opens the chart (overview) (6.0482ms)
+✔ section, sub-view and item survive a round trip through the hash (2.9897ms)
+✔ the URL carries only opaque ids; unknown or malformed parts are dropped, not guessed (1.5993ms)
+✔ history.state keeps the item next to the section so Back restores both (1.0413ms)
+(node:19688) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1503.4398

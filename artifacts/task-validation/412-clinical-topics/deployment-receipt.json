@@ -1,0 +1,56 @@
+{
+  "applicationCommit": "3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56",
+  "checkedAt": "2026-10-09T09:56:21.8750921Z",
+  "decision": "VERIFIED RELEASE",
+  "productionPatientTestMutations": 0,
+  "vercel": {
+    "gitSourceSha": "3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56",
+    "http": 200,
+    "clinicalChunks": [
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/NarrativeSectionsTab-DIW7CZyd.js",
+        "compactAbsencePresent": true,
+        "http": 200,
+        "currentLabelPresent": false,
+        "sourceDetailPresent": true,
+        "sha256": "0f200a6ebbbd36f340de83c8c3139e4b342a99a8cd5501f4ca088157b8d44bca"
+      },
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetail-BG6yudGE.js",
+        "compactAbsencePresent": false,
+        "http": 200,
+        "currentLabelPresent": true,
+        "sourceDetailPresent": false,
+        "sha256": "359a5a08a97dd0650ca4abb39c225305c65539afe7dbe2f8d152655bc4a545d8"
+      },
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/PatientDetailLazyTabs-B99yJE8n.js",
+        "compactAbsencePresent": false,
+        "http": 200,
+        "currentLabelPresent": false,
+        "sourceDetailPresent": false,
+        "sha256": "c5fc5642e7bea09b22d1c8b5d3bd59ed4f0a4091c9ce3f5fb8e14f15f0f83e9c"
+      }
+    ],
+    "id": "dpl_31ZqytigpuBYh2Pgb3axwqSz3JQP",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "bundleSha256": "85c62839c6818ab7e0070640fad32665b4f669ed7868b2dcb8223bdd49bc80b9",
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-BidnWvby.js",
+    "entryContainsClinicalTopics": false,
+    "githubCommitSha": "3790a95b7c0c09b388ffbaeb7c71fe09d80a1c56",
+    "state": "READY",
+    "aliases": [
+      "clinicos-eosin.vercel.app",
+      "clinicos-lucalavia-2482s-projects.vercel.app",
+      "clinicos-git-main-lucalavia-2482s-projects.vercel.app"
+    ]
+  },
+  "backend": {
+    "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "provenance": "No412backend/schema/API changes; previously verified409retained. No fake redeployment or production patient test write.",
+    "healthHttp": 200,
+    "changed": false,
+    "healthUrl": "https://clinicos-backend-production-df88.up.railway.app/health"
+  }
+}
