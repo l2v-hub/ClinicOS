@@ -50,12 +50,22 @@ if (mode === 'prepare') {
     if (path.endsWith('.zip')) for (const member of zipMembers(bytes)) { inspect(member.body, `${path}:${member.name}`); zipEntriesChecked++; }
   }
   for (const file of independent.files) assert.equal(sha(readFileSync(file.path)), file.sha256);
+  const stageFiles = spawnSync('git', ['add', '-f', '--', ...paths], { encoding: 'utf8' }); assert.equal(stageFiles.status, 0, stageFiles.stderr);
+  const exportedFiles = paths.map(path => {
+    const local = readFileSync(path);
+    const staged = spawnSync('git', ['show', `:${path}`], { maxBuffer: 50*1024*1024 }); assert.equal(staged.status, 0);
+    const exact = local.equals(staged.stdout);
+    if (!exact) assert.ok(Buffer.from(local.toString('utf8').replace(/\r\n/g, '\n')).equals(staged.stdout), `Non-EOL export drift: ${path}`);
+    return { path, sha256: sha(local), gitBlobSha256: sha(staged.stdout), exportNormalization: exact ? 'none' : 'CRLF to LF only' };
+  });
   const receipt = { applicationCommit: independent.applicationCommit, applicationSourceSha256: independent.sourceSha256, decision: 'SOURCE-BOUND SYNTHETIC PROOF', secretChecks, zipEntriesChecked, originalIndependentManifestFrozen: true, productionPatientTestMutations: 0, excluded: ['root-initial/debug/failures and initial online-browser transport-guard failure', 'scratch-prisma generated client', '405/408/410 unreleased app sources', 'dirty launchers', 'coordination metadata', 'original audit/medical photos'], files: paths.map(path => ({ path, sha256: sha(readFileSync(path)) })) };
+  receipt.files = exportedFiles;
+  receipt.exportPolicy = 'Independent local manifest remains frozen. Git may normalize text CRLF to LF; each exported blob is separately bound and byte-checked against only that transformation. No binary or substantive drift permitted.';
   writeFileSync(`${root}/publication-manifest.json`, JSON.stringify(receipt, null, 2));
   const stage = spawnSync('git', ['add', '-f', '--', ...paths, `${root}/publication-manifest.json`], { encoding: 'utf8' }); assert.equal(stage.status, 0, stage.stderr);
   console.log(JSON.stringify({ files: receipt.files.length, secretChecks, zipEntriesChecked, stagedExplicitPaths: true }));
 } else if (mode === 'verify-git') {
   const receipt = JSON.parse(readFileSync(`${root}/publication-manifest.json`, 'utf8'));
-  for (const file of receipt.files) { const r = spawnSync('git', ['show', `HEAD:${file.path}`], { maxBuffer: 50*1024*1024 }); assert.equal(r.status, 0); assert.equal(sha(r.stdout), file.sha256, file.path); }
+  for (const file of receipt.files) { const r = spawnSync('git', ['show', `HEAD:${file.path}`], { maxBuffer: 50*1024*1024 }); assert.equal(r.status, 0); assert.equal(sha(r.stdout), file.gitBlobSha256, file.path); }
   console.log(JSON.stringify({ gitBlobHashesVerified: receipt.files.length, applicationCommit: receipt.applicationCommit }));
 } else throw new Error('prepare or verify-git required');

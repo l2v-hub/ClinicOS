@@ -58,6 +58,8 @@ root-release-gate.mjs verified immutable independent hashes and exact source, au
 
 Only sanitized logs are allowed.
 
+Evidence export: Windows Git normalizes some text CRLF to LF. Initial byte-hash publication check detected this and prevented closure. Final publication-manifest.json separately binds frozen local SHA and canonical Git blob SHA; it accepts only exact bytes or that precise EOL-only transformation, never substantive or binary drift. Independent original local manifest remains unchanged.
+
 ## Residual Risks
 
 12 unchanged baseline full-suite failures and7dependency findings not addressed by411. Mobile/grayscale are emulation, not real glare/AT/clinical-policy signoff. No clinical data persistence modified. Default state counts withheld for missing enrichment, loaded rendered identity count remains explicit. Pending405/408/410 excluded, not silently waived. Original medical/audit photos not published.
