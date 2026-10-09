@@ -9,6 +9,36 @@
 .import-documents {
   padding: 1rem;
 }
+.import-empty-start {
+  padding: 1.25rem;
+  border: 1px solid var(--border-color, #ccd3d8);
+  border-radius: 0.65rem;
+  background: var(--bg-subtle, #f3f5f7);
+  overflow-wrap: anywhere;
+}
+.import-empty-start h3 {
+  margin: 0 0 0.5rem;
+}
+.import-empty-start p {
+  margin-block: 0.5rem;
+}
+.import-empty-start__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-block: 1rem;
+}
+.import-empty-start__actions button {
+  min-height: 44px;
+  max-width: 100%;
+  white-space: normal;
+}
+.import-empty-start__guidance,
+.import-empty-start__hint {
+  color: var(--text-secondary, #475569);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
 .import-session-limits,
 .import-letter-tabs,
 .import-letter-tools,

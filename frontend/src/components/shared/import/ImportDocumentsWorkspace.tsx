@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { CameraCapture } from '../CameraCapture';
 import { ImportPagePreview } from './ImportPageView';
 import { ImportPageGrid } from './ImportPageGrid';
+import { ImportEmptyStart, hasImportContent } from './ImportEmptyStart';
 import { ImportUploadQueue, prepareUploadGroup } from './importUploadQueue';
 import {
   activeImport,
@@ -85,6 +86,7 @@ export function ImportDocumentsWorkspace({
     return () => window.removeEventListener('beforeunload', guard);
   }, [pending]);
   const groups = [...job.manifest.groups].sort((a, b) => a.sortOrder - b.sortOrder);
+  const hasContent = hasImportContent(job);
   const current = groups.find((group) => group.id === groupId) ?? groups[0];
   const pages = current ? orderedPages(job.manifest, current.id) : [];
   const emptyGroups = groups.filter(
@@ -169,21 +171,23 @@ export function ImportDocumentsWorkspace({
   }
   return (
     <div className="import-documents" data-testid="import-documents-workspace">
-      <div className="import-session-limits" role="status">
-        <strong>
-          {job.manifest.pages.length} / {job.limits.maxPages} pagine
-        </strong>
-        <span>
-          {mb(job.totalBytes)} / {mb(job.limits.maxTotalBytes)}
-        </span>
-        <span>
-          {job.documents.length} / {job.limits.maxSourceFiles} file originali · {groups.length} /{' '}
-          {job.limits.maxGroups} lettere
-        </span>
-        <span>
-          Massimo {mb(job.limits.maxFileBytes)} per file · invio progressivo, un file alla volta
-        </span>
-      </div>
+      {hasContent && (
+        <div className="import-session-limits" role="status">
+          <strong>
+            {job.manifest.pages.length} / {job.limits.maxPages} pagine
+          </strong>
+          <span>
+            {mb(job.totalBytes)} / {mb(job.limits.maxTotalBytes)}
+          </span>
+          <span>
+            {job.documents.length} / {job.limits.maxSourceFiles} file originali · {groups.length} /{' '}
+            {job.limits.maxGroups} lettere
+          </span>
+          <span>
+            Massimo {mb(job.limits.maxFileBytes)} per file · invio progressivo, un file alla volta
+          </span>
+        </div>
+      )}
       {(processing || retryable || job.progress.failedPages > 0) && (
         <div
           className="import-upload-status import-progress-summary"
@@ -218,30 +222,43 @@ export function ImportDocumentsWorkspace({
           )}
         </div>
       )}
-      <div className="import-letter-tabs" role="tablist" aria-label="Lettere importate">
-        {groups.map((group) => (
+      {!hasContent && !processing && (
+        <ImportEmptyStart
+          limits={job.limits}
+          disabled={disabled || limit}
+          onUpload={() => {
+            replacing.current = undefined;
+            files.current?.click();
+          }}
+          onScan={() => setCamera({})}
+        />
+      )}
+      {hasContent && (
+        <div className="import-letter-tabs" role="tablist" aria-label="Lettere importate">
+          {groups.map((group) => (
+            <button
+              key={group.id}
+              role="tab"
+              aria-selected={current?.id === group.id}
+              className={`btn-secondary${current?.id === group.id ? ' is-active' : ''}`}
+              onClick={() => {
+                setGroupId(group.id);
+                setGroupLabel('');
+              }}
+            >
+              {group.label} · {group.pageCount} pagine
+            </button>
+          ))}
           <button
-            key={group.id}
-            role="tab"
-            aria-selected={current?.id === group.id}
-            className={`btn-secondary${current?.id === group.id ? ' is-active' : ''}`}
-            onClick={() => {
-              setGroupId(group.id);
-              setGroupLabel('');
-            }}
+            className="btn-secondary"
+            disabled={disabled || groups.length >= job.limits.maxGroups}
+            onClick={() => void addGroup()}
           >
-            {group.label} · {group.pageCount} pagine
+            + Nuova lettera
           </button>
-        ))}
-        <button
-          className="btn-secondary"
-          disabled={disabled || groups.length >= job.limits.maxGroups}
-          onClick={() => void addGroup()}
-        >
-          + Nuova lettera
-        </button>
-      </div>
-      {current && (
+        </div>
+      )}
+      {hasContent && current && (
         <div className="import-letter-tools">
           <h3>{current.label}</h3>
           <label>
@@ -297,7 +314,7 @@ export function ImportDocumentsWorkspace({
           )}
         </div>
       )}
-      {!processing && (
+      {hasContent && !processing && (
         <div className="import-modal__actions">
           <button
             className="btn-secondary"
@@ -321,20 +338,20 @@ export function ImportDocumentsWorkspace({
             Prossima pagina: {pages.length + 1}
             {current ? ` · ${current.label}` : ''}
           </span>
-          <input
-            ref={files}
-            type="file"
-            hidden
-            multiple
-            accept={job.limits.acceptedMimeTypes.join(',')}
-            onChange={(event) => {
-              const selected = Array.from(event.target.files ?? []);
-              event.target.value = '';
-              void upload(selected, replacing.current).catch(() => {});
-            }}
-          />
         </div>
       )}
+      <input
+        ref={files}
+        type="file"
+        hidden
+        multiple
+        accept={job.limits.acceptedMimeTypes.join(',')}
+        onChange={(event) => {
+          const selected = Array.from(event.target.files ?? []);
+          event.target.value = '';
+          void upload(selected, replacing.current).catch(() => {});
+        }}
+      />
       {limit && (
         <p role="status">
           Limite pagine raggiunto. Puoi riordinare, rimuovere o sostituire una pagina.
@@ -405,13 +422,13 @@ export function ImportDocumentsWorkspace({
         onRetake={(pageId) => setCamera({ pageId })}
         onMutation={onMutation}
       />
-      {!pages.length && (
+      {hasContent && !pages.length && (
         <p className="import-modal__empty">
           Aggiungi le pagine della lettera corrente. Puoi creare altre lettere e spostare le pagine
           in seguito.
         </p>
       )}
-      {!processing && (
+      {hasContent && !processing && (
         <footer className="import-modal__foot">
           {emptyGroups.length > 0 && job.manifest.pages.length > 0 && (
             <p role="status">
