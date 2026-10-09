@@ -32,6 +32,8 @@ export interface PaperSheetProps {
   footerNote?: ReactNode;
   /** Frozen snapshot text of the selected options (shown instead of the definition text). */
   selectedText?: Record<string, string>;
+  /** Interactive PAINAD only; read-only paper and other scales retain full layout. */
+  compactCompilation?: boolean;
 }
 
 export function PaperSheet({
@@ -47,11 +49,13 @@ export function PaperSheet({
   signatureName,
   footerNote,
   selectedText,
+  compactCompilation = false,
 }: PaperSheetProps) {
   const label = (item: PaperItem, value: number | boolean, text: string) =>
     answers[item.key] === value ? (selectedText?.[item.key] ?? text) : text;
   const id = useId();
   const readOnly = !onChange;
+  const compact = compactCompilation && !readOnly && scale.type === 'painad';
   const total = result?.total ?? partialTotal(scale, answers);
   const items = paperItems(scale);
   const band = result ? paperBand(scale, result.total) : null;
@@ -184,14 +188,14 @@ export function PaperSheet({
   );
   return (
     <article
-      className={`paper-sheet paper-sheet--${scale.type} paper-sheet--${scale.layout}`}
+      className={`paper-sheet paper-sheet--${scale.type} paper-sheet--${scale.layout}${compact ? ' paper-sheet--compact-compilation' : ''}`}
       aria-label={scale.title}
     >
       <header className={`paper-head paper-head--${scale.header}`}>
         <h3>{scale.title}</h3>
         <p>{scale.subtitle}</p>
       </header>
-      <section className="paper-fields" aria-label={scale.patientBoxTitle ?? 'Anagrafica'}>
+      {!compact && <section className="paper-fields" aria-label={scale.patientBoxTitle ?? 'Anagrafica'}>
         {scale.patientBoxTitle && <h4>{scale.patientBoxTitle}</h4>}
         <dl>
           {fields.map((field) => (
@@ -201,7 +205,7 @@ export function PaperSheet({
             </div>
           ))}
         </dl>
-      </section>
+      </section>}
       {scale.instruction && (
         <p className="paper-instruction">
           <strong>{scale.instruction.label}</strong> {scale.instruction.text}

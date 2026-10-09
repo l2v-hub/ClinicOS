@@ -7,6 +7,7 @@ import {
   type DemographicField,
 } from '../../lib/patientDemographics';
 import { patientLocationLabel } from '../../lib/patientIdentity';
+import { PatientIdentifier } from '../shared/PatientIdentity';
 import { DemographicsStatus } from '../shared/DemographicsStatus';
 import { PatientIntakeReview } from './PatientIntakeReview';
 import { PatientContacts } from './PatientContacts';
@@ -2344,6 +2345,7 @@ export function PatientDetail({
         </h1>
       </div>
       <p className="page-header__subtitle">{patientSubtitle}</p>
+      {tab === 'painad' && <PatientIdentifier patient={paziente} />}
     </div>
   );
 
@@ -2702,6 +2704,7 @@ export function PatientDetail({
           current === 'barthel' ||
           current === 'ucla_npi_sleep') && (
           <AssessmentWorkspace
+            contextIdentityProvided={current === 'painad'}
             patient={paziente}
             operatorId={operatoreId}
             operatorRole={operatoreRole}

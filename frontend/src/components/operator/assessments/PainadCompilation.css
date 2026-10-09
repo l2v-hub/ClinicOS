@@ -1,0 +1,27 @@
+/* Scoped presentation only: no changes to validated definitions or other modules. */
+.assessment-workspace--focused > .cts,
+.assessment-workspace--focused > .cts > .cts__body { overflow: visible; }
+.assessment-workspace--focused .assessment-local:empty { display: none; }
+.paper-form--focused { --assessment-identity-height: 0px; }
+.painad-compilation-toolbar {
+  position: sticky; top: var(--painad-top-offset, 0px); z-index: 4;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px; background: #fff; border: 1px solid var(--border, #d7e0ec);
+  border-radius: 10px; box-shadow: 0 2px 8px #172b4d12;
+}
+.painad-compilation-toolbar [role="status"] { display: grid; gap: 4px; font-size: 13px; }
+.painad-compilation-toolbar [role="status"] span { color: var(--text-secondary); }
+.painad-compilation-toolbar .assessment-actions { margin: 0; }
+.assessment-workspace .painad-compilation-toolbar button { min-height: 44px; }
+.painad-metadata { margin: 8px 0; }
+.painad-metadata summary { padding: 12px 4px; cursor: pointer; font-size: 13px; }
+.painad-metadata .assessment-date { margin-top: 8px; }
+.paper-sheet--compact-compilation .paper-head { padding: 12px 20px; }
+.paper-sheet--compact-compilation .paper-head h3 { font-size: 18px; }
+.paper-form--focused .paper-check { scroll-margin-top: var(--painad-focus-offset, 150px); scroll-margin-bottom: 24px; }
+@media (max-width: 600px) {
+  .painad-compilation-toolbar { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px; }
+  .painad-compilation-toolbar .assessment-actions { flex-wrap: nowrap; gap: 8px; }
+  .painad-compilation-toolbar button { font-size: 12px; padding: 8px; }
+  .paper-sheet--compact-compilation .paper-head { padding: 12px; }
+}

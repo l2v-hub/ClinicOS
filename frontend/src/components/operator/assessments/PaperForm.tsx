@@ -22,6 +22,7 @@ import { PaperSheet } from './PaperSheet';
 import { partialTotal } from '../../../lib/assessments/paper/paperLayout';
 import { measureText, paperFields } from './paperFields';
 import { assessmentEditable } from '../../../lib/assessments/assessmentTime';
+import './PainadCompilation.css';
 
 type MeasureKey = 'weightKg' | 'heightM' | 'calfCm';
 const parseMeasure = (raw: string): number | null | 'invalid' => {
@@ -39,6 +40,7 @@ export function PaperForm({
   operatorName,
   onSave,
   onPreview,
+  focusCompilation = false,
 }: {
   draft: AssessmentDraft;
   store: AssessmentDraftStore;
@@ -47,8 +49,11 @@ export function PaperForm({
   operatorName: string;
   onSave: () => void;
   onPreview: () => void;
+  focusCompilation?: boolean;
 }) {
   const root = useRef<HTMLFormElement>(null);
+  const focused = focusCompilation && scale.type === 'painad';
+  const focusedKey = useRef<string | null>(null);
   const answers = draft.fields.answers as PaperAnswers;
   const locked = draft.busy || !!draft.pending;
   const result = paperResult(scale, answers);
@@ -111,6 +116,34 @@ export function PaperForm({
     field?.focus();
     field?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [draft.failure]);
+  useEffect(() => {
+    if (!focused || !root.current) return;
+    const form = root.current;
+    const toolbar = form.querySelector<HTMLElement>('.painad-compilation-toolbar');
+    const topbar = document.querySelector<HTMLElement>('.compact-topbar');
+    const identity = form.closest('.assessment-workspace')?.querySelector<HTMLElement>('.assessment-patient');
+    const measure = () => {
+      const offset = (window.innerWidth <= 1023 ? (topbar?.getBoundingClientRect().height ?? 0) : 0) + (identity?.offsetHeight ?? 0);
+      form.style.setProperty('--painad-top-offset', `${offset}px`);
+      form.style.setProperty('--painad-focus-offset', `${offset + (toolbar?.offsetHeight ?? 0) + 24}px`);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (toolbar) observer.observe(toolbar);
+    if (topbar) observer.observe(topbar);
+    if (identity) observer.observe(identity);
+    window.addEventListener('resize', measure);
+    return () => { observer.disconnect(); window.removeEventListener('resize', measure); };
+  }, [focused]);
+  useEffect(() => {
+    if (!focused || locked || focusedKey.current === draft.key) return;
+    focusedKey.current = draft.key;
+    // Do not steal focus from validation errors or on each response/save render.
+    if (draft.failure?.missingPaths?.length) return;
+    const first = root.current?.querySelector<HTMLInputElement>('input[data-field-path="respiration"]:not(:disabled)');
+    first?.focus({ preventScroll: true });
+    first?.scrollIntoView({ block: 'center', behavior: 'instant' });
+  }, [focused, draft.key, locked, draft.failure]);
   const measureInput = (key: MeasureKey, label: string) => (
     <span className="paper-measure">
       <input
@@ -148,16 +181,31 @@ export function PaperForm({
   return (
     <form
       ref={root}
-      className="assessment-form paper-form"
+      className={`assessment-form paper-form${focused ? ' paper-form--focused' : ''}`}
       aria-busy={draft.busy}
       onSubmit={(event) => {
         event.preventDefault();
         if (!invalidMeasures) onSave();
       }}
     >
-      <AssessmentDateFields draft={draft} store={store} />
+      {focused && <div className="painad-compilation-toolbar" role="region" aria-label="Azioni compilazione PAINAD">
+        <div role="status" aria-live="polite">
+          <strong>Bozza in modifica · {count} di 5 risposte</strong>
+          <span>{result ? 'Compilazione completa · da verificare' : `Compilazione in corso · punteggio parziale ${partialTotal(scale, answers)} / ${scale.maximum}`}</span>
+        </div>
+        <div className="assessment-actions">
+          <button type="submit" className="btn-secondary" disabled={locked || !draft.dirty || invalidMeasures}>{draft.busy ? 'Salvataggio…' : 'Salva bozza'}</button>
+          <button type="button" className="btn-primary" disabled={locked || !result || invalidMeasures} onClick={onPreview}>Salva e verifica anteprima</button>
+        </div>
+      </div>}
+      {focused ? <details className="painad-metadata" open={draft.predecessorId ? true : undefined}>
+        <summary>Data e compilatore · {operatorName}</summary>
+        <AssessmentDateFields draft={draft} store={store} />
+        <p className="assessment-hint">La bozza resta disponibile dopo il ricaricamento in questa scheda. Salvala sul server per ritrovarla dopo l’accesso successivo.</p>
+      </details> : <AssessmentDateFields draft={draft} store={store} />}
       <PaperSheet
         scale={scale}
+        compactCompilation={focused}
         answers={answers}
         result={result}
         answeredCount={count}
@@ -177,7 +225,7 @@ export function PaperForm({
           },
         })}
       />
-      <div className="assessment-actions">
+      {!focused && <div className="assessment-actions">
         <button
           type="submit"
           className="btn-secondary"
@@ -193,7 +241,7 @@ export function PaperForm({
         >
           Salva e verifica anteprima
         </button>
-      </div>
+      </div>}
     </form>
   );
 }

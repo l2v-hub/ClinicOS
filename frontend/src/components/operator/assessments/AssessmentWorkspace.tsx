@@ -55,6 +55,8 @@ export interface AssessmentWorkspaceProps {
   onOpenArchive?: (documentId: string, assessment: AssessmentTarget) => void;
   client?: AssessmentClient;
   children?: ReactNode;
+  /** Caller supplies the persistent patient name and disambiguating identifier. */
+  contextIdentityProvided?: boolean;
 }
 export function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   return (
@@ -77,6 +79,7 @@ function AssessmentSession({
   onOpenArchive,
   client: providedClient,
   children,
+  contextIdentityProvided = false,
 }: AssessmentWorkspaceProps) {
   const definition = assessmentDefinition(type);
   const canCreate = useCan('assessments.create_draft');
@@ -123,6 +126,7 @@ function AssessmentSession({
   const history = useAssessmentHistory(patient.id, client, type);
   const draft = selectedKey ? store.get(selectedKey) : undefined;
   const record = draft?.record;
+  const focusedCompilation = type === 'painad' && !!draft && !draft.preview && record?.status !== 'final';
   const { pdfBusy, pdfDocument, setPdfDocument, pdfAction, openPdf } = useAssessmentPdf({
     record,
     selectedKey,
@@ -261,10 +265,10 @@ function AssessmentSession({
     }
   }
   return (
-    <div className="assessment-workspace" ref={workspaceRef}>
-      <div className="assessment-patient" ref={identityRef}>
+    <div className={`assessment-workspace${focusedCompilation ? ' assessment-workspace--focused' : ''}`} ref={workspaceRef}>
+      {!(type === 'painad' && contextIdentityProvided) && <div className="assessment-patient" ref={identityRef}>
         <PatientIdentity patient={patient} />
-      </div>
+      </div>}
       <ClinicalTableSection
         title={definition.title}
         actions={
@@ -276,7 +280,7 @@ function AssessmentSession({
         }
       >
         <div className="cts__body--padded">
-          <p>{definition.description}</p>
+          {!focusedCompilation && <p>{definition.description}</p>}
           {type !== 'painad' && (
             <div className="assessment-actions">
               <button
@@ -292,14 +296,14 @@ function AssessmentSession({
           {currentEmpty && !draft && (
             <p>Nessuna scheda finale corrente. Avvia una nuova compilazione.</p>
           )}
-          <p className="assessment-hint">
+          {!focusedCompilation && <p className="assessment-hint">
             Compilatore: {operatorName}. La bozza resta disponibile dopo il ricaricamento in questa scheda. Salvala sul server per ritrovarla dopo l’accesso successivo.
-          </p>
+          </p>}
           {store.persistenceFailed() && <p role="alert">Bozza disponibile in questa pagina. Il browser non consente di conservarla dopo il ricaricamento.</p>}
           {localDrafts.length > 0 && (
             <div className="assessment-local">
-              <span>Draft · compilazioni da completare</span>
-              {localDrafts.map((item) => (
+              {localDrafts.some(item => !focusedCompilation || item.key !== selectedKey) && <span>Draft · compilazioni da completare</span>}
+              {localDrafts.filter(item => !focusedCompilation || item.key !== selectedKey).map((item) => (
                 <button
                   key={item.key}
                   type="button"
@@ -379,6 +383,7 @@ function AssessmentSession({
                     });
                     return paper ? (
                       <PaperForm
+                        focusCompilation={type === 'painad'}
                         draft={draft}
                         store={store}
                         scale={paper}
