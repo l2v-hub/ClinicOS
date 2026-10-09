@@ -114,6 +114,7 @@ import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { PatientVitalSignsView } from './PatientVitalSignsView';
 import './PatientRecordData.css';
 import './PatientOverview.css';
+import './PatientChartScroll.css';
 import { UrgencyNotice } from '../shared/UrgencyNotice';
 import { consegnaPriorityLabel, isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';
 
