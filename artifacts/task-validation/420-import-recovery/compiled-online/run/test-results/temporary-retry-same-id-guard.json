@@ -1,0 +1,185 @@
+{
+  "allowed": true,
+  "appointments": [],
+  "session": {
+    "id": "synthetic-session-420",
+    "status": "collecting",
+    "expiresAt": "2026-10-10T12:00:00Z",
+    "totalBytes": 0,
+    "documents": [],
+    "capabilities": {
+      "sessionVersion": 1,
+      "pageEditing": true,
+      "atomicReplacement": true
+    },
+    "manifest": {
+      "version": 1,
+      "revision": 1,
+      "groups": [
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 0,
+          "status": "pending",
+          "pageCount": 0,
+          "completedPages": 0,
+          "error": null,
+          "pdfUrl": null
+        }
+      ],
+      "pages": []
+    },
+    "limits": {
+      "maxPages": 30,
+      "maxSourceFiles": 30,
+      "maxGroups": 30,
+      "maxTotalBytes": 26214400,
+      "maxFileBytes": 26214400,
+      "maxFilesPerRequest": 10,
+      "maxRequestBytes": 26476544,
+      "acceptedMimeTypes": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    },
+    "progress": {
+      "phase": "documents",
+      "totalPages": 0,
+      "completedPages": 0,
+      "failedPages": 0,
+      "totalGroups": 1,
+      "completedGroups": 0,
+      "currentPageId": null,
+      "currentGroupId": null
+    },
+    "review": {
+      "manifestRevision": null,
+      "resultHash": null,
+      "unresolvedConflicts": 0,
+      "canProceed": false,
+      "draftId": null,
+      "draftSourceIsCurrent": false
+    }
+  },
+  "sessionStatus": 200,
+  "created": 0,
+  "creationKeys": [],
+  "expectedHttp": [
+    {
+      "status": 503,
+      "path": "/ai/extraction/jobs/synthetic-session-420"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/me/roster-order"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/notes"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/operators/directory/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/status"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/settings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-420/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/jobs/synthetic-session-420"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/jobs/synthetic-session-420"
+    }
+  ],
+  "errors": [
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+  ],
+  "pageErrors": [],
+  "httpErrors": [
+    {
+      "status": 503,
+      "path": "/ai/extraction/jobs/synthetic-session-420"
+    }
+  ],
+  "unexpected": [],
+  "external": [],
+  "writes": []
+}

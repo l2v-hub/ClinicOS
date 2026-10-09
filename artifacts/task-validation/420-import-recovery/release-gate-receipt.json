@@ -1,0 +1,23 @@
+{
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "applicationCommit": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+  "baselineCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "sourceSha256": "c0cedb0d84be397f4085dfc25cf3a8cd4ae39b25d36c7724285625e966ddbbad",
+  "canonicalSourceSha256": "c50c4b957793e5ac09b9d8433a5eb94113a03e666e1457873a92f46d54a3c304",
+  "qaManifestSha256": "ebc5f86a444eb2fa9ca9cc1b02e97809aa84432b351a5873bd19c077cd7b4398",
+  "immutableFilesVerified": 201,
+  "rootOrdinaryBrowser": 13,
+  "independentBrowser": 20,
+  "rootIndependentRerun": 20,
+  "focusedEach": 32,
+  "unchangedBaselineFailures": 12,
+  "newFailures": 0,
+  "originalAcceptanceCriteria": 4,
+  "allOriginalCriteriaPassed": true,
+  "review": "Main read independent report/recipes/privacy/seal and full application diff; original desktop expired/creation and mobile terminal BEFORE return visually inspected; byte-identical independent20 rerun plus ordinary13; exact source and evidence integrity verified.",
+  "security": "Scoped three inherited medium heuristics outside changed paths; no global/CVE green claim.",
+  "productionPatientTestMutations": 0,
+  "authority": "Direct human authorization for sequential scoped fixes/deployment; root sole integration writer",
+  "at": "2026-10-09T18:40:05.030Z",
+  "remaining": "Exact-source deployment, compiled-online guards, completed CI comparison and pinned synthetic evidence before closure"
+}

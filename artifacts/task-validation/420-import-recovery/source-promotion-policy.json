@@ -1,0 +1,10 @@
+{
+  "action": "PUSH EXACT APPLICATION TO MAIN",
+  "authority": "Direct human authorization plus root independent review/rerun release decision",
+  "applicationCommit": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+  "expectedRemoteBaseline": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "sourceSha256": "c0cedb0d84be397f4085dfc25cf3a8cd4ae39b25d36c7724285625e966ddbbad",
+  "decision": "AUTHORIZED",
+  "at": "2026-10-09T18:40:06.093Z",
+  "excluded": "All artifacts, primary/launcher edits, unaccepted blocked candidates"
+}

@@ -1,0 +1,120 @@
+[
+  {
+    "createdAt": "2026-10-08T20:22:04Z",
+    "labels": [],
+    "number": 429,
+    "title": "[UX/UI audit] ClinicOS — 27 segnalazioni per uso clinico e luce intensa · 8 ottobre 2026"
+  },
+  {
+    "createdAt": "2026-10-08T20:21:13Z",
+    "labels": [],
+    "number": 428,
+    "title": "[UX audit][P2] Gestione operatori: celle Ruolo vuote per operatori attivi"
+  },
+  {
+    "createdAt": "2026-10-08T20:21:09Z",
+    "labels": [],
+    "number": 427,
+    "title": "[UX audit][P2] Agenda globale: stessi colori per identità operatore e stato attività"
+  },
+  {
+    "createdAt": "2026-10-08T20:21:06Z",
+    "labels": [],
+    "number": 426,
+    "title": "[UX audit][P2] Posti letto: nomi delle azioni ripetuti senza camera o letto"
+  },
+  {
+    "createdAt": "2026-10-08T20:20:55Z",
+    "labels": [],
+    "number": 425,
+    "title": "[UX audit][P2] Cartella: pannelli interni e pagina competono nello scorrimento"
+  },
+  {
+    "createdAt": "2026-10-08T20:20:52Z",
+    "labels": [],
+    "number": 424,
+    "title": "[UX audit][P2] Diario: «Letto» sembra uno stato, ma è un’azione di conferma"
+  },
+  {
+    "createdAt": "2026-10-08T20:20:48Z",
+    "labels": [],
+    "number": 423,
+    "title": "[UX audit][P3] Archivio documenti vuoto: molte cartelle a zero prima dell’azione utile"
+  },
+  {
+    "createdAt": "2026-10-08T20:20:45Z",
+    "labels": [],
+    "number": 422,
+    "title": "[UX audit][P2] Ricerca farmaci: confezioni omonime poco distinguibili e RCP ripetuti"
+  },
+  {
+    "createdAt": "2026-10-08T20:20:38Z",
+    "labels": [],
+    "number": 421,
+    "title": "[UX audit][P2] Importazione vuota sovraccarica di contatori e comandi prima del primo documento"
+  },
+  {
+    "createdAt": "2026-10-08T20:20:35Z",
+    "labels": [],
+    "number": 420,
+    "title": "[UX audit][P2] Importazione scaduta: messaggio di recupero e promessa di conservazione incoerenti"
+  },
+  {
+    "createdAt": "2026-10-08T20:19:32Z",
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      }
+    ],
+    "number": 416,
+    "title": "[UX audit][P2] Azioni frequenti al letto del paziente concentrate in controlli da 36 px"
+  },
+  {
+    "createdAt": "2026-10-08T20:19:03Z",
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      }
+    ],
+    "number": 410,
+    "title": "[UX audit][P2] «Adesso» ripete ritardi e pazienti, riducendo la gerarchia operativa"
+  },
+  {
+    "createdAt": "2026-10-08T20:18:36Z",
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      }
+    ],
+    "number": 408,
+    "title": "[UX audit][P2] Calendario terapia: stati visivi basati su colore e conteggio"
+  },
+  {
+    "createdAt": "2026-10-08T20:18:19Z",
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      }
+    ],
+    "number": 405,
+    "title": "[UX audit][P1] Campi di «Nuovo appuntamento» privi di nome accessibile associato"
+  },
+  {
+    "createdAt": "2026-07-25T09:41:13Z",
+    "labels": [],
+    "number": 303,
+    "title": "knoledge base"
+  }
+]

@@ -1,0 +1,125 @@
+{
+  "results": [
+    {
+      "name": "authoritative-expired",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:11.769Z",
+      "endedAt": "2026-10-09T18:37:14.444Z"
+    },
+    {
+      "name": "authoritative-cancelled",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:14.445Z",
+      "endedAt": "2026-10-09T18:37:17.843Z"
+    },
+    {
+      "name": "authoritative-confirmed",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:17.843Z",
+      "endedAt": "2026-10-09T18:37:20.512Z"
+    },
+    {
+      "name": "masked404-neutral-not-deleted",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:20.513Z",
+      "endedAt": "2026-10-09T18:37:23.387Z"
+    },
+    {
+      "name": "temporary-503-same-reference",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:23.387Z",
+      "endedAt": "2026-10-09T18:37:26.192Z"
+    },
+    {
+      "name": "temporary-network-same-reference",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:26.192Z",
+      "endedAt": "2026-10-09T18:37:29.076Z"
+    },
+    {
+      "name": "temporary-403-same-reference",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:29.076Z",
+      "endedAt": "2026-10-09T18:37:31.706Z"
+    },
+    {
+      "name": "explicit-new-feedback-keyboard-return-and-reload",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:31.706Z",
+      "endedAt": "2026-10-09T18:37:39.926Z"
+    },
+    {
+      "name": "lost-creation-response-same-idempotency-key",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:39.926Z",
+      "endedAt": "2026-10-09T18:37:46.156Z"
+    },
+    {
+      "name": "saved-source-qualified-recovery",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:46.157Z",
+      "endedAt": "2026-10-09T18:37:51.959Z"
+    },
+    {
+      "name": "result404-not-parent-deletion",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:51.959Z",
+      "endedAt": "2026-10-09T18:37:55.387Z"
+    },
+    {
+      "name": "page404-not-parent-terminal",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:37:55.387Z",
+      "endedAt": "2026-10-09T18:38:01.495Z"
+    },
+    {
+      "name": "terminal-poll-disposes-stale-saved-page",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:01.496Z",
+      "endedAt": "2026-10-09T18:38:04.808Z"
+    },
+    {
+      "name": "mutation-closed-clears-stale-workspace",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:04.808Z",
+      "endedAt": "2026-10-09T18:38:08.139Z"
+    },
+    {
+      "name": "expiry-past-not-fabricated",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:08.139Z",
+      "endedAt": "2026-10-09T18:38:11.424Z"
+    },
+    {
+      "name": "expiry-invalid-not-fabricated",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:11.424Z",
+      "endedAt": "2026-10-09T18:38:15.197Z"
+    },
+    {
+      "name": "clock-expiry-removes-promise-only",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:15.198Z",
+      "endedAt": "2026-10-09T18:38:19.142Z"
+    },
+    {
+      "name": "different-actor-cannot-reuse-old-reference",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:19.143Z",
+      "endedAt": "2026-10-09T18:38:22.088Z"
+    },
+    {
+      "name": "mobile-terminal-wrap-and-keyboard-return",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:22.088Z",
+      "endedAt": "2026-10-09T18:38:26.167Z"
+    },
+    {
+      "name": "mobile-new-feedback-return",
+      "status": "PASS",
+      "startedAt": "2026-10-09T18:38:26.167Z",
+      "endedAt": "2026-10-09T18:38:31.209Z"
+    }
+  ],
+  "productionPatientMutations": 0
+}

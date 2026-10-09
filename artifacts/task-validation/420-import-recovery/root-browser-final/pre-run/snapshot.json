@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-09T18:31:24.871Z",
+  "applicationCommit": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+  "actualCompiler": "frontend/vite.config.ts; actual React compiler; own7501; clinical APIs intercepted",
+  "files": [
+    {
+      "path": "fixture.mjs",
+      "sha256": "461bf326bbc470f2f9c45421667edf08dd6824e7f0312e75bc80505167faa337"
+    },
+    {
+      "path": "after.mjs",
+      "sha256": "3c71707c4e3d9bf927fecbaa0f476ab6f05c87d044097b34df418e05163c3521"
+    },
+    {
+      "path": "qa-server.mjs",
+      "sha256": "df581ca3390b64446037871196896d976816f029777dafe6634020077c876141"
+    },
+    {
+      "path": "commands.mjs",
+      "sha256": "387a4d5cc83474394d8a70088330f97694e12e30112ac560863587014e303e70"
+    },
+    {
+      "path": "source-receipt.mjs",
+      "sha256": "564c9acfa1d75155e96169a94c644dfbdb17c1b77d1ad86b8be796ceaf726bbe"
+    },
+    {
+      "path": "prepare.mjs",
+      "sha256": "390c36eb12dfd9ff487999188934ac21b92a4261b156b1911c12af3e9bfad5ad"
+    }
+  ]
+}

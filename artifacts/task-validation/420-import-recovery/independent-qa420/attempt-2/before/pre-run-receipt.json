@@ -1,0 +1,75 @@
+{
+  "snapshotAt": "2026-10-09T18:31:11.198Z",
+  "applicationCommit": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+  "files": [
+    {
+      "path": "fixture.mjs",
+      "sha256": "b1de4e0568eb6a239f1c63127bb030eb926ac2c5afb1eb2a5e935b935ebe7e29",
+      "bytes": 11033
+    },
+    {
+      "path": "recipe.mjs",
+      "sha256": "cd3df5745f8eaa161afa9022026d9618d8950f8f1697c77a61c1e726133a8c08",
+      "bytes": 11363
+    },
+    {
+      "path": "qa-server.mjs",
+      "sha256": "06df420f19a9ddbc1ec76b4a55d3f782e9f8dcb6edd210965220cda4e9c26cb1",
+      "bytes": 659
+    },
+    {
+      "path": "commands.mjs",
+      "sha256": "a6017cf69a8e64e8ec69def2c1f71688e1b1f5e8fd3c2093c46e00992eb5c055",
+      "bytes": 2614
+    },
+    {
+      "path": "prepare.mjs",
+      "sha256": "e3d1a13b8a4d6b5d86dc9658092edc2cf86b9e491c353f791b4ab31e0622692b",
+      "bytes": 2788
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "15e94b61490c2db46ea2b1dfce13c2841098bffda0736336a82eda887c5fa7af",
+      "bytes": 2855
+    },
+    {
+      "path": "frontend__vite.config.ts",
+      "original": "frontend/vite.config.ts",
+      "sha256": "ec75b4405e60b7e4ab6de65ff536063b952a6d66fbc86a0d977cfa3d2f427ae8",
+      "bytes": 286
+    },
+    {
+      "path": "frontend__tsconfig.app.json",
+      "original": "frontend/tsconfig.app.json",
+      "sha256": "beb4745fe309bec67d29e9a8945b498f08d7164b0dd12ebd63a49818cd4548dd",
+      "bytes": 722
+    },
+    {
+      "path": "frontend__package.json",
+      "original": "frontend/package.json",
+      "sha256": "319c3acade0ca06ff325e4749a65ab331bdd8c106086ccffd1d8be8f48468ac3",
+      "bytes": 1077
+    },
+    {
+      "path": "scripts__run-node-tests.mjs",
+      "original": "scripts/run-node-tests.mjs",
+      "sha256": "af853157fdd60a2e2eebb7fd4168cfe2e4c4a801d2e03fa9eac7e7fd083f7ff2",
+      "bytes": 3254
+    },
+    {
+      "path": "scripts__stub-css-loader.mjs",
+      "original": "scripts/stub-css-loader.mjs",
+      "sha256": "4f33a76956230205ffc91843f4c0cc264677ac0dc81048c11c7c5a2b7bf89b64",
+      "bytes": 1534
+    }
+  ],
+  "runtime": {
+    "node": "v26.3.0",
+    "playwright": "1.61.1",
+    "compiler": "actual frontend/vite.config.ts react compiler",
+    "port": 7503,
+    "envOverrides": false,
+    "sharedDependencies": "readonly junction installed by integration; no mutation"
+  },
+  "authoring": "Fresh independent recipe; inspected implementer synthetic transport fixture reused with stricter per-URL guard and independent fault extensions"
+}

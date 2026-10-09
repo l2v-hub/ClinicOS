@@ -1,0 +1,23 @@
+
+Security Scan
+──────────────────────────────────────────────────
+
+... Scanning C:/w-420-qa/frontend/src...
+                                    
+Scan complete
+
++----------+-----------+---------------------------+----------------+
+| Severity | Type      | Location                  | Description    |
++----------+-----------+---------------------------+----------------+
+| MEDIUM   | React XSS | components\shared\sect... | React XSS risk |
+| MEDIUM   | React XSS | components\shared\sect... | React XSS risk |
+| MEDIUM   | React XSS | lib\__tests__\therapyG... | React XSS risk |
++----------+-----------+---------------------------+----------------+
++------------- Scan Summary --------------+
+| Target: C:/w-420-qa/frontend/src        |
+| Depth: deep                             |
+| Type: code                              |
+|                                         |
+| Critical: 0  High: 0  Medium: 3  Low: 0 |
+| Total Issues: 3                         |
++-----------------------------------------+

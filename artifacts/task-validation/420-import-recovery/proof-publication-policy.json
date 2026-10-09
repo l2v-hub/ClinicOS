@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND PROOF COMMIT AND PUSH",
+  "authority": "Direct human authorization; root release gate plus independent/re-run/compiled online/CI comparison passed",
+  "applicationCommit": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+  "branch": "codex/bug-420-import-recovery",
+  "scope": "artifacts/task-validation/420-import-recovery",
+  "artifacts": 539,
+  "configuredCredentialChecks": 23958,
+  "expandedZipMembers": 7447,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T18:53:44.116Z",
+  "excluded": "No main proof promotion or application change, no primary/blocked source"
+}

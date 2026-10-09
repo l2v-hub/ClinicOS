@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-09T18:37:04.311Z",
+  "applicationCommit": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+  "files": [
+    {
+      "path": "recipe.mjs",
+      "sha256": "cd3df5745f8eaa161afa9022026d9618d8950f8f1697c77a61c1e726133a8c08"
+    },
+    {
+      "path": "fixture.mjs",
+      "sha256": "b1de4e0568eb6a239f1c63127bb030eb926ac2c5afb1eb2a5e935b935ebe7e29"
+    }
+  ],
+  "origin": "C:/w-420-qa/artifacts/task-validation/420-import-recovery/independent-qa420",
+  "actualRuntime": "Root owned7501 actual compiler; independently authored recipe byte-identical, no clinical network"
+}

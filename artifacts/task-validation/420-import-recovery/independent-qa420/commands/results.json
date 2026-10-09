@@ -1,0 +1,73 @@
+[
+  {
+    "name": "frontend-types",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "frontend/tsconfig.app.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "backend-types",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "backend/tsconfig.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "build",
+    "args": [
+      "node_modules/typescript/bin/tsc",
+      "-b",
+      "frontend/tsconfig.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "vite-build",
+    "args": [
+      "node_modules/vite/bin/vite.js",
+      "build",
+      "frontend"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "import-focused",
+    "args": [
+      "--import",
+      "tsx",
+      "--import",
+      "./scripts/stub-css-loader.mjs",
+      "--test",
+      "frontend/src/components/shared/import/__tests__\\importUpload.test.ts",
+      "frontend/src/components/shared/import/__tests__\\importSession.test.ts",
+      "frontend/src/components/shared/import/__tests__\\importReview.test.ts",
+      "frontend/src/components/shared/import/__tests__\\importRecovery.test.ts",
+      "frontend/src/components/shared/import/__tests__\\importHandoff.test.ts",
+      "frontend/src/lib/__tests__/capabilities.test.ts"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "full-regression",
+    "args": [
+      "../scripts/run-node-tests.mjs"
+    ],
+    "exitCode": 1
+  },
+  {
+    "name": "secret-scan",
+    "args": [
+      "scripts/security/scan-frontend-secrets.mjs",
+      "frontend/src",
+      "frontend/index.html"
+    ],
+    "exitCode": 0
+  }
+]

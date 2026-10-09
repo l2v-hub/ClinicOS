@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/420-import-recovery',app='c00bff678dfc9845c31742bc5d0d750fbbb9603e',base='fa028c11ffe5dbfe514df8110e6ccf7f6b977602';
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20e6});assert.equal(r.status,0,'Protected Git action/check failed safely');return r.stdout.trim();};
+const gate=JSON.parse(readFileSync(root+'/release-gate-receipt.json'));
+assert.equal(gate.applicationCommit,app);assert.equal(gate.decision,'AUTHORIZED SCOPED APPLICATION PROMOTION');
+assert.equal(git(['rev-parse','HEAD']),app);git(['diff','--exit-code',app,'--','frontend','backend','prisma','package.json','package-lock.json']);
+assert.equal(git(['ls-files','--others','--exclude-standard','--','frontend','backend','prisma']),'');
+assert.match(git(['ls-remote','origin','refs/heads/main']),new RegExp('^'+base+'\\s'));
+git(['diff','--check',base,app,'--','frontend']);
+const receipt={action:'PUSH EXACT APPLICATION TO MAIN',authority:'Direct human authorization plus root independent review/rerun release decision',applicationCommit:app,expectedRemoteBaseline:base,sourceSha256:gate.sourceSha256,decision:'AUTHORIZED',at:new Date().toISOString(),excluded:'All artifacts, primary/launcher edits, unaccepted blocked candidates'};
+writeFileSync(root+'/source-promotion-policy.json',JSON.stringify(receipt,null,2));
+git(['push','origin',app+':refs/heads/main']);assert.match(git(['ls-remote','origin','refs/heads/main']),new RegExp('^'+app+'\\s'));
+writeFileSync(root+'/source-promotion-receipt.json',JSON.stringify({...receipt,result:'REMOTE MAIN EXACT APPLICATION VERIFIED',verifiedAt:new Date().toISOString()},null,2));
+console.log('Exact c00 application promotion verified; deployment/publication/closure still gated');

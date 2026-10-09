@@ -1,0 +1,20 @@
+{
+  "snapshotPolicy": "Post-run byte extraction from original immutable trace, not invented pre-run snapshot or current modified fixture copy",
+  "applicationCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "files": [
+    {
+      "bytes": 976,
+      "path": "before.mjs.source",
+      "originalZipEntry": "resources/src@68a3947d0a544cb115c67076371e27b1a56bf582.txt",
+      "sha256": "41bd397e016b1c7977fc70cc14150091c65cb939d2eefac2a9b17bda45539b0b"
+    },
+    {
+      "bytes": 9873,
+      "path": "fixture.mjs.source",
+      "originalZipEntry": "resources/src@b3fa122a4b6f909e51ed44bde915798bf81b903b.txt",
+      "sha256": "48ea83b5431936aeb366266accd9c283f4ba34691bfcc6a44cc8b256db42b2f3"
+    }
+  ],
+  "recoveredAt": "2026-10-09T18:38:16.9936815Z",
+  "source": "Original Playwright before-run-02 trace captured recipe bytes during baseline execution"
+}

@@ -1,0 +1,9 @@
+{
+  "results": [
+    {
+      "name": "contradictory promise reproduced; explicit new already works",
+      "status": "PASS"
+    }
+  ],
+  "productionPatientMutations": 0
+}

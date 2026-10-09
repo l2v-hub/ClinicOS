@@ -1,0 +1,5 @@
+# Attempt retention
+
+Attempt 1 remains original and unmodified, including six passing case receipts and the seventh failing guard. The extra independent 403 case behaved correctly: same reference, retry available, no new import. QA expected Chromium 403 label `Internal Server Error` incorrectly; actual standard `Forbidden` was not ignored. Only the own transport fixture expected label was corrected, with exact URL/text/count checks retained. Attempt 2 gets a separate immutable pre-run snapshot and output tree. No application changed.
+
+Source binding later correctly rejected an inert untracked JSON emitted by Ruflo under `frontend/src/.claude/security-scans/scan-code-deep.json`. This CLI-generated metadata was moved byte-preserving, after exact absolute source-path validation, to own `scanner-generated-state.json`; no application source was changed. Empty scanner directories remain; no files were deleted. Final Git/source guard is clean for the application scope and equal to pre-run source. No evidence was discarded or an untracked application override allowed.

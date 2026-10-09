@@ -1,0 +1,57 @@
+{
+  "results": [
+    {
+      "name": "expired",
+      "status": "PASS"
+    },
+    {
+      "name": "cancelled",
+      "status": "PASS"
+    },
+    {
+      "name": "confirmed",
+      "status": "PASS"
+    },
+    {
+      "name": "missing-masked",
+      "status": "PASS"
+    },
+    {
+      "name": "temporary-retry-same-id",
+      "status": "PASS"
+    },
+    {
+      "name": "network-retry-same-id",
+      "status": "PASS"
+    },
+    {
+      "name": "replacement-feedback-return-reload",
+      "status": "PASS"
+    },
+    {
+      "name": "active-saved-page-recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "resource404-not-job-deletion",
+      "status": "PASS"
+    },
+    {
+      "name": "terminal-poll-removes-stale",
+      "status": "PASS"
+    },
+    {
+      "name": "terminal-mutation-removes-stale",
+      "status": "PASS"
+    },
+    {
+      "name": "past-expiry-not-fabricated",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile-terminal-return",
+      "status": "PASS"
+    }
+  ],
+  "productionPatientMutations": 0
+}

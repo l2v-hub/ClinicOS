@@ -1,0 +1,14 @@
+{
+  "decision": "AUTHORIZED SCOPED IMPLEMENTATION AND LOCAL VALIDATION",
+  "authority": "Direct user authorization to resolve GitHub bugs sequentially and publish verified scoped fixes; valid root task contract before application edits",
+  "issue": 420,
+  "rootWriter": "C:/w-420",
+  "applicationCommit": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+  "baselineCommit": "fa028c11ffe5dbfe514df8110e6ccf7f6b977602",
+  "scope": ["frontend/src/components/shared/DischargeImportModal.tsx", "frontend/src/components/shared/import/importSessionApi.ts", "frontend/src/components/shared/import/importSessionRecovery.ts", "frontend/src/components/shared/import/__tests__/importRecovery.test.ts"],
+  "coordination": "Native Ruflo swarm initialized max3 hierarchical. Registered guidance/AgentDB MCP absent; installed route CLI has OOM. Source/contract/ADR fallback used, no installs/config changes. Architecture read-only completed, NEW QA evidence-only in detached C:/w-420-qa; single browser lane reserved7503, root7501idle. Lease or PID is not publishing authority.",
+  "retention": "Dirty primary, unrelated native launcher/config state and blocked405/408/410/416 candidates excluded and preserved. Own generated scanner directory moved intact outside app source with validated absolute paths. Prior root-frozen57 output preserved after conservative lost-response copy correction, no runtime QA ever began on57.",
+  "sourceIdentity": "Clean application commit required for release, not HEAD alone while source dirty; pending root source/QA immutable binding and release receipts",
+  "productionClinicalMutations": 0,
+  "release": "NOT AUTHORIZED BY THIS RECEIPT: root independent review/rerun and source promotion receipt still required; closure requires exact deployment and immutable public synthetic evidence"
+}
