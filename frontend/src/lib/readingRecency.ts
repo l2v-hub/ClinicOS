@@ -19,7 +19,12 @@ export function readingRecency(instant: string, now: Date = new Date()): Reading
     day < 1 || day > days[month - 1] || Number(match[4]) > 23 ||
     Number(match[5]) > 59 || Number(match[6]) > 59)
     return { absolute: 'Data/ora non verificabile', elapsed: '', valid: false };
-  const absolute = formatFacilityLocalMinute(facilityLocalMinute(date));
+  const localMinute = facilityLocalMinute(date);
+  // The facility formatter accepts exactly four year digits. Reject unsupported
+  // representations (including zone rollover), not a clinical age threshold.
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(localMinute))
+    return { absolute: 'Data/ora non verificabile', elapsed: '', valid: false };
+  const absolute = formatFacilityLocalMinute(localMinute);
   const age = now.getTime() - date.getTime();
   if (!Number.isFinite(age)) return { absolute, elapsed: 'recenza non verificabile', valid: true };
   if (age < 0) return { absolute, elapsed: 'data/ora futura — da verificare', valid: true };

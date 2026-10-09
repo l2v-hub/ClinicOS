@@ -21,6 +21,15 @@ test('invalid, unzoned and impossible calendar instants are explicit, not empty 
   assert.equal(readingRecency('2026-10-09T11:00:00Z', now).elapsed, 'data/ora futura — da verificare');
   assert.equal(readingRecency('2026-10-09T09:00:00Z', new Date(NaN)).elapsed, 'recenza non verificabile');
 });
+test('unsupported facility year representations fail explicitly without crashing mounted history', () => {
+  for (const instant of ['0000-01-01T00:00:00Z', '0099-01-01T00:00:00Z',
+    '0999-01-01T00:00:00Z', '9999-12-31T23:59:00Z']) {
+    assert.deepEqual(readingRecency(instant, now), {
+      absolute: 'Data/ora non verificabile', elapsed: '', valid: false,
+    });
+  }
+  assert.equal(readingRecency('1000-01-01T00:00:00Z', now).absolute, '01/01/1000 00:49');
+});
 test('DST, timezone offsets, Rome midnight and year rollover use real elapsed time', () => {
   assert.deepEqual(readingRecency('2026-03-29T01:30:00+01:00', new Date('2026-03-29T01:30:00Z')),
     {absolute: '29/03/2026 01:30', elapsed: '1 ora fa', valid: true});
