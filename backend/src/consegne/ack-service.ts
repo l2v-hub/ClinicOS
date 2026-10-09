@@ -29,6 +29,11 @@ import { patientScopeWhere } from '../patients/patient-scope.js';
 
 import { readsAllConsegne } from './visibility.js';
 import { diaryReadReceipt } from '../patients/diary-reading.js';
+import {
+  insertExplicitDiaryRead,
+  loadExplicitDiaryReads,
+  mergedDiaryReads,
+} from '../patients/diary-explicit-read.js';
 export const CONSEGNA_ACK_AUDIT_ACTION = 'consegna:ack';
 
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -136,27 +141,43 @@ export async function acknowledgeConsegna(
 
     let created = false;
     const existingAcks = (await loadConsegnaAckRows([id], tx)).get(id) ?? [];
+    const existingReads = (await loadExplicitDiaryReads('consegna', [id], tx)).get(id) ?? [];
     const before = urgencyView(subject, existingAcks, actorRef);
     if (
       purpose === 'read'
-        ? diaryReadReceipt(subject, existingAcks, actorRef).state === 'unread'
+        ? diaryReadReceipt(subject, mergedDiaryReads(existingAcks, existingReads), actorRef)
+            .state === 'unread'
         : before.state === 'active'
     ) {
-      await tx.consegnaAcknowledgement.create({
-        data: {
-          consegnaId: id,
-          patientId: c.pazienteId,
-          operatorId: actor.id,
-          operatorName: me.authorName,
-          operatorRole: me.authorType,
-        },
-      });
+      if (purpose === 'read')
+        await insertExplicitDiaryRead(
+          'consegna',
+          id,
+          c.pazienteId,
+          { id: actor.id, name: me.authorName, role: me.authorType },
+          tx,
+        );
+      else
+        await tx.consegnaAcknowledgement.create({
+          data: {
+            consegnaId: id,
+            patientId: c.pazienteId,
+            operatorId: actor.id,
+            operatorName: me.authorName,
+            operatorRole: me.authorType,
+          },
+        });
       created = true;
     }
 
     const committedAcks = (await loadConsegnaAckRows([id], tx)).get(id) ?? [];
     const urgency = urgencyView(subject, committedAcks, actorRef);
-    const readReceipt = diaryReadReceipt(subject, committedAcks, actorRef);
+    const committedReads = (await loadExplicitDiaryReads('consegna', [id], tx)).get(id) ?? [];
+    const readReceipt = diaryReadReceipt(
+      subject,
+      mergedDiaryReads(committedAcks, committedReads),
+      actorRef,
+    );
     return { created, urgency, readReceipt, patientId: c.pazienteId };
   });
 
@@ -169,7 +190,7 @@ export async function acknowledgeConsegna(
     kind: result.created ? 'create' : 'read',
     channel: 'gui',
     // Ids only: never the handover text.
-    fields: [`consegna:${id}`, `ack:${result.created ? 'new' : 'existing'}`],
+    fields: [`consegna:${id}`, `purpose:${purpose}`, `ack:${result.created ? 'new' : 'existing'}`],
     outcome: result.created ? 'ok' : 'deduped',
   });
 

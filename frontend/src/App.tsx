@@ -663,8 +663,8 @@ export default function App() {
   const [loadingConsegne, setLoadingConsegne] = useState(false);
   const [consegneLoadError, setConsegneLoadError] = useState<string | null>(null);
   // #283: come aprire la pagina Consegne (filtro iniziale + eventuale consegna da evidenziare)
-  const [consegneView, setConsegneView] = useState<ConsegneEntry>({ mode: 'rounds', key: 0 });
-  const [consegneMode, setConsegneMode] = useState<'rounds' | 'feed'>('rounds');
+  const [consegneView, setConsegneView] = useState<ConsegneEntry>({ mode: 'unread', key: 0 });
+  const [consegneMode, setConsegneMode] = useState<'rounds' | 'feed' | 'unread'>('unread');
   const consegnaViewScopeRef = useRef({
     navKey,
     mode: consegneMode,
@@ -826,8 +826,8 @@ export default function App() {
     // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
     // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
     if (key === 'consegne') {
-      setConsegneView((value) => ({ mode: 'rounds', key: value.key + 1 }));
-      setConsegneMode('rounds');
+      setConsegneView((value) => ({ mode: 'unread', key: value.key + 1 }));
+      setConsegneMode('unread');
       consegneQueryRef.current = {};
     }
     // La voce generica «Pazienti» riapre la lista sulla vista predefinita, senza filtri.
@@ -2403,8 +2403,8 @@ export default function App() {
     setPazientiRicerca('');
     setPazientiFiltroSesso('tutti');
     setPendingModuleTab(undefined);
-    setConsegneView({ mode: 'rounds', key: 0 });
-    setConsegneMode('rounds');
+    setConsegneView({ mode: 'unread', key: 0 });
+    setConsegneMode('unread');
     setCartelle([]);
     setAppuntamenti([]);
     setNote([]);
@@ -3709,7 +3709,7 @@ export default function App() {
                         )}
                         {navKey === 'consegne' && (
                           <ConsegneWorkspace
-                            sessionKey={utenteId}
+                            sessionKey={`${utenteId}:${authz?.appRole ?? utente.ruolo}:${authz?.policyVersion ?? 'legacy'}`}
                             entry={consegneView}
                             draftStore={consegnaDraftStore}
                             onModeChange={setConsegneMode}

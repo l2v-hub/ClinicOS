@@ -1,6 +1,6 @@
 import type { ConsegnaFeedQuery } from './consegneFeed';
 export interface ConsegneEntry {
-  mode: 'rounds' | 'feed';
+  mode: 'rounds' | 'feed' | 'unread';
   query?: ConsegnaFeedQuery;
   focusId?: string | null;
   key: number;
@@ -8,7 +8,7 @@ export interface ConsegneEntry {
 
 export interface ConsegneViewScope {
   navKey: string;
-  mode: 'rounds' | 'feed';
+  mode: 'rounds' | 'feed' | 'unread';
   patientId?: string;
 }
 

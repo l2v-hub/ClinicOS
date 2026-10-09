@@ -8,6 +8,11 @@ import { acknowledgeDiaryEntry } from '../patients/diary-ack-service.js';
 import { UrgencyAckError } from '../lib/urgency.js';
 import { loadPatientDiary } from '../patients/diary-read-service.js';
 import { countUnreadDiary } from '../patients/diary-reading.js';
+import {
+  loadUnreadDiary,
+  loadUnreadPatientCounts,
+  parseUnreadPatientIds,
+} from '../patients/diary-unread-service.js';
 import { DiaryWriteInputError, parseDiaryPatchBody } from '../patients/diary-write-validation.js';
 import {
   DiaryTherapyInputError,
@@ -36,6 +41,44 @@ router.get('/diary-unread-count', async (req: AuthedRequest, res) => {
     res.status(200).json({ unreadCount: await countUnreadDiary(req.operator!) });
   } catch {
     res.status(503).json({ error: 'Conteggio delle note da leggere non disponibile' });
+  }
+});
+
+router.get('/diary-unread', async (req: AuthedRequest, res) => {
+  try {
+    res
+      .status(200)
+      .json(await loadUnreadDiary(req.query as Record<string, unknown>, req.operator!));
+  } catch (error) {
+    res
+      .status(error instanceof DiaryPageInputError ? 400 : 503)
+      .json({
+        error:
+          error instanceof DiaryPageInputError
+            ? error.message
+            : 'Coda delle note non confermate non disponibile',
+      });
+  }
+});
+router.get('/diary-unread-patient-counts', async (req: AuthedRequest, res) => {
+  try {
+    res
+      .status(200)
+      .json({
+        items: await loadUnreadPatientCounts(
+          parseUnreadPatientIds(req.query.patientIds),
+          req.operator!,
+        ),
+      });
+  } catch (error) {
+    res
+      .status(error instanceof DiaryPageInputError ? 400 : 503)
+      .json({
+        error:
+          error instanceof DiaryPageInputError
+            ? error.message
+            : 'Conteggi delle note non confermate non disponibili',
+      });
   }
 });
 
@@ -134,7 +177,12 @@ router.post('/:patientId/diary/:entryId/ack', async (req: AuthedRequest, res) =>
   const patientId = String(req.params.patientId ?? '');
   const entryId = String(req.params.entryId ?? '');
   try {
-    const result = await acknowledgeDiaryEntry(patientId, entryId, req.operator!, req.body?.purpose === 'read' ? 'read' : 'urgency');
+    const result = await acknowledgeDiaryEntry(
+      patientId,
+      entryId,
+      req.operator!,
+      req.body?.purpose === 'read' ? 'read' : 'urgency',
+    );
     res.status(result.created ? 201 : 200).json(result);
   } catch (error) {
     if (error instanceof UrgencyAckError) {

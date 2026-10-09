@@ -104,8 +104,24 @@ test('all-priority explicit reads share one authoritative receipt, are idempoten
     assert.equal(await unread(doctor), baseline - 1);
     assert.equal(
       await prisma.diaryEntryAcknowledgement.count({ where: { entryId: original.id } }),
-      1,
+      0,
     );
+    const reads = await prisma.$queryRaw<
+      Array<{ total: bigint }>
+    >`SELECT count(*) AS total FROM "DiaryEntryReadReceipt" WHERE "entryId" = ${original.id}`;
+    assert.equal(Number(reads[0].total), 1);
+    if (priority === 'urgente') {
+      assert.equal(
+        results[0].body.urgency.state,
+        'taken',
+        'legacy closed note is not reopened by reading',
+      );
+      assert.equal(
+        results[0].body.urgency.takenBy,
+        null,
+        'plain reading does not fabricate a clinical taker',
+      );
+    }
     assert.deepEqual(
       await prisma.patientDiaryEntry.findUnique({ where: { id: original.id } }),
       original,
@@ -219,7 +235,7 @@ test('legacy own-name receipt with whitespace does not settle a note; invalid pu
   assert.equal(read.body.readReceipt.state, 'read');
   assert.equal(await unread(), baseline - 1);
 });
-test('urgent and all-priority read actions racing share the same lock and first reader', async () => {
+test('urgent and all-priority read actions racing serialize without conflating reader and clinical taker', async () => {
   const row = await entry(patients[0], 'urgente', 'aperta');
   const baseline = await unread();
   const route = `/patients/${patients[0]}/diary/${row.id}/ack`;
@@ -227,13 +243,30 @@ test('urgent and all-priority read actions racing share the same lock and first 
     call(base, nurse, 'POST', route),
     call(base, oss, 'POST', route, { purpose: 'read' }),
   ]);
-  assert.deepEqual(results.map((result) => result.status).sort(), [200, 201]);
+  assert.equal(results[0].status, 201);
+  assert.ok([200, 201].includes(results[1].status));
   assert.equal(results[0].body.urgency.state, 'taken');
   assert.equal(results[1].body.readReceipt.state, 'read');
-  assert.equal(
-    results[0].body.urgency.takenBy.operatorName,
-    results[1].body.readReceipt.readBy.operatorName,
-  );
+  assert.ok(results[1].body.readReceipt.readBy.operatorName);
   assert.equal(await prisma.diaryEntryAcknowledgement.count({ where: { entryId: row.id } }), 1);
   assert.equal(await unread(), baseline - 1);
+});
+
+test('reading an active urgency never takes charge; same reader can explicitly take it later', async () => {
+  const row = await entry(patients[0], 'urgente', 'aperta');
+  const route = `/patients/${patients[0]}/diary/${row.id}/ack`;
+  const read = await call(base, nurse, 'POST', route, { purpose: 'read' });
+  assert.equal(read.status, 201);
+  assert.equal(read.body.readReceipt.state, 'read');
+  assert.equal(read.body.urgency.state, 'active');
+  assert.equal(await prisma.diaryEntryAcknowledgement.count({ where: { entryId: row.id } }), 0);
+  const taken = await call(base, nurse, 'POST', route, { purpose: 'urgency' });
+  assert.equal(taken.status, 201);
+  assert.equal(taken.body.urgency.state, 'taken');
+  assert.equal(
+    taken.body.readReceipt.readBy.operatorName,
+    read.body.readReceipt.readBy.operatorName,
+  );
+  assert.equal(await prisma.diaryEntryAcknowledgement.count({ where: { entryId: row.id } }), 1);
+  assert.deepEqual(await prisma.patientDiaryEntry.findUnique({ where: { id: row.id } }), row);
 });

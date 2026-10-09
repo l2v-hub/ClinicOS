@@ -30,6 +30,11 @@ import { loadConsegnaAckRows } from '../consegne/ack-service.js';
 import { authoritativeDiaryAuthor } from './diary-author.js';
 import { patientScopeWhere } from './patient-scope.js';
 import { diaryReadReceipt, type DiaryReadReceipt } from './diary-reading.js';
+import {
+  insertExplicitDiaryRead,
+  loadExplicitDiaryReads,
+  mergedDiaryReads,
+} from './diary-explicit-read.js';
 
 export const DIARY_ACK_AUDIT_ACTION = 'diary:ack';
 
@@ -82,14 +87,17 @@ async function diaryAckRows(
 export async function loadDiaryAckFields(
   entries: ReadonlyArray<DiaryFeedEntryLike>,
   actor: Operator,
+  db: Prisma.TransactionClient = prisma,
 ): Promise<Map<string, DiaryUrgencyFields>> {
   const diaryIds = entries.filter((e) => e.sourceType !== 'consegna').map((e) => e.id);
   const consegnaIds = entries
     .filter((e) => e.sourceType === 'consegna' && e.sourceId)
     .map((e) => e.sourceId!);
-  const [diaryAcks, consegnaAcks] = await Promise.all([
-    diaryAckRows(diaryIds),
-    loadConsegnaAckRows(consegnaIds),
+  const [diaryAcks, consegnaAcks, diaryReads, consegnaReads] = await Promise.all([
+    diaryAckRows(diaryIds, db),
+    loadConsegnaAckRows(consegnaIds, db),
+    loadExplicitDiaryReads('diary', diaryIds, db),
+    loadExplicitDiaryReads('consegna', consegnaIds, db),
   ]);
   const result = new Map<string, DiaryUrgencyFields>();
   for (const entry of entries) {
@@ -99,7 +107,16 @@ export async function loadDiaryAckFields(
         : (diaryAcks.get(entry.id) ?? []);
     result.set(entry.id, {
       urgency: urgencyView(subjectOf(entry), acks, actor),
-      readReceipt: diaryReadReceipt(subjectOf(entry), acks, actor),
+      readReceipt: diaryReadReceipt(
+        subjectOf(entry),
+        mergedDiaryReads(
+          acks,
+          (entry.sourceType === 'consegna'
+            ? consegnaReads.get(entry.sourceId ?? '')
+            : diaryReads.get(entry.id)) ?? [],
+        ),
+        actor,
+      ),
     });
   }
   return result;
@@ -141,27 +158,44 @@ export async function acknowledgeDiaryEntry(
 
     let created = false;
     const existingAcks = (await diaryAckRows([entryId], tx)).get(entryId) ?? [];
+    const existingReads = (await loadExplicitDiaryReads('diary', [entryId], tx)).get(entryId) ?? [];
     const before = urgencyView(subject, existingAcks, actorRef);
     if (
       purpose === 'read'
-        ? diaryReadReceipt(subject, existingAcks, actorRef).state === 'unread'
+        ? diaryReadReceipt(subject, mergedDiaryReads(existingAcks, existingReads), actorRef)
+            .state === 'unread'
         : before.state === 'active'
     ) {
-      await tx.diaryEntryAcknowledgement.create({
-        data: {
+      if (purpose === 'read')
+        await insertExplicitDiaryRead(
+          'diary',
           entryId,
-          patientId: entry.patientId,
-          operatorId: actor.id,
-          operatorName: me.authorName,
-          operatorRole: me.authorType,
-        },
-      });
+          entry.patientId,
+          { id: actor.id, name: me.authorName, role: me.authorType },
+          tx,
+        );
+      else
+        await tx.diaryEntryAcknowledgement.create({
+          data: {
+            entryId,
+            patientId: entry.patientId,
+            operatorId: actor.id,
+            operatorName: me.authorName,
+            operatorRole: me.authorType,
+          },
+        });
       created = true;
     }
 
     const committedAcks = (await diaryAckRows([entryId], tx)).get(entryId) ?? [];
     const urgency = urgencyView(subject, committedAcks, actorRef);
-    const readReceipt = diaryReadReceipt(subject, committedAcks, actorRef);
+    const committedReads =
+      (await loadExplicitDiaryReads('diary', [entryId], tx)).get(entryId) ?? [];
+    const readReceipt = diaryReadReceipt(
+      subject,
+      mergedDiaryReads(committedAcks, committedReads),
+      actorRef,
+    );
     return { created, urgency, readReceipt, patientId: entry.patientId };
   });
 
@@ -174,7 +208,11 @@ export async function acknowledgeDiaryEntry(
     kind: result.created ? 'create' : 'read',
     channel: 'gui',
     // Ids only: never the entry text.
-    fields: [`entry:${entryId}`, `ack:${result.created ? 'new' : 'existing'}`],
+    fields: [
+      `entry:${entryId}`,
+      `purpose:${purpose}`,
+      `ack:${result.created ? 'new' : 'existing'}`,
+    ],
     outcome: result.created ? 'ok' : 'deduped',
   });
 

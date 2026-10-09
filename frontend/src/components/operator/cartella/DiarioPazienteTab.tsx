@@ -26,8 +26,14 @@ import { diaryCreatePayload, diaryWriteErrorMessage } from './diaryEntryPayload'
 import { useCan } from '../../../lib/capabilities';
 import { countToSee, needsMyAck, postDiaryAck } from './diaryAck';
 import { DiaryThreadReceipt } from './DiaryThreadReceipt';
+import { UrgencyNotice } from '../../shared/UrgencyNotice';
 import { isActiveUrgency, postUrgencyAck, URGENCY_ACKNOWLEDGED_EVENT } from '../../../lib/urgency';
-import { isDiaryReadReceipt, postDiaryRead, type DiaryReadReceipt } from '../../../lib/diaryReading';
+import {
+  DIARY_READING_CHANGED_EVENT,
+  isDiaryReadReceipt,
+  postDiaryRead,
+  type DiaryReadReceipt,
+} from '../../../lib/diaryReading';
 
 // Diario terapia: il pannello (form Terapia completo) si carica solo quando serve.
 const DiaryTherapyPanel = lazy(() =>
@@ -240,10 +246,18 @@ export function DiarioPazienteTab({
     async (
       signal: AbortSignal,
       request: number,
-      options: { cursor?: string; append?: boolean; silent?: boolean; direction?: 'next' | 'previous' } = {},
+      options: {
+        cursor?: string;
+        append?: boolean;
+        silent?: boolean;
+        direction?: 'next' | 'previous';
+      } = {},
     ) => {
       const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
-      const cacheKey = diaryCacheKey(pazienteId, `${resolvedFilter}:${dateRange.from}:${dateRange.to}`);
+      const cacheKey = diaryCacheKey(
+        pazienteId,
+        `${resolvedFilter}:${dateRange.from}:${dateRange.to}`,
+      );
       if (options.append) setLoadingMore(true);
       else {
         setLoadingMore(false);
@@ -288,7 +302,13 @@ export function DiarioPazienteTab({
         let legacyPageTruncated = false;
 
         // Backward compat: use legacy data only for an empty first page with no active filter.
-        if (!options.append && allEntries.length === 0 && resolvedFilter === 'tutti' && !dateRange.from && !dateRange.to) {
+        if (
+          !options.append &&
+          allEntries.length === 0 &&
+          resolvedFilter === 'tutti' &&
+          !dateRange.from &&
+          !dateRange.to
+        ) {
           const legacyEntries = convertLegacyEntries(legacyInfermieristico, legacyMedico);
           allEntries = legacyEntries.slice(0, DIARY_PAGE_SIZE);
           pageHasMore = false;
@@ -354,7 +374,11 @@ export function DiarioPazienteTab({
     const controller = new AbortController();
     loadMoreControllerRef.current = controller;
     const request = ++readSequenceRef.current;
-    void fetchEntries(controller.signal, request, { cursor: nextCursor, append: true, direction: 'next' });
+    void fetchEntries(controller.signal, request, {
+      cursor: nextCursor,
+      append: true,
+      direction: 'next',
+    });
   }
 
   function handlePreviousPage() {
@@ -363,7 +387,9 @@ export function DiarioPazienteTab({
     const controller = new AbortController();
     loadMoreControllerRef.current = controller;
     void fetchEntries(controller.signal, ++readSequenceRef.current, {
-      cursor: historyCursors.current.at(-1), append: true, direction: 'previous',
+      cursor: historyCursors.current.at(-1),
+      append: true,
+      direction: 'previous',
     });
   }
 
@@ -398,7 +424,9 @@ export function DiarioPazienteTab({
       setForm(emptyForm());
       setShowAdd(false);
       setTherapyPanel(null);
-      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
+      window.dispatchEvent(
+        new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }),
+      );
       setRefreshVersion((version) => version + 1);
     } catch (error) {
       setError(
@@ -441,7 +469,9 @@ export function DiarioPazienteTab({
     setTherapyPanel(null);
     setForm(emptyForm());
     setShowAdd(false);
-    window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
+    window.dispatchEvent(
+      new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }),
+    );
     setRefreshVersion((version) => version + 1);
   }
 
@@ -478,7 +508,9 @@ export function DiarioPazienteTab({
         ),
       );
       setEditEntry(null);
-      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
+      window.dispatchEvent(
+        new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }),
+      );
       setRefreshVersion((version) => version + 1);
     } catch (error) {
       setError(
@@ -512,7 +544,9 @@ export function DiarioPazienteTab({
       if (!res.ok) throw new Error();
       setEntries((prev) => prev.filter((e) => e.id !== entry.id));
       setPendingDelete(null);
-      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
+      window.dispatchEvent(
+        new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }),
+      );
       setRefreshVersion((version) => version + 1);
     } catch {
       setError('Errore nella eliminazione della voce.');
@@ -523,26 +557,43 @@ export function DiarioPazienteTab({
 
   // ── «Ho capito» (UX2 W8: il primo non-autore prende in carico l'urgenza per tutti) ──────────
 
-  async function handleAck(entry: DiaryFeedEntry) {
+  async function handleAck(entry: DiaryFeedEntry, purpose: 'read' | 'urgency' = 'read') {
     if (acking || !canReadDiary || (entry.sourceType === 'consegna' && !canReadHandovers)) return;
     setAckError('');
     setAcking(entry.id);
     try {
       // Una consegna nel diario si prende in carico sulla consegna stessa (stessa regola).
-      const result = isDiaryReadReceipt(entry.readReceipt)
-        ? await postDiaryRead(entry.sourceType === 'consegna' && entry.sourceId
-          ? `${API_URL}/consegne/${encodeURIComponent(entry.sourceId)}/ack`
-          : `${API_URL}/patients/${encodeURIComponent(pazienteId)}/diary/${encodeURIComponent(entry.id)}/ack`, operatorHeaders())
-        : entry.sourceType === 'consegna' && entry.sourceId
-          ? await postUrgencyAck(
-              `${API_URL}/consegne/${encodeURIComponent(entry.sourceId)}/ack`,
+      const result =
+        purpose === 'read' && isDiaryReadReceipt(entry.readReceipt)
+          ? await postDiaryRead(
+              entry.sourceType === 'consegna' && entry.sourceId
+                ? `${API_URL}/consegne/${encodeURIComponent(entry.sourceId)}/ack`
+                : `${API_URL}/patients/${encodeURIComponent(pazienteId)}/diary/${encodeURIComponent(entry.id)}/ack`,
               operatorHeaders(),
             )
-          : await postDiaryAck(pazienteId, entry.id);
+          : entry.sourceType === 'consegna' && entry.sourceId
+            ? await postUrgencyAck(
+                `${API_URL}/consegne/${encodeURIComponent(entry.sourceId)}/ack`,
+                operatorHeaders(),
+              )
+            : await postDiaryAck(pazienteId, entry.id);
       setEntries((prev) =>
-        prev.map((e) => (e.id === entry.id ? { ...e, urgency: result.urgency, ...('readReceipt' in result ? { readReceipt: result.readReceipt } : {}) } : e)),
+        prev.map((e) =>
+          e.id === entry.id
+            ? {
+                ...e,
+                urgency: result.urgency,
+                ...('readReceipt' in result ? { readReceipt: result.readReceipt } : {}),
+              }
+            : e,
+        ),
       );
-      window.dispatchEvent(new CustomEvent(URGENCY_ACKNOWLEDGED_EVENT, { detail: { patientId: pazienteId } }));
+      window.dispatchEvent(
+        new CustomEvent(
+          purpose === 'read' ? DIARY_READING_CHANGED_EVENT : URGENCY_ACKNOWLEDGED_EVENT,
+          { detail: { patientId: pazienteId } },
+        ),
+      );
       // Rivalida in background (la pagina in cache resta visibile): stato condiviso con gli altri.
       setRefreshVersion((version) => version + 1);
     } catch (error) {
@@ -580,12 +631,12 @@ export function DiarioPazienteTab({
   }
   // A newly visible handover must not hide the older Cartella diary records.
   const additionalLegacy = convertLegacyEntries(legacyInfermieristico, legacyMedico).filter(
-        (entry) =>
-          (!filterBy || filterBy === 'tutti' || entry.authorType === filterBy) &&
-          (!dateRange.from || entry.entryDateTime.slice(0, 10) >= dateRange.from) &&
-          (!dateRange.to || entry.entryDateTime.slice(0, 10) <= dateRange.to) &&
-          !entries.some((current) => current.id === entry.id),
-      );
+    (entry) =>
+      (!filterBy || filterBy === 'tutti' || entry.authorType === filterBy) &&
+      (!dateRange.from || entry.entryDateTime.slice(0, 10) >= dateRange.from) &&
+      (!dateRange.to || entry.entryDateTime.slice(0, 10) <= dateRange.to) &&
+      !entries.some((current) => current.id === entry.id),
+  );
   const [legacyVisible, setLegacyVisible] = useState(50);
 
   // ── Diario a card: render helper per una voce ────────────────────────────────
@@ -593,8 +644,7 @@ export function DiarioPazienteTab({
   function renderDiarioCard(row: DiaryFeedEntry) {
     const toSee = needsMyAck(row);
     // UX2 W8: «Urgente» solo finché l'urgenza è attiva; presa in carico → non più segnalata.
-    const urgentActive =
-      row.priority === 'urgente' && isActiveUrgency(row.urgency);
+    const urgentActive = row.priority === 'urgente' && isActiveUrgency(row.urgency);
     const priorityLabel =
       row.priority === 'urgente' && !urgentActive
         ? 'Priorità originale: urgente'
@@ -632,7 +682,7 @@ export function DiarioPazienteTab({
                   aria-expanded={editingId === row.id}
                   aria-controls={editingId === row.id ? `diary-edit-${row.id}` : undefined}
                   disabled={saving}
-                  onClick={event => {
+                  onClick={(event) => {
                     editButtonRef.current = event.currentTarget;
                     startEdit(row);
                   }}
@@ -678,10 +728,21 @@ export function DiarioPazienteTab({
             </div>
           )}
         </div>
-        <div className="diario-card__author">Segnalata da <strong>{row.authorName}</strong></div>
+        <div className="diario-card__author">
+          Segnalata da <strong>{row.authorName}</strong>
+        </div>
         {editingId === row.id && canEditEntry ? (
-          <div ref={editRegionRef} id={`diary-edit-${row.id}`} role="group" aria-label="Modifica voce del diario">
-            {error && <p className="diario-ack-error" role="alert">{error}</p>}
+          <div
+            ref={editRegionRef}
+            id={`diary-edit-${row.id}`}
+            role="group"
+            aria-label="Modifica voce del diario"
+          >
+            {error && (
+              <p className="diario-ack-error" role="alert">
+                {error}
+              </p>
+            )}
             {renderForm(
               editForm,
               setEditForm,
@@ -704,9 +765,24 @@ export function DiarioPazienteTab({
           priority={PRIORITY_LABELS[row.priority].toLowerCase()}
           onAcknowledge={() => void handleAck(row)}
           busy={acking === row.id}
-          disabled={acking !== null || !canReadDiary || (row.sourceType === 'consegna' && !canReadHandovers)}
+          disabled={
+            acking !== null || !canReadDiary || (row.sourceType === 'consegna' && !canReadHandovers)
+          }
           subject={`della voce${row.title ? ` «${row.title}»` : ''} del ${fmtDT(row.entryDateTime)}`}
         />
+        {isDiaryReadReceipt(row.readReceipt) && (
+          <UrgencyNotice
+            urgency={row.urgency}
+            onAcknowledge={() => void handleAck(row, 'urgency')}
+            busy={acking === row.id}
+            disabled={
+              acking !== null ||
+              !canReadDiary ||
+              (row.sourceType === 'consegna' && !canReadHandovers)
+            }
+            subject={`della voce del ${fmtDT(row.entryDateTime)}`}
+          />
+        )}
       </div>
     );
   }
@@ -769,9 +845,22 @@ export function DiarioPazienteTab({
         >
           {title}
         </div>
-        <ClinicalNoteEditor content={f.content} title={f.title} priority={f.priority} disabled={saving || locked}
-          onChange={change => setF(prev => ({ ...prev, ...change, priority: (change.priority ?? prev.priority) as DiarioForm['priority'] }))} />
-        {locked && <p className="form-hint">Chiudi l’anteprima prima di modificare la segnalazione.</p>}
+        <ClinicalNoteEditor
+          content={f.content}
+          title={f.title}
+          priority={f.priority}
+          disabled={saving || locked}
+          onChange={(change) =>
+            setF((prev) => ({
+              ...prev,
+              ...change,
+              priority: (change.priority ?? prev.priority) as DiarioForm['priority'],
+            }))
+          }
+        />
+        {locked && (
+          <p className="form-hint">Chiudi l’anteprima prima di modificare la segnalazione.</p>
+        )}
         <div className="cr-inline-form__actions diario-form__actions">
           <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
             Annulla
@@ -860,7 +949,11 @@ export function DiarioPazienteTab({
 
   return (
     <div className="cr-tab-content">
-      {ackError && <p className="diario-ack-error" role="alert">{ackError}</p>}
+      {ackError && (
+        <p className="diario-ack-error" role="alert">
+          {ackError}
+        </p>
+      )}
       {/* Error message */}
       {error && (
         <div
@@ -896,20 +989,64 @@ export function DiarioPazienteTab({
         defaultOpen
         actions={headerActions === undefined ? sectionActions : headerActions}
       >
-        <form className="diario-history-filters" onSubmit={event => { event.preventDefault();
-          if (dateDraft.from && dateDraft.to && dateDraft.from > dateDraft.to) return;
-          setLegacyVisible(50); setDateRange({ ...dateDraft }); }}>
-          <label>Dal <input className="form-input" type="date" value={dateDraft.from}
-            max={dateDraft.to || undefined} onChange={e => setDateDraft(prev => ({ ...prev, from: e.target.value }))} /></label>
-          <label>Al <input className="form-input" type="date" value={dateDraft.to}
-            min={dateDraft.from || undefined} onChange={e => setDateDraft(prev => ({ ...prev, to: e.target.value }))} /></label>
-          <button className="ds-btn ds-btn--secondary" type="submit">Filtra storico</button>
-          {(dateRange.from || dateRange.to) && <button className="ds-link" type="button"
-            onClick={() => { setDateDraft({ from: '', to: '' }); setDateRange({ from: '', to: '' }); }}>Tutte le date</button>}
+        <form
+          className="diario-history-filters"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (dateDraft.from && dateDraft.to && dateDraft.from > dateDraft.to) return;
+            setLegacyVisible(50);
+            setDateRange({ ...dateDraft });
+          }}
+        >
+          <label>
+            Dal{' '}
+            <input
+              className="form-input"
+              type="date"
+              value={dateDraft.from}
+              max={dateDraft.to || undefined}
+              onChange={(e) => setDateDraft((prev) => ({ ...prev, from: e.target.value }))}
+            />
+          </label>
+          <label>
+            Al{' '}
+            <input
+              className="form-input"
+              type="date"
+              value={dateDraft.to}
+              min={dateDraft.from || undefined}
+              onChange={(e) => setDateDraft((prev) => ({ ...prev, to: e.target.value }))}
+            />
+          </label>
+          <button className="ds-btn ds-btn--secondary" type="submit">
+            Filtra storico
+          </button>
+          {(dateRange.from || dateRange.to) && (
+            <button
+              className="ds-link"
+              type="button"
+              onClick={() => {
+                setDateDraft({ from: '', to: '' });
+                setDateRange({ from: '', to: '' });
+              }}
+            >
+              Tutte le date
+            </button>
+          )}
         </form>
-        <p className="form-hint">Pagina {historyDepth + 1} · fino a 50 segnalazioni, dalla più recente.</p>
-        {historyDepth > 0 && <button type="button" className="ds-btn ds-btn--secondary" disabled={loadingMore}
-          onClick={handlePreviousPage}>← Segnalazioni più recenti</button>}
+        <p className="form-hint">
+          Pagina {historyDepth + 1} · fino a 50 segnalazioni, dalla più recente.
+        </p>
+        {historyDepth > 0 && (
+          <button
+            type="button"
+            className="ds-btn ds-btn--secondary"
+            disabled={loadingMore}
+            onClick={handlePreviousPage}
+          >
+            ← Segnalazioni più recenti
+          </button>
+        )}
         {/* Add form */}
         {showAdd &&
           renderForm(
@@ -972,9 +1109,17 @@ export function DiarioPazienteTab({
         {!loading && additionalLegacy.length > 0 && (
           <details>
             <summary>Registrazioni precedenti ({additionalLegacy.length})</summary>
-            {additionalLegacy.slice(Math.max(0, legacyVisible - 50), legacyVisible).map(renderDiarioCard)}
-            {legacyVisible > 50 && <button className="btn-secondary btn-sm"
-              onClick={() => setLegacyVisible(value => Math.max(50, value - 50))}>← Registrazioni precedenti più recenti</button>}
+            {additionalLegacy
+              .slice(Math.max(0, legacyVisible - 50), legacyVisible)
+              .map(renderDiarioCard)}
+            {legacyVisible > 50 && (
+              <button
+                className="btn-secondary btn-sm"
+                onClick={() => setLegacyVisible((value) => Math.max(50, value - 50))}
+              >
+                ← Registrazioni precedenti più recenti
+              </button>
+            )}
             {additionalLegacy.length > legacyVisible && (
               <button
                 className="btn-secondary btn-sm"

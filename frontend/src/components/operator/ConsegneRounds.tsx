@@ -12,6 +12,9 @@ import { DiarioPazienteTab } from './cartella/DiarioPazienteTab';
 import { PatientIdentity } from '../shared/PatientIdentity';
 import { useCan } from '../../lib/capabilities';
 import { useConsegnaDraft } from '../../lib/useConsegnaDraft';
+import { fetchPatientById } from '../../lib/patientPage';
+import { API_URL } from '../../config';
+import { operatorHeaders } from '../../lib/operatorSession';
 export function ConsegneRounds({
   store,
   operatori,
@@ -33,6 +36,8 @@ export function ConsegneRounds({
   const [focusRequest, setFocusRequest] = useState(0);
   const [showOrder, setShowOrder] = useState(false);
   const [historyVersion, setHistoryVersion] = useState(0);
+  const [targetError, setTargetError] = useState('');
+  const [targetRetry, setTargetRetry] = useState(0);
   const [requestedView, setView] = useState<'diary' | 'compose'>('diary');
   const workspaceId = useId();
   const canCreate = useCan('consegne.create');
@@ -52,7 +57,9 @@ export function ConsegneRounds({
   }, [roster]);
   const patient = selected
     ? (roster.items.find((item) => item.id === selected.id) ?? selected)
-    : roster.items[0];
+    : initialPatientId
+      ? roster.items.find((item) => item.id === initialPatientId)
+      : roster.items[0];
   function selectPatient(value: Paziente) {
     selection.current = { id: value.id, generation: selection.current.generation + 1 };
     setSelected(value);
@@ -63,7 +70,32 @@ export function ConsegneRounds({
     setView('compose');
     setFocusRequest((value) => value + 1);
   }
-  const first = roster.items.find((item) => item.id === initialPatientId) ?? roster.items[0];
+  const first = initialPatientId
+    ? roster.items.find((item) => item.id === initialPatientId)
+    : roster.items[0];
+  useEffect(() => {
+    if (!active || !initialPatientId) return;
+    const controller = new AbortController();
+    setTargetError('');
+    void fetchPatientById(API_URL, initialPatientId, {
+      headers: operatorHeaders(),
+      signal: controller.signal,
+    })
+      .then((value) => {
+        if (controller.signal.aborted) return;
+        if (selection.current.id && selection.current.id !== initialPatientId) return;
+        if (value.id !== initialPatientId) throw new Error('Paziente non disponibile');
+        selection.current = { id: value.id, generation: selection.current.generation + 1 };
+        setSelected(value);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setTargetError(
+            'Il paziente richiesto non è disponibile. Nessun altro paziente è stato selezionato.',
+          );
+      });
+    return () => controller.abort();
+  }, [active, initialPatientId, targetRetry]);
   useEffect(() => {
     if (selected || !first) return;
     const timer = window.setTimeout(() => {
@@ -191,6 +223,18 @@ export function ConsegneRounds({
           )}
         </div>
         <div className="handover-rounds__detail">
+          {targetError && (
+            <p role="alert">
+              {targetError}{' '}
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() => setTargetRetry((value) => value + 1)}
+              >
+                Riprova paziente
+              </button>
+            </p>
+          )}
           {roster.error && (
             <p role="alert">
               {roster.error}{' '}

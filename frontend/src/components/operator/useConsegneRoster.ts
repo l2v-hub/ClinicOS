@@ -4,17 +4,17 @@ import type { Paziente } from '../../types';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { facilityLocalMinute } from '../../lib/facilityTime';
 import { fetchPatientPage, mergePatientPage } from '../../lib/patientPage';
-import {
-  fetchConsegnePatientSummary,
-  type ConsegnePatientSummary,
-} from '../../lib/consegnePatientSummary';
+import { fetchUnreadPatientCounts } from '../../lib/diaryUnreadQueue';
+import { sessionCan } from '../../lib/capabilities';
+import { DIARY_READING_CHANGED_EVENT } from '../../lib/diaryReading';
+import { URGENCY_ACKNOWLEDGED_EVENT } from '../../lib/urgency';
 import { isRosterChanged } from '../../lib/rosterOrder';
 import { useRosterOrderContext } from '../shared/RosterOrderContext';
 export type SummaryState =
   | { status: 'loading' }
   | { status: 'error' }
   | { status: 'unavailable' }
-  | { status: 'ready'; value: ConsegnePatientSummary };
+  | { status: 'ready'; value: { patientId: string; total: number } };
 
 export function useConsegneRoster(query: string, room: string, active: boolean) {
   const { options, requestKey, accept, recover } = useRosterOrderContext();
@@ -36,9 +36,18 @@ export function useConsegneRoster(query: string, room: string, active: boolean) 
   const cursor = useRef<string | null>(null);
   const controllers = useRef(new Set<AbortController>());
   const more = useRef<Promise<Paziente[] | null> | null>(null);
+  const summarySequence = useRef(new Map<string, number>());
   const refreshSummary = useCallback(async (patientIds: string[]) => {
     if (!patientIds.length) return;
+    if (!sessionCan('diary.list')) return;
     const version = generation.current;
+    const tokens = new Map(
+      patientIds.map((id) => {
+        const token = (summarySequence.current.get(id) ?? 0) + 1;
+        summarySequence.current.set(id, token);
+        return [id, token] as const;
+      }),
+    );
     const controller = new AbortController();
     controllers.current.add(controller);
     setSummaries((current) => ({
@@ -46,7 +55,7 @@ export function useConsegneRoster(query: string, room: string, active: boolean) 
       ...Object.fromEntries(patientIds.map((id) => [id, { status: 'loading' }])),
     }));
     try {
-      const incoming = await fetchConsegnePatientSummary(API_URL, patientIds, {
+      const incoming = await fetchUnreadPatientCounts(API_URL, patientIds, {
         headers: operatorHeaders(),
         signal: controller.signal,
       });
@@ -55,17 +64,23 @@ export function useConsegneRoster(query: string, room: string, active: boolean) 
       setSummaries((current) => ({
         ...current,
         ...Object.fromEntries(
-          patientIds.map((id) => [
-            id,
-            map.has(id) ? { status: 'ready', value: map.get(id)! } : { status: 'unavailable' },
-          ]),
+          patientIds
+            .filter((id) => summarySequence.current.get(id) === tokens.get(id))
+            .map((id) => [
+              id,
+              map.has(id) ? { status: 'ready', value: map.get(id)! } : { status: 'unavailable' },
+            ]),
         ),
       }));
     } catch {
       if (!controller.signal.aborted && version === generation.current)
         setSummaries((current) => ({
           ...current,
-          ...Object.fromEntries(patientIds.map((id) => [id, { status: 'error' }])),
+          ...Object.fromEntries(
+            patientIds
+              .filter((id) => summarySequence.current.get(id) === tokens.get(id))
+              .map((id) => [id, { status: 'error' }]),
+          ),
         }));
     } finally {
       controllers.current.delete(controller);
@@ -93,6 +108,7 @@ export function useConsegneRoster(query: string, room: string, active: boolean) 
         cursor.current = page.nextCursor;
         setItems(rows.current);
         setNextCursor(page.nextCursor);
+        void refreshSummary(page.items.map((item) => item.id));
         return page.items;
       } catch (cause) {
         if (!controller.signal.aborted && version === generation.current) {
@@ -148,6 +164,19 @@ export function useConsegneRoster(query: string, room: string, active: boolean) 
     });
     return request;
   };
+  useEffect(() => {
+    if (!active) return;
+    const refresh = () => {
+      for (let offset = 0; offset < rows.current.length; offset += 50)
+        void refreshSummary(rows.current.slice(offset, offset + 50).map((item) => item.id));
+    };
+    window.addEventListener(DIARY_READING_CHANGED_EVENT, refresh);
+    window.addEventListener(URGENCY_ACKNOWLEDGED_EVENT, refresh);
+    return () => {
+      window.removeEventListener(DIARY_READING_CHANGED_EVENT, refresh);
+      window.removeEventListener(URGENCY_ACKNOWLEDGED_EVENT, refresh);
+    };
+  }, [active, refreshSummary]);
   return {
     items,
     summaries,

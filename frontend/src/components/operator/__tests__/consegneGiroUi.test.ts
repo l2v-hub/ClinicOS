@@ -31,9 +31,9 @@ const feed: ConsegneWorkspaceProps = {
   onRetry() {},
 };
 
-test('handover workspace has one patient round and legacy feed entry returns to that workspace', () => {
+test('handover workspace defaults to unread queue and explicit filtered feed preserves its target', () => {
   const general = render(React.createElement(ConsegneWorkspace, feed));
-  assert.match(general, /Giro pazienti|Feed consegne|Caricamento pazienti/);
+  assert.match(general, /Non confermate/);
   assert.doesNotMatch(general, /Solo dati sintetici/);
   const explicit = render(
     React.createElement(ConsegneWorkspace, {
@@ -41,8 +41,9 @@ test('handover workspace has one patient round and legacy feed entry returns to 
       entry: { mode: 'feed', key: 1, query: { status: 'attive' }, focusId: identityHandover.id },
     }),
   );
-  assert.doesNotMatch(explicit, /Feed consegne|Solo dati sintetici/);
-  assert.match(explicit, /Caricamento pazienti/);
+  assert.doesNotMatch(explicit, /Caricamento pazienti/);
+  assert.match(explicit, /Solo dati sintetici/);
+  assert.match(explicit, /Consegne filtrate/);
 });
 
 test('composer retains patient-specific draft and identity after remount; permitted assignment is visible', () => {

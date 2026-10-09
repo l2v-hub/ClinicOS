@@ -14,10 +14,10 @@ function roomOf(patient: Paziente): string {
 function RosterPatient({
   patient,
   selected,
-  summary: _summary,
+  summary,
   store,
   onSelect,
-  onRetry: _onRetry,
+  onRetry,
 }: {
   patient: Paziente;
   selected: boolean;
@@ -53,11 +53,23 @@ function RosterPatient({
         <span className="ho-who">
           <PatientIdentity patient={patient} />
           <span className="handover-rounds__badges">
+            <span>
+              {summary?.status === 'ready'
+                ? `${summary.value.total} non confermate`
+                : summary?.status === 'loading'
+                  ? 'Conteggio letture in caricamento…'
+                  : 'Conteggio letture non disponibile'}
+            </span>
             {draft.dirty && <span>Bozza</span>}
             {draft.receipt && <span>Appena salvata</span>}
           </span>
         </span>
       </button>
+      {summary?.status === 'error' && (
+        <button type="button" className="link-btn" onClick={onRetry}>
+          Riprova conteggio
+        </button>
+      )}
       <a
         className="ds-icon-btn handover-rounds__diary"
         href={`#/dettaglio-paziente/${encodeURIComponent(patient.id)}`}

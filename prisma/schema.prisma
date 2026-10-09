@@ -576,6 +576,7 @@ model Consegna {
   @@index([stato, priorita, createdAt, id])
   @@index([pazienteId, stato, createdAt, id])
   acknowledgements ConsegnaAcknowledgement[]
+  readReceipts ConsegnaReadReceipt[]
 }
 
 // UX2 W8 (owner 2026-10-03): «Ho capito» on an URGENT handover. The first row written by an
@@ -583,6 +584,21 @@ model Consegna {
 // (DB triggers), one row per (consegna, operator), cascade only with the handover itself.
 model ConsegnaAcknowledgement {
   id             String   @id @default(cuid())
+  consegnaId     String
+  patientId      String
+  operatorId     String
+  operatorName   String
+  operatorRole   String
+  acknowledgedAt DateTime @default(now())
+  consegna       Consegna @relation(fields: [consegnaId], references: [id], onDelete: Cascade)
+
+  @@unique([consegnaId, operatorId])
+  @@index([operatorId, acknowledgedAt])
+  @@index([patientId])
+}
+
+model ConsegnaReadReceipt {
+  id             String   @id @default(uuid())
   consegnaId     String
   patientId      String
   operatorId     String
@@ -671,6 +687,7 @@ model PatientDiaryEntry {
   patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
   therapy       PatientTherapy? @relation(fields: [therapyId], references: [id], onDelete: SetNull)
   acknowledgements DiaryEntryAcknowledgement[]
+  readReceipts DiaryEntryReadReceipt[]
 
   @@unique([patientId, therapyRequestId])
   @@index([patientId])
@@ -687,6 +704,21 @@ model PatientDiaryEntry {
 // dell'operatore (lo storico sopravvive a rinomine). patientId duplicato per scope/audit.
 model DiaryEntryAcknowledgement {
   id             String            @id @default(cuid())
+  entryId        String
+  patientId      String
+  operatorId     String
+  operatorName   String
+  operatorRole   String
+  acknowledgedAt DateTime          @default(now())
+  entry          PatientDiaryEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@unique([entryId, operatorId])
+  @@index([operatorId, acknowledgedAt])
+  @@index([patientId])
+}
+
+model DiaryEntryReadReceipt {
+  id             String            @id @default(uuid())
   entryId        String
   patientId      String
   operatorId     String
