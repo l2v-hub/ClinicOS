@@ -54,6 +54,8 @@ test('tiles show the latest value, the unit and the trend against the previous v
   assert.equal(by.pa.trend, 'era 142/80');
   assert.equal(by.temperatura.value, '38,2');
   assert.equal(by.fr.at, '08:05');
+  assert.equal(by.fr.measuredAt, '2026-09-27T06:05:00.000Z');
+  assert.equal(by.fr.previousMeasuredAt, '2026-09-27T05:00:00.000Z');
   // colore dal punteggio NEWS2 del parametro: FR 24 → 2 (ambra), SpO₂ 92 → 2, FC 108 → 1, T 38,2 → 1
   assert.equal(by.fr.tone, 'warn');
   assert.equal(by.spo2.tone, 'warn');
@@ -64,8 +66,16 @@ test('a parameter never measured says so; a single value has no trend', () => {
   const tiles = vitalTiles([r('a', '2026-09-27T06:00:00.000Z', { pa: '120/80' })], now);
   const by = Object.fromEntries(tiles.map((t) => [t.key, t]));
   assert.equal(by.fr.value, null);
+  assert.equal(by.fr.measuredAt, null);
   assert.equal(by.pa.value, '120/80');
   assert.equal(by.pa.trend, null);
+});
+
+test('invalid historical timestamp never crashes overview or pretends to be current', () => {
+  const tiles = vitalTiles([r('bad', 'bad', full)], now);
+  assert.equal(tiles[0].at, 'Data/ora non verificabile');
+  assert.equal(tiles[0].measuredAt, 'bad');
+  assert.equal(news2Tile([r('bad', 'bad', full)], now).at, 'Data/ora non verificabile');
 });
 
 test('NEWS2 tile: score of the latest complete reading (prototype example = 6)', () => {
@@ -84,6 +94,7 @@ test('NEWS2 tile: score of the latest complete reading (prototype example = 6)',
   );
   assert.equal(tile.score, 6);
   assert.equal(tile.at, '08:05');
+  assert.equal(tile.measuredAt, '2026-09-27T06:05:00.000Z');
   assert.equal(tile.tone, 'medium');
   assert.ok(tile.response);
 });

@@ -43,6 +43,12 @@
 .parameter-reading-form__previous {
   overflow-wrap: anywhere;
 }
+.parameter-reading-form__field small.parameter-reading-form__previous {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: normal;
+}
 .parameter-reading-form__tools {
   display: grid;
   gap: 10px;

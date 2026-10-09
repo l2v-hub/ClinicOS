@@ -1,0 +1,17 @@
+.reading-recency {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.vt__trend.vt__comparison {
+  display: grid;
+  align-items: start;
+  overflow-wrap: anywhere;
+}

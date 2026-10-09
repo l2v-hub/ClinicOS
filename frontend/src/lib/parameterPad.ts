@@ -2,6 +2,7 @@
 // Il valore salvato resta quello di sempre: la pressione è un solo campo "sistolica/diastolica".
 import type { ParameterValues, PatientParameterReading } from './patientParameterReadings';
 import { facilityLocalMinute } from './facilityTime';
+import { readingRecencyText } from './readingRecency';
 
 export type PadField = 'fr' | 'spo2' | 'pas' | 'pad' | 'fc' | 'temperatura' | 'dtx';
 
@@ -148,5 +149,5 @@ export function previousText(
         : `Prima: non fra le ultime ${state.count} rilevazioni`
       : 'Nessuna rilevazione precedente';
   const shown = key === 'o2' ? (item.value === 'si' ? 'con O2' : 'in aria') : item.value;
-  return `Prima: ${shown} · ${whenLabel(item.measuredAt, now)}`;
+  return `Prima: ${shown} · ${readingRecencyText(item.measuredAt, now)}`;
 }

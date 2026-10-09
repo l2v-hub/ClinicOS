@@ -4,6 +4,9 @@ import { news2Tile, vitalTiles } from '../../lib/patientVitalsOverview';
 import type { PatientParameterReading } from '../../lib/patientParameterReadings';
 import { useCan } from '../../lib/capabilities';
 import { useWidgetOpen } from '../shared/WidgetGroup';
+import { useRecencyClock } from '../../lib/useRecencyClock';
+import { readingRecencyText } from '../../lib/readingRecency';
+import { ReadingRecency } from './ReadingRecency';
 
 interface Props {
   state: 'loading' | 'ready' | 'error';
@@ -26,6 +29,7 @@ export function VitalsOverview({
   const { open, setOpen, bodyId } = useWidgetOpen();
   const titleId = useId();
   const canRecord = useCan('parameters.create_reading');
+  const now = useRecencyClock();
   if (state === 'error')
     return (
       <p className="vitals-note vitals-note--error" role="alert">
@@ -41,8 +45,8 @@ export function VitalsOverview({
         Caricamento dei parametri…
       </p>
     );
-  const tiles = vitalTiles(readings);
-  const n = news2Tile(readings);
+  const tiles = vitalTiles(readings, now);
+  const n = news2Tile(readings, now);
   const tone =
     n.tone === 'high' || n.tone === 'medium' ? 'crit' : n.tone === 'single' ? 'warn' : 'none';
   const detail =
@@ -64,8 +68,11 @@ export function VitalsOverview({
             {tile.value ?? 'N/A'}
             {tile.value !== null && <small>{tile.unit}</small>}
           </span>
-          <span className="vt__trend">{tile.at ? `alle ${tile.at}` : ''}</span>
-          {large && tile.trend && <span className="vt__trend">{tile.trend}</span>}
+          {tile.measuredAt && <ReadingRecency measuredAt={tile.measuredAt} now={now} />}
+          {large && tile.trend && <span className="vt__trend vt__comparison">{tile.trend}
+            {tile.direction !== null && tile.previousMeasuredAt &&
+              <ReadingRecency measuredAt={tile.previousMeasuredAt} now={now} />}
+          </span>}
         </div>
       ))}
       <button
@@ -73,14 +80,14 @@ export function VitalsOverview({
         className={`vt vt--news2 vt--${tone}`}
         onClick={history}
         aria-haspopup="dialog"
-        aria-label={`NEWS2 ${n.score ?? 'non calcolabile'}${n.at ? ` alle ${n.at}` : ''}: ${detail}. Apri lo storico NEWS2`}
+        aria-label={`NEWS2 ${n.score ?? 'non calcolabile'}${n.measuredAt ? ` · ${readingRecencyText(n.measuredAt, now)}` : ''}: ${detail}. Apri lo storico NEWS2`}
       >
         <span className="vt__label">NEWS2</span>
         <span className="vt__value">
           {n.score ?? 'N/A'}
           {n.score !== null && <small>punti</small>}
         </span>
-        <span className="vt__trend">{n.at ?? ''}</span>
+        {n.measuredAt && <ReadingRecency measuredAt={n.measuredAt} now={now} />}
       </button>
     </div>
   );

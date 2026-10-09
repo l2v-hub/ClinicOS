@@ -169,7 +169,7 @@ test('"Prima" never claims an absence that the unread history could contradict',
   const now = new Date('2026-09-27T10:00:00.000Z');
   assert.equal(
     previousText({ status: 'ready', values, hasMore: false, count: 1 }, 'fr', now),
-    'Prima: 24 · 08:05',
+    'Prima: 24 · Misurato il 27/09/2026 08:05 · 3 ore fa',
   );
   assert.equal(
     previousText({ status: 'ready', values, hasMore: false, count: 1 }, 'dtx', now),

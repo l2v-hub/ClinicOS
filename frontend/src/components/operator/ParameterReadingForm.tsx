@@ -20,6 +20,7 @@ import {
   type ParameterValues,
 } from '../../lib/patientParameterReadings';
 import { usePreviousParameterValues } from '../../lib/usePreviousParameterValues';
+import { useRecencyClock } from '../../lib/useRecencyClock';
 import { news2, NEWS2_LABELS } from '../../lib/news2';
 import './ParameterReadingForm.css';
 
@@ -58,6 +59,7 @@ export function ParameterReadingForm({
   );
   const saveButton = useRef<HTMLButtonElement>(null);
   const previous = usePreviousParameterValues(patientId);
+  const now = useRecencyClock();
   const locked = saving || uncertain;
   const score = news2(values);
   const activeNumeric = ENTRY_FIELDS.find((field) => field.key === active && field.numeric);
@@ -192,7 +194,7 @@ export function ParameterReadingForm({
                 )}
                 {historical && (
                   <small id={`${id}-previous`} className="parameter-reading-form__previous">
-                    {previousText(previous, field.key as PreviousKey)}
+                    {previousText(previous, field.key as PreviousKey, now)}
                   </small>
                 )}
                 {field.key === 'note' && noteSummary && <small>{noteSummary}</small>}

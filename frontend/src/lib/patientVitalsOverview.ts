@@ -4,6 +4,7 @@
 import { NEWS2_LABELS, news2Parts, type News2Parameter } from './news2';
 import { latestCompleteNews2, news2Points, news2Staleness, news2Tone } from './news2History';
 import { readingTime, type PatientParameterReading } from './patientParameterReadings';
+import { readingRecency } from './readingRecency';
 
 export type VitalKey = 'fr' | 'spo2' | 'pa' | 'fc' | 'temperatura';
 /** Colore della tessera come il prototipo: dal punteggio NEWS2 del parametro (0 · 1–2 · 3). */
@@ -19,6 +20,8 @@ export interface VitalTile {
   direction: 'up' | 'down' | 'flat' | null;
   tone: VitalTone;
   at: string | null;
+  measuredAt: string | null;
+  previousMeasuredAt: string | null;
 }
 
 export interface News2Tile {
@@ -26,6 +29,7 @@ export interface News2Tile {
   score: number | null;
   response: string | null;
   at: string | null;
+  measuredAt: string | null;
   tone: ReturnType<typeof news2Tone>;
   stale: boolean;
   /** Parametri mancanti nell'ultima rilevazione quando il NEWS2 non è calcolabile. */
@@ -64,6 +68,7 @@ const numeric = (key: VitalKey, value: string): number | null => {
 
 /** "08:05" se di oggi (ora della struttura), altrimenti "24/09 08:05". */
 export function shortTime(instant: string, now = new Date()): string {
+  if (!readingRecency(instant, now).valid) return 'Data/ora non verificabile';
   const full = readingTime(instant); // "dd/mm/yyyy hh:mm"
   const today = readingTime(now.toISOString()).slice(0, 10);
   return full.slice(0, 10) === today ? full.slice(-5) : `${full.slice(0, 5)} ${full.slice(-5)}`;
@@ -90,6 +95,8 @@ export function vitalTiles(readings: PatientParameterReading[], now = new Date()
         direction: null,
         tone: 'none',
         at: null,
+        measuredAt: null,
+        previousMeasuredAt: null,
       };
     const value = latest.values[key]!.trim();
     const prev = withValue[1]?.values[key]?.trim() ?? null;
@@ -121,6 +128,8 @@ export function vitalTiles(readings: PatientParameterReading[], now = new Date()
       direction,
       tone: partTone(part),
       at: shortTime(latest.measuredAt, now),
+      measuredAt: latest.measuredAt,
+      previousMeasuredAt: withValue[1]?.measuredAt ?? null,
     };
   });
 }
@@ -134,6 +143,7 @@ export function news2Tile(readings: PatientParameterReading[], now = new Date())
       score: latest.result.total,
       response: latest.result.response,
       at: shortTime(latest.reading.measuredAt, now),
+      measuredAt: latest.reading.measuredAt,
       tone: news2Tone(latest),
       stale: staleness.stale,
       missing: [],
@@ -144,6 +154,7 @@ export function news2Tile(readings: PatientParameterReading[], now = new Date())
     score: null,
     response: null,
     at: last ? shortTime(last.reading.measuredAt, now) : null,
+    measuredAt: last?.reading.measuredAt ?? null,
     tone: 'none',
     stale: false,
     missing: last ? last.result.missing.map((k) => NEWS2_LABELS[k]) : [],
