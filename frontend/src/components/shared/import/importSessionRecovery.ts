@@ -14,7 +14,7 @@ export function importFailureMessage(error: unknown): string {
   if (error instanceof ImportApiError && error.code === 'session_closed')
     return 'Questa sessione non è più modificabile. Per una nuova importazione, ricarica i documenti.';
   if (!(error instanceof ImportApiError) || error.status >= 500)
-    return 'Disponibilità della sessione non verificata. Riprova: non è stata avviata una nuova importazione.';
+    return 'Disponibilità della sessione non verificata. Riprova senza iniziare un’altra importazione.';
   return error.message;
 }
 export function importRecoveryPresentation({

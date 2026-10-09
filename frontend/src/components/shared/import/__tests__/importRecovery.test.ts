@@ -123,5 +123,6 @@ test('unknown temporary failure never promises preservation or fabricates a term
   for (const error of [new TypeError('network'), new ImportApiError('backend unavailable', 503)]) {
     assert.match(importFailureMessage(error), /Disponibilità della sessione non verificata/);
     assert.doesNotMatch(importFailureMessage(error), /conservata|eliminata|scaduta|conclusa/);
+    assert.doesNotMatch(importFailureMessage(error), /non è stata avviata/);
   }
 });
