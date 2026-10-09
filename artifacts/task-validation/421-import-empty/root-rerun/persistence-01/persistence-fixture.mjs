@@ -1,0 +1,112 @@
+import {createRequire} from 'node:module';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+const {chromium,expect:rawExpect}=createRequire('C:/w-insulin-qa/package.json')('playwright/test');
+const expect=rawExpect.configure({timeout:20000});
+export {expect};
+if(!process.env.EV_OUT)throw Error('Distinct immutable-attempt EV_OUT required');
+export const out=resolve(process.env.EV_OUT);
+for(const dir of ['screenshots','video','trace','test-results','playwright-report'])mkdirSync(`${out}/${dir}`,{recursive:true});
+export const browser=await chromium.launch({headless:true});
+export const identity={id:'QA-NURSE-421',name:'Infermiere Sintetico',roleLabel:'Infermiere',appRole:'nurse',uiShell:'operator'};
+export const patient={id:'QA-PATIENT-421',firstName:'Persona',lastName:'Sintetica',dateOfBirth:'1980-01-01',sex:'M',codiceFiscale:null,medicalRecordNumber:'QA-421'};
+export const memoryKey='clinicos:import-session:QA-NURSE-421:operatore';
+export const newJob=(status='collecting',id='synthetic-session-421')=>({id,status,expiresAt:'2026-10-10T12:00:00Z',totalBytes:0,documents:[],capabilities:{sessionVersion:1,pageEditing:true,atomicReplacement:true},manifest:{version:1,revision:1,groups:[{id:'synthetic-letter',label:'Lettera sintetica',sortOrder:0,status:'pending',pageCount:0,completedPages:0,error:null,pdfUrl:null}],pages:[]},limits:{maxPages:30,maxSourceFiles:30,maxGroups:30,maxTotalBytes:26214400,maxFileBytes:26214400,maxFilesPerRequest:10,maxRequestBytes:26476544,acceptedMimeTypes:['application/pdf','image/jpeg','image/png']},progress:{phase:'documents',totalPages:0,completedPages:0,failedPages:0,totalGroups:1,completedGroups:0,currentPageId:null,currentGroupId:null},review:{manifestRevision:null,resultHash:null,unresolvedConflicts:0,canProceed:false,draftId:null,draftSourceIsCurrent:false}});
+const operator={id:identity.id,nome:'Infermiere',cognome:'Sintetico',ruolo:'infermiere',reparto:'Reparto sintetico',stato:'attivo',email:'qa@example.invalid',telefono:'',qualifica:''};
+export async function setup({allowed=true,time='2026-10-09T18:00:00Z',appointments=[],mobile=false,session=newJob('expired'),sessionStatus=200}={}){
+ const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1150,height:1004},timezoneId:'Europe/Rome',recordVideo:{dir:`${out}/video`}});
+ await context.tracing.start({screenshots:true,snapshots:true,sources:true});
+ const page=await context.newPage(); await page.clock.install({time:new Date(time)});
+ const syntheticPng=Buffer.from(await page.evaluate(()=>{const c=document.createElement('canvas');c.width=80;c.height=100;const x=c.getContext('2d');x.fillStyle='white';x.fillRect(0,0,80,100);x.fillStyle='#2359aa';x.font='16px sans-serif';x.fillText('QA',20,50);return c.toDataURL('image/png').split(',')[1];}),'base64');
+ const state={allowed,appointments,session,sessionStatus,created:0,creationKeys:[],uploads:[],manifestEdits:[],expectedHttp:[],requests:[],errors:[],pageErrors:[],httpErrors:[],unexpected:[],external:[],writes:[]};
+ const uploadedBytes=new Map(),uploadResults=new Map();
+ const update=()=>{const j=state.session;j.manifest.revision++;j.manifest.groups=j.manifest.groups.map(g=>({...g,pageCount:j.manifest.pages.filter(p=>p.groupId===g.id).length}));j.progress.totalPages=j.manifest.pages.length;j.progress.totalGroups=j.manifest.groups.length;j.totalBytes=j.documents.reduce((n,d)=>n+d.sizeBytes,0);};
+ await context.addInitScript(({key})=>{if(!sessionStorage.getItem('qa421-seeded')){if(!localStorage.getItem(key))localStorage.setItem(key,'synthetic-session-421');sessionStorage.setItem('qa421-seeded','yes');}},{key:memoryKey});
+ await context.route('**/*',async route=>{
+  const req=route.request(),u=new URL(req.url()),path=u.pathname;
+  if(u.hostname==='fonts.googleapis.com')return route.fulfill({status:200,contentType:'text/css',body:''});
+  if(process.env.QA_ONLINE==='1'&&u.hostname==='clinicos-eosin.vercel.app'&&req.method()==='GET'&&(path==='/'||path.startsWith('/assets/')||path==='/favicon.ico'))return route.continue();
+  const api=process.env.QA_ONLINE==='1'?['clinicos-backend-demo.up.railway.app','clinicos-backend-production-df88.up.railway.app'].includes(u.hostname):['127.0.0.1','localhost'].includes(u.hostname)&&u.port==='3001';
+  if(!api){if(process.env.QA_ONLINE!=='1'&&['127.0.0.1','localhost'].includes(u.hostname)&&u.port===String(process.env.QA_PORT||7507))return route.continue();state.external.push(u.origin);return route.abort();}
+  state.requests.push({method:req.method(),path});
+  const json=(body,status=200)=>{if(status>=400)state.expectedHttp.push({status,path});return route.fulfill({status,contentType:'application/json',body:JSON.stringify(body)});};
+  if(path==='/ai/extraction/status')return json({available:true,provider:'synthetic-no-provider',model:'fixture',errors:[]});
+  if(path==='/ai/extraction/jobs'&&req.method()==='POST'){state.creationKeys.push(req.headers()['idempotency-key']);if(state.delayCreate)await new Promise(r=>setTimeout(r,state.delayCreate));state.created++;state.session=newJob('collecting','synthetic-new-session-421');state.sessionStatus=200;return json({job:state.session});}
+  const sourceMatch=path.match(/\/files\/([^/]+)\/content$/);
+  if(sourceMatch&&req.method()==='GET')return route.fulfill({status:200,contentType:'image/png',body:uploadedBytes.get(sourceMatch[1])||syntheticPng});
+  if(path.startsWith('/ai/extraction/jobs/')&&req.method()==='POST'&&(path.endsWith('/files')||path.endsWith('/replace'))){
+   const form=await new Request(req.url(),{method:'POST',headers:req.headers(),body:req.postDataBuffer()}).formData();
+   const metadata=JSON.parse(form.get('metadata')),file=form.get('files'),bytes=Buffer.from(await file.arrayBuffer());
+   state.uploads.push({metadata,filename:file.name,mimeType:file.type,sizeBytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
+   if(state.holdUpload)await new Promise(resolve=>{state.resumeUpload=resolve;});
+   if(state.rejectUpload){state.rejectUpload=false;return json({error:'Synthetic upload temporarily unavailable'},503);}
+   if(uploadResults.has(metadata.requestId))return json(uploadResults.get(metadata.requestId));
+   if(metadata.expectedRevision!==state.session.manifest.revision)throw Error('Fixture revision contract mismatch');
+   const documentId=`synthetic-source-${state.uploads.length}`,pageId=path.match(/\/pages\/([^/]+)\/replace$/)?.[1],old=state.session.manifest.pages.find(p=>p.id===pageId);
+   const groupId=old?.groupId||metadata.groupId,id=pageId||`synthetic-page-${state.uploads.length}`;
+   uploadedBytes.set(documentId,bytes);state.session.documents.push({id:documentId,filename:file.name,mimeType:file.type,sizeBytes:bytes.length,pageCount:1,contentUrl:`/ai/extraction/jobs/${state.session.id}/files/${documentId}/content`});
+   state.session.manifest.pages=state.session.manifest.pages.filter(p=>p.id!==pageId);
+   state.session.manifest.pages.push({id,documentId,sourcePageNumber:1,groupId,sortOrder:old?.sortOrder??state.session.manifest.pages.filter(p=>p.groupId===groupId).length,status:'pending',canRetry:false,errorCode:null,error:null});
+   if(pageId)state.session.documents=state.session.documents.filter(d=>state.session.manifest.pages.some(p=>p.documentId===d.id));
+   update();const result={job:structuredClone(state.session),outcomes:[{filename:file.name,status:'accepted',documentId,clientFileId:metadata.clientFileId||metadata.items[0].clientFileId,pageIds:[id]}]};uploadResults.set(metadata.requestId,result);
+   if(state.loseUpload){state.loseUpload=false;state.expectedNetwork=(state.expectedNetwork||0)+1;return route.abort('failed');}return json(result);
+  }
+  if(path.startsWith('/ai/extraction/jobs/')&&req.method()==='GET'&&!path.endsWith('/result')){if(state.networkFailure){state.networkFailure=false;state.expectedNetwork=(state.expectedNetwork||0)+1;return route.abort('failed');}return json(state.sessionStatus===200?state.session:{error:'Synthetic unavailable'},state.sessionStatus);}
+  if(path.endsWith('/manifest')&&req.method()==='PUT'){
+   const data=req.postDataJSON();if(data.expectedRevision!==state.session.manifest.revision)throw Error('Fixture manifest revision mismatch');state.manifestEdits.push(data);
+   state.session.manifest.groups=data.groups.map(g=>({...state.session.manifest.groups.find(old=>old.id===g.id),...g,status:'pending',completedPages:0,error:null,pdfUrl:null}));
+   state.session.manifest.pages=data.pages.map(p=>({...state.session.manifest.pages.find(old=>old.id===p.id),...p}));update();return json(state.session);
+  }
+  if(path.match(/\/ai\/extraction\/jobs\/[^/]+\/pages\/[^/]+$/)&&req.method()==='DELETE'){
+   const id=path.split('/').at(-1),data=req.postDataJSON();if(data.expectedRevision!==state.session.manifest.revision)throw Error('Fixture removal revision mismatch');
+   state.session.manifest.pages=state.session.manifest.pages.filter(p=>p.id!==id);state.session.documents=state.session.documents.filter(d=>state.session.manifest.pages.some(p=>p.documentId===d.id));update();return json(state.session);
+  }
+  if(path.endsWith('/result')&&req.method()==='GET')return json({error:'Synthetic missing result'},404);
+  if(path==='/auth/status')return json({mode:'disabled',temporaryDemo:false,simulator:true});
+  if(path==='/auth/simulator/identities')return json({identities:[identity]});
+  if(path==='/auth/simulator/session'&&req.method()==='POST')return json({token:'synthetic421-not-a-secret'});
+  if(path==='/auth/simulator/logout'&&req.method()==='POST')return json({ok:true});
+  if(path==='/auth/me')return json({...identity,role:'operatore',authMode:'disabled',temporaryDemo:false,capabilities:Object.fromEntries(['patients.list_page','patients.get','patients.clinical_summary','patients.clinical_overview','appointments.list','consegne.list','notes.list','operators.directory','administration.list_slots','therapy.list','therapy.list_page','diary.list','parameters.list_readings','documents.list','patients.diary_unread_count','intake.create_draft','ai.extraction.status','ai.extraction.import',...state.allowed?['appointments.create']:[]].map(id=>[id,{allowed:true,effect:'ALLOWED'}]))});
+  if(path==='/patients/page/search'&&req.method()==='POST')return json({items:[patient],hasMore:false,nextCursor:null});
+  if(req.method()!=='GET'){state.writes.push({method:req.method(),path});return json({error:'Unexpected guarded domain write'},500);}
+  if(path==='/appointments')return json(state.appointments);
+  if(path==='/operators/directory/page')return json({items:[operator],pageInfo:{hasMore:false,nextCursor:null}});
+  if(path==='/therapy-slots')return json([]);
+  if(path==='/patients/settings')return json({deleteEnabled:false});
+  if(path.endsWith('/parameter-readings'))return json([]);
+  if(path==='/patients/page')return json({items:[patient],hasMore:false,nextCursor:null});
+  if(path==='/patients/parameters/page')return json({items:[],hasMore:false,nextCursor:null});
+  if(path==='/patients/clinical-summary')return json([{patientId:patient.id,statoRicovero:'ambulatoriale',consegneAperte:0,hasCriticalVitals:false,hasHighRisk:false,allergieCount:0,hasSevereAllergy:false,terapieTotali:0,terapieCompletate:0}]);
+  if(path==='/patients/clinical-summary/overview')return json({totalPatients:1,critici:0,rischiAlti:0,ricoverati:0,dimessi:0,allergieGravi:0,terapieTotali:0,terapieCompletate:0});
+  if(path==='/me/roster-order')return json({effective:{criterion:'name',direction:'asc'},source:'system',canEdit:false,canEditDefault:false});
+  if(path==='/patients/diary-unread-count')return json({unreadCount:0});
+  if(path==='/consegne/overview')return json({scope:'operator',summary:{total:0,urgentActive:0,urgentTaken:0},recentPreview:[],urgentPreview:[],byOperator:{}});
+  if(path==='/consegne')return json({items:[],pageInfo:{hasMore:false,nextCursor:null},summary:{total:0,urgentActive:0,urgentTaken:0}});
+  if(path==='/notes')return json({items:[],pageInfo:{hasMore:false,nextCursor:null},summary:{unread:0}});
+  state.unexpected.push(`${req.method()} ${path}`);return json({error:'Unexpected guarded API'},500);
+ });
+ page.on('console',m=>{if(m.type()==='error')state.errors.push(m.text());});page.on('pageerror',e=>state.pageErrors.push(e.message));page.on('response',r=>{if(r.status()>=400)state.httpErrors.push({status:r.status(),path:new URL(r.url()).pathname});});
+ return {page,context,state,syntheticPng};
+}
+export async function openImport(ctx){
+ const base=process.env.QA_ONLINE==='1'?'https://clinicos-eosin.vercel.app':`http://127.0.0.1:${process.env.QA_PORT||7507}`;
+ await ctx.page.goto(`${base}/#/operator-dashboard`);await ctx.page.getByRole('button',{name:'Infermiere Sintetico'}).click();
+ await expect(ctx.page.getByRole('heading',{name:'Il mio turno'})).toBeVisible();
+ if(await ctx.page.getByRole('button',{name:'Apri menu'}).isVisible())await ctx.page.getByRole('button',{name:'Apri menu'}).click();
+ await ctx.page.locator('.teams-sidebar').getByRole('button',{name:'Pazienti',exact:true}).click();await ctx.page.getByRole('button',{name:'Importa lettera di dimissione',exact:true}).click();await expect(ctx.page.getByRole('dialog',{name:'Importa lettere di dimissione'})).toBeVisible();
+}
+export async function finish(ctx,name){
+ writeFileSync(`${out}/test-results/${name}-guard.json`,JSON.stringify(ctx.state,null,2));
+ await ctx.context.tracing.stop({path:`${out}/trace/${name}.zip`});await ctx.context.close();
+ expect(ctx.state.httpErrors).toEqual(ctx.state.expectedHttp);expect(ctx.state.errors).toEqual([...ctx.state.expectedHttp.map(({status})=>`Failed to load resource: the server responded with a status of ${status} (${status===404?'Not Found':status===503?'Service Unavailable':status===409?'Conflict':'Internal Server Error'})`),...Array(ctx.state.expectedNetwork||0).fill('Failed to load resource: net::ERR_FAILED')]);
+ for(const key of ['pageErrors','unexpected','external','writes'])expect(ctx.state[key],key).toEqual([]);
+ writeFileSync(`${out}/test-results/${name}.json`,JSON.stringify({name,status:'PASS',guard:ctx.state},null,2));
+}
+export function report(results){
+ writeFileSync(`${out}/test-results/results.json`,JSON.stringify({results,productionPatientMutations:0},null,2));
+ writeFileSync(`${out}/playwright-report/index.html`, `<!doctype html><meta charset="utf-8"><title>421 assertion receipt</title><h1>Actual Playwright-library assertions for issue 421</h1><p>Guarded synthetic APIs; no production patient writes.</p><pre>${JSON.stringify(results,null,2)}</pre>`);
+}
+
+
+

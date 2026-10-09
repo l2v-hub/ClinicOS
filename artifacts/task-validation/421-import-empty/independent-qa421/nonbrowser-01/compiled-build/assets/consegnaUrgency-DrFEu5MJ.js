@@ -1,0 +1,1 @@
+function e(e){return e.urgency?e.urgency.state===`active`:e.priorita===`urgente`&&e.stato!==`completata`}function t(t){return t.priorita===`urgente`?e(t)?`Urgente`:t.urgency?.takenBy?`Letta e compresa`:`Urgenza storica`:t.priorita===`alta`?`Alta (valore precedente)`:`Normale`}export{e as n,t};

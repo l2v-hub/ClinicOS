@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,copyFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const root='artifacts/task-validation/421-import-empty',read=p=>JSON.parse(readFileSync(p)),sha=b=>createHash('sha256').update(b).digest('hex');
+const source=read(root+'/root-frozen/pre-run/source/source-receipt.json'),after=read(root+'/root-frozen/after/source-receipt.json');
+assert.equal(source.applicationCommit,'80b313227a9a2b9fefc0441c718b259d0d901cae');assert.equal(source.sourceSha256,after.sourceSha256);assert.equal(source.fileCount,1470);
+for(const f of read(root+'/root-frozen/pre-run/snapshot.json').files){assert.equal(sha(readFileSync(root+'/root-frozen/pre-run/'+f.path)),f.sha256);assert.equal(sha(readFileSync(root+'/'+f.path.replace(/\.source$/,''))),f.sha256);}
+const c=read(root+'/root-frozen/commands/command-results.json');for(const r of c.records)if(r.name!=='full-regression')assert.equal(r.exit,0,r.name);assert.deepEqual(c.newFailures,[]);assert.equal(c.records.find(r=>r.name==='focused').pass,37);assert.equal(c.records.find(r=>r.name==='full-regression').tests,1243);assert.equal(c.records.find(r=>r.name==='full-regression').fail,12);
+const cases=read(root+'/root-frozen/run/test-results/results.json');assert.equal(cases.results.length,14);assert.ok(cases.results.every(r=>r.status==='PASS'));
+for(const r of cases.results){const g=read(root+'/root-frozen/run/test-results/'+r.name+'-guard.json');for(const k of ['pageErrors','unexpected','external','writes'])assert.deepEqual(g[k],[]);assert.deepEqual(g.httpErrors,g.expectedHttp);assert.equal(g.errors.length,g.expectedHttp.length+(g.expectedNetwork||0));}
+copyFileSync('C:/w-420/artifacts/task-validation/420-import-recovery/security/accepted-baseline-code-scan.json',root+'/security/accepted-baseline-code-scan.json');
+const scan=read(root+'/security/scan-code-deep.json'),baseline=read(root+'/security/accepted-baseline-code-scan.json');assert.deepEqual(scan.findings,baseline.findings);assert.deepEqual(scan.summary,baseline.summary);
+writeFileSync(root+'/security/comparison.json',JSON.stringify({applicationCommit:source.applicationCommit,baselineApplication:source.baseline,summary:scan.summary,newSourceFindings:[],changedPathFindings:[],scope:'Three inherited MEDIUM source heuristics outside four changed paths; not global or dependency/CVE clean certification.'},null,2));
+writeFileSync(root+'/root-verification.json',JSON.stringify({applicationCommit:source.applicationCommit,sourceSha256:source.sourceSha256,sourceFiles:1470,rootBrowserCases:14,focusedTests:37,fullTests:1243,fullPass:1231,unchangedBaselineFailures:12,newFailures:0,productionPatientTestMutations:0,rootServer:{port:7505,pid:15856,exactCommandAndListenerVerifiedBeforeStop:true,stopped:true},decision:'ROOT VERIFIED; independent QA and subsequent release gates still required'},null,2));
+console.log('Root14 + focused37 + types/build/privacy/static scanner; same12 baseline0new, source1470 unchanged.');

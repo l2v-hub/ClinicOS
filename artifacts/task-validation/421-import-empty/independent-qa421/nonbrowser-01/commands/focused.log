@@ -1,0 +1,73 @@
+(node:5060) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ default and additional empty letters do not constitute saved content (3.0259ms)
+✔ saved global pages or originals retain management regardless of current empty letter (0.4279ms)
+✔ guidance describes authoritative formats and all limits before choosing a file (109.2724ms)
+✔ empty panel has one primary load action, scan alternative, and no objectless controls (14.3662ms)
+✔ busy first upload disables acquisition without removing its guidance (1.7747ms)
+(node:5060) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22736) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ first handoff retains reviewed values after create-response loss and a retry (53.4385ms)
+✔ first handoff retains reviewed values after patch-precommit loss and a retry (1.7785ms)
+✔ first handoff retains reviewed values after patch-response loss and a retry (1.1463ms)
+✔ opening a pre-existing draft never reseeds it from an unrelated review (0.3903ms)
+✔ recovery preserves a concurrently edited draft and refuses a different source (1.4223ms)
+(node:22736) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:30896) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ verified expired has a distinct explanation without clinical payload (5.0843ms)
+✔ verified cancelled has a distinct explanation without clinical payload (0.6008ms)
+✔ verified confirmed has a distinct explanation without clinical payload (0.8059ms)
+✔ only session GET normalizes masked 404; resource 404 never proves session deletion (84.1598ms)
+✔ temporary HTTP and network failures remain retryable, without reset authorization (3.3752ms)
+✔ nested missing result/page is not a terminal session; explicit closed code is terminal (1.2046ms)
+✔ only verified future/undated active saved pages offer qualified resumption (3.8811ms)
+✔ unknown temporary failure never promises preservation or fabricates a terminal reason (1.0436ms)
+(node:30896) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29844) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ each current conflict needs an explicit valid decision, including defer; stale/duplicate decisions fail (1.8237ms)
+✔ conflict surface shows both values and sources without a default selection (21.0168ms)
+✔ review still prefers narrative text and persists edited sections separately from source (1.7268ms)
+(node:29844) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ authenticated original cache downloads one immutable document once, cleans URLs and evicts replaced source (82.7346ms)
+✔ failed source fetch can be retried and an oversized original is refused (2.4584ms)
+(node:20640) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ single-flight creation, close/reopen and a new module instance use only opaque IDs/keys (8.2626ms)
+✔ lost creation response reuses its key across reload; failed resume never creates a job (3.8741ms)
+✔ operator scope and storage failure never reuse another actor session (1.9419ms)
+✔ 30 pages in three letters move without changing source identity and with contiguous order (3.3045ms)
+✔ manifest retry preserves request identity and stale revision response supplies authoritative job (75.8758ms)
+✔ stale session retains its ID until explicit new import; terminal, denied and network failures are distinct (5.2808ms)
+(node:20640) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:1312) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ uncertain upload retry uses identical metadata, bytes and revision; replay duplicate is accepted (90.5573ms)
+✔ atomic retake at capacity calls replacement only and preserves old page on rejection (3.8925ms)
+✔ revision conflict updates manifest but upload retries only after explicit run with a fresh key (3.6179ms)
+✔ double submit shares the running queue and one pending camera File identity (2.9905ms)
+✔ first capture sends the revision returned by group creation before any render effect (6.6278ms)
+(node:1312) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ can(): allowed, denied, missing, and no policy map (3.8895ms)
+✔ canNavigate(): pages follow their backing capability, dashboards are always visible (8.0224ms)
+✔ capabilityDeniedMessage(): only policy 403s get the role message (1.3776ms)
+(node:8084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1617.893

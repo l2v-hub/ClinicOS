@@ -1,0 +1,17 @@
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+const base=resolve('artifacts/task-validation/421-import-empty/independent-qa421');
+const out=resolve(process.argv[2]);if(existsSync(out))throw Error('Immutable attempt already exists');mkdirSync(out,{recursive:true});
+const git=(args,cwd=process.cwd())=>{const r=spawnSync('git',args,{cwd,encoding:'utf8',maxBuffer:40e6});if(r.status!==0)throw Error('Git check failed '+args.join(' '));return r.stdout;};
+const commit='80b313227a9a2b9fefc0441c718b259d0d901cae';
+const scopes=['frontend/src','backend/src','prisma','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','frontend/tsconfig.json','frontend/tsconfig.app.json','frontend/tsconfig.node.json','frontend/vite.config.ts','frontend/vercel.json','backend/package.json','backend/tsconfig.json','scripts/run-node-tests.mjs','scripts/stub-css-loader.mjs'];
+if(git(['rev-parse','HEAD']).trim()!==commit)throw Error('Application changed');
+git(['diff','--exit-code','HEAD','--',...scopes]);
+if(git(['ls-files','--others','--exclude-standard','--',...scopes]).trim())throw Error('Untracked app');
+const hash=data=>createHash('sha256').update(data).digest('hex');
+const files=git(['ls-files','-z','--',...scopes]).split('\0').filter(Boolean).sort().map(path=>{const raw=readFileSync(path),rootRaw=readFileSync('C:/w-421/'+path);const canonical=hash(raw.toString('utf8').replace(/\r\n/g,'\n')),rootCanonical=hash(rootRaw.toString('utf8').replace(/\r\n/g,'\n'));if(canonical!==rootCanonical)throw Error('Cross-check mismatch '+path);return {path,bytes:raw.length,sha256:hash(raw),canonicalLF:canonical,rootCanonicalLF:rootCanonical};});
+const recipeFiles=['task-contract.md','prepare.mjs','commands.mjs','fixture.mjs','after.mjs','qa-server.mjs','read-issue.mjs','pdf-fixture.mjs','pdf-after.mjs','persistence-fixture.mjs','persistence-after.mjs','post-run.mjs','seal.mjs'].filter(f=>existsSync(base+'/'+f)).map(path=>{const raw=readFileSync(base+'/'+path);writeFileSync(out+'/'+path,raw);return {path,sha256:hash(raw)};});
+writeFileSync(out+'/pre-run-receipt.json',JSON.stringify({application:commit,baseline:'c00bff678dfc9845c31742bc5d0d750fbbb9603e',scope:scopes,files,recipeFiles,sourceSHA:hash(JSON.stringify(files)),canonicalSHA:hash(JSON.stringify(files.map(({path,canonicalLF})=>({path,canonicalLF})))),status:git(['status','--short']),authorization:'READONLY APPLICATION; only own evidence writes; browser lane requires explicit root release; synthetic routes only'},null,2));
+console.log('Pre-run frozen '+out);

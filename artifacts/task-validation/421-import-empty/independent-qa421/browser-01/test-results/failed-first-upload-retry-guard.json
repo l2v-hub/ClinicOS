@@ -1,0 +1,266 @@
+{
+  "allowed": true,
+  "appointments": [],
+  "session": {
+    "id": "synthetic-session-421",
+    "status": "collecting",
+    "expiresAt": "2026-10-10T12:00:00Z",
+    "totalBytes": 1067,
+    "documents": [
+      {
+        "id": "synthetic-source-2",
+        "filename": "synthetic-letter.png",
+        "mimeType": "image/png",
+        "sizeBytes": 1067,
+        "pageCount": 1,
+        "contentUrl": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-2/content"
+      }
+    ],
+    "capabilities": {
+      "sessionVersion": 1,
+      "pageEditing": true,
+      "atomicReplacement": true
+    },
+    "manifest": {
+      "version": 1,
+      "revision": 2,
+      "groups": [
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 0,
+          "status": "pending",
+          "pageCount": 1,
+          "completedPages": 0,
+          "error": null,
+          "pdfUrl": null
+        }
+      ],
+      "pages": [
+        {
+          "id": "synthetic-page-2",
+          "documentId": "synthetic-source-2",
+          "sourcePageNumber": 1,
+          "groupId": "synthetic-letter",
+          "sortOrder": 0,
+          "status": "pending",
+          "canRetry": false,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    "limits": {
+      "maxPages": 30,
+      "maxSourceFiles": 30,
+      "maxGroups": 30,
+      "maxTotalBytes": 26214400,
+      "maxFileBytes": 26214400,
+      "maxFilesPerRequest": 10,
+      "maxRequestBytes": 26476544,
+      "acceptedMimeTypes": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    },
+    "progress": {
+      "phase": "documents",
+      "totalPages": 1,
+      "completedPages": 0,
+      "failedPages": 0,
+      "totalGroups": 1,
+      "completedGroups": 0,
+      "currentPageId": null,
+      "currentGroupId": null
+    },
+    "review": {
+      "manifestRevision": null,
+      "resultHash": null,
+      "unresolvedConflicts": 0,
+      "canProceed": false,
+      "draftId": null,
+      "draftSourceIsCurrent": false
+    }
+  },
+  "sessionStatus": 200,
+  "created": 0,
+  "creationKeys": [],
+  "uploads": [
+    {
+      "metadata": {
+        "requestId": "a1b03e7f-2692-41c4-a905-0fd131a64873",
+        "expectedRevision": 1,
+        "groupId": "synthetic-letter",
+        "items": [
+          {
+            "clientFileId": "1cb1c6ed-bbda-416f-a291-30ac000839af"
+          }
+        ]
+      },
+      "filename": "synthetic-letter.png",
+      "mimeType": "image/png",
+      "sizeBytes": 1067,
+      "sha256": "9f964b0af1cd587ee5348a37306944a9974dce5fc2f231ddca33ae7a2ebb9158"
+    },
+    {
+      "metadata": {
+        "requestId": "a1b03e7f-2692-41c4-a905-0fd131a64873",
+        "expectedRevision": 1,
+        "groupId": "synthetic-letter",
+        "items": [
+          {
+            "clientFileId": "1cb1c6ed-bbda-416f-a291-30ac000839af"
+          }
+        ]
+      },
+      "filename": "synthetic-letter.png",
+      "mimeType": "image/png",
+      "sizeBytes": 1067,
+      "sha256": "9f964b0af1cd587ee5348a37306944a9974dce5fc2f231ddca33ae7a2ebb9158"
+    }
+  ],
+  "manifestEdits": [],
+  "expectedHttp": [
+    {
+      "status": 503,
+      "path": "/ai/extraction/jobs/synthetic-session-421/files"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/me/roster-order"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/notes"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/operators/directory/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/status"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/settings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-421/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-421/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/jobs/synthetic-session-421"
+    },
+    {
+      "method": "POST",
+      "path": "/ai/extraction/jobs/synthetic-session-421/files"
+    },
+    {
+      "method": "POST",
+      "path": "/ai/extraction/jobs/synthetic-session-421/files"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-2/content"
+    }
+  ],
+  "errors": [
+    "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+  ],
+  "pageErrors": [],
+  "httpErrors": [
+    {
+      "status": 503,
+      "path": "/ai/extraction/jobs/synthetic-session-421/files"
+    }
+  ],
+  "unexpected": [],
+  "external": [],
+  "writes": [],
+  "rejectUpload": false
+}

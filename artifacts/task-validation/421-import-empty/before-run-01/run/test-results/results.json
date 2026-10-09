@@ -1,0 +1,9 @@
+{
+  "results": [
+    {
+      "name": "Empty initial management/counters compete before first content",
+      "status": "PASS"
+    }
+  ],
+  "productionPatientMutations": 0
+}

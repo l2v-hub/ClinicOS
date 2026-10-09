@@ -1,0 +1,21 @@
+{
+  "server": {
+    "port": 7507,
+    "address": "127.0.0.1",
+    "pid": 41460,
+    "parentPid": 14376,
+    "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/421-import-empty/independent-qa421/browser-01/qa-server.mjs",
+    "execSession": 89122,
+    "ownershipCIMandListenerVerifiedBeforeStop": true,
+    "stopped": true,
+    "processAbsent": true,
+    "listenerAbsent": true,
+    "exitCode": 1,
+    "exitReason": "Intentional Stop-Process exact owned PID after completed browser tests",
+    "logs": [
+      "421 actual SPA/config/compiler QA loopback7507, synthetic intercepted APIs only",
+      "BABEL code generator deoptimised styling for cached react-dom_client/@azure_msal-browser/codice-fiscale-js/pdfjs-dist (>500KB); informational, not console/page errors"
+    ]
+  },
+  "browserLaneReleasedToRoot": true
+}

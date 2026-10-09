@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND PROOF COMMIT AND PUSH",
+  "authority": "Direct human authorization; root release gate plus independent/re-run/compiled online/CI comparison passed",
+  "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "branch": "codex/bug-421-import-empty",
+  "scope": "artifacts/task-validation/421-import-empty",
+  "artifacts": 694,
+  "configuredCredentialChecks": 24582,
+  "expandedZipMembers": 7500,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T19:41:33.301Z",
+  "excluded": "No main proof promotion or application change, no primary/blocked source"
+}

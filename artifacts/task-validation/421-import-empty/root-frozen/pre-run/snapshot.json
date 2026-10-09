@@ -1,0 +1,38 @@
+{
+  "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "capturedAt": "2026-10-09T19:09:36.731Z",
+  "files": [
+    {
+      "path": "after.mjs.source",
+      "sha256": "8a3d651f8c8cad21db9c85c1b53cbfd961fd683f51fd5596361bd0c05d24376f"
+    },
+    {
+      "path": "fixture.mjs.source",
+      "sha256": "7c4a95efeee267b70d56e4f9fbc0811e3e181e034af28ec4425b6c7438d1a797"
+    },
+    {
+      "path": "qa-server.mjs.source",
+      "sha256": "0222fa8e2f2b24e7fa5e96c4799833ef17ac4e76acff50433bad2d3e5e71ab78"
+    },
+    {
+      "path": "commands.mjs.source",
+      "sha256": "4fa03372a79140445438ab6ac31d3b703c65eb9dfd388089af416ccdf37a80ef"
+    },
+    {
+      "path": "source-receipt.mjs.source",
+      "sha256": "aab7c9c2582634df818321d5068c08cf2d5eada33d3a44355f17967e732c51d5"
+    },
+    {
+      "path": "prepare-frozen.mjs.source",
+      "sha256": "ded47b9d2397e307d1632eb530e09518912be636e772da6f13f6bbebf0e3c4f0"
+    },
+    {
+      "path": "task-contract.md.source",
+      "sha256": "3226e24b86c7be48c8a5bd97b83cf1111119e5bf9c648845998161aa3026206e"
+    },
+    {
+      "path": "execution-policy.md.source",
+      "sha256": "b050650cd4b8dbd09b8e13c3b1b3849aedb6377d40156f460bdff46c8148c939"
+    }
+  ]
+}

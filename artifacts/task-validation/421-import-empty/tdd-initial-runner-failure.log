@@ -1,0 +1,41 @@
+(node:34812) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ default and additional empty letters do not constitute saved content (0.6759ms)
+✔ saved global pages or originals retain management regardless of current empty letter (0.13ms)
+✔ guidance describes authoritative formats and all limits before choosing a file (11.6149ms)
+✖ empty panel has one primary load action, scan alternative, and no objectless controls (0.2099ms)
+✖ busy first upload disables acquisition without removing its guidance (0.0932ms)
+(node:34812) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 286.9383
+
+✖ failing tests:
+
+test at frontend\src\components\shared\import\__tests__\importEmpty.test.tsx:1:1459
+✖ empty panel has one primary load action, scan alternative, and no objectless controls (0.2099ms)
+  ReferenceError: React is not defined
+      at TestContext.<anonymous> (C:\w-421\frontend\src\components\shared\import\__tests__\importEmpty.test.tsx:32:37)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at frontend\src\components\shared\import\__tests__\importEmpty.test.tsx:1:1972
+✖ busy first upload disables acquisition without removing its guidance (0.0932ms)
+  ReferenceError: React is not defined
+      at TestContext.<anonymous> (C:\w-421\frontend\src\components\shared\import\__tests__\importEmpty.test.tsx:41:37)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

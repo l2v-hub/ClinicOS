@@ -1,0 +1,36 @@
+{
+  "sessionId": "synthetic-session-421",
+  "savedManifest": {
+    "version": 1,
+    "revision": 3,
+    "groups": [
+      {
+        "id": "synthetic-letter",
+        "label": "Lettera persistente QA",
+        "sortOrder": 0,
+        "status": "pending",
+        "pageCount": 1,
+        "completedPages": 0,
+        "error": null,
+        "pdfUrl": null
+      }
+    ],
+    "pages": [
+      {
+        "id": "synthetic-page-1",
+        "documentId": "synthetic-source-1",
+        "sourcePageNumber": 1,
+        "groupId": "synthetic-letter",
+        "sortOrder": 0,
+        "status": "pending",
+        "canRetry": false,
+        "errorCode": null,
+        "error": null
+      }
+    ]
+  },
+  "closedMemoryRetainedBeforeReload": true,
+  "reloadSeedSuppressed": true,
+  "reloadGetsIncreased": true,
+  "simulationOnly": true
+}

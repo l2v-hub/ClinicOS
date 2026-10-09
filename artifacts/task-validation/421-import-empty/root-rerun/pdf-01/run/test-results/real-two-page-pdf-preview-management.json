@@ -1,0 +1,318 @@
+{
+  "name": "real-two-page-pdf-preview-management",
+  "status": "PASS",
+  "guard": {
+    "allowed": true,
+    "appointments": [],
+    "session": {
+      "id": "synthetic-session-421",
+      "status": "collecting",
+      "expiresAt": "2026-10-10T12:00:00Z",
+      "totalBytes": 1281,
+      "documents": [
+        {
+          "id": "synthetic-source-1",
+          "filename": "synthetic-two-pages.pdf",
+          "mimeType": "application/pdf",
+          "sizeBytes": 1281,
+          "pageCount": 2,
+          "contentUrl": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+        }
+      ],
+      "capabilities": {
+        "sessionVersion": 1,
+        "pageEditing": true,
+        "atomicReplacement": true
+      },
+      "manifest": {
+        "version": 1,
+        "revision": 4,
+        "groups": [
+          {
+            "id": "synthetic-letter",
+            "label": "Lettera sintetica",
+            "sortOrder": 0,
+            "status": "pending",
+            "pageCount": 2,
+            "completedPages": 0,
+            "error": null,
+            "pdfUrl": null
+          },
+          {
+            "id": "62c52f2f-f797-43a2-90b0-1b9f524d630c",
+            "label": "Lettera 2",
+            "sortOrder": 1,
+            "status": "pending",
+            "completedPages": 0,
+            "error": null,
+            "pdfUrl": null,
+            "pageCount": 0
+          }
+        ],
+        "pages": [
+          {
+            "id": "synthetic-page-1",
+            "documentId": "synthetic-source-1",
+            "sourcePageNumber": 1,
+            "groupId": "synthetic-letter",
+            "sortOrder": 1,
+            "status": "pending",
+            "canRetry": false,
+            "errorCode": null,
+            "error": null
+          },
+          {
+            "id": "synthetic-page-1-2",
+            "documentId": "synthetic-source-1",
+            "sourcePageNumber": 2,
+            "groupId": "synthetic-letter",
+            "sortOrder": 0,
+            "status": "pending",
+            "canRetry": false,
+            "errorCode": null,
+            "error": null
+          }
+        ]
+      },
+      "limits": {
+        "maxPages": 30,
+        "maxSourceFiles": 30,
+        "maxGroups": 30,
+        "maxTotalBytes": 26214400,
+        "maxFileBytes": 26214400,
+        "maxFilesPerRequest": 10,
+        "maxRequestBytes": 26476544,
+        "acceptedMimeTypes": [
+          "application/pdf",
+          "image/jpeg",
+          "image/png"
+        ]
+      },
+      "progress": {
+        "phase": "documents",
+        "totalPages": 2,
+        "completedPages": 0,
+        "failedPages": 0,
+        "totalGroups": 2,
+        "completedGroups": 0,
+        "currentPageId": null,
+        "currentGroupId": null
+      },
+      "review": {
+        "manifestRevision": null,
+        "resultHash": null,
+        "unresolvedConflicts": 0,
+        "canProceed": false,
+        "draftId": null,
+        "draftSourceIsCurrent": false
+      }
+    },
+    "sessionStatus": 200,
+    "created": 0,
+    "creationKeys": [],
+    "uploads": [
+      {
+        "metadata": {
+          "requestId": "5ed82726-d3c2-4fbf-bcf6-f6f8390d9028",
+          "expectedRevision": 1,
+          "groupId": "synthetic-letter",
+          "items": [
+            {
+              "clientFileId": "a185d689-a384-4411-8ce2-21e593a8bc45"
+            }
+          ]
+        },
+        "filename": "synthetic-two-pages.pdf",
+        "mimeType": "application/pdf",
+        "sizeBytes": 1281,
+        "sha256": "84485e01208bdc272b1fd694e9afd00b6bd5645a9f824aadd7339385562e8875"
+      }
+    ],
+    "manifestEdits": [
+      {
+        "requestId": "114fe2f9-d13e-4c94-b5e7-9bcb218df7b4",
+        "expectedRevision": 2,
+        "groups": [
+          {
+            "id": "synthetic-letter",
+            "label": "Lettera sintetica",
+            "sortOrder": 0
+          }
+        ],
+        "pages": [
+          {
+            "id": "synthetic-page-1",
+            "groupId": "synthetic-letter",
+            "sortOrder": 1
+          },
+          {
+            "id": "synthetic-page-1-2",
+            "groupId": "synthetic-letter",
+            "sortOrder": 0
+          }
+        ]
+      },
+      {
+        "requestId": "602239b8-2c22-4ed3-a915-05f874bdf99d",
+        "expectedRevision": 3,
+        "groups": [
+          {
+            "id": "synthetic-letter",
+            "label": "Lettera sintetica",
+            "sortOrder": 0
+          },
+          {
+            "id": "62c52f2f-f797-43a2-90b0-1b9f524d630c",
+            "label": "Lettera 2",
+            "sortOrder": 1
+          }
+        ],
+        "pages": [
+          {
+            "id": "synthetic-page-1",
+            "groupId": "synthetic-letter",
+            "sortOrder": 1
+          },
+          {
+            "id": "synthetic-page-1-2",
+            "groupId": "synthetic-letter",
+            "sortOrder": 0
+          }
+        ]
+      }
+    ],
+    "expectedHttp": [],
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/simulator/session"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/me/roster-order"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/diary-unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/notes"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/directory/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/parameters/page"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/status"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/settings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-421/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-421/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/jobs/synthetic-session-421"
+      },
+      {
+        "method": "POST",
+        "path": "/ai/extraction/jobs/synthetic-session-421/files"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+      },
+      {
+        "method": "PUT",
+        "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+      },
+      {
+        "method": "PUT",
+        "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+      }
+    ],
+    "errors": [],
+    "pageErrors": [],
+    "httpErrors": [],
+    "unexpected": [],
+    "external": [],
+    "writes": []
+  }
+}

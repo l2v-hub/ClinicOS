@@ -1,0 +1,11 @@
+{
+  "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "deployment": "dpl_FxYiESFpVu3bEkn73ffLqssBNjRT",
+  "bundleSha256": "a8fb6aab23fce849d6f3f241e806d5f8b16622e30e178e8cc969be7d3978fdaf",
+  "decision": "COMPILED ONLINE ACCEPTANCE VERIFIED",
+  "cases": 14,
+  "sourceRecipeBoundBeforeExecution": true,
+  "afterDeploymentAndBundleUnchanged": true,
+  "productionPatientTestMutations": 0,
+  "checkedAt": "2026-10-09T19:34:04.137Z"
+}

@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-09T19:32:37.029Z",
+  "records": [
+    {
+      "path": "after.mjs",
+      "sha256": "8a3d651f8c8cad21db9c85c1b53cbfd961fd683f51fd5596361bd0c05d24376f"
+    },
+    {
+      "path": "fixture.mjs",
+      "sha256": "7c4a95efeee267b70d56e4f9fbc0811e3e181e034af28ec4425b6c7438d1a797"
+    }
+  ],
+  "deployment": {
+    "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+    "checkedAt": "2026-10-09T19:32:28.138Z",
+    "decision": "VERIFIED RELEASE",
+    "vercel": {
+      "id": "dpl_FxYiESFpVu3bEkn73ffLqssBNjRT",
+      "state": "READY",
+      "githubCommitSha": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+      "gitSourceSha": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+      "productionAlias": "https://clinicos-eosin.vercel.app/",
+      "http": 200,
+      "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-DWmrst_6.js",
+      "bundleHttp": 200,
+      "bundleSha256": "a8fb6aab23fce849d6f3f241e806d5f8b16622e30e178e8cc969be7d3978fdaf"
+    },
+    "backend": {
+      "changed": false,
+      "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+      "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+      "healthHttp": 200
+    },
+    "productionPatientTestMutations": 0,
+    "compiledSemanticAcceptance": "Separate guarded online browser evidence required before closure"
+  },
+  "actualRuntime": "Exact compiled production static JS only, all clinical APIs intercepted before network",
+  "productionPatientTestMutations": 0
+}

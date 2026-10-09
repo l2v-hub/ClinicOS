@@ -1,0 +1,254 @@
+{
+  "name": "first-default-group",
+  "status": "PASS",
+  "guard": {
+    "allowed": true,
+    "appointments": [],
+    "session": {
+      "id": "synthetic-session-421",
+      "status": "collecting",
+      "expiresAt": "2026-10-10T12:00:00Z",
+      "totalBytes": 1067,
+      "documents": [
+        {
+          "id": "synthetic-source-1",
+          "filename": "synthetic-letter.png",
+          "mimeType": "image/png",
+          "sizeBytes": 1067,
+          "pageCount": 1,
+          "contentUrl": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+        }
+      ],
+      "capabilities": {
+        "sessionVersion": 1,
+        "pageEditing": true,
+        "atomicReplacement": true
+      },
+      "manifest": {
+        "version": 1,
+        "revision": 3,
+        "groups": [
+          {
+            "id": "ef9afac9-21b3-4074-9ba7-6154eebcb646",
+            "label": "Lettera 1",
+            "sortOrder": 0,
+            "status": "pending",
+            "completedPages": 0,
+            "error": null,
+            "pdfUrl": null,
+            "pageCount": 1
+          }
+        ],
+        "pages": [
+          {
+            "id": "synthetic-page-1",
+            "documentId": "synthetic-source-1",
+            "sourcePageNumber": 1,
+            "groupId": "ef9afac9-21b3-4074-9ba7-6154eebcb646",
+            "sortOrder": 0,
+            "status": "pending",
+            "canRetry": false,
+            "errorCode": null,
+            "error": null
+          }
+        ]
+      },
+      "limits": {
+        "maxPages": 30,
+        "maxSourceFiles": 30,
+        "maxGroups": 30,
+        "maxTotalBytes": 26214400,
+        "maxFileBytes": 26214400,
+        "maxFilesPerRequest": 10,
+        "maxRequestBytes": 26476544,
+        "acceptedMimeTypes": [
+          "application/pdf",
+          "image/jpeg",
+          "image/png"
+        ]
+      },
+      "progress": {
+        "phase": "documents",
+        "totalPages": 1,
+        "completedPages": 0,
+        "failedPages": 0,
+        "totalGroups": 1,
+        "completedGroups": 0,
+        "currentPageId": null,
+        "currentGroupId": null
+      },
+      "review": {
+        "manifestRevision": null,
+        "resultHash": null,
+        "unresolvedConflicts": 0,
+        "canProceed": false,
+        "draftId": null,
+        "draftSourceIsCurrent": false
+      }
+    },
+    "sessionStatus": 200,
+    "created": 0,
+    "creationKeys": [],
+    "uploads": [
+      {
+        "metadata": {
+          "requestId": "9255b8c8-d666-4199-aa9f-1eabd7a5d479",
+          "expectedRevision": 2,
+          "groupId": "ef9afac9-21b3-4074-9ba7-6154eebcb646",
+          "items": [
+            {
+              "clientFileId": "b34ab379-320a-4d61-8d7a-4dbfcd5a1974"
+            }
+          ]
+        },
+        "filename": "synthetic-letter.png",
+        "mimeType": "image/png",
+        "sizeBytes": 1067,
+        "sha256": "9f964b0af1cd587ee5348a37306944a9974dce5fc2f231ddca33ae7a2ebb9158"
+      }
+    ],
+    "manifestEdits": [
+      {
+        "requestId": "0cbd9e6c-c801-4bbf-8593-8897bd1f5f43",
+        "expectedRevision": 1,
+        "groups": [
+          {
+            "id": "ef9afac9-21b3-4074-9ba7-6154eebcb646",
+            "label": "Lettera 1",
+            "sortOrder": 0
+          }
+        ],
+        "pages": []
+      }
+    ],
+    "expectedHttp": [],
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/simulator/session"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/me/roster-order"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/diary-unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/notes"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/directory/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/parameters/page"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/status"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/settings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-421/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-421/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/jobs/synthetic-session-421"
+      },
+      {
+        "method": "PUT",
+        "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+      },
+      {
+        "method": "POST",
+        "path": "/ai/extraction/jobs/synthetic-session-421/files"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+      }
+    ],
+    "errors": [],
+    "pageErrors": [],
+    "httpErrors": [],
+    "unexpected": [],
+    "external": [],
+    "writes": []
+  }
+}

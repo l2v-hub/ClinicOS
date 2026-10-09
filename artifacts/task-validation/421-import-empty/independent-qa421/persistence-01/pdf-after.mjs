@@ -1,0 +1,43 @@
+import {createRequire} from 'node:module';
+import {writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {browser,setup,openImport,finish,expect,out,newJob,report} from './pdf-fixture.mjs';
+const {PDFDocument,StandardFonts,rgb}=createRequire('C:/w-insulin-qa/package.json')('pdf-lib');
+const results=[];
+let ctx;
+try {
+ const doc=await PDFDocument.create();
+ doc.setTitle('Synthetic QA only issue 421');doc.setAuthor('QA');doc.setCreator('QA fixture');
+ const font=await doc.embedFont(StandardFonts.Helvetica);
+ for(let n=1;n<=2;n++){const page=doc.addPage([400,500]);page.drawText('Synthetic QA 421 page '+n,{x:40,y:430,size:22,font,color:rgb(0.1,0.3,0.7)});page.drawText('No clinical content',{x:40,y:390,size:14,font});}
+ const bytes=Buffer.from(await doc.save());writeFileSync(out+'/synthetic-two-pages.pdf',bytes);
+ expect((await PDFDocument.load(bytes)).getPageCount()).toBe(2);
+ ctx=await setup({session:newJob()});await openImport(ctx);
+ const w=ctx.page.getByTestId('import-documents-workspace');
+ await expect(w.getByRole('heading',{name:'Aggiungi la lettera di dimissione'})).toBeVisible();
+ const chooser=ctx.page.waitForEvent('filechooser');await w.getByRole('button',{name:'Carica documento',exact:true}).click();
+ await (await chooser).setFiles({name:'synthetic-two-pages.pdf',mimeType:'application/pdf',buffer:bytes});
+ await expect(w.locator('.import-page')).toHaveCount(2);
+ await expect(w.getByRole('tab',{name:'Lettera sintetica · 2 pagine',exact:true})).toBeVisible();
+ expect(ctx.state.session.documents.length).toBe(1);expect(ctx.state.session.documents[0].pageCount).toBe(2);
+ expect(ctx.state.uploads[0].sha256).toBe(createHash('sha256').update(bytes).digest('hex'));
+ const second=ctx.state.session.manifest.pages.find(p=>p.sourcePageNumber===2).id;
+ await w.locator('.import-page').nth(1).getByRole('button',{name:/Anteprima pagina 2/}).click();
+ const preview=ctx.page.getByRole('dialog',{name:'Anteprima · pagina 2',exact:true});
+ await expect(preview.locator('canvas[data-ready=true]')).toBeVisible();
+ await expect(preview).toContainText('Pagina 2 di 2');
+ await expect(preview.locator('.document-pdf-preview__accessible')).toHaveText('Synthetic QA 421 page 2 No clinical content');
+ await ctx.page.screenshot({path:out+'/screenshots/pdf-page-2-preview.png'});
+ await preview.getByRole('button',{name:'Chiudi anteprima',exact:true}).last().click();
+ await w.getByRole('button',{name:'Sposta pagina 2 prima',exact:true}).click();
+ await expect.poll(()=>ctx.state.session.manifest.pages.find(p=>p.id===second)?.sortOrder).toBe(0);
+ await w.getByRole('button',{name:'+ Nuova lettera',exact:true}).click();
+ await expect(w.getByRole('heading',{name:'Aggiungi la lettera di dimissione'})).toHaveCount(0);
+ await expect(w.getByRole('button',{name:'Elimina lettera vuota',exact:true})).toBeVisible();
+ await w.getByRole('tab',{name:'Lettera sintetica · 2 pagine',exact:true}).click();
+ await expect(w.locator('.import-page')).toHaveCount(2);
+ await expect(w.locator('.import-page').first()).toContainText('originale p. 2');
+ await ctx.page.screenshot({path:out+'/screenshots/pdf-two-page-management.png'});
+ await finish(ctx,'real-two-page-pdf-preview-management');results.push({name:'real-two-page-pdf-preview-management',status:'PASS'});
+} catch(e) {results.push({name:'real-two-page-pdf-preview-management',status:'FAIL',error:String(e)});if(ctx){writeFileSync(out+'/test-results/failed-guard.json',JSON.stringify(ctx.state,null,2));await ctx.page.screenshot({path:out+'/screenshots/pdf-failure.png'}).catch(()=>{});await ctx.context.tracing.stop({path:out+'/trace/pdf-failure.zip'}).catch(()=>{});await ctx.context.close().catch(()=>{});}throw e;
+} finally {report(results);await browser.close();}

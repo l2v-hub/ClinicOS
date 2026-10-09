@@ -1,0 +1,45 @@
+{
+  "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "capturedAt": "2026-10-09T19:26:44.590Z",
+  "environmentOnly": {
+    "QA_PORT": 7505,
+    "serverEV_OUT": "artifacts/task-validation/421-import-empty/root-rerun-runtime"
+  },
+  "files": [
+    {
+      "origin": "C:/w-421-qa/artifacts/task-validation/421-import-empty/independent-qa421/browser-01/after.mjs",
+      "path": "browser-01/after.mjs",
+      "sha256": "cf3679d4657f57291ac5bde53766dab4733f7ac0aa7766b9594f0e8fb1b7613d"
+    },
+    {
+      "origin": "C:/w-421-qa/artifacts/task-validation/421-import-empty/independent-qa421/browser-01/fixture.mjs",
+      "path": "browser-01/fixture.mjs",
+      "sha256": "c2339aef7e56216c9f2c5668e2bb4e6543feb9f8bbcb94b800238ba799091943"
+    },
+    {
+      "origin": "C:/w-421-qa/artifacts/task-validation/421-import-empty/independent-qa421/pdf-01/pdf-after.mjs",
+      "path": "pdf-01/pdf-after.mjs",
+      "sha256": "6549cbb7a9e8e0f579489dd0707f5112dd3b07e6f3785d10da36dcf8232f4262"
+    },
+    {
+      "origin": "C:/w-421-qa/artifacts/task-validation/421-import-empty/independent-qa421/pdf-01/pdf-fixture.mjs",
+      "path": "pdf-01/pdf-fixture.mjs",
+      "sha256": "b33603a4772d67618f49f04ef2420730484c636dcefdb0f8c8c7739c8afd9603"
+    },
+    {
+      "origin": "C:/w-421-qa/artifacts/task-validation/421-import-empty/independent-qa421/persistence-01/persistence-after.mjs",
+      "path": "persistence-01/persistence-after.mjs",
+      "sha256": "c9a444646122212a3238b7f6c7e2254f0b2c8177ebceb31666e638c64ee62436"
+    },
+    {
+      "origin": "C:/w-421-qa/artifacts/task-validation/421-import-empty/independent-qa421/persistence-01/persistence-fixture.mjs",
+      "path": "persistence-01/persistence-fixture.mjs",
+      "sha256": "fbb10e19e62b319971143131a6f8dd5bed6be5c3a9a49c871836de5454915614"
+    },
+    {
+      "origin": "C:/w-421-qa/artifacts/task-validation/421-import-empty/independent-qa421/browser-01/qa-server.mjs",
+      "path": "qa-server.mjs",
+      "sha256": "71dfc4af385ec8c2ab7fa985c55b018d22b6633a9a9a726f6cd3a5d117c5a7b7"
+    }
+  ]
+}

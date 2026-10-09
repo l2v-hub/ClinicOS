@@ -1,0 +1,438 @@
+{
+  "allowed": true,
+  "appointments": [],
+  "session": {
+    "id": "synthetic-session-421",
+    "status": "collecting",
+    "expiresAt": "2026-10-10T12:00:00Z",
+    "totalBytes": 2134,
+    "documents": [
+      {
+        "id": "synthetic-source-1",
+        "filename": "synthetic-first.png",
+        "mimeType": "image/png",
+        "sizeBytes": 1067,
+        "pageCount": 1,
+        "contentUrl": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+      },
+      {
+        "id": "synthetic-source-2",
+        "filename": "synthetic-second.png",
+        "mimeType": "image/png",
+        "sizeBytes": 1067,
+        "pageCount": 1,
+        "contentUrl": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-2/content"
+      }
+    ],
+    "capabilities": {
+      "sessionVersion": 1,
+      "pageEditing": true,
+      "atomicReplacement": true
+    },
+    "manifest": {
+      "version": 1,
+      "revision": 8,
+      "groups": [
+        {
+          "id": "bfcfa8af-1169-4bd4-b642-211df0d47e42",
+          "label": "Seconda lettera QA",
+          "sortOrder": 0,
+          "status": "pending",
+          "completedPages": 0,
+          "error": null,
+          "pdfUrl": null,
+          "pageCount": 1
+        },
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 1,
+          "status": "pending",
+          "pageCount": 1,
+          "completedPages": 0,
+          "error": null,
+          "pdfUrl": null
+        }
+      ],
+      "pages": [
+        {
+          "id": "synthetic-page-1",
+          "documentId": "synthetic-source-1",
+          "sourcePageNumber": 1,
+          "groupId": "synthetic-letter",
+          "sortOrder": 0,
+          "status": "pending",
+          "canRetry": false,
+          "errorCode": null,
+          "error": null
+        },
+        {
+          "id": "synthetic-page-2",
+          "documentId": "synthetic-source-2",
+          "sourcePageNumber": 1,
+          "groupId": "bfcfa8af-1169-4bd4-b642-211df0d47e42",
+          "sortOrder": 0,
+          "status": "pending",
+          "canRetry": false,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    "limits": {
+      "maxPages": 30,
+      "maxSourceFiles": 30,
+      "maxGroups": 30,
+      "maxTotalBytes": 26214400,
+      "maxFileBytes": 26214400,
+      "maxFilesPerRequest": 10,
+      "maxRequestBytes": 26476544,
+      "acceptedMimeTypes": [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+      ]
+    },
+    "progress": {
+      "phase": "documents",
+      "totalPages": 2,
+      "completedPages": 0,
+      "failedPages": 0,
+      "totalGroups": 2,
+      "completedGroups": 0,
+      "currentPageId": null,
+      "currentGroupId": null
+    },
+    "review": {
+      "manifestRevision": null,
+      "resultHash": null,
+      "unresolvedConflicts": 0,
+      "canProceed": false,
+      "draftId": null,
+      "draftSourceIsCurrent": false
+    }
+  },
+  "sessionStatus": 200,
+  "created": 0,
+  "creationKeys": [],
+  "uploads": [
+    {
+      "metadata": {
+        "requestId": "b0692995-c7ff-4eb8-8264-e4f88d6c62a7",
+        "expectedRevision": 1,
+        "groupId": "synthetic-letter",
+        "items": [
+          {
+            "clientFileId": "70cbaa7e-5a06-4ec0-8cdb-76ea4f981ef6"
+          }
+        ]
+      },
+      "filename": "synthetic-first.png",
+      "mimeType": "image/png",
+      "sizeBytes": 1067,
+      "sha256": "9f964b0af1cd587ee5348a37306944a9974dce5fc2f231ddca33ae7a2ebb9158"
+    },
+    {
+      "metadata": {
+        "requestId": "0cd2ff26-e379-4922-8b96-435f69e1d821",
+        "expectedRevision": 2,
+        "groupId": "synthetic-letter",
+        "items": [
+          {
+            "clientFileId": "fd021b64-7eeb-45b8-9986-9de659d1211f"
+          }
+        ]
+      },
+      "filename": "synthetic-second.png",
+      "mimeType": "image/png",
+      "sizeBytes": 1067,
+      "sha256": "9f964b0af1cd587ee5348a37306944a9974dce5fc2f231ddca33ae7a2ebb9158"
+    }
+  ],
+  "manifestEdits": [
+    {
+      "requestId": "a81796a9-3a17-44a8-ab16-055c4a9f5ffe",
+      "expectedRevision": 3,
+      "groups": [
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 0
+        }
+      ],
+      "pages": [
+        {
+          "id": "synthetic-page-1",
+          "groupId": "synthetic-letter",
+          "sortOrder": 1
+        },
+        {
+          "id": "synthetic-page-2",
+          "groupId": "synthetic-letter",
+          "sortOrder": 0
+        }
+      ]
+    },
+    {
+      "requestId": "2e019054-005d-40e8-81d3-8a5f8ef3d4a1",
+      "expectedRevision": 4,
+      "groups": [
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 0
+        },
+        {
+          "id": "bfcfa8af-1169-4bd4-b642-211df0d47e42",
+          "label": "Lettera 2",
+          "sortOrder": 1
+        }
+      ],
+      "pages": [
+        {
+          "id": "synthetic-page-1",
+          "groupId": "synthetic-letter",
+          "sortOrder": 1
+        },
+        {
+          "id": "synthetic-page-2",
+          "groupId": "synthetic-letter",
+          "sortOrder": 0
+        }
+      ]
+    },
+    {
+      "requestId": "4a71c1f8-0e2e-402b-9d9a-20ae2e07cb0f",
+      "expectedRevision": 5,
+      "groups": [
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 0
+        },
+        {
+          "id": "bfcfa8af-1169-4bd4-b642-211df0d47e42",
+          "label": "Seconda lettera QA",
+          "sortOrder": 1
+        }
+      ],
+      "pages": [
+        {
+          "id": "synthetic-page-1",
+          "groupId": "synthetic-letter",
+          "sortOrder": 1
+        },
+        {
+          "id": "synthetic-page-2",
+          "groupId": "synthetic-letter",
+          "sortOrder": 0
+        }
+      ]
+    },
+    {
+      "requestId": "24ceecae-766b-4d2a-9c01-38d0e134b74f",
+      "expectedRevision": 6,
+      "groups": [
+        {
+          "id": "bfcfa8af-1169-4bd4-b642-211df0d47e42",
+          "label": "Seconda lettera QA",
+          "sortOrder": 0
+        },
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 1
+        }
+      ],
+      "pages": [
+        {
+          "id": "synthetic-page-1",
+          "groupId": "synthetic-letter",
+          "sortOrder": 1
+        },
+        {
+          "id": "synthetic-page-2",
+          "groupId": "synthetic-letter",
+          "sortOrder": 0
+        }
+      ]
+    },
+    {
+      "requestId": "25e75cf0-8ae3-4dbe-a810-244733f8a015",
+      "expectedRevision": 7,
+      "groups": [
+        {
+          "id": "bfcfa8af-1169-4bd4-b642-211df0d47e42",
+          "label": "Seconda lettera QA",
+          "sortOrder": 0
+        },
+        {
+          "id": "synthetic-letter",
+          "label": "Lettera sintetica",
+          "sortOrder": 1
+        }
+      ],
+      "pages": [
+        {
+          "id": "synthetic-page-1",
+          "groupId": "synthetic-letter",
+          "sortOrder": 0
+        },
+        {
+          "id": "synthetic-page-2",
+          "groupId": "bfcfa8af-1169-4bd4-b642-211df0d47e42",
+          "sortOrder": 0
+        }
+      ]
+    }
+  ],
+  "expectedHttp": [],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/status"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/simulator/identities"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/simulator/session"
+    },
+    {
+      "method": "GET",
+      "path": "/auth/me"
+    },
+    {
+      "method": "GET",
+      "path": "/me/roster-order"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/diary-unread-count"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/appointments"
+    },
+    {
+      "method": "GET",
+      "path": "/consegne/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/notes"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary/overview"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/therapy-slots"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/operators/directory/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/parameters/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/status"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/settings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/page"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/clinical-summary"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-421/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/patients/QA-PATIENT-421/parameter-readings"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/jobs/synthetic-session-421"
+    },
+    {
+      "method": "POST",
+      "path": "/ai/extraction/jobs/synthetic-session-421/files"
+    },
+    {
+      "method": "POST",
+      "path": "/ai/extraction/jobs/synthetic-session-421/files"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+    },
+    {
+      "method": "GET",
+      "path": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-2/content"
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+    }
+  ],
+  "errors": [],
+  "pageErrors": [],
+  "httpErrors": [],
+  "unexpected": [],
+  "external": [],
+  "writes": []
+}

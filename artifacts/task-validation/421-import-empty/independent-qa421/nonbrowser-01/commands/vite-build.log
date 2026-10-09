@@ -1,0 +1,187 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 713 modules transformed.
+rendering chunks...
+computing gzip size...
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/index.html                                           1.92 kB │ gzip:   0.76 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/pdf.worker.min-CHFwMXne.mjs               1,262.39 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AssessmentDraftStatus-DepsWT8d.css            0.35 kB │ gzip:   0.21 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/NarrativeSectionsTab-BabjH-C5.css             0.40 kB │ gzip:   0.22 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PdfCanvasPreview-BY-O_bqx.css                 0.68 kB │ gzip:   0.37 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/SemanticTaggedText-Cy2K2aEq.css               0.80 kB │ gzip:   0.37 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientIdentity-CcceCeFU.css                  0.98 kB │ gzip:   0.37 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/RosterOrderControl-D6JdzpHU.css               0.98 kB │ gzip:   0.44 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AnagraficaFarmaciPage-BLCRf3SR.css            1.21 kB │ gzip:   0.37 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ClinicalNoteEditor-QU8po2rl.css               1.34 kB │ gzip:   0.58 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DiaryTherapyPanel-C9VpT_pb.css                1.80 kB │ gzip:   0.61 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/CameraCapture-BZrPNFqj.css                    1.85 kB │ gzip:   0.74 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DiagnosisEditor-B-ZZ6bUu.css                  1.88 kB │ gzip:   0.75 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/Tinetti-PvAQNSKS.css                          1.90 kB │ gzip:   0.60 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/NewPatientFlow-DtDiBuAk.css                   1.95 kB │ gzip:   0.65 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DiarioPazienteTab-CZjQJr10.css                2.03 kB │ gzip:   0.76 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AssessmentCatalog-CCjgyrS9.css                2.58 kB │ gzip:   0.88 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/RicercaFarmaco-G1ieY86a.css                   2.66 kB │ gzip:   0.89 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientCombobox-m3PNMGTn.css                  2.69 kB │ gzip:   0.91 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AgendaInline-BiARtFgk.css                     2.72 kB │ gzip:   0.92 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ConsegneWorkspace-Df-KQF84.css                2.86 kB │ gzip:   0.84 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css            2.99 kB │ gzip:   0.95 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/VisoreDocumentoFarmaco-BaEEBIbC.css           3.02 kB │ gzip:   0.90 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AdminDashboard-CfKABW4v.css                   3.67 kB │ gzip:   0.93 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ClinicalTable-HlTQH1g4.css                    3.76 kB │ gzip:   1.01 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/OperatorAgenda-MQKGjmcj.css                   3.90 kB │ gzip:   1.04 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AgnosPanel-CW1huyUN.css                       4.19 kB │ gzip:   1.42 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/OperatorManagement-DTt4_Y4X.css               4.38 kB │ gzip:   1.20 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DischargeImportModal-aqFKhVmp.css             4.51 kB │ gzip:   1.31 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/NotesPage-DyQBXekH.css                        5.22 kB │ gzip:   1.44 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TopNav-DQXC9CRC.css                           5.74 kB │ gzip:   1.51 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientParameters-BML_WSVJ.css                6.31 kB │ gzip:   1.55 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/MultiPatientParametri-D-4y5rAR.css            6.43 kB │ gzip:   1.64 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/News2Chip-CT4ZleOC.css                        6.66 kB │ gzip:   1.79 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TherapyRoundsPage-CIClEI_9.css                7.10 kB │ gzip:   1.75 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ConsegneRounds-BP9N68un.css                   7.50 kB │ gzip:   1.86 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DocumentiTab-DJY500eY.css                     8.61 kB │ gzip:   1.87 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/intakeTherapies-iYDttph8.css                  8.88 kB │ gzip:   2.20 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AssistantMode-DzeiogH9.css                    8.94 kB │ gzip:   2.29 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/OperatorDashboard-DR177w2Y.css                9.07 kB │ gzip:   2.07 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TherapyRoundsPage-CIs_nEdS.css                9.81 kB │ gzip:   2.33 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/IntakeWorkspace-CGXNSq0l.css                 10.80 kB │ gzip:   2.57 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/RolePermissionsPage-Ch45e6Xy.css             10.84 kB │ gzip:   2.76 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DashboardKpiBand-B_ZN6mIU.css                12.18 kB │ gzip:   2.34 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientList-t9pGv_kY.css                     12.77 kB │ gzip:   2.89 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TerapiaFarmacologicaTab-zpCIETGM.css         17.00 kB │ gzip:   3.35 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AssessmentWorkspace-BU6sfsd2.css             18.25 kB │ gzip:   4.10 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientDetail-BkwNPSz3.css                   23.46 kB │ gzip:   4.38 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/index-DC8NTiJ6.css                          278.68 kB │ gzip:  47.62 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/pdf.worker.min-0cTqlNvF.js                    0.12 kB │ gzip:   0.13 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/corePriority-B9P5skz3.js                      0.16 kB │ gzip:   0.13 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/compiler-runtime-XYET9J12.js                  0.22 kB │ gzip:   0.20 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/patientTabSnapshots-Bm7XaQYi.js               0.27 kB │ gzip:   0.21 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/consegnaUrgency-DrFEu5MJ.js                   0.29 kB │ gzip:   0.20 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/submissionKey-mAJteX_U.js                     0.30 kB │ gzip:   0.22 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/appointmentRange-Bcoh8cH0.js                  0.30 kB │ gzip:   0.23 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/operatorSession-CocZDchv.js                   0.41 kB │ gzip:   0.24 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ClinicalSectionLoading-FxjCTS7u.js            0.44 kB │ gzip:   0.32 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/allergyStatusModel-MCtsmAIL.js                0.52 kB │ gzip:   0.30 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/tinettiTypes-DMl49mUB.js                      0.52 kB │ gzip:   0.34 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/useRecencyClock-X1VI5jiO.js                   0.57 kB │ gzip:   0.37 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/LoadErrorState-BaaNYhJ3.js                    0.57 kB │ gzip:   0.39 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/SectionToggle-BdiAqDov.js                     0.65 kB │ gzip:   0.46 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/facilityTime-DLFyR9ze.js                      0.68 kB │ gzip:   0.41 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/assessmentEntry-DYo2nZTW.js                   0.68 kB │ gzip:   0.37 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/SortArrow-ZVEVVOW-.js                         0.78 kB │ gzip:   0.51 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/LazyNews2-ByM8iVmb.js                         0.98 kB │ gzip:   0.61 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/presaInCarico-KSO7RO3U.js                     1.04 kB │ gzip:   0.53 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/farmacoRiferimento-DXCvZ1a1.js                1.11 kB │ gzip:   0.65 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/therapyPages-CTzxXm06.js                      1.42 kB │ gzip:   0.70 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/voiceStartGate-DghV267x.js                    1.45 kB │ gzip:   0.67 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/capabilities-sGJaafSh.js                      1.48 kB │ gzip:   0.75 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientIdentity-CruepHVW.js                   1.65 kB │ gzip:   0.82 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/useLegacyCatalogView-BWQeaWq6.js              1.81 kB │ gzip:   1.03 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/clinicalHistory-Dc8Sh74T.js                   1.85 kB │ gzip:   0.87 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/farmacoDocumento-DzyiFi7j.js                  1.94 kB │ gzip:   0.96 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AnagraficaFarmaciPage-hHQQzwR7.js             2.02 kB │ gzip:   1.02 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AvvisoAnomalieFarmaci-B-U1OyO7.js             2.12 kB │ gzip:   1.04 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TopNav-CZXlxe28.js                            2.16 kB │ gzip:   1.15 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PageHeader-CnbXtEHV.js                        2.20 kB │ gzip:   0.95 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ConfirmDialog-BBErGqid.js                     2.23 kB │ gzip:   1.12 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/therapyDose-hyD67tme.js                       2.27 kB │ gzip:   1.09 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/patientListView-LVltQk8P.js                   2.39 kB │ gzip:   1.07 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/useMedicationSearch-CKwkpeTx.js               2.41 kB │ gzip:   1.23 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AccessibleDialogSurface-RIztw6FT.js           2.45 kB │ gzip:   1.31 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/VitalSignsEditor-BU5u_ipj.js                  2.51 kB │ gzip:   1.23 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AssessmentDraftStatus-CjWmu0W9.js             2.64 kB │ gzip:   1.27 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/usePatientDocuments-B8HmQ9nk.js               2.72 kB │ gzip:   1.19 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ClinicalCard-BgWpYVTg.js                      2.85 kB │ gzip:   1.52 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/renderArchivePrint-CiR_4elq.js                3.19 kB │ gzip:   1.50 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/rosterOrder-Cj3l_KEH.js                       3.68 kB │ gzip:   1.44 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/patientTherapyCalendar-oJO4T2nO.js            3.75 kB │ gzip:   1.62 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/patientDocumentArchive-DspJ_2du.js            3.79 kB │ gzip:   1.59 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/RosterOrderControl-BiI0WpLL.js                3.97 kB │ gzip:   1.70 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/useAnomalieReparto-ChIlIjmB.js                4.08 kB │ gzip:   1.87 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/InlineEditableField-Be8yBaIO.js               4.12 kB │ gzip:   1.45 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/shared-DGlifFUS.js                            4.15 kB │ gzip:   1.77 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PdfCanvasPreview-B3ZMoXOo.js                  4.19 kB │ gzip:   1.79 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ClinicalAttachments-CeWSfZD3.js               4.34 kB │ gzip:   1.86 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ClinicalNoteEditor-OI1h09S6.js                4.45 kB │ gzip:   2.08 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ScalaNRSTab-B4HIuct_.js                       4.54 kB │ gzip:   2.05 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DiaryTherapyPanel-BTRzoojg.js                 5.01 kB │ gzip:   2.00 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AnamnesisEditor-DK4Ofbjn.js                   5.40 kB │ gzip:   2.41 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ScalaTinettiTab-T7UglH5x.js                   5.47 kB │ gzip:   2.35 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientCombobox-DEp1Hamy.js                   5.55 kB │ gzip:   2.57 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/SemanticTaggedText-BllEvLgB.js                5.64 kB │ gzip:   2.42 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/GlucoseScaleEditor-CcDV7Fct.js                5.92 kB │ gzip:   2.58 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PainAssessmentEditor-C74I2kML.js              6.04 kB │ gzip:   2.74 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TherapyEditor-Ih0Eejf-.js                     6.33 kB │ gzip:   2.70 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DocumentPreview-BWMiF-ed.js                   6.47 kB │ gzip:   2.45 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/OperatorSchedule-Dr96ocdR.js                  6.85 kB │ gzip:   2.71 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/GlucoseAdministrationControl-DHW8JS8_.js      7.79 kB │ gzip:   3.33 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientDetailLazyTabs-BrsVOWk7.js             7.89 kB │ gzip:   2.51 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ClinicalTable-D1gdO3SW.js                     7.99 kB │ gzip:   3.17 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/RicercaFarmaco-BaDxkKgq.js                    8.10 kB │ gzip:   3.15 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/react-B3nAlWH0.js                             8.18 kB │ gzip:   3.16 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/NewPatientFlow-CIR0pEsN.js                    8.96 kB │ gzip:   3.73 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/diaryTherapy-NeGmEEZV.js                      9.12 kB │ gzip:   3.55 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientArchivePreview-B6ztz4lR.js            10.02 kB │ gzip:   4.09 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ConsegneRounds-BbgLeSpg.js                   10.06 kB │ gzip:   4.54 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientParameters-CcfaXH3o.js                10.13 kB │ gzip:   4.21 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/VisoreDocumentoFarmaco-pcR6oArz.js           11.77 kB │ gzip:   4.97 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/MultiPatientParametri-CTPsvVHJ.js            12.30 kB │ gzip:   5.02 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/NotesPage-SX4keEiH.js                        12.97 kB │ gzip:   4.70 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/EsamiConsulenzeTab-DwI4xXr7.js               13.00 kB │ gzip:   4.99 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/NarrativeSectionsTab-ClSfr_vN.js             13.70 kB │ gzip:   4.82 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/RoomsManagement-Cxr3Tczc.js                  13.73 kB │ gzip:   3.83 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/CameraCapture-BOGy1yr0.js                    14.07 kB │ gzip:   5.45 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ParametriTab-DSkC7ehH.js                     15.58 kB │ gzip:   5.24 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TherapyRoundsPage-DnbWb2Km.js                16.19 kB │ gzip:   5.92 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/InvioPSModal-CMX_WtiY.js                     16.29 kB │ gzip:   5.05 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ScalaBradenTab-DE0tXVQf.js                   16.56 kB │ gzip:   5.54 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TherapyRoundsPage-l8VpU5iT.js                17.02 kB │ gzip:   6.53 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DashboardKpiBand-LhuewpsM.js                 18.22 kB │ gzip:   6.20 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AdminAgenda-3FP2QkAt.js                      18.47 kB │ gzip:   6.52 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DiagnosisEditor-CyIU_-GJ.js                  19.11 kB │ gzip:   6.03 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/OperatorAgenda-SIfXhevV.js                   20.04 kB │ gzip:   7.46 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/assessmentTypes-H3bfR4sY.js                  22.94 kB │ gzip:   8.35 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AgendaInline-8UJqDrvC.js                     23.44 kB │ gzip:   7.86 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DiarioPazienteTab-DKcdNI_9.js                23.93 kB │ gzip:   8.03 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/OperatorManagement-5Xq7SUmM.js               24.52 kB │ gzip:   8.34 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/OperatorDashboard-C6ABqH_0.js                26.58 kB │ gzip:   9.55 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AdminDashboard-D4i9Djra.js                   27.68 kB │ gzip:   8.88 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/News2Chip-DRojVJS9.js                        28.05 kB │ gzip:  10.36 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/MedicazioniTab-Cyg6Ne3j.js                   28.33 kB │ gzip:   7.51 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DocumentiTab-xsxmfVml.js                     28.56 kB │ gzip:   9.27 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ContenzioniTab-C8-cx5ty.js                   32.97 kB │ gzip:   8.98 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientList-CO4FHqVy.js                      32.99 kB │ gzip:  11.63 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PresaInCaricoTab-DdyN8JQL.js                 39.68 kB │ gzip:  11.13 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/intakeTherapies-BdMvHbq0.js                  43.70 kB │ gzip:  13.86 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DischargeImportModal-CfBr_eGV.js             46.27 kB │ gzip:  15.55 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AgnosPanel-_261y02n.js                       47.83 kB │ gzip:  15.59 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/RolePermissionsPage-B8WoOpCR.js              48.03 kB │ gzip:  14.33 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/ConsegneWorkspace-ChEzUwr9.js                56.61 kB │ gzip:  18.94 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/DimissioneTab-CyCnNYho.js                    59.43 kB │ gzip:  14.48 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AssistantMode-VYE-4nhz.js                    62.25 kB │ gzip:  20.39 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/TerapiaFarmacologicaTab-BQuvlbxG.js          68.60 kB │ gzip:  22.44 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/PatientDetail-BRyxNvC6.js                   119.61 kB │ gzip:  32.50 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/AssessmentWorkspace-Du_r_CxH.js             125.10 kB │ gzip:  37.68 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/IntakeWorkspace-ByPuAfwe.js                 131.20 kB │ gzip:  42.42 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/pdf-BiuaVVg2.js                             427.30 kB │ gzip: 127.39 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/patientDemographics-OKkN11Bn.js             427.81 kB │ gzip: 123.56 kB
+../artifacts/task-validation/421-import-empty/independent-qa421/nonbrowser-01/compiled-build/assets/index-BWnV6oel.js                           632.65 kB │ gzip: 181.72 kB
+
+✓ built in 31.69s
+
+(!) outDir C:\w-421-qa\artifacts\task-validation\421-import-empty\independent-qa421\nonbrowser-01\compiled-build is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[PLUGIN_TIMINGS] [0mYour build spent 97% of 31.7s inside plugin hooks (30.7s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @rolldown/plugin-babel transform (95%, 30.1s, 470 calls)
+Those rows are 95% of the build; the rest of the 97% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:css transform (83 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+

@@ -1,0 +1,82 @@
+{
+  "comparisons": [
+    {
+      "attempt": "nonbrowser-01",
+      "fileCount": 1469,
+      "sourceSHA": "39a11f430ed8992676bb666843f360cf26838bc32c52fd5fbb6eb03f03e671cb",
+      "canonicalSHA": "4a80fe0f0637e37d6420e0cf5fac213ee71ab8499a954d22aa1b43646e77ea4f",
+      "unchanged": true
+    },
+    {
+      "attempt": "browser-01",
+      "fileCount": 1469,
+      "sourceSHA": "39a11f430ed8992676bb666843f360cf26838bc32c52fd5fbb6eb03f03e671cb",
+      "canonicalSHA": "4a80fe0f0637e37d6420e0cf5fac213ee71ab8499a954d22aa1b43646e77ea4f",
+      "unchanged": true
+    },
+    {
+      "attempt": "pdf-01",
+      "fileCount": 1469,
+      "sourceSHA": "39a11f430ed8992676bb666843f360cf26838bc32c52fd5fbb6eb03f03e671cb",
+      "canonicalSHA": "4a80fe0f0637e37d6420e0cf5fac213ee71ab8499a954d22aa1b43646e77ea4f",
+      "unchanged": true
+    },
+    {
+      "attempt": "persistence-01",
+      "fileCount": 1469,
+      "sourceSHA": "39a11f430ed8992676bb666843f360cf26838bc32c52fd5fbb6eb03f03e671cb",
+      "canonicalSHA": "4a80fe0f0637e37d6420e0cf5fac213ee71ab8499a954d22aa1b43646e77ea4f",
+      "unchanged": true
+    }
+  ],
+  "baseline": {
+    "proofCommit": "dcb78dcc2cb4b333ca9553cace6ea13c87460467",
+    "application": "c00bff678dfc9845c31742bc5d0d750fbbb9603e",
+    "sha256": "e7b20377462454daabab376a97478df6c9ca2fb4d5cbceff14ea32eff16574f5",
+    "counts": {
+      "tests": 1238,
+      "pass": 1226,
+      "fail": 12,
+      "skipped": 0
+    },
+    "failures": [
+      "Assistant classic fallback with a known resident opens that resident section",
+      "a single parameters table is always visible and uses the operational table contract",
+      "multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+      "multi-patient parameters uses one bounded page instead of cartella fan-out",
+      "multi-patient quick entry exposes every action and field to assistive technology",
+      "multi-patient quick entry reuses the ClinicOS form and action design system",
+      "multi-patient refresh keeps the previous roster visible and announces progress",
+      "new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+      "only design-system.css decides how a canonical control looks",
+      "schedule reads are abortable, session-safe and retryable",
+      "src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+      "weekly and monthly views never repeat one-day therapy data across calendar cells"
+    ]
+  },
+  "current": {
+    "name": "full-regression",
+    "exit": 1,
+    "tests": 1243,
+    "pass": 1231,
+    "fail": 12,
+    "skipped": 0,
+    "failures": [
+      "Assistant classic fallback with a known resident opens that resident section",
+      "a single parameters table is always visible and uses the operational table contract",
+      "multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+      "multi-patient parameters uses one bounded page instead of cartella fan-out",
+      "multi-patient quick entry exposes every action and field to assistive technology",
+      "multi-patient quick entry reuses the ClinicOS form and action design system",
+      "multi-patient refresh keeps the previous roster visible and announces progress",
+      "new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+      "only design-system.css decides how a canonical control looks",
+      "schedule reads are abortable, session-safe and retryable",
+      "src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+      "weekly and monthly views never repeat one-day therapy data across calendar cells"
+    ]
+  },
+  "newFailures": [],
+  "removedFailures": [],
+  "applicationScopeOnlyFourFrontendPaths": true
+}

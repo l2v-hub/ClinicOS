@@ -1,0 +1,238 @@
+{
+  "name": "first-default-group",
+  "status": "PASS",
+  "guard": {
+    "allowed": true,
+    "appointments": [],
+    "session": {
+      "id": "synthetic-session-421",
+      "status": "collecting",
+      "expiresAt": "2026-10-10T12:00:00Z",
+      "totalBytes": 1067,
+      "documents": [
+        {
+          "id": "synthetic-source-1",
+          "filename": "synthetic-letter.png",
+          "mimeType": "image/png",
+          "sizeBytes": 1067,
+          "pageCount": 1,
+          "contentUrl": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+        }
+      ],
+      "capabilities": {
+        "sessionVersion": 1,
+        "pageEditing": true,
+        "atomicReplacement": true
+      },
+      "manifest": {
+        "version": 1,
+        "revision": 3,
+        "groups": [
+          {
+            "id": "cfc264b8-4350-4666-92e9-e3ca84adcb0a",
+            "label": "Lettera 1",
+            "sortOrder": 0,
+            "status": "pending",
+            "completedPages": 0,
+            "error": null,
+            "pdfUrl": null,
+            "pageCount": 1
+          }
+        ],
+        "pages": [
+          {
+            "id": "synthetic-page-1",
+            "documentId": "synthetic-source-1",
+            "sourcePageNumber": 1,
+            "groupId": "cfc264b8-4350-4666-92e9-e3ca84adcb0a",
+            "sortOrder": 0,
+            "status": "pending",
+            "canRetry": false,
+            "errorCode": null,
+            "error": null
+          }
+        ]
+      },
+      "limits": {
+        "maxPages": 30,
+        "maxSourceFiles": 30,
+        "maxGroups": 30,
+        "maxTotalBytes": 26214400,
+        "maxFileBytes": 26214400,
+        "maxFilesPerRequest": 10,
+        "maxRequestBytes": 26476544,
+        "acceptedMimeTypes": [
+          "application/pdf",
+          "image/jpeg",
+          "image/png"
+        ]
+      },
+      "progress": {
+        "phase": "documents",
+        "totalPages": 1,
+        "completedPages": 0,
+        "failedPages": 0,
+        "totalGroups": 1,
+        "completedGroups": 0,
+        "currentPageId": null,
+        "currentGroupId": null
+      },
+      "review": {
+        "manifestRevision": null,
+        "resultHash": null,
+        "unresolvedConflicts": 0,
+        "canProceed": false,
+        "draftId": null,
+        "draftSourceIsCurrent": false
+      }
+    },
+    "sessionStatus": 200,
+    "created": 0,
+    "creationKeys": [],
+    "uploads": [
+      {
+        "metadata": {
+          "requestId": "e3797cff-5afb-45d8-beed-b0f7a15d6fa9",
+          "expectedRevision": 2,
+          "groupId": "cfc264b8-4350-4666-92e9-e3ca84adcb0a",
+          "items": [
+            {
+              "clientFileId": "decbf98f-5734-4c4c-9c24-be8634cab0ac"
+            }
+          ]
+        },
+        "filename": "synthetic-letter.png",
+        "mimeType": "image/png",
+        "sizeBytes": 1067,
+        "sha256": "9f964b0af1cd587ee5348a37306944a9974dce5fc2f231ddca33ae7a2ebb9158"
+      }
+    ],
+    "manifestEdits": [
+      {
+        "requestId": "7e4be9a7-5eda-417d-b537-60e9da03967f",
+        "expectedRevision": 1,
+        "groups": [
+          {
+            "id": "cfc264b8-4350-4666-92e9-e3ca84adcb0a",
+            "label": "Lettera 1",
+            "sortOrder": 0
+          }
+        ],
+        "pages": []
+      }
+    ],
+    "expectedHttp": [],
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/simulator/session"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/me/roster-order"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/diary-unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/notes"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/directory/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/parameters/page"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/status"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/settings"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/QA-PATIENT-421/parameter-readings"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/jobs/synthetic-session-421"
+      },
+      {
+        "method": "PUT",
+        "path": "/ai/extraction/jobs/synthetic-session-421/manifest"
+      },
+      {
+        "method": "POST",
+        "path": "/ai/extraction/jobs/synthetic-session-421/files"
+      },
+      {
+        "method": "GET",
+        "path": "/ai/extraction/jobs/synthetic-session-421/files/synthetic-source-1/content"
+      }
+    ],
+    "errors": [],
+    "pageErrors": [],
+    "httpErrors": [],
+    "unexpected": [],
+    "external": [],
+    "writes": []
+  }
+}

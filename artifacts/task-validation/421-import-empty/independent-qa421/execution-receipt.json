@@ -1,0 +1,52 @@
+{
+  "application": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "attempts": [
+    {
+      "name": "nonbrowser-01",
+      "session": 72873,
+      "exit": 0,
+      "fullRawExit": 1,
+      "baselineFailures": 12
+    },
+    {
+      "name": "browser-01",
+      "session": 75679,
+      "exit": 0,
+      "cases": 18
+    },
+    {
+      "name": "pdf-01",
+      "session": 70834,
+      "exit": 0,
+      "cases": 1
+    },
+    {
+      "name": "persistence-01",
+      "exit": 0,
+      "cases": 1
+    }
+  ],
+  "diagnostics": [
+    "Direct initial gh issue view authentication unavailable; safe configured-token readonly adapter then successfully fresh-read original issue/comments.",
+    "Two attempted missing files AGENTS.md and .ai/PROJECT_RULES.md absent from detached tracked checkout; supplied human AGENTS instructions applied.",
+    "First attempted task-contract apply_patch syntax failed before writing any file; corrected patch then wrote own summary before supplemental persistence run."
+  ],
+  "policy": {
+    "allowed": [
+      "read-only application inspections",
+      "own artifact writes",
+      "synthetic intercepted fixturebrowser operations",
+      "ownloopbackserver7507",
+      "exactownPIDstop"
+    ],
+    "denied": [
+      "app/config/dependencyedits",
+      "install",
+      "commit",
+      "push",
+      "GHwrites",
+      "deploy",
+      "realclinicalbackendwrites"
+    ]
+  }
+}

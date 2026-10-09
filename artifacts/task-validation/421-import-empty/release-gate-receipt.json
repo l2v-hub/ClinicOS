@@ -1,0 +1,20 @@
+{
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct human authorized deploy plus root original4AC independent review/byteidentical20rerun gate",
+  "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "sourceSha256": "a43885c0b0bdfc15b750abd76ad13317ce013ad56f6ad9e07cf7a709df076013",
+  "rootBrowser": 14,
+  "independentBrowser": 20,
+  "rootIndependentRerun": 20,
+  "focusedEach": 37,
+  "fullTests": 1243,
+  "fullPass": 1231,
+  "sameBaselineFailures": 12,
+  "newFailures": 0,
+  "qaManifest": "3c94ef1ac9c6c12a01f84dbab606c1f866dd651602bef4ef12dbee9e8796786f",
+  "immutableQaFiles": 346,
+  "originalCriteriaPassed": 4,
+  "scope": "Four frontend import presentation paths only; deployment/CI/publication must still pass before closure",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T19:29:07.584Z"
+}

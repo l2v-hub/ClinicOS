@@ -1,0 +1,1 @@
+function e(e,t,n){return[{value:`normale`,label:`Normale`},...e===t?[{value:t,label:`${n} (valore precedente)`}]:[],{value:`urgente`,label:`Urgente`}]}export{e as t};

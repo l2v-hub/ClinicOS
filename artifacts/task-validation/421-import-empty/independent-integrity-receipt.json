@@ -1,0 +1,15 @@
+{
+  "applicationCommit": "80b313227a9a2b9fefc0441c718b259d0d901cae",
+  "manifestSha256": "3c94ef1ac9c6c12a01f84dbab606c1f866dd651602bef4ef12dbee9e8796786f",
+  "immutableFiles": 346,
+  "independentBrowser": 20,
+  "rootIdenticalRerun": 20,
+  "sourceFiles": 1469,
+  "rootSourceFiles": 1470,
+  "onlyScopeDifference": "scripts/build/copy-assessment-fonts.mjs not used by QA build",
+  "physicalAndStrictValidUtf8CRLFComparisons": true,
+  "byteidenticalRecipes": true,
+  "copyHashesVerified": true,
+  "visualReview": "Desktop/mobile/PDFpage2/strongpersistence original pixels inspected by root; synthetic only",
+  "productionPatientTestMutations": 0
+}
