@@ -1,0 +1,717 @@
+{
+  "head": "796f5b4b1e32c43a15f5875a8bea79dd4f4fc61e",
+  "sourceSha256": "0a3a453fe16573d8afff50c4119efb3b9520b322fc9cca15b7478090d1595fd1",
+  "excluded": "runtime-cache generated dependency cache only; all successful and failed test attempts retained",
+  "files": [
+    {
+      "path": "browser01/doctor-1024-after-wheel.png",
+      "bytes": 72018,
+      "sha256": "dace291eb1bcd982edb4b020226a9bfd201fa3abc1578c1b3b8d17653be6d8c8"
+    },
+    {
+      "path": "browser01/doctor-1024-before-wheel.png",
+      "bytes": 75836,
+      "sha256": "4d012596c8d2820cc839f78284c21941180d222d6cf0c7a0f489914822edeaac"
+    },
+    {
+      "path": "browser01/doctor-1024-clinical.png",
+      "bytes": 72452,
+      "sha256": "d4da8545aea5772ef4c0833ca0525be4e31144c842b377c02309483c836f944e"
+    },
+    {
+      "path": "browser01/doctor-1024-form.png",
+      "bytes": 69431,
+      "sha256": "feb3ffeaf4422f2ee45bf16379926f465e6dc43b9458a6d5e65f2451b265bdc4"
+    },
+    {
+      "path": "browser01/doctor-1024-modal.png",
+      "bytes": 69307,
+      "sha256": "5e6ffb9b9752982406b4faf86447c56e6a5c12b3e271bff3ef79d94e6f049135"
+    },
+    {
+      "path": "browser01/doctor-1024-trace.zip",
+      "bytes": 17304255,
+      "sha256": "32795fe53cea20856b15a6c2315201d0468de6bca1abc79b274242399d46b6a2"
+    },
+    {
+      "path": "browser01/doctor-1024-week-rail.png",
+      "bytes": 76424,
+      "sha256": "91747f4284b8e8a71090d94d7e188a76316be3971719b02019e0e30e8522f6c8"
+    },
+    {
+      "path": "browser01/doctor-1150-after-wheel.png",
+      "bytes": 89565,
+      "sha256": "ca2dcd37ee8d76e74f80d27c67d859c4f0ed2875db55ac0e42bee83a3ef424c8"
+    },
+    {
+      "path": "browser01/doctor-1150-before-wheel.png",
+      "bytes": 92048,
+      "sha256": "6e7552d7a0c912bb7ab3fe84c510fabad7e8c319ab35584ef2742fee5505a0cd"
+    },
+    {
+      "path": "browser01/doctor-1150-clinical.png",
+      "bytes": 88484,
+      "sha256": "4737470490790d6ce855c4f394f8d1282bb3bfc0e731ba897fe5206f3837fea1"
+    },
+    {
+      "path": "browser01/doctor-1150-form.png",
+      "bytes": 92968,
+      "sha256": "c573bd8d428842030cd9a4010f6fcdfa32e2155d0af7575585247d8759f355fb"
+    },
+    {
+      "path": "browser01/doctor-1150-modal.png",
+      "bytes": 111322,
+      "sha256": "4918487150cbe0d4ba366ac14eb4fa33f15f21c3623d6aeda76e4b3e849fc6b5"
+    },
+    {
+      "path": "browser01/doctor-1150-trace.zip",
+      "bytes": 14811899,
+      "sha256": "a434f5085baa0d74cd3f326378f50e80ffd44bc9468a363c9b34084b48d5fb52"
+    },
+    {
+      "path": "browser01/doctor-1150-week-rail.png",
+      "bytes": 101365,
+      "sha256": "8afceb3f14f6960569fb0c6af7552003d38edd40f945b5eb1ddf22649ed8acdb"
+    },
+    {
+      "path": "browser01/doctor-1280-after-wheel.png",
+      "bytes": 71470,
+      "sha256": "c7e2c0114bf9bec08ad3d8dfe3e40f3ed2e180da1673a49d47f0ab02f3a8a7fc"
+    },
+    {
+      "path": "browser01/doctor-1280-before-wheel.png",
+      "bytes": 73965,
+      "sha256": "68f344f5ad17d6a4d72b20b96314e17d52b6b18c74eb592e9a08573b4278d054"
+    },
+    {
+      "path": "browser01/doctor-1280-clinical.png",
+      "bytes": 72084,
+      "sha256": "a8e3eeef34d86cd98238ecf03adc8948393a81468241e1abe15aaf3208102a8b"
+    },
+    {
+      "path": "browser01/doctor-1280-form.png",
+      "bytes": 68794,
+      "sha256": "d8304b08a646661155d709b221264911f8dc62afa6e8c7840027bc36873df7ee"
+    },
+    {
+      "path": "browser01/doctor-1280-modal.png",
+      "bytes": 94708,
+      "sha256": "a0d0aac427c59eee3c141ffecb5a87c934ebfc8cb518c966d9055ec5f60f6b7a"
+    },
+    {
+      "path": "browser01/doctor-1280-trace.zip",
+      "bytes": 12158148,
+      "sha256": "ed1b8aa5f1edeeeecb1e767e3936a420e86e338d7058dcdbf67ea2d4c6bc517d"
+    },
+    {
+      "path": "browser01/doctor-1280-week-rail.png",
+      "bytes": 90895,
+      "sha256": "7cd6fee6d7c41db02c08cbd2149ec4716e4eb17d246511cb054c352854a88775"
+    },
+    {
+      "path": "browser01/doctor-390-after-wheel.png",
+      "bytes": 41779,
+      "sha256": "2c8cff515def8b007a6ca683ec7eb9c1a210e6dc96f1405574a4985e5d303115"
+    },
+    {
+      "path": "browser01/doctor-390-before-wheel.png",
+      "bytes": 45226,
+      "sha256": "98afad16a995473672fe68a2351cdcb42a0b00acb76f764ca136318079e2a6eb"
+    },
+    {
+      "path": "browser01/doctor-390-clinical.png",
+      "bytes": 45866,
+      "sha256": "59e1576d9b84a96651d24dd0b0a4586654545ae9891ecd72e1053bcc8b010174"
+    },
+    {
+      "path": "browser01/doctor-390-form.png",
+      "bytes": 42302,
+      "sha256": "860e0169f4ca065bf34405c366331eb0291888d171daafba618cc8a48e17664c"
+    },
+    {
+      "path": "browser01/doctor-390-modal.png",
+      "bytes": 39441,
+      "sha256": "ee57e19f6a10bd4729c9d945b50f2f06a93334550d98e120eb55b60f8f9e37a1"
+    },
+    {
+      "path": "browser01/doctor-390-trace.zip",
+      "bytes": 15202899,
+      "sha256": "047d31e08b47d5862085fc096bfc4229d190228a5d5a0251c1e7f4a0fdd25338"
+    },
+    {
+      "path": "browser01/doctor-390-week-rail.png",
+      "bytes": 35144,
+      "sha256": "e26ec2ff05446a0073abe877f8306c77f474d7a5d0fee0ef0d89b9bb137ff63b"
+    },
+    {
+      "path": "browser01/doctor-768-after-wheel.png",
+      "bytes": 62328,
+      "sha256": "c4854896ae21f608ea5de139d63743ea0f2364b918819a945121ba12864293a6"
+    },
+    {
+      "path": "browser01/doctor-768-before-wheel.png",
+      "bytes": 70167,
+      "sha256": "d28c5faf599413bf0040a9451ed299d88099a71db8fbbfc5fd1ee6b53bc768e3"
+    },
+    {
+      "path": "browser01/doctor-768-clinical.png",
+      "bytes": 70464,
+      "sha256": "cde61534d9b1859f3bb22c1b923ea13204bd003c865f6b1334c8f6a489659090"
+    },
+    {
+      "path": "browser01/doctor-768-form.png",
+      "bytes": 71202,
+      "sha256": "179b5ed164d9bc8602d2897117eb71bfd1aad71ec68e2cd6d774f63eae0eebfe"
+    },
+    {
+      "path": "browser01/doctor-768-modal.png",
+      "bytes": 89211,
+      "sha256": "a0f6ba966c646f6fbd9a28a5e0e8355b796697921194ff9cbd8f1e8d98f4888d"
+    },
+    {
+      "path": "browser01/doctor-768-trace.zip",
+      "bytes": 16005542,
+      "sha256": "4d05e9942ad8087af461ef7ee313dd09b9a2e4774cc7d7eb60e16aba82cf69b1"
+    },
+    {
+      "path": "browser01/doctor-768-week-rail.png",
+      "bytes": 69292,
+      "sha256": "cec8c45efbac8e3882efaf935a4c5d650bb408e3e94c5b1bb853e653f5c61c18"
+    },
+    {
+      "path": "browser01/nurse-1024-after-wheel.png",
+      "bytes": 71792,
+      "sha256": "a85b2c573014cc8cbd8a9321f68addd9f7982069b526ff02707e2f4da4f48246"
+    },
+    {
+      "path": "browser01/nurse-1024-before-wheel.png",
+      "bytes": 75610,
+      "sha256": "81bd6fcad68838d8e570b9d9436c581b1df374adc82773a7faba1847cea6e080"
+    },
+    {
+      "path": "browser01/nurse-1024-clinical.png",
+      "bytes": 72407,
+      "sha256": "bed86a9af7548aff35c09a051cea91bf57d1f90ea721e2884342dd86a01384a5"
+    },
+    {
+      "path": "browser01/nurse-1024-form.png",
+      "bytes": 69097,
+      "sha256": "804ff85a25d9924af88f74abffa195fde8bc1c79358b0b9809ee29e67c41be76"
+    },
+    {
+      "path": "browser01/nurse-1024-modal.png",
+      "bytes": 69261,
+      "sha256": "c6c339e56c0b19bb7be2b0d89c7c2b313d59c8f118a63cc159913dc63298b680"
+    },
+    {
+      "path": "browser01/nurse-1024-trace.zip",
+      "bytes": 17002405,
+      "sha256": "1a581f3fd9cb422b1f5106f915060909c20caf55fa517dd4633323f8c82a34d2"
+    },
+    {
+      "path": "browser01/nurse-1024-week-rail.png",
+      "bytes": 76212,
+      "sha256": "a331d1f725ef57068bfc81868f7c5173803d5f1a1e5ae91d38eac942d994cf3b"
+    },
+    {
+      "path": "browser01/nurse-1150-after-wheel.png",
+      "bytes": 89310,
+      "sha256": "3cb8d642e8705d340ffab813ed89506c2799c118e931a7b962e80251ba61513b"
+    },
+    {
+      "path": "browser01/nurse-1150-before-wheel.png",
+      "bytes": 91782,
+      "sha256": "3be72e5e0ae6369fe1da6f83edd682ee8bda537eba5399225ca85aafa089f78d"
+    },
+    {
+      "path": "browser01/nurse-1150-clinical.png",
+      "bytes": 69225,
+      "sha256": "42bce3c4d9e44d8941f801be39005ce5e79ab67ec944fc810b0720a2563f4180"
+    },
+    {
+      "path": "browser01/nurse-1150-form.png",
+      "bytes": 92879,
+      "sha256": "dec0176cda688a1afa72a8c3bb727ca69df5a3eee45d2f14f6783495db3516bf"
+    },
+    {
+      "path": "browser01/nurse-1150-modal.png",
+      "bytes": 111235,
+      "sha256": "f8c5582d1f696913a8c6a78e9406653e24cda1eaa3770017811700670e814862"
+    },
+    {
+      "path": "browser01/nurse-1150-trace.zip",
+      "bytes": 22494550,
+      "sha256": "7e0a51ada47d6839e48fbbdee55ae1656481ee7c68736581091605bc593090bb"
+    },
+    {
+      "path": "browser01/nurse-1150-week-rail.png",
+      "bytes": 101091,
+      "sha256": "97f1d691fb631347a29519801d3dfd82fc9cad07cdbe60b3fc87d7cc18e2fd36"
+    },
+    {
+      "path": "browser01/nurse-1280-after-wheel.png",
+      "bytes": 71212,
+      "sha256": "d6b1ff8049df599819db9615cbc05c16513f50ef0a7f851bd9136a994f863fd5"
+    },
+    {
+      "path": "browser01/nurse-1280-before-wheel.png",
+      "bytes": 73711,
+      "sha256": "808aa5ed0a6ea3bd2bde986f45f9e0da48753c5cba25f323864857c89a72af62"
+    },
+    {
+      "path": "browser01/nurse-1280-clinical.png",
+      "bytes": 72042,
+      "sha256": "597f1fafe003513ccc2df25aa8d3d76e9cbdd8a5219a6c1a95f8d15e75ae9596"
+    },
+    {
+      "path": "browser01/nurse-1280-form.png",
+      "bytes": 68747,
+      "sha256": "5b1bb419e120cecd48da56494a3483c2541a68e7f77137d05449c6265afd2123"
+    },
+    {
+      "path": "browser01/nurse-1280-modal.png",
+      "bytes": 94668,
+      "sha256": "106a92ce5b7c3a93efd69dd9f3325ce737d33ec7f5bf92c1b011c99335a193fc"
+    },
+    {
+      "path": "browser01/nurse-1280-trace.zip",
+      "bytes": 12346134,
+      "sha256": "034e293d2514db58aabba5f27f1558f45344341deb3ac9499e7e8f8f05dab1d8"
+    },
+    {
+      "path": "browser01/nurse-1280-week-rail.png",
+      "bytes": 90651,
+      "sha256": "d2f771072eb20ba86069538e01a1149010b4547f36ccdb37c24a2f46e6d67046"
+    },
+    {
+      "path": "browser01/nurse-390-after-wheel.png",
+      "bytes": 41559,
+      "sha256": "44a20906df91a2297728332f46101dc54d33fbbaa223d5bf7155afb213d99748"
+    },
+    {
+      "path": "browser01/nurse-390-before-wheel.png",
+      "bytes": 44805,
+      "sha256": "27d1bd826e1efa88f40e76ce43c2d05ecd74b6a4b87891869368a69d6ff14fe2"
+    },
+    {
+      "path": "browser01/nurse-390-clinical.png",
+      "bytes": 45667,
+      "sha256": "6157be8b367b1bf21677b74c96bda9f69d35ce4ce693e50beecb8fc18fedfeed"
+    },
+    {
+      "path": "browser01/nurse-390-form.png",
+      "bytes": 42133,
+      "sha256": "b5aa9207ea2f5ddf8ebc9af5280f380f807e67e3f1a440223005bf83be2d7f96"
+    },
+    {
+      "path": "browser01/nurse-390-modal.png",
+      "bytes": 39244,
+      "sha256": "07653c00db7d13fd4e4a25d7e697d456559bddea8b54505ab78a2529126e83ea"
+    },
+    {
+      "path": "browser01/nurse-390-trace.zip",
+      "bytes": 14893325,
+      "sha256": "02a1c49001215813c176c46be0a303a6d59244a9a9d8a2b4a2e67288afe7a2cc"
+    },
+    {
+      "path": "browser01/nurse-390-week-rail.png",
+      "bytes": 34916,
+      "sha256": "bc27dbf7b8ccc2b18d57525ab51ffb28a8933d95111910789369795192aca4a7"
+    },
+    {
+      "path": "browser01/nurse-768-after-wheel.png",
+      "bytes": 62093,
+      "sha256": "0942701bb88e92858b0deef9b8c3e3e260c1cd4e84cb74fa2315fe3b5d053c0b"
+    },
+    {
+      "path": "browser01/nurse-768-before-wheel.png",
+      "bytes": 69926,
+      "sha256": "7456696b296ffa40f8ba44a308196937884ffe3ce5d3ee990cd7da3622ef5f90"
+    },
+    {
+      "path": "browser01/nurse-768-clinical.png",
+      "bytes": 63128,
+      "sha256": "69f9c4df8f366e01955ae16af20490969836b57c8adecb0351d6a5da5dd17a56"
+    },
+    {
+      "path": "browser01/nurse-768-form.png",
+      "bytes": 70958,
+      "sha256": "912bd06d8bafad05ac409729f444bdf25d68dd12c57207fa339cb5fa48efcb67"
+    },
+    {
+      "path": "browser01/nurse-768-modal.png",
+      "bytes": 88942,
+      "sha256": "b01d225cf5e7d94327eee25abd33973adf49b9dc28a9fb32918343ef384f921a"
+    },
+    {
+      "path": "browser01/nurse-768-trace.zip",
+      "bytes": 15403396,
+      "sha256": "bbed473c4f3e0aabb15c54b4fa530515de73b43315a729f38c700f48d91be616"
+    },
+    {
+      "path": "browser01/nurse-768-week-rail.png",
+      "bytes": 69053,
+      "sha256": "cec746661df51e0f83fb49aec8bfd28b128fbfc546ae8bd881e15d815390e2cf"
+    },
+    {
+      "path": "browser01/page@0a3b156d794c7ec402ea48ab46c093cd.webm",
+      "bytes": 1699869,
+      "sha256": "c1973ee838d4e2b3cfb05d11bfcb5e4a83be37b86a09cea7ce6411e410dc9347"
+    },
+    {
+      "path": "browser01/page@1659b9dbfa0880db9ebf47d6573d1240.webm",
+      "bytes": 1557603,
+      "sha256": "1f078e0fa0be0ecc3fa294cc8a82d7c2c3377c127c6bf2ea33229ef64d35bb14"
+    },
+    {
+      "path": "browser01/page@1810f53e165e094f84542640dff0ddb4.webm",
+      "bytes": 1746348,
+      "sha256": "3e1fd0a55008480fe75371ac5ea67df155f4834428dd65ae33966617e4bc4d1a"
+    },
+    {
+      "path": "browser01/page@1c23c3f3aecc06cd2deda5cf2e954eb8.webm",
+      "bytes": 1495062,
+      "sha256": "8c2371338c8ccd3399aac08732fd994c7f031597e93c217dac127adc3900344c"
+    },
+    {
+      "path": "browser01/page@36349cc427d1b76a1231b48eb0a54e6d.webm",
+      "bytes": 2009649,
+      "sha256": "3c210129ea19c072b49aa6784b528bb92f98de2084e93552cb4300b452508d7b"
+    },
+    {
+      "path": "browser01/page@466b43c54cf1514bd83776083efbcf49.webm",
+      "bytes": 1282591,
+      "sha256": "05f6718940e0ecee26c5b676e723611383b76ad79120d3802a5e50c764fc6a15"
+    },
+    {
+      "path": "browser01/page@8132b19cdb591db0c5566ee9abb1916e.webm",
+      "bytes": 2091082,
+      "sha256": "86fd8ffeb8c2025fd56cebcf2c118b58db2063d8702028806d6f4c34fc757d5a"
+    },
+    {
+      "path": "browser01/page@a2eb78b09c144a82e4b1ffa4b0fac2d8.webm",
+      "bytes": 1548646,
+      "sha256": "8bd02fde7e94a3ac650928e153e1b89d4b6df673f7065f1623e5b7f77ea66cbd"
+    },
+    {
+      "path": "browser01/page@d223826c6e0de6bc40762b548cf7b65f.webm",
+      "bytes": 1641144,
+      "sha256": "40acaa43542ba7c3f6dee4c005a7856f6df29363faaebd6c6647f442260bb47a"
+    },
+    {
+      "path": "browser01/page@e910d273c0cd037798c50550ce95be62.webm",
+      "bytes": 1212796,
+      "sha256": "388ec97b34140ee8a990e7c21d455ed987e32704e4c3ea8aaa81b4fc5333c820"
+    },
+    {
+      "path": "browser01/results.json",
+      "bytes": 1058713,
+      "sha256": "195d79b1acd79a0a453b9bec3a6be64cf7edc8ff289d7f23d8500829f82e352d"
+    },
+    {
+      "path": "browser02/nurse-1024-after-wheel.png",
+      "bytes": 70819,
+      "sha256": "3bb4503e7e13144a728d52a98677b85b825333396cde836b6bd95070886ca714"
+    },
+    {
+      "path": "browser02/nurse-1024-before-wheel.png",
+      "bytes": 74081,
+      "sha256": "53a4d42734043ae6f9f0c6dfbd1b8353b129114896618a14689eb4992675e036"
+    },
+    {
+      "path": "browser02/nurse-1024-trace.zip",
+      "bytes": 3232901,
+      "sha256": "0f932807365f48ba5c5370354320a6dbcf9d204e97f43f7404075ef5a97c2d8e"
+    },
+    {
+      "path": "browser02/nurse-1024-week-rail.png",
+      "bytes": 75527,
+      "sha256": "1806bf1aeb40d1e76960e45f07271088049a8b65d1083d5fc628138506f0b739"
+    },
+    {
+      "path": "browser02/nurse-390-after-wheel.png",
+      "bytes": 41438,
+      "sha256": "761812302b30b1b5d4d01b4a5957f0f0e7e14973cbe380cebbbd47eb792e31c0"
+    },
+    {
+      "path": "browser02/nurse-390-before-wheel.png",
+      "bytes": 42212,
+      "sha256": "5e95ed225a8f21f4ad69b613ed1dadb1e1e5242087d4a449bfa777f34ca320af"
+    },
+    {
+      "path": "browser02/nurse-390-trace.zip",
+      "bytes": 2435914,
+      "sha256": "9309b2af98c5e78cd45ad5d25a8d9de5b4a9024bef3b88c5f35b60ed66d97ccf"
+    },
+    {
+      "path": "browser02/nurse-390-week-rail.png",
+      "bytes": 34210,
+      "sha256": "dccf4225b30e1981237ce08e44ba68aa5b5c5c2d9dcb9bc2e6253e3c92579ee3"
+    },
+    {
+      "path": "browser02/nurse-768-after-wheel.png",
+      "bytes": 62059,
+      "sha256": "dff0bd22a7b31acef7a479ec6318cffa010aa7f2df08ca767483830f9b6282ea"
+    },
+    {
+      "path": "browser02/nurse-768-before-wheel.png",
+      "bytes": 67938,
+      "sha256": "b5db18ca4f9155a8cd9bfd7c138f1526cfe9cf892c30cbc93a112709526d7fb1"
+    },
+    {
+      "path": "browser02/nurse-768-trace.zip",
+      "bytes": 2762479,
+      "sha256": "e2cebc04ee439dc241d939d82b4269089b9cbfcf7f60e51814d29532ce8b114a"
+    },
+    {
+      "path": "browser02/nurse-768-week-rail.png",
+      "bytes": 68433,
+      "sha256": "1a0087dcb937af9ebb81b23ba28c987fcb5b335dbb45261b0b66c6614f586341"
+    },
+    {
+      "path": "browser02/page@136ad186f67dbf32c9609d7b9db82501.webm",
+      "bytes": 423718,
+      "sha256": "70715db73c937cec15f3d8707e4107c839ccd2f9f330bc7d269d8a857e5255f1"
+    },
+    {
+      "path": "browser02/page@334f1b3bb397e19b2a4301a397abe663.webm",
+      "bytes": 509375,
+      "sha256": "2ff6e6c0ba96335b9e14bd2f91a1943692d47d14e66ce87481e172ef8737b7ac"
+    },
+    {
+      "path": "browser02/page@cfb8dfdd35f69e249cb70389de9d60f2.webm",
+      "bytes": 367152,
+      "sha256": "fb7b33d013d077ba60d862b68c7900703b8649b128a2513acbc12881faabaf8b"
+    },
+    {
+      "path": "browser02/results.json",
+      "bytes": 34112,
+      "sha256": "6e2c6c6519519f612cd2687e3a4a96fe07450d46b61bac16404d6e67e9f471c4"
+    },
+    {
+      "path": "browser03/doctor-1280-after-wheel.png",
+      "bytes": 71469,
+      "sha256": "fd98af6825a44748c20d3ff881e6593d66bd31289acb8796694f3a10322457de"
+    },
+    {
+      "path": "browser03/doctor-1280-before-wheel.png",
+      "bytes": 73977,
+      "sha256": "35c654471469f280179d472a4ed0ccc156cb5640e43c998908ac1da4f50035e9"
+    },
+    {
+      "path": "browser03/doctor-1280-clinical.png",
+      "bytes": 72264,
+      "sha256": "8bc468f2be633b3f1e6172d433831db394e07084d52a868e94941b4f7d1f6334"
+    },
+    {
+      "path": "browser03/doctor-1280-form.png",
+      "bytes": 68963,
+      "sha256": "671a856df2cb12726b3985fbd6af3c38b76c8eba7eeafa54b9e07d2863218573"
+    },
+    {
+      "path": "browser03/doctor-1280-week-rail.png",
+      "bytes": 90894,
+      "sha256": "276b0fee92bcc56c584fcc69382e7ca49f27fddd482105dda5306de76ef7d93e"
+    },
+    {
+      "path": "browser03/failure-0-trace.zip",
+      "bytes": 14004710,
+      "sha256": "f4d3cf63a69e66f865d830b100a4ef3c50885c7f5705832c22bb037fc88045dc"
+    },
+    {
+      "path": "browser03/failure-0.png",
+      "bytes": 98507,
+      "sha256": "598694d6d789d6929a0bfc9e005092a8788fe8aaef782f0c9f04127ad5f1bdfd"
+    },
+    {
+      "path": "browser03/failure.json",
+      "bytes": 327271,
+      "sha256": "be13aa997bb5decd0d6710ec806a7e1f60114fa421523ef3100b501c5f26d0c5"
+    },
+    {
+      "path": "browser03/page@745af755f731b48d5d792d83b7fa2556.webm",
+      "bytes": 1342822,
+      "sha256": "125ae34d831fa059d51ed03808abc94e4ed0a1650bb652472a23d5e7712ef380"
+    },
+    {
+      "path": "commands01/backend-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "commands01/command-results.json",
+      "bytes": 3165,
+      "sha256": "2399b1d0e5b84b66f5d219e0c8ee55fea9a3060b17cb9c1d23be2bbf55a063a7"
+    },
+    {
+      "path": "commands01/focused.log",
+      "bytes": 8461,
+      "sha256": "353b214894ee4340b37d66a29567842c7fb2ae5164323e82a49eaa1650172c7f"
+    },
+    {
+      "path": "commands01/frontend-tsc-build.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "commands01/frontend-types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "commands01/full-regression.log",
+      "bytes": 427219,
+      "sha256": "9e268de86c77cae18057b4fb672cbe427dbe26af1d34d79c5ed0ced07e5827f7"
+    },
+    {
+      "path": "commands01/security-scan.log",
+      "bytes": 71,
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "commands01/vite-build.log",
+      "bytes": 15173,
+      "sha256": "988c793a499a879ecc5039fc206c4d5d342d6f5dee2fc5d8abf3e3e4da54f470"
+    },
+    {
+      "path": "diff.patch",
+      "bytes": 4496,
+      "sha256": "eed52fe701ebb65ac5867a6787725c8ae2d70525a279cc273759ae078abba2ef"
+    },
+    {
+      "path": "execution-policy.md",
+      "bytes": 1401,
+      "sha256": "c60068688e44ceceae4ec651269b38ede99f8d98f774f81f1eb7a8b4f97101cc"
+    },
+    {
+      "path": "failure-report.mjs",
+      "bytes": 1223,
+      "sha256": "0d681c41b7e102ee9b4a6267388e7e58cb5050ca09b035890ad60d4451d2cbd9"
+    },
+    {
+      "path": "failure-summary.json",
+      "bytes": 23032,
+      "sha256": "e4f06d9762bd369b1d112ba1bd1952c295f120c06cb2a1f6ffd1e60b7fffd186"
+    },
+    {
+      "path": "playwright-report/index.html",
+      "bytes": 23199,
+      "sha256": "b5000999207f631c24abc4fd0461cb364056ee5cb6657653d348481c8aa79f71"
+    },
+    {
+      "path": "prepare.mjs",
+      "bytes": 1325,
+      "sha256": "32afb3bb7a16b02027b21ae70dcf1ddff964e651dc450735d848536dde3e525a"
+    },
+    {
+      "path": "recipes/browser01.mjs",
+      "bytes": 15370,
+      "sha256": "36475d076a4618c0bc76ca1b1de9737b140151e65e0860a462134f48b476bfd4"
+    },
+    {
+      "path": "recipes/browser02-denied.mjs",
+      "bytes": 15585,
+      "sha256": "d41925e6a540453a247e3bd2d20fedca6f45660663d4b4fd509a5bd82f37b1a8"
+    },
+    {
+      "path": "recipes/browser03-clip.mjs",
+      "bytes": 16323,
+      "sha256": "14dc8bd59807527fea229fc2f1057408f786698763470a5e4c378c5f7388e4da"
+    },
+    {
+      "path": "recipes/commands.mjs",
+      "bytes": 3227,
+      "sha256": "01068c93c19d21f73977cb05a4037e65afff5a7636d711b8d21f9dfcb1402fb6"
+    },
+    {
+      "path": "recipes/original-issue.json",
+      "bytes": 3039,
+      "sha256": "efeea3fd93742e61fad2fffe7ae8f5b3da83c51e733fafd4632b3e298d7ba7e6"
+    },
+    {
+      "path": "recipes/qa-server.mjs",
+      "bytes": 751,
+      "sha256": "08911bcde283d969d71db3899710647366d27ba1df4e9d3feef928171e1c1368"
+    },
+    {
+      "path": "recipes/security.mjs",
+      "bytes": 2199,
+      "sha256": "fc2b7bee6d7871c40b3b26f335f4fa2088fba6262bcce2c6a7d30e4857ab5d8f"
+    },
+    {
+      "path": "recipes/task-contract.md",
+      "bytes": 4117,
+      "sha256": "f685d51f1f6da3d77dd56e0b393f242f7d9849a5be1052932682042f99e8fe15"
+    },
+    {
+      "path": "report.mjs",
+      "bytes": 1522,
+      "sha256": "6d59820d97466edaa84ea5e7b4e8f6905fe2b5c11dafaa8344207f46aad0ab86"
+    },
+    {
+      "path": "seal.mjs",
+      "bytes": 1592,
+      "sha256": "2ab7ee66aa9f9de8cac5b71a96d395b9fde5b17f75993a931f7d1b2def9d112f"
+    },
+    {
+      "path": "security01/baseline-cli.log",
+      "bytes": 1168,
+      "sha256": "639e7100750ca8a5e7937a4ee1f6f616139504ea1a0281c2f9de6e8e7fb8e049"
+    },
+    {
+      "path": "security01/baseline/.claude/security-scans/scan-code-deep.json",
+      "bytes": 311,
+      "sha256": "6a58b249b53fc58d9a0ec06b2ff68c570c275dc2344fb494d3af413b7371ef16"
+    },
+    {
+      "path": "security01/baseline/frontend/src/components/operator/PatientDetail.tsx",
+      "bytes": 117804,
+      "sha256": "46b2d94d60c494f3007c940346d1541d4c731077168b3d259325099b016c3054"
+    },
+    {
+      "path": "security01/candidate-cli.log",
+      "bytes": 1177,
+      "sha256": "41ead35effbd1ce0267501483c4a9f30cae099020efe951f52193e2e319e42f4"
+    },
+    {
+      "path": "security01/candidate/.claude/security-scans/scan-code-deep.json",
+      "bytes": 312,
+      "sha256": "23acbad09a627b0bf319f6b66ce69a319d9b4640003c6f921113b91ec340a7d4"
+    },
+    {
+      "path": "security01/candidate/frontend/src/components/operator/PatientChartScroll.css",
+      "bytes": 1553,
+      "sha256": "591745cdb9c756374adc366bd19e4ec1915af783b9198fa038a4325633bbeb89"
+    },
+    {
+      "path": "security01/candidate/frontend/src/components/operator/PatientDetail.tsx",
+      "bytes": 120813,
+      "sha256": "28267ccb2f9f25f5966729f026489af77f1c5bf294598ad6b523bbe352af9298"
+    },
+    {
+      "path": "security01/candidate/frontend/src/lib/__tests__/patientChartScroll.test.ts",
+      "bytes": 1734,
+      "sha256": "55f2dc981d31d477780d6c74aea803037dce2582c90bfd2cbdb93109d940ad3b"
+    },
+    {
+      "path": "security01/comparison.json",
+      "bytes": 1061,
+      "sha256": "26e3281623e2239a647599612ef9b6268cc1879eabf0a02dee27a8a23dcf9858"
+    },
+    {
+      "path": "source-after.json",
+      "bytes": 249317,
+      "sha256": "506e0b37d0b10ac4dd177c1468a6d5e7654e5107534fd134531a1f4b8c7b0582"
+    },
+    {
+      "path": "source-before.json",
+      "bytes": 249391,
+      "sha256": "3507701b78507256ccef2ea9bd6b2ddaec441a0c9f4f18d5a39fbbca41aefe3b"
+    },
+    {
+      "path": "validation-report.md",
+      "bytes": 3938,
+      "sha256": "a3256569b8238c69a6dec1419f8f3a6f3ff1bbdba5d5c4816657fe0d241eb92e"
+    }
+  ]
+}

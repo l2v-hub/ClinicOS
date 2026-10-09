@@ -1,0 +1,8 @@
+{
+  "port": 7515,
+  "action": "STOP OWNED SYNTHETIC QA SERVER",
+  "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/425-chart-scroll/independent-qa2/recipes/qa-server.mjs",
+  "authorizedBy": "root assigned serial lane and scoped teardown",
+  "pid": 8748,
+  "identityVerified": true
+}

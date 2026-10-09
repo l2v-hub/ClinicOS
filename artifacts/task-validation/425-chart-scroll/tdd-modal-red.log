@@ -1,0 +1,85 @@
+✔ the actual patient chart loads its scoped screen-only scroll contract (0.8493ms)
+✔ chart tabs do not become another vertical owner through cross-axis conversion (0.3292ms)
+✔ small chart viewports explicitly release both axes and the constrained ancestor chain (0.3776ms)
+✔ patient prescribing actions remain in flow rather than covering keyboard focus (0.2442ms)
+✖ chart transitions do not create a clipped containing block for fixed therapy dialogs (2.336ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 699.3004
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\patientChartScroll.test.ts:1:1601
+✖ chart transitions do not create a clipped containing block for fixed therapy dialogs (2.336ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\.patient-record-view \.cr-detail-content\.tab-panel-transition\s*\{[^}]*animation:\s*none;/s. Input:
+  
+  '/* The chart content is the desktop vertical owner. Horizontal data rails remain local;\n' +
+    '   clip (not hidden) avoids turning otherwise visible Y overflow into another scroller. */\n' +
+    '@media screen {\n' +
+    '  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {\n' +
+    '    min-height: 0;\n' +
+    '    overflow-y: auto;\n' +
+    '    overflow-x: hidden;\n' +
+    '    scroll-padding-block: 12px;\n' +
+    '  }\n' +
+    '\n' +
+    '  .patient-record-view .cr-detail-content .cr-tab-content {\n' +
+    '    overflow-x: clip;\n' +
+    '    overflow-y: visible;\n' +
+    '    max-height: none;\n' +
+    '  }\n' +
+    '\n' +
+    '  .patient-record-view .therapy-form-shell .form-actions.therapy-form-shell__actions {\n' +
+    '    position: static;\n' +
+    '  }\n' +
+    '\n' +
+    '  .patient-record-view :is(input, select, textarea, button, summary) {\n' +
+    '    scroll-margin-block: 12px;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '/* Below the desktop shell breakpoint the document owns vertical scrolling. Release the\n' +
+    '   entire constrained chart chain, not only one Y axis subsequently converted by hidden X. */\n' +
+    '@media screen and (max-width: 1023px) {\n' +
+    '  html:has(.patient-record-view) {\n' +
+    '    scroll-padding-block: 160px 12px;\n' +
+    '  }\n' +
+    '\n' +
+    '  .app-shell .main-area-clean .page-content:has(.patient-record-view) {\n' +
+    '    height: auto;\n' +
+    '    max-height: none;\n' +
+    '    overflow: visible;\n' +
+    '  }\n' +
+    '\n' +
+    '  .patient-record-view,\n' +
+    '  .patient-record-view .cr-detail-layout--no-sidebar,\n' +
+    '  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {\n' +
+    '    height: auto;\n' +
+    '    max-height: none;\n' +
+    '    overflow: visible;\n' +
+    '  }\n' +
+    '\n' +
+    '  .patient-record-view :is(input, select, textarea, button, summary) {\n' +
+    '    scroll-margin-block-start: 160px;\n' +
+    '  }\n' +
+    '}\n'
+  
+      at TestContext.<anonymous> (C:\w-425\frontend\src\lib\__tests__\patientChartScroll.test.ts:31:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '/* The chart content is the desktop vertical owner. Horizontal data rails remain local;\n   clip (not hidden) avoids turning otherwise visible Y overflow into another scroller. */\n@media screen {\n  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {\n    min-height: 0;\n    overflow-y: auto;\n    overflow-x: hidden;\n    scroll-padding-block: 12px;\n  }\n\n  .patient-record-view .cr-detail-content .cr-tab-content {\n    overflow-x: clip;\n    overflow-y: visible;\n    max-height: none;\n  }\n\n  .patient-record-view .therapy-form-shell .form-actions.therapy-form-shell__actions {\n    position: static;\n  }\n\n  .patient-record-view :is(input, select, textarea, button, summary) {\n    scroll-margin-block: 12px;\n  }\n}\n\n/* Below the desktop shell breakpoint the document owns vertical scrolling. Release the\n   entire constrained chart chain, not only one Y axis subsequently converted by hidden X. */\n@media screen and (max-width: 1023px) {\n  html:has(.patient-record-view) {\n    scroll-padding-block: 160px 12px;\n  }\n\n  .app-shell .main-area-clean .page-content:has(.patient-record-view) {\n    height: auto;\n    max-height: none;\n    overflow: visible;\n  }\n\n  .patient-record-view,\n  .patient-record-view .cr-detail-layout--no-sidebar,\n  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {\n    height: auto;\n    max-height: none;\n    overflow: visible;\n  }\n\n  .patient-record-view :is(input, select, textarea, button, summary) {\n    scroll-margin-block-start: 160px;\n  }\n}\n',
+    expected: /\.patient-record-view \.cr-detail-content\.tab-panel-transition\s*\{[^}]*animation:\s*none;/s,
+    operator: 'match',
+    diff: 'simple'
+  }

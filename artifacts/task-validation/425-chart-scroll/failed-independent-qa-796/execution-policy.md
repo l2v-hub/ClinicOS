@@ -1,0 +1,7 @@
+# Independent QA ownership and policy
+
+Root assigned isolated C:/w-425-qa at 796f5b4b1e32c43a15f5875a8bea79dd4f4fc61e; accepted baseline 67d21c3e9257a5acb8c9b25130c9417fb92185fb. Root is sole application writer and release authority. This fresh dedicated QA session may write only artifacts/task-validation/425-chart-scroll/independent-qa. Preserve start-claude-team.ps1 user overlay. No app edits, provider writes, commits, pushes, dependencies or clinical writes. Browser lane remains root-owned until explicit release.
+
+Read QA/evidence/quality-gate skills and tracked CLAUDE/plan/docs/requirements queue in full. Original issue and zero comments are frozen alongside recipes. Source snapshots bind all tracked frontend/backend/scripts/manifests; native launchers are outside app scope. Freeze recipes before execution, preserve failed attempts, seal raw artifacts only after completion. Independent security checks are changed-file scope, not global CVE certification. No backend/DB state is changed or asserted as persisted.
+
+AC4 asks dimensions desktop and tablet reali; original explicitly states touch was not tested on a device. Actual Chromium innerWidth/innerHeight and computed overflow at specified CSS viewport sizes are tested; no physical-tablet, gloves, sunlight or ward-usability certification is claimed. External CI/release gate remains root responsibility and is not waived here.

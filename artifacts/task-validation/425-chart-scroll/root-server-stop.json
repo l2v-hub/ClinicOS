@@ -1,0 +1,8 @@
+{
+  "port": 7513,
+  "at": "2026-10-09T21:53:34.7317674Z",
+  "decision": "AUTHORIZED scoped synthetic root server stop after browser completion",
+  "command": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/425-chart-scroll/qa-server.mjs",
+  "listenerFree": false,
+  "pid": 43044
+}

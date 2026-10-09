@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+const own='artifacts/task-validation/425-chart-scroll/independent-qa';
+const commands=JSON.parse(readFileSync(own+'/commands01/command-results.json'));
+const primary=JSON.parse(readFileSync(own+'/browser01/results.json'));
+const denial=JSON.parse(readFileSync(own+'/browser02/results.json'));
+const security=JSON.parse(readFileSync(own+'/security01/comparison.json'));
+assert.equal(primary.results.length,10);assert.equal(denial.results.length,3);
+assert.deepEqual(commands.newFailures,[]);assert.deepEqual(commands.focusedNewFailures,[]);
+assert.equal(commands.records.find(r=>r.name==='full-regression').fail,12);
+assert.equal(security.newFindings.length,0);
+mkdirSync(own+'/playwright-report',{recursive:true});
+writeFileSync(own+'/playwright-report/index.html',`<!doctype html><html lang="en"><meta charset="utf-8"><title>425 independent browser assertions</title><h1>Issue 425 independent QA</h1><p>13 actual SPA viewport/role groups. Synthetic API transport, no physical hardware/touch certification.</p><pre>${JSON.stringify({primary:primary.results.map(r=>({role:r.role,viewport:r.viewport,focusControls:r.focus.length,modalControls:r.modal.focus.length,horizontal:r.horizontal})),denied:denial.results.map(r=>({role:r.role,viewport:r.viewport,pointer:r.pointer}))},null,2).replaceAll('&','&amp;').replaceAll('<','&lt;')}</pre></html>`);
+console.log('Generated assertion report; no added application surface');

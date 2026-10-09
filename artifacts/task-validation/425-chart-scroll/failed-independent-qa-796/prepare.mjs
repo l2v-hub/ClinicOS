@@ -1,0 +1,14 @@
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+const own=resolve('artifacts/task-validation/425-chart-scroll/independent-qa');
+const source='C:/w-425/artifacts/task-validation/425-chart-scroll';
+mkdirSync(own+'/recipes',{recursive:true});
+for(const p of ['commands.mjs','security.mjs','qa-server.mjs','task-contract.md','original-issue.json'])copyFileSync(source+'/'+p,own+'/recipes/'+p);
+const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+const files=git('ls-files','frontend','backend','scripts','package.json','package-lock.json').split('\n').filter(Boolean);
+const hashes=files.map(path=>({path,sha256:createHash('sha256').update(readFileSync(path)).digest('hex')}));
+writeFileSync(own+'/source-before.json',JSON.stringify({head:git('rev-parse','HEAD'),files:hashes,sourceSha256:createHash('sha256').update(JSON.stringify(hashes)).digest('hex'),excludedOverlay:'start-claude-team.ps1 user-owned; source readonly'},null,2));
+writeFileSync(own+'/diff.patch',execFileSync('git',['diff','67d21c3e9257a5acb8c9b25130c9417fb92185fb..HEAD','--','frontend'],{encoding:'utf8'}));
+console.log('Independent recipes and source snapshot frozen; no app writes');

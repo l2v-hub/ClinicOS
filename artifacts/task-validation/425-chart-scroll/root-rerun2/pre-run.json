@@ -1,0 +1,33 @@
+{
+  "head": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "qaManifestSha256": "d2b1a84a534fcc1e1e98cabc5e48f8134aa45ad344727710a6a188daf82f2e3d",
+  "qaArtifacts": 160,
+  "records": [
+    {
+      "name": "browser01.mjs",
+      "sha256": "36475d076a4618c0bc76ca1b1de9737b140151e65e0860a462134f48b476bfd4"
+    },
+    {
+      "name": "browser02-denied.mjs",
+      "sha256": "d41925e6a540453a247e3bd2d20fedca6f45660663d4b4fd509a5bd82f37b1a8"
+    },
+    {
+      "name": "browser03-clip.mjs",
+      "sha256": "fba33549c38a539be232cf3fad3b8d6cd1320f6df40a3ce4d147e1a80f973fdc"
+    },
+    {
+      "name": "commands.mjs",
+      "sha256": "01068c93c19d21f73977cb05a4037e65afff5a7636d711b8d21f9dfcb1402fb6"
+    },
+    {
+      "name": "security.mjs",
+      "sha256": "fc2b7bee6d7871c40b3b26f335f4fa2088fba6262bcce2c6a7d30e4857ab5d8f"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "08911bcde283d969d71db3899710647366d27ba1df4e9d3feef928171e1c1368"
+    }
+  ],
+  "decision": "FROZEN BYTE-IDENTICAL RECIPES BEFORE ROOT RERUN",
+  "at": "2026-10-09T22:13:15.068Z"
+}

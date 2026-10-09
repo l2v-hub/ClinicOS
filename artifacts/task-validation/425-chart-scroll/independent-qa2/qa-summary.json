@@ -1,0 +1,236 @@
+{
+  "decision": "READY FOR CODEX QA",
+  "application": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "primary": [
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 1150,
+        "height": 1004
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 0,
+        "start": 0,
+        "end": 0
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 0,
+        "start": 0,
+        "end": 0
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 0,
+        "start": 0,
+        "end": 0
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 75,
+        "start": 0,
+        "end": 60
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 453,
+        "start": 0,
+        "end": 438
+      }
+    },
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 1150,
+        "height": 1004
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 0,
+        "start": 0,
+        "end": 0
+      }
+    },
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 0,
+        "start": 0,
+        "end": 0
+      }
+    },
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 0,
+        "start": 0,
+        "end": 0
+      }
+    },
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 75,
+        "start": 0,
+        "end": 60
+      }
+    },
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "focusControls": 110,
+      "modalControls": 110,
+      "horizontal": {
+        "max": 453,
+        "start": 0,
+        "end": 438
+      }
+    }
+  ],
+  "denied": [
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "pointer": {
+        "coarse": true,
+        "innerWidth": 1024,
+        "innerHeight": 768
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "pointer": {
+        "coarse": true,
+        "innerWidth": 768,
+        "innerHeight": 1024
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pointer": {
+        "coarse": true,
+        "innerWidth": 390,
+        "innerHeight": 844
+      }
+    }
+  ],
+  "fixedModal": [
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "containingBlock": "viewport",
+      "controlsTested": 110,
+      "saveBounds": {
+        "top": 601.640625,
+        "bottom": 637.640625,
+        "height": 36,
+        "hit": true,
+        "text": "Salva terapia"
+      }
+    },
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "containingBlock": "viewport",
+      "controlsTested": 110,
+      "saveBounds": {
+        "top": 883.4375,
+        "bottom": 919.4375,
+        "height": 36,
+        "hit": true,
+        "text": "Salva terapia"
+      }
+    },
+    {
+      "role": "doctor",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "containingBlock": "viewport",
+      "controlsTested": 110,
+      "saveBounds": {
+        "top": 656.953125,
+        "bottom": 692.953125,
+        "height": 36,
+        "hit": true,
+        "text": "Salva terapia"
+      }
+    }
+  ],
+  "newTestFailures": [],
+  "physicalTablet": false
+}

@@ -1,0 +1,53 @@
+{
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Explicit human authorization plus independent QA and root byte-identical source-bound rerun",
+  "originalCriteriaPassed": 4,
+  "independentBrowserCases": 16,
+  "rootIndependentRerun": 16,
+  "sourceSha256": "cc6d66918aaa8f696cdfb0ed4db2a90babeeea80e9ffe95a6604d91fe2d79565",
+  "sourceFiles": 1534,
+  "qaManifestSha256": "d2b1a84a534fcc1e1e98cabc5e48f8134aa45ad344727710a6a188daf82f2e3d",
+  "immutableQaFiles": 160,
+  "normalization": [
+    {
+      "path": "frontend/src/components/operator/PatientChartScroll.css",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientChartScroll.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    }
+  ],
+  "focusedEach": {
+    "tests": 44,
+    "pass": 43,
+    "exactBaselineFailures": 1
+  },
+  "fullEach": {
+    "tests": 1257,
+    "pass": 1245,
+    "exactBaselineFailures": 12,
+    "newFailures": 0
+  },
+  "productionPatientTestMutations": 0,
+  "scope": [
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/PatientChartScroll.css",
+    "frontend/src/lib/__tests__/patientChartScroll.test.ts"
+  ],
+  "hardwareClaim": "Actual browser viewport dimensions only; no physical tablet/touch/ward certification",
+  "dbScope": "No backend/durable state changes or clinical writes; no mock persistence claim",
+  "failedCandidate": "796 rejected; failed142-artifact QA retained immutable, not waived",
+  "remainingReleaseGates": [
+    "Exact production deployment",
+    "Compiled online acceptance",
+    "Completed CI baseline comparison",
+    "Canonical privacy and pinned GitHub proof"
+  ],
+  "at": "2026-10-09T22:20:06.302Z"
+}

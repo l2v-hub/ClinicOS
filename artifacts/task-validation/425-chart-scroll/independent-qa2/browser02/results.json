@@ -1,0 +1,1334 @@
+{
+  "results": [
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "initial": {
+        "document": {
+          "height": 768,
+          "client": 768,
+          "top": 0,
+          "width": 1024
+        },
+        "owners": [
+          {
+            "selector": ".page-content",
+            "height": 704,
+            "client": 704,
+            "top": 0,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "selector": ".patient-record-view",
+            "height": 704,
+            "client": 704,
+            "top": 0,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "selector": ".cr-detail-layout",
+            "height": 521,
+            "client": 521,
+            "top": 0,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "selector": ".cr-detail-content",
+            "height": 2286,
+            "client": 521,
+            "top": 0,
+            "overflowX": "hidden",
+            "overflowY": "auto"
+          },
+          {
+            "selector": ".cr-tab-content",
+            "height": 2270,
+            "client": 2270,
+            "top": 0,
+            "overflowX": "clip",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".therapy-calendar-grid",
+            "height": 1782,
+            "client": 1782,
+            "top": 0,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          }
+        ],
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        }
+      },
+      "after": {
+        "document": {
+          "height": 768,
+          "client": 768,
+          "top": 0,
+          "width": 1024
+        },
+        "owners": [
+          {
+            "selector": ".page-content",
+            "height": 704,
+            "client": 704,
+            "top": 0,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "selector": ".patient-record-view",
+            "height": 704,
+            "client": 704,
+            "top": 0,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "selector": ".cr-detail-layout",
+            "height": 521,
+            "client": 521,
+            "top": 0,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "selector": ".cr-detail-content",
+            "height": 2286,
+            "client": 521,
+            "top": 1765,
+            "overflowX": "hidden",
+            "overflowY": "auto"
+          },
+          {
+            "selector": ".cr-tab-content",
+            "height": 2270,
+            "client": 2270,
+            "top": 0,
+            "overflowX": "clip",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".therapy-calendar-grid",
+            "height": 1782,
+            "client": 1782,
+            "top": 0,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          }
+        ],
+        "viewport": {
+          "width": 1024,
+          "height": 768
+        }
+      },
+      "prn": {
+        "x": 137,
+        "y": 581.8125,
+        "width": 846,
+        "height": 153.625
+      },
+      "horizontal": {
+        "max": 0,
+        "start": 0,
+        "end": 0
+      },
+      "pointer": {
+        "coarse": true,
+        "innerWidth": 1024,
+        "innerHeight": 768
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "initial": {
+        "document": {
+          "height": 2665,
+          "client": 1024,
+          "top": 0,
+          "width": 768
+        },
+        "owners": [
+          {
+            "selector": ".page-content",
+            "height": 2601,
+            "client": 2601,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".patient-record-view",
+            "height": 2601,
+            "client": 2601,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-layout",
+            "height": 2286,
+            "client": 2286,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-content",
+            "height": 2286,
+            "client": 2286,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-tab-content",
+            "height": 2270,
+            "client": 2270,
+            "top": 0,
+            "overflowX": "clip",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".therapy-calendar-grid",
+            "height": 1782,
+            "client": 1782,
+            "top": 0,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          }
+        ],
+        "viewport": {
+          "width": 768,
+          "height": 1024
+        }
+      },
+      "after": {
+        "document": {
+          "height": 2665,
+          "client": 1024,
+          "top": 1641,
+          "width": 768
+        },
+        "owners": [
+          {
+            "selector": ".page-content",
+            "height": 2601,
+            "client": 2601,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".patient-record-view",
+            "height": 2601,
+            "client": 2601,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-layout",
+            "height": 2286,
+            "client": 2286,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-content",
+            "height": 2286,
+            "client": 2286,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-tab-content",
+            "height": 2270,
+            "client": 2270,
+            "top": 0,
+            "overflowX": "clip",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".therapy-calendar-grid",
+            "height": 1782,
+            "client": 1782,
+            "top": 0,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          }
+        ],
+        "viewport": {
+          "width": 768,
+          "height": 1024
+        }
+      },
+      "prn": {
+        "x": 33,
+        "y": 753.8125,
+        "width": 702,
+        "height": 153.625
+      },
+      "horizontal": {
+        "max": 75,
+        "start": 0,
+        "end": 60
+      },
+      "pointer": {
+        "coarse": true,
+        "innerWidth": 768,
+        "innerHeight": 1024
+      }
+    },
+    {
+      "role": "nurse",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "initial": {
+        "document": {
+          "height": 2902,
+          "client": 844,
+          "top": 0,
+          "width": 390
+        },
+        "owners": [
+          {
+            "selector": ".page-content",
+            "height": 2761,
+            "client": 2761,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".patient-record-view",
+            "height": 2761,
+            "client": 2761,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-layout",
+            "height": 2421,
+            "client": 2421,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-content",
+            "height": 2421,
+            "client": 2421,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-tab-content",
+            "height": 2405,
+            "client": 2405,
+            "top": 0,
+            "overflowX": "clip",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".therapy-calendar-grid",
+            "height": 1782,
+            "client": 1782,
+            "top": 0,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      "after": {
+        "document": {
+          "height": 2902,
+          "client": 844,
+          "top": 2058,
+          "width": 390
+        },
+        "owners": [
+          {
+            "selector": ".page-content",
+            "height": 2761,
+            "client": 2761,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".patient-record-view",
+            "height": 2761,
+            "client": 2761,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-layout",
+            "height": 2421,
+            "client": 2421,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-detail-content",
+            "height": 2421,
+            "client": 2421,
+            "top": 0,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".cr-tab-content",
+            "height": 2405,
+            "client": 2405,
+            "top": 0,
+            "overflowX": "clip",
+            "overflowY": "visible"
+          },
+          {
+            "selector": ".therapy-calendar-grid",
+            "height": 1782,
+            "client": 1782,
+            "top": 0,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      "prn": {
+        "x": 33,
+        "y": 534.109375,
+        "width": 324,
+        "height": 192.40625
+      },
+      "horizontal": {
+        "max": 453,
+        "start": 0,
+        "end": 438
+      },
+      "pointer": {
+        "coarse": true,
+        "innerWidth": 390,
+        "innerHeight": 844
+      }
+    }
+  ],
+  "states": [
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "role": "nurse",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-10&to=2026-10-10&limit=1000&operatorId=QA-nurse-425"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-425"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-10&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-425"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-10"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/diary",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%200&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%201&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2010&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2011&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2012&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2013&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2014&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2015&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2016&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2017&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2018&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2019&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%202&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2020&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2021&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2022&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2023&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2024&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%203&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%204&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%205&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%206&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%207&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%208&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%209&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-05"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-06"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-07"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-08"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-11"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "writes": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "httpErrors": []
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "role": "nurse",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-10&to=2026-10-10&limit=1000&operatorId=QA-nurse-425"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-425"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-10"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/diary",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-10&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-425"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%200&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%201&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2010&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2011&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2012&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2013&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2014&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2015&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2016&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2017&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2018&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2019&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%202&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2020&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2021&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2022&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2023&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2024&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%203&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%204&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%205&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%206&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%207&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%208&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%209&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-05"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-06"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-07"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-08"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-11"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "writes": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "httpErrors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "role": "nurse",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-10&to=2026-10-10&limit=1000&operatorId=QA-nurse-425"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/cartella",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/room-options",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/consegne",
+          "query": "?limit=20&patientId=QA-PATIENT-425"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-10&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-425"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-10"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=tutte"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/diary",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%200&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%201&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2010&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2011&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2012&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2013&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2014&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2015&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2016&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2017&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2018&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2019&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%202&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2020&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2021&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2022&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2023&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%2024&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%203&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%204&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%205&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%206&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%207&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%208&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/farmaci/cerca",
+          "query": "?q=FARMACO%20SINTETICO%209&limite=25"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-425/therapies/page",
+          "query": "?limit=100&status=attiva"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-05"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-06"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-07"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-08"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-09"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots",
+          "query": "?date=2026-10-11"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "writes": [],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "httpErrors": []
+    }
+  ],
+  "physicalTablet": false,
+  "mode": "source-bound browser layout/keyboard acceptance; physical touch unverified"
+}

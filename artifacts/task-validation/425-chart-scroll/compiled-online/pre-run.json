@@ -1,0 +1,35 @@
+{
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-BOMa-W3k.js",
+  "bundleSha256Before": "4091a73cabe0f6669d1cc119ae189211034118fcf84edf15478b1a67c017d001",
+  "styleAssets": [
+    {
+      "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+      "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+    }
+  ],
+  "htmlSha256Before": "9615db4620f46f85913f352e531a9ccd68fff393f3f3f89d158e8f0c624abcd7",
+  "records": [
+    {
+      "name": "browser01.mjs",
+      "localFrozenRecipeSha256": "36475d076a4618c0bc76ca1b1de9737b140151e65e0860a462134f48b476bfd4",
+      "compiledRecipeSha256": "f667f96fbf1ecf2d6716e9ac727dcb8c4cff72c22451dfe3ae41eec204143a79",
+      "changed": "Only guarded origin transport and production static URL; assertions, fixtures and role/viewports unchanged"
+    },
+    {
+      "name": "browser02-denied.mjs",
+      "localFrozenRecipeSha256": "d41925e6a540453a247e3bd2d20fedca6f45660663d4b4fd509a5bd82f37b1a8",
+      "compiledRecipeSha256": "57da7af555fe270b22727eb0d28bde286adf6c6ab31905b278053f5830a001e6",
+      "changed": "Only guarded origin transport and production static URL; assertions, fixtures and role/viewports unchanged"
+    },
+    {
+      "name": "browser03-clip.mjs",
+      "localFrozenRecipeSha256": "fba33549c38a539be232cf3fad3b8d6cd1320f6df40a3ce4d147e1a80f973fdc",
+      "compiledRecipeSha256": "b458a2d071eb5c78876e121f8ee6aa920d7cb725936e8e42943eb292f14b54d4",
+      "changed": "Only guarded origin transport and production static URL; assertions, fixtures and role/viewports unchanged"
+    }
+  ],
+  "decision": "RECIPES FROZEN BEFORE COMPILED ONLINE READONLY TESTS",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T22:21:53.349Z"
+}

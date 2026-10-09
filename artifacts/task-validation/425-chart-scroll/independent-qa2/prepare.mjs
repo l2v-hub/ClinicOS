@@ -1,0 +1,17 @@
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+const own=resolve('artifacts/task-validation/425-chart-scroll/independent-qa2');
+const root='C:/w-425/artifacts/task-validation/425-chart-scroll';
+const previous='C:/w-425-qa/artifacts/task-validation/425-chart-scroll/independent-qa';
+mkdirSync(own+'/recipes',{recursive:true});
+for(const p of ['commands.mjs','security.mjs','qa-server.mjs','task-contract.md','original-issue.json'])copyFileSync(root+'/'+p,own+'/recipes/'+p);
+for(const p of ['browser01.mjs','browser02-denied.mjs','browser03-clip.mjs'])copyFileSync(previous+'/recipes/'+p,own+'/recipes/'+p);
+const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+const files=git('ls-files','frontend','backend','scripts','package.json','package-lock.json').split('\n').filter(Boolean);
+const hashes=files.map(path=>({path,sha256:createHash('sha256').update(readFileSync(path)).digest('hex')}));
+writeFileSync(own+'/source-before.json',JSON.stringify({head:git('rev-parse','HEAD'),files:hashes,sourceSha256:createHash('sha256').update(JSON.stringify(hashes)).digest('hex'),excludedOverlay:'Native launchers outside app scope; app source readonly'},null,2));
+writeFileSync(own+'/diff.patch',execFileSync('git',['diff','67d21c3e9257a5acb8c9b25130c9417fb92185fb..HEAD','--','frontend'],{encoding:'utf8'}));
+copyFileSync(previous+'/seal.mjs',own+'/seal.mjs');
+console.log('QA2 recipe copies and source snapshot ready; previous failed bundle untouched');

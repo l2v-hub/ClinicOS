@@ -1,0 +1,22 @@
+{
+  "decision": "AUTHORIZED SCOPED SYNTHETIC PROOF STAGING",
+  "authority": "Direct human evidence publishing authority; root sole integration writer",
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "explicitDirectoryAllowlist": [
+    "failed-independent-qa-796",
+    "independent-qa2",
+    "root-rerun2",
+    "compiled-online",
+    "root-modal-commands",
+    "root-modal-security"
+  ],
+  "artifacts": 641,
+  "excluded": [
+    "Primary dirty checkout and native launchers",
+    "Root dev attempts retained locally",
+    "Runtime caches",
+    "Original clinical audit photos",
+    "Unreleased blocked source candidates"
+  ],
+  "at": "2026-10-09T22:27:55.149Z"
+}

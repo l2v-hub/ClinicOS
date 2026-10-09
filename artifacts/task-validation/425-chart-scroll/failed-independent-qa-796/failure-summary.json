@@ -1,0 +1,912 @@
+{
+  "decision": "FAILED VALIDATION",
+  "application": "796f5b4b1e32c43a15f5875a8bea79dd4f4fc61e",
+  "successfulBrowserGroups": 13,
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "modalFocusCount": 110,
+  "clipped": [
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Chiudi nuova terapia",
+      "rect": {
+        "top": 189.5,
+        "bottom": 225.5
+      },
+      "hit": false,
+      "hitTag": "ASIDE",
+      "hitClass": "demographics-status",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Chiudi nuova terapia",
+      "rect": {
+        "top": 185.5,
+        "bottom": 221.5
+      },
+      "hit": false,
+      "hitTag": "STRONG",
+      "hitClass": "",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "SUMMARY",
+      "id": "",
+      "type": null,
+      "text": "Divisibilità Frazioni consentite",
+      "rect": {
+        "top": 194.234375,
+        "bottom": 238.234375
+      },
+      "hit": false,
+      "hitTag": "ASIDE",
+      "hitClass": "demographics-status",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Schema glicemico",
+      "rect": {
+        "top": 185.234375,
+        "bottom": 221.234375
+      },
+      "hit": false,
+      "hitTag": "BUTTON",
+      "hitClass": "ds-link",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Dose fissa",
+      "rect": {
+        "top": 185.234375,
+        "bottom": 221.234375
+      },
+      "hit": false,
+      "hitTag": "SPAN",
+      "hitClass": "",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "id": "_r_1j_-route",
+      "type": null,
+      "text": "oraleIMSCIVsublingualetopicotransdermicainalatoriarettaleoft",
+      "rect": {
+        "top": 190.0625,
+        "bottom": 226.0625
+      },
+      "hit": false,
+      "hitTag": "ASIDE",
+      "hitClass": "demographics-status",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "id": "",
+      "type": null,
+      "text": "Unità dosaggio commerciale",
+      "rect": {
+        "top": 190.0625,
+        "bottom": 226.0625
+      },
+      "hit": false,
+      "hitTag": "ASIDE",
+      "hitClass": "demographics-status",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "id": "_r_1j_-strength",
+      "type": "number",
+      "text": "",
+      "rect": {
+        "top": 190.0625,
+        "bottom": 226.0625
+      },
+      "hit": false,
+      "hitTag": "ASIDE",
+      "hitClass": "demographics-status",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "id": "_r_1j_-form",
+      "type": null,
+      "text": "Seleziona formacompressacapsulasciroppofialaflaconebustinago",
+      "rect": {
+        "top": 190.0625,
+        "bottom": 226.0625
+      },
+      "hit": false,
+      "hitTag": "ASIDE",
+      "hitClass": "demographics-status",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "type": "button",
+      "text": "Chiudi nuova terapia",
+      "rect": {
+        "top": 189.5,
+        "bottom": 225.5
+      },
+      "hit": false,
+      "hitTag": "ASIDE",
+      "hitClass": "demographics-status",
+      "ancestors": [
+        {
+          "tag": "DIV",
+          "className": "modal-box therapy-calendar-dialog",
+          "top": 173.5,
+          "bottom": 785.5,
+          "overflow": "auto",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "patient-record-view",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "MAIN",
+          "className": "page-content content-panel",
+          "top": 64,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "main-area-clean",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        },
+        {
+          "tag": "DIV",
+          "className": "app-shell",
+          "top": 0,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "none"
+        }
+      ],
+      "clipped": [
+        {
+          "tag": "DIV",
+          "className": "cr-detail-content tab-panel-transition",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "auto",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)"
+        },
+        {
+          "tag": "DIV",
+          "className": "cr-detail-layout cr-detail-layout--no-sidebar",
+          "top": 239,
+          "bottom": 720,
+          "overflow": "hidden",
+          "transform": "none"
+        }
+      ]
+    }
+  ],
+  "transport": [
+    {
+      "unknown": 0,
+      "external": 0,
+      "writes": 0,
+      "pageErrors": 0,
+      "consoleErrors": 0,
+      "httpErrors": 0
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Independent QA iteration 2 policy
+
+Root assigned isolated C:/w-425-qa2 HEAD b7ae14d120c1e70ccf72784206a505f8c48f975e before this writing session. Source readonly, only owned artifacts/task-validation/425-chart-scroll/independent-qa2 may be written. Parent explicitly released browser lane and approved actual repository SPA7515, focused/type/build/full/scoped security commands. No clinical/provider/DB writes, app edits, commits, pushes, install, dependency/config/lock changes. Synthetic APIs intercepted before wire. Unknown or non-GET clinical calls rejected. Root remains sole application/release authority.
+
+Previous failed796 bundle C:/w-425-qa/.../independent-qa manifest a69b2123ffa5765005099a494ed66aa030561836b748fdec15ad93798885e22f stays immutable. Added candidate CSS disables only retained chart transform animation; 5th regression test. QA2 recipes frozen before each first execution. Fixed overlays are tested against real containing blocks and elementFromPoint, not naively treating every DOM overflow ancestor as their geometric clipping ancestor. Keep failed attempts, do not silently waive actual hit-test misses.
+
+AC4 actual viewport dimensions, no hardware/touch/gloves/ward/light certification. No DB persistence assertion for frontend-only readonly UI. Exact baseline test failures are disclosed, never global green. Scoped security scanner zero changed-file findings is not global CVE certification. Servers stopped only after exact process and listener identity verification; all proof sealed raw SHA256 with source before/after unchanged.

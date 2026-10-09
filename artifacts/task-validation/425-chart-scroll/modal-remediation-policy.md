@@ -1,0 +1,5 @@
+# Failed QA remediation decision
+
+AUTHORIZED scoped local remediation for #425 under the existing human bug-fix authority. Independent QA rejected candidate 796f5b4b: ten therapy dialog controls are clipped by the transformed chart panel. The original failed bundle remains immutable in C:/w-425-qa, sealed manifest a69b2123ffa5765005099a494ed66aa030561836b748fdec15ad93798885e22f. Root alone changes application code in C:/w-425; QA released its server and browser lane before this edit.
+
+The new guard was run RED before implementation. Disable only the chart panel's retained tab animation, which otherwise makes the fixed inline overlay relative to a scrolling/clipping ancestor. No shared dialog, calendar, API, database, authentication, dependency or primary checkout changes. Fresh source freeze, independent actual-ancestor clipping and hit-test evidence, source-bound root rerun and deployment gates remain mandatory. Previous DOM-only dialog visibility tests are insufficient and do not authorize publication or closure.

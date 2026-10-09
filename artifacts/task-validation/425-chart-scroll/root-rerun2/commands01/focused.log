@@ -1,0 +1,117 @@
+(node:21052) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-04: the slot detail shows only the current patient at that exact time (10.038ms)
+✔ AT-04: simultaneous doses share one named button for their hour dialog (52.5557ms)
+(node:21052) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-05: administration from the chart is capability-gated and reuses the giro rows (33.9282ms)
+✔ AT-05: recordAdministration posts the slot key to the existing endpoints (41.9488ms)
+✔ AT-05: a refused administration shows the server reason, not a generic error (2.6667ms)
+✔ AT-12: a correctly filled therapy form has no issues (2.9033ms)
+✔ AT-11: invalid fields are reported per field and schedule row, never dropped (1.3798ms)
+✔ AT-11: a server rejection shows its reason instead of «Errore 400» (10.2101ms)
+(node:17936) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ preview keeps incomplete OCR values visibly incomplete without filling a dose or date (26.2141ms)
+✔ preview follows the therapy type without presenting latent schedules as active instructions (5.7024ms)
+✔ multiple forms have unique labels and radio groups; imported notes and fractions remain exposed (55.4061ms)
+(node:17936) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19908) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ shared clinical dialog surface owns keyboard focus and restores its trigger (19.7309ms)
+✔ all PatientDetail clinical cards use the accessible dialog contract (7.2414ms)
+(node:19908) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:41784) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ the actual patient chart loads its scoped screen-only scroll contract (16.2835ms)
+✔ chart tabs do not become another vertical owner through cross-axis conversion (3.2276ms)
+✔ small chart viewports explicitly release both axes and the constrained ancestor chain (8.6945ms)
+✔ patient prescribing actions remain in flow rather than covering keyboard focus (3.4096ms)
+✔ chart transitions do not create a clipped containing block for fixed therapy dialogs (2.4669ms)
+(node:41784) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39760) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ late, due and unscheduled doses land on Terapia → giornaliere on that drug, day and band (7.1527ms)
+✔ each clinical signal lands on the section and item where it lives (1.6063ms)
+✔ capability-aware fallback: never a section the role cannot read (0.9753ms)
+✔ landing helpers keep tab-only callers working and strip the patient id (0.6209ms)
+✔ Adesso rows carry their landing: dose, handover, drug to fix (with the drug names) (4.3603ms)
+✔ KPI list filters match exactly what the tile counts (1.34ms)
+✔ Agnos NavActions keep the cited item (therapy row, diary entry, document page) (1.8039ms)
+✖ Assistant classic fallback with a known resident opens that resident section (10.754ms)
+(node:39760) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:4440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ keeps every exact time, simultaneous medication and per-dose fraction across a full day (90.31ms)
+✔ isolates the patient and excludes suspended/concluded prescriptions (1.6623ms)
+✔ date range is inclusive and ISO weekdays are respected (3.0288ms)
+✔ one-time dates and legacy times work independently from the recurring date range (2.3257ms)
+✔ PRN and fascia-only orders remain outside the grid without fabricated times or doses (3.8253ms)
+✔ invalid legacy dates/recurrence stay visible for correction instead of masquerading as empty (2.1841ms)
+✔ mixed invalid times retain valid occurrences and surface the anomaly (2.5199ms)
+✔ calendar date validation/navigation respects civil days, leap years and local midnight (5.2002ms)
+✔ reads all patient-scoped pages with operator headers, without returning a partial page (77.2515ms)
+✔ HTTP failure on a later page discards the whole read and a fresh retry recovers (3.6773ms)
+✔ rejects foreign patient payloads and malformed envelopes, not a false empty calendar (6.3693ms)
+✔ counts, cursor loops and capacity cannot silently truncate the patient regimen (3.4597ms)
+✔ timeout aborts the read and a subsequent retry does not share the stalled request (15.1724ms)
+✔ cancelled or late ignored-abort responses cannot complete a patient read (1.4583ms)
+(node:4440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26228) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ calendar creation preserves selected local date and minute for recurring and one-time fields without changing defaults (33.1686ms)
+✔ invalid calendar date or HH:MM cannot initialize a prescription (1.9853ms)
+(node:26228) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:42680) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ therapy slots are loaded only when the therapy page is visible, including history navigation (14.7319ms)
+✔ agenda follows the bounded page contract and aborts obsolete date requests (8.7957ms)
+(node:42680) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 43
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2650.6058
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\patientTargetResolver.test.ts:1:6500
+✖ Assistant classic fallback with a known resident opens that resident section (10.754ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   kind: 'screen',
+  +   screen: 'terapie'
+  -   kind: 'patient',
+  -   patientId: 'patient-1',
+  -   tab: 'terapia-farmacologica',
+  -   therapy: {
+  -     subView: 'giornaliere'
+  -   }
+    }
+  
+      at TestContext.<anonymous> (C:\w-425\frontend\src\lib\__tests__\patientTargetResolver.test.ts:236:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { kind: 'screen', screen: 'terapie' },
+    expected: { kind: 'patient', patientId: 'patient-1', tab: 'terapia-farmacologica', therapy: { subView: 'giornaliere' } },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

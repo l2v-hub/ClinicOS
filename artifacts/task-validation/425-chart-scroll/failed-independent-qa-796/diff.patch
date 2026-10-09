@@ -1,0 +1,102 @@
+diff --git a/frontend/src/components/operator/PatientChartScroll.css b/frontend/src/components/operator/PatientChartScroll.css
+new file mode 100644
+index 00000000..f5aae7ee
+--- /dev/null
++++ b/frontend/src/components/operator/PatientChartScroll.css
+@@ -0,0 +1,50 @@
++/* The chart content is the desktop vertical owner. Horizontal data rails remain local;
++   clip (not hidden) avoids turning otherwise visible Y overflow into another scroller. */
++@media screen {
++  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {
++    min-height: 0;
++    overflow-y: auto;
++    overflow-x: hidden;
++    scroll-padding-block: 12px;
++  }
++
++  .patient-record-view .cr-detail-content .cr-tab-content {
++    overflow-x: clip;
++    overflow-y: visible;
++    max-height: none;
++  }
++
++  .patient-record-view .therapy-form-shell .form-actions.therapy-form-shell__actions {
++    position: static;
++  }
++
++  .patient-record-view :is(input, select, textarea, button, summary) {
++    scroll-margin-block: 12px;
++  }
++}
++
++/* Below the desktop shell breakpoint the document owns vertical scrolling. Release the
++   entire constrained chart chain, not only one Y axis subsequently converted by hidden X. */
++@media screen and (max-width: 1023px) {
++  html:has(.patient-record-view) {
++    scroll-padding-block: 160px 12px;
++  }
++
++  .app-shell .main-area-clean .page-content:has(.patient-record-view) {
++    height: auto;
++    max-height: none;
++    overflow: visible;
++  }
++
++  .patient-record-view,
++  .patient-record-view .cr-detail-layout--no-sidebar,
++  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {
++    height: auto;
++    max-height: none;
++    overflow: visible;
++  }
++
++  .patient-record-view :is(input, select, textarea, button, summary) {
++    scroll-margin-block-start: 160px;
++  }
++}
+diff --git a/frontend/src/components/operator/PatientDetail.tsx b/frontend/src/components/operator/PatientDetail.tsx
+index 06c5efb8..82a79544 100644
+--- a/frontend/src/components/operator/PatientDetail.tsx
++++ b/frontend/src/components/operator/PatientDetail.tsx
+@@ -114,6 +114,7 @@ import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
+ import { PatientVitalSignsView } from './PatientVitalSignsView';
+ import './PatientRecordData.css';
+ import './PatientOverview.css';
++import './PatientChartScroll.css';
+ import { UrgencyNotice } from '../shared/UrgencyNotice';
+ import { consegnaPriorityLabel, isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';
+ 
+diff --git a/frontend/src/lib/__tests__/patientChartScroll.test.ts b/frontend/src/lib/__tests__/patientChartScroll.test.ts
+new file mode 100644
+index 00000000..0d8c1e51
+--- /dev/null
++++ b/frontend/src/lib/__tests__/patientChartScroll.test.ts
+@@ -0,0 +1,28 @@
++import assert from 'node:assert/strict';
++import { existsSync, readFileSync } from 'node:fs';
++import { test } from 'node:test';
++
++const url = new URL('../../components/operator/PatientChartScroll.css', import.meta.url);
++const css = existsSync(url) ? readFileSync(url, 'utf8') : '';
++const component = readFileSync(new URL('../../components/operator/PatientDetail.tsx', import.meta.url), 'utf8');
++
++test('the actual patient chart loads its scoped screen-only scroll contract', () => {
++  assert.match(component, /import '\.\/PatientChartScroll\.css'/);
++  assert.match(css, /@media screen/);
++  assert.doesNotMatch(css, /!important/);
++});
++test('chart tabs do not become another vertical owner through cross-axis conversion', () => {
++  assert.match(css, /\.cr-tab-content\s*\{[^}]*overflow-x:\s*clip;[^}]*overflow-y:\s*visible;/s);
++  assert.match(css, /\.cr-detail-content\s*\{[^}]*overflow-y:\s*auto;/s);
++});
++test('small chart viewports explicitly release both axes and the constrained ancestor chain', () => {
++  assert.match(css, /@media screen and \(max-width: 1023px\)/);
++  assert.match(css, /html:has\(\.patient-record-view\)\s*\{[^}]*scroll-padding-block:\s*160px 12px;/s);
++  assert.match(css, /\.page-content:has\(\.patient-record-view\)[^}]*height:\s*auto;[^}]*overflow:\s*visible;/s);
++  assert.match(css, /\.patient-record-view[^}]*\.cr-detail-content\s*\{[^}]*height:\s*auto;[^}]*overflow:\s*visible;/s);
++});
++test('patient prescribing actions remain in flow rather than covering keyboard focus', () => {
++  assert.match(css, /\.therapy-form-shell__actions\s*\{[^}]*position:\s*static;/s);
++  assert.match(css, /scroll-margin-block:\s*12px;/);
++  assert.doesNotMatch(css, /\.therapy-calendar-grid\s*\{/);
++});

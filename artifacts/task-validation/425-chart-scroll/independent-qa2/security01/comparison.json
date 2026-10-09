@@ -1,0 +1,39 @@
+{
+  "baseline": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "changed": [
+    "frontend/src/components/operator/PatientDetail.tsx",
+    "frontend/src/components/operator/PatientChartScroll.css",
+    "frontend/src/lib/__tests__/patientChartScroll.test.ts"
+  ],
+  "records": [
+    {
+      "kind": "baseline",
+      "absent": [
+        "frontend/src/components/operator/PatientChartScroll.css",
+        "frontend/src/lib/__tests__/patientChartScroll.test.ts"
+      ],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    },
+    {
+      "kind": "candidate",
+      "absent": [],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    }
+  ],
+  "newFindings": [],
+  "scope": "Changed source files only; files absent at baseline are honestly omitted. Native scanner samples and coordination sideeffects isolated to owned artifact scratch. No global CVE certification."
+}

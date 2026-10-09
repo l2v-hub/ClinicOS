@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/425-chart-scroll',app='b7ae14d120c1e70ccf72784206a505f8c48f975e',base='67d21c3e9257a5acb8c9b25130c9417fb92185fb';
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:20e6});assert.equal(r.status,0,'Protected Git action failed safely');return r.stdout.trim();};
+const gate=JSON.parse(readFileSync(root+'/release-gate-receipt.json'));assert.equal(gate.applicationCommit,app);assert.equal(gate.decision,'AUTHORIZED SCOPED APPLICATION PROMOTION');assert.equal(gate.originalCriteriaPassed,4);assert.equal(gate.independentBrowserCases,16);assert.equal(gate.rootIndependentRerun,16);
+assert.equal(git(['rev-parse','HEAD']),app);git(['diff','--exit-code',app,'--','frontend','backend','scripts','package.json','package-lock.json']);assert.equal(git(['ls-files','--others','--exclude-standard','--','frontend','backend','scripts']),'');
+assert.deepEqual(git(['diff','--name-only',base,app]).split('\n').sort(),gate.scope.slice().sort());assert.match(git(['ls-remote','origin','refs/heads/main']),new RegExp('^'+base+'\\s'));git(['diff','--check',base,app]);
+const policy={decision:'AUTHORIZED',action:'PUSH EXACT SOURCE TO MAIN',authority:gate.authority,applicationCommit:app,expectedRemoteBaseline:base,sourceSha256:gate.sourceSha256,at:new Date().toISOString(),excluded:'Artifacts, dirty primary, launchers and unaccepted blocked candidates'};
+writeFileSync(root+'/source-promotion-policy.json',JSON.stringify(policy,null,2));git(['push','origin',app+':refs/heads/main']);assert.match(git(['ls-remote','origin','refs/heads/main']),new RegExp('^'+app+'\\s'));writeFileSync(root+'/source-promotion-receipt.json',JSON.stringify({...policy,result:'REMOTE MAIN EXACT VERIFIED',verifiedAt:new Date().toISOString()},null,2));console.log('425 source promoted; deployment and closure gates remain pending');

@@ -1,0 +1,50 @@
+/* The chart content is the desktop vertical owner. Horizontal data rails remain local;
+   clip (not hidden) avoids turning otherwise visible Y overflow into another scroller. */
+@media screen {
+  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-padding-block: 12px;
+  }
+
+  .patient-record-view .cr-detail-content .cr-tab-content {
+    overflow-x: clip;
+    overflow-y: visible;
+    max-height: none;
+  }
+
+  .patient-record-view .therapy-form-shell .form-actions.therapy-form-shell__actions {
+    position: static;
+  }
+
+  .patient-record-view :is(input, select, textarea, button, summary) {
+    scroll-margin-block: 12px;
+  }
+}
+
+/* Below the desktop shell breakpoint the document owns vertical scrolling. Release the
+   entire constrained chart chain, not only one Y axis subsequently converted by hidden X. */
+@media screen and (max-width: 1023px) {
+  html:has(.patient-record-view) {
+    scroll-padding-block: 160px 12px;
+  }
+
+  .app-shell .main-area-clean .page-content:has(.patient-record-view) {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .patient-record-view,
+  .patient-record-view .cr-detail-layout--no-sidebar,
+  .patient-record-view .cr-detail-layout--no-sidebar .cr-detail-content {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .patient-record-view :is(input, select, textarea, button, summary) {
+    scroll-margin-block-start: 160px;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND SYNTHETIC EVIDENCE COMMIT/PUSH",
+  "authority": "Direct human authorization; source/QA/root/compiled/deployment verified; this action alone does not close issue",
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "parentProof": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "branch": "codex/bug-425-chart-scroll",
+  "scope": "artifacts/task-validation/425-chart-scroll",
+  "canonicalFiles": 642,
+  "secretChecks": 75180,
+  "zipMembers": 24418,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T22:30:43.452Z"
+}

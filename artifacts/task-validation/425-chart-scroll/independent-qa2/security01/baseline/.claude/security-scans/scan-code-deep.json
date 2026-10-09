@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-09T22:04:28.041Z",
+  "target": "C:\\w-425-qa2\\artifacts\\task-validation\\425-chart-scroll\\independent-qa2\\security01/baseline",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "findings": []
+}

@@ -1,0 +1,12 @@
+{
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "decision": "COMPILED ONLINE ACCEPTANCE VERIFIED",
+  "cases": 16,
+  "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-BOMa-W3k.js",
+  "bundleSha256Before": "4091a73cabe0f6669d1cc119ae189211034118fcf84edf15478b1a67c017d001",
+  "bundleSha256After": "4091a73cabe0f6669d1cc119ae189211034118fcf84edf15478b1a67c017d001",
+  "productionPatientTestMutations": 0,
+  "apiGuard": "All clinical/auth/provider APIs intercepted before wire; only production static GET allowlist passes network",
+  "physicalTablet": false,
+  "at": "2026-10-09T22:26:42.466Z"
+}

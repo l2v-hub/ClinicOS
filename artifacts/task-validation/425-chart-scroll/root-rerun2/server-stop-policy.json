@@ -1,0 +1,9 @@
+{
+  "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/425-chart-scroll/root-rerun2/recipes/qa-server.mjs",
+  "port": 7513,
+  "action": "STOP OWN VERIFIED QA SERVER",
+  "scope": "Root synthetic QA process only; no other process or server",
+  "pid": 36344,
+  "decision": "AUTHORIZED",
+  "at": "2026-10-09T22:20:01.8536342Z"
+}

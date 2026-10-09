@@ -1,0 +1,10 @@
+{
+  "decision": "AUTHORIZED",
+  "action": "PUSH EXACT SOURCE TO MAIN",
+  "authority": "Explicit human authorization plus independent QA and root byte-identical source-bound rerun",
+  "applicationCommit": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "expectedRemoteBaseline": "67d21c3e9257a5acb8c9b25130c9417fb92185fb",
+  "sourceSha256": "cc6d66918aaa8f696cdfb0ed4db2a90babeeea80e9ffe95a6604d91fe2d79565",
+  "at": "2026-10-09T22:20:14.664Z",
+  "excluded": "Artifacts, dirty primary, launchers and unaccepted blocked candidates"
+}

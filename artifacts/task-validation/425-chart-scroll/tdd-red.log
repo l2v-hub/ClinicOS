@@ -1,0 +1,411 @@
+✖ the actual patient chart loads its scoped screen-only scroll contract (2.5617ms)
+✖ chart tabs do not become another vertical owner through cross-axis conversion (0.2955ms)
+✖ small chart viewports explicitly release both axes and the constrained ancestor chain (0.1612ms)
+✖ patient prescribing actions remain in flow rather than covering keyboard focus (0.1883ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 184.7821
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\patientChartScroll.test.ts:1:361
+✖ the actual patient chart loads its scoped screen-only scroll contract (2.5617ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /import '\.\/PatientChartScroll\.css'/. Input:
+  
+  "import { intakeDemographicErrors } from '../../lib/intakeDemographics';\r\n" +
+    'import {\r\n' +
+    '  birthDateValue,\r\n' +
+    '  birthSummary,\r\n' +
+    '  formatBirthDate,\r\n' +
+    '  patientAge,\r\n' +
+    '  type DemographicField,\r\n' +
+    "} from '../../lib/patientDemographics';\r\n" +
+    "import { patientLocationLabel } from '../../lib/patientIdentity';\r\n" +
+    "import { PatientIdentifier } from '../shared/PatientIdentity';\r\n" +
+    "import { DemographicsStatus } from '../shared/DemographicsStatus';\r\n" +
+    "import { PatientIntakeReview } from './PatientIntakeReview';\r\n" +
+    "import { PatientContacts } from './PatientContacts';\r\n" +
+    "import { WidgetGroup } from '../shared/WidgetGroup';\r\n" +
+    "import { ClinicalCard } from '../shared/ClinicalCard';\r\n" +
+    "import { usePatientIntakeReview } from '../../lib/patientIntakeReview';\r\n" +
+    "import { ConsegnaTimestamp } from './ConsegnaTimestamp';\r\n" +
+    "import { ConsegnaQuickAdd } from './ConsegnaQuickAdd';\r\n" +
+    "import type { ConsegnaCreate } from '../../lib/consegnaCreation';\r\n" +
+    "import type { ConsegnaDraftStore } from '../../lib/consegnaDrafts';\r\n" +
+    'import {\r\n' +
+    '  createAssessmentDraftStore,\r\n' +
+    '  type AssessmentDraftStore,\r\n' +
+    "} from '../../lib/assessments/assessmentDraftStore';\r\n" +
+    'import {\r\n' +
+    '  assessmentCatalogEntry,\r\n' +
+    '  type AssessmentEntry,\r\n' +
+    "} from '../../lib/assessments/assessmentEntry';\r\n" +
+    "import { AssessmentCatalog } from './assessments/AssessmentCatalog';\r\n" +
+    "import type { AssessmentTarget } from '../../lib/assessments/assessmentTypes';\r\n" +
+    'import {\r\n' +
+    '  startTransition,\r\n' +
+    '  Suspense,\r\n' +
+    '  useState,\r\n' +
+    '  useEffect,\r\n' +
+    '  useRef,\r\n' +
+    '  useCallback,\r\n' +
+    '  useContext,\r\n' +
+    "} from 'react';\r\n" +
+    'import type {\r\n' +
+    '  Paziente,\r\n' +
+    '  Consegna,\r\n' +
+    '  Operatore,\r\n' +
+    '  Camera,\r\n' +
+    '  CartellaPaziente,\r\n' +
+    '  NotaClinica,\r\n' +
+    '  VisitaRecord,\r\n' +
+    '  IndicatoreRischio,\r\n' +
+    '  VitaleItem,\r\n' +
+    '  Anamnesi,\r\n' +
+    '  ConsegnaSummary,\r\n' +
+    "} from '../../types';\r\n" +
+    "import { IcoEdit, IcoCheck, IcoX, IcoPlus, IcoWarning, IcoClock } from '../../icons';\r\n" +
+    "import { DIARIO_AUTHOR_FILTERS } from './cartella/diarioFilters';\r\n" +
+    "import { TopNav, type TopNavItem } from '../navigation/TopNav';\r\n" +
+    "import { AvvisoAnomalieFarmaci } from './cartella/AvvisoAnomalieFarmaci';\r\n" +
+    'import {\r\n' +
+    '  useAnomalieReparto,\r\n' +
+    '  anomalieDelPaziente,\r\n' +
+    '  anomalyTherapyId,\r\n' +
+    "} from './cartella/useAnomalieReparto';\r\n" +
+    "import type { PatientTargetRequest, TherapyTarget } from '../../lib/patientTarget';\r\n" +
+    "import { RISK_SCALE_TAB } from '../../lib/patientTargetResolver';\r\n" +
+    "import './chartFocus.css';\r\n" +
+    "import { createPortal } from 'react-dom';\r\n" +
+    "import { TopbarTitleSlot } from '../shared/topbarTitleSlot';\r\n" +
+    "import { News2Chip } from './News2Chip';\r\n" +
+    "import PatientRecordPrintDialog from './PatientRecordPrintDialog';\r\n" +
+    "import { ClinicalTableSection } from './cartella/shared';\r\n" +
+    "import { AllergiesEditor } from './sections/AllergiesEditor';\r\n" +
+    "import { PATIENT_PHONE_MAX_LENGTH, validatePatientPhone } from '../../lib/patientPhone';\r\n" +
+    'import {\r\n' +
+    '  assignableBeds,\r\n' +
+    '  assignableRooms,\r\n' +
+    '  assignableWards,\r\n' +
+    '  bedDisplayLabel,\r\n' +
+    '  currentPatientPlacement,\r\n' +
+    '  patientPlacementValues,\r\n' +
+    '  isValidBedSelection,\r\n' +
+    "} from '../../lib/roomAssignmentModel';\r\n" +
+    "import { DiagnosisEditor } from './sections/DiagnosisEditor';\r\n" +
+    'import {\r\n' +
+    '  CHART_SECTIONS,\r\n' +
+    '  chartSectionOf,\r\n' +
+    '  chartSectionAllowed,\r\n' +
+    '  type ChartSection,\r\n' +
+    '  resolvePatientTab,\r\n' +
+    '  assessmentPatientTab,\r\n' +
+    '  patientTabGroup,\r\n' +
+    '  type TabGroup,\r\n' +
+    '  type TabId,\r\n' +
+    "} from './tabGroups';\r\n" +
+    "import { useCan } from '../../lib/capabilities';\r\n" +
+    'import {\r\n' +
+    '  AnamnesisEditor,\r\n' +
+    '  AssessmentWorkspace,\r\n' +
+    '  ContenzioniTab,\r\n' +
+    '  DiarioPazienteTab,\r\n' +
+    '  DimissioneTab,\r\n' +
+    '  DocumentiTab,\r\n' +
+    '  EsamiConsulenzeTab,\r\n' +
+    '  InvioPSModal,\r\n' +
+    '  MedicazioniTab,\r\n' +
+    '  NarrativeSectionsTab,\r\n' +
+    '  PainAssessmentEditor,\r\n' +
+    '  PresaInCaricoTab,\r\n' +
+    '  ScalaBradenTab,\r\n' +
+    '  ScalaTinettiTab,\r\n' +
+    '  TherapyEditor,\r\n' +
+    "} from './PatientDetailLazyTabs';\r\n" +
+    "import { prefetchPatientDetailTabs } from '../../lib/patientDetailPrefetch';\r\n" +
+    "import { ClinicalSectionLoading } from './ClinicalSectionLoading';\r\n" +
+    "import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';\r\n" +
+    "import { PatientVitalSignsView } from './PatientVitalSignsView';\r\n" +
+    "import './PatientRecordData.css';\r\n" +
+    "import './PatientOverview.css';\r\n" +
+    "import { UrgencyNotice } from '../shared/UrgencyNotice';\r\n" +
+    "import { consegnaPriorityLabel, isConsegnaUrgencyActive } from '../../lib/consegnaUrgency';\r\n" +
+    '\r\n' +
+    '// ── Types ─────────────────────────────────────────────────────────────────────\r\n' +
+    '\r\n' +
+    "// findGroupForTab removed — sidebar nav doesn't need group tracking\r\n" +
+    '\r\n' +
+    'interface PatientDetailProps {\r\n' +
+    '  paziente: Paziente;\r\n' +
+    '  cartella: CartellaPaziente;\r\n' +
+    '  consegne: Consegna[];\r\n' +
+    '  consegneSummary: ConsegnaSummary | null;\r\n' +
+    '  consegneLoading: boolean;\r\n' +
+    '  consegneError: string | null;\r\n' +
+    '  consegneHasMore: boolean;\r\n' +
+    '  onLoadMoreConsegne: () => void;\r\n' +
+    '  onRetryConsegne: () => void;\r\n' +
+    '  operatori: Operatore[];\r\n' +
+    '  camere: Camera[];\r\n' +
+    "  camereLoadState: 'idle' | 'loading' | 'ready' | 'error';\r\n" +
+    '  camereLoadError: string | null;\r\n' +
+    '  onRetryCamere: () => void;\r\n' +
+    '  canAssignRooms: boolean;\r\n' +
+    '  onBack: () => void;\r\n' +
+    '  backLabel?: string;\r\n' +
+    '  onAddConsegna: ConsegnaCreate;\r\n' +
+    '  consegnaDraftStore?: ConsegnaDraftStore;\r\n' +
+    '  assessmentDraftStore?: AssessmentDraftStore;\r\n' +
+    '  /** UX2 W8: «Ho capito» su una consegna urgente. */\r\n' +
+    '  onAcknowledgeConsegna: (id: string) => void | Promise<boolean>;\r\n' +
+    '  onUpdateCartella: (\r\n' +
+    '    pazienteId: string,\r\n' +
+    '    updates: Partial<CartellaPaziente>,\r\n' +
+    '    options?: { optimistic?: boolean },\r\n' +
+    '  ) => void | Promise<boolean>;\r\n' +
+    '  onUpdatePaziente: (\r\n' +
+    '    id: string,\r\n' +
+    "    updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale' | 'dateOfBirth'>>,\r\n" +
+    '  ) => Promise<boolean>;\r\n' +
+    '  onAssignCamera: (\r\n' +
+    '    pazienteId: string,\r\n' +
+    '    cameraNumero?: string,\r\n' +
+    '    bedId?: string,\r\n' +
+    '  ) => Promise<{ ok: boolean; lettoLabel?: string }>;\r\n' +
+    '  operatoreNome: string;\r\n' +
+    '  operatoreId: string;\r\n' +
+    '  /** #243: land on this tab (e.g. a "Moduli" module) the first time this patient is shown,\r\n' +
+    "   * instead of the default 'riepilogo'. Consumed once per mount/patient — subsequent patient\r\n" +
+    '   * switches while this component stays mounted still reset to the default tab. */\r\n' +
+    '  initialTab?: TabId;\r\n' +
+    '  navigationRequestId?: number;\r\n' +
+    '  /** Direct access: section + sub-view + item to land on (therapy, handover, diary entry,\r\n' +
+    '   *  document, assessment). `requestId` changes on every navigation, even to the same target. */\r\n' +
+    '  navigationTarget?: PatientTargetRequest;\r\n' +
+    "  /** Chiamato quando l'operatore cambia sezione: App ne fa un passo della cronologia. */\r\n" +
+    '  onTabNavigate?: (tab: TabId) => void;\r\n' +
+    '  assistantSectionRefresh?: { actionType: string; version: number };\r\n' +
+    "  /** #246: operator role, forwarded to the document-upload endpoints' auth gate (X-Operator-Role). */\r\n" +
+    '  operatoreRole?: string;\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '// ── Helpers ───────────────────────────────────────────────────────────────────\r\n' +
+    '\r\n' +
+    'function fmtDate(iso: string): string {\r\n' +
+    "  if (!iso) return '—';\r\n" +
+    '  const d = new Date(iso);\r\n' +
+    "  if (isNaN(d.getTime())) return '—';\r\n" +
+    "  return d.toLocaleDateString('it-IT');\r\n" +
+    '}\r\n' +
+    '\r\n' +
+    'function fmtDateTime(iso: string): string {\r\n' +
+    "  if (!iso) return '—';\r\n" +
+    '  const d = new Date(iso);\r\n' +
+    "  if (isNaN(d.getTime())) return '—';\r\n" +
+    '  return (\r\n' +
+    "    d.toLocaleDateString('it-IT') +\r\n" +
+    "    ' ' +\r\n" +
+    "    d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })\r\n" +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'function uid(): string {\r\n' +
+    '  return crypto.randomUUID();\r\n' +
+    '}\r\n' +
+    'function nowISO(): string {\r\n' +
+    '  return new Date().toISOString();\r\n' +
+    '}\r\n' +
+    'function todayStr(): string {\r\n' +
+    '  return new Date().toISOString().slice(0, 10);\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'const RISCHIO_CLASS: Record<string, string> = {\r\n' +
+    "  critico: 'badge--red',\r\n" +
+    "  alto: 'badge--amber',\r\n" +
+    "  medio: 'badge--blue',\r\n" +
+    "  basso: 'badge--gray',\r\n" +
+    '};\r\n' +
+    'const STATO_VITALE_CLASS: Record<string, string> = {\r\n' +
+    "  normale: 'vital-card--normale',\r\n" +
+    "  attenzione: 'vital-card--attenzione',\r\n" +
+    "  critico: 'vital-card--critico',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    '// SectionHeader removed — all sections now use ClinicalTableSection\r\n' +
+    '\r\n' +
+    '// ── Inline form wrapper ────────────────────────────────────────────────────────\r\n' +
+    '\r\n' +
+    'function InlineForm({\r\n' +
+    '  onSave,\r\n' +
+    '  onCancel,\r\n' +
+    '  saving = false,\r\n' +
+    '  children,\r\n' +
+    '}: {\r\n' +
+    '  onSave: () => void;\r\n' +
+    '  onCancel: () => void;\r\n' +
+    '  saving?: boolean;\r\n' +
+    '  children: React.ReactNode;\r\n' +
+    '}) {\r\n' +
+    '  return (\r\n' +
+    '    <div className="cr-inline-form">\r\n' +
+    '      {children}\r\n' +
+    '      <div className="cr-inline-form__actions">\r\n' +
+    '        <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>\r\n' +
+    '          Annulla\r\n' +
+    '        </button>\r\n' +
+    '        <button className="btn-success btn-sm" onClick={onSave} disabled={saving}>\r\n' +
+    "          <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}\r\n" +
+    '        </button>\r\n' +
+    '      </div>\r\n' +
+    '    </div>\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '// ── Item row ───────────────────────────────────────────────────────────────────\r\n' +
+    '\r\n' +
+    'function ItemRow({\r\n' +
+    '  onEdit,\r\n' +
+    '  onDelete,\r\n' +
+    '  children,\r\n' +
+    '}: {\r\n' +
+    '  onEdit: () => void;\r\n' +
+    '  onDelete: () => void;\r\n' +
+    '  children: React.ReactNode;\r\n' +
+    '}) {\r\n' +
+    '  return (\r\n' +
+    '    <div className="cr-item-row">\r\n' +
+    '      <div className="cr-item-row__content">{children}</div>\r\n' +
+    '      <div className="cr-item-row__actions">\r\n' +
+    '        <button className="icon-btn icon-btn--sm icon-btn--edit" onClick={onEdit} title="Modifica">\r\n' +
+    '          <IcoEdit />\r\n' +
+    '        </button>\r\n' +
+    '        <button\r\n' +
+    '          className="icon-btn icon-btn--sm icon-btn--danger"\r\n' +
+    '          onClick={onDelete}\r\n' +
+    '          title="Elimina"\r\n' +
+    '        >\r\n' +
+    '          <IcoX />\r\n' +
+    '        </button>\r\n' +
+    '      </div>\r\n' +
+    '    </div>\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '// ── Main component ─────────────────────────────────────────────────────────────\r\n' +
+    '\r\n' +
+    'export function PatientDetail({\r\n' +
+    '  operatori,\r\n' +
+    '  paziente,\r\n' +
+    '  cartella,\r\n' +
+    '  consegne,\r\n' +
+    '  consegneSummary,\r\n' +
+    '  consegneLoading,\r\n' +
+    '  consegneError,\r\n' +
+    '  consegneHasMore,\r\n' +
+    '  onLoadMoreConsegne,\r\n' +
+    '  onRetryConsegne,\r\n' +
+    '  camere,\r\n' +
+    '  camereLoadState,\r\n' +
+    '  camereLoadError,\r\n' +
+    '  onRetryCamere,\r\n' +
+    '  canAssignRooms,\r\n' +
+    '  onAddConsegna,\r\n' +
+    '  consegnaDraftStore,\r\n' +
+    '  assessmentDraftStore,\r\n' +
+    '  onAcknowledgeConsegna,\r\n' +
+    '  onUpdateCartella,\r\n' +
+    '  onUpdatePaziente,\r\n' +
+    '  onAssignCamera,\r\n' +
+    '  operatoreNome,\r\n' +
+    '  operatoreId,\r\n' +
+    '  operatoreRole,\r\n' +
+    '  initialTab,\r\n' +
+    '  navigationRequestId,\r\n' +
+    '  navigationTarget,\r\n' +
+    '  onTabNavigate,\r\n' +
+    '  assistantSectionRefresh,\r\n' +
+    '}: PatientDetailProps) {\r\n' +
+    '  const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));\r\n' +
+    "  const canListTherapy = useCan('therapy.list');\r\n" +
+    '  const canListDocumen'... 108939 more characters
+  
+      at TestContext.<anonymous> (C:\w-425\frontend\src\lib\__tests__\patientChartScroll.test.ts:10:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { intakeDemographicErrors } from \'../../lib/intakeDemographics\';\r\nimport {\r\n  birthDateValue,\r\n  birthSummary,\r\n  formatBirthDate,\r\n  patientAge,\r\n  type DemographicField,\r\n} from \'../../lib/patientDemographics\';\r\nimport { patientLocationLabel } from \'../../lib/patientIdentity\';\r\nimport { PatientIdentifier } from \'../shared/PatientIdentity\';\r\nimport { DemographicsStatus } from \'../shared/DemographicsStatus\';\r\nimport { PatientIntakeReview } from \'./PatientIntakeReview\';\r\nimport { PatientContacts } from \'./PatientContacts\';\r\nimport { WidgetGroup } from \'../shared/WidgetGroup\';\r\nimport { ClinicalCard } from \'../shared/ClinicalCard\';\r\nimport { usePatientIntakeReview } from \'../../lib/patientIntakeReview\';\r\nimport { ConsegnaTimestamp } from \'./ConsegnaTimestamp\';\r\nimport { ConsegnaQuickAdd } from \'./ConsegnaQuickAdd\';\r\nimport type { ConsegnaCreate } from \'../../lib/consegnaCreation\';\r\nimport type { ConsegnaDraftStore } from \'../../lib/consegnaDrafts\';\r\nimport {\r\n  createAssessmentDraftStore,\r\n  type AssessmentDraftStore,\r\n} from \'../../lib/assessments/assessmentDraftStore\';\r\nimport {\r\n  assessmentCatalogEntry,\r\n  type AssessmentEntry,\r\n} from \'../../lib/assessments/assessmentEntry\';\r\nimport { AssessmentCatalog } from \'./assessments/AssessmentCatalog\';\r\nimport type { AssessmentTarget } from \'../../lib/assessments/assessmentTypes\';\r\nimport {\r\n  startTransition,\r\n  Suspense,\r\n  useState,\r\n  useEffect,\r\n  useRef,\r\n  useCallback,\r\n  useContext,\r\n} from \'react\';\r\nimport type {\r\n  Paziente,\r\n  Consegna,\r\n  Operatore,\r\n  Camera,\r\n  CartellaPaziente,\r\n  NotaClinica,\r\n  VisitaRecord,\r\n  IndicatoreRischio,\r\n  VitaleItem,\r\n  Anamnesi,\r\n  ConsegnaSummary,\r\n} from \'../../types\';\r\nimport { IcoEdit, IcoCheck, IcoX, IcoPlus, IcoWarning, IcoClock } from \'../../icons\';\r\nimport { DIARIO_AUTHOR_FILTERS } from \'./cartella/diarioFilters\';\r\nimport { TopNav, type TopNavItem } from \'../navigation/TopNav\';\r\nimport { AvvisoAnomalieFarmaci } from \'./cartella/AvvisoAnomalieFarmaci\';\r\nimport {\r\n  useAnomalieReparto,\r\n  anomalieDelPaziente,\r\n  anomalyTherapyId,\r\n} from \'./cartella/useAnomalieReparto\';\r\nimport type { PatientTargetRequest, TherapyTarget } from \'../../lib/patientTarget\';\r\nimport { RISK_SCALE_TAB } from \'../../lib/patientTargetResolver\';\r\nimport \'./chartFocus.css\';\r\nimport { createPortal } from \'react-dom\';\r\nimport { TopbarTitleSlot } from \'../shared/topbarTitleSlot\';\r\nimport { News2Chip } from \'./News2Chip\';\r\nimport PatientRecordPrintDialog from \'./PatientRecordPrintDialog\';\r\nimport { ClinicalTableSection } from \'./cartella/shared\';\r\nimport { AllergiesEditor } from \'./sections/AllergiesEditor\';\r\nimport { PATIENT_PHONE_MAX_LENGTH, validatePatientPhone } from \'../../lib/patientPhone\';\r\nimport {\r\n  assignableBeds,\r\n  assignableRooms,\r\n  assignableWards,\r\n  bedDisplayLabel,\r\n  currentPatientPlacement,\r\n  patientPlacementValues,\r\n  isValidBedSelection,\r\n} from \'../../lib/roomAssignmentModel\';\r\nimport { DiagnosisEditor } from \'./sections/DiagnosisEditor\';\r\nimport {\r\n  CHART_SECTIONS,\r\n  chartSectionOf,\r\n  chartSectionAllowed,\r\n  type ChartSection,\r\n  resolvePatientTab,\r\n  assessmentPatientTab,\r\n  patientTabGroup,\r\n  type TabGroup,\r\n  type TabId,\r\n} from \'./tabGroups\';\r\nimport { useCan } from \'../../lib/capabilities\';\r\nimport {\r\n  AnamnesisEditor,\r\n  AssessmentWorkspace,\r\n  ContenzioniTab,\r\n  DiarioPazienteTab,\r\n  DimissioneTab,\r\n  DocumentiTab,\r\n  EsamiConsulenzeTab,\r\n  InvioPSModal,\r\n  MedicazioniTab,\r\n  NarrativeSectionsTab,\r\n  PainAssessmentEditor,\r\n  PresaInCaricoTab,\r\n  ScalaBradenTab,\r\n  ScalaTinettiTab,\r\n  TherapyEditor,\r\n} from \'./PatientDetailLazyTabs\';\r\nimport { prefetchPatientDetailTabs } from \'../../lib/patientDetailPrefetch\';\r\nimport { ClinicalSectionLoading } from \'./ClinicalSectionLoading\';\r\nimport { AccessibleDialogSurface } from \'../shared/AccessibleDialogSurface\';\r\nimport { PatientVitalSignsView } from \'./PatientVitalSignsView\';\r\nimport \'./PatientRecordData.css\';\r\nimport \'./PatientOverview.css\';\r\nimport { UrgencyNotice } from \'../shared/UrgencyNotice\';\r\nimport { consegnaPriorityLabel, isConsegnaUrgencyActive } from \'../../lib/consegnaUrgency\';\r\n\r\n// ── Types ─────────────────────────────────────────────────────────────────────\r\n\r\n// findGroupForTab removed — sidebar nav doesn\'t need group tracking\r\n\r\ninterface PatientDetailProps {\r\n  paziente: Paziente;\r\n  cartella: CartellaPaziente;\r\n  consegne: Consegna[];\r\n  consegneSummary: ConsegnaSummary | null;\r\n  consegneLoading: boolean;\r\n  consegneError: string | null;\r\n  consegneHasMore: boolean;\r\n  onLoadMoreConsegne: () => void;\r\n  onRetryConsegne: () => void;\r\n  operatori: Operatore[];\r\n  camere: Camera[];\r\n  camereLoadState: \'idle\' | \'loading\' | \'ready\' | \'error\';\r\n  camereLoadError: string | null;\r\n  onRetryCamere: () => void;\r\n  canAssignRooms: boolean;\r\n  onBack: () => void;\r\n  backLabel?: string;\r\n  onAddConsegna: ConsegnaCreate;\r\n  consegnaDraftStore?: ConsegnaDraftStore;\r\n  assessmentDraftStore?: AssessmentDraftStore;\r\n  /** UX2 W8: «Ho capito» su una consegna urgente. */\r\n  onAcknowledgeConsegna: (id: string) => void | Promise<boolean>;\r\n  onUpdateCartella: (\r\n    pazienteId: string,\r\n    updates: Partial<CartellaPaziente>,\r\n    options?: { optimistic?: boolean },\r\n  ) => void | Promise<boolean>;\r\n  onUpdatePaziente: (\r\n    id: string,\r\n    updates: Partial<Pick<Paziente, \'email\' | \'phone\' | \'codiceFiscale\' | \'dateOfBirth\'>>,\r\n  ) => Promise<boolean>;\r\n  onAssignCamera: (\r\n    pazienteId: string,\r\n    cameraNumero?: string,\r\n    bedId?: string,\r\n  ) => Promise<{ ok: boolean; lettoLabel?: string }>;\r\n  operatoreNome: string;\r\n  operatoreId: string;\r\n  /** #243: land on this tab (e.g. a "Moduli" module) the first time this patient is shown,\r\n   * instead of the default \'riepilogo\'. Consumed once per mount/patient — subsequent patient\r\n   * switches while this component stays mounted still reset to the default tab. */\r\n  initialTab?: TabId;\r\n  navigationRequestId?: number;\r\n  /** Direct access: section + sub-view + item to land on (therapy, handover, diary entry,\r\n   *  document, assessment). `requestId` changes on every navigation, even to the same target. */\r\n  navigationTarget?: PatientTargetRequest;\r\n  /** Chiamato quando l\'operatore cambia sezione: App ne fa un passo della cronologia. */\r\n  onTabNavigate?: (tab: TabId) => void;\r\n  assistantSectionRefresh?: { actionType: string; version: number };\r\n  /** #246: operator role, forwarded to the document-upload endpoints\' auth gate (X-Operator-Role). */\r\n  operatoreRole?: string;\r\n}\r\n\r\n// ── Helpers ───────────────────────────────────────────────────────────────────\r\n\r\nfunction fmtDate(iso: string): string {\r\n  if (!iso) return \'—\';\r\n  const d = new Date(iso);\r\n  if (isNaN(d.getTime())) return \'—\';\r\n  return d.toLocaleDateString(\'it-IT\');\r\n}\r\n\r\nfunction fmtDateTime(iso: string): string {\r\n  if (!iso) return \'—\';\r\n  const d = new Date(iso);\r\n  if (isNaN(d.getTime())) return \'—\';\r\n  return (\r\n    d.toLocaleDateString(\'it-IT\') +\r\n    \' \' +\r\n    d.toLocaleTimeString(\'it-IT\', { hour: \'2-digit\', minute: \'2-digit\' })\r\n  );\r\n}\r\n\r\nfunction uid(): string {\r\n  return crypto.randomUUID();\r\n}\r\nfunction nowISO(): string {\r\n  return new Date().toISOString();\r\n}\r\nfunction todayStr(): string {\r\n  return new Date().toISOString().slice(0, 10);\r\n}\r\n\r\nconst RISCHIO_CLASS: Record<string, string> = {\r\n  critico: \'badge--red\',\r\n  alto: \'badge--amber\',\r\n  medio: \'badge--blue\',\r\n  basso: \'badge--gray\',\r\n};\r\nconst STATO_VITALE_CLASS: Record<string, string> = {\r\n  normale: \'vital-card--normale\',\r\n  attenzione: \'vital-card--attenzione\',\r\n  critico: \'vital-card--critico\',\r\n};\r\n\r\n// SectionHeader removed — all sections now use ClinicalTableSection\r\n\r\n// ── Inline form wrapper ────────────────────────────────────────────────────────\r\n\r\nfunction InlineForm({\r\n  onSave,\r\n  onCancel,\r\n  saving = false,\r\n  children,\r\n}: {\r\n  onSave: () => void;\r\n  onCancel: () => void;\r\n  saving?: boolean;\r\n  children: React.ReactNode;\r\n}) {\r\n  return (\r\n    <div className="cr-inline-form">\r\n      {children}\r\n      <div className="cr-inline-form__actions">\r\n        <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>\r\n          Annulla\r\n        </button>\r\n        <button className="btn-success btn-sm" onClick={onSave} disabled={saving}>\r\n          <IcoCheck /> {saving ? \'Salvataggio…\' : \'Salva\'}\r\n        </button>\r\n      </div>\r\n    </div>\r\n  );\r\n}\r\n\r\n// ── Item row ───────────────────────────────────────────────────────────────────\r\n\r\nfunction ItemRow({\r\n  onEdit,\r\n  onDelete,\r\n  children,\r\n}: {\r\n  onEdit: () => void;\r\n  onDelete: () => void;\r\n  children: React.ReactNode;\r\n}) {\r\n  return (\r\n    <div className="cr-item-row">\r\n      <div className="cr-item-row__content">{children}</div>\r\n      <div className="cr-item-row__actions">\r\n        <button className="icon-btn icon-btn--sm icon-btn--edit" onClick={onEdit} title="Modifica">\r\n          <IcoEdit />\r\n        </button>\r\n        <button\r\n          className="icon-btn icon-btn--sm icon-btn--danger"\r\n          onClick={onDelete}\r\n          title="Elimina"\r\n        >\r\n          <IcoX />\r\n        </button>\r\n      </div>\r\n    </div>\r\n  );\r\n}\r\n\r\n// ── Main component ─────────────────────────────────────────────────────────────\r\n\r\nexport function PatientDetail({\r\n  operatori,\r\n  paziente,\r\n  cartella,\r\n  consegne,\r\n  consegneSummary,\r\n  consegneLoading,\r\n  consegneError,\r\n  consegneHasMore,\r\n  onLoadMoreConsegne,\r\n  onRetryConsegne,\r\n  camere,\r\n  camereLoadState,\r\n  camereLoadError,\r\n  onRetryCamere,\r\n  canAssignRooms,\r\n  onAddConsegna,\r\n  consegnaDraftStore,\r\n  assessmentDraftStore,\r\n  onAcknowledgeConsegna,\r\n  onUpdateCartella,\r\n  onUpdatePaziente,\r\n  onAssignCamera,\r\n  operatoreNome,\r\n  operatoreId,\r\n  operatoreRole,\r\n  initialTab,\r\n  navigationRequestId,\r\n  navigationTarget,\r\n  onTabNavigate,\r\n  assistantSectionRefresh,\r\n}: PatientDetailProps) {\r\n  const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));\r\n  const canListTherapy = useCan(\'therapy.list\');\r\n  const canListDocumen'... 108939 more characters,
+    expected: /import '\.\/PatientChartScroll\.css'/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\patientChartScroll.test.ts:1:580
+✖ chart tabs do not become another vertical owner through cross-axis conversion (0.2955ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\.cr-tab-content\s*\{[^}]*overflow-x:\s*clip;[^}]*overflow-y:\s*visible;/s. Input:
+  
+  ''
+  
+      at TestContext.<anonymous> (C:\w-425\frontend\src\lib\__tests__\patientChartScroll.test.ts:15:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: /\.cr-tab-content\s*\{[^}]*overflow-x:\s*clip;[^}]*overflow-y:\s*visible;/s,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\patientChartScroll.test.ts:1:836
+✖ small chart viewports explicitly release both axes and the constrained ancestor chain (0.1612ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /@media screen and \(max-width: 1023px\)/. Input:
+  
+  ''
+  
+      at TestContext.<anonymous> (C:\w-425\frontend\src\lib\__tests__\patientChartScroll.test.ts:19:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: /@media screen and \(max-width: 1023px\)/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\patientChartScroll.test.ts:1:1223
+✖ patient prescribing actions remain in flow rather than covering keyboard focus (0.1883ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\.therapy-form-shell__actions\s*\{[^}]*position:\s*static;/s. Input:
+  
+  ''
+  
+      at TestContext.<anonymous> (C:\w-425\frontend\src\lib\__tests__\patientChartScroll.test.ts:24:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: /\.therapy-form-shell__actions\s*\{[^}]*position:\s*static;/s,
+    operator: 'match',
+    diff: 'simple'
+  }
