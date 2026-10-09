@@ -10,6 +10,7 @@ import { isPatchUnit } from '../../operator/cartella/therapyDose';
 import type { TherapyFieldIssue } from '../../operator/cartella/therapyFieldFeedback';
 import type { IntakeTherapyDiagnostic } from './intakeTherapyNavigation';
 import { glucoseScaleRows, validateGlucoseScaleRows } from '../../operator/cartella/glucoseScale';
+import { isTherapyRegimenRoute, THERAPY_ROUTE_REVIEW_MESSAGE } from '../../../lib/therapyRoute';
 
 const hasText = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
 const validTime = (v: unknown): v is string =>
@@ -52,7 +53,9 @@ export function therapyInputDiagnostics(input: Record<string, unknown>): Therapy
     (!validDate(input.dataFine) || String(input.dataFine) < String(input.dataInizio))
   )
     add('dataFine', 'La data di fine deve essere valida e non precedere l’inizio');
-  if (!VIA_OPTIONS.includes(String(input.viaSomministrazione)))
+  if (isTherapyRegimenRoute(input.viaSomministrazione))
+    add('viaSomministrazione', THERAPY_ROUTE_REVIEW_MESSAGE);
+  else if (!VIA_OPTIONS.includes(String(input.viaSomministrazione)))
     add('viaSomministrazione', 'Verifica la via di somministrazione');
   if (!['periodica', 'una_tantum', 'al_bisogno'].includes(String(input.tipo)))
     add('tipo', 'Verifica il tipo di terapia');

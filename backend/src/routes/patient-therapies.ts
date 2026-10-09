@@ -35,7 +35,11 @@ import {
   parseTherapyListQuery,
   TherapyListInputError,
 } from '../therapies/list-query.js';
-import { assertTherapyScalarInput, TherapyInputError } from '../therapies/input-validation.js';
+import {
+  assertTherapyScalarInput,
+  assertTherapyRouteUpdate,
+  TherapyInputError,
+} from '../therapies/input-validation.js';
 
 const router = Router();
 
@@ -291,6 +295,8 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
       return;
     }
 
+    const legacyStatusOnly = assertTherapyRouteUpdate(body, existing);
+
     const scalarAllowed = [
       'farmacoNome',
       'dosaggio',
@@ -336,30 +342,32 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     const hasSchedules = body.schedules !== undefined;
     if (hasSchedules) assertValidSchedulesInput(body.schedules);
     const schedules: ScheduleInput[] = hasSchedules ? normalizeSchedules(body.schedules) : [];
-    const nextDoseMode =
-      updates.doseMode === 'glucose_scale' ||
-      (updates.doseMode === undefined && existing.doseMode === 'glucose_scale')
-        ? 'glucose_scale'
-        : 'fixed';
-    updates.doseMode = nextDoseMode;
-    if (nextDoseMode === 'glucose_scale') {
-      if ((updates.tipo ?? existing.tipo) !== 'periodica') {
-        throw new InvalidDoseProtocolError('Lo schema glicemico richiede una terapia periodica');
-      }
-      if (
-        (hasSchedules && schedules.length === 0) ||
-        (!hasSchedules && existing._count.schedules === 0)
-      ) {
-        throw new InvalidDoseProtocolError(
-          'Aggiungi almeno un orario di rilevazione e somministrazione',
+    if (!legacyStatusOnly) {
+      const nextDoseMode =
+        updates.doseMode === 'glucose_scale' ||
+        (updates.doseMode === undefined && existing.doseMode === 'glucose_scale')
+          ? 'glucose_scale'
+          : 'fixed';
+      updates.doseMode = nextDoseMode;
+      if (nextDoseMode === 'glucose_scale') {
+        if ((updates.tipo ?? existing.tipo) !== 'periodica') {
+          throw new InvalidDoseProtocolError('Lo schema glicemico richiede una terapia periodica');
+        }
+        if (
+          (hasSchedules && schedules.length === 0) ||
+          (!hasSchedules && existing._count.schedules === 0)
+        ) {
+          throw new InvalidDoseProtocolError(
+            'Aggiungi almeno un orario di rilevazione e somministrazione',
+          );
+        }
+        updates.doseProtocol = normalizeGlucoseScaleProtocol(
+          Object.hasOwn(updates, 'doseProtocol') ? updates.doseProtocol : existing.doseProtocol,
         );
+        updates.dosaggio = 'Dose secondo schema glicemico';
+      } else {
+        updates.doseProtocol = Prisma.DbNull;
       }
-      updates.doseProtocol = normalizeGlucoseScaleProtocol(
-        Object.hasOwn(updates, 'doseProtocol') ? updates.doseProtocol : existing.doseProtocol,
-      );
-      updates.dosaggio = 'Dose secondo schema glicemico';
-    } else {
-      updates.doseProtocol = Prisma.DbNull;
     }
     if ('dataInizio' in updates || 'dataFine' in updates) {
       const dates = normalizeTherapyDateRange(

@@ -193,6 +193,8 @@ test('invalid therapy returns indexed 400 before any patient or therapy write', 
     { ...therapy, schedules: [{ ...therapy.schedules[0], time: '25:99' }] },
     { ...therapy, schedules: [therapy.schedules[0], therapy.schedules[0]] },
     { ...therapy, giorniSettimana: 'unknown' },
+    { ...therapy, viaSomministrazione: 'al bisogno' },
+    { ...therapy, viaSomministrazione: 'PRN', tipo: 'al_bisogno' },
     null,
   ]) {
     const response = await confirm([therapy, bad]);

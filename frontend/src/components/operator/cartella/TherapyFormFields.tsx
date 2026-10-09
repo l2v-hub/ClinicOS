@@ -16,6 +16,7 @@ import { therapyFieldFeedback, type TherapyFieldIssue } from './therapyFieldFeed
 import './TherapyFormFields.css';
 import { GlucoseScaleEditor } from './GlucoseScaleEditor';
 import type { GlucoseDoseRuleForm } from './glucoseScale';
+import { isTherapyRegimenRoute, THERAPY_ROUTE_REVIEW_MESSAGE } from '../../../lib/therapyRoute';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -26,7 +27,6 @@ export const VIA_OPTIONS = [
   'IV',
   'sublinguale',
   'topico',
-  'al bisogno',
   'transdermica',
   'inalatoria',
   'rettale',
@@ -136,7 +136,13 @@ export function TherapyFormFields({
   prescriberSuggestions,
 }: TherapyFormFieldsProps) {
   const id = useId();
-  const feedback = therapyFieldFeedback(id, issues);
+  const routeNeedsReview = isTherapyRegimenRoute(value.viaSomministrazione);
+  const feedback = therapyFieldFeedback(
+    id,
+    routeNeedsReview && !issues?.some((issue) => issue.field === 'viaSomministrazione')
+      ? [...(issues ?? []), { field: 'viaSomministrazione', message: THERAPY_ROUTE_REVIEW_MESSAGE }]
+      : issues,
+  );
   // Keep pending custom quantities across changes of therapy type.
   const [customQty, setCustomQty] = useState<Record<number, string>>({});
   const update = (patch: Partial<TherapyFormValue>) =>
@@ -230,11 +236,13 @@ export function TherapyFormFields({
               id={`${id}-route`}
               {...feedback.attributes('viaSomministrazione')}
               className="form-select"
-              value={value.viaSomministrazione}
+              value={routeNeedsReview ? '' : value.viaSomministrazione}
               onChange={(e) => update({ viaSomministrazione: e.target.value })}
             >
               {!VIA_OPTIONS.includes(value.viaSomministrazione) && (
-                <option value={value.viaSomministrazione}>Seleziona via</option>
+                <option value={routeNeedsReview ? '' : value.viaSomministrazione}>
+                  Seleziona via
+                </option>
               )}
               {VIA_OPTIONS.map((v) => (
                 <option key={v} value={v}>

@@ -2,6 +2,7 @@ import { useId } from 'react';
 import type { TherapyFormValue } from './TherapyFormFields';
 import { formatFraction } from './therapyDose';
 import { GlucoseScaleSummary } from './GlucoseScaleEditor';
+import { isTherapyRegimenRoute } from '../../../lib/therapyRoute';
 
 const WEEKDAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 const TYPES = { periodica: 'Periodica', una_tantum: 'Una tantum', al_bisogno: 'Al bisogno' };
@@ -20,11 +21,15 @@ export function TherapyFormPreview({ value }: { value: TherapyFormValue }) {
       <div className="therapy-form__preview-heading">
         <strong>{value.farmacoNome || 'Farmaco da selezionare'}</strong>
         <span>
-          {TYPES[value.tipo]} · {value.stato}
+          Tipo terapia: {TYPES[value.tipo]} · {value.stato}
         </span>
       </div>
       <p>
-        Via: {value.viaSomministrazione || 'da indicare'} · Inizio: {dateLabel(value.dataInizio)}
+        Via:{' '}
+        {isTherapyRegimenRoute(value.viaSomministrazione)
+          ? 'da verificare'
+          : value.viaSomministrazione || 'da indicare'}{' '}
+        · Inizio: {dateLabel(value.dataInizio)}
         {value.tipo === 'periodica' && value.dataFine && ` · Fine: ${dateLabel(value.dataFine)}`}
       </p>
       {value.tipo === 'periodica' && (

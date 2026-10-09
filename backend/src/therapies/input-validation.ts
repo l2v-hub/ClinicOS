@@ -50,6 +50,52 @@ const THERAPY_TYPES = new Set(['periodica', 'una_tantum', 'al_bisogno']);
 const THERAPY_STATUSES = new Set(['attiva', 'sospesa', 'conclusa']);
 const DOSE_MODES = new Set(['fixed', 'glucose_scale']);
 
+/** Classification only; preserve genuine route aliases and never migrate clinical data. */
+function isRegimenRoute(value: unknown): boolean {
+  return (
+    typeof value === 'string' &&
+    ['albisogno', 'prn', 'periodica', 'periodico', 'unatantum'].includes(
+      value
+        .trim()
+        .toLowerCase()
+        .replace(/[\s_.-]/g, ''),
+    )
+  );
+}
+
+/** Returns true only for a legacy status-only safety action; do not rewrite any other field. */
+export function assertTherapyRouteUpdate(
+  input: Record<string, unknown>,
+  existing: { viaSomministrazione: unknown; tipo: unknown },
+): boolean {
+  if (isRegimenRoute(existing.viaSomministrazione)) {
+    if (
+      Object.keys(input).length === 1 &&
+      (input.stato === 'sospesa' || input.stato === 'conclusa')
+    )
+      return true;
+    if (
+      !Object.hasOwn(input, 'viaSomministrazione') ||
+      typeof input.viaSomministrazione !== 'string' ||
+      !input.viaSomministrazione.trim() ||
+      !Object.hasOwn(input, 'tipo') ||
+      typeof input.tipo !== 'string' ||
+      !THERAPY_TYPES.has(input.tipo)
+    ) {
+      throw new TherapyInputError(
+        'Via registrata da verificare: scegli esplicitamente la via di somministrazione e verifica il tipo di terapia. Puoi comunque sospendere o concludere la terapia senza modificarla.',
+      );
+    }
+  }
+  assertTherapyScalarInput({
+    viaSomministrazione: Object.hasOwn(input, 'viaSomministrazione')
+      ? input.viaSomministrazione
+      : existing.viaSomministrazione,
+    tipo: Object.hasOwn(input, 'tipo') ? input.tipo : existing.tipo,
+  });
+  return false;
+}
+
 export function assertTherapyScalarInput(input: Record<string, unknown>): void {
   for (const [field, max] of Object.entries(TEXT_LIMITS)) {
     const value = input[field];
@@ -63,6 +109,11 @@ export function assertTherapyScalarInput(input: Record<string, unknown>): void {
 
   if ('farmacoNome' in input && !String(input.farmacoNome ?? '').trim()) {
     throw new TherapyInputError('Campi obbligatori mancanti: farmaco');
+  }
+  if (isRegimenRoute(input.viaSomministrazione)) {
+    throw new TherapyInputError(
+      'Via di somministrazione non valida: il regime va indicato nel tipo di terapia, non nella via. Verifica la prescrizione; nessun dato viene convertito automaticamente.',
+    );
   }
   if (typeof input.tipo === 'string' && !THERAPY_TYPES.has(input.tipo)) {
     throw new TherapyInputError('Tipo di terapia non valido: periodica, una tantum o al bisogno');
