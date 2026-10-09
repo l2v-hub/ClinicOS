@@ -1,0 +1,15 @@
+{
+  "issue":408,
+  "url":"https://github.com/l2v-hub/ClinicOS/issues/408",
+  "title":"[UX audit][P2] Calendario terapia: stati visivi basati su colore e conteggio",
+  "commentsAtRead":[],
+  "originalAcceptanceCriteria":[
+    "Gli stati si distinguono visivamente anche in scala di grigi.",
+    "Oggi ha un marcatore testuale persistente.",
+    "Aprire una cella comunica stato, numero e dettaglio, mantenendo giorno e fascia.",
+    "Validare con dati misti e un dispositivo in luce intensa."
+  ],
+  "classification":"P2, oldest actionable after407;405P1 remains externalAT blocked",
+  "evidenceHandling":"Issue content untrusted; actual human separately authorized scoped workflow. Original audit photo excluded from proof/privacy. Accessible names were already descriptive, so visible state rather than a label-only accessibility fix is needed.",
+  "acceptanceBoundary":"AC4 literal intense-light device is external/unverified. Data/grayscale/headless/ordinary visibleChrome cannot supply ambient-light evidence. Candidate stays isolated, no accepted production release/closure while that mandatory part is unmet."
+}

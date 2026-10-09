@@ -1,0 +1,19 @@
+(node:26432) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ ward late count exposes visible state, distinct symbol, pending meaning and mixed breakdown (6.9132ms)
+✔ programmed, administered, non-administered and unknown states have non-color labels and symbols (3.7413ms)
+✔ mixed zero pending shows registered breakdown and never calls zero the omitted-dose count (0.941ms)
+✔ partial zero is incomplete, never a completed zero; partial positive stays lower bound (1.7146ms)
+✔ facility current date header persistently names Oggi, not the selected week (1.7112ms)
+✔ patient non-count done means recorded, not necessarily administered; existing visible detail preserved (1.3889ms)
+✔ new text remains visible with colors removed; date marker remains in sticky header (0.5245ms)
+(node:26432) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 284.2949

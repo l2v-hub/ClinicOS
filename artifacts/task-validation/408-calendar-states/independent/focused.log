@@ -1,0 +1,90 @@
+(node:41320) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-04: the slot detail shows only the current patient at that exact time (2.5947ms)
+✔ AT-04: simultaneous doses share one named button for their hour dialog (9.0719ms)
+(node:41320) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ AT-05: administration from the chart is capability-gated and reuses the giro rows (6.0535ms)
+✔ AT-05: recordAdministration posts the slot key to the existing endpoints (16.584ms)
+✔ AT-05: a refused administration shows the server reason, not a generic error (1.0774ms)
+✔ AT-12: a correctly filled therapy form has no issues (1.183ms)
+✔ AT-11: invalid fields are reported per field and schedule row, never dropped (0.5292ms)
+✔ AT-11: a server rejection shows its reason instead of «Errore 400» (2.4289ms)
+(node:38168) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ ward late count exposes visible state, distinct symbol, pending meaning and mixed breakdown (16.9785ms)
+✔ programmed, administered, non-administered and unknown states have non-color labels and symbols (5.9378ms)
+✔ mixed zero pending shows registered breakdown and never calls zero the omitted-dose count (2.5994ms)
+✔ partial zero is incomplete, never a completed zero; partial positive stays lower bound (4.2866ms)
+✔ facility current date header persistently names Oggi, not the selected week (3.5417ms)
+✔ patient non-count done means recorded, not necessarily administered; existing visible detail preserved (3.5309ms)
+✔ new text remains visible with colors removed; date marker remains in sticky header (1.0658ms)
+(node:38168) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36772) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ done counts administered and not administered from exact server totals (0.6318ms)
+✔ initial slot is the first by time with pending work, else the first of the day (1.1689ms)
+✔ reason labels map known codes and keep free text; time is facility time (0.6171ms)
+✔ rows name patient, identifier and drug on every action; never the stale room fields (8.0019ms)
+✔ read-only rows offer no signing; done rows show time, operator and reason (2.3196ms)
+✔ page shows the round by real time: only hours with administrations, counts from them (3.8162ms)
+✔ calendar is the main view; directed dose requests retain loading and retry feedback (6.1704ms)
+✔ the round is by real prescription time and by patient, whatever the server band (0.3541ms)
+✔ one group per patient with all its drugs of that hour; the action sends the server band (1.4337ms)
+(node:36772) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:26692) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ keeps every exact time, simultaneous medication and per-dose fraction across a full day (16.3309ms)
+✔ isolates the patient and excludes suspended/concluded prescriptions (0.8157ms)
+✔ date range is inclusive and ISO weekdays are respected (1.0176ms)
+✔ one-time dates and legacy times work independently from the recurring date range (0.6839ms)
+✔ PRN and fascia-only orders remain outside the grid without fabricated times or doses (0.8512ms)
+✔ invalid legacy dates/recurrence stay visible for correction instead of masquerading as empty (0.3862ms)
+✔ mixed invalid times retain valid occurrences and surface the anomaly (0.3157ms)
+✔ calendar date validation/navigation respects civil days, leap years and local midnight (1.6068ms)
+✔ reads all patient-scoped pages with operator headers, without returning a partial page (27.2576ms)
+✔ HTTP failure on a later page discards the whole read and a fresh retry recovers (1.3216ms)
+✔ rejects foreign patient payloads and malformed envelopes, not a false empty calendar (2.0058ms)
+✔ counts, cursor loops and capacity cannot silently truncate the patient regimen (0.934ms)
+(node:26692) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ timeout aborts the read and a subsequent retry does not share the stalled request (19.8844ms)
+✔ cancelled or late ignored-abort responses cannot complete a patient read (0.7989ms)
+(node:40352) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ Back calendar snapshot preserves minute precision, week, dialog and scroll (4.9745ms)
+✔ calendar remembers this ward history entry without names or changing patient entry (0.7281ms)
+✔ active prescription links have their own tab, dose links keep calendar (0.4908ms)
+(node:40352) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23236) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ zero doses distinguishes incomplete prescriptions immediately and keeps original reasons (7.9068ms)
+✔ non-prescriber sees clinician reference, never an editor action (0.6903ms)
+✔ authorized edit is tied to the original incomplete therapy (0.7701ms)
+✔ mixed valid and invalid schedules preserve separate counts without claiming total drugs (0.5845ms)
+✔ genuinely empty and week states explain the displayed period without incomplete warning (0.375ms)
+(node:23236) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ warning precedes grid and parent forwards only permitted existing-prescription edits (10.7259ms)
+✔ incomplete calendar editor never derives hours from bands or missing times (4.356ms)
+✔ strict editor preserves saved exact/invalid times and quantities for explicit correction (0.349ms)
+✔ adding a schedule requires an explicit time rather than a default dose hour (1.5202ms)
+(node:35892) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ the week runs Monday to Sunday around any day, across month and year ends (2.5013ms)
+✔ time slots of the week are listed once each, in time order, even if a day lacks one (9.0005ms)
+✔ cell state: empty, complete, to do today, future, and past without records (to verify) (0.2595ms)
+✔ cell label says what the data says, never "skipped" (0.2901ms)
+(node:35892) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 54
+ℹ suites 0
+ℹ pass 54
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 646.1058

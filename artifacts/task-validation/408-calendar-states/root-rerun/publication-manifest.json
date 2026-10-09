@@ -1,0 +1,154 @@
+{
+  "applicationCommit": "f58fbbd3337fabe68315dbd3cf7d295219dab58e",
+  "applicationSourceSha256": "fe8f81cf7483941b21958ee92a1340767625dbc6665db320b91eb9b5b95189a8",
+  "verdict": "BLOCKED",
+  "blocker": "Original AC4 actual device in intense ambient light UNVERIFIED. Mixed-data browser portion passes only; no release/closure.",
+  "passingBrowserAssertions": 10,
+  "excluded": [
+    "debug-attempts/**",
+    "unrelated launchers",
+    "generated metadata"
+  ],
+  "files": [
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-browser.mjs",
+      "sha256": "f8da85ed8098f73273dbaa602894266975b3fcd6fcd6d6d343ec187e60e589f8"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-commands.mjs",
+      "sha256": "8cb82ed1be3645cca65380f51a8eb7f52c02789024fffd873e727a3cfb13068a"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-publication-receipt.mjs",
+      "sha256": "d111ae537841fbb83bc603d028a7c8dcf434c5b9977391f62dc59a7cfdfb27c9"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-server.mjs",
+      "sha256": "bbe8f30b6ce4f9156290b52495b157b441f48a07eaa450c4e948fcc9c21d6f63"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-source-receipt.mjs",
+      "sha256": "ab56975f1aa1cc07035487111ff3e4bc2ae5c669009f0f33b29416f04c1d9bb8"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/architecture-review-snapshot.md",
+      "sha256": "00af1792dc0aab62e24dd671db8ac5755657037a7622157a509c0faff9531746"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/command-results.json",
+      "sha256": "e767cb83bede6160c5763f14aaed10350532f45d93ad9b04b25b54363dfe6e6c"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/focused.log",
+      "sha256": "67794619005675f01046d7b4dc17e1742dc376ed8c25d5818356bcf07a8faf26"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/full-regression.log",
+      "sha256": "956702e7736d6261da9d0014418347e366e96f4638ffa270709f8ea510470213"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/implementation-receipt-snapshot.md",
+      "sha256": "331ebf8ba40a95c964c6ad51d28a644560f88334a37cc1343d680e55061b65d3"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/issue-specific.log",
+      "sha256": "dcb4a9a2596cb6c6e8f6b69878ad1197e1fbd1b4dcbb5f0b254e503cc9ac2a30"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/mobile-trace.zip",
+      "sha256": "4b90a61536a17cd4ad5b8a74a9eecc4b407a75406a6f7b36d32e6ec655bd88ab"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/playwright-report/index.html",
+      "sha256": "85cfcf49f449b099ff811243dea14398817aef747f73a80a917fad2e9c526273"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/desktop-exact-time-dialog.png",
+      "sha256": "1bddbf2c0c9bc52d4ed2775060b7547d0cb9ff4394f3d22202f2357ed62d32b5"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/desktop-giro-alternative.png",
+      "sha256": "b87c2f68e764b662825ed3145f7d1b52bc604a948ffc97ea82d7f7cfc859864a"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/desktop-grayscale-mixed.png",
+      "sha256": "c93b51c303b171a49756f5cb8b72b88e85e819faf7b4069c6bac6b00a5d35bb1"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/desktop-mixed-states.png",
+      "sha256": "519db2f3bec8eac6fb138a4dff9d8fa87df1f3611ff712f09c4cccd23a423876"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/desktop-partial-zero.png",
+      "sha256": "a81262d8937ebf76d6137ae54aa4e52a666cdc60b56d4b093454ce84b9dc2a4c"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/desktop-sticky-oggi.png",
+      "sha256": "f82571897551a383479650d17696f27fcfa657c27de019b6c7704acd580773c4"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/mobile-exact-time-dialog.png",
+      "sha256": "c81ad1fa47efa18ea09eb7ef3593f65c7c0bb3e4b8fa0c48be47db4b40c7edba"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/mobile-giro-alternative.png",
+      "sha256": "0f67fbbbb5ee03d898c9bc401bdec0b53f3535598bf3b89c8b9edb36d4f72113"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/mobile-grayscale-mixed.png",
+      "sha256": "1735e8f02a4c3a4a4d158e0f38f1aed03a9a84c0773faa23f1cb1baf38dcaa60"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/mobile-mixed-states.png",
+      "sha256": "830b26419bf04e75b8c374881ec462621d8e6eabe45424d12ef981f952a08bbd"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/mobile-partial-zero.png",
+      "sha256": "35d77d1efc30b5c8e6481acb84046d321d6948865b1f1d53d9dc487125ccd72e"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/screenshots/mobile-sticky-oggi.png",
+      "sha256": "4cb0c49ecaa26b0c4e1fcbd104ab7f7fb642d01237478750df5cc4d07f07c603"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/source-receipt.json",
+      "sha256": "2b6f12ffceebf6441933af2e59d36d3e4cee27d003d09ea68b16bbdb2b036684"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/task-contract-snapshot.md",
+      "sha256": "ed69a65d25e9d626f1bd8d307f30b687e4b16f3c32ca1d6e4a09297e56b3eb3a"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/test-results/browser-results.json",
+      "sha256": "5008e4e70bdd9315ab8cc8e7be991978879583f4985a0faa8d879011f40f2979"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/trace.zip",
+      "sha256": "5f8f769a8f7f24e72c62797bc156fef1ed419551ee2d692747d82eb1a6cd99cf"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/video/desktop.webm",
+      "sha256": "0b512376c98d5606d5c2cad7f38a8b1e0f24e1f96a15cc14802679b6399fcb01"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/video/mobile.webm",
+      "sha256": "22eb25b1977a03657d3ee6dd1c548cfb615aed0197a608afa940cfa7b4b06bfd"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/root-rerun/vite-build.log",
+      "sha256": "0bcab3c3520c191664f436620d50b87ffc6166181892c332411a7773467d9791"
+    }
+  ]
+}

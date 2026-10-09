@@ -1,0 +1,517 @@
+{
+  "applicationCommit": "f58fbbd3337fabe68315dbd3cf7d295219dab58e",
+  "outcomes": [
+    {
+      "name": "desktop actual SPA non-color labels/symbols/mixed counts",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop facility Rome Oggi sticky header survives scroll; host previous date",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop exact 07:15/08:00 same band dialogs preserve statuses/dose/date and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop incomplete positive/zero flags and actual bounded load-more merge",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop other week excludes Oggi; existing Giro alternative intact",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile actual SPA non-color labels/symbols/mixed counts",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile facility Rome Oggi sticky header survives scroll; host previous date",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile exact 07:15/08:00 same band dialogs preserve statuses/dose/date and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile incomplete positive/zero flags and actual bounded load-more merge",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile other week excludes Oggi; existing Giro alternative intact",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "mobile": false,
+      "clock": "2026-10-08T22:30:00Z",
+      "hostTimezone": "America/Los_Angeles",
+      "facilityCurrentDate": "2026-10-09",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-08&to=2026-10-08&limit=1000&operatorId=QA-NURSE-408"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-08&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-408"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-05&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-06&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-07&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-08&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-09&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-10&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-11&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-05&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-06&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-07&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-08&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-09&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-10&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-11&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-07&limit=100&cursor=QA-NEXT"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-10&limit=100&cursor=QA-NEXT"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-12&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-13&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-14&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-15&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-16&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-17&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-18&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-408/cartella",
+          "query": ""
+        }
+      ],
+      "writes": [],
+      "unexpected": [],
+      "external": [],
+      "consoleErrors": [],
+      "runtimeErrors": [],
+      "httpErrors": [],
+      "measurements": [
+        {
+          "text": "Programmata",
+          "display": "block",
+          "width": 106,
+          "height": 17,
+          "scrollWidth": 106,
+          "scrollHeight": 17
+        },
+        {
+          "text": "1 somministrate · 1 non somministrate",
+          "display": "block",
+          "width": 106,
+          "height": 32,
+          "scrollWidth": 106,
+          "scrollHeight": 32
+        }
+      ]
+    },
+    {
+      "mobile": true,
+      "clock": "2026-10-08T22:30:00Z",
+      "hostTimezone": "America/Los_Angeles",
+      "facilityCurrentDate": "2026-10-09",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities",
+          "query": ""
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/appointments",
+          "query": "?from=2026-10-08&to=2026-10-08&limit=1000&operatorId=QA-NURSE-408"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/notes",
+          "query": "?box=all&limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-08&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview",
+          "query": ""
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-05&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-06&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-07&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-08&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-09&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-10&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-11&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-05&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-06&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-07&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-08&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-09&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-10&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-11&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page",
+          "query": "?limit=50"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page",
+          "query": "?limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page",
+          "query": "?limit=25&month=10&year=2026&date=2026-10-09&view=entry"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary",
+          "query": "?patientIds=QA-PATIENT-408"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-07&limit=100&cursor=QA-NEXT"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-10&limit=100&cursor=QA-NEXT"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-12&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-13&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-14&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-15&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-16&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-17&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots/page",
+          "query": "?date=2026-10-18&limit=100"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PATIENT-408/cartella",
+          "query": ""
+        }
+      ],
+      "writes": [],
+      "unexpected": [],
+      "external": [],
+      "consoleErrors": [],
+      "runtimeErrors": [],
+      "httpErrors": [],
+      "measurements": [
+        {
+          "text": "Programmata",
+          "display": "block",
+          "width": 73,
+          "height": 34,
+          "scrollWidth": 73,
+          "scrollHeight": 34
+        },
+        {
+          "text": "1 somministrate · 1 non somministrate",
+          "display": "block",
+          "width": 73,
+          "height": 64,
+          "scrollWidth": 73,
+          "scrollHeight": 64
+        }
+      ]
+    }
+  ],
+  "noClinicalWrites": true,
+  "fixtureTransport": "Guarded synthetic API, actual SPA; fixed clock and timezone only QA emulation; no application substitutions.",
+  "intenseLightDevice": {
+    "status": "UNVERIFIED",
+    "reason": "Explicit original AC4 requires real device in intense ambient light; grayscale/desktop/mobile emulation cannot certify it."
+  }
+}

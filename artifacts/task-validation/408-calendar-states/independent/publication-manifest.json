@@ -1,0 +1,162 @@
+{
+  "applicationCommit": "f58fbbd3337fabe68315dbd3cf7d295219dab58e",
+  "applicationSourceSha256": "fe8f81cf7483941b21958ee92a1340767625dbc6665db320b91eb9b5b95189a8",
+  "verdict": "BLOCKED",
+  "blocker": "Original AC4 actual device in intense ambient light UNVERIFIED. Mixed-data browser portion passes only; no release/closure.",
+  "passingBrowserAssertions": 10,
+  "excluded": [
+    "debug-attempts/**",
+    "unrelated launchers",
+    "generated metadata"
+  ],
+  "files": [
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/architecture-review-snapshot.md",
+      "sha256": "00af1792dc0aab62e24dd671db8ac5755657037a7622157a509c0faff9531746"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/command-results.json",
+      "sha256": "e767cb83bede6160c5763f14aaed10350532f45d93ad9b04b25b54363dfe6e6c"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/focused.log",
+      "sha256": "c274f23d9178760b5add2d7c0c21fc68ac03c7f65a45951ccd933990913054dc"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/full-regression.log",
+      "sha256": "48ae5f62b444b2d931021940f4db95e7dffd9cb24b96e05833b0e2226b5ff222"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/implementation-receipt-snapshot.md",
+      "sha256": "331ebf8ba40a95c964c6ad51d28a644560f88334a37cc1343d680e55061b65d3"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/issue-specific.log",
+      "sha256": "b0ae30a15c375a2b48f9d50d599c9b4a9ff472a38c6e0e24bd5d5cbe4aadf3ca"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/mobile-trace.zip",
+      "sha256": "baac67d67e637c78e9ffb059e46b81a603b4a82540631209ae7cb82a2b651632"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/playwright-report/index.html",
+      "sha256": "85cfcf49f449b099ff811243dea14398817aef747f73a80a917fad2e9c526273"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/runtime-closure.json",
+      "sha256": "37aae54949843fbc701acfbce858404f7e4a7fceceda930cd0d0972ff42ede98"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/desktop-exact-time-dialog.png",
+      "sha256": "1bddbf2c0c9bc52d4ed2775060b7547d0cb9ff4394f3d22202f2357ed62d32b5"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/desktop-giro-alternative.png",
+      "sha256": "63263c5670a4abe24218922ccb4032963b051c9e12e44111a03c5a32ab80e670"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/desktop-grayscale-mixed.png",
+      "sha256": "c93b51c303b171a49756f5cb8b72b88e85e819faf7b4069c6bac6b00a5d35bb1"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/desktop-mixed-states.png",
+      "sha256": "519db2f3bec8eac6fb138a4dff9d8fa87df1f3611ff712f09c4cccd23a423876"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/desktop-partial-zero.png",
+      "sha256": "a81262d8937ebf76d6137ae54aa4e52a666cdc60b56d4b093454ce84b9dc2a4c"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/desktop-sticky-oggi.png",
+      "sha256": "f82571897551a383479650d17696f27fcfa657c27de019b6c7704acd580773c4"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/mobile-exact-time-dialog.png",
+      "sha256": "b8e9c44f86888ae16dc0287f4495de0e2940280d4a7e697d974cc1b136b3ab1b"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/mobile-giro-alternative.png",
+      "sha256": "de54b84d00762a9aa0d9e1b0326f615460ece3fb89548360c4fd2af314115459"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/mobile-grayscale-mixed.png",
+      "sha256": "9edb27410404eb21baf0985deb98e41d0228288b92ed4d1c2c6b42adc5ff9abd"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/mobile-mixed-states.png",
+      "sha256": "c75f0d341eb401c5ecb279859e1bfa3b9462667ad5c0c7cae1ab1db018edccb4"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/mobile-partial-zero.png",
+      "sha256": "93fb276e8f9fc59c97e881f96d6d30943057d63688fe2ef44402a53a4e62671e"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/screenshots/mobile-sticky-oggi.png",
+      "sha256": "732b43e5e4a1e2473913801d9ac61809bbf8c2db5f61704411ad1d10fcdeab05"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/security-scan.log",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/source-receipt.json",
+      "sha256": "2b6f12ffceebf6441933af2e59d36d3e4cee27d003d09ea68b16bbdb2b036684"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/task-contract-snapshot.md",
+      "sha256": "ed69a65d25e9d626f1bd8d307f30b687e4b16f3c32ca1d6e4a09297e56b3eb3a"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/test-results/browser-results.json",
+      "sha256": "dddfba32afa75d82dc7af8aecf17f4d88607122e16f8694b3a6893a0e259d6fd"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/trace.zip",
+      "sha256": "b5944e27b6fab7921e57acf607c55d45223d1851a04d8d3499b602567a4c70cc"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/tsc-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/validation-report.md",
+      "sha256": "0ca4f82dd69558dcaaf0e5c65146da1f75a5012beddccfbfc0e4e18e5111ed71"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/video/desktop.webm",
+      "sha256": "8483a4a07fa4975b63e8fe785c9e2fdd51ee73974364585c79441a6315e16f1c"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/video/mobile.webm",
+      "sha256": "9012b6bee2c6cc490d125afc75709e36749c1c2ff08083c6382fa4a8b7c21aa2"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/independent/vite-build.log",
+      "sha256": "9c6058284cb30dbfe07ab803e6ca335ae777ff3ae4b93a217ee4bfbcf95e6b7c"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-browser.mjs",
+      "sha256": "f8da85ed8098f73273dbaa602894266975b3fcd6fcd6d6d343ec187e60e589f8"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-commands.mjs",
+      "sha256": "8cb82ed1be3645cca65380f51a8eb7f52c02789024fffd873e727a3cfb13068a"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-publication-receipt.mjs",
+      "sha256": "d111ae537841fbb83bc603d028a7c8dcf434c5b9977391f62dc59a7cfdfb27c9"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-server.mjs",
+      "sha256": "bbe8f30b6ce4f9156290b52495b157b441f48a07eaa450c4e948fcc9c21d6f63"
+    },
+    {
+      "path": "artifacts/task-validation/408-calendar-states/qa-source-receipt.mjs",
+      "sha256": "ab56975f1aa1cc07035487111ff3e4bc2ae5c669009f0f33b29416f04c1d9bb8"
+    }
+  ]
+}

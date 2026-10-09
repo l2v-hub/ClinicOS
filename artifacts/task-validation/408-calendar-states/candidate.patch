@@ -1,0 +1,247 @@
+diff --git a/frontend/src/components/operator/__tests__/therapyCalendarVisualStates.test.ts b/frontend/src/components/operator/__tests__/therapyCalendarVisualStates.test.ts
+new file mode 100644
+index 00000000..0ec424b9
+--- /dev/null
++++ b/frontend/src/components/operator/__tests__/therapyCalendarVisualStates.test.ts
+@@ -0,0 +1,64 @@
++import assert from 'node:assert/strict';
++import {readFileSync} from 'node:fs';
++import {test} from 'node:test';
++import React from 'react';
++import {renderToStaticMarkup} from 'react-dom/server';
++import {TherapyCalendarGrid, type TherapyCalendarCell} from '../../shared/TherapyCalendarGrid';
++
++Object.assign(globalThis,{React});
++const day='2026-10-09';
++const base:TherapyCalendarCell={date:day,time:'08:00',title:'2 pazienti',count:3,
++ pendingCount:2,tone:'late',detail:'1 somministrate · 0 non somministrate · 2 in ritardo / non registrate'};
++const render=(cells:TherapyCalendarCell[],today=day)=>renderToStaticMarkup(React.createElement(TherapyCalendarGrid,{days:[day,'2026-10-10'],cells,today,onOpen(){}}));
++const button=(html:string)=>html.match(/<button[^>]*data-testid="therapy-calendar-count"[\s\S]*?<\/button>/)?.[0]??'';
++
++test('ward late count exposes visible state, distinct symbol, pending meaning and mixed breakdown',()=>{
++ const html=button(render([base]));
++ assert.match(html,/therapy-calendar-count__symbol[^>]*>!<\/span>/);
++ assert.match(html,/therapy-calendar-count__state[^>]*>Ritardo \/ non registrata/);
++ assert.match(html,/>2<\/strong>/);assert.match(html,/>da erogare<\/span>/);
++ assert.match(html,/therapy-calendar-count__detail[^>]*>1 somministrate · 0 non somministrate · 2 in ritardo/);
++ assert.match(html,/data-date="2026-10-09" data-time="08:00"/);
++ assert.match(html,/aria-haspopup="dialog"/);
++});
++test('programmed, administered, non-administered and unknown states have non-color labels and symbols',()=>{
++ for(const [tone,label,symbol] of [['due','Programmata','○'],['future','Programmata','○'],['done','Somministrate','✓'],['missed','Non somministrate presenti','×'],['unknown','Stato da verificare','?']]){
++  const html=button(render([{...base,tone}]));
++  assert.ok(html.includes(`>${label}</span>`),tone);assert.ok(html.includes(`>${symbol}</span>`),tone);
++ }
++});
++test('mixed zero pending shows registered breakdown and never calls zero the omitted-dose count',()=>{
++ const html=button(render([{...base,pendingCount:0,tone:'missed',detail:'1 somministrate · 2 non somministrate'}]));
++ assert.match(html,/>0<\/strong>/);assert.match(html,/>da erogare<\/span>/);
++ assert.match(html,/>Non somministrate presenti<\/span>/);
++ assert.match(html,/>1 somministrate · 2 non somministrate<\/span>/);
++ assert.doesNotMatch(html,/>Somministrate<\/span>/);
++});
++test('partial zero is incomplete, never a completed zero; partial positive stays lower bound',()=>{
++ const zero=button(render([{...base,pendingCount:0,tone:'done',partial:true}]));
++ assert.match(zero,/>—<\/strong>/);assert.match(zero,/>Conteggio incompleto<\/span>/);
++ assert.match(zero,/>Elenco parziale<\/small>/);assert.doesNotMatch(zero,/>Somministrate<\/span>/);
++ const positive=button(render([{...base,partial:true}]));
++ assert.match(positive,/>≥2<\/strong>/);assert.match(positive,/>Ritardo \/ non registrata<\/span>/);
++ assert.match(positive,/>Elenco parziale<\/small>/);
++});
++test('facility current date header persistently names Oggi, not the selected week',()=>{
++ const html=render([]);assert.equal((html.match(/>Oggi<\/strong>/g)??[]).length,1);
++ assert.match(html,/<th[^>]*class="therapy-calendar-grid__today"[^>]*aria-current="date"/);
++ assert.doesNotMatch(render([],'2026-11-01'),/>Oggi<\/strong>|aria-current="date"/);
++ const source=readFileSync(new URL('../../shared/TherapyCalendarGrid.tsx',import.meta.url),'utf8');
++ assert.match(source,/today = facilityLocalDate\(\)/);
++});
++test('patient non-count done means recorded, not necessarily administered; existing visible detail preserved',()=>{
++ const {pendingCount:_,...patient}=base;
++ const html=render([{...patient,tone:'done',title:'Farmaco sintetico',detail:'1 registrata · 1 non somministrata'}]);
++ assert.match(html,/data-testid="therapy-calendar-cell"/);assert.match(html,/1 registrata · 1 non somministrata/);
++ assert.doesNotMatch(html,/therapy-calendar-count__state|>Somministrate<\/span>/);
++});
++test('new text remains visible with colors removed; date marker remains in sticky header',()=>{
++ const css=readFileSync(new URL('../../shared/TherapyCalendarGrid.css',import.meta.url),'utf8');
++ assert.match(css,/\.therapy-calendar-count__state\s*\{[^}]*overflow-wrap: anywhere/s);
++ assert.match(css,/\.therapy-calendar-grid__today-marker\s*\{[^}]*display: block/s);
++ assert.match(css,/\.therapy-calendar-grid thead th\s*\{[^}]*position: sticky/s);
++ assert.doesNotMatch(css,/\.therapy-calendar-count__(?:state|detail)[^}]*display: none/);
++});
+diff --git a/frontend/src/components/shared/TherapyCalendarGrid.css b/frontend/src/components/shared/TherapyCalendarGrid.css
+index f9ee63b2..1ebfee7c 100644
+--- a/frontend/src/components/shared/TherapyCalendarGrid.css
++++ b/frontend/src/components/shared/TherapyCalendarGrid.css
+@@ -32,6 +32,16 @@
+ .therapy-calendar-grid.is-week table {
+   min-width: 760px;
+ }
++.therapy-calendar-grid thead th.therapy-calendar-grid__today {
++  background: var(--ds-blue-tint, #eef3ff);
++  border-bottom: 2px solid var(--ds-blue-active, #2054b2);
++}
++.therapy-calendar-grid__today-marker {
++  display: block;
++  margin-top: 3px;
++  color: var(--ds-blue-active, #2054b2);
++  font-size: 13px;
++}
+ .therapy-calendar-grid__empty {
+   display: block;
+   min-height: 24px;
+@@ -155,20 +165,48 @@
+ }
+ .therapy-calendar-count {
+   display: flex;
+-  align-items: center;
+-  justify-content: center;
+-  min-width: 36px;
+-  min-height: 36px;
+-  width: max-content;
++  flex-direction: column;
++  align-items: stretch;
++  gap: 4px;
++  min-width: 0;
++  min-height: 44px;
++  width: 100%;
+   max-width: 100%;
+-  padding: 4px 8px;
++  padding: 6px;
+   border: 1px solid #b9cafa;
+   border-radius: 8px;
+   background: #eef3ff;
+   color: #2054b2;
+-  font: 650 14px/20px var(--ds-font);
++  font: 500 12px/17px var(--ds-font);
++  text-align: left;
+   cursor: pointer;
+ }
++.therapy-calendar-count__summary {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  gap: 4px;
++  font-variant-numeric: tabular-nums;
++}
++.therapy-calendar-count__summary strong {
++  font-size: 16px;
++}
++.therapy-calendar-count__symbol {
++  display: inline-flex;
++  justify-content: center;
++  min-width: 16px;
++  font-size: 16px;
++  font-weight: 700;
++}
++.therapy-calendar-count__state {
++  overflow-wrap: anywhere;
++  font-weight: 650;
++}
++.therapy-calendar-count__detail {
++  overflow-wrap: anywhere;
++  font-size: 11px;
++  line-height: 16px;
++}
+ .therapy-calendar-count.is-late {
+   border-color: #f1b3be;
+   background: #fff0f3;
+diff --git a/frontend/src/components/shared/TherapyCalendarGrid.tsx b/frontend/src/components/shared/TherapyCalendarGrid.tsx
+index 386d65f2..78171482 100644
+--- a/frontend/src/components/shared/TherapyCalendarGrid.tsx
++++ b/frontend/src/components/shared/TherapyCalendarGrid.tsx
+@@ -1,7 +1,18 @@
+ import { IcoChevronRight, IcoPill } from '../../icons';
+ import { useEffect, useRef } from 'react';
++import { facilityLocalDate } from '../../lib/facilityTime';
+ import './TherapyCalendarGrid.css';
+ 
++// Ward aggregate cue, not a uniform per-dose outcome. The visible detail retains mixed states.
++const WARD_STATE: Record<string, { symbol: string; label: string }> = {
++  late: { symbol: '!', label: 'Ritardo / non registrata' },
++  due: { symbol: '○', label: 'Programmata' },
++  future: { symbol: '○', label: 'Programmata' },
++  done: { symbol: '✓', label: 'Somministrate' },
++  missed: { symbol: '×', label: 'Non somministrate presenti' },
++  unknown: { symbol: '?', label: 'Stato da verificare' },
++};
++
+ export interface TherapyCalendarCell {
+   date: string;
+   time: string;
+@@ -24,6 +35,7 @@ export function TherapyCalendarGrid({
+   selected,
+   loadingDays = [],
+   errorDays = [],
++  today = facilityLocalDate(),
+ }: {
+   days: string[];
+   cells: TherapyCalendarCell[];
+@@ -32,6 +44,7 @@ export function TherapyCalendarGrid({
+   selected?: { date: string; time: string; patientId?: string } | null;
+   loadingDays?: string[];
+   errorDays?: string[];
++  today?: string;
+ }) {
+   const root = useRef<HTMLDivElement>(null);
+   const scrolledDay = useRef<string | null>(null);
+@@ -65,12 +78,15 @@ export function TherapyCalendarGrid({
+           <tr>
+             <th scope="col">Ora</th>
+             {days.map((day) => (
+-              <th scope="col" key={day}>
+-                {new Date(`${day}T12:00:00`).toLocaleDateString('it-IT', {
++              <th scope="col" key={day}
++                className={day === today ? 'therapy-calendar-grid__today' : undefined}
++                aria-current={day === today ? 'date' : undefined}>
++                <span>{new Date(`${day}T12:00:00`).toLocaleDateString('it-IT', {
+                   weekday: 'short',
+                   day: 'numeric',
+                   month: 'short',
+-                })}
++                })}</span>
++                {day === today && <strong className="therapy-calendar-grid__today-marker">Oggi</strong>}
+               </th>
+             ))}
+           </tr>
+@@ -81,6 +97,9 @@ export function TherapyCalendarGrid({
+               <th scope="row">{time}</th>
+               {days.map((day) => {
+                 const cell = cells.find((item) => item.date === day && item.time === time);
++                const state = cell?.partial && cell.pendingCount === 0
++                  ? { symbol: '?', label: 'Conteggio incompleto' }
++                  : WARD_STATE[cell?.tone ?? 'unknown'] ?? WARD_STATE.unknown;
+                 return (
+                   <td key={day}>
+                     {loadingDays.includes(day) ? (
+@@ -93,20 +112,23 @@ export function TherapyCalendarGrid({
+                         className={`therapy-calendar-count is-${cell.partial && cell.pendingCount === 0 ? 'unknown' : (cell.tone ?? 'unknown')}`}
+                         aria-haspopup="dialog"
+                         aria-expanded={selected?.date === day && selected.time === time}
+-                        aria-label={`${day} ore ${time}: ${cell.partial ? (cell.pendingCount > 0 ? `almeno ${cell.pendingCount} dosi da erogare, conteggio parziale` : 'conteggio da erogare incompleto') : `${cell.pendingCount} dosi da erogare`}. ${cell.title}, ${cell.count} dosi caricate, ${cell.detail}. Apri dettagli`}
++                        aria-label={`${day} ore ${time}: ${state.label}. ${cell.partial ? (cell.pendingCount > 0 ? `almeno ${cell.pendingCount} dosi da erogare, conteggio parziale` : 'conteggio da erogare incompleto') : `${cell.pendingCount} dosi da erogare`}. ${cell.title}, ${cell.count} dosi caricate, ${cell.detail}. Apri dettagli`}
+                         title={`${cell.pendingCount} dosi da erogare${cell.partial ? ' nei dettagli caricati; conteggio parziale' : ''}`}
+                         data-testid="therapy-calendar-count"
+                         data-date={day}
+                         data-time={time}
+                         onClick={() => onOpen(day, time)}
+                       >
+-                        <span>
+-                          {cell.partial
+-                            ? cell.pendingCount > 0
+-                              ? `≥${cell.pendingCount}`
+-                              : '—'
+-                            : cell.pendingCount}
++                        <span className="therapy-calendar-count__summary">
++                          <span className="therapy-calendar-count__symbol" aria-hidden="true">{state.symbol}</span>
++                          <strong>{cell.partial
++                              ? cell.pendingCount > 0 ? `≥${cell.pendingCount}` : '—'
++                              : cell.pendingCount}</strong>
++                          <span>da erogare</span>
+                         </span>
++                        <span className="therapy-calendar-count__state">{state.label}</span>
++                        <span className="therapy-calendar-count__detail">{cell.detail}</span>
++                        {cell.partial && <small>Elenco parziale</small>}
+                       </button>
+                     ) : cell ? (
+                       <button
+

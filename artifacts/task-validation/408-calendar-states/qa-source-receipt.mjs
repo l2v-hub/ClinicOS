@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {resolve} from 'node:path';
+const source='f58fbbd3337fabe68315dbd3cf7d295219dab58e';
+const out=resolve(process.env.QA408_OUTPUT||'artifacts/task-validation/408-calendar-states/independent');mkdirSync(out,{recursive:true});
+const scopes=['frontend/src','backend/src','prisma','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','frontend/tsconfig.json','frontend/tsconfig.app.json','frontend/tsconfig.node.json','frontend/vite.config.ts','frontend/vercel.json','backend/package.json','backend/tsconfig.json','scripts/build/copy-assessment-fonts.mjs','scripts/stub-css-loader.mjs','scripts/run-node-tests.mjs'];
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8'});assert.equal(r.status,0,`${args.join(' ')} failed`);return r.stdout;};
+assert.equal(git(['rev-parse','HEAD']).trim(),source);git(['diff','--exit-code','HEAD','--',...scopes]);assert.equal(git(['ls-files','--others','--exclude-standard','--',...scopes]).trim(),'');
+const paths=git(['ls-files','-z','--',...scopes]).split('\0').filter(Boolean).sort();const tree=createHash('sha256');
+const files=paths.map(path=>{const sha256=createHash('sha256').update(readFileSync(path)).digest('hex');tree.update(`${path}\0${sha256}\n`);return {path,sha256};});
+const receipt={applicationCommit:source,baseline:'973d78e5e109032a36cf89cf80fd8eb2a848a649',sourceScope:scopes,sourceSha256:tree.digest('hex'),trackedSourceMatchesCommit:true,noUntrackedApplicationOverrides:true,fileCount:files.length,excluded:'QA artifacts, generated builds and metadata, known unrelated launcher changes; whole checkout not asserted clean.',files};
+writeFileSync(resolve(out,'source-receipt.json'),JSON.stringify(receipt,null,2));console.log(JSON.stringify({applicationCommit:source,sourceSha256:receipt.sourceSha256,fileCount:receipt.fileCount}));

@@ -1,0 +1,11 @@
+{
+  "issue": 408,
+  "applicationCommit": "f58fbbd3337fabe68315dbd3cf7d295219dab58e",
+  "browser": "All owned Playwright contexts and Chromium closed in harness finally",
+  "server": "Owned exec session 51072 stopped with Ctrl+C; no other process terminated",
+  "loopbackPort": 7472,
+  "portFreeCheck": "Get-NetTCPConnection -LocalPort 7472 -State Listen returned no listener",
+  "manifestIntegrity": "Every successful artifact SHA256 matched before adding this closure receipt; manifest regenerated afterwards",
+  "artifactTextSecretPatternScan": "No private key, GitHub token, OpenAI key, or password-bearing PostgreSQL URL pattern matches in independent JSON/Markdown/HTML/logs; rg exit1 means no match",
+  "authority": "No commit, push, deploy, provider mutation, issue mutation or clinical write by this independent QA session"
+}

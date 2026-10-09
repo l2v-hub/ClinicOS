@@ -1,0 +1,11 @@
+# Implementation policy receipt — 408
+
+Validated contract before app edits. Root sole application writer; read-only architecture reviewer identified shared patient-calendar done semantics and truthful mixed/partial counts. No application callback, slot aggregation, scheduling, clinical write, API, auth, database, environment or dependency edits.
+
+Three scoped paths: shared TherapyCalendarGrid TSX/CSS and new actual-SSR regression tests. Ward count branch displays priority state text + distinct monochrome symbol, separately captioned remaining-dose number and visible original loaded mixed-dose breakdown. Partial0 stays unknown— / Conteggio incompleto; positivepartial stays≥N, explicit Elenco parziale. Patient non-count branch unchanged. Sticky true facility date header names Oggi (Rome helper), optional deterministic today input for tests only.
+
+TDD ran new seven-tests suite before implementation:1PASS/6FAIL, no state labels/today/style markers. After scoped patch, new7 + existing patient-slot8/week4/calendar-state3 =22/22PASS. Full/types/build and fresh independent/root real-SPA QA still required. All symptoms/screenshots are synthetic; original audit attachment not copied.
+
+Root initial gate complete: types/tsc/Vite/security PASS, issue7/7, focused54/54, full1190total/1178PASS/12FAIL exactly baseline names0NEW. App candidatef58fbbd3337fabe68315dbd3cf7d295219dab58e committed explicitly3paths and frozen. Fresh independent QA assigned evidence/helpers/browser7472 only, not application writes. Root owns no runtime, does not run concurrent builds while QA owns lane. Root rereview/rerun still required after handoff; intense-lightAC4 remains external.
+
+Original AC4 explicitly includes a device in intense light. No such evidence is currently available. Candidate remains isolated, not main-promoted/deployed/closed, even if ordinary browser/grayscale/mixed-data tests pass. Partial proof can be published with issue open/status-blocked after QA gates. #407 normal desktop visual acceptance cannot be reused to narrow408. Preserve405candidate and dirty primary checkout. Ruflo hierarchy2 ledger1791529207546-wwytnr coordinates only; root user-authorized integration is releaseauthority, not worker/ledger. Existing AgentDBOOM avoided via source/test architecture recall.

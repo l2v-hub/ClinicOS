@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
+import {resolve,relative} from 'node:path';
+const out=resolve(process.env.QA408_OUTPUT||'artifacts/task-validation/408-calendar-states/independent'),root=resolve('artifacts/task-validation/408-calendar-states');
+const browser=JSON.parse(readFileSync(resolve(out,'test-results/browser-results.json'),'utf8'));assert.equal(browser.outcomes.length,10);assert.ok(browser.outcomes.every(x=>x.status==='PASS'));
+const source=JSON.parse(readFileSync(resolve(out,'source-receipt.json'),'utf8'));assert.equal(source.applicationCommit,'f58fbbd3337fabe68315dbd3cf7d295219dab58e');
+const commands=JSON.parse(readFileSync(resolve(out,'command-results.json'),'utf8'));assert.equal(commands.newFailures.length,0);assert.equal(commands.records.find(r=>r.name==='full-regression').fail,12);assert.ok(commands.records.filter(r=>r.name!=='full-regression').every(r=>r.exit===0));
+const walk=dir=>readdirSync(dir,{withFileTypes:true}).flatMap(e=>{if(e.name==='debug-attempts'||e.name==='publication-manifest.json')return [];const path=resolve(dir,e.name);return e.isDirectory()?walk(path):[path];});
+for(const file of ['task-contract.md','architecture-review.md','implementation-receipt.md'])writeFileSync(resolve(out,`${file.replace('.md','')}-snapshot.md`),readFileSync(resolve(root,file)));
+const helpers=['qa-commands.mjs','qa-browser.mjs','qa-server.mjs','qa-source-receipt.mjs','qa-publication-receipt.mjs'];
+const files=[...walk(out),...helpers.map(name=>resolve(root,name))].sort().map(path=>({path:relative(process.cwd(),path).replaceAll('\\','/'),sha256:createHash('sha256').update(readFileSync(path)).digest('hex')}));
+writeFileSync(resolve(out,'publication-manifest.json'),JSON.stringify({applicationCommit:source.applicationCommit,applicationSourceSha256:source.sourceSha256,verdict:'BLOCKED',blocker:'Original AC4 actual device in intense ambient light UNVERIFIED. Mixed-data browser portion passes only; no release/closure.',passingBrowserAssertions:10,excluded:['debug-attempts/**','unrelated launchers','generated metadata'],files},null,2));console.log(JSON.stringify({manifestFiles:files.length,browserPass:10,applicationCommit:source.applicationCommit,sourceSha256:source.sourceSha256}));
