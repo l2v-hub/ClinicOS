@@ -1,7 +1,7 @@
 # #423 — Archivio documenti vuoto
 
 ## Final Decision
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
 
 Application 3f911cbd281d7c93c4796e97d5940258ceb331f0; accepted baseline3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510. Vercel dpl_BnZZKg2wR3jW149F8BBzHH91e3aU READY exact meta/gitSource SHA and production alias. HTML/JS/CSS200 and hashes unchanged before/after 46 compiled browser groups. Backend unchanged, retained accepted3cd/Railway5902626b-ef72-4c31-bf09-bdd4d69cdfc0 with health200; no new backend deployment required.
 
@@ -32,6 +32,6 @@ independent-qa, root-rerun and compiled-online plans/results enumerate screensho
 
 Root TDD red and failed commands01 retained: list extraction initially imported status labels through the form and triggered transitive PDF-worker initialization in SSR. Unchanged status constant moved to a tiny shared module with original public re-export; no loader/test weakening. First QA1 found d653 unnecessarily blocked metadata-only editing without classification permission; candidate superseded and QA1 sealed as FAILED VALIDATION. Narrow three-path refinement preserves metadata edit while disabling/guarding only unauthorized category changes, confirmed by updated TDD red (initial missing CSS-loader attempt retained separately) and NEW QA2 plus root/compiled note-only save/reload. All independent preliminary transport/selector attempts and original recipes/logs retained immutably. Native headless focus revocation probe did not cause a new auth read; this is not runtime proof of live permission revocation, no injected workaround. No original clinical photos, PHI, actual credentials or real patient writes in evidence. No physical phone, assistive-technology, sunlight, touch/gloves or clinical audit429 signoff claimed.
 
-Pinned public HTTP/hash proof pending: issue remains open.
+Public proof 451acfe9b0a3bd3d5363045844bb9dc056bdeb2f: 6 actual synthetic PNGs HTTP200 with raw SHA verification. Publisher rechecks final proof and unchanged original issue before closure.
 
 Canonical staged Git blobs, configured credential values and every expanded trace ZIP member checked before publication; publication-manifest.json authoritative. Release uses direct human authorization plus independent/root gates, not a fabricated Ruflo lease. Blocked405/408/410/416 candidates excluded from accepted main; audit429 remains dependent on original external acceptance.

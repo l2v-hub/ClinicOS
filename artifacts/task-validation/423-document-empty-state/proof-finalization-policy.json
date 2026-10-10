@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED FINAL VERIFIED REPORT STAGING",
+  "authority": "Human release request plus independent/root/compiled/deployment/CI/public image gates",
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "priorProof": "451acfe9b0a3bd3d5363045844bb9dc056bdeb2f",
+  "scope": [
+    "validation-report.md",
+    "public-preverification.json",
+    "check-closure.log",
+    "proof-finalization-policy.json"
+  ],
+  "at": "2026-10-10T03:14:11.925Z"
+}

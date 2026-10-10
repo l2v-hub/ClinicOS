@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND SYNTHETIC EVIDENCE COMMIT/PUSH",
+  "authority": "Direct human authorization; independent/root/compiled/source/deployment verified; GitHub closure separately gated",
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "parentProof": "451acfe9b0a3bd3d5363045844bb9dc056bdeb2f",
+  "branch": "codex/bug-423-document-empty-state",
+  "scope": "artifacts/task-validation/423-document-empty-state",
+  "canonicalFiles": 1327,
+  "secretChecks": 74199,
+  "zipMembers": 23406,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T03:14:53.721Z"
+}

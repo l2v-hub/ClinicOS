@@ -1,0 +1,52 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "proofCommit": "451acfe9b0a3bd3d5363045844bb9dc056bdeb2f",
+  "decision": "PINNED PUBLIC PROOF PREVERIFIED",
+  "canonicalHashesVerified": 1324,
+  "images": [
+    {
+      "label": "Archivio vuoto: primo passo chiaro",
+      "path": "compiled-online/browser03/run/screenshots/desktop-empty-next-step-viewport.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/451acfe9b0a3bd3d5363045844bb9dc056bdeb2f/artifacts/task-validation/423-document-empty-state/compiled-online/browser03/run/screenshots/desktop-empty-next-step-viewport.png",
+      "http": 200,
+      "sha256": "7afde072394c22c03d87d8e75ef6a55dd5663e161c273d7bb8d39e11989a8dd0"
+    },
+    {
+      "label": "Archivio vuoto su viewport mobile emulato",
+      "path": "compiled-online/browser03/run/screenshots/mobile-empty-next-step-viewport.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/451acfe9b0a3bd3d5363045844bb9dc056bdeb2f/artifacts/task-validation/423-document-empty-state/compiled-online/browser03/run/screenshots/mobile-empty-next-step-viewport.png",
+      "http": 200,
+      "sha256": "938780943de08d5abdbe47e82d47a420469a7adf0d31847c29ae00ea8240ba2d"
+    },
+    {
+      "label": "Ruolo non autorizzato: spiegazione e referente",
+      "path": "compiled-online/browser03/run/screenshots/desktop-empty-no-upload-viewport.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/451acfe9b0a3bd3d5363045844bb9dc056bdeb2f/artifacts/task-validation/423-document-empty-state/compiled-online/browser03/run/screenshots/desktop-empty-no-upload-viewport.png",
+      "http": 200,
+      "sha256": "da17a9b7d37f8bfad8e278de396b95d39b9bbc9fc4a170e27ac95c3968eab5cb"
+    },
+    {
+      "label": "Primo caricamento nel form esistente",
+      "path": "compiled-online/browser03/run/screenshots/desktop-first-native-form-viewport.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/451acfe9b0a3bd3d5363045844bb9dc056bdeb2f/artifacts/task-validation/423-document-empty-state/compiled-online/browser03/run/screenshots/desktop-first-native-form-viewport.png",
+      "http": 200,
+      "sha256": "23908ef960b2ff70bc8a00eb82df4ad806774610a10875ff3bc0fda19458cc4a"
+    },
+    {
+      "label": "Documento sintetico dopo reload",
+      "path": "compiled-online/browser03/run/screenshots/desktop-first-document-reloaded-viewport.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/451acfe9b0a3bd3d5363045844bb9dc056bdeb2f/artifacts/task-validation/423-document-empty-state/compiled-online/browser03/run/screenshots/desktop-first-document-reloaded-viewport.png",
+      "http": 200,
+      "sha256": "b73357936ec66c9c9e92451cc2ee5705aca557877d0e525cbf2debcf17e26744"
+    },
+    {
+      "label": "Modifica note senza riclassificare il file",
+      "path": "compiled-online/browser03/run/screenshots/mobile-no-classify-metadata-form-save-viewport.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/451acfe9b0a3bd3d5363045844bb9dc056bdeb2f/artifacts/task-validation/423-document-empty-state/compiled-online/browser03/run/screenshots/mobile-no-classify-metadata-form-save-viewport.png",
+      "http": 200,
+      "sha256": "d2c021a8450faa22f1a02f2f2f8f8fc9dad5fb2e272f80341e465f4f0c3f4b39"
+    }
+  ],
+  "at": "2026-10-10T03:14:10.454Z",
+  "productionPatientTestMutations": 0
+}
