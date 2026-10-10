@@ -92,7 +92,7 @@ test('423 populated list respects save/classify gates, keeps read/print and esca
       createdAt: '2026-10-10T00:00:00Z',
     },
   };
-  const render = (canSave: boolean, canClassify: boolean) =>
+  const render = (canSave: boolean) =>
     renderToStaticMarkup(
       React.createElement(ArchiveResultList, {
         entries: [entry],
@@ -101,21 +101,18 @@ test('423 populated list respects save/classify gates, keeps read/print and esca
         formOpen: false,
         saving: false,
         canSave,
-        canClassify,
         onToggle: () => {},
         onPreview: () => {},
         onEdit: () => {},
         onRemove: () => {},
       }),
     );
-  let html = render(false, false);
+  let html = render(false);
   assert.doesNotMatch(html, /Modifica dettagli|Rimuovi scheda|<img/);
   assert.match(html, /Visualizza/);
   assert.match(html, /Seleziona per la stampa/);
   assert.match(html, /&lt;img/);
-  html = render(true, false);
-  assert.doesNotMatch(html, /Modifica dettagli/);
-  assert.match(html, /Rimuovi scheda/);
-  html = render(true, true);
+  html = render(true);
   assert.match(html, /Modifica dettagli/);
+  assert.match(html, /Rimuovi scheda/);
 });

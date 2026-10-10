@@ -105,7 +105,7 @@ function DocumentArchiveWorkspace({
   const selectedCategory = ARCHIVE_CATEGORIES.find((item) => item.id === folder.category);
   const complete = archive.status === 'ready';
   const empty = isEmptyArchive(archive.status, entries.length);
-  const formAllowed = form?.entry ? canSave && (!form.entry.document || canClassify) : canAdd;
+  const formAllowed = form?.entry ? canSave : canAdd;
   const focusedDocument = useRef('');
   useEffect(() => {
     const focusKey = `${focusDocumentId}:${expectedAssessmentId}:${expectedAssessmentType}`;
@@ -155,7 +155,7 @@ function DocumentArchiveWorkspace({
     });
   }
   const openForm = (entry: ArchiveEntry | null) => {
-    if (!complete || (entry ? !canSave || (!!entry.document && !canClassify) : !canAdd)) return;
+    if (!complete || (entry ? !canSave : !canAdd)) return;
     setError('');
     setForm({ key: crypto.randomUUID(), entry });
   };
@@ -406,7 +406,6 @@ function DocumentArchiveWorkspace({
                       formOpen={!!form}
                       saving={saving}
                       canSave={canSave}
-                      canClassify={canClassify}
                       onToggle={toggleSelected}
                       onPreview={setPreview}
                       onEdit={openForm}

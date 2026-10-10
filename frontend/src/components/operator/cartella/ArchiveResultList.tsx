@@ -13,7 +13,6 @@ export function ArchiveResultList({
   formOpen,
   saving,
   canSave,
-  canClassify,
   onToggle,
   onPreview,
   onEdit,
@@ -26,7 +25,6 @@ export function ArchiveResultList({
   formOpen: boolean;
   saving: boolean;
   canSave: boolean;
-  canClassify: boolean;
   onToggle: (id: string) => void;
   onPreview: (entry: ArchiveEntry) => void;
   onEdit: (entry: ArchiveEntry) => void;
@@ -111,7 +109,7 @@ export function ArchiveResultList({
               >
                 Apri valutazione
               </button>
-            ) : canSave && (!entry.document || canClassify) ? (
+            ) : canSave ? (
               <button
                 type="button"
                 className="btn-secondary btn-sm"
