@@ -1,0 +1,30 @@
+{
+  "applicationCommit": "14a03038f758cf728e563807752da1642dc35fa8",
+  "syntheticOnly": true,
+  "writes": 0,
+  "separated": {
+    "inputPrescriptions": 3,
+    "outputRows": 1,
+    "names": [
+      "FARMACOALFA"
+    ],
+    "finding": "Known incomplete paragraph terminates parsing, dropping a later complete prescription."
+  },
+  "numbered": {
+    "inputPrescriptions": 2,
+    "outputRows": 2,
+    "names": [
+      "",
+      ""
+    ],
+    "finding": "Both source names are not mapped from numbered lines; not accepted as complete medicines."
+  },
+  "combined": {
+    "inputPrescriptions": 2,
+    "outputRows": 1,
+    "state": "da_verificare",
+    "originalTextPreserved": true,
+    "finding": "Intentional ambiguity guard keeps second medicine in note; do not auto-invent a second prescription."
+  },
+  "finalDecision": "PARTIAL: assigned-medication display candidate does not repair unresolved import paths."
+}

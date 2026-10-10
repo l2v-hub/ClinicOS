@@ -323,7 +323,7 @@ export function PatientTherapyCalendar({
                       {therapy && canShowToday && (
                         <button
                           type="button"
-                          className="ds-btn ds-btn--secondary"
+                          className="ds-btn ds-btn--secondary ds-btn--wrap"
                           aria-expanded={expanded}
                           onClick={() => setPrnOpen(expanded ? null : item.therapyId)}
                         >

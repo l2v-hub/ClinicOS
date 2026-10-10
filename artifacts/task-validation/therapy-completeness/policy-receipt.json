@@ -1,0 +1,13 @@
+{
+  "applicationCommit": "14a03038f758cf728e563807752da1642dc35fa8",
+  "sourceBase": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "authority": "Direct human request to continue GitHub bugs with commit/push and synthetic screenshot evidence; production only after completed acceptance and independent verification",
+  "decision": "ALLOW isolated candidate/evidence branch push and clearly labelled partial GitHub comment after privacy seal; DENY production promotion and issue closure while mandatory QA fails",
+  "scope": "Eight frontend files plus task-only synthetic proof; no backend/schema/env/dependency/user-record modifications",
+  "independentVerdict": "FAILED VALIDATION",
+  "unresolved": ["12 exact-baseline global test failures", "Import source inventory reconciliation"],
+  "productionPatientMutations": 0,
+  "automationResumed": false,
+  "mainMayBeChanged": false,
+  "issue432MayBeClosed": false
+}

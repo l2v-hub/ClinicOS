@@ -1,0 +1,36 @@
+{
+  "base": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "candidate": "14a03038f758cf728e563807752da1642dc35fa8",
+  "baselineExit": 1,
+  "baselineSha256": "b00f43a276f1a0d264675501a7a2ddd03f6857a4310147d2fb9aba03a1a38e05",
+  "baselineFailures": [
+    "✖ Assistant classic fallback with a known resident opens that resident section",
+    "✖ a single parameters table is always visible and uses the operational table contract",
+    "✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+    "✖ multi-patient parameters uses one bounded page instead of cartella fan-out",
+    "✖ multi-patient quick entry exposes every action and field to assistive technology",
+    "✖ multi-patient quick entry reuses the ClinicOS form and action design system",
+    "✖ multi-patient refresh keeps the previous roster visible and announces progress",
+    "✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+    "✖ only design-system.css decides how a canonical control looks",
+    "✖ schedule reads are abortable, session-safe and retryable",
+    "✖ src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+    "✖ weekly and monthly views never repeat one-day therapy data across calendar cells"
+  ],
+  "candidateFailures": [
+    "✖ Assistant classic fallback with a known resident opens that resident section",
+    "✖ a single parameters table is always visible and uses the operational table contract",
+    "✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+    "✖ multi-patient parameters uses one bounded page instead of cartella fan-out",
+    "✖ multi-patient quick entry exposes every action and field to assistive technology",
+    "✖ multi-patient quick entry reuses the ClinicOS form and action design system",
+    "✖ multi-patient refresh keeps the previous roster visible and announces progress",
+    "✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+    "✖ only design-system.css decides how a canonical control looks",
+    "✖ schedule reads are abortable, session-safe and retryable",
+    "✖ src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+    "✖ weekly and monthly views never repeat one-day therapy data across calendar cells"
+  ],
+  "introducedFailures": [],
+  "at": "2026-10-10T16:58:30.995Z"
+}

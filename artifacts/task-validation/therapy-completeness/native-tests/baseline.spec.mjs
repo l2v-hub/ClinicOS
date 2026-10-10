@@ -1,0 +1,21 @@
+import { test, expect } from 'playwright/test';
+import { guard } from './fixtures.mjs';
+test('base30f reproduces hidden later prescriptions, absent week PRN and missing feed drug', async ({ page }, info) => {
+  const log = await guard(page); await page.goto('/qa-therapy');
+  await page.getByRole('tab', { name: 'Piano terapeutico' }).click();
+  await expect(page.getByTestId('therapy-drug-line')).toHaveCount(100);
+  await expect(page.getByRole('button', { name: 'Carica altre terapie' })).toBeVisible();
+  await expect(page.locator('[data-therapy-id="101"]')).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('baseline-plan-truncated.png') });
+  await page.getByRole('tab', { name: 'Calendario', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Al bisogno', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Settimana', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Al bisogno', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Giorno', exact: true }).click();
+  await page.locator('[data-testid="therapy-calendar-cell"][data-time="08:00"]').click();
+  await expect(page.getByTestId('patient-therapy-slot-detail')).toBeVisible();
+  await expect(page.getByTestId('patient-therapy-slot-detail')).toContainText('Farmaco sintetico 000');
+  await expect(page.getByTestId('patient-therapy-slot-detail')).not.toContainText('Farmaco sintetico 001');
+  await page.screenshot({ path: info.outputPath('baseline-feed-omits-prescription.png') });
+  expect(log.errors).toEqual([]); expect(log.blocked).toEqual([]);
+});

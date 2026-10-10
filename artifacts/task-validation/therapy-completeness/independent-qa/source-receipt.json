@@ -1,0 +1,72 @@
+{
+  "candidate": "14a03038f758cf728e563807752da1642dc35fa8",
+  "base": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "applicationWorkingDiffEmpty": true,
+  "owner": "/root/therapy_complete_qa",
+  "isolatedCheckout": "C:\\w-therapy-qa",
+  "source": [
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+      "blob": "a23858eacda19b6f471ab32e607426bb7cf8ca94",
+      "sha256WorkingBytes": "a29deba8dcc4a80436e6d75cbdad0cd013821289e436332d13782fa1419e73ec"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapySlotDetail.tsx",
+      "blob": "902d084b1c128181dfc1a4a68b1d42f64a020ef1",
+      "sha256WorkingBytes": "4a15430c56e40dbbc19f106e1f8145069cfaccc3e484a467e2c265a1f1eafc06"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "blob": "62cb0ecd6367abcd595b6053ff28efe9f9954458",
+      "sha256WorkingBytes": "cf4f8da9511ae8593b45f3b814eef85c1b123d535a52a743b27aa7bfa9976b0e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyCompleteness.test.ts",
+      "blob": "ac250c8705965d1b3c87f8186e777c03f5ac13b7",
+      "sha256WorkingBytes": "a9c570622cb32cfcf392907b8756d9f6f421f77ed93ad549d9966fffd5d94ace"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "blob": "394d0d3831712af7202321aec507b36c91a8d037",
+      "sha256WorkingBytes": "cf9fefaa458af08d8e63331d52528eb94a0b883db9b29f76fbda09342916e73c"
+    },
+    {
+      "path": "frontend/src/lib/patientTherapyCalendarRead.ts",
+      "blob": "885e7ccb7c28fc44944acab948585cc49bec0997",
+      "sha256WorkingBytes": "bac6a2fa292ff23357b01c0f3d9a0fd5238a2880cde721ae3653d1b7a73e70b5"
+    },
+    {
+      "path": "frontend/src/lib/therapyCompleteness.ts",
+      "blob": "695fd1c03b51388af5db0ffc4139c14f73ddf09a",
+      "sha256WorkingBytes": "9acaa7751e52eaea7030bc3454da44badd5a733d2ecb3569b26d8a1fbc2fe78f"
+    },
+    {
+      "path": "frontend/src/lib/therapyPages.ts",
+      "blob": "a9e2a56d81cfae0160e200ba320c9360ca2119a6",
+      "sha256WorkingBytes": "c5b93437224abe792cd936da2419067cf085eb50fbf5fdb19659a968e5468db9"
+    }
+  ],
+  "mandatoryVerdict": "FAILED VALIDATION",
+  "focusedPass": 46,
+  "adversarialPass": 5,
+  "playwrightPass": 12,
+  "fullTests": 1308,
+  "fullPass": 1296,
+  "fullFail": 12,
+  "independentlyObservedFailures": [
+    "✖ Assistant classic fallback with a known resident opens that resident section",
+    "✖ a single parameters table is always visible and uses the operational table contract",
+    "✖ multi-patient mobile layout is a labelled two-column card without horizontal scroll",
+    "✖ multi-patient parameters uses one bounded page instead of cartella fan-out",
+    "✖ multi-patient quick entry exposes every action and field to assistive technology",
+    "✖ multi-patient quick entry reuses the ClinicOS form and action design system",
+    "✖ multi-patient refresh keeps the previous roster visible and announces progress",
+    "✖ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance",
+    "✖ only design-system.css decides how a canonical control looks",
+    "✖ schedule reads are abortable, session-safe and retryable",
+    "✖ src\\components\\operator\\__tests__\\assessmentCatalogUi.test.ts",
+    "✖ weekly and monthly views never repeat one-day therapy data across calendar cells"
+  ],
+  "suppliedBaselineComparisonSha256": "2c6877b7bbfba2c770629e3b7f124374a06514be62a2241acbf423a2d683d5a7",
+  "sourceIdentityAt": "2026-10-10T17:01:47.358Z"
+}

@@ -1,0 +1,8 @@
+{
+  "applicationCommit": "14a03038f758cf728e563807752da1642dc35fa8",
+  "verdict": "FAILED VALIDATION",
+  "files": 151,
+  "manifestSha256": "a31205f54d7db8ea26696db7900f5baff1b4e93960254d8b431b677a6f97d34f",
+  "exactBytesVerified": true,
+  "at": "2026-10-10T17:04:41.204Z"
+}

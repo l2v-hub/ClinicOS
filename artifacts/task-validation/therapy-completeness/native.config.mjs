@@ -1,0 +1,4 @@
+import { defineConfig } from 'playwright/test';
+export default defineConfig({ testDir: './native-tests', testMatch: process.env.BASELINE ? 'baseline.spec.mjs' : 'complete.spec.mjs', workers: 1, fullyParallel: false, timeout: 45000,
+  outputDir: process.env.RUN ? `./${process.env.RUN}/test-results` : process.env.BASELINE ? './baseline/test-results' : './test-results', reporter: [['list'], ['html', { outputFolder: process.env.RUN ? `./${process.env.RUN}/playwright-report` : process.env.BASELINE ? './baseline/playwright-report' : './playwright-report', open: 'never' }]],
+  use: { baseURL: 'http://127.0.0.1:7542', trace: 'on', video: 'on', screenshot: 'only-on-failure', timezoneId: 'Europe/Rome' } });

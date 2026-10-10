@@ -1,0 +1,108 @@
+{
+  "applicationCommit": "14a03038f758cf728e563807752da1642dc35fa8",
+  "source": [
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+      "sha256": "9b8da23ab0953fc84f41108b574beca2652e9fd0c4442392c72445c9e87fd06f"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapySlotDetail.tsx",
+      "sha256": "1869395f3d8dda2b2fea19c677e4438eedd974a8f4ff44fd4b4f3fb8e40f427a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "483673fff5f0740e5fc629f71242a0b4c6c898e0fb63a3184766ed072d843183"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyCompleteness.test.ts",
+      "sha256": "1badcc97f15578229e1ac419c0dbfabfe74f2e012701205a4fc598c3b084e1fb"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "sha256": "db50fe92bae37a39f911f4a4692d39fab88b3ef8395c06f075c0d82327d34287"
+    },
+    {
+      "path": "frontend/src/lib/patientTherapyCalendarRead.ts",
+      "sha256": "8df12f3a04a440fe0724c404eafe3fc57948ad2a8d14ef0f14802b3c49819e9c"
+    },
+    {
+      "path": "frontend/src/lib/therapyCompleteness.ts",
+      "sha256": "cd5e77a188dd4d705e9393b1650b477f89d5be5b8dc392e5a9e69acfeec34fda"
+    },
+    {
+      "path": "frontend/src/lib/therapyPages.ts",
+      "sha256": "61658bb0f39a19330eb20e81e916621686795890fea43f54b278e82d0a5c0d57"
+    }
+  ],
+  "results": [
+    {
+      "name": "focused",
+      "cwd": ".",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "./scripts/stub-css-loader.mjs",
+        "--test",
+        "frontend/src/lib/__tests__/therapyCompleteness.test.ts",
+        "frontend/src/lib/__tests__/therapyPages.test.ts",
+        "frontend/src/lib/__tests__/patientTherapyCalendar.test.ts",
+        "frontend/src/components/operator/__tests__/patientTherapySlotAndForm.test.ts",
+        "frontend/src/lib/__tests__/therapyIncompleteSummary.test.ts"
+      ],
+      "start": "2026-10-10T16:53:42.886Z",
+      "exit": 0,
+      "logSha256": "68a00c8ab8fd495a0e6b8c840be052da6102a9ba51cb545b2c1bd463236b1ece"
+    },
+    {
+      "name": "types",
+      "cwd": ".",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-b",
+        "frontend"
+      ],
+      "start": "2026-10-10T16:53:44.129Z",
+      "exit": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "frontend/vite.config.ts",
+        "frontend"
+      ],
+      "start": "2026-10-10T16:54:01.067Z",
+      "exit": 0,
+      "logSha256": "a24bb1afb83cbe2aeca47c4194f331208fd9d57cf26180436f23f170f343eca7"
+    },
+    {
+      "name": "full-regression",
+      "cwd": "frontend",
+      "args": [
+        "../scripts/run-node-tests.mjs"
+      ],
+      "start": "2026-10-10T16:54:26.839Z",
+      "exit": 1,
+      "logSha256": "fd2695a5329eabe0dc70beabf78e8f8d87f7ad7259428bd5efb52aea1764419c"
+    },
+    {
+      "name": "import-audit-existing-tests",
+      "cwd": "backend",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "src/intake/__tests__/parse-discharge-therapy.test.ts",
+        "src/intake/__tests__/parse-discharge-therapy-nonrx.test.ts"
+      ],
+      "start": "2026-10-10T16:55:28.577Z",
+      "exit": 0,
+      "logSha256": "1a6e9db9a247d03e3ca24b9f4b8ebe464cc21652dd0068d45d0ce49d4789ba31"
+    }
+  ]
+}
