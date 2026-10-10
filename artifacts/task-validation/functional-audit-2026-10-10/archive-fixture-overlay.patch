@@ -1,0 +1,10 @@
+--- a/backend/src/ai/__tests__/patient-archive-persistence-db.test.ts
++++ b/backend/src/ai/__tests__/patient-archive-persistence-db.test.ts
+@@ -38,6 +38,7 @@
+         data: {
+           id: `${runId}-job-${jobIds.length}`,
+           status: 'review_ready',
++          resultData: {"_narrative": {"firstName": "", "lastName": "", "dateOfBirth": "", "placeOfBirth": "", "sex": "", "fiscalCode": "", "address": "", "phone": "", "email": "", "allergiesText": "", "diagnosisText": "", "anamnesisText": "", "hospitalCourseText": "", "consultationsText": "", "imagingDiagnosticsText": "", "proceduresAndInterventionsText": "", "therapyText": "", "adviceAndFollowUpText": "", "unmappedText": "", "schemaVersion": "clinicos-discharge-narrative-v1", "allergyStatus": "not_documented", "boldTags": [], "sourceReferences": [], "missingSections": [], "warnings": []}, "_sections": null},
+           createdById: runId,
+           maxFiles: 10,
+           maxTotalBytes: 1_000_000,

@@ -1,0 +1,15 @@
+▶ archive originals survive confirmation and failures roll back on PostgreSQL
+  ✔ existing patient confirmation archives every source and remains idempotent (193.474163ms)
+  ✔ missing original rolls back existing chart update and prevents confirmed status (32.358788ms)
+  ✔ new intake patient and draft confirmation roll back when a source is unavailable (99.256626ms)
+  ✔ concurrent source copies do not duplicate files (43.446902ms)
+  ✔ legacy apply persists the original in the canonical list and rolls back corrupt bytes (112.020451ms)
+✔ archive originals survive confirmation and failures roll back on PostgreSQL (1368.503951ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11693.96887

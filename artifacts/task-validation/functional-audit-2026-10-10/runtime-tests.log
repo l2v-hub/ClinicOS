@@ -1,0 +1,305 @@
+/workspace/ClinicOS/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:36: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+test_third_job_stays_queued_until_a_slot_frees (test_app_limits.ConcurrencySemaphoreTests.test_third_job_stays_queued_until_a_slot_frees) ... ok
+test_create_job_triggers_gc_opportunistically (test_app_limits.JobGcTests.test_create_job_triggers_gc_opportunistically) ... ok
+test_gc_ignores_terminal_jobs_without_finished_at (test_app_limits.JobGcTests.test_gc_ignores_terminal_jobs_without_finished_at) ... ok
+test_gc_keeps_recent_terminal_jobs (test_app_limits.JobGcTests.test_gc_keeps_recent_terminal_jobs) ... ok
+test_gc_never_removes_active_jobs_even_if_old (test_app_limits.JobGcTests.test_gc_never_removes_active_jobs_even_if_old) ... ok
+test_gc_removes_expired_failed_and_cancelled_too (test_app_limits.JobGcTests.test_gc_removes_expired_failed_and_cancelled_too) ... ok
+test_gc_removes_expired_terminal_jobs (test_app_limits.JobGcTests.test_gc_removes_expired_terminal_jobs) ... ok
+test_timeout_marks_job_failed_with_explicit_error (test_app_limits.JobTimeoutTests.test_timeout_marks_job_failed_with_explicit_error) ... ok
+test_single_job_within_limits_completes_review_ready (test_app_limits.SingleJobRegressionTests.test_single_job_within_limits_completes_review_ready) ... ok
+test_oversized_single_file_rejected_with_413 (test_app_limits.UploadSizeLimitTests.test_oversized_single_file_rejected_with_413) ... ok
+test_oversized_total_across_multiple_files_rejected (test_app_limits.UploadSizeLimitTests.test_oversized_total_across_multiple_files_rejected) ... ok
+test_upload_within_limit_is_accepted (test_app_limits.UploadSizeLimitTests.test_upload_within_limit_is_accepted) ... ok
+test_mock_compose_returns_unfounded_empty (test_assistant_plan.AssistantComposeTests.test_mock_compose_returns_unfounded_empty) ... ok
+test_mock_recognizes_plan_marker (test_assistant_plan.AssistantPlanTests.test_mock_recognizes_plan_marker) ... ok
+test_returns_valid_empty_plan_with_mock (test_assistant_plan.AssistantPlanTests.test_returns_valid_empty_plan_with_mock) ... ok
+test_prompt_teaches_query_data_dsl (test_assistant_plan.DataQueryPromptTests.test_prompt_teaches_query_data_dsl) ... ok
+test_fenced_json (test_assistant_plan.ParsePlanJsonTests.test_fenced_json) ... ok
+test_prose_wrapped_json (test_assistant_plan.ParsePlanJsonTests.test_prose_wrapped_json) ... ok
+test_pure_json (test_assistant_plan.ParsePlanJsonTests.test_pure_json) ... ok
+test_unparsable_returns_none (test_assistant_plan.ParsePlanJsonTests.test_unparsable_returns_none) ... ok
+test_plan_logs_sanitized_provider_line (test_assistant_plan.ProviderInvocationLogTests.test_plan_logs_sanitized_provider_line) ... ok
+test_prompt_enumerates_backend_intents (test_assistant_plan.SystemPromptContractTests.test_prompt_enumerates_backend_intents) ... ok
+test_forwards_images_and_files (test_azure_gpt5.TestAzureRunnerMultimodal.test_forwards_images_and_files) ... ok
+test_status_error_raises_provider_error (test_azure_gpt5.TestAzureRunnerMultimodal.test_status_error_raises_provider_error) ... ok
+test_text_only_has_no_media_kwargs (test_azure_gpt5.TestAzureRunnerMultimodal.test_text_only_has_no_media_kwargs) ... ok
+test_azure_gpt55_is_vision_and_pdf (test_azure_gpt5.TestGpt5Capabilities.test_azure_gpt55_is_vision_and_pdf) ... ok
+test_extraction_requirement_passes_for_gpt55 (test_azure_gpt5.TestGpt5Capabilities.test_extraction_requirement_passes_for_gpt55) ... ok
+test_gpt6_family_is_vision_and_pdf (test_azure_gpt5.TestGpt5Capabilities.test_gpt6_family_is_vision_and_pdf) ... ok
+test_older_azure_models_unchanged (test_azure_gpt5.TestGpt5Capabilities.test_older_azure_models_unchanged) ... ok
+test_body_carries_schema_and_parts (test_azure_structured.TestStructuredBody.test_body_carries_schema_and_parts) ... ok
+test_example_instead_of_schema_falls_back_to_json_object (test_azure_structured.TestStructuredBody.test_example_instead_of_schema_falls_back_to_json_object) ... ok
+test_extraction_prefers_run_structured (test_azure_structured.TestStructuredBody.test_extraction_prefers_run_structured) ... ok
+test_no_attachments_still_valid (test_azure_structured.TestStructuredBody.test_no_attachments_still_valid) ... ok
+test_real_schema_still_uses_json_schema (test_azure_structured.TestStructuredBody.test_real_schema_still_uses_json_schema) ... ok
+test_429_becomes_rate_limit (test_azure_structured.TestStructuredCall.test_429_becomes_rate_limit) ... ok
+test_connect_timeout_wrapped_in_urlerror_is_timeout (test_azure_structured.TestStructuredCall.test_connect_timeout_wrapped_in_urlerror_is_timeout) ... ok
+test_http_error_becomes_provider_error_without_secrets (test_azure_structured.TestStructuredCall.test_http_error_becomes_provider_error_without_secrets) ... ok
+test_missing_credentials_is_provider_unavailable (test_azure_structured.TestStructuredCall.test_missing_credentials_is_provider_unavailable) ... ok
+test_other_urlerror_is_provider_error (test_azure_structured.TestStructuredCall.test_other_urlerror_is_provider_error) ... ok
+test_returns_message_content (test_azure_structured.TestStructuredCall.test_returns_message_content) ... ok
+test_socket_timeout_is_classified_as_timeout (test_azure_structured.TestStructuredCall.test_socket_timeout_is_classified_as_timeout) ... ok
+test_url_is_built_on_the_root_endpoint (test_azure_structured.TestStructuredCall.test_url_is_built_on_the_root_endpoint) ... ok
+test_agno_last_assistant_metadata_and_unknown_reason (test_completion_integrity.CompletionIntegrityTests.test_agno_last_assistant_metadata_and_unknown_reason) ... ok
+test_azure_structured_preserves_finish_and_rejects_length_or_refusal (test_completion_integrity.CompletionIntegrityTests.test_azure_structured_preserves_finish_and_rejects_length_or_refusal) ... ok
+test_missing_metadata_stays_unknown (test_completion_integrity.CompletionIntegrityTests.test_missing_metadata_stays_unknown) ... ok
+test_ocr_metadata_survives_raw_text_unwrap (test_completion_integrity.CompletionIntegrityTests.test_ocr_metadata_survives_raw_text_unwrap) ... ok
+test_ocr_with_truncated_text_fails (test_completion_integrity.CompletionIntegrityTests.test_ocr_with_truncated_text_fails) ... ok
+test_oversize_repair_fails_explicitly_without_truncating (test_completion_integrity.CompletionIntegrityTests.test_oversize_repair_fails_explicitly_without_truncating) ... ok
+test_repair_cannot_promote_truncated_valid_json (test_completion_integrity.CompletionIntegrityTests.test_repair_cannot_promote_truncated_valid_json) ... ok
+test_repair_receives_full_tail_beyond_old_6000_character_slice (test_completion_integrity.CompletionIntegrityTests.test_repair_receives_full_tail_beyond_old_6000_character_slice) ... ok
+test_sdk_parser_preserves_reason_before_it_would_be_discarded (test_completion_integrity.CompletionIntegrityTests.test_sdk_parser_preserves_reason_before_it_would_be_discarded) ... ok
+test_top_level_non_object_is_not_a_valid_extraction (test_completion_integrity.CompletionIntegrityTests.test_top_level_non_object_is_not_a_valid_extraction) ... ok
+test_valid_json_with_length_reason_fails_without_repair (test_completion_integrity.CompletionIntegrityTests.test_valid_json_with_length_reason_fails_without_repair) ... ok
+test_alias_leggibili (test_docintel.TestConfigurazione.test_alias_leggibili) ... ok
+test_capability_soddisfano_il_ruolo_ocr (test_docintel.TestConfigurazione.test_capability_soddisfano_il_ruolo_ocr) ... ok
+test_ruoli_indipendenti_ocr_e_extraction (test_docintel.TestConfigurazione.test_ruoli_indipendenti_ocr_e_extraction) ... ok
+test_mode_default_resta_extraction (test_docintel.TestModoOcr.test_mode_default_resta_extraction) ... ok
+test_mode_ocr_lascia_intatto_il_markdown (test_docintel.TestModoOcr.test_mode_ocr_lascia_intatto_il_markdown) ... ok
+test_mode_ocr_scarta_involucro_json_di_un_modello_di_chat (test_docintel.TestModoOcr.test_mode_ocr_scarta_involucro_json_di_un_modello_di_chat) ... ok
+test_mode_ocr_usa_il_ruolo_ocr_e_restituisce_rawText (test_docintel.TestModoOcr.test_mode_ocr_usa_il_ruolo_ocr_e_restituisce_rawText) ... ok
+test_i_numeri_di_pagina_restano_rumore_da_togliere (test_docintel.TestPuliziaMarkdown.test_i_numeri_di_pagina_restano_rumore_da_togliere) ... ok
+test_i_tag_che_valgono_un_a_capo_diventano_un_a_capo (test_docintel.TestPuliziaMarkdown.test_i_tag_che_valgono_un_a_capo_diventano_un_a_capo) ... ok
+test_il_titolo_marcato_come_intestazione_di_pagina_sopravvive (test_docintel.TestPuliziaMarkdown.test_il_titolo_marcato_come_intestazione_di_pagina_sopravvive) ... ok
+test_le_celle_restano_distinguibili (test_docintel.TestPuliziaMarkdown.test_le_celle_restano_distinguibili) ... ok
+test_toglie_commenti_e_tag_conservando_il_contenuto (test_docintel.TestPuliziaMarkdown.test_toglie_commenti_e_tag_conservando_il_contenuto) ... ok
+test_un_titolo_seguito_da_a_capo_resta_riga_a_se (test_docintel.TestPuliziaMarkdown.test_un_titolo_seguito_da_a_capo_resta_riga_a_se) ... ok
+test_429_e_rate_limit_senza_chiave_nel_messaggio (test_docintel.TestRunner.test_429_e_rate_limit_senza_chiave_nel_messaggio) ... ok
+test_analisi_asincrona_e_markdown (test_docintel.TestRunner.test_analisi_asincrona_e_markdown) ... ok
+test_analisi_fallita_e_errore_provider (test_docintel.TestRunner.test_analisi_fallita_e_errore_provider) ... ok
+test_nessun_allegato_nessuna_chiamata (test_docintel.TestRunner.test_nessun_allegato_nessuna_chiamata) ... ok
+test_pagine_analizzate_in_parallelo (test_docintel.TestRunner.test_pagine_analizzate_in_parallelo) ... ok
+test_piu_documenti_concatenati_nell_ordine_di_partenza (test_docintel.TestRunner.test_piu_documenti_concatenati_nell_ordine_di_partenza) ... ok
+test_un_allegato_vuoto_non_diventa_una_trascrizione_parziale (test_docintel.TestRunner.test_un_allegato_vuoto_non_diventa_una_trascrizione_parziale) ... ok
+test_imola_recognised (test_document_profiles.ClassificationTests.test_imola_recognised) ... ok
+test_profile_is_configurable_and_swappable (test_document_profiles.ClassificationTests.test_profile_is_configurable_and_swappable) ... ok
+test_unrecognised_falls_back_to_generic (test_document_profiles.ClassificationTests.test_unrecognised_falls_back_to_generic) ... ok
+test_header_with_anagraphic_data_is_kept (test_document_profiles.HeaderFooterTests.test_header_with_anagraphic_data_is_kept) ... ok
+test_original_text_immutable (test_document_profiles.HeaderFooterTests.test_original_text_immutable) ... ok
+test_repetitive_header_footer_removed (test_document_profiles.HeaderFooterTests.test_repetitive_header_footer_removed) ... ok
+test_duplicate_page_number_flagged_both_kept (test_document_profiles.OrderingTests.test_duplicate_page_number_flagged_both_kept) ... ok
+test_missing_page_flagged (test_document_profiles.OrderingTests.test_missing_page_flagged) ... ok
+test_multipage_in_order (test_document_profiles.OrderingTests.test_multipage_in_order) ... ok
+test_no_page_number_uses_upload_order (test_document_profiles.OrderingTests.test_no_page_number_uses_upload_order) ... ok
+test_photos_out_of_order_get_sorted (test_document_profiles.OrderingTests.test_photos_out_of_order_get_sorted) ... ok
+test_single_page (test_document_profiles.OrderingTests.test_single_page) ... ok
+test_footer_bare_x_slash_y (test_document_profiles.PageNumberTests.test_footer_bare_x_slash_y) ... ok
+test_footer_pag_x_slash_y (test_document_profiles.PageNumberTests.test_footer_pag_x_slash_y) ... ok
+test_footer_pagina_x_di_y (test_document_profiles.PageNumberTests.test_footer_pagina_x_di_y) ... ok
+test_pagina_x_only (test_document_profiles.PageNumberTests.test_pagina_x_only) ... ok
+test_recovered_before_footer_removed (test_document_profiles.PageNumberTests.test_recovered_before_footer_removed) ... ok
+test_1_reads_agnos_llm_provider (test_env_config.AgnosLlmTests.test_1_reads_agnos_llm_provider) ... ok
+test_2_reads_agnos_llm_model (test_env_config.AgnosLlmTests.test_2_reads_agnos_llm_model) ... ok
+test_3_azure_only_when_provider_azure_openai (test_env_config.AgnosLlmTests.test_3_azure_only_when_provider_azure_openai) ... ok
+test_3b_azure_missing_endpoint_is_clear_error (test_env_config.AgnosLlmTests.test_3b_azure_missing_endpoint_is_clear_error) ... ok
+test_8_legacy_agent_model_only_as_fallback (test_env_config.AgnosLlmTests.test_8_legacy_agent_model_only_as_fallback) ... ok
+test_9_missing_required_gives_clear_error (test_env_config.AgnosLlmTests.test_9_missing_required_gives_clear_error) ... ok
+test_5_extraction_uses_ai_extraction_model_not_agnos (test_env_config.ExtractionTests.test_5_extraction_uses_ai_extraction_model_not_agnos) ... ok
+test_6_mistral_separate_from_agnos (test_env_config.ExtractionTests.test_6_mistral_separate_from_agnos) ... ok
+test_extraction_default_provider_mistral (test_env_config.ExtractionTests.test_extraction_default_provider_mistral) ... ok
+test_health_legacy_provider_shown (test_env_config.LlmHealthTests.test_health_legacy_provider_shown) ... ok
+test_health_missing_azure_env_is_error_no_secret (test_env_config.LlmHealthTests.test_health_missing_azure_env_is_error_no_secret) ... ok
+test_health_never_exposes_secret (test_env_config.LlmHealthTests.test_health_never_exposes_secret) ... ok
+test_health_shape_azure_ok (test_env_config.LlmHealthTests.test_health_shape_azure_ok) ... ok
+test_4_ocr_uses_ai_ocr_model_not_agnos (test_env_config.OcrTests.test_4_ocr_uses_ai_ocr_model_not_agnos) ... ok
+test_7_azure_separate_from_ocr (test_env_config.OcrTests.test_7_azure_separate_from_ocr) ... ok
+test_ocr_default_provider_mistral (test_env_config.OcrTests.test_ocr_default_provider_mistral) ... ok
+test_ocr_legacy_provider_colon_model (test_env_config.OcrTests.test_ocr_legacy_provider_colon_model) ... ok
+test_normalize_azure_openai (test_env_config.ProviderAliasTests.test_normalize_azure_openai) ... ok
+test_repair_bare_model_rides_agnos_provider (test_env_config.RepairTests.test_repair_bare_model_rides_agnos_provider) ... ok
+test_repair_explicit_provider_model_kept (test_env_config.RepairTests.test_repair_explicit_provider_model_kept) ... ok
+test_repair_missing_inherits_agnos (test_env_config.RepairTests.test_repair_missing_inherits_agnos) ... ok
+test_10_no_secret_in_config_log (test_env_config.SecretSafetyTests.test_10_no_secret_in_config_log) ... ok
+test_11_no_secret_key_in_frontend (test_env_config.SecretSafetyTests.test_11_no_secret_key_in_frontend) ... ok
+test_capability_gate_blocks_incompatible_model (test_factory.FactoryTests.test_capability_gate_blocks_incompatible_model) ... ok
+test_mock_build_and_run (test_factory.FactoryTests.test_mock_build_and_run) ... ok
+test_vision_model_passes_gate (test_factory.FactoryTests.test_vision_model_passes_gate) ... ok
+test_cancel_queued_never_calls_provider (test_job_recovery.JobRecoveryTests.test_cancel_queued_never_calls_provider) ... ok
+test_cancel_running_cancels_task_and_blocks_late_success (test_job_recovery.JobRecoveryTests.test_cancel_running_cancels_task_and_blocks_late_success) ... ok
+test_cancel_terminal_preserves_completed_result (test_job_recovery.JobRecoveryTests.test_cancel_terminal_preserves_completed_result) ... ok
+test_changed_attempt_fences_old_provider_result (test_job_recovery.JobRecoveryTests.test_changed_attempt_fences_old_provider_result) ... ok
+test_create_replays_only_identical_unit_and_canonical_payload (test_job_recovery.JobRecoveryTests.test_create_replays_only_identical_unit_and_canonical_payload) ... ok
+test_duplicate_runs_never_duplicate_provider_or_reset_terminal (test_job_recovery.JobRecoveryTests.test_duplicate_runs_never_duplicate_provider_or_reset_terminal) ... ok
+test_incomplete_output_cannot_publish_or_retry (test_job_recovery.JobRecoveryTests.test_incomplete_output_cannot_publish_or_retry) ... ok
+test_invalid_identity_and_attempt_rejected_at_boundary (test_job_recovery.JobRecoveryTests.test_invalid_identity_and_attempt_rejected_at_boundary) ... ok
+test_key_conflicts_on_changed_hash_prompt_schema_or_file (test_job_recovery.JobRecoveryTests.test_key_conflicts_on_changed_hash_prompt_schema_or_file) ... ok
+test_legacy_correlation_does_not_deduplicate (test_job_recovery.JobRecoveryTests.test_legacy_correlation_does_not_deduplicate) ... ok
+test_restart_and_gc_allow_recreation_with_no_stale_identity (test_job_recovery.JobRecoveryTests.test_restart_and_gc_allow_recreation_with_no_stale_identity) ... ok
+test_retry_response_loss_and_stale_replays_run_once (test_job_recovery.JobRecoveryTests.test_retry_response_loss_and_stale_replays_run_once) ... ok
+test_timeout_cannot_accept_provider_ignoring_cancellation (test_job_recovery.JobRecoveryTests.test_timeout_cannot_accept_provider_ignoring_cancellation) ... ok
+test_upload_stream_stops_before_reading_tail_after_limit (test_job_recovery.JobRecoveryTests.test_upload_stream_stops_before_reading_tail_after_limit) ... ok
+test_429_still_classified_rate_limit (test_mistral.TestPostErrorClassification.test_429_still_classified_rate_limit) ... ok
+test_malformed_json_body_is_classified_provider_error_not_raw_exception (test_mistral.TestPostErrorClassification.test_malformed_json_body_is_classified_provider_error_not_raw_exception) ... ok
+test_valid_json_body_is_parsed (test_mistral.TestPostErrorClassification.test_valid_json_body_is_parsed) ... ok
+test_auth_route_limits_and_failures_are_safe_and_distinct (test_mistral_azure.AzureMistralTests.test_auth_route_limits_and_failures_are_safe_and_distinct) ... ok
+test_azure_secret_never_falls_back_to_non_azure_hosts (test_mistral_azure.AzureMistralTests.test_azure_secret_never_falls_back_to_non_azure_hosts) ... ok
+test_every_document_must_supply_requested_structured_annotation (test_mistral_azure.AzureMistralTests.test_every_document_must_supply_requested_structured_annotation) ... ok
+test_explicit_url_and_dedicated_key_take_precedence (test_mistral_azure.AzureMistralTests.test_explicit_url_and_dedicated_key_take_precedence) ... ok
+test_insecure_or_credential_bearing_endpoints_are_rejected_without_echo (test_mistral_azure.AzureMistralTests.test_insecure_or_credential_bearing_endpoints_are_rejected_without_echo) ... ok
+test_invalid_utf8_response_has_a_safe_provider_error (test_mistral_azure.AzureMistralTests.test_invalid_utf8_response_has_a_safe_provider_error) ... ok
+test_missing_structured_annotation_cannot_be_an_empty_success (test_mistral_azure.AzureMistralTests.test_missing_structured_annotation_cannot_be_an_empty_success) ... ok
+test_model_payload_and_order_for_images_and_pdf (test_mistral_azure.AzureMistralTests.test_model_payload_and_order_for_images_and_pdf) ... ok
+test_no_documents_or_empty_output_cannot_succeed (test_mistral_azure.AzureMistralTests.test_no_documents_or_empty_output_cannot_succeed) ... ok
+test_one_empty_document_cannot_be_hidden_by_another_readable_document (test_mistral_azure.AzureMistralTests.test_one_empty_document_cannot_be_hidden_by_another_readable_document) ... ok
+test_raw_text_schema_does_not_request_annotation (test_mistral_azure.AzureMistralTests.test_raw_text_schema_does_not_request_annotation) ... ok
+test_redirect_never_forwards_credentials (test_mistral_azure.AzureMistralTests.test_redirect_never_forwards_credentials) ... ok
+test_root_endpoint_uses_ocr_route_and_scoped_azure_key (test_mistral_azure.AzureMistralTests.test_root_endpoint_uses_ocr_route_and_scoped_azure_key) ... ok
+test_ai_disabled_makes_no_provider_call (test_openai_cutover.CutoverFlowTests.test_ai_disabled_makes_no_provider_call) ... Executing <Task finished name='Task-296' coro=<CutoverFlowTests.test_ai_disabled_makes_no_provider_call() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:141> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.516 seconds
+ok
+test_cost_estimate_and_soft_budget_alert (test_openai_cutover.CutoverFlowTests.test_cost_estimate_and_soft_budget_alert) ... Executing <Task pending name='Task-301' coro=<CutoverFlowTests.test_cost_estimate_and_soft_budget_alert() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:159> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 1.286 seconds
+Executing <Task pending name='Task-301' coro=<CutoverFlowTests.test_cost_estimate_and_soft_budget_alert() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:166> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.106 seconds
+Executing <Task finished name='Task-301' coro=<CutoverFlowTests.test_cost_estimate_and_soft_budget_alert() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:152> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.497 seconds
+ok
+test_role_mapping_on_the_wire_and_switch_openai_test_openai (test_openai_cutover.CutoverFlowTests.test_role_mapping_on_the_wire_and_switch_openai_test_openai) ... Executing <Task finished name='Task-306' coro=<CutoverFlowTests.test_role_mapping_on_the_wire_and_switch_openai_test_openai() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:101> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.501 seconds
+ok
+test_secret_never_in_logs_or_responses (test_openai_cutover.CutoverFlowTests.test_secret_never_in_logs_or_responses) ... Executing <Task finished name='Task-311' coro=<CutoverFlowTests.test_secret_never_in_logs_or_responses() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_openai_cutover.py:171> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.504 seconds
+ok
+test_deprecated_transcription_model_flagged (test_openai_cutover.TargetConfigurationTests.test_deprecated_transcription_model_flagged) ... ok
+test_missing_key_makes_ai_unavailable_without_leaking (test_openai_cutover.TargetConfigurationTests.test_missing_key_makes_ai_unavailable_without_leaking) ... ok
+test_openai_adapter_has_no_azure_dependency (test_openai_cutover.TargetConfigurationTests.test_openai_adapter_has_no_azure_dependency) ... ok
+test_prompt_variable_set_without_default_misses_vision (test_openai_cutover.TargetConfigurationTests.test_prompt_variable_set_without_default_misses_vision) ... ok
+test_realtime_is_separate_and_off (test_openai_cutover.TargetConfigurationTests.test_realtime_is_separate_and_off) ... ok
+test_target_validates_without_any_azure_variable (test_openai_cutover.TargetConfigurationTests.test_target_validates_without_any_azure_variable) ... ok
+test_malformed_id_is_replaced (test_phase9_hardening.CorrelationTests.test_malformed_id_is_replaced) ... ok
+test_middleware_echoes_request_id (test_phase9_hardening.CorrelationTests.test_middleware_echoes_request_id) ... ok
+test_well_formed_id_is_kept (test_phase9_hardening.CorrelationTests.test_well_formed_id_is_kept) ... ok
+test_plan_error_detail_is_generic (test_phase9_hardening.GenericErrorBodyTests.test_plan_error_detail_is_generic) ... assistant plan failed: RuntimeError
+ok
+test_unexpected_exception_never_reaches_the_caller (test_phase9_hardening.GenericErrorBodyTests.test_unexpected_exception_never_reaches_the_caller) ... skill route failed: ValueError
+ok
+test_compare_is_constant_time (test_phase9_hardening.ServiceTokenTests.test_compare_is_constant_time) ... ok
+test_unset_token_fails_closed (test_phase9_hardening.ServiceTokenTests.test_unset_token_fails_closed) ... ok
+test_valid_token_accepted (test_phase9_hardening.ServiceTokenTests.test_valid_token_accepted) ... ok
+test_wrong_missing_and_prefix_tokens_rejected (test_phase9_hardening.ServiceTokenTests.test_wrong_missing_and_prefix_tokens_rejected) ... ok
+test_no_hidden_sdk_retries (test_provider_agnostic.AgnoPathRegressionTests.test_no_hidden_sdk_retries) ... ok
+test_swallowed_rate_limit_stays_rate_limit (test_provider_agnostic.AgnoPathRegressionTests.test_swallowed_rate_limit_stays_rate_limit) ... ok
+test_errors (test_provider_agnostic.ConfigurationTests.test_errors) ... ok
+test_legacy_configuration_unchanged (test_provider_agnostic.ConfigurationTests.test_legacy_configuration_unchanged) ... ok
+test_per_role_model_and_provider_override (test_provider_agnostic.ConfigurationTests.test_per_role_model_and_provider_override) ... ok
+test_single_switch_resolves_every_logical_role (test_provider_agnostic.ConfigurationTests.test_single_switch_resolves_every_logical_role) ... ok
+test_switch_is_one_variable (test_provider_agnostic.ConfigurationTests.test_switch_is_one_variable) ... ok
+test_no_vendor_in_neutral_layers (test_provider_agnostic.CouplingGuardTests.test_no_vendor_in_neutral_layers) ... ok
+test_cancellation_is_real (test_provider_agnostic.ErrorAndUsageNormalizationTests.test_cancellation_is_real) ... Executing <Task finished name='Task-325' coro=<ErrorAndUsageNormalizationTests.test_cancellation_is_real() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:220> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.222 seconds
+ok
+test_fallback_only_when_enabled_and_allowed (test_provider_agnostic.ErrorAndUsageNormalizationTests.test_fallback_only_when_enabled_and_allowed) ... Executing <Task finished name='Task-331' coro=<ErrorAndUsageNormalizationTests.test_fallback_only_when_enabled_and_allowed() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:252> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.499 seconds
+ok
+test_openai_adapter_errors (test_provider_agnostic.ErrorAndUsageNormalizationTests.test_openai_adapter_errors) ... Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.513 seconds
+Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.546 seconds
+Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.515 seconds
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 37394)
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 766, in __init__
+    self.handle()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 440, in handle
+    self.handle_one_request()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 428, in handle_one_request
+    method()
+  File "/workspace/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 113, in do_POST
+    return self._send(200, {
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 55, in _send
+    self.wfile.write(body)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 845, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.520 seconds
+Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.516 seconds
+Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.520 seconds
+Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:217> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.514 seconds
+Executing <Task pending name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:218> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.519 seconds
+Executing <Task finished name='Task-336' coro=<ErrorAndUsageNormalizationTests.test_openai_adapter_errors() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:212> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.497 seconds
+ok
+test_test_provider_faults_map_to_every_code (test_provider_agnostic.ErrorAndUsageNormalizationTests.test_test_provider_faults_map_to_every_code) ... ok
+test_token_budget (test_provider_agnostic.ErrorAndUsageNormalizationTests.test_token_budget) ... ok
+test_usage_normalized (test_provider_agnostic.ErrorAndUsageNormalizationTests.test_usage_normalized) ... Executing <Task finished name='Task-352' coro=<ErrorAndUsageNormalizationTests.test_usage_normalized() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:242> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.497 seconds
+ok
+test_openai_then_test_provider_same_workflows (test_provider_agnostic.ProviderSwitchTests.test_openai_then_test_provider_same_workflows) ... Executing <Task finished name='Task-357' coro=<ProviderSwitchTests.test_openai_then_test_provider_same_workflows() done, defined at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:165> result=None created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.494 seconds
+ok
+test_stt_switch (test_provider_agnostic.ProviderSwitchTests.test_stt_switch) ... ----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 47824)
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 766, in __init__
+    self.handle()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 440, in handle
+    self.handle_one_request()
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/http/server.py", line 428, in handle_one_request
+    method()
+  File "/workspace/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 113, in do_POST
+    return self._send(200, {
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/ClinicOS/clinicos-ai-runtime/tests/openai_stub.py", line 55, in _send
+    self.wfile.write(body)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/socketserver.py", line 845, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+Executing <Task pending name='Task-362' coro=<ProviderSwitchTests.test_stt_switch() running at /workspace/ClinicOS/clinicos-ai-runtime/tests/test_provider_agnostic.py:193> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/futures.py:389, Task.task_wakeup()] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:181] created at /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:100> took 0.501 seconds
+ok
+test_aliases (test_provider_agnostic.RegistryTests.test_aliases) ... ok
+test_every_entry_has_an_importable_adapter (test_provider_agnostic.RegistryTests.test_every_entry_has_an_importable_adapter) ... ok
+test_credentials_capabilities_stt (test_provider_agnostic.ValidationTests.test_credentials_capabilities_stt) ... ok
+test_model_less_providers_start_without_model_ids (test_provider_agnostic.ValidationTests.test_model_less_providers_start_without_model_ids) ... ok
+test_strict_mode (test_provider_agnostic.ValidationTests.test_strict_mode) ... ok
+test_real_http_cancel_propagates_and_discards_late_result (test_recovery_http.RecoveryHttpTests.test_real_http_cancel_propagates_and_discards_late_result) ... ok
+test_real_http_chunked_upload_enforces_limit_without_content_length (test_recovery_http.RecoveryHttpTests.test_real_http_chunked_upload_enforces_limit_without_content_length) ... ok
+test_real_http_create_replay_conflict_run_and_version (test_recovery_http.RecoveryHttpTests.test_real_http_create_replay_conflict_run_and_version) ... ok
+test_real_http_retry_expected_attempt_replay (test_recovery_http.RecoveryHttpTests.test_real_http_retry_expected_attempt_replay) ... ok
+test_real_http_truncation_auth_validation_and_upload_limit (test_recovery_http.RecoveryHttpTests.test_real_http_truncation_auth_validation_and_upload_limit) ... ok
+test_met_capability_ok (test_registry.CapabilityTests.test_met_capability_ok) ... ok
+test_unmet_capability_raises (test_registry.CapabilityTests.test_unmet_capability_raises) ... ok
+test_all_roles_available (test_registry.ConfigTests.test_all_roles_available) ... ok
+test_change_provider_via_env_only (test_registry.ConfigTests.test_change_provider_via_env_only) ... ok
+test_fallback_both_spellings (test_registry.ConfigTests.test_fallback_both_spellings) ... ok
+test_missing_role_model_is_error (test_registry.ConfigTests.test_missing_role_model_is_error) ... ok
+test_temperature_and_timeout_per_role_and_global (test_registry.ConfigTests.test_temperature_and_timeout_per_role_and_global) ... ok
+test_credentials_check (test_registry.RegistryTests.test_credentials_check) ... ok
+test_public_status_has_no_secrets (test_registry.RegistryTests.test_public_status_has_no_secrets) ... ok
+test_resolve_primary_then_fallback (test_registry.RegistryTests.test_resolve_primary_then_fallback) ... ok
+test_usable_specs_filters_by_credentials (test_registry.RegistryTests.test_usable_specs_filters_by_credentials) ... ok
+test_parse_openai_like (test_registry.SpecTests.test_parse_openai_like) ... ok
+test_parse_rejects_empty (test_registry.SpecTests.test_parse_rejects_empty) ... ok
+test_parse_rejects_unknown_provider (test_registry.SpecTests.test_parse_rejects_unknown_provider) ... ok
+test_parse_requires_colon (test_registry.SpecTests.test_parse_requires_colon) ... ok
+test_parse_valid (test_registry.SpecTests.test_parse_valid) ... ok
+test_error_status_raises_provider_error (test_runner.RunnerErrorSurfacingTests.test_error_status_raises_provider_error) ... ok
+test_no_status_attr_returns_content (test_runner.RunnerErrorSurfacingTests.test_no_status_attr_returns_content) ... ok
+test_ok_status_returns_content (test_runner.RunnerErrorSurfacingTests.test_ok_status_returns_content) ... ok
+test_role_hint_is_one_short_optional_line (test_skill_route.RoleHintTests.test_role_hint_is_one_short_optional_line) ... ok
+test_drops_skill_not_offered (test_skill_route.SanitizeRouteTests.test_drops_skill_not_offered) ... ok
+test_garbage (test_skill_route.SanitizeRouteTests.test_garbage) ... ok
+test_keeps_offered_skill_and_known_fields (test_skill_route.SanitizeRouteTests.test_keeps_offered_skill_and_known_fields) ... ok
+test_endpoint_requires_service_token_and_answers (test_skill_route.SkillRouteEndpointTests.test_endpoint_requires_service_token_and_answers) ... ok
+test_marker_present (test_skill_route.SkillRouteTests.test_marker_present) ... ok
+test_mock_never_invents_a_route (test_skill_route.SkillRouteTests.test_mock_never_invents_a_route) ... ok
+test_forged_delimiters_are_neutralized (test_untrusted.FenceTests.test_forged_delimiters_are_neutralized) ... ok
+test_label_cannot_inject (test_untrusted.FenceTests.test_label_cannot_inject) ... ok
+test_plan_and_compose_prompts_carry_the_rule (test_untrusted.PromptRuleTests.test_plan_and_compose_prompts_carry_the_rule) ... ok
+test_skill_route_prompt_is_fenced_and_injection_cannot_add_a_skill (test_untrusted.PromptRuleTests.test_skill_route_prompt_is_fenced_and_injection_cannot_add_a_skill) ... ok
+test_rule_has_no_jailbreak_like_imperatives (test_untrusted.RuleWordingTests.test_rule_has_no_jailbreak_like_imperatives) ... ok
+test_google_request_shape_and_no_speech_marker (test_voice_stt.SttAdapterTests.test_google_request_shape_and_no_speech_marker) ... ok
+test_invalid_audio (test_voice_stt.SttAdapterTests.test_invalid_audio) ... ok
+test_mock_returns_empty_transcript_never_invents (test_voice_stt.SttAdapterTests.test_mock_returns_empty_transcript_never_invents) ... ok
+test_not_configured (test_voice_stt.SttAdapterTests.test_not_configured) ... ok
+test_provider_errors_are_typed (test_voice_stt.SttAdapterTests.test_provider_errors_are_typed) ... stt provider=google model=m bytes=4 durationMs=0 outcome=timeout correlationId=-
+ok
+test_endpoint_auth_and_limits (test_voice_stt.SttEndpointTests.test_endpoint_auth_and_limits) ... /workspace/ClinicOS/clinicos-ai-runtime/tests/test_voice_stt.py:118: StarletteDeprecationWarning: 'HTTP_413_REQUEST_ENTITY_TOO_LARGE' is deprecated. Use 'HTTP_413_CONTENT_TOO_LARGE' instead.
+  await voice_transcribe(FakeRequest({}, {"content-length": str(10_000_000)}),
+ok
+test_provider_non_json_is_a_typed_error (test_voice_stt.SttEndpointTests.test_provider_non_json_is_a_typed_error) ... ok
+
+----------------------------------------------------------------------
+Ran 229 tests in 13.881s
+
+OK

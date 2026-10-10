@@ -1,0 +1,24 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+✔ 428 real API admin and minimum directory preserve missing/legacy role without GET writes (1301.717409ms)
+PUT /operators/SYNTHETIC-428-0 → updated
+PUT /operators/SYNTHETIC-428-1 → updated
+PUT /operators/SYNTHETIC-428-2 → updated
+PUT /operators/SYNTHETIC-428-3 → updated
+PUT /operators/SYNTHETIC-428-4 → updated
+PUT /operators/SYNTHETIC-428-5 → updated
+✔ 428 unrelated real PUT and fresh GET preserve exact DB role and authorization assignments (141.960462ms)
+PUT /operators/SYNTHETIC-428-0 → updated
+✔ 428 explicit professional change never promotes the User role or active authorization policy (17.54372ms)
+✔ 428 outer policy denials preserve accepted baseline behavior and never mutate profiles (36.177102ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11896.552732
