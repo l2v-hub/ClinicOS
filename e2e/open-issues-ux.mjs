@@ -94,11 +94,22 @@ try {
   writeFileSync(
     resolve(output, 'appointment-accessibility-tree.json'),
     JSON.stringify(
-      ax.nodes.map((node) => ({
-        role: node.role?.value,
-        name: node.name?.value,
-        ignored: node.ignored,
-      })),
+      ax.nodes
+        .filter(
+          (node) =>
+            labels.some(
+              (label) =>
+                node.name?.value?.toLocaleLowerCase('it') === label.name.toLocaleLowerCase('it'),
+            ) ||
+            ['Nuovo Appuntamento', 'Chiudi', 'Annulla', 'Salva appuntamento'].includes(
+              node.name?.value,
+            ),
+        )
+        .map((node) => ({
+          role: node.role?.value,
+          name: node.name?.value,
+          ignored: node.ignored,
+        })),
       null,
       2,
     ),
@@ -228,17 +239,15 @@ try {
     .waitFor();
   const sizes = [];
   async function checkTargets(selector, context) {
-    const controls = await bedside
-      .locator(selector)
-      .evaluateAll((nodes) =>
-        nodes
-          .filter((node) => node.getClientRects().length && !node.disabled)
-          .map((node) => ({
-            name: node.getAttribute('aria-label') || node.textContent.trim(),
-            width: node.getBoundingClientRect().width,
-            height: node.getBoundingClientRect().height,
-          })),
-      );
+    const controls = await bedside.locator(selector).evaluateAll((nodes) =>
+      nodes
+        .filter((node) => node.getClientRects().length && !node.disabled)
+        .map((node) => ({
+          name: node.getAttribute('aria-label') || node.textContent.trim(),
+          width: node.getBoundingClientRect().width,
+          height: node.getBoundingClientRect().height,
+        })),
+    );
     assert.ok(controls.length, context);
     for (const control of controls) {
       assert.ok(
