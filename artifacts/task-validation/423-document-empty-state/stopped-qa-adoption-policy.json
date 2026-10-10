@@ -1,0 +1,9 @@
+{
+  "decision": "AUTHORIZED IMMUTABLE FAILED CANDIDATE EVIDENCE COPY ONLY; NOT ACCEPTANCE OR RELEASE",
+  "supersededApplicationCommit": "d6539fbb68973f01e97e2b5578e2d053537fd962",
+  "manifestSha256": "a8c49d4ef97c2070548ab59f3b373d8f92316b5709bb1712b950b89a2530aa15",
+  "files": 284,
+  "source": "C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa",
+  "target": "artifacts/task-validation/423-document-empty-state/stopped-qa1",
+  "at": "2026-10-10T02:21:57.890Z"
+}

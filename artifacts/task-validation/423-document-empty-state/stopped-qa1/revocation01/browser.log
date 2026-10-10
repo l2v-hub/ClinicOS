@@ -1,0 +1,29 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(received).toBeGreaterThan(expected)
+
+Expected: > 1
+Received:   1
+
+Call Log:
+- Timeout 60000ms exceeded while waiting on the predicate
+    at captureRawStack (C:\w-insulin-qa\node_modules\playwright-core\lib\coreBundle.js:3172:17)
+    at callMatcherAsStep (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12877:57)
+    at Object.toBeGreaterThan (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12867:23)
+    at C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\revocation-recipes\browser.mjs:11:175 {
+  matcherResult: {
+    pass: false,
+    message: 'expect(received).toBeGreaterThan(expected)\n' +
+      '\n' +
+      'Expected: > 1\n' +
+      'Received:   1\n' +
+      '\n' +
+      'Call Log:\n' +
+      '- Timeout 60000ms exceeded while waiting on the predicate',
+    name: 'toBeGreaterThan'
+  }
+}
+
+Node.js v26.3.0

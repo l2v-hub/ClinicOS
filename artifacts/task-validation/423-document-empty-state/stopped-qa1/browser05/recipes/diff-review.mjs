@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+const out=process.argv[2];assert.ok(out);assert.equal(existsSync(out),false);
+const baseline='3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510',head='d6539fbb68973f01e97e2b5578e2d053537fd962';
+const git=(args)=>{const r=spawnSync('git',args,{encoding:'utf8',maxBuffer:15e6});assert.equal(r.status,0);return r.stdout;};assert.equal(git(['rev-parse','HEAD']).trim(),head);
+const scope=JSON.parse(readFileSync(new URL('./scope.json',import.meta.url),'utf8')).sort(),actual=git(['diff','--name-only',baseline,head]).trim().split('\n').sort();assert.deepEqual(actual,scope);
+assert.equal(git(['diff','--check',baseline,head]),'');const files=scope.map(path=>{const content=readFileSync(path,'utf8'),lines=content.trimEnd().split('\n').length;assert.ok(lines<500);assert.doesNotMatch(content,/console\.log|debugger;|dangerouslySetInnerHTML/);return {path,lines};});
+const taxonomyPath='frontend/src/lib/patientDocumentArchive.ts';assert.equal(git(['diff',baseline,head,'--',taxonomyPath,'frontend/src/lib/patientDocumentArchiveIO.ts','frontend/src/lib/capabilities.ts','backend','frontend/src/config.ts','package.json','package-lock.json','frontend/package.json','backend/package.json']),'');
+writeFileSync(out,JSON.stringify({head,baseline,scope,files,scopeExact:true,diffCheck:true,taxonomyIOCapabilitySemanticsBackendConfigDependenciesUnchanged:true,findings:[],notes:['List extraction preserves existing details/read/selection/assessment callbacks, adding existing save/classify presentation guards. Status labels unchanged with original form re-export.','Explicit available policy missing/denied is fail-closed for add. Null map retains the existing server-authoritative compatibility behavior, not a new authority or grant.','Loading/error complete combined archive determines empty; filtered zero cannot cause empty view.']},null,2));

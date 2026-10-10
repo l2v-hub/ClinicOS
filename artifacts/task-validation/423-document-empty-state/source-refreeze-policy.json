@@ -1,0 +1,14 @@
+{
+  "decision": "AUTHORIZED NARROW LOCAL REFINEMENT COMMIT ONLY",
+  "supersededCandidate": "d6539fbb68973f01e97e2b5578e2d053537fd962",
+  "scope": [
+    "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+    "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+    "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+  ],
+  "sourceSha256": "f9e39f60309dce0bff526eec534743b5e9ac8e8f6b3c6ab02ec880031bcc2c4b",
+  "sourceFiles": 1551,
+  "authority": "Direct human bug-fix authority and independently found metadata-edit preservation regression; root sole application writer",
+  "at": "2026-10-10T02:19:24.845Z",
+  "reason": "Existing metadata save uses clinical_record.save; classification remains independently disabled/guarded. All fresh independent/root/release gates pending"
+}

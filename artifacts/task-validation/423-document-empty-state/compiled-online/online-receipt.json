@@ -1,0 +1,13 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "decision": "COMPILED ONLINE ACCEPTANCE VERIFIED",
+  "cases": 46,
+  "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-Dz7d40PA.js",
+  "bundleSha256Before": "2a269f88b23b5b208cfc027455813a9121387ea2ade3787ec0f48ce55725cc62",
+  "bundleSha256After": "2a269f88b23b5b208cfc027455813a9121387ea2ade3787ec0f48ce55725cc62",
+  "productionPatientTestMutations": 0,
+  "apiGuard": "Before-wire auth/facility/clinical fixtures and production static GET allowlist only",
+  "physicalHardware": false,
+  "realPersistence": false,
+  "at": "2026-10-10T02:55:28.782Z"
+}

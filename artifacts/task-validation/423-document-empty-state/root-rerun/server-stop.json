@@ -1,0 +1,57 @@
+{
+  "listenerFree": true,
+  "ports": [
+    7530,
+    7531
+  ],
+  "ownedPids": [
+    22432,
+    2960,
+    41784,
+    43736,
+    17768,
+    25432
+  ],
+  "receipts": [
+    {
+      "path": "artifacts/task-validation/423-document-empty-state/root-rerun/browser03/lane-receipt.json",
+      "pid": 22432,
+      "port": 7530,
+      "status": 0
+    },
+    {
+      "path": "artifacts/task-validation/423-document-empty-state/independent-qa/baseline01/lane-receipt.json",
+      "pid": 2960,
+      "port": 7531,
+      "status": 0
+    },
+    {
+      "path": "artifacts/task-validation/423-document-empty-state/independent-qa/baseline02/lane-receipt.json",
+      "pid": 41784,
+      "port": 7531,
+      "status": 0
+    },
+    {
+      "path": "artifacts/task-validation/423-document-empty-state/independent-qa/browser01/lane-receipt.json",
+      "pid": 43736,
+      "port": 7531,
+      "status": 1
+    },
+    {
+      "path": "artifacts/task-validation/423-document-empty-state/independent-qa/browser02/lane-receipt.json",
+      "pid": 17768,
+      "port": 7531,
+      "status": 0
+    },
+    {
+      "path": "artifacts/task-validation/423-document-empty-state/independent-qa/browser03/lane-receipt.json",
+      "pid": 25432,
+      "port": 7531,
+      "status": 0
+    }
+  ],
+  "ownedPidsAlive": 0,
+  "browserLane": "RELEASED",
+  "productionMutation": 0,
+  "at": "2026-10-10T02:46:49.797Z"
+}

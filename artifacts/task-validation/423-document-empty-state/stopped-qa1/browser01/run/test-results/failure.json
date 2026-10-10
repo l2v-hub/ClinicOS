@@ -1,0 +1,143 @@
+{
+  "message": "unexpected\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 5\n\n- Array []\n+ Array [\n+   \"GET /patients/QA-PAT-423/room-options\",\n+   \"GET /patients/QA-PAT-423/therapies/page\",\n+   \"GET /patients/QA-PAT-423/diary\",\n+ ]",
+  "stack": "Error: unexpected\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 5\n\n- Array []\n+ Array [\n+   \"GET /patients/QA-PAT-423/room-options\",\n+   \"GET /patients/QA-PAT-423/therapies/page\",\n+   \"GET /patients/QA-PAT-423/diary\",\n+ ]\n    at captureRawStack (C:\\w-insulin-qa\\node_modules\\playwright-core\\lib\\coreBundle.js:3172:17)\n    at callMatcherAsStep (C:\\w-insulin-qa\\node_modules\\playwright\\lib\\matchers\\expect.js:12877:57)\n    at Object.toEqual (C:\\w-insulin-qa\\node_modules\\playwright\\lib\\matchers\\expect.js:12867:23)\n    at guards (C:\\w-423-qa1\\artifacts\\task-validation\\423-document-empty-state\\independent-qa\\recipes\\transport.mjs:71:129)\n    at check (C:\\w-423-qa1\\artifacts\\task-validation\\423-document-empty-state\\independent-qa\\recipes\\browser.mjs:7:52)\n    at async file:///C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa/recipes/browser.mjs:15:2",
+  "outcomes": [],
+  "states": [
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/documents"
+        }
+      ],
+      "unexpected": [
+        "GET /patients/QA-PAT-423/room-options",
+        "GET /patients/QA-PAT-423/therapies/page",
+        "GET /patients/QA-PAT-423/diary"
+      ],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ],
+      "pageErrors": [],
+      "httpErrors": [
+        {
+          "status": 500,
+          "path": "/patients/QA-PAT-423/room-options"
+        },
+        {
+          "status": 500,
+          "path": "/patients/QA-PAT-423/therapies/page"
+        },
+        {
+          "status": 500,
+          "path": "/patients/QA-PAT-423/diary"
+        }
+      ],
+      "expectedErrors": [],
+      "asserted": [],
+      "grant": "allowed",
+      "operator": true,
+      "mode": "ready",
+      "held": 0,
+      "uploads": 0,
+      "cartellaSaves": 0
+    }
+  ]
+}

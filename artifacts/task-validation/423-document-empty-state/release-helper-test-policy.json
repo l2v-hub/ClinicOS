@@ -1,0 +1,7 @@
+{
+  "decision": "AUTHORIZED ISOLATED READ-GATE FAILURE-PATH TESTS",
+  "scope": "C:\\Users\\Claudio\\AppData\\Local\\Temp/clinicos-423-release-guards-xS1gnD",
+  "productionWrites": false,
+  "applicationWrites": false,
+  "at": "2026-10-10T02:39:28.630Z"
+}

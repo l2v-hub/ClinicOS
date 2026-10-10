@@ -1,0 +1,20 @@
+{
+  "decision": "PASS NEGATIVE FAILURE-PATH GUARDS",
+  "cases": [
+    {
+      "name": "Initial CI evidence write-once, before provider calls",
+      "status": "PASS",
+      "exit": 1,
+      "initialEvidenceSha256": "5ad1c5125a6eccb68116cf7130e09ac581bc103af2bbfbe23d5fd709d2685fc6"
+    },
+    {
+      "name": "Recovery staging denied without final strict CI comparison",
+      "status": "PASS",
+      "exit": 1,
+      "indexUnchanged": true
+    }
+  ],
+  "scope": "These two actual negative calls do not certify provider success or application QA; exact attempt/head bindings reviewed independently",
+  "productionWrites": false,
+  "at": "2026-10-10T03:05:27.377Z"
+}

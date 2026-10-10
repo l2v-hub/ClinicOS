@@ -1,0 +1,40 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct human authorization plus NEW independent423QA2 and root byte-identical source-bound replay",
+  "scope": [
+    "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+    "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+    "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+    "frontend/src/components/operator/cartella/archiveDocumentStatus.ts",
+    "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+  ],
+  "originalCriteriaPassed": 4,
+  "independentBrowserCases": 46,
+  "rootIndependentRerun": 46,
+  "sourceSha256": "f9e39f60309dce0bff526eec534743b5e9ac8e8f6b3c6ab02ec880031bcc2c4b",
+  "independentRawSourceSha256": "f223d90ef67cc6e978925938fcd4365c5310dea6192dd1ed290b3fbea449abf7",
+  "sourceFiles": 1551,
+  "qaManifestSha256": "fd55dcaa1a8170a38a7d0b136683fc4ab1fe7f44ed1ca8d6bea3443e9df1c7b4",
+  "immutableQaFiles": 519,
+  "focusedEach": 44,
+  "fullEach": {
+    "tests": 1297,
+    "pass": 1285,
+    "exactBaselineFailures": 12,
+    "newFailures": 0
+  },
+  "productionPatientTestMutations": 0,
+  "physicalHardware": false,
+  "backendChange": "None; frontend presentation only, no auth/schema/backend changes",
+  "persistenceProof": "Synthetic intercepted reload only; real DB not required by frontend scope",
+  "remainingGates": [
+    "Exact production deployment",
+    "Compiled online acceptance",
+    "Completed CI baseline delta",
+    "Canonical privacy/pinned synthetic proof"
+  ],
+  "at": "2026-10-10T02:46:50.800Z"
+}

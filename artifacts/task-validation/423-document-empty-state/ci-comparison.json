@@ -1,0 +1,27 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "candidateAttempt": 2,
+  "baselineApplication": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "baselineRun": 37987185985,
+  "candidateRun": 38018242472,
+  "workflow": "AI Import E2E Gate",
+  "candidateConclusion": "failure",
+  "failedStage": "Backend unit tests",
+  "baselineFailureNames": [
+    "therapy reads and writes apply patient scope before loading clinical data"
+  ],
+  "candidateFailureNames": [
+    "therapy reads and writes apply patient scope before loading clinical data"
+  ],
+  "newFailureNames": [],
+  "failedSteps": [
+    "gate: Backend unit tests"
+  ],
+  "baselineFailedSteps": [
+    "gate: Backend unit tests"
+  ],
+  "downstreamImportTests": "Skipped, not claimed passing",
+  "frontendSecretScanRun": 38018242492,
+  "frontendSecretScanConclusion": "success",
+  "scope": "Frontend-only document archive presentation; backend/schema/auth/workflow unchanged. No new backend deployment or DB writes. Exact same single accepted422 failure in final attempt; initial6 additional failures and one bounded diagnostic retry preserved, no harness fix or global CI green claim"
+}

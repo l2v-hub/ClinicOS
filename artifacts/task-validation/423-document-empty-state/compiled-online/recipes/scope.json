@@ -1,0 +1,9 @@
+[
+  "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+  "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+  "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+  "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+  "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+  "frontend/src/components/operator/cartella/archiveDocumentStatus.ts",
+  "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+]

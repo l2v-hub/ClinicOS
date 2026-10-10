@@ -1,0 +1,46 @@
+{
+  "baseline": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "changed": [
+    "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+    "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+    "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+    "frontend/src/components/operator/cartella/archiveDocumentStatus.ts",
+    "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+  ],
+  "records": [
+    {
+      "kind": "baseline",
+      "absent": [
+        "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+        "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+        "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+        "frontend/src/components/operator/cartella/archiveDocumentStatus.ts",
+        "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+      ],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    },
+    {
+      "kind": "candidate",
+      "absent": [],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    }
+  ],
+  "newFindings": [],
+  "scope": "Changed source only; absent baseline files omitted. Scanner side effects isolated. Not global CVE certification."
+}

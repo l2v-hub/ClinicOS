@@ -1,0 +1,40 @@
+(node:17772) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 423 empty is complete combined archive only, never loading/error or filtered zero (0.9445ms)
+✔ 423 authorized empty has next step and native closed taxonomy disclosure, not management controls (11.1124ms)
+✔ 423 read-only empty explains limitation and actual organizational referent without add action (1.2498ms)
+✔ 423 upload taxonomy retains existing non-assessment types (0.2275ms)
+✖ 423 populated list respects save/classify gates, keeps read/print and escapes document titles (5.9245ms)
+(node:17772) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 710.5942
+
+✖ failing tests:
+
+test at frontend\src\components\operator\cartella\__tests__\documentEmptyState.test.ts:1:2568
+✖ 423 populated list respects save/classify gates, keeps read/print and escapes document titles (5.9245ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Modifica dettagli/. Input:
+  
+  '<ul class="patient-document-archive__list"><li class="patient-document-archive__item"><div class="patient-document-archive__file-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6M8 13h8M8 17h6"></path></svg></div><div class="patient-document-archive__details"><label class="patient-document-archive__print-option no-print"><input type="checkbox" aria-label="Seleziona per la stampa: &lt;img src=x onerror=alert(1)&gt;"/>Seleziona per la stampa</label><button type="button" class="patient-document-archive__title">&lt;img src=x onerror=alert(1)&gt;</button><div class="patient-document-archive__meta"><span class="badge badge--blue">Altro documento</span><span>10/10/2026</span><span>Ricevuto</span></div><p>synthetic.pdf · 0.0 MB</p><p>Registrato da: QA Synthetic</p></div><div class="patient-document-archive__actions no-print"><button type="button" class="btn-secondary btn-sm">Visualizza</button><button type="button" class="patient-document-archive__remove">Rimuovi scheda</button></div></li></ul>'
+  
+      at TestContext.<anonymous> (C:\w-423\frontend\src\components\operator\cartella\__tests__\documentEmptyState.test.ts:117:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<ul class="patient-document-archive__list"><li class="patient-document-archive__item"><div class="patient-document-archive__file-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6M8 13h8M8 17h6"></path></svg></div><div class="patient-document-archive__details"><label class="patient-document-archive__print-option no-print"><input type="checkbox" aria-label="Seleziona per la stampa: &lt;img src=x onerror=alert(1)&gt;"/>Seleziona per la stampa</label><button type="button" class="patient-document-archive__title">&lt;img src=x onerror=alert(1)&gt;</button><div class="patient-document-archive__meta"><span class="badge badge--blue">Altro documento</span><span>10/10/2026</span><span>Ricevuto</span></div><p>synthetic.pdf · 0.0 MB</p><p>Registrato da: QA Synthetic</p></div><div class="patient-document-archive__actions no-print"><button type="button" class="btn-secondary btn-sm">Visualizza</button><button type="button" class="patient-document-archive__remove">Rimuovi scheda</button></div></li></ul>',
+    expected: /Modifica dettagli/,
+    operator: 'match',
+    diff: 'simple'
+  }

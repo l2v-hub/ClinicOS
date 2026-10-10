@@ -1,0 +1,9 @@
+{
+  "serverPid": 23636,
+  "port": 7531,
+  "serverStopped": true,
+  "signalCode": "SIGTERM",
+  "status": 1,
+  "root": "C:\\w-423-qa1",
+  "released": true
+}

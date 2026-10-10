@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-10T01:55:15.972Z",
+  "target": "C:\\w-423\\artifacts\\task-validation\\423-document-empty-state\\root-initial\\security01/baseline",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "findings": []
+}

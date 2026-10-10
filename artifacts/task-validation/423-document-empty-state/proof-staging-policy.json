@@ -1,0 +1,21 @@
+{
+  "decision": "AUTHORIZED SCOPED SYNTHETIC PROOF STAGING",
+  "authority": "Human-authorized evidence publication; root integration owner after actual source/QA/replay/compiled gates",
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "explicitDirectories": [
+    "independent-qa",
+    "root-rerun",
+    "compiled-online",
+    "root-initial",
+    "root-refinement",
+    "stopped-qa1"
+  ],
+  "plannedPaths": 1323,
+  "excluded": [
+    "Dirty main/launchers",
+    "Unreleased blocked candidates",
+    "Unsealed runtime cache",
+    "Real clinical photos"
+  ],
+  "at": "2026-10-10T03:12:18.575Z"
+}

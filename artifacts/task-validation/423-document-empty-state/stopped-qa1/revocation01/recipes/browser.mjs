@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {mkdirSync,writeFileSync,existsSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {chromium,expect,setup,finish,guards} from './transport.mjs';
+const out=resolve(process.argv[2]);assert.ok(process.argv[2]);assert.equal(existsSync(out),false);for(const p of ['screenshots','video','trace','test-results','playwright-report'])mkdirSync(out+'/'+p,{recursive:true});
+const browser=await chromium.launch({headless:true}),contexts=[],states=[],outcomes=[];
+try{for(const [width,height,device] of [[1150,1004,'desktop'],[390,844,'mobile']])for(const grant of ['no-upload','no-save']){
+ const ctx=await setup(browser,out,width,height);contexts.push(ctx);states.push(ctx.state);const page=ctx.page;
+ await expect(page.getByRole('region',{name:'Archivio senza documenti'})).toBeVisible();await page.getByRole('button',{name:'Aggiungi documento',exact:true}).click();await expect(page.getByRole('heading',{name:'Nuovo documento',exact:true})).toBeVisible();await page.getByRole('textbox',{name:'Descrizione',exact:true}).fill('Synthetic unsaved revocation fixture');
+ const before=ctx.state.requests.filter(r=>r.path==='/auth/me').length;ctx.state.grant=grant;
+ const other=await ctx.context.newPage();await other.bringToFront();await page.bringToFront();await expect.poll(()=>ctx.state.requests.filter(r=>r.path==='/auth/me').length).toBeGreaterThan(before);
+ await expect(page.getByRole('heading',{name:'Nuovo documento',exact:true})).toHaveCount(0);await expect(page.getByRole('region',{name:'Archivio senza documenti'})).toBeVisible();await expect(page.getByText(/Il tuo ruolo non può aggiungere documenti/)).toBeVisible();await expect(page.getByRole('button',{name:'Aggiungi documento',exact:true})).toHaveCount(0);expect(ctx.state.allowedMockMutations).toEqual([]);await other.close();await guards(ctx);await page.screenshot({path:out+'/screenshots/'+device+'-revoked-'+grant+'.png',fullPage:true});outcomes.push({name:device+' native browser focus refresh revokes '+grant+' while form open without mutation',status:'PASS'});await finish(ctx,out,device+'-'+grant);
+}
+writeFileSync(out+'/test-results/browser-results.json',JSON.stringify({applicationCommit:process.env.SOURCE_COMMIT,outcomes,states,fixtureTransport:'Actual SPA native tab focus refresh triggers existing /auth/me; synthetic capability transport only. No injected focus event/DOM/CSS/app state and no writes.'},null,2));writeFileSync(out+'/playwright-report/index.html','<!doctype html><meta charset="utf-8"><h1>423 native focus revocation</h1><p>Playwright library assertion receipt, not native Test reporter.</p><pre>'+JSON.stringify(outcomes,null,2)+'</pre>');
+}catch(e){for(const [i,c]of contexts.entries()){await c.page.screenshot({path:out+'/screenshots/failure-'+i+'.png',fullPage:true}).catch(()=>{});await c.context.tracing.stop({path:out+'/trace/failure-'+i+'.zip'}).catch(()=>{});}writeFileSync(out+'/test-results/failure.json',JSON.stringify({message:e.message,stack:e.stack,outcomes,states},null,2));throw e;}finally{for(const c of contexts)await c.context.close().catch(()=>{});await browser.close();}

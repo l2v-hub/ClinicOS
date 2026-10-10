@@ -1,0 +1,17 @@
+{
+  "applicationCommit": "d6539fbb68973f01e97e2b5578e2d053537fd962",
+  "base": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "scope": [
+    "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+    "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+    "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+    "frontend/src/components/operator/cartella/archiveDocumentStatus.ts",
+    "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+  ],
+  "sourceSha256": "27d31a36d2415560ba343c89d1d0b8847a0837cae5babe898be4ef904b5434ba",
+  "sourceFiles": 1551,
+  "decision": "LOCAL CLEAN FROZEN CANDIDATE; FRESH QA AND RELEASE PENDING",
+  "at": "2026-10-10T01:58:44.552Z"
+}

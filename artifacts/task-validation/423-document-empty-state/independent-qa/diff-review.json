@@ -1,0 +1,52 @@
+{
+  "head": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "baseline": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "scope": [
+    "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+    "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+    "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+    "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts",
+    "frontend/src/components/operator/cartella/archiveDocumentStatus.ts"
+  ],
+  "files": [
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+      "lines": 348
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+      "lines": 83
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+      "lines": 60
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+      "lines": 137
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+      "lines": 470
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts",
+      "lines": 118
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/archiveDocumentStatus.ts",
+      "lines": 9
+    }
+  ],
+  "scopeExact": true,
+  "diffCheck": true,
+  "taxonomyIOCapabilitySemanticsBackendConfigDependenciesUnchanged": true,
+  "findings": [],
+  "notes": [
+    "List extraction preserves existing details/read/selection/assessment callbacks, adding existing save/classify presentation guards. Status labels unchanged with original form re-export.",
+    "Explicit available policy missing/denied is fail-closed for add. Null map retains the existing server-authoritative compatibility behavior, not a new authority or grant.",
+    "Loading/error complete combined archive determines empty; filtered zero cannot cause empty view."
+  ]
+}

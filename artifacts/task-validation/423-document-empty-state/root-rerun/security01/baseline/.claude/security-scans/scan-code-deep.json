@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-10T02:42:17.355Z",
+  "target": "C:\\w-423\\artifacts\\task-validation\\423-document-empty-state\\root-rerun\\security01/baseline",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "findings": []
+}

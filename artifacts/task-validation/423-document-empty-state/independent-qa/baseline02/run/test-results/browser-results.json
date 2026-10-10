@@ -1,0 +1,246 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "outcomes": [
+    {
+      "name": "desktop actual accepted baseline exposes management controls and zero-folder tree",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile actual accepted baseline exposes management controls and zero-folder tree",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/documents"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "asserted": [],
+      "grant": "allowed",
+      "operator": true,
+      "mode": "ready",
+      "held": 0,
+      "uploads": 0,
+      "cartellaSaves": 0
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/diary"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "asserted": [],
+      "grant": "allowed",
+      "operator": true,
+      "mode": "ready",
+      "held": 0,
+      "uploads": 0,
+      "cartellaSaves": 0
+    }
+  ],
+  "fixtureTransport": "Actual accepted baseline SPA, identical guarded synthetic transport, zero mocked clinical writes"
+}

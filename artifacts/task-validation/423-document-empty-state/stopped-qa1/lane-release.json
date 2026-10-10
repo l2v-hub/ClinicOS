@@ -1,0 +1,77 @@
+{
+  "head": "d6539fbb68973f01e97e2b5578e2d053537fd962",
+  "lanes": [
+    {
+      "attempt": "browser01",
+      "serverPid": 36248,
+      "port": 7531,
+      "serverStopped": true,
+      "signalCode": "SIGTERM",
+      "status": 1,
+      "root": "C:\\w-423-qa1",
+      "released": true
+    },
+    {
+      "attempt": "browser02",
+      "serverPid": 23636,
+      "port": 7531,
+      "serverStopped": true,
+      "signalCode": "SIGTERM",
+      "status": 1,
+      "root": "C:\\w-423-qa1",
+      "released": true
+    },
+    {
+      "attempt": "browser03",
+      "serverPid": 6244,
+      "port": 7531,
+      "serverStopped": true,
+      "signalCode": "SIGTERM",
+      "status": 1,
+      "root": "C:\\w-423-qa1",
+      "released": true
+    },
+    {
+      "attempt": "browser04",
+      "serverPid": 29760,
+      "port": 7531,
+      "serverStopped": true,
+      "signalCode": "SIGTERM",
+      "status": 1,
+      "root": "C:\\w-423-qa1",
+      "released": true
+    },
+    {
+      "attempt": "browser05",
+      "serverPid": 8520,
+      "port": 7531,
+      "serverStopped": true,
+      "signalCode": "SIGTERM",
+      "status": 0,
+      "root": "C:\\w-423-qa1",
+      "released": true
+    },
+    {
+      "attempt": "revocation01",
+      "serverPid": 32540,
+      "port": 7531,
+      "serverStopped": true,
+      "signalCode": "SIGTERM",
+      "status": 1,
+      "root": "C:\\w-423-qa1",
+      "released": true
+    }
+  ],
+  "exactPidProbe": [
+    "ABSENT:36248",
+    "ABSENT:23636",
+    "ABSENT:6244",
+    "ABSENT:29760",
+    "ABSENT:8520",
+    "ABSENT:32540"
+  ],
+  "port": 7531,
+  "portFree": true,
+  "probeClosed": true,
+  "allOwnedServersReleased": true
+}

@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const root='artifacts/task-validation/423-document-empty-state';
+const hash=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
+const git=()=>{const r=spawnSync('git',['diff','--cached','--name-only'],{encoding:'utf8',windowsHide:true});assert.equal(r.status,0);return r.stdout;};
+const before=git(),initialHash=hash(root+'/ci-unexpected-failures.json');
+const guard=spawnSync(process.execPath,[root+'/ci-failure-review.mjs'],{encoding:'utf8',windowsHide:true});
+assert.equal(guard.status,1);assert.match(guard.stderr,/Initial attempt snapshot is write-once/);assert.equal(hash(root+'/ci-unexpected-failures.json'),initialHash);
+const stage=spawnSync(process.execPath,[root+'/stage-proof.mjs','recover-after-ci'],{encoding:'utf8',windowsHide:true});
+assert.equal(stage.status,1);assert.match(stage.stderr,/ci-comparison\.json/);assert.equal(git(),before);
+writeFileSync(root+'/ci-helper-guards.json',JSON.stringify({decision:'PASS NEGATIVE FAILURE-PATH GUARDS',cases:[{name:'Initial CI evidence write-once, before provider calls',status:'PASS',exit:guard.status,initialEvidenceSha256:initialHash},{name:'Recovery staging denied without final strict CI comparison',status:'PASS',exit:stage.status,indexUnchanged:true}],scope:'These two actual negative calls do not certify provider success or application QA; exact attempt/head bindings reviewed independently',productionWrites:false,at:new Date().toISOString()},null,2));
+console.log('PASS2 negative helper guards; initial snapshot and task index unchanged');

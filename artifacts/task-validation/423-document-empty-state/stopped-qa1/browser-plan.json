@@ -1,0 +1,404 @@
+{
+  "head": "d6539fbb68973f01e97e2b5578e2d053537fd962",
+  "baseline": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "verdict": "FAILED VALIDATION",
+  "superseded": true,
+  "releaseEligible": false,
+  "application": "actual repository Vite React SPA; no replica or DOM/CSS/state injection",
+  "port": 7531,
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1150,
+      "height": 1004
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "executedRecipeCommand": "node <attempt>/recipes/browser-lane.mjs <fresh-output-folder> browser.mjs",
+  "environment": {
+    "QA_PORT": "7531",
+    "SOURCE_COMMIT": "d6539fbb68973f01e97e2b5578e2d053537fd962"
+  },
+  "attempts": [
+    {
+      "attempt": "browser01",
+      "folder": "browser01",
+      "recipes": [
+        {
+          "path": "browser01/recipes/browser-lane.mjs",
+          "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+        },
+        {
+          "path": "browser01/recipes/browser.mjs",
+          "sha256": "e8a9c2ef3bec1483f8713196e2e1c77e5ae4a47887822362104b7cca272cb35e"
+        },
+        {
+          "path": "browser01/recipes/qa-server.mjs",
+          "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+        },
+        {
+          "path": "browser01/recipes/transport.mjs",
+          "sha256": "78069937c6b194b42d6b6bcf3b2b618620b97763c08a4553618578299c861303"
+        }
+      ],
+      "status": "failed attempt retained"
+    },
+    {
+      "attempt": "browser02",
+      "folder": "browser02",
+      "recipes": [
+        {
+          "path": "browser02/recipes/baseline.mjs",
+          "sha256": "cd53fa0a11856c40df3914b82c641089f7d9987d7d75b38efcb81560803268a8"
+        },
+        {
+          "path": "browser02/recipes/bind-source.mjs",
+          "sha256": "7f98f13fd1e94415d1e64808281e2281379b464d9a3b9f720cc28d07d0c755e7"
+        },
+        {
+          "path": "browser02/recipes/browser-lane.mjs",
+          "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+        },
+        {
+          "path": "browser02/recipes/browser.mjs",
+          "sha256": "e8a9c2ef3bec1483f8713196e2e1c77e5ae4a47887822362104b7cca272cb35e"
+        },
+        {
+          "path": "browser02/recipes/qa-server.mjs",
+          "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+        },
+        {
+          "path": "browser02/recipes/transport.mjs",
+          "sha256": "d69771bebda2167aa0c3bfb51d9481e36caf17d02daae4e5ea837f257de61bc5"
+        }
+      ],
+      "status": "failed attempt retained"
+    },
+    {
+      "attempt": "browser03",
+      "folder": "browser03",
+      "recipes": [
+        {
+          "path": "browser03/recipes/baseline.mjs",
+          "sha256": "cd53fa0a11856c40df3914b82c641089f7d9987d7d75b38efcb81560803268a8"
+        },
+        {
+          "path": "browser03/recipes/bind-source.mjs",
+          "sha256": "7f98f13fd1e94415d1e64808281e2281379b464d9a3b9f720cc28d07d0c755e7"
+        },
+        {
+          "path": "browser03/recipes/browser-lane.mjs",
+          "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+        },
+        {
+          "path": "browser03/recipes/browser.mjs",
+          "sha256": "37f8a5bc0457aaa35445fb7a8db04d8823f5434c6dfd6e0623d247fbcfdd4031"
+        },
+        {
+          "path": "browser03/recipes/qa-server.mjs",
+          "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+        },
+        {
+          "path": "browser03/recipes/transport.mjs",
+          "sha256": "d69771bebda2167aa0c3bfb51d9481e36caf17d02daae4e5ea837f257de61bc5"
+        }
+      ],
+      "status": "failed attempt retained"
+    },
+    {
+      "attempt": "browser04",
+      "folder": "browser04",
+      "recipes": [
+        {
+          "path": "browser04/recipes/baseline.mjs",
+          "sha256": "cd53fa0a11856c40df3914b82c641089f7d9987d7d75b38efcb81560803268a8"
+        },
+        {
+          "path": "browser04/recipes/bind-source.mjs",
+          "sha256": "7f98f13fd1e94415d1e64808281e2281379b464d9a3b9f720cc28d07d0c755e7"
+        },
+        {
+          "path": "browser04/recipes/browser-lane.mjs",
+          "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+        },
+        {
+          "path": "browser04/recipes/browser.mjs",
+          "sha256": "d411f9f1154a0d681becf8e1d35992eaf05eabddd597274f95883f6d880532e4"
+        },
+        {
+          "path": "browser04/recipes/commands.mjs",
+          "sha256": "27103b61959c86c7913d35750175d25bc1ebe0084ae05bb6edf349bc2d8c6340"
+        },
+        {
+          "path": "browser04/recipes/diff-review.mjs",
+          "sha256": "d5975f3171837a36cd66f66c5afd56a7471f198a7f765ab574e535d77b2add78"
+        },
+        {
+          "path": "browser04/recipes/qa-server.mjs",
+          "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+        },
+        {
+          "path": "browser04/recipes/scope.json",
+          "sha256": "a91a9064a8874d73b01bc5992ae8b892f418e024a953a7c1617cfb257281c5e4"
+        },
+        {
+          "path": "browser04/recipes/security.mjs",
+          "sha256": "1f24914452b9a5a96a393a757fe546743be46956ed99224dfb678f8252799760"
+        },
+        {
+          "path": "browser04/recipes/source-receipt.mjs",
+          "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+        },
+        {
+          "path": "browser04/recipes/transport.mjs",
+          "sha256": "d69771bebda2167aa0c3bfb51d9481e36caf17d02daae4e5ea837f257de61bc5"
+        }
+      ],
+      "status": "failed attempt retained"
+    },
+    {
+      "attempt": "browser05",
+      "folder": "browser05",
+      "recipes": [
+        {
+          "path": "browser05/recipes/baseline.mjs",
+          "sha256": "cd53fa0a11856c40df3914b82c641089f7d9987d7d75b38efcb81560803268a8"
+        },
+        {
+          "path": "browser05/recipes/bind-source.mjs",
+          "sha256": "7f98f13fd1e94415d1e64808281e2281379b464d9a3b9f720cc28d07d0c755e7"
+        },
+        {
+          "path": "browser05/recipes/browser-lane.mjs",
+          "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+        },
+        {
+          "path": "browser05/recipes/browser.mjs",
+          "sha256": "d411f9f1154a0d681becf8e1d35992eaf05eabddd597274f95883f6d880532e4"
+        },
+        {
+          "path": "browser05/recipes/commands.mjs",
+          "sha256": "27103b61959c86c7913d35750175d25bc1ebe0084ae05bb6edf349bc2d8c6340"
+        },
+        {
+          "path": "browser05/recipes/diff-review.mjs",
+          "sha256": "d5975f3171837a36cd66f66c5afd56a7471f198a7f765ab574e535d77b2add78"
+        },
+        {
+          "path": "browser05/recipes/qa-server.mjs",
+          "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+        },
+        {
+          "path": "browser05/recipes/scope.json",
+          "sha256": "a91a9064a8874d73b01bc5992ae8b892f418e024a953a7c1617cfb257281c5e4"
+        },
+        {
+          "path": "browser05/recipes/security.mjs",
+          "sha256": "1f24914452b9a5a96a393a757fe546743be46956ed99224dfb678f8252799760"
+        },
+        {
+          "path": "browser05/recipes/source-receipt.mjs",
+          "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+        },
+        {
+          "path": "browser05/recipes/transport.mjs",
+          "sha256": "aaa8bed01ffa477e1fab398de4ac9c0bcac9491a2f13f598e913f4e08147d720"
+        }
+      ],
+      "status": "recipe assertions PASS; acceptance FAILED"
+    },
+    {
+      "attempt": "revocation01",
+      "folder": "revocation01",
+      "recipes": [
+        {
+          "path": "revocation01/recipes/browser-lane.mjs",
+          "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+        },
+        {
+          "path": "revocation01/recipes/browser.mjs",
+          "sha256": "32ff877fb1d901c2710b6a73cf8b8f4a03438f21b045b741c46dd13d8a659487"
+        },
+        {
+          "path": "revocation01/recipes/qa-server.mjs",
+          "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+        },
+        {
+          "path": "revocation01/recipes/transport.mjs",
+          "sha256": "65642f6ac809af58254e312cff505720dedfd3bdced9b53498daceeca2058fc3"
+        }
+      ],
+      "status": "optional probe unsupported"
+    }
+  ],
+  "cases": [
+    {
+      "name": "desktop true empty guides first action; compact closed categories no management controls",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard details all10 categories unchanged and assessment origin explained",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native add retains9 optgroups22 types; keyboard cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop missing attachment rejected locally and no writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop synthetic first PNG exact scoped upload and record save transition to management",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop synthetic persisted first file and record survive native reload and re-login",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop populated search-zero distinct from realempty; existing management retained",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop explicit no-upload policy read-only explains referent no add/form or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop explicit no-save policy read-only explains referent no add/form or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop explicit missing policy read-only explains referent no add/form or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop administrator same capability-driven first action not professionalrole",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop administrator denied upload receives same organizational referent",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop delayed metadata is loading not empty and no active add",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop error metadata distinct partial/error with native retry to empty",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop malformed metadata distinct partial/error with native retry to empty",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop populated no-save guards edits/removal; escaped literal title no XSS",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop populated no-classify guards edits/removal; escaped literal title no XSS",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop no classify still authorized first upload form; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop legacy absent policy uses established server-authoritative presentation compatibility",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile true empty guides first action; compact closed categories no management controls",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard details all10 categories unchanged and assessment origin explained",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native add retains9 optgroups22 types; keyboard cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile missing attachment rejected locally and no writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile synthetic first PNG exact scoped upload and record save transition to management",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile synthetic persisted first file and record survive native reload and re-login",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile populated search-zero distinct from realempty; existing management retained",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile explicit no-upload policy read-only explains referent no add/form or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile explicit no-save policy read-only explains referent no add/form or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile explicit missing policy read-only explains referent no add/form or writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile administrator same capability-driven first action not professionalrole",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile administrator denied upload receives same organizational referent",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile delayed metadata is loading not empty and no active add",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile error metadata distinct partial/error with native retry to empty",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile malformed metadata distinct partial/error with native retry to empty",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile populated no-save guards edits/removal; escaped literal title no XSS",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile populated no-classify guards edits/removal; escaped literal title no XSS",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile no classify still authorized first upload form; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile legacy absent policy uses established server-authoritative presentation compatibility",
+      "status": "PASS"
+    }
+  ],
+  "states": 26,
+  "limitations": [
+    "No accepted-baseline browser execution after root stop",
+    "No native open-form revocation verdict; headless focus did not refresh auth",
+    "No real backend/DB or deployment proof",
+    "Two no-classify passing assertions encode rejected behavior, not metadata preservation"
+  ],
+  "finding": {
+    "status": "FAIL",
+    "kind": "preservation regression",
+    "required": "Allow existing note-only edits with clinical_record.save; deny actual type changes without documents.update_type"
+  }
+}

@@ -1,0 +1,8 @@
+[
+  {"label":"Archivio vuoto: primo passo chiaro", "path":"compiled-online/browser03/run/screenshots/desktop-empty-next-step-viewport.png"},
+  {"label":"Archivio vuoto su viewport mobile emulato", "path":"compiled-online/browser03/run/screenshots/mobile-empty-next-step-viewport.png"},
+  {"label":"Ruolo non autorizzato: spiegazione e referente", "path":"compiled-online/browser03/run/screenshots/desktop-empty-no-upload-viewport.png"},
+  {"label":"Primo caricamento nel form esistente", "path":"compiled-online/browser03/run/screenshots/desktop-first-native-form-viewport.png"},
+  {"label":"Documento sintetico dopo reload", "path":"compiled-online/browser03/run/screenshots/desktop-first-document-reloaded-viewport.png"},
+  {"label":"Modifica note senza riclassificare il file", "path":"compiled-online/browser03/run/screenshots/mobile-no-classify-metadata-form-save-viewport.png"}
+]

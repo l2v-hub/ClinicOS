@@ -1,0 +1,5 @@
+423 actual SPA/config/compiler; API guarded before wire
+04:04:28 [vite] (client) [optimizer] scanning dependencies...
+[BABEL] Note: The code generator has deoptimised the styling of C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\browser01\runtime-cache\deps\@azure_msal-browser.js?v=4dd4318d as it exceeds the max of 500KB.
+[BABEL] Note: The code generator has deoptimised the styling of C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\browser01\runtime-cache\deps\react-dom_client.js?v=75b5cc3e as it exceeds the max of 500KB.
+[BABEL] Note: The code generator has deoptimised the styling of C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\browser01\runtime-cache\deps\codice-fiscale-js.js?v=b62fea20 as it exceeds the max of 500KB.

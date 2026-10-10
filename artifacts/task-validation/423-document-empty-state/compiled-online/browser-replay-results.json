@@ -1,0 +1,12 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "records": [
+    {
+      "recipe": "recipes/browser.mjs",
+      "folder": "browser03/run",
+      "cases": 46,
+      "exit": 0
+    }
+  ],
+  "cases": 46
+}

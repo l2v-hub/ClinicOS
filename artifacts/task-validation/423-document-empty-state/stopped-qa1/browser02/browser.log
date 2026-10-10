@@ -1,0 +1,123 @@
+PASS desktop true empty guides first action; compact closed categories no management controls
+PASS desktop native keyboard details all10 categories unchanged and assessment origin explained
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: getByLabel('Tipo documento', { exact: true })
+Expected: visible
+Timeout: 60000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "to.be.visible" with timeout 60000ms
+  - waiting for getByLabel('Tipo documento', { exact: true })
+
+    at captureRawStack (C:\w-insulin-qa\node_modules\playwright-core\lib\coreBundle.js:3172:17)
+    at callMatcherAsStep (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12877:57)
+    at Object.toBeVisible (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12867:23)
+    at C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\browser.mjs:17:201
+    at async check (C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\browser.mjs:7:35)
+    at async file:///C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa/recipes/browser.mjs:17:2 {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: getByLabel('Tipo documento', { exact: true })\n" +
+      'Expected: visible\n' +
+      'Timeout: 60000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      '  - Expect "to.be.visible" with timeout 60000ms\n' +
+      "  - waiting for getByLabel('Tipo documento', { exact: true })\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      '  - Expect "to.be.visible" with timeout 60000ms',
+      "  - waiting for getByLabel('Tipo documento', { exact: true })"
+    ],
+    timeout: 60000,
+    ariaSnapshot: '- navigation "Navigazione principale":\n' +
+      '  - button "Turno"\n' +
+      '  - button "Pazienti"\n' +
+      '  - button "Terapia"\n' +
+      '  - button "Consegne, 0 note senza conferma di lettura": Consegne\n' +
+      '  - button "Agenda"\n' +
+      '  - button "Farmaci"\n' +
+      '- heading "Sintetico, Paziente" [level=1]\n' +
+      '- paragraph: Posto letto non disponibile · 46 anni · nato il 01/01/1980\n' +
+      '- text: Turno notte\n' +
+      '- time: 04:06\n' +
+      '- button "Apri Milo, assistente clinico AI, a schermo intero":\n' +
+      '  - img\n' +
+      '  - text: Milo\n' +
+      '- button "Cerca paziente, camera, codice fiscale":\n' +
+      '  - img\n' +
+      '- text: Simulatore\n' +
+      `- 'button "Operatore Sintetico, Infermiere: menu utente"': OS\n` +
+      '- main:\n' +
+      '  - tablist "Sezioni della cartella":\n' +
+      '    - tab "Panoramica"\n' +
+      '    - tab "Dati di ingresso"\n' +
+      '    - tab "Clinica"\n' +
+      '    - tab "Terapia"\n' +
+      '    - tab "Parametri"\n' +
+      '    - tab "Moduli"\n' +
+      '    - tab "Documenti" [selected]\n' +
+      '    - tab "Dimissione"\n' +
+      '  - button "Stampa la scheda": Stampa\n' +
+      '  - button "Invio in Pronto Soccorso": Invio in PS\n' +
+      '  - complementary "Completezza anagrafica":\n' +
+      '    - strong: Anagrafica da completare\n' +
+      '    - text: "Dati da completare:"\n' +
+      '    - list:\n' +
+      '      - listitem:\n' +
+      '        - button "Codice fiscale"\n' +
+      '      - listitem:\n' +
+      '        - button "Telefono"\n' +
+      '  - tabpanel "Documenti":\n' +
+      '    - button "Comprimi Documenti paziente" [expanded]\n' +
+      '    - text: Documenti paziente 0 documenti\n' +
+      '    - heading "Nuovo documento" [level=3]\n' +
+      '    - group:\n' +
+      '      - text: Tipo documento\n' +
+      '      - combobox "Tipo documento"\n' +
+      '      - text: Stato\n' +
+      '      - combobox "Stato":\n' +
+      '        - option "Ricevuto" [selected]\n' +
+      '        - option "Mancante"\n' +
+      '        - option "Da verificare"\n' +
+      '        - option "Firmato"\n' +
+      '        - option "Scaduto"\n' +
+      '      - text: Data ricezione\n' +
+      '      - textbox "Data ricezione": 2026-10-10\n' +
+      '      - text: Scadenza\n' +
+      '      - textbox "Scadenza"\n' +
+      '      - text: Provenienza\n' +
+      '      - textbox "Provenienza":\n' +
+      '        - /placeholder: Paziente, familiare, centro medico…\n' +
+      '      - text: Firmato da\n' +
+      '      - combobox "Firmato da":\n' +
+      '        - option "Non firmato" [selected]\n' +
+      '        - option "Paziente"\n' +
+      '        - option "Tutore"\n' +
+      '        - option "Familiare"\n' +
+      '        - option "Medico"\n' +
+      '      - text: Descrizione\n' +
+      '      - textbox "Descrizione":\n' +
+      '        - /placeholder: Documento di identità\n' +
+      '      - text: Note\n' +
+      '      - textbox "Note"\n' +
+      '      - paragraph: Allegato · PDF, JPEG, JPG o PNG, massimo 15 MB\n' +
+      '      - button "Carica file"\n' +
+      '      - button "Scatta foto"\n' +
+      '    - button "Annulla"\n' +
+      '    - button "Salva documento"'
+  }
+}
+
+Node.js v26.3.0

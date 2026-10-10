@@ -1,0 +1,8 @@
+{
+  "files": 515,
+  "zipMembers": 9615,
+  "configuredCredentialExactChecks": 3,
+  "findings": [],
+  "syntheticOnly": "Browser evidence and fixture data synthetic; original clinical image not downloaded",
+  "scope": "Canonical publishable evidence excluding runtime cache/node_modules; ZIP member bytes also inspected"
+}

@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-10T02:23:30.280Z",
+  "target": "C:\\w-423-qa2\\artifacts\\task-validation\\423-document-empty-state\\independent-qa\\security01/candidate",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "findings": []
+}

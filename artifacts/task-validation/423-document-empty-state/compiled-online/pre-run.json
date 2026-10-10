@@ -1,0 +1,91 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-Dz7d40PA.js",
+  "bundleSha256Before": "2a269f88b23b5b208cfc027455813a9121387ea2ade3787ec0f48ce55725cc62",
+  "styleAssets": [
+    {
+      "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+      "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+    }
+  ],
+  "htmlSha256Before": "7dd0033759d7fc97219db2f9f84bd19d589a0f64181264a10e31689f272e27ec",
+  "records": [
+    {
+      "recipe": "recipes/browser.mjs",
+      "folder": "browser03/run",
+      "cases": 46,
+      "localFrozenRecipeSha256": "a940703b83ad8f794ab6917da60611ca1ffd6c8fc4a3f2afe36351e62a71a338",
+      "compiledRecipeSha256": "a940703b83ad8f794ab6917da60611ca1ffd6c8fc4a3f2afe36351e62a71a338",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "baseline.mjs",
+      "sha256": "cd53fa0a11856c40df3914b82c641089f7d9987d7d75b38efcb81560803268a8"
+    },
+    {
+      "name": "bind-source.mjs",
+      "sha256": "7f98f13fd1e94415d1e64808281e2281379b464d9a3b9f720cc28d07d0c755e7"
+    },
+    {
+      "name": "browser-lane.mjs",
+      "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+    },
+    {
+      "name": "commands.mjs",
+      "sha256": "27103b61959c86c7913d35750175d25bc1ebe0084ae05bb6edf349bc2d8c6340"
+    },
+    {
+      "name": "diff-review.mjs",
+      "sha256": "3dbdeac8a2199d064054b7644b3a6ef15524a09e3c139053b4f1501796fad43a"
+    },
+    {
+      "name": "input-receipt.mjs",
+      "sha256": "e31e0f077a55bd4f6f66c21adbde950249133c4cff1afaf25afac033af59a7d6"
+    },
+    {
+      "name": "issue-read.mjs",
+      "sha256": "b43b0b4a5d7539b1b49d822111ca80c67842a8b2f1ba7288bcf124d7c3282a2e"
+    },
+    {
+      "name": "port-check.mjs",
+      "sha256": "28c8aac343d394421ffe14c3f01ae7efab6b03be1b85a9b5bfc7ed2a0ee50684"
+    },
+    {
+      "name": "publication-scan.mjs",
+      "sha256": "91883a1956f2382946bfaf84f2cb7d5c20311bd6ed277cd064da256bfbe22a88"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+    },
+    {
+      "name": "result-summary.mjs",
+      "sha256": "4d954dd5f4738d0730b8c94f6c72fa60e218ab213c6d2a6fc2678ea56189287f"
+    },
+    {
+      "name": "scope.json",
+      "sha256": "a91a9064a8874d73b01bc5992ae8b892f418e024a953a7c1617cfb257281c5e4"
+    },
+    {
+      "name": "seal.mjs",
+      "sha256": "1cae64cf6eca75794d06912b24d99753308979789825a206a51761e06cf622a7"
+    },
+    {
+      "name": "security.mjs",
+      "sha256": "1f24914452b9a5a96a393a757fe546743be46956ed99224dfb678f8252799760"
+    },
+    {
+      "name": "source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "name": "transport.mjs",
+      "sha256": "ae51b47bb43f4425a50dc594833f7f3095868e1bb3d224e558ec7c3c88026562"
+    }
+  ],
+  "decision": "BYTE-IDENTICAL RECIPES FROZEN BEFORE COMPILED ONLINE READONLY TESTS",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T02:54:11.333Z"
+}

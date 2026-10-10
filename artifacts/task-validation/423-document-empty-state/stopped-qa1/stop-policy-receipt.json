@@ -1,0 +1,10 @@
+{
+  "action": "stop-and-seal-independent-qa",
+  "decision": "ALLOW evidence-only stop and seal; DENY acceptance/promotion/revised-candidate QA",
+  "sourceHead": "d6539fbb68973f01e97e2b5578e2d053537fd962",
+  "owner": "/root/bug423_independent_qa1",
+  "reason": "Root accepted independent no-classify metadata-edit preservation regression and explicitly ordered stopped handoff with fresh QA required.",
+  "scope": "C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa only; normal owned server cleanup; read-only source/PID/port integrity checks",
+  "noApplicationEdits": true,
+  "noExternalMutations": true
+}

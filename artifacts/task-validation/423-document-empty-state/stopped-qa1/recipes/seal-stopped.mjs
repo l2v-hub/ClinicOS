@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,readdirSync,statSync,existsSync} from 'node:fs';
+import {resolve,relative} from 'node:path';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import net from 'node:net';
+const base=resolve('artifacts/task-validation/423-document-empty-state/independent-qa');
+const head='d6539fbb68973f01e97e2b5578e2d053537fd962';
+const get=p=>JSON.parse(readFileSync(base+'/'+p,'utf8'));
+const save=(p,value)=>{assert.equal(existsSync(base+'/'+p),false);writeFileSync(base+'/'+p,JSON.stringify(value,null,2));};
+const hash=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
+const attempts=['browser01','browser02','browser03','browser04','browser05','revocation01'];
+const lanes=attempts.map(a=>({attempt:a,...get(a+'/lane-receipt.json')}));
+assert.ok(lanes.every(l=>l.released&&l.serverStopped&&l.port===7531));
+const pids=[...new Set(lanes.map(l=>l.serverPid))];
+const probe=spawnSync('powershell',['-NoProfile','-Command',`@(${pids.join(',')}) | ForEach-Object { $qaTaskProcess = Get-Process -Id $_ -ErrorAction SilentlyContinue; if ($qaTaskProcess) { Write-Output ('LIVE:' + $_) } else { Write-Output ('ABSENT:' + $_) } }`],{encoding:'utf8',windowsHide:true});
+assert.equal(probe.status,0);assert.ok(!probe.stdout.includes('LIVE:'));
+const portProbe=net.createServer();await new Promise((ok,fail)=>{portProbe.once('error',fail);portProbe.listen(7531,'127.0.0.1',ok);});await new Promise((ok,fail)=>portProbe.close(e=>e?fail(e):ok()));
+save('lane-release.json',{head,lanes,exactPidProbe:probe.stdout.trim().split(/\r?\n/),port:7531,portFree:true,probeClosed:true,allOwnedServersReleased:true});
+const results=get('browser05/run/test-results/browser-results.json');assert.equal(results.applicationCommit,head);assert.equal(results.outcomes.length,38);assert.ok(results.outcomes.every(o=>o.status==='PASS'));assert.equal(results.states.length,26);
+const bad=[];for(const s of results.states){for(const k of ['unexpected','external','clinicalWrites','pageErrors'])if(s[k].length)bad.push(k);assert.deepEqual(s.httpErrors,s.expectedErrors);}
+assert.deepEqual(bad,[]);assert.equal(results.states.reduce((n,s)=>n+s.allowedMockMutations.length,0),4);
+const frozen=attempts.map(a=>{const dir=base+'/'+a+'/recipes';assert.ok(existsSync(dir));return {attempt:a,folder:a,recipes:readdirSync(dir).filter(n=>statSync(dir+'/'+n).isFile()).sort().map(n=>({path:a+'/recipes/'+n,sha256:hash(dir+'/'+n)})),status:a==='browser05'?'recipe assertions PASS; acceptance FAILED':a==='revocation01'?'optional probe unsupported':'failed attempt retained'};});
+save('browser-plan.json',{head,baseline:'3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510',verdict:'FAILED VALIDATION',superseded:true,releaseEligible:false,application:'actual repository Vite React SPA; no replica or DOM/CSS/state injection',port:7531,viewports:[{name:'desktop',width:1150,height:1004},{name:'mobile',width:390,height:844}],executedRecipeCommand:'node <attempt>/recipes/browser-lane.mjs <fresh-output-folder> browser.mjs',environment:{QA_PORT:'7531',SOURCE_COMMIT:head},attempts:frozen,cases:results.outcomes,states:results.states.length,limitations:['No accepted-baseline browser execution after root stop','No native open-form revocation verdict; headless focus did not refresh auth','No real backend/DB or deployment proof','Two no-classify passing assertions encode rejected behavior, not metadata preservation'],finding:{status:'FAIL',kind:'preservation regression',required:'Allow existing note-only edits with clinical_record.save; deny actual type changes without documents.update_type'}});
+const files=[];function walk(d){for(const n of readdirSync(d).sort()){if(n==='runtime-cache'||n==='node_modules'||n==='manifest.json')continue;const p=d+'/'+n;if(statSync(p).isDirectory())walk(p);else files.push({path:relative(base,p).replaceAll('\\','/'),sha256:hash(p)});}}walk(base);
+save('manifest.json',{head,verdict:'FAILED VALIDATION',superseded:true,files,exclusions:['runtime-cache','node_modules','manifest.json (self-reference)'],sourceBinding:get('git-source-binding.json')});
+console.log(JSON.stringify({head,verdict:'FAILED VALIDATION',files:files.length,manifestSha256:hash(base+'/manifest.json'),portFree:true,pids}));

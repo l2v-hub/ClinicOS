@@ -1,0 +1,171 @@
+PASS desktop true empty guides first action; compact closed categories no management controls
+PASS desktop native keyboard details all10 categories unchanged and assessment origin explained
+PASS desktop native add retains9 optgroups22 types; keyboard cancel zero writes
+PASS desktop missing attachment rejected locally and no writes
+PASS desktop synthetic first PNG exact scoped upload and record save transition to management
+PASS desktop synthetic persisted first file and record survive native reload and re-login
+PASS desktop populated search-zero distinct from realempty; existing management retained
+PASS desktop explicit no-upload policy read-only explains referent no add/form or writes
+PASS desktop explicit no-save policy read-only explains referent no add/form or writes
+PASS desktop explicit missing policy read-only explains referent no add/form or writes
+PASS desktop administrator same capability-driven first action not professionalrole
+PASS desktop administrator denied upload receives same organizational referent
+PASS desktop delayed metadata is loading not empty and no active add
+PASS desktop error metadata distinct partial/error with native retry to empty
+PASS desktop malformed metadata distinct partial/error with native retry to empty
+PASS desktop populated no-save guards edits/removal; escaped literal title no XSS
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: getByRole('dialog')
+Expected: visible
+Timeout: 60000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "to.be.visible" with timeout 60000ms
+  - waiting for getByRole('dialog')
+
+    at captureRawStack (C:\w-insulin-qa\node_modules\playwright-core\lib\coreBundle.js:3172:17)
+    at callMatcherAsStep (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12877:57)
+    at Object.toBeVisible (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12867:23)
+    at C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\browser.mjs:28:850
+    at async check (C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\browser.mjs:7:35)
+    at async file:///C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa/recipes/browser.mjs:28:123 {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: getByRole('dialog')\n" +
+      'Expected: visible\n' +
+      'Timeout: 60000ms\n' +
+      'Error: element(s) not found\n' +
+      '\n' +
+      'Call log:\n' +
+      '  - Expect "to.be.visible" with timeout 60000ms\n' +
+      "  - waiting for getByRole('dialog')\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      '  - Expect "to.be.visible" with timeout 60000ms',
+      "  - waiting for getByRole('dialog')"
+    ],
+    timeout: 60000,
+    ariaSnapshot: '- navigation "Navigazione principale":\n' +
+      '  - button "Turno"\n' +
+      '  - button "Pazienti"\n' +
+      '  - button "Terapia"\n' +
+      '  - button "Consegne, 0 note senza conferma di lettura": Consegne\n' +
+      '  - button "Agenda"\n' +
+      '  - button "Farmaci"\n' +
+      '- heading "Sintetico, Paziente" [level=1]\n' +
+      '- paragraph: Posto letto non disponibile · 46 anni · nato il 01/01/1980\n' +
+      '- text: Turno notte\n' +
+      '- time: 04:09\n' +
+      '- button "Apri Milo, assistente clinico AI, a schermo intero":\n' +
+      '  - img\n' +
+      '  - text: Milo\n' +
+      '- button "Cerca paziente, camera, codice fiscale":\n' +
+      '  - img\n' +
+      '- text: Simulatore\n' +
+      `- 'button "Operatore Sintetico, Infermiere: menu utente"': OS\n` +
+      '- main:\n' +
+      '  - tablist "Sezioni della cartella":\n' +
+      '    - tab "Panoramica"\n' +
+      '    - tab "Dati di ingresso"\n' +
+      '    - tab "Clinica"\n' +
+      '    - tab "Terapia"\n' +
+      '    - tab "Parametri"\n' +
+      '    - tab "Moduli"\n' +
+      '    - tab "Documenti 1" [selected]\n' +
+      '    - tab "Dimissione"\n' +
+      '  - button "Stampa la scheda": Stampa\n' +
+      '  - button "Invio in Pronto Soccorso": Invio in PS\n' +
+      '  - complementary "Completezza anagrafica":\n' +
+      '    - strong: Anagrafica da completare\n' +
+      '    - text: "Dati da completare:"\n' +
+      '    - list:\n' +
+      '      - listitem:\n' +
+      '        - button "Codice fiscale"\n' +
+      '      - listitem:\n' +
+      '        - button "Telefono"\n' +
+      '  - tabpanel "Documenti 1":\n' +
+      '    - button "Comprimi Documenti paziente" [expanded]\n' +
+      '    - text: Documenti paziente 1 documenti\n' +
+      '    - button "Stampa selezionati (0)" [disabled]\n' +
+      '    - button "+ Aggiungi"\n' +
+      '    - text: Cerca nell’archivio\n' +
+      '    - searchbox "Cerca nell’archivio"\n' +
+      '    - text: Mostra\n' +
+      '    - combobox "Mostra":\n' +
+      '      - option "Tutti i documenti" [selected]\n' +
+      '      - option "Documenti correnti"\n' +
+      '      - option "Documenti nello storico"\n' +
+      '    - button "Aggiorna archivio"\n' +
+      '    - paragraph: Qui trovi tutti i file e le foto salvati per il paziente, anche da esami, medicazioni e importazioni.\n' +
+      '    - checkbox "Seleziona documenti visibili"\n' +
+      '    - text: Seleziona documenti visibili\n' +
+      '    - status: 0 selezionati\n' +
+      '    - navigation "Cartelle documenti":\n' +
+      '      - heading "Cartelle" [level=3]\n' +
+      '      - button "Tutti i documenti 1"\n' +
+      '      - list:\n' +
+      '        - listitem:\n' +
+      '          - button "Espandi Moduli e valutazioni"\n' +
+      '          - button "Moduli e valutazioni 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Espandi Personali"\n' +
+      '          - button "Personali 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Visite specialistiche 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Analisi 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Espandi Esami e referti"\n' +
+      '          - button "Esami e referti 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Espandi Terapie"\n' +
+      '          - button "Terapie 1"\n' +
+      '        - listitem:\n' +
+      '          - button "Medicazioni 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Espandi Dimissioni e invii"\n' +
+      '          - button "Dimissioni e invii 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Espandi Consensi e moduli"\n' +
+      '          - button "Consensi e moduli 0"\n' +
+      '        - listitem:\n' +
+      '          - button "Altri documenti 0"\n' +
+      '    - region "Contenuto della cartella":\n' +
+      '      - navigation "Percorso documenti":\n' +
+      '        - button "Documenti"\n' +
+      '      - heading "Tutti i documenti" [level=3]\n' +
+      '      - status: 1 documento trovato\n' +
+      '      - list:\n' +
+      '        - listitem:\n' +
+      `          - 'checkbox "Seleziona per la stampa: <img src=x onerror=alert(423)>"'\n` +
+      '          - text: Seleziona per la stampa\n' +
+      '          - button "<img src=x onerror=alert(423)>"\n' +
+      '          - text: Prescrizione 10/10/2026 Ricevuto\n' +
+      '          - paragraph: synthetic-423.png · 0.0 MB\n' +
+      '          - paragraph: "Registrato da: Operatore Sintetico"\n' +
+      '          - paragraph: Solo dati sintetici\n' +
+      '          - button "Visualizza"\n' +
+      '          - button "Rimuovi scheda"\n' +
+      '    - alertdialog "Rimuovi scheda documento":\n' +
+      '      - heading "Rimuovi scheda documento" [level=3]\n' +
+      '      - paragraph: Rimuovere i dettagli della scheda? Il file originale rimane nell’archivio.\n' +
+      '      - button "Annulla":\n' +
+      '        - img\n' +
+      '        - text: Annulla\n' +
+      '      - button "Rimuovi scheda":\n' +
+      '        - img\n' +
+      '        - text: Rimuovi scheda'
+  }
+}
+
+Node.js v26.3.0

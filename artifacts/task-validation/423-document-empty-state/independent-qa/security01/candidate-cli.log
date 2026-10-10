@@ -1,0 +1,15 @@
+
+Security Scan
+──────────────────────────────────────────────────
+... Scanning C:\w-423-qa2\artifacts\task-validation\423-document-empty-state\independent-qa\security01/candidate...                                    Scan complete
+
+No security issues found!
+
++----------------------------------------------- Scan Summary ------------------------------------------------+
+| Target: C:\w-423-qa2\artifacts\task-validation\423-document-empty-state\independent-qa\security01/candidate |
+| Depth: deep                                                                                                 |
+| Type: code                                                                                                  |
+|                                                                                                             |
+| Critical: 0  High: 0  Medium: 0  Low: 0                                                                     |
+| Total Issues: 0                                                                                             |
++-------------------------------------------------------------------------------------------------------------+

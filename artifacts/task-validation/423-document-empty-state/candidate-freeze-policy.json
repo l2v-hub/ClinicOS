@@ -1,0 +1,23 @@
+{
+  "decision": "AUTHORIZED LOCAL SOURCE COMMIT ONLY",
+  "authority": "Direct human bug-fix authorization; release requires fresh independent QA and root replay",
+  "base": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "scope": [
+    "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+    "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.tsx",
+    "frontend/src/components/operator/cartella/ArchiveEmptyState.css",
+    "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+    "frontend/src/components/operator/cartella/archiveDocumentStatus.ts",
+    "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+  ],
+  "focused": 44,
+  "full": {
+    "tests": 1297,
+    "pass": 1285,
+    "knownFailures": 12,
+    "newFailures": 0
+  },
+  "primaryPreserved": true,
+  "at": "2026-10-10T01:58:42.952Z"
+}

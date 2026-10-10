@@ -1,0 +1,8 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "run": 38018242472,
+  "requestedAttempt": 2,
+  "decision": "ONE DIAGNOSTIC RERUN REQUESTED, NOT A TEST VERDICT",
+  "initialFailuresPreserved": "ci-unexpected-failures.json",
+  "at": "2026-10-10T03:01:21.930Z"
+}

@@ -1,0 +1,14 @@
+{
+  "decision": "AUTHORIZED NARROW PRESERVATION REFINEMENT; OLD CANDIDATE NOT RELEASE ELIGIBLE",
+  "authority": "Direct human bug-fix authorization, fresh QA1 diff-review finding, root sole application writer",
+  "supersededApplicationCommit": "d6539fbb68973f01e97e2b5578e2d053537fd962",
+  "scope": [
+    "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+    "frontend/src/components/operator/cartella/ArchiveResultList.tsx",
+    "frontend/src/components/operator/cartella/__tests__/documentEmptyState.test.ts"
+  ],
+  "reason": "Preserve existing metadata-only editing with clinical_record.save while disabling only unauthorized existing-file reclassification",
+  "validation": "Updated expectation must fail before guard correction, then focused/build/full exact baseline and NEW fresh QA2/root/compiled replay",
+  "excluded": "No backend, schema, policy, permission registry, dependencies or production mutation; old QA1 evidence retained without alteration",
+  "at": "2026-10-10T02:16:00.000Z"
+}

@@ -1,0 +1,80 @@
+(node:16928) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 423 empty is complete combined archive only, never loading/error or filtered zero (1.0899ms)
+✔ 423 authorized empty has next step and native closed taxonomy disclosure, not management controls (14.0753ms)
+✔ 423 read-only empty explains limitation and actual organizational referent without add action (1.5045ms)
+✔ 423 upload taxonomy retains existing non-assessment types (0.2643ms)
+✔ 423 populated list respects save/classify gates, keeps read/print and escapes document titles (7.3588ms)
+(node:16928) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:21336) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ selection uses exact IDs, stable archive order, dedupes linked records and excludes missing/unsupported files (49.4843ms)
+✔ prepares only chosen unique files and preserves every PDF page then image in source order (4.9915ms)
+✔ rejects invalid/empty/oversized selections before any content read (2.2622ms)
+✔ actual response MIME is revalidated and empty payload is rejected (1.4411ms)
+✔ a middle read failure prevents any partial result and stops remaining reads (1.1358ms)
+✔ abort during read never starts rendering or fetches another file (1.2142ms)
+✔ abort between rendered pages closes the generator without a printable result (1.244ms)
+✔ page and pixel limits reject entire batch and dispose renderer generator (3.3289ms)
+✔ empty, corrupt and invalid-dimension rendered documents cannot be printed (1.8392ms)
+✔ actual aggregate bytes are bounded even if metadata understates file sizes (22.7605ms)
+(node:21336) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:7440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ generated PAINAD archives under its module using clinical Rome date and exact IDs for multi-print (4.8218ms)
+✔ archive metadata requires reserved category and valid assessment association together (1.168ms)
+✔ direct metadata open verifies document identity before content access (55.9987ms)
+✔ manual upload, classification and stored document edit cannot use generated assessment category (1.4147ms)
+(node:7440) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ every supported type belongs to exactly one folder and all originals remain represented (60.2466ms)
+✔ dressing photos have their own folder, separate from therapy plans (0.6199ms)
+✔ subfolder search keeps scope and treats accents and case consistently (2.6029ms)
+✔ all-documents view includes saved historical files and legacy types without duplicating links (0.6699ms)
+(node:8084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33876) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ personal and clinical taxonomy preserves imported aliases (2.6016ms)
+✔ merge links by id, preserves two same-name files, legacy and archived entries (3.8935ms)
+✔ remote classification is authoritative and search includes accents, provenance and notes (1.2749ms)
+✔ complete metadata pagination finds a document beyond first page without content reads (54.7838ms)
+✔ rejects incomplete counts, oversized totals, malformed pages and invalid metadata (4.6378ms)
+✔ rejects repeated cursors and duplicate document ids instead of partial success (2.9145ms)
+(node:33876) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ metadata timeout includes pending authentication and aborted scopes never fetch (22.9742ms)
+✔ file validation rejects unsupported, empty and oversized files (11.4856ms)
+✔ legacy image originals remain readable after narrowing new upload formats (10.0687ms)
+✔ upload sends category and original file with scoped headers (1.5743ms)
+✔ content retrieval uses exact id, not duplicate filename, and rejects invalid content (1.3266ms)
+✔ classification patches only category and validates server identity and category (2.6027ms)
+✔ previously imported TIFF, text and DOCX originals and files over new upload size remain downloadable (29.6567ms)
+✔ metadata failure retains upload; retry reuses same id and can change category (6.6568ms)
+✔ failed upload and aborted write do not persist or remember in stale workspace (0.6876ms)
+(node:41368) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a delayed document response cannot open after patient or session scope changes (5.6702ms)
+✔ an aborted document request cannot create or open a blob URL (1.2479ms)
+(node:41368) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:16720) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ document page URL carries a bounded limit, opaque cursor and encoded source target (6.668ms)
+✔ document pages deduplicate appends and merge a source match outside the first page (5.6852ms)
+✔ partial document page without a continuation cursor is rejected (4.063ms)
+✔ document hook aborts obsolete scope/page requests and sequence-checks results (2.9748ms)
+(node:16720) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2317.092

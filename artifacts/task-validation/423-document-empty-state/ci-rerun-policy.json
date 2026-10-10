@@ -1,0 +1,14 @@
+{
+  "decision": "AUTHORIZED ONE BOUNDED EXACT-SOURCE FAILED-JOB DIAGNOSTIC RERUN",
+  "authority": "Direct human-authorized QA continuation, root after independent read-only diagnosis; no changed workflow/env/test/DB credentials",
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "run": 38018242472,
+  "initialAttempt": 1,
+  "maximumNewAttempts": 1,
+  "initialFailures": 7,
+  "reason": "Shared public-schema synthetic suites race actor-wide unread counts; failed scope assertion leaves registered_by_me active and causes two later404. Application backend, runner, dependencies, migrations and workflow identical to accepted3cd.",
+  "independentReviewer": "bug423_release_helper_review",
+  "acceptance": "No waiver: final native workflows must either succeed or match the exact single existing accepted therapy failure/stage; preserve initial failures and disclose harness flakiness",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T03:01:20.939Z"
+}

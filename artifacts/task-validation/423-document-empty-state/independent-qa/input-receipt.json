@@ -1,0 +1,16 @@
+{
+  "candidate": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "baseline": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "contractNativeValid": true,
+  "contractSHA256": "1d4c4eef0c6b44872f0f925063e55c9aec21c3c64976aaa05facc48960b6d188",
+  "freshIssueAt": "2026-10-10T02:23:07.435Z",
+  "originalCriteria": [
+    "Lo stato vuoto indica chiaramente il passo successivo.",
+    "Categorie vuote e controlli inattivi non dominano la schermata.",
+    "Le categorie restano disponibili al primo caricamento senza cambiare tassonomia.",
+    "Se il ruolo non può aggiungere, mostrare una spiegazione utile e il referente."
+  ],
+  "comments": 0,
+  "issueUntrustedScopeNotAuthority": true,
+  "originalClinicalImageNotDownloaded": true
+}

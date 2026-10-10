@@ -1,0 +1,47 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: unexpected
+
+expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 5
+
+- Array []
++ Array [
++   "GET /patients/QA-PAT-423/room-options",
++   "GET /patients/QA-PAT-423/therapies/page",
++   "GET /patients/QA-PAT-423/diary",
++ ]
+    at captureRawStack (C:\w-insulin-qa\node_modules\playwright-core\lib\coreBundle.js:3172:17)
+    at callMatcherAsStep (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12877:57)
+    at Object.toEqual (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12867:23)
+    at guards (C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\transport.mjs:71:129)
+    at check (C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\browser.mjs:7:52)
+    at async file:///C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa/recipes/browser.mjs:15:2 {
+  matcherResult: {
+    actual: [
+      'GET /patients/QA-PAT-423/room-options',
+      'GET /patients/QA-PAT-423/therapies/page',
+      'GET /patients/QA-PAT-423/diary'
+    ],
+    expected: [],
+    message: 'expect(received).toEqual(expected) // deep equality\n' +
+      '\n' +
+      '- Expected  - 1\n' +
+      '+ Received  + 5\n' +
+      '\n' +
+      '- Array []\n' +
+      '+ Array [\n' +
+      '+   "GET /patients/QA-PAT-423/room-options",\n' +
+      '+   "GET /patients/QA-PAT-423/therapies/page",\n' +
+      '+   "GET /patients/QA-PAT-423/diary",\n' +
+      '+ ]',
+    name: 'toEqual',
+    pass: false
+  }
+}
+
+Node.js v26.3.0

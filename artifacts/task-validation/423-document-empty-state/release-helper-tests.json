@@ -1,0 +1,49 @@
+{
+  "decision": "PASS",
+  "cases": [
+    {
+      "name": "exact index coverage accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "exact canonical blob accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "extra index artifact denied",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate manifest row denied",
+      "status": "PASS"
+    },
+    {
+      "name": "exact pinned proof accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "CRLF-only local evidence accepted",
+      "status": "PASS"
+    },
+    {
+      "name": "local BOM drift denied",
+      "status": "PASS"
+    },
+    {
+      "name": "unpublished local closure report denied",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid UTF8 denied",
+      "status": "PASS"
+    },
+    {
+      "name": "extra committed artifact denied",
+      "status": "PASS"
+    }
+  ],
+  "temporarySyntheticRepository": "C:\\Users\\Claudio\\AppData\\Local\\Temp/clinicos-423-release-guards-xS1gnD",
+  "cleanup": "Retained temporary fixture, no recursive deletion",
+  "productionWrites": false,
+  "at": "2026-10-10T02:39:30.118Z"
+}

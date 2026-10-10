@@ -1,0 +1,68 @@
+PASS desktop true empty guides first action; compact closed categories no management controls
+PASS desktop native keyboard details all10 categories unchanged and assessment origin explained
+PASS desktop native add retains9 optgroups22 types; keyboard cancel zero writes
+PASS desktop missing attachment rejected locally and no writes
+PASS desktop synthetic first PNG exact scoped upload and record save transition to management
+PASS desktop synthetic persisted first file and record survive native reload and re-login
+PASS desktop populated search-zero distinct from realempty; existing management retained
+PASS desktop explicit no-upload policy read-only explains referent no add/form or writes
+PASS desktop explicit no-save policy read-only explains referent no add/form or writes
+PASS desktop explicit missing policy read-only explains referent no add/form or writes
+PASS desktop administrator same capability-driven first action not professionalrole
+PASS desktop administrator denied upload receives same organizational referent
+PASS desktop delayed metadata is loading not empty and no active add
+PASS desktop error metadata distinct partial/error with native retry to empty
+PASS desktop malformed metadata distinct partial/error with native retry to empty
+PASS desktop populated no-save guards edits/removal; escaped literal title no XSS
+PASS desktop populated no-classify guards edits/removal; escaped literal title no XSS
+PASS desktop no classify still authorized first upload form; cancel zero writes
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+ExpectError: unexpected
+
+expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 6
+
+- Array []
++ Array [
++   "GET /patients/QA-PAT-423/intake-review",
++   "GET /patients/QA-PAT-423/intake-review",
++   "GET /patients/QA-PAT-423/narrative-sections",
++   "GET /patients/QA-PAT-423/assessments/catalog",
++ ]
+    at captureRawStack (C:\w-insulin-qa\node_modules\playwright-core\lib\coreBundle.js:3172:17)
+    at callMatcherAsStep (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12877:57)
+    at Object.toEqual (C:\w-insulin-qa\node_modules\playwright\lib\matchers\expect.js:12867:23)
+    at guards (C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\transport.mjs:73:129)
+    at check (C:\w-423-qa1\artifacts\task-validation\423-document-empty-state\independent-qa\recipes\browser.mjs:7:52)
+    at async file:///C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa/recipes/browser.mjs:30:67 {
+  matcherResult: {
+    actual: [
+      'GET /patients/QA-PAT-423/intake-review',
+      'GET /patients/QA-PAT-423/intake-review',
+      'GET /patients/QA-PAT-423/narrative-sections',
+      'GET /patients/QA-PAT-423/assessments/catalog'
+    ],
+    expected: [],
+    message: 'expect(received).toEqual(expected) // deep equality\n' +
+      '\n' +
+      '- Expected  - 1\n' +
+      '+ Received  + 6\n' +
+      '\n' +
+      '- Array []\n' +
+      '+ Array [\n' +
+      '+   "GET /patients/QA-PAT-423/intake-review",\n' +
+      '+   "GET /patients/QA-PAT-423/intake-review",\n' +
+      '+   "GET /patients/QA-PAT-423/narrative-sections",\n' +
+      '+   "GET /patients/QA-PAT-423/assessments/catalog",\n' +
+      '+ ]',
+    name: 'toEqual',
+    pass: false
+  }
+}
+
+Node.js v26.3.0

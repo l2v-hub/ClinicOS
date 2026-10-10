@@ -1,0 +1,142 @@
+{
+  "message": "expect(locator).toBeVisible() failed\n\nLocator: getByLabel('Tipo documento', { exact: true })\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 60000ms\n  - waiting for getByLabel('Tipo documento', { exact: true })\n",
+  "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByLabel('Tipo documento', { exact: true })\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 60000ms\n  - waiting for getByLabel('Tipo documento', { exact: true })\n\n    at captureRawStack (C:\\w-insulin-qa\\node_modules\\playwright-core\\lib\\coreBundle.js:3172:17)\n    at callMatcherAsStep (C:\\w-insulin-qa\\node_modules\\playwright\\lib\\matchers\\expect.js:12877:57)\n    at Object.toBeVisible (C:\\w-insulin-qa\\node_modules\\playwright\\lib\\matchers\\expect.js:12867:23)\n    at C:\\w-423-qa1\\artifacts\\task-validation\\423-document-empty-state\\independent-qa\\recipes\\browser.mjs:17:201\n    at async check (C:\\w-423-qa1\\artifacts\\task-validation\\423-document-empty-state\\independent-qa\\recipes\\browser.mjs:7:35)\n    at async file:///C:/w-423-qa1/artifacts/task-validation/423-document-empty-state/independent-qa/recipes/browser.mjs:17:2",
+  "outcomes": [
+    {
+      "name": "desktop true empty guides first action; compact closed categories no management controls",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard details all10 categories unchanged and assessment origin explained",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/directory/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/cartella"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/room-options"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/parameters/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/therapies/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/diary"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/QA-PAT-423/documents"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "expectedErrors": [],
+      "asserted": [
+        "desktop true empty guides first action; compact closed categories no management controls",
+        "desktop native keyboard details all10 categories unchanged and assessment origin explained"
+      ],
+      "grant": "allowed",
+      "operator": true,
+      "mode": "ready",
+      "held": 0,
+      "uploads": 0,
+      "cartellaSaves": 0
+    }
+  ]
+}

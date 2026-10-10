@@ -1,0 +1,3 @@
+[
+  { "recipe": "recipes/browser.mjs", "folder": "browser03/run", "cases": 46 }
+]

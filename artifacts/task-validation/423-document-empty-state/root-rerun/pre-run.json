@@ -1,0 +1,76 @@
+{
+  "applicationCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "qaManifestSha256": "fd55dcaa1a8170a38a7d0b136683fc4ab1fe7f44ed1ca8d6bea3443e9df1c7b4",
+  "records": [
+    {
+      "name": "baseline.mjs",
+      "sha256": "cd53fa0a11856c40df3914b82c641089f7d9987d7d75b38efcb81560803268a8"
+    },
+    {
+      "name": "bind-source.mjs",
+      "sha256": "7f98f13fd1e94415d1e64808281e2281379b464d9a3b9f720cc28d07d0c755e7"
+    },
+    {
+      "name": "browser-lane.mjs",
+      "sha256": "ba48865dcc86780d62bc052fe993bf2416b4852d2b185327421368522c832090"
+    },
+    {
+      "name": "browser.mjs",
+      "sha256": "a940703b83ad8f794ab6917da60611ca1ffd6c8fc4a3f2afe36351e62a71a338"
+    },
+    {
+      "name": "commands.mjs",
+      "sha256": "27103b61959c86c7913d35750175d25bc1ebe0084ae05bb6edf349bc2d8c6340"
+    },
+    {
+      "name": "diff-review.mjs",
+      "sha256": "3dbdeac8a2199d064054b7644b3a6ef15524a09e3c139053b4f1501796fad43a"
+    },
+    {
+      "name": "input-receipt.mjs",
+      "sha256": "e31e0f077a55bd4f6f66c21adbde950249133c4cff1afaf25afac033af59a7d6"
+    },
+    {
+      "name": "issue-read.mjs",
+      "sha256": "b43b0b4a5d7539b1b49d822111ca80c67842a8b2f1ba7288bcf124d7c3282a2e"
+    },
+    {
+      "name": "port-check.mjs",
+      "sha256": "28c8aac343d394421ffe14c3f01ae7efab6b03be1b85a9b5bfc7ed2a0ee50684"
+    },
+    {
+      "name": "publication-scan.mjs",
+      "sha256": "91883a1956f2382946bfaf84f2cb7d5c20311bd6ed277cd064da256bfbe22a88"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "aad67bb761913a30a59cc35b83152bf1b597239e5b161a2f0cc2241116b5c113"
+    },
+    {
+      "name": "result-summary.mjs",
+      "sha256": "4d954dd5f4738d0730b8c94f6c72fa60e218ab213c6d2a6fc2678ea56189287f"
+    },
+    {
+      "name": "scope.json",
+      "sha256": "a91a9064a8874d73b01bc5992ae8b892f418e024a953a7c1617cfb257281c5e4"
+    },
+    {
+      "name": "seal.mjs",
+      "sha256": "1cae64cf6eca75794d06912b24d99753308979789825a206a51761e06cf622a7"
+    },
+    {
+      "name": "security.mjs",
+      "sha256": "1f24914452b9a5a96a393a757fe546743be46956ed99224dfb678f8252799760"
+    },
+    {
+      "name": "source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "name": "transport.mjs",
+      "sha256": "ae51b47bb43f4425a50dc594833f7f3095868e1bb3d224e558ec7c3c88026562"
+    }
+  ],
+  "decision": "AUTHORIZED IDENTICAL ROOT REPLAY; NO APP WRITE",
+  "at": "2026-10-10T02:40:58.795Z"
+}
