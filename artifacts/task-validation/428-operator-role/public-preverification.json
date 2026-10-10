@@ -1,0 +1,38 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "proofCommit": "28159ea72055b4f2e07de70b3c9f9d83e255c0cd",
+  "decision": "PINNED PUBLIC PROOF PREVERIFIED",
+  "canonicalHashesVerified": 445,
+  "images": [
+    {
+      "label": "Dashboard — ruoli professionali coerenti",
+      "path": "compiled-online/dashboard-visual/screenshots/dashboard-visible-3.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/28159ea72055b4f2e07de70b3c9f9d83e255c0cd/artifacts/task-validation/428-operator-role/compiled-online/dashboard-visual/screenshots/dashboard-visible-3.png",
+      "http": 200,
+      "sha256": "e2799f3887d5dd862d0d0adce863fbcc81805d47008b1294b3a45bddb724ced9"
+    },
+    {
+      "label": "Tabella — ruoli normalizzati e legacy espliciti",
+      "path": "compiled-online/browser03/run/screenshots/desktop-directory-all-roles.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/28159ea72055b4f2e07de70b3c9f9d83e255c0cd/artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/desktop-directory-all-roles.png",
+      "http": 200,
+      "sha256": "b60bd9eb18fd4a7b99a1eaae78d60326f8dbf97bfb7abf45a869a5ccf5fb64fe"
+    },
+    {
+      "label": "Editor — ruolo mancante conservato, senza inventare Medico",
+      "path": "compiled-online/editor01/run/screenshots/desktop-visible-retained-10.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/28159ea72055b4f2e07de70b3c9f9d83e255c0cd/artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/desktop-visible-retained-10.png",
+      "http": 200,
+      "sha256": "fe542ad17f796daa77f0c9726e2bf50eac3374c922cdef9e5fb16deafa9eba8c"
+    },
+    {
+      "label": "Mobile — ruolo legacy conservato e dati incerti verificabili",
+      "path": "compiled-online/editor01/run/screenshots/mobile-visible-retained-15.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/28159ea72055b4f2e07de70b3c9f9d83e255c0cd/artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/mobile-visible-retained-15.png",
+      "http": 200,
+      "sha256": "c1c692bd99b6b77606aa22344701c2fd2fd76cdc86364503028887c39a9edf06"
+    }
+  ],
+  "at": "2026-10-10T01:42:36.318Z",
+  "productionPatientTestMutations": 0
+}

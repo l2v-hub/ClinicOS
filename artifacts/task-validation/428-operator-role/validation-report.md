@@ -1,7 +1,7 @@
 # #428 — Professional role presentation
 
 ## Final Decision
-IMPLEMENTED — NOT VERIFIED
+CLOSED — VERIFIED
 
 Application 3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510. Vercel dpl_Eg6dn1sD3uwQ4HzYJ4rVThzVWDHp READY exact meta/gitSource SHA and production alias; HTML/JS/CSS HTTP200 hashes unchanged before/after 56 compiled browser groups. Pertinent backend workflow 38013399251 exact checkout/uploadID, Railway 5902626b-ef72-4c31-bf09-bdd4d69cdfc0 SUCCESS/image digest and health200. No schema/migration change; no production patient test writes.
 
@@ -30,6 +30,6 @@ independent-qa, root-rerun and compiled-online browser-plan.json enumerate succe
 
 All failed attempts preserved: initial db01 extra denial-cache assertion; initial commands01 static icon extraction assumption; superseded5b candidate and stopped QA1 before execution; independent browser01 missing operators.page fixture, browser02 native re-login omission. Corrected fixture/structural checks without weakening application requirements; complete immutable failed bundles/recipes retained. The pre-existing outer capability-gate denial cache gap is source-bound unchanged: denied401/403 omit header, not a no-store pass. Successful operator responses assert private,no-store. Native narrow select may truncate long option text; exact selected option/value and full table/card label verified, not a global form layout redesign.
 
-Pinned public HTTP/hash proof still pending; issue remains open.
+Pinned public proof 28159ea72055b4f2e07de70b3c9f9d83e255c0cd: 4 PNG HTTP200/raw SHA verified. Final publisher must recheck exact final proof/issue body/actor before closure.
 
 Canonical staged Git blobs/configured credential values/expanded ZIP members checked before publication, publication-manifest.json authoritative. Root release policy follows direct human authorization, no fabricated Ruflo lease. Blocked405/408/410/416 source excluded from accepted release; audit429 requires external human/device/clinical acceptance.
