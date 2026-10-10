@@ -39,3 +39,50 @@
 .agt-month-day__apts {
   overflow: visible;
 }
+
+/* Identità admin: il nome identifica l'operatore; il colore è riservato allo stato.
+   La larghezza zero neutralizza anche i bordi colorati inline di settimana/mese.
+   L'agenda HMI dell'operatore conserva la propria presentazione. */
+.agt-view:not(.agt-view--hmi) .agt-op-dot {
+  display: none;
+}
+.agt-view:not(.agt-view--hmi) .agt-inline-apt {
+  border-left-width: 0;
+}
+.agt-view:not(.agt-view--hmi) .agt-apt-card--programmato {
+  background: #fff0cf;
+  border-color: #e8c078;
+  border-left-color: #c77700;
+}
+.agt-view:not(.agt-view--hmi) .agt-apt-card--in_corso {
+  background: #e7efff;
+  border-color: #b9ccf5;
+  border-left-color: #2f6bed;
+}
+.agt-view:not(.agt-view--hmi) .agt-apt-card--completato {
+  background: #e3f5eb;
+  border-color: #addbc4;
+  border-left-color: #16a37b;
+}
+.agt-view:not(.agt-view--hmi) .agt-apt-card--annullato {
+  background: #eceff3;
+  border-color: #cfd5dd;
+  border-left-color: #64748b;
+}
+.agt-state-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  min-width: 0;
+}
+.agt-state-filter__caption,
+.agt-legend__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.agt-legend {
+  flex-wrap: wrap;
+  row-gap: 6px;
+}

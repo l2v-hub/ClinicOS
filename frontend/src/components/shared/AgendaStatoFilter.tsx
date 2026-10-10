@@ -14,30 +14,33 @@ export function AgendaStatoFilterRow({
   appuntamenti,
 }: AgendaStatoFilterRowProps) {
   return (
-    <div className="ds-chip-group" role="group" aria-label="Filtra per stato">
-      <button
-        type="button"
-        className="ds-chip"
-        aria-pressed={filtro === 'tutti'}
-        onClick={() => onChange('tutti')}
-      >
-        Tutti gli stati <span className="ds-chip__count">{appuntamenti.length}</span>
-      </button>
-      {STATI_APPUNTAMENTO.map((s) => {
-        const n = appuntamenti.filter((a) => a.stato === s).length;
-        return (
-          <button
-            type="button"
-            key={s}
-            className="ds-chip"
-            aria-pressed={filtro === s}
-            onClick={() => onChange(filtro === s ? 'tutti' : s)}
-          >
-            {STATO_LABEL[s]}
-            {n > 0 && <span className="ds-chip__count">{n}</span>}
-          </button>
-        );
-      })}
+    <div className="agt-state-filter">
+      <span className="agt-state-filter__caption">Appuntamenti nel periodo selezionato</span>
+      <div className="ds-chip-group" role="group" aria-label="Filtra per stato">
+        <button
+          type="button"
+          className="ds-chip"
+          aria-pressed={filtro === 'tutti'}
+          onClick={() => onChange('tutti')}
+        >
+          Tutti gli stati <span className="ds-chip__count">{appuntamenti.length}</span>
+        </button>
+        {STATI_APPUNTAMENTO.map((s) => {
+          const n = appuntamenti.filter((a) => a.stato === s).length;
+          return (
+            <button
+              type="button"
+              key={s}
+              className="ds-chip"
+              aria-pressed={filtro === s}
+              onClick={() => onChange(filtro === s ? 'tutti' : s)}
+            >
+              {STATO_LABEL[s]}
+              {n > 0 && <span className="ds-chip__count">{n}</span>}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
