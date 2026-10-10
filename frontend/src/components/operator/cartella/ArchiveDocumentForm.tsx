@@ -17,14 +17,8 @@ import {
 import type { PatientDocumentMeta } from '../../../lib/patientDocumentsPage';
 import { PatientArchivePreview } from './PatientArchivePreview';
 import { CameraCapture } from '../../shared/CameraCapture';
-
-export const DOCUMENT_STATUS_LABELS: Record<StatoDocumento, string> = {
-  ricevuto: 'Ricevuto',
-  mancante: 'Mancante',
-  da_verificare: 'Da verificare',
-  firmato: 'Firmato',
-  scaduto: 'Scaduto',
-};
+import { DOCUMENT_STATUS_LABELS } from './archiveDocumentStatus';
+export { DOCUMENT_STATUS_LABELS } from './archiveDocumentStatus';
 
 export function ArchiveDocumentForm({
   initial,
@@ -34,6 +28,7 @@ export function ArchiveDocumentForm({
   operatorId,
   operatorRole,
   operatorName,
+  canClassify = true,
   onPersist,
   onStored,
   onClose,
@@ -45,6 +40,7 @@ export function ArchiveDocumentForm({
   operatorId?: string;
   operatorRole?: string;
   operatorName: string;
+  canClassify?: boolean;
   onPersist: (records: DocumentoConsegnato[]) => void | Promise<boolean>;
   onStored: (document: PatientDocumentMeta) => void;
   onClose: () => void;
@@ -96,6 +92,12 @@ export function ArchiveDocumentForm({
     new Date(value).toISOString().slice(0, 10) === value;
   async function save() {
     if (busyRef.current) return;
+    if (storedRef.current && storedRef.current.documentType !== form.tipo && !canClassify) {
+      setError(
+        'Il tuo ruolo non può cambiare la categoria di un file già archiviato. Rivolgiti al coordinatore o all’amministrazione.',
+      );
+      return;
+    }
     if (!validDate(form.dataConsegna) || (form.scadenza && !validDate(form.scadenza))) {
       setError('Verifica le date del documento.');
       return;
@@ -157,6 +159,7 @@ export function ArchiveDocumentForm({
             <select
               className="form-input"
               value={form.tipo}
+              disabled={!!stored && !canClassify}
               onChange={(event) => set({ tipo: event.target.value as TipoDocumento })}
             >
               {ARCHIVE_CATEGORIES.filter((category) => category.id !== 'valutazioni').map(
