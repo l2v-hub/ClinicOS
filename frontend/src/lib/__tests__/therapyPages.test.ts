@@ -93,20 +93,20 @@ test('therapy page loader carries every server filter on the first page', async 
   assert.match(requested, /data=2030-01-02/);
 });
 
-test('therapy UI loads incrementally while emergency print requires every active page', async () => {
+test('therapy plan and emergency print require every page, never a manual partial plan', async () => {
   const [tab, emergencyPrint] = await Promise.all([
     readFile(therapyTabUrl, 'utf8'),
     readFile(emergencyPrintUrl, 'utf8'),
   ]);
-  assert.match(tab, /loadTherapyPage\(requestedPatientId/);
-  assert.match(tab, /Carica altre terapie/);
+  assert.match(tab, /readCompletePatientTherapies\(requestedPatientId, controller.signal\)/);
+  assert.doesNotMatch(tab, /Carica altre terapie|nextTherapyCursor/);
   assert.match(tab, /therapyLoadSequence/);
   assert.match(tab, /therapySummary\?\.active/);
-  assert.match(tab, /Verifica anagrafica parziale/);
-  assert.match(tab, /loadTherapyPage\(requestedPatientId, 'tutte', nextTherapyCursor\)/);
+  assert.match(tab, /completeTherapySnapshot/);
+  assert.match(tab, /Vedi tutti i farmaci nel piano terapeutico/);
   assert.match(
     tab,
-    /setTherapies\(\[\]\);[\s\S]*setNextTherapyCursor\(null\);[\s\S]*setTherapySummary\(null\);/,
+    /setTherapies\(\[\]\);[\s\S]*setTherapySummary\(null\);/,
   );
   assert.match(emergencyPrint, /loadAllTherapyPages\(paziente\.id, 'attiva'\)/);
   assert.match(emergencyPrint, /disabled=\{loading \|\| Boolean\(fetchError\)\}/);

@@ -1,6 +1,7 @@
 import { API_URL } from '../config';
 import type { PatientTherapyAPI } from '../types';
 import { operatorHeaders } from './operatorSession';
+import type { TherapyListStatus } from './therapyPages';
 
 const MAX_PAGES = 50;
 const PAGE_SIZE = 100;
@@ -57,6 +58,16 @@ export async function readPatientCalendarTherapies(
   signal: AbortSignal,
   timeoutMs = 15_000,
 ): Promise<PatientTherapyAPI[]> {
+  return readCompletePatientTherapies(patientId, signal, 'attiva', timeoutMs);
+}
+
+/** Prescription inventory, independent of calendar/date eligibility; never returns partial data. */
+export async function readCompletePatientTherapies(
+  patientId: string,
+  signal: AbortSignal,
+  status: TherapyListStatus = 'tutte',
+  timeoutMs = 15_000,
+): Promise<PatientTherapyAPI[]> {
   if (!patientId.trim()) throw new Error('Paziente non valido');
   const controller = new AbortController();
   const cancel = () => controller.abort();
@@ -67,10 +78,12 @@ export async function readPatientCalendarTherapies(
   const seen = new Set<string>();
   let cursor: string | null = null;
   let expectedTotal = 0;
+  let expectedActive = 0;
+  let expectedInactive = 0;
   try {
     for (let pageIndex = 0; pageIndex < MAX_PAGES; pageIndex++) {
       controller.signal.throwIfAborted();
-      const query = new URLSearchParams({ limit: String(PAGE_SIZE), status: 'attiva' });
+      const query = new URLSearchParams({ limit: String(PAGE_SIZE), status });
       if (cursor) query.set('cursor', cursor);
       const response = await fetch(
         `${API_URL}/patients/${encodeURIComponent(patientId)}/therapies/page?${query}`,
@@ -102,22 +115,30 @@ export async function readPatientCalendarTherapies(
           !isRecord(summary) ||
           !Number.isSafeInteger(summary.total) ||
           Number(summary.total) < 0 ||
-          summary.active !== summary.total ||
-          summary.inactive !== 0
+          !Number.isSafeInteger(summary.active) || Number(summary.active) < 0 ||
+          !Number.isSafeInteger(summary.inactive) || Number(summary.inactive) < 0 ||
+          Number(summary.active) + Number(summary.inactive) !== summary.total ||
+          (status === 'attiva' && summary.inactive !== 0) ||
+          (status === 'non_attiva' && summary.active !== 0)
         )
           throw new Error('Riepilogo terapie non valido');
         expectedTotal = Number(summary.total);
+        expectedActive = Number(summary.active);
+        expectedInactive = Number(summary.inactive);
         if (expectedTotal > MAX_PAGES * PAGE_SIZE)
           throw new Error('Terapie oltre il limite del calendario');
       }
       for (const item of page.items) {
         assertTherapy(item, patientId);
-        if (item.stato !== 'attiva' || items.has(item.id))
+        if ((status === 'attiva' && item.stato !== 'attiva') ||
+          (status === 'non_attiva' && item.stato === 'attiva') || items.has(item.id))
           throw new Error('Elenco terapie cambiato: riprovare');
         items.set(item.id, item);
       }
       if (!page.pageInfo.hasMore) {
-        if (items.size !== expectedTotal) throw new Error('Elenco terapie incompleto: riprovare');
+        const active = [...items.values()].filter(item => item.stato === 'attiva').length;
+        if (items.size !== expectedTotal || active !== expectedActive ||
+          items.size - active !== expectedInactive) throw new Error('Elenco terapie incompleto: riprovare');
         return [...items.values()];
       }
       const next = page.pageInfo.nextCursor as string;

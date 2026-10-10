@@ -23,7 +23,8 @@ import {
   therapyListCacheKey as therapyCacheKey,
   type TherapyListSnapshot,
 } from '../../../lib/patientTabSnapshots';
-import { loadTherapyPage } from '../../../lib/therapyPages';
+import { readCompletePatientTherapies } from '../../../lib/patientTherapyCalendarRead';
+import { completeTherapySnapshot } from '../../../lib/therapyCompleteness';
 import { operatorHeaders } from '../../../lib/operatorSession';
 import { useCan } from '../../../lib/capabilities';
 import { rememberTherapyView } from '../../../lib/patientTargetHash';
@@ -58,8 +59,6 @@ import { RicercaFarmacoModal } from './RicercaFarmaco';
 import type { PrescrizioneDaAbbinare } from './farmacoCorrispondenza';
 import './TherapyRowFocus.css';
 import './TherapyViews.css';
-
-const STATO_ORDER: Record<string, number> = { attiva: 0, sospesa: 1, conclusa: 2 };
 
 interface Props {
   paziente: Paziente;
@@ -105,15 +104,14 @@ export function TerapiaFarmacologicaTab({
 
   // Ultimo elenco gia' mostrato per questo paziente in sessione: il tab si disegna subito con
   // quello e lo rivalida in background invece di ripartire da "Caricamento…".
-  const initialSnapshot = readSessionCache<TherapyListSnapshot>(therapyCacheKey(paziente.id, {}));
+  const initialSnapshot = completeTherapySnapshot(
+    readSessionCache<TherapyListSnapshot>(therapyCacheKey(paziente.id, {})), paziente.id,
+  );
   const [therapies, setTherapies] = useState<PatientTherapyAPI[]>(
     () => initialSnapshot?.therapies ?? [],
   );
+  const [inventoryPatientId, setInventoryPatientId] = useState(paziente.id);
   const [loading, setLoading] = useState(!initialSnapshot);
-  const [nextTherapyCursor, setNextTherapyCursor] = useState<string | null>(
-    initialSnapshot?.nextCursor ?? null,
-  );
-  const [loadingMoreTherapies, setLoadingMoreTherapies] = useState(false);
   const [therapySummary, setTherapySummary] = useState<{
     total: number;
     active: number;
@@ -128,6 +126,7 @@ export function TerapiaFarmacologicaTab({
   const [form, setForm] = useState<TherapyForm>(emptyTherapyForm());
   const [saving, setSaving] = useState(false);
   const therapyLoadSequence = useRef(0);
+  const therapyReadController = useRef<AbortController | null>(null);
   const activePatientId = useRef(paziente.id);
   const tabRootRef = useRef<HTMLDivElement>(null);
 
@@ -146,29 +145,33 @@ export function TerapiaFarmacologicaTab({
   }, [paziente.id]);
 
   const loadTherapies = useCallback(async () => {
+    therapyReadController.current?.abort();
+    const controller = new AbortController();
+    therapyReadController.current = controller;
     const sequence = ++therapyLoadSequence.current;
     const requestedPatientId = paziente.id;
     const cacheKey = therapyCacheKey(requestedPatientId, {});
     try {
       // Con un elenco gia' in cache la rivalidazione avviene senza svuotare l'elenco.
-      setLoading(readSessionCache(cacheKey) === undefined);
-      setLoadingMoreTherapies(false);
+      setLoading(completeTherapySnapshot(readSessionCache(cacheKey), requestedPatientId) === undefined);
       setTherapyLoadError('');
-      const page = await loadTherapyPage(requestedPatientId, 'tutte', null);
+      const items = await readCompletePatientTherapies(requestedPatientId, controller.signal);
       if (
         sequence !== therapyLoadSequence.current ||
         activePatientId.current !== requestedPatientId
       ) {
         return;
       }
-      const data = sortTherapiesByState(page.items);
+      const data = sortTherapiesByState(items);
+      const active = data.filter(item => item.stato === 'attiva').length;
+      const summary = { total: data.length, active, inactive: data.length - active };
       setTherapies(data);
-      setNextTherapyCursor(page.pageInfo.nextCursor);
-      setTherapySummary(page.summary);
+      setInventoryPatientId(requestedPatientId);
+      setTherapySummary(summary);
       writeSessionCache<TherapyListSnapshot>(cacheKey, {
         therapies: data,
-        nextCursor: page.pageInfo.nextCursor,
-        summary: page.summary,
+        nextCursor: null,
+        summary,
       });
     } catch (err) {
       if (
@@ -176,7 +179,7 @@ export function TerapiaFarmacologicaTab({
         activePatientId.current === requestedPatientId
       ) {
         setTherapies([]);
-        setNextTherapyCursor(null);
+        setInventoryPatientId(requestedPatientId);
         setTherapySummary(null);
         setTherapyLoadError(
           err instanceof Error ? err.message : 'Impossibile caricare le terapie.',
@@ -192,51 +195,14 @@ export function TerapiaFarmacologicaTab({
     }
   }, [paziente.id]);
 
-  const loadMoreTherapies = useCallback(async () => {
-    if (!nextTherapyCursor || loadingMoreTherapies) return;
-    const sequence = ++therapyLoadSequence.current;
-    const requestedPatientId = paziente.id;
-    try {
-      setLoadingMoreTherapies(true);
-      setTherapyLoadError('');
-      const page = await loadTherapyPage(requestedPatientId, 'tutte', nextTherapyCursor);
-      if (
-        sequence !== therapyLoadSequence.current ||
-        activePatientId.current !== requestedPatientId
-      ) {
-        return;
-      }
-      setTherapies((current) => {
-        const merged = new Map(current.map((therapy) => [therapy.id, therapy]));
-        for (const therapy of page.items) merged.set(therapy.id, therapy);
-        return [...merged.values()].sort(
-          (a, b) => (STATO_ORDER[a.stato] ?? 9) - (STATO_ORDER[b.stato] ?? 9),
-        );
-      });
-      setNextTherapyCursor(page.pageInfo.nextCursor);
-    } catch (err) {
-      if (
-        sequence === therapyLoadSequence.current &&
-        activePatientId.current === requestedPatientId
-      ) {
-        setTherapyLoadError(
-          err instanceof Error ? err.message : 'Impossibile caricare altre terapie.',
-        );
-      }
-    } finally {
-      if (
-        sequence === therapyLoadSequence.current &&
-        activePatientId.current === requestedPatientId
-      ) {
-        setLoadingMoreTherapies(false);
-      }
-    }
-  }, [loadingMoreTherapies, nextTherapyCursor, paziente.id]);
-
   useEffect(() => {
     void (async () => {
       await loadTherapies();
     })();
+    return () => {
+      ++therapyLoadSequence.current;
+      therapyReadController.current?.abort();
+    };
   }, [loadTherapies]);
 
   /** Dopo ogni modifica della prescrizione: elenco e calendario si rileggono. */
@@ -466,8 +432,8 @@ export function TerapiaFarmacologicaTab({
 
   // ── Derived data ──────────────────────────────────────────────────────────────
 
-  const attive = therapies.filter((t) => t.stato === 'attiva');
-  const inattive = therapies.filter((t) => t.stato !== 'attiva');
+  const attive = therapies.filter((t) => t.patientId === paziente.id && t.stato === 'attiva');
+  const inattive = therapies.filter((t) => t.patientId === paziente.id && t.stato !== 'attiva');
 
   // ── Accesso diretto: vista, giorno/ora e farmaco (riapplicato a ogni requestId) ──
   const [targetViewApplied, setTargetViewApplied] = useState<number | null>(null);
@@ -690,26 +656,7 @@ export function TerapiaFarmacologicaTab({
     <TherapyPrescriptionDetail therapy={t} name={renderFarmaco(t)} actions={prescriptionActions} />
   );
 
-  const therapyPager = nextTherapyCursor ? (
-    <div className="tf-pager">
-      {therapyLoadError && therapies.length > 0 && (
-        <p className="tf-pager__error" role="alert">{therapyLoadError}</p>
-      )}
-      <span>
-        {therapies.length} di {therapySummary?.total ?? '—'} terapie caricate
-      </span>
-      <button
-        type="button"
-        className="ds-btn ds-btn--secondary"
-        disabled={loadingMoreTherapies}
-        onClick={() => void loadMoreTherapies()}
-      >
-        {loadingMoreTherapies ? 'Caricamento…' : 'Carica altre terapie'}
-      </button>
-    </div>
-  ) : null;
-
-  const listState = loading ? (
+  const listState = loading || inventoryPatientId !== paziente.id ? (
     <LoadingState />
   ) : therapyLoadError && therapies.length === 0 ? (
     <LoadErrorState
@@ -779,7 +726,7 @@ export function TerapiaFarmacologicaTab({
     <div className="cr-tab-content" ref={tabRootRef}>
       <ClinicalTableSection
         title="Terapia Farmacologica"
-        count={therapySummary?.active ?? attive.length}
+        count={inventoryPatientId === paziente.id ? therapySummary?.active ?? attive.length : 0}
         countLabel="farmaci attivi"
       >
         {/* Navigazione prima di avvisi e controlli condizionali: cambiare vista non la sposta. */}
@@ -802,17 +749,20 @@ export function TerapiaFarmacologicaTab({
 
         {activeView === 'attivi' && (
           <div className="cts__body--padded tf-active">
-            {nextTherapyCursor && <p role="status">Verifica anagrafica parziale: carica le altre terapie per consultare tutti i farmaci.</p>}
             {editing ? formShell : listState ?? <>
               <TherapyDrugList therapies={attive} openId={openDrugId} focusId={focusDrugId}
                 onToggle={toggleDrug} renderDetail={renderDetail} label="Farmaci attivi"
-                lineBadge={lineBadge} emptyText={nextTherapyCursor ? 'Nessun farmaco attivo tra le terapie caricate.' : 'Nessun farmaco attivo.'} />
-              {therapyPager}
+                lineBadge={lineBadge} emptyText="Nessun farmaco attivo." />
             </>}
           </div>
         )}
         {activeView === 'calendario' && (
           <div className="cts__body--padded tf-calendar-view">
+            <p>Il calendario mostra le dosi del periodo, non l’elenco completo delle prescrizioni.{' '}
+              <button type="button" className="btn-secondary btn-sm" onClick={() => showView('attivi')}>
+                Vedi tutti i farmaci nel piano terapeutico
+              </button>
+            </p>
             <PatientTherapyCalendar
               key={`${paziente.id}|${calendarFocus?.requestId ?? 0}|${calendarFocus?.time ?? ''}`}
               patientId={paziente.id} initialDate={calendarFocus?.date}
@@ -829,7 +779,7 @@ export function TerapiaFarmacologicaTab({
               patientId={paziente.id}
               status={historyStatus}
               onStatusChange={changeHistoryStatus}
-              prescriptionNames={therapies.map((t) => t.farmacoNome)}
+              prescriptionNames={therapies.filter(t => t.patientId === paziente.id).map((t) => t.farmacoNome)}
               renderPrescriptions={(drug) => {
                 const list = drug
                   ? inattive.filter(
@@ -846,13 +796,8 @@ export function TerapiaFarmacologicaTab({
                         onToggle={toggleDrug}
                         renderDetail={renderDetail}
                         label="Prescrizioni sospese o concluse"
-                        emptyText={
-                          nextTherapyCursor
-                            ? 'Nessuna terapia sospesa o conclusa tra quelle caricate.'
-                            : 'Nessuna terapia sospesa o conclusa.'
-                        }
+                        emptyText="Nessuna terapia sospesa o conclusa."
                       />
-                      {therapyPager}
                     </>
                   )
                 );

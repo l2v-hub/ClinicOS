@@ -47,7 +47,7 @@ function assertPage(value: unknown): asserts value is TherapyListPage {
     !page.pageInfo ||
     typeof page.pageInfo.hasMore !== 'boolean' ||
     (page.pageInfo.nextCursor !== null && typeof page.pageInfo.nextCursor !== 'string') ||
-    (page.pageInfo.hasMore && !page.pageInfo.nextCursor)
+    (page.pageInfo.hasMore ? !page.pageInfo.nextCursor : page.pageInfo.nextCursor !== null)
   ) {
     throw new Error('Risposta terapie non valida');
   }
@@ -64,14 +64,19 @@ export async function loadAllTherapyPages(
   const items = new Map<string, PatientTherapyAPI>();
   const seenCursors = new Set<string>();
   let cursor: string | null = null;
+  let expectedTotal = 0;
 
   for (let pageNumber = 0; pageNumber < MAX_PAGES; pageNumber += 1) {
     const value = await loadTherapyPage(patientId, status, cursor);
+    if (cursor === null) expectedTotal = value.summary!.total;
     for (const item of value.items) {
-      if (!item || typeof item.id !== 'string') throw new Error('Terapia senza identificativo');
+      if (!item || typeof item.id !== 'string' || !item.id) throw new Error('Terapia senza identificativo');
       items.set(item.id, item);
     }
-    if (!value.pageInfo.hasMore) return [...items.values()];
+    if (!value.pageInfo.hasMore) {
+      if (items.size !== expectedTotal) throw new Error('Elenco terapie incompleto: riprovare');
+      return [...items.values()];
+    }
 
     const next = value.pageInfo.nextCursor!;
     if (seenCursors.has(next)) throw new Error('Paginazione terapie non valida');

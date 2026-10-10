@@ -20,6 +20,7 @@ import {
   type CalendarOccurrence,
 } from '../../../lib/patientTherapyCalendar';
 import { readPatientCalendarTherapies } from '../../../lib/patientTherapyCalendarRead';
+import { asNeededForPeriod } from '../../../lib/therapyCompleteness';
 import { doseStatus, type DoseStatus } from '../../../lib/therapyDoseStatus';
 import { weekDays } from '../../../lib/therapyWeek';
 import { LoadErrorState } from './LoadErrorState';
@@ -195,10 +196,12 @@ export function PatientTherapyCalendar({
     month: 'long',
     year: 'numeric',
   });
-  const asNeeded = day.unscheduled.filter((item) => item.kind === 'as_needed');
   // Week totals cover the displayed period; each incomplete prescription is counted once.
   // PRN is distinct, and mixed valid/invalid schedules can appear in both groups.
   const periodDays = visibleDays.map((value) => buildPatientTherapyDay(state.therapies, patientId, value));
+  const asNeeded = asNeededForPeriod(periodDays);
+  const todayAsNeeded = new Set(buildPatientTherapyDay(state.therapies, patientId, today)
+    .unscheduled.filter(item => item.kind === 'as_needed').map(item => item.therapyId));
   const incomplete = [...new Map(periodDays.flatMap((value) => value.unscheduled)
     .filter((item) => item.kind === 'incomplete').map((item) => [item.therapyId, item])).values()];
   const doseCount = cells.reduce((total, cell) => total + cell.count, 0);
@@ -296,16 +299,19 @@ export function PatientTherapyCalendar({
             events={day.events.filter((event) => event.time === openTime)} focusTherapyId={focusTherapyId}
             onClose={() => setOpen(null)} onRecorded={() => setSlotsRevision((value) => value + 1)} />
         </AccessibleDialogSurface>}
-        {view === 'giorno' && <>
+        <>
           {asNeeded.length > 0 && (
             <section className="patient-therapy-calendar__unscheduled" aria-label="Al bisogno">
               <h4>
                 Al bisogno <span>({asNeeded.length})</span>
               </h4>
+              {view === 'settimana' && <p>Prescrizioni al bisogno valide nella settimana; le dosi registrabili sono solo quelle di oggi.</p>}
               <ul>
                 {asNeeded.map((item) => {
                   const therapy = therapyById.get(item.therapyId);
                   const expanded = prnOpen === item.therapyId;
+                  const canShowToday = (view === 'giorno' ? date === today : visibleDays.includes(today)) &&
+                    todayAsNeeded.has(item.therapyId);
                   return (
                     <li key={item.id}>
                       <strong>{item.drugName}</strong>
@@ -314,7 +320,7 @@ export function PatientTherapyCalendar({
                         {item.prescriber ? ` · Prescr. ${item.prescriber}` : ''}
                       </span>
                       {item.note && <p>{item.note}</p>}
-                      {therapy && date === today && (
+                      {therapy && canShowToday && (
                         <button
                           type="button"
                           className="ds-btn ds-btn--secondary"
@@ -324,7 +330,7 @@ export function PatientTherapyCalendar({
                           {expanded ? 'Chiudi' : 'Somministra al bisogno · dosi di oggi'}
                         </button>
                       )}
-                      {therapy && expanded && date === today && (
+                      {therapy && expanded && canShowToday && (
                         <div className="ptc-prn-panel">
                           <TherapyDrugDosePanel
                             patientId={patientId}
@@ -339,7 +345,7 @@ export function PatientTherapyCalendar({
               </ul>
             </section>
           )}
-        </>}
+        </>
       </>}
     </section>
   );
