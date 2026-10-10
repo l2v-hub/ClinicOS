@@ -23,7 +23,7 @@ La prova con screen reader reale (#405), dispositivi touch/guanti (#416) e luce 
 - Il collegamento «Apri nella GUI classica» dell'assistente atterra sulla terapia del paziente noto. Le viste settimana/mese dell'agenda spiegano come aprire le somministrazioni del giorno esatto.
 - I test della precedente tabella multipaziente verificano ora il picker e il modulo condiviso: limiti di pagina, scarto delle risposte obsolete, associazione al paziente selezionato, preservazione della bozza, nomi accessibili e layout mobile.
 - Il runner backend esegue separatamente i file che confrontano conteggi globali del database. Il test di scope del diario ripristina la configurazione anche dopo un'asserzione fallita; la fixture di import ha un'identità univoca per run. La fixture MNA v1 già archiviata viene riletta e confrontata integralmente con il dump originale, senza cancellare o riscrivere documenti immutabili.
-- Le personalizzazioni preesistenti degli script PowerShell dell'utente sono escluse dalla modifica.
+- Le modifiche locali preesistenti dei due script PowerShell sono incluse su richiesta dell'utente: normalizzano i terminatori di riga nel repository senza cambiare le istruzioni degli script; il checkout Windows resta CRLF secondo `.gitattributes`.
 
 Comandi dalla root del repository:
 
