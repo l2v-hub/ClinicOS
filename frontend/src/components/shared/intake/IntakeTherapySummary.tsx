@@ -172,9 +172,12 @@ export function IntakeTherapySummary({ therapy: t, busy, onCorrect }: Props) {
         {Boolean(value('note')) && field('Note', undefined, value('note'))}
         {(t.originalText || t.structuredSource !== undefined || t.requiresSourceReview) && (
           <div className="intake-therapy-summary__source">
-            {t.requiresSourceReview && field('Verifica della fonte', 'sourceReview', 'Confronta con il documento prima di confermare')}
-            <TherapyImportSource row={t} />
-            {!t.originalText && t.structuredSource === undefined && field('Testo estratto dalla lettera', 'sourceReview', 'Testo originale non disponibile')}
+            {field(
+              t.originalText || t.structuredSource === undefined ? 'Testo estratto dalla lettera' : 'Verifica della fonte estratta',
+              'sourceReview',
+              t.originalText || (t.structuredSource === undefined ? 'Testo originale non disponibile' : 'Confronta con il documento prima di confermare'),
+            )}
+            <TherapyImportSource row={{ ...t, originalText: '' }} />
           </div>
         )}
       </div>

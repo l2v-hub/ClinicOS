@@ -120,11 +120,15 @@ test('a selected conflict from the same group authorizes only its exact extracte
 
 test('server-owned extraction evidence cannot be forged in page or legacy autosave', () => {
   const rows = therapySourceInventory('', [beta]);
-  for (const page of [true, false]) for (const key of ['sourceKind', 'structuredSource', 'importRowKey', 'structuredOccurrenceKey']) {
+  for (const page of [true, false]) for (const key of ['sourceKind', 'structuredSource', 'importRowKey', 'structuredOccurrenceKey', 'originalText']) {
     const saved = { terapiaImport: rows, ...(page ? { _importSource: {} } : {}) };
     assert.throws(() => guard(saved, { terapiaImport: [{ ...rows[0], [key]: 'forged' }] }, undefined), { code: 'immutable_source' });
   }
   assert.doesNotThrow(() => guard({ terapiaImport: rows }, { terapiaImport: [{ ...rows[0], farmacoNome: 'Reviewed' }] }, undefined));
+  assert.throws(() => guard({ terapiaImport: [{ originalText: 'Dal documento' }] },
+    { terapiaImport: [{ originalText: 'Inventato' }] }, undefined), { code: 'immutable_source' });
+  assert.doesNotThrow(() => guard({ terapiaImport: rows },
+    { terapiaImport: [...rows, { originalText: 'Nuova voce legacy' }] }, undefined));
   assert.throws(() => guard({ terapiaImport: [{ originalText: 'legacy' }] },
     { terapiaImport: [{ originalText: 'legacy', sourceKind: 'structured' }] }, undefined), { code: 'immutable_source' });
 });

@@ -77,6 +77,14 @@ export function guardPageRows(previous: Json, patch: Json, result: Json | undefi
   patch.terapiaImport.forEach((value, index) => {
     const row = object(value),
       old = object(before[index]);
+    // Existing import evidence is server-owned. Legacy appended rows have no
+    // prior source and retain their existing creation path.
+    if (index < before.length && canonical(row.originalText) !== canonical(old.originalText))
+      throw new ImportSessionError(
+        400,
+        'immutable_source',
+        'Il testo originale della terapia non può essere modificato',
+      );
     for (const key of ['importSource', 'importSources', 'conflictDeferred', 'conflictId',
       'sourceKind', 'structuredSource', 'structuredOccurrenceKey', 'importRowKey']) {
       if (canonical(row[key]) !== canonical(old[key]))
