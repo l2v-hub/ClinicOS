@@ -1,0 +1,2952 @@
+[
+  {
+    "name": "desktop",
+    "pixels": [
+      {
+        "page": 1,
+        "dark": 1525,
+        "light": 40295
+      },
+      {
+        "page": 2,
+        "dark": 39404,
+        "light": 2350
+      },
+      {
+        "page": 3,
+        "dark": 39103,
+        "light": 2621
+      },
+      {
+        "page": 4,
+        "dark": 38808,
+        "light": 2893
+      }
+    ],
+    "errors": [],
+    "httpErrors": [],
+    "requests": [
+      {
+        "path": "/",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-Drueo4s4.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/react-B3nAlWH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/compiler-runtime-XYET9J12.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/appointmentRange-Bcoh8cH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyDose-hyD67tme.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTherapyCalendar-oJO4T2nO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorSession-CocZDchv.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/rosterOrder-Cj3l_KEH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/facilityTime-DLFyR9ze.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/tinettiTypes-DMl49mUB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentTypes-H3bfR4sY.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientDemographics-OKkN11Bn.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/capabilities-sGJaafSh.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-DC8NTiJ6.css",
+        "method": "GET"
+      },
+      {
+        "path": "/css2",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/status",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/identities",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-Dqiu2hm-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PageHeader-CRmfuDXT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-DZTZtkds.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AccessibleDialogSurface-MyZoDpCF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useAnomalieReparto-BR5K-6IU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoDocumento-DzyiFi7j.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoRiferimento-DfA3X287.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-DmsDlKLi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-B_ZN6mIU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/consegnaUrgency-DrFEu5MJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientListView-LVltQk8P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-DR177w2Y.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-D7JF4wY_.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorRolePresentation-14aEdAFr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-CfKABW4v.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-BxvznZFw.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-GFjzEHOU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-CcceCeFU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-B80eokJ9.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-DtDiBuAk.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SortArrow-DX4m59RB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConfirmDialog-Cht412xk.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-NKiO7ZlN.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-D6JdzpHU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LazyNews2-DwXLFvUH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-tBePNmZU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useRecencyClock-X1VI5jiO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-CT4ZleOC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-t9pGv_kY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-p2MqAy5J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/shared-CwxxUeDT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SectionToggle-Cpaw-yFE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DjwTZtlF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DQXC9CRC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalCard-DK34x0Zi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-B341fIWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-D4-UilWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-QU8po2rl.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-BP9N68un.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTabSnapshots-Bm7XaQYi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyPages-BNrtsl3g.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-B7DfDnkT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-BML_WSVJ.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-DdiOmuK3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/allergyStatusModel-MCtsmAIL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-B-ZZ6bUu.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentEntry-DYo2nZTW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetailLazyTabs-C_QAYRzQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalSectionLoading-quy79krG.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-DqcXTU7o.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentCatalog-CCjgyrS9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/session",
+        "method": "POST"
+      },
+      {
+        "path": "/auth/me",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DJ1vTYr-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-Co8d6mr0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-HlTQH1g4.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalTable-CnVgtFps.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DTt4_Y4X.css",
+        "method": "GET"
+      },
+      {
+        "path": "/me/roster-order",
+        "method": "GET"
+      },
+      {
+        "path": "/appointments",
+        "method": "GET"
+      },
+      {
+        "path": "/consegne/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/notes",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/clinical-summary/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/status",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/page",
+        "method": "GET"
+      },
+      {
+        "path": "/therapy-slots",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/settings",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminAgenda-DguWfQN6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseAdministrationControl-B51poA7a.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseScaleEditor-BQ7FkUo5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-DzCRJ-GW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-Bf7TwIla.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-m3PNMGTn.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-BNaybtfV.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-BMsAPvmV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-DJSKGR4O.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorSchedule-DCr9643u.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-CaM_THI3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InlineEditableField-Bkv_kUwL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/corePriority-B9P5skz3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-C0LNLuIE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/submissionKey-mAJteX_U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-BbfJ_aGi.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiaryTherapyPanel-C9VpT_pb.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-Df-KQF84.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-B4VM5XP8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-HxdoLxqp.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-BZrPNFqj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-_H1kRtvt.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-Cy2K2aEq.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-DBIGa9jo.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-CdN0fueg.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useMedicationSearch-DMqcKmZD.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-iYDttph8.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfPreviewResources-BxsAF4WT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/presaInCarico-KSO7RO3U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PainAssessmentEditor-lcOr_oNr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnamnesisEditor-BsJHAMD8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/clinicalHistory-Dc8Sh74T.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyEditor-DBHgZB5P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/VitalSignsEditor-BW5FbpaX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-CGXNSq0l.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-aqFKhVmp.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-DChgTbv5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-h5RvtgcF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIs_nEdS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIClEI_9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-BEDS_qbV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-MQKGjmcj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-oNmK4eAP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-DyQBXekH.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-C3HCthWC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-D-4y5rAR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/operators/directory/page",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/parameters/page",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs",
+        "method": "POST"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-DwoqoyEP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-D5aJqvXO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-B92usS3P.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-BLCRf3SR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf-C5FQc3nd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-0cTqlNvF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-DnzvoiGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/voiceStartGate-DsF1ZeEX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-CW1huyUN.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-C0leVDyj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-Ch45e6Xy.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-ByCfiiwJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LoadErrorState-Ddo9Q--J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-zpCIETGM.css",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one/files/synthetic-doc/content",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PresaInCaricoTab-BzSrBqmc.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-DSETYWWj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DocumentPreview-rijBUTIH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/usePatientDocuments-BTOy3BgK.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-BabjH-C5.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MedicazioniTab-DAYcmabR.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useLegacyCatalogView-vI_izsGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-D5_Z-KXQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-DepsWT8d.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalAttachments-Ce3ONnTd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientArchivePreview-BsgwftF-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-CeBBiUzX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-BY-O_bqx.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ContenzioniTab-CXPrHtS6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaBradenTab-Cz3um5py.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaTinettiTab-CKUKjaCi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/Tinetti-PvAQNSKS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DimissioneTab-l9is1yiC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/EsamiConsulenzeTab-C1GVGZsX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InvioPSModal-BeqlbT40.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one/manifest",
+        "method": "PUT"
+      },
+      {
+        "path": "/",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-Drueo4s4.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/react-B3nAlWH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/compiler-runtime-XYET9J12.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/appointmentRange-Bcoh8cH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyDose-hyD67tme.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTherapyCalendar-oJO4T2nO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorSession-CocZDchv.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/rosterOrder-Cj3l_KEH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/facilityTime-DLFyR9ze.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/tinettiTypes-DMl49mUB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentTypes-H3bfR4sY.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientDemographics-OKkN11Bn.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/capabilities-sGJaafSh.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-DC8NTiJ6.css",
+        "method": "GET"
+      },
+      {
+        "path": "/css2",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/status",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/identities",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-Dqiu2hm-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PageHeader-CRmfuDXT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-DZTZtkds.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AccessibleDialogSurface-MyZoDpCF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useAnomalieReparto-BR5K-6IU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoDocumento-DzyiFi7j.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoRiferimento-DfA3X287.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-DmsDlKLi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-B_ZN6mIU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/consegnaUrgency-DrFEu5MJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientListView-LVltQk8P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-DR177w2Y.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-D7JF4wY_.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorRolePresentation-14aEdAFr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-CfKABW4v.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-BxvznZFw.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-GFjzEHOU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-CcceCeFU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-B80eokJ9.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-DtDiBuAk.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SortArrow-DX4m59RB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConfirmDialog-Cht412xk.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-NKiO7ZlN.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-D6JdzpHU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LazyNews2-DwXLFvUH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-tBePNmZU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useRecencyClock-X1VI5jiO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-CT4ZleOC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-t9pGv_kY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-p2MqAy5J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/shared-CwxxUeDT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SectionToggle-Cpaw-yFE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DjwTZtlF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DQXC9CRC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalCard-DK34x0Zi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-B341fIWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-D4-UilWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-QU8po2rl.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-BP9N68un.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTabSnapshots-Bm7XaQYi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyPages-BNrtsl3g.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-B7DfDnkT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-BML_WSVJ.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-DdiOmuK3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/allergyStatusModel-MCtsmAIL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-B-ZZ6bUu.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentEntry-DYo2nZTW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetailLazyTabs-C_QAYRzQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalSectionLoading-quy79krG.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-DqcXTU7o.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentCatalog-CCjgyrS9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/session",
+        "method": "POST"
+      },
+      {
+        "path": "/auth/me",
+        "method": "GET"
+      },
+      {
+        "path": "/me/roster-order",
+        "method": "GET"
+      },
+      {
+        "path": "/appointments",
+        "method": "GET"
+      },
+      {
+        "path": "/consegne/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/notes",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/clinical-summary/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/status",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/page",
+        "method": "GET"
+      },
+      {
+        "path": "/therapy-slots",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/settings",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DJ1vTYr-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-Co8d6mr0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-HlTQH1g4.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalTable-CnVgtFps.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DTt4_Y4X.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminAgenda-DguWfQN6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseAdministrationControl-B51poA7a.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseScaleEditor-BQ7FkUo5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-DzCRJ-GW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-Bf7TwIla.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-m3PNMGTn.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-BNaybtfV.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-B4VM5XP8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-HxdoLxqp.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-BZrPNFqj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-_H1kRtvt.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-Cy2K2aEq.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-DBIGa9jo.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-CdN0fueg.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useMedicationSearch-DMqcKmZD.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-iYDttph8.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfPreviewResources-BxsAF4WT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/presaInCarico-KSO7RO3U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PainAssessmentEditor-lcOr_oNr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnamnesisEditor-BsJHAMD8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InlineEditableField-Bkv_kUwL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/clinicalHistory-Dc8Sh74T.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyEditor-DBHgZB5P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/VitalSignsEditor-BW5FbpaX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-CGXNSq0l.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-aqFKhVmp.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-BMsAPvmV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-DJSKGR4O.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorSchedule-DCr9643u.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-CaM_THI3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/corePriority-B9P5skz3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-C0LNLuIE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/submissionKey-mAJteX_U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-BbfJ_aGi.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiaryTherapyPanel-C9VpT_pb.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-Df-KQF84.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-DChgTbv5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-h5RvtgcF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIs_nEdS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIClEI_9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-BEDS_qbV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-MQKGjmcj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-oNmK4eAP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-DyQBXekH.css",
+        "method": "GET"
+      },
+      {
+        "path": "/operators/directory/page",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/parameters/page",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-C3HCthWC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-D-4y5rAR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf-C5FQc3nd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-0cTqlNvF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-DwoqoyEP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-D5aJqvXO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-B92usS3P.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-BLCRf3SR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-DnzvoiGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/voiceStartGate-DsF1ZeEX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-CW1huyUN.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-C0leVDyj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-Ch45e6Xy.css",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one/files/synthetic-doc/content",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-ByCfiiwJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LoadErrorState-Ddo9Q--J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-zpCIETGM.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PresaInCaricoTab-BzSrBqmc.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-DSETYWWj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DocumentPreview-rijBUTIH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/usePatientDocuments-BTOy3BgK.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-BabjH-C5.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MedicazioniTab-DAYcmabR.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useLegacyCatalogView-vI_izsGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-D5_Z-KXQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-DepsWT8d.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalAttachments-Ce3ONnTd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientArchivePreview-BsgwftF-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-CeBBiUzX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-BY-O_bqx.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ContenzioniTab-CXPrHtS6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaBradenTab-Cz3um5py.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaTinettiTab-CKUKjaCi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/Tinetti-PvAQNSKS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DimissioneTab-l9is1yiC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/EsamiConsulenzeTab-C1GVGZsX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InvioPSModal-BeqlbT40.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      }
+    ],
+    "state": {
+      "forbidden": [],
+      "mockMutations": [
+        "synthetic session creation",
+        "synthetic manifest reorder"
+      ]
+    },
+    "pass": true,
+    "baseline": false,
+    "online": true
+  },
+  {
+    "name": "mobile",
+    "pixels": [
+      {
+        "page": 1,
+        "dark": 1525,
+        "light": 40295
+      },
+      {
+        "page": 2,
+        "dark": 39404,
+        "light": 2350
+      },
+      {
+        "page": 3,
+        "dark": 39103,
+        "light": 2621
+      },
+      {
+        "page": 4,
+        "dark": 38808,
+        "light": 2893
+      }
+    ],
+    "errors": [],
+    "httpErrors": [],
+    "requests": [
+      {
+        "path": "/",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-Drueo4s4.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/react-B3nAlWH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/compiler-runtime-XYET9J12.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/appointmentRange-Bcoh8cH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyDose-hyD67tme.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTherapyCalendar-oJO4T2nO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorSession-CocZDchv.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/rosterOrder-Cj3l_KEH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/facilityTime-DLFyR9ze.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/tinettiTypes-DMl49mUB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentTypes-H3bfR4sY.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientDemographics-OKkN11Bn.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/capabilities-sGJaafSh.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-DC8NTiJ6.css",
+        "method": "GET"
+      },
+      {
+        "path": "/css2",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/status",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/identities",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-Dqiu2hm-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PageHeader-CRmfuDXT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-DZTZtkds.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AccessibleDialogSurface-MyZoDpCF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useAnomalieReparto-BR5K-6IU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoDocumento-DzyiFi7j.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoRiferimento-DfA3X287.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-DmsDlKLi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-B_ZN6mIU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/consegnaUrgency-DrFEu5MJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientListView-LVltQk8P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-DR177w2Y.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-D7JF4wY_.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorRolePresentation-14aEdAFr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-CfKABW4v.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-BxvznZFw.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-GFjzEHOU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-CcceCeFU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-B80eokJ9.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-DtDiBuAk.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SortArrow-DX4m59RB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConfirmDialog-Cht412xk.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-NKiO7ZlN.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-D6JdzpHU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LazyNews2-DwXLFvUH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-tBePNmZU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useRecencyClock-X1VI5jiO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-CT4ZleOC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-t9pGv_kY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-p2MqAy5J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/shared-CwxxUeDT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SectionToggle-Cpaw-yFE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DjwTZtlF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DQXC9CRC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalCard-DK34x0Zi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-B341fIWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-D4-UilWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-QU8po2rl.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-BP9N68un.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTabSnapshots-Bm7XaQYi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyPages-BNrtsl3g.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-B7DfDnkT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-BML_WSVJ.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-DdiOmuK3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/allergyStatusModel-MCtsmAIL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-B-ZZ6bUu.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentEntry-DYo2nZTW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetailLazyTabs-C_QAYRzQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalSectionLoading-quy79krG.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-DqcXTU7o.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentCatalog-CCjgyrS9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/session",
+        "method": "POST"
+      },
+      {
+        "path": "/auth/me",
+        "method": "GET"
+      },
+      {
+        "path": "/me/roster-order",
+        "method": "GET"
+      },
+      {
+        "path": "/appointments",
+        "method": "GET"
+      },
+      {
+        "path": "/consegne/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/notes",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/clinical-summary/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/status",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/page",
+        "method": "GET"
+      },
+      {
+        "path": "/therapy-slots",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DJ1vTYr-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-Co8d6mr0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/settings",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-HlTQH1g4.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalTable-CnVgtFps.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DTt4_Y4X.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminAgenda-DguWfQN6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseAdministrationControl-B51poA7a.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseScaleEditor-BQ7FkUo5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-DzCRJ-GW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-Bf7TwIla.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-m3PNMGTn.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-BNaybtfV.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-BMsAPvmV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-DJSKGR4O.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorSchedule-DCr9643u.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-CaM_THI3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InlineEditableField-Bkv_kUwL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/corePriority-B9P5skz3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-C0LNLuIE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/submissionKey-mAJteX_U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-BbfJ_aGi.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiaryTherapyPanel-C9VpT_pb.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-Df-KQF84.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-DChgTbv5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-h5RvtgcF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIs_nEdS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIClEI_9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-B4VM5XP8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-HxdoLxqp.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-BZrPNFqj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-_H1kRtvt.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-Cy2K2aEq.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-DBIGa9jo.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-CdN0fueg.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useMedicationSearch-DMqcKmZD.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-iYDttph8.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfPreviewResources-BxsAF4WT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/presaInCarico-KSO7RO3U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PainAssessmentEditor-lcOr_oNr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnamnesisEditor-BsJHAMD8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/clinicalHistory-Dc8Sh74T.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyEditor-DBHgZB5P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/VitalSignsEditor-BW5FbpaX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-CGXNSq0l.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-aqFKhVmp.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-BEDS_qbV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-MQKGjmcj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-oNmK4eAP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-DyQBXekH.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-C3HCthWC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-D-4y5rAR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-DwoqoyEP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-D5aJqvXO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-B92usS3P.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-BLCRf3SR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-DnzvoiGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/voiceStartGate-DsF1ZeEX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-CW1huyUN.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-C0leVDyj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-Ch45e6Xy.css",
+        "method": "GET"
+      },
+      {
+        "path": "/operators/directory/page",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/parameters/page",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs",
+        "method": "POST"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-ByCfiiwJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LoadErrorState-Ddo9Q--J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-zpCIETGM.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PresaInCaricoTab-BzSrBqmc.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-DSETYWWj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DocumentPreview-rijBUTIH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/usePatientDocuments-BTOy3BgK.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-BabjH-C5.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf-C5FQc3nd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-0cTqlNvF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MedicazioniTab-DAYcmabR.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useLegacyCatalogView-vI_izsGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-D5_Z-KXQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-DepsWT8d.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalAttachments-Ce3ONnTd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientArchivePreview-BsgwftF-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-CeBBiUzX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-BY-O_bqx.css",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one/files/synthetic-doc/content",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ContenzioniTab-CXPrHtS6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaBradenTab-Cz3um5py.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaTinettiTab-CKUKjaCi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/Tinetti-PvAQNSKS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DimissioneTab-l9is1yiC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/EsamiConsulenzeTab-C1GVGZsX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InvioPSModal-BeqlbT40.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one/manifest",
+        "method": "PUT"
+      },
+      {
+        "path": "/",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-Drueo4s4.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/react-B3nAlWH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/compiler-runtime-XYET9J12.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/appointmentRange-Bcoh8cH0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyDose-hyD67tme.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTherapyCalendar-oJO4T2nO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorSession-CocZDchv.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/rosterOrder-Cj3l_KEH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/facilityTime-DLFyR9ze.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/tinettiTypes-DMl49mUB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentTypes-H3bfR4sY.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientDemographics-OKkN11Bn.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/capabilities-sGJaafSh.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/index-DC8NTiJ6.css",
+        "method": "GET"
+      },
+      {
+        "path": "/css2",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/status",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/identities",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-Dqiu2hm-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PageHeader-CRmfuDXT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-DZTZtkds.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AccessibleDialogSurface-MyZoDpCF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useAnomalieReparto-BR5K-6IU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoDocumento-DzyiFi7j.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/farmacoRiferimento-DfA3X287.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-DmsDlKLi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DashboardKpiBand-B_ZN6mIU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/consegnaUrgency-DrFEu5MJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientListView-LVltQk8P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorDashboard-DR177w2Y.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-D7JF4wY_.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/operatorRolePresentation-14aEdAFr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminDashboard-CfKABW4v.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-BxvznZFw.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-GFjzEHOU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientIdentity-CcceCeFU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-B80eokJ9.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NewPatientFlow-DtDiBuAk.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SortArrow-DX4m59RB.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConfirmDialog-Cht412xk.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-NKiO7ZlN.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RosterOrderControl-D6JdzpHU.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LazyNews2-DwXLFvUH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-tBePNmZU.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useRecencyClock-X1VI5jiO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/News2Chip-CT4ZleOC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientList-t9pGv_kY.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-p2MqAy5J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/shared-CwxxUeDT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SectionToggle-Cpaw-yFE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DjwTZtlF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TopNav-DQXC9CRC.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalCard-DK34x0Zi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-B341fIWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-D4-UilWA.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalNoteEditor-QU8po2rl.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneRounds-BP9N68un.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/patientTabSnapshots-Bm7XaQYi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/therapyPages-BNrtsl3g.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-B7DfDnkT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientParameters-BML_WSVJ.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-DdiOmuK3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/allergyStatusModel-MCtsmAIL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiagnosisEditor-B-ZZ6bUu.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/assessmentEntry-DYo2nZTW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetailLazyTabs-C_QAYRzQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalSectionLoading-quy79krG.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientDetail-DqcXTU7o.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentCatalog-CCjgyrS9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/auth/simulator/session",
+        "method": "POST"
+      },
+      {
+        "path": "/auth/me",
+        "method": "GET"
+      },
+      {
+        "path": "/me/roster-order",
+        "method": "GET"
+      },
+      {
+        "path": "/appointments",
+        "method": "GET"
+      },
+      {
+        "path": "/consegne/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/notes",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/clinical-summary/overview",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/status",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/page",
+        "method": "GET"
+      },
+      {
+        "path": "/therapy-slots",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/settings",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DJ1vTYr-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-Co8d6mr0.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TableFilters-HlTQH1g4.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalTable-CnVgtFps.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorManagement-DTt4_Y4X.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AdminAgenda-DguWfQN6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseAdministrationControl-B51poA7a.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/GlucoseScaleEditor-BQ7FkUo5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-DzCRJ-GW.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-Bf7TwIla.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientCombobox-m3PNMGTn.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgendaInline-BNaybtfV.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-BMsAPvmV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RoomsManagement-DJSKGR4O.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorSchedule-DCr9643u.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-CaM_THI3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InlineEditableField-Bkv_kUwL.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/corePriority-B9P5skz3.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-C0LNLuIE.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/submissionKey-mAJteX_U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiarioPazienteTab-BbfJ_aGi.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DiaryTherapyPanel-C9VpT_pb.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ConsegneWorkspace-Df-KQF84.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-DChgTbv5.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-h5RvtgcF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIs_nEdS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyRoundsPage-CIClEI_9.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-B4VM5XP8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-HxdoLxqp.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/CameraCapture-BZrPNFqj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-_H1kRtvt.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/SemanticTaggedText-Cy2K2aEq.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-DBIGa9jo.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-CdN0fueg.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useMedicationSearch-DMqcKmZD.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/intakeTherapies-iYDttph8.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfPreviewResources-BxsAF4WT.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/presaInCarico-KSO7RO3U.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PainAssessmentEditor-lcOr_oNr.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnamnesisEditor-BsJHAMD8.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/clinicalHistory-Dc8Sh74T.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TherapyEditor-DBHgZB5P.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/VitalSignsEditor-BW5FbpaX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/IntakeWorkspace-CGXNSq0l.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DischargeImportModal-aqFKhVmp.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-BEDS_qbV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/OperatorAgenda-MQKGjmcj.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-oNmK4eAP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NotesPage-DyQBXekH.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-C3HCthWC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MultiPatientParametri-D-4y5rAR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-DwoqoyEP.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-D5aJqvXO.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RicercaFarmaco-B92usS3P.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AnagraficaFarmaciPage-BLCRf3SR.css",
+        "method": "GET"
+      },
+      {
+        "path": "/operators/directory/page",
+        "method": "GET"
+      },
+      {
+        "path": "/patients/parameters/page",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-DnzvoiGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/voiceStartGate-DsF1ZeEX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AgnosPanel-CW1huyUN.css",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf-C5FQc3nd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-0cTqlNvF.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-C0leVDyj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/RolePermissionsPage-Ch45e6Xy.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-ByCfiiwJ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/LoadErrorState-Ddo9Q--J.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/TerapiaFarmacologicaTab-zpCIETGM.css",
+        "method": "GET"
+      },
+      {
+        "path": "/ai/extraction/jobs/job-one/files/synthetic-doc/content",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PresaInCaricoTab-BzSrBqmc.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-DSETYWWj.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DocumentPreview-rijBUTIH.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/usePatientDocuments-BTOy3BgK.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/NarrativeSectionsTab-BabjH-C5.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/MedicazioniTab-DAYcmabR.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/useLegacyCatalogView-vI_izsGV.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-D5_Z-KXQ.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/AssessmentDraftStatus-DepsWT8d.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ClinicalAttachments-Ce3ONnTd.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PatientArchivePreview-BsgwftF-.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-CeBBiUzX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/PdfCanvasPreview-BY-O_bqx.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ContenzioniTab-CXPrHtS6.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaBradenTab-Cz3um5py.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/ScalaTinettiTab-CKUKjaCi.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/Tinetti-PvAQNSKS.css",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/DimissioneTab-l9is1yiC.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/EsamiConsulenzeTab-C1GVGZsX.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/InvioPSModal-BeqlbT40.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+        "method": "GET"
+      },
+      {
+        "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+        "method": "GET"
+      }
+    ],
+    "state": {
+      "forbidden": [],
+      "mockMutations": [
+        "synthetic session creation",
+        "synthetic manifest reorder"
+      ]
+    },
+    "pass": true,
+    "baseline": false,
+    "online": true
+  }
+]

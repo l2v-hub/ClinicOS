@@ -1,0 +1,80 @@
+{
+  "pass": true,
+  "errors": [],
+  "warnings": [
+    "Synthetic thumbnail failure: InvalidPDFException: Invalid PDF structure.",
+    "Warning: Indexing all PDF objects",
+    "Synthetic thumbnail failure: InvalidPDFException: Invalid PDF structure.",
+    "Warning: Indexing all PDF objects",
+    "Synthetic thumbnail failure: InvalidPDFException: Invalid PDF structure.",
+    "Warning: Indexing all PDF objects",
+    "Synthetic thumbnail failure: InvalidPDFException: Invalid PDF structure.",
+    "Warning: Indexing all PDF objects",
+    "Warning: Indexing all PDF objects",
+    "Warning: Indexing all PDF objects"
+  ],
+  "bad": [],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/qa-preview"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/PdfCanvasPreview-BY-O_bqx.css"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/surface-Q2Hf5SYm.css"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/qa-entry.js"
+    },
+    {
+      "method": "GET",
+      "path": "/css2"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf-BbXXzWpc.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf.worker.min-C8Ts8bNu.js"
+    },
+    {
+      "method": "GET",
+      "path": "/synthetic/files/synthetic-doc/content"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/PdfCanvasPreview-VCLfsQJ3.js"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs"
+    },
+    {
+      "method": "GET",
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs"
+    }
+  ],
+  "expectedError": "invalid synthetic PDF gives explicit error, retry and original download"
+}

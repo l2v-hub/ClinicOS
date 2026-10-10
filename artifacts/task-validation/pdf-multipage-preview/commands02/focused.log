@@ -1,0 +1,42 @@
+(node:40492) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ each current conflict needs an explicit valid decision, including defer; stale/duplicate decisions fail (1.2031ms)
+✔ conflict surface shows both values and sources without a default selection (10.1426ms)
+✔ review still prefers narrative text and persists edited sections separately from source (0.7315ms)
+(node:40492) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ authenticated original cache downloads one immutable document once, cleans URLs and evicts replaced source (44.5117ms)
+✔ failed source fetch can be retried and an oversized original is refused (1.4185ms)
+(node:40528) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ single-flight creation, close/reopen and a new module instance use only opaque IDs/keys (4.4238ms)
+✔ lost creation response reuses its key across reload; failed resume never creates a job (1.2182ms)
+✔ operator scope and storage failure never reuse another actor session (0.7838ms)
+✔ 30 pages in three letters move without changing source identity and with contiguous order (1.8959ms)
+✔ manifest retry preserves request identity and stale revision response supplies authoritative job (40.131ms)
+✔ stale session retains its ID until explicit new import; terminal, denied and network failures are distinct (3.5327ms)
+(node:40528) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:35848) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ uncertain upload retry uses identical metadata, bytes and revision; replay duplicate is accepted (47.0602ms)
+✔ atomic retake at capacity calls replacement only and preserves old page on rejection (3.9813ms)
+✔ revision conflict updates manifest but upload retries only after explicit run with a fresh key (3.0793ms)
+✔ double submit shares the running queue and one pending camera File identity (1.3936ms)
+✔ first capture sends the revision returned by group creation before any render effect (4.185ms)
+(node:35848) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:6792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ PDF decoders resolve beside version-matched worker on app origin, also under a base path (3.2577ms)
+✔ Vite emits exact installed decoder bytes and licenses with names expected by PDF.js (49.8471ms)
+(node:6792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1428.6269

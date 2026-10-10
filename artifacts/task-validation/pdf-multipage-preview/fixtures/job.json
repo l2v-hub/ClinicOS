@@ -1,0 +1,115 @@
+{
+  "id": "job-one",
+  "status": "collecting",
+  "totalBytes": 4536,
+  "documents": [
+    {
+      "id": "synthetic-doc",
+      "filename": "four-pages-synthetic.pdf",
+      "mimeType": "application/pdf",
+      "pageCount": 4,
+      "sizeBytes": 4536,
+      "contentUrl": ""
+    }
+  ],
+  "capabilities": {
+    "sessionVersion": 1,
+    "pageEditing": true,
+    "atomicReplacement": true
+  },
+  "manifest": {
+    "version": 1,
+    "revision": 1,
+    "groups": [
+      {
+        "id": "letter-a",
+        "label": "Lettera A",
+        "sortOrder": 0,
+        "status": "pending",
+        "pageCount": 4,
+        "completedPages": 0,
+        "error": null,
+        "pdfUrl": null
+      }
+    ],
+    "pages": [
+      {
+        "id": "synthetic-page-1",
+        "documentId": "synthetic-doc",
+        "sourcePageNumber": 1,
+        "groupId": "letter-a",
+        "sortOrder": 0,
+        "status": "pending",
+        "canRetry": false,
+        "error": null,
+        "errorCode": null
+      },
+      {
+        "id": "synthetic-page-2",
+        "documentId": "synthetic-doc",
+        "sourcePageNumber": 2,
+        "groupId": "letter-a",
+        "sortOrder": 1,
+        "status": "pending",
+        "canRetry": false,
+        "error": null,
+        "errorCode": null
+      },
+      {
+        "id": "synthetic-page-3",
+        "documentId": "synthetic-doc",
+        "sourcePageNumber": 3,
+        "groupId": "letter-a",
+        "sortOrder": 2,
+        "status": "pending",
+        "canRetry": false,
+        "error": null,
+        "errorCode": null
+      },
+      {
+        "id": "synthetic-page-4",
+        "documentId": "synthetic-doc",
+        "sourcePageNumber": 4,
+        "groupId": "letter-a",
+        "sortOrder": 3,
+        "status": "pending",
+        "canRetry": false,
+        "error": null,
+        "errorCode": null
+      }
+    ]
+  },
+  "limits": {
+    "maxPages": 30,
+    "maxSourceFiles": 30,
+    "maxGroups": 30,
+    "maxTotalBytes": 26214400,
+    "maxFileBytes": 26214400,
+    "maxFilesPerRequest": 10,
+    "maxRequestBytes": 26476544,
+    "acceptedMimeTypes": [
+      "application/pdf",
+      "image/jpeg",
+      "image/png"
+    ]
+  },
+  "progress": {
+    "phase": "documents",
+    "totalPages": 0,
+    "completedPages": 0,
+    "failedPages": 0,
+    "totalGroups": 1,
+    "completedGroups": 0,
+    "currentPageId": null,
+    "currentGroupId": null
+  },
+  "review": {
+    "manifestRevision": null,
+    "resultHash": null,
+    "unresolvedConflicts": 0,
+    "canProceed": false,
+    "draftId": null,
+    "draftSourceIsCurrent": false
+  },
+  "expiresAt": "2026-10-17T12:00:00Z"
+}

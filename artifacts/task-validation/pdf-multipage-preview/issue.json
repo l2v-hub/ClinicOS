@@ -1,0 +1,11 @@
+{
+  "issue": {
+    "number": 430,
+    "title": "[Bug] Anteprima PDF multipagina: scansioni successive alla prima bianche",
+    "body": "Segnalazione diretta dell'utente: l'importazione conta correttamente 4 pagine del PDF, ma solo la prima anteprima è valorizzata; le successive appaiono bianche. Nessun documento o screenshot contenente dati reali viene pubblicato.\n\nScope: anteprime miniature e ingrandite del PDF importato, senza modificare originali, pagina di origine, ordinamento, estrazione/OCR, autorizzazioni o sessioni reali.\n\nAcceptance criteria:\n- [ ] Riprodurre il difetto su baseline con un PDF sintetico di quattro pagine, prima pagina vettoriale e tre scansioni CCITT, verificato anche con renderer indipendente.\n- [ ] Visualizzare tutte e quattro le miniature con contenuto distinto e fedele su desktop e mobile.\n- [ ] Aprire le pagine 2, 3, 4 con corretto contenuto di origine, anche dopo riordino e ricaricamento/ripresa della sessione sintetica.\n- [ ] Servire decoder dependency-bound dallo stesso origin con bytes/MIME corretti; mantenere CSP e fallback, senza PHI o richieste cliniche reali.\n- [ ] Test mirati, tipi/build, sicurezza scoped, QA indipendente e prova del deployment esatto online; documentare separatamente eventuali errori preesistenti della suite.\n\nCorrezione candidata: 30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6. Non ancora dichiarata risolta o pubblicata; chiusura solo dopo tutte le prove.",
+    "state": "open",
+    "url": "https://github.com/l2v-hub/ClinicOS/issues/430"
+  },
+  "comments": [],
+  "at": "2026-10-10T15:38:56.889Z"
+}

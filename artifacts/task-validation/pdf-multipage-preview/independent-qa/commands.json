@@ -1,0 +1,107 @@
+[
+  {
+    "name": "contract",
+    "cwd": "C:\\w-pdf-qa",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "scripts/quality-gate/validate-task-contract.js",
+      "pdf-multipage-preview"
+    ],
+    "started": "2026-10-10T15:30:36.029Z",
+    "exitCode": 0,
+    "allowedFailure": false
+  },
+  {
+    "name": "focused",
+    "cwd": "C:\\w-pdf-qa\\frontend",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "--import",
+      "tsx",
+      "--import",
+      "file:///C:/w-pdf-qa/scripts/stub-css-loader.mjs",
+      "--test",
+      "src/lib/__tests__/pdfPreviewResources.test.ts",
+      "src/components/shared/import/__tests__/importSession.test.ts",
+      "src/components/shared/import/__tests__/importUpload.test.ts"
+    ],
+    "started": "2026-10-10T15:30:36.461Z",
+    "exitCode": 0,
+    "allowedFailure": false
+  },
+  {
+    "name": "types",
+    "cwd": "C:\\w-pdf-qa\\frontend",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\w-pdf-qa\\node_modules\\typescript\\bin\\tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.app.json"
+    ],
+    "started": "2026-10-10T15:30:44.039Z",
+    "exitCode": 0,
+    "allowedFailure": false
+  },
+  {
+    "name": "build-types",
+    "cwd": "C:\\w-pdf-qa\\frontend",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\w-pdf-qa\\node_modules\\typescript\\bin\\tsc",
+      "-b"
+    ],
+    "started": "2026-10-10T15:31:45.424Z",
+    "exitCode": 0,
+    "allowedFailure": false
+  },
+  {
+    "name": "build-vite",
+    "cwd": "C:\\w-pdf-qa\\frontend",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\w-pdf-qa\\node_modules\\vite\\bin\\vite.js",
+      "build"
+    ],
+    "started": "2026-10-10T15:32:42.545Z",
+    "exitCode": 0,
+    "allowedFailure": false
+  },
+  {
+    "name": "secrets-source",
+    "cwd": "C:\\w-pdf-qa",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "scripts/security/scan-frontend-secrets.mjs",
+      "frontend/src",
+      "frontend/config",
+      "frontend/index.html"
+    ],
+    "started": "2026-10-10T15:33:26.213Z",
+    "exitCode": 0,
+    "allowedFailure": false
+  },
+  {
+    "name": "secrets-dist",
+    "cwd": "C:\\w-pdf-qa",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "scripts/security/scan-frontend-secrets.mjs",
+      "frontend/dist"
+    ],
+    "started": "2026-10-10T15:33:27.639Z",
+    "exitCode": 0,
+    "allowedFailure": false
+  },
+  {
+    "name": "full-frontend",
+    "cwd": "C:\\w-pdf-qa\\frontend",
+    "command": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "../scripts/run-node-tests.mjs"
+    ],
+    "started": "2026-10-10T15:33:27.986Z",
+    "exitCode": 1,
+    "allowedFailure": true
+  }
+]

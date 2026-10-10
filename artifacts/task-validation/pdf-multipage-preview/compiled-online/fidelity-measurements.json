@@ -1,0 +1,890 @@
+[
+  {
+    "variant": "legacy",
+    "viewport": "desktop",
+    "page": 2,
+    "kind": "page",
+    "imageSha256": "3d41c614ec6139519284a97ccea17388cc9809503fae09e8f63b0fd816e33ad3",
+    "size": [
+      852,
+      1108
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0001959712547244962,
+        "foregroundRetention": 1.0010008991127624,
+        "actualForeground": 59006,
+        "oracleForeground": 58947
+      },
+      "title": {
+        "mismatchFraction": 0.0025205312504327834,
+        "foregroundRetention": 1.0096253007906497,
+        "actualForeground": 5874,
+        "oracleForeground": 5818
+      },
+      "marker": {
+        "mismatchFraction": 2.7862914460852604e-05,
+        "foregroundRetention": 1.0001446968600782,
+        "actualForeground": 20736,
+        "oracleForeground": 20733
+      },
+      "bars": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 32396,
+        "oracleForeground": 32396
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "desktop",
+    "page": 2,
+    "kind": "thumbnail",
+    "imageSha256": "ba9b7ab4c310c457722df2e501b09b1842c56b983d003524d76022f0dc904bac",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0048670465337132,
+        "foregroundRetention": 0.9545974818771461,
+        "actualForeground": 2502,
+        "oracleForeground": 2621
+      },
+      "title": {
+        "mismatchFraction": 0.01728395061728395,
+        "foregroundRetention": 1.0977777777777777,
+        "actualForeground": 247,
+        "oracleForeground": 225
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.021252317786335757,
+        "foregroundRetention": 0.9057486631016043,
+        "actualForeground": 1355,
+        "oracleForeground": 1496
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "desktop",
+    "page": 3,
+    "kind": "page",
+    "imageSha256": "8ca23a519abcb444cb7e661cee0b6e7ef6d3ebcfd156adceaa1e9f29e2cf2e61",
+    "size": [
+      852,
+      1108
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00019385264656531244,
+        "foregroundRetention": 1.0008118623816673,
+        "actualForeground": 65335,
+        "oracleForeground": 65282
+      },
+      "title": {
+        "mismatchFraction": 0.0025343803232373593,
+        "foregroundRetention": 1.0090862334990571,
+        "actualForeground": 5886,
+        "oracleForeground": 5833
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 20592,
+        "oracleForeground": 20592
+      },
+      "bars": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 38857,
+        "oracleForeground": 38857
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "desktop",
+    "page": 3,
+    "kind": "thumbnail",
+    "imageSha256": "4827d24943186138d9a9a8f9543f3ef7ed80b7a131b82347fb4250d58ed10ad4",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00560303893637227,
+        "foregroundRetention": 0.9486301369863014,
+        "actualForeground": 2770,
+        "oracleForeground": 2920
+      },
+      "title": {
+        "mismatchFraction": 0.01728395061728395,
+        "foregroundRetention": 1.0982142857142858,
+        "actualForeground": 246,
+        "oracleForeground": 224
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.025673940949935817,
+        "foregroundRetention": 0.9042316258351893,
+        "actualForeground": 1624,
+        "oracleForeground": 1796
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "desktop",
+    "page": 4,
+    "kind": "page",
+    "imageSha256": "c478a0c9e1abcd7ec5f5895c2e55c4cf2bc6674f1f0925b6e7742e42fc528b7e",
+    "size": [
+      852,
+      1108
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00018961543024694497,
+        "foregroundRetention": 1.0006536402197344,
+        "actualForeground": 71952,
+        "oracleForeground": 71905
+      },
+      "title": {
+        "mismatchFraction": 0.0024374368136053292,
+        "foregroundRetention": 1.0075162282200205,
+        "actualForeground": 5898,
+        "oracleForeground": 5854
+      },
+      "marker": {
+        "mismatchFraction": 2.7862914460852604e-05,
+        "foregroundRetention": 1.0001446968600782,
+        "actualForeground": 20736,
+        "oracleForeground": 20733
+      },
+      "bars": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 45318,
+        "oracleForeground": 45318
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "desktop",
+    "page": 4,
+    "kind": "thumbnail",
+    "imageSha256": "6b65c32eb0d695086529ffcf732c78b05ad91d6df91ee759d7b266962a4723c6",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.006196581196581196,
+        "foregroundRetention": 0.9419615145872129,
+        "actualForeground": 3035,
+        "oracleForeground": 3222
+      },
+      "title": {
+        "mismatchFraction": 0.016358024691358025,
+        "foregroundRetention": 1.075221238938053,
+        "actualForeground": 243,
+        "oracleForeground": 226
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.02966766509770361,
+        "foregroundRetention": 0.9026717557251909,
+        "actualForeground": 1892,
+        "oracleForeground": 2096
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "mobile",
+    "page": 2,
+    "kind": "page",
+    "imageSha256": "1c6bc2491fe254f1144c7935cb8c5fd613c311c595c374439959fbfad70aeb2e",
+    "size": [
+      307,
+      400
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.007174267100977199,
+        "foregroundRetention": 1.005030310847414,
+        "actualForeground": 7792,
+        "oracleForeground": 7753
+      },
+      "title": {
+        "mismatchFraction": 0.0064407137577869285,
+        "foregroundRetention": 0.9826666666666667,
+        "actualForeground": 737,
+        "oracleForeground": 750
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 2652,
+        "oracleForeground": 2652
+      },
+      "bars": {
+        "mismatchFraction": 0.024927113702623908,
+        "foregroundRetention": 0.9413927832682142,
+        "actualForeground": 4096,
+        "oracleForeground": 4351
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "mobile",
+    "page": 2,
+    "kind": "thumbnail",
+    "imageSha256": "ba9b7ab4c310c457722df2e501b09b1842c56b983d003524d76022f0dc904bac",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0048670465337132,
+        "foregroundRetention": 0.9545974818771461,
+        "actualForeground": 2502,
+        "oracleForeground": 2621
+      },
+      "title": {
+        "mismatchFraction": 0.01728395061728395,
+        "foregroundRetention": 1.0977777777777777,
+        "actualForeground": 247,
+        "oracleForeground": 225
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.021252317786335757,
+        "foregroundRetention": 0.9057486631016043,
+        "actualForeground": 1355,
+        "oracleForeground": 1496
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "mobile",
+    "page": 3,
+    "kind": "page",
+    "imageSha256": "b3a98b2718e0e210da2ced9db285eb757345372d4ed5084fa8b5719936d148ea",
+    "size": [
+      307,
+      400
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.008070032573289903,
+        "foregroundRetention": 0.9985038554494188,
+        "actualForeground": 8676,
+        "oracleForeground": 8689
+      },
+      "title": {
+        "mismatchFraction": 0.0066518847006651885,
+        "foregroundRetention": 0.9800796812749004,
+        "actualForeground": 738,
+        "oracleForeground": 753
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 2704,
+        "oracleForeground": 2704
+      },
+      "bars": {
+        "mismatchFraction": 0.030174927113702624,
+        "foregroundRetention": 0.9417048929663608,
+        "actualForeground": 4927,
+        "oracleForeground": 5232
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "mobile",
+    "page": 3,
+    "kind": "thumbnail",
+    "imageSha256": "4827d24943186138d9a9a8f9543f3ef7ed80b7a131b82347fb4250d58ed10ad4",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00560303893637227,
+        "foregroundRetention": 0.9486301369863014,
+        "actualForeground": 2770,
+        "oracleForeground": 2920
+      },
+      "title": {
+        "mismatchFraction": 0.01728395061728395,
+        "foregroundRetention": 1.0982142857142858,
+        "actualForeground": 246,
+        "oracleForeground": 224
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.025673940949935817,
+        "foregroundRetention": 0.9042316258351893,
+        "actualForeground": 1624,
+        "oracleForeground": 1796
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "mobile",
+    "page": 4,
+    "kind": "page",
+    "imageSha256": "572326457d6f26d02eda2226e85ed04cc21c5d0c52081a1b924b3092fb5fb0e7",
+    "size": [
+      307,
+      400
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.008957654723127036,
+        "foregroundRetention": 0.9919957872564508,
+        "actualForeground": 9419,
+        "oracleForeground": 9495
+      },
+      "title": {
+        "mismatchFraction": 0.008130081300813009,
+        "foregroundRetention": 0.9669749009247027,
+        "actualForeground": 732,
+        "oracleForeground": 757
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 2652,
+        "oracleForeground": 2652
+      },
+      "bars": {
+        "mismatchFraction": 0.0347910592808552,
+        "foregroundRetention": 0.9411764705882353,
+        "actualForeground": 5728,
+        "oracleForeground": 6086
+      }
+    }
+  },
+  {
+    "variant": "legacy",
+    "viewport": "mobile",
+    "page": 4,
+    "kind": "thumbnail",
+    "imageSha256": "6b65c32eb0d695086529ffcf732c78b05ad91d6df91ee759d7b266962a4723c6",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.006196581196581196,
+        "foregroundRetention": 0.9419615145872129,
+        "actualForeground": 3035,
+        "oracleForeground": 3222
+      },
+      "title": {
+        "mismatchFraction": 0.016358024691358025,
+        "foregroundRetention": 1.075221238938053,
+        "actualForeground": 243,
+        "oracleForeground": 226
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.02966766509770361,
+        "foregroundRetention": 0.9026717557251909,
+        "actualForeground": 1892,
+        "oracleForeground": 2096
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "desktop",
+    "page": 2,
+    "kind": "page",
+    "imageSha256": "81a1f01e28b8f3f616635df6c1c109041e56b7b2e625b6a4b71613525927652d",
+    "size": [
+      852,
+      1108
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0002288096811918442,
+        "foregroundRetention": 1.0015615982618733,
+        "actualForeground": 59006,
+        "oracleForeground": 58914
+      },
+      "title": {
+        "mismatchFraction": 0.0029498525073746312,
+        "foregroundRetention": 1.0153846153846153,
+        "actualForeground": 5874,
+        "oracleForeground": 5785
+      },
+      "marker": {
+        "mismatchFraction": 2.7862914460852604e-05,
+        "foregroundRetention": 1.0001446968600782,
+        "actualForeground": 20736,
+        "oracleForeground": 20733
+      },
+      "bars": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 32396,
+        "oracleForeground": 32396
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "desktop",
+    "page": 2,
+    "kind": "thumbnail",
+    "imageSha256": "72be868a0ff1c4b6ae974b4dec4598b87685e67de1aad8218888b0e098fdb9d2",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0033000949667616334,
+        "foregroundRetention": 1.0491869918699186,
+        "actualForeground": 2581,
+        "oracleForeground": 2460
+      },
+      "title": {
+        "mismatchFraction": 0.018827160493827162,
+        "foregroundRetention": 1.2047619047619047,
+        "actualForeground": 253,
+        "oracleForeground": 210
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.011125374411638854,
+        "foregroundRetention": 1.0577777777777777,
+        "actualForeground": 1428,
+        "oracleForeground": 1350
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "desktop",
+    "page": 3,
+    "kind": "page",
+    "imageSha256": "fd7eab7127cfaa6fa5a771196ebbbdd353c3f0bd0fac41b4a814d921586a26fd",
+    "size": [
+      852,
+      1108
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00023198759343061982,
+        "foregroundRetention": 1.0013947642695114,
+        "actualForeground": 65335,
+        "oracleForeground": 65244
+      },
+      "title": {
+        "mismatchFraction": 0.0030329469442020858,
+        "foregroundRetention": 1.0157031924072477,
+        "actualForeground": 5886,
+        "oracleForeground": 5795
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 20592,
+        "oracleForeground": 20592
+      },
+      "bars": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 38857,
+        "oracleForeground": 38857
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "desktop",
+    "page": 3,
+    "kind": "thumbnail",
+    "imageSha256": "573aa9170e883534796cccc76a7bcd40d2e96abffea8227cc2e4680c73072f72",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0036324786324786326,
+        "foregroundRetention": 1.0494686698424331,
+        "actualForeground": 2864,
+        "oracleForeground": 2729
+      },
+      "title": {
+        "mismatchFraction": 0.018827160493827162,
+        "foregroundRetention": 1.2057416267942584,
+        "actualForeground": 252,
+        "oracleForeground": 209
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.01312223648552275,
+        "foregroundRetention": 1.05679012345679,
+        "actualForeground": 1712,
+        "oracleForeground": 1620
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "desktop",
+    "page": 4,
+    "kind": "page",
+    "imageSha256": "d9b8ae6ef726a705c0f680cd1a39b4031eb495b420fba822bf0baffdfb742357",
+    "size": [
+      852,
+      1108
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00022033524855510924,
+        "foregroundRetention": 1.001085232490191,
+        "actualForeground": 71952,
+        "oracleForeground": 71874
+      },
+      "title": {
+        "mismatchFraction": 0.0028390599249380256,
+        "foregroundRetention": 1.012879958784132,
+        "actualForeground": 5898,
+        "oracleForeground": 5823
+      },
+      "marker": {
+        "mismatchFraction": 2.7862914460852604e-05,
+        "foregroundRetention": 1.0001446968600782,
+        "actualForeground": 20736,
+        "oracleForeground": 20733
+      },
+      "bars": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 45318,
+        "oracleForeground": 45318
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "desktop",
+    "page": 4,
+    "kind": "thumbnail",
+    "imageSha256": "3dc7c063cb4ebea385e74538ad64386c99c1e66ff169804b33d166fbcd8690e1",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00389363722697056,
+        "foregroundRetention": 1.0479840053315561,
+        "actualForeground": 3145,
+        "oracleForeground": 3001
+      },
+      "title": {
+        "mismatchFraction": 0.017901234567901235,
+        "foregroundRetention": 1.180094786729858,
+        "actualForeground": 249,
+        "oracleForeground": 211
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.015119098559406647,
+        "foregroundRetention": 1.0560846560846562,
+        "actualForeground": 1996,
+        "oracleForeground": 1890
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "mobile",
+    "page": 2,
+    "kind": "page",
+    "imageSha256": "a3010ab1e1685d81dd26c1fb2ef6f182aadfae30aa1b4a6593853969494d3e2e",
+    "size": [
+      307,
+      400
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.004657980456026059,
+        "foregroundRetention": 0.9687862762801496,
+        "actualForeground": 7511,
+        "oracleForeground": 7753
+      },
+      "title": {
+        "mismatchFraction": 0.0062295428149086686,
+        "foregroundRetention": 1.0173333333333334,
+        "actualForeground": 763,
+        "oracleForeground": 750
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 2652,
+        "oracleForeground": 2652
+      },
+      "bars": {
+        "mismatchFraction": 0.024927113702623908,
+        "foregroundRetention": 0.9413927832682142,
+        "actualForeground": 4096,
+        "oracleForeground": 4351
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "mobile",
+    "page": 2,
+    "kind": "thumbnail",
+    "imageSha256": "72be868a0ff1c4b6ae974b4dec4598b87685e67de1aad8218888b0e098fdb9d2",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0033000949667616334,
+        "foregroundRetention": 1.0491869918699186,
+        "actualForeground": 2581,
+        "oracleForeground": 2460
+      },
+      "title": {
+        "mismatchFraction": 0.018827160493827162,
+        "foregroundRetention": 1.2047619047619047,
+        "actualForeground": 253,
+        "oracleForeground": 210
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.011125374411638854,
+        "foregroundRetention": 1.0577777777777777,
+        "actualForeground": 1428,
+        "oracleForeground": 1350
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "mobile",
+    "page": 3,
+    "kind": "page",
+    "imageSha256": "daa5e761d3c5a49350ee246d05dcc57e9b70beb8d3f2673852649fbe94060eba",
+    "size": [
+      307,
+      400
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.005553745928338762,
+        "foregroundRetention": 0.9661641155483945,
+        "actualForeground": 8395,
+        "oracleForeground": 8689
+      },
+      "title": {
+        "mismatchFraction": 0.0064407137577869285,
+        "foregroundRetention": 1.0146082337317397,
+        "actualForeground": 764,
+        "oracleForeground": 753
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 2704,
+        "oracleForeground": 2704
+      },
+      "bars": {
+        "mismatchFraction": 0.030174927113702624,
+        "foregroundRetention": 0.9417048929663608,
+        "actualForeground": 4927,
+        "oracleForeground": 5232
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "mobile",
+    "page": 3,
+    "kind": "thumbnail",
+    "imageSha256": "573aa9170e883534796cccc76a7bcd40d2e96abffea8227cc2e4680c73072f72",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.0036324786324786326,
+        "foregroundRetention": 1.0494686698424331,
+        "actualForeground": 2864,
+        "oracleForeground": 2729
+      },
+      "title": {
+        "mismatchFraction": 0.018827160493827162,
+        "foregroundRetention": 1.2057416267942584,
+        "actualForeground": 252,
+        "oracleForeground": 209
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.01312223648552275,
+        "foregroundRetention": 1.05679012345679,
+        "actualForeground": 1712,
+        "oracleForeground": 1620
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "mobile",
+    "page": 4,
+    "kind": "page",
+    "imageSha256": "d274f727b368d7f372f84616070de7271dab706cfb6fa1e11993e6975b66cae1",
+    "size": [
+      307,
+      400
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.006392508143322475,
+        "foregroundRetention": 0.963243812532912,
+        "actualForeground": 9146,
+        "oracleForeground": 9495
+      },
+      "title": {
+        "mismatchFraction": 0.007285397529299968,
+        "foregroundRetention": 1.011889035667107,
+        "actualForeground": 766,
+        "oracleForeground": 757
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 2652,
+        "oracleForeground": 2652
+      },
+      "bars": {
+        "mismatchFraction": 0.0347910592808552,
+        "foregroundRetention": 0.9411764705882353,
+        "actualForeground": 5728,
+        "oracleForeground": 6086
+      }
+    }
+  },
+  {
+    "variant": "v2",
+    "viewport": "mobile",
+    "page": 4,
+    "kind": "thumbnail",
+    "imageSha256": "3dc7c063cb4ebea385e74538ad64386c99c1e66ff169804b33d166fbcd8690e1",
+    "size": [
+      180,
+      234
+    ],
+    "regions": {
+      "whole": {
+        "mismatchFraction": 0.00389363722697056,
+        "foregroundRetention": 1.0479840053315561,
+        "actualForeground": 3145,
+        "oracleForeground": 3001
+      },
+      "title": {
+        "mismatchFraction": 0.017901234567901235,
+        "foregroundRetention": 1.180094786729858,
+        "actualForeground": 249,
+        "oracleForeground": 211
+      },
+      "marker": {
+        "mismatchFraction": 0.0,
+        "foregroundRetention": 1.0,
+        "actualForeground": 900,
+        "oracleForeground": 900
+      },
+      "bars": {
+        "mismatchFraction": 0.015119098559406647,
+        "foregroundRetention": 1.0560846560846562,
+        "actualForeground": 1996,
+        "oracleForeground": 1890
+      }
+    }
+  }
+]

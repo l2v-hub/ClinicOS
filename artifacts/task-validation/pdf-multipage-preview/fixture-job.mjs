@@ -1,0 +1,10 @@
+import { job } from '../../../frontend/src/components/shared/import/__tests__/fixtures.ts';
+import { readFileSync, writeFileSync } from 'node:fs';
+const folder = 'artifacts/task-validation/pdf-multipage-preview/fixtures';
+const initial = job(), bytes = readFileSync(folder + '/four-pages-synthetic.pdf');
+initial.expiresAt = '2026-10-17T12:00:00Z';
+initial.totalBytes = bytes.length;
+initial.documents = [{ id: 'synthetic-doc', filename: 'four-pages-synthetic.pdf', mimeType: 'application/pdf', pageCount: 4, sizeBytes: bytes.length, contentUrl: '' }];
+initial.manifest.groups[0].pageCount = 4;
+initial.manifest.pages = Array.from({ length: 4 }, (_, i) => ({ id: `synthetic-page-${i + 1}`, documentId: 'synthetic-doc', sourcePageNumber: i + 1, groupId: 'letter-a', sortOrder: i, status: 'pending', canRetry: false, error: null, errorCode: null }));
+writeFileSync(folder + '/job.json', JSON.stringify(initial, null, 2));

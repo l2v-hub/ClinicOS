@@ -1,0 +1,12 @@
+{
+  "decision": "ALLOW SCOPED INDEPENDENT QA ONLY",
+  "sourceCommit": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "owner": "/root/pdf_preview_independent_qa",
+  "writeScope": "C:/w-pdf-qa/artifacts/task-validation/pdf-multipage-preview",
+  "qaPort": 7541,
+  "allowed": ["read source and issue/comments", "local build/types/tests", "synthetic local-only browser QA", "create synthetic PDF and artifact reports"],
+  "forbidden": ["application edits", "real patient/document/session access", "database writes", "commit", "push", "deployment", "GitHub writes", "automation change"],
+  "applicationImmutable": true,
+  "publicationPerformed": false,
+  "evidence": ["commands.json", "source-before.json", "source-after.json", "resource-binding.json", "fidelity-measurements.json"]
+}

@@ -1,0 +1,121 @@
+{
+  "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: locator('[data-page-id=\"synthetic-page-4\"] img')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.be.visible\" with timeout 5000ms\n  - waiting for locator('[data-page-id=\"synthetic-page-4\"] img')\n",
+  "errors": [],
+  "warnings": [
+    "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently",
+    "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently",
+    "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently"
+  ],
+  "httpErrors": [],
+  "requests": [
+    {
+      "path": "/qa-preview",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/PdfCanvasPreview-BY-O_bqx.css",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/surface-Q2Hf5SYm.css",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/qa-entry.js",
+      "method": "GET"
+    },
+    {
+      "path": "/css2",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf-BbXXzWpc.js",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf.worker.min-C8Ts8bNu.js",
+      "method": "GET"
+    },
+    {
+      "path": "/synthetic/files/synthetic-doc/content",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/PdfCanvasPreview-VCLfsQJ3.js",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+      "method": "GET"
+    },
+    {
+      "path": "/qa-preview",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/PdfCanvasPreview-BY-O_bqx.css",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/surface-Q2Hf5SYm.css",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/qa-entry.js",
+      "method": "GET"
+    },
+    {
+      "path": "/css2",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf-BbXXzWpc.js",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf.worker.min-C8Ts8bNu.js",
+      "method": "GET"
+    },
+    {
+      "path": "/synthetic/files/synthetic-doc/content",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+      "method": "GET"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+      "method": "GET"
+    }
+  ],
+  "body": "Importa lettere di dimissione · QA sintetico\n4 / 30 pagine\n0.0 MB / 25.0 MB\n1 / 30 file originali · 1 / 30 lettere\nMassimo 25.0 MB per file · invio progressivo, un file alla volta\nLettera A · 4 pagine\n+ Nuova lettera\nLettera A\nNome lettera \nRinomina\nLettera precedente\nLettera successiva\nScarica PDF lettera\nSeleziona file\nScansiona pagine\nProssima pagina: 5 · Lettera A\nPagina 1\nfour-pages-synthetic.pdf · originale p. 1\n↑\n↓\nRifai\nRimuovi\nSposta nella lettera\nLettera A\nPagina 2\nfour-pages-synthetic.pdf · originale p. 2\n↑\n↓\nRifai\nRimuovi\nSposta nella lettera\nLettera A\nAnteprima…\nPagina 3\nfour-pages-synthetic.pdf · originale p. 4\n↑\n↓\nRifai\nRimuovi\nSposta nella lettera\nLettera A\nAnteprima…\nPagina 4\nfour-pages-synthetic.pdf · originale p. 3\n↑\n↓\nRifai\nRimuovi\nSposta nella lettera\nLettera A\nAvvia elaborazione"
+}

@@ -1,0 +1,81 @@
+{
+  "base": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "source": [
+    {
+      "path": "frontend/vite.config.ts",
+      "sha256": "3f1173c0ba0a3e27e27d4d25846f71f5b1274930e878243821e92712a2632e18"
+    },
+    {
+      "path": "frontend/config/pdfPreviewAssets.ts",
+      "sha256": "f4ca487bdcaa5e1de0da4b12dcc7b3c803661bc51043150fb02bd191f824e8de"
+    },
+    {
+      "path": "frontend/src/lib/pdfPreviewResources.ts",
+      "sha256": "609f5a6633393d73bc96450f99bf9015f6aaf73e5f9432ec1053c976b4621dfb"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/pdfPreviewResources.test.ts",
+      "sha256": "405916083d358c08e716c525870beb3330368e2b5253ed2cce351840c3561a3a"
+    },
+    {
+      "path": "frontend/src/components/shared/PdfCanvasPreview.tsx",
+      "sha256": "302dd7ead6f1aa1d7cd341d9d30551d25d39e3f0a845b3ba4b26e0ba781667e5"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSourceCache.ts",
+      "sha256": "86dc2b6a6ea1af114ebd55c6b9641afbced1857f1bd1d26acf1b9d6560448f30"
+    }
+  ],
+  "unchanged": true,
+  "results": [
+    {
+      "name": "focused",
+      "args": [
+        "--import",
+        "tsx",
+        "--import",
+        "../scripts/stub-css-loader.mjs",
+        "--test",
+        "src/lib/__tests__/pdfPreviewResources.test.ts",
+        "src/components/shared/import/__tests__/importReview.test.ts",
+        "src/components/shared/import/__tests__/importSession.test.ts",
+        "src/components/shared/import/__tests__/importUpload.test.ts"
+      ],
+      "cwd": "frontend",
+      "exit": 0,
+      "logSha256": "7c23453c8708490a2bbae14145040bac46c00cf098f816bdab319dc02642f05a"
+    },
+    {
+      "name": "types",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "-b",
+        "frontend"
+      ],
+      "cwd": ".",
+      "exit": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "frontend"
+      ],
+      "cwd": ".",
+      "exit": 0,
+      "logSha256": "29c9563654c1079cbb37f0d41251230acdb0a81d4970de26030157f7e5b09665"
+    },
+    {
+      "name": "full-regression",
+      "args": [
+        "../scripts/run-node-tests.mjs"
+      ],
+      "cwd": "frontend",
+      "exit": 1,
+      "logSha256": "909b983f00b6441753dc67b67bb9abbc156756cf57b76f4a9263d4b04b6a7505"
+    }
+  ],
+  "at": "2026-10-10T15:31:27.042Z"
+}

@@ -1,0 +1,58 @@
+{
+  "applicationCommit": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "baselineCommit": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "snapshots": [
+    {
+      "source": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+      "conclusion": "success",
+      "databaseId": 38018242492,
+      "headSha": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+      "name": "Frontend Secret Scan",
+      "status": "completed",
+      "failureNames": [],
+      "failedSteps": []
+    },
+    {
+      "source": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+      "conclusion": "failure",
+      "databaseId": 38018242472,
+      "headSha": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+      "name": "AI Import E2E Gate",
+      "status": "completed",
+      "failureNames": [
+        "therapy reads and writes apply patient scope before loading clinical data"
+      ],
+      "failedSteps": [
+        "gate: Backend unit tests"
+      ]
+    },
+    {
+      "source": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+      "conclusion": "success",
+      "databaseId": 38065121195,
+      "headSha": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+      "name": "Frontend Secret Scan",
+      "status": "completed",
+      "failureNames": [],
+      "failedSteps": []
+    },
+    {
+      "source": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+      "conclusion": "failure",
+      "databaseId": 38065121183,
+      "headSha": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+      "name": "AI Import E2E Gate",
+      "status": "completed",
+      "failureNames": [
+        "therapy reads and writes apply patient scope before loading clinical data"
+      ],
+      "failedSteps": [
+        "gate: Backend unit tests"
+      ]
+    }
+  ],
+  "newFailureNames": [],
+  "globallyGreen": false,
+  "decision": "EXACT NAMED BASELINE DELTA VERIFIED",
+  "at": "2026-10-10T15:59:34.795Z"
+}

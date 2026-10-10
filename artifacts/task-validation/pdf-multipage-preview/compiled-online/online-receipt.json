@@ -1,0 +1,941 @@
+{
+  "applicationCommit": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "deploymentId": "dpl_2ogtCyTFEqnxw11J99QHtv3kUJD3",
+  "decision": "ACTUAL DEPLOYED SPA ACCEPTANCE VERIFIED",
+  "scenarios": 4,
+  "rasterComparisons": 24,
+  "htmlAndEntryShaUnchanged": true,
+  "cspUnchanged": true,
+  "assets": [
+    {
+      "path": "/assets/AccessibleDialogSurface-D9MO8pjF.js",
+      "http": 200,
+      "sha256": "8568da1f79c74ed01da7beffd4abad706f17132854bcc06f5a5584fe502abc6c",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AdminAgenda-DeAt_lH2.js",
+      "http": 200,
+      "sha256": "f9f63edf9332a75bdb41dc757a4f8f067586dd43bc294249fb30072c313c1e45",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AdminDashboard-COYAbEcS.js",
+      "http": 200,
+      "sha256": "1d0d6449994c9e9b5912a13a9bc2b589da1983e815aa1597140f3cb0e0dafa2b",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AdminDashboard-CfKABW4v.css",
+      "http": 200,
+      "sha256": "278f9623ed11194f8c42c4470c7fc1348ea6ee41cbdf07ef0405a084627cd1da",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/AgendaInline-BNaybtfV.css",
+      "http": 200,
+      "sha256": "0c4227f75c6b017911da141ccb9a11526e1174205c3c2829e799bbf9aff35363",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/AgendaInline-DPDQL5qW.js",
+      "http": 200,
+      "sha256": "26940a76c280d5ac39e5e8d40f71e4dc97453ed31b0a23b0c865cac81a38cbb2",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AgnosPanel-BMbqS2e8.js",
+      "http": 200,
+      "sha256": "c1d7e9a94dd240c606401ba07ba2c9ca006ea3d97c94cc3e7f8b823289444af5",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AgnosPanel-CW1huyUN.css",
+      "http": 200,
+      "sha256": "d577de0b1aee1e92da61d9d949880d5f2f32e40aba30a8bb0b1518a890606e4d",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/AnagraficaFarmaciPage-72fyvF6L.js",
+      "http": 200,
+      "sha256": "2e5f7bca6e7190c5b946dd1e7a4f100936137022252c4c16974860ddfa6cc3ce",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AnagraficaFarmaciPage-BLCRf3SR.css",
+      "http": 200,
+      "sha256": "6946f4325a62a5cdabbaf1620d442aa53fb609d7dd2221656c602d8192c90f76",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/AnamnesisEditor-CjMDYXTo.js",
+      "http": 200,
+      "sha256": "bc2e5236d6650b8abadf98dff9d3dd352070515fae8500e96bd243e2ec92af8d",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AssessmentCatalog-CCjgyrS9.css",
+      "http": 200,
+      "sha256": "87d99f9cb1110b4cb8d74c45b69efdb2321c5ecd1ca72c8f2740249384b255d2",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/AssessmentDraftStatus-C00fZDro.js",
+      "http": 200,
+      "sha256": "8997fe12cf013c602a2cdb1ed4be4a2370d1ff9540894274664e7d03acd85b33",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/AssessmentDraftStatus-DepsWT8d.css",
+      "http": 200,
+      "sha256": "70bc37f6c9a84b626133a43a0a1a420e913e2fc094cbb9076d0f077190eeddc7",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/AvvisoAnomalieFarmaci-CGXPg4mY.css",
+      "http": 200,
+      "sha256": "72bc2ec81ffd42f9246a3cfb44e0f672be44e07f34416a32b2e2aeb89e8f560a",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/AvvisoAnomalieFarmaci-JkvEHPn7.js",
+      "http": 200,
+      "sha256": "7e6b902a160fb5363cf5c3c36b5e896e5afe553a86826346656595530dfa078b",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/CameraCapture-BZrPNFqj.css",
+      "http": 200,
+      "sha256": "087605da365a42d9251f178fe12cee846c7ff8aa2d946796e7d969df1d49d0bc",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/CameraCapture-Dmumd-d5.js",
+      "http": 200,
+      "sha256": "e383ea783598dc30c56c09f5b76f912f86bc2afd2a91d40503bad14f8b4f46f2",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ClinicalAttachments-XJomdRDN.js",
+      "http": 200,
+      "sha256": "880d94a0141a8659dac37e71762888c6d501a69d9af239e600ee782531d380d2",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ClinicalCard-Cu26iKRt.js",
+      "http": 200,
+      "sha256": "74cbf5d84a80c657e967ba7e8f0a13502c6864c4d35a9e53f8a6a77d913c6c65",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ClinicalNoteEditor-DW4fdQl6.js",
+      "http": 200,
+      "sha256": "d038b703f4c38ea9f1b3d512ad1cd869e1b3415b50bfc2453c6081570a0e47d9",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ClinicalNoteEditor-QU8po2rl.css",
+      "http": 200,
+      "sha256": "3966e250d6bc3d6b76cb407b0b168d1c5a836bee06e84cf3a986475f50a42aed",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/ClinicalSectionLoading-CYNKSATm.js",
+      "http": 200,
+      "sha256": "7ddb9dbbfa43dbf6a99f0c33aae3538a8a1a6f4640b9df851cda696a9a79d57b",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ClinicalTable-Bl2szYcF.js",
+      "http": 200,
+      "sha256": "613e895fa56a8fee2256f20b4574b319a2eba62b8ed6cdc012db8459f7863852",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ConfirmDialog-D_ukY5ff.js",
+      "http": 200,
+      "sha256": "0eba28977da1a86d1689798b312caf1cc2fa420b5036f04ff40add9996bb65cf",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ConsegneRounds-BP9N68un.css",
+      "http": 200,
+      "sha256": "dd80c1a505990b37b9025cb584bc75249c491c63d09b758e929e7f6a95f41202",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/ConsegneRounds-Bp0Dy05D.js",
+      "http": 200,
+      "sha256": "33136ab85c852aacafd97e02f5729331e43b9a1cafd21577c45cdf18cd8ca332",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ConsegneWorkspace-CtcxqSBU.js",
+      "http": 200,
+      "sha256": "faf056c5e958560dd18a9f1f4fd667ca62f595afefc10501c419c45f91b22f48",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ConsegneWorkspace-Df-KQF84.css",
+      "http": 200,
+      "sha256": "7acb329370a018f826a7c9482a6c3ad5b462658bc0a9166739a231674e1a1984",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/ContenzioniTab-DrdGWi0d.js",
+      "http": 200,
+      "sha256": "3ec3cac12941da3e00f0d6a8f9538b5c7d228437d70bbfc4cf75bb3c0506a430",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/DashboardKpiBand-B_ZN6mIU.css",
+      "http": 200,
+      "sha256": "1627b2ad39115acaf0a9d7dcb18b3864eb4a478d40753cbc18b5cb150916ef2b",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/DashboardKpiBand-CowopTUG.js",
+      "http": 200,
+      "sha256": "a9b56420169dbc82286cc13f6f4e25aec4f50c59eaba3dd0abca6729dbdc05a1",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/DiagnosisEditor-B-ZZ6bUu.css",
+      "http": 200,
+      "sha256": "f27e83542b8b4aa5102c5e4f7abd69b0f212436040b572efe66860c1f29d158d",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/DiagnosisEditor-DjJqA6xX.js",
+      "http": 200,
+      "sha256": "79414e0d3a03cc80fbf9538193c8790edf72ee9a7e8304c056c9ced99dd2b558",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/DiarioPazienteTab-BbfJ_aGi.css",
+      "http": 200,
+      "sha256": "cd2d2834888a518f3b5c4f312382eaf0e6eec2a6ca631d0db382e30758ed3bb7",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/DiarioPazienteTab-DAw0ZikQ.js",
+      "http": 200,
+      "sha256": "f50df9fa18c74ee09733b529e10d089c21ae5024f164d2d81ac0576edb32fdcf",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/DiaryTherapyPanel-C9VpT_pb.css",
+      "http": 200,
+      "sha256": "87383eaf9a9d36b228fa6252a4c976913f154d4b3d23b178f20029dbcf6b3144",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/DimissioneTab-BmcfFx9o.js",
+      "http": 200,
+      "sha256": "34f36b1e6d47b1ad306244aaae9346646146319d137c0ff2e77633e7f5e67c14",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/DischargeImportModal-D4TcaW2S.js",
+      "http": 200,
+      "sha256": "92441f7ba12f720324d399d2ee80848c7d11845751b906574b8d1e69bcc252b6",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/DischargeImportModal-aqFKhVmp.css",
+      "http": 200,
+      "sha256": "e918529e94031d2875e7df04606e4211aae452c5a11e9e956f862bc306aaf0ea",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/DocumentPreview-DpEmCZKC.js",
+      "http": 200,
+      "sha256": "f629bc6399379d1c63ae985313fa4840d772d55b452322787103db5ace5aa715",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/EsamiConsulenzeTab-BBiQ5_KQ.js",
+      "http": 200,
+      "sha256": "954132789365e7ae5760e89d714c42302d9f6fffe0de76cdb6de3257aa5775e9",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/GlucoseAdministrationControl-Cb_9ApZx.js",
+      "http": 200,
+      "sha256": "43b818a23c25f269eb90cd292a4b48fcc2641abbfe4ea9e0def32913a6e6c0c6",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/GlucoseScaleEditor-EMEyduw_.js",
+      "http": 200,
+      "sha256": "c093e9e8442df793d3e64558675b3b6d57caf221f51c45ed42a8e69d196b1718",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/InlineEditableField-ByJDwC99.js",
+      "http": 200,
+      "sha256": "f5d52a0688f79b1bd101350d89d9bc1065ca3993de82cf87e844796e3a8d3231",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/IntakeWorkspace-Bz2SAGPD.js",
+      "http": 200,
+      "sha256": "b2c60421b3bfbd88ffcb3fbe5777157e68bb8b2ebfa8aea8a115de2ea94b2b87",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/IntakeWorkspace-CGXNSq0l.css",
+      "http": 200,
+      "sha256": "9a4d5f327713fcbfe95456755a35a905259208b793e7d6378c36518a0b732f83",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/InvioPSModal-C-GGqNlf.js",
+      "http": 200,
+      "sha256": "bd56f4b35b6a76ea70f697c0bea9ae1688f4b6cc5a5c690503a67bbbc50b310f",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/LazyNews2-Gbtr97Je.js",
+      "http": 200,
+      "sha256": "6ad39c3cfa51ca45b2becf7e1420499edba5cad4a137a5a6861926510952fab1",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/LoadErrorState-BWJfk5nO.js",
+      "http": 200,
+      "sha256": "dc3242690a38596a11f5289bf26029c61e2a228877499e1c36d9dad7e05d3a50",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/MedicazioniTab-DoFmvt9w.js",
+      "http": 200,
+      "sha256": "6877ada888d139d627e738bd3e8c405a0e6107850def363181325b70e742dba6",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/MultiPatientParametri-D-4y5rAR.css",
+      "http": 200,
+      "sha256": "ec6b84c97c61fafdd7f3bcfb6f0f468e647a6c9882b9c14b987b18699ca8eb88",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/MultiPatientParametri-DZeOYBZ1.js",
+      "http": 200,
+      "sha256": "745fdb0927d2b111edee72c4b19b1d4c8e2535914c7eb957f1037922be3a89ce",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/NarrativeSectionsTab-BSpq0gm6.js",
+      "http": 200,
+      "sha256": "e93098dcc5a213beaa7eb7f9018a6262364308cffb35c3af8d72763531e20e9b",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/NarrativeSectionsTab-BabjH-C5.css",
+      "http": 200,
+      "sha256": "29ec6f2d4ef36fb45544731b4513499b338091259065a534acea34b30fed0957",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/NewPatientFlow-D8-RmsTt.js",
+      "http": 200,
+      "sha256": "0449c3c1bc84812ee9df37e6c524e456e57543e323200673dfe45ef00e020420",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/NewPatientFlow-DtDiBuAk.css",
+      "http": 200,
+      "sha256": "0864c2afec290ab16175b11aa7de6ed71467fbfe8986b91bbb3ba986fc39c03f",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/News2Chip-C9qgpU7a.js",
+      "http": 200,
+      "sha256": "17e782398a595ca6a44345804fb820505db615d6970765c2c873330620459a1e",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/News2Chip-CT4ZleOC.css",
+      "http": 200,
+      "sha256": "43598d67479a79a2a6bfa9547e20a1a9efc8731a904d45dac0b2af43bf644674",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/NotesPage-DRCHH5Zt.js",
+      "http": 200,
+      "sha256": "06057fd3d2c666b2f51c191529b87138f34a431dc091bf05b8299d2f84337a0d",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/NotesPage-DyQBXekH.css",
+      "http": 200,
+      "sha256": "67981788c6dcbe7bcb16f34fa72bb9c7a20d123b16d03f00fbf68900a96e5abc",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/OperatorAgenda-B_DcC48D.js",
+      "http": 200,
+      "sha256": "74eed3cbd9db4bb33b97a4d7e634fccf587a6f8395a958e32701f4f0340ca68d",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/OperatorAgenda-MQKGjmcj.css",
+      "http": 200,
+      "sha256": "fac78c09f2dcdcb42b7153288630241eca8f70497f4c45ce6fc0421f2ebba572",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/OperatorDashboard-DR177w2Y.css",
+      "http": 200,
+      "sha256": "0baefc94c73d10c08c65bde6131074277e22b49c0a31e226c9c397afe06fa8f7",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/OperatorDashboard-qvM7MyHw.js",
+      "http": 200,
+      "sha256": "9e12261bea350096b647dce62f1502202f69255e677a97f812f08a8ee85398bf",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/OperatorManagement-0Xf2zYDg.js",
+      "http": 200,
+      "sha256": "cfbb41e1efc15a33d20741695e25767b44b0a18e5040c6c3d7e9ed1c08cb322d",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/OperatorManagement-DTt4_Y4X.css",
+      "http": 200,
+      "sha256": "2b326c2ae4a41201ce9cf10cce5377eb2620cb950d53db6d7f6694a979db7f5f",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/OperatorSchedule-BaBInWYB.js",
+      "http": 200,
+      "sha256": "01e5a91271ff1dc132b76efe7eab998aa9b4036ca0bcfacf57650a63107974dc",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PageHeader-_rhI0zuP.js",
+      "http": 200,
+      "sha256": "94ed5d416c7b33d9aff5a6a9c1485eac7ba4a5e4ea72bbfc407b82a22911a010",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PainAssessmentEditor-DDA8678W.js",
+      "http": 200,
+      "sha256": "f1983b4af02a66ae70bb05cd5cace4dfc54a64afb28f19a0d1fc3f0ed23f2070",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientArchivePreview-DP1LCCzB.js",
+      "http": 200,
+      "sha256": "2150e3deebf9f9f1e1a4febb53d7a8f0a76656a41bde842e25a0c06d59b6dc42",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientCombobox-GjtglHm8.js",
+      "http": 200,
+      "sha256": "03bc614a20791fd6c9c5bf748542393963430a7c955b380ac83854ded4da150e",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientCombobox-m3PNMGTn.css",
+      "http": 200,
+      "sha256": "db8536a76160d9c44507ac9527ea47f0b5b9fd21c3055df5092e2a4167e15905",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientDetail-B26PH4HF.js",
+      "http": 200,
+      "sha256": "3914b7b7e13718afc3fffd070bf5c193fe88f4733eff189a4dd91e9c95ed2ae7",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientDetail-DqcXTU7o.css",
+      "http": 200,
+      "sha256": "fec07ea0a90f336514250ce179ed8331bda207d4096566b0b3bd9f53c8cd6c27",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientDetailLazyTabs-BrfCvhc8.js",
+      "http": 200,
+      "sha256": "5a2a439fb3baff935db96fff2506924d62ad35277a2d044cae4118ac1686b6b3",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientIdentity-CcceCeFU.css",
+      "http": 200,
+      "sha256": "9f0c99f9739ffc88708fd32a55c020d12cd8c8468d1c69358a8973ed587488c7",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientIdentity-DtKgrGPQ.js",
+      "http": 200,
+      "sha256": "b85815d1ec86ba79d6fe7a35c9bd2626644073c3e681b4842538dbcf20e4e8c0",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientList-IjWRrTD6.js",
+      "http": 200,
+      "sha256": "f44850625e35e86b4a62a5fd9629490ac89a0cc05adebc1a3a7e908e01b5df85",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientList-t9pGv_kY.css",
+      "http": 200,
+      "sha256": "85ba598c581d1a94539982938a911597b4da636e9dee8d4919397fcab298cee9",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientParameters-BML_WSVJ.css",
+      "http": 200,
+      "sha256": "57333c10999b4987a48775c9e2e123d5e7e8d8185aa7765799e2d6c769ba4b7b",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/PatientParameters-JCKf8K0U.js",
+      "http": 200,
+      "sha256": "eadf6fdfdf0254b76791f0090022a393f4d696f62fa3d6f9aca0b5091299c7c3",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PdfCanvasPreview-BY-O_bqx.css",
+      "http": 200,
+      "sha256": "798813cc9625b50f22879608a7ea64e095056a40b25be7920c1dfb740e757538",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/PdfCanvasPreview-DOmoe2vy.js",
+      "http": 200,
+      "sha256": "352a9f9e5fa4e7f8fac440fb17e530c068878ad91d1f8524df93822846bad459",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/PresaInCaricoTab-s3nBKuAq.js",
+      "http": 200,
+      "sha256": "b08fe6bf149275efc6663ff725ba94156ccde18111c873063a9623341f43f9f7",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/RicercaFarmaco-B92usS3P.css",
+      "http": 200,
+      "sha256": "2733ff0f4ae549a79b361ea1a3b8fc260a31d89efa209148b5a5e17dfb4ae897",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/RicercaFarmaco-Dx8BfSsL.js",
+      "http": 200,
+      "sha256": "f8a030b6794b5a841b5d169fd0931c4cb2868d5bfcfc46109a28fdaf7df8aa1a",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/RolePermissionsPage-CZMvr12V.js",
+      "http": 200,
+      "sha256": "c8130f6bfbdd5533d44f9906f7371769030fa07d3b8bf91e490268f0d78a580a",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/RolePermissionsPage-Ch45e6Xy.css",
+      "http": 200,
+      "sha256": "af8a27a5164c5291fde855a4eda25f4f5e3c67fad9787c7af03580d69982fcc7",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/RoomsManagement-DJSKGR4O.css",
+      "http": 200,
+      "sha256": "42fa0abba4e4864f04e3e16532f44205410d3b1b73b9cf21625541db19b97e11",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/RoomsManagement-DxN4i3MM.js",
+      "http": 200,
+      "sha256": "e1af1aaae136b5f83ff7f5aad6b5c23a1b0d08267c321cc91091e5e99d934982",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/RosterOrderControl-C7nCOONy.js",
+      "http": 200,
+      "sha256": "7159d19e4be68e71c0996c7ebf047f96d907dccfce72620e051b917249434906",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/RosterOrderControl-D6JdzpHU.css",
+      "http": 200,
+      "sha256": "1a86c648c8d24348d729e45c268ab9f1baa6c77a41b25019bb78bd83865ad22a",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/ScalaBradenTab-DYqOEq5q.js",
+      "http": 200,
+      "sha256": "3f8c6dcfba5aab9fac8585665460439b48b3359290b8f169ff91b155af70bbcd",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/ScalaTinettiTab-DcbU_M2A.js",
+      "http": 200,
+      "sha256": "a76c7808e0ca9a7ff42bfb803fdcf28fc8453b9e68e042a3b682fa5c596b2a49",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/SectionToggle-4YoHJSIC.js",
+      "http": 200,
+      "sha256": "2d6fd0c360b3fe505d79743458c72143dbc7c7119c029bf2b82ec23e71945ade",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/SemanticTaggedText-COcwT7un.js",
+      "http": 200,
+      "sha256": "9e67bf3713a9b3ed00b265fc4a3e7502384c430059f9e8882304c7a53b475ea4",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/SemanticTaggedText-Cy2K2aEq.css",
+      "http": 200,
+      "sha256": "8e1468ddc2dc49ec862668499bbb9eddfb070b2937558ba90d289df8cb597156",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/SortArrow-DQYwtDDz.js",
+      "http": 200,
+      "sha256": "a8ed1c132d9fb85b8b8c8a93380a938d6350d4feeabcf91e85d081b0de5ffc0d",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/TableFilters-BcaQaHv7.js",
+      "http": 200,
+      "sha256": "01f328df854f4676d0098fa2aa7f3a562d1e088fcd7e8f1888d2ffec9012072f",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/TableFilters-HlTQH1g4.css",
+      "http": 200,
+      "sha256": "44c7276cfd850163bfbee12609d917d6a1a38bbbc1b3e6de7c9cd1e7beb18e55",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/TerapiaFarmacologicaTab-DcCgdRD_.js",
+      "http": 200,
+      "sha256": "95e9e2b3915390078111eb35f43506ca4d16a5e512f91cb73c4f41521cadc681",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/TerapiaFarmacologicaTab-zpCIETGM.css",
+      "http": 200,
+      "sha256": "dd9a2131516d616ce0a072cceae8ac178b617ebbb736911aa5de92c48bc1cb01",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/TherapyEditor-CEkpRLjQ.js",
+      "http": 200,
+      "sha256": "9f9fbc971c2686f07d403bf45008fc28c131033012717d8d14df51eb7bd9e6ae",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/TherapyRoundsPage-CIClEI_9.css",
+      "http": 200,
+      "sha256": "95cb3d6902d2373802a672a0193b37073fe6aecd796e100c81c8c4a32ac568e7",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/TherapyRoundsPage-CIs_nEdS.css",
+      "http": 200,
+      "sha256": "043b6dd49dbad664073071e6b3429a22b3dfceb3c6c4438ed3a2076be38404ec",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/TherapyRoundsPage-CauxjjX1.js",
+      "http": 200,
+      "sha256": "38f7e9114c90ca713805d1d446a92668c92628da3bc596328a075c41104b9b60",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/TherapyRoundsPage-DWj3GNXM.js",
+      "http": 200,
+      "sha256": "4f9143007bf5fb0fba3b9d4920f050f3b13da5128361ecfae3aabfe100089e34",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/Tinetti-PvAQNSKS.css",
+      "http": 200,
+      "sha256": "3d8d6819272cfe8d3243df9a45f3b89e140ac3387e4bea381fca59ba1c5c7b59",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/TopNav-Ba9m6JV8.js",
+      "http": 200,
+      "sha256": "ecfea5f3d3812bf7f57c59a6de2ca2be9ca07ab2554fdb534cbe07b66be282b0",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/TopNav-DQXC9CRC.css",
+      "http": 200,
+      "sha256": "860dd730b27a7a153c13b4acd4833f2c12c3ef69482fa31c61be2e74b20d36ee",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/VitalSignsEditor-BLk2XHWR.js",
+      "http": 200,
+      "sha256": "740f0e282e5b9f42c3ed84392b44b372319a04c14b43c385ee5aaeb2c23e92cb",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/allergyStatusModel-MCtsmAIL.js",
+      "http": 200,
+      "sha256": "b5e50b2b93db8da077abf73c935a7ea178224d6a729964c108e114cf847112cb",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/appointmentRange-Bcoh8cH0.js",
+      "http": 200,
+      "sha256": "bf71782718943f19f9888d5dcfce3c734611f333fe05559e2f02a78df62a3e53",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/assessmentEntry-DYo2nZTW.js",
+      "http": 200,
+      "sha256": "8eb709f7371d436a46667b35b54822a951b375a63bf627a1c2408cd669e853e7",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/assessmentTypes-H3bfR4sY.js",
+      "http": 200,
+      "sha256": "088e1323beac4be35618562ce4aaee22a9449493b0d9f80ab37a89d80492eca9",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/capabilities-sGJaafSh.js",
+      "http": 200,
+      "sha256": "3c60c53929159bfef24dcf15b62c2bfc09db2364de0800e45972c452d80ca33e",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/clinicalHistory-Dc8Sh74T.js",
+      "http": 200,
+      "sha256": "d619ba31010d85b762bd8728699a181199f1cadd0eb5c77c7ba5b3f6faae281f",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/compiler-runtime-XYET9J12.js",
+      "http": 200,
+      "sha256": "db9bb270e68f5c6ef2cb48570b74e652ad106300d84572479574b6105cd63ac9",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/consegnaUrgency-DrFEu5MJ.js",
+      "http": 200,
+      "sha256": "9e5d70dbfaa444149b4e948d7504fc3f354c13b3be0f644622cca3a0ae2e77a5",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/corePriority-B9P5skz3.js",
+      "http": 200,
+      "sha256": "a2e09c550876022df3bb5bb932f3bee9373dc1ecb76654d4821acb324e6ef052",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/facilityTime-DLFyR9ze.js",
+      "http": 200,
+      "sha256": "476fea5fe332e3818d8abc778469e3b0876ceaa5d377f3e67c56b314c12b0f07",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/farmacoDocumento-DzyiFi7j.js",
+      "http": 200,
+      "sha256": "a85d947ee84ac02d62eb0e4a5eedc79824b7ddb3e76699f5181bbffc1bb3182c",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/farmacoRiferimento-Btgh3V6D.js",
+      "http": 200,
+      "sha256": "762beebdd4ff6846c3f7f23efa624ecb184cc0a62a3624a7e07e343dfa23d008",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/index-D-kY0PQD.js",
+      "http": 200,
+      "sha256": "e3b2e65d67b435fcc694fa2ae02ccca0e0da85875f332fa822511b5bcd64ffdd",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/index-DC8NTiJ6.css",
+      "http": 200,
+      "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/intakeTherapies-TaeP80as.js",
+      "http": 200,
+      "sha256": "e2a16f6dbe35a8043b07770bbaf92778e1a92aa476b6be5f1b0eb6c0bc841aea",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/intakeTherapies-iYDttph8.css",
+      "http": 200,
+      "sha256": "4db1e564d080db1499febd6f9f0e53bc601dc7cabf49dc94a051ffbbf0a7ce27",
+      "mime": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/assets/operatorRolePresentation-14aEdAFr.js",
+      "http": 200,
+      "sha256": "6f80903aecc5769580cd7968cf93e1cc601c99516877372e24dc67ecbdcc894c",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/operatorSession-CocZDchv.js",
+      "http": 200,
+      "sha256": "5c055dc77e7dbc7544956d254140116ad58b1173abb01a6a4f2f4ebb6b5f15e2",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/patientDemographics-OKkN11Bn.js",
+      "http": 200,
+      "sha256": "5b8b91cc5a0f08dbd37c638a1cb671300f1c7630918d8a544ecf36b8b27c6a4a",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/patientListView-LVltQk8P.js",
+      "http": 200,
+      "sha256": "276233b0206297931d62b8691a74fe113ec1c399a749afa9c72127ee08528ab4",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/patientTabSnapshots-Bm7XaQYi.js",
+      "http": 200,
+      "sha256": "5d9ad9928554b3565f9aa4fb8133fd45476bbcdeb4854371640b7e4a42dbecc9",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/patientTherapyCalendar-oJO4T2nO.js",
+      "http": 200,
+      "sha256": "48d5947d6124aa3fc621762dfeaa0f573502ea29377dcf19137f0404c28384b7",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/pdf-Bk8QBUzC.js",
+      "http": 200,
+      "sha256": "0d0e81910b7ff20f42d09fceb481555f0cb0b8942018738d3d02cfd98498ca73",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/pdf.worker.min-0cTqlNvF.js",
+      "http": 200,
+      "sha256": "e8633803a22192ad68fd9f70e49865e393fa1c1c5ca55c931924e377d5c8bc16",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/pdf.worker.min-CHFwMXne.mjs",
+      "http": 200,
+      "sha256": "0613f41490dd6aaceed7a93fbbd38c85e6d6aa60474b6588c6e7709cfbe18cb3",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/pdfPreviewResources-BxsAF4WT.js",
+      "http": 200,
+      "sha256": "a08a14f34aff74605114bd4da4c3cabc47cbd28d73eee52e3fdfd594e999fd76",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/jbig2.wasm",
+      "http": 200,
+      "sha256": "e6bee67724a7b5436fe8162638e3708cfc8d52b6342db69a49715e30ff27cfdc",
+      "mime": "application/wasm"
+    },
+    {
+      "path": "/assets/pdfjs-6.2.108/jbig2_nowasm_fallback.js",
+      "http": 200,
+      "sha256": "04c795a6657a4553a64b781ea3e85256203d913c3b71b72b85fa3ce00622f458",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/presaInCarico-KSO7RO3U.js",
+      "http": 200,
+      "sha256": "e8a104039d5dbe2dff5652efd42917b62e5b56eac32f64eadd6d17f539389afe",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/react-B3nAlWH0.js",
+      "http": 200,
+      "sha256": "ee9838a4cbba0a54feea8f2d38ec1d8d3c7592bc8b5cc325e0b53ff06c22755b",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/rosterOrder-Cj3l_KEH.js",
+      "http": 200,
+      "sha256": "5b147607fa995015155a7c66c872a3cdd6de737ad0ab7cfdbf03e130b8a130a8",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/shared-8__omYu5.js",
+      "http": 200,
+      "sha256": "02515dc053e608b9407ebc14e61b0f018a040834f58ac75baa07801a4b53e628",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/submissionKey-mAJteX_U.js",
+      "http": 200,
+      "sha256": "35c3ad357762a48e14b00c99a0ec5c831197e7963bd421aea63238d6c47aa59b",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/therapyDose-hyD67tme.js",
+      "http": 200,
+      "sha256": "27aefeec3bba91b4e45f2fce4e2d5dbf8458ffb7a9e1c4db7e3547edae1e3b64",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/therapyPages-BapzjdM4.js",
+      "http": 200,
+      "sha256": "0f4e5e66504a8c80a3477b5cd444e818ce6535482d9311d5cee35233222dd141",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/tinettiTypes-DMl49mUB.js",
+      "http": 200,
+      "sha256": "9f60c5f096533e5fa8f8dd7f0be11fdce534d86e6485a2dde1a6646380998463",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/useAnomalieReparto-BRh0-bIJ.js",
+      "http": 200,
+      "sha256": "5df9ce25165afd394fb849aacff542a8f58ac1abc7d147fa26c5472e29701a9a",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/useLegacyCatalogView-BSotu5qL.js",
+      "http": 200,
+      "sha256": "3acf757e318dbc5c26e78f066b61dfc0ae6dcc6e9ed33cfa3b4f439da95afa1d",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/useMedicationSearch-BzRtO-XJ.js",
+      "http": 200,
+      "sha256": "7bc6e683281145ddc8a98b713e98907994b42339549e501f108cbdb545e8a638",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/usePatientDocuments-CszzV0ph.js",
+      "http": 200,
+      "sha256": "6a05a85aadc3e79b74a60b86fcac8c047fae34a23e97ff02ee47ef7b5e23a40d",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/useRecencyClock-X1VI5jiO.js",
+      "http": 200,
+      "sha256": "d1c8f26f94df39d0a067edcdebe3d5eb8f374322cd9a4a10697f7fc7d98e6bcc",
+      "mime": "application/javascript; charset=utf-8"
+    },
+    {
+      "path": "/assets/voiceStartGate-DrUg1CiW.js",
+      "http": 200,
+      "sha256": "28e86a9203eea816181374c6173e8e853d954412b0dde13bdd09079a2916849d",
+      "mime": "application/javascript; charset=utf-8"
+    }
+  ],
+  "productionPatientTestMutations": 0,
+  "realPersistence": false,
+  "realAuthenticationTested": false,
+  "mobileHardware": false,
+  "routeGuard": "All authentication/roster/import API intercepted before wire; only production static GET reached network; synthetic session/reorder only",
+  "at": "2026-10-10T15:54:23.588Z"
+}

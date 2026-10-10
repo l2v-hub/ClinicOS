@@ -1,0 +1,33 @@
+(node:25792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ single-flight creation, close/reopen and a new module instance use only opaque IDs/keys (33.7828ms)
+✔ lost creation response reuses its key across reload; failed resume never creates a job (3.7115ms)
+✔ operator scope and storage failure never reuse another actor session (2.5649ms)
+✔ 30 pages in three letters move without changing source identity and with contiguous order (4.1651ms)
+✔ manifest retry preserves request identity and stale revision response supplies authoritative job (114.699ms)
+✔ stale session retains its ID until explicit new import; terminal, denied and network failures are distinct (11.98ms)
+(node:25792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ uncertain upload retry uses identical metadata, bytes and revision; replay duplicate is accepted (285.4708ms)
+✔ atomic retake at capacity calls replacement only and preserves old page on rejection (7.6163ms)
+✔ revision conflict updates manifest but upload retries only after explicit run with a fresh key (9.4754ms)
+✔ double submit shares the running queue and one pending camera File identity (4.3084ms)
+✔ first capture sends the revision returned by group creation before any render effect (5.1529ms)
+(node:40176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ PDF decoders resolve beside version-matched worker on app origin, also under a base path (5.2871ms)
+✔ Vite emits exact installed decoder bytes and licenses with names expected by PDF.js (609.0848ms)
+(node:37084) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7043.5607

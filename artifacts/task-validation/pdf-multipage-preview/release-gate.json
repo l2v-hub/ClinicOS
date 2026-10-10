@@ -1,0 +1,36 @@
+{
+  "applicationCommit": "30f0b14d63ae69acec66cd82dcaee1d0abbb1cf6",
+  "base": "3f911cbd281d7c93c4796e97d5940258ceb331f0",
+  "decision": "AUTHORIZED SCOPED PROMOTION",
+  "authority": "Standing direct human commit/push/deployment/GitHub evidence authorization; independent QA, root actual-SPA/CSP replay and exact baseline reproduction",
+  "independentManifestSha256": "a9c2e7ebbe6f1de363fa86e4e924f50a0b303080708960c1070ff60bb9da34fb",
+  "immutableQaArtifacts": 261,
+  "rootBrowserResponsiveScenarios": 4,
+  "fullRasterComparisonsEach": 24,
+  "rootFocused": 18,
+  "independentFocused": 13,
+  "frontendRegression": {
+    "tests": 1299,
+    "pass": 1287,
+    "exactBaselineFailures": 12,
+    "newFailures": 0,
+    "globallyGreen": false
+  },
+  "scope": [
+    "artifacts/task-validation/pdf-multipage-preview/task-contract.md",
+    "frontend/config/pdfPreviewAssets.ts",
+    "frontend/src/components/shared/PdfCanvasPreview.tsx",
+    "frontend/src/components/shared/import/importSourceCache.ts",
+    "frontend/src/lib/__tests__/pdfPreviewResources.test.ts",
+    "frontend/src/lib/pdfPreviewResources.ts",
+    "frontend/vite.config.ts"
+  ],
+  "productionPatientTestMutations": 0,
+  "automationResumed": false,
+  "pending": [
+    "exact production deployment",
+    "actual deployed SPA pixels and resource bytes",
+    "named CI delta and pinned synthetic publication"
+  ],
+  "at": "2026-10-10T15:48:32.786Z"
+}

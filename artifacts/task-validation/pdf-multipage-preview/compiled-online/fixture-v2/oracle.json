@@ -1,0 +1,20 @@
+[
+  {
+    "page": 2,
+    "tiffPhotometric": 1,
+    "compression": 4,
+    "rasterSha256": "dd7f54a3a13154cf13abadfeeff907c0a3c7683de49c1a642f3ecaf65ad5c512"
+  },
+  {
+    "page": 3,
+    "tiffPhotometric": 1,
+    "compression": 4,
+    "rasterSha256": "c13b31bc4efcd11b1f7ca5034291f78c46f600fd3bc849f05437f6ddbac9dfdd"
+  },
+  {
+    "page": 4,
+    "tiffPhotometric": 1,
+    "compression": 4,
+    "rasterSha256": "5c49ecc77a8fde5a8c07bac965c50bb6403f02a8711f6f946259837d550da258"
+  }
+]

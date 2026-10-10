@@ -1,0 +1,12 @@
+{
+  "versions": {
+    "pdfjs-dist": "6.2.108",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "vite": "8.2.2",
+    "typescript": "6.0.3",
+    "tsx": "4.23.1",
+    "playwright": "1.61.1"
+  },
+  "lockfileSha256": "a7c71d1fb154f0d72ec2de6e207780cb352960848c8c47c5ef1bc300f2cf6e7f"
+}
