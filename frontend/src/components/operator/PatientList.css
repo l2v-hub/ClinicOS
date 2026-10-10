@@ -238,6 +238,9 @@
 }
 
 /* apri/elimina: ds-icon-btn canonici (design-system.css) */
+td.patient-roster__actions > button + button {
+  margin-inline-start: 8px;
+}
 
 .patient-roster__empty {
   height: 88px;

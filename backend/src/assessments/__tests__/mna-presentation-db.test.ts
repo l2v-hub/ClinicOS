@@ -88,61 +88,65 @@ test('real archived PO15 MNA v1 ready retry invokes no renderer and preserves ev
     'ClinicOS mna-a4-v1',
   );
   const legacyActor = { id: assessment.authorOperatorId, role: 'operatore' };
-  await prisma.user.create({
-    data: {
-      email: `po16-${randomUUID()}@example.test`,
-      passwordHash: 'synthetic-disabled',
-      fullName: assessment.authorName,
-      operator: { create: { id: legacyActor.id } },
-    },
-  });
-  await prisma.patient.create({
-    data: {
-      id: assessment.patientId,
-      medicalRecordNumber: assessment.patientId,
-      firstName: assessment.finalSnapshot.patient.firstName,
-      lastName: assessment.finalSnapshot.patient.lastName,
-      registeredById: legacyActor.id,
-    },
-  });
   const restored = { ...assessment };
   for (const key of ['assessedAt', 'createdAt', 'updatedAt', 'finalizedAt', 'pdfUpdatedAt'])
-    restored[key] = new Date(assessment[key]);
-  await assessmentTransaction(async (tx) => {
-    await tx.patientAssessment.create({
+    restored[key] = new Date(restored[key]);
+  // Fixed archived IDs survive local test runs because final documents are immutable.
+  // Reuse a restored fixture and verify it against the original dump below.
+  if (!(await prisma.patientAssessment.findUnique({ where: { id: assessment.id } }))) {
+    await prisma.user.create({
       data: {
-        ...restored,
-        status: 'draft',
-        version: 1,
-        finalizedAt: null,
-        finalSnapshot: Prisma.DbNull,
-        snapshotSha256: null,
-        finalizeRequestId: null,
-        finalizePayloadHash: null,
-        pdfStatus: null,
-        pdfAttemptCount: 0,
-        pdfUpdatedAt: null,
-      } as Prisma.PatientAssessmentUncheckedCreateInput,
+        email: `po16-${randomUUID()}@example.test`,
+        passwordHash: 'synthetic-disabled',
+        fullName: assessment.authorName,
+        operator: { create: { id: legacyActor.id } },
+      },
     });
-    await tx.patientAssessment.update({
-      where: { id: assessment.id },
+    await prisma.patient.create({
       data: {
-        ...restored,
-        pdfStatus: 'pending',
-      } as Prisma.PatientAssessmentUncheckedUpdateInput,
+        id: assessment.patientId,
+        medicalRecordNumber: assessment.patientId,
+        firstName: assessment.finalSnapshot.patient.firstName,
+        lastName: assessment.finalSnapshot.patient.lastName,
+        registeredById: legacyActor.id,
+      },
     });
-    await tx.patientDocument.create({
-      data: {
-        ...document,
-        createdAt: new Date(document.createdAt),
-        dataBase64: bytes.toString('base64'),
-      } as Prisma.PatientDocumentUncheckedCreateInput,
+    await assessmentTransaction(async (tx) => {
+      await tx.patientAssessment.create({
+        data: {
+          ...restored,
+          status: 'draft',
+          version: 1,
+          finalizedAt: null,
+          finalSnapshot: Prisma.DbNull,
+          snapshotSha256: null,
+          finalizeRequestId: null,
+          finalizePayloadHash: null,
+          pdfStatus: null,
+          pdfAttemptCount: 0,
+          pdfUpdatedAt: null,
+        } as Prisma.PatientAssessmentUncheckedCreateInput,
+      });
+      await tx.patientAssessment.update({
+        where: { id: assessment.id },
+        data: {
+          ...restored,
+          pdfStatus: 'pending',
+        } as Prisma.PatientAssessmentUncheckedUpdateInput,
+      });
+      await tx.patientDocument.create({
+        data: {
+          ...document,
+          createdAt: new Date(document.createdAt),
+          dataBase64: bytes.toString('base64'),
+        } as Prisma.PatientDocumentUncheckedCreateInput,
+      });
+      await tx.patientAssessment.update({
+        where: { id: assessment.id },
+        data: { pdfStatus: 'ready' },
+      });
     });
-    await tx.patientAssessment.update({
-      where: { id: assessment.id },
-      data: { pdfStatus: 'ready' },
-    });
-  });
+  }
   const read = () =>
     assessmentTransaction(async (tx) => ({
       assessment: await tx.patientAssessment.findUniqueOrThrow({ where: { id: assessment.id } }),

@@ -98,6 +98,41 @@ export interface AdessoInput {
   anomalie: AnomaliaPazienteRiga[];
 }
 
+export type AdessoSection = 'scadute' | 'prossime' | 'urgenti' | 'verifiche';
+export interface AdessoGroup {
+  key: string;
+  section: AdessoSection;
+  items: AdessoItem[];
+}
+
+export function adessoSection(item: AdessoItem): AdessoSection {
+  // Every handover in this queue is already an explicit active urgency. Keep it
+  // visible independently of the therapy backlog, even when its deadline passed.
+  if (item.kind.startsWith('consegna-')) return 'urgenti';
+  if (item.inRitardo) return 'scadute';
+  if (item.kind.endsWith('-imminente')) return 'prossime';
+  return 'verifiche';
+}
+
+/** Raggruppa solo dosi dello stesso paziente, giorno, fascia e stato operativo.
+ * Mantiene l'ordine ricevuto e ogni singola azione; le consegne restano autonome. */
+export function groupAdessoQueue(items: readonly AdessoItem[]): AdessoGroup[] {
+  const groups = new Map<string, AdessoGroup>();
+  for (const item of items) {
+    const section = adessoSection(item);
+    const therapy = item.landing.therapy;
+    const band = therapy?.fascia || item.ora;
+    const key =
+      item.kind.startsWith('terapia-') && item.patientId && therapy?.date && band
+        ? JSON.stringify([item.patientId, therapy.date, band, item.kind])
+        : JSON.stringify(['item', item.key]);
+    const group = groups.get(key);
+    if (group) group.items.push(item);
+    else groups.set(key, { key, section, items: [item] });
+  }
+  return [...groups.values()];
+}
+
 const ISO_DAY = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 /** Giorni civili fra `day` e `today` (entrambi YYYY-MM-DD); null se la data non è valida. */
@@ -195,10 +230,11 @@ function consegnaItem(c: Consegna, cal: { oggi: string; minuto: number }): Adess
 }
 
 const luogoTerapia = (row: ScadenzaTerapia) =>
-  row.location !== undefined ? patientLocationLabel(row.location) :
-  [row.camera ? `Camera ${row.camera}` : '', row.letto ? `Letto ${row.letto}` : '']
-    .filter(Boolean)
-    .join(' · ') || null;
+  row.location !== undefined
+    ? patientLocationLabel(row.location)
+    : [row.camera ? `Camera ${row.camera}` : '', row.letto ? `Letto ${row.letto}` : '']
+        .filter(Boolean)
+        .join(' · ') || null;
 
 function terapiaItem(row: ScadenzaTerapia, kind: AdessoKind): AdessoItem {
   const minuti = row.minuti ?? 0;

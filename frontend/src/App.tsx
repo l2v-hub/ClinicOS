@@ -16,6 +16,7 @@ import './App.css';
 import './design-system.css';
 import { API_URL } from './config';
 import { useRosterOrder } from './lib/useRosterOrder';
+import { useBedsideTouchLayout } from './lib/useBedsideTouchLayout';
 import {
   createConsegna,
   type ConsegnaCreateRequest,
@@ -457,6 +458,7 @@ export default function App() {
   const [loginPending, setLoginPending] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
+  useBedsideTouchLayout(navKey, Boolean(utente));
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [aiOpen, setAiOpen] = useState(false);
   const [assistantModeOpen, setAssistantModeOpen] = useState(false);

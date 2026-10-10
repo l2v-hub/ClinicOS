@@ -8,6 +8,7 @@
 // (npm's `-w` already does this), e.g. `node ../scripts/run-node-tests.mjs`.
 import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { resolve } from 'node:path';
 
 const ROOT = 'src';
 
@@ -38,32 +39,44 @@ const stubCss = new URL('./stub-css-loader.mjs', import.meta.url).href;
 console.log(`run-node-tests: running ${files.length} test file(s) via node --import tsx --test`);
 const childEnv = { ...process.env };
 const isBackendWorkspace = process.cwd().split(/[\\/]/).at(-1) === 'backend';
+if (!isBackendWorkspace && !Object.hasOwn(childEnv, 'TSX_TSCONFIG_PATH')) {
+  // tsx does not follow TypeScript project references when choosing the JSX transform.
+  childEnv.TSX_TSCONFIG_PATH = resolve(process.cwd(), 'tsconfig.app.json');
+}
 if (isBackendWorkspace) {
   // Synthetic identities must be an explicit test-harness decision. Application
   // code stays fail-closed when AUTH_MODE is absent or misspelled.
   if (!Object.hasOwn(childEnv, 'AUTH_MODE')) childEnv.AUTH_MODE = 'demo';
   if (!Object.hasOwn(childEnv, 'NODE_ENV')) childEnv.NODE_ENV = 'test';
 }
-// Suites that page through the roster assert on the GLOBAL roster epoch (bumped by any Patient /
-// PatientTherapy / room write). Run concurrently with other DB-writing files they fail with
-// «Elenco aggiornato» or an unexpected epoch: they run in a second, isolated pass (one at a time).
-const EPOCH_SENSITIVE = [
+// Global roster epochs and unread totals change when other suites write clinical data.
+// Run their assertions after concurrent DB writers, one file at a time.
+const DATABASE_ISOLATED = [
+  'src/ai/__tests__/intake-tinetti-db.test.ts',
+  'src/assessments/__tests__/catalog-db.test.ts',
   'src/roster/__tests__/order-key-db.test.ts',
   'src/roster/__tests__/roster-pagination-db.test.ts',
   'src/roster/__tests__/preferences-db.test.ts',
   'src/patients/__tests__/alphabetical-pages-db.test.ts',
   'src/patients/__tests__/room-filter-db.test.ts',
+  'src/patients/__tests__/diary-reading-db.test.ts',
+  'src/patients/__tests__/diary-unread-queue-db.test.ts',
 ];
-const isolated = files.filter((f) => EPOCH_SENSITIVE.includes(f));
-const concurrent = files.filter((f) => !EPOCH_SENSITIVE.includes(f));
+const isolated = files.filter((f) => DATABASE_ISOLATED.includes(f));
+const concurrent = files.filter((f) => !DATABASE_ISOLATED.includes(f));
 const run = (list, extra = []) =>
   list.length === 0
     ? 0
-    : (spawnSync(process.execPath, ['--import', 'tsx', '--import', stubCss, '--test', ...extra, ...list], {
-        stdio: 'inherit',
-        env: childEnv,
-      }).status ?? 1);
+    : (spawnSync(
+        process.execPath,
+        ['--import', 'tsx', '--import', stubCss, '--test', ...extra, ...list],
+        {
+          stdio: 'inherit',
+          env: childEnv,
+        },
+      ).status ?? 1);
 const first = run(concurrent);
-if (isolated.length) console.log(`run-node-tests: isolated pass for ${isolated.length} roster-epoch suite(s)`);
+if (isolated.length)
+  console.log(`run-node-tests: isolated pass for ${isolated.length} global-database suite(s)`);
 const second = run(isolated, ['--test-concurrency=1']);
 process.exit(first || second);

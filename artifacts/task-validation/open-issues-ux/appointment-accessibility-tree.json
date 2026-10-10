@@ -1,0 +1,3254 @@
+[
+  {
+    "role": "RootWebArea",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "main",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "table",
+    "name": "Calendario terapie per orario",
+    "ignored": false
+  },
+  {
+    "role": "region",
+    "name": "Adesso",
+    "ignored": false
+  },
+  {
+    "role": "region",
+    "name": "Prossimi appuntamenti",
+    "ignored": false
+  },
+  {
+    "role": "region",
+    "name": "Ultime consegne",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Apri appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "dialog",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "rowgroup",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "row",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "row",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "row",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "row",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "row",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "heading",
+    "name": "Adesso",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "22",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " in ritardo",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "1",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "consegna urgente",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Chiudi Adesso",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "heading",
+    "name": "Prossimi appuntamenti",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Agenda",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Chiudi Prossimi appuntamenti",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "heading",
+    "name": "Ultime consegne",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Tutte",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Chiudi Ultime consegne",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Apri appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "heading",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Chiudi",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Crea nuovo paziente",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "Date",
+    "name": "DATA",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InputTime",
+    "name": "ORA",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "DURATA",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "TIPO INTERVENTO",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "PRIORITÀ",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "OPERATORE",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "textbox",
+    "name": "CAMERA (OPZ.)",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "combobox",
+    "name": "STATO",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "textbox",
+    "name": "NOTE CLINICHE",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Sintetico",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Operatore",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " ·",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "button",
+    "name": "Annulla",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Salva appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "row",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "rowheader",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "2026-10-10 ore 08:00: Ritardo / non registrata. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "rowheader",
+    "name": "09:00",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "2026-10-10 ore 09:00: Programmata. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "rowheader",
+    "name": "10:00",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "2026-10-10 ore 10:00: Somministrate. 0 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "rowheader",
+    "name": "11:00",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "2026-10-10 ore 11:00: Non somministrate presenti. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "rowheader",
+    "name": "12:00",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "2026-10-10 ore 12:00: Stato da verificare. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "cell",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Adesso",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "22",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " in ritardo",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "consegna urgente",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "▴",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Ordine operativo: scadute, in scadenza, consegne urgenti, verifiche. Il ritardo indica una scadenza superata, non una priorità clinica.",
+    "ignored": false
+  },
+  {
+    "role": "region",
+    "name": "Scadute · 22 attività",
+    "ignored": false
+  },
+  {
+    "role": "region",
+    "name": "Consegne urgenti · 1 attività",
+    "ignored": false
+  },
+  {
+    "role": "region",
+    "name": "Da verificare · 8 attività",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "button",
+    "name": "Mostra altri 7 gruppi",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Terapia",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Consegne",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Aggiornamento automatico ogni minuto · Orari della struttura (Roma)",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Prossimi appuntamenti",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Agenda",
+    "ignored": false
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "▴",
+    "ignored": false
+  },
+  {
+    "role": "status",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Ultime consegne",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Tutte",
+    "ignored": false
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "▴",
+    "ignored": false
+  },
+  {
+    "role": "paragraph",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "status",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "LabelText",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "paragraph",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Crea nuovo paziente",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "DATA",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Show date picker Show date picker",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "ORA",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Show time picker Show time picker",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "DURATA",
+    "ignored": false
+  },
+  {
+    "role": "MenuListPopup",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "TIPO INTERVENTO",
+    "ignored": false
+  },
+  {
+    "role": "MenuListPopup",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "PRIORITÀ",
+    "ignored": false
+  },
+  {
+    "role": "MenuListPopup",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "OPERATORE",
+    "ignored": false
+  },
+  {
+    "role": "MenuListPopup",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "CAMERA (OPZ.)",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "STATO",
+    "ignored": false
+  },
+  {
+    "role": "MenuListPopup",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "NOTE CLINICHE",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Sintetico",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Operatore",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " ·",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Annulla",
+    "ignored": false
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Salva appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "columnheader",
+    "name": "Ora",
+    "ignored": false
+  },
+  {
+    "role": "columnheader",
+    "name": "sab 10 ott Oggi",
+    "ignored": false
+  },
+  {
+    "role": "columnheader",
+    "name": "dom 11 ott",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "2026-10-10 ore 08:00: Ritardo / non registrata. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "09:00",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "2026-10-10 ore 09:00: Programmata. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "10:00",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "2026-10-10 ore 10:00: Somministrate. 0 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "11:00",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "2026-10-10 ore 11:00: Non somministrate presenti. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "12:00",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "2026-10-10 ore 12:00: Stato da verificare. 2 dosi da erogare. 5 dosi, 5 dosi caricate, 2 somministrate · 1 non somministrata · 2 da erogare. Apri dettagli",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "Nessuna dose caricata",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Adesso",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "▴",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Ordine operativo: scadute, in scadenza, consegne urgenti, verifiche. Il ritardo indica una scadenza superata, non una priorità clinica.",
+    "ignored": false
+  },
+  {
+    "role": "heading",
+    "name": "Scadute · 22 attività",
+    "ignored": false
+  },
+  {
+    "role": "list",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "heading",
+    "name": "Consegne urgenti · 1 attività",
+    "ignored": false
+  },
+  {
+    "role": "list",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "heading",
+    "name": "Da verificare · 8 attività",
+    "ignored": false
+  },
+  {
+    "role": "list",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Mostra altri 7 gruppi",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Terapia",
+    "ignored": false
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Consegne",
+    "ignored": false
+  },
+  {
+    "role": "image",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Aggiornamento automatico ogni minuto · Orari della struttura (Roma)",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Prossimi appuntamenti",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Agenda",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "▴",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Nessun altro appuntamento oggi.",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Ultime consegne",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Tutte",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "▴",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Selezione delle ultime consegne · prima le urgenze attive",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Nessuna consegna da mostrare.",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Nuovo Appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "PAZIENTE",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "combobox",
+    "name": "PAZIENTE",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Seleziona un paziente per salvare l’appuntamento. Cerca per nome, cognome o codice fiscale.",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Crea nuovo paziente",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "DATA",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "ORA",
+    "ignored": false
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "DURATA",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "30 min",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "1 ora",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "1h 30min",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "2 ore",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "TIPO INTERVENTO",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Visita",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Controllo",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Procedura",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Urgenza",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Consulto",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Follow-up",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Altro",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "PRIORITÀ",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Normale",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Alta",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Urgente",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "OPERATORE",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Sintetico Operatore",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "CAMERA (OPZ.)",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "STATO",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Programmato",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "In corso",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Completato",
+    "ignored": false
+  },
+  {
+    "role": "option",
+    "name": "Annullato",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "NOTE CLINICHE",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Annulla",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Salva appuntamento",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Ora",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "sab 10 ott",
+    "ignored": false
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "dom 11 ott",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Ritardo / non registrata",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "09:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Programmata",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "10:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Somministrate",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "11:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Non somministrate presenti",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "12:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Stato da verificare",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Scadute",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "22",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " attività",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Consegne urgenti",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "1",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " attività",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Da verificare",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "8",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " attività",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "listitem",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Mostra altri 7 gruppi",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Consegne",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Nessun altro appuntamento oggi.",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Selezione delle ultime consegne · prima le urgenze attive",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Nessuna consegna da mostrare.",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "PAZIENTE",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "generic",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Seleziona un paziente per salvare l’appuntamento. Cerca per nome, cognome o codice fiscale.",
+    "ignored": false
+  },
+  {
+    "role": "spinbutton",
+    "name": "Month Month",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "/",
+    "ignored": false
+  },
+  {
+    "role": "spinbutton",
+    "name": "Day Day",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "/",
+    "ignored": false
+  },
+  {
+    "role": "spinbutton",
+    "name": "Year Year",
+    "ignored": false
+  },
+  {
+    "role": "spinbutton",
+    "name": "Hours Hours",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": ":",
+    "ignored": false
+  },
+  {
+    "role": "spinbutton",
+    "name": "Minutes Minutes",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "spinbutton",
+    "name": "AM/PM AM/PM",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Ora",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "sab 10 ott",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Oggi",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "dom 11 ott",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Ritardo / non registrata",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Programmata",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "0",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Somministrate",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Non somministrate presenti",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Stato da verificare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2 somministrate · 1 non somministrata · 2 da erogare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "·",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Scadute",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "22",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " attività",
+    "ignored": false
+  },
+  {
+    "role": "group",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco single-0 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-P0: Farmaco single-0 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco single-1 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-P1: Farmaco single-1 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco single-2 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-P2: Farmaco single-2 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco single-3 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-P3: Farmaco single-3 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco single-4 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-P4: Farmaco single-4 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Consegne urgenti",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " attività",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Nuova consegna urgente",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-UX-P1: Nuova consegna urgente, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Da verificare",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "8",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " attività",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco check-0 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-UX-P1: Farmaco check-0 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco check-1 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-UX-P1: Farmaco check-1 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco check-2 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-UX-P1: Farmaco check-2 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco check-3 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-UX-P1: Farmaco check-3 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco check-4 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-UX-P1: Farmaco check-4 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "Farmaco check-5 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "button",
+    "name": "Apri QA-UX-P1: Farmaco check-5 · 1 cp · orale, In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "10",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "/",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "10",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "/",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "2026",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "08",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": ":",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "00",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "AM",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Oggi",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "0",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "DisclosureTriangle",
+    "name": "QA-UX-P1 · mattina · 2026-10-10 · 12 dosiIn ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-P0",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco single-0 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco single-1 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-P2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco single-2 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-P3",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco single-3 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-P4",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco single-4 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Nuova consegna urgente",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Leggi",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco check-0 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco check-1 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco check-2 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco check-3 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco check-4 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08:00",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Camera 1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Farmaco check-5 · 1 cp · orale",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "10",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "10",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2026",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "08",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "00",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "AM",
+    "ignored": false
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "none",
+    "ignored": true
+  },
+  {
+    "role": "strong",
+    "name": "",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " ·",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "mattina",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "2026-10-10",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "12",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": " dosi",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-P0",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-P2",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-P3",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-P4",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Apri terapia",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Leggi",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "Verifica",
+    "ignored": false
+  },
+  {
+    "role": "StaticText",
+    "name": "QA-UX-P1",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " ·",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "mattina",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "2026-10-10",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " · ",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "12",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": " dosi",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "In ritardo di 30 min",
+    "ignored": false
+  },
+  {
+    "role": "InlineTextBox",
+    "name": "QA-UX-P1",
+    "ignored": false
+  }
+]
