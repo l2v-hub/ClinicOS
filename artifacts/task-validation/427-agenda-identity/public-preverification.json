@@ -1,0 +1,38 @@
+{
+  "applicationCommit": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "proofCommit": "790fdaa96fcf739dbf638407270e50d023faceea",
+  "decision": "PINNED PUBLIC PROOF PREVERIFIED",
+  "canonicalHashesVerified": 356,
+  "images": [
+    {
+      "label": "Agenda giornaliera: identità neutre, quattro stati espliciti",
+      "path": "compiled-online/browser02/screenshots/desktop-giorno-mixed.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/790fdaa96fcf739dbf638407270e50d023faceea/artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-giorno-mixed.png",
+      "http": 200,
+      "sha256": "86692e16720694d612f83d06a8af959350f88a07b56a1f6482156d99c3012222"
+    },
+    {
+      "label": "Agenda settimanale: operatori e stati distinguibili in scala di grigi",
+      "path": "compiled-online/browser02/screenshots/desktop-settimana-grayscale.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/790fdaa96fcf739dbf638407270e50d023faceea/artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/desktop-settimana-grayscale.png",
+      "http": 200,
+      "sha256": "8a17b6e0006f05415b50e611ab9275b75a46a72a4efa77843e58d7533acf4b4a"
+    },
+    {
+      "label": "Giornata vuota su telefono: filtri e legenda espliciti",
+      "path": "compiled-online/browser02/screenshots/mobile-giorno-empty.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/790fdaa96fcf739dbf638407270e50d023faceea/artifacts/task-validation/427-agenda-identity/compiled-online/browser02/screenshots/mobile-giorno-empty.png",
+      "http": 200,
+      "sha256": "eee109b592a52447481b82262d57f10ad8d4dc1a545a74364a5d4e23a27253fc"
+    },
+    {
+      "label": "Vista mese su telefono: testi conservati, limite preesistente di impaginazione stretta",
+      "path": "compiled-online/values01/screenshots/mobile-mese-values-bounds.png",
+      "url": "https://raw.githubusercontent.com/l2v-hub/ClinicOS/790fdaa96fcf739dbf638407270e50d023faceea/artifacts/task-validation/427-agenda-identity/compiled-online/values01/screenshots/mobile-mese-values-bounds.png",
+      "http": 200,
+      "sha256": "c581764e472d5098908728f475bf48c93d62b16ffb4bf5dc0bfa4b197710f735"
+    }
+  ],
+  "at": "2026-10-10T00:45:30.978Z",
+  "productionPatientTestMutations": 0
+}
