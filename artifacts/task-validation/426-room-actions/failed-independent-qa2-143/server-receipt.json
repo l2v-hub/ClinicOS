@@ -1,0 +1,7 @@
+{
+    "port":  7519,
+    "pid":  15744,
+    "purpose":  "Actual repository Vite React compiler; API transport intercepted before wire",
+    "head":  "1436602e81d0c03625cfa73ce24974099e919612",
+    "commandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/426-room-actions/independent-qa2/recipes/qa-server.mjs "
+}

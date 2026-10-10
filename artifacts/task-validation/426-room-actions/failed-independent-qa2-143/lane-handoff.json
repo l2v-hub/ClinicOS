@@ -1,0 +1,8 @@
+{
+    "port":  7519,
+    "browserLane":  "RELEASED",
+    "pid":  15744,
+    "verifiedCommand":  "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/426-room-actions/independent-qa2/recipes/qa-server.mjs ",
+    "allRecipeBrowsersClosed":  true,
+    "stopped":  true
+}

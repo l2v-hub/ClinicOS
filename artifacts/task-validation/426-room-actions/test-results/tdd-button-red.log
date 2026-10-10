@@ -1,0 +1,89 @@
+(node:10892) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ room actions have explicit resource-bound accessible names and tooltip values (1.0722ms)
+✔ bed opening captures both original resource identifiers rather than editable form values (0.173ms)
+✔ room rename retains original heading identity in a separate captured state (0.1148ms)
+✔ destructive action is distinct and remains behind the existing resource-bound confirmation (0.2646ms)
+✔ custom bed labels stay unambiguous across separator/quote collisions (0.859ms)
+✔ room editor rendering preserves original target and escapes hostile identity (7.9971ms)
+✔ all newly touched room presentation modules meet the500line budget (1.181ms)
+✔ bed resource headings wrap bounded custom labels within the dialog (0.5655ms)
+✔ long camera identities wrap in the inline editor and deletion confirmation without shared control overrides (0.637ms)
+✖ bounded destructive text defeats canonical nowrap specificity without replacing the shared skin (2.2819ms)
+(node:10892) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 473.84
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\roomActionIdentity.test.ts:1:4634
+✖ bounded destructive text defeats canonical nowrap specificity without replacing the shared skin (2.2819ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /\.rooms-view \.confirm-dialog__actions \.btn-danger:not\(#ds\)\s*\{[^}]*height:\s*auto;[^}]*white-space:\s*normal;/. Input:
+  
+  '.rooms-view .room-card__actions {\n' +
+    '  display: flex;\n' +
+    '  align-items: center;\n' +
+    '  flex-shrink: 0;\n' +
+    '  gap: 12px;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view .room-card__header {\n' +
+    '  flex-wrap: wrap;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view .room-card__actions .icon-btn--danger {\n' +
+    '  margin-inline-start: 4px;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view .room-bed-edit__title {\n' +
+    '  flex: 1 1 0;\n' +
+    '  min-width: 0;\n' +
+    '  overflow-wrap: anywhere;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view #room-edit-panel-title,\n' +
+    '.rooms-view .confirm-dialog__title {\n' +
+    '  flex: 1 1 0;\n' +
+    '  min-width: 0;\n' +
+    '  overflow-wrap: anywhere;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view .op-form-panel__header .icon-btn {\n' +
+    '  flex-shrink: 0;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view .confirm-dialog__message {\n' +
+    '  overflow-wrap: anywhere;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view .confirm-dialog__actions {\n' +
+    '  flex-wrap: wrap;\n' +
+    '}\n' +
+    '\n' +
+    '.rooms-view .confirm-dialog__actions .btn-danger {\n' +
+    '  max-width: 100%;\n' +
+    '  white-space: normal;\n' +
+    '  overflow-wrap: anywhere;\n' +
+    '}\n'
+  
+      at TestContext.<anonymous> (C:\w-426\frontend\src\lib\__tests__\roomActionIdentity.test.ts:71:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '.rooms-view .room-card__actions {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  gap: 12px;\n}\n\n.rooms-view .room-card__header {\n  flex-wrap: wrap;\n}\n\n.rooms-view .room-card__actions .icon-btn--danger {\n  margin-inline-start: 4px;\n}\n\n.rooms-view .room-bed-edit__title {\n  flex: 1 1 0;\n  min-width: 0;\n  overflow-wrap: anywhere;\n}\n\n.rooms-view #room-edit-panel-title,\n.rooms-view .confirm-dialog__title {\n  flex: 1 1 0;\n  min-width: 0;\n  overflow-wrap: anywhere;\n}\n\n.rooms-view .op-form-panel__header .icon-btn {\n  flex-shrink: 0;\n}\n\n.rooms-view .confirm-dialog__message {\n  overflow-wrap: anywhere;\n}\n\n.rooms-view .confirm-dialog__actions {\n  flex-wrap: wrap;\n}\n\n.rooms-view .confirm-dialog__actions .btn-danger {\n  max-width: 100%;\n  white-space: normal;\n  overflow-wrap: anywhere;\n}\n',
+    expected: /\.rooms-view \.confirm-dialog__actions \.btn-danger:not\(#ds\)\s*\{[^}]*height:\s*auto;[^}]*white-space:\s*normal;/,
+    operator: 'match',
+    diff: 'simple'
+  }

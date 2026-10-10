@@ -1,0 +1,8 @@
+{
+  "recipe": "artifacts/task-validation/426-room-actions/root-rerun4/recipes/qa-server.mjs",
+  "port": 7524,
+  "pid": 28028,
+  "root": "C:/w-426",
+  "decision": "AUTHORIZED ROOT OWNED QA SERVER AFTER INDEPENDENT HANDOFF",
+  "at": "2026-10-09T23:51:13.7605302Z"
+}

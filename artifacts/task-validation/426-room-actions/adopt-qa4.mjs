@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,existsSync,readdirSync} from 'node:fs';
+import {dirname} from 'node:path';
+import {createHash} from 'node:crypto';
+const root='artifacts/task-validation/426-room-actions',source='C:/w-426-qa4/'+root+'/independent-qa4',target=root+'/independent-qa4',sha=b=>createHash('sha256').update(b).digest('hex');
+const expected=process.argv[2];assert.match(expected||'',/^[a-f0-9]{64}$/);assert.equal(existsSync(target),false);
+const bytes=readFileSync(source+'/artifact-manifest.json'),manifest=JSON.parse(bytes),app=JSON.parse(readFileSync(root+'/frozen-release-source.json')).applicationCommit;
+assert.equal(manifest.head,app);assert.equal(sha(bytes),expected);assert.match(readFileSync(source+'/validation-report.md','utf8'),/^QA Verdict: READY FOR CODEX QA$/m);
+for(const f of manifest.files){assert.ok(!f.path.includes('..')&&!f.path.startsWith('/')&&!f.path.includes(':'));assert.equal(sha(readFileSync(source+'/'+f.path)),f.sha256);mkdirSync(dirname(target+'/'+f.path),{recursive:true});copyFileSync(source+'/'+f.path,target+'/'+f.path);assert.equal(sha(readFileSync(target+'/'+f.path)),f.sha256);}writeFileSync(target+'/artifact-manifest.json',bytes);
+const recipes=readdirSync(target+'/recipes').filter(n=>n.endsWith('.mjs')),rerun=root+'/root-rerun4';assert.equal(existsSync(rerun),false);mkdirSync(rerun+'/recipes',{recursive:true});
+const records=recipes.map(name=>{copyFileSync(target+'/recipes/'+name,rerun+'/recipes/'+name);const hash=sha(readFileSync(rerun+'/recipes/'+name));assert.equal(hash,sha(readFileSync(target+'/recipes/'+name)));return {name,sha256:hash};});
+writeFileSync(rerun+'/pre-run.json',JSON.stringify({applicationCommit:app,qaManifestSha256:sha(bytes),qaArtifacts:manifest.files.length,records,decision:'FROZEN BYTE-IDENTICAL RECIPES BEFORE ROOT RERUN',at:new Date().toISOString()},null,2));console.log(JSON.stringify({immutableArtifacts:manifest.files.length,manifestSha256:sha(bytes),recipes:records.length}));

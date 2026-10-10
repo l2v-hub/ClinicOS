@@ -1,0 +1,6 @@
+{
+    "port":  7518,
+    "pid":  42176,
+    "source":  "07c3f7d13e8ac99a1af1238ec3661502950f45e3",
+    "command":  "recipes/qa-server.mjs"
+}

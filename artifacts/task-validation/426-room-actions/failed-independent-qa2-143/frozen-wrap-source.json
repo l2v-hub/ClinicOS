@@ -1,0 +1,26 @@
+{
+  "decision": "AUTHORIZED LOCAL REMEDIATED IMMUTABLE APPLICATION CANDIDATE",
+  "authority": "Direct human scopedfix authority, root after valid32/16-label clipping found by independent07QA, inspectedpixels, RED1 then22focused/types/compiler/scans pass and1265full/12exactbaseline. No release/closure; NEW isolated independent gate pending.",
+  "prior": "07c3f7d13e8ac99a1af1238ec3661502950f45e3",
+  "scope": [
+    "frontend/src/components/admin/BedEditDialog.tsx",
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts"
+  ],
+  "sourceSha256": "b8e5a1dec15bda5b2ae9c2cd9edc16773fccd7eba29e6b7cc10054cb3541d620",
+  "at": "2026-10-09T23:19:14.883Z",
+  "applicationCommit": "1436602e81d0c03625cfa73ce24974099e919612",
+  "base": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "completeScope": [
+    "frontend/src/components/admin/RoomsManagement.tsx",
+    "frontend/src/components/admin/RoomManagementModel.ts",
+    "frontend/src/components/admin/RoomFormPanel.tsx",
+    "frontend/src/components/admin/BedEditDialog.tsx",
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts",
+    "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+    "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts"
+  ],
+  "sourceFiles": 1539,
+  "result": "LOCAL CANDIDATE ONLY; NEW INDEPENDENT QA PENDING"
+}

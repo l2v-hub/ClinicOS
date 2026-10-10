@@ -1,0 +1,47 @@
+{
+  "baseline": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "changed": [
+    "frontend/src/components/admin/RoomsManagement.tsx",
+    "frontend/src/components/admin/RoomManagementModel.ts",
+    "frontend/src/components/admin/RoomFormPanel.tsx",
+    "frontend/src/components/admin/BedEditDialog.tsx",
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts",
+    "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+    "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts"
+  ],
+  "records": [
+    {
+      "kind": "baseline",
+      "absent": [
+        "frontend/src/components/admin/RoomManagementModel.ts",
+        "frontend/src/components/admin/RoomFormPanel.tsx",
+        "frontend/src/components/admin/BedEditDialog.tsx",
+        "frontend/src/components/admin/RoomActions.css",
+        "frontend/src/lib/__tests__/roomActionIdentity.test.ts"
+      ],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    },
+    {
+      "kind": "candidate",
+      "absent": [],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    }
+  ],
+  "newFindings": [],
+  "scope": "Changed source files only; files absent at baseline honestly omitted. Native scanner samples/coordination sideeffects isolated to owned artifact scratch. Not global CVE certification."
+}

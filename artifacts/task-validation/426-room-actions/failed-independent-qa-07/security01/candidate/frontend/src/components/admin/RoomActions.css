@@ -1,0 +1,14 @@
+.rooms-view .room-card__actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.rooms-view .room-card__header {
+  flex-wrap: wrap;
+}
+
+.rooms-view .room-card__actions .icon-btn--danger {
+  margin-inline-start: 4px;
+}

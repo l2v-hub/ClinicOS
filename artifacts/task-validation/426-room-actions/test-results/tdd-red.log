@@ -1,0 +1,1368 @@
+✖ room actions have explicit resource-bound accessible names and tooltip values (2.7599ms)
+✖ bed opening captures both original resource identifiers rather than editable form values (0.8629ms)
+✖ room rename retains original heading identity in a separate captured state (0.4827ms)
+✖ destructive action is distinct and remains behind the existing resource-bound confirmation (0.4481ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 271.152
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\roomActionIdentity.test.ts:1:205
+✖ room actions have explicit resource-bound accessible names and tooltip values (2.7599ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /aria-label=\{roomActionNames\(room\.numero\)\.edit\}/. Input:
+  
+  "import { useState, useEffect, useCallback, useRef } from 'react';\r\n" +
+    "import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';\r\n" +
+    "import { API_URL } from '../../config';\r\n" +
+    "import { operatorHeaders } from '../../lib/operatorSession';\r\n" +
+    "import { ClinicalTableSection } from '../operator/cartella/shared';\r\n" +
+    "import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';\r\n" +
+    "import { ConfirmDialog } from '../shared/ConfirmDialog';\r\n" +
+    '\r\n' +
+    '/* ── API types ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'interface AssignmentAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  patientId: string;\r\n' +
+    '  startDate: string;\r\n' +
+    '  endDate: string | null;\r\n' +
+    '  patient: {\r\n' +
+    '    id: string;\r\n' +
+    '    firstName: string;\r\n' +
+    '    lastName: string;\r\n' +
+    '    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n' +
+    '  };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface BedAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  roomId: string;\r\n' +
+    '  label: string;\r\n' +
+    '  stato: string;\r\n' +
+    '  note: string;\r\n' +
+    '  assignments: AssignmentAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface RoomAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  numero: string;\r\n' +
+    "  tipo: 'singola' | 'doppia' | 'altra';\r\n" +
+    '  piano: string;\r\n' +
+    '  reparto: string;\r\n' +
+    "  stato: 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    '  note: string;\r\n' +
+    '  beds: BedAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface OccupancyAPI {\r\n' +
+    '  totalRooms: number;\r\n' +
+    '  totalBeds: number;\r\n' +
+    '  occupiedBeds: number;\r\n' +
+    '  freeBeds: number;\r\n' +
+    '  maintenanceBeds: number;\r\n' +
+    '  occupancyPct: number;\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Helpers ───────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "type StatoLetto = 'libero' | 'occupato' | 'manutenzione';\r\n" +
+    "type TipoCamera = 'singola' | 'doppia' | 'altra';\r\n" +
+    "type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    'const MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'letto--libero',\r\n" +
+    "  occupato: 'letto--occupato',\r\n" +
+    "  manutenzione: 'letto--manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'Libero',\r\n" +
+    "  occupato: 'Occupato',\r\n" +
+    "  manutenzione: 'Manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const FORM_CAMERA_VUOTO = {\r\n' +
+    "  numero: '',\r\n" +
+    "  tipo: 'singola' as TipoCamera,\r\n" +
+    "  piano: '1°',\r\n" +
+    "  reparto: '',\r\n" +
+    "  stato: 'attiva' as StatoCamera,\r\n" +
+    "  note: '',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'function bedIsOccupied(bed: BedAPI): boolean {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return bed.assignments.some(\r\n' +
+    '    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'function bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n' +
+    "  if (bed.stato === 'manutenzione') return 'manutenzione';\r\n" +
+    "  if (bedIsOccupied(bed)) return 'occupato';\r\n" +
+    "  return 'libero';\r\n" +
+    '}\r\n' +
+    '\r\n' +
+    'function activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return (\r\n' +
+    '    bed.assignments.find(\r\n' +
+    '      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '    ) ?? null\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'async function fetchFacilityData(signal?: AbortSignal) {\r\n' +
+    '  const [roomsRes, occRes] = await Promise.all([\r\n' +
+    '    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n' +
+    '    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n' +
+    '  ]);\r\n' +
+    '  if (!roomsRes.ok || !occRes.ok) {\r\n' +
+    "    throw new Error('facility_data_unavailable');\r\n" +
+    '  }\r\n' +
+    '  const [rooms, occupancy] = await Promise.all([\r\n' +
+    '    roomsRes.json() as Promise<RoomAPI[]>,\r\n' +
+    '    occRes.json() as Promise<OccupancyAPI>,\r\n' +
+    '  ]);\r\n' +
+    '  return { rooms, occupancy };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Component ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'export function RoomsManagement() {\r\n' +
+    '  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n' +
+    '  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n' +
+    '  const [loading, setLoading] = useState(true);\r\n' +
+    '  const [error, setError] = useState<string | null>(null);\r\n' +
+    '  const [loadError, setLoadError] = useState<string | null>(null);\r\n' +
+    '\r\n' +
+    '  const [formAperto, setFormAperto] = useState(false);\r\n' +
+    '  const [editId, setEditId] = useState<string | null>(null);\r\n' +
+    '  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n' +
+    '  const [saving, setSaving] = useState(false);\r\n' +
+    '\r\n' +
+    '  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n' +
+    '  const [bedSaving, setBedSaving] = useState(false);\r\n' +
+    '  const bedSaveInFlight = useRef(false);\r\n' +
+    '  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n' +
+    "    stato: 'libero',\r\n" +
+    "    note: '',\r\n" +
+    '  });\r\n' +
+    '\r\n' +
+    "  const [filtroReparto, setFiltroReparto] = useState('tutti');\r\n" +
+    "  const [filtroStatoLetto, setFiltroStatoLetto] = useState<'tutti' | StatoLetto>('tutti');\r\n" +
+    '\r\n' +
+    '  /* ── Data loading ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  const loadData = useCallback(async () => {\r\n' +
+    '    setLoading(true);\r\n' +
+    '    setLoadError(null);\r\n' +
+    '    try {\r\n' +
+    '      const data = await fetchFacilityData();\r\n' +
+    '      setRooms(data.rooms);\r\n' +
+    '      setOccupancy(data.occupancy);\r\n' +
+    '    } catch {\r\n' +
+    '      setLoadError(\r\n' +
+    "        'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.',\r\n" +
+    '      );\r\n' +
+    '    } finally {\r\n' +
+    '      setLoading(false);\r\n' +
+    '    }\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  useEffect(() => {\r\n' +
+    '    const controller = new AbortController();\r\n' +
+    '    void fetchFacilityData(controller.signal)\r\n' +
+    '      .then((data) => {\r\n' +
+    '        setRooms(data.rooms);\r\n' +
+    '        setOccupancy(data.occupancy);\r\n' +
+    '        setLoadError(null);\r\n' +
+    '      })\r\n' +
+    '      .catch(() => {\r\n' +
+    '        if (!controller.signal.aborted) {\r\n' +
+    '          setLoadError(\r\n' +
+    "            'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.',\r\n" +
+    '          );\r\n' +
+    '        }\r\n' +
+    '      })\r\n' +
+    '      .finally(() => {\r\n' +
+    '        if (!controller.signal.aborted) setLoading(false);\r\n' +
+    '      });\r\n' +
+    '    return () => controller.abort();\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  /* ── Derived data ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "  const reparti = ['tutti', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n" +
+    '\r\n' +
+    '  const roomsPerReparto =\r\n' +
+    "    filtroReparto === 'tutti' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n" +
+    '\r\n' +
+    '  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n' +
+    '  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n' +
+    '\r\n' +
+    '  const lettiVisibili = (room: RoomAPI) =>\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? room.beds\r\n' +
+    '      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n' +
+    '\r\n' +
+    '  const roomsFiltrate =\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? roomsPerReparto\r\n' +
+    '      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n' +
+    '\r\n' +
+    '  /* ── Room CRUD ────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  async function salvaCamera() {\r\n' +
+    '    if (!form.numero.trim()) return;\r\n' +
+    '    setSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n' +
+    "      const method = editId ? 'PUT' : 'POST';\r\n" +
+    '      const res = await fetch(url, {\r\n' +
+    '        method,\r\n' +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          numero: form.numero,\r\n' +
+    '          tipo: form.tipo,\r\n' +
+    '          piano: form.piano,\r\n' +
+    '          reparto: form.reparto,\r\n' +
+    '          stato: form.stato,\r\n' +
+    '          note: form.note,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || `Errore nel ${editId ? 'salvataggio' : 'creazione'} della camera`);\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setFormAperto(false);\r\n' +
+    '      setEditId(null);\r\n' +
+    '      setForm(FORM_CAMERA_VUOTO);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio');\r\n" +
+    '    } finally {\r\n' +
+    '      setSaving(false);\r\n' +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n' +
+    '  const [deletingRoom, setDeletingRoom] = useState(false);\r\n' +
+    '\r\n' +
+    '  async function eliminaCamera(roomId: string) {\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n' +
+    "        method: 'DELETE',\r\n" +
+    '        headers: operatorHeaders(),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    '        if (res.status === 409) {\r\n' +
+    "          setError(data.error || 'Impossibile eliminare: ci sono assegnazioni attive');\r\n" +
+    '        } else {\r\n' +
+    `          setError(data.error || "Errore durante l'eliminazione");\r\n` +
+    '        }\r\n' +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    `      setError("Errore di rete durante l'eliminazione");\r\n` +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function confirmDeleteRoom() {\r\n' +
+    '    if (!pendingRoom) return;\r\n' +
+    '    setDeletingRoom(true);\r\n' +
+    '    await eliminaCamera(pendingRoom.id);\r\n' +
+    '    setDeletingRoom(false);\r\n' +
+    '    setPendingRoom(null);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function apriModificaCamera(room: RoomAPI) {\r\n' +
+    '    setEditId(room.id);\r\n' +
+    '    setForm({\r\n' +
+    '      numero: room.numero,\r\n' +
+    '      tipo: room.tipo,\r\n' +
+    '      piano: room.piano,\r\n' +
+    '      reparto: room.reparto,\r\n' +
+    '      stato: room.stato,\r\n' +
+    '      note: room.note,\r\n' +
+    '    });\r\n' +
+    '    setFormAperto(true);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  /* ── Bed edit ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  function apriLettoEdit(bed: BedAPI) {\r\n' +
+    '    setLettoEdit({ bedId: bed.id });\r\n' +
+    '    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n' +
+    '    setLettoForm({\r\n' +
+    "      stato: bed.stato === 'manutenzione' ? 'manutenzione' : 'libero',\r\n" +
+    "      note: bed.note ?? '',\r\n" +
+    '    });\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function salvaLetto() {\r\n' +
+    '    if (!lettoEdit || bedSaveInFlight.current) return;\r\n' +
+    '    bedSaveInFlight.current = true;\r\n' +
+    '    setBedSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n' +
+    "        method: 'PUT',\r\n" +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          stato: lettoForm.stato,\r\n' +
+    '          note: lettoForm.note || undefined,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || 'Errore nel salvataggio del letto');\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setLettoEdit(null);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio del letto');\r\n" +
+    '  '... 15825 more characters
+  
+      at TestContext.<anonymous> (C:\w-426\frontend\src\lib\__tests__\roomActionIdentity.test.ts:7:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useState, useEffect, useCallback, useRef } from \'react\';\r\nimport { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from \'../../icons\';\r\nimport { API_URL } from \'../../config\';\r\nimport { operatorHeaders } from \'../../lib/operatorSession\';\r\nimport { ClinicalTableSection } from \'../operator/cartella/shared\';\r\nimport { AccessibleDialogSurface } from \'../shared/AccessibleDialogSurface\';\r\nimport { ConfirmDialog } from \'../shared/ConfirmDialog\';\r\n\r\n/* ── API types ─────────────────────────────────────────── */\r\n\r\ninterface AssignmentAPI {\r\n  id: string;\r\n  patientId: string;\r\n  startDate: string;\r\n  endDate: string | null;\r\n  patient: {\r\n    id: string;\r\n    firstName: string;\r\n    lastName: string;\r\n    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n  };\r\n}\r\n\r\ninterface BedAPI {\r\n  id: string;\r\n  roomId: string;\r\n  label: string;\r\n  stato: string;\r\n  note: string;\r\n  assignments: AssignmentAPI[];\r\n}\r\n\r\ninterface RoomAPI {\r\n  id: string;\r\n  numero: string;\r\n  tipo: \'singola\' | \'doppia\' | \'altra\';\r\n  piano: string;\r\n  reparto: string;\r\n  stato: \'attiva\' | \'inattiva\' | \'manutenzione\';\r\n  note: string;\r\n  beds: BedAPI[];\r\n}\r\n\r\ninterface OccupancyAPI {\r\n  totalRooms: number;\r\n  totalBeds: number;\r\n  occupiedBeds: number;\r\n  freeBeds: number;\r\n  maintenanceBeds: number;\r\n  occupancyPct: number;\r\n}\r\n\r\n/* ── Helpers ───────────────────────────────────────────── */\r\n\r\ntype StatoLetto = \'libero\' | \'occupato\' | \'manutenzione\';\r\ntype TipoCamera = \'singola\' | \'doppia\' | \'altra\';\r\ntype StatoCamera = \'attiva\' | \'inattiva\' | \'manutenzione\';\r\nconst MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n\r\nconst STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n  libero: \'letto--libero\',\r\n  occupato: \'letto--occupato\',\r\n  manutenzione: \'letto--manutenzione\',\r\n};\r\n\r\nconst STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n  libero: \'Libero\',\r\n  occupato: \'Occupato\',\r\n  manutenzione: \'Manutenzione\',\r\n};\r\n\r\nconst FORM_CAMERA_VUOTO = {\r\n  numero: \'\',\r\n  tipo: \'singola\' as TipoCamera,\r\n  piano: \'1°\',\r\n  reparto: \'\',\r\n  stato: \'attiva\' as StatoCamera,\r\n  note: \'\',\r\n};\r\n\r\nfunction bedIsOccupied(bed: BedAPI): boolean {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return bed.assignments.some(\r\n    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n  );\r\n}\r\n\r\nfunction bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n  if (bed.stato === \'manutenzione\') return \'manutenzione\';\r\n  if (bedIsOccupied(bed)) return \'occupato\';\r\n  return \'libero\';\r\n}\r\n\r\nfunction activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return (\r\n    bed.assignments.find(\r\n      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n    ) ?? null\r\n  );\r\n}\r\n\r\nasync function fetchFacilityData(signal?: AbortSignal) {\r\n  const [roomsRes, occRes] = await Promise.all([\r\n    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n  ]);\r\n  if (!roomsRes.ok || !occRes.ok) {\r\n    throw new Error(\'facility_data_unavailable\');\r\n  }\r\n  const [rooms, occupancy] = await Promise.all([\r\n    roomsRes.json() as Promise<RoomAPI[]>,\r\n    occRes.json() as Promise<OccupancyAPI>,\r\n  ]);\r\n  return { rooms, occupancy };\r\n}\r\n\r\n/* ── Component ─────────────────────────────────────────── */\r\n\r\nexport function RoomsManagement() {\r\n  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n  const [loading, setLoading] = useState(true);\r\n  const [error, setError] = useState<string | null>(null);\r\n  const [loadError, setLoadError] = useState<string | null>(null);\r\n\r\n  const [formAperto, setFormAperto] = useState(false);\r\n  const [editId, setEditId] = useState<string | null>(null);\r\n  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n  const [saving, setSaving] = useState(false);\r\n\r\n  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n  const [bedSaving, setBedSaving] = useState(false);\r\n  const bedSaveInFlight = useRef(false);\r\n  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n    stato: \'libero\',\r\n    note: \'\',\r\n  });\r\n\r\n  const [filtroReparto, setFiltroReparto] = useState(\'tutti\');\r\n  const [filtroStatoLetto, setFiltroStatoLetto] = useState<\'tutti\' | StatoLetto>(\'tutti\');\r\n\r\n  /* ── Data loading ─────────────────────────────────────── */\r\n\r\n  const loadData = useCallback(async () => {\r\n    setLoading(true);\r\n    setLoadError(null);\r\n    try {\r\n      const data = await fetchFacilityData();\r\n      setRooms(data.rooms);\r\n      setOccupancy(data.occupancy);\r\n    } catch {\r\n      setLoadError(\r\n        \'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.\',\r\n      );\r\n    } finally {\r\n      setLoading(false);\r\n    }\r\n  }, []);\r\n\r\n  useEffect(() => {\r\n    const controller = new AbortController();\r\n    void fetchFacilityData(controller.signal)\r\n      .then((data) => {\r\n        setRooms(data.rooms);\r\n        setOccupancy(data.occupancy);\r\n        setLoadError(null);\r\n      })\r\n      .catch(() => {\r\n        if (!controller.signal.aborted) {\r\n          setLoadError(\r\n            \'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.\',\r\n          );\r\n        }\r\n      })\r\n      .finally(() => {\r\n        if (!controller.signal.aborted) setLoading(false);\r\n      });\r\n    return () => controller.abort();\r\n  }, []);\r\n\r\n  /* ── Derived data ─────────────────────────────────────── */\r\n\r\n  const reparti = [\'tutti\', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n\r\n  const roomsPerReparto =\r\n    filtroReparto === \'tutti\' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n\r\n  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n\r\n  const lettiVisibili = (room: RoomAPI) =>\r\n    filtroStatoLetto === \'tutti\'\r\n      ? room.beds\r\n      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n\r\n  const roomsFiltrate =\r\n    filtroStatoLetto === \'tutti\'\r\n      ? roomsPerReparto\r\n      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n\r\n  /* ── Room CRUD ────────────────────────────────────────── */\r\n\r\n  async function salvaCamera() {\r\n    if (!form.numero.trim()) return;\r\n    setSaving(true);\r\n    setError(null);\r\n    try {\r\n      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n      const method = editId ? \'PUT\' : \'POST\';\r\n      const res = await fetch(url, {\r\n        method,\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          numero: form.numero,\r\n          tipo: form.tipo,\r\n          piano: form.piano,\r\n          reparto: form.reparto,\r\n          stato: form.stato,\r\n          note: form.note,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || `Errore nel ${editId ? \'salvataggio\' : \'creazione\'} della camera`);\r\n        return;\r\n      }\r\n      setFormAperto(false);\r\n      setEditId(null);\r\n      setForm(FORM_CAMERA_VUOTO);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio\');\r\n    } finally {\r\n      setSaving(false);\r\n    }\r\n  }\r\n\r\n  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n  const [deletingRoom, setDeletingRoom] = useState(false);\r\n\r\n  async function eliminaCamera(roomId: string) {\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n        method: \'DELETE\',\r\n        headers: operatorHeaders(),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        if (res.status === 409) {\r\n          setError(data.error || \'Impossibile eliminare: ci sono assegnazioni attive\');\r\n        } else {\r\n          setError(data.error || "Errore durante l\'eliminazione");\r\n        }\r\n        return;\r\n      }\r\n      await loadData();\r\n    } catch {\r\n      setError("Errore di rete durante l\'eliminazione");\r\n    }\r\n  }\r\n\r\n  async function confirmDeleteRoom() {\r\n    if (!pendingRoom) return;\r\n    setDeletingRoom(true);\r\n    await eliminaCamera(pendingRoom.id);\r\n    setDeletingRoom(false);\r\n    setPendingRoom(null);\r\n  }\r\n\r\n  function apriModificaCamera(room: RoomAPI) {\r\n    setEditId(room.id);\r\n    setForm({\r\n      numero: room.numero,\r\n      tipo: room.tipo,\r\n      piano: room.piano,\r\n      reparto: room.reparto,\r\n      stato: room.stato,\r\n      note: room.note,\r\n    });\r\n    setFormAperto(true);\r\n  }\r\n\r\n  /* ── Bed edit ─────────────────────────────────────────── */\r\n\r\n  function apriLettoEdit(bed: BedAPI) {\r\n    setLettoEdit({ bedId: bed.id });\r\n    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n    setLettoForm({\r\n      stato: bed.stato === \'manutenzione\' ? \'manutenzione\' : \'libero\',\r\n      note: bed.note ?? \'\',\r\n    });\r\n  }\r\n\r\n  async function salvaLetto() {\r\n    if (!lettoEdit || bedSaveInFlight.current) return;\r\n    bedSaveInFlight.current = true;\r\n    setBedSaving(true);\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n        method: \'PUT\',\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          stato: lettoForm.stato,\r\n          note: lettoForm.note || undefined,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || \'Errore nel salvataggio del letto\');\r\n        return;\r\n      }\r\n      setLettoEdit(null);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio del letto\');\r\n  '... 15825 more characters,
+    expected: /aria-label=\{roomActionNames\(room\.numero\)\.edit\}/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\roomActionIdentity.test.ts:1:591
+✖ bed opening captures both original resource identifiers rather than editable form values (0.8629ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /bedId: bed\.id, label: bed\.label, roomNumber: room\.numero/. Input:
+  
+  "import { useState, useEffect, useCallback, useRef } from 'react';\r\n" +
+    "import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';\r\n" +
+    "import { API_URL } from '../../config';\r\n" +
+    "import { operatorHeaders } from '../../lib/operatorSession';\r\n" +
+    "import { ClinicalTableSection } from '../operator/cartella/shared';\r\n" +
+    "import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';\r\n" +
+    "import { ConfirmDialog } from '../shared/ConfirmDialog';\r\n" +
+    '\r\n' +
+    '/* ── API types ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'interface AssignmentAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  patientId: string;\r\n' +
+    '  startDate: string;\r\n' +
+    '  endDate: string | null;\r\n' +
+    '  patient: {\r\n' +
+    '    id: string;\r\n' +
+    '    firstName: string;\r\n' +
+    '    lastName: string;\r\n' +
+    '    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n' +
+    '  };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface BedAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  roomId: string;\r\n' +
+    '  label: string;\r\n' +
+    '  stato: string;\r\n' +
+    '  note: string;\r\n' +
+    '  assignments: AssignmentAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface RoomAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  numero: string;\r\n' +
+    "  tipo: 'singola' | 'doppia' | 'altra';\r\n" +
+    '  piano: string;\r\n' +
+    '  reparto: string;\r\n' +
+    "  stato: 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    '  note: string;\r\n' +
+    '  beds: BedAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface OccupancyAPI {\r\n' +
+    '  totalRooms: number;\r\n' +
+    '  totalBeds: number;\r\n' +
+    '  occupiedBeds: number;\r\n' +
+    '  freeBeds: number;\r\n' +
+    '  maintenanceBeds: number;\r\n' +
+    '  occupancyPct: number;\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Helpers ───────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "type StatoLetto = 'libero' | 'occupato' | 'manutenzione';\r\n" +
+    "type TipoCamera = 'singola' | 'doppia' | 'altra';\r\n" +
+    "type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    'const MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'letto--libero',\r\n" +
+    "  occupato: 'letto--occupato',\r\n" +
+    "  manutenzione: 'letto--manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'Libero',\r\n" +
+    "  occupato: 'Occupato',\r\n" +
+    "  manutenzione: 'Manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const FORM_CAMERA_VUOTO = {\r\n' +
+    "  numero: '',\r\n" +
+    "  tipo: 'singola' as TipoCamera,\r\n" +
+    "  piano: '1°',\r\n" +
+    "  reparto: '',\r\n" +
+    "  stato: 'attiva' as StatoCamera,\r\n" +
+    "  note: '',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'function bedIsOccupied(bed: BedAPI): boolean {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return bed.assignments.some(\r\n' +
+    '    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'function bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n' +
+    "  if (bed.stato === 'manutenzione') return 'manutenzione';\r\n" +
+    "  if (bedIsOccupied(bed)) return 'occupato';\r\n" +
+    "  return 'libero';\r\n" +
+    '}\r\n' +
+    '\r\n' +
+    'function activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return (\r\n' +
+    '    bed.assignments.find(\r\n' +
+    '      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '    ) ?? null\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'async function fetchFacilityData(signal?: AbortSignal) {\r\n' +
+    '  const [roomsRes, occRes] = await Promise.all([\r\n' +
+    '    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n' +
+    '    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n' +
+    '  ]);\r\n' +
+    '  if (!roomsRes.ok || !occRes.ok) {\r\n' +
+    "    throw new Error('facility_data_unavailable');\r\n" +
+    '  }\r\n' +
+    '  const [rooms, occupancy] = await Promise.all([\r\n' +
+    '    roomsRes.json() as Promise<RoomAPI[]>,\r\n' +
+    '    occRes.json() as Promise<OccupancyAPI>,\r\n' +
+    '  ]);\r\n' +
+    '  return { rooms, occupancy };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Component ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'export function RoomsManagement() {\r\n' +
+    '  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n' +
+    '  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n' +
+    '  const [loading, setLoading] = useState(true);\r\n' +
+    '  const [error, setError] = useState<string | null>(null);\r\n' +
+    '  const [loadError, setLoadError] = useState<string | null>(null);\r\n' +
+    '\r\n' +
+    '  const [formAperto, setFormAperto] = useState(false);\r\n' +
+    '  const [editId, setEditId] = useState<string | null>(null);\r\n' +
+    '  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n' +
+    '  const [saving, setSaving] = useState(false);\r\n' +
+    '\r\n' +
+    '  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n' +
+    '  const [bedSaving, setBedSaving] = useState(false);\r\n' +
+    '  const bedSaveInFlight = useRef(false);\r\n' +
+    '  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n' +
+    "    stato: 'libero',\r\n" +
+    "    note: '',\r\n" +
+    '  });\r\n' +
+    '\r\n' +
+    "  const [filtroReparto, setFiltroReparto] = useState('tutti');\r\n" +
+    "  const [filtroStatoLetto, setFiltroStatoLetto] = useState<'tutti' | StatoLetto>('tutti');\r\n" +
+    '\r\n' +
+    '  /* ── Data loading ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  const loadData = useCallback(async () => {\r\n' +
+    '    setLoading(true);\r\n' +
+    '    setLoadError(null);\r\n' +
+    '    try {\r\n' +
+    '      const data = await fetchFacilityData();\r\n' +
+    '      setRooms(data.rooms);\r\n' +
+    '      setOccupancy(data.occupancy);\r\n' +
+    '    } catch {\r\n' +
+    '      setLoadError(\r\n' +
+    "        'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.',\r\n" +
+    '      );\r\n' +
+    '    } finally {\r\n' +
+    '      setLoading(false);\r\n' +
+    '    }\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  useEffect(() => {\r\n' +
+    '    const controller = new AbortController();\r\n' +
+    '    void fetchFacilityData(controller.signal)\r\n' +
+    '      .then((data) => {\r\n' +
+    '        setRooms(data.rooms);\r\n' +
+    '        setOccupancy(data.occupancy);\r\n' +
+    '        setLoadError(null);\r\n' +
+    '      })\r\n' +
+    '      .catch(() => {\r\n' +
+    '        if (!controller.signal.aborted) {\r\n' +
+    '          setLoadError(\r\n' +
+    "            'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.',\r\n" +
+    '          );\r\n' +
+    '        }\r\n' +
+    '      })\r\n' +
+    '      .finally(() => {\r\n' +
+    '        if (!controller.signal.aborted) setLoading(false);\r\n' +
+    '      });\r\n' +
+    '    return () => controller.abort();\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  /* ── Derived data ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "  const reparti = ['tutti', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n" +
+    '\r\n' +
+    '  const roomsPerReparto =\r\n' +
+    "    filtroReparto === 'tutti' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n" +
+    '\r\n' +
+    '  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n' +
+    '  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n' +
+    '\r\n' +
+    '  const lettiVisibili = (room: RoomAPI) =>\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? room.beds\r\n' +
+    '      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n' +
+    '\r\n' +
+    '  const roomsFiltrate =\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? roomsPerReparto\r\n' +
+    '      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n' +
+    '\r\n' +
+    '  /* ── Room CRUD ────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  async function salvaCamera() {\r\n' +
+    '    if (!form.numero.trim()) return;\r\n' +
+    '    setSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n' +
+    "      const method = editId ? 'PUT' : 'POST';\r\n" +
+    '      const res = await fetch(url, {\r\n' +
+    '        method,\r\n' +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          numero: form.numero,\r\n' +
+    '          tipo: form.tipo,\r\n' +
+    '          piano: form.piano,\r\n' +
+    '          reparto: form.reparto,\r\n' +
+    '          stato: form.stato,\r\n' +
+    '          note: form.note,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || `Errore nel ${editId ? 'salvataggio' : 'creazione'} della camera`);\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setFormAperto(false);\r\n' +
+    '      setEditId(null);\r\n' +
+    '      setForm(FORM_CAMERA_VUOTO);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio');\r\n" +
+    '    } finally {\r\n' +
+    '      setSaving(false);\r\n' +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n' +
+    '  const [deletingRoom, setDeletingRoom] = useState(false);\r\n' +
+    '\r\n' +
+    '  async function eliminaCamera(roomId: string) {\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n' +
+    "        method: 'DELETE',\r\n" +
+    '        headers: operatorHeaders(),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    '        if (res.status === 409) {\r\n' +
+    "          setError(data.error || 'Impossibile eliminare: ci sono assegnazioni attive');\r\n" +
+    '        } else {\r\n' +
+    `          setError(data.error || "Errore durante l'eliminazione");\r\n` +
+    '        }\r\n' +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    `      setError("Errore di rete durante l'eliminazione");\r\n` +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function confirmDeleteRoom() {\r\n' +
+    '    if (!pendingRoom) return;\r\n' +
+    '    setDeletingRoom(true);\r\n' +
+    '    await eliminaCamera(pendingRoom.id);\r\n' +
+    '    setDeletingRoom(false);\r\n' +
+    '    setPendingRoom(null);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function apriModificaCamera(room: RoomAPI) {\r\n' +
+    '    setEditId(room.id);\r\n' +
+    '    setForm({\r\n' +
+    '      numero: room.numero,\r\n' +
+    '      tipo: room.tipo,\r\n' +
+    '      piano: room.piano,\r\n' +
+    '      reparto: room.reparto,\r\n' +
+    '      stato: room.stato,\r\n' +
+    '      note: room.note,\r\n' +
+    '    });\r\n' +
+    '    setFormAperto(true);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  /* ── Bed edit ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  function apriLettoEdit(bed: BedAPI) {\r\n' +
+    '    setLettoEdit({ bedId: bed.id });\r\n' +
+    '    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n' +
+    '    setLettoForm({\r\n' +
+    "      stato: bed.stato === 'manutenzione' ? 'manutenzione' : 'libero',\r\n" +
+    "      note: bed.note ?? '',\r\n" +
+    '    });\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function salvaLetto() {\r\n' +
+    '    if (!lettoEdit || bedSaveInFlight.current) return;\r\n' +
+    '    bedSaveInFlight.current = true;\r\n' +
+    '    setBedSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n' +
+    "        method: 'PUT',\r\n" +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          stato: lettoForm.stato,\r\n' +
+    '          note: lettoForm.note || undefined,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || 'Errore nel salvataggio del letto');\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setLettoEdit(null);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio del letto');\r\n" +
+    '  '... 15825 more characters
+  
+      at TestContext.<anonymous> (C:\w-426\frontend\src\lib\__tests__\roomActionIdentity.test.ts:13:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useState, useEffect, useCallback, useRef } from \'react\';\r\nimport { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from \'../../icons\';\r\nimport { API_URL } from \'../../config\';\r\nimport { operatorHeaders } from \'../../lib/operatorSession\';\r\nimport { ClinicalTableSection } from \'../operator/cartella/shared\';\r\nimport { AccessibleDialogSurface } from \'../shared/AccessibleDialogSurface\';\r\nimport { ConfirmDialog } from \'../shared/ConfirmDialog\';\r\n\r\n/* ── API types ─────────────────────────────────────────── */\r\n\r\ninterface AssignmentAPI {\r\n  id: string;\r\n  patientId: string;\r\n  startDate: string;\r\n  endDate: string | null;\r\n  patient: {\r\n    id: string;\r\n    firstName: string;\r\n    lastName: string;\r\n    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n  };\r\n}\r\n\r\ninterface BedAPI {\r\n  id: string;\r\n  roomId: string;\r\n  label: string;\r\n  stato: string;\r\n  note: string;\r\n  assignments: AssignmentAPI[];\r\n}\r\n\r\ninterface RoomAPI {\r\n  id: string;\r\n  numero: string;\r\n  tipo: \'singola\' | \'doppia\' | \'altra\';\r\n  piano: string;\r\n  reparto: string;\r\n  stato: \'attiva\' | \'inattiva\' | \'manutenzione\';\r\n  note: string;\r\n  beds: BedAPI[];\r\n}\r\n\r\ninterface OccupancyAPI {\r\n  totalRooms: number;\r\n  totalBeds: number;\r\n  occupiedBeds: number;\r\n  freeBeds: number;\r\n  maintenanceBeds: number;\r\n  occupancyPct: number;\r\n}\r\n\r\n/* ── Helpers ───────────────────────────────────────────── */\r\n\r\ntype StatoLetto = \'libero\' | \'occupato\' | \'manutenzione\';\r\ntype TipoCamera = \'singola\' | \'doppia\' | \'altra\';\r\ntype StatoCamera = \'attiva\' | \'inattiva\' | \'manutenzione\';\r\nconst MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n\r\nconst STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n  libero: \'letto--libero\',\r\n  occupato: \'letto--occupato\',\r\n  manutenzione: \'letto--manutenzione\',\r\n};\r\n\r\nconst STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n  libero: \'Libero\',\r\n  occupato: \'Occupato\',\r\n  manutenzione: \'Manutenzione\',\r\n};\r\n\r\nconst FORM_CAMERA_VUOTO = {\r\n  numero: \'\',\r\n  tipo: \'singola\' as TipoCamera,\r\n  piano: \'1°\',\r\n  reparto: \'\',\r\n  stato: \'attiva\' as StatoCamera,\r\n  note: \'\',\r\n};\r\n\r\nfunction bedIsOccupied(bed: BedAPI): boolean {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return bed.assignments.some(\r\n    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n  );\r\n}\r\n\r\nfunction bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n  if (bed.stato === \'manutenzione\') return \'manutenzione\';\r\n  if (bedIsOccupied(bed)) return \'occupato\';\r\n  return \'libero\';\r\n}\r\n\r\nfunction activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return (\r\n    bed.assignments.find(\r\n      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n    ) ?? null\r\n  );\r\n}\r\n\r\nasync function fetchFacilityData(signal?: AbortSignal) {\r\n  const [roomsRes, occRes] = await Promise.all([\r\n    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n  ]);\r\n  if (!roomsRes.ok || !occRes.ok) {\r\n    throw new Error(\'facility_data_unavailable\');\r\n  }\r\n  const [rooms, occupancy] = await Promise.all([\r\n    roomsRes.json() as Promise<RoomAPI[]>,\r\n    occRes.json() as Promise<OccupancyAPI>,\r\n  ]);\r\n  return { rooms, occupancy };\r\n}\r\n\r\n/* ── Component ─────────────────────────────────────────── */\r\n\r\nexport function RoomsManagement() {\r\n  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n  const [loading, setLoading] = useState(true);\r\n  const [error, setError] = useState<string | null>(null);\r\n  const [loadError, setLoadError] = useState<string | null>(null);\r\n\r\n  const [formAperto, setFormAperto] = useState(false);\r\n  const [editId, setEditId] = useState<string | null>(null);\r\n  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n  const [saving, setSaving] = useState(false);\r\n\r\n  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n  const [bedSaving, setBedSaving] = useState(false);\r\n  const bedSaveInFlight = useRef(false);\r\n  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n    stato: \'libero\',\r\n    note: \'\',\r\n  });\r\n\r\n  const [filtroReparto, setFiltroReparto] = useState(\'tutti\');\r\n  const [filtroStatoLetto, setFiltroStatoLetto] = useState<\'tutti\' | StatoLetto>(\'tutti\');\r\n\r\n  /* ── Data loading ─────────────────────────────────────── */\r\n\r\n  const loadData = useCallback(async () => {\r\n    setLoading(true);\r\n    setLoadError(null);\r\n    try {\r\n      const data = await fetchFacilityData();\r\n      setRooms(data.rooms);\r\n      setOccupancy(data.occupancy);\r\n    } catch {\r\n      setLoadError(\r\n        \'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.\',\r\n      );\r\n    } finally {\r\n      setLoading(false);\r\n    }\r\n  }, []);\r\n\r\n  useEffect(() => {\r\n    const controller = new AbortController();\r\n    void fetchFacilityData(controller.signal)\r\n      .then((data) => {\r\n        setRooms(data.rooms);\r\n        setOccupancy(data.occupancy);\r\n        setLoadError(null);\r\n      })\r\n      .catch(() => {\r\n        if (!controller.signal.aborted) {\r\n          setLoadError(\r\n            \'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.\',\r\n          );\r\n        }\r\n      })\r\n      .finally(() => {\r\n        if (!controller.signal.aborted) setLoading(false);\r\n      });\r\n    return () => controller.abort();\r\n  }, []);\r\n\r\n  /* ── Derived data ─────────────────────────────────────── */\r\n\r\n  const reparti = [\'tutti\', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n\r\n  const roomsPerReparto =\r\n    filtroReparto === \'tutti\' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n\r\n  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n\r\n  const lettiVisibili = (room: RoomAPI) =>\r\n    filtroStatoLetto === \'tutti\'\r\n      ? room.beds\r\n      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n\r\n  const roomsFiltrate =\r\n    filtroStatoLetto === \'tutti\'\r\n      ? roomsPerReparto\r\n      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n\r\n  /* ── Room CRUD ────────────────────────────────────────── */\r\n\r\n  async function salvaCamera() {\r\n    if (!form.numero.trim()) return;\r\n    setSaving(true);\r\n    setError(null);\r\n    try {\r\n      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n      const method = editId ? \'PUT\' : \'POST\';\r\n      const res = await fetch(url, {\r\n        method,\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          numero: form.numero,\r\n          tipo: form.tipo,\r\n          piano: form.piano,\r\n          reparto: form.reparto,\r\n          stato: form.stato,\r\n          note: form.note,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || `Errore nel ${editId ? \'salvataggio\' : \'creazione\'} della camera`);\r\n        return;\r\n      }\r\n      setFormAperto(false);\r\n      setEditId(null);\r\n      setForm(FORM_CAMERA_VUOTO);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio\');\r\n    } finally {\r\n      setSaving(false);\r\n    }\r\n  }\r\n\r\n  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n  const [deletingRoom, setDeletingRoom] = useState(false);\r\n\r\n  async function eliminaCamera(roomId: string) {\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n        method: \'DELETE\',\r\n        headers: operatorHeaders(),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        if (res.status === 409) {\r\n          setError(data.error || \'Impossibile eliminare: ci sono assegnazioni attive\');\r\n        } else {\r\n          setError(data.error || "Errore durante l\'eliminazione");\r\n        }\r\n        return;\r\n      }\r\n      await loadData();\r\n    } catch {\r\n      setError("Errore di rete durante l\'eliminazione");\r\n    }\r\n  }\r\n\r\n  async function confirmDeleteRoom() {\r\n    if (!pendingRoom) return;\r\n    setDeletingRoom(true);\r\n    await eliminaCamera(pendingRoom.id);\r\n    setDeletingRoom(false);\r\n    setPendingRoom(null);\r\n  }\r\n\r\n  function apriModificaCamera(room: RoomAPI) {\r\n    setEditId(room.id);\r\n    setForm({\r\n      numero: room.numero,\r\n      tipo: room.tipo,\r\n      piano: room.piano,\r\n      reparto: room.reparto,\r\n      stato: room.stato,\r\n      note: room.note,\r\n    });\r\n    setFormAperto(true);\r\n  }\r\n\r\n  /* ── Bed edit ─────────────────────────────────────────── */\r\n\r\n  function apriLettoEdit(bed: BedAPI) {\r\n    setLettoEdit({ bedId: bed.id });\r\n    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n    setLettoForm({\r\n      stato: bed.stato === \'manutenzione\' ? \'manutenzione\' : \'libero\',\r\n      note: bed.note ?? \'\',\r\n    });\r\n  }\r\n\r\n  async function salvaLetto() {\r\n    if (!lettoEdit || bedSaveInFlight.current) return;\r\n    bedSaveInFlight.current = true;\r\n    setBedSaving(true);\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n        method: \'PUT\',\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          stato: lettoForm.stato,\r\n          note: lettoForm.note || undefined,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || \'Errore nel salvataggio del letto\');\r\n        return;\r\n      }\r\n      setLettoEdit(null);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio del letto\');\r\n  '... 15825 more characters,
+    expected: /bedId: bed\.id, label: bed\.label, roomNumber: room\.numero/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\roomActionIdentity.test.ts:1:925
+✖ room rename retains original heading identity in a separate captured state (0.4827ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /setEditRoomNumber\(room\.numero\)/. Input:
+  
+  "import { useState, useEffect, useCallback, useRef } from 'react';\r\n" +
+    "import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';\r\n" +
+    "import { API_URL } from '../../config';\r\n" +
+    "import { operatorHeaders } from '../../lib/operatorSession';\r\n" +
+    "import { ClinicalTableSection } from '../operator/cartella/shared';\r\n" +
+    "import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';\r\n" +
+    "import { ConfirmDialog } from '../shared/ConfirmDialog';\r\n" +
+    '\r\n' +
+    '/* ── API types ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'interface AssignmentAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  patientId: string;\r\n' +
+    '  startDate: string;\r\n' +
+    '  endDate: string | null;\r\n' +
+    '  patient: {\r\n' +
+    '    id: string;\r\n' +
+    '    firstName: string;\r\n' +
+    '    lastName: string;\r\n' +
+    '    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n' +
+    '  };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface BedAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  roomId: string;\r\n' +
+    '  label: string;\r\n' +
+    '  stato: string;\r\n' +
+    '  note: string;\r\n' +
+    '  assignments: AssignmentAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface RoomAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  numero: string;\r\n' +
+    "  tipo: 'singola' | 'doppia' | 'altra';\r\n" +
+    '  piano: string;\r\n' +
+    '  reparto: string;\r\n' +
+    "  stato: 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    '  note: string;\r\n' +
+    '  beds: BedAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface OccupancyAPI {\r\n' +
+    '  totalRooms: number;\r\n' +
+    '  totalBeds: number;\r\n' +
+    '  occupiedBeds: number;\r\n' +
+    '  freeBeds: number;\r\n' +
+    '  maintenanceBeds: number;\r\n' +
+    '  occupancyPct: number;\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Helpers ───────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "type StatoLetto = 'libero' | 'occupato' | 'manutenzione';\r\n" +
+    "type TipoCamera = 'singola' | 'doppia' | 'altra';\r\n" +
+    "type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    'const MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'letto--libero',\r\n" +
+    "  occupato: 'letto--occupato',\r\n" +
+    "  manutenzione: 'letto--manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'Libero',\r\n" +
+    "  occupato: 'Occupato',\r\n" +
+    "  manutenzione: 'Manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const FORM_CAMERA_VUOTO = {\r\n' +
+    "  numero: '',\r\n" +
+    "  tipo: 'singola' as TipoCamera,\r\n" +
+    "  piano: '1°',\r\n" +
+    "  reparto: '',\r\n" +
+    "  stato: 'attiva' as StatoCamera,\r\n" +
+    "  note: '',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'function bedIsOccupied(bed: BedAPI): boolean {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return bed.assignments.some(\r\n' +
+    '    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'function bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n' +
+    "  if (bed.stato === 'manutenzione') return 'manutenzione';\r\n" +
+    "  if (bedIsOccupied(bed)) return 'occupato';\r\n" +
+    "  return 'libero';\r\n" +
+    '}\r\n' +
+    '\r\n' +
+    'function activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return (\r\n' +
+    '    bed.assignments.find(\r\n' +
+    '      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '    ) ?? null\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'async function fetchFacilityData(signal?: AbortSignal) {\r\n' +
+    '  const [roomsRes, occRes] = await Promise.all([\r\n' +
+    '    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n' +
+    '    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n' +
+    '  ]);\r\n' +
+    '  if (!roomsRes.ok || !occRes.ok) {\r\n' +
+    "    throw new Error('facility_data_unavailable');\r\n" +
+    '  }\r\n' +
+    '  const [rooms, occupancy] = await Promise.all([\r\n' +
+    '    roomsRes.json() as Promise<RoomAPI[]>,\r\n' +
+    '    occRes.json() as Promise<OccupancyAPI>,\r\n' +
+    '  ]);\r\n' +
+    '  return { rooms, occupancy };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Component ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'export function RoomsManagement() {\r\n' +
+    '  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n' +
+    '  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n' +
+    '  const [loading, setLoading] = useState(true);\r\n' +
+    '  const [error, setError] = useState<string | null>(null);\r\n' +
+    '  const [loadError, setLoadError] = useState<string | null>(null);\r\n' +
+    '\r\n' +
+    '  const [formAperto, setFormAperto] = useState(false);\r\n' +
+    '  const [editId, setEditId] = useState<string | null>(null);\r\n' +
+    '  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n' +
+    '  const [saving, setSaving] = useState(false);\r\n' +
+    '\r\n' +
+    '  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n' +
+    '  const [bedSaving, setBedSaving] = useState(false);\r\n' +
+    '  const bedSaveInFlight = useRef(false);\r\n' +
+    '  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n' +
+    "    stato: 'libero',\r\n" +
+    "    note: '',\r\n" +
+    '  });\r\n' +
+    '\r\n' +
+    "  const [filtroReparto, setFiltroReparto] = useState('tutti');\r\n" +
+    "  const [filtroStatoLetto, setFiltroStatoLetto] = useState<'tutti' | StatoLetto>('tutti');\r\n" +
+    '\r\n' +
+    '  /* ── Data loading ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  const loadData = useCallback(async () => {\r\n' +
+    '    setLoading(true);\r\n' +
+    '    setLoadError(null);\r\n' +
+    '    try {\r\n' +
+    '      const data = await fetchFacilityData();\r\n' +
+    '      setRooms(data.rooms);\r\n' +
+    '      setOccupancy(data.occupancy);\r\n' +
+    '    } catch {\r\n' +
+    '      setLoadError(\r\n' +
+    "        'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.',\r\n" +
+    '      );\r\n' +
+    '    } finally {\r\n' +
+    '      setLoading(false);\r\n' +
+    '    }\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  useEffect(() => {\r\n' +
+    '    const controller = new AbortController();\r\n' +
+    '    void fetchFacilityData(controller.signal)\r\n' +
+    '      .then((data) => {\r\n' +
+    '        setRooms(data.rooms);\r\n' +
+    '        setOccupancy(data.occupancy);\r\n' +
+    '        setLoadError(null);\r\n' +
+    '      })\r\n' +
+    '      .catch(() => {\r\n' +
+    '        if (!controller.signal.aborted) {\r\n' +
+    '          setLoadError(\r\n' +
+    "            'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.',\r\n" +
+    '          );\r\n' +
+    '        }\r\n' +
+    '      })\r\n' +
+    '      .finally(() => {\r\n' +
+    '        if (!controller.signal.aborted) setLoading(false);\r\n' +
+    '      });\r\n' +
+    '    return () => controller.abort();\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  /* ── Derived data ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "  const reparti = ['tutti', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n" +
+    '\r\n' +
+    '  const roomsPerReparto =\r\n' +
+    "    filtroReparto === 'tutti' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n" +
+    '\r\n' +
+    '  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n' +
+    '  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n' +
+    '\r\n' +
+    '  const lettiVisibili = (room: RoomAPI) =>\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? room.beds\r\n' +
+    '      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n' +
+    '\r\n' +
+    '  const roomsFiltrate =\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? roomsPerReparto\r\n' +
+    '      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n' +
+    '\r\n' +
+    '  /* ── Room CRUD ────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  async function salvaCamera() {\r\n' +
+    '    if (!form.numero.trim()) return;\r\n' +
+    '    setSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n' +
+    "      const method = editId ? 'PUT' : 'POST';\r\n" +
+    '      const res = await fetch(url, {\r\n' +
+    '        method,\r\n' +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          numero: form.numero,\r\n' +
+    '          tipo: form.tipo,\r\n' +
+    '          piano: form.piano,\r\n' +
+    '          reparto: form.reparto,\r\n' +
+    '          stato: form.stato,\r\n' +
+    '          note: form.note,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || `Errore nel ${editId ? 'salvataggio' : 'creazione'} della camera`);\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setFormAperto(false);\r\n' +
+    '      setEditId(null);\r\n' +
+    '      setForm(FORM_CAMERA_VUOTO);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio');\r\n" +
+    '    } finally {\r\n' +
+    '      setSaving(false);\r\n' +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n' +
+    '  const [deletingRoom, setDeletingRoom] = useState(false);\r\n' +
+    '\r\n' +
+    '  async function eliminaCamera(roomId: string) {\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n' +
+    "        method: 'DELETE',\r\n" +
+    '        headers: operatorHeaders(),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    '        if (res.status === 409) {\r\n' +
+    "          setError(data.error || 'Impossibile eliminare: ci sono assegnazioni attive');\r\n" +
+    '        } else {\r\n' +
+    `          setError(data.error || "Errore durante l'eliminazione");\r\n` +
+    '        }\r\n' +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    `      setError("Errore di rete durante l'eliminazione");\r\n` +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function confirmDeleteRoom() {\r\n' +
+    '    if (!pendingRoom) return;\r\n' +
+    '    setDeletingRoom(true);\r\n' +
+    '    await eliminaCamera(pendingRoom.id);\r\n' +
+    '    setDeletingRoom(false);\r\n' +
+    '    setPendingRoom(null);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function apriModificaCamera(room: RoomAPI) {\r\n' +
+    '    setEditId(room.id);\r\n' +
+    '    setForm({\r\n' +
+    '      numero: room.numero,\r\n' +
+    '      tipo: room.tipo,\r\n' +
+    '      piano: room.piano,\r\n' +
+    '      reparto: room.reparto,\r\n' +
+    '      stato: room.stato,\r\n' +
+    '      note: room.note,\r\n' +
+    '    });\r\n' +
+    '    setFormAperto(true);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  /* ── Bed edit ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  function apriLettoEdit(bed: BedAPI) {\r\n' +
+    '    setLettoEdit({ bedId: bed.id });\r\n' +
+    '    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n' +
+    '    setLettoForm({\r\n' +
+    "      stato: bed.stato === 'manutenzione' ? 'manutenzione' : 'libero',\r\n" +
+    "      note: bed.note ?? '',\r\n" +
+    '    });\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function salvaLetto() {\r\n' +
+    '    if (!lettoEdit || bedSaveInFlight.current) return;\r\n' +
+    '    bedSaveInFlight.current = true;\r\n' +
+    '    setBedSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n' +
+    "        method: 'PUT',\r\n" +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          stato: lettoForm.stato,\r\n' +
+    '          note: lettoForm.note || undefined,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || 'Errore nel salvataggio del letto');\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setLettoEdit(null);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio del letto');\r\n" +
+    '  '... 15825 more characters
+  
+      at TestContext.<anonymous> (C:\w-426\frontend\src\lib\__tests__\roomActionIdentity.test.ts:18:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useState, useEffect, useCallback, useRef } from \'react\';\r\nimport { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from \'../../icons\';\r\nimport { API_URL } from \'../../config\';\r\nimport { operatorHeaders } from \'../../lib/operatorSession\';\r\nimport { ClinicalTableSection } from \'../operator/cartella/shared\';\r\nimport { AccessibleDialogSurface } from \'../shared/AccessibleDialogSurface\';\r\nimport { ConfirmDialog } from \'../shared/ConfirmDialog\';\r\n\r\n/* ── API types ─────────────────────────────────────────── */\r\n\r\ninterface AssignmentAPI {\r\n  id: string;\r\n  patientId: string;\r\n  startDate: string;\r\n  endDate: string | null;\r\n  patient: {\r\n    id: string;\r\n    firstName: string;\r\n    lastName: string;\r\n    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n  };\r\n}\r\n\r\ninterface BedAPI {\r\n  id: string;\r\n  roomId: string;\r\n  label: string;\r\n  stato: string;\r\n  note: string;\r\n  assignments: AssignmentAPI[];\r\n}\r\n\r\ninterface RoomAPI {\r\n  id: string;\r\n  numero: string;\r\n  tipo: \'singola\' | \'doppia\' | \'altra\';\r\n  piano: string;\r\n  reparto: string;\r\n  stato: \'attiva\' | \'inattiva\' | \'manutenzione\';\r\n  note: string;\r\n  beds: BedAPI[];\r\n}\r\n\r\ninterface OccupancyAPI {\r\n  totalRooms: number;\r\n  totalBeds: number;\r\n  occupiedBeds: number;\r\n  freeBeds: number;\r\n  maintenanceBeds: number;\r\n  occupancyPct: number;\r\n}\r\n\r\n/* ── Helpers ───────────────────────────────────────────── */\r\n\r\ntype StatoLetto = \'libero\' | \'occupato\' | \'manutenzione\';\r\ntype TipoCamera = \'singola\' | \'doppia\' | \'altra\';\r\ntype StatoCamera = \'attiva\' | \'inattiva\' | \'manutenzione\';\r\nconst MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n\r\nconst STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n  libero: \'letto--libero\',\r\n  occupato: \'letto--occupato\',\r\n  manutenzione: \'letto--manutenzione\',\r\n};\r\n\r\nconst STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n  libero: \'Libero\',\r\n  occupato: \'Occupato\',\r\n  manutenzione: \'Manutenzione\',\r\n};\r\n\r\nconst FORM_CAMERA_VUOTO = {\r\n  numero: \'\',\r\n  tipo: \'singola\' as TipoCamera,\r\n  piano: \'1°\',\r\n  reparto: \'\',\r\n  stato: \'attiva\' as StatoCamera,\r\n  note: \'\',\r\n};\r\n\r\nfunction bedIsOccupied(bed: BedAPI): boolean {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return bed.assignments.some(\r\n    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n  );\r\n}\r\n\r\nfunction bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n  if (bed.stato === \'manutenzione\') return \'manutenzione\';\r\n  if (bedIsOccupied(bed)) return \'occupato\';\r\n  return \'libero\';\r\n}\r\n\r\nfunction activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return (\r\n    bed.assignments.find(\r\n      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n    ) ?? null\r\n  );\r\n}\r\n\r\nasync function fetchFacilityData(signal?: AbortSignal) {\r\n  const [roomsRes, occRes] = await Promise.all([\r\n    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n  ]);\r\n  if (!roomsRes.ok || !occRes.ok) {\r\n    throw new Error(\'facility_data_unavailable\');\r\n  }\r\n  const [rooms, occupancy] = await Promise.all([\r\n    roomsRes.json() as Promise<RoomAPI[]>,\r\n    occRes.json() as Promise<OccupancyAPI>,\r\n  ]);\r\n  return { rooms, occupancy };\r\n}\r\n\r\n/* ── Component ─────────────────────────────────────────── */\r\n\r\nexport function RoomsManagement() {\r\n  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n  const [loading, setLoading] = useState(true);\r\n  const [error, setError] = useState<string | null>(null);\r\n  const [loadError, setLoadError] = useState<string | null>(null);\r\n\r\n  const [formAperto, setFormAperto] = useState(false);\r\n  const [editId, setEditId] = useState<string | null>(null);\r\n  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n  const [saving, setSaving] = useState(false);\r\n\r\n  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n  const [bedSaving, setBedSaving] = useState(false);\r\n  const bedSaveInFlight = useRef(false);\r\n  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n    stato: \'libero\',\r\n    note: \'\',\r\n  });\r\n\r\n  const [filtroReparto, setFiltroReparto] = useState(\'tutti\');\r\n  const [filtroStatoLetto, setFiltroStatoLetto] = useState<\'tutti\' | StatoLetto>(\'tutti\');\r\n\r\n  /* ── Data loading ─────────────────────────────────────── */\r\n\r\n  const loadData = useCallback(async () => {\r\n    setLoading(true);\r\n    setLoadError(null);\r\n    try {\r\n      const data = await fetchFacilityData();\r\n      setRooms(data.rooms);\r\n      setOccupancy(data.occupancy);\r\n    } catch {\r\n      setLoadError(\r\n        \'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.\',\r\n      );\r\n    } finally {\r\n      setLoading(false);\r\n    }\r\n  }, []);\r\n\r\n  useEffect(() => {\r\n    const controller = new AbortController();\r\n    void fetchFacilityData(controller.signal)\r\n      .then((data) => {\r\n        setRooms(data.rooms);\r\n        setOccupancy(data.occupancy);\r\n        setLoadError(null);\r\n      })\r\n      .catch(() => {\r\n        if (!controller.signal.aborted) {\r\n          setLoadError(\r\n            \'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.\',\r\n          );\r\n        }\r\n      })\r\n      .finally(() => {\r\n        if (!controller.signal.aborted) setLoading(false);\r\n      });\r\n    return () => controller.abort();\r\n  }, []);\r\n\r\n  /* ── Derived data ─────────────────────────────────────── */\r\n\r\n  const reparti = [\'tutti\', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n\r\n  const roomsPerReparto =\r\n    filtroReparto === \'tutti\' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n\r\n  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n\r\n  const lettiVisibili = (room: RoomAPI) =>\r\n    filtroStatoLetto === \'tutti\'\r\n      ? room.beds\r\n      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n\r\n  const roomsFiltrate =\r\n    filtroStatoLetto === \'tutti\'\r\n      ? roomsPerReparto\r\n      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n\r\n  /* ── Room CRUD ────────────────────────────────────────── */\r\n\r\n  async function salvaCamera() {\r\n    if (!form.numero.trim()) return;\r\n    setSaving(true);\r\n    setError(null);\r\n    try {\r\n      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n      const method = editId ? \'PUT\' : \'POST\';\r\n      const res = await fetch(url, {\r\n        method,\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          numero: form.numero,\r\n          tipo: form.tipo,\r\n          piano: form.piano,\r\n          reparto: form.reparto,\r\n          stato: form.stato,\r\n          note: form.note,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || `Errore nel ${editId ? \'salvataggio\' : \'creazione\'} della camera`);\r\n        return;\r\n      }\r\n      setFormAperto(false);\r\n      setEditId(null);\r\n      setForm(FORM_CAMERA_VUOTO);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio\');\r\n    } finally {\r\n      setSaving(false);\r\n    }\r\n  }\r\n\r\n  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n  const [deletingRoom, setDeletingRoom] = useState(false);\r\n\r\n  async function eliminaCamera(roomId: string) {\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n        method: \'DELETE\',\r\n        headers: operatorHeaders(),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        if (res.status === 409) {\r\n          setError(data.error || \'Impossibile eliminare: ci sono assegnazioni attive\');\r\n        } else {\r\n          setError(data.error || "Errore durante l\'eliminazione");\r\n        }\r\n        return;\r\n      }\r\n      await loadData();\r\n    } catch {\r\n      setError("Errore di rete durante l\'eliminazione");\r\n    }\r\n  }\r\n\r\n  async function confirmDeleteRoom() {\r\n    if (!pendingRoom) return;\r\n    setDeletingRoom(true);\r\n    await eliminaCamera(pendingRoom.id);\r\n    setDeletingRoom(false);\r\n    setPendingRoom(null);\r\n  }\r\n\r\n  function apriModificaCamera(room: RoomAPI) {\r\n    setEditId(room.id);\r\n    setForm({\r\n      numero: room.numero,\r\n      tipo: room.tipo,\r\n      piano: room.piano,\r\n      reparto: room.reparto,\r\n      stato: room.stato,\r\n      note: room.note,\r\n    });\r\n    setFormAperto(true);\r\n  }\r\n\r\n  /* ── Bed edit ─────────────────────────────────────────── */\r\n\r\n  function apriLettoEdit(bed: BedAPI) {\r\n    setLettoEdit({ bedId: bed.id });\r\n    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n    setLettoForm({\r\n      stato: bed.stato === \'manutenzione\' ? \'manutenzione\' : \'libero\',\r\n      note: bed.note ?? \'\',\r\n    });\r\n  }\r\n\r\n  async function salvaLetto() {\r\n    if (!lettoEdit || bedSaveInFlight.current) return;\r\n    bedSaveInFlight.current = true;\r\n    setBedSaving(true);\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n        method: \'PUT\',\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          stato: lettoForm.stato,\r\n          note: lettoForm.note || undefined,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || \'Errore nel salvataggio del letto\');\r\n        return;\r\n      }\r\n      setLettoEdit(null);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio del letto\');\r\n  '... 15825 more characters,
+    expected: /setEditRoomNumber\(room\.numero\)/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\roomActionIdentity.test.ts:1:1139
+✖ destructive action is distinct and remains behind the existing resource-bound confirmation (0.4481ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /className="room-card__actions"/. Input:
+  
+  "import { useState, useEffect, useCallback, useRef } from 'react';\r\n" +
+    "import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';\r\n" +
+    "import { API_URL } from '../../config';\r\n" +
+    "import { operatorHeaders } from '../../lib/operatorSession';\r\n" +
+    "import { ClinicalTableSection } from '../operator/cartella/shared';\r\n" +
+    "import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';\r\n" +
+    "import { ConfirmDialog } from '../shared/ConfirmDialog';\r\n" +
+    '\r\n' +
+    '/* ── API types ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'interface AssignmentAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  patientId: string;\r\n' +
+    '  startDate: string;\r\n' +
+    '  endDate: string | null;\r\n' +
+    '  patient: {\r\n' +
+    '    id: string;\r\n' +
+    '    firstName: string;\r\n' +
+    '    lastName: string;\r\n' +
+    '    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n' +
+    '  };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface BedAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  roomId: string;\r\n' +
+    '  label: string;\r\n' +
+    '  stato: string;\r\n' +
+    '  note: string;\r\n' +
+    '  assignments: AssignmentAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface RoomAPI {\r\n' +
+    '  id: string;\r\n' +
+    '  numero: string;\r\n' +
+    "  tipo: 'singola' | 'doppia' | 'altra';\r\n" +
+    '  piano: string;\r\n' +
+    '  reparto: string;\r\n' +
+    "  stato: 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    '  note: string;\r\n' +
+    '  beds: BedAPI[];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'interface OccupancyAPI {\r\n' +
+    '  totalRooms: number;\r\n' +
+    '  totalBeds: number;\r\n' +
+    '  occupiedBeds: number;\r\n' +
+    '  freeBeds: number;\r\n' +
+    '  maintenanceBeds: number;\r\n' +
+    '  occupancyPct: number;\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Helpers ───────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "type StatoLetto = 'libero' | 'occupato' | 'manutenzione';\r\n" +
+    "type TipoCamera = 'singola' | 'doppia' | 'altra';\r\n" +
+    "type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';\r\n" +
+    'const MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'letto--libero',\r\n" +
+    "  occupato: 'letto--occupato',\r\n" +
+    "  manutenzione: 'letto--manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n' +
+    "  libero: 'Libero',\r\n" +
+    "  occupato: 'Occupato',\r\n" +
+    "  manutenzione: 'Manutenzione',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'const FORM_CAMERA_VUOTO = {\r\n' +
+    "  numero: '',\r\n" +
+    "  tipo: 'singola' as TipoCamera,\r\n" +
+    "  piano: '1°',\r\n" +
+    "  reparto: '',\r\n" +
+    "  stato: 'attiva' as StatoCamera,\r\n" +
+    "  note: '',\r\n" +
+    '};\r\n' +
+    '\r\n' +
+    'function bedIsOccupied(bed: BedAPI): boolean {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return bed.assignments.some(\r\n' +
+    '    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'function bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n' +
+    "  if (bed.stato === 'manutenzione') return 'manutenzione';\r\n" +
+    "  if (bedIsOccupied(bed)) return 'occupato';\r\n" +
+    "  return 'libero';\r\n" +
+    '}\r\n' +
+    '\r\n' +
+    'function activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n' +
+    '  const today = new Date().toISOString().slice(0, 10);\r\n' +
+    '  return (\r\n' +
+    '    bed.assignments.find(\r\n' +
+    '      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n' +
+    '    ) ?? null\r\n' +
+    '  );\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'async function fetchFacilityData(signal?: AbortSignal) {\r\n' +
+    '  const [roomsRes, occRes] = await Promise.all([\r\n' +
+    '    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n' +
+    '    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n' +
+    '  ]);\r\n' +
+    '  if (!roomsRes.ok || !occRes.ok) {\r\n' +
+    "    throw new Error('facility_data_unavailable');\r\n" +
+    '  }\r\n' +
+    '  const [rooms, occupancy] = await Promise.all([\r\n' +
+    '    roomsRes.json() as Promise<RoomAPI[]>,\r\n' +
+    '    occRes.json() as Promise<OccupancyAPI>,\r\n' +
+    '  ]);\r\n' +
+    '  return { rooms, occupancy };\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    '/* ── Component ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    'export function RoomsManagement() {\r\n' +
+    '  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n' +
+    '  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n' +
+    '  const [loading, setLoading] = useState(true);\r\n' +
+    '  const [error, setError] = useState<string | null>(null);\r\n' +
+    '  const [loadError, setLoadError] = useState<string | null>(null);\r\n' +
+    '\r\n' +
+    '  const [formAperto, setFormAperto] = useState(false);\r\n' +
+    '  const [editId, setEditId] = useState<string | null>(null);\r\n' +
+    '  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n' +
+    '  const [saving, setSaving] = useState(false);\r\n' +
+    '\r\n' +
+    '  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n' +
+    '  const [bedSaving, setBedSaving] = useState(false);\r\n' +
+    '  const bedSaveInFlight = useRef(false);\r\n' +
+    '  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n' +
+    "    stato: 'libero',\r\n" +
+    "    note: '',\r\n" +
+    '  });\r\n' +
+    '\r\n' +
+    "  const [filtroReparto, setFiltroReparto] = useState('tutti');\r\n" +
+    "  const [filtroStatoLetto, setFiltroStatoLetto] = useState<'tutti' | StatoLetto>('tutti');\r\n" +
+    '\r\n' +
+    '  /* ── Data loading ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  const loadData = useCallback(async () => {\r\n' +
+    '    setLoading(true);\r\n' +
+    '    setLoadError(null);\r\n' +
+    '    try {\r\n' +
+    '      const data = await fetchFacilityData();\r\n' +
+    '      setRooms(data.rooms);\r\n' +
+    '      setOccupancy(data.occupancy);\r\n' +
+    '    } catch {\r\n' +
+    '      setLoadError(\r\n' +
+    "        'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.',\r\n" +
+    '      );\r\n' +
+    '    } finally {\r\n' +
+    '      setLoading(false);\r\n' +
+    '    }\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  useEffect(() => {\r\n' +
+    '    const controller = new AbortController();\r\n' +
+    '    void fetchFacilityData(controller.signal)\r\n' +
+    '      .then((data) => {\r\n' +
+    '        setRooms(data.rooms);\r\n' +
+    '        setOccupancy(data.occupancy);\r\n' +
+    '        setLoadError(null);\r\n' +
+    '      })\r\n' +
+    '      .catch(() => {\r\n' +
+    '        if (!controller.signal.aborted) {\r\n' +
+    '          setLoadError(\r\n' +
+    "            'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.',\r\n" +
+    '          );\r\n' +
+    '        }\r\n' +
+    '      })\r\n' +
+    '      .finally(() => {\r\n' +
+    '        if (!controller.signal.aborted) setLoading(false);\r\n' +
+    '      });\r\n' +
+    '    return () => controller.abort();\r\n' +
+    '  }, []);\r\n' +
+    '\r\n' +
+    '  /* ── Derived data ─────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    "  const reparti = ['tutti', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n" +
+    '\r\n' +
+    '  const roomsPerReparto =\r\n' +
+    "    filtroReparto === 'tutti' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n" +
+    '\r\n' +
+    '  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n' +
+    '  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n' +
+    '\r\n' +
+    '  const lettiVisibili = (room: RoomAPI) =>\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? room.beds\r\n' +
+    '      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n' +
+    '\r\n' +
+    '  const roomsFiltrate =\r\n' +
+    "    filtroStatoLetto === 'tutti'\r\n" +
+    '      ? roomsPerReparto\r\n' +
+    '      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n' +
+    '\r\n' +
+    '  /* ── Room CRUD ────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  async function salvaCamera() {\r\n' +
+    '    if (!form.numero.trim()) return;\r\n' +
+    '    setSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n' +
+    "      const method = editId ? 'PUT' : 'POST';\r\n" +
+    '      const res = await fetch(url, {\r\n' +
+    '        method,\r\n' +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          numero: form.numero,\r\n' +
+    '          tipo: form.tipo,\r\n' +
+    '          piano: form.piano,\r\n' +
+    '          reparto: form.reparto,\r\n' +
+    '          stato: form.stato,\r\n' +
+    '          note: form.note,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || `Errore nel ${editId ? 'salvataggio' : 'creazione'} della camera`);\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setFormAperto(false);\r\n' +
+    '      setEditId(null);\r\n' +
+    '      setForm(FORM_CAMERA_VUOTO);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio');\r\n" +
+    '    } finally {\r\n' +
+    '      setSaving(false);\r\n' +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n' +
+    '  const [deletingRoom, setDeletingRoom] = useState(false);\r\n' +
+    '\r\n' +
+    '  async function eliminaCamera(roomId: string) {\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n' +
+    "        method: 'DELETE',\r\n" +
+    '        headers: operatorHeaders(),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    '        if (res.status === 409) {\r\n' +
+    "          setError(data.error || 'Impossibile eliminare: ci sono assegnazioni attive');\r\n" +
+    '        } else {\r\n' +
+    `          setError(data.error || "Errore durante l'eliminazione");\r\n` +
+    '        }\r\n' +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    `      setError("Errore di rete durante l'eliminazione");\r\n` +
+    '    }\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function confirmDeleteRoom() {\r\n' +
+    '    if (!pendingRoom) return;\r\n' +
+    '    setDeletingRoom(true);\r\n' +
+    '    await eliminaCamera(pendingRoom.id);\r\n' +
+    '    setDeletingRoom(false);\r\n' +
+    '    setPendingRoom(null);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function apriModificaCamera(room: RoomAPI) {\r\n' +
+    '    setEditId(room.id);\r\n' +
+    '    setForm({\r\n' +
+    '      numero: room.numero,\r\n' +
+    '      tipo: room.tipo,\r\n' +
+    '      piano: room.piano,\r\n' +
+    '      reparto: room.reparto,\r\n' +
+    '      stato: room.stato,\r\n' +
+    '      note: room.note,\r\n' +
+    '    });\r\n' +
+    '    setFormAperto(true);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  /* ── Bed edit ─────────────────────────────────────────── */\r\n' +
+    '\r\n' +
+    '  function apriLettoEdit(bed: BedAPI) {\r\n' +
+    '    setLettoEdit({ bedId: bed.id });\r\n' +
+    '    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n' +
+    '    setLettoForm({\r\n' +
+    "      stato: bed.stato === 'manutenzione' ? 'manutenzione' : 'libero',\r\n" +
+    "      note: bed.note ?? '',\r\n" +
+    '    });\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  async function salvaLetto() {\r\n' +
+    '    if (!lettoEdit || bedSaveInFlight.current) return;\r\n' +
+    '    bedSaveInFlight.current = true;\r\n' +
+    '    setBedSaving(true);\r\n' +
+    '    setError(null);\r\n' +
+    '    try {\r\n' +
+    '      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n' +
+    "        method: 'PUT',\r\n" +
+    "        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },\r\n" +
+    '        body: JSON.stringify({\r\n' +
+    '          stato: lettoForm.stato,\r\n' +
+    '          note: lettoForm.note || undefined,\r\n' +
+    '        }),\r\n' +
+    '      });\r\n' +
+    '      if (!res.ok) {\r\n' +
+    '        const data = await res.json().catch(() => ({}));\r\n' +
+    "        setError(data.error || 'Errore nel salvataggio del letto');\r\n" +
+    '        return;\r\n' +
+    '      }\r\n' +
+    '      setLettoEdit(null);\r\n' +
+    '      await loadData();\r\n' +
+    '    } catch {\r\n' +
+    "      setError('Errore di rete durante il salvataggio del letto');\r\n" +
+    '  '... 15825 more characters
+  
+      at TestContext.<anonymous> (C:\w-426\frontend\src\lib\__tests__\roomActionIdentity.test.ts:22:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useState, useEffect, useCallback, useRef } from \'react\';\r\nimport { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from \'../../icons\';\r\nimport { API_URL } from \'../../config\';\r\nimport { operatorHeaders } from \'../../lib/operatorSession\';\r\nimport { ClinicalTableSection } from \'../operator/cartella/shared\';\r\nimport { AccessibleDialogSurface } from \'../shared/AccessibleDialogSurface\';\r\nimport { ConfirmDialog } from \'../shared/ConfirmDialog\';\r\n\r\n/* ── API types ─────────────────────────────────────────── */\r\n\r\ninterface AssignmentAPI {\r\n  id: string;\r\n  patientId: string;\r\n  startDate: string;\r\n  endDate: string | null;\r\n  patient: {\r\n    id: string;\r\n    firstName: string;\r\n    lastName: string;\r\n    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;\r\n  };\r\n}\r\n\r\ninterface BedAPI {\r\n  id: string;\r\n  roomId: string;\r\n  label: string;\r\n  stato: string;\r\n  note: string;\r\n  assignments: AssignmentAPI[];\r\n}\r\n\r\ninterface RoomAPI {\r\n  id: string;\r\n  numero: string;\r\n  tipo: \'singola\' | \'doppia\' | \'altra\';\r\n  piano: string;\r\n  reparto: string;\r\n  stato: \'attiva\' | \'inattiva\' | \'manutenzione\';\r\n  note: string;\r\n  beds: BedAPI[];\r\n}\r\n\r\ninterface OccupancyAPI {\r\n  totalRooms: number;\r\n  totalBeds: number;\r\n  occupiedBeds: number;\r\n  freeBeds: number;\r\n  maintenanceBeds: number;\r\n  occupancyPct: number;\r\n}\r\n\r\n/* ── Helpers ───────────────────────────────────────────── */\r\n\r\ntype StatoLetto = \'libero\' | \'occupato\' | \'manutenzione\';\r\ntype TipoCamera = \'singola\' | \'doppia\' | \'altra\';\r\ntype StatoCamera = \'attiva\' | \'inattiva\' | \'manutenzione\';\r\nconst MAX_FACILITY_NOTE_LENGTH = 2_000;\r\n\r\nconst STATO_LETTO_CLASS: Record<StatoLetto, string> = {\r\n  libero: \'letto--libero\',\r\n  occupato: \'letto--occupato\',\r\n  manutenzione: \'letto--manutenzione\',\r\n};\r\n\r\nconst STATO_LETTO_LABEL: Record<StatoLetto, string> = {\r\n  libero: \'Libero\',\r\n  occupato: \'Occupato\',\r\n  manutenzione: \'Manutenzione\',\r\n};\r\n\r\nconst FORM_CAMERA_VUOTO = {\r\n  numero: \'\',\r\n  tipo: \'singola\' as TipoCamera,\r\n  piano: \'1°\',\r\n  reparto: \'\',\r\n  stato: \'attiva\' as StatoCamera,\r\n  note: \'\',\r\n};\r\n\r\nfunction bedIsOccupied(bed: BedAPI): boolean {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return bed.assignments.some(\r\n    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n  );\r\n}\r\n\r\nfunction bedStatoDisplay(bed: BedAPI): StatoLetto {\r\n  if (bed.stato === \'manutenzione\') return \'manutenzione\';\r\n  if (bedIsOccupied(bed)) return \'occupato\';\r\n  return \'libero\';\r\n}\r\n\r\nfunction activeBedAssignment(bed: BedAPI): AssignmentAPI | null {\r\n  const today = new Date().toISOString().slice(0, 10);\r\n  return (\r\n    bed.assignments.find(\r\n      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),\r\n    ) ?? null\r\n  );\r\n}\r\n\r\nasync function fetchFacilityData(signal?: AbortSignal) {\r\n  const [roomsRes, occRes] = await Promise.all([\r\n    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),\r\n    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),\r\n  ]);\r\n  if (!roomsRes.ok || !occRes.ok) {\r\n    throw new Error(\'facility_data_unavailable\');\r\n  }\r\n  const [rooms, occupancy] = await Promise.all([\r\n    roomsRes.json() as Promise<RoomAPI[]>,\r\n    occRes.json() as Promise<OccupancyAPI>,\r\n  ]);\r\n  return { rooms, occupancy };\r\n}\r\n\r\n/* ── Component ─────────────────────────────────────────── */\r\n\r\nexport function RoomsManagement() {\r\n  const [rooms, setRooms] = useState<RoomAPI[]>([]);\r\n  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);\r\n  const [loading, setLoading] = useState(true);\r\n  const [error, setError] = useState<string | null>(null);\r\n  const [loadError, setLoadError] = useState<string | null>(null);\r\n\r\n  const [formAperto, setFormAperto] = useState(false);\r\n  const [editId, setEditId] = useState<string | null>(null);\r\n  const [form, setForm] = useState(FORM_CAMERA_VUOTO);\r\n  const [saving, setSaving] = useState(false);\r\n\r\n  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);\r\n  const [bedSaving, setBedSaving] = useState(false);\r\n  const bedSaveInFlight = useRef(false);\r\n  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({\r\n    stato: \'libero\',\r\n    note: \'\',\r\n  });\r\n\r\n  const [filtroReparto, setFiltroReparto] = useState(\'tutti\');\r\n  const [filtroStatoLetto, setFiltroStatoLetto] = useState<\'tutti\' | StatoLetto>(\'tutti\');\r\n\r\n  /* ── Data loading ─────────────────────────────────────── */\r\n\r\n  const loadData = useCallback(async () => {\r\n    setLoading(true);\r\n    setLoadError(null);\r\n    try {\r\n      const data = await fetchFacilityData();\r\n      setRooms(data.rooms);\r\n      setOccupancy(data.occupancy);\r\n    } catch {\r\n      setLoadError(\r\n        \'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.\',\r\n      );\r\n    } finally {\r\n      setLoading(false);\r\n    }\r\n  }, []);\r\n\r\n  useEffect(() => {\r\n    const controller = new AbortController();\r\n    void fetchFacilityData(controller.signal)\r\n      .then((data) => {\r\n        setRooms(data.rooms);\r\n        setOccupancy(data.occupancy);\r\n        setLoadError(null);\r\n      })\r\n      .catch(() => {\r\n        if (!controller.signal.aborted) {\r\n          setLoadError(\r\n            \'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.\',\r\n          );\r\n        }\r\n      })\r\n      .finally(() => {\r\n        if (!controller.signal.aborted) setLoading(false);\r\n      });\r\n    return () => controller.abort();\r\n  }, []);\r\n\r\n  /* ── Derived data ─────────────────────────────────────── */\r\n\r\n  const reparti = [\'tutti\', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];\r\n\r\n  const roomsPerReparto =\r\n    filtroReparto === \'tutti\' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);\r\n\r\n  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };\r\n  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));\r\n\r\n  const lettiVisibili = (room: RoomAPI) =>\r\n    filtroStatoLetto === \'tutti\'\r\n      ? room.beds\r\n      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);\r\n\r\n  const roomsFiltrate =\r\n    filtroStatoLetto === \'tutti\'\r\n      ? roomsPerReparto\r\n      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);\r\n\r\n  /* ── Room CRUD ────────────────────────────────────────── */\r\n\r\n  async function salvaCamera() {\r\n    if (!form.numero.trim()) return;\r\n    setSaving(true);\r\n    setError(null);\r\n    try {\r\n      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;\r\n      const method = editId ? \'PUT\' : \'POST\';\r\n      const res = await fetch(url, {\r\n        method,\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          numero: form.numero,\r\n          tipo: form.tipo,\r\n          piano: form.piano,\r\n          reparto: form.reparto,\r\n          stato: form.stato,\r\n          note: form.note,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || `Errore nel ${editId ? \'salvataggio\' : \'creazione\'} della camera`);\r\n        return;\r\n      }\r\n      setFormAperto(false);\r\n      setEditId(null);\r\n      setForm(FORM_CAMERA_VUOTO);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio\');\r\n    } finally {\r\n      setSaving(false);\r\n    }\r\n  }\r\n\r\n  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);\r\n  const [deletingRoom, setDeletingRoom] = useState(false);\r\n\r\n  async function eliminaCamera(roomId: string) {\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {\r\n        method: \'DELETE\',\r\n        headers: operatorHeaders(),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        if (res.status === 409) {\r\n          setError(data.error || \'Impossibile eliminare: ci sono assegnazioni attive\');\r\n        } else {\r\n          setError(data.error || "Errore durante l\'eliminazione");\r\n        }\r\n        return;\r\n      }\r\n      await loadData();\r\n    } catch {\r\n      setError("Errore di rete durante l\'eliminazione");\r\n    }\r\n  }\r\n\r\n  async function confirmDeleteRoom() {\r\n    if (!pendingRoom) return;\r\n    setDeletingRoom(true);\r\n    await eliminaCamera(pendingRoom.id);\r\n    setDeletingRoom(false);\r\n    setPendingRoom(null);\r\n  }\r\n\r\n  function apriModificaCamera(room: RoomAPI) {\r\n    setEditId(room.id);\r\n    setForm({\r\n      numero: room.numero,\r\n      tipo: room.tipo,\r\n      piano: room.piano,\r\n      reparto: room.reparto,\r\n      stato: room.stato,\r\n      note: room.note,\r\n    });\r\n    setFormAperto(true);\r\n  }\r\n\r\n  /* ── Bed edit ─────────────────────────────────────────── */\r\n\r\n  function apriLettoEdit(bed: BedAPI) {\r\n    setLettoEdit({ bedId: bed.id });\r\n    // "occupato" is derived from active assignments; it is never a persisted bed status.\r\n    setLettoForm({\r\n      stato: bed.stato === \'manutenzione\' ? \'manutenzione\' : \'libero\',\r\n      note: bed.note ?? \'\',\r\n    });\r\n  }\r\n\r\n  async function salvaLetto() {\r\n    if (!lettoEdit || bedSaveInFlight.current) return;\r\n    bedSaveInFlight.current = true;\r\n    setBedSaving(true);\r\n    setError(null);\r\n    try {\r\n      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {\r\n        method: \'PUT\',\r\n        headers: { \'Content-Type\': \'application/json\', ...operatorHeaders() },\r\n        body: JSON.stringify({\r\n          stato: lettoForm.stato,\r\n          note: lettoForm.note || undefined,\r\n        }),\r\n      });\r\n      if (!res.ok) {\r\n        const data = await res.json().catch(() => ({}));\r\n        setError(data.error || \'Errore nel salvataggio del letto\');\r\n        return;\r\n      }\r\n      setLettoEdit(null);\r\n      await loadData();\r\n    } catch {\r\n      setError(\'Errore di rete durante il salvataggio del letto\');\r\n  '... 15825 more characters,
+    expected: /className="room-card__actions"/,
+    operator: 'match',
+    diff: 'simple'
+  }

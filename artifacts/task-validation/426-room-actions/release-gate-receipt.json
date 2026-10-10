@@ -1,0 +1,94 @@
+{
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Explicit human authorization plus NEW independent QA4 and root byte-identical source-bound replay",
+  "originalCriteriaPassed": 4,
+  "independentBrowserCases": 22,
+  "rootIndependentRerun": 22,
+  "sourceSha256": "0cc67f8a38525edb6e1ce76a42890d16dfd3011b08054f0d23c92b683354bcdf",
+  "independentRawSourceSha256": "8d92ae28a802936347180bdb50cd3fc40f4b7f163d64aa3cc8d4fff1ecad7de1",
+  "sourceFiles": 1539,
+  "qaManifestSha256": "5ba66a00b8923beccd2e5f8faf47c54de068a38f4b406ab8f742b13158b5e733",
+  "immutableQaFiles": 122,
+  "normalization": [
+    {
+      "path": "frontend/src/components/admin/BedEditDialog.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomActions.css",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomFormPanel.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomManagementModel.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomsManagement.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomActionIdentity.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    }
+  ],
+  "focusedEach": 24,
+  "fullEach": {
+    "tests": 1267,
+    "pass": 1255,
+    "exactBaselineFailures": 12,
+    "newFailures": 0
+  },
+  "productionPatientTestMutations": 0,
+  "scope": [
+    "frontend/src/components/admin/RoomsManagement.tsx",
+    "frontend/src/components/admin/RoomManagementModel.ts",
+    "frontend/src/components/admin/RoomFormPanel.tsx",
+    "frontend/src/components/admin/BedEditDialog.tsx",
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts",
+    "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+    "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts"
+  ],
+  "failedAttempts": [
+    {
+      "folder": "failed-independent-qa-07",
+      "manifestSha256": "7a7ee7ff2f48dde6ba453771441f753634dcdd6d13583b9c32219a51a86d2f7d",
+      "files": 105,
+      "verdict": "FAILED VALIDATION retained, not waived"
+    },
+    {
+      "folder": "failed-independent-qa2-143",
+      "manifestSha256": "214ebae4bdc1cced6455897772fc0acca255488c91cb95b74a2b0a6055dafe29",
+      "files": 100,
+      "verdict": "FAILED VALIDATION retained, not waived"
+    },
+    {
+      "folder": "failed-independent-qa3-922",
+      "manifestSha256": "133014ded7ed582f34b38f615551b8ab66ca1509407e6a1a99150d7fbfbf7c58",
+      "files": 140,
+      "verdict": "FAILED VALIDATION retained, not waived"
+    }
+  ],
+  "hardwareClaim": "Chromium viewport/emulation only, not actual hardware/AT",
+  "persistenceClaim": "Before-wire stateful mock reload only; NO realDB or live deletion claim",
+  "remainingReleaseGates": [
+    "Exact production deployment",
+    "Compiled online acceptance",
+    "Completed CI baseline comparison",
+    "Canonical privacy and pinned public GitHub proof"
+  ],
+  "at": "2026-10-09T23:54:58.652Z"
+}

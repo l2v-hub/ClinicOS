@@ -1,0 +1,31 @@
+{
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "checkedAt": "2026-10-09T23:58:20.701Z",
+  "decision": "VERIFIED RELEASE",
+  "vercel": {
+    "id": "dpl_2bHN5q241NNpYY2G51iEsyJ3uBot",
+    "state": "READY",
+    "githubCommitSha": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+    "gitSourceSha": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "http": 200,
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-4PgwoUsM.js",
+    "bundleHttp": 200,
+    "bundleSha256": "3cc83bedb225c134263b12ed348ed7d9336340c5d238d55cd87a0721d0c60ea4",
+    "styleAssets": [
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+        "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+      }
+    ],
+    "htmlSha256": "9d7ae3882de673e4d0892bdd3ce162866edf47c45ec69ad5c222a37eb177f821"
+  },
+  "backend": {
+    "changed": false,
+    "retainedApplication": "47a4b16c111d9b9bfd0b138991958a8ca8f6c351",
+    "retainedDeployment": "ed539cb2-224c-4221-8e7a-0f0901039987",
+    "healthHttp": 200
+  },
+  "productionPatientTestMutations": 0,
+  "compiledSemanticAcceptance": "Separate guarded compiled online proof required before closure"
+}

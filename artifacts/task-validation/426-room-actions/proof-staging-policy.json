@@ -1,0 +1,27 @@
+{
+  "decision": "AUTHORIZED SCOPED SYNTHETIC PROOF STAGING",
+  "authority": "Direct human evidence publishing authority; root integration owner",
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "explicitDirectoryAllowlist": [
+    "failed-independent-qa-07",
+    "failed-independent-qa2-143",
+    "failed-independent-qa3-922",
+    "independent-qa4",
+    "root-rerun4",
+    "compiled-online",
+    "root-headers2",
+    "root-button",
+    "test-results"
+  ],
+  "plannedPaths": 799,
+  "sealedQa3CacheEvidence": 21,
+  "cachePolicy": "Retain exact21 already-sealed FAILED QA3 optimizer blobs without rewriting its immutable140-file bundle; canonical privacy checks apply to all; exclude every other runtime cache",
+  "excluded": [
+    "Primary dirty/native launchers",
+    "Root preliminary dev attempts retained locally",
+    "Unsealed runtime caches",
+    "Original clinical photos",
+    "Unreleased blocked source"
+  ],
+  "at": "2026-10-10T00:01:01.466Z"
+}

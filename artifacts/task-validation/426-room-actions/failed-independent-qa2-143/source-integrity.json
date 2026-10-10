@@ -1,0 +1,59 @@
+{
+  "head": "1436602e81d0c03625cfa73ce24974099e919612",
+  "base": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "files": 1539,
+  "sourceSha256": "ab0075a27fb722e2818aa5cf56774e4c38acb48324400aba20ea3da86cc6ed31",
+  "beforeAfterIdentical": true,
+  "scope": [
+    "frontend/src/components/admin/BedEditDialog.tsx",
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/components/admin/RoomFormPanel.tsx",
+    "frontend/src/components/admin/RoomManagementModel.ts",
+    "frontend/src/components/admin/RoomsManagement.tsx",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts",
+    "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+    "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts"
+  ],
+  "blobs": [
+    {
+      "path": "frontend/src/components/admin/BedEditDialog.tsx",
+      "gitBlobSha256": "5266d1cb7cc4e6195c291e8d6bb0a7d3ace932acac1501744744328fba55a167",
+      "physicalSha256": "b25c368768d360c7bb741d199617293ca5d18396c2af908e175977c2cf077f15"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomActions.css",
+      "gitBlobSha256": "8f5fbb7e69c4fc9fe7e5c64c6be6b981c3474c34a857afaae3a15613fff5f454",
+      "physicalSha256": "c9f42daeb73f1948a4bfea982ef1430349397d068d41381f7832f12ef3946106"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomFormPanel.tsx",
+      "gitBlobSha256": "eebc73f3d04b6298af760ed11f9df17661b48f6debe8c92a63c7fc64a0f01a5f",
+      "physicalSha256": "319c6824cbab0aa92437ecd0359e8061f23b40e172bd912be795e86d4111670a"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomManagementModel.ts",
+      "gitBlobSha256": "e1d996cb4b4da7e9fb9b4872606eb2820eddac66125e59104cf979a198a9d982",
+      "physicalSha256": "daee9d2c3d51f40910bbc33d58694a16907250a37e398e0a4009be2687969502"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomsManagement.tsx",
+      "gitBlobSha256": "2596b47449e92486d8fe9db4f94919b7fbcc7e8066ba4ff1e46c97d873d48efd",
+      "physicalSha256": "7d03cb6cf9a1d7c461c80b994ec49290c16c1d87cb5676c99170378c69047625"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomActionIdentity.test.ts",
+      "gitBlobSha256": "94fd0f1fa61df56b16ea92851831b934d62efd4ed7a8b837c2759461dd3cf0c4",
+      "physicalSha256": "0694a02027e2c24d6431cca33f10bce33ad897ea79a63267595a7526930fa817"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+      "gitBlobSha256": "2a967696faa6d491d8633054781be34bd32fbf5d40e415b32b929d958bcf0e93",
+      "physicalSha256": "a2600474f80aa1b0d32035dd1183627c465d589b69d6aa7fdd9c2d345ce14b96"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts",
+      "gitBlobSha256": "58bc48b6ce54efbece71332e04238762be5ada2f2ddf823649f3e5f4c740972c",
+      "physicalSha256": "71fdcf2e645922bf2752f63d30f75387fb8c32026e002a24fbc3084c5e037b68"
+    }
+  ]
+}

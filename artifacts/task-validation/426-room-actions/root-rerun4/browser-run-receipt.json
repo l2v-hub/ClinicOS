@@ -1,0 +1,50 @@
+{
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "records": [
+    {
+      "recipe": "browser.mjs",
+      "folder": "browser01",
+      "cases": 6,
+      "exit": 0
+    },
+    {
+      "recipe": "supplemental.mjs",
+      "folder": "supplemental01",
+      "cases": 5,
+      "exit": 0
+    },
+    {
+      "recipe": "long-labels.mjs",
+      "folder": "long01",
+      "cases": 6,
+      "exit": 0
+    },
+    {
+      "recipe": "room-headers.mjs",
+      "folder": "room-headers01",
+      "cases": 2,
+      "exit": 0
+    },
+    {
+      "recipe": "delete-header.mjs",
+      "folder": "delete-header01",
+      "cases": 1,
+      "exit": 0
+    },
+    {
+      "recipe": "confirm-bounds.mjs",
+      "folder": "confirm-bounds01",
+      "cases": 1,
+      "exit": 0
+    },
+    {
+      "recipe": "header-vertical.mjs",
+      "folder": "header-vertical01",
+      "cases": 1,
+      "exit": 0
+    }
+  ],
+  "serialized": true,
+  "appUrl": "http://127.0.0.1:7524",
+  "at": "2026-10-09T23:54:14.418Z"
+}

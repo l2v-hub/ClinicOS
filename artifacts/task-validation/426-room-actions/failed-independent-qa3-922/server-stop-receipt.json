@@ -1,0 +1,9 @@
+{
+  "pid": 26324,
+  "observedListenerOwner": 26324,
+  "result": "STOPPED; browser recipes explicitly closed every context and browser in finally",
+  "exactOwnedCheckout": "C:/w-426-qa3",
+  "commandLine": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/426-room-actions/independent-qa3/recipes/qa-server.mjs",
+  "decision": "AUTHORIZED OWN QA SERVER STOP",
+  "port": 7521
+}

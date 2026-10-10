@@ -1,0 +1,747 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
+import { API_URL } from '../../config';
+import { operatorHeaders } from '../../lib/operatorSession';
+import { ClinicalTableSection } from '../operator/cartella/shared';
+import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
+import { ConfirmDialog } from '../shared/ConfirmDialog';
+
+/* ── API types ─────────────────────────────────────────── */
+
+interface AssignmentAPI {
+  id: string;
+  patientId: string;
+  startDate: string;
+  endDate: string | null;
+  patient: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;
+  };
+}
+
+interface BedAPI {
+  id: string;
+  roomId: string;
+  label: string;
+  stato: string;
+  note: string;
+  assignments: AssignmentAPI[];
+}
+
+interface RoomAPI {
+  id: string;
+  numero: string;
+  tipo: 'singola' | 'doppia' | 'altra';
+  piano: string;
+  reparto: string;
+  stato: 'attiva' | 'inattiva' | 'manutenzione';
+  note: string;
+  beds: BedAPI[];
+}
+
+interface OccupancyAPI {
+  totalRooms: number;
+  totalBeds: number;
+  occupiedBeds: number;
+  freeBeds: number;
+  maintenanceBeds: number;
+  occupancyPct: number;
+}
+
+/* ── Helpers ───────────────────────────────────────────── */
+
+type StatoLetto = 'libero' | 'occupato' | 'manutenzione';
+type TipoCamera = 'singola' | 'doppia' | 'altra';
+type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';
+const MAX_FACILITY_NOTE_LENGTH = 2_000;
+
+const STATO_LETTO_CLASS: Record<StatoLetto, string> = {
+  libero: 'letto--libero',
+  occupato: 'letto--occupato',
+  manutenzione: 'letto--manutenzione',
+};
+
+const STATO_LETTO_LABEL: Record<StatoLetto, string> = {
+  libero: 'Libero',
+  occupato: 'Occupato',
+  manutenzione: 'Manutenzione',
+};
+
+const FORM_CAMERA_VUOTO = {
+  numero: '',
+  tipo: 'singola' as TipoCamera,
+  piano: '1°',
+  reparto: '',
+  stato: 'attiva' as StatoCamera,
+  note: '',
+};
+
+function bedIsOccupied(bed: BedAPI): boolean {
+  const today = new Date().toISOString().slice(0, 10);
+  return bed.assignments.some(
+    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),
+  );
+}
+
+function bedStatoDisplay(bed: BedAPI): StatoLetto {
+  if (bed.stato === 'manutenzione') return 'manutenzione';
+  if (bedIsOccupied(bed)) return 'occupato';
+  return 'libero';
+}
+
+function activeBedAssignment(bed: BedAPI): AssignmentAPI | null {
+  const today = new Date().toISOString().slice(0, 10);
+  return (
+    bed.assignments.find(
+      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),
+    ) ?? null
+  );
+}
+
+async function fetchFacilityData(signal?: AbortSignal) {
+  const [roomsRes, occRes] = await Promise.all([
+    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),
+    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),
+  ]);
+  if (!roomsRes.ok || !occRes.ok) {
+    throw new Error('facility_data_unavailable');
+  }
+  const [rooms, occupancy] = await Promise.all([
+    roomsRes.json() as Promise<RoomAPI[]>,
+    occRes.json() as Promise<OccupancyAPI>,
+  ]);
+  return { rooms, occupancy };
+}
+
+/* ── Component ─────────────────────────────────────────── */
+
+export function RoomsManagement() {
+  const [rooms, setRooms] = useState<RoomAPI[]>([]);
+  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const [formAperto, setFormAperto] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [form, setForm] = useState(FORM_CAMERA_VUOTO);
+  const [saving, setSaving] = useState(false);
+
+  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);
+  const [bedSaving, setBedSaving] = useState(false);
+  const bedSaveInFlight = useRef(false);
+  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({
+    stato: 'libero',
+    note: '',
+  });
+
+  const [filtroReparto, setFiltroReparto] = useState('tutti');
+  const [filtroStatoLetto, setFiltroStatoLetto] = useState<'tutti' | StatoLetto>('tutti');
+
+  /* ── Data loading ─────────────────────────────────────── */
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const data = await fetchFacilityData();
+      setRooms(data.rooms);
+      setOccupancy(data.occupancy);
+    } catch {
+      setLoadError(
+        'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetchFacilityData(controller.signal)
+      .then((data) => {
+        setRooms(data.rooms);
+        setOccupancy(data.occupancy);
+        setLoadError(null);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setLoadError(
+            'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.',
+          );
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
+  }, []);
+
+  /* ── Derived data ─────────────────────────────────────── */
+
+  const reparti = ['tutti', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];
+
+  const roomsPerReparto =
+    filtroReparto === 'tutti' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);
+
+  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };
+  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));
+
+  const lettiVisibili = (room: RoomAPI) =>
+    filtroStatoLetto === 'tutti'
+      ? room.beds
+      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);
+
+  const roomsFiltrate =
+    filtroStatoLetto === 'tutti'
+      ? roomsPerReparto
+      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);
+
+  /* ── Room CRUD ────────────────────────────────────────── */
+
+  async function salvaCamera() {
+    if (!form.numero.trim()) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;
+      const method = editId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+        body: JSON.stringify({
+          numero: form.numero,
+          tipo: form.tipo,
+          piano: form.piano,
+          reparto: form.reparto,
+          stato: form.stato,
+          note: form.note,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || `Errore nel ${editId ? 'salvataggio' : 'creazione'} della camera`);
+        return;
+      }
+      setFormAperto(false);
+      setEditId(null);
+      setForm(FORM_CAMERA_VUOTO);
+      await loadData();
+    } catch {
+      setError('Errore di rete durante il salvataggio');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);
+  const [deletingRoom, setDeletingRoom] = useState(false);
+
+  async function eliminaCamera(roomId: string) {
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {
+        method: 'DELETE',
+        headers: operatorHeaders(),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 409) {
+          setError(data.error || 'Impossibile eliminare: ci sono assegnazioni attive');
+        } else {
+          setError(data.error || "Errore durante l'eliminazione");
+        }
+        return;
+      }
+      await loadData();
+    } catch {
+      setError("Errore di rete durante l'eliminazione");
+    }
+  }
+
+  async function confirmDeleteRoom() {
+    if (!pendingRoom) return;
+    setDeletingRoom(true);
+    await eliminaCamera(pendingRoom.id);
+    setDeletingRoom(false);
+    setPendingRoom(null);
+  }
+
+  function apriModificaCamera(room: RoomAPI) {
+    setEditId(room.id);
+    setForm({
+      numero: room.numero,
+      tipo: room.tipo,
+      piano: room.piano,
+      reparto: room.reparto,
+      stato: room.stato,
+      note: room.note,
+    });
+    setFormAperto(true);
+  }
+
+  /* ── Bed edit ─────────────────────────────────────────── */
+
+  function apriLettoEdit(bed: BedAPI) {
+    setLettoEdit({ bedId: bed.id });
+    // "occupato" is derived from active assignments; it is never a persisted bed status.
+    setLettoForm({
+      stato: bed.stato === 'manutenzione' ? 'manutenzione' : 'libero',
+      note: bed.note ?? '',
+    });
+  }
+
+  async function salvaLetto() {
+    if (!lettoEdit || bedSaveInFlight.current) return;
+    bedSaveInFlight.current = true;
+    setBedSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+        body: JSON.stringify({
+          stato: lettoForm.stato,
+          note: lettoForm.note || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || 'Errore nel salvataggio del letto');
+        return;
+      }
+      setLettoEdit(null);
+      await loadData();
+    } catch {
+      setError('Errore di rete durante il salvataggio del letto');
+    } finally {
+      bedSaveInFlight.current = false;
+      setBedSaving(false);
+    }
+  }
+
+  /* ── Render ───────────────────────────────────────────── */
+
+  if (loading) {
+    return (
+      <div
+        className="rooms-view"
+        style={{ display: 'flex', justifyContent: 'center', padding: 48 }}
+      >
+        <span>Caricamento...</span>
+      </div>
+    );
+  }
+
+  const occ = occupancy;
+
+  return (
+    <div className="rooms-view">
+      <div className="view-header">
+        <div>
+          <h2 className="view-header__title">Posti Letto</h2>
+          <p className="view-header__sub">
+            {occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`}
+          </p>
+        </div>
+        <button
+          className="btn-success"
+
+          onClick={() => {
+            setFormAperto((v) => !v);
+            setEditId(null);
+            setForm(FORM_CAMERA_VUOTO);
+          }}
+        >
+          <IcoPlus /> Nuova camera
+        </button>
+      </div>
+
+      {/* Error alert */}
+      {error && (
+        <div className="alert alert--error" role="alert">
+          <span className="alert__text">{error}</span>
+          <button className="icon-btn" onClick={() => setError(null)} aria-label="Chiudi errore">
+            <IcoX />
+          </button>
+        </div>
+      )}
+
+      {loadError && (
+        <div className="alert alert--error" role="alert">
+          <span className="alert__text">{loadError}</span>
+          <button className="btn-secondary" onClick={() => void loadData()}>
+            Riprova
+          </button>
+        </div>
+      )}
+
+      {/* Occupancy stats */}
+      <div className="occupancy-stats" hidden={!occupancy}>
+        <div className="occ-stat">
+          <span className="occ-stat__val" style={{ color: 'var(--red)' }}>
+            {occ?.occupiedBeds ?? 0}
+          </span>
+          <span className="occ-stat__lbl">Occupati</span>
+        </div>
+        <div className="occ-stat">
+          <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>
+            {occ?.freeBeds ?? 0}
+          </span>
+          <span className="occ-stat__lbl">Liberi</span>
+        </div>
+        <div className="occ-stat">
+          <span className="occ-stat__val">{occ?.maintenanceBeds ?? 0}</span>
+          <span className="occ-stat__lbl">Manutenzione</span>
+        </div>
+        <div className="occ-stat">
+          <span className="occ-stat__val">{occ?.occupancyPct ?? 0}%</span>
+          <span className="occ-stat__lbl">Tasso occupazione</span>
+          <div className="workload-bar-track" style={{ marginTop: 6 }}>
+            <div
+              className="workload-bar-fill"
+              style={{
+                width: `${occ?.occupancyPct ?? 0}%`,
+                background:
+                  (occ?.occupancyPct ?? 0) >= 90
+                    ? 'var(--red)'
+                    : (occ?.occupancyPct ?? 0) >= 70
+                      ? 'var(--amber)'
+                      : 'var(--emerald)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Room form */}
+      {formAperto && (
+        <div className="op-form-panel">
+          <div className="op-form-panel__header">
+            <h3 className="op-form-panel__title">{editId ? 'Modifica Camera' : 'Nuova Camera'}</h3>
+            <button className="icon-btn" onClick={() => setFormAperto(false)}>
+              <IcoX />
+            </button>
+          </div>
+          <div className="op-form-grid">
+            <div className="form-field">
+              <label className="form-label">N° camera *</label>
+              <input
+                className="form-input"
+                value={form.numero}
+                maxLength={32}
+                onChange={(e) => setForm((p) => ({ ...p, numero: e.target.value }))}
+                placeholder="es. 101, PS-02"
+              />
+            </div>
+            <div className="form-field">
+              <label className="form-label">Tipo</label>
+              <select
+                className="form-select"
+                value={form.tipo}
+                onChange={(e) => setForm((p) => ({ ...p, tipo: e.target.value as TipoCamera }))}
+              >
+                <option value="singola">Singola</option>
+                <option value="doppia">Doppia</option>
+                <option value="altra">Altra</option>
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Piano</label>
+              <input
+                className="form-input"
+                value={form.piano}
+                maxLength={64}
+                onChange={(e) => setForm((p) => ({ ...p, piano: e.target.value }))}
+                placeholder="1°, PT…"
+              />
+            </div>
+            <div className="form-field">
+              <label className="form-label">Reparto</label>
+              <input
+                className="form-input"
+                value={form.reparto}
+                maxLength={64}
+                onChange={(e) => setForm((p) => ({ ...p, reparto: e.target.value }))}
+                placeholder="Cardiologia…"
+              />
+            </div>
+            <div className="form-field">
+              <label className="form-label">Stato</label>
+              <select
+                className="form-select"
+                value={form.stato}
+                onChange={(e) => setForm((p) => ({ ...p, stato: e.target.value as StatoCamera }))}
+              >
+                <option value="attiva">Attiva</option>
+                <option value="inattiva">Inattiva</option>
+                <option value="manutenzione">Manutenzione</option>
+              </select>
+            </div>
+          </div>
+          <div className="form-field" style={{ marginTop: 8 }}>
+            <label className="form-label">Note</label>
+            <input
+              className="form-input"
+              value={form.note}
+              maxLength={MAX_FACILITY_NOTE_LENGTH}
+              onChange={(e) => setForm((p) => ({ ...p, note: e.target.value }))}
+              placeholder="Note sulla camera…"
+            />
+          </div>
+          <div className="op-form-panel__actions">
+            <button
+              className="btn-secondary"
+
+              onClick={() => setFormAperto(false)}
+            >
+              Annulla
+            </button>
+            <button
+              className="btn-success"
+
+              onClick={salvaCamera}
+              disabled={saving}
+            >
+              <IcoCheck /> {saving ? 'Salvataggio…' : editId ? 'Salva modifiche' : 'Crea camera'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Bed edit modal */}
+      {lettoEdit && (
+        <AccessibleDialogSurface
+          labelledBy="bed-edit-dialog-title"
+          onClose={() => setLettoEdit(null)}
+          dismissible={!bedSaving}
+        >
+          <div className="modal-header">
+            <h3 className="modal-title" id="bed-edit-dialog-title">
+              Modifica letto
+            </h3>
+            <button
+              type="button"
+              className="icon-btn"
+              aria-label="Chiudi modifica letto"
+              data-dialog-initial-focus
+              disabled={bedSaving}
+              onClick={() => setLettoEdit(null)}
+            >
+              <IcoX />
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="op-form-grid">
+              <div className="form-field">
+                <label className="form-label" htmlFor="bed-edit-status">
+                  Stato
+                </label>
+                <select
+                  id="bed-edit-status"
+                  className="form-select"
+                  value={lettoForm.stato}
+                  disabled={bedSaving}
+                  onChange={(e) => setLettoForm((p) => ({ ...p, stato: e.target.value }))}
+                >
+                  <option value="libero">Libero</option>
+                  <option value="manutenzione">Manutenzione</option>
+                </select>
+              </div>
+              <div className="form-field">
+                <label className="form-label" htmlFor="bed-edit-notes">
+                  Note
+                </label>
+                <input
+                  id="bed-edit-notes"
+                  className="form-input"
+                  value={lettoForm.note}
+                  maxLength={MAX_FACILITY_NOTE_LENGTH}
+                  disabled={bedSaving}
+                  onChange={(e) => setLettoForm((p) => ({ ...p, note: e.target.value }))}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn-secondary"
+
+              disabled={bedSaving}
+              onClick={() => setLettoEdit(null)}
+            >
+              Annulla
+            </button>
+            <button
+              type="button"
+              className="btn-success"
+
+              disabled={bedSaving}
+              onClick={salvaLetto}
+            >
+              <IcoCheck /> {bedSaving ? 'Salvataggio…' : 'Salva'}
+            </button>
+          </div>
+        </AccessibleDialogSurface>
+      )}
+
+      {/* Filtro reparto */}
+      <div className="filter-chips" style={{ marginBottom: 16 }}>
+        {reparti.map((r) => (
+          <button
+            key={r}
+            type="button"
+            className="ds-chip"
+            aria-pressed={filtroReparto === r}
+
+            onClick={() => setFiltroReparto(r)}
+          >
+            {r === 'tutti' ? 'Tutti i reparti' : r}
+          </button>
+        ))}
+      </div>
+
+      {/* Filtro stato letto */}
+      <div className="filter-chips" style={{ marginBottom: 16 }}>
+        {(
+          [
+            { key: 'tutti', label: 'Tutti gli stati' },
+            { key: 'occupato', label: `Occupati (${contiStatoLetto.occupato})` },
+            { key: 'libero', label: `Liberi (${contiStatoLetto.libero})` },
+            { key: 'manutenzione', label: `Manutenzione (${contiStatoLetto.manutenzione})` },
+          ] as const
+        ).map((f) => (
+          <button
+            key={f.key}
+            type="button"
+            className="ds-chip"
+            aria-pressed={filtroStatoLetto === f.key}
+
+            onClick={() => setFiltroStatoLetto(f.key)}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Rooms grid */}
+      <ClinicalTableSection title="Camere" count={roomsFiltrate.length} countLabel="camere">
+        <div className="rooms-grid">
+          {roomsFiltrate.map((room) => {
+            const occupati = room.beds.filter((b) => bedStatoDisplay(b) === 'occupato').length;
+            return (
+              <div
+                key={room.id}
+                className={`room-card${room.stato === 'inattiva' ? ' room-card--inactive' : ''}${room.stato === 'manutenzione' ? ' room-card--inactive' : ''}`}
+              >
+                <div className="room-card__header">
+                  <div className="room-number-badge">
+                    <IcoBed />
+                    <span>{room.numero}</span>
+                  </div>
+                  <div className="room-card__info">
+                    <span className="room-tipo">{room.tipo}</span>
+                    <span className="room-piano">
+                      {room.piano} · {room.reparto}
+                    </span>
+                  </div>
+                  <div className="room-occupancy-indicator">
+                    <span
+                      style={{
+                        color: occupati === room.beds.length ? 'var(--red)' : 'var(--emerald)',
+                        fontWeight: 700,
+                      }}
+                    >
+                      {occupati}/{room.beds.length}
+                    </span>
+                  </div>
+                  <button
+                    className="icon-btn icon-btn--sm icon-btn--edit"
+
+                    onClick={() => apriModificaCamera(room)}
+                    title="Modifica camera"
+                  >
+                    <IcoEdit />
+                  </button>
+                  <button
+                    className="icon-btn icon-btn--danger"
+
+                    onClick={() => setPendingRoom(room)}
+                    title="Elimina camera"
+                  >
+                    <IcoX />
+                  </button>
+                </div>
+
+                {room.note && <p className="room-note">{room.note}</p>}
+                {room.stato === 'manutenzione' && (
+                  <p className="room-note" style={{ color: 'var(--amber)', fontWeight: 600 }}>
+                    In manutenzione
+                  </p>
+                )}
+
+                <div className="letti-list">
+                  {lettiVisibili(room).map((bed) => {
+                    const stato = bedStatoDisplay(bed);
+                    const activeAssignment = activeBedAssignment(bed);
+                    const patientName = activeAssignment
+                      ? `${activeAssignment.patient.lastName}, ${activeAssignment.patient.firstName}`
+                      : null;
+                    const operatorName = activeAssignment?.patient.registeredBy?.user.fullName;
+                    return (
+                      <div key={bed.id} className={`letto-row ${STATO_LETTO_CLASS[stato]}`}>
+                        <span className="letto-num">{bed.label}</span>
+                        <span className={`letto-stato-badge letto-stato--${stato}`}>
+                          {STATO_LETTO_LABEL[stato]}
+                        </span>
+                        {patientName && activeAssignment && (
+                          <button
+                            type="button"
+                            className="letto-paziente letto-paziente--link"
+                            onClick={() => {
+                              window.location.hash = `/dettaglio-paziente/${activeAssignment.patientId}`;
+                            }}
+                            aria-label={`Apri la scheda di ${activeAssignment.patient.firstName} ${activeAssignment.patient.lastName}`}
+                          >
+                            <span>{patientName}</span>
+                            {operatorName && <small>Operatore: {operatorName}</small>}
+                          </button>
+                        )}
+                        {bed.note && <span className="letto-note">{bed.note}</span>}
+                        <button
+                          className="icon-btn icon-btn--sm"
+
+                          onClick={() => apriLettoEdit(bed)}
+                          title="Modifica letto"
+                        >
+                          <IcoEdit />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </ClinicalTableSection>
+
+      <ConfirmDialog
+        open={pendingRoom !== null}
+        title="Eliminare la camera?"
+        message={
+          pendingRoom
+            ? `La camera ${pendingRoom.numero} verrà eliminata. L'azione non è reversibile.`
+            : ''
+        }
+        confirmLabel="Elimina camera"
+        busy={deletingRoom}
+        onConfirm={() => void confirmDeleteRoom()}
+        onCancel={() => setPendingRoom(null)}
+      />
+    </div>
+  );
+}

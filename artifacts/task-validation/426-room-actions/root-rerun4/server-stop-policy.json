@@ -1,0 +1,7 @@
+{
+  "pid": 28028,
+  "decision": "AUTHORIZED STOP EXACT OWNED QA PID",
+  "at": "2026-10-09T23:54:27.5557350Z",
+  "port": 7524,
+  "verifiedCommand": "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/426-room-actions/root-rerun4/recipes/qa-server.mjs"
+}

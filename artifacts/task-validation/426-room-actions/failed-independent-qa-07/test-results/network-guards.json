@@ -1,0 +1,29 @@
+{
+  "records": [
+    {
+      "path": "browser01/test-results/browser-results.json",
+      "contexts": 2,
+      "expectedControlled409": 0,
+      "zeroUnhandledOrLiveMutations": true
+    },
+    {
+      "path": "long-labels01/test-results/browser-results.json",
+      "contexts": 3,
+      "expectedControlled409": 1,
+      "zeroUnhandledOrLiveMutations": true
+    },
+    {
+      "path": "long-labels02/test-results/failure.json",
+      "contexts": 3,
+      "expectedControlled409": 1,
+      "zeroUnhandledOrLiveMutations": true
+    },
+    {
+      "path": "supplemental01/test-results/browser-results.json",
+      "contexts": 3,
+      "expectedControlled409": 1,
+      "zeroUnhandledOrLiveMutations": true
+    }
+  ],
+  "scope": "Every attempt including failed geometry. Synthetic fixture authentication and facility transports mocked beforewire. Only explicit synthetic PUT; zero actualDELETE/livewrites, no DB persistence proof."
+}

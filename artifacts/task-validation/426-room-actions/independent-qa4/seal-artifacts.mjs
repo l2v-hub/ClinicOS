@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,readdirSync,statSync,mkdirSync,existsSync} from 'node:fs';
+import {resolve,relative} from 'node:path';
+import {createHash} from 'node:crypto';
+const root=resolve('artifacts/task-validation/426-room-actions/independent-qa4'),head='30e8023e8b88dcd8b5e40544f1597ee0c046a41c';
+const sha=b=>createHash('sha256').update(b).digest('hex'),json=p=>JSON.parse(readFileSync(root+'/'+p));
+const before=json('source-before.json'),after=json('source-after.json');assert.equal(before.head,head);assert.deepEqual(after,before);
+const binding=json('source-git-binding.json');assert.equal(binding.head,head);assert.equal(binding.files.length,1539);assert.equal(binding.rawSourceSha256,before.sourceSha256);
+const plan=json('browser-plan.json'),replay=json('browser-replay-results.json');assert.equal(replay.head,head);assert.equal(replay.records.length,7);
+let cases=0;const results=[];
+for(const [i,p]of plan.entries()){
+ const r=replay.records[i];assert.equal(r.recipe,p.recipe);assert.equal(r.folder,p.folder);assert.equal(r.cases,p.cases);assert.equal(r.exit,0);assert.equal(r.sha256,sha(readFileSync(root+'/recipes/'+p.recipe)));
+ const result=json(p.folder+'/test-results/browser-results.json');assert.equal(result.applicationCommit,head);assert.equal(result.outcomes.length,p.cases);assert.ok(result.outcomes.every(c=>c.status==='PASS'));cases+=p.cases;
+ for(const s of result.states){for(const key of ['unexpected','external','clinicalWrites','pageErrors'])assert.deepEqual(s[key],[]);assert.ok(s.requests.every(r=>r.method!=='DELETE'));}
+ results.push({...r,outcomes:result.outcomes});
+}assert.equal(cases,22);
+const commands=json('commands01/command-results.json');assert.equal(commands.newFailures.length,0);assert.equal(commands.records.find(r=>r.name==='focused').pass,24);const full=commands.records.find(r=>r.name==='full-regression');assert.equal(full.tests,1267);assert.equal(full.pass,1255);assert.equal(full.fail,12);assert.deepEqual(full.failures,commands.baselineFailures);
+const lane=json('lane-handoff.json');assert.equal(lane.browserLane,'RELEASED');assert.ok(lane.commandAndListenerVerified&&lane.processStopped&&lane.listenerReleased&&lane.allBrowserContextsClosed);
+const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+mkdirSync(root+'/playwright-report',{recursive:true});
+const html='<!doctype html><meta charset="utf-8"><title>Issue426 independent QA4</title><style>body{font:16px system-ui;padding:24px;color:#16202e}td,th{padding:8px;border:1px solid #e6ebf2}table{border-collapse:collapse}a{color:#1d4fc4}</style><h1>Independent QA4:22/22 Playwright assertion groups PASS</h1><p>Application '+head+'</p><p>Actual repository React/Vite SPA, desktop1280×720 and mobile390×844. All API/auth intercepted before wire; synthetic facility/empty patients. Not DB persistence, hardware or AT certification. Supplemental and long runs explicitly assert one controlled mock409 each.</p><table><tr><th>Recipe/output</th><th>Assertions</th><th>Raw evidence</th></tr>'+results.map(r=>'<tr><td>'+esc(r.recipe)+' → '+esc(r.folder)+'<br>'+r.cases+' PASS<br>SHA256 '+r.sha256+'</td><td>'+r.outcomes.map(o=>esc(o.name)+' — '+esc(o.status)).join('<br>')+'</td><td><a href="../'+r.folder+'/test-results/browser-results.json">Raw result</a> · <a href="../'+r.folder+'.log">Log</a></td></tr>').join('')+'</table><p><a href="../header-vertical01/screenshots/mobile-complete-confirmation-context.png">Complete mobile confirmation</a> · <a href="../long01/screenshots/independent-mobile-long-context.png">Complete mobile bed identity</a> · <a href="../browser01/screenshots/resource-actions.png">Distinct room actions</a></p><p>Generated directly from frozen recipe results; not a fabricated native Playwright runner report. Original traces/videos/screenshots reside in each output folder. Root must replay unchanged recipes before release.</p>';
+writeFileSync(root+'/playwright-report/index.html',html);
+const paths=[];function walk(dir){for(const n of readdirSync(dir).sort()){const p=dir+'/'+n,rel=relative(root,p).replaceAll('\\','/');if(rel==='runtime01'||rel==='artifact-manifest.json')continue;if(statSync(p).isDirectory())walk(p);else paths.push(rel);}}walk(root);
+assert.equal(existsSync(root+'/artifact-manifest.json'),false);const files=paths.sort().map(path=>({path,sha256:sha(readFileSync(root+'/'+path)),bytes:statSync(root+'/'+path).size}));
+writeFileSync(root+'/artifact-manifest.json',JSON.stringify({head,qaVerdict:'READY FOR CODEX QA',localFinalDecision:'IMPLEMENTED — NOT VERIFIED',sourceSha256:before.sourceSha256,browserCases:cases,browserLane:'RELEASED',excluded:['artifact-manifest.json (self)','runtime01 (generated Vite dependency cache, not evidence)'],files},null,2));
+console.log(JSON.stringify({head,files:files.length,manifestSha256:sha(readFileSync(root+'/artifact-manifest.json')),sourceSha256:before.sourceSha256,sourceExact:binding.exact,sourceCrlfOnly:binding.crlfOnly,png:files.filter(f=>f.path.endsWith('.png')).length,trace:files.filter(f=>f.path.startsWith('')&&f.path.endsWith('.zip')).length,video:files.filter(f=>f.path.endsWith('.webm')).length,cases}));

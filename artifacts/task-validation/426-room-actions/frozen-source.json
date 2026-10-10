@@ -1,0 +1,21 @@
+{
+  "decision": "AUTHORIZED LOCAL IMMUTABLE APPLICATION CANDIDATE",
+  "authority": "Direct human authorization for scoped fixes; root decision after first21focused/6browser/types/compiler/scans pass and1264full with12exactaccepted baseline failures. NOT production or issue-closure gate.",
+  "base": "b7ae14d120c1e70ccf72784206a505f8c48f975e",
+  "scope": [
+    "frontend/src/components/admin/RoomsManagement.tsx",
+    "frontend/src/components/admin/RoomManagementModel.ts",
+    "frontend/src/components/admin/RoomFormPanel.tsx",
+    "frontend/src/components/admin/BedEditDialog.tsx",
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts",
+    "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+    "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts"
+  ],
+  "sourceSha256": "02a0a77c8c3d72fc94c018f24bddb7b1339c9377631d15bc47a53cc57f1ca1c1",
+  "excluded": "Primary dirty checkout, native launcher overlays, artifacts and unrelated blocked candidates",
+  "at": "2026-10-09T23:10:29.937Z",
+  "applicationCommit": "07c3f7d13e8ac99a1af1238ec3661502950f45e3",
+  "sourceFiles": 1539,
+  "result": "LOCAL CANDIDATE ONLY, INDEPENDENT QA PENDING"
+}

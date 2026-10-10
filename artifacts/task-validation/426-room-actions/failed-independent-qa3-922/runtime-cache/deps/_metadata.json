@@ -1,0 +1,68 @@
+{
+  "hash": "ebc6a2e3",
+  "configHash": "f33f5ff9",
+  "lockfileHash": "33f99b1b",
+  "browserHash": "3db4c4e4",
+  "optimized": {
+    "@azure/msal-browser": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/@azure/msal-browser/dist/index.mjs",
+      "file": "@azure_msal-browser.js",
+      "fileHash": "ad9d97f9",
+      "needsInterop": false
+    },
+    "codice-fiscale-js": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/codice-fiscale-js/dist/codice.fiscale.commonjs2.js",
+      "file": "codice-fiscale-js.js",
+      "fileHash": "cc3207a4",
+      "needsInterop": true
+    },
+    "pdfjs-dist": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/pdfjs-dist/build/pdf.mjs",
+      "file": "pdfjs-dist.js",
+      "fileHash": "c4b0fa4d",
+      "needsInterop": false
+    },
+    "react-dom": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "04d98357",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "d551ee3d",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "a589bff5",
+      "needsInterop": true
+    },
+    "react/compiler-runtime": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/compiler-runtime.js",
+      "file": "react_compiler-runtime.js",
+      "fileHash": "bfa4fcac",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "801e1404",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../../../../../../Workspace/ClinicOSHouse-worktrees/insulin-online-20261008/node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "8d5d64d0",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "rolldown-runtime-EAsCxrDo": {
+      "file": "rolldown-runtime-EAsCxrDo.js",
+      "isDynamicEntry": false
+    }
+  }
+}

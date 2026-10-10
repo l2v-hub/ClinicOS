@@ -1,0 +1,9 @@
+[
+  {"recipe":"browser.mjs","folder":"browser01","cases":6},
+  {"recipe":"supplemental.mjs","folder":"supplemental01","cases":5},
+  {"recipe":"long-labels.mjs","folder":"long01","cases":6},
+  {"recipe":"room-headers.mjs","folder":"room-headers01","cases":2},
+  {"recipe":"delete-header.mjs","folder":"delete-header01","cases":1},
+  {"recipe":"confirm-bounds.mjs","folder":"confirm-bounds01","cases":1},
+  {"recipe":"header-vertical.mjs","folder":"header-vertical01","cases":1}
+]

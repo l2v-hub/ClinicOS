@@ -1,0 +1,6 @@
+PASS Independent bed busy409 retains exact target, all5controls disabled and singleflight; synthetic retry reload
+PASS Independent room rename PUT targets capturedoriginal ID, mock-only reload confirms renamedresource
+PASS Independent creation heading notstale editidentity and cancel issues noPOST
+PASS Independent arbitrary separator/hostilelabels unique literalnames notHTML execution
+PASS Independent mobile pixelhit tests roomedit/delete and all beddialog fields/buttons
+PASS Independent boundlength mobile resourceheader/actions remain visible and hitreachable

@@ -1,0 +1,15 @@
+{
+    "head":  "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+    "at":  "2026-10-09T23:50:11.6350329Z",
+    "decision":  "ALLOW STOP EXACT OWNED SERVER",
+    "pid":  2972,
+    "commandLine":  "\"C:\\Program Files\\nodejs\\node.exe\" C:/w-426-qa4/artifacts/task-validation/426-room-actions/independent-qa4/recipes/qa-server.mjs ",
+    "listeners":  [
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  7525,
+                          "OwningProcess":  2972
+                      }
+                  ],
+    "scope":  "Only own Vite process after browser contexts closed"
+}

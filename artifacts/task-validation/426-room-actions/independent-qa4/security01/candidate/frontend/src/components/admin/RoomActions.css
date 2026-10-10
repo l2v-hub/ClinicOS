@@ -1,0 +1,50 @@
+.rooms-view .room-card__actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.rooms-view .room-card__header {
+  flex-wrap: wrap;
+}
+
+.rooms-view .room-card__actions .icon-btn--danger {
+  margin-inline-start: 4px;
+}
+
+.rooms-view .room-bed-edit__title {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.rooms-view #room-edit-panel-title,
+.rooms-view .confirm-dialog__title {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.rooms-view .op-form-panel__header .icon-btn {
+  flex-shrink: 0;
+}
+
+.rooms-view .confirm-dialog__message {
+  overflow-wrap: anywhere;
+}
+
+.rooms-view .confirm-dialog__actions {
+  flex-wrap: wrap;
+}
+
+.rooms-view .confirm-dialog__actions .btn-danger {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.rooms-view .confirm-dialog__actions .btn-danger:not(#ds) {
+  height: auto;
+  white-space: normal;
+}

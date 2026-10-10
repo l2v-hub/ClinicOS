@@ -1,0 +1,76 @@
+[
+  {
+    "name": "message",
+    "left": 37.59375,
+    "right": 352.390625,
+    "top": 126.75,
+    "bottom": 213.5,
+    "dialogLeft": 15.59375,
+    "dialogRight": 374.390625,
+    "dialogTop": 0,
+    "dialogBottom": 331.5,
+    "scrollWidth": 315,
+    "clientWidth": 315,
+    "scrollHeight": 87,
+    "clientHeight": 87,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
+    "textRects": [
+      {
+        "left": 37.59375,
+        "right": 100.109375,
+        "top": 127.75,
+        "bottom": 146.75
+      },
+      {
+        "left": 37.59375,
+        "right": 351.453125,
+        "top": 149.4375,
+        "bottom": 168.4375
+      },
+      {
+        "left": 37.59375,
+        "right": 333.25,
+        "top": 171.125,
+        "bottom": 190.125
+      },
+      {
+        "left": 37.59375,
+        "right": 103.390625,
+        "top": 192.8125,
+        "bottom": 211.8125
+      }
+    ]
+  },
+  {
+    "name": "destructivebutton",
+    "left": 37.59375,
+    "right": 352.390625,
+    "top": 231.5,
+    "bottom": 267.5,
+    "dialogLeft": 15.59375,
+    "dialogRight": 374.390625,
+    "dialogTop": 0,
+    "dialogBottom": 331.5,
+    "scrollWidth": 435,
+    "clientWidth": 311,
+    "scrollHeight": 32,
+    "clientHeight": 32,
+    "viewportWidth": 390,
+    "viewportHeight": 844,
+    "textRects": [
+      {
+        "left": -84.359375,
+        "right": -66.359375,
+        "top": 240.5,
+        "bottom": 258.5
+      },
+      {
+        "left": -58.359375,
+        "right": 474.34375,
+        "top": 239.5,
+        "bottom": 258.5
+      }
+    ]
+  }
+]

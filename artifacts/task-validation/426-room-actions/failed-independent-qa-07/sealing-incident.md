@@ -1,0 +1,5 @@
+# Sealing tooling incident
+
+First artifact guard receipt command completed in-memory guard assertions but failed writing network-guards.json with ENOENT because top-level test-results directory did not exist. Combined PowerShell command then generated the report/first manifest despite earlier command exit1. This was QA tooling, not application behavior, and the initially incomplete sealing attempt is retained as artifact-manifest-attempt01.json (SHA256ff32a8356783cb7772e4890474f404e0ee8a60ebe454a6de6242dcb581bb5481). It is NOT the final acceptance manifest.
+
+Repair is solely artifact recipe mkdirSync(root+'/test-results',{recursive:true}); all guards rerun to actual receipt before final seal. Generated first manifest is moved recoverably within the exact owned artifact directory; no app files, patient data or user files changed/deleted. Final seal includes this incident and original first-manifest bytes, excludes only self/runtime-cache. Candidate remains FAILED VALIDATION for actual clipped mobile resource heading, independent of sealing tooling.

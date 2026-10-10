@@ -1,0 +1,89 @@
+(node:34924) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ room actions have explicit resource-bound accessible names and tooltip values (1.5745ms)
+✔ bed opening captures both original resource identifiers rather than editable form values (0.1926ms)
+✔ room rename retains original heading identity in a separate captured state (0.1252ms)
+✔ destructive action is distinct and remains behind the existing resource-bound confirmation (0.3208ms)
+✔ custom bed labels stay unambiguous across separator/quote collisions (1.0022ms)
+✔ room editor rendering preserves original target and escapes hostile identity (10.0946ms)
+✔ all newly touched room presentation modules meet the500line budget (2.2974ms)
+✖ bed resource headings wrap bounded custom labels within the dialog (3.5342ms)
+(node:34924) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 528.2266
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\roomActionIdentity.test.ts:1:3370
+✖ bed resource headings wrap bounded custom labels within the dialog (3.5342ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /className="modal-title room-bed-edit__title"/. Input:
+  
+  "import type { Dispatch, SetStateAction } from 'react';\n" +
+    "import { IcoCheck, IcoX } from '../../icons';\n" +
+    "import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';\n" +
+    "import { MAX_FACILITY_NOTE_LENGTH, bedEditName, type BedEditTarget, type BedFormValues } from './RoomManagementModel';\n" +
+    '\n' +
+    'interface Props {\n' +
+    '  target: BedEditTarget;\n' +
+    '  form: BedFormValues;\n' +
+    '  onChange: Dispatch<SetStateAction<BedFormValues>>;\n' +
+    '  bedSaving: boolean;\n' +
+    '  onSave: () => void;\n' +
+    '  onClose: () => void;\n' +
+    '}\n' +
+    'export function BedEditDialog({ target, form, onChange, bedSaving, onSave, onClose }: Props) {\n' +
+    '  const title = bedEditName(target.label, target.roomNumber);\n' +
+    '  return (\n' +
+    '    <AccessibleDialogSurface labelledBy="bed-edit-dialog-title" onClose={onClose} dismissible={!bedSaving}>\n' +
+    '      <div className="modal-header">\n' +
+    '        <h3 className="modal-title" id="bed-edit-dialog-title">{title}</h3>\n' +
+    '        <button type="button" className="icon-btn" aria-label={`Chiudi ${title}`} data-dialog-initial-focus\n' +
+    '          disabled={bedSaving} onClick={onClose}><IcoX /></button>\n' +
+    '      </div>\n' +
+    '      <div className="modal-body">\n' +
+    '        <div className="op-form-grid">\n' +
+    '          <div className="form-field">\n' +
+    '            <label className="form-label" htmlFor="bed-edit-status">Stato</label>\n' +
+    '            <select id="bed-edit-status" className="form-select" value={form.stato} disabled={bedSaving}\n' +
+    '              onChange={e => onChange(p => ({ ...p, stato: e.target.value }))}>\n' +
+    '              <option value="libero">Libero</option><option value="manutenzione">Manutenzione</option>\n' +
+    '            </select>\n' +
+    '          </div>\n' +
+    '          <div className="form-field">\n' +
+    '            <label className="form-label" htmlFor="bed-edit-notes">Note</label>\n' +
+    '            <input id="bed-edit-notes" className="form-input" value={form.note} maxLength={MAX_FACILITY_NOTE_LENGTH}\n' +
+    '              disabled={bedSaving} onChange={e => onChange(p => ({ ...p, note: e.target.value }))} />\n' +
+    '          </div>\n' +
+    '        </div>\n' +
+    '      </div>\n' +
+    '      <div className="modal-footer">\n' +
+    '        <button type="button" className="btn-secondary" disabled={bedSaving} onClick={onClose}>Annulla</button>\n' +
+    '        <button type="button" className="btn-success" disabled={bedSaving} onClick={onSave}>\n' +
+    "          <IcoCheck /> {bedSaving ? 'Salvataggio…' : 'Salva'}\n" +
+    '        </button>\n' +
+    '      </div>\n' +
+    '    </AccessibleDialogSurface>\n' +
+    '  );\n' +
+    '}\n'
+  
+      at TestContext.<anonymous> (C:\w-426\frontend\src\lib\__tests__\roomActionIdentity.test.ts:56:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import type { Dispatch, SetStateAction } from \'react\';\nimport { IcoCheck, IcoX } from \'../../icons\';\nimport { AccessibleDialogSurface } from \'../shared/AccessibleDialogSurface\';\nimport { MAX_FACILITY_NOTE_LENGTH, bedEditName, type BedEditTarget, type BedFormValues } from \'./RoomManagementModel\';\n\ninterface Props {\n  target: BedEditTarget;\n  form: BedFormValues;\n  onChange: Dispatch<SetStateAction<BedFormValues>>;\n  bedSaving: boolean;\n  onSave: () => void;\n  onClose: () => void;\n}\nexport function BedEditDialog({ target, form, onChange, bedSaving, onSave, onClose }: Props) {\n  const title = bedEditName(target.label, target.roomNumber);\n  return (\n    <AccessibleDialogSurface labelledBy="bed-edit-dialog-title" onClose={onClose} dismissible={!bedSaving}>\n      <div className="modal-header">\n        <h3 className="modal-title" id="bed-edit-dialog-title">{title}</h3>\n        <button type="button" className="icon-btn" aria-label={`Chiudi ${title}`} data-dialog-initial-focus\n          disabled={bedSaving} onClick={onClose}><IcoX /></button>\n      </div>\n      <div className="modal-body">\n        <div className="op-form-grid">\n          <div className="form-field">\n            <label className="form-label" htmlFor="bed-edit-status">Stato</label>\n            <select id="bed-edit-status" className="form-select" value={form.stato} disabled={bedSaving}\n              onChange={e => onChange(p => ({ ...p, stato: e.target.value }))}>\n              <option value="libero">Libero</option><option value="manutenzione">Manutenzione</option>\n            </select>\n          </div>\n          <div className="form-field">\n            <label className="form-label" htmlFor="bed-edit-notes">Note</label>\n            <input id="bed-edit-notes" className="form-input" value={form.note} maxLength={MAX_FACILITY_NOTE_LENGTH}\n              disabled={bedSaving} onChange={e => onChange(p => ({ ...p, note: e.target.value }))} />\n          </div>\n        </div>\n      </div>\n      <div className="modal-footer">\n        <button type="button" className="btn-secondary" disabled={bedSaving} onClick={onClose}>Annulla</button>\n        <button type="button" className="btn-success" disabled={bedSaving} onClick={onSave}>\n          <IcoCheck /> {bedSaving ? \'Salvataggio…\' : \'Salva\'}\n        </button>\n      </div>\n    </AccessibleDialogSurface>\n  );\n}\n',
+    expected: /className="modal-title room-bed-edit__title"/,
+    operator: 'match',
+    diff: 'simple'
+  }

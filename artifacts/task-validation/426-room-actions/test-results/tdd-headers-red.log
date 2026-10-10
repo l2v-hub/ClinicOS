@@ -1,0 +1,41 @@
+(node:6356) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ room actions have explicit resource-bound accessible names and tooltip values (0.9947ms)
+✔ bed opening captures both original resource identifiers rather than editable form values (0.1705ms)
+✔ room rename retains original heading identity in a separate captured state (0.1106ms)
+✔ destructive action is distinct and remains behind the existing resource-bound confirmation (0.2899ms)
+✔ custom bed labels stay unambiguous across separator/quote collisions (0.8481ms)
+✔ room editor rendering preserves original target and escapes hostile identity (8.0429ms)
+✔ all newly touched room presentation modules meet the500line budget (1.3287ms)
+✔ bed resource headings wrap bounded custom labels within the dialog (0.5192ms)
+✖ long camera identities wrap in the inline editor and deletion confirmation without shared control overrides (2.0667ms)
+(node:6356) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 392.9758
+
+✖ failing tests:
+
+test at frontend\src\lib\__tests__\roomActionIdentity.test.ts:1:3830
+✖ long camera identities wrap in the inline editor and deletion confirmation without shared control overrides (2.0667ms)
+  AssertionError [ERR_ASSERTION]: #room-edit-panel-title
+      at TestContext.<anonymous> (C:\w-426\frontend\src\lib\__tests__\roomActionIdentity.test.ts:62:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,11 @@
+{
+  "decision": "AUTHORIZED LOCAL REMEDIATED IMMUTABLE APPLICATION CANDIDATE",
+  "authority": "Direct human scope; QA3 full confirmation text failure retained140immutable. RED1 then actual glyph/pixel strong preflight and24 focused/types/build/security/full1267 with12exactbaseline0new. No release/closure; NEW isolated QA4 pending.",
+  "prior": "922a801f5c64cbeff02e2c14298d4dd5a16e622f",
+  "scope": [
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts"
+  ],
+  "sourceSha256": "0cc67f8a38525edb6e1ce76a42890d16dfd3011b08054f0d23c92b683354bcdf",
+  "at": "2026-10-09T23:43:51.443Z"
+}

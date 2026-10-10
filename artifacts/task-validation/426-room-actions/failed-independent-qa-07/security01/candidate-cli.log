@@ -1,0 +1,15 @@
+
+Security Scan
+──────────────────────────────────────────────────
+... Scanning C:\w-426-qa\artifacts\task-validation\426-room-actions\independent-qa\security01/candidate...                                    Scan complete
+
+No security issues found!
+
++------------------------------------------- Scan Summary -------------------------------------------+
+| Target: C:\w-426-qa\artifacts\task-validation\426-room-actions\independent-qa\security01/candidate |
+| Depth: deep                                                                                        |
+| Type: code                                                                                         |
+|                                                                                                    |
+| Critical: 0  High: 0  Medium: 0  Low: 0                                                            |
+| Total Issues: 0                                                                                    |
++----------------------------------------------------------------------------------------------------+

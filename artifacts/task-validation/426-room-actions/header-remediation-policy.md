@@ -1,0 +1,5 @@
+# Scoped remediation after independent QA2
+
+Authority: the human authorized sequential bug fixes, isolated implementation, independent validation and verified publication. Root remains the sole application writer in C:/w-426. QA2 has stopped its owned server and released the browser lane.
+
+Candidate143 is NOT releasable: valid32-character camera names overflow the inline editor and deletion confirmation on390px mobile. Preserve the entire100-file FAILED QA2 bundle byte-identically, including both failed browser attempts. Fix only local RoomActions.css layout and its focused regression test: allow complete resource headings/message/button to wrap and keep close/cancel reachable. Do not change the shared ConfirmDialog/control skin, API, backend, destructive handler or authorizations. RED test before CSS. Freeze an additive candidate after build/types/focused/security and exact accepted baseline delta. A NEW dedicated QA gate and root identical replay remain required before source promotion. No patient data, real DELETE, production writes or release in this step.

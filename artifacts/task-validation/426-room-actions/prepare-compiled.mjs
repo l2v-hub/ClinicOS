@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const root='artifacts/task-validation/426-room-actions',out=root+'/compiled-online',sha=b=>createHash('sha256').update(b).digest('hex');
+assert.equal(existsSync(out),false);const receipt=JSON.parse(readFileSync(root+'/deployment-receipt.json')),app=JSON.parse(readFileSync(root+'/frozen-release-source.json')).applicationCommit;
+assert.equal(receipt.applicationCommit,app);assert.equal(receipt.decision,'VERIFIED RELEASE');mkdirSync(out+'/recipes',{recursive:true});const plan=JSON.parse(readFileSync(root+'/browser-plan.json')),records=[];
+for(const item of plan){const path=root+'/root-rerun4/recipes/'+item.recipe,bytes=readFileSync(path);copyFileSync(path,out+'/recipes/'+item.recipe);assert.equal(sha(readFileSync(out+'/recipes/'+item.recipe)),sha(bytes));records.push({...item,localFrozenRecipeSha256:sha(bytes),compiledRecipeSha256:sha(bytes),changed:'NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged.'});}
+writeFileSync(out+'/pre-run.json',JSON.stringify({applicationCommit:app,bundleUrl:receipt.vercel.bundleUrl,bundleSha256Before:receipt.vercel.bundleSha256,styleAssets:receipt.vercel.styleAssets,htmlSha256Before:receipt.vercel.htmlSha256,records,decision:'BYTE-IDENTICAL RECIPES FROZEN BEFORE COMPILED ONLINE READONLY TESTS',productionPatientTestMutations:0,at:new Date().toISOString()},null,2));console.log('Compiled recipes frozen byte-identically; all APIs intercepted before wire');

@@ -1,0 +1,5 @@
+{
+  "scope": "All raw text artifacts scanned for credential/private-key patterns; source/build/native checks separately. Synthetic fixture inspection. Root must still scan configured credential values and ZIP members before public release.",
+  "files": 100,
+  "findings": 0
+}

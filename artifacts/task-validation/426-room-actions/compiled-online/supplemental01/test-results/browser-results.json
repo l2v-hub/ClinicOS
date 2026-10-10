@@ -1,0 +1,631 @@
+{
+  "outcomes": [
+    {
+      "name": "Independent bed busy409 retains exact target, all5controls disabled and singleflight; synthetic retry reload",
+      "status": "PASS"
+    },
+    {
+      "name": "Independent room rename PUT targets capturedoriginal ID, mock-only reload confirms renamedresource",
+      "status": "PASS"
+    },
+    {
+      "name": "Independent creation heading notstale editidentity and cancel issues noPOST",
+      "status": "PASS"
+    },
+    {
+      "name": "Independent arbitrary separator/hostilelabels unique literalnames notHTML execution",
+      "status": "PASS"
+    },
+    {
+      "name": "Independent mobile pixelhit tests roomedit/delete and all beddialog fields/buttons",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "rooms": [
+        {
+          "id": "QA-ROOM-426-1",
+          "numero": "103",
+          "tipo": "doppia",
+          "piano": "1",
+          "reparto": "Reparto Sintetico",
+          "stato": "attiva",
+          "note": "",
+          "beds": [
+            {
+              "id": "QA-BED-426-1-A",
+              "roomId": "QA-ROOM-426-1",
+              "label": "A",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            },
+            {
+              "id": "QA-BED-426-1-B",
+              "roomId": "QA-ROOM-426-1",
+              "label": "B",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            }
+          ]
+        },
+        {
+          "id": "QA-ROOM-426-2",
+          "numero": "102",
+          "tipo": "doppia",
+          "piano": "1",
+          "reparto": "Reparto Sintetico",
+          "stato": "attiva",
+          "note": "",
+          "beds": [
+            {
+              "id": "QA-BED-426-2-A",
+              "roomId": "QA-ROOM-426-2",
+              "label": "A",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            },
+            {
+              "id": "QA-BED-426-2-B",
+              "roomId": "QA-ROOM-426-2",
+              "label": "B",
+              "stato": "manutenzione",
+              "note": "Nota sintetica QA426",
+              "assignments": []
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        },
+        {
+          "method": "PUT",
+          "path": "/admin/beds/QA-BED-426-2-B"
+        },
+        {
+          "method": "PUT",
+          "path": "/admin/beds/QA-BED-426-2-B"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        },
+        {
+          "method": "PUT",
+          "path": "/admin/rooms/QA-ROOM-426-1"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [
+        {
+          "method": "PUT",
+          "path": "/admin/beds/QA-BED-426-2-B",
+          "body": "{\"stato\":\"manutenzione\",\"note\":\"Nota sintetica QA426\"}"
+        },
+        {
+          "method": "PUT",
+          "path": "/admin/beds/QA-BED-426-2-B",
+          "body": "{\"stato\":\"manutenzione\",\"note\":\"Nota sintetica QA426\"}"
+        },
+        {
+          "method": "PUT",
+          "path": "/admin/rooms/QA-ROOM-426-1",
+          "body": "{\"numero\":\"103\",\"tipo\":\"doppia\",\"piano\":\"1\",\"reparto\":\"Reparto Sintetico\",\"stato\":\"attiva\",\"note\":\"\"}"
+        }
+      ],
+      "errors": [
+        "Failed to load resource: the server responded with a status of 409 (Conflict)"
+      ],
+      "pageErrors": [],
+      "httpErrors": [
+        {
+          "status": 409,
+          "path": "/admin/beds/QA-BED-426-2-B"
+        }
+      ],
+      "allowMutation": true,
+      "delay": false,
+      "expectedErrors": 1,
+      "fail": false,
+      "held": false
+    },
+    {
+      "rooms": [
+        {
+          "id": "QA-ROOM-426-1",
+          "numero": "1 della camera 2",
+          "tipo": "doppia",
+          "piano": "1",
+          "reparto": "Reparto Sintetico",
+          "stato": "attiva",
+          "note": "",
+          "beds": [
+            {
+              "id": "QA-BED-426-1-A",
+              "roomId": "QA-ROOM-426-1",
+              "label": "A",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            },
+            {
+              "id": "QA-BED-426-1-B",
+              "roomId": "QA-ROOM-426-1",
+              "label": "B",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            }
+          ]
+        },
+        {
+          "id": "QA-ROOM-426-2",
+          "numero": "2",
+          "tipo": "doppia",
+          "piano": "1",
+          "reparto": "Reparto Sintetico",
+          "stato": "attiva",
+          "note": "",
+          "beds": [
+            {
+              "id": "QA-BED-426-2-A",
+              "roomId": "QA-ROOM-426-2",
+              "label": "A della camera 1",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            },
+            {
+              "id": "QA-BED-426-2-B",
+              "roomId": "QA-ROOM-426-2",
+              "label": "<img src=x onerror=1>",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "allowMutation": false,
+      "delay": false,
+      "expectedErrors": 0
+    },
+    {
+      "rooms": [
+        {
+          "id": "QA-ROOM-426-1",
+          "numero": "101",
+          "tipo": "doppia",
+          "piano": "1",
+          "reparto": "Reparto Sintetico",
+          "stato": "attiva",
+          "note": "",
+          "beds": [
+            {
+              "id": "QA-BED-426-1-A",
+              "roomId": "QA-ROOM-426-1",
+              "label": "A",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            },
+            {
+              "id": "QA-BED-426-1-B",
+              "roomId": "QA-ROOM-426-1",
+              "label": "B",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            }
+          ]
+        },
+        {
+          "id": "QA-ROOM-426-2",
+          "numero": "102",
+          "tipo": "doppia",
+          "piano": "1",
+          "reparto": "Reparto Sintetico",
+          "stato": "attiva",
+          "note": "",
+          "beds": [
+            {
+              "id": "QA-BED-426-2-A",
+              "roomId": "QA-ROOM-426-2",
+              "label": "A",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            },
+            {
+              "id": "QA-BED-426-2-B",
+              "roomId": "QA-ROOM-426-2",
+              "label": "B",
+              "stato": "libero",
+              "note": "",
+              "assignments": []
+            }
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms/occupancy"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "allowMutation": false,
+      "delay": false,
+      "expectedErrors": 0
+    }
+  ],
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "fixtureTransport": "All endpoints mocked beforewire. Exactoriginal PUT IDs + controlled409 and stateful mockreload only; NOT real persistence/DB. Zero actualDELETE/livewrites."
+}

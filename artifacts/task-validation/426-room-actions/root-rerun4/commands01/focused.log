@@ -1,0 +1,48 @@
+(node:20464) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ room actions have explicit resource-bound accessible names and tooltip values (3.4657ms)
+✔ bed opening captures both original resource identifiers rather than editable form values (0.6368ms)
+✔ room rename retains original heading identity in a separate captured state (0.4646ms)
+✔ destructive action is distinct and remains behind the existing resource-bound confirmation (0.8755ms)
+✔ custom bed labels stay unambiguous across separator/quote collisions (3.1645ms)
+✔ room editor rendering preserves original target and escapes hostile identity (25.6927ms)
+✔ all newly touched room presentation modules meet the500line budget (2.075ms)
+✔ bed resource headings wrap bounded custom labels within the dialog (1.4091ms)
+✔ long camera identities wrap in the inline editor and deletion confirmation without shared control overrides (1.7242ms)
+✔ bounded destructive text defeats canonical nowrap specificity without replacing the shared skin (1.3276ms)
+(node:20464) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:18496) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ placement display prefers the current assigned bed over stale cartella labels (14.623ms)
+✔ placement display preserves valid cartella labels when current room data is absent (1.1234ms)
+✔ empty placement values stay absent rather than becoming blank or saved fallback labels (1.0343ms)
+✔ dependent room choices expose only active rooms with a usable bed (54.8766ms)
+✔ bed labels and current placement preserve backend identity (1.3614ms)
+✔ save validity requires the exact selected bed in the selected room (1.2557ms)
+(node:18496) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38920) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ camera synchronization requests only the bounded active room-assignment scope (9.4208ms)
+✔ room editor mirrors server bounds and never persists derived occupancy (2.494ms)
+✔ facility loading is abortable and exposes retry instead of a false zero snapshot (1.8422ms)
+✔ App does not download facility rooms during ordinary login bootstrap (2.986ms)
+✔ navigation-scoped room reads reject stale responses and expose a retryable state (2.2559ms)
+✔ room consumers never present a failed load as zero occupancy or an empty assignment list (2.8038ms)
+✔ patient assignment editor uses dependent labelled selects and an exact bed id (4.2233ms)
+(node:38920) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:7384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ bed editing uses the shared keyboard-safe dialog and a single-flight save (10.3019ms)
+(node:7384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3130.4195

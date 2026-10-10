@@ -1,0 +1,11 @@
+{
+  "decision": "AUTHORIZED LOCAL REMEDIATED IMMUTABLE APPLICATION CANDIDATE",
+  "authority": "Direct human scoped fix authority; QA2 valid32 camera editor/confirmation failures retained byte-identically. RED1 then fresh23 focused/types/compiler/scans pass and1266full/12exactbaseline. No release/closure; NEW isolated independent QA pending.",
+  "prior": "1436602e81d0c03625cfa73ce24974099e919612",
+  "scope": [
+    "frontend/src/components/admin/RoomActions.css",
+    "frontend/src/lib/__tests__/roomActionIdentity.test.ts"
+  ],
+  "sourceSha256": "f2bcdeb7fc91329837b73be8a7820ceabf18e13d0aadc1b01efb914c03770a6c",
+  "at": "2026-10-09T23:31:32.313Z"
+}

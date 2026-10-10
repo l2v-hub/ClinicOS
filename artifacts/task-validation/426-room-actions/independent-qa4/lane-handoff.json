@@ -1,0 +1,12 @@
+{
+    "head":  "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+    "at":  "2026-10-09T23:50:12.5565040Z",
+    "browserLane":  "RELEASED",
+    "port":  7525,
+    "ownPid":  2972,
+    "commandAndListenerVerified":  true,
+    "processStopped":  true,
+    "listenerReleased":  true,
+    "allBrowserContextsClosed":  true,
+    "scope":  "Root may now replay frozen recipes serially in its assigned lane"
+}

@@ -1,0 +1,9 @@
+{
+    "at":  "2026-10-09T23:46:22.9921879Z",
+    "head":  "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+    "pid":  2972,
+    "port":  7525,
+    "script":  "C:/w-426-qa4/artifacts/task-validation/426-room-actions/independent-qa4/recipes/qa-server.mjs",
+    "decision":  "ALLOW OWNED SYNTHETIC LOCAL SERVER",
+    "scope":  "Exclusive assigned browser lane; no production API/credentials/writes"
+}

@@ -1,0 +1,73 @@
+{
+  "applicationCommit": "30e8023e8b88dcd8b5e40544f1597ee0c046a41c",
+  "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-4PgwoUsM.js",
+  "bundleSha256Before": "3cc83bedb225c134263b12ed348ed7d9336340c5d238d55cd87a0721d0c60ea4",
+  "styleAssets": [
+    {
+      "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+      "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+    }
+  ],
+  "htmlSha256Before": "9d7ae3882de673e4d0892bdd3ce162866edf47c45ec69ad5c222a37eb177f821",
+  "records": [
+    {
+      "recipe": "browser.mjs",
+      "folder": "browser01",
+      "cases": 6,
+      "localFrozenRecipeSha256": "ca0166d2c514177f3c8f1ddef94b23d3ebb07003cf5ac47087bffad1788ba57a",
+      "compiledRecipeSha256": "ca0166d2c514177f3c8f1ddef94b23d3ebb07003cf5ac47087bffad1788ba57a",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    },
+    {
+      "recipe": "supplemental.mjs",
+      "folder": "supplemental01",
+      "cases": 5,
+      "localFrozenRecipeSha256": "c2363641a441bb4a24ab761e1579792d6b4394b213f6c199988b04c62e033ba6",
+      "compiledRecipeSha256": "c2363641a441bb4a24ab761e1579792d6b4394b213f6c199988b04c62e033ba6",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    },
+    {
+      "recipe": "long-labels.mjs",
+      "folder": "long01",
+      "cases": 6,
+      "localFrozenRecipeSha256": "55af3b745fd778e74b2198d419053cbe83055d30b2e986b343392144a174e11e",
+      "compiledRecipeSha256": "55af3b745fd778e74b2198d419053cbe83055d30b2e986b343392144a174e11e",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    },
+    {
+      "recipe": "room-headers.mjs",
+      "folder": "room-headers01",
+      "cases": 2,
+      "localFrozenRecipeSha256": "a3564a42c22f9557f14be3238ad23a77fb22da150800593d4100c7b05032e43b",
+      "compiledRecipeSha256": "a3564a42c22f9557f14be3238ad23a77fb22da150800593d4100c7b05032e43b",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    },
+    {
+      "recipe": "delete-header.mjs",
+      "folder": "delete-header01",
+      "cases": 1,
+      "localFrozenRecipeSha256": "6e4ab639f42a13550583e4d66d08f3bf517e0a568e8d11fd85d1379442ce0b4a",
+      "compiledRecipeSha256": "6e4ab639f42a13550583e4d66d08f3bf517e0a568e8d11fd85d1379442ce0b4a",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    },
+    {
+      "recipe": "confirm-bounds.mjs",
+      "folder": "confirm-bounds01",
+      "cases": 1,
+      "localFrozenRecipeSha256": "173ed3d36cba323a973007680ea119e68b5ce25bfb1e2248e752ade53a2d66e9",
+      "compiledRecipeSha256": "173ed3d36cba323a973007680ea119e68b5ce25bfb1e2248e752ade53a2d66e9",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    },
+    {
+      "recipe": "header-vertical.mjs",
+      "folder": "header-vertical01",
+      "cases": 1,
+      "localFrozenRecipeSha256": "63511abf0027804deff0ce7b3d6c02d654e92356f28f81cf9cb1fe3af4264c68",
+      "compiledRecipeSha256": "63511abf0027804deff0ce7b3d6c02d654e92356f28f81cf9cb1fe3af4264c68",
+      "changed": "NONE: byte-identical recipe; only APP_URL environment selects deployed compiled static GET transport. Assertions/fixtures/guards unchanged."
+    }
+  ],
+  "decision": "BYTE-IDENTICAL RECIPES FROZEN BEFORE COMPILED ONLINE READONLY TESTS",
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-09T23:57:07.888Z"
+}

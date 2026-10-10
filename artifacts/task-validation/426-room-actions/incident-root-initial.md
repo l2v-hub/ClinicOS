@@ -1,0 +1,3 @@
+# Root initial browser attempt
+
+Four candidate checks passed. Reload clears the synthetic simulator session and signing in intentionally returns to Dashboard. The fifth check waited for room controls on Dashboard and timed out. The preserved failure accessibility tree shows Dashboard, not a room rendering error; guards record no unauthorized writes or unexpected requests. The harness now follows the existing Gestione posti letto button after reauthentication, as in initial setup. No application source changed for this harness correction. Retain root-initial raw files and rerun into root-initial02.

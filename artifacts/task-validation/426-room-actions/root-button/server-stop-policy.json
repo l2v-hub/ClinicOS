@@ -1,0 +1,7 @@
+﻿{
+    "port":  7523,
+    "pid":  43132,
+    "verifiedCommand":  "\"C:\\Program Files\\nodejs\\node.exe\" artifacts/task-validation/426-room-actions/root-button/recipes/qa-server.mjs ",
+    "at":  "2026-10-09T23:39:34.2429091Z",
+    "decision":  "AUTHORIZED STOP OWNED PREFLIGHT PID"
+}
