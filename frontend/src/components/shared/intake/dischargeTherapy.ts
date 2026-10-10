@@ -26,6 +26,7 @@ export interface DischargeTherapyRow {
   note: string;
   originalText: string;
   stato: 'ok' | 'da_verificare';
+  tipo?: 'periodica' | 'una_tantum' | 'al_bisogno';
   doseMode?: 'fixed' | 'glucose_scale';
   glucoseScale?: GlucoseDoseRule[];
   excludedFromConfirm?: boolean;
@@ -136,6 +137,7 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
   const scale = r.doseMode === 'glucose_scale';
   return {
     ...emptyTherapyForm(),
+    ...(r.tipo === 'al_bisogno' ? { tipo: 'al_bisogno' as const } : {}),
     farmacoNome: (r.farmacoNome || '').trim(),
     pharmaceuticalForm: forma ?? '',
     commercialStrengthValue: dose?.value ?? '',
@@ -150,7 +152,7 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
       maxMgDl: rule.maxMgDl === null ? '' : String(rule.maxMgDl),
       units: String(rule.units),
     })),
-    schedules: times.map((time) => ({
+    schedules: r.tipo === 'al_bisogno' ? [] : times.map((time) => ({
       time: /^\d:\d{2}$/.test(time) ? `0${time}` : time,
       // Technical schedule metadata only: a scale's administered dose is resolved from glucose.
       quantityNumerator: scale ? 1 : qty.num,
@@ -158,7 +160,8 @@ export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormVa
       administrationUnit: scale ? 'unità' : qty.unit,
     })),
     giorniSettimana: Array.isArray(r.giorni) ? r.giorni.map(dayToIso).sort((a, b) => a - b) : [],
-    note: [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '']
+    note: [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '',
+      r.tipo === 'al_bisogno' && r.quantita ? `Quantità riportata nel documento: ${r.quantita}` : '']
       .filter(Boolean)
       .join(' — '),
   };
@@ -178,6 +181,7 @@ export function therapyFormToDischargeRow(
       ? `${v.commercialStrengthValue} ${v.commercialStrengthUnit}`.trim()
       : '',
     viaSomministrazione: v.viaSomministrazione,
+    tipo: v.tipo,
     doseMode: v.doseMode ?? 'fixed',
     glucoseScale:
       v.doseMode === 'glucose_scale'
