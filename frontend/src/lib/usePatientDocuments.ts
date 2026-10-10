@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { documentAuthHeaders } from './entraAuth';
+import { useCan } from './capabilities';
 import {
   EMPTY_DOCUMENT_PAGE_INFO,
   mergePatientDocuments,
@@ -31,6 +32,7 @@ export function usePatientDocuments({
   operatorRole?: string;
   sourceFileName?: string;
 }) {
+  const canRead = useCan('documents.list');
   const scope = `${patientId}\u0000${operatorId ?? ''}\u0000${operatorRole ?? ''}\u0000${sourceFileName ?? ''}`;
   const [state, setState] = useState<DocumentState>({
     scope: '',
@@ -54,6 +56,7 @@ export function usePatientDocuments({
 
   const load = useCallback(
     async (append = false) => {
+      if (!canRead) return;
       const current = stateRef.current;
       const currentPage = current.scope === scope ? current.pageInfo : EMPTY_DOCUMENT_PAGE_INFO;
       const cursor = append ? currentPage.nextCursor : null;
@@ -110,7 +113,7 @@ export function usePatientDocuments({
         if (request === requestRef.current) controllerRef.current = null;
       }
     },
-    [operatorId, operatorRole, patientId, scope, sourceFileName, updateState],
+    [operatorId, operatorRole, patientId, scope, sourceFileName, updateState, canRead],
   );
 
   useEffect(() => {
@@ -138,8 +141,18 @@ export function usePatientDocuments({
     [scope, updateState],
   );
 
-  const current =
-    state.scope === scope ? state : { ...state, documents: [], status: 'loading' as const };
+  const current = !canRead
+    ? {
+        ...state,
+        documents: [],
+        status: 'ready' as const,
+        loadingMore: false,
+        loadMoreError: null,
+        pageInfo: EMPTY_DOCUMENT_PAGE_INFO,
+      }
+    : state.scope === scope
+      ? state
+      : { ...state, documents: [], status: 'loading' as const };
   return {
     ...current,
     reload: () => void load(false),

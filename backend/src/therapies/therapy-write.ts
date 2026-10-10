@@ -1,7 +1,11 @@
 import type { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { AppointmentListInputError, parseIsoCalendarDate } from '../appointments/list-query.js';
-import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
+import {
+  MAX_THERAPY_SCHEDULES,
+  scheduleDoseLabel,
+  type ScheduleInput,
+} from '../lib/therapy-dose.js';
 import { therapyWhereForDate } from './therapy-query.js';
 import { hasFacilityPatientScope } from '../patients/patient-scope.js';
 import {
@@ -54,6 +58,7 @@ const ACCEPTED_FIELDS = new Set([
   'therapyId',
   'date',
   'fascia',
+  'scheduledTime',
   'motivo',
   'note',
   // Transitional display fields and legacy actor fields are accepted but never trusted.
@@ -71,6 +76,7 @@ export interface TherapyAdministrationInput {
   therapyId: string;
   date: string;
   fascia: keyof typeof FASCIA_FLAGS;
+  scheduledTime?: string;
   motivo?: string;
   note?: string;
   measuredGlucose?: number;
@@ -133,6 +139,9 @@ export function parseTherapyAdministrationBody(
   }
   const fascia = boundedString(body, 'fascia', 16, true)!;
   if (!(fascia in FASCIA_FLAGS)) throw new TherapyWriteInputError('fascia non valida');
+  const scheduledTime = boundedString(body, 'scheduledTime', 5);
+  if (scheduledTime !== undefined && !/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(scheduledTime))
+    throw new TherapyWriteInputError('Orario di somministrazione non valido');
   const motivo = boundedString(body, 'motivo', 200, requireReason);
   const note = boundedString(body, 'note', 2_000);
   let measuredGlucose: number | undefined;
@@ -148,6 +157,7 @@ export function parseTherapyAdministrationBody(
     therapyId,
     date,
     fascia: fascia as keyof typeof FASCIA_FLAGS,
+    ...(scheduledTime !== undefined ? { scheduledTime } : {}),
     motivo,
     note,
     ...(measuredGlucose !== undefined ? { measuredGlucose } : {}),
@@ -192,7 +202,8 @@ export async function resolveAuthoritativeTherapy(
       commercialStrengthUnit: true,
       schedules: {
         where: { fascia: input.fascia },
-        take: 1,
+        take: MAX_THERAPY_SCHEDULES + 1,
+        orderBy: [{ time: 'asc' }, { id: 'asc' }],
         select: {
           fascia: true,
           time: true,
@@ -208,7 +219,31 @@ export async function resolveAuthoritativeTherapy(
     throw new TherapyNotDueError();
   }
   const flag = FASCIA_FLAGS[input.fascia];
-  const schedule = therapy.schedules[0] as ScheduleInput | undefined;
+  const schedules = therapy.schedules as ScheduleInput[];
+  if (schedules.length > MAX_THERAPY_SCHEDULES)
+    throw new TherapyWriteInputError(
+      'Pianificazione oltre il limite: verifica la prescrizione',
+      409,
+    );
+  if (!input.scheduledTime && schedules.length > 1)
+    throw new TherapyWriteInputError(
+      'Seleziona l’orario esatto della dose: questa fascia contiene più somministrazioni',
+    );
+  const matches = input.scheduledTime
+    ? schedules.filter((schedule) => schedule.time === input.scheduledTime)
+    : schedules;
+  if (matches.length > 1)
+    throw new TherapyWriteInputError(
+      'Prescrizione con quantità ambigue allo stesso orario: verifica la terapia',
+      409,
+    );
+  const schedule = matches[0];
+  if (
+    input.scheduledTime &&
+    ((schedules.length > 0 && !schedule) ||
+      (schedules.length === 0 && input.scheduledTime !== FALLBACK_TIMES[input.fascia]))
+  )
+    throw new TherapyNotDueError();
   // The read model creates slots from the fascia flags. A write must be accepted only for an
   // administration the operator could actually see in that same read model.
   if (!therapy[flag]) throw new TherapyNotDueError();
@@ -247,6 +282,7 @@ export async function resolveAuthoritativeTherapy(
   }
   return {
     ...input,
+    scheduledTime: schedule?.time || FALLBACK_TIMES[input.fascia],
     farmacoNome: therapy.farmacoNome,
     farmacoDose:
       conditionalDose !== null

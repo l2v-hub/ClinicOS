@@ -491,6 +491,7 @@ export async function executeSkill(
         dosage: string;
         route: string;
         status: string;
+        scheduledTime: string;
       };
       const slots = (Array.isArray(check.data) ? check.data : []) as {
         fascia: string;
@@ -501,7 +502,7 @@ export async function executeSkill(
         .flatMap((s) => s.patients ?? [])
         .filter((p) => p.patientId === patientId)
         .flatMap((p) => p.administrations ?? [])
-        .find((x) => x.therapyId === a.therapyId);
+        .find((x) => x.therapyId === a.therapyId && x.scheduledTime === a.scheduledTime);
       const unchanged =
         current &&
         current.status === 'pending' &&
@@ -526,7 +527,15 @@ export async function executeSkill(
         };
       const result = await call(
         tool,
-        { body: { patientId, therapyId: a.therapyId, date: a.date, fascia: a.fascia } },
+        {
+          body: {
+            patientId,
+            therapyId: a.therapyId,
+            date: a.date,
+            fascia: a.fascia,
+            scheduledTime: a.scheduledTime,
+          },
+        },
         true,
       );
       if (!result.ok) return failure(result, tool, used);

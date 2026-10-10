@@ -1,0 +1,14 @@
+✔ backend CI jobs explicitly opt in to synthetic test authentication (0.799596ms)
+✔ browser-e2e builds the frontend against the local backend (VITE_API_URL) (0.24419ms)
+✔ playwright is a pinned root devDependency present in the lockfile (0.190544ms)
+✔ Playwright install step is deterministic (no npm-install fallback) (0.154205ms)
+✔ browser-e2e failures are not masked by continue-on-error (1.031365ms)
+✔ browser-e2e creates synthetic identities after build and fails on seed errors (0.247714ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73.462069

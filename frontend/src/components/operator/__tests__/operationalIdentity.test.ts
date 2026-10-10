@@ -154,11 +154,11 @@ test('therapy action names identify both homonyms and drug while readOnly offers
   assert.match(html, /role="dialog"/);
   assert.match(
     html,
-    /aria-label="Erogata: Rossi, Mario · CF RSSMRA80A01H501U · Farmaco sintetico · 1 mg"/,
+    /aria-label="Erogata: Rossi, Mario · CF RSSMRA80A01H501U · Farmaco sintetico · 1 mg · 09:00"/,
   );
   assert.match(
     html,
-    /aria-label="Non erogata: Rossi, Mario · Nato\/a il 15\/06\/1975 · CF da completare · Farmaco sintetico · 1 mg"/,
+    /aria-label="Non erogata: Rossi, Mario · Nato\/a il 15\/06\/1975 · CF da completare · Farmaco sintetico · 1 mg · 09:00"/,
   );
   assert.doesNotMatch(html, /STALE-ROOM|STALE-BED|MRN-NEVER-RENDER/);
   const readonly = render(

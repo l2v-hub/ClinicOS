@@ -5,6 +5,7 @@ import {
   invalidateSessionCache,
   pendingSessionCache,
   readSessionCache,
+  sessionCacheEpoch,
   trackSessionCache,
   writeSessionCache,
 } from '../sessionCache';
@@ -33,6 +34,23 @@ test('session cache stores, reads, invalidates by prefix and clears everything',
   // Logout must leave nothing behind: the next operator never sees the previous one's data.
   clearSessionCache();
   assert.equal(readSessionCache('diary:p1:tutti'), undefined);
+});
+
+test('a late read from the previous session cannot repopulate any clinical snapshot', async () => {
+  clearSessionCache();
+  const epoch = sessionCacheEpoch();
+  let complete!: (value: string) => void;
+  const pending = new Promise<string>((resolve) => (complete = resolve));
+  trackSessionCache('narrative:p1', pending, epoch);
+  const publish = pending.then((value) => writeSessionCache('narrative:p1', value, epoch));
+  clearSessionCache();
+  writeSessionCache('narrative:p1', 'current session');
+  complete('previous session');
+  await publish;
+  assert.equal(readSessionCache('narrative:p1'), 'current session');
+  assert.equal(pendingSessionCache('narrative:p1'), undefined);
+  trackSessionCache('old idle task', pending, epoch);
+  assert.equal(pendingSessionCache('old idle task'), undefined);
 });
 
 test('an in-flight prefetch is exposed while pending, never rejects, and is dropped when done', async () => {

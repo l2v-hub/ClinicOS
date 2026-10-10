@@ -20,6 +20,7 @@ test(
     const { listPatientDocuments, getPatientDocumentContent } =
       await import('../upload/patient-documents.js');
     const { createTestOperator } = await import('../../test-support/operator-fixture.js');
+    const { buildNarrativeDraft } = await import('../sections/narrative.js');
     const runId = `TEST-ARCHIVE-${randomUUID()}`;
     const patientIds: string[] = [];
     const jobIds: string[] = [];
@@ -38,6 +39,12 @@ test(
         data: {
           id: `${runId}-job-${jobIds.length}`,
           status: 'review_ready',
+          resultData: {
+            _narrative: buildNarrativeDraft({
+              sections: [],
+              allergies: { status: 'not_documented' },
+            }),
+          },
           createdById: runId,
           maxFiles: 10,
           maxTotalBytes: 1_000_000,

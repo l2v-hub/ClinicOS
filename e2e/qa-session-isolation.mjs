@@ -78,6 +78,15 @@ try {
   await page.getByRole('button', { name: 'Cambia profilo', exact: true }).click();
   await page.getByRole('button', { name: /^OSS 1/ }).click();
   await page.getByRole('navigation', { name: 'Navigazione principale' }).waitFor();
+  const ossHeaders = await page.evaluate(async () => {
+    const session = await import('/src/lib/operatorSession.ts');
+    return session.operatorHeaders();
+  });
+  const denied = await context.request.get(`${backend}/patients/${patientId}/narrative-sections`, {
+    headers: ossHeaders,
+  });
+  evidence.nextRoleNarrativeStatus = denied.status();
+  assert.equal(denied.status(), 403);
   release();
   await page.waitForTimeout(800);
   evidence.cacheAfterRoleChange = await page.evaluate(async (id) => {
@@ -102,7 +111,10 @@ try {
     path: resolve(out, 'oss-after-doctor-late-response.png'),
     fullPage: true,
   });
-  evidence.pass = !evidence.cacheAfterRoleChange && !evidence.markerElements;
+  evidence.pass =
+    evidence.nextRoleNarrativeStatus === 403 &&
+    !evidence.cacheAfterRoleChange &&
+    !evidence.markerElements;
   writeFileSync(resolve(out, 'results.json'), JSON.stringify(evidence, null, 2));
   console.log(JSON.stringify(evidence, null, 2));
   process.exitCode = evidence.pass ? 0 : 1;

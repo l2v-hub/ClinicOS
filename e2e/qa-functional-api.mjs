@@ -173,6 +173,37 @@ if (patientId) {
       'Malformed optional field reached persistence instead of validation',
     );
   });
+  for (const [field, values] of Object.entries({
+    sex: [{}, [], 2],
+    email: [[], true, 'invalid-email'],
+    address: [{}, ['home']],
+    emergencyContactName: [{}, 123],
+    emergencyContactPhone: [{}, ['phone']],
+  }))
+    for (const value of values)
+      await check(`patient:invalid-${field}:${JSON.stringify(value)}`, async () => {
+        const before = await call(doctor, 'GET', `/patients/${patientId}`);
+        const r = await call(doctor, 'PATCH', `/patients/${patientId}`, { [field]: value });
+        assert.equal(r.status, 400, JSON.stringify(r.data));
+        const after = await call(doctor, 'GET', `/patients/${patientId}`);
+        assert.equal(after.data[field], before.data[field]);
+      });
+  await check('patient:optional-contacts-valid-and-clear', async () => {
+    const r = await call(doctor, 'PATCH', `/patients/${patientId}`, {
+      email: 'qa@example.test',
+      emergencyContactName: 'Synthetic contact',
+      emergencyContactPhone: '+39 333 0000000',
+    });
+    assert.equal(r.status, 200, JSON.stringify(r.data));
+    const cleared = await call(doctor, 'PATCH', `/patients/${patientId}`, {
+      email: null,
+      emergencyContactName: '',
+      emergencyContactPhone: null,
+    });
+    assert.equal(cleared.status, 200, JSON.stringify(cleared.data));
+    assert.equal(cleared.data.email, null);
+    assert.equal(cleared.data.emergencyContactName, null);
+  });
   await check('parameters:idempotency/changed-replay/persisted-patient', async () => {
     const body = {
       requestId: randomUUID(),
@@ -244,7 +275,13 @@ if (patientId) {
     const path = `/patients/${patientId}/narrative-sections/ANAMNESIS`;
     const r = await call(doctor, 'PUT', path, { reviewedText: '', reviewStatus: 'reviewed' });
     evidence.emptyNarrative = r.data;
-    assert.equal(r.data.displayText, '', 'Clearing reviewed text resurrected the original');
+    assert.equal(r.status, 400, 'Empty review must be explicitly rejected');
+    assert.match(r.data.error, /revisione.*vuota/i);
+    const saved = await call(doctor, 'GET', `/patients/${patientId}/narrative-sections`);
+    assert.equal(
+      saved.data.sections.find((s) => s.sectionKey === 'ANAMNESIS').displayText,
+      'Revisione 2',
+    );
   });
   let therapy;
   await check('therapy:create/authoritative-read/nurse-denied', async () => {

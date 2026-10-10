@@ -130,8 +130,6 @@ import type {
   ClinicalOverview,
   TherapySlot,
   MotivoNonErogazione,
-  TherapySlotPatient,
-  TherapyAdministration,
   TipoIntervento,
   ConsegnaOverview,
   ConsegnaPageInfo,
@@ -3212,6 +3210,7 @@ export default function App() {
           operatoreId: utente?.id ?? '',
           operatoreNome: utente?.nome ?? '',
           therapyId: info.therapyId,
+          ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
           ...(info.measuredGlucose !== undefined ? { measuredGlucose: info.measuredGlucose } : {}),
         }),
       });
@@ -3232,31 +3231,6 @@ export default function App() {
     motivo: MotivoNonErogazione,
     noteText: string,
   ) {
-    setTherapySlots((prev) =>
-      prev.map((slot) => {
-        if (slot.fascia !== info.fascia) return slot;
-        return {
-          ...slot,
-          summary: {
-            ...slot.summary,
-            notAdministered: slot.summary.notAdministered + 1,
-            pending: Math.max(0, slot.summary.pending - 1),
-          },
-          patients: slot.patients.map((p: TherapySlotPatient) => {
-            if (p.patientId !== info.patientId) return p;
-            return {
-              ...p,
-              administrations: p.administrations.map((a: TherapyAdministration) =>
-                a.therapyId === info.therapyId
-                  ? { ...a, status: 'not_administered' as const, notAdministeredReason: motivo }
-                  : a,
-              ),
-            };
-          }),
-        };
-      }),
-    );
-
     try {
       const res = await fetch(`${API_URL}/therapy-slots/not-administered`, {
         method: 'POST',
@@ -3272,6 +3246,7 @@ export default function App() {
           operatoreId: utente?.id ?? '',
           operatoreNome: utente?.nome ?? '',
           therapyId: info.therapyId,
+          ...(info.scheduledTime !== undefined ? { scheduledTime: info.scheduledTime } : {}),
           motivo,
           note: noteText,
         }),

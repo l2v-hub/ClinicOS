@@ -7,6 +7,7 @@
 
 import type { Prisma } from '@prisma/client';
 import {
+  NarrativeInputError,
   assertNarrativeDraftMetadataBounds,
   parseNarrativeMetadata,
   parseNarrativeSaveInput,
@@ -190,6 +191,17 @@ export async function upsertNarrativeSection(
   const existing = await prisma.patientNarrativeSection.findUnique({
     where: { patientId_sectionKey: { patientId, sectionKey } },
   });
+  // An empty edit would silently fall back to the immutable original in every reader.
+  // Reject it before saving; restoring the original is an explicit, non-empty edit.
+  if (
+    validated.reviewedText !== undefined &&
+    !validated.reviewedText.trim() &&
+    (existing?.originalText ?? validated.originalText ?? '').trim()
+  ) {
+    throw new NarrativeInputError(
+      'La revisione non può essere vuota: inserisci il testo oppure ripristina il testo originale. Nessuna modifica è stata salvata.',
+    );
+  }
   const reviewStatus =
     validated.reviewStatus ??
     (validated.reviewedText?.trim() ? 'modified' : (existing?.reviewStatus ?? 'pending'));

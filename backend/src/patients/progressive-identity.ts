@@ -54,6 +54,32 @@ export function patientName(value: unknown, field: keyof typeof NAME_LABEL = 'fi
   return value.trim();
 }
 
+const OPTIONAL_FIELDS = {
+  sex: { label: 'Sesso', max: 32 },
+  email: { label: 'Email', max: 254 },
+  address: { label: 'Indirizzo', max: 1000 },
+  emergencyContactName: { label: 'Contatto di emergenza', max: 150 },
+  emergencyContactPhone: { label: 'Telefono del contatto di emergenza', max: 64 },
+} as const;
+
+/** Validate optional fields before passing user input to Prisma. Missing fields stay missing. */
+export function patientOptionalFields(input: Record<string, unknown>) {
+  const result: Partial<Record<keyof typeof OPTIONAL_FIELDS, string | null>> = {};
+  for (const [field, { label, max }] of Object.entries(OPTIONAL_FIELDS)) {
+    if (!Object.hasOwn(input, field) || input[field] === undefined) continue;
+    const raw = input[field];
+    if (raw !== null && typeof raw !== 'string')
+      throw new PatientIdentityInputError(`${label}: deve essere un testo`);
+    const value = typeof raw === 'string' ? raw.trim() : '';
+    if (value.length > max)
+      throw new PatientIdentityInputError(`${label}: massimo ${max} caratteri`);
+    if (field === 'email' && value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value))
+      throw new PatientIdentityInputError('Email non valida');
+    result[field as keyof typeof OPTIONAL_FIELDS] = value || null;
+  }
+  return result;
+}
+
 export function normalizePatientIdentity(input: Record<string, unknown>) {
   return {
     firstName: patientName(input.firstName, 'firstName'),

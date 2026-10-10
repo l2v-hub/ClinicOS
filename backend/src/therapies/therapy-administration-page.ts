@@ -15,14 +15,22 @@ export interface TherapyAdministrationPageRow {
   farmacoNome: string;
   farmacoDose?: string;
   fascia: string;
+  ora?: string;
   stato: string;
   confirmedAt: Date | null;
   operatoreNome: string | null;
   motivo: string | null;
 }
 
-export function legacyAdministrationKey(patientId: string, drugName: string, fascia: string) {
-  return JSON.stringify([patientId, drugName, fascia]);
+export function legacyAdministrationKey(
+  patientId: string,
+  drugName: string,
+  fascia: string,
+  time?: string,
+) {
+  return JSON.stringify(
+    time === undefined ? [patientId, drugName, fascia] : [patientId, drugName, fascia, time],
+  );
 }
 
 /** Load only administrations that can match this exact therapy page. */
@@ -66,6 +74,7 @@ export async function findTherapyPageAdministrations(
         ma."farmacoNome",
         ma."farmacoDose",
         ma.fascia,
+        ma.ora,
         ma.stato,
         ma."confirmedAt",
         ma."operatoreNome",
@@ -88,13 +97,14 @@ export async function findTherapyPageAdministrations(
               ),
             )}
           )
-          SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia)
+          SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia, ma.ora)
             ma.id,
             ma."therapyId",
             ma."patientId",
             ma."farmacoNome",
             ma."farmacoDose",
             ma.fascia,
+            ma.ora,
             ma.stato,
             ma."confirmedAt",
             ma."operatoreNome",
@@ -106,7 +116,7 @@ export async function findTherapyPageAdministrations(
             AND ma.fascia = candidate.fascia
             AND ma.date = ${date}
             AND ma."therapyId" IS NULL
-          ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.id DESC
+          ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.ora, ma.id DESC
         `),
   ]);
   return [...modernRows, ...legacyRows];
