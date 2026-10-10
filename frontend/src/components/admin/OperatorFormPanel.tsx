@@ -3,6 +3,11 @@ import { IcoCheck, IcoX } from '../../icons';
 import { OPERATOR_COLOR_PALETTE } from '../../types';
 import type { RuoloOperatore, StatoOperatore } from '../../types';
 import type { OperatorFormValue } from './operatorFormModel';
+import {
+  OPERATOR_ROLE_EXPLANATION,
+  isStandardOperatorRole,
+  operatorRolePresentation,
+} from '../../lib/operatorRolePresentation';
 import './OperatorManagement.css';
 
 const COLOR_LABELS = [
@@ -118,14 +123,21 @@ export function OperatorFormPanel({
               <select
                 id="operator-role"
                 name="ruolo"
+                aria-describedby="operator-role-help"
                 className="form-select"
                 value={value.ruolo}
                 onChange={(event) => update('ruolo', event.target.value as RuoloOperatore)}
               >
+                {!isStandardOperatorRole(value.ruolo) && (
+                  <option value={value.ruolo}>{operatorRolePresentation(value.ruolo).label}</option>
+                )}
                 <option value="medico">Medico</option>
                 <option value="infermiere">Infermiere</option>
                 <option value="coordinatore">Coordinatore</option>
               </select>
+              <span id="operator-role-help" className="form-hint">
+                {OPERATOR_ROLE_EXPLANATION}
+              </span>
             </div>
             <div className="form-field operator-editor__field--span-2">
               <label className="form-label" htmlFor="operator-qualification">

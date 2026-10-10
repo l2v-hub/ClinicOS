@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Operatore, RuoloOperatore, StatoOperatore } from '../../types';
+import type { Operatore, StatoOperatore } from '../../types';
 import { OPERATOR_COLOR_PALETTE } from '../../types';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoChevronRight } from '../../icons';
 import { ClinicalTable } from '../operator/cartella/ClinicalTable';
@@ -8,7 +8,12 @@ import { TableFilters } from '../shared/TableFilters';
 import type { TableFilterField } from '../shared/TableFilters';
 import { OperatorFormPanel } from './OperatorFormPanel';
 import { RosterDefaultsPanel } from './RosterDefaultsPanel';
-import { EMPTY_OPERATOR_FORM } from './operatorFormModel';
+import { EMPTY_OPERATOR_FORM, operatorProfileUpdate } from './operatorFormModel';
+import {
+  OPERATOR_ROLE_EXPLANATION,
+  operatorProfileLabel,
+  operatorRolePresentation,
+} from '../../lib/operatorRolePresentation';
 import type {
   OperatorDirectoryStatus,
   OperatorDirectorySummary,
@@ -40,7 +45,6 @@ const OPERATOR_FILTER_FIELDS: TableFilterField[] = [
 ];
 
 function operatoriColumns(
-  ruoloLabel: Record<RuoloOperatore, string>,
   apriModifica: (op: Operatore) => void,
   onToggleStato: (id: string) => void,
 ): ColumnDef<Operatore>[] {
@@ -65,10 +69,18 @@ function operatoriColumns(
       label: 'Ruolo',
       sortable: true,
       render: (_v, op) => (
-        <span className="cell--muted">
-          {ruoloLabel[op.ruolo]}
-          {op.qualifica ? ` · ${op.qualifica}` : ''}
-        </span>
+        <div>
+          <span className="cell--muted">{operatorProfileLabel(op)}</span>
+          {operatorRolePresentation(op.ruolo).needsVerification && (
+            <button
+              className="link-btn"
+              aria-label={`Verifica ruolo di ${op.cognome} ${op.nome}`}
+              onClick={() => apriModifica(op)}
+            >
+              Verifica ruolo
+            </button>
+          )}
+        </div>
       ),
     },
     {
@@ -190,7 +202,9 @@ export function OperatorManagement({
     // email obbligatoria: lato backend l'operatore è uno User (email unica)
     if (!form.nome.trim() || !form.cognome.trim() || !form.email.trim()) return;
     if (editId) {
-      onUpdate(editId, form);
+      const original = operatori.find((op) => op.id === editId);
+      if (!original) return;
+      onUpdate(editId, operatorProfileUpdate(form, original));
     } else {
       onAdd(form);
     }
@@ -204,12 +218,6 @@ export function OperatorManagement({
     setEditId(null);
     setForm(EMPTY_OPERATOR_FORM);
   }
-
-  const ruoloLabel: Record<RuoloOperatore, string> = {
-    medico: 'Medico',
-    infermiere: 'Infermiere',
-    coordinatore: 'Coordinatore',
-  };
 
   function setOperatorFilter(key: string, value: string) {
     if (key === 'query') {
@@ -248,6 +256,7 @@ export function OperatorManagement({
         </button>
       </div>
 
+      <p className="view-header__sub">{OPERATOR_ROLE_EXPLANATION}</p>
       <RosterDefaultsPanel />
       {/* Form */}
       {formAperto && (
@@ -265,7 +274,7 @@ export function OperatorManagement({
         title="Operatori"
         count={summary?.matching ?? operatori.length}
         countLabel="operatori"
-        columns={operatoriColumns(ruoloLabel, apriModifica, onToggleStato)}
+        columns={operatoriColumns(apriModifica, onToggleStato)}
         data={filtrati}
         emptyMessage="Nessun operatore trovato."
         filterBar={
@@ -295,9 +304,17 @@ export function OperatorManagement({
               <span className="pt-list-card__name">
                 {op.cognome} {op.nome}
               </span>
-              <span className="pt-list-card__meta">
-                {ruoloLabel[op.ruolo]} · {op.reparto}
-              </span>
+              <span className="pt-list-card__meta">{operatorProfileLabel(op)}</span>
+              <span className="pt-list-card__meta">{op.reparto}</span>
+              {operatorRolePresentation(op.ruolo).needsVerification && (
+                <button
+                  className="link-btn"
+                  aria-label={`Verifica ruolo di ${op.cognome} ${op.nome}`}
+                  onClick={() => apriModifica(op)}
+                >
+                  Verifica ruolo
+                </button>
+              )}
             </div>
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}

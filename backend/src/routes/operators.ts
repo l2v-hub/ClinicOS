@@ -1,6 +1,7 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import type { Prisma } from '@prisma/client';
+import * as operatorView from '../operators/operator-view.js';
 import { requireOperator, requireRole } from '../ai/auth.js';
 import {
   OperatorScheduleInputError,
@@ -15,11 +16,6 @@ import {
   encodeOperatorPageCursor,
   parseOperatorPageQuery,
 } from '../operators/page-query.js';
-
-// Fase 1b: real CRUD for the admin "Gestione Operatori" screen (was a client-side mock).
-// An "operatore" in the UI is a User (identity: fullName/email/isActive) + an Operator row
-// (department/phone/ruolo/qualifica). Rows are returned already mapped to the frontend
-// `Operatore` shape; colore/iniziali stay client-derived.
 
 const operatorsRouter = Router();
 const requireAdmin = requireRole('admin', 'manager');
@@ -44,23 +40,6 @@ operatorsRouter.use((req, res, next) => {
   requireAdmin(req, res, next);
 });
 
-// UI fullName convention: first token = nome, rest = cognome ("Marco De Luca" → Marco / De Luca).
-function splitFullName(fullName: string): { nome: string; cognome: string } {
-  const parts = fullName.trim().split(/\s+/);
-  return { nome: parts[0] ?? '', cognome: parts.slice(1).join(' ') };
-}
-
-type OperatorWithUser = {
-  id: string;
-  createdAt: Date;
-  department: string | null;
-  phone?: string | null;
-  ruolo: string | null;
-  qualifica: string | null;
-  user: { email?: string; fullName: string; isActive: boolean };
-  _count?: { registeredPatients?: number; appointments?: number };
-};
-
 export const OPERATOR_DIRECTORY_SELECT = {
   id: true,
   createdAt: true,
@@ -80,52 +59,6 @@ export const OPERATOR_ADMIN_SELECT = {
   user: { select: { email: true, fullName: true, isActive: true } },
   _count: { select: { registeredPatients: true } },
 } as const;
-
-function toOperatore(op: OperatorWithUser, appuntamentiOggi: number) {
-  const { nome, cognome } = splitFullName(op.user.fullName);
-  return {
-    id: op.id,
-    nome,
-    cognome,
-    ruolo: op.ruolo ?? 'medico',
-    email: op.user.email ?? '',
-    telefono: op.phone ?? '',
-    reparto: op.department ?? '',
-    stato: op.user.isActive ? 'attivo' : 'inattivo',
-    qualifica: op.qualifica ?? '',
-    pazientiAssegnati: op._count?.registeredPatients ?? 0,
-    appuntamentiOggi,
-  };
-}
-
-function toDirectoryOperatore(op: OperatorWithUser, appuntamentiOggi: number) {
-  const { nome, cognome } = splitFullName(op.user.fullName);
-  return {
-    id: op.id,
-    nome,
-    cognome,
-    ruolo: op.ruolo ?? 'medico',
-    email: '',
-    telefono: '',
-    reparto: op.department ?? '',
-    stato: op.user.isActive ? 'attivo' : 'inattivo',
-    qualifica: op.qualifica ?? '',
-    pazientiAssegnati: 0,
-    appuntamentiOggi,
-  };
-}
-
-function todayRange(): { gte: Date; lte: Date } {
-  const from = new Date();
-  from.setHours(0, 0, 0, 0);
-  const to = new Date();
-  to.setHours(23, 59, 59, 999);
-  return { gte: from, lte: to };
-}
-
-async function appointmentsTodayForOperator(operatorId: string): Promise<number> {
-  return prisma.appointment.count({ where: { operatorId, scheduledAt: todayRange() } });
-}
 
 function operatorPageWhere(
   q?: string,
@@ -173,7 +106,7 @@ operatorsRouter.get('/directory/page', async (req, res) => {
       ? decodeOperatorPageCursor(input.cursor, { q: input.q })
       : undefined;
     const cursorWhere = operatorCursorWhere(position);
-    const scheduledAt = todayRange();
+    const scheduledAt = operatorView.todayRange();
     const rows = await prisma.operator.findMany({
       where: cursorWhere
         ? { AND: [operatorPageWhere(input.q), cursorWhere] }
@@ -189,7 +122,7 @@ operatorsRouter.get('/directory/page', async (req, res) => {
     const pageRows = rows.slice(0, input.limit);
     const last = pageRows.at(-1);
     res.status(200).json({
-      items: pageRows.map((op) => toDirectoryOperatore(op, op._count.appointments)),
+      items: pageRows.map((op) => operatorView.toDirectoryOperatore(op, op._count.appointments)),
       pageInfo: {
         hasMore,
         nextCursor: hasMore && last ? encodeOperatorPageCursor(last, { q: input.q }) : null,
@@ -208,7 +141,7 @@ operatorsRouter.get('/directory/page', async (req, res) => {
 // GET /operators/directory — minimum fields needed by agendas and clinical collaboration.
 operatorsRouter.get('/directory', async (_req, res) => {
   try {
-    const scheduledAt = todayRange();
+    const scheduledAt = operatorView.todayRange();
     const operators = await prisma.operator.findMany({
       select: {
         ...OPERATOR_DIRECTORY_SELECT,
@@ -224,7 +157,7 @@ operatorsRouter.get('/directory', async (_req, res) => {
     }
     res.status(200).json(
       window.items.map((op) => {
-        return toDirectoryOperatore(op, op._count.appointments);
+        return operatorView.toDirectoryOperatore(op, op._count.appointments);
       }),
     );
   } catch (error) {
@@ -260,7 +193,7 @@ operatorsRouter.get('/page', async (req, res) => {
       ? decodeOperatorPageCursor(input.cursor, { q: input.q, status: input.status })
       : undefined;
     const cursorWhere = operatorCursorWhere(position);
-    const scheduledAt = todayRange();
+    const scheduledAt = operatorView.todayRange();
     const summaryWhere = operatorPageWhere(input.q, true);
     const baseWhere = operatorPageWhere(input.q, true, input.status);
     const activeWhere: Prisma.OperatorWhereInput = {
@@ -305,7 +238,7 @@ operatorsRouter.get('/page', async (req, res) => {
     const pageRows = rows.slice(0, input.limit);
     const last = pageRows.at(-1);
     res.status(200).json({
-      items: pageRows.map((op) => toOperatore(op, op._count.appointments)),
+      items: pageRows.map((op) => operatorView.toOperatore(op, op._count.appointments)),
       summary,
       pageInfo: {
         hasMore,
@@ -327,7 +260,7 @@ operatorsRouter.get('/page', async (req, res) => {
 
 operatorsRouter.get('/', async (_req, res) => {
   try {
-    const scheduledAt = todayRange();
+    const scheduledAt = operatorView.todayRange();
     const operators = await prisma.operator.findMany({
       select: {
         ...OPERATOR_ADMIN_SELECT,
@@ -346,7 +279,9 @@ operatorsRouter.get('/', async (_req, res) => {
       res.status(409).json({ error: 'Directory oltre il limite: usare la ricerca paginata' });
       return;
     }
-    res.status(200).json(window.items.map((op) => toOperatore(op, op._count.appointments)));
+    res
+      .status(200)
+      .json(window.items.map((op) => operatorView.toOperatore(op, op._count.appointments)));
   } catch (error) {
     console.error('GET /operators error:', error);
     res.status(500).json({ error: 'Errore nel recupero operatori' });
@@ -457,7 +392,7 @@ operatorsRouter.post('/', async (req, res) => {
     const op = user.operator!;
     console.log(`POST /operators → created id=${op.id}`);
     res.status(201).json(
-      toOperatore(
+      operatorView.toOperatore(
         {
           ...op,
           user: { email: user.email, fullName: user.fullName, isActive: user.isActive },
@@ -512,7 +447,7 @@ operatorsRouter.put('/:operatorId', async (req, res) => {
 
     const userData: Record<string, unknown> = {};
     if (body.nome !== undefined || body.cognome !== undefined) {
-      const current = splitFullName(existing.user.fullName);
+      const current = operatorView.splitFullName(existing.user.fullName);
       const nome = (body.nome ?? current.nome).trim();
       const cognome = (body.cognome ?? current.cognome).trim();
       if (!nome || !cognome) {
@@ -539,11 +474,11 @@ operatorsRouter.put('/:operatorId', async (req, res) => {
         },
         include: { user: true, _count: { select: { registeredPatients: true } } },
       }),
-      appointmentsTodayForOperator(operatorId),
+      operatorView.appointmentsTodayForOperator(prisma, operatorId),
     ]);
 
     console.log(`PUT /operators/${operatorId} → updated`);
-    res.status(200).json(toOperatore(updated, apptToday));
+    res.status(200).json(operatorView.toOperatore(updated, apptToday));
   } catch (error: unknown) {
     console.error('PUT /operators/:operatorId error:', error);
     if (

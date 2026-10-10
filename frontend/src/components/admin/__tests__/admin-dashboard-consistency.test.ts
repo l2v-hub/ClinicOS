@@ -3,6 +3,10 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const dashboard = readFileSync(new URL('../AdminDashboard.tsx', import.meta.url), 'utf8');
+const workloadHeading = readFileSync(
+  new URL('../OperatorWorkloadHeading.tsx', import.meta.url),
+  'utf8',
+);
 const appStyles = readFileSync(new URL('../../../App.css', import.meta.url), 'utf8');
 const adminKpis = readFileSync(new URL('../AdminDashboardKpiBands.tsx', import.meta.url), 'utf8');
 const sharedKpis = readFileSync(
@@ -81,10 +85,14 @@ test('shared KPI layout has equal card geometry and responsive no-overflow grids
 
 test('dashboard people use a simple semantic icon instead of unreadable initials tiles', () => {
   assert.match(dashboard, /import[\s\S]*IcoUser[\s\S]*from '\.\.\/\.\.\/icons'/);
-  assert.equal((dashboard.match(/className="dashboard-person-icon"/g) ?? []).length, 2);
-  assert.equal((dashboard.match(/<IcoUser \/>/g) ?? []).length, 2);
-  assert.match(dashboard, /className="dashboard-person-icon"[\s\S]*aria-hidden="true"/);
-  assert.doesNotMatch(dashboard, /className="op-avatar-sm"[\s\S]*\{op\.iniziali\}/);
+  assert.equal((dashboard.match(/<OperatorWorkloadHeading op=\{op\}/g) ?? []).length, 1);
+  for (const source of [dashboard, workloadHeading]) {
+    assert.match(source, /import[\s\S]*IcoUser[\s\S]*from '\.\.\/\.\.\/icons'/);
+    assert.equal((source.match(/className="dashboard-person-icon"/g) ?? []).length, 1);
+    assert.equal((source.match(/<IcoUser \/>/g) ?? []).length, 1);
+    assert.match(source, /className="dashboard-person-icon"[\s\S]*aria-hidden="true"/);
+    assert.doesNotMatch(source, /className="op-avatar-sm"[\s\S]*\{op\.iniziali\}/);
+  }
   assert.match(appStyles, /\.dashboard-person-icon\s*\{[^}]*width:\s*32px[^}]*height:\s*32px/s);
   assert.match(appStyles, /\.dashboard-person-icon svg\s*\{[^}]*width:\s*24px[^}]*height:\s*24px/s);
   assert.doesNotMatch(

@@ -19,6 +19,8 @@ import { DashboardTherapyDeadlines } from '../shared/DashboardTherapyDeadlines';
 import { landingOf, type PatientLanding } from '../../lib/patientTargetResolver';
 import type { PatientListEntry } from '../../lib/patientListView';
 import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
+import { OPERATOR_ROLE_EXPLANATION } from '../../lib/operatorRolePresentation';
+import { OperatorWorkloadHeading } from './OperatorWorkloadHeading';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -348,6 +350,7 @@ export function AdminDashboard({
         </button>
       </div>
 
+      <p className="view-header__sub">{OPERATOR_ROLE_EXPLANATION}</p>
       <div className="operator-workload-grid">
         {operatori.map((op) => (
           <div
@@ -355,24 +358,7 @@ export function AdminDashboard({
             className={`op-workload-card${op.stato === 'inattivo' ? ' op-workload-card--inactive' : ''}`}
             style={{ borderTop: `3px solid ${op.colore}` }}
           >
-            <div className="op-workload-card__header">
-              <span
-                className="dashboard-person-icon"
-                style={{ color: op.colore }}
-                aria-hidden="true"
-              >
-                <IcoUser />
-              </span>
-              <div className="op-workload-card__info">
-                <span className="op-workload-card__name">
-                  {op.cognome} {op.nome}
-                </span>
-                <span className="op-workload-card__role">
-                  {op.ruolo} · {op.reparto}
-                </span>
-              </div>
-              <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>
-            </div>
+            <OperatorWorkloadHeading op={op} />
             {op.stato === 'attivo' && (
               <>
                 <div className="op-workload-stats">
