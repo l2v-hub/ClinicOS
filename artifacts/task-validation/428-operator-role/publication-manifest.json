@@ -1,0 +1,2688 @@
+{
+  "secretChecks": 25017,
+  "applicationSourceSha256": "ed35529df868c86c185c5947f8addcc24035badc763e43c1f966227ac24fed6c",
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "originalIndependentManifestFrozen": true,
+  "files": [
+    {
+      "path": "artifacts/task-validation/428-operator-role/adopt-qa.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "40bfc077308fa8de763c4dbb4b1f58872dddc5365d777a0cc66de45356cbdc63",
+      "sha256": "40bfc077308fa8de763c4dbb4b1f58872dddc5365d777a0cc66de45356cbdc63"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/authorize-release.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "535d2fe0f212988a34aa91d7c399f63796f259a6d3e618633dcf8b122c22b6cc",
+      "sha256": "535d2fe0f212988a34aa91d7c399f63796f259a6d3e618633dcf8b122c22b6cc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/bind-source.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8bd5c7e2049d902f528fb0e8a5df44354afbb4c8861f3f4b5239981a3798ce15",
+      "sha256": "8bd5c7e2049d902f528fb0e8a5df44354afbb4c8861f3f4b5239981a3798ce15"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/browser-guards.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "646a6bab471c3f9891e02f2395aed33a6392ccc3679d3fed9a6b52a162dfaba5",
+      "sha256": "646a6bab471c3f9891e02f2395aed33a6392ccc3679d3fed9a6b52a162dfaba5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/canonical-blobs.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "54c9e00de7a3d25b2e17f10d1bbb37743b1e0f010621c4fdbd8f8b4a44a69000",
+      "sha256": "54c9e00de7a3d25b2e17f10d1bbb37743b1e0f010621c4fdbd8f8b4a44a69000"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/ci-comparison.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e592fc0d7c5cd0ced9a3bb3c3e009c4772270279a683379cc1588728587b89c3",
+      "sha256": "e592fc0d7c5cd0ced9a3bb3c3e009c4772270279a683379cc1588728587b89c3"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/ci-duration.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c2dd4d29c4f878190f1f3c8991b7f0e5ce71e58bbc2ed9d0a648633994e51231",
+      "sha256": "c2dd4d29c4f878190f1f3c8991b7f0e5ce71e58bbc2ed9d0a648633994e51231"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/ci-duration.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "66a88ca012d699e3921f79c27ddaa2712be37f2580c92c660d335df4c49b7da6",
+      "sha256": "66a88ca012d699e3921f79c27ddaa2712be37f2580c92c660d335df4c49b7da6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/ci-proof-staging-policy.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2a3561c1af42b12939b1996d744cc9e7ef3da459421f6e89e36b8ac79e82e0b6",
+      "sha256": "2a3561c1af42b12939b1996d744cc9e7ef3da459421f6e89e36b8ac79e82e0b6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/ci-receipt.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a030625fd5bbdb9cafe85ecc81d9fd6646cd7ad390b9c28c19e3a333d5d91153",
+      "sha256": "a030625fd5bbdb9cafe85ecc81d9fd6646cd7ad390b9c28c19e3a333d5d91153"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/commands.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f",
+      "sha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser-plan.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1ad30c0274c986c7cbefd489e90eebff010bf3ebb1dfb04c8d1c641047803208",
+      "sha256": "1ad30c0274c986c7cbefd489e90eebff010bf3ebb1dfb04c8d1c641047803208"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser-replay-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c27aaa4e2ff3a10b9798a74e6ea8cd85eca73d9913dff649587eb18c39613cd5",
+      "sha256": "c27aaa4e2ff3a10b9798a74e6ea8cd85eca73d9913dff649587eb18c39613cd5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6c63bcffb5baae4917f55e16b671e63393d765c1464d390fb99a31893f9beaea",
+      "sha256": "6c63bcffb5baae4917f55e16b671e63393d765c1464d390fb99a31893f9beaea"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "aecd534ddc0f8c374733358d0dd5dd9686476a88a8eb5a60c48fd85a99859b6a",
+      "sha256": "aecd534ddc0f8c374733358d0dd5dd9686476a88a8eb5a60c48fd85a99859b6a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/desktop-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "05c108af385deb7cd1ed9dfb4c01cfdd3720d3382bd9e43c56bae1b9ea4bd5c9",
+      "sha256": "05c108af385deb7cd1ed9dfb4c01cfdd3720d3382bd9e43c56bae1b9ea4bd5c9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/desktop-directory-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b60bd9eb18fd4a7b99a1eaae78d60326f8dbf97bfb7abf45a869a5ccf5fb64fe",
+      "sha256": "b60bd9eb18fd4a7b99a1eaae78d60326f8dbf97bfb7abf45a869a5ccf5fb64fe"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/desktop-explicit-role-reloaded.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9bffd149ef6866bcb43a4489105683dd3d5fce8c75c02e094c82c130a11dca40",
+      "sha256": "9bffd149ef6866bcb43a4489105683dd3d5fce8c75c02e094c82c130a11dca40"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/desktop-retained-editor-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c5d0892394e9f15373693447f238650ba4ff053df6f8f65722c4611a531a31b1",
+      "sha256": "c5d0892394e9f15373693447f238650ba4ff053df6f8f65722c4611a531a31b1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/desktop-retained-editor-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4a5bbafd4ebe7b276db9f7a77a1f66a7dd93b3f778a2e902e70bec61c53c1c50",
+      "sha256": "4a5bbafd4ebe7b276db9f7a77a1f66a7dd93b3f778a2e902e70bec61c53c1c50"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/desktop-retained-editor-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "049bd79332168963ab2e165d2e4edd126d7c5487ccf7e85c51d269155267daa5",
+      "sha256": "049bd79332168963ab2e165d2e4edd126d7c5487ccf7e85c51d269155267daa5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/mobile-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "15616aa5135b82a32f600c313f4a08063ef58d2b0772434fa5f715ac344ec157",
+      "sha256": "15616aa5135b82a32f600c313f4a08063ef58d2b0772434fa5f715ac344ec157"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/mobile-directory-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "03b3693309e182b0f25968389c5260443e7a8979edece14fecaf399ee583dc9a",
+      "sha256": "03b3693309e182b0f25968389c5260443e7a8979edece14fecaf399ee583dc9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/mobile-explicit-role-reloaded.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b5575955f64fb54d329ce6a969254282388ca24586247c7893957cf0c9802418",
+      "sha256": "b5575955f64fb54d329ce6a969254282388ca24586247c7893957cf0c9802418"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/mobile-retained-editor-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4e3ec504b446683c49e9277e85330d679572950330d4b8744b4b094ca2567ab6",
+      "sha256": "4e3ec504b446683c49e9277e85330d679572950330d4b8744b4b094ca2567ab6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/mobile-retained-editor-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "13603199539a4b77b5b47ec6b9d190e4a03a36c9e25a227f74a92b33e10efcd0",
+      "sha256": "13603199539a4b77b5b47ec6b9d190e4a03a36c9e25a227f74a92b33e10efcd0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/screenshots/mobile-retained-editor-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "512706bd8e3e894e497b9c862ccc676f6286547f2fb2468120482d2392db0b1a",
+      "sha256": "512706bd8e3e894e497b9c862ccc676f6286547f2fb2468120482d2392db0b1a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/test-results/browser-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d2c4ded5de37aafeb37bd42a413dd33b02fcc37c5ae692391f77a0e92ebbb8ee",
+      "sha256": "d2c4ded5de37aafeb37bd42a413dd33b02fcc37c5ae692391f77a0e92ebbb8ee"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "41380b7134f4c3a19400d703d6fd7666fc7bde38968aa37c93d68c0e332b5e3c",
+      "sha256": "41380b7134f4c3a19400d703d6fd7666fc7bde38968aa37c93d68c0e332b5e3c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/trace/mobile.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "84ed7dcc1a8aa8681086f290e16eb883fa2676dafe35276b9948bc7a7c72b084",
+      "sha256": "84ed7dcc1a8aa8681086f290e16eb883fa2676dafe35276b9948bc7a7c72b084"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "131f16de7de2d3395f58f0c825d4d85dc5765ffd248f0825fa0fcf994e9b2bcd",
+      "sha256": "131f16de7de2d3395f58f0c825d4d85dc5765ffd248f0825fa0fcf994e9b2bcd"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/browser03/run/video/mobile.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "39feaada27dbb7c66ee4fdaf361c040c1ed4d9ff937be0e88e41c15038a8b122",
+      "sha256": "39feaada27dbb7c66ee4fdaf361c040c1ed4d9ff937be0e88e41c15038a8b122"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/dashboard-visual/pre-run.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e6a994e5c4776ea4781573419906898fa2325310fcfca79a509385c9f6cb8364",
+      "sha256": "e6a994e5c4776ea4781573419906898fa2325310fcfca79a509385c9f6cb8364"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/dashboard-visual/screenshots/dashboard-visible-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7d1eddf20d89f3101cabf704c113dd3279397e27a1b43984f2d05b96b1c8f09a",
+      "sha256": "7d1eddf20d89f3101cabf704c113dd3279397e27a1b43984f2d05b96b1c8f09a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/dashboard-visual/screenshots/dashboard-visible-3.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e2799f3887d5dd862d0d0adce863fbcc81805d47008b1294b3a45bddb724ced9",
+      "sha256": "e2799f3887d5dd862d0d0adce863fbcc81805d47008b1294b3a45bddb724ced9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/dashboard-visual/test-results/visual-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cd91294863c97702c517db62dbe1183c7e8cb7615284f03dfcecb4371903b28e",
+      "sha256": "cd91294863c97702c517db62dbe1183c7e8cb7615284f03dfcecb4371903b28e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/dashboard-visual/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2fdaeadeb7b3f84a8533a4c12842d973c1d71f9446560aa1c253111219bbf1f7",
+      "sha256": "2fdaeadeb7b3f84a8533a4c12842d973c1d71f9446560aa1c253111219bbf1f7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/dashboard-visual/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ee6937e6e38ce8f1fa046f5a1a93702b400a14b646a3ff6889fd07645ab5834d",
+      "sha256": "ee6937e6e38ce8f1fa046f5a1a93702b400a14b646a3ff6889fd07645ab5834d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "33c5c9056c9b8d156c06c06072c5e35683c40da65395cb42d7b9bd7d2f0325b1",
+      "sha256": "33c5c9056c9b8d156c06c06072c5e35683c40da65395cb42d7b9bd7d2f0325b1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/desktop-visible-retained-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fe542ad17f796daa77f0c9726e2bf50eac3374c922cdef9e5fb16deafa9eba8c",
+      "sha256": "fe542ad17f796daa77f0c9726e2bf50eac3374c922cdef9e5fb16deafa9eba8c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/desktop-visible-retained-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "15c0cdbb52c99343a5999b00e1e3040a3d7fbe2a5c42cf5a0013736bf2f7edb0",
+      "sha256": "15c0cdbb52c99343a5999b00e1e3040a3d7fbe2a5c42cf5a0013736bf2f7edb0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/desktop-visible-retained-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c168f71908e5c552134668157e104742e659bbe824a96246c3f0c159cf266eb5",
+      "sha256": "c168f71908e5c552134668157e104742e659bbe824a96246c3f0c159cf266eb5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/mobile-visible-retained-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2c99cf6be583256ceac9a5ddecef16d6837f77d5d51b2cca73b8f8064be0cf74",
+      "sha256": "2c99cf6be583256ceac9a5ddecef16d6837f77d5d51b2cca73b8f8064be0cf74"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/mobile-visible-retained-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f481bf69fc83ecea82e61de2cf5aadf8171b1b3efe5cd114357103a3e3b1d317",
+      "sha256": "f481bf69fc83ecea82e61de2cf5aadf8171b1b3efe5cd114357103a3e3b1d317"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/screenshots/mobile-visible-retained-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c1c692bd99b6b77606aa22344701c2fd2fd76cdc86364503028887c39a9edf06",
+      "sha256": "c1c692bd99b6b77606aa22344701c2fd2fd76cdc86364503028887c39a9edf06"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/test-results/browser-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a9863baad044452a4b40a85589bd49a2744d9ad9949c1b8ca51d06198beef484",
+      "sha256": "a9863baad044452a4b40a85589bd49a2744d9ad9949c1b8ca51d06198beef484"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4b6a54e85d7fb56f772b1083a8fba43254a4e6c74d0e011b92018adb1088bb32",
+      "sha256": "4b6a54e85d7fb56f772b1083a8fba43254a4e6c74d0e011b92018adb1088bb32"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/trace/mobile.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "18ee92db7895ff9925e726811e0385a04b4faf9fe6ba96a61c94ce295df6510c",
+      "sha256": "18ee92db7895ff9925e726811e0385a04b4faf9fe6ba96a61c94ce295df6510c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cd6b7cc0c7edd92eb71e010b5a0a78c11b4b1f15a254ef9f3ba4da50dd3c1ef6",
+      "sha256": "cd6b7cc0c7edd92eb71e010b5a0a78c11b4b1f15a254ef9f3ba4da50dd3c1ef6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/editor01/run/video/mobile.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4f3971b08e5bb513d6f4eb1fc0dbf5e61ed8f107b54edc0a2647bc13f83e5248",
+      "sha256": "4f3971b08e5bb513d6f4eb1fc0dbf5e61ed8f107b54edc0a2647bc13f83e5248"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/online-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "41ae23895432cde4870f9ec635636fdff8dc1cd3ede0060c779e0d14ee26f8d8",
+      "sha256": "41ae23895432cde4870f9ec635636fdff8dc1cd3ede0060c779e0d14ee26f8d8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "05300e0f70ade12dc43876c3309b616462d7c436c1ad7a67e1dc24e1addc60dc",
+      "sha256": "05300e0f70ade12dc43876c3309b616462d7c436c1ad7a67e1dc24e1addc60dc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/pre-run.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3cf46caa9d087049ee872126b6de9b0dbb2e1c9c08b0671325b5a15501f10d33",
+      "sha256": "3cf46caa9d087049ee872126b6de9b0dbb2e1c9c08b0671325b5a15501f10d33"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/before-browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c4a74f02b252eec3617fa53677c3f98bb47d7a67d4521f3e269a0ce3f02a8259",
+      "sha256": "c4a74f02b252eec3617fa53677c3f98bb47d7a67d4521f3e269a0ce3f02a8259"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/browser-lane.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d",
+      "sha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9a3ea1a2fa44145a0f301f17d781d3c9451682a0d9fe0ad4c00fb6c7b4f00fe8",
+      "sha256": "9a3ea1a2fa44145a0f301f17d781d3c9451682a0d9fe0ad4c00fb6c7b4f00fe8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/commands.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f",
+      "sha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/db-regression.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0cc667311e36eab3843078fbe88b7394a01b8b05e7af7291f80c0d3ae570f4fa",
+      "sha256": "0cc667311e36eab3843078fbe88b7394a01b8b05e7af7291f80c0d3ae570f4fa"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/editor-visual.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4b28c33622182e20b7c78fbe928e38568d31493d27a76a490e1af242b3570f60",
+      "sha256": "4b28c33622182e20b7c78fbe928e38568d31493d27a76a490e1af242b3570f60"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/no-cluster-optin.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "615f55711702ec256dd1c058ff31239f3c4090f8c89946e7541ae494b36092a5",
+      "sha256": "615f55711702ec256dd1c058ff31239f3c4090f8c89946e7541ae494b36092a5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/qa-server.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae",
+      "sha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/scope.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388",
+      "sha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/seal.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4e8e8e552d701f4315bf5980f413191558b1b00acf5e2d2fd1649aa1e903b3db",
+      "sha256": "4e8e8e552d701f4315bf5980f413191558b1b00acf5e2d2fd1649aa1e903b3db"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/security.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9661daacf985d6d768f0d58a6cce05ac8939914278b01cf28832eb64506d27df",
+      "sha256": "9661daacf985d6d768f0d58a6cce05ac8939914278b01cf28832eb64506d27df"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/source-binding.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2500686435d05c0655fbdf6dc9a23bbfb5c948c5c97c75bfb5b62d981d4d0ee7",
+      "sha256": "2500686435d05c0655fbdf6dc9a23bbfb5c948c5c97c75bfb5b62d981d4d0ee7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/source-receipt.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/compiled-online/recipes/transport.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76",
+      "sha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/db-regression.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7fcd71c718004504003099f7b02f877239cdb56aa96767e7f5838eb11c6824fe",
+      "sha256": "7fcd71c718004504003099f7b02f877239cdb56aa96767e7f5838eb11c6824fe"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/deployment-progress.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0424e43c7d728fe293464fcf11c4c4bae9c09ae91a5a4056758b49ccd91bfc33",
+      "sha256": "0424e43c7d728fe293464fcf11c4c4bae9c09ae91a5a4056758b49ccd91bfc33"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/deployment-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1d183ec13a0845645f93db53be498ced7e9ef239451c5bea28a9cf99d3b3dd77",
+      "sha256": "1d183ec13a0845645f93db53be498ced7e9ef239451c5bea28a9cf99d3b3dd77"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/finalize-proof.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4be9ed3d5313de02e9ec560784dda37955e004599dd42fbd6ac7c48c60bbccf4",
+      "sha256": "4be9ed3d5313de02e9ec560784dda37955e004599dd42fbd6ac7c48c60bbccf4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/freeze-source.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "94478c7cebda189fb900bf9d59920420e29467fa08676144885b6b0281c95822",
+      "sha256": "94478c7cebda189fb900bf9d59920420e29467fa08676144885b6b0281c95822"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/frozen-source.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "01f1ef45f29953afbebc5eef26f181352bbc0a8f753c869cdadb054a51a13af1",
+      "sha256": "01f1ef45f29953afbebc5eef26f181352bbc0a8f753c869cdadb054a51a13af1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/baseline-browser-plan.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "629d44f839c29632eebac62090acebb9c93afac90f7f3874cb5e0ab9c431bf95",
+      "sha256": "629d44f839c29632eebac62090acebb9c93afac90f7f3874cb5e0ab9c431bf95"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/baseline-source-after.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b",
+      "sha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/baseline-source-comparison.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "aa9b0fc8a2b7610a09f165e5c631cfb177e37af1bfea1719c435dea82ea69199",
+      "sha256": "aa9b0fc8a2b7610a09f165e5c631cfb177e37af1bfea1719c435dea82ea69199"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/baseline-source-git-binding.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "553b05b7aa89dd7da8acf56c5ab4f308af97027eb6cdec12326cadf19f010d66",
+      "sha256": "553b05b7aa89dd7da8acf56c5ab4f308af97027eb6cdec12326cadf19f010d66"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/baseline-source.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b",
+      "sha256": "eed367101463074f118963dd0070d6aaea3d561f2e4c616cb4ea41213065c76b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before-checkout-policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0d3494f1b3375c813a4f9a54c19e0a08e10fb0350c168be0296227873edfdf15",
+      "sha256": "0d3494f1b3375c813a4f9a54c19e0a08e10fb0350c168be0296227873edfdf15"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/browser.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/lane-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c4860cc955e533709dd764876dff3cc4bffdb38926dc6550790cc0fe81db58d0",
+      "sha256": "c4860cc955e533709dd764876dff3cc4bffdb38926dc6550790cc0fe81db58d0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0d48d6227171a95214bf96e962553f1cf534973b8f8e018a45f05ee9ffac9248",
+      "sha256": "0d48d6227171a95214bf96e962553f1cf534973b8f8e018a45f05ee9ffac9248"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/screenshots/desktop-before-dashboard.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7c09fae944f30f62e9ccea33d75d0de061567d9b420e2dd3bcce8089401b0619",
+      "sha256": "7c09fae944f30f62e9ccea33d75d0de061567d9b420e2dd3bcce8089401b0619"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/screenshots/desktop-before-directory.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "31874a9e466586b3e37341d175e530590ca3f50c1a9c888b3d60383a75da58a2",
+      "sha256": "31874a9e466586b3e37341d175e530590ca3f50c1a9c888b3d60383a75da58a2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/screenshots/desktop-before-legacy-editor.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "98ba40042b5e2b0a6f1d4eb145c61e1f953805925c724009a28acc6609ef571b",
+      "sha256": "98ba40042b5e2b0a6f1d4eb145c61e1f953805925c724009a28acc6609ef571b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/screenshots/mobile-before-dashboard.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2d186f57c2b7bbeb5fc5a4fb0a257bc45c114b62d748c035f5d9827f823e943c",
+      "sha256": "2d186f57c2b7bbeb5fc5a4fb0a257bc45c114b62d748c035f5d9827f823e943c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/screenshots/mobile-before-directory.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "99d2f0a0321af24c10bb00c70df55c54cd2e3f673748a9bf5bde1354b4e7cf1e",
+      "sha256": "99d2f0a0321af24c10bb00c70df55c54cd2e3f673748a9bf5bde1354b4e7cf1e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/screenshots/mobile-before-legacy-editor.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "38aa834549ec9336676d7fa58b189a7282a022c2ff377500bf654d5c43db8c4f",
+      "sha256": "38aa834549ec9336676d7fa58b189a7282a022c2ff377500bf654d5c43db8c4f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/test-results/browser-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "619e84138189520d841e05e82cf6911c11e58a103cbc72c07ba43fbbf5316aab",
+      "sha256": "619e84138189520d841e05e82cf6911c11e58a103cbc72c07ba43fbbf5316aab"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6a8299cceaaf48a1042403b5dfb82bbab29b1aaeeb464df53c910054e3f3308d",
+      "sha256": "6a8299cceaaf48a1042403b5dfb82bbab29b1aaeeb464df53c910054e3f3308d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/trace/mobile.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d910b2465420174042c8d3ad460c6cbf3f7b93a47baab0c2bf9afac5fec4ea58",
+      "sha256": "d910b2465420174042c8d3ad460c6cbf3f7b93a47baab0c2bf9afac5fec4ea58"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fc81102011567546eba4c41bc4df57bbcfa906605aec7ceb5382233cb16b8eef",
+      "sha256": "fc81102011567546eba4c41bc4df57bbcfa906605aec7ceb5382233cb16b8eef"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/run/video/mobile.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "26562bdcb359b11f59160505d505bd523e433143db8971718125eaa55744b255",
+      "sha256": "26562bdcb359b11f59160505d505bd523e433143db8971718125eaa55744b255"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/before01/server.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e86d010fd32ace61a107adf38a60307d008eba2ddb513ed9b554091211ad5138",
+      "sha256": "e86d010fd32ace61a107adf38a60307d008eba2ddb513ed9b554091211ad5138"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser-plan.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1ad30c0274c986c7cbefd489e90eebff010bf3ebb1dfb04c8d1c641047803208",
+      "sha256": "1ad30c0274c986c7cbefd489e90eebff010bf3ebb1dfb04c8d1c641047803208"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/browser.log",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "8772945d02b2ea13594ca147e646e186331acdc3a268938926d7e439ddc26a41",
+      "sha256": "0974b887f33712a539cf1c40b4cc8f367f2040007912194ca725158c0cf026d8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/failure-analysis.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4c6fe2f61a449a11b5ca7661de3269716c6577e849975f31934aae10d1cdf92c",
+      "sha256": "4c6fe2f61a449a11b5ca7661de3269716c6577e849975f31934aae10d1cdf92c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/lane-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7ebc46b6ad88666f7af3b732d25471473d3116bfdb53462109fe32b8d25502ee",
+      "sha256": "7ebc46b6ad88666f7af3b732d25471473d3116bfdb53462109fe32b8d25502ee"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/recipes-used/browser-lane.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2065f497265242decdd6710df1cfcf0ef884bd5f8bfdedb02afd937cd9527087",
+      "sha256": "2065f497265242decdd6710df1cfcf0ef884bd5f8bfdedb02afd937cd9527087"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/recipes-used/browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "04b5b301b0823a7f525054e0ea1e7dbfc638f15ae58025501c23d5c889c0c9d9",
+      "sha256": "04b5b301b0823a7f525054e0ea1e7dbfc638f15ae58025501c23d5c889c0c9d9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/recipes-used/qa-server.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae",
+      "sha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/recipes-used/transport.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0bbd146888600e5292a3815efeadb13191cccf839f81a2a1747dea867f6e86c1",
+      "sha256": "0bbd146888600e5292a3815efeadb13191cccf839f81a2a1747dea867f6e86c1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/run/screenshots/desktop-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "058b4f968e6c3895681262b2402c0f657067edcf508f7040dd30c3410dbc8b71",
+      "sha256": "058b4f968e6c3895681262b2402c0f657067edcf508f7040dd30c3410dbc8b71"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/run/screenshots/failure-0.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9f391c7522751a4498db3376e9939a94fbe1378a12adad9a0a1af24b22382919",
+      "sha256": "9f391c7522751a4498db3376e9939a94fbe1378a12adad9a0a1af24b22382919"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/run/test-results/failure.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c0eb572a5d0fbc35bc42c8de478dce839fa04decfc3cb88273086ddffabf9f4c",
+      "sha256": "c0eb572a5d0fbc35bc42c8de478dce839fa04decfc3cb88273086ddffabf9f4c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/run/trace/failure-0.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e7854c5fbbd78f81bceb772f6917c5ef00787352b8dfa94264b35e38337b8897",
+      "sha256": "e7854c5fbbd78f81bceb772f6917c5ef00787352b8dfa94264b35e38337b8897"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/run/video/page@f5c6f80a16d60a21b54f9d2c03eb775e.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "28241f5e863bbbc8998ffc7bb53fcb5a15f2ce9760592f9f4e00b498d5942d2c",
+      "sha256": "28241f5e863bbbc8998ffc7bb53fcb5a15f2ce9760592f9f4e00b498d5942d2c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser01/server.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "17f74359bdb956adc9ca0a6682a123c28294fbd80c367170e88c10eb0a2b28a4",
+      "sha256": "17f74359bdb956adc9ca0a6682a123c28294fbd80c367170e88c10eb0a2b28a4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/browser.log",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "fdd2aa5662d5ef416ed83820ddb73826bdfc4f3fe22f632d439671ebee6b7ff7",
+      "sha256": "8ed2d6fbfbba24cb66be59eca1010f405347b8f76bc531e79872c6a658eace47"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/failure-analysis.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3add9414799b129198b16c49b218c13b450dd06c55cc4fb1e6f5917eebb11d2d",
+      "sha256": "3add9414799b129198b16c49b218c13b450dd06c55cc4fb1e6f5917eebb11d2d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/lane-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "eb6ceaf0bd12117baf5f13629537ac4e0def326d17f819732a9f75cdb72f5ed0",
+      "sha256": "eb6ceaf0bd12117baf5f13629537ac4e0def326d17f819732a9f75cdb72f5ed0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/recipes-used/browser-lane.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d",
+      "sha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/recipes-used/browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "04b5b301b0823a7f525054e0ea1e7dbfc638f15ae58025501c23d5c889c0c9d9",
+      "sha256": "04b5b301b0823a7f525054e0ea1e7dbfc638f15ae58025501c23d5c889c0c9d9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/recipes-used/qa-server.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae",
+      "sha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/recipes-used/transport.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "48f2a263769166cfb040ab772b764fa14c53a64047602c0a94a33d0bbbfe975b",
+      "sha256": "48f2a263769166cfb040ab772b764fa14c53a64047602c0a94a33d0bbbfe975b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/screenshots/desktop-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4a5089c111120ada94a99d92de6fe4f9eef2ef617a954f9fc80c91eb41a0e4d9",
+      "sha256": "4a5089c111120ada94a99d92de6fe4f9eef2ef617a954f9fc80c91eb41a0e4d9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/screenshots/desktop-directory-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a197383ffc79803e4c02e3414de47f63af618863e305e88a9750a1e5e4210474",
+      "sha256": "a197383ffc79803e4c02e3414de47f63af618863e305e88a9750a1e5e4210474"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/screenshots/desktop-retained-editor-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5920e91747241e759b1204790ef9d564bba9e06ce67fe65df2009583b45b9bcc",
+      "sha256": "5920e91747241e759b1204790ef9d564bba9e06ce67fe65df2009583b45b9bcc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/screenshots/desktop-retained-editor-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5271bab496dc5e56e8e539592cdcdf64c86571feb407ea886a8e3ff42c6f4530",
+      "sha256": "5271bab496dc5e56e8e539592cdcdf64c86571feb407ea886a8e3ff42c6f4530"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/screenshots/desktop-retained-editor-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "396cd77497fdc22db565cc9ed0440d4f2c24ea67cbfa30ebfa80ba63a63100b9",
+      "sha256": "396cd77497fdc22db565cc9ed0440d4f2c24ea67cbfa30ebfa80ba63a63100b9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/screenshots/failure-0.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5d8a84b46b713dcd70f662bc663f574622414cb18f6627141da2362a86d2f5cf",
+      "sha256": "5d8a84b46b713dcd70f662bc663f574622414cb18f6627141da2362a86d2f5cf"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/test-results/failure.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b9bfd8d2ecf79179ce9d1556aa03841153ce257792932650c0427c515b3a3975",
+      "sha256": "b9bfd8d2ecf79179ce9d1556aa03841153ce257792932650c0427c515b3a3975"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/trace/failure-0.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d8bf2ebb5278ed2f475aa28d6518655af3aef774c56f83d9bc06059c1fa395eb",
+      "sha256": "d8bf2ebb5278ed2f475aa28d6518655af3aef774c56f83d9bc06059c1fa395eb"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/run/video/page@655cf6c7da426a2ebb7e8af6b7699438.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "90cccaeb0490a9489f26fe16351d8caa6561baac6b5f90b71fe8434786728bee",
+      "sha256": "90cccaeb0490a9489f26fe16351d8caa6561baac6b5f90b71fe8434786728bee"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser02/server.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5d1d5ecaad2bc9c808faeb7d6c29fd06bcde9d7721fa464ac34d421bf998507c",
+      "sha256": "5d1d5ecaad2bc9c808faeb7d6c29fd06bcde9d7721fa464ac34d421bf998507c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/browser.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6c63bcffb5baae4917f55e16b671e63393d765c1464d390fb99a31893f9beaea",
+      "sha256": "6c63bcffb5baae4917f55e16b671e63393d765c1464d390fb99a31893f9beaea"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/lane-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "bcc21ef8915d442bc033192b5fbb1edb815f81ffd60bcca6eb7eb3f0979674fd",
+      "sha256": "bcc21ef8915d442bc033192b5fbb1edb815f81ffd60bcca6eb7eb3f0979674fd"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "aecd534ddc0f8c374733358d0dd5dd9686476a88a8eb5a60c48fd85a99859b6a",
+      "sha256": "aecd534ddc0f8c374733358d0dd5dd9686476a88a8eb5a60c48fd85a99859b6a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/desktop-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "71b26df73f5c55bf9d18d4dabf0d9a93ad4412d88f0c8afa7a275d46acbd1550",
+      "sha256": "71b26df73f5c55bf9d18d4dabf0d9a93ad4412d88f0c8afa7a275d46acbd1550"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/desktop-directory-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "167f72a4a2a212daf7a891ea16aef45c0d42a6d8261f970c1e5cba6f0c6845e2",
+      "sha256": "167f72a4a2a212daf7a891ea16aef45c0d42a6d8261f970c1e5cba6f0c6845e2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/desktop-explicit-role-reloaded.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cc41b7017d7d27a02e6714507029be23162c28a0f7f44ca35700d88f87f3eef7",
+      "sha256": "cc41b7017d7d27a02e6714507029be23162c28a0f7f44ca35700d88f87f3eef7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/desktop-retained-editor-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "00676168752ef9de6d4cd7119d4ab81c3d411c74091d8a49b4441ba9bb8c07c1",
+      "sha256": "00676168752ef9de6d4cd7119d4ab81c3d411c74091d8a49b4441ba9bb8c07c1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/desktop-retained-editor-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "01669bce8e3a10084c26bc3b47b31b1c070211a8da87d64c282f298769e9774b",
+      "sha256": "01669bce8e3a10084c26bc3b47b31b1c070211a8da87d64c282f298769e9774b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/desktop-retained-editor-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cb958415ed03edee1250dfcb859431973f7c0eaafe8ccc5de09d456a6f2c4524",
+      "sha256": "cb958415ed03edee1250dfcb859431973f7c0eaafe8ccc5de09d456a6f2c4524"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/mobile-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "15616aa5135b82a32f600c313f4a08063ef58d2b0772434fa5f715ac344ec157",
+      "sha256": "15616aa5135b82a32f600c313f4a08063ef58d2b0772434fa5f715ac344ec157"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/mobile-directory-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "03b3693309e182b0f25968389c5260443e7a8979edece14fecaf399ee583dc9a",
+      "sha256": "03b3693309e182b0f25968389c5260443e7a8979edece14fecaf399ee583dc9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/mobile-explicit-role-reloaded.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d614d4aba40198542cba7e1b36c2b673ecadc42b302178d13a8339f5d32130c5",
+      "sha256": "d614d4aba40198542cba7e1b36c2b673ecadc42b302178d13a8339f5d32130c5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/mobile-retained-editor-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5c42fe54d346144f6468fe77817228af9f5ec0c47e90dbade196b47623883713",
+      "sha256": "5c42fe54d346144f6468fe77817228af9f5ec0c47e90dbade196b47623883713"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/mobile-retained-editor-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "99deddfdae5bfe1324f9c35f0315897ddfbc7d5d12b9c6a61016a1a7e83b3247",
+      "sha256": "99deddfdae5bfe1324f9c35f0315897ddfbc7d5d12b9c6a61016a1a7e83b3247"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/screenshots/mobile-retained-editor-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "512706bd8e3e894e497b9c862ccc676f6286547f2fb2468120482d2392db0b1a",
+      "sha256": "512706bd8e3e894e497b9c862ccc676f6286547f2fb2468120482d2392db0b1a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/test-results/browser-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "87bdf5e30bc25fbc651c443c94f07e6e39f832aae89d915ebd2816aa4de728b5",
+      "sha256": "87bdf5e30bc25fbc651c443c94f07e6e39f832aae89d915ebd2816aa4de728b5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fdf08a6c77395a00dedb69c8287ff54cf9b2952a1f165a3fd26247a7669aa5b0",
+      "sha256": "fdf08a6c77395a00dedb69c8287ff54cf9b2952a1f165a3fd26247a7669aa5b0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/trace/mobile.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8e581bb8d9c3f51058ecc2deca20eb4b0fc90adf2c13b654c0f5235bbdf03471",
+      "sha256": "8e581bb8d9c3f51058ecc2deca20eb4b0fc90adf2c13b654c0f5235bbdf03471"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cab8d4e5d972208c380981eea6bc79c3fa6e43d0415de04118aa71ba4c3dae62",
+      "sha256": "cab8d4e5d972208c380981eea6bc79c3fa6e43d0415de04118aa71ba4c3dae62"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/run/video/mobile.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d328449c58aae36bc7083fdefa403ab16e1e37d7e59dc2d44d3c7fed6d6d1895",
+      "sha256": "d328449c58aae36bc7083fdefa403ab16e1e37d7e59dc2d44d3c7fed6d6d1895"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/browser03/server.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "56d31f062032de8df375e9c288ce42265f0e3201a83581cbc727705d88d54aa1",
+      "sha256": "56d31f062032de8df375e9c288ce42265f0e3201a83581cbc727705d88d54aa1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/backend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/command-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e",
+      "sha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/focused.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "89fea5e8b535792e72664568857be750589808a2b650133cb4f1818a347a872d",
+      "sha256": "89fea5e8b535792e72664568857be750589808a2b650133cb4f1818a347a872d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/frontend-tsc-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/frontend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/full-regression.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e9cb82e3ccee1b40770b33e23eccc11fefdef062d02fcd268a41b86b501825f4",
+      "sha256": "e9cb82e3ccee1b40770b33e23eccc11fefdef062d02fcd268a41b86b501825f4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/security-scan.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/commands01/vite-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5344ba3dae1f08b89463c1dbc784e8d5a69e9724a4163664e34ecde51cfcd4ba",
+      "sha256": "5344ba3dae1f08b89463c1dbc784e8d5a69e9724a4163664e34ecde51cfcd4ba"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/db01/migrations.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a",
+      "sha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/db01/policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638",
+      "sha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/db01/result.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3",
+      "sha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/db01/tests.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b4353ead89e4c35f3662c8f0e0da459e22b9d42bb961e83d783574219ad7a3ba",
+      "sha256": "b4353ead89e4c35f3662c8f0e0da459e22b9d42bb961e83d783574219ad7a3ba"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/diff-review.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b7960244b620f83b4567c5d83ecab5d5771893dfae72f00281f4d2b3235aa5c",
+      "sha256": "7b7960244b620f83b4567c5d83ecab5d5771893dfae72f00281f4d2b3235aa5c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/browser.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/lane-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "72c6713b27c7ae144986234760037f206be138f3b2741b15c99ba8c7537ddf7d",
+      "sha256": "72c6713b27c7ae144986234760037f206be138f3b2741b15c99ba8c7537ddf7d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "33c5c9056c9b8d156c06c06072c5e35683c40da65395cb42d7b9bd7d2f0325b1",
+      "sha256": "33c5c9056c9b8d156c06c06072c5e35683c40da65395cb42d7b9bd7d2f0325b1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/screenshots/desktop-visible-retained-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b943f77a63e30defb1b4fa6ca27b0f5d02212e8da0c6577819f689f5aa21547a",
+      "sha256": "b943f77a63e30defb1b4fa6ca27b0f5d02212e8da0c6577819f689f5aa21547a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/screenshots/desktop-visible-retained-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4b6a537f3fd87e77c3796d23bd5d5d8f61588c9628e4014a1d7bdf2ef9662c0a",
+      "sha256": "4b6a537f3fd87e77c3796d23bd5d5d8f61588c9628e4014a1d7bdf2ef9662c0a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/screenshots/desktop-visible-retained-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "65e056b0dce4b0f4179466002edcc19bb05098f742248303db7fc358e6cf28f4",
+      "sha256": "65e056b0dce4b0f4179466002edcc19bb05098f742248303db7fc358e6cf28f4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/screenshots/mobile-visible-retained-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a96daef8a7c6b80676ad406f686792b9da86d374f8d09f515b8af6faf9b7a75c",
+      "sha256": "a96daef8a7c6b80676ad406f686792b9da86d374f8d09f515b8af6faf9b7a75c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/screenshots/mobile-visible-retained-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "149fcd04effe74eccbbfe327c3f999c62f3d9e49eb3d19e3c5fa9f11c73d1321",
+      "sha256": "149fcd04effe74eccbbfe327c3f999c62f3d9e49eb3d19e3c5fa9f11c73d1321"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/screenshots/mobile-visible-retained-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c5f144ba45fd2e2b3d0445679bd4519a599b32b7a5b03aff2e6be5480041a8bf",
+      "sha256": "c5f144ba45fd2e2b3d0445679bd4519a599b32b7a5b03aff2e6be5480041a8bf"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/test-results/browser-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "420ec16709ee54257579e64d65df93a89e405c1ffbed0ebd247a150b00bc6a8d",
+      "sha256": "420ec16709ee54257579e64d65df93a89e405c1ffbed0ebd247a150b00bc6a8d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2c0afbfc48809ba9ab90e3a85ba7159c8eae7b2b59088f5fc0a16db4d1647169",
+      "sha256": "2c0afbfc48809ba9ab90e3a85ba7159c8eae7b2b59088f5fc0a16db4d1647169"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/trace/mobile.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6b71162cbaade8ed54affe7f569b8c9cb299d6a9a519e7e073b06d84ae2172da",
+      "sha256": "6b71162cbaade8ed54affe7f569b8c9cb299d6a9a519e7e073b06d84ae2172da"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "131ee01c2bb0fe3149cad645eff251c8c9e842b00be9baa0c0ab33427f220e1d",
+      "sha256": "131ee01c2bb0fe3149cad645eff251c8c9e842b00be9baa0c0ab33427f220e1d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/run/video/mobile.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4854b7fe190ed91a5e136a40acc212556b82602548cd5db28c7eb7c60ee4d54e",
+      "sha256": "4854b7fe190ed91a5e136a40acc212556b82602548cd5db28c7eb7c60ee4d54e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/editor01/server.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "74c52ff4584532b97d8845f645f29e5fe7148c4ec6c8ed4e475cbb84dd56eefa",
+      "sha256": "74c52ff4584532b97d8845f645f29e5fe7148c4ec6c8ed4e475cbb84dd56eefa"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/frozen-source.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "01f1ef45f29953afbebc5eef26f181352bbc0a8f753c869cdadb054a51a13af1",
+      "sha256": "01f1ef45f29953afbebc5eef26f181352bbc0a8f753c869cdadb054a51a13af1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/issue-428-original.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "635da590fda417bcfacba9b6a451519915485568d741a2057b4b9ac25723ce58",
+      "sha256": "635da590fda417bcfacba9b6a451519915485568d741a2057b4b9ac25723ce58"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/lane-handoff.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "922a3ae7326b13765016a5f260a2548869ae69b609c02a69e8ccc1cc768e65b3",
+      "sha256": "922a3ae7326b13765016a5f260a2548869ae69b609c02a69e8ccc1cc768e65b3"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/manifest.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "09ca7b3f1d48ad249d4b4e8c7b96901f24e203f521b54c098b6b54ba82140df2",
+      "sha256": "09ca7b3f1d48ad249d4b4e8c7b96901f24e203f521b54c098b6b54ba82140df2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/no-cluster01/result.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3f9ec46e398b8a95ad07e5dbb28fa7b6739b196aaf8a2486c32640a8967470b4",
+      "sha256": "3f9ec46e398b8a95ad07e5dbb28fa7b6739b196aaf8a2486c32640a8967470b4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/no-cluster01/tests.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "907190846aeb8551f19f4288c9895c35417e12c8ce30bf08d0360176b5e6eeb5",
+      "sha256": "907190846aeb8551f19f4288c9895c35417e12c8ce30bf08d0360176b5e6eeb5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/qa2-assignment-policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8e5158b7c33e792fa05893e9e96db7c55b69bb3581a8db51987bb7ba0e457f08",
+      "sha256": "8e5158b7c33e792fa05893e9e96db7c55b69bb3581a8db51987bb7ba0e457f08"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/before-browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c4a74f02b252eec3617fa53677c3f98bb47d7a67d4521f3e269a0ce3f02a8259",
+      "sha256": "c4a74f02b252eec3617fa53677c3f98bb47d7a67d4521f3e269a0ce3f02a8259"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/browser-lane.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d",
+      "sha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9a3ea1a2fa44145a0f301f17d781d3c9451682a0d9fe0ad4c00fb6c7b4f00fe8",
+      "sha256": "9a3ea1a2fa44145a0f301f17d781d3c9451682a0d9fe0ad4c00fb6c7b4f00fe8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/commands.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f",
+      "sha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/db-regression.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0cc667311e36eab3843078fbe88b7394a01b8b05e7af7291f80c0d3ae570f4fa",
+      "sha256": "0cc667311e36eab3843078fbe88b7394a01b8b05e7af7291f80c0d3ae570f4fa"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/editor-visual.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4b28c33622182e20b7c78fbe928e38568d31493d27a76a490e1af242b3570f60",
+      "sha256": "4b28c33622182e20b7c78fbe928e38568d31493d27a76a490e1af242b3570f60"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/no-cluster-optin.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "615f55711702ec256dd1c058ff31239f3c4090f8c89946e7541ae494b36092a5",
+      "sha256": "615f55711702ec256dd1c058ff31239f3c4090f8c89946e7541ae494b36092a5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/qa-server.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae",
+      "sha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/scope.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388",
+      "sha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/seal.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4e8e8e552d701f4315bf5980f413191558b1b00acf5e2d2fd1649aa1e903b3db",
+      "sha256": "4e8e8e552d701f4315bf5980f413191558b1b00acf5e2d2fd1649aa1e903b3db"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/security.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9661daacf985d6d768f0d58a6cce05ac8939914278b01cf28832eb64506d27df",
+      "sha256": "9661daacf985d6d768f0d58a6cce05ac8939914278b01cf28832eb64506d27df"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/source-binding.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2500686435d05c0655fbdf6dc9a23bbfb5c948c5c97c75bfb5b62d981d4d0ee7",
+      "sha256": "2500686435d05c0655fbdf6dc9a23bbfb5c948c5c97c75bfb5b62d981d4d0ee7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/source-receipt.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/recipes/transport.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76",
+      "sha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "daeba21ea0354fbd98a6177badd9646e28d168b80566fe07428d8ac7d3c2c1ca",
+      "sha256": "daeba21ea0354fbd98a6177badd9646e28d168b80566fe07428d8ac7d3c2c1ca"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f0c572c388a46b002b6b5a34f6237c1dd3abb9f87caaabe2ea97c09f6394e9fc",
+      "sha256": "f0c572c388a46b002b6b5a34f6237c1dd3abb9f87caaabe2ea97c09f6394e9fc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline/backend/src/routes/operators.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843",
+      "sha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624",
+      "sha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec",
+      "sha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4",
+      "sha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5",
+      "sha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/baseline/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc",
+      "sha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f49dfca41e8fa5d1d1898f5f9b48cd87390d1c418456e580ae6ef7007ac6ef70",
+      "sha256": "f49dfca41e8fa5d1d1898f5f9b48cd87390d1c418456e580ae6ef7007ac6ef70"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6c1b1e80366929a75ded601c4fbf23bf96ce83889114ac60b37ef2d5fde4fcea",
+      "sha256": "6c1b1e80366929a75ded601c4fbf23bf96ce83889114ac60b37ef2d5fde4fcea"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/backend/src/operators/__tests__/operator-role-db.test.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "ed2994d7a1be2ab177046f09ae1c850222b03b00fdab5a28c6723b69cd0e4d1a",
+      "sha256": "0e6718ac9bc56a3a351a52cd4c8e59b024361b6bc869d674f56426442089f1db"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/backend/src/operators/__tests__/operator-view.test.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "5ba0dab0831559063ed0b723ac422e4d893bbcb7ed1caf487f40ca091d15b659",
+      "sha256": "3650cdaea7e173607da1d876e38552c266286dcc6bc73f46e2633461d2758794"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/backend/src/operators/operator-view.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "e6a38a6e7cf3a29ae9daf349f0f14d1ba3ba6683a227442e087fe0c756e166c2",
+      "sha256": "d8a420ef541760470219830cbbd22d9be13f1e3580064af76393624f7e26963e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/backend/src/routes/operators.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "31a9279605ed01abec4d5e876ef7664d094d669635286153e78e716447ac7e43",
+      "sha256": "df714fe9cb051b6885a128e7f696709d49a22b06cf83d3198e6dc5ced8fe8850"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "2a894dae34f1c8a3841126956d4907caa9606e6cbdaf67c09b9a1e975915d26d",
+      "sha256": "e9be17936b79102fcc185b7da8da33a382a9def4f3b508b9a25d70058bea8c60"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "8c6a8362d51c793f4a635b7b6e6b52345230a842578e022fd2f36fc95a564c7d",
+      "sha256": "95fa55ca1c8c35014bf6da99e9d5892fac73882977dd9bd06240d9c1f52155a5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "484433b03078a8fcf30dd75270486e9f3b87a1ee6fbdebc887fea4f4cade25c7",
+      "sha256": "0790cf389af96eb5793c8ab9e07712a2d6d813ff1e07249a65345df381132250"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "e118bba8596859311126b25dd215bbe1be3d1bd2f2f97ad7effbaa00ec525207",
+      "sha256": "85698403f11c08720eca9848a4b5f860fdfc9d26aac7793275bfbc7e394940c0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "a47bfeafd1f33fd9a12aaade2559d29f23cff33e4f11433a9dcefc3fe4f76282",
+      "sha256": "8c929118c591cc717da2618ab7685c9faf7209fbdbde048f6699ca15ca8c1356"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "7c57bb0e18358250c4893301a2c39a0ca16ea8c78f116e9769aa75892752042f",
+      "sha256": "061da1913f98a1c05e14aa57db71fc1a3e3de342f39f82b21e87c1cda00c20f7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "d1ba0265ccaef841f45bea27f23784d425bc993dc760fcd7cb53187ddc78e2e6",
+      "sha256": "07f2b2d8a57c1022a60e55d1aa7c3f19f0b9bbd8c37e43640d449bb576fbe23f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/candidate/frontend/src/lib/operatorRolePresentation.ts",
+      "exportNormalization": "CRLF to LF only",
+      "gitBlobSha256": "0f61ac12df2cdd2153614b386e9e51bfe86b5768af66fd2ef6b35bb4b04f5536",
+      "sha256": "3be2be0d2cc3b92e35119dc45af572d30fdd825fff280cb10754cb02966465a0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/security01/comparison.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7",
+      "sha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/source-after.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cf67bb325c2a2c0a37998a227ff8919557bdeed57851cf9a7430ef77dcca6594",
+      "sha256": "cf67bb325c2a2c0a37998a227ff8919557bdeed57851cf9a7430ef77dcca6594"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/source-before-git-binding.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "91e55a74aa0dc9d1c37572d5f2835cbc5d396c0d66999f189b8ffa00fd073802",
+      "sha256": "91e55a74aa0dc9d1c37572d5f2835cbc5d396c0d66999f189b8ffa00fd073802"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/source-before.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "cf67bb325c2a2c0a37998a227ff8919557bdeed57851cf9a7430ef77dcca6594",
+      "sha256": "cf67bb325c2a2c0a37998a227ff8919557bdeed57851cf9a7430ef77dcca6594"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/source-comparison.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b017dfa36cfed5c834c8681d9e41f67298a41acf22ac4a4ebc09da0dc324aa49",
+      "sha256": "b017dfa36cfed5c834c8681d9e41f67298a41acf22ac4a4ebc09da0dc324aa49"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/task-contract.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "27a118056a35a3e6344f365d83086726f4170b51e90efb9da96a164990f6386b",
+      "sha256": "27a118056a35a3e6344f365d83086726f4170b51e90efb9da96a164990f6386b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/independent-qa/validation-report.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "85a86e422819a4a35b29f0558d12b4c3a2fed601f9eba84f3c17d0d321e41e0b",
+      "sha256": "85a86e422819a4a35b29f0558d12b4c3a2fed601f9eba84f3c17d0d321e41e0b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/original-issue.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "635da590fda417bcfacba9b6a451519915485568d741a2057b4b9ac25723ce58",
+      "sha256": "635da590fda417bcfacba9b6a451519915485568d741a2057b4b9ac25723ce58"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/prepare-compiled.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2c83278fb977c0f4cb633985a7e5e51edd4e1373a40937a0c9f5826a5c104356",
+      "sha256": "2c83278fb977c0f4cb633985a7e5e51edd4e1373a40937a0c9f5826a5c104356"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/preverify-public.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a87210be98e7cfb9f58bef282eaff0d5e8576b0d88a66cfde07fafbd1ca56ec8",
+      "sha256": "a87210be98e7cfb9f58bef282eaff0d5e8576b0d88a66cfde07fafbd1ca56ec8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/promote-source.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "578cdf4f24aa2f6f89c6fea3323f63ba0a1c50656ac073ee4085e89c0443c4d8",
+      "sha256": "578cdf4f24aa2f6f89c6fea3323f63ba0a1c50656ac073ee4085e89c0443c4d8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/proof-staging-policy.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e49005d45c0c6b3e4433645ed2dc358e41ca50ed62a833071590f167dc0bfb6f",
+      "sha256": "e49005d45c0c6b3e4433645ed2dc358e41ca50ed62a833071590f167dc0bfb6f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/public-images.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5c02f7615ae9798e39937f2e2772556ebbe572e9d2cf7cb9ebc709ff6e8e62d1",
+      "sha256": "5c02f7615ae9798e39937f2e2772556ebbe572e9d2cf7cb9ebc709ff6e8e62d1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/publication-check.ps1",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a58f4fbab3753d6c11aa4c0ee990b21dc6b15058c9bb91b9c23bb699f058fe2e",
+      "sha256": "a58f4fbab3753d6c11aa4c0ee990b21dc6b15058c9bb91b9c23bb699f058fe2e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/publish-github.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8da42b069dce31aa823d288198719b054c627492d85c9d89be1ccaab822e56a4",
+      "sha256": "8da42b069dce31aa823d288198719b054c627492d85c9d89be1ccaab822e56a4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/push-proof.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "de441dea527609931b6aa62e60a299103d2e6c08d48e201954f5f0f27e80f7e5",
+      "sha256": "de441dea527609931b6aa62e60a299103d2e6c08d48e201954f5f0f27e80f7e5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/qa-assignment-policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d7f9cd51a6a705c4569d8cbc4908f9deed9022e1a0e99fd1075556b98f6e301f",
+      "sha256": "d7f9cd51a6a705c4569d8cbc4908f9deed9022e1a0e99fd1075556b98f6e301f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/qa2-assignment-policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8e5158b7c33e792fa05893e9e96db7c55b69bb3581a8db51987bb7ba0e457f08",
+      "sha256": "8e5158b7c33e792fa05893e9e96db7c55b69bb3581a8db51987bb7ba0e457f08"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/refreeze-source.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "23331e1391a70645a903c66fd17e1b8013c9b753a26473b24600f3a3de4e103a",
+      "sha256": "23331e1391a70645a903c66fd17e1b8013c9b753a26473b24600f3a3de4e103a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/release-gate-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7fbfa5c849f053828117953fcc4385a762111f90689c7eea0177f5be549e039b",
+      "sha256": "7fbfa5c849f053828117953fcc4385a762111f90689c7eea0177f5be549e039b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/release-inspection.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f62a9c7862b4eeddb5601ae36a791188fee70c891269842175475e23afdefdde",
+      "sha256": "f62a9c7862b4eeddb5601ae36a791188fee70c891269842175475e23afdefdde"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/report.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ce8bdb1f89f936fd12ca187157bdf4159ff90be4cdcce49dab61a5279820c41e",
+      "sha256": "ce8bdb1f89f936fd12ca187157bdf4159ff90be4cdcce49dab61a5279820c41e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/backend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/command-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "fe11317b2b15aea7ec99b56cdda6de1d31c3b47c2d8fa0a7979b56d56dc0df69",
+      "sha256": "fe11317b2b15aea7ec99b56cdda6de1d31c3b47c2d8fa0a7979b56d56dc0df69"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/focused.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "39cc31608fb5201634711d2afbc3aa192900fc924ff764f7ff86d09daca2e04b",
+      "sha256": "39cc31608fb5201634711d2afbc3aa192900fc924ff764f7ff86d09daca2e04b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/frontend-tsc-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/frontend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/full-regression.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "858707f7672e8a0c08caf55d7028e958a2ef7e00805c5e3f4376ec3d811f9a0c",
+      "sha256": "858707f7672e8a0c08caf55d7028e958a2ef7e00805c5e3f4376ec3d811f9a0c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/security-scan.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands01/vite-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b8a01a155ff421c5037ed29974a714caa73f7780d6b25908d51e36dda6c412a2",
+      "sha256": "b8a01a155ff421c5037ed29974a714caa73f7780d6b25908d51e36dda6c412a2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/backend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/command-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e",
+      "sha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/focused.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "88340ac507cfdc20d278385673d42ca0a70b533430ff9139a50d1a7b1553c098",
+      "sha256": "88340ac507cfdc20d278385673d42ca0a70b533430ff9139a50d1a7b1553c098"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/frontend-tsc-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/frontend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/full-regression.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8e535e802978a00e485c9d31e8cca9c7681f6f9faba4b1c22aff19779bb621fc",
+      "sha256": "8e535e802978a00e485c9d31e8cca9c7681f6f9faba4b1c22aff19779bb621fc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/security-scan.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/commands02/vite-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f40d2dcd9a331739041ed95a3a22eaabb95773c3bf7067f87b21d8e5b0dfb2d1",
+      "sha256": "f40d2dcd9a331739041ed95a3a22eaabb95773c3bf7067f87b21d8e5b0dfb2d1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db01/migrations.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a",
+      "sha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db01/policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638",
+      "sha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db01/result.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "06bfe308fa55005ffff17eca53242339d9e77a1ae9da081a13aaddc3d6c374f9",
+      "sha256": "06bfe308fa55005ffff17eca53242339d9e77a1ae9da081a13aaddc3d6c374f9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db01/tests.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0a7dd51826cac0da4a5647be01b568d442d2e1d13fa7cbf3894eae6d9f4e28a8",
+      "sha256": "0a7dd51826cac0da4a5647be01b568d442d2e1d13fa7cbf3894eae6d9f4e28a8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db02/migrations.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a",
+      "sha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db02/policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638",
+      "sha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db02/result.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3",
+      "sha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial/db02/tests.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "606465ab7b40e83c9082b3d3f7f38488094a76c60e89928bae836b860d381cea",
+      "sha256": "606465ab7b40e83c9082b3d3f7f38488094a76c60e89928bae836b860d381cea"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "557571eeca1124e972d72b99fce208f88e3f32caa8adc7de9a2077fa1b4a02ec",
+      "sha256": "557571eeca1124e972d72b99fce208f88e3f32caa8adc7de9a2077fa1b4a02ec"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8677620566dd31ba91e6db3111ad076687f74f1ad7467583c0ca4a03b6561584",
+      "sha256": "8677620566dd31ba91e6db3111ad076687f74f1ad7467583c0ca4a03b6561584"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline/backend/src/routes/operators.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843",
+      "sha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624",
+      "sha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec",
+      "sha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4",
+      "sha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5",
+      "sha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/baseline/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc",
+      "sha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "49bb9e115933b3b0f074b16463a7a56e3094aad12257ee366ce80fe546f64c04",
+      "sha256": "49bb9e115933b3b0f074b16463a7a56e3094aad12257ee366ce80fe546f64c04"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "67227b0a09af28376990209192001f7d58c484c077045d631eb0f74c08cad058",
+      "sha256": "67227b0a09af28376990209192001f7d58c484c077045d631eb0f74c08cad058"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/backend/src/operators/__tests__/operator-role-db.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2026e597353f7f65786e513de45fda504c5e838aa81e6dfda9ad07744be3c44f",
+      "sha256": "2026e597353f7f65786e513de45fda504c5e838aa81e6dfda9ad07744be3c44f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/backend/src/operators/__tests__/operator-view.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5ba0dab0831559063ed0b723ac422e4d893bbcb7ed1caf487f40ca091d15b659",
+      "sha256": "5ba0dab0831559063ed0b723ac422e4d893bbcb7ed1caf487f40ca091d15b659"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/backend/src/operators/operator-view.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e6a38a6e7cf3a29ae9daf349f0f14d1ba3ba6683a227442e087fe0c756e166c2",
+      "sha256": "e6a38a6e7cf3a29ae9daf349f0f14d1ba3ba6683a227442e087fe0c756e166c2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/backend/src/routes/operators.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "31a9279605ed01abec4d5e876ef7664d094d669635286153e78e716447ac7e43",
+      "sha256": "31a9279605ed01abec4d5e876ef7664d094d669635286153e78e716447ac7e43"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2a894dae34f1c8a3841126956d4907caa9606e6cbdaf67c09b9a1e975915d26d",
+      "sha256": "2a894dae34f1c8a3841126956d4907caa9606e6cbdaf67c09b9a1e975915d26d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8c6a8362d51c793f4a635b7b6e6b52345230a842578e022fd2f36fc95a564c7d",
+      "sha256": "8c6a8362d51c793f4a635b7b6e6b52345230a842578e022fd2f36fc95a564c7d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "484433b03078a8fcf30dd75270486e9f3b87a1ee6fbdebc887fea4f4cade25c7",
+      "sha256": "484433b03078a8fcf30dd75270486e9f3b87a1ee6fbdebc887fea4f4cade25c7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e118bba8596859311126b25dd215bbe1be3d1bd2f2f97ad7effbaa00ec525207",
+      "sha256": "e118bba8596859311126b25dd215bbe1be3d1bd2f2f97ad7effbaa00ec525207"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a47bfeafd1f33fd9a12aaade2559d29f23cff33e4f11433a9dcefc3fe4f76282",
+      "sha256": "a47bfeafd1f33fd9a12aaade2559d29f23cff33e4f11433a9dcefc3fe4f76282"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7c57bb0e18358250c4893301a2c39a0ca16ea8c78f116e9769aa75892752042f",
+      "sha256": "7c57bb0e18358250c4893301a2c39a0ca16ea8c78f116e9769aa75892752042f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d1ba0265ccaef841f45bea27f23784d425bc993dc760fcd7cb53187ddc78e2e6",
+      "sha256": "d1ba0265ccaef841f45bea27f23784d425bc993dc760fcd7cb53187ddc78e2e6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/candidate/frontend/src/lib/operatorRolePresentation.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0f61ac12df2cdd2153614b386e9e51bfe86b5768af66fd2ef6b35bb4b04f5536",
+      "sha256": "0f61ac12df2cdd2153614b386e9e51bfe86b5768af66fd2ef6b35bb4b04f5536"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/security01/comparison.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7",
+      "sha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/source-after.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "959ae107f2877d7a0ba95bcfc53440dc6353f8342676625eb0ddd2023eab45dd",
+      "sha256": "959ae107f2877d7a0ba95bcfc53440dc6353f8342676625eb0ddd2023eab45dd"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-initial02/source-before.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "959ae107f2877d7a0ba95bcfc53440dc6353f8342676625eb0ddd2023eab45dd",
+      "sha256": "959ae107f2877d7a0ba95bcfc53440dc6353f8342676625eb0ddd2023eab45dd"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/backend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/command-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e",
+      "sha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/focused.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ba78f5b2065e7b5bf3268d2b0c917bb1e0a0bc806e4795db248148885909bea6",
+      "sha256": "ba78f5b2065e7b5bf3268d2b0c917bb1e0a0bc806e4795db248148885909bea6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/frontend-tsc-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/frontend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/full-regression.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "421ca14d41f816e34864522981208608af9c0983371ffcd34ed8f43cdc276673",
+      "sha256": "421ca14d41f816e34864522981208608af9c0983371ffcd34ed8f43cdc276673"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/security-scan.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/commands03/vite-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "64bf02cf01f6f4d957c082f8f53c7e08da0c921e4ee9ae5a2d82280d61b2b5b4",
+      "sha256": "64bf02cf01f6f4d957c082f8f53c7e08da0c921e4ee9ae5a2d82280d61b2b5b4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/db03/migrations.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a",
+      "sha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/db03/policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638",
+      "sha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/db03/result.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3",
+      "sha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/db03/tests.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b91bd67619e1494fc6c28a655eaa531a37a42eaff00caff4321c1d02fe617e13",
+      "sha256": "b91bd67619e1494fc6c28a655eaa531a37a42eaff00caff4321c1d02fe617e13"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6666254af358c41e5ed7c65e4f9dc69b5058acd5c9b5194f3928ba3971022150",
+      "sha256": "6666254af358c41e5ed7c65e4f9dc69b5058acd5c9b5194f3928ba3971022150"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "19fb2b01c81ab57b30972b8f57aac327f4eb74db1bbcd2b08d0961a8c7d4b45e",
+      "sha256": "19fb2b01c81ab57b30972b8f57aac327f4eb74db1bbcd2b08d0961a8c7d4b45e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline/backend/src/routes/operators.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843",
+      "sha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624",
+      "sha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec",
+      "sha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4",
+      "sha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5",
+      "sha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/baseline/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc",
+      "sha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9ac05fd089eaec7c6fedaa81d7f5d23ce6564922b98df39b04640b9edcec09f1",
+      "sha256": "9ac05fd089eaec7c6fedaa81d7f5d23ce6564922b98df39b04640b9edcec09f1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8c44e2ac5dd1d4a7d165c32761259b662b6d13e5395b54e875b3beee038aaf67",
+      "sha256": "8c44e2ac5dd1d4a7d165c32761259b662b6d13e5395b54e875b3beee038aaf67"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/backend/src/operators/__tests__/operator-role-db.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ed2994d7a1be2ab177046f09ae1c850222b03b00fdab5a28c6723b69cd0e4d1a",
+      "sha256": "ed2994d7a1be2ab177046f09ae1c850222b03b00fdab5a28c6723b69cd0e4d1a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/backend/src/operators/__tests__/operator-view.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5ba0dab0831559063ed0b723ac422e4d893bbcb7ed1caf487f40ca091d15b659",
+      "sha256": "5ba0dab0831559063ed0b723ac422e4d893bbcb7ed1caf487f40ca091d15b659"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/backend/src/operators/operator-view.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e6a38a6e7cf3a29ae9daf349f0f14d1ba3ba6683a227442e087fe0c756e166c2",
+      "sha256": "e6a38a6e7cf3a29ae9daf349f0f14d1ba3ba6683a227442e087fe0c756e166c2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/backend/src/routes/operators.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "31a9279605ed01abec4d5e876ef7664d094d669635286153e78e716447ac7e43",
+      "sha256": "31a9279605ed01abec4d5e876ef7664d094d669635286153e78e716447ac7e43"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2a894dae34f1c8a3841126956d4907caa9606e6cbdaf67c09b9a1e975915d26d",
+      "sha256": "2a894dae34f1c8a3841126956d4907caa9606e6cbdaf67c09b9a1e975915d26d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8c6a8362d51c793f4a635b7b6e6b52345230a842578e022fd2f36fc95a564c7d",
+      "sha256": "8c6a8362d51c793f4a635b7b6e6b52345230a842578e022fd2f36fc95a564c7d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "484433b03078a8fcf30dd75270486e9f3b87a1ee6fbdebc887fea4f4cade25c7",
+      "sha256": "484433b03078a8fcf30dd75270486e9f3b87a1ee6fbdebc887fea4f4cade25c7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e118bba8596859311126b25dd215bbe1be3d1bd2f2f97ad7effbaa00ec525207",
+      "sha256": "e118bba8596859311126b25dd215bbe1be3d1bd2f2f97ad7effbaa00ec525207"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a47bfeafd1f33fd9a12aaade2559d29f23cff33e4f11433a9dcefc3fe4f76282",
+      "sha256": "a47bfeafd1f33fd9a12aaade2559d29f23cff33e4f11433a9dcefc3fe4f76282"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7c57bb0e18358250c4893301a2c39a0ca16ea8c78f116e9769aa75892752042f",
+      "sha256": "7c57bb0e18358250c4893301a2c39a0ca16ea8c78f116e9769aa75892752042f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d1ba0265ccaef841f45bea27f23784d425bc993dc760fcd7cb53187ddc78e2e6",
+      "sha256": "d1ba0265ccaef841f45bea27f23784d425bc993dc760fcd7cb53187ddc78e2e6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/candidate/frontend/src/lib/operatorRolePresentation.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0f61ac12df2cdd2153614b386e9e51bfe86b5768af66fd2ef6b35bb4b04f5536",
+      "sha256": "0f61ac12df2cdd2153614b386e9e51bfe86b5768af66fd2ef6b35bb4b04f5536"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/security02/comparison.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7",
+      "sha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/source-after.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7d6830e47d43b6829ff1931d76920d73733b8ba54141edc199e7b1ea97dfccd8",
+      "sha256": "7d6830e47d43b6829ff1931d76920d73733b8ba54141edc199e7b1ea97dfccd8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-refinement/source-before.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7d6830e47d43b6829ff1931d76920d73733b8ba54141edc199e7b1ea97dfccd8",
+      "sha256": "7d6830e47d43b6829ff1931d76920d73733b8ba54141edc199e7b1ea97dfccd8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser-plan.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1ad30c0274c986c7cbefd489e90eebff010bf3ebb1dfb04c8d1c641047803208",
+      "sha256": "1ad30c0274c986c7cbefd489e90eebff010bf3ebb1dfb04c8d1c641047803208"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser-replay-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c27aaa4e2ff3a10b9798a74e6ea8cd85eca73d9913dff649587eb18c39613cd5",
+      "sha256": "c27aaa4e2ff3a10b9798a74e6ea8cd85eca73d9913dff649587eb18c39613cd5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/browser.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6c63bcffb5baae4917f55e16b671e63393d765c1464d390fb99a31893f9beaea",
+      "sha256": "6c63bcffb5baae4917f55e16b671e63393d765c1464d390fb99a31893f9beaea"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/lane-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "20b61e21c4d1b91fd68a5fd832c7b7c8f6d9992dfe549e2f93c8877b4cb58b4d",
+      "sha256": "20b61e21c4d1b91fd68a5fd832c7b7c8f6d9992dfe549e2f93c8877b4cb58b4d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "35c7093f332034e8c628e5325c04f2831d888d51f007b2adfe0f64d212fb0efb",
+      "sha256": "35c7093f332034e8c628e5325c04f2831d888d51f007b2adfe0f64d212fb0efb"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "aecd534ddc0f8c374733358d0dd5dd9686476a88a8eb5a60c48fd85a99859b6a",
+      "sha256": "aecd534ddc0f8c374733358d0dd5dd9686476a88a8eb5a60c48fd85a99859b6a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/desktop-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "90a92ed71b040bb9c103c8e3ea60e1268fc6ad0d2eaa992366613b9638de68fe",
+      "sha256": "90a92ed71b040bb9c103c8e3ea60e1268fc6ad0d2eaa992366613b9638de68fe"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/desktop-directory-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "273e79bf4608f8520e74dc7911f636a3384bfd50db63e85abf6ebd1c0ed18526",
+      "sha256": "273e79bf4608f8520e74dc7911f636a3384bfd50db63e85abf6ebd1c0ed18526"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/desktop-explicit-role-reloaded.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9c8ae8df1ffa8ba13483c850d001a4dc132bd10f664ba3b4a77c9da52d833c48",
+      "sha256": "9c8ae8df1ffa8ba13483c850d001a4dc132bd10f664ba3b4a77c9da52d833c48"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/desktop-retained-editor-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "afb8fe2527dcb5efc67421b062b20f415bd9c6a2de951b149ba1bf3509032cd6",
+      "sha256": "afb8fe2527dcb5efc67421b062b20f415bd9c6a2de951b149ba1bf3509032cd6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/desktop-retained-editor-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "92c8b0fc972275ff76e45cb566246a48e2d0f8d840588de288c3b2a28f8d1673",
+      "sha256": "92c8b0fc972275ff76e45cb566246a48e2d0f8d840588de288c3b2a28f8d1673"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/desktop-retained-editor-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b4754426bdbe54087e1ea471f521f64903559227c5366126339771fb9ebd187",
+      "sha256": "7b4754426bdbe54087e1ea471f521f64903559227c5366126339771fb9ebd187"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/mobile-dashboard-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "15616aa5135b82a32f600c313f4a08063ef58d2b0772434fa5f715ac344ec157",
+      "sha256": "15616aa5135b82a32f600c313f4a08063ef58d2b0772434fa5f715ac344ec157"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/mobile-directory-all-roles.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "03b3693309e182b0f25968389c5260443e7a8979edece14fecaf399ee583dc9a",
+      "sha256": "03b3693309e182b0f25968389c5260443e7a8979edece14fecaf399ee583dc9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/mobile-explicit-role-reloaded.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d614d4aba40198542cba7e1b36c2b673ecadc42b302178d13a8339f5d32130c5",
+      "sha256": "d614d4aba40198542cba7e1b36c2b673ecadc42b302178d13a8339f5d32130c5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/mobile-retained-editor-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5c42fe54d346144f6468fe77817228af9f5ec0c47e90dbade196b47623883713",
+      "sha256": "5c42fe54d346144f6468fe77817228af9f5ec0c47e90dbade196b47623883713"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/mobile-retained-editor-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "99deddfdae5bfe1324f9c35f0315897ddfbc7d5d12b9c6a61016a1a7e83b3247",
+      "sha256": "99deddfdae5bfe1324f9c35f0315897ddfbc7d5d12b9c6a61016a1a7e83b3247"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/screenshots/mobile-retained-editor-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "512706bd8e3e894e497b9c862ccc676f6286547f2fb2468120482d2392db0b1a",
+      "sha256": "512706bd8e3e894e497b9c862ccc676f6286547f2fb2468120482d2392db0b1a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/test-results/browser-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "596e0c307f2d123e55a30dcffa6277b6017ad0afe7e869922cd1224ec1e53774",
+      "sha256": "596e0c307f2d123e55a30dcffa6277b6017ad0afe7e869922cd1224ec1e53774"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2cfb114393213e6d6360cfb6b312feb0077caed1247d9b5abd9c5ecaed05a34d",
+      "sha256": "2cfb114393213e6d6360cfb6b312feb0077caed1247d9b5abd9c5ecaed05a34d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/trace/mobile.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9b0efa9810dd8842d64074e18d279d2829ec57053756e5cd1ab98f457a377d66",
+      "sha256": "9b0efa9810dd8842d64074e18d279d2829ec57053756e5cd1ab98f457a377d66"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "885f5ca44963a56d7e8080256b257661ac70eddf361e8d123e192dbc7d253df5",
+      "sha256": "885f5ca44963a56d7e8080256b257661ac70eddf361e8d123e192dbc7d253df5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/run/video/mobile.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a675abc339b74e480456cd16c35395ed2a2674cff3cf09a429275da1fcdeb21b",
+      "sha256": "a675abc339b74e480456cd16c35395ed2a2674cff3cf09a429275da1fcdeb21b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/browser03/server.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ecd265961630d18097cc02a4cd4d63bc54448ea0e8a6b63f06b5de6d13522aec",
+      "sha256": "ecd265961630d18097cc02a4cd4d63bc54448ea0e8a6b63f06b5de6d13522aec"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/backend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/command-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e",
+      "sha256": "7dd13e6796b6faf3115adbd031086d5385e222c7daef4f820760956ebe7bdb0e"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/focused.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "248379a7384f88b1993d23e34a9bb385b1920351485c406a021e0bdab9aecfe0",
+      "sha256": "248379a7384f88b1993d23e34a9bb385b1920351485c406a021e0bdab9aecfe0"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/frontend-tsc-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/frontend-types.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/full-regression.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d7b3d4ac09d9d8ca812720b9aa53943c08cd4ca74fe9b4e7ee7597c3cb0da705",
+      "sha256": "d7b3d4ac09d9d8ca812720b9aa53943c08cd4ca74fe9b4e7ee7597c3cb0da705"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/security-scan.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba",
+      "sha256": "e80325db020f69d921f01abbe586f38e4d573c920ba8119962665f4c424f4eba"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/commands01/vite-build.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "66e4857a94248f43f830f069aa32c16788ae1b487a9119119007b497e264ae76",
+      "sha256": "66e4857a94248f43f830f069aa32c16788ae1b487a9119119007b497e264ae76"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/db01/migrations.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a",
+      "sha256": "b6c45b12af0fb1eca99bdde7af19d62cffca7aaba44155999b0f72182ed35f9a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/db01/policy.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638",
+      "sha256": "3124d2bbe797f16bfbdc0d23c2059b6064cc967cb640ae9e39e6c785644d0638"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/db01/result.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3",
+      "sha256": "7f1e3cffc53fd3cf51e4d33c16d3b685d28b016eaef982db653aa3a35cb568a3"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/db01/tests.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3aa380a4b155930d5cc26b1206c85b8ff71976fa53478a9c0370ede14f34377f",
+      "sha256": "3aa380a4b155930d5cc26b1206c85b8ff71976fa53478a9c0370ede14f34377f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/browser.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/lane-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9e2dce22a60439f47e799ba002abaa1cb3d42a49e473e3a19b7a3a51c7f3f0f6",
+      "sha256": "9e2dce22a60439f47e799ba002abaa1cb3d42a49e473e3a19b7a3a51c7f3f0f6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "35c7093f332034e8c628e5325c04f2831d888d51f007b2adfe0f64d212fb0efb",
+      "sha256": "35c7093f332034e8c628e5325c04f2831d888d51f007b2adfe0f64d212fb0efb"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/playwright-report/index.html",
+      "exportNormalization": "none",
+      "gitBlobSha256": "33c5c9056c9b8d156c06c06072c5e35683c40da65395cb42d7b9bd7d2f0325b1",
+      "sha256": "33c5c9056c9b8d156c06c06072c5e35683c40da65395cb42d7b9bd7d2f0325b1"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/screenshots/desktop-visible-retained-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "645fca4e417f377bd96a833d3cfc57f2d0f0ef366ca53f0976c8784b139c0a0f",
+      "sha256": "645fca4e417f377bd96a833d3cfc57f2d0f0ef366ca53f0976c8784b139c0a0f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/screenshots/desktop-visible-retained-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2d5cbbb41766443273134dbbc44aed59a012071491d52654d56798893f4d0032",
+      "sha256": "2d5cbbb41766443273134dbbc44aed59a012071491d52654d56798893f4d0032"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/screenshots/desktop-visible-retained-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8a7ef87f9b10e25cbcd8cb98e1f619e44567e3125a0d9edd0a62fccf570b9a2d",
+      "sha256": "8a7ef87f9b10e25cbcd8cb98e1f619e44567e3125a0d9edd0a62fccf570b9a2d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/screenshots/mobile-visible-retained-10.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a96daef8a7c6b80676ad406f686792b9da86d374f8d09f515b8af6faf9b7a75c",
+      "sha256": "a96daef8a7c6b80676ad406f686792b9da86d374f8d09f515b8af6faf9b7a75c"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/screenshots/mobile-visible-retained-14.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "149fcd04effe74eccbbfe327c3f999c62f3d9e49eb3d19e3c5fa9f11c73d1321",
+      "sha256": "149fcd04effe74eccbbfe327c3f999c62f3d9e49eb3d19e3c5fa9f11c73d1321"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/screenshots/mobile-visible-retained-15.png",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c5f144ba45fd2e2b3d0445679bd4519a599b32b7a5b03aff2e6be5480041a8bf",
+      "sha256": "c5f144ba45fd2e2b3d0445679bd4519a599b32b7a5b03aff2e6be5480041a8bf"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/test-results/browser-results.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3d80a1c5e541189f5c70b12de8e8c385396e97326f4666d7e55be9b3f0c648dc",
+      "sha256": "3d80a1c5e541189f5c70b12de8e8c385396e97326f4666d7e55be9b3f0c648dc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/trace/desktop.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f533b16383ad4839063242b73bb92dce47507ed630386cd06cf764f7ae9a729f",
+      "sha256": "f533b16383ad4839063242b73bb92dce47507ed630386cd06cf764f7ae9a729f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/trace/mobile.zip",
+      "exportNormalization": "none",
+      "gitBlobSha256": "961f607222b77fecf545afad456271bca73e4aa96418312d394a0921c3400e60",
+      "sha256": "961f607222b77fecf545afad456271bca73e4aa96418312d394a0921c3400e60"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/video/desktop.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "1627ca2bf60d7abca4225f08de91aa3449b326fe5a9fdb196ef49e7758b33d81",
+      "sha256": "1627ca2bf60d7abca4225f08de91aa3449b326fe5a9fdb196ef49e7758b33d81"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/run/video/mobile.webm",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b06b479e5e224c568e34ed44ad239239ea9c7b8763a23d0bcc1960e660ae81e3",
+      "sha256": "b06b479e5e224c568e34ed44ad239239ea9c7b8763a23d0bcc1960e660ae81e3"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/editor01/server.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7b4f0c112380c37cb0af0216b0fa5639b43e5fc2bc157674a10b3baaf2125819",
+      "sha256": "7b4f0c112380c37cb0af0216b0fa5639b43e5fc2bc157674a10b3baaf2125819"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/no-cluster01/result.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "3f9ec46e398b8a95ad07e5dbb28fa7b6739b196aaf8a2486c32640a8967470b4",
+      "sha256": "3f9ec46e398b8a95ad07e5dbb28fa7b6739b196aaf8a2486c32640a8967470b4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/no-cluster01/tests.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2c7b458eb605c39119ad7212502cc27f11b571cedf842c6d5bc4ed7e738a1f13",
+      "sha256": "2c7b458eb605c39119ad7212502cc27f11b571cedf842c6d5bc4ed7e738a1f13"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/pre-run.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d6d0424c457fc8c46b39a96e5847050c1387b85952c80609a678448ba334e6e6",
+      "sha256": "d6d0424c457fc8c46b39a96e5847050c1387b85952c80609a678448ba334e6e6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/before-browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "c4a74f02b252eec3617fa53677c3f98bb47d7a67d4521f3e269a0ce3f02a8259",
+      "sha256": "c4a74f02b252eec3617fa53677c3f98bb47d7a67d4521f3e269a0ce3f02a8259"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/browser-lane.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d",
+      "sha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/browser.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9a3ea1a2fa44145a0f301f17d781d3c9451682a0d9fe0ad4c00fb6c7b4f00fe8",
+      "sha256": "9a3ea1a2fa44145a0f301f17d781d3c9451682a0d9fe0ad4c00fb6c7b4f00fe8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/commands.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f",
+      "sha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/db-regression.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0cc667311e36eab3843078fbe88b7394a01b8b05e7af7291f80c0d3ae570f4fa",
+      "sha256": "0cc667311e36eab3843078fbe88b7394a01b8b05e7af7291f80c0d3ae570f4fa"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/editor-visual.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4b28c33622182e20b7c78fbe928e38568d31493d27a76a490e1af242b3570f60",
+      "sha256": "4b28c33622182e20b7c78fbe928e38568d31493d27a76a490e1af242b3570f60"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/no-cluster-optin.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "615f55711702ec256dd1c058ff31239f3c4090f8c89946e7541ae494b36092a5",
+      "sha256": "615f55711702ec256dd1c058ff31239f3c4090f8c89946e7541ae494b36092a5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/qa-server.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae",
+      "sha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/scope.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388",
+      "sha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/seal.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4e8e8e552d701f4315bf5980f413191558b1b00acf5e2d2fd1649aa1e903b3db",
+      "sha256": "4e8e8e552d701f4315bf5980f413191558b1b00acf5e2d2fd1649aa1e903b3db"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/security.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "9661daacf985d6d768f0d58a6cce05ac8939914278b01cf28832eb64506d27df",
+      "sha256": "9661daacf985d6d768f0d58a6cce05ac8939914278b01cf28832eb64506d27df"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/source-binding.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2500686435d05c0655fbdf6dc9a23bbfb5c948c5c97c75bfb5b62d981d4d0ee7",
+      "sha256": "2500686435d05c0655fbdf6dc9a23bbfb5c948c5c97c75bfb5b62d981d4d0ee7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/source-receipt.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/recipes/transport.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76",
+      "sha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d090235e18cc3f221e50fa54d3c1381f8f93088211a5bb604c310554bb91a1ff",
+      "sha256": "d090235e18cc3f221e50fa54d3c1381f8f93088211a5bb604c310554bb91a1ff"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "acef4cbf8f8b737cf73332056da57225d17167578e27117a52416eec848d7724",
+      "sha256": "acef4cbf8f8b737cf73332056da57225d17167578e27117a52416eec848d7724"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline/backend/src/routes/operators.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843",
+      "sha256": "0a81ed8fdbfb857a5d1fc71ece69f3fbbe9356c9fcd1dcdaea409a7b93546843"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624",
+      "sha256": "39b80d090be005ede06202d6851713a4f33b77b2ac0afbd06f5f30ffacfc7624"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec",
+      "sha256": "e9a257b9b888407d64a1af5fd5fee73da60f12b3361e17895bc32a305afa3cec"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4",
+      "sha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5",
+      "sha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/baseline/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc",
+      "sha256": "6d47ac7328a12ce74db10058f7858e1194cfce1d4cd18f543a41de1c3f44dbcc"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate-cli.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0ce1706f464a3782c00ec12e8f61c3307fbdeb23954e1545b72561b15eb09833",
+      "sha256": "0ce1706f464a3782c00ec12e8f61c3307fbdeb23954e1545b72561b15eb09833"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/.claude/security-scans/scan-code-deep.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e03a403b79e16ac57fa18566788c930b257378afa9b28bb88947de7874c6df97",
+      "sha256": "e03a403b79e16ac57fa18566788c930b257378afa9b28bb88947de7874c6df97"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/backend/src/operators/__tests__/operator-role-db.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "ed2994d7a1be2ab177046f09ae1c850222b03b00fdab5a28c6723b69cd0e4d1a",
+      "sha256": "ed2994d7a1be2ab177046f09ae1c850222b03b00fdab5a28c6723b69cd0e4d1a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/backend/src/operators/__tests__/operator-view.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5ba0dab0831559063ed0b723ac422e4d893bbcb7ed1caf487f40ca091d15b659",
+      "sha256": "5ba0dab0831559063ed0b723ac422e4d893bbcb7ed1caf487f40ca091d15b659"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/backend/src/operators/operator-view.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e6a38a6e7cf3a29ae9daf349f0f14d1ba3ba6683a227442e087fe0c756e166c2",
+      "sha256": "e6a38a6e7cf3a29ae9daf349f0f14d1ba3ba6683a227442e087fe0c756e166c2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/backend/src/routes/operators.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "31a9279605ed01abec4d5e876ef7664d094d669635286153e78e716447ac7e43",
+      "sha256": "31a9279605ed01abec4d5e876ef7664d094d669635286153e78e716447ac7e43"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "2a894dae34f1c8a3841126956d4907caa9606e6cbdaf67c09b9a1e975915d26d",
+      "sha256": "2a894dae34f1c8a3841126956d4907caa9606e6cbdaf67c09b9a1e975915d26d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/components/admin/AdminDashboard.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8c6a8362d51c793f4a635b7b6e6b52345230a842578e022fd2f36fc95a564c7d",
+      "sha256": "8c6a8362d51c793f4a635b7b6e6b52345230a842578e022fd2f36fc95a564c7d"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/components/admin/operatorFormModel.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "484433b03078a8fcf30dd75270486e9f3b87a1ee6fbdebc887fea4f4cade25c7",
+      "sha256": "484433b03078a8fcf30dd75270486e9f3b87a1ee6fbdebc887fea4f4cade25c7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/components/admin/OperatorFormPanel.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e118bba8596859311126b25dd215bbe1be3d1bd2f2f97ad7effbaa00ec525207",
+      "sha256": "e118bba8596859311126b25dd215bbe1be3d1bd2f2f97ad7effbaa00ec525207"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/components/admin/OperatorManagement.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "a47bfeafd1f33fd9a12aaade2559d29f23cff33e4f11433a9dcefc3fe4f76282",
+      "sha256": "a47bfeafd1f33fd9a12aaade2559d29f23cff33e4f11433a9dcefc3fe4f76282"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7c57bb0e18358250c4893301a2c39a0ca16ea8c78f116e9769aa75892752042f",
+      "sha256": "7c57bb0e18358250c4893301a2c39a0ca16ea8c78f116e9769aa75892752042f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d1ba0265ccaef841f45bea27f23784d425bc993dc760fcd7cb53187ddc78e2e6",
+      "sha256": "d1ba0265ccaef841f45bea27f23784d425bc993dc760fcd7cb53187ddc78e2e6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/candidate/frontend/src/lib/operatorRolePresentation.ts",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0f61ac12df2cdd2153614b386e9e51bfe86b5768af66fd2ef6b35bb4b04f5536",
+      "sha256": "0f61ac12df2cdd2153614b386e9e51bfe86b5768af66fd2ef6b35bb4b04f5536"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/security01/comparison.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7",
+      "sha256": "24f6397a7fb7f8c5cccdd4a2c1072015402c909f7eb1c95e6a7799e7aa2d3ff7"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/server-stop.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "0bb38b2b37ce25840ea9fdb0eb55bfff94f25f104c85102ab38984b730b0950b",
+      "sha256": "0bb38b2b37ce25840ea9fdb0eb55bfff94f25f104c85102ab38984b730b0950b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/source-after.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "64ba561c21cf420213bbdf368fddd9ec2b8ce722c1f1eaba9531d0b2bc9dc1e5",
+      "sha256": "64ba561c21cf420213bbdf368fddd9ec2b8ce722c1f1eaba9531d0b2bc9dc1e5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/source-before.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "64ba561c21cf420213bbdf368fddd9ec2b8ce722c1f1eaba9531d0b2bc9dc1e5",
+      "sha256": "64ba561c21cf420213bbdf368fddd9ec2b8ce722c1f1eaba9531d0b2bc9dc1e5"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/root-rerun/source-git-binding.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "67bf01ab1316f10fb31a3692635e3f330ca3e7d57d2a278e0f624764df5aa5ab",
+      "sha256": "67bf01ab1316f10fb31a3692635e3f330ca3e7d57d2a278e0f624764df5aa5ab"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/run-plan.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "92e1b1fc2e22ea480b30b3302eb96060f7da149f1e8fae6a4ec1d656d4646dce",
+      "sha256": "92e1b1fc2e22ea480b30b3302eb96060f7da149f1e8fae6a4ec1d656d4646dce"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/scope.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388",
+      "sha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/security.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7a747fbef363cb9c50a48c58c9973762f052c02c3ad2542a29e91df16182fe4f",
+      "sha256": "7a747fbef363cb9c50a48c58c9973762f052c02c3ad2542a29e91df16182fe4f"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/source-freeze-policy.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "4d4381ef3a71ed4377adadfc08f79973ead59425f09c44cc59e8b05f0a0276c2",
+      "sha256": "4d4381ef3a71ed4377adadfc08f79973ead59425f09c44cc59e8b05f0a0276c2"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/source-promotion-policy.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "e3642d4a1c25b7ed276b6bbd44ec36b447275b40e5ed0ddc0bf1fcdac69e8c31",
+      "sha256": "e3642d4a1c25b7ed276b6bbd44ec36b447275b40e5ed0ddc0bf1fcdac69e8c31"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/source-promotion-receipt.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "71e405a4dfb4f378f56587a0d753eab1dd082fb8512c80f1169e148388a73755",
+      "sha256": "71e405a4dfb4f378f56587a0d753eab1dd082fb8512c80f1169e148388a73755"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/source-receipt.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/source-refinement-policy.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "69b49ab31bae3b155c306a5c489035109b11eb26e19c082c9be5a5941ce551a9",
+      "sha256": "69b49ab31bae3b155c306a5c489035109b11eb26e19c082c9be5a5941ce551a9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/stage-ci-proof.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "25a825e9e338e499ef3bff98ca55ba2c6041af1a0fbe879424b742a182e29497",
+      "sha256": "25a825e9e338e499ef3bff98ca55ba2c6041af1a0fbe879424b742a182e29497"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/stage-proof.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b28068fbc7f25fa56ffecddc063ce83945f628b4e3b3da1d00d02806c2337928",
+      "sha256": "b28068fbc7f25fa56ffecddc063ce83945f628b4e3b3da1d00d02806c2337928"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/stopped-qa1/stopped-review.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "f6146f3268cb0696f08c86f3d9b4fe5e49d3d1e1fb935be732c6d806080d48d6",
+      "sha256": "f6146f3268cb0696f08c86f3d9b4fe5e49d3d1e1fb935be732c6d806080d48d6"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/superseded-frozen-source.json",
+      "exportNormalization": "none",
+      "gitBlobSha256": "31efab59cfa085a12cfbe9934ba2f00f70c8315eb8d15a6d8e6af4e1bd9039b8",
+      "sha256": "31efab59cfa085a12cfbe9934ba2f00f70c8315eb8d15a6d8e6af4e1bd9039b8"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/task-contract.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "27a118056a35a3e6344f365d83086726f4170b51e90efb9da96a164990f6386b",
+      "sha256": "27a118056a35a3e6344f365d83086726f4170b51e90efb9da96a164990f6386b"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/tdd-red.log",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d318fa207274aba6673b0467bcbd482ae48ae72a69546a0f6e8ec227560c9342",
+      "sha256": "d318fa207274aba6673b0467bcbd482ae48ae72a69546a0f6e8ec227560c9342"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/tdd-red.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "b431fff495c911d48d24b21948d84e577cc5e70d182ec54e40b7de388cf3e8ef",
+      "sha256": "b431fff495c911d48d24b21948d84e577cc5e70d182ec54e40b7de388cf3e8ef"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/validation-report.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "7bd0da5b66f2b210981da3095ac9547ac33e83ee02ee462800b159a5cf38740a",
+      "sha256": "7bd0da5b66f2b210981da3095ac9547ac33e83ee02ee462800b159a5cf38740a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/verify-lane.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "5a276f2ce8411eacd6cf2cf4d22c8f7389a953bdf0a1caf4d8b1db088c12f2f9",
+      "sha256": "5a276f2ce8411eacd6cf2cf4d22c8f7389a953bdf0a1caf4d8b1db088c12f2f9"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/verify-online.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "24970a1e5d2ab3c731be00adda8b1dbfcdfecf996bc187a249778199c758243a",
+      "sha256": "24970a1e5d2ab3c731be00adda8b1dbfcdfecf996bc187a249778199c758243a"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/visual-review.md",
+      "exportNormalization": "none",
+      "gitBlobSha256": "d03e8546b3c4e6273b50e0f9c52ebf0a1eede2d5371069e48678bdc52b18d915",
+      "sha256": "d03e8546b3c4e6273b50e0f9c52ebf0a1eede2d5371069e48678bdc52b18d915"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/visual-supplement.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "76a768ceeed92fae09f8f5168af743311ad1034d8c9b9f8da4d72f66eab079fb",
+      "sha256": "76a768ceeed92fae09f8f5168af743311ad1034d8c9b9f8da4d72f66eab079fb"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/wait-ci.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "76c0aa66edc49d798249a7d6db026cf8ac830adb2b3b03698091d137ea8de030",
+      "sha256": "76c0aa66edc49d798249a7d6db026cf8ac830adb2b3b03698091d137ea8de030"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/wait-deployment.mjs",
+      "exportNormalization": "none",
+      "gitBlobSha256": "8e6463c6229f427ed9748a891134c80b8b528fbe90c4296d02c1cc324bf69b46",
+      "sha256": "8e6463c6229f427ed9748a891134c80b8b528fbe90c4296d02c1cc324bf69b46"
+    },
+    {
+      "path": "artifacts/task-validation/428-operator-role/proof-push-policy-3cd984a5a40f.json",
+      "sha256": "3271baf74b3a098a3148e62b7e24e985af5ff410ce30dd3673c5556823bf6919",
+      "gitBlobSha256": "3271baf74b3a098a3148e62b7e24e985af5ff410ce30dd3673c5556823bf6919",
+      "exportNormalization": "none"
+    }
+  ],
+  "zipEntriesChecked": 7894,
+  "decision": "SOURCE-BOUND SYNTHETIC PROOF",
+  "productionPatientTestMutations": 0,
+  "excluded": [
+    "primary dirty checkout and launchers",
+    "unreleased405/408/410/416 source",
+    "original patient audit photos",
+    "root development failures and independent failures included immutably"
+  ],
+  "exportPolicy": "Independent local manifest immutable, including all declared preliminary failures; each canonical staged Git blob separately verified, only CRLF to LF normalization allowed."
+}

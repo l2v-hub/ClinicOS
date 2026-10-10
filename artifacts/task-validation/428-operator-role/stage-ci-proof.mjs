@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/428-operator-role',app=JSON.parse(readFileSync(root+'/frozen-source.json')).applicationCommit;
+const git=args=>{const r=spawnSync('git',args,{encoding:'utf8',windowsHide:true});assert.equal(r.status,0);return r.stdout.trim();};
+assert.equal(git(['rev-parse','HEAD']),app);
+assert.ok(git(['diff','--cached','--name-only']).split('\n').filter(Boolean).every(p=>p.startsWith(root+'/')));
+const ci=JSON.parse(readFileSync(root+'/ci-comparison.json'));assert.equal(ci.applicationCommit,app);assert.deepEqual(ci.newFailureNames,[]);assert.equal(ci.frontendSecretScanConclusion,'success');
+const scope=['ci-comparison.json','validation-report.md','stage-ci-proof.mjs','ci-proof-staging-policy.json','ci-duration.mjs','ci-duration.json','wait-ci.mjs'];
+writeFileSync(root+'/ci-proof-staging-policy.json',JSON.stringify({applicationCommit:app,decision:'AUTHORIZED CI RECEIPT AND HONEST PREPUBLICATION REPORT STAGING',authority:'Human publication request; completed exact-source CI baseline delta and secret scan verified, public PNG gate remains pending',scope,at:new Date().toISOString()},null,2));
+git(['add','-f','--',...scope.map(p=>root+'/'+p)]);console.log('Completed CI proof staged; rerun canonical privacy gate before push');

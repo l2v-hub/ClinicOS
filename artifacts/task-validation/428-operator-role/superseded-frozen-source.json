@@ -1,0 +1,25 @@
+{
+  "decision": "AUTHORIZED LOCAL IMMUTABLE CANDIDATE ONLY",
+  "authority": "Direct human authorization for scoped bug implementation. Focused/types/build/security/DB pass; exact accepted full baseline. New independent QA/release/production/closure gates still pending.",
+  "base": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "scope": [
+    "frontend/src/lib/operatorRolePresentation.ts",
+    "frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+    "frontend/src/components/admin/OperatorManagement.tsx",
+    "frontend/src/components/admin/OperatorFormPanel.tsx",
+    "frontend/src/components/admin/operatorFormModel.ts",
+    "frontend/src/components/admin/AdminDashboard.tsx",
+    "frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+    "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+    "backend/src/routes/operators.ts",
+    "backend/src/operators/operator-view.ts",
+    "backend/src/operators/__tests__/operator-view.test.ts",
+    "backend/src/operators/__tests__/operator-role-db.test.ts"
+  ],
+  "sourceSha256": "53c550e21eca6409b3053435b530d77dab0bd581a8ef8d792db4fce3daa9e0a0",
+  "sourceFiles": 1546,
+  "at": "2026-10-10T01:03:28.684Z",
+  "excluded": "Dirty main/native launchers/artifacts/blocked candidates",
+  "applicationCommit": "5b371f788a17598cdad1d9e07a0945a8a1bdf88d",
+  "result": "LOCAL CANDIDATE ONLY, NEW INDEPENDENT QA PENDING"
+}

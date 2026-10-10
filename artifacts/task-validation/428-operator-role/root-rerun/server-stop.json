@@ -1,0 +1,16 @@
+{
+  "listenerFree": true,
+  "ports": [
+    7528,
+    7529
+  ],
+  "ownedPids": [
+    31800,
+    29488
+  ],
+  "syntheticClustersAlive": 0,
+  "ownedPidsAlive": 0,
+  "browserLane": "RELEASED",
+  "productionMutation": 0,
+  "at": "2026-10-10T01:29:29.219Z"
+}

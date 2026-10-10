@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-10-10T01:40:22.325Z",
+  "records": [
+    {
+      "id": 37987185985,
+      "headSha": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+      "status": "completed",
+      "conclusion": "failure",
+      "stages": [
+        {
+          "job": "gate",
+          "completedAt": "2026-10-09T20:38:35Z",
+          "conclusion": "failure",
+          "name": "Backend unit tests",
+          "number": 12,
+          "startedAt": "2026-10-09T20:30:45Z",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": 38013399240,
+      "headSha": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+      "status": "completed",
+      "conclusion": "failure",
+      "stages": [
+        {
+          "job": "gate",
+          "completedAt": "2026-10-10T01:40:18Z",
+          "conclusion": "failure",
+          "name": "Backend unit tests",
+          "number": 12,
+          "startedAt": "2026-10-10T01:32:29Z",
+          "status": "completed"
+        }
+      ]
+    }
+  ],
+  "decision": "READONLY DURATION DIAGNOSTIC; NOT A PASS/WAIVER"
+}

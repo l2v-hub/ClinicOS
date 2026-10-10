@@ -1,0 +1,52 @@
+{
+  "baseline": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "changed": [
+    "frontend/src/lib/operatorRolePresentation.ts",
+    "frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+    "frontend/src/components/admin/OperatorManagement.tsx",
+    "frontend/src/components/admin/OperatorFormPanel.tsx",
+    "frontend/src/components/admin/operatorFormModel.ts",
+    "frontend/src/components/admin/AdminDashboard.tsx",
+    "frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+    "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+    "backend/src/routes/operators.ts",
+    "backend/src/operators/operator-view.ts",
+    "backend/src/operators/__tests__/operator-view.test.ts",
+    "backend/src/operators/__tests__/operator-role-db.test.ts"
+  ],
+  "records": [
+    {
+      "kind": "baseline",
+      "absent": [
+        "frontend/src/lib/operatorRolePresentation.ts",
+        "frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+        "frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+        "backend/src/operators/operator-view.ts",
+        "backend/src/operators/__tests__/operator-view.test.ts",
+        "backend/src/operators/__tests__/operator-role-db.test.ts"
+      ],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    },
+    {
+      "kind": "candidate",
+      "absent": [],
+      "summary": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "total": 0
+      },
+      "findings": []
+    }
+  ],
+  "newFindings": [],
+  "scope": "Changed source only; absent baseline files omitted. Scanner side effects isolated. Not global CVE certification."
+}

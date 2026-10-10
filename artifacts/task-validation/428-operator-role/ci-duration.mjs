@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+const root='artifacts/task-validation/428-operator-role',configured=JSON.parse(readFileSync('C:/Workspace/ClinicOSHouse/.claude/settings.local.json','utf8')).env,records=[];
+for(const id of [37987185985,JSON.parse(readFileSync(root+(existsSync(root+'/ci-progress.json')?'/ci-progress.json':'/ci-comparison.json'))).candidateRun]){const r=spawnSync('gh',['run','view',String(id),'--repo','l2v-hub/ClinicOS','--json','headSha,status,conclusion,jobs'],{windowsHide:true,encoding:'utf8',maxBuffer:15e6,env:{...process.env,GH_TOKEN:configured.GITHUB_TOKEN||configured.GH_TOKEN}});assert.equal(r.status,0,'CI timing inspection failed safely');const body=JSON.parse(r.stdout);records.push({id,headSha:body.headSha,status:body.status,conclusion:body.conclusion,stages:body.jobs.flatMap(j=>j.steps.filter(s=>s.name==='Backend unit tests').map(s=>({job:j.name,...s})))});}
+writeFileSync(root+'/ci-duration.json',JSON.stringify({checkedAt:new Date().toISOString(),records,decision:'READONLY DURATION DIAGNOSTIC; NOT A PASS/WAIVER'},null,2));console.log(JSON.stringify(records));

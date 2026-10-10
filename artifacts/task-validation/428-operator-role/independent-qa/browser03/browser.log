@@ -1,0 +1,50 @@
+PASS desktop dashboard all16 explicit professional labels and separate qualification
+PASS desktop same16 table/mobile role labels, qualification, uncertainty and literal XSS
+PASS desktop native keyboard editor retains exact token 0; cancel zero writes
+PASS desktop native keyboard editor retains exact token 1; cancel zero writes
+PASS desktop native keyboard editor retains exact token 2; cancel zero writes
+PASS desktop native keyboard editor retains exact token 3; cancel zero writes
+PASS desktop native keyboard editor retains exact token 4; cancel zero writes
+PASS desktop native keyboard editor retains exact token 5; cancel zero writes
+PASS desktop native keyboard editor retains exact token 6; cancel zero writes
+PASS desktop native keyboard editor retains exact token 7; cancel zero writes
+PASS desktop native keyboard editor retains exact token 8; cancel zero writes
+PASS desktop native keyboard editor retains exact token 9; cancel zero writes
+PASS desktop native keyboard editor retains exact token 10; cancel zero writes
+PASS desktop native keyboard editor retains exact token 11; cancel zero writes
+PASS desktop native keyboard editor retains exact token 12; cancel zero writes
+PASS desktop native keyboard editor retains exact token 13; cancel zero writes
+PASS desktop native keyboard editor retains exact token 14; cancel zero writes
+PASS desktop native keyboard editor retains exact token 15; cancel zero writes
+PASS desktop unrelated edit omits role 10 and mock reload retains exact original
+PASS desktop unrelated edit omits role 11 and mock reload retains exact original
+PASS desktop unrelated edit omits role 12 and mock reload retains exact original
+PASS desktop unrelated edit omits role 13 and mock reload retains exact original
+PASS desktop unrelated edit omits role 15 and mock reload retains exact original
+PASS desktop unrelated edit omits role 9 and mock reload retains exact original
+PASS desktop explicit selection sends only chosen professional role; mock reload displays change
+PASS mobile dashboard all16 explicit professional labels and separate qualification
+PASS mobile same16 table/mobile role labels, qualification, uncertainty and literal XSS
+PASS mobile native keyboard editor retains exact token 0; cancel zero writes
+PASS mobile native keyboard editor retains exact token 1; cancel zero writes
+PASS mobile native keyboard editor retains exact token 2; cancel zero writes
+PASS mobile native keyboard editor retains exact token 3; cancel zero writes
+PASS mobile native keyboard editor retains exact token 4; cancel zero writes
+PASS mobile native keyboard editor retains exact token 5; cancel zero writes
+PASS mobile native keyboard editor retains exact token 6; cancel zero writes
+PASS mobile native keyboard editor retains exact token 7; cancel zero writes
+PASS mobile native keyboard editor retains exact token 8; cancel zero writes
+PASS mobile native keyboard editor retains exact token 9; cancel zero writes
+PASS mobile native keyboard editor retains exact token 10; cancel zero writes
+PASS mobile native keyboard editor retains exact token 11; cancel zero writes
+PASS mobile native keyboard editor retains exact token 12; cancel zero writes
+PASS mobile native keyboard editor retains exact token 13; cancel zero writes
+PASS mobile native keyboard editor retains exact token 14; cancel zero writes
+PASS mobile native keyboard editor retains exact token 15; cancel zero writes
+PASS mobile unrelated edit omits role 10 and mock reload retains exact original
+PASS mobile unrelated edit omits role 11 and mock reload retains exact original
+PASS mobile unrelated edit omits role 12 and mock reload retains exact original
+PASS mobile unrelated edit omits role 13 and mock reload retains exact original
+PASS mobile unrelated edit omits role 15 and mock reload retains exact original
+PASS mobile unrelated edit omits role 9 and mock reload retains exact original
+PASS mobile explicit selection sends only chosen professional role; mock reload displays change

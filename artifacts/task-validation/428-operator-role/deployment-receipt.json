@@ -1,0 +1,39 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "checkedAt": "2026-10-10T01:33:20.758Z",
+  "decision": "VERIFIED RELEASE",
+  "vercel": {
+    "id": "dpl_Eg6dn1sD3uwQ4HzYJ4rVThzVWDHp",
+    "state": "READY",
+    "githubCommitSha": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+    "gitSourceSha": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+    "productionAlias": "https://clinicos-eosin.vercel.app/",
+    "http": 200,
+    "bundleUrl": "https://clinicos-eosin.vercel.app/assets/index-DC62ZCGl.js",
+    "bundleHttp": 200,
+    "bundleSha256": "4bed2abba0656827159c2c6c2be45aa3698c77ebc7cdb5c71de8fef9ff99801e",
+    "styleAssets": [
+      {
+        "url": "https://clinicos-eosin.vercel.app/assets/index-DC8NTiJ6.css",
+        "sha256": "9fba89f031426d7186d2edeadbb618909139c86032a58bb47ed84a461742d379"
+      }
+    ],
+    "htmlSha256": "549076c5cc335bf5930e7c84a63633ccbf167dba20e9ac5199318b84879326e6"
+  },
+  "backend": {
+    "changed": true,
+    "runId": 38013399251,
+    "runUrl": "https://github.com/l2v-hub/ClinicOS/actions/runs/38013399251",
+    "eventHeadSha": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+    "actualCheckoutSha": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+    "workflowConclusion": "success",
+    "railwayDeploymentId": "5902626b-ef72-4c31-bf09-bdd4d69cdfc0",
+    "railwayStatus": "SUCCESS",
+    "imageDigest": "sha256:589f198992dab114f8e6a3b1847e7377d4e2dc7b024b1a518d266bac56828571",
+    "healthHttp": 200,
+    "newMigrations": false,
+    "provenance": "Actions exact checkout plus deployment upload ID, provider SUCCESS/image digest and health200; no production patient test mutation"
+  },
+  "productionPatientTestMutations": 0,
+  "compiledSemanticAcceptance": "Separate guarded compiled proof still required"
+}

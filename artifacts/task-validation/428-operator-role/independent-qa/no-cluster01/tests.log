@@ -1,0 +1,12 @@
+﹣ 428 real API admin and minimum directory preserve missing/legacy role without GET writes (7.5123ms) # SKIP
+﹣ 428 unrelated real PUT and fresh GET preserve exact DB role and authorization assignments (0.9879ms) # SKIP
+﹣ 428 explicit professional change never promotes the User role or active authorization policy (4.6592ms) # SKIP
+﹣ 428 outer policy denials preserve accepted baseline behavior and never mutate profiles (1.6136ms) # SKIP
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 4
+ℹ todo 0
+ℹ duration_ms 4366.4693

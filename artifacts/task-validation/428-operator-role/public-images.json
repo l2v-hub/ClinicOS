@@ -1,0 +1,6 @@
+[
+ {"label":"Dashboard — ruoli professionali coerenti","path":"compiled-online/dashboard-visual/screenshots/dashboard-visible-3.png"},
+ {"label":"Tabella — ruoli normalizzati e legacy espliciti","path":"compiled-online/browser03/run/screenshots/desktop-directory-all-roles.png"},
+ {"label":"Editor — ruolo mancante conservato, senza inventare Medico","path":"compiled-online/editor01/run/screenshots/desktop-visible-retained-10.png"},
+ {"label":"Mobile — ruolo legacy conservato e dati incerti verificabili","path":"compiled-online/editor01/run/screenshots/mobile-visible-retained-15.png"}
+]

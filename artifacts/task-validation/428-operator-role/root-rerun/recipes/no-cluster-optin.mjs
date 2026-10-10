@@ -1,0 +1,7 @@
+import {spawnSync} from 'node:child_process';
+import {mkdirSync,writeFileSync,existsSync} from 'node:fs';
+import {resolve} from 'node:path';
+import assert from 'node:assert/strict';
+const out=resolve(process.argv[2]);assert.ok(process.argv[2]);assert.equal(existsSync(out),false);mkdirSync(out,{recursive:true});
+const env={...process.env,DATABASE_URL:'postgresql://synthetic@127.0.0.1:1/never-connect',NODE_ENV:'test'};delete env.BUG428_SYNTHETIC_CLUSTER;for(const k of ['OPENAI_API_KEY','GEMINI_API_KEY','GOOGLE_API_KEY','ANTHROPIC_API_KEY','RESIDENT_SCOPE_CONFIG'])delete env[k];
+const result=spawnSync(process.execPath,['--import','tsx','--test','--test-concurrency=1','src/operators/__tests__/operator-role-db.test.ts'],{cwd:resolve('backend'),env,windowsHide:true,encoding:'utf8',maxBuffer:5e6});const log=(result.stdout||'')+(result.stderr||'');writeFileSync(out+'/tests.log',log);assert.equal(result.status,0);assert.match(log,/ℹ tests 4/);assert.match(log,/ℹ pass 0/);assert.match(log,/ℹ skipped 4/);assert.doesNotMatch(log,/PUT \/operators|CORS allowed origins/);writeFileSync(out+'/result.json',JSON.stringify({exit:result.status,tests:4,pass:0,skipped:4,cwd:'backend',guardAbsent:true,clusterStarted:false,applicationStarted:false,writeTestsExecuted:0,scope:'Read-only skip guard proof, not a real DB persistence run.'},null,2));console.log('Dedicated cluster opt-in absent: all4 SKIP, no application/cluster writes');

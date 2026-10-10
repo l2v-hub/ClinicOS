@@ -1,0 +1,1628 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "outcomes": [
+    {
+      "name": "desktop dashboard all16 explicit professional labels and separate qualification",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop same16 table/mobile role labels, qualification, uncertainty and literal XSS",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 0; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 1; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 2; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 3; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 4; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 5; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 6; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 7; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 8; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 9; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 10; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 11; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 12; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 13; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 14; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop native keyboard editor retains exact token 15; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop unrelated edit omits role 10 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop unrelated edit omits role 11 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop unrelated edit omits role 12 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop unrelated edit omits role 13 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop unrelated edit omits role 15 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop unrelated edit omits role 9 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop explicit selection sends only chosen professional role; mock reload displays change",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile dashboard all16 explicit professional labels and separate qualification",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile same16 table/mobile role labels, qualification, uncertainty and literal XSS",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 0; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 1; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 2; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 3; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 4; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 5; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 6; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 7; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 8; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 9; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 10; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 11; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 12; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 13; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 14; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile native keyboard editor retains exact token 15; cancel zero writes",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile unrelated edit omits role 10 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile unrelated edit omits role 11 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile unrelated edit omits role 12 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile unrelated edit omits role 13 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile unrelated edit omits role 15 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile unrelated edit omits role 9 and mock reload retains exact original",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile explicit selection sends only chosen professional role; mock reload displays change",
+      "status": "PASS"
+    }
+  ],
+  "states": [
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-10"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-11"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-12"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-13"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-15"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-9"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-10"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [
+        {
+          "id": "QA-OP-428-10",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita10",
+            "email": "role428-10@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 10",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 10",
+            "colore": "#2F6BED",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-11",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita11",
+            "email": "role428-11@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 11",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 11",
+            "colore": "#0D9488",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-12",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita12",
+            "email": "role428-12@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 12",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 12",
+            "colore": "#6C4BD1",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-13",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita13",
+            "email": "role428-13@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 13",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 13",
+            "colore": "#C77700",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-15",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita15",
+            "email": "role428-15@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 15",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 15",
+            "colore": "#8B5CF6",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-9",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita09",
+            "email": "role428-9@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 9",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 9",
+            "colore": "#06B6D4",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-10",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita10",
+            "ruolo": "infermiere",
+            "email": "role428-10@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 10",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 10",
+            "colore": "#2F6BED",
+            "note": ""
+          }
+        }
+      ],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "selected": [
+        {
+          "i": 0,
+          "value": "medico",
+          "text": "Medico"
+        },
+        {
+          "i": 1,
+          "value": "infermiere",
+          "text": "Infermiere"
+        },
+        {
+          "i": 2,
+          "value": "coordinatore",
+          "text": "Coordinatore"
+        },
+        {
+          "i": 3,
+          "value": "oss",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 4,
+          "value": "fisioterapista",
+          "text": "Fisioterapista (legacy)"
+        },
+        {
+          "i": 5,
+          "value": "operatore",
+          "text": "Operatore (legacy)"
+        },
+        {
+          "i": 6,
+          "value": "altro",
+          "text": "Altro (legacy)"
+        },
+        {
+          "i": 7,
+          "value": "admin",
+          "text": "Amministratore (legacy)"
+        },
+        {
+          "i": 8,
+          "value": "manager",
+          "text": "Manager (legacy)"
+        },
+        {
+          "i": 9,
+          "value": "  InFeRmIeRe  ",
+          "text": "Infermiere"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 11,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 12,
+          "value": "   ",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 13,
+          "value": "custom",
+          "text": "custom (da verificare)"
+        },
+        {
+          "i": 14,
+          "value": "<img src=x onerror=alert(1)>",
+          "text": "<img src=x onerror=alert(1)> (da verificare)"
+        },
+        {
+          "i": 15,
+          "value": "  OSS ",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 11,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 11,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 12,
+          "value": "   ",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 12,
+          "value": "   ",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 13,
+          "value": "custom",
+          "text": "custom (da verificare)"
+        },
+        {
+          "i": 13,
+          "value": "custom",
+          "text": "custom (da verificare)"
+        },
+        {
+          "i": 15,
+          "value": "  OSS ",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 15,
+          "value": "  OSS ",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 9,
+          "value": "  InFeRmIeRe  ",
+          "text": "Infermiere"
+        },
+        {
+          "i": 9,
+          "value": "  InFeRmIeRe  ",
+          "text": "Infermiere"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        }
+      ],
+      "asserted": [
+        "desktop dashboard all16 explicit professional labels and separate qualification",
+        "desktop same16 table/mobile role labels, qualification, uncertainty and literal XSS",
+        "desktop native keyboard editor retains exact token 0; cancel zero writes",
+        "desktop native keyboard editor retains exact token 1; cancel zero writes",
+        "desktop native keyboard editor retains exact token 2; cancel zero writes",
+        "desktop native keyboard editor retains exact token 3; cancel zero writes",
+        "desktop native keyboard editor retains exact token 4; cancel zero writes",
+        "desktop native keyboard editor retains exact token 5; cancel zero writes",
+        "desktop native keyboard editor retains exact token 6; cancel zero writes",
+        "desktop native keyboard editor retains exact token 7; cancel zero writes",
+        "desktop native keyboard editor retains exact token 8; cancel zero writes",
+        "desktop native keyboard editor retains exact token 9; cancel zero writes",
+        "desktop native keyboard editor retains exact token 10; cancel zero writes",
+        "desktop native keyboard editor retains exact token 11; cancel zero writes",
+        "desktop native keyboard editor retains exact token 12; cancel zero writes",
+        "desktop native keyboard editor retains exact token 13; cancel zero writes",
+        "desktop native keyboard editor retains exact token 14; cancel zero writes",
+        "desktop native keyboard editor retains exact token 15; cancel zero writes",
+        "desktop unrelated edit omits role 10 and mock reload retains exact original",
+        "desktop unrelated edit omits role 11 and mock reload retains exact original",
+        "desktop unrelated edit omits role 12 and mock reload retains exact original",
+        "desktop unrelated edit omits role 13 and mock reload retains exact original",
+        "desktop unrelated edit omits role 15 and mock reload retains exact original",
+        "desktop unrelated edit omits role 9 and mock reload retains exact original",
+        "desktop explicit selection sends only chosen professional role; mock reload displays change"
+      ],
+      "fixture": "Synthetic transport only; raw null DTO projected as empty string; real DB proof is separate."
+    },
+    {
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/admin/rooms"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/therapy-slots"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-10"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-11"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-12"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-13"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-15"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-9"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        },
+        {
+          "method": "PUT",
+          "path": "/operators/QA-OP-428-10"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/status"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/simulator/identities"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/simulator/session"
+        },
+        {
+          "method": "GET",
+          "path": "/auth/me"
+        },
+        {
+          "method": "GET",
+          "path": "/me/roster-order"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/diary-unread-count"
+        },
+        {
+          "method": "GET",
+          "path": "/appointments"
+        },
+        {
+          "method": "GET",
+          "path": "/consegne/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/notes"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/clinical-summary/overview"
+        },
+        {
+          "method": "GET",
+          "path": "/operators/page"
+        },
+        {
+          "method": "GET",
+          "path": "/patients/page"
+        }
+      ],
+      "unexpected": [],
+      "external": [],
+      "clinicalWrites": [],
+      "allowedMockMutations": [
+        {
+          "id": "QA-OP-428-10",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita10",
+            "email": "role428-10@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 10",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 10",
+            "colore": "#2F6BED",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-11",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita11",
+            "email": "role428-11@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 11",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 11",
+            "colore": "#0D9488",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-12",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita12",
+            "email": "role428-12@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 12",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 12",
+            "colore": "#6C4BD1",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-13",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita13",
+            "email": "role428-13@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 13",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 13",
+            "colore": "#C77700",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-15",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita15",
+            "email": "role428-15@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 15",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 15",
+            "colore": "#8B5CF6",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-9",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita09",
+            "email": "role428-9@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 9",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 9",
+            "colore": "#06B6D4",
+            "note": ""
+          }
+        },
+        {
+          "id": "QA-OP-428-10",
+          "payload": {
+            "nome": "Sintetico",
+            "cognome": "Identita10",
+            "ruolo": "infermiere",
+            "email": "role428-10@example.test",
+            "telefono": "",
+            "reparto": "Reparto aggiornato sintetico 10",
+            "stato": "attivo",
+            "qualifica": "Qualifica sintetica 10",
+            "colore": "#2F6BED",
+            "note": ""
+          }
+        }
+      ],
+      "errors": [],
+      "pageErrors": [],
+      "httpErrors": [],
+      "selected": [
+        {
+          "i": 0,
+          "value": "medico",
+          "text": "Medico"
+        },
+        {
+          "i": 1,
+          "value": "infermiere",
+          "text": "Infermiere"
+        },
+        {
+          "i": 2,
+          "value": "coordinatore",
+          "text": "Coordinatore"
+        },
+        {
+          "i": 3,
+          "value": "oss",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 4,
+          "value": "fisioterapista",
+          "text": "Fisioterapista (legacy)"
+        },
+        {
+          "i": 5,
+          "value": "operatore",
+          "text": "Operatore (legacy)"
+        },
+        {
+          "i": 6,
+          "value": "altro",
+          "text": "Altro (legacy)"
+        },
+        {
+          "i": 7,
+          "value": "admin",
+          "text": "Amministratore (legacy)"
+        },
+        {
+          "i": 8,
+          "value": "manager",
+          "text": "Manager (legacy)"
+        },
+        {
+          "i": 9,
+          "value": "  InFeRmIeRe  ",
+          "text": "Infermiere"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 11,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 12,
+          "value": "   ",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 13,
+          "value": "custom",
+          "text": "custom (da verificare)"
+        },
+        {
+          "i": 14,
+          "value": "<img src=x onerror=alert(1)>",
+          "text": "<img src=x onerror=alert(1)> (da verificare)"
+        },
+        {
+          "i": 15,
+          "value": "  OSS ",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 11,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 11,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 12,
+          "value": "   ",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 12,
+          "value": "   ",
+          "text": "Ruolo non disponibile"
+        },
+        {
+          "i": 13,
+          "value": "custom",
+          "text": "custom (da verificare)"
+        },
+        {
+          "i": 13,
+          "value": "custom",
+          "text": "custom (da verificare)"
+        },
+        {
+          "i": 15,
+          "value": "  OSS ",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 15,
+          "value": "  OSS ",
+          "text": "OSS (legacy)"
+        },
+        {
+          "i": 9,
+          "value": "  InFeRmIeRe  ",
+          "text": "Infermiere"
+        },
+        {
+          "i": 9,
+          "value": "  InFeRmIeRe  ",
+          "text": "Infermiere"
+        },
+        {
+          "i": 10,
+          "value": "",
+          "text": "Ruolo non disponibile"
+        }
+      ],
+      "asserted": [
+        "mobile dashboard all16 explicit professional labels and separate qualification",
+        "mobile same16 table/mobile role labels, qualification, uncertainty and literal XSS",
+        "mobile native keyboard editor retains exact token 0; cancel zero writes",
+        "mobile native keyboard editor retains exact token 1; cancel zero writes",
+        "mobile native keyboard editor retains exact token 2; cancel zero writes",
+        "mobile native keyboard editor retains exact token 3; cancel zero writes",
+        "mobile native keyboard editor retains exact token 4; cancel zero writes",
+        "mobile native keyboard editor retains exact token 5; cancel zero writes",
+        "mobile native keyboard editor retains exact token 6; cancel zero writes",
+        "mobile native keyboard editor retains exact token 7; cancel zero writes",
+        "mobile native keyboard editor retains exact token 8; cancel zero writes",
+        "mobile native keyboard editor retains exact token 9; cancel zero writes",
+        "mobile native keyboard editor retains exact token 10; cancel zero writes",
+        "mobile native keyboard editor retains exact token 11; cancel zero writes",
+        "mobile native keyboard editor retains exact token 12; cancel zero writes",
+        "mobile native keyboard editor retains exact token 13; cancel zero writes",
+        "mobile native keyboard editor retains exact token 14; cancel zero writes",
+        "mobile native keyboard editor retains exact token 15; cancel zero writes",
+        "mobile unrelated edit omits role 10 and mock reload retains exact original",
+        "mobile unrelated edit omits role 11 and mock reload retains exact original",
+        "mobile unrelated edit omits role 12 and mock reload retains exact original",
+        "mobile unrelated edit omits role 13 and mock reload retains exact original",
+        "mobile unrelated edit omits role 15 and mock reload retains exact original",
+        "mobile unrelated edit omits role 9 and mock reload retains exact original",
+        "mobile explicit selection sends only chosen professional role; mock reload displays change"
+      ],
+      "fixture": "Synthetic transport only; raw null DTO projected as empty string; real DB proof is separate."
+    }
+  ],
+  "fixtureTransport": "Actual SPA; all APIs guarded before wire; browser writes and reload are synthetic mock transport only. Separate PostgreSQL proves real API persistence."
+}

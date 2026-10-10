@@ -1,0 +1,80 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "visualCaptures": 2,
+  "acceptanceCountUnchanged": 56,
+  "state": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/auth/status"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/simulator/identities"
+      },
+      {
+        "method": "POST",
+        "path": "/auth/simulator/session"
+      },
+      {
+        "method": "GET",
+        "path": "/auth/me"
+      },
+      {
+        "method": "GET",
+        "path": "/me/roster-order"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/diary-unread-count"
+      },
+      {
+        "method": "GET",
+        "path": "/appointments"
+      },
+      {
+        "method": "GET",
+        "path": "/consegne/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/notes"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/clinical-summary/overview"
+      },
+      {
+        "method": "GET",
+        "path": "/operators/page"
+      },
+      {
+        "method": "GET",
+        "path": "/admin/rooms"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/therapy-slots"
+      },
+      {
+        "method": "GET",
+        "path": "/patients/page"
+      }
+    ],
+    "unexpected": [],
+    "external": [],
+    "clinicalWrites": [],
+    "allowedMockMutations": [],
+    "errors": [],
+    "pageErrors": [],
+    "httpErrors": [],
+    "selected": [],
+    "asserted": [],
+    "fixture": "Synthetic transport only; raw null DTO projected as empty string; real DB proof is separate."
+  },
+  "realWrites": 0
+}

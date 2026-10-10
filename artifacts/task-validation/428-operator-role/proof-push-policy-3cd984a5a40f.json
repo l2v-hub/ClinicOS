@@ -1,0 +1,13 @@
+{
+  "decision": "AUTHORIZED SOURCE-BOUND SYNTHETIC EVIDENCE COMMIT/PUSH",
+  "authority": "Direct human authorization; independent/root/compiled/source/deployment verified; GitHub closure separately gated",
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "parentProof": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "branch": "codex/bug-428-operator-role",
+  "scope": "artifacts/task-validation/428-operator-role",
+  "canonicalFiles": 444,
+  "secretChecks": 25014,
+  "zipMembers": 7894,
+  "productionPatientTestMutations": 0,
+  "at": "2026-10-10T01:41:32.431Z"
+}

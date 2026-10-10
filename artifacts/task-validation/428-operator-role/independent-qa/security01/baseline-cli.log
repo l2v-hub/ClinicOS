@@ -1,0 +1,15 @@
+
+Security Scan
+──────────────────────────────────────────────────
+... Scanning C:\w-428-qa2\artifacts\task-validation\428-operator-role\independent-qa\security01/baseline...                                    Scan complete
+
+No security issues found!
+
++------------------------------------------- Scan Summary --------------------------------------------+
+| Target: C:\w-428-qa2\artifacts\task-validation\428-operator-role\independent-qa\security01/baseline |
+| Depth: deep                                                                                         |
+| Type: code                                                                                          |
+|                                                                                                     |
+| Critical: 0  High: 0  Medium: 0  Low: 0                                                             |
+| Total Issues: 0                                                                                     |
++-----------------------------------------------------------------------------------------------------+

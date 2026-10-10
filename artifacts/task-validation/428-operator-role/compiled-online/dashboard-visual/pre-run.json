@@ -1,0 +1,8 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "recipeSha256": "76a768ceeed92fae09f8f5168af743311ad1034d8c9b9f8da4d72f66eab079fb",
+  "transportSha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76",
+  "decision": "AUTHORIZED ROOT VISUAL SUPPLEMENT ONLY; EXISTING56 FROZEN ACCEPTANCE UNCHANGED",
+  "api": "Before-wire synthetic fixture only, zero real writes, native scrolling, no DOM patch",
+  "at": "2026-10-10T01:35:29.120Z"
+}

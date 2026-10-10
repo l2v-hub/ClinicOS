@@ -1,0 +1,26 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "baselineApplication": "b5f471cd2cd56839e7ebbd0d3daf0bbf04791468",
+  "baselineRun": 37987185985,
+  "candidateRun": 38013399240,
+  "workflow": "AI Import E2E Gate",
+  "candidateConclusion": "failure",
+  "failedStage": "Backend unit tests",
+  "baselineFailureNames": [
+    "therapy reads and writes apply patient scope before loading clinical data"
+  ],
+  "candidateFailureNames": [
+    "therapy reads and writes apply patient scope before loading clinical data"
+  ],
+  "newFailureNames": [],
+  "failedSteps": [
+    "gate: Backend unit tests"
+  ],
+  "baselineFailedSteps": [
+    "gate: Backend unit tests"
+  ],
+  "downstreamImportTests": "Skipped, not claimed passing",
+  "frontendSecretScanRun": 38013399210,
+  "frontendSecretScanConclusion": "success",
+  "scope": "Narrow professional DTO backend correction; authorization/schema/workflow unchanged. Dedicated isolated real DB4 verified separately; shared CI skips these four without synthetic-cluster opt-in. Exact same single accepted422 failure, no global CI green claim"
+}

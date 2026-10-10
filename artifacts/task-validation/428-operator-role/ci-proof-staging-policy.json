@@ -1,0 +1,15 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "decision": "AUTHORIZED CI RECEIPT AND HONEST PREPUBLICATION REPORT STAGING",
+  "authority": "Human publication request; completed exact-source CI baseline delta and secret scan verified, public PNG gate remains pending",
+  "scope": [
+    "ci-comparison.json",
+    "validation-report.md",
+    "stage-ci-proof.mjs",
+    "ci-proof-staging-policy.json",
+    "ci-duration.mjs",
+    "ci-duration.json",
+    "wait-ci.mjs"
+  ],
+  "at": "2026-10-10T01:41:13.949Z"
+}

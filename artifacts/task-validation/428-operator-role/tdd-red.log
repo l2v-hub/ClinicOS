@@ -1,0 +1,765 @@
+(node:25976) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✖ 428 both projections represent missing role without inventing medico (7.0392ms)
+✔ 428 role tokens including legacy/case/whitespace are preserved exactly (0.3112ms)
+✔ 428 minimum directory still omits private contact and patient counts (0.144ms)
+✔ 428 extracted name and today-range behavior remains unchanged (0.6754ms)
+(node:25976) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:18580) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 428 explicit professional label medico (1.6394ms)
+✔ 428 explicit professional label infermiere (0.1151ms)
+✔ 428 explicit professional label coordinatore (0.0666ms)
+✖ 428 explicit professional label oss (1.6561ms)
+✖ 428 explicit professional label fisioterapista (0.3123ms)
+✖ 428 explicit professional label operatore (0.2783ms)
+✖ 428 explicit professional label altro (0.1465ms)
+✖ 428 explicit professional label admin (0.2918ms)
+✖ 428 explicit professional label manager (0.1464ms)
+✖ 428 explicit professional label   InFeRmIeRe   (0.1615ms)
+✖ 428 missing value null (1.1628ms)
+✖ 428 missing value undefined (0.2573ms)
+✖ 428 missing value "" (0.206ms)
+✖ 428 missing value "   " (0.2242ms)
+✖ 428 missing value {} (0.2292ms)
+✖ 428 missing value 42 (0.1435ms)
+✖ 428 unknown tokens stay explicit, never inferred as a permission or doctor (0.2604ms)
+✖ 428 qualification is distinct and formatting never mutates original data (0.2244ms)
+✔ 428 only exact existing standard values are standard editor options (0.1265ms)
+✖ 428 all profile surfaces use the shared label and preserve unchanged role (2.2787ms)
+(node:18580) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 7
+ℹ fail 17
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 266.7962
+
+✖ failing tests:
+
+test at backend\src\operators\__tests__\operator-view.test.ts:1:449
+✖ 428 both projections represent missing role without inventing medico (7.0392ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'medico' !== ''
+  
+      at TestContext.<anonymous> (C:\w-428\backend\src\operators\__tests__\operator-view.test.ts:13:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'medico',
+    expected: '',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:551
+✖ 428 explicit professional label oss (1.6561ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '' !== 'OSS (legacy)'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:23:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'OSS (legacy)',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:551
+✖ 428 explicit professional label fisioterapista (0.3123ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + ''
+  - 'Fisioterapista (legacy)'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:23:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'Fisioterapista (legacy)',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:551
+✖ 428 explicit professional label operatore (0.2783ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + ''
+  - 'Operatore (legacy)'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:23:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'Operatore (legacy)',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:551
+✖ 428 explicit professional label altro (0.1465ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + ''
+  - 'Altro (legacy)'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:23:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'Altro (legacy)',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:551
+✖ 428 explicit professional label admin (0.2918ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + ''
+  - 'Amministratore (legacy)'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:23:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'Amministratore (legacy)',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:551
+✖ 428 explicit professional label manager (0.1464ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + ''
+  - 'Manager (legacy)'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:23:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'Manager (legacy)',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:551
+✖ 428 explicit professional label   InFeRmIeRe   (0.1615ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '' !== 'Infermiere'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:23:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: 'Infermiere',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:785
+✖ 428 missing value null (1.1628ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   label: '',
+  +   needsVerification: false
+  -   label: 'Ruolo non disponibile',
+  -   needsVerification: true
+    }
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:30:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { label: '', needsVerification: false },
+    expected: { label: 'Ruolo non disponibile', needsVerification: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:785
+✖ 428 missing value undefined (0.2573ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   label: '',
+  +   needsVerification: false
+  -   label: 'Ruolo non disponibile',
+  -   needsVerification: true
+    }
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:30:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { label: '', needsVerification: false },
+    expected: { label: 'Ruolo non disponibile', needsVerification: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:785
+✖ 428 missing value "" (0.206ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   label: '',
+  +   needsVerification: false
+  -   label: 'Ruolo non disponibile',
+  -   needsVerification: true
+    }
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:30:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { label: '', needsVerification: false },
+    expected: { label: 'Ruolo non disponibile', needsVerification: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:785
+✖ 428 missing value "   " (0.2242ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   label: '',
+  +   needsVerification: false
+  -   label: 'Ruolo non disponibile',
+  -   needsVerification: true
+    }
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:30:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { label: '', needsVerification: false },
+    expected: { label: 'Ruolo non disponibile', needsVerification: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:785
+✖ 428 missing value {} (0.2292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   label: '',
+  +   needsVerification: false
+  -   label: 'Ruolo non disponibile',
+  -   needsVerification: true
+    }
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:30:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { label: '', needsVerification: false },
+    expected: { label: 'Ruolo non disponibile', needsVerification: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:785
+✖ 428 missing value 42 (0.1435ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   label: '',
+  +   needsVerification: false
+  -   label: 'Ruolo non disponibile',
+  -   needsVerification: true
+    }
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:30:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { label: '', needsVerification: false },
+    expected: { label: 'Ruolo non disponibile', needsVerification: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:947
+✖ 428 unknown tokens stay explicit, never inferred as a permission or doctor (0.2604ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   label: '',
+  +   needsVerification: false
+  -   label: 'nuova-funzione (da verificare)',
+  -   needsVerification: true
+    }
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:39:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { label: '', needsVerification: false },
+    expected: { label: 'nuova-funzione (da verificare)', needsVerification: true },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:1240
+✖ 428 qualification is distinct and formatting never mutates original data (0.2244ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + ' · Qualifica: assistenza sintetica'
+  - 'OSS (legacy) · Qualifica: assistenza sintetica'
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:48:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: ' · Qualifica: assistenza sintetica',
+    expected: 'OSS (legacy) · Qualifica: assistenza sintetica',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at frontend\src\lib\__tests__\operatorRolePresentation.test.ts:1:1972
+✖ 428 all profile surfaces use the shared label and preserve unchanged role (2.2787ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /operatorProfileLabel\(op\)/. Input:
+  
+  "import { useEffect, useRef, useState } from 'react';\r\n" +
+    "import type { Operatore, RuoloOperatore, StatoOperatore } from '../../types';\r\n" +
+    "import { OPERATOR_COLOR_PALETTE } from '../../types';\r\n" +
+    "import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoChevronRight } from '../../icons';\r\n" +
+    "import { ClinicalTable } from '../operator/cartella/ClinicalTable';\r\n" +
+    "import type { ColumnDef } from '../operator/cartella/ClinicalTable';\r\n" +
+    "import { TableFilters } from '../shared/TableFilters';\r\n" +
+    "import type { TableFilterField } from '../shared/TableFilters';\r\n" +
+    "import { OperatorFormPanel } from './OperatorFormPanel';\r\n" +
+    "import { RosterDefaultsPanel } from './RosterDefaultsPanel';\r\n" +
+    "import { EMPTY_OPERATOR_FORM } from './operatorFormModel';\r\n" +
+    'import type {\r\n' +
+    '  OperatorDirectoryStatus,\r\n' +
+    '  OperatorDirectorySummary,\r\n' +
+    "} from '../../lib/operatorDirectoryPage';\r\n" +
+    '\r\n' +
+    'interface OperatorManagementProps {\r\n' +
+    '  operatori: Operatore[];\r\n' +
+    '  summary?: OperatorDirectorySummary | null;\r\n' +
+    '  onSearch?: (query: string) => void;\r\n' +
+    '  onStatusChange?: (status: OperatorDirectoryStatus) => void;\r\n' +
+    '  onAdd: (\r\n' +
+    "    op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>,\r\n" +
+    '  ) => void;\r\n' +
+    '  onUpdate: (id: string, updates: Partial<Operatore>) => void;\r\n' +
+    '  onToggleStato: (id: string) => void;\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'const OPERATOR_FILTER_FIELDS: TableFilterField[] = [\r\n' +
+    "  { key: 'query', label: 'Cerca operatore', type: 'text' },\r\n" +
+    '  {\r\n' +
+    "    key: 'status',\r\n" +
+    "    label: 'Stato',\r\n" +
+    "    type: 'select',\r\n" +
+    '    options: [\r\n' +
+    "      { value: 'attivo', label: 'Attivi' },\r\n" +
+    "      { value: 'inattivo', label: 'Inattivi' },\r\n" +
+    '    ],\r\n' +
+    '  },\r\n' +
+    '];\r\n' +
+    '\r\n' +
+    'function operatoriColumns(\r\n' +
+    '  ruoloLabel: Record<RuoloOperatore, string>,\r\n' +
+    '  apriModifica: (op: Operatore) => void,\r\n' +
+    '  onToggleStato: (id: string) => void,\r\n' +
+    '): ColumnDef<Operatore>[] {\r\n' +
+    '  return [\r\n' +
+    '    {\r\n' +
+    "      key: 'cognome',\r\n" +
+    "      label: 'Operatore',\r\n" +
+    '      sortable: true,\r\n' +
+    '      render: (_v, op) => (\r\n' +
+    "        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>\r\n" +
+    '          <div className="op-avatar-sm" style={{ background: op.colore }}>\r\n' +
+    '            {op.iniziali}\r\n' +
+    '          </div>\r\n' +
+    '          <div className="cell--name">\r\n' +
+    '            {op.cognome} {op.nome}\r\n' +
+    '          </div>\r\n' +
+    '        </div>\r\n' +
+    '      ),\r\n' +
+    '    },\r\n' +
+    '    {\r\n' +
+    "      key: 'ruolo',\r\n" +
+    "      label: 'Ruolo',\r\n" +
+    '      sortable: true,\r\n' +
+    '      render: (_v, op) => (\r\n' +
+    '        <span className="cell--muted">\r\n' +
+    '          {ruoloLabel[op.ruolo]}\r\n' +
+    "          {op.qualifica ? ` · ${op.qualifica}` : ''}\r\n" +
+    '        </span>\r\n' +
+    '      ),\r\n' +
+    '    },\r\n' +
+    '    {\r\n' +
+    "      key: 'reparto',\r\n" +
+    "      label: 'Reparto',\r\n" +
+    '      sortable: true,\r\n' +
+    '      render: (v) => <span className="cell--muted">{v}</span>,\r\n' +
+    '    },\r\n' +
+    '    {\r\n' +
+    "      key: 'email',\r\n" +
+    "      label: 'Contatti',\r\n" +
+    '      render: (_v, op) => (\r\n' +
+    '        <div className="cell--muted" style={{ fontSize: 12 }}>\r\n' +
+    '          <div>{op.email}</div>\r\n' +
+    '          <div>{op.telefono}</div>\r\n' +
+    '        </div>\r\n' +
+    '      ),\r\n' +
+    '    },\r\n' +
+    '    {\r\n' +
+    "      key: 'pazientiAssegnati',\r\n" +
+    "      label: 'Pazienti',\r\n" +
+    '      sortable: true,\r\n' +
+    '      render: (v) => <span className="cell--muted">{v}</span>,\r\n' +
+    '    },\r\n' +
+    '    {\r\n' +
+    "      key: 'stato',\r\n" +
+    "      label: 'Stato',\r\n" +
+    '      sortable: true,\r\n' +
+    '      render: (v) => <span className={`stato-pill stato-pill--${v}`}>{v}</span>,\r\n' +
+    '    },\r\n' +
+    '    {\r\n' +
+    "      key: 'id',\r\n" +
+    "      label: 'Azioni',\r\n" +
+    "      width: '72px',\r\n" +
+    '      render: (_v, op) => (\r\n' +
+    '        <div className="table-actions">\r\n' +
+    '          <button\r\n' +
+    '            className="icon-btn icon-btn--sm icon-btn--edit"\r\n' +
+    '            onClick={() => apriModifica(op)}\r\n' +
+    '            title="Modifica"\r\n' +
+    '          >\r\n' +
+    '            <IcoEdit />\r\n' +
+    '          </button>\r\n' +
+    '          <button\r\n' +
+    "            className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}\r\n" +
+    '            onClick={() => onToggleStato(op.id)}\r\n' +
+    "            title={op.stato === 'attivo' ? 'Disattiva' : 'Riattiva'}\r\n" +
+    '          >\r\n' +
+    "            {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}\r\n" +
+    '          </button>\r\n' +
+    '        </div>\r\n' +
+    '      ),\r\n' +
+    '    },\r\n' +
+    '  ];\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'export function OperatorManagement({\r\n' +
+    '  operatori,\r\n' +
+    '  summary = null,\r\n' +
+    '  onSearch,\r\n' +
+    '  onStatusChange,\r\n' +
+    '  onAdd,\r\n' +
+    '  onUpdate,\r\n' +
+    '  onToggleStato,\r\n' +
+    '}: OperatorManagementProps) {\r\n' +
+    "  const [ricerca, setRicerca] = useState('');\r\n" +
+    "  const [filtroStato, setFiltroStato] = useState<'tutti' | StatoOperatore>('tutti');\r\n" +
+    '  const [formAperto, setFormAperto] = useState(false);\r\n' +
+    '  const [editId, setEditId] = useState<string | null>(null);\r\n' +
+    '  const [form, setForm] = useState(EMPTY_OPERATOR_FORM);\r\n' +
+    '  const searchMounted = useRef(false);\r\n' +
+    '\r\n' +
+    '  useEffect(() => {\r\n' +
+    '    if (!searchMounted.current) {\r\n' +
+    '      searchMounted.current = true;\r\n' +
+    '      return;\r\n' +
+    '    }\r\n' +
+    '    const timer = window.setTimeout(() => onSearch?.(ricerca.trim()), 300);\r\n' +
+    '    return () => window.clearTimeout(timer);\r\n' +
+    '  }, [ricerca, onSearch]);\r\n' +
+    '\r\n' +
+    '  const filtrati = operatori.filter((op) => {\r\n' +
+    '    const match =\r\n' +
+    "      `${op.nome} ${op.cognome} ${op.reparto} ${op.email} ${op.ruolo} ${op.qualifica ?? ''}`\r\n" +
+    '        .toLowerCase()\r\n' +
+    '        .includes(ricerca.toLowerCase());\r\n' +
+    "    const statoMatch = filtroStato === 'tutti' || op.stato === filtroStato;\r\n" +
+    '    return match && statoMatch;\r\n' +
+    '  });\r\n' +
+    '\r\n' +
+    '  function apriNuovo() {\r\n' +
+    '    setEditId(null);\r\n' +
+    '    // Pick next unused color\r\n' +
+    '    const usedColors = operatori.map((o) => o.colore);\r\n' +
+    '    const nextColor =\r\n' +
+    '      OPERATOR_COLOR_PALETTE.find((c) => !usedColors.includes(c)) ?? EMPTY_OPERATOR_FORM.colore;\r\n' +
+    '    setForm({ ...EMPTY_OPERATOR_FORM, colore: nextColor });\r\n' +
+    '    setFormAperto(true);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function apriModifica(op: Operatore) {\r\n' +
+    '    setEditId(op.id);\r\n' +
+    '    setForm({\r\n' +
+    '      nome: op.nome,\r\n' +
+    '      cognome: op.cognome,\r\n' +
+    '      ruolo: op.ruolo,\r\n' +
+    '      email: op.email,\r\n' +
+    '      telefono: op.telefono,\r\n' +
+    '      reparto: op.reparto,\r\n' +
+    '      stato: op.stato,\r\n' +
+    "      qualifica: op.qualifica ?? '',\r\n" +
+    '      colore: op.colore,\r\n' +
+    "      note: op.note ?? '',\r\n" +
+    '    });\r\n' +
+    '    setFormAperto(true);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function salva() {\r\n' +
+    "    // email obbligatoria: lato backend l'operatore è uno User (email unica)\r\n" +
+    '    if (!form.nome.trim() || !form.cognome.trim() || !form.email.trim()) return;\r\n' +
+    '    if (editId) {\r\n' +
+    '      onUpdate(editId, form);\r\n' +
+    '    } else {\r\n' +
+    '      onAdd(form);\r\n' +
+    '    }\r\n' +
+    '    setFormAperto(false);\r\n' +
+    '    setEditId(null);\r\n' +
+    '    setForm(EMPTY_OPERATOR_FORM);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  function annulla() {\r\n' +
+    '    setFormAperto(false);\r\n' +
+    '    setEditId(null);\r\n' +
+    '    setForm(EMPTY_OPERATOR_FORM);\r\n' +
+    '  }\r\n' +
+    '\r\n' +
+    '  const ruoloLabel: Record<RuoloOperatore, string> = {\r\n' +
+    "    medico: 'Medico',\r\n" +
+    "    infermiere: 'Infermiere',\r\n" +
+    "    coordinatore: 'Coordinatore',\r\n" +
+    '  };\r\n' +
+    '\r\n' +
+    '  function setOperatorFilter(key: string, value: string) {\r\n' +
+    "    if (key === 'query') {\r\n" +
+    '      setRicerca(value);\r\n' +
+    '      return;\r\n' +
+    '    }\r\n' +
+    '\r\n' +
+    "    const stato = value === 'attivo' || value === 'inattivo' ? value : 'tutti';\r\n" +
+    '    setFiltroStato(stato);\r\n' +
+    "    onStatusChange?.(stato === 'attivo' ? 'active' : stato === 'inattivo' ? 'inactive' : 'all');\r\n" +
+    '  }\r\n' +
+    '\r\n' +
+    '  function clearOperatorFilters() {\r\n' +
+    "    setRicerca('');\r\n" +
+    "    setFiltroStato('tutti');\r\n" +
+    "    onStatusChange?.('all');\r\n" +
+    '  }\r\n' +
+    '\r\n' +
+    '  return (\r\n' +
+    '    <div className="op-management">\r\n' +
+    '      <div className="view-header">\r\n' +
+    '        <div>\r\n' +
+    '          <h2 className="view-header__title">Gestione Operatori</h2>\r\n' +
+    '          <p className="view-header__sub">\r\n' +
+    "            {summary?.active ?? operatori.filter((o) => o.stato === 'attivo').length} attivi su{' '}\r\n" +
+    '            {summary?.total ?? operatori.length} totali\r\n' +
+    '          </p>\r\n' +
+    '        </div>\r\n' +
+    '        <button\r\n' +
+    '          className="btn-success"\r\n' +
+    '          onClick={apriNuovo}\r\n' +
+    '          aria-expanded={formAperto}\r\n' +
+    '          aria-controls="operator-form-panel"\r\n' +
+    '        >\r\n' +
+    '          <IcoPlus /> Nuovo Operatore\r\n' +
+    '        </button>\r\n' +
+    '      </div>\r\n' +
+    '\r\n' +
+    '      <RosterDefaultsPanel />\r\n' +
+    '      {/* Form */}\r\n' +
+    '      {formAperto && (\r\n' +
+    '        <OperatorFormPanel\r\n' +
+    '          value={form}\r\n' +
+    '          editMode={Boolean(editId)}\r\n' +
+    '          onChange={setForm}\r\n' +
+    '          onCancel={annulla}\r\n' +
+    '          onSubmit={salva}\r\n' +
+    '        />\r\n' +
+    '      )}\r\n' +
+    '\r\n' +
+    '      {/* Table wrapped in collapsible ClinicalTable */}\r\n' +
+    '      <ClinicalTable<Operatore>\r\n' +
+    '        title="Operatori"\r\n' +
+    '        count={summary?.matching ?? operatori.length}\r\n' +
+    '        countLabel="operatori"\r\n' +
+    '        columns={operatoriColumns(ruoloLabel, apriModifica, onToggleStato)}\r\n' +
+    '        data={filtrati}\r\n' +
+    '        emptyMessage="Nessun operatore trovato."\r\n' +
+    '        filterBar={\r\n' +
+    '          <TableFilters\r\n' +
+    '            tableLabel="Operatori"\r\n' +
+    '            fields={OPERATOR_FILTER_FIELDS}\r\n' +
+    '            values={{\r\n' +
+    '              query: ricerca,\r\n' +
+    "              status: filtroStato === 'tutti' ? '' : filtroStato,\r\n" +
+    '            }}\r\n' +
+    '            resultCount={filtrati.length}\r\n' +
+    '            totalCount={summary?.total ?? operatori.length}\r\n' +
+    '            onChange={setOperatorFilter}\r\n' +
+    '            onClear={clearOperatorFilters}\r\n' +
+    '          />\r\n' +
+    '        }\r\n' +
+    '      />\r\n' +
+    '\r\n' +
+    '      {/* Card list mobile */}\r\n' +
+    '      <div className="pt-card-list">\r\n' +
+    '        {filtrati.map((op) => (\r\n' +
+    `          <div key={op.id} className="pt-list-card" style={{ cursor: 'default' }}>\r\n` +
+    '            <div className="op-avatar-sm" style={{ background: op.colore }}>\r\n' +
+    '              {op.iniziali}\r\n' +
+    '            </div>\r\n' +
+    '            <div className="pt-list-card__info">\r\n' +
+    '              <span className="pt-list-card__name">\r\n' +
+    '                {op.cognome} {op.nome}\r\n' +
+    '              </span>\r\n' +
+    '              <span className="pt-list-card__meta">\r\n' +
+    '                {ruoloLabel[op.ruolo]} · {op.reparto}\r\n' +
+    '              </span>\r\n' +
+    '            </div>\r\n' +
+    '            <div\r\n' +
+    "              style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}\r\n" +
+    '            >\r\n' +
+    '              <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>\r\n' +
+    '              <div className="table-actions">\r\n' +
+    '                <button\r\n' +
+    '                  className="icon-btn icon-btn--sm icon-btn--edit"\r\n' +
+    '                  onClick={() => apriModifica(op)}\r\n' +
+    '                >\r\n' +
+    '                  <IcoEdit />\r\n' +
+    '                </button>\r\n' +
+    '                <button\r\n' +
+    "                  className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}\r\n" +
+    '  '... 387 more characters
+  
+      at TestContext.<anonymous> (C:\w-428\frontend\src\lib\__tests__\operatorRolePresentation.test.ts:64:12)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'import { useEffect, useRef, useState } from \'react\';\r\nimport type { Operatore, RuoloOperatore, StatoOperatore } from \'../../types\';\r\nimport { OPERATOR_COLOR_PALETTE } from \'../../types\';\r\nimport { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoChevronRight } from \'../../icons\';\r\nimport { ClinicalTable } from \'../operator/cartella/ClinicalTable\';\r\nimport type { ColumnDef } from \'../operator/cartella/ClinicalTable\';\r\nimport { TableFilters } from \'../shared/TableFilters\';\r\nimport type { TableFilterField } from \'../shared/TableFilters\';\r\nimport { OperatorFormPanel } from \'./OperatorFormPanel\';\r\nimport { RosterDefaultsPanel } from \'./RosterDefaultsPanel\';\r\nimport { EMPTY_OPERATOR_FORM } from \'./operatorFormModel\';\r\nimport type {\r\n  OperatorDirectoryStatus,\r\n  OperatorDirectorySummary,\r\n} from \'../../lib/operatorDirectoryPage\';\r\n\r\ninterface OperatorManagementProps {\r\n  operatori: Operatore[];\r\n  summary?: OperatorDirectorySummary | null;\r\n  onSearch?: (query: string) => void;\r\n  onStatusChange?: (status: OperatorDirectoryStatus) => void;\r\n  onAdd: (\r\n    op: Omit<Operatore, \'id\' | \'pazientiAssegnati\' | \'appuntamentiOggi\' | \'iniziali\'>,\r\n  ) => void;\r\n  onUpdate: (id: string, updates: Partial<Operatore>) => void;\r\n  onToggleStato: (id: string) => void;\r\n}\r\n\r\nconst OPERATOR_FILTER_FIELDS: TableFilterField[] = [\r\n  { key: \'query\', label: \'Cerca operatore\', type: \'text\' },\r\n  {\r\n    key: \'status\',\r\n    label: \'Stato\',\r\n    type: \'select\',\r\n    options: [\r\n      { value: \'attivo\', label: \'Attivi\' },\r\n      { value: \'inattivo\', label: \'Inattivi\' },\r\n    ],\r\n  },\r\n];\r\n\r\nfunction operatoriColumns(\r\n  ruoloLabel: Record<RuoloOperatore, string>,\r\n  apriModifica: (op: Operatore) => void,\r\n  onToggleStato: (id: string) => void,\r\n): ColumnDef<Operatore>[] {\r\n  return [\r\n    {\r\n      key: \'cognome\',\r\n      label: \'Operatore\',\r\n      sortable: true,\r\n      render: (_v, op) => (\r\n        <div style={{ display: \'flex\', alignItems: \'center\', gap: 10 }}>\r\n          <div className="op-avatar-sm" style={{ background: op.colore }}>\r\n            {op.iniziali}\r\n          </div>\r\n          <div className="cell--name">\r\n            {op.cognome} {op.nome}\r\n          </div>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      key: \'ruolo\',\r\n      label: \'Ruolo\',\r\n      sortable: true,\r\n      render: (_v, op) => (\r\n        <span className="cell--muted">\r\n          {ruoloLabel[op.ruolo]}\r\n          {op.qualifica ? ` · ${op.qualifica}` : \'\'}\r\n        </span>\r\n      ),\r\n    },\r\n    {\r\n      key: \'reparto\',\r\n      label: \'Reparto\',\r\n      sortable: true,\r\n      render: (v) => <span className="cell--muted">{v}</span>,\r\n    },\r\n    {\r\n      key: \'email\',\r\n      label: \'Contatti\',\r\n      render: (_v, op) => (\r\n        <div className="cell--muted" style={{ fontSize: 12 }}>\r\n          <div>{op.email}</div>\r\n          <div>{op.telefono}</div>\r\n        </div>\r\n      ),\r\n    },\r\n    {\r\n      key: \'pazientiAssegnati\',\r\n      label: \'Pazienti\',\r\n      sortable: true,\r\n      render: (v) => <span className="cell--muted">{v}</span>,\r\n    },\r\n    {\r\n      key: \'stato\',\r\n      label: \'Stato\',\r\n      sortable: true,\r\n      render: (v) => <span className={`stato-pill stato-pill--${v}`}>{v}</span>,\r\n    },\r\n    {\r\n      key: \'id\',\r\n      label: \'Azioni\',\r\n      width: \'72px\',\r\n      render: (_v, op) => (\r\n        <div className="table-actions">\r\n          <button\r\n            className="icon-btn icon-btn--sm icon-btn--edit"\r\n            onClick={() => apriModifica(op)}\r\n            title="Modifica"\r\n          >\r\n            <IcoEdit />\r\n          </button>\r\n          <button\r\n            className={`icon-btn icon-btn--sm${op.stato === \'attivo\' ? \' icon-btn--danger\' : \' icon-btn--success\'}`}\r\n            onClick={() => onToggleStato(op.id)}\r\n            title={op.stato === \'attivo\' ? \'Disattiva\' : \'Riattiva\'}\r\n          >\r\n            {op.stato === \'attivo\' ? <IcoX /> : <IcoCheck />}\r\n          </button>\r\n        </div>\r\n      ),\r\n    },\r\n  ];\r\n}\r\n\r\nexport function OperatorManagement({\r\n  operatori,\r\n  summary = null,\r\n  onSearch,\r\n  onStatusChange,\r\n  onAdd,\r\n  onUpdate,\r\n  onToggleStato,\r\n}: OperatorManagementProps) {\r\n  const [ricerca, setRicerca] = useState(\'\');\r\n  const [filtroStato, setFiltroStato] = useState<\'tutti\' | StatoOperatore>(\'tutti\');\r\n  const [formAperto, setFormAperto] = useState(false);\r\n  const [editId, setEditId] = useState<string | null>(null);\r\n  const [form, setForm] = useState(EMPTY_OPERATOR_FORM);\r\n  const searchMounted = useRef(false);\r\n\r\n  useEffect(() => {\r\n    if (!searchMounted.current) {\r\n      searchMounted.current = true;\r\n      return;\r\n    }\r\n    const timer = window.setTimeout(() => onSearch?.(ricerca.trim()), 300);\r\n    return () => window.clearTimeout(timer);\r\n  }, [ricerca, onSearch]);\r\n\r\n  const filtrati = operatori.filter((op) => {\r\n    const match =\r\n      `${op.nome} ${op.cognome} ${op.reparto} ${op.email} ${op.ruolo} ${op.qualifica ?? \'\'}`\r\n        .toLowerCase()\r\n        .includes(ricerca.toLowerCase());\r\n    const statoMatch = filtroStato === \'tutti\' || op.stato === filtroStato;\r\n    return match && statoMatch;\r\n  });\r\n\r\n  function apriNuovo() {\r\n    setEditId(null);\r\n    // Pick next unused color\r\n    const usedColors = operatori.map((o) => o.colore);\r\n    const nextColor =\r\n      OPERATOR_COLOR_PALETTE.find((c) => !usedColors.includes(c)) ?? EMPTY_OPERATOR_FORM.colore;\r\n    setForm({ ...EMPTY_OPERATOR_FORM, colore: nextColor });\r\n    setFormAperto(true);\r\n  }\r\n\r\n  function apriModifica(op: Operatore) {\r\n    setEditId(op.id);\r\n    setForm({\r\n      nome: op.nome,\r\n      cognome: op.cognome,\r\n      ruolo: op.ruolo,\r\n      email: op.email,\r\n      telefono: op.telefono,\r\n      reparto: op.reparto,\r\n      stato: op.stato,\r\n      qualifica: op.qualifica ?? \'\',\r\n      colore: op.colore,\r\n      note: op.note ?? \'\',\r\n    });\r\n    setFormAperto(true);\r\n  }\r\n\r\n  function salva() {\r\n    // email obbligatoria: lato backend l\'operatore è uno User (email unica)\r\n    if (!form.nome.trim() || !form.cognome.trim() || !form.email.trim()) return;\r\n    if (editId) {\r\n      onUpdate(editId, form);\r\n    } else {\r\n      onAdd(form);\r\n    }\r\n    setFormAperto(false);\r\n    setEditId(null);\r\n    setForm(EMPTY_OPERATOR_FORM);\r\n  }\r\n\r\n  function annulla() {\r\n    setFormAperto(false);\r\n    setEditId(null);\r\n    setForm(EMPTY_OPERATOR_FORM);\r\n  }\r\n\r\n  const ruoloLabel: Record<RuoloOperatore, string> = {\r\n    medico: \'Medico\',\r\n    infermiere: \'Infermiere\',\r\n    coordinatore: \'Coordinatore\',\r\n  };\r\n\r\n  function setOperatorFilter(key: string, value: string) {\r\n    if (key === \'query\') {\r\n      setRicerca(value);\r\n      return;\r\n    }\r\n\r\n    const stato = value === \'attivo\' || value === \'inattivo\' ? value : \'tutti\';\r\n    setFiltroStato(stato);\r\n    onStatusChange?.(stato === \'attivo\' ? \'active\' : stato === \'inattivo\' ? \'inactive\' : \'all\');\r\n  }\r\n\r\n  function clearOperatorFilters() {\r\n    setRicerca(\'\');\r\n    setFiltroStato(\'tutti\');\r\n    onStatusChange?.(\'all\');\r\n  }\r\n\r\n  return (\r\n    <div className="op-management">\r\n      <div className="view-header">\r\n        <div>\r\n          <h2 className="view-header__title">Gestione Operatori</h2>\r\n          <p className="view-header__sub">\r\n            {summary?.active ?? operatori.filter((o) => o.stato === \'attivo\').length} attivi su{\' \'}\r\n            {summary?.total ?? operatori.length} totali\r\n          </p>\r\n        </div>\r\n        <button\r\n          className="btn-success"\r\n          onClick={apriNuovo}\r\n          aria-expanded={formAperto}\r\n          aria-controls="operator-form-panel"\r\n        >\r\n          <IcoPlus /> Nuovo Operatore\r\n        </button>\r\n      </div>\r\n\r\n      <RosterDefaultsPanel />\r\n      {/* Form */}\r\n      {formAperto && (\r\n        <OperatorFormPanel\r\n          value={form}\r\n          editMode={Boolean(editId)}\r\n          onChange={setForm}\r\n          onCancel={annulla}\r\n          onSubmit={salva}\r\n        />\r\n      )}\r\n\r\n      {/* Table wrapped in collapsible ClinicalTable */}\r\n      <ClinicalTable<Operatore>\r\n        title="Operatori"\r\n        count={summary?.matching ?? operatori.length}\r\n        countLabel="operatori"\r\n        columns={operatoriColumns(ruoloLabel, apriModifica, onToggleStato)}\r\n        data={filtrati}\r\n        emptyMessage="Nessun operatore trovato."\r\n        filterBar={\r\n          <TableFilters\r\n            tableLabel="Operatori"\r\n            fields={OPERATOR_FILTER_FIELDS}\r\n            values={{\r\n              query: ricerca,\r\n              status: filtroStato === \'tutti\' ? \'\' : filtroStato,\r\n            }}\r\n            resultCount={filtrati.length}\r\n            totalCount={summary?.total ?? operatori.length}\r\n            onChange={setOperatorFilter}\r\n            onClear={clearOperatorFilters}\r\n          />\r\n        }\r\n      />\r\n\r\n      {/* Card list mobile */}\r\n      <div className="pt-card-list">\r\n        {filtrati.map((op) => (\r\n          <div key={op.id} className="pt-list-card" style={{ cursor: \'default\' }}>\r\n            <div className="op-avatar-sm" style={{ background: op.colore }}>\r\n              {op.iniziali}\r\n            </div>\r\n            <div className="pt-list-card__info">\r\n              <span className="pt-list-card__name">\r\n                {op.cognome} {op.nome}\r\n              </span>\r\n              <span className="pt-list-card__meta">\r\n                {ruoloLabel[op.ruolo]} · {op.reparto}\r\n              </span>\r\n            </div>\r\n            <div\r\n              style={{ display: \'flex\', flexDirection: \'column\', gap: 6, alignItems: \'flex-end\' }}\r\n            >\r\n              <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>\r\n              <div className="table-actions">\r\n                <button\r\n                  className="icon-btn icon-btn--sm icon-btn--edit"\r\n                  onClick={() => apriModifica(op)}\r\n                >\r\n                  <IcoEdit />\r\n                </button>\r\n                <button\r\n                  className={`icon-btn icon-btn--sm${op.stato === \'attivo\' ? \' icon-btn--danger\' : \' icon-btn--success\'}`}\r\n  '... 387 more characters,
+    expected: /operatorProfileLabel\(op\)/,
+    operator: 'match',
+    diff: 'simple'
+  }

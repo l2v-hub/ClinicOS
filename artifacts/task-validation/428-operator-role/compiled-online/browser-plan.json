@@ -1,0 +1,4 @@
+[
+  {"recipe":"recipes/browser.mjs","folder":"browser03/run","cases":50},
+  {"recipe":"recipes/editor-visual.mjs","folder":"editor01/run","cases":6}
+]

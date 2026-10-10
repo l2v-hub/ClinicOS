@@ -1,0 +1,27 @@
+{
+  "decision": "AUTHORIZED REFINED LOCAL CANDIDATE ONLY",
+  "authority": "Direct human authorization for scoped bug implementation. Focused/types/build/security/DB pass; exact accepted full baseline. New independent QA/release/production/closure gates still pending.",
+  "base": "7680ec0b25c61de5745f296d91e370b575de9c00",
+  "scope": [
+    "frontend/src/lib/operatorRolePresentation.ts",
+    "frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+    "frontend/src/components/admin/OperatorManagement.tsx",
+    "frontend/src/components/admin/OperatorFormPanel.tsx",
+    "frontend/src/components/admin/operatorFormModel.ts",
+    "frontend/src/components/admin/AdminDashboard.tsx",
+    "frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+    "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+    "backend/src/routes/operators.ts",
+    "backend/src/operators/operator-view.ts",
+    "backend/src/operators/__tests__/operator-view.test.ts",
+    "backend/src/operators/__tests__/operator-role-db.test.ts"
+  ],
+  "sourceSha256": "ed35529df868c86c185c5947f8addcc24035badc763e43c1f966227ac24fed6c",
+  "sourceFiles": 1546,
+  "at": "2026-10-10T01:08:16.006Z",
+  "excluded": "Dirty main/native launchers/artifacts/blocked candidates",
+  "applicationCommit": "5b371f788a17598cdad1d9e07a0945a8a1bdf88d",
+  "result": "LOCAL CANDIDATE ONLY, NEW INDEPENDENT QA PENDING",
+  "supersededCandidate": "5b371f788a17598cdad1d9e07a0945a8a1bdf88d",
+  "reason": "Test-only dedicated cluster ownership and CWD safety refinement; oldQA paused without runtime. All acceptance/release gates still pending"
+}

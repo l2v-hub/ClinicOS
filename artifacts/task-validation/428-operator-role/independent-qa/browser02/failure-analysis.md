@@ -1,0 +1,3 @@
+# Preserved second attempt
+
+Dashboard16/table16 labels and all16 native keyboard current-option/cancel assertions passed. First unrelated edit payload omitted ruolo correctly. The simulator session is intentionally an in-memory module singleton (operatorSession.ts); page.reload returns the native profile chooser. The test wrongly assumed session restoration. Fix the harness only to re-authenticate through that same native synthetic profile button and open Operatori after reload. All original data-value, exact-token, payload-omission and no-write assertions retained; no localStorage/DOM injection or application change. Full failed screenshot/trace/video/result and runnable recipes preserved. browser03 is separate.

@@ -1,0 +1,85 @@
+(node:17496) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator directory exposes at most 500 rows with an explicit overflow sentinel (2.2512ms)
+✔ compatibility and paged operator rosters stay stable and count only returned rows (4.6529ms)
+(node:17496) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:21792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 428 both projections represent missing role without inventing medico (2.8119ms)
+✔ 428 role tokens including legacy/case/whitespace are preserved exactly (0.9796ms)
+✔ 428 minimum directory still omits private contact and patient counts (0.4612ms)
+✔ 428 extracted name and today-range behavior remains unchanged (2.4448ms)
+(node:21792) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:10096) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator pages default to 50 and cap every response request at 100 (5.1126ms)
+✔ operator cursor is canonical and bound to the active search (4.9837ms)
+✔ both roster page routes use stable keyset windows and a 101-row sentinel (2.3217ms)
+(node:10096) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23404) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator schedule input is canonical, bounded and complete (8.3184ms)
+✔ operator schedule rejects malformed or oversized write payloads before Prisma (2.4653ms)
+✔ operator schedule reads are projected, bounded, canonical and legacy-safe (8.8693ms)
+✔ operator schedule routes validate writes and bound both list endpoints (2.1484ms)
+(node:23404) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:30896) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator editor is a labelled native form with guided sections (6.0428ms)
+✔ operator fields support labels, browser validation and useful autofill (2.0474ms)
+✔ operator editor exposes every action and color choice accessibly (0.6479ms)
+✔ operator editor uses scoped table-like geometry and responsive grids (1.8585ms)
+(node:30896) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17748) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ ordinary login bootstrap never downloads the operator directory (3.8967ms)
+✔ operator directory reads are abortable, session-safe, cached and retryable (1.7382ms)
+✔ navigation resets filtered directory state and logout aborts obsolete requests (1.4218ms)
+(node:17748) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22056) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ operator directory URL selects the bounded role-specific page and cursor (3.6502ms)
+✔ operator directory pages require coherent page metadata (2.7256ms)
+✔ operator page merge preserves order and replaces duplicate identities (9.2901ms)
+✔ management search and append retry are wired to the server page contract (8.7766ms)
+(node:22056) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29156) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ 428 explicit professional label medico (1.9126ms)
+✔ 428 explicit professional label infermiere (0.2209ms)
+✔ 428 explicit professional label coordinatore (0.1333ms)
+✔ 428 explicit professional label oss (0.1464ms)
+✔ 428 explicit professional label fisioterapista (0.2387ms)
+✔ 428 explicit professional label operatore (0.1843ms)
+✔ 428 explicit professional label altro (0.1333ms)
+✔ 428 explicit professional label admin (0.1207ms)
+✔ 428 explicit professional label manager (0.1462ms)
+✔ 428 explicit professional label   InFeRmIeRe   (0.2568ms)
+✔ 428 missing value null (1.9468ms)
+✔ 428 missing value undefined (0.2302ms)
+✔ 428 missing value "" (0.134ms)
+✔ 428 missing value "   " (0.165ms)
+✔ 428 missing value {} (0.1189ms)
+✔ 428 missing value 42 (0.1786ms)
+✔ 428 unknown tokens stay explicit, never inferred as a permission or doctor (0.5347ms)
+✔ 428 qualification is distinct and formatting never mutates original data (0.3753ms)
+✔ 428 only exact existing standard values are standard editor options (0.3737ms)
+✔ 428 all profile surfaces use the shared label and preserve unchanged role (10.0306ms)
+✔ 428 unrelated edits omit the exact original role; only an explicit change sends it (0.4817ms)
+(node:29156) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 45
+ℹ suites 0
+ℹ pass 45
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1277.7209

@@ -1,0 +1,18 @@
+PASS desktop dashboard all16 explicit professional labels and separate qualification
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 60000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Operatori', exact: true })[22m
+
+    at navigate (C:\w-428-qa2\artifacts\task-validation\428-operator-role\independent-qa\recipes\transport.mjs:42:185)
+    at C:\w-428-qa2\artifacts\task-validation\428-operator-role\independent-qa\recipes\browser.mjs:15:7 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'Operatori', exact: true })"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v26.3.0

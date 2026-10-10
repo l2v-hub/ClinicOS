@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-10-10T01:06:30.495Z",
+  "target": "C:\\w-428\\artifacts\\task-validation\\428-operator-role\\root-refinement\\security02/baseline",
+  "depth": "deep",
+  "type": "code",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total": 0
+  },
+  "findings": []
+}

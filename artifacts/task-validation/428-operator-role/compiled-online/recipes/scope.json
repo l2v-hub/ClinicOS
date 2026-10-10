@@ -1,0 +1,14 @@
+[
+  "frontend/src/lib/operatorRolePresentation.ts",
+  "frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+  "frontend/src/components/admin/OperatorManagement.tsx",
+  "frontend/src/components/admin/OperatorFormPanel.tsx",
+  "frontend/src/components/admin/operatorFormModel.ts",
+  "frontend/src/components/admin/AdminDashboard.tsx",
+  "frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+  "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+  "backend/src/routes/operators.ts",
+  "backend/src/operators/operator-view.ts",
+  "backend/src/operators/__tests__/operator-view.test.ts",
+  "backend/src/operators/__tests__/operator-role-db.test.ts"
+]

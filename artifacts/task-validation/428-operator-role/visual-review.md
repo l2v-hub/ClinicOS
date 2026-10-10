@@ -1,0 +1,11 @@
+# ACTUAL PIXELS INSPECTED — #428
+
+Root viewed the actual PNGs using the local image viewer after compiled56 PASS on application3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510, bundle4bed2abba0656827159c2c6c2be45aa3698c77ebc7cdb5c71de8fef9ff99801e.
+
+Public images from public-images.json inspected: compiled desktop directory (standard and legacy roles readable; first rows visible in inner scroll viewport); compiled visible missing-role editor (native selected value is missing, not Medico; long option visually truncated in narrow select); compiled mobile OSS retained editor (native role clear, complete synthetic card list including missing/custom verification labels); compiled dashboard-visual/dashboard-visible-3 (only native scroll, standard/legacy/missing cards and professional-versus-permission caption visible). Dashboard-visible-10 additionally inspected. Supplementary2 captures use the same frozen before-wire synthetic transport, no injected DOM, no mock/real writes; not added to the independently replayed56 acceptance count.
+
+Earlier independent desktop directory/missing editor, root desktop unknown literal sentinel editor, root mobile OSS editor and accepted7680 baseline desktop directory viewed as well. Baseline blank legacy role/qualification-only rows actually visible; candidate shows explicit labels. Unknown sentinel is literal text, not an image/script. Editor01 captures supersede visual use of original browser03 retained-editor captures outside desktop inner scroll, which remain historical unchanged.
+
+Limits: fullPage mobile image extends beyond viewport and viewer scales it; actual CSS viewport390×844, emulation only. Existing sticky header overlaps the upper scrolled mobile form in fullPage captures; no claim that this scoped role correction redesigns all form layout. Native select long option can truncate, full option text/value and complete table/card labels verified separately. Dashboard sticky notification bar/partial neighbouring section are not edited. No physical touch/gloves/light/assistive technology or ward clinical acceptance claimed. All identities/emails/dataset synthetic, no original clinical photos/patient screenshots.
+
+Release screenshot labels represent actual visible state, not a global visual redesign certification. Trace/video/raw assertions and current bundle hashes are retained.

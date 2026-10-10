@@ -1,0 +1,12 @@
+{
+  "exit": 0,
+  "tests": 4,
+  "pass": 0,
+  "skipped": 4,
+  "cwd": "backend",
+  "guardAbsent": true,
+  "clusterStarted": false,
+  "applicationStarted": false,
+  "writeTestsExecuted": 0,
+  "scope": "Read-only skip guard proof, not a real DB persistence run."
+}

@@ -1,0 +1,13 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "run": {
+    "conclusion": "",
+    "databaseId": 38013399251,
+    "headSha": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+    "status": "in_progress",
+    "url": "https://github.com/l2v-hub/ClinicOS/actions/runs/38013399251",
+    "workflowName": "Deploy Backend to Railway"
+  },
+  "decision": "PENDING FINAL PROVIDER/HEALTH/BUNDLE RECEIPT",
+  "at": "2026-10-10T01:31:38.847Z"
+}

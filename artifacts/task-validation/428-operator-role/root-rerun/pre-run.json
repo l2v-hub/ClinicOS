@@ -1,0 +1,64 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "qaManifestSha256": "09ca7b3f1d48ad249d4b4e8c7b96901f24e203f521b54c098b6b54ba82140df2",
+  "records": [
+    {
+      "name": "before-browser.mjs",
+      "sha256": "c4a74f02b252eec3617fa53677c3f98bb47d7a67d4521f3e269a0ce3f02a8259"
+    },
+    {
+      "name": "browser-lane.mjs",
+      "sha256": "ffe594fc49bfe6f0b3f49758ad54e2d360b4b54ea2d69a6a151a0d1361f5955d"
+    },
+    {
+      "name": "browser.mjs",
+      "sha256": "9a3ea1a2fa44145a0f301f17d781d3c9451682a0d9fe0ad4c00fb6c7b4f00fe8"
+    },
+    {
+      "name": "commands.mjs",
+      "sha256": "858ecbc06147b2f6df95181895e0007d84ea77731db2592f287207a7da0fc23f"
+    },
+    {
+      "name": "db-regression.mjs",
+      "sha256": "0cc667311e36eab3843078fbe88b7394a01b8b05e7af7291f80c0d3ae570f4fa"
+    },
+    {
+      "name": "editor-visual.mjs",
+      "sha256": "4b28c33622182e20b7c78fbe928e38568d31493d27a76a490e1af242b3570f60"
+    },
+    {
+      "name": "no-cluster-optin.mjs",
+      "sha256": "615f55711702ec256dd1c058ff31239f3c4090f8c89946e7541ae494b36092a5"
+    },
+    {
+      "name": "qa-server.mjs",
+      "sha256": "768877ecda5bcdae51c122f58c335524db4f3d70a84bb9e17b996dc2a6b0ddae"
+    },
+    {
+      "name": "scope.json",
+      "sha256": "f66634b67e5cf783c0e7a8984659f5d1197868e6dbda2d30cc27c20d8463d388"
+    },
+    {
+      "name": "seal.mjs",
+      "sha256": "4e8e8e552d701f4315bf5980f413191558b1b00acf5e2d2fd1649aa1e903b3db"
+    },
+    {
+      "name": "security.mjs",
+      "sha256": "9661daacf985d6d768f0d58a6cce05ac8939914278b01cf28832eb64506d27df"
+    },
+    {
+      "name": "source-binding.mjs",
+      "sha256": "2500686435d05c0655fbdf6dc9a23bbfb5c948c5c97c75bfb5b62d981d4d0ee7"
+    },
+    {
+      "name": "source-receipt.mjs",
+      "sha256": "048ac78206f789e33db44f46743b213c0cd5542e82c163e6f9e7704c906d9161"
+    },
+    {
+      "name": "transport.mjs",
+      "sha256": "5a4defe1050b375d42c7e265b3fe5865a1e30784136e3cd5af28a56c77c29b76"
+    }
+  ],
+  "decision": "AUTHORIZED IDENTICAL ROOT REPLAY; NO APP WRITE",
+  "at": "2026-10-10T01:25:14.111Z"
+}

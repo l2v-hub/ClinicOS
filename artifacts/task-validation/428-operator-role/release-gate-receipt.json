@@ -1,0 +1,97 @@
+{
+  "applicationCommit": "3cd984a5a40f1fe5cdc368dbcc4bb629bd6d1510",
+  "decision": "AUTHORIZED SCOPED APPLICATION PROMOTION",
+  "authority": "Direct human authorization plus NEW independent428QA2 and root byte-identical source-bound replay",
+  "scope": [
+    "frontend/src/lib/operatorRolePresentation.ts",
+    "frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+    "frontend/src/components/admin/OperatorManagement.tsx",
+    "frontend/src/components/admin/OperatorFormPanel.tsx",
+    "frontend/src/components/admin/operatorFormModel.ts",
+    "frontend/src/components/admin/AdminDashboard.tsx",
+    "frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+    "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+    "backend/src/routes/operators.ts",
+    "backend/src/operators/operator-view.ts",
+    "backend/src/operators/__tests__/operator-view.test.ts",
+    "backend/src/operators/__tests__/operator-role-db.test.ts"
+  ],
+  "originalCriteriaPassed": 4,
+  "independentBrowserCases": 56,
+  "rootIndependentRerun": 56,
+  "sourceSha256": "ed35529df868c86c185c5947f8addcc24035badc763e43c1f966227ac24fed6c",
+  "independentRawSourceSha256": "300db7dbce5004834424809f6e0bdaa134af53af1ce2be219928c1ab6d359a38",
+  "sourceFiles": 1546,
+  "qaManifestSha256": "09ca7b3f1d48ad249d4b4e8c7b96901f24e203f521b54c098b6b54ba82140df2",
+  "immutableQaFiles": 150,
+  "normalization": [
+    {
+      "path": "backend/src/operators/__tests__/operator-role-db.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "backend/src/operators/__tests__/operator-view.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "backend/src/operators/operator-view.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "backend/src/routes/operators.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/AdminDashboard.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorFormPanel.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorManagement.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorWorkloadHeading.tsx",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/components/admin/operatorFormModel.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorRolePresentation.test.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    },
+    {
+      "path": "frontend/src/lib/operatorRolePresentation.ts",
+      "policy": "strict UTF-8 CRLF-to-LF only"
+    }
+  ],
+  "focusedEach": 45,
+  "fullEach": {
+    "tests": 1292,
+    "pass": 1280,
+    "exactBaselineFailures": 12,
+    "newFailures": 0
+  },
+  "productionPatientTestMutations": 0,
+  "physicalHardware": false,
+  "realIsolatedDbEach": 4,
+  "existingMigrationsAppliedEach": 57,
+  "sharedCiGuardEach": "4 skip, zero write tests; not persistence proof",
+  "backendChange": "Narrow professional DTO read correction only, no auth/schema changes",
+  "remainingGates": [
+    "Exact production deployment",
+    "Compiled online acceptance",
+    "Completed CI baseline delta",
+    "Canonical privacy/pinned synthetic proof"
+  ],
+  "at": "2026-10-10T01:29:46.068Z"
+}
